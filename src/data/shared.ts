@@ -22,15 +22,16 @@ export const SET_TIMES = [
   { time: '11:30 PM – 2:00 AM', artist: 'Black Coffee', note: 'Headline' },
 ];
 
-export const KEY_TIMES = [
-  { time: '5:00 PM', label: 'Box Office Opens' },
-  { time: '5:30 PM', label: 'VIP Table Early Admission' },
-  { time: '6:00 PM', label: 'VIP + VIP Table Doors' },
-  { time: '6:30 PM', label: 'GA Doors' },
-  { time: '1:30 AM', label: 'Last Call' },
-  { time: '2:00 AM', label: 'Bars Close' },
-  { time: '2:30 AM', label: 'Venue Close' },
+export const SCHEDULE = [
+  { label: 'Load-in Start', datetime: '3/23 8:00 AM' },
+  { label: 'Load-in End', datetime: '3/28 3:00 PM' },
+  { label: 'Event Start', datetime: '3/28 6:00 PM' },
+  { label: 'Event End', datetime: '3/29 1:00 AM' },
+  { label: 'Load Out Start', datetime: '3/29 2:00 AM' },
+  { label: 'Load Out End', datetime: '3/31 6:00 PM' },
 ];
+
+export const DAILY_HOURS = '8:00 AM – 6:00 PM';
 
 export const TRANSIT_INFO = {
   metroRail: 'MetroRail Green Line to Hialeah Station (125 E 21st St). About 15–20 minute walk north on Palm Ave. Runs 5 AM to midnight. $2.25 per trip.',

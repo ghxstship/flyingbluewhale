@@ -6,7 +6,8 @@ import type { GuideConfig, ContactSection, FAQPair } from '@/data/types';
 import {
   EVENT,
   SET_TIMES,
-  KEY_TIMES,
+  SCHEDULE,
+  DAILY_HOURS,
   CREDENTIAL_MATRIX,
   RESOURCE_LOCATIONS,
   EVACUATION_ROUTES,
@@ -362,8 +363,6 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-light mb-1">Date</p>
                 <p className="font-medium text-dark">{EVENT.date}</p>
-                <p className="text-xs font-semibold uppercase tracking-wider text-light mt-3 mb-1">Hours</p>
-                <p className="text-sm text-dark">{guide.hours}</p>
               </div>
             </div>
 
@@ -413,15 +412,19 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
               </div>
             </SubSection>
 
-            <SubSection title="Key Times">
+            <SubSection title="Schedule">
               <div className="space-y-1.5">
-                {KEY_TIMES.map((k, i) => (
+                {SCHEDULE.map((s, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <span className="font-mono text-xs text-pink w-20 shrink-0">{k.time}</span>
-                    <span className="text-sm text-dark">{k.label}</span>
+                    <span className="text-sm text-dark w-36 shrink-0">{s.label}</span>
+                    <span className="font-mono text-xs text-pink">{s.datetime}</span>
                   </div>
                 ))}
               </div>
+            </SubSection>
+
+            <SubSection title="Daily Hours of Operation">
+              <p className="font-mono text-sm text-dark">{DAILY_HOURS}</p>
             </SubSection>
           </div>
           <PrintButton />

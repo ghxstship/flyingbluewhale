@@ -19,7 +19,7 @@ const temporary: GuideConfig = {
   ],
   vehicleRoute: 'Enter via the E 32nd St Production Gate. Follow escort instructions. Do not deviate from the assigned route.',
   parking: 'Temporary vehicles park only in designated areas as directed by your escort. Do not park in Crew Parking or guest lots.',
-  rideshare: 'If arriving by rideshare, be dropped at the E 32nd St Production Gate. Do not use the guest entrance.',
+  rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone.',
   transit: 'Not recommended for temporary access. Drive or rideshare.',
   wayfinding: 'You will be met at the Production Gate by your escort. Do not enter the site without an escort.',
   credentials: 'Check in at the Production Gate with valid photo ID. You will receive a Temporary wristband. Your escort will accompany you at all times.',

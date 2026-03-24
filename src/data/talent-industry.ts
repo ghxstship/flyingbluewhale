@@ -22,7 +22,7 @@ const talentIndustry: GuideConfig = {
   parking:
     'Artist vehicles park in the designated area near backstage. Your Liaison will coordinate.',
   rideshare:
-    'If arriving by rideshare, your Liaison will provide a specific drop-off point and meet you.',
+    'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Your Liaison will meet you at the designated drop-off zone.',
   transit:
     'Not recommended for artist/industry arrivals. Rideshare or arranged vehicle is preferred.',
   wayfinding:

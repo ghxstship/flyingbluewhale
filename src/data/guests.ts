@@ -21,7 +21,7 @@ const guests: GuideConfig = {
   ],
   vehicleRoute: 'Enter via E 4th Ave and follow event signage to parking.',
   parking: 'Guest parking is in the main Hialeah Park lots. Enter via E 4th Ave. Parking attendants will direct you. Arrive early — lots fill up.',
-  rideshare: 'Rideshare pickup and drop-off is on E 4th Ave at the marked event zone. Follow the signs from the drop-off area to the entrance — about a 3-minute walk.',
+  rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. Follow the signs from the drop-off area to the entrance.',
   transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). About 15–20 minute walk north on Palm Ave. Runs 5 AM to midnight. $2.25 per trip. Heads up: MetroRail shuts down around midnight and this event runs until 2 AM. Have a rideshare plan for the way home.',
   wayfinding: 'Follow the event signage from parking or the rideshare zone. The entrance is clearly marked. Look for the staff in pink — they\'ll point you in the right direction.',
   credentials: 'Have your ticket ready on your phone (screenshot works). You\'ll receive a wristband at the gate. VIP and VIP Table holders will be directed to the VIP entrance at the Fountain Terrace.',

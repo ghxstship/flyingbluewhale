@@ -21,7 +21,7 @@ const foodBeverage: GuideConfig = {
   ],
   vehicleRoute: 'Production vehicles enter via the E 32nd St Production Gate (north side). Follow signage to Crew Parking. Do not use the E 4th Ave guest entrance.',
   parking: 'Crew parking is accessible via E 4th Ave — the same route as guest parking. Follow the event signage and park in the zone corresponding to your issued parking pass. Display your parking pass on the dashboard at all times. Unauthorized vehicles will be towed.',
-  rideshare: 'Rideshare is not the recommended arrival method for F&B staff. If necessary, have your driver drop you at the E 32nd St Production Gate \u2014 not the guest entrance on E 4th Ave.',
+  rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone.',
   transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). About 15\u201320 minute walk north on Palm Ave. Runs 5 AM to midnight. $2.25 per trip. MetroRail shuts down around midnight \u2014 have a ride plan for strike.',
   wayfinding: 'From the Production Gate, follow the marked path past Crew Parking to the Production Office (Clubhouse 2F). All F&B staff check in at the Production Office before heading to your assigned bar or station.',
   credentials: 'Check in at the Production Office (Clubhouse 2F) with valid photo ID. You will receive an F&B wristband. Wear your credential visibly at all times. Lost credentials must be reported to the Production Office immediately.',

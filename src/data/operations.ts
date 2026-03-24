@@ -6,7 +6,7 @@ const operations: GuideConfig = {
   title: 'OPERATIONS',
   classification: 'INTERNAL — OPERATIONS CREW ONLY',
   scope: 'Security, Medical, Cleaning, Parking, Guest Services, Logistics',
-  icon: '🔧',
+  icon: '🦩',
   callTime: '08:00 AM — Thursday, March 27',
   hours: 'Build: Mar 27–28 · Show Day: 08:00 AM – 02:30 AM · Strike: Immediate',
 

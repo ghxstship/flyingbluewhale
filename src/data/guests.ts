@@ -6,7 +6,7 @@ const guests: GuideConfig = {
   title: 'GUESTS',
   classification: '',
   scope: 'GA, VIP, VIP Table Holders',
-  icon: '✨',
+  icon: '🦩',
   callTime: 'Doors at 6:30 PM (VIP at 6:00 PM · VIP Table at 5:30 PM)',
   hours: '6:00 PM – 2:00 AM',
 

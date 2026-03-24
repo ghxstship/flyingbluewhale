@@ -6,7 +6,7 @@ const foodBeverage: GuideConfig = {
   title: 'FOOD & BEVERAGE',
   classification: 'INTERNAL — F&B STAFF ONLY',
   scope: 'Bars, Beverage Service, VIP Table Service, Catering, Concessions',
-  icon: '\u{1F378}',
+  icon: '🦩',
   callTime: '10:00 AM — Friday, March 28',
   hours: 'Build: Mar 28 \u00B7 Show Day: 10:00 AM \u2013 02:30 AM \u00B7 Strike: Immediate',
 

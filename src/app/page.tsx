@@ -18,7 +18,7 @@ export default function Home() {
             BLACK COFFEE + CARLITA + KAZ JAMES
           </h1>
           <p className="mt-3 font-display text-xl font-bold text-white/80 sm:text-2xl lg:text-3xl">
-            at the Racetrack
+            Open Air at the Racetrack
           </p>
 
           <p className="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-[#E84393] sm:text-base">

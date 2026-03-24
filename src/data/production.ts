@@ -6,7 +6,7 @@ const production: GuideConfig = {
   title: 'PRODUCTION',
   classification: 'INTERNAL — PRODUCTION CREW ONLY',
   scope: 'Stage, Audio, Lighting, Video, Rigging, Backline, Power, Scenic',
-  icon: '🎛️',
+  icon: '🦩',
   callTime: '06:00 AM — Wednesday, March 25',
   hours: 'Build: Mar 25–28 · Show Day: 06:00 AM – 02:30 AM · Strike: Immediate',
 

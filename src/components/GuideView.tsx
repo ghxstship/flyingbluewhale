@@ -348,7 +348,7 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
           <div className="space-y-4">
             <div>
               <h3 className="font-display text-2xl font-bold text-black">{EVENT.title}</h3>
-              <p className="text-medium italic">{SET_TIMES.length > 0 && 'at the Racetrack'}</p>
+              <p className="text-medium italic">{SET_TIMES.length > 0 && 'Open Air at the Racetrack'}</p>
               <p className="text-sm text-light mt-1">{EVENT.series} &middot; Presented by {EVENT.presenter}</p>
             </div>
 

@@ -6,7 +6,7 @@ const talentIndustry: GuideConfig = {
   title: 'TALENT & INDUSTRY',
   classification: 'CONFIDENTIAL — ARTIST & INDUSTRY ACCESS',
   scope: 'Artists, Touring Parties, Management, Agents, Industry Guests, Media',
-  icon: '🎤',
+  icon: '🦩',
   callTime: 'Per your Liaison — check your advance email',
   hours: 'Event: 6:00 PM – 2:00 AM',
 

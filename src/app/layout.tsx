@@ -31,9 +31,9 @@ const jetbrainsMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Know Before You Go — MMW26 at the Racetrack",
+  title: "Know Before You Go — MMW26 Open Air at the Racetrack",
   description:
-    "Your guide to Black Coffee + Carlita + Kaz James at the Racetrack — Miami Music Week 2026 at Hialeah Park Casino.",
+    "Your guide to Black Coffee + Carlita + Kaz James Open Air at the Racetrack — Miami Music Week 2026 at Hialeah Park Casino.",
 };
 
 export default function RootLayout({

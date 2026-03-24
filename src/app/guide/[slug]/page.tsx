@@ -17,7 +17,7 @@ export async function generateMetadata({
   if (!guide) return {};
   return {
     title: `${guide.title} — Know Before You Go — MMW26`,
-    description: `${guide.title} guide for Black Coffee + Carlita + Kaz James at the Racetrack.`,
+    description: `${guide.title} guide for Black Coffee + Carlita + Kaz James Open Air at the Racetrack.`,
   };
 }
 

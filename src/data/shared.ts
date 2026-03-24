@@ -2,7 +2,7 @@ import type { CredentialRow, ResourceLocation, EvacuationRoute, FAQPair } from '
 
 export const EVENT = {
   title: 'Black Coffee + Carlita + Kaz James',
-  subtitle: 'at the Racetrack',
+  subtitle: 'Open Air at the Racetrack',
   series: 'Miami Music Week 2026',
   presenter: 'Club Space Miami',
   date: 'Saturday, March 28, 2026',

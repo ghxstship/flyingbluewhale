@@ -41,15 +41,15 @@ export const TRANSIT_INFO = {
 };
 
 export const CREDENTIAL_MATRIX: CredentialRow[] = [
-  { credential: 'Production (T1)', backstage: true, prodOffice: true, fohTech: true, vipArea: true, gaArea: true, crewPark: true, guestPark: false },
-  { credential: 'Operations (T2)', backstage: true, prodOffice: true, fohTech: true, vipArea: true, gaArea: true, crewPark: true, guestPark: false, note: 'Backstage limited to security and medical response' },
-  { credential: 'F&B (T3)', backstage: false, prodOffice: true, fohTech: true, vipArea: true, gaArea: true, crewPark: true, guestPark: false },
-  { credential: 'Artist/Touring', backstage: true, prodOffice: false, fohTech: true, vipArea: true, gaArea: true, crewPark: false, guestPark: true },
-  { credential: 'Industry', backstage: false, prodOffice: false, fohTech: false, vipArea: true, gaArea: true, crewPark: false, guestPark: true },
-  { credential: 'VIP Table', backstage: false, prodOffice: false, fohTech: false, vipArea: true, gaArea: true, crewPark: false, guestPark: true },
-  { credential: 'VIP', backstage: false, prodOffice: false, fohTech: false, vipArea: true, gaArea: true, crewPark: false, guestPark: true },
-  { credential: 'GA', backstage: false, prodOffice: false, fohTech: false, vipArea: false, gaArea: true, crewPark: false, guestPark: true },
-  { credential: 'Temporary (T6)', backstage: false, prodOffice: false, fohTech: false, vipArea: false, gaArea: false, crewPark: false, guestPark: false },
+  { credential: 'Core + Escort', commandCenter: true, backOfHouse: true, stage: true, backstage: true, vipStageTableNorth: true, vipStageTableSouth: true, vipBackstage: true, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'Production', commandCenter: true, backOfHouse: true, stage: true, backstage: true, vipStageTableNorth: true, vipStageTableSouth: true, vipBackstage: true, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'Crew', commandCenter: false, backOfHouse: true, stage: true, backstage: true, vipStageTableNorth: false, vipStageTableSouth: false, vipBackstage: false, vipClubhouse: false, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'Artist', commandCenter: false, backOfHouse: true, stage: true, backstage: true, vipStageTableNorth: true, vipStageTableSouth: true, vipBackstage: true, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'Backstage', commandCenter: false, backOfHouse: false, stage: false, backstage: true, vipStageTableNorth: true, vipStageTableSouth: true, vipBackstage: true, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'Stage Table North', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: true, vipStageTableSouth: false, vipBackstage: false, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'Stage Table South', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: false, vipStageTableSouth: true, vipBackstage: false, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'Grandstand Table', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: false, vipStageTableSouth: false, vipBackstage: false, vipClubhouse: false, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'VIP', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: false, vipStageTableSouth: false, vipBackstage: false, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
 ];
 
 export const RESOURCE_LOCATIONS: ResourceLocation[] = [

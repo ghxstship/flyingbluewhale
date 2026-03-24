@@ -53,13 +53,16 @@ export interface FAQPair {
 
 export interface CredentialRow {
   credential: string;
+  commandCenter: boolean;
+  backOfHouse: boolean;
+  stage: boolean;
   backstage: boolean;
-  prodOffice: boolean;
-  fohTech: boolean;
-  vipArea: boolean;
-  gaArea: boolean;
-  crewPark: boolean;
-  guestPark: boolean;
+  vipStageTableNorth: boolean;
+  vipStageTableSouth: boolean;
+  vipBackstage: boolean;
+  vipClubhouse: boolean;
+  vipDanceFloor: boolean;
+  grandstandsGA: boolean;
   note?: string;
 }
 

@@ -251,8 +251,8 @@ function AccessBadge({ access }: { access: boolean }) {
 
 /* ─── Credential row highlight ─── */
 function getCredentialHighlightIndex(tier: number): number {
-  // Matrix rows: Production(0), Operations(1), F&B(2), Artist/Touring(3), Industry(4), VIP Table(5), VIP(6), GA(7), Temporary(8)
-  const map: Record<number, number> = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 7, 6: 8 };
+  // Matrix rows: Core+Escort(0), Production(1), Crew(2), Artist(3), Backstage(4), Stage Table North(5), Stage Table South(6), Grandstand Table(7), VIP(8)
+  const map: Record<number, number> = { 1: 1, 2: 2, 3: 2, 4: 3, 5: 8, 6: -1 };
   return map[tier] ?? -1;
 }
 
@@ -512,22 +512,22 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
 
           <SubSection title="Credential Access Matrix">
             <DataTable
-              headers={['Credential', 'Backstage', 'Prod Office', 'FOH/Tech', 'VIP Area', 'GA Area', 'Crew Park', 'Guest Park']}
+              headers={['Credential', 'Command Center', 'Back of House', 'Stage', 'Backstage', 'VIP Tables — Stage North', 'VIP Tables — Stage South', 'VIP Tables — Backstage', 'VIP Clubhouse', 'VIP Dance Floor', 'Grandstands (GA)']}
               rows={CREDENTIAL_MATRIX.map((r) => [
                 <span key={r.credential} className="font-medium">{r.credential}</span>,
+                <AccessBadge key={`${r.credential}-cc`} access={r.commandCenter} />,
+                <AccessBadge key={`${r.credential}-boh`} access={r.backOfHouse} />,
+                <AccessBadge key={`${r.credential}-st`} access={r.stage} />,
                 <AccessBadge key={`${r.credential}-bs`} access={r.backstage} />,
-                <AccessBadge key={`${r.credential}-po`} access={r.prodOffice} />,
-                <AccessBadge key={`${r.credential}-ft`} access={r.fohTech} />,
-                <AccessBadge key={`${r.credential}-vip`} access={r.vipArea} />,
-                <AccessBadge key={`${r.credential}-ga`} access={r.gaArea} />,
-                <AccessBadge key={`${r.credential}-cp`} access={r.crewPark} />,
-                <AccessBadge key={`${r.credential}-gp`} access={r.guestPark} />,
+                <AccessBadge key={`${r.credential}-vstn`} access={r.vipStageTableNorth} />,
+                <AccessBadge key={`${r.credential}-vsts`} access={r.vipStageTableSouth} />,
+                <AccessBadge key={`${r.credential}-vb`} access={r.vipBackstage} />,
+                <AccessBadge key={`${r.credential}-vc`} access={r.vipClubhouse} />,
+                <AccessBadge key={`${r.credential}-vdf`} access={r.vipDanceFloor} />,
+                <AccessBadge key={`${r.credential}-ga`} access={r.grandstandsGA} />,
               ])}
               highlightRow={credHighlight}
             />
-            {CREDENTIAL_MATRIX[1].note && (
-              <p className="text-xs text-light mt-1">* {CREDENTIAL_MATRIX[1].note}</p>
-            )}
           </SubSection>
           <PrintButton />
         </SectionWrapper>

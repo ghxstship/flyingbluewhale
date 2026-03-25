@@ -90,7 +90,7 @@ const guests: GuideConfig = {
   emergencyAltContent: [
     'If you hear an emergency announcement, stay calm and follow the instructions.',
     'Look for staff members in pink or high-vis vests — they\'ll direct you to safety.',
-    'If you need to evacuate, follow staff to the Assembly Point in Parking Lot Zone C.',
+    'If you need to evacuate, follow staff to the Assembly Point in Parking Zone C.',
     'Do not re-enter the venue after an evacuation until staff confirms it\'s safe.',
     'If you see something concerning, tell the nearest staff member or security guard.',
     'If someone near you needs medical help, alert any staff member — medical response is fast.',
@@ -112,7 +112,7 @@ const guests: GuideConfig = {
     { item: 'Exit Signs', spec: 'Illuminated exit signs at every exit — follow them in an emergency' },
     { item: 'Emergency Lighting', spec: 'All exits and corridors stay lit, even in a power outage' },
     { item: 'Covered Shelter', spec: 'Clubhouse and Casino are designated shelter areas for severe weather' },
-    { item: 'Assembly Point', spec: 'Parking Lot Zone C — follow staff in an emergency' },
+    { item: 'Assembly Point', spec: 'Parking Zone C — follow staff in an emergency' },
   ],
 
   // ── Sustainability ─────────────────────────────────────────────────

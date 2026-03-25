@@ -205,7 +205,7 @@ const foodBeverage: GuideConfig = {
         'Production Manager or Security Director calls \u201CFull Evacuation\u201D on CH 16.',
         'Stage Manager halts all performance immediately \u2014 house lights up.',
         'Audio plays pre-recorded evacuation announcement (loaded on show playback).',
-        'Security opens all exit gates and directs guests to Assembly Point (Parking Lot Zone C).',
+        'Security opens all exit gates and directs guests to Assembly Point (Parking Zone C).',
         'All crew assist with calm, orderly movement toward exits. Use your flashlight.',
         'Medical team stages at Assembly Point for triage.',
         'Production Manager conducts headcount of all crew at Assembly Point.',

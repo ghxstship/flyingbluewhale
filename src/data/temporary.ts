@@ -72,7 +72,7 @@ const temporary: GuideConfig = {
     { item: 'Exit Signs', spec: 'Illuminated exit signs at every exit — follow them in an emergency' },
     { item: 'Emergency Lighting', spec: 'All exits and corridors stay lit, even in a power outage' },
     { item: 'Evacuation Route', spec: 'Follow your escort to the nearest exit' },
-    { item: 'Assembly Point', spec: 'Parking Lot Zone C — follow your escort' },
+    { item: 'Assembly Point', spec: 'Parking Zone C — follow your escort' },
   ],
 
   roleFAQ: [

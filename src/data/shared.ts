@@ -65,12 +65,12 @@ export const RESOURCE_LOCATIONS: ResourceLocation[] = [
 ];
 
 export const EVACUATION_ROUTES: EvacuationRoute[] = [
-  { from: 'Dance Floor', route: 'Nearest marked exit to open ground, then follow staff to assembly', destination: 'Assembly Point' },
-  { from: 'Grandstands', route: 'Descend to ground level via nearest stairway, then follow staff to assembly', destination: 'Assembly Point' },
-  { from: 'VIP Dance Floor', route: 'Nearest marked exit to open ground, then follow staff to assembly', destination: 'Assembly Point' },
-  { from: 'VIP Clubhouse', route: 'Nearest marked exit to exterior, then follow staff to assembly', destination: 'Assembly Point' },
-  { from: 'Casino', route: 'Nearest marked exit per venue fire plan, then follow staff to assembly', destination: 'Assembly Point' },
-  { from: 'Parking Lots', route: 'Proceed to nearest vehicle exit or walk to perimeter, then follow staff direction', destination: 'Off-property' },
+  { from: 'Dance Floor', route: 'Exit south through GA Entrance or nearest marked exit, proceed to Parking Zone C', destination: 'Parking Zone C' },
+  { from: 'Grandstands', route: 'Descend to ground level via nearest stairway, exit south, proceed to Parking Zone C', destination: 'Parking Zone C' },
+  { from: 'VIP Dance Floor', route: 'Exit via VIP Entrance or nearest marked exit, proceed south to Parking Zone C', destination: 'Parking Zone C' },
+  { from: 'VIP Clubhouse', route: 'Nearest marked exit to exterior, proceed south to Parking Zone C', destination: 'Parking Zone C' },
+  { from: 'Casino', route: 'Nearest marked exit per venue fire plan, proceed south to Parking Zone C', destination: 'Parking Zone C' },
+  { from: 'Parking Lots', route: 'Proceed south to Parking Zone C or exit property via E 4th Ave', destination: 'Parking Zone C / Off-property' },
 ];
 
 export const GUEST_FAQ: FAQPair[] = [
@@ -96,5 +96,5 @@ export const GUEST_FAQ: FAQPair[] = [
   { question: 'How does VIP Table service work?', answer: 'VIP Table holders receive a reserved table in the Fountain Terrace with bottle service. Your dedicated server will be introduced upon arrival. Minimum spend requirements apply per your booking confirmation. Early admission begins at 5:30 PM so you can settle in before the music starts.' },
 ];
 
-export const ASSEMBLY_POINT = 'Parking Lot Zone C';
-export const EMS_STAGING = 'East Gate';
+export const ASSEMBLY_POINT = 'Parking Zone C (GA Lot)';
+export const EMS_STAGING = 'E 4th Ave entrance';

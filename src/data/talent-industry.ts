@@ -81,7 +81,7 @@ const talentIndustry: GuideConfig = {
     'If you hear "Code" followed by a color on a radio or announcement, it means an emergency protocol is active.',
     'Your Liaison will guide you to safety. Stay with them and follow their instructions.',
     'If you cannot find your Liaison, go to the nearest crew member in a high-vis vest.',
-    'If you need to evacuate, your Liaison will escort you to the Assembly Point (Parking Lot Zone C).',
+    'If you need to evacuate, your Liaison will escort you to the Assembly Point (Parking Zone C).',
     'Do not re-enter the venue after an evacuation until your Liaison confirms it is safe.',
   ],
 
@@ -90,7 +90,7 @@ const talentIndustry: GuideConfig = {
     { item: 'Fire Alarm Pull Station', spec: 'At every exit in Clubhouse + Casino (indoor use)' },
     { item: 'Emergency Lighting', spec: 'All exits and corridors are illuminated' },
     { item: 'Exit Signage', spec: 'Illuminated exit signs at every exit' },
-    { item: 'Evacuation Assembly', spec: 'Parking Lot Zone C — your Liaison will guide you' },
+    { item: 'Evacuation Assembly', spec: 'Parking Zone C — your Liaison will guide you' },
   ],
 
   roleFAQ: [

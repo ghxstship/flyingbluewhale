@@ -127,10 +127,10 @@ const production: GuideConfig = {
   radioProtocol: 'Key your radio, wait one second, then speak. Use "Copy" to confirm receipt. Use "Say again" if you didn\'t hear. Keep transmissions under 10 seconds. No casual conversation on any channel. CH 1 is emergency only — never transmit on CH 1 unless directed by Production or Security.',
   chainOfCommand: [
     { role: 'Executive Producer', responsibility: 'Final authority on all production decisions', radio: 'CH 3' },
-    { role: 'Site (Ops) Director', responsibility: 'Site-wide operations, infrastructure, logistics oversight', radio: 'CH 3 / CH 4' },
-    { role: 'Production Manager', responsibility: 'Day-to-day production operations, crew coordination', radio: 'CH 3' },
-    { role: 'Operations Manager', responsibility: 'Site ops, cleaning, parking, logistics', radio: 'CH 3 / CH 4' },
+    { role: 'Site Director', responsibility: 'Site-wide operations, infrastructure, site ops management', radio: 'CH 3 / CH 4' },
     { role: 'Technical Director', responsibility: 'Audio, lighting, video oversight', radio: 'CH 3 / CH 8' },
+    { role: 'Production Manager', responsibility: 'Day-to-day production operations, crew coordination', radio: 'CH 3' },
+    { role: 'Operations Manager', responsibility: 'Access control, communications, credentialing, parking, logistics', radio: 'CH 3 / CH 4' },
     { role: 'Stage Manager', responsibility: 'Stage calls, artist changeovers, cue execution', radio: 'CH 7' },
     { role: 'Public Safety Director', responsibility: 'Security operations, crowd management, medical oversight, incident response', radio: 'CH 2' },
     { role: 'Venue Liaison', responsibility: 'Venue-specific rules, building access, historic preservation', radio: 'CH 3' },

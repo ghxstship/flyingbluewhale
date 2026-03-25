@@ -41,6 +41,12 @@ const temporary: GuideConfig = {
 
   showAltContent: 'Show day operations are managed by the production team. Temporary access is typically not available during show hours (6:00 PM – 2:00 AM) unless pre-arranged with the Production Office.',
 
+  venueAmenities: [
+    'Restrooms — Your escort will direct you to the nearest available facility.',
+    'Water Fountains — Located near most grandstand restrooms.',
+    'Medical — EMTs and paramedics are on site. Alert your escort if you need help.',
+  ],
+
   safetyAltContent: [
     'Wear your high-vis vest and closed-toe shoes at all times on site.',
     'Follow your escort\'s instructions without exception.',

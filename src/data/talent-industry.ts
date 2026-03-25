@@ -50,6 +50,15 @@ const talentIndustry: GuideConfig = {
     { time: '01:00 AM', activity: 'Music ends — event close' },
   ],
 
+  venueAmenities: [
+    'Green Room — Climate-controlled backstage lounge with catering and beverages.',
+    'VIP Access — Full access to the Fountain Terrace VIP area with premium bars.',
+    'Water Fountains — Located near most grandstand restrooms.',
+    'Restrooms — Accessible in all VIP and backstage areas.',
+    'Medical — EMTs and paramedics staffed throughout the event.',
+    'Earplugs — Free at First Aid stations.',
+  ],
+
   safetyAltContent: [
     'Your safety is our priority. Your Liaison is your first point of contact for any concern.',
     'If you feel unsafe at any time, tell your Liaison or any crew member immediately.',

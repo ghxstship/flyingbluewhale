@@ -61,7 +61,7 @@ export const RESOURCE_LOCATIONS: ResourceLocation[] = [
   { resource: 'Spill Kit', location: 'Each bar, cleaning staging, Command Center', zone: 'Service/Ops' },
   { resource: 'Narcan (Naloxone)', location: 'Medical stations + roving medical', zone: 'All zones' },
   { resource: 'Earplugs (free)', location: 'First Aid stations', zone: 'All zones' },
-  { resource: 'Water Refill Station', location: 'Permanent water fountains located near all restroom facilities throughout the venue', zone: 'All zones' },
+  { resource: 'Water Fountains', location: 'Located near most grandstand restrooms throughout the venue', zone: 'All zones' },
 ];
 
 export const EVACUATION_ROUTES: EvacuationRoute[] = [
@@ -78,8 +78,8 @@ export const GUEST_FAQ: FAQPair[] = [
   { question: 'What time does the music start?', answer: 'Kaz James opens at 7:00 PM. Carlita takes over at 9:30 PM. Black Coffee headlines from 11:30 PM until 1:00 AM.' },
   { question: 'What are the age requirements?', answer: 'GA is 18+ and VIP is 21+. A valid government-issued photo ID is required for entry — no exceptions. Acceptable forms include a driver\'s license, passport, or state ID.' },
   { question: 'Is there a dress code?', answer: 'There is no formal dress code, but we encourage smart-casual attire. This is an outdoor event on racetrack grounds, so comfortable shoes are recommended. Stilettos and open-toe shoes can be challenging on grass and gravel surfaces.' },
-  { question: 'What can I bring?', answer: 'You may bring a small clutch or bag (no larger than 12" × 6" × 12"). Clear bags are encouraged for faster entry. Sealed, empty reusable water bottles are allowed and can be filled at our free water refill stations inside the venue.' },
-  { question: 'Are water bottles allowed?', answer: 'Sealed, empty reusable water bottles are welcome. We have free water refill stations at the GA Entrance, VIP area, and Paddock.' },
+  { question: 'What can I bring?', answer: 'You may bring a small clutch or bag (no larger than 12" × 6" × 12"). Clear bags are encouraged for faster entry. Sealed, empty reusable water bottles are allowed — free water fountains are available near most grandstand restrooms.' },
+  { question: 'Are water bottles allowed?', answer: 'Sealed, empty reusable water bottles are welcome. Free water fountains are available near most grandstand restrooms.' },
   { question: 'Can I leave and come back?', answer: 'No. This is a no re-entry event. Once you exit the venue, you will not be permitted to re-enter.' },
   { question: 'Where should my rideshare drop me off?', answer: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. Follow the signs from the drop-off area to the entrance.' },
   { question: 'Is there on-site parking?', answer: 'Yes. Guest parking is available in the main Hialeah Park lots. Enter via E 4th Ave. Parking attendants will direct you. Arrive early — lots fill up.' },

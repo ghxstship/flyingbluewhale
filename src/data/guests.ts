@@ -17,7 +17,7 @@ const guests: GuideConfig = {
     'Check the weather — this is an outdoor event on the racetrack grounds.',
     'Wear comfortable shoes. Grass and gravel are part of the charm, but stilettos are not your friend here.',
     'Small bags only (12" × 6" × 12" max). Clear bags get you through the line faster.',
-    'Sealed, empty water bottles are welcome — we have free refill stations inside.',
+    'Sealed, empty water bottles are welcome — free water fountains are available inside.',
   ],
   vehicleRoute: 'Enter via E 4th Ave and follow event signage to parking. Parking attendants will direct you to the right lot.',
   parking: 'Guest parking is in the main Hialeah Park lots off E 4th Ave. Follow signage and parking attendants to your spot. Arrive early — lots fill up.',
@@ -28,7 +28,7 @@ const guests: GuideConfig = {
   entrance: 'GA: Main entrance gate. VIP + VIP Table: Fountain Terrace entrance.',
   additionalNotes: [
     'This is a no re-entry event. Once you leave, you can\'t come back in.',
-    'Free water refill stations are at the GA Entrance, VIP area, and Paddock.',
+    'Free water fountains are available near most grandstand restrooms.',
     'Free earplugs are available at First Aid stations.',
     'ATMs are inside the Casino building and near the Clubhouse entrance.',
   ],
@@ -41,13 +41,13 @@ const guests: GuideConfig = {
     { time: '7:00 PM', activity: 'Kaz James' },
     { time: '9:30 PM', activity: 'Carlita' },
     { time: '11:30 PM', activity: 'Black Coffee (Headline)' },
-    { time: '1:00 AM', activity: 'Music ends' },
     { time: '12:45 AM', activity: 'Last call — bars close' },
+    { time: '1:00 AM', activity: 'Music ends' },
     { time: '2:00 AM', activity: 'Venue close — time to head home' },
   ],
 
   venueAmenities: [
-    'Water Stations — Free refill stations located near all restroom facilities. Bring your reusable bottle.',
+    'Water Fountains — Located near most grandstand restrooms. Bring your reusable bottle.',
     'Earplugs — Free earplugs available at First Aid stations. Your hearing matters.',
     'ATMs — Located inside the Casino building and near the Clubhouse entrance.',
     'Restrooms — Available in the GA area, VIP area, and Clubhouse. ADA-accessible units in all locations.',
@@ -116,10 +116,9 @@ const guests: GuideConfig = {
 
   // ── Sustainability ─────────────────────────────────────────────────
   sustainabilityItems: [
-    { initiative: 'Water Stations', detail: 'Free refill stations reduce single-use plastic. Bring your reusable bottle.' },
+    { initiative: 'Water Fountains', detail: 'Free water fountains reduce single-use plastic. Bring your reusable bottle.' },
     { initiative: 'Recycling', detail: 'Recycling bins are paired with every trash bin. Please separate your waste.' },
     { initiative: 'Local Sourcing', detail: 'Our bars feature locally sourced ingredients and Florida-based craft beverages where possible.' },
-    { initiative: 'Carbon Offset', detail: 'GHXSTSHIP Industries purchases carbon offsets for all production travel and freight.' },
   ],
 
   // ── Contacts ───────────────────────────────────────────────────────

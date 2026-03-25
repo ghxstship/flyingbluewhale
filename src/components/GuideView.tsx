@@ -540,14 +540,28 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
         <SectionWrapper num={4} title="The Experience" id="section-4">
           {guide.venueAmenities && guide.venueAmenities.length > 0 && (
             <SubSection title="Amenities">
-              <ul className="space-y-3">
-                {guide.venueAmenities.map((a, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-dark">
-                    <span className="text-pink shrink-0 mt-0.5">&bull;</span>
-                    {a}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-sm text-dark leading-relaxed mb-4">
+                {guide.tier <= 3
+                  ? 'These resources are available to all crew throughout the build, show, and strike.'
+                  : guide.tier === 4
+                  ? 'Your Liaison can help you access any of the following.'
+                  : guide.tier === 6
+                  ? 'Your escort can direct you to these resources while on site.'
+                  : 'Here\u2019s what\u2019s available on site to make your night easier.'}
+              </p>
+              <div className="space-y-3">
+                {guide.venueAmenities.map((a, i) => {
+                  const dashIndex = a.indexOf(' — ');
+                  const feature = dashIndex >= 0 ? a.slice(0, dashIndex) : a;
+                  const detail = dashIndex >= 0 ? a.slice(dashIndex + 3) : '';
+                  return (
+                    <div key={i}>
+                      <p className="font-medium text-sm text-dark">{feature}</p>
+                      {detail && <p className="text-sm text-medium">{detail}</p>}
+                    </div>
+                  );
+                })}
+              </div>
             </SubSection>
           )}
 
@@ -647,6 +661,9 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
 
         {/* ═══ Page 5: Safety & Security (combined old 5 + 7) ═══ */}
         <SectionWrapper num={5} title={guide.tier <= 3 ? 'Safety & Security' : 'Your Safety'} id="section-5">
+          {!guide.ppeTable && guide.safetyAltContent && guide.safetyAltContent.length > 0 && (
+            <p className="text-sm text-dark leading-relaxed mb-4">{guide.safetyAltContent[0]}</p>
+          )}
           {guide.ppeTable && guide.ppeTable.length > 0 && (
             <SubSection title="Required Personal Protective Equipment">
               <DataTable
@@ -666,9 +683,9 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
             </SubSection>
           )}
 
-          {guide.safetyAltContent && guide.safetyAltContent.length > 0 && (
+          {guide.safetyAltContent && guide.safetyAltContent.length > 1 && (
             <ul className="space-y-2 mt-4">
-              {guide.safetyAltContent.map((item, i) => (
+              {guide.safetyAltContent.slice(1).map((item, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-dark">
                   <span className="text-pink mt-0.5 shrink-0">&bull;</span>
                   {item}
@@ -702,14 +719,17 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
 
           {guide.emergencyAltContent && guide.emergencyAltContent.length > 0 && (
             <SubSection title="In an Emergency">
-              <ul className="space-y-2">
-                {guide.emergencyAltContent.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-dark">
-                    <span className="text-pink mt-0.5 shrink-0">&bull;</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-sm text-dark leading-relaxed mb-4">{guide.emergencyAltContent[0]}</p>
+              {guide.emergencyAltContent.length > 1 && (
+                <ul className="space-y-2">
+                  {guide.emergencyAltContent.slice(1).map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-dark">
+                      <span className="text-pink mt-0.5 shrink-0">&bull;</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </SubSection>
           )}
           <PrintButton />
@@ -764,14 +784,19 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
           )}
 
           {guide.commsAltContent && guide.commsAltContent.length > 0 && (
-            <ul className="space-y-2">
-              {guide.commsAltContent.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-dark">
-                  <span className="text-pink mt-0.5 shrink-0">&bull;</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <>
+              <p className="text-sm text-dark leading-relaxed mb-4">{guide.commsAltContent[0]}</p>
+              {guide.commsAltContent.length > 1 && (
+                <ul className="space-y-2">
+                  {guide.commsAltContent.slice(1).map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-dark">
+                      <span className="text-pink mt-0.5 shrink-0">&bull;</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
 
           {guide.contactsIntro && (

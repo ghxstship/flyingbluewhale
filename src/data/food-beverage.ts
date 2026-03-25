@@ -56,6 +56,15 @@ const foodBeverage: GuideConfig = {
     { time: '02:00 AM', activity: 'Venue clear — cash out, inventory, breakdown begins' },
   ],
 
+  venueAmenities: [
+    'Craft Services — Ground floor of the Clubhouse. Meals and snacks available throughout the day.',
+    'Crew Break Area — Clubhouse second-floor lounge. Climate-controlled with seating.',
+    'Water Fountains — Located near most grandstand restrooms. Bring your reusable bottle.',
+    'Restrooms — Crew restroom trailers near Crew Parking, plus Clubhouse ground floor facilities.',
+    'Medical — EMTs and paramedics staffed at the Medical Tent in the Paddock from load-in through strike.',
+    'Earplugs — Free at First Aid stations.',
+  ],
+
   ppeTable: [
     { gear: 'Non-Slip Shoes (ASTM F2913)', spec: 'Slip-resistant rated', who: 'All F&B staff' },
     { gear: 'Cut-Resistant Gloves (ANSI 105)', spec: 'Cut Level A4+', who: 'Glass handling / bottle breaking' },

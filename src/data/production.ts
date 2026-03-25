@@ -57,6 +57,15 @@ const production: GuideConfig = {
     { time: '02:00 AM', activity: 'Venue clear — strike begins' },
   ],
 
+  venueAmenities: [
+    'Craft Services — Ground floor of the Clubhouse. Breakfast, lunch, dinner, and snacks throughout the day.',
+    'Crew Break Area — Clubhouse second-floor lounge. Climate-controlled with seating.',
+    'Water Fountains — Located near most grandstand restrooms. Bring your reusable bottle.',
+    'Restrooms — Crew restroom trailers near Crew Parking, plus Clubhouse ground floor facilities.',
+    'Medical — EMTs and paramedics staffed at the Medical Tent in the Paddock from load-in through strike.',
+    'Earplugs — Free at First Aid stations. Required near main PA during tuning and show.',
+  ],
+
   ppeTable: [
     { gear: 'Hard Hat (ANSI Z89.1)', spec: 'Type I, Class E or G', who: 'Rigging, stage build, overhead work' },
     { gear: 'High-Vis Vest (ANSI 107)', spec: 'Class 2 minimum', who: 'All crew during build/strike, parking, loading' },

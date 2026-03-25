@@ -96,12 +96,12 @@ const guests: GuideConfig = {
   ],
 
   securityPolicies: [
-    'Bag check at entry — small bags only (12" × 6" × 12" max)',
-    'No weapons, sharp objects, illegal substances, or professional cameras',
-    'No outside food or beverages (sealed empty water bottles OK)',
-    'No re-entry',
-    'Wristband must be worn and visible at all times',
-    'Security has final say on entry — please respect their decisions',
+    'All bags are checked at entry. Small bags only — 12" × 6" × 12" maximum. Clear bags are encouraged for faster entry.',
+    'Weapons, sharp objects, illegal substances, and professional cameras are not permitted.',
+    'Outside food and beverages are not allowed. Sealed, empty reusable water bottles are welcome.',
+    'This is a no re-entry event. Once you exit the venue, you will not be permitted to re-enter.',
+    'Your wristband must be worn and visible at all times inside the venue.',
+    'Security has final say on entry and reserves the right to refuse admission. Please respect their decisions.',
   ],
 
   // ── Resources ──────────────────────────────────────────────────────

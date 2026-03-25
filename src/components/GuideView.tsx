@@ -121,7 +121,7 @@ function SOPCard({ sop }: { sop: NonNullable<GuideConfig['emergencySOPs']>[numbe
         onClick={() => setOpen(!open)}
         aria-expanded={open}
       >
-        <span className="inline-block px-2 py-0.5 rounded text-xs font-mono font-bold bg-pink text-white shrink-0">
+        <span className="inline-block w-28 text-center px-2 py-0.5 rounded text-xs font-mono font-bold bg-pink text-white shrink-0">
           {sop.code}
         </span>
         <span className="font-semibold text-dark flex-1">{sop.title}</span>
@@ -671,84 +671,8 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
           <PrintButton />
         </SectionWrapper>
 
-        {/* ═══ Page 5: Safety & Security (combined old 5 + 7) ═══ */}
-        <SectionWrapper num={5} title={guide.tier <= 3 ? 'Safety & Security' : 'Your Safety'} id="section-5">
-          {!guide.ppeTable && guide.safetyAltContent && guide.safetyAltContent.length > 0 && (
-            <p className="text-sm text-dark leading-relaxed mb-4">{guide.safetyAltContent[0]}</p>
-          )}
-          {guide.ppeTable && guide.ppeTable.length > 0 && (
-            <SubSection title="Required Personal Protective Equipment">
-              <DataTable
-                headers={['Gear', 'Spec', 'Who']}
-                rows={guide.ppeTable.map((p) => [p.gear, p.spec, p.who])}
-              />
-            </SubSection>
-          )}
-
-          {guide.safetyRules && guide.safetyRules.length > 0 && (
-            <SubSection title={guide.tier === 3 ? 'F&B Service Standards' : 'Workplace Safety Rules'}>
-              <ol className="space-y-2 list-decimal list-inside">
-                {guide.safetyRules.map((rule, i) => (
-                  <li key={i} className="text-sm text-dark leading-relaxed">{rule}</li>
-                ))}
-              </ol>
-            </SubSection>
-          )}
-
-          {guide.safetyAltContent && guide.safetyAltContent.length > 1 && (
-            <ul className="space-y-2 mt-4">
-              {guide.safetyAltContent.slice(1).map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-dark">
-                  <span className="text-pink mt-0.5 shrink-0">&bull;</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {guide.securityPolicies && guide.securityPolicies.length > 0 && (
-            <SubSection title="Security & Policies">
-              <ul className="space-y-2">
-                {guide.securityPolicies.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-dark">
-                    <span className="text-pink mt-0.5 shrink-0">&bull;</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </SubSection>
-          )}
-
-          {guide.emergencySOPs && guide.emergencySOPs.length > 0 && (
-            <SubSection title="Emergency Procedures">
-              <div className="space-y-0">
-                {guide.emergencySOPs.map((sop, i) => (
-                  <SOPCard key={i} sop={sop} />
-                ))}
-              </div>
-            </SubSection>
-          )}
-
-          {guide.emergencyAltContent && guide.emergencyAltContent.length > 0 && (
-            <SubSection title="In an Emergency">
-              <p className="text-sm text-dark leading-relaxed mb-4">{guide.emergencyAltContent[0]}</p>
-              {guide.emergencyAltContent.length > 1 && (
-                <ul className="space-y-2">
-                  {guide.emergencyAltContent.slice(1).map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-dark">
-                      <span className="text-pink mt-0.5 shrink-0">&bull;</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </SubSection>
-          )}
-          <PrintButton />
-        </SectionWrapper>
-
-        {/* ═══ Page 6: Communications / Who to Contact ═══ */}
-        <SectionWrapper num={6} title={guide.tier <= 3 ? 'Communications' : 'Who to Contact'} id="section-6">
+        {/* ═══ Page 5: Communications / Who to Contact ═══ */}
+        <SectionWrapper num={5} title={guide.tier <= 3 ? 'Communications' : 'Who to Contact'} id="section-5">
           {guide.radioChannels && guide.radioChannels.length > 0 && (
             <>
               <SubSection title="Radio Channel Matrix">
@@ -820,6 +744,82 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
           <SubSection title="Contact Directory">
             <ContactTable contacts={guide.contactDirectory} />
           </SubSection>
+          <PrintButton />
+        </SectionWrapper>
+
+        {/* ═══ Page 6: Safety & Security ═══ */}
+        <SectionWrapper num={6} title={guide.tier <= 3 ? 'Safety & Security' : 'Your Safety'} id="section-6">
+          {!guide.ppeTable && guide.safetyAltContent && guide.safetyAltContent.length > 0 && (
+            <p className="text-sm text-dark leading-relaxed mb-4">{guide.safetyAltContent[0]}</p>
+          )}
+          {guide.ppeTable && guide.ppeTable.length > 0 && (
+            <SubSection title="Required Personal Protective Equipment">
+              <DataTable
+                headers={['Gear', 'Spec', 'Who']}
+                rows={guide.ppeTable.map((p) => [p.gear, p.spec, p.who])}
+              />
+            </SubSection>
+          )}
+
+          {guide.safetyRules && guide.safetyRules.length > 0 && (
+            <SubSection title={guide.tier === 3 ? 'F&B Service Standards' : 'Workplace Safety Rules'}>
+              <ol className="space-y-2 list-decimal list-inside">
+                {guide.safetyRules.map((rule, i) => (
+                  <li key={i} className="text-sm text-dark leading-relaxed">{rule}</li>
+                ))}
+              </ol>
+            </SubSection>
+          )}
+
+          {guide.safetyAltContent && guide.safetyAltContent.length > 1 && (
+            <ul className="space-y-2 mt-4">
+              {guide.safetyAltContent.slice(1).map((item, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-dark">
+                  <span className="text-pink mt-0.5 shrink-0">&bull;</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {guide.securityPolicies && guide.securityPolicies.length > 0 && (
+            <SubSection title="Security & Policies">
+              <ul className="space-y-2">
+                {guide.securityPolicies.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-dark">
+                    <span className="text-pink mt-0.5 shrink-0">&bull;</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </SubSection>
+          )}
+
+          {guide.emergencySOPs && guide.emergencySOPs.length > 0 && (
+            <SubSection title="Emergency Procedures">
+              <div className="space-y-0">
+                {guide.emergencySOPs.map((sop, i) => (
+                  <SOPCard key={i} sop={sop} />
+                ))}
+              </div>
+            </SubSection>
+          )}
+
+          {guide.emergencyAltContent && guide.emergencyAltContent.length > 0 && (
+            <SubSection title="In an Emergency">
+              <p className="text-sm text-dark leading-relaxed mb-4">{guide.emergencyAltContent[0]}</p>
+              {guide.emergencyAltContent.length > 1 && (
+                <ul className="space-y-2">
+                  {guide.emergencyAltContent.slice(1).map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-dark">
+                      <span className="text-pink mt-0.5 shrink-0">&bull;</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </SubSection>
+          )}
           <PrintButton />
         </SectionWrapper>
 

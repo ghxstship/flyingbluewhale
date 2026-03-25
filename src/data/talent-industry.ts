@@ -57,7 +57,7 @@ const talentIndustry: GuideConfig = {
     'Water Fountains — Located near most grandstand restrooms.',
     'Restrooms — Accessible in all VIP and backstage areas.',
     'Medical — EMTs and paramedics staffed throughout the event.',
-    'Earplugs — Free at First Aid stations.',
+    'Earplugs — Free at First Aid stations. Recommended if you plan to be near the main PA.',
   ],
 
   safetyAltContent: [

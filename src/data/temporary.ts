@@ -82,7 +82,7 @@ const temporary: GuideConfig = {
   ],
 
   roleFAQ: [
-    { question: 'Where do I check in?', answer: 'Production Gate on E 32nd St. Have your photo ID ready.' },
+    { question: 'Where do I check in?', answer: 'Check in at the Production Gate on E 32nd St. Have your valid photo ID ready — you will not be admitted without it.' },
     { question: 'Do I need an escort?', answer: 'Yes. You must be escorted at all times. Do not enter the site without your escort.' },
     { question: 'Where can I park?', answer: 'Your escort will direct you to a temporary parking area. Do not park in Crew Parking or guest lots.' },
     { question: 'Can I access the event areas?', answer: 'No. Temporary credentials do not grant access to guest, VIP, crew, or backstage areas.' },

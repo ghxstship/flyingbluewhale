@@ -27,20 +27,20 @@ const operations: GuideConfig = {
   credentials: 'If you do not have your credential, proceed to the Staff Check-in lane at Guest Services (adjacent to the VIP Entrance) with valid photo ID to pick up your wristband. If you already have your credential, proceed directly to the designated Staff entrance lanes at the VIP Entrance. Wear your credential visibly at all times.',
   entrance: 'Credential Pickup Hours\nFriday, March 27 — 10 AM – 8 PM\nSaturday, March 28 — 10 AM – 8 PM\nGuest Services (adjacent to VIP Entrance)',
   additionalNotes: [
-    'Cell service unreliable during peak hours, rely on radios.',
-    'No personal vehicles beyond Crew Parking.',
-    'Security staff must complete briefing before assuming positions.',
-    'Pets, personal guests, and children not permitted in operations areas.',
+    'Cell service will be unreliable during peak hours. Rely on radios for all operational communication.',
+    'No personal vehicles are permitted beyond the Crew Parking lot. All gear moves via hand cart or approved production vehicle only.',
+    'Security staff must complete the pre-show briefing before assuming positions.',
+    'Pets, personal guests, and children are not permitted in operations areas at any time.',
   ],
 
   buildSchedule: [
-    { date: 'Thu Mar 27', time: '08:00 AM', activity: 'Ops load-in begins' },
-    { date: 'Fri Mar 28', time: '08:00 AM', activity: 'Final ops walk — guest flow, wayfinding, ADA check' },
-    { date: 'Fri Mar 28', time: '02:00 PM', activity: 'All ops positions briefed & ready' },
+    { date: 'Fri Mar 27', time: '08:00 AM', activity: 'Ops load-in begins' },
+    { date: 'Sat Mar 28', time: '08:00 AM', activity: 'Final ops walk — guest flow, wayfinding, ADA check' },
+    { date: 'Sat Mar 28', time: '02:00 PM', activity: 'All ops positions briefed & ready' },
   ],
   strikeSchedule: [
-    { date: 'Sat Mar 29', time: '02:00 AM', activity: 'Ops strike begins' },
-    { date: 'Sat Mar 29', time: '10:00 AM', activity: 'Final cleaning & site walkthrough' },
+    { date: 'Sun Mar 29', time: '02:00 AM', activity: 'Ops strike begins' },
+    { date: 'Sun Mar 29', time: '10:00 AM', activity: 'Final cleaning & site walkthrough' },
   ],
 
   showTimeline: [
@@ -62,7 +62,7 @@ const operations: GuideConfig = {
     'Water Fountains — Located near most grandstand restrooms. Bring your reusable bottle.',
     'Restrooms — Temporary restrooms on the north side of the footprint. Permanent restrooms available on the south side and throughout the Casino and Grandstands.',
     'Medical — EMTs and paramedics staffed at the Medical Tent in the Paddock from load-in through strike.',
-    'Earplugs — Free at First Aid stations.',
+    'Earplugs — Free at First Aid stations. Recommended near the main PA during tuning and show.',
   ],
 
   ppeTable: [
@@ -149,7 +149,7 @@ const operations: GuideConfig = {
         'If the patient is unresponsive, begin CPR if trained. Locate nearest AED.',
         'Production Manager notifies Executive Producer. Stage Manager assesses whether show continues.',
       ],
-      note: 'AEDs are located at: Command Center (Clubhouse 2F), Production Office, GA Entrance gate, VIP Entrance, and Medical (Paddock).',
+      note: 'AEDs are located at: Command Center (Clubhouse 3F), Production Office, GA Entrance gate, VIP Entrance, and Medical (Paddock).',
     },
     {
       title: 'Burglary or Theft',
@@ -302,18 +302,18 @@ const operations: GuideConfig = {
   guestFAQIntro: 'Every member of this team should be able to answer the most common guest questions confidently and accurately.',
 
   roleFAQ: [
-    { question: 'Where is the Production Office?', answer: 'The Production Office handles admin, crew services, and radio distribution. Its location will be on your call sheet. The Command Center (Clubhouse 2F) is separate and restricted to Core credential holders and public safety leadership.' },
-    { question: 'Where do I pick up my radio?', answer: 'Production Office during check-in.' },
-    { question: 'What\'s the Wi-Fi?', answer: 'Network: GHXSTSHIP-PROD, password at check-in, don\'t share.' },
+    { question: 'Where is the Production Office?', answer: 'The Production Office is on the third floor of the Clubhouse, in the same area as the Command Center. The Production Office handles admin, crew services, and radio distribution. The Command Center is separate and restricted to Core credential holders and public safety leadership.' },
+    { question: 'Where do I pick up my radio?', answer: 'Radios are distributed at the Production Office during check-in. Return your radio to the Production Office at the end of your shift or at strike. You are responsible for your assigned radio.' },
+    { question: 'What\'s the Wi-Fi?', answer: 'Network: GHXSTSHIP-PROD · Password: distributed at check-in. Do not share with guests. This is a production network — not for streaming.' },
     { question: 'Is there craft services?', answer: 'No. This production does not offer craft services. Plan your own meals. Food vendors available during show hours on the north side of the footprint.' },
     { question: 'Where do I park?', answer: 'Crew parking is via E 4th Ave — the same route as guest parking. Follow signage and park in the zone matching your issued parking pass. Display your pass on the dashboard.' },
-    { question: 'What if I\'m running late?', answer: 'Call/text department head.' },
-    { question: 'Who do I report an injury to?', answer: 'Production Office immediately, Code Blue on CH 9 for emergencies.' },
-    { question: 'Can I bring a guest?', answer: 'No personal guests in operations areas.' },
-    { question: 'What if it rains?', answer: 'Show proceeds in light rain, weather hold in severe weather per CH 16.' },
-    { question: 'When does my shift end?', answer: 'When department head releases you.' },
+    { question: 'What if I\'m running late?', answer: 'Call or text your department head immediately. If you cannot reach them, call the Production Office at the number on your call sheet.' },
+    { question: 'Who do I report an injury to?', answer: 'Report all injuries to the Production Office immediately. If it\'s an emergency, call "Code Blue" on CH 1 (Emergency).' },
+    { question: 'Can I bring a guest?', answer: 'No. Personal guests are not permitted in operations areas. If someone needs to visit, they must be credentialed through the Production Office in advance.' },
+    { question: 'What if it rains?', answer: 'The show proceeds in light rain. In severe weather, the Production Manager will call a weather hold or evacuation. Follow instructions on CH 1 (Emergency).' },
+    { question: 'When does my shift end?', answer: 'Your shift ends when your department head releases you. Show day is a full-day call. Strike crew should expect to work until the site is clear.' },
     { question: 'Where are the restrooms for crew?', answer: 'Temporary restrooms on the north side of the footprint. Permanent restrooms on the south side and throughout the Casino and Grandstands.' },
-    { question: 'What if I see something suspicious?', answer: 'Report to Security on CH 7 immediately, do not confront.' },
+    { question: 'What if I see something suspicious?', answer: 'Report to Security on CH 2 immediately. Do not confront — observe and relay details.' },
   ],
   roleFAQTitle: 'Crew Intel',
 

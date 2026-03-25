@@ -34,14 +34,14 @@ const foodBeverage: GuideConfig = {
   ],
 
   buildSchedule: [
-    { date: 'Fri Mar 28', time: '10:00 AM', activity: 'F&B load-in begins' },
-    { date: 'Fri Mar 28', time: '02:00 PM', activity: 'Bar inspection & health code walk-through' },
-    { date: 'Fri Mar 28', time: '04:00 PM', activity: 'All bars staffed & stocked — ready for service' },
+    { date: 'Fri Mar 27', time: '08:00 AM', activity: 'F&B and vendor load-in begins' },
+    { date: 'Sat Mar 28', time: '10:00 AM', activity: 'Bar inspection & health code walk-through' },
+    { date: 'Sat Mar 28', time: '04:00 PM', activity: 'All bars staffed & stocked — ready for service' },
   ],
   strikeSchedule: [
-    { date: 'Sat Mar 29', time: '12:45 AM', activity: 'Last call — bars close' },
-    { date: 'Sat Mar 29', time: '02:00 AM', activity: 'Cash out, inventory, breakdown' },
-    { date: 'Sat Mar 29', time: '06:00 AM', activity: 'F&B site clear' },
+    { date: 'Sun Mar 29', time: '12:45 AM', activity: 'Last call — bars close' },
+    { date: 'Sun Mar 29', time: '02:00 AM', activity: 'Cash out, inventory, breakdown' },
+    { date: 'Sun Mar 29', time: '06:00 AM', activity: 'F&B site clear' },
   ],
 
   showTimeline: [
@@ -62,7 +62,7 @@ const foodBeverage: GuideConfig = {
     'Water Fountains — Located near most grandstand restrooms. Bring your reusable bottle.',
     'Restrooms — Temporary restrooms on the north side of the footprint. Permanent restrooms available on the south side and throughout the Casino and Grandstands.',
     'Medical — EMTs and paramedics staffed at the Medical Tent in the Paddock from load-in through strike.',
-    'Earplugs — Free at First Aid stations.',
+    'Earplugs — Free at First Aid stations. Recommended near the main PA during tuning and show.',
   ],
 
   ppeTable: [
@@ -74,8 +74,8 @@ const foodBeverage: GuideConfig = {
   safetyRules: [
     'Non-slip closed-toe shoes required at all times. No exceptions.',
     'No consumption of alcohol during your shift \u2014 zero tolerance, immediate termination.',
-    'Cut off any guest who is visibly intoxicated. Notify your bar lead and Security (CH 7).',
-    'Report all spills immediately. If you can\u2019t clean it safely, call for cleaning support on CH 10.',
+    'Cut off any guest who is visibly intoxicated. Notify your bar lead and Security (CH 2).',
+    'Report all spills immediately. If you can\u2019t clean it safely, call for cleaning support on CH 6 (Cleaning & Sanitation).',
     'Wash hands after every break, after handling cash, and before handling food or garnishes.',
     'No personal phones, earbuds, or smartwatches at bar stations during service.',
     'All tips are pooled per your bar assignment. Your F&B lead will explain the structure at pre-shift.',
@@ -145,7 +145,7 @@ const foodBeverage: GuideConfig = {
         'If the patient is unresponsive, begin CPR if trained. Locate nearest AED.',
         'Production Manager notifies Executive Producer. Stage Manager assesses whether show continues.',
       ],
-      note: 'AEDs are located at: Command Center (Clubhouse 2F), Production Office, GA Entrance gate, VIP Entrance, and Medical (Paddock).',
+      note: 'AEDs are located at: Command Center (Clubhouse 3F), Production Office, GA Entrance gate, VIP Entrance, and Medical (Paddock).',
     },
     {
       title: 'Burglary or Theft',
@@ -300,14 +300,14 @@ const foodBeverage: GuideConfig = {
   roleFAQ: [
     { question: 'What\u2019s the dress code for F&B staff?', answer: 'All-black: black shirt, black pants, black non-slip closed-toe shoes. No logos, no graphics.' },
     { question: 'Where do I check in?', answer: 'If you don\u2019t have your credential, go to the Staff Check-in lane at Guest Services (adjacent to the VIP Entrance). If you already have your credential, enter through the Staff entrance lanes at the VIP Entrance. Report to your assigned bar or station after entry.' },
-    { question: 'Where is my bar assignment?', answer: 'Your F&B lead will assign your station at pre-shift meeting (3:00 PM).' },
+    { question: 'Where is my bar assignment?', answer: 'Your F&B lead will assign your station at pre-shift meeting (5:00 PM — one hour before doors).' },
     { question: 'What\u2019s the menu?', answer: 'Menu and pricing will be reviewed at pre-shift. Specialty cocktails, beer, wine, and non-alcoholic options.' },
     { question: 'How do tips work?', answer: 'Tips are pooled per bar assignment. Your F&B lead explains the structure at pre-shift.' },
-    { question: 'What if a guest is too drunk?', answer: 'Cut them off politely but firmly. Notify your bar lead and Security (CH 7). Offer water and help arrange a ride.' },
-    { question: 'What if someone gets hurt at my bar?', answer: 'Call \u201CCode Blue\u201D on CH 9. Clear the area. Do not move the person unless they\u2019re in danger.' },
+    { question: 'What if a guest is too drunk?', answer: 'Cut them off politely but firmly. Notify your bar lead and Security (CH 2). Offer water and help arrange a ride.' },
+    { question: 'What if someone gets hurt at my bar?', answer: 'Call \u201CCode Blue\u201D on CH 1 (Emergency). Clear the area. Do not move the person unless they\u2019re in danger.' },
     { question: 'Where are the restrooms for staff?', answer: 'Temporary restrooms on the north side of the footprint. Permanent restrooms on the south side and throughout the Casino and Grandstands.' },
     { question: 'Can I take a break?', answer: 'Breaks are coordinated by your F&B lead. Never leave your bar unattended.' },
-    { question: 'What if I run out of something?', answer: 'Radio CH 10 for runner support or notify your F&B lead.' },
+    { question: 'What if I run out of something?', answer: 'Radio CH 15 (Bar Ops) for runner support or notify your F&B lead.' },
     { question: 'When am I done?', answer: 'After cash-out, inventory, and breakdown. Your F&B lead releases you.' },
   ],
   roleFAQTitle: 'F&B Intel',

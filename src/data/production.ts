@@ -28,21 +28,23 @@ const production: GuideConfig = {
   entrance: 'Credential Pickup Hours\nFriday, March 27 — 10 AM – 8 PM\nSaturday, March 28 — 10 AM – 8 PM\nGuest Services (adjacent to VIP Entrance)',
   additionalNotes: [
     'Cell service will be unreliable during peak hours. Rely on radios for all operational communication.',
-    'The Command Center (Clubhouse 2F) is restricted to Core credential holders and public safety leadership only. For admin, radios, and crew services, report to the Production Office.',
+    'The Command Center, Production Office, and Green Room are all located on the third floor of the Clubhouse. The Command Center is restricted to Core credential holders and public safety leadership only. For admin, radios, and crew services, report to the Production Office.',
     'The Clubhouse is a historic building. Do not drill, nail, screw, or tape into any original surfaces without explicit approval from the Venue Liaison.',
     'No personal vehicles are permitted beyond the Crew Parking lot. All gear moves via hand cart or approved production vehicle only.',
     'Pets, personal guests, and children are not permitted in production areas at any time.',
   ],
 
   buildSchedule: [
-    { date: 'Tue Mar 25', time: '06:00 AM', activity: 'Load-in begins' },
-    { date: 'Thu Mar 27', time: '02:00 PM', activity: 'Full production rehearsal' },
-    { date: 'Fri Mar 28', time: '06:00 AM', activity: 'Show day — final checks begin' },
-    { date: 'Fri Mar 28', time: '04:00 PM', activity: 'All production positions locked — show mode' },
+    { date: 'Mon Mar 23', time: '08:00 AM', activity: 'Site & stage load-in begins' },
+    { date: 'Wed Mar 25', time: '08:00 AM', activity: 'Experiential & scenic load-in begins' },
+    { date: 'Fri Mar 27', time: '08:00 AM', activity: 'F&B and vendor load-in begins' },
+    { date: 'Fri Mar 27', time: '02:00 PM', activity: 'Full production rehearsal' },
+    { date: 'Sat Mar 28', time: '06:00 AM', activity: 'Show day — final checks begin' },
+    { date: 'Sat Mar 28', time: '04:00 PM', activity: 'All production positions locked — show mode' },
   ],
   strikeSchedule: [
-    { date: 'Sat Mar 29', time: '02:00 AM', activity: 'Strike begins' },
-    { date: 'Sat Mar 29', time: '12:00 PM', activity: 'Site clear — final walkthrough with Venue Liaison' },
+    { date: 'Sun Mar 29', time: '02:00 AM', activity: 'Strike begins' },
+    { date: 'Sun Mar 29', time: '12:00 PM', activity: 'Site clear — final walkthrough with Venue Liaison' },
   ],
 
   showTimeline: [
@@ -64,7 +66,7 @@ const production: GuideConfig = {
     'Water Fountains — Located near most grandstand restrooms. Bring your reusable bottle.',
     'Restrooms — Temporary restrooms on the north side of the footprint. Permanent restrooms available on the south side and throughout the Casino and Grandstands.',
     'Medical — EMTs and paramedics staffed at the Medical Tent in the Paddock from load-in through strike.',
-    'Earplugs — Free at First Aid stations. Required near main PA during tuning and show.',
+    'Earplugs — Free at First Aid stations. Recommended near the main PA during tuning and show.',
   ],
 
   ppeTable: [
@@ -151,7 +153,7 @@ const production: GuideConfig = {
         'If the patient is unresponsive, begin CPR if trained. Locate nearest AED.',
         'Production Manager notifies Executive Producer. Stage Manager assesses whether show continues.',
       ],
-      note: 'AEDs are located at: Command Center (Clubhouse 2F), Production Office, GA Entrance gate, VIP Entrance, and Medical (Paddock).',
+      note: 'AEDs are located at: Command Center (Clubhouse 3F), Production Office, GA Entrance gate, VIP Entrance, and Medical (Paddock).',
     },
     {
       title: 'Burglary or Theft',
@@ -304,15 +306,15 @@ const production: GuideConfig = {
   guestFAQIntro: 'Every member of this team should be able to answer the most common guest questions confidently and accurately.',
 
   roleFAQ: [
-    { question: 'Where is the Production Office?', answer: 'The Production Office handles admin, crew services, and radio distribution. Its location will be on your call sheet. The Command Center (Clubhouse 2F) is separate and restricted to Core credential holders and public safety leadership.' },
+    { question: 'Where is the Production Office?', answer: 'The Production Office is on the third floor of the Clubhouse, in the same area as the Command Center and Green Room. The Production Office handles admin, crew services, and radio distribution. The Command Center is separate and restricted to Core credential holders and public safety leadership.' },
     { question: 'Where do I pick up my radio?', answer: 'Radios are distributed at the Production Office during check-in. Return your radio to the Production Office at the end of your shift or at strike. You are responsible for your assigned radio.' },
     { question: 'What\'s the Wi-Fi?', answer: 'Network: GHXSTSHIP-PROD · Password: distributed at check-in. Do not share with guests. This is a production network — not for streaming.' },
     { question: 'Is there craft services?', answer: 'No. This production does not offer craft services. Plan your own meals and snacks. Food vendors will be available on the north side of the footprint during show hours.' },
     { question: 'Where do I park?', answer: 'Crew parking is via E 4th Ave — the same route as guest parking. Follow signage and park in the zone matching your issued parking pass. Display your pass on the dashboard.' },
     { question: 'What if I\'m running late?', answer: 'Call or text your department head immediately. If you cannot reach them, call the Production Office at the number on your call sheet.' },
-    { question: 'Who do I report an injury to?', answer: 'Report all injuries — no matter how minor — to the Production Office immediately. If it\'s an emergency, call "Code Blue" on CH 9.' },
+    { question: 'Who do I report an injury to?', answer: 'Report all injuries — no matter how minor — to the Production Office immediately. If it\'s an emergency, call "Code Blue" on CH 1 (Emergency).' },
     { question: 'Can I bring a guest?', answer: 'No. Personal guests are not permitted in production areas. If someone needs to visit, they must be credentialed through the Production Office in advance.' },
-    { question: 'What if it rains?', answer: 'The show is outdoor and proceeds in light rain. In severe weather (lightning, high winds), the Production Manager will call a weather hold or evacuation. Follow instructions on CH 16.' },
+    { question: 'What if it rains?', answer: 'The show is outdoor and proceeds in light rain. In severe weather (lightning, high winds), the Production Manager will call a weather hold or evacuation. Follow instructions on CH 1 (Emergency).' },
     { question: 'When does my shift end?', answer: 'Your shift ends when your department head releases you. Show day is a full-day call. Strike crew should expect to work until the site is clear.' },
     { question: 'Is there a quiet area or break space?', answer: 'The Clubhouse second-floor lounge is available as a break area for crew. It\'s climate-controlled and has seating. Please keep it clean.' },
     { question: 'What if I have a medical condition my team should know about?', answer: 'Disclose any relevant medical information to the Production Office and your department head confidentially. The Medical Tent has EMTs and paramedics on-site from load-in through strike.' },

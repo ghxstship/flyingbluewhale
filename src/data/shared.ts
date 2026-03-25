@@ -54,7 +54,7 @@ export const CREDENTIAL_MATRIX: CredentialRow[] = [
 ];
 
 export const RESOURCE_LOCATIONS: ResourceLocation[] = [
-  { resource: 'AED Defibrillator', location: 'Command Center (Clubhouse 2F), Production Office, GA Entrance gate, VIP Entrance, Medical (Paddock)', zone: 'All zones' },
+  { resource: 'AED Defibrillator', location: 'Command Center (Clubhouse 3F), Production Office, GA Entrance gate, VIP Entrance, Medical (Paddock)', zone: 'All zones' },
   { resource: 'First Aid & Medical', location: 'North station near GA Restrooms, South station in the tunnel between VIP Dance Floor and VIP Clubhouse — EMTs + paramedics staffed', zone: 'All zones' },
   { resource: 'Fire Extinguisher (ABC)', location: 'Every 75 feet throughout footprint, every bar, kitchen, backstage, and electrical panel', zone: 'All zones' },
   { resource: 'Fire Alarm Pull Station', location: 'Every exit in Clubhouse + Casino', zone: 'Indoor' },
@@ -78,16 +78,16 @@ export const GUEST_FAQ: FAQPair[] = [
   { question: 'What time does the music start?', answer: 'Kaz James opens at 7:00 PM. Carlita takes over at 9:30 PM. Black Coffee headlines from 11:30 PM until 1:00 AM.' },
   { question: 'What are the age requirements?', answer: 'GA is 18+ and VIP is 21+. A valid government-issued photo ID is required for entry — no exceptions. Acceptable forms include a driver\'s license, passport, or state ID.' },
   { question: 'Is there a dress code?', answer: 'There is no formal dress code, but we encourage smart-casual attire. This is an outdoor event on racetrack grounds, so comfortable shoes are recommended. Stilettos and open-toe shoes can be challenging on grass and gravel surfaces.' },
-  { question: 'What can I bring?', answer: 'You may bring a small clutch or bag (no larger than 12" × 6" × 12"). Clear bags are encouraged for faster entry. Sealed, empty reusable water bottles are allowed — free water fountains are available near most grandstand restrooms.' },
+  { question: 'What can I bring?', answer: 'You may bring a small clutch or bag (no larger than 12" × 6" × 12"). Clear bags are encouraged for faster entry. Sealed, empty reusable water bottles are welcome.' },
   { question: 'Are water bottles allowed?', answer: 'Sealed, empty reusable water bottles are welcome. Free water fountains are available near most grandstand restrooms.' },
   { question: 'Can I leave and come back?', answer: 'No. This is a no re-entry event. Once you exit the venue, you will not be permitted to re-enter.' },
   { question: 'Where should my rideshare drop me off?', answer: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. Follow the signs from the drop-off area to the entrance.' },
   { question: 'Is there on-site parking?', answer: 'Yes. Guest parking is available in the main Hialeah Park lots. Enter via E 4th Ave. Parking attendants will direct you. Arrive early — lots fill up.' },
   { question: 'Is this event outdoors?', answer: 'Yes. The main event takes place on the Racetrack Grounds, which is an outdoor venue. Some covered areas are available (Paddock, Clubhouse balcony), but most of the experience is open-air. Check the weather forecast and dress accordingly.' },
   { question: 'Are there ATMs on site?', answer: 'Yes. ATMs are located inside the Casino building and near the Clubhouse entrance. Standard transaction fees apply.' },
-  { question: 'What if I lose something?', answer: 'Visit Guest Services adjacent to the VIP Entrance during the event. After the event, contact sos@ghxstship.pro with a description of the lost item.' },
+  { question: 'What if I lose something?', answer: 'Visit Guest Services adjacent to the VIP Entrance during the event. After the event, contact info@clubspace.com with a description of the lost item.' },
   { question: 'What if I need medical help?', answer: 'Find any staff member or security guard — they will call for medical support immediately. The Medical Tent with EMTs and paramedics is located in the Paddock area. AEDs and first aid kits are positioned throughout the venue.' },
-  { question: 'Is the venue ADA accessible?', answer: 'Yes. ADA-accessible entrances, viewing areas, and restrooms are available. If you need accommodation, contact sos@ghxstship.pro before the event or ask any staff member in a high-visibility vest on-site.' },
+  { question: 'Is the venue ADA accessible?', answer: 'Yes. ADA-accessible entrances, viewing areas, and restrooms are available. If you need accommodation, contact info@clubspace.com before the event or ask any staff member in a high-visibility vest on-site.' },
   { question: 'Can I bring a professional camera?', answer: 'Professional cameras, drones, GoPros, and recording equipment are not permitted. Phone cameras are welcome for personal use.' },
   { question: 'Is there a smoking area?', answer: 'Yes. Designated smoking areas are located in the Paddock and near the Crew Parking perimeter. Smoking is not permitted inside any building or in the main GA/VIP areas.' },
   { question: 'What items are prohibited?', answer: 'Prohibited items include: weapons or sharp objects, illegal substances, outside food or beverages, professional cameras or recording equipment, drones, laser pointers, fireworks or flares, large bags or backpacks, chairs or blankets, glass containers, and any item deemed a safety risk by security.' },

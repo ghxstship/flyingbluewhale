@@ -22,13 +22,12 @@ const guests: GuideConfig = {
   vehicleRoute: 'Enter via E 4th Ave and follow event signage to parking. Parking attendants will direct you to the right lot.',
   parking: 'Guest parking is in the main Hialeah Park lots off E 4th Ave. Follow signage and parking attendants to your spot. Arrive early — lots fill up.',
   rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. From the drop-off, follow the signs toward the entrance — it\'s a short walk.',
-  transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). From the platform, take the pedestrian bridge over the tracks to the north side, then follow event signage through the parking lot to the entrances. Runs 5 AM to midnight. $2.25 per trip. Heads up: MetroRail shuts down around midnight and this event runs until 1 AM. Have a rideshare plan for the way home.',
+  transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). From the platform, take the pedestrian bridge over the tracks to the north side, then follow event signage through the parking lot to the entrances. Runs 5 AM to midnight, $2.25 per trip. Bus Route 37 stops at Palm Ave & W 28th St, about a 5-minute walk. Freebee offers free on-demand rides within Hialeah via their app. Heads up: MetroRail shuts down around midnight and this event runs until 1 AM. Have a rideshare plan for the way home.',
   wayfinding: 'However you arrive — by car, rideshare, or transit — follow the event signage to the entrance gates. Look for the staff in high-visibility vests — they\'ll point you in the right direction. Have your ticket ready on your phone (a screenshot works).',
   credentials: 'You\'ll receive a wristband at the gate. VIP and VIP Table holders will be directed to the VIP Entrance.',
   entrance: 'GA: Main entrance gate. VIP + VIP Table: VIP Entrance.',
   additionalNotes: [
     'This is a no re-entry event. Once you leave, you can\'t come back in.',
-    'Free water fountains are available near most grandstand restrooms.',
     'Free earplugs are available at First Aid stations.',
     'ATMs are inside the Casino building and near the Clubhouse entrance.',
   ],
@@ -37,13 +36,13 @@ const guests: GuideConfig = {
   scheduleAltContent: 'Here\'s your evening at a glance. Arrive early, find your spot, and let the music take you.',
 
   showTimeline: [
-    { time: '6:00 PM', activity: 'Doors open — welcome to the Racetrack' },
-    { time: '7:00 PM', activity: 'Kaz James' },
-    { time: '9:30 PM', activity: 'Carlita' },
+    { time: '06:00 PM', activity: 'Doors open — welcome to the Racetrack' },
+    { time: '07:00 PM', activity: 'Kaz James' },
+    { time: '09:30 PM', activity: 'Carlita' },
     { time: '11:30 PM', activity: 'Black Coffee (Headline)' },
     { time: '12:45 AM', activity: 'Last call — bars close' },
-    { time: '1:00 AM', activity: 'Music ends' },
-    { time: '2:00 AM', activity: 'Venue close — time to head home' },
+    { time: '01:00 AM', activity: 'Music ends' },
+    { time: '02:00 AM', activity: 'Venue close — time to head home' },
   ],
 
   venueAmenities: [

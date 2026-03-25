@@ -10,10 +10,20 @@ export const EVENT = {
   address: '100 E 32nd St, Hialeah, FL 33013',
   phone: '(305) 885-8000',
   capacity: '10,000',
-  producer: 'GHXSTSHIP Industries',
+  producer: 'G H X S T S H I P  INDUSTRIES LLC',
   projectCode: 'MMW26-HP',
   sitePlan: 'https://app.cartamaps.com/share/fb788ebb-8b41-4838-b631-4d51097b3e77',
   contact: 'sos@ghxstship.pro',
+  eventLinks: [
+    { label: 'Event Info', url: 'https://www.clubspace.com/club-space-presents-black-coffee' },
+    { label: 'Tickets', url: 'https://dice.fm/event/7dpg36-black-coffee-carlita-kaz-james-at-the-racetrack-mmw-26-28th-mar-club-space-miami-miami-hialeah-park-casino-hialeah-tickets?lng=en-US' },
+  ],
+  socials: {
+    instagram: 'https://www.instagram.com/ghxstship',
+    linkedin: 'https://www.linkedin.com/company/ghxstship',
+    youtube: 'https://www.youtube.com/@ghxstship',
+    website: 'https://ghxstship.pro',
+  },
 };
 
 export const SET_TIMES = [

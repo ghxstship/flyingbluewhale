@@ -18,17 +18,17 @@ const talentIndustry: GuideConfig = {
     'If you have dietary needs or allergies, notify your Liaison in advance.',
   ],
   vehicleRoute:
-    'Your Liaison will provide specific arrival instructions. Artists arrive via the Production Gate (E 32nd St) with vehicle escort to backstage.',
+    'Your Liaison will provide specific arrival instructions in advance. Artists with arranged vehicles arrive via E 32nd St with Liaison escort to backstage.',
   parking:
-    'Artist vehicles park in the designated area near backstage. Your Liaison will coordinate.',
+    'Artist and industry vehicles enter via E 4th Ave and follow event signage. Your Liaison will coordinate your specific parking area.',
   rideshare:
-    'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Your Liaison will meet you at the designated drop-off zone.',
+    'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. Your Liaison will meet you at the drop-off.',
   transit:
-    'Not recommended for artist/industry arrivals. Rideshare or arranged vehicle is preferred.',
+    'MetroRail Green Line to Hialeah Station (125 E 21st St). From the platform, take the pedestrian bridge over the tracks to the north side, then follow event signage through the parking lot. Your Liaison can meet you at the station if arranged in advance.',
   wayfinding:
-    'Your Liaison will meet you at your arrival point and escort you to the Green Room or VIP area.',
+    'Your Liaison will meet you at your arrival point — whether that\'s the rideshare drop-off, parking area, or pedestrian bridge — and escort you directly to the Green Room or VIP area.',
   credentials:
-    'Your Liaison will have your credential ready. Artist/Touring wristband provides backstage, FOH, VIP, and GA access. Industry credential provides VIP and GA access.',
+    'Your Liaison will have your credential ready upon arrival. Artist/Touring wristband provides backstage, stage, VIP, and GA access. Industry credential provides VIP and GA access.',
   entrance:
     'Artists: Production Gate (E 32nd St) with Liaison escort. Industry: VIP Entrance (Fountain Terrace).',
   additionalNotes: [

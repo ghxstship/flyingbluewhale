@@ -459,15 +459,9 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
             <p className="text-sm text-dark leading-relaxed">{guide.transit}</p>
           </SubSection>
 
-          <SubSection title="Finding Your Way">
+          <SubSection title="Check-In & Wayfinding">
             <p className="text-sm text-dark leading-relaxed">{guide.wayfinding}</p>
-          </SubSection>
-
-          <SubSection title="Check-In">
-            <p className="text-sm text-dark leading-relaxed">{guide.credentials}</p>
-          </SubSection>
-
-          <SubSection title="Your Entrance">
+            <p className="text-sm text-dark leading-relaxed mt-3">{guide.credentials}</p>
             <PinkCallout>
               <p className="text-sm text-dark font-medium">{guide.entrance}</p>
             </PinkCallout>

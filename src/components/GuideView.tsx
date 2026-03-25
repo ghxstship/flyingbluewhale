@@ -483,7 +483,7 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
         </SectionWrapper>
 
         {/* ═══ Page 3: Build & Credentials ═══ */}
-        <SectionWrapper num={3} title={guide.tier <= 3 ? 'The Build & The Strike' : guide.tier === 5 ? 'Your Schedule' : 'Schedule & Credentials'} id="section-3">
+        <SectionWrapper num={3} title={guide.tier <= 3 ? 'Build & Strike' : guide.tier === 5 ? 'Your Schedule' : 'Schedule & Credentials'} id="section-3">
           {guide.buildSchedule && guide.buildSchedule.length > 0 && (
             <>
               <SubSection title="Build Schedule">

@@ -24,8 +24,8 @@ const production: GuideConfig = {
   rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. From the drop-off, follow signage to the Production Gate.',
   transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). From the platform, take the pedestrian bridge over the tracks to the north side, then follow event signage through the parking lot to the Production Gate. Runs 5 AM to midnight. $2.25 per trip. MetroRail shuts down around midnight — have a rideshare plan for the way home.',
   wayfinding: 'However you arrive — by car, rideshare, or transit — follow event signage toward the venue entrances.',
-  credentials: 'If you do not have your credential, proceed to the Staff Check-in lane at Guest Services (near the GA Entrance) with valid photo ID to pick up your wristband and lanyard. If you already have your credential, proceed directly to the designated Staff entrance lanes at the VIP entrance. Wear your credential visibly at all times. Lost credentials must be reported to the Production Office immediately.',
-  entrance: 'Staff without credentials: Staff Check-in lane at Guest Services. Staff with credentials: Staff entrance lanes at VIP entrance.',
+  credentials: 'If you do not have your credential, proceed to the Staff Check-in lane at Guest Services (adjacent to the VIP Entrance) with valid photo ID to pick up your wristband and lanyard. If you already have your credential, proceed directly to the designated Staff entrance lanes at the VIP Entrance. Wear your credential visibly at all times. Lost credentials must be reported to the Production Office immediately.',
+  entrance: 'Staff without credentials: Staff Check-in lane at Guest Services. Staff with credentials: Staff entrance lanes at VIP Entrance.',
   additionalNotes: [
     'Cell service will be unreliable during peak hours. Rely on radios for all operational communication.',
     'The Command Center (Clubhouse 2F) is restricted to Core credential holders and public safety leadership only. For admin, radios, and crew services, report to the Production Office.',
@@ -127,14 +127,16 @@ const production: GuideConfig = {
   radioProtocol: 'Key your radio, wait one second, then speak. Use "Copy" to confirm receipt. Use "Say again" if you didn\'t hear. Keep transmissions under 10 seconds. No casual conversation on any channel. CH 1 is emergency only — never transmit on CH 1 unless directed by Production or Security.',
   chainOfCommand: [
     { role: 'Executive Producer', responsibility: 'Final authority on all production decisions', radio: 'CH 3' },
+    { role: 'Site (Ops) Director', responsibility: 'Site-wide operations, infrastructure, logistics oversight', radio: 'CH 3 / CH 4' },
     { role: 'Production Manager', responsibility: 'Day-to-day production operations, crew coordination', radio: 'CH 3' },
-    { role: 'Stage Manager', responsibility: 'Stage calls, artist changeovers, cue execution', radio: 'CH 7' },
-    { role: 'Technical Director', responsibility: 'Audio, lighting, video oversight', radio: 'CH 3 / CH 8' },
-    { role: 'Security Director', responsibility: 'Security operations, crowd management, incident response', radio: 'CH 2' },
-    { role: 'Medical Director', responsibility: 'Medical team supervision, emergency medical decisions', radio: 'CH 2' },
     { role: 'Operations Manager', responsibility: 'Site ops, cleaning, parking, logistics', radio: 'CH 3 / CH 4' },
+    { role: 'Technical Director', responsibility: 'Audio, lighting, video oversight', radio: 'CH 3 / CH 8' },
+    { role: 'Stage Manager', responsibility: 'Stage calls, artist changeovers, cue execution', radio: 'CH 7' },
+    { role: 'Public Safety Director', responsibility: 'Security operations, crowd management, medical oversight, incident response', radio: 'CH 2' },
     { role: 'Venue Liaison', responsibility: 'Venue-specific rules, building access, historic preservation', radio: 'CH 3' },
-    { role: 'Artist Liaison', responsibility: 'Artist coordination, green room, hospitality', radio: 'CH 13' },
+    { role: 'Artist Relations Manager', responsibility: 'Artist coordination, green room, hospitality', radio: 'CH 13' },
+    { role: 'Guest Services Manager', responsibility: 'Guest assistance, ticketing support, ADA, lost & found', radio: 'CH 14' },
+    { role: 'Food & Beverage Director', responsibility: 'Bar operations, VIP table service, catering, concessions', radio: 'CH 15 / CH 16' },
   ],
 
   emergencySOPs: [

@@ -51,7 +51,7 @@ const guests: GuideConfig = {
     'Earplugs — Free earplugs available at First Aid stations. Your hearing matters.',
     'ATMs — Located inside the Casino building and near the Clubhouse entrance.',
     'Restrooms — Available in the GA area, VIP area, and Clubhouse. ADA-accessible units in all locations.',
-    'Guest Services — Near the GA Entrance for questions, lost items, and ADA assistance.',
+    'Guest Services — Adjacent to the VIP Entrance for questions, lost items, and ADA assistance.',
     'Covered Areas — The Paddock and Clubhouse balcony offer shelter from sun and weather.',
     'Smoking Areas — Designated areas in the Paddock and near the Crew Parking perimeter. No smoking inside any building or in the main GA/VIP areas.',
     'Food & Drink — Full bar service with craft cocktails, beer, wine, and non-alcoholic options. GA is 18+, alcohol service is 21+ with valid ID. VIP Table holders receive dedicated bottle service.',
@@ -72,13 +72,13 @@ const guests: GuideConfig = {
     { feature: 'ADA Viewing', detail: 'Designated accessible viewing area in GA and VIP with companion seating' },
     { feature: 'ADA Restrooms', detail: 'Accessible restroom units in GA, VIP, and Clubhouse' },
     { feature: 'Service Animals', detail: 'Service animals welcome in all public areas per ADA guidelines' },
-    { feature: 'Assistance', detail: 'Need anything? Ask any staff member or visit the Guest Services near the GA Entrance.' },
+    { feature: 'Assistance', detail: 'Need anything? Ask any staff member or visit Guest Services adjacent to the VIP Entrance.' },
   ],
 
   // ── Communications ─────────────────────────────────────────────────
   commsAltContent: [
     'We\'re here to help. If you need anything, find a staff member — they\'re the ones in high-visibility vests.',
-    'The Guest Services near the GA Entrance is your go-to for questions, lost items, and general help.',
+    'Guest Services is adjacent to the VIP Entrance — your go-to for questions, lost items, and general help.',
     'For medical help, tell any staff member or security guard — they\'ll call it in immediately.',
     'If you need ADA assistance, visit the Guest Services or ask any staff member.',
   ],
@@ -124,7 +124,7 @@ const guests: GuideConfig = {
   // ── Contacts ───────────────────────────────────────────────────────
   contactDirectory: [
     { type: 'header', label: 'During the Event' },
-    { type: 'entry', label: 'Guest Services', phone: 'Near GA Entrance', notes: 'Questions, lost items, ADA assistance' },
+    { type: 'entry', label: 'Guest Services', phone: 'Adjacent to VIP Entrance', notes: 'Questions, lost items, ADA assistance' },
     { type: 'entry', label: 'Medical Tent', phone: 'Paddock area', notes: 'EMTs + paramedics on-site all night' },
     { type: 'header', label: 'Emergency' },
     { type: 'entry', label: 'Police / Fire / EMS', phone: '911', notes: 'Life-threatening emergencies' },

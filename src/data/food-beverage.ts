@@ -24,7 +24,7 @@ const foodBeverage: GuideConfig = {
   rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. From the drop-off, follow signage to the Production Gate.',
   transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). From the platform, take the pedestrian bridge over the tracks to the north side, then follow event signage through the parking lot to the Production Gate. Runs 5 AM to midnight. $2.25 per trip. MetroRail shuts down around midnight — have a rideshare plan for the way home.',
   wayfinding: 'However you arrive — by car, rideshare, or transit — follow event signage toward the venue entrances.',
-  credentials: 'If you do not have your credential, proceed to the Staff Check-in lane at Guest Services (near the GA Entrance) with valid photo ID to pick up your F&B wristband. If you already have your credential, proceed directly to the designated Staff entrance lanes at the VIP entrance. Wear your credential visibly at all times. Lost credentials must be reported to the Production Office immediately.',
+  credentials: 'If you do not have your credential, proceed to the Staff Check-in lane at Guest Services (adjacent to the VIP Entrance) with valid photo ID to pick up your F&B wristband. If you already have your credential, proceed directly to the designated Staff entrance lanes at the VIP Entrance. Wear your credential visibly at all times. Lost credentials must be reported to the Production Office immediately.',
   entrance: 'Staff without credentials: Staff Check-in lane at Guest Services. Staff with credentials: Staff entrance lanes at VIP entrance.',
   additionalNotes: [
     'All F&B staff must complete TIPS (or equivalent) training before the event.',
@@ -121,14 +121,16 @@ const foodBeverage: GuideConfig = {
   radioProtocol: 'Key your radio, wait one second, then speak. Use "Copy" to confirm receipt. Use "Say again" if you didn\'t hear. Keep transmissions under 10 seconds. No casual conversation on any channel. CH 1 is emergency only — never transmit on CH 1 unless directed by Production or Security.',
   chainOfCommand: [
     { role: 'Executive Producer', responsibility: 'Final authority on all production decisions', radio: 'CH 3' },
+    { role: 'Site (Ops) Director', responsibility: 'Site-wide operations, infrastructure, logistics oversight', radio: 'CH 3 / CH 4' },
     { role: 'Production Manager', responsibility: 'Day-to-day production operations, crew coordination', radio: 'CH 3' },
-    { role: 'Stage Manager', responsibility: 'Stage calls, artist changeovers, cue execution', radio: 'CH 7' },
-    { role: 'Technical Director', responsibility: 'Audio, lighting, video oversight', radio: 'CH 3 / CH 8' },
-    { role: 'Security Director', responsibility: 'Security operations, crowd management, incident response', radio: 'CH 2' },
-    { role: 'Medical Director', responsibility: 'Medical team supervision, emergency medical decisions', radio: 'CH 2' },
     { role: 'Operations Manager', responsibility: 'Site ops, cleaning, parking, logistics', radio: 'CH 3 / CH 4' },
+    { role: 'Technical Director', responsibility: 'Audio, lighting, video oversight', radio: 'CH 3 / CH 8' },
+    { role: 'Stage Manager', responsibility: 'Stage calls, artist changeovers, cue execution', radio: 'CH 7' },
+    { role: 'Public Safety Director', responsibility: 'Security operations, crowd management, medical oversight, incident response', radio: 'CH 2' },
     { role: 'Venue Liaison', responsibility: 'Venue-specific rules, building access, historic preservation', radio: 'CH 3' },
-    { role: 'Artist Liaison', responsibility: 'Artist coordination, green room, hospitality', radio: 'CH 13' },
+    { role: 'Artist Relations Manager', responsibility: 'Artist coordination, green room, hospitality', radio: 'CH 13' },
+    { role: 'Guest Services Manager', responsibility: 'Guest assistance, ticketing support, ADA, lost & found', radio: 'CH 14' },
+    { role: 'Food & Beverage Director', responsibility: 'Bar operations, VIP table service, catering, concessions', radio: 'CH 15 / CH 16' },
   ],
 
   emergencySOPs: [
@@ -297,7 +299,7 @@ const foodBeverage: GuideConfig = {
 
   roleFAQ: [
     { question: 'What\u2019s the dress code for F&B staff?', answer: 'All-black: black shirt, black pants, black non-slip closed-toe shoes. No logos, no graphics.' },
-    { question: 'Where do I check in?', answer: 'If you don\u2019t have your credential, go to the Staff Check-in lane at Guest Services (near the GA Entrance). If you already have your credential, enter through the Staff entrance lanes at the VIP entrance. Report to your assigned bar or station after entry.' },
+    { question: 'Where do I check in?', answer: 'If you don\u2019t have your credential, go to the Staff Check-in lane at Guest Services (adjacent to the VIP Entrance). If you already have your credential, enter through the Staff entrance lanes at the VIP Entrance. Report to your assigned bar or station after entry.' },
     { question: 'Where is my bar assignment?', answer: 'Your F&B lead will assign your station at pre-shift meeting (3:00 PM).' },
     { question: 'What\u2019s the menu?', answer: 'Menu and pricing will be reviewed at pre-shift. Specialty cocktails, beer, wine, and non-alcoholic options.' },
     { question: 'How do tips work?', answer: 'Tips are pooled per bar assignment. Your F&B lead explains the structure at pre-shift.' },

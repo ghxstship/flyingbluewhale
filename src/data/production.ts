@@ -5,7 +5,7 @@ const production: GuideConfig = {
   tier: 1,
   title: 'PRODUCTION',
   classification: 'INTERNAL — PRODUCTION CREW ONLY',
-  scope: 'Site, Executive, Admin, Technical, Experiential',
+  scope: 'Executive, Admin, Site, Technical, Experiential',
   icon: '🦩',
   callTime: '3:00 PM — Saturday, March 28',
   hours: 'Build: Mar 23–28 · Show Day: 3:00 PM – 2:00 AM · Strike: Immediate',

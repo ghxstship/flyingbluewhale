@@ -53,7 +53,7 @@ const guests: GuideConfig = {
     'Restrooms — Temporary restrooms on the north side of the footprint. Permanent restrooms on the south side and throughout the Casino and Grandstands. ADA-accessible units in all locations.',
     'Guest Services — Adjacent to the VIP Entrance for questions, lost items, and ADA assistance.',
     'Covered Areas — The Clubhouse and Casino offer shelter from sun and weather.',
-    'Smoking Areas — Designated areas near the Crew Parking perimeter. No smoking inside any building or in the GA or VIP areas.',
+    'Smoking Areas — Designated areas near the parking lot perimeter. No smoking inside any building or in the GA or VIP areas.',
     'Seating — The Grandstands offer seated viewing. The Dance Floor and VIP Dance Floor are standing areas. VIP Clubhouse has lounge seating.',
     'Food & Drink — Food vendors on the north side of the footprint and bars throughout. Full bar service with craft cocktails, beer, wine, and non-alcoholic options. GA is 18+, alcohol service is 21+ with valid ID. VIP Table holders receive dedicated bottle service.',
     'Charging — Portable chargers are welcome. Keep your phone charged for your ticket and rideshare home.',

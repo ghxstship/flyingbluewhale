@@ -20,12 +20,12 @@ const foodBeverage: GuideConfig = {
     'If you have a food handler\u2019s certification, bring it.',
   ],
   vehicleRoute: 'Enter via E 4th Ave and follow event signage to your designated parking zone.',
-  parking: 'Crew parking is accessible via E 4th Ave — the same route as guest parking. Follow the event signage and park in the zone corresponding to your issued parking pass. Display your parking pass on the dashboard at all times. Unauthorized vehicles will be towed.',
-  rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. From the drop-off, follow signage to the Production Gate.',
-  transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). From the platform, take the pedestrian bridge over the tracks to the north side, then follow event signage through the parking lot to the Production Gate. Runs 5 AM to midnight. $2.25 per trip. MetroRail shuts down around midnight — have a rideshare plan for the way home.',
+  parking: 'F&B staff park in Zone B, accessible via E 4th Ave. Follow event signage to the Zone B lot. Display your parking pass on the dashboard at all times. Unauthorized vehicles will be towed.',
+  rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. From the drop-off, follow signage to the Clubhouse Entrance (next to VIP Tables).',
+  transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). From the platform, take the pedestrian bridge over the tracks to the north side, then follow event signage through the parking lot to the Clubhouse Entrance (next to VIP Tables). Runs 5 AM to midnight. $2.25 per trip. MetroRail shuts down around midnight — have a rideshare plan for the way home.',
   wayfinding: 'However you arrive — by car, rideshare, or transit — follow event signage toward the venue entrances.',
-  credentials: 'If you do not have your credential, proceed to the Staff Check-in lane at Guest Services (adjacent to the VIP Entrance) with valid photo ID to pick up your F&B wristband. If you already have your credential, proceed directly to the designated Staff entrance lanes at the VIP Entrance. Wear your credential visibly at all times. Lost credentials must be reported to the Production Office immediately.',
-  entrance: 'Credential Pickup Hours\nFriday, March 27 — 10 AM – 8 PM\nSaturday, March 28 — 10 AM – 8 PM\nGuest Services (adjacent to VIP Entrance)',
+  credentials: 'If you do not have your credential, proceed to Staff Check-in at the Clubhouse Entrance (next to VIP Tables) with valid photo ID to pick up your F&B wristband. If you already have your credential, enter through the Clubhouse Entrance. Wear your credential visibly at all times. Lost credentials must be reported to the Production Office immediately.',
+  entrance: 'Credential Pickup Hours\nFriday, March 27 — 10 AM – 8 PM\nSaturday, March 28 — 10 AM – 8 PM\nClubhouse Entrance (next to VIP Tables)',
   additionalNotes: [
     'All F&B staff must complete TIPS (or equivalent) training before the event.',
     'No consumption of alcohol during your shift \u2014 zero tolerance.',
@@ -303,7 +303,7 @@ const foodBeverage: GuideConfig = {
 
   roleFAQ: [
     { question: 'What\u2019s the dress code for F&B staff?', answer: 'All-black attire: black shirt, black pants, and black non-slip closed-toe shoes. No logos or graphics on any garment.' },
-    { question: 'Where do I check in?', answer: 'If you don\u2019t have your credential, go to the Staff Check-in lane at Guest Services (adjacent to the VIP Entrance). If you already have your credential, enter through the Staff entrance lanes at the VIP Entrance. Report to your assigned bar or station after entry.' },
+    { question: 'Where do I check in?', answer: 'If you don\u2019t have your credential, go to Staff Check-in at the Clubhouse Entrance (next to VIP Tables). If you already have your credential, enter through the Clubhouse Entrance. Report to your assigned bar or station after entry.' },
     { question: 'Where is my bar assignment?', answer: 'Your F&B lead will assign your station at pre-shift meeting (5:00 PM — one hour before doors).' },
     { question: 'What\u2019s the menu?', answer: 'Menu and pricing will be reviewed at pre-shift. Specialty cocktails, beer, wine, and non-alcoholic options.' },
     { question: 'How do tips work?', answer: 'Tips are pooled per bar assignment. Your F&B lead explains the structure at pre-shift.' },

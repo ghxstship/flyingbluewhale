@@ -18,7 +18,7 @@ const temporary: GuideConfig = {
     'No weapons, alcohol, or drugs on site — zero tolerance.',
   ],
   vehicleRoute: 'Enter via E 4th Ave and follow event signage. Coordinate your specific entry point with your escort in advance.',
-  parking: 'Park only in designated areas as directed by your escort. Follow signage from E 4th Ave and confirm your parking zone before arriving.',
+  parking: 'Vendors, service vehicles, and temporary access park in Zone C, accessible via E 4th Ave. Follow event signage to the Zone C lot. Your escort will confirm your spot.',
   rideshare: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. Your escort will meet you at the drop-off.',
   transit: 'MetroRail Green Line to Hialeah Station (125 E 21st St). From the platform, take the pedestrian bridge over the tracks to the north side. Your escort can meet you at the pedestrian bridge exit if arranged in advance.',
   wayfinding: 'However you arrive, your escort will meet you at the designated check-in point. Do not enter the site without an escort.',
@@ -84,7 +84,7 @@ const temporary: GuideConfig = {
   roleFAQ: [
     { question: 'Where do I check in?', answer: 'Check in at the Production Gate on E 32nd St. Have your valid photo ID ready — you will not be admitted without it.' },
     { question: 'Do I need an escort?', answer: 'Yes. You must be escorted at all times. Do not enter the site without your escort.' },
-    { question: 'Where can I park?', answer: 'Your escort will direct you to a temporary parking area. Do not park in Crew Parking or guest lots.' },
+    { question: 'Where can I park?', answer: 'Temporary access vehicles park in Zone C via E 4th Ave. Your escort will confirm your spot. Do not park in crew, guest, or VIP lots.' },
     { question: 'Can I access the event areas?', answer: 'No. Temporary credentials do not grant access to guest, VIP, crew, or backstage areas.' },
     { question: 'What if I need to come back?', answer: 'Each visit requires a new check-in and escort. Contact your GHXSTSHIP contact to schedule.' },
     { question: 'What if I have a problem with my delivery?', answer: 'Tell your escort. They\'ll coordinate with the Production Office.' },

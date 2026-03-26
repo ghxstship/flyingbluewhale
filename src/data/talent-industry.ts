@@ -20,7 +20,7 @@ const talentIndustry: GuideConfig = {
   vehicleRoute:
     'Artists arrive using the same route as VIP Tables — via E 4th Ave following event signage. Your Liaison will meet you at the VIP table entrance and escort you from there.',
   parking:
-    'Artist and industry vehicles enter via E 4th Ave and follow event signage. Your Liaison will coordinate your specific parking area.',
+    'Artist and industry vehicles park in Zone A, accessible via E 4th Ave. Follow event signage to the Zone A lot. Your Liaison will coordinate your specific spot.',
   rideshare:
     'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. Your Liaison will meet you at the drop-off.',
   transit:

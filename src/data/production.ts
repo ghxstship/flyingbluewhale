@@ -312,7 +312,7 @@ const production: GuideConfig = {
   roleFAQ: [
     { question: 'Where is the Production Office?', answer: 'The Production Office is on the third floor of the Clubhouse, in the same area as the Command Center and Green Room. The Production Office handles admin, crew services, and radio distribution. The Command Center is separate and restricted to Core credential holders and public safety leadership.' },
     { question: 'Where do I pick up my radio?', answer: 'Radios are distributed at the Production Office during check-in. Return your radio to the Production Office at the end of your shift or at strike. You are responsible for your assigned radio.' },
-    { question: 'What\'s the Wi-Fi?', answer: 'Network: GHXSTSHIP-PROD · Password: distributed at check-in. Do not share with guests. This is a production network — not for streaming.' },
+    { question: 'What\'s the Wi-Fi?', answer: 'Network: BCProduction · Password: coffeeBlack!! — Do not share with guests. This is a production network — not for streaming.' },
     { question: 'Is there craft services?', answer: 'No. This production does not offer craft services. Plan your own meals and snacks. Food vendors will be available on the north side of the footprint during show hours.' },
     { question: 'Where do I park?', answer: 'Production and crew staff park in Zone B via E 4th Ave. Executive staff park in Zone A. Follow signage to your assigned zone and display your parking pass on the dashboard.' },
     { question: 'What if I\'m running late?', answer: 'Call or text your department head immediately. If you cannot reach them, call the Production Office at the number on your call sheet.' },

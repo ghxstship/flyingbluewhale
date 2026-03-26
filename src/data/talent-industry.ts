@@ -14,7 +14,7 @@ const talentIndustry: GuideConfig = {
     'Your Artist Liaison will confirm your arrival time, vehicle instructions, and credential pickup.',
     'Bring valid photo ID — required for credentialing.',
     'Review your advance email for green room details and schedule.',
-    'Pack anything you need for the evening — re-entry is not permitted.',
+    'Pack anything you need for the evening. Artists and touring parties may leave and return with their Liaison.',
     'If you have dietary needs or allergies, notify your Liaison in advance.',
   ],
   vehicleRoute:
@@ -33,7 +33,7 @@ const talentIndustry: GuideConfig = {
     'Artists: VIP table entrance with Liaison escort. Industry & Media: Guest Services (adjacent to VIP Entrance) for credential pickup.',
   additionalNotes: [
     'Your Liaison is your single point of contact for everything — requests, questions, issues. Industry Guests and Media should reach out to their Liaison with any questions, concerns, or issues.',
-    'Wi-Fi: GHXSTSHIP-PROD (password from your Liaison) — production network, not for streaming.',
+    'Wi-Fi: BCProduction (password from your Liaison) — production network, not for streaming.',
     'The Green Room is climate-controlled with catering, beverages, and lounge seating.',
     'Photography is welcome in VIP and GA areas. Backstage and Green Room photography requires Liaison approval before posting.',
     'Artists and touring parties may leave and return with their Liaison. The no re-entry policy applies to general admission and VIP guests only.',
@@ -111,7 +111,7 @@ const talentIndustry: GuideConfig = {
     {
       question: 'What\'s the Wi-Fi?',
       answer:
-        'Network: GHXSTSHIP-PROD. Your Liaison will provide the password. Production network — not for streaming.',
+        'Network: BCProduction. Your Liaison will provide the password. Production network — not for streaming.',
     },
     {
       question: 'Is there catering?',

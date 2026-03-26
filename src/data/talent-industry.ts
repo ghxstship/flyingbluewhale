@@ -45,9 +45,10 @@ const talentIndustry: GuideConfig = {
   showTimeline: [
     { time: '04:00 PM', activity: 'Green Room open — catering available' },
     { time: '06:00 PM', activity: 'Doors open — all guests' },
-    { time: '07:00 PM', activity: 'Kaz James — set begins' },
-    { time: '09:30 PM', activity: 'Carlita — set begins' },
-    { time: '11:30 PM', activity: 'Black Coffee — set begins (Headline)' },
+    { time: '06:00 PM', activity: 'Canela B2B Fiin — set begins' },
+    { time: '07:30 PM', activity: 'Kaz James — set begins' },
+    { time: '09:00 PM', activity: 'Carlita — set begins' },
+    { time: '10:30 PM', activity: 'Black Coffee — set begins (Headline)' },
     { time: '12:45 AM', activity: 'Last call — bars close' },
     { time: '01:00 AM', activity: 'Music ends — event close' },
   ],

@@ -927,6 +927,14 @@ export default function GuideView({ guide }: { guide: GuideConfig }) {
                 <a href="https://www.instagram.com/kazjames" target="_blank" rel="noopener noreferrer" className="text-pink hover:underline">@kazjames</a>
               </div>
               <div className="flex items-center gap-2">
+                <span className="font-semibold w-28">Canela</span>
+                <a href="https://www.instagram.com/canaboriqua" target="_blank" rel="noopener noreferrer" className="text-pink hover:underline">@canaboriqua</a>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold w-28">Fiin</span>
+                <a href="https://www.instagram.com/fiinmusic" target="_blank" rel="noopener noreferrer" className="text-pink hover:underline">@fiinmusic</a>
+              </div>
+              <div className="flex items-center gap-2">
                 <span className="font-semibold w-28">Club Space</span>
                 <a href="https://www.instagram.com/clubspace" target="_blank" rel="noopener noreferrer" className="text-pink hover:underline">@clubspace</a>
               </div>

@@ -1,7 +1,7 @@
 import type { CredentialRow, ResourceLocation, EvacuationRoute, FAQPair } from './types';
 
 export const EVENT = {
-  title: 'Black Coffee + Carlita + Kaz James',
+  title: 'Black Coffee + Carlita + Kaz James + Canela B2B Fiin',
   subtitle: 'Open Air at the Racetrack',
   series: 'Miami Music Week 2026',
   presenter: 'Club Space Miami',
@@ -27,9 +27,10 @@ export const EVENT = {
 };
 
 export const SET_TIMES = [
-  { time: '7:00 – 9:30 PM', artist: 'Kaz James' },
-  { time: '9:30 – 11:30 PM', artist: 'Carlita' },
-  { time: '11:30 PM – 1:00 AM', artist: 'Black Coffee', note: 'Headline' },
+  { time: '6:00 – 7:30 PM', artist: 'Canela B2B Fiin' },
+  { time: '7:30 – 9:00 PM', artist: 'Kaz James' },
+  { time: '9:00 – 10:30 PM', artist: 'Carlita' },
+  { time: '10:30 PM – 1:00 AM', artist: 'Black Coffee', note: 'Headline' },
 ];
 
 export const SCHEDULE = [
@@ -85,12 +86,12 @@ export const EVACUATION_ROUTES: EvacuationRoute[] = [
 
 export const GUEST_FAQ: FAQPair[] = [
   { question: 'What time do doors open?', answer: 'Doors open at 6:00 PM for all guests — GA, VIP, and VIP Table holders.' },
-  { question: 'What time does the music start?', answer: 'Kaz James opens at 7:00 PM. Carlita takes over at 9:30 PM. Black Coffee headlines from 11:30 PM until 1:00 AM.' },
+  { question: 'What time does the music start?', answer: 'Canela B2B Fiin open at 6:00 PM. Kaz James takes over at 7:30 PM, followed by Carlita at 9:00 PM. Black Coffee headlines from 10:30 PM until 1:00 AM.' },
   { question: 'What are the age requirements?', answer: 'GA is 18+ and VIP is 21+. A valid government-issued photo ID is required for entry — no exceptions. Acceptable forms include a driver\'s license, passport, or state ID.' },
   { question: 'Is there a dress code?', answer: 'There is no formal dress code, but we encourage smart-casual attire. This is an outdoor event on racetrack grounds, so comfortable shoes are recommended. Stilettos and open-toe shoes can be challenging on grass and gravel surfaces.' },
   { question: 'What can I bring?', answer: 'You may bring a small clutch or bag (no larger than 12" × 6" × 12"). Clear bags are encouraged for faster entry. Sealed, empty reusable water bottles are welcome.' },
   { question: 'Are water bottles allowed?', answer: 'Sealed, empty reusable water bottles are welcome. Free water fountains are available near most grandstand restrooms.' },
-  { question: 'Can I leave and come back?', answer: 'No. This is a no re-entry event. Once you exit the venue, you will not be permitted to re-enter.' },
+  { question: 'Can I leave and come back?', answer: 'This is a no re-entry event for GA and VIP guests — once you exit the venue, you will not be permitted to re-enter. Artists and touring parties may leave and return with their Liaison.' },
   { question: 'Where should my rideshare drop me off?', answer: 'The rideshare loop is on E 32nd St and E 2nd Ave, eastbound only — no left turns. Have your driver follow signage to the designated drop-off zone. Follow the signs from the drop-off area to the entrance.' },
   { question: 'Is there on-site parking?', answer: 'Yes. Guest parking is available in the main Hialeah Park lots. Enter via E 4th Ave. Parking attendants will direct you. Arrive early — lots fill up.' },
   { question: 'Is this event outdoors?', answer: 'Yes. The main event takes place on the Racetrack Grounds, which is an outdoor venue. Some covered areas are available in the Clubhouse and Casino, but most of the experience is open-air. Check the weather forecast and dress accordingly.' },

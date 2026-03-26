@@ -37,9 +37,10 @@ const guests: GuideConfig = {
 
   showTimeline: [
     { time: '06:00 PM', activity: 'Doors open — welcome to the Racetrack' },
-    { time: '07:00 PM', activity: 'Kaz James' },
-    { time: '09:30 PM', activity: 'Carlita' },
-    { time: '11:30 PM', activity: 'Black Coffee (Headline)' },
+    { time: '06:00 PM', activity: 'Canela B2B Fiin' },
+    { time: '07:30 PM', activity: 'Kaz James' },
+    { time: '09:00 PM', activity: 'Carlita' },
+    { time: '10:30 PM', activity: 'Black Coffee (Headline)' },
     { time: '12:45 AM', activity: 'Last call — bars close' },
     { time: '01:00 AM', activity: 'Music ends' },
     { time: '02:00 AM', activity: 'Venue close — time to head home' },

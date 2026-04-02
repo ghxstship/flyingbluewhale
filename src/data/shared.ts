@@ -60,7 +60,7 @@ export const CREDENTIAL_MATRIX: CredentialRow[] = [
   { credential: 'Backstage', commandCenter: false, backOfHouse: false, stage: false, backstage: true, vipStageTableNorth: true, vipStageTableSouth: true, vipBackstage: true, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
   { credential: 'Stage Table North', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: true, vipStageTableSouth: false, vipBackstage: false, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
   { credential: 'Stage Table South', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: false, vipStageTableSouth: true, vipBackstage: false, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
-  { credential: 'Grandstand Table', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: false, vipStageTableSouth: false, vipBackstage: true, vipClubhouse: false, vipDanceFloor: true, grandstandsGA: true },
+  { credential: 'Grandstand Table', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: false, vipStageTableSouth: false, vipBackstage: true, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
   { credential: 'VIP', commandCenter: false, backOfHouse: false, stage: false, backstage: false, vipStageTableNorth: false, vipStageTableSouth: false, vipBackstage: false, vipClubhouse: true, vipDanceFloor: true, grandstandsGA: true },
 ];
 

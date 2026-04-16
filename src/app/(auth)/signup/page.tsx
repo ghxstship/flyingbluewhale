@@ -1,11 +1,11 @@
-import { createClient } from '@/lib/supabase/server';
+'use client';
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  return { title: `Signup -- GVTEWAY` };
-}
+import { useActionState } from 'react';
+import { signup, type SignupState } from './actions';
 
-export default async function SignupPage() {
+export default function SignupPage() {
+  const [state, formAction, pending] = useActionState<SignupState, FormData>(signup, undefined);
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.02]" style={{
@@ -23,7 +23,21 @@ export default async function SignupPage() {
           <p className="text-sm text-text-secondary">Get started with universal production advancing</p>
         </div>
 
-        <form className="space-y-4">
+        {/* Error message */}
+        {state?.error && (
+          <div className="mb-4 p-3 rounded bg-red-500/10 border border-red-500/20 text-red-400 text-xs" role="alert">
+            {state.error}
+          </div>
+        )}
+
+        {/* Email confirmation success */}
+        {state?.success && (
+          <div className="mb-4 p-3 rounded bg-cyan/10 border border-cyan/20 text-cyan text-xs" role="status">
+            Account created! Check your email to confirm your account.
+          </div>
+        )}
+
+        <form action={formAction} className="space-y-4">
           <div>
             <label htmlFor="signup-name" className="text-label text-text-tertiary block mb-2">Full Name</label>
             <input id="signup-name" name="name" type="text" placeholder="Your full name" required className="input w-full" />
@@ -33,10 +47,16 @@ export default async function SignupPage() {
             <input id="signup-email" name="email" type="email" placeholder="you@company.com" required className="input w-full" autoComplete="email" />
           </div>
           <div>
+            <label htmlFor="signup-password" className="text-label text-text-tertiary block mb-2">Password</label>
+            <input id="signup-password" name="password" type="password" placeholder="••••••••" required minLength={6} className="input w-full" autoComplete="new-password" />
+          </div>
+          <div>
             <label htmlFor="signup-org" className="text-label text-text-tertiary block mb-2">Organization</label>
             <input id="signup-org" name="organization" type="text" placeholder="Your company or organization" className="input w-full" />
           </div>
-          <button type="submit" className="btn btn-primary w-full py-3">Create Account</button>
+          <button type="submit" disabled={pending} className="btn btn-primary w-full py-3 disabled:opacity-50">
+            {pending ? 'Creating account...' : 'Create Account'}
+          </button>
         </form>
 
         <p className="text-center text-xs text-text-disabled mt-8">

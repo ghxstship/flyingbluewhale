@@ -63,6 +63,11 @@ export default async function ConsolePage() {
               <div className="text-label text-text-disabled text-[0.5rem]">DEVELOPER</div>
             </div>
           </div>
+          <form action="/api/auth/signout" method="POST" className="mt-3">
+            <button type="submit" className="btn btn-ghost w-full text-xs py-1.5 text-text-tertiary hover:text-red-400">
+              Sign Out
+            </button>
+          </form>
         </div>
       </aside>
 

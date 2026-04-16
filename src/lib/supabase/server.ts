@@ -27,3 +27,22 @@ export async function createClient() {
     }
   );
 }
+
+/**
+ * Safe wrapper for API routes — returns 401 JSON if auth fails
+ * instead of throwing a 500.
+ */
+export async function withAuth<T>(
+  handler: (supabase: Awaited<ReturnType<typeof createClient>>, user: { id: string; email?: string }) => Promise<T>
+): Promise<T | Response> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return handler(supabase, user);
+  } catch {
+    return Response.json({ error: 'Authentication required' }, { status: 401 });
+  }
+}

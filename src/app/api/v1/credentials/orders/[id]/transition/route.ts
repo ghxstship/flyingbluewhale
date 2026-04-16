@@ -7,14 +7,23 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const body = await request.json();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  const updateFields: Record<string, unknown> = { status: body.status };
-  if (body.status === 'approved') updateFields.approved_by = user.id;
-  else if (body.status === 'denied') updateFields.denied_by = user.id;
-  else if (body.status === 'issued') updateFields.issued_by = user.id;
-  else if (body.status === 'revoked') { updateFields.revoked_by = user.id; updateFields.revocation_reason = body.reason; }
-  if (body.notes) updateFields.notes = body.notes;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase as any).from('credential_orders').update(updateFields).eq('id', id).select().single();
-  if (error) return NextResponse.json({ error: (error as { message: string }).message }, { status: 400 });
+
+  const { status: newStatus, reason, notes } = body as { status: string; reason?: string; notes?: string };
+
+  const { data, error } = await supabase
+    .from('credential_orders')
+    .update({
+      status: newStatus as 'requested' | 'approved' | 'denied' | 'issued' | 'picked_up' | 'revoked',
+      ...(newStatus === 'approved' && { approved_by: user.id }),
+      ...(newStatus === 'denied' && { denied_by: user.id }),
+      ...(newStatus === 'issued' && { issued_by: user.id }),
+      ...(newStatus === 'revoked' && { revoked_by: user.id, revocation_reason: reason }),
+      ...(notes && { notes }),
+    })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
   return NextResponse.json({ data });
 }

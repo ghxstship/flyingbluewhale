@@ -242,39 +242,158 @@ export type Database = {
           },
         ]
       }
+      approval_actions: {
+        Row: {
+          action: string
+          comment: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          performed_at: string
+          performed_by: string
+          project_id: string
+        }
+        Insert: {
+          action: string
+          comment?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          performed_at?: string
+          performed_by: string
+          project_id: string
+        }
+        Update: {
+          action?: string
+          comment?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          performed_at?: string
+          performed_by?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_actions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          metadata: Json
+          new_state: Json | null
+          old_state: Json | null
+          organization_id: string | null
+          project_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          metadata?: Json
+          new_state?: Json | null
+          old_state?: Json | null
+          organization_id?: string | null
+          project_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          metadata?: Json
+          new_state?: Json | null
+          old_state?: Json | null
+          organization_id?: string | null
+          project_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_log_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_log_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       catalog_item_allocations: {
         Row: {
           allocated_by: string
+          barcode: string | null
+          checked_in_by: string | null
+          checked_out_by: string | null
           created_at: string
           id: string
           item_id: string
           notes: string | null
+          pickup_at: string | null
           project_id: string
           quantity: number
+          return_at: string | null
+          return_condition: string | null
+          return_notes: string | null
           space_id: string | null
           state: Database["public"]["Enums"]["allocation_state"]
           updated_at: string
         }
         Insert: {
           allocated_by: string
+          barcode?: string | null
+          checked_in_by?: string | null
+          checked_out_by?: string | null
           created_at?: string
           id?: string
           item_id: string
           notes?: string | null
+          pickup_at?: string | null
           project_id: string
           quantity?: number
+          return_at?: string | null
+          return_condition?: string | null
+          return_notes?: string | null
           space_id?: string | null
           state?: Database["public"]["Enums"]["allocation_state"]
           updated_at?: string
         }
         Update: {
           allocated_by?: string
+          barcode?: string | null
+          checked_in_by?: string | null
+          checked_out_by?: string | null
           created_at?: string
           id?: string
           item_id?: string
           notes?: string | null
+          pickup_at?: string | null
           project_id?: string
           quantity?: number
+          return_at?: string | null
+          return_condition?: string | null
+          return_notes?: string | null
           space_id?: string | null
           state?: Database["public"]["Enums"]["allocation_state"]
           updated_at?: string
@@ -723,9 +842,13 @@ export type Database = {
       }
       credential_badges: {
         Row: {
+          badge_url: string | null
           barcode_data: string | null
           created_at: string
+          expires_at: string | null
           id: string
+          is_revoked: boolean
+          issued_at: string | null
           order_id: string
           person_id: string | null
           person_name: string | null
@@ -735,9 +858,13 @@ export type Database = {
           template_id: string | null
         }
         Insert: {
+          badge_url?: string | null
           barcode_data?: string | null
           created_at?: string
+          expires_at?: string | null
           id?: string
+          is_revoked?: boolean
+          issued_at?: string | null
           order_id: string
           person_id?: string | null
           person_name?: string | null
@@ -747,9 +874,13 @@ export type Database = {
           template_id?: string | null
         }
         Update: {
+          badge_url?: string | null
           barcode_data?: string | null
           created_at?: string
+          expires_at?: string | null
           id?: string
+          is_revoked?: boolean
+          issued_at?: string | null
           order_id?: string
           person_id?: string | null
           person_name?: string | null
@@ -819,12 +950,20 @@ export type Database = {
           approved_by: string | null
           created_at: string
           credential_type_id: string
+          denied_at: string | null
+          denied_by: string | null
           group_name: string | null
           id: string
+          issued_at: string | null
+          issued_by: string | null
           notes: string | null
+          picked_up_at: string | null
           project_id: string
           quantity: number
           requested_at: string
+          revocation_reason: string | null
+          revoked_at: string | null
+          revoked_by: string | null
           status: Database["public"]["Enums"]["credential_order_status"]
           user_id: string | null
         }
@@ -833,12 +972,20 @@ export type Database = {
           approved_by?: string | null
           created_at?: string
           credential_type_id: string
+          denied_at?: string | null
+          denied_by?: string | null
           group_name?: string | null
           id?: string
+          issued_at?: string | null
+          issued_by?: string | null
           notes?: string | null
+          picked_up_at?: string | null
           project_id: string
           quantity?: number
           requested_at?: string
+          revocation_reason?: string | null
+          revoked_at?: string | null
+          revoked_by?: string | null
           status?: Database["public"]["Enums"]["credential_order_status"]
           user_id?: string | null
         }
@@ -847,12 +994,20 @@ export type Database = {
           approved_by?: string | null
           created_at?: string
           credential_type_id?: string
+          denied_at?: string | null
+          denied_by?: string | null
           group_name?: string | null
           id?: string
+          issued_at?: string | null
+          issued_by?: string | null
           notes?: string | null
+          picked_up_at?: string | null
           project_id?: string
           quantity?: number
           requested_at?: string
+          revocation_reason?: string | null
+          revoked_at?: string | null
+          revoked_by?: string | null
           status?: Database["public"]["Enums"]["credential_order_status"]
           user_id?: string | null
         }
@@ -1121,6 +1276,150 @@ export type Database = {
           },
         ]
       }
+      fulfillment_order_items: {
+        Row: {
+          allocation_id: string
+          condition_on_receive: string | null
+          created_at: string
+          id: string
+          item_id: string
+          notes: string | null
+          order_id: string
+          packed: boolean
+          packed_at: string | null
+          packed_by: string | null
+          quantity: number
+          received: boolean
+          received_at: string | null
+          received_by: string | null
+        }
+        Insert: {
+          allocation_id: string
+          condition_on_receive?: string | null
+          created_at?: string
+          id?: string
+          item_id: string
+          notes?: string | null
+          order_id: string
+          packed?: boolean
+          packed_at?: string | null
+          packed_by?: string | null
+          quantity?: number
+          received?: boolean
+          received_at?: string | null
+          received_by?: string | null
+        }
+        Update: {
+          allocation_id?: string
+          condition_on_receive?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string
+          notes?: string | null
+          order_id?: string
+          packed?: boolean
+          packed_at?: string | null
+          packed_by?: string | null
+          quantity?: number
+          received?: boolean
+          received_at?: string | null
+          received_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fulfillment_order_items_allocation_id_fkey"
+            columns: ["allocation_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_item_allocations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fulfillment_order_items_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "advance_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fulfillment_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "fulfillment_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fulfillment_orders: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          created_by: string
+          delivered_at: string | null
+          destination: string | null
+          id: string
+          notes: string | null
+          project_id: string
+          reference_number: string | null
+          scheduled_at: string | null
+          shipped_at: string | null
+          shipping_details: Json
+          shipping_method: string | null
+          status: string
+          total_items: number
+          total_weight_kg: number | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          created_by: string
+          delivered_at?: string | null
+          destination?: string | null
+          id?: string
+          notes?: string | null
+          project_id: string
+          reference_number?: string | null
+          scheduled_at?: string | null
+          shipped_at?: string | null
+          shipping_details?: Json
+          shipping_method?: string | null
+          status?: string
+          total_items?: number
+          total_weight_kg?: number | null
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string
+          delivered_at?: string | null
+          destination?: string | null
+          id?: string
+          notes?: string | null
+          project_id?: string
+          reference_number?: string | null
+          scheduled_at?: string | null
+          shipped_at?: string | null
+          shipping_details?: Json
+          shipping_method?: string | null
+          status?: string
+          total_items?: number
+          total_weight_kg?: number | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fulfillment_orders_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_log: {
         Row: {
           body: string | null
@@ -1237,6 +1536,67 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_trigger_rules: {
+        Row: {
+          cooldown_minutes: number | null
+          created_at: string
+          id: string
+          is_active: boolean
+          organization_id: string | null
+          project_id: string | null
+          recipient_filter: Json
+          template_id: string
+          trigger_event: string
+          updated_at: string
+        }
+        Insert: {
+          cooldown_minutes?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          organization_id?: string | null
+          project_id?: string | null
+          recipient_filter?: Json
+          template_id: string
+          trigger_event: string
+          updated_at?: string
+        }
+        Update: {
+          cooldown_minutes?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          organization_id?: string | null
+          project_id?: string | null
+          recipient_filter?: Json
+          template_id?: string
+          trigger_event?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_trigger_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_trigger_rules_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_trigger_rules_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "notification_templates"
             referencedColumns: ["id"]
           },
         ]
@@ -1601,6 +1961,7 @@ export type Database = {
         | "confirmed"
         | "in_transit"
         | "on_site"
+        | "checked_out"
         | "returned"
         | "maintenance"
       catering_alloc_status: "allocated" | "confirmed" | "checked_in"
@@ -1786,6 +2147,7 @@ export const Constants = {
         "confirmed",
         "in_transit",
         "on_site",
+        "checked_out",
         "returned",
         "maintenance",
       ],

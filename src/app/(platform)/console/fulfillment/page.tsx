@@ -3,8 +3,7 @@ export const metadata = { title: 'Fulfillment -- GVTEWAY' };
 
 export default async function FulfillmentPage() {
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: orders } = await (supabase as any).from('fulfillment_orders').select(`*`).order('created_at', { ascending: false }).limit(50) as { data: Array<{ id: string; status: string; reference_number: string | null; type: string; destination: string | null; total_items: number }> | null };
+  const { data: orders } = await supabase.from('fulfillment_orders').select(`*`).order('created_at', { ascending: false }).limit(50);
 
   const columns = [
     { key: 'pending', label: 'Pending', fg: '#9CA3AF' }, { key: 'packing', label: 'Packing', fg: '#3B82F6' },

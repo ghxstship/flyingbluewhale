@@ -4,8 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
   const { searchParams } = new URL(request.url);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let query = (supabase as any).from('audit_log').select('*').order('created_at', { ascending: false });
+  let query = supabase.from('audit_log').select('*').order('created_at', { ascending: false });
   const projectId = searchParams.get('project_id');
   if (projectId) query = query.eq('project_id', projectId);
   const entityType = searchParams.get('entity_type');
@@ -18,6 +17,6 @@ export async function GET(request: NextRequest) {
   const offset = parseInt(searchParams.get('offset') || '0');
   query = query.range(offset, offset + limit - 1);
   const { data, error, count } = await query;
-  if (error) return NextResponse.json({ error: (error as { message: string }).message }, { status: 400 });
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
   return NextResponse.json({ data, meta: { count, limit, offset } });
 }

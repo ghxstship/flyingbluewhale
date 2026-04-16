@@ -1,11 +1,16 @@
 /**
  * GVTEWAY Test User Creation Script
  *
- * Creates 11 test users (one per platform role) with:
- * - Supabase auth accounts (email + password)
- * - Profile records
- * - Organization memberships
- * - Project memberships (linked to seeded projects)
+ * Creates 17 test users across the two-tier RBAC system:
+ * - 5 Platform Roles (org-scoped): developer, owner, admin, team_member, collaborator
+ * - 12 Project Roles (project-scoped): executive, production, management, crew, staff,
+ *   talent, vendor, client, sponsor, press, guest, attendee
+ *
+ * Each user gets:
+ * - Supabase auth account (email + password)
+ * - Profile record
+ * - Organization membership (platform role)
+ * - Project memberships (project role on both seeded projects)
  *
  * Usage: npx tsx scripts/create-test-users.ts
  */
@@ -33,29 +38,40 @@ const TEST_PASSWORD = 'Test1234!';
 interface TestUser {
   email: string;
   fullName: string;
-  role: string;
-  projectRole?: string;
+  platformRole: string;  // org-scoped
+  projectRole: string;   // project-scoped
 }
 
 const TEST_USERS: TestUser[] = [
-  { email: 'dev@gvteway.test', fullName: 'Dev User', role: 'developer', projectRole: 'developer' },
-  { email: 'owner@gvteway.test', fullName: 'Owner User', role: 'owner', projectRole: 'owner' },
-  { email: 'admin@gvteway.test', fullName: 'Admin User', role: 'admin', projectRole: 'admin' },
-  { email: 'team@gvteway.test', fullName: 'Team Member', role: 'team_member', projectRole: 'team_member' },
-  { email: 'talentmgmt@gvteway.test', fullName: 'Talent Manager', role: 'talent_management', projectRole: 'talent_management' },
-  { email: 'performer@gvteway.test', fullName: 'DJ Testificate', role: 'talent_performer', projectRole: 'talent_performer' },
-  { email: 'crew@gvteway.test', fullName: 'Crew Member', role: 'talent_crew', projectRole: 'talent_crew' },
-  { email: 'vendor@gvteway.test', fullName: 'Vendor User', role: 'vendor', projectRole: 'vendor' },
-  { email: 'client@gvteway.test', fullName: 'Client User', role: 'client', projectRole: 'client' },
-  { email: 'sponsor@gvteway.test', fullName: 'Sponsor User', role: 'sponsor', projectRole: 'sponsor' },
-  { email: 'guest@gvteway.test', fullName: 'Industry Guest', role: 'industry_guest', projectRole: 'industry_guest' },
+  // ─── Platform Roles (Internal) ───
+  { email: 'dev@gvteway.test', fullName: 'Dev User', platformRole: 'developer', projectRole: 'executive' },
+  { email: 'owner@gvteway.test', fullName: 'Owner User', platformRole: 'owner', projectRole: 'executive' },
+  { email: 'admin@gvteway.test', fullName: 'Admin User', platformRole: 'admin', projectRole: 'executive' },
+  { email: 'team@gvteway.test', fullName: 'Team Member', platformRole: 'team_member', projectRole: 'production' },
+  { email: 'collab@gvteway.test', fullName: 'Collaborator User', platformRole: 'collaborator', projectRole: 'staff' },
+
+  // ─── Project Roles (External) ───
+  { email: 'exec@gvteway.test', fullName: 'Executive User', platformRole: 'collaborator', projectRole: 'executive' },
+  { email: 'production@gvteway.test', fullName: 'Production Lead', platformRole: 'collaborator', projectRole: 'production' },
+  { email: 'mgmt@gvteway.test', fullName: 'Management User', platformRole: 'collaborator', projectRole: 'management' },
+  { email: 'crew@gvteway.test', fullName: 'Crew Member', platformRole: 'collaborator', projectRole: 'crew' },
+  { email: 'staff@gvteway.test', fullName: 'Staff Member', platformRole: 'collaborator', projectRole: 'staff' },
+  { email: 'talent@gvteway.test', fullName: 'DJ Testificate', platformRole: 'collaborator', projectRole: 'talent' },
+  { email: 'vendor@gvteway.test', fullName: 'Vendor User', platformRole: 'collaborator', projectRole: 'vendor' },
+  { email: 'client@gvteway.test', fullName: 'Client User', platformRole: 'collaborator', projectRole: 'client' },
+  { email: 'sponsor@gvteway.test', fullName: 'Sponsor User', platformRole: 'collaborator', projectRole: 'sponsor' },
+  { email: 'press@gvteway.test', fullName: 'Press User', platformRole: 'collaborator', projectRole: 'press' },
+  { email: 'guest@gvteway.test', fullName: 'Guest User', platformRole: 'collaborator', projectRole: 'guest' },
+  { email: 'attendee@gvteway.test', fullName: 'Attendee User', platformRole: 'collaborator', projectRole: 'attendee' },
 ];
 
 async function createTestUsers() {
-  console.log('🔑 Creating 11 test users for GVTEWAY...\n');
+  console.log(`🔑 Creating ${TEST_USERS.length} test users for GVTEWAY...\n`);
+  console.log('  Platform Role (org)  │ Project Role          │ Email');
+  console.log('  ─────────────────────┼───────────────────────┼──────────────────────');
 
   for (const user of TEST_USERS) {
-    process.stdout.write(`  Creating ${user.role.padEnd(20)} (${user.email})... `);
+    process.stdout.write(`  ${user.platformRole.padEnd(21)}│ ${user.projectRole.padEnd(22)}│ ${user.email}... `);
 
     // 1. Create auth user
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
@@ -102,35 +118,37 @@ async function createTestUsers() {
   console.log('\n✅ Done! All test users ready.');
   console.log(`\n📋 Login credentials:`);
   console.log(`   Password for all users: ${TEST_PASSWORD}`);
-  console.log(`   Emails:`);
-  for (const user of TEST_USERS) {
-    console.log(`     ${user.role.padEnd(20)} → ${user.email}`);
+  console.log(`\n   Platform (Internal):`);
+  for (const user of TEST_USERS.filter(u => u.platformRole !== 'collaborator')) {
+    console.log(`     ${user.platformRole.padEnd(15)} → ${user.email}`);
+  }
+  console.log(`\n   Project (External):`);
+  for (const user of TEST_USERS.filter(u => u.platformRole === 'collaborator')) {
+    console.log(`     ${user.projectRole.padEnd(15)} → ${user.email}`);
   }
 }
 
 async function ensureMemberships(userId: string, user: TestUser) {
-  // Org membership
+  // Org membership (platform role)
   await supabase.from('organization_members').upsert(
     {
       organization_id: ORG_ID,
       user_id: userId,
-      role: user.role,
+      role: user.platformRole,
     },
     { onConflict: 'organization_id,user_id' }
   );
 
-  // Project memberships (both seeded projects)
-  if (user.projectRole) {
-    for (const projectId of [PROJECT_ID_JOINTS, PROJECT_ID_SALVAGE]) {
-      await supabase.from('project_members').upsert(
-        {
-          project_id: projectId,
-          user_id: userId,
-          role: user.projectRole,
-        },
-        { onConflict: 'project_id,user_id' }
-      );
-    }
+  // Project memberships (project role — both seeded projects)
+  for (const projectId of [PROJECT_ID_JOINTS, PROJECT_ID_SALVAGE]) {
+    await supabase.from('project_members').upsert(
+      {
+        project_id: projectId,
+        user_id: userId,
+        role: user.projectRole,
+      },
+      { onConflict: 'project_id,user_id' }
+    );
   }
 }
 

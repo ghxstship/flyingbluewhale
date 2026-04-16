@@ -13,6 +13,13 @@ import type { Database } from './database.types';
 /* ─── Convenience Aliases ─── */
 
 export type PlatformRole = Database['public']['Enums']['platform_role'];
+/**
+ * ProjectRole — alias for platform_role.
+ * project_members.role uses the same platform_role enum.
+ * The role_taxonomy_overhaul migration that would have created a
+ * separate project_role enum was reverted due to RLS dependency conflicts.
+ */
+export type ProjectRole = PlatformRole;
 export type ProjectType = Database['public']['Enums']['project_type'];
 export type ProjectStatus = Database['public']['Enums']['project_status'];
 export type DeliverableType = Database['public']['Enums']['deliverable_type'];
@@ -52,33 +59,77 @@ export type CmsRevision = Database['public']['Tables']['cms_revisions']['Row'];
 export type ProjectTemplate = Database['public']['Tables']['project_templates']['Row'];
 export type SubmissionTemplate = Database['public']['Tables']['submission_templates']['Row'];
 
-/* ─── Role Helpers ─── */
+/* ─── Platform Role Helpers (org-scoped, internal) ─── */
 
-export const INTERNAL_ROLES: PlatformRole[] = [
+export const PLATFORM_ROLES: PlatformRole[] = [
   'developer', 'owner', 'admin', 'team_member',
 ];
 
-export const TALENT_ROLES: PlatformRole[] = [
+/** Roles with org-level admin privileges */
+export const ADMIN_PLATFORM_ROLES: PlatformRole[] = [
+  'developer', 'owner', 'admin',
+];
+
+/* ─── Project Role Helpers (project-scoped) ─── */
+
+/** Full write access — operations backbone */
+export const INTERNAL_PROJECT_ROLES: ProjectRole[] = [
+  'developer', 'owner', 'admin',
+];
+
+/** Operations roles with day-of-show + build/strike access */
+export const OPERATIONS_PROJECT_ROLES: ProjectRole[] = [
+  'developer', 'owner', 'admin', 'team_member',
+];
+
+/** Talent/creative roles */
+export const TALENT_PROJECT_ROLES: ProjectRole[] = [
   'talent_management', 'talent_performer', 'talent_crew',
 ];
 
-export const PRODUCTION_ROLES: PlatformRole[] = [
-  'vendor', 'client',
+/** External stakeholder roles */
+export const EXTERNAL_PROJECT_ROLES: ProjectRole[] = [
+  'vendor', 'client', 'sponsor', 'industry_guest',
 ];
 
-export const ALL_ROLES: PlatformRole[] = [
-  ...INTERNAL_ROLES, ...TALENT_ROLES, ...PRODUCTION_ROLES,
-  'sponsor', 'industry_guest',
+/** All project roles */
+export const ALL_PROJECT_ROLES: ProjectRole[] = [
+  'developer', 'owner', 'admin', 'team_member',
+  'talent_management', 'talent_performer', 'talent_crew',
+  'vendor', 'client', 'sponsor', 'industry_guest',
 ];
 
-export function isTalentRole(role: PlatformRole): boolean {
-  return TALENT_ROLES.includes(role);
+/* ─── Role Check Functions ─── */
+
+export function isInternalProjectRole(role: ProjectRole): boolean {
+  return INTERNAL_PROJECT_ROLES.includes(role);
 }
+
+export function isOperationsRole(role: ProjectRole): boolean {
+  return OPERATIONS_PROJECT_ROLES.includes(role);
+}
+
+export function isTalentRole(role: ProjectRole): boolean {
+  return TALENT_PROJECT_ROLES.includes(role);
+}
+
+export function isAdminPlatformRole(role: PlatformRole): boolean {
+  return ADMIN_PLATFORM_ROLES.includes(role);
+}
+
+export function canSeeFullCatalog(role: ProjectRole): boolean {
+  return OPERATIONS_PROJECT_ROLES.includes(role) || role === 'vendor' || role === 'client';
+}
+
+/* ─── Legacy Compat (deprecated — use specific helpers above) ─── */
+
+/** @deprecated Use PLATFORM_ROLES */
+export const INTERNAL_ROLES = ADMIN_PLATFORM_ROLES;
+/** @deprecated Use TALENT_PROJECT_ROLES */
+export const TALENT_ROLES = TALENT_PROJECT_ROLES;
+/** @deprecated Use OPERATIONS_PROJECT_ROLES */
+export const PRODUCTION_ROLES = OPERATIONS_PROJECT_ROLES;
 
 export function isInternalRole(role: PlatformRole): boolean {
-  return INTERNAL_ROLES.includes(role);
-}
-
-export function canSeeFullCatalog(role: PlatformRole): boolean {
-  return isInternalRole(role) || PRODUCTION_ROLES.includes(role);
+  return ADMIN_PLATFORM_ROLES.includes(role);
 }

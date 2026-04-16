@@ -19,7 +19,7 @@ export default async function CmsPage() {
     .select('*')
     .order('updated_at', { ascending: false });
 
-  const tracks = ['artist', 'production', 'sponsor', 'guest', 'client'] as const;
+  const tracks = ['artist', 'production', 'talent', 'crew', 'management', 'staff', 'sponsor', 'press', 'guest', 'attendee', 'client'] as const;
 
   return (
     <div className="min-h-screen flex flex-col">

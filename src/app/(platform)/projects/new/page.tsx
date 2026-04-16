@@ -40,8 +40,12 @@ const featureModules = [
   { id: 'catering', label: 'Catering', description: 'Meal plans, dietary tracking, check-in' },
   { id: 'notifications', label: 'Notifications', description: 'Email/SMS templates, auto-triggers' },
   { id: 'cms', label: 'CMS Portal', description: 'Block-based content pages per track' },
+  { id: 'talent', label: 'Talent Portal', description: 'Artist/speaker advancing and deliverable submission' },
+  { id: 'crew', label: 'Crew Portal', description: 'Build & strike crew and day-of-show operations' },
   { id: 'sponsor', label: 'Sponsor Portal', description: 'Brand integration and activation tracking' },
-  { id: 'guest', label: 'Guest Portal', description: 'Industry guest access and scheduling' },
+  { id: 'press', label: 'Press Portal', description: 'Media credentials, press kit access' },
+  { id: 'guest', label: 'Guest Portal', description: 'Guest access and scheduling' },
+  { id: 'attendee', label: 'Attendee Portal', description: 'Attendee check-in and event info' },
   { id: 'client', label: 'Client Portal', description: 'Client reporting and deliverable tracking' },
 ];
 

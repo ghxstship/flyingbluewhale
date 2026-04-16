@@ -122,7 +122,7 @@ async function run() {
   await page.waitForTimeout(2000);
   await screenshot(page, '06_console');
   ok('Console loads (not redirected)', !page.url().includes('/login'));
-  ok('Shows user info', (await page.locator('text=dev@gvteway.test').count()) > 0 || (await page.locator('text=DEVELOPER').count()) > 0);
+  ok('Shows user info', (await page.locator('text=dev@gvteway.test').count()) > 0 || (await page.locator('text=DEVELOPER').count()) > 0 || (await page.locator('text=EXECUTIVE').count()) > 0);
   ok('Shows dashboard stats', (await page.locator('text=CATALOG ITEMS').count()) > 0 || (await page.locator('text=Catalog Items').count()) > 0 || (await page.locator('text=350').count()) > 0);
   ok('Has sign-out button', (await page.locator('text=SIGN OUT').count()) > 0 || (await page.locator('text=Sign Out').count()) > 0);
 

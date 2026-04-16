@@ -16,7 +16,7 @@ export default async function CredentialManagerPage() {
     denied: { bg: 'rgba(239,68,68,0.12)', fg: '#EF4444' }, issued: { bg: 'rgba(99,102,241,0.12)', fg: '#6366F1' },
     picked_up: { bg: 'rgba(0,229,255,0.1)', fg: '#00E5FF' }, revoked: { bg: 'rgba(156,163,175,0.12)', fg: '#9CA3AF' },
   };
-  const credTypes = ['Artist', 'Crew', 'VIP', 'Staff', 'Media', 'Vendor', 'Sponsor', 'Guest'];
+  const credTypes = ['Executive', 'Production', 'Management', 'Crew', 'Staff', 'Talent', 'VIP', 'Vendor', 'Sponsor', 'Press', 'Guest', 'Attendee'];
   const zones = ['Backstage', 'FOH', 'BOH', 'VIP Lounge', 'Media Pit', 'All Access'];
   const matrixDefaults: Record<string, string[]> = { Artist: ['Backstage', 'FOH', 'VIP Lounge'], Crew: ['Backstage', 'BOH'], Staff: ['Backstage', 'FOH', 'BOH', 'VIP Lounge', 'All Access'], VIP: ['FOH', 'VIP Lounge'], Media: ['FOH', 'Media Pit'] };
 

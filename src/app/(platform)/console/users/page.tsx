@@ -5,18 +5,27 @@ export const metadata = {
   description: 'Manage organization members and role assignments.',
 };
 
-const roleDescriptions: Record<string, string> = {
+const platformRoleDescriptions: Record<string, string> = {
   developer: 'Full system access, can modify schema and settings',
   owner: 'Organization owner, full admin rights',
   admin: 'Administrative access, manage members and projects',
   team_member: 'Internal team, manage assigned projects',
-  talent_management: 'Artist management, submit on behalf of talent',
-  talent_performer: 'Performing artist, submit own deliverables',
-  talent_crew: 'Touring crew member, limited deliverable access',
+  collaborator: 'External stakeholder with org-level access',
+};
+
+const projectRoleDescriptions: Record<string, string> = {
+  executive: 'Full project authority — build, strike, day of show',
+  production: 'Operations lead — build & strike + day of show',
+  management: 'Day of show, load-in/out access, no build & strike',
+  crew: 'Build & strike + day of show operations',
+  staff: 'Day of show only, no build & strike',
+  talent: 'Performers, speakers, artists — submit deliverables',
   vendor: 'External vendor, submit production deliverables',
   client: 'Client stakeholder, review and approve',
   sponsor: 'Sponsor representative, brand activation portal',
-  industry_guest: 'Industry guest, read-only access',
+  press: 'Press and media credentials, limited access',
+  guest: 'Guest access, read-only portal',
+  attendee: 'Attendee-level access, minimal portal',
 };
 
 export default async function UsersPage() {
@@ -36,7 +45,7 @@ export default async function UsersPage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div>
             <h1 className="text-heading text-lg text-text-primary">Users & Roles</h1>
-            <p className="text-sm text-text-secondary mt-1">{members?.length ?? 0} members &middot; 11 roles</p>
+            <p className="text-sm text-text-secondary mt-1">{members?.length ?? 0} members &middot; 5 platform + 12 project roles</p>
           </div>
           <button className="btn btn-primary text-xs py-2 px-4">Invite Member</button>
         </div>
@@ -44,21 +53,39 @@ export default async function UsersPage() {
 
       <div className="flex-1 px-8 py-8">
         <div className="max-w-6xl mx-auto">
-          {/* Role Reference */}
+          {/* Platform Role Reference */}
           <section className="mb-10">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-1 h-6 bg-cyan rounded-full" />
-              <h2 className="text-heading text-sm text-text-primary">RBAC Role Hierarchy</h2>
+              <h2 className="text-heading text-sm text-text-primary">Platform Roles (Internal)</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {Object.entries(roleDescriptions).map(([role, desc]) => {
-                const isInternal = ['developer', 'owner', 'admin', 'team_member'].includes(role);
-                const isTalent = ['talent_management', 'talent_performer', 'talent_crew'].includes(role);
+              {Object.entries(platformRoleDescriptions).map(([role, desc]) => (
+                <div key={role} className="card-elevated p-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="badge border text-cyan border-cyan/20 bg-cyan-subtle">
+                      {role.replace(/_/g, ' ')}
+                    </span>
+                  </div>
+                  <p className="text-xs text-text-tertiary">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
+          {/* Project Role Reference */}
+          <section className="mb-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-1 h-6 bg-info rounded-full" />
+              <h2 className="text-heading text-sm text-text-primary">Project Roles (External)</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {Object.entries(projectRoleDescriptions).map(([role, desc]) => {
+                const isOps = ['executive', 'production', 'management', 'crew', 'staff'].includes(role);
                 return (
                   <div key={role} className="card-elevated p-4">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className={`badge border ${isInternal ? 'text-cyan border-cyan/20 bg-cyan-subtle' : isTalent ? 'text-info border-info/30 bg-info/10' : 'text-text-secondary border-border bg-surface-raised'}`}>
+                      <span className={`badge border ${isOps ? 'text-info border-info/30 bg-info/10' : 'text-text-secondary border-border bg-surface-raised'}`}>
                         {role.replace(/_/g, ' ')}
                       </span>
                     </div>

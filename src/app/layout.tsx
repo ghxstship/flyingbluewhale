@@ -1,39 +1,53 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
-import localFont from "next/font/local";
+import { Anton, Bebas_Neue, Share_Tech, Share_Tech_Mono } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
-const syne = localFont({
-  src: [
-    { path: "../fonts/Syne-Bold.woff2", weight: "700", style: "normal" as const },
-    { path: "../fonts/Syne-ExtraBold.woff2", weight: "800", style: "normal" as const },
-  ],
-  variable: "--font-syne",
-  display: "swap",
-  preload: true,
-});
-
-const plusJakarta = localFont({
-  src: [
-    { path: "../fonts/PlusJakartaSans-Regular.woff2", weight: "400", style: "normal" as const },
-    { path: "../fonts/PlusJakartaSans-Medium.woff2", weight: "500", style: "normal" as const },
-    { path: "../fonts/PlusJakartaSans-SemiBold.woff2", weight: "600", style: "normal" as const },
-    { path: "../fonts/PlusJakartaSans-Bold.woff2", weight: "700", style: "normal" as const },
-  ],
-  variable: "--font-geist-sans",
-  display: "swap",
-  preload: true,
-});
-
-const jetbrainsMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const anton = Anton({
+  weight: "400",
   subsets: ["latin"],
+  variable: "--font-anton",
+  display: "swap",
+});
+
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bebas",
+  display: "swap",
+});
+
+const shareTech = Share_Tech({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-share-tech",
+  display: "swap",
+});
+
+const shareTechMono = Share_Tech_Mono({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-share-tech-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Know Before You Go — MMW26 Open Air at the Racetrack",
+  title: "GVTEWAY -- Universal Production Advancing",
   description:
-    "Your guide to Black Coffee + Carlita + Kaz James Open Air at the Racetrack — Miami Music Week 2026 at Hialeah Park Casino.",
+    "Enterprise-grade production advancing platform. One catalog, two views. Talent and production track management for live events.",
+  keywords: [
+    "production advancing",
+    "talent management",
+    "event production",
+    "unified catalog",
+    "live events",
+  ],
+  openGraph: {
+    title: "GVTEWAY -- Universal Production Advancing",
+    description:
+      "Enterprise-grade production advancing platform for live events.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -44,13 +58,37 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${syne.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${anton.variable} ${bebasNeue.variable} ${shareTech.variable} ${shareTechMono.variable}`}
     >
-      <body className="min-h-full flex flex-col font-sans">
-        <a href="#main-content" className="skip-link">
+      <body>
+        <a href="#main" className="skip-link">
           Skip to content
         </a>
-        {children}
+        <main id="main">{children}</main>
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              background: "#1A1A1A",
+              color: "#F5F5F5",
+              border: "1px solid #2A2A2A",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.875rem",
+            },
+            success: {
+              iconTheme: {
+                primary: "#00E676",
+                secondary: "#0A0A0A",
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: "#FF5252",
+                secondary: "#0A0A0A",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

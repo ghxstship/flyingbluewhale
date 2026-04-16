@@ -1,5 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import type { Database } from '@/lib/supabase/database.types';
+
+type AllocationState = Database['public']['Enums']['allocation_state'];
 
 // GET /api/v1/allocations - List allocations
 export async function GET(request: NextRequest) {
@@ -21,7 +24,7 @@ export async function GET(request: NextRequest) {
     .order('created_at', { ascending: false });
 
   const state = searchParams.get('state');
-  if (state) query = query.eq('state', state);
+  if (state) query = query.eq('state', state as AllocationState);
 
   const { data, error } = await query;
 
@@ -36,6 +39,8 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const { data: { user } } = await supabase.auth.getUser();
 
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   const { data, error } = await supabase
     .from('catalog_item_allocations')
     .insert({
@@ -44,7 +49,7 @@ export async function POST(request: NextRequest) {
       space_id: body.space_id,
       quantity: body.quantity || 1,
       notes: body.notes,
-      allocated_by: user?.id,
+      allocated_by: user.id,
     })
     .select()
     .single();

@@ -1,5 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import type { Database } from '@/lib/supabase/database.types';
+
+type ProjectStatus = Database['public']['Enums']['project_status'];
+type ProjectType = Database['public']['Enums']['project_type'];
 
 // GET /api/v1/projects - List projects
 export async function GET(request: NextRequest) {
@@ -12,10 +16,10 @@ export async function GET(request: NextRequest) {
     .order('created_at', { ascending: false });
 
   const status = searchParams.get('status');
-  if (status) query = query.eq('status', status);
+  if (status) query = query.eq('status', status as ProjectStatus);
 
   const type = searchParams.get('type');
-  if (type) query = query.eq('type', type);
+  if (type) query = query.eq('type', type as ProjectType);
 
   const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100);
   const offset = parseInt(searchParams.get('offset') || '0');

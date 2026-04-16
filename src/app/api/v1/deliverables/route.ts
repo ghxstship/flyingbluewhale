@@ -1,5 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import type { Database } from '@/lib/supabase/database.types';
+
+type DeliverableType = Database['public']['Enums']['deliverable_type'];
+type DeliverableStatus = Database['public']['Enums']['deliverable_status'];
 
 // GET /api/v1/deliverables - List deliverables
 export async function GET(request: NextRequest) {
@@ -20,10 +24,10 @@ export async function GET(request: NextRequest) {
     .order('updated_at', { ascending: false });
 
   const type = searchParams.get('type');
-  if (type) query = query.eq('type', type);
+  if (type) query = query.eq('type', type as DeliverableType);
 
   const status = searchParams.get('status');
-  if (status) query = query.eq('status', status);
+  if (status) query = query.eq('status', status as DeliverableStatus);
 
   const { data, error } = await query;
 

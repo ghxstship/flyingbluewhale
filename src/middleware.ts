@@ -44,10 +44,16 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session token
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Refresh session token gracefully, preventing edge crashes on previews missing db credentials
+  let user = null;
+  if (supabaseUrl !== 'http://localhost:54321') {
+    try {
+      const { data } = await supabase.auth.getUser();
+      user = data.user;
+    } catch (err) {
+      console.warn("Failed to reach Supabase from Edge Middleware:", err);
+    }
+  }
 
   // Protected routes: redirect to login if not authenticated
   // Guards all four authenticated shells: platform, portal, mobile, personal

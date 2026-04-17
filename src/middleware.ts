@@ -2,17 +2,18 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import type { Database } from '@/lib/supabase/database.types';
 import { ROLE_TRACK_MAP } from '@/lib/supabase/types';
+import { env } from '@/lib/env';
 
 export async function middleware(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // If Supabase is not configured, fail hard in production (silent pass-through is a security risk)
-  if (!supabaseUrl || !supabaseAnonKey) {
-    if (process.env.NODE_ENV === 'production') {
+  // If Supabase is not configured, warn instead of failing hard if we're on a preview
+  if (supabaseUrl === 'http://localhost:54321' || !supabaseAnonKey) {
+    if (process.env.VERCEL_ENV === 'production') {
       return new NextResponse('Service unavailable: authentication not configured', { status: 503 });
     }
-    return NextResponse.next({ request });
+    console.warn("Using placeholder Supabase credentials in middleware.");
   }
 
   // ─── Request ID for correlation ───

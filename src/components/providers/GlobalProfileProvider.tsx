@@ -1,19 +1,45 @@
 'use client';
 
 import React, { createContext, useContext } from 'react';
+import type { PlatformRole } from '@/lib/supabase/types';
 
-type GlobalProfileWrapperProps = {
-  children: React.ReactNode;
-  globalProfile: any;
-};
+/* ═══════════════════════════════════════════════════════
+   GlobalProfileProvider — User context for client components
+   Provides typed user/org profile to the component tree.
+   ═══════════════════════════════════════════════════════ */
 
-const GlobalProfileContext = createContext<any>(null);
+export interface GlobalProfile {
+  userId: string;
+  email: string | null;
+  orgId: string | null;
+  orgName: string | null;
+  orgSlug: string | null;
+  orgTier: string | null;
+  platformRole: PlatformRole | null;
+}
 
-export const useGlobalProfile = () => {
+const GlobalProfileContext = createContext<GlobalProfile | null>(null);
+
+export const useGlobalProfile = (): GlobalProfile | null => {
   return useContext(GlobalProfileContext);
 };
 
-export function GlobalProfileProvider({ children, globalProfile }: GlobalProfileWrapperProps) {
+/**
+ * Provides typed global profile context.
+ * Wrap authenticated layouts with this provider.
+ * 
+ * Usage:
+ *   <GlobalProfileProvider globalProfile={profile}>
+ *     {children}
+ *   </GlobalProfileProvider>
+ */
+export function GlobalProfileProvider({
+  children,
+  globalProfile,
+}: {
+  children: React.ReactNode;
+  globalProfile: GlobalProfile | null;
+}) {
   return (
     <GlobalProfileContext.Provider value={globalProfile}>
       {children}

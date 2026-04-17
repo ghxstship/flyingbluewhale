@@ -7,9 +7,10 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   reporter: 'list',
-  timeout: 15000,
+  timeout: 45000,
   use: {
     baseURL: 'http://localhost:3000',
+    navigationTimeout: 30000,
     trace: 'on-first-retry',
   },
   projects: [

@@ -354,18 +354,18 @@ body {
 
 .btn-ghost {
   background: transparent;
-  color: #A0A0A0;
+  color: var(--color-text-secondary);
 }
 
 .btn-ghost:hover {
-  background: #1A1A1A;
-  color: #F5F5F5;
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
 }
 
 .btn-danger {
   background: transparent;
-  color: #FF5252;
-  border: 1px solid #FF5252;
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
 }
 
 .btn-danger:hover {

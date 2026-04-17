@@ -133,22 +133,14 @@ const ALL_CAPABILITIES: Capability[] = [
   'branding:manage', 'domains:manage',
 ];
 
-const PLATFORM_ROLE_CAPABILITIES: Record<string, Capability[]> = {
+const PLATFORM_ROLE_CAPABILITIES: Partial<Record<PlatformRole, Capability[]>> = {
   developer: ALL_CAPABILITIES,
   owner: ALL_CAPABILITIES,
   admin: ALL_CAPABILITIES.filter(c => c !== 'billing:manage'), // billing is owner-only
-  controller: [
-    'projects:read',
-    'invoices:read', 'invoices:create', 'invoices:approve',
-    'expenses:read', 'expenses:create', 'expenses:approve',
-    'budgets:read', 'budgets:manage',
-    'time:read', 'time:approve',
-    'advances:read', 'advances:approve',
-    'payouts:manage', 'finance:reports',
-    'requisitions:read', 'requisitions:approve',
-    'purchase_orders:read', 'purchase_orders:approve',
-    'vendors:read', 'vendors:manage',
-    'catalog:read',
+  talent_management: [
+    'projects:read', 'tasks:read', 'tasks:create', 'schedule:read',
+    'locations:read', 'time:read', 'time:submit', 'credentials:read',
+    'ai:assistant', 'inbox:read', 'files:read',
   ],
   team_member: [
     'projects:read', 'projects:create', 'projects:update',
@@ -197,14 +189,14 @@ const PLATFORM_ROLE_CAPABILITIES: Record<string, Capability[]> = {
     'ai:assistant',
     'inbox:read', 'files:read',
   ],
-  contractor: [
-    'projects:read',
-    'tasks:read', 'tasks:update',
-    'schedule:read',
-    'time:read', 'time:submit',
-    'advances:read', 'advances:request',
-    'credentials:read',
-    'inbox:read',
+  talent_performer: [
+    'projects:read', 'schedule:read', 'locations:read',
+    'time:read', 'credentials:read', 'inbox:read',
+  ],
+  talent_crew: [
+    'projects:read', 'tasks:read', 'tasks:update',
+    'schedule:read', 'time:read', 'time:submit',
+    'credentials:read', 'inbox:read',
   ],
   crew: [
     'projects:read',
@@ -219,11 +211,9 @@ const PLATFORM_ROLE_CAPABILITIES: Record<string, Capability[]> = {
     'invoices:read',
     'files:read',
   ],
-  viewer: [
-    'projects:read',
-    'schedule:read',
+  industry_guest: [
+    'projects:read', 'schedule:read',
   ],
-  community: [] as Capability[],
 };
 
 /* ─── Capability Check ─── */
@@ -242,7 +232,7 @@ interface CanContext {
  *   }
  */
 export function can(role: PlatformRole | string, capability: Capability, _ctx?: CanContext): boolean {
-  const caps = PLATFORM_ROLE_CAPABILITIES[role];
+  const caps = PLATFORM_ROLE_CAPABILITIES[role as PlatformRole];
   if (!caps) return false;
   return caps.includes(capability);
 }
@@ -258,7 +248,7 @@ export function canAny(role: PlatformRole | string, capabilities: Capability[]):
  * Get all capabilities for a role.
  */
 export function getCapabilities(role: PlatformRole | string): Capability[] {
-  return PLATFORM_ROLE_CAPABILITIES[role] ?? [];
+  return PLATFORM_ROLE_CAPABILITIES[role as PlatformRole] ?? [];
 }
 
 /* ─── Sidebar Section Gating ─── */

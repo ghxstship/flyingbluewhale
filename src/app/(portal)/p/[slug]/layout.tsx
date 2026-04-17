@@ -49,15 +49,19 @@ export default async function PortalLayout({
     redirect('/login?error=unauthorized_or_revoked_access');
   }
 
-  // Fetch Global Profile for Cross-Project Reusability (Gap Closing)
-  const { data: globalProfile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
+  // Build typed global profile from authenticated user
+  const typedProfile = {
+    userId: user.id,
+    email: user.email ?? null,
+    orgId: null,
+    orgName: null,
+    orgSlug: null,
+    orgTier: null,
+    platformRole: null,
+  };
 
   return (
-    <GlobalProfileProvider globalProfile={globalProfile || { id: user.id }}>
+    <GlobalProfileProvider globalProfile={typedProfile}>
       <div data-platform="gvteway" className="flex flex-col min-h-screen">
         {/* Global GVTEWAY Portal Header */}
         <header className="px-6 py-4 flex items-center justify-between border-b border-border bg-surface shrink-0 sticky top-0 z-50">

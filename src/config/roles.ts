@@ -1,25 +1,32 @@
 /** Role configuration — labels and display options */
 
+import type { PlatformRole } from '@/lib/supabase/types';
+
+/** Platform + project role display labels.
+ *  Uses Record<string, string> intentionally so it can also display
+ *  any legacy roles without compile errors. Access is safe because
+ *  the ?? fallback handles missing keys.
+ */
 export const ROLE_LABELS: Record<string, string> = {
-  // Platform roles
+  // Platform roles (from platform_role enum)
   developer: 'Developer',
   owner: 'Owner',
   admin: 'Admin',
   team_member: 'Team Member',
+  talent_management: 'Talent Management',
+  talent_performer: 'Talent Performer',
+  talent_crew: 'Talent Crew',
+  industry_guest: 'Industry Guest',
   collaborator: 'Collaborator',
-  controller: 'Controller',
-  contractor: 'Contractor',
-  crew: 'Crew',
-  client: 'Client',
-  viewer: 'Viewer',
-  community: 'Community',
   // Project roles
   executive: 'Executive',
   production: 'Production',
   management: 'Management',
+  crew: 'Crew',
   staff: 'Staff',
   talent: 'Talent',
   vendor: 'Vendor',
+  client: 'Client',
   sponsor: 'Sponsor',
   press: 'Press',
   guest: 'Guest',

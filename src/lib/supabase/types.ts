@@ -14,15 +14,18 @@ import type { Database } from './database.types';
 
 export type PlatformRole = Database['public']['Enums']['platform_role'];
 /**
- * ProjectRole — alias for platform_role.
+ * ProjectRole — narrowed from platform_role enum.
  * project_members.role uses the same platform_role enum, but
- * a CHECK constraint (migration 011) restricts valid values to:
- *   executive, production, management, crew, staff,
- *   talent, vendor, client, sponsor, press, guest, attendee.
+ * a CHECK constraint (migration 011) restricts valid values to
+ * only these 12 project-scoped roles.
  * Platform roles (developer, owner, admin, team_member, collaborator)
  * are constrained to organization_members.role only.
  */
-export type ProjectRole = PlatformRole;
+export type ProjectRole =
+  | 'executive' | 'production' | 'management'
+  | 'crew' | 'staff' | 'talent'
+  | 'vendor' | 'client' | 'sponsor'
+  | 'press' | 'guest' | 'attendee';
 export type ProjectType = Database['public']['Enums']['project_type'];
 export type ProjectStatus = Database['public']['Enums']['project_status'];
 export type DeliverableType = Database['public']['Enums']['deliverable_type'];

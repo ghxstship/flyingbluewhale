@@ -1,35 +1,24 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import type { Database } from '@/lib/supabase/database.types';
-
-/* ─── Role → Portal Track Mapping ─── */
-const ROLE_TRACK_MAP: Record<string, string> = {
-  // Internal roles
-  executive: 'production',
-  production: 'production',
-  management: 'management',
-  // Operations roles
-  crew: 'crew',
-  staff: 'staff',
-  // Talent roles
-  talent: 'artist',
-  // External roles
-  vendor: 'vendor',
-  client: 'client',
-  sponsor: 'sponsor',
-  press: 'press',
-  guest: 'guest',
-  attendee: 'attendee',
-};
+import { ROLE_TRACK_MAP } from '@/lib/supabase/types';
 
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // If Supabase is not configured, pass through without auth checks
+  // If Supabase is not configured, fail hard in production (silent pass-through is a security risk)
   if (!supabaseUrl || !supabaseAnonKey) {
+    if (process.env.NODE_ENV === 'production') {
+      return new NextResponse('Service unavailable: authentication not configured', { status: 503 });
+    }
     return NextResponse.next({ request });
   }
+
+  // ─── Request ID for correlation ───
+  const requestId = crypto.randomUUID();
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-request-id', requestId);
 
   let supabaseResponse = NextResponse.next({ request });
 
@@ -122,6 +111,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Attach request ID to response for client-side correlation
+  supabaseResponse.headers.set('x-request-id', requestId);
   return supabaseResponse;
 }
 

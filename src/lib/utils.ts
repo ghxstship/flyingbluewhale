@@ -1,6 +1,8 @@
 /** Utility helpers */
 
-export function cn(...inputs: any[]): string {
+type ClassValue = string | boolean | undefined | null | number;
+
+export function cn(...inputs: ClassValue[]): string {
   return inputs.filter(Boolean).join(' ');
 }
 
@@ -52,7 +54,7 @@ export function getInitials(name?: string | null): string {
     .join('');
 }
 
-export function getPersistedView(key: string): any {
+export function getPersistedView(key: string): unknown {
   if (typeof window === 'undefined') return null;
   try {
     const raw = localStorage.getItem(`view:${key}`);

@@ -16,9 +16,11 @@ export default function GlobalError({
             System Error
           </h1>
           <p style={{ color: '#A0A0A0', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-            {error.message || 'An unexpected error occurred.'}
+            {process.env.NODE_ENV === 'development'
+              ? (error.message || 'An unexpected error occurred.')
+              : 'An unexpected error occurred. Please try again or contact support.'}
           </p>
-          {error.digest && (
+          {process.env.NODE_ENV === 'development' && error.digest && (
             <p style={{ color: '#444', fontFamily: 'monospace', fontSize: '0.75rem', marginBottom: '1.5rem' }}>
               Digest: {error.digest}
             </p>

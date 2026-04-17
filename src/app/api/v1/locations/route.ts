@@ -35,9 +35,21 @@ export const POST = requireAuth(async (request: NextRequest, { user }: { user: {
 
   const supabase = await createClient();
 
+  // Resolve organization from user's membership — never trust client-supplied org_id
+  const { data: orgMember } = await supabase
+    .from('organization_members')
+    .select('organization_id')
+    .eq('user_id', user.id)
+    .limit(1)
+    .single();
+
+  if (!orgMember) {
+    return error('User has no organization membership', 403);
+  }
+
   const slug = (body.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   const { data, error: dbError } = await supabase.from('locations').insert({
-    organization_id: body.organization_id || 'default-org',
+    organization_id: orgMember.organization_id,
     project_id: body.project_id || null,
     parent_id: body.parent_id || null,
     name: body.name,

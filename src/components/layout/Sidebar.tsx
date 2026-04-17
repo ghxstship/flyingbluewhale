@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Avatar } from '../ui/Avatar';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { ROLE_LABELS } from '@/config/roles';
 
 /* ═══════════════════════════════════════════════════════
    Sidebar — Canonical console navigation sidebar
@@ -143,20 +144,29 @@ interface SidebarProps {
   currentPath?: string;
   /** Sections to show (from RBAC getVisibleSections). Shows all if omitted. */
   visibleSections?: string[];
+  /** User's platform role for display */
+  platformRole?: string | null;
+  /** Platform brand slug for theming */
+  platformBrand?: string | null;
 }
 
-export function Sidebar({ userEmail, currentPath, visibleSections }: SidebarProps) {
+export function Sidebar({ userEmail, currentPath, visibleSections, platformRole, platformBrand }: SidebarProps) {
   const sections = visibleSections
     ? NAV_SECTIONS.filter((s) => s.id === 'dashboard' || visibleSections.includes(s.id))
     : NAV_SECTIONS;
 
+  const brandName = (platformBrand || 'gvteway').toUpperCase();
+  const roleLabel = platformRole && ROLE_LABELS[platformRole as keyof typeof ROLE_LABELS]
+    ? ROLE_LABELS[platformRole as keyof typeof ROLE_LABELS]
+    : platformRole?.toUpperCase() ?? 'USER';
+
   return (
-    <aside data-platform="atlvs" className="w-64 border-r border-border bg-surface flex flex-col shrink-0">
+    <aside data-platform={platformBrand || 'gvteway'} className="w-64 border-r border-border bg-surface flex flex-col shrink-0">
       {/* Brand */}
       <div className="p-6 border-b border-border-subtle">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-[var(--brand-color)] [box-shadow:var(--brand-shadow)]" />
-          <span className="text-heading text-sm tracking-[0.2em] text-text-primary">ATLVS</span>
+          <span className="text-heading text-sm tracking-[0.2em] text-text-primary">{brandName}</span>
         </div>
       </div>
 
@@ -194,7 +204,7 @@ export function Sidebar({ userEmail, currentPath, visibleSections }: SidebarProp
             <div className="text-xs text-text-primary truncate">
               {userEmail || 'Not signed in'}
             </div>
-            <div className="text-label text-text-disabled text-[0.5rem]">DEVELOPER</div>
+            <div className="text-label text-text-disabled text-[0.5rem]">{roleLabel}</div>
           </div>
         </div>
         <div className="mt-4 mb-2 flex justify-center">

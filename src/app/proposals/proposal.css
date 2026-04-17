@@ -1,0 +1,35 @@
+/* Proposal-specific print CSS + typography overrides.
+   Force-opens phase accordions at print time and strips the top nav. */
+
+@media print {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #0A0A0A;
+    --bg-secondary: #F7F7F7;
+    --text-muted: #555;
+  }
+
+  .print-hide, .glass-nav, nav.glass-nav, .print-hide-sibling {
+    display: none !important;
+  }
+
+  .proposal-doc {
+    background: #fff !important;
+    color: #000 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Force-expand phase accordion bodies at print time. */
+  .proposal-doc details,
+  .proposal-doc [data-phase-collapsed="true"] {
+    display: block !important;
+  }
+
+  section { page-break-inside: avoid; }
+  .surface, .surface-raised, .surface-inset {
+    box-shadow: none !important;
+    border: 1px solid #D4D4D4 !important;
+  }
+  a { color: #000; text-decoration: underline; }
+}

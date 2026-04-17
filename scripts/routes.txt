@@ -1,0 +1,241 @@
+# MARKETING
+(marketing)/page.tsx|Home|Unified production platform for live events, fabrication, and creative ops
+(marketing)/pricing/page.tsx|Pricing|Portal · Starter · Professional · Enterprise
+(marketing)/features/page.tsx|Features|Everything in flyingbluewhale
+(marketing)/features/[module]/page.tsx|Feature|Per-module landing
+(marketing)/solutions/[industry]/page.tsx|Solutions|Vertical landing page
+(marketing)/customers/page.tsx|Customers|Case studies
+(marketing)/customers/[slug]/page.tsx|Case Study|Customer story
+(marketing)/blog/page.tsx|Blog|Index
+(marketing)/blog/[slug]/page.tsx|Blog Post|Article
+(marketing)/changelog/page.tsx|Changelog|Product updates
+(marketing)/docs/page.tsx|Docs|Public docs landing
+(marketing)/about/page.tsx|About|Company and team
+(marketing)/contact/page.tsx|Contact|Talk to us · request a demo
+(marketing)/legal/terms/page.tsx|Terms of Service|
+(marketing)/legal/privacy/page.tsx|Privacy Policy|
+(marketing)/legal/dpa/page.tsx|Data Processing Addendum|
+(marketing)/legal/sla/page.tsx|Service Level Agreement|
+
+# AUTH
+(auth)/login/page.tsx|Log in|
+(auth)/signup/page.tsx|Sign up|
+(auth)/forgot-password/page.tsx|Forgot password|
+(auth)/reset-password/[token]/page.tsx|Reset password|
+(auth)/verify-email/[token]/page.tsx|Verify email|
+(auth)/magic-link/[token]/page.tsx|Magic link|
+(auth)/accept-invite/[token]/page.tsx|Accept invite|Org or project invite
+(auth)/sso/[provider]/page.tsx|SSO|OAuth or OIDC entry
+
+# PERSONAL
+(personal)/me/page.tsx|My dashboard|Tickets, tasks, notifications
+(personal)/me/profile/page.tsx|Profile|Identity, avatar, contact
+(personal)/me/settings/page.tsx|Settings|Preferences, timezone, locale
+(personal)/me/notifications/page.tsx|Notifications|Per-channel preferences
+(personal)/me/security/page.tsx|Security|Password, 2FA, sessions, tokens
+(personal)/me/tickets/page.tsx|My tickets|Purchased and scanned tickets
+(personal)/me/organizations/page.tsx|Organizations|Memberships and switcher
+
+# PLATFORM — dashboard
+(platform)/console/page.tsx|Console|Operations dashboard
+(platform)/console/command/page.tsx|Command palette|Global search and actions
+
+# PLATFORM — work
+(platform)/console/projects/page.tsx|Projects|All projects
+(platform)/console/projects/new/page.tsx|New project|
+(platform)/console/projects/[projectId]/page.tsx|Project|
+(platform)/console/projects/[projectId]/overview/page.tsx|Overview|
+(platform)/console/projects/[projectId]/tasks/page.tsx|Tasks|
+(platform)/console/projects/[projectId]/gantt/page.tsx|Gantt|
+(platform)/console/projects/[projectId]/roadmap/page.tsx|Roadmap|
+(platform)/console/projects/[projectId]/files/page.tsx|Files|
+(platform)/console/projects/[projectId]/calendar/page.tsx|Calendar|
+(platform)/console/projects/[projectId]/budget/page.tsx|Budget|
+(platform)/console/projects/[projectId]/crew/page.tsx|Crew|
+(platform)/console/projects/[projectId]/advancing/page.tsx|Advancing|Internal view of portal advancing
+(platform)/console/projects/[projectId]/portal-preview/page.tsx|Portal preview|Preview external portal as role
+(platform)/console/tasks/page.tsx|Tasks|All tasks
+(platform)/console/tasks/new/page.tsx|New task|
+(platform)/console/tasks/[taskId]/page.tsx|Task|
+(platform)/console/schedule/page.tsx|Schedule|Master schedule with RRULE and ICS export
+(platform)/console/events/page.tsx|Events|
+(platform)/console/events/new/page.tsx|New event|
+(platform)/console/events/[eventId]/page.tsx|Event|
+(platform)/console/locations/page.tsx|Locations|Canonical locations DB
+(platform)/console/locations/new/page.tsx|New location|
+(platform)/console/locations/[locationId]/page.tsx|Location|
+(platform)/console/locations/picker/page.tsx|Location picker|Typeahead with map preview
+
+# PLATFORM — sales / CRM
+(platform)/console/pipeline/page.tsx|Pipeline|Kanban by stage
+(platform)/console/pipeline/[dealId]/page.tsx|Deal|
+(platform)/console/leads/page.tsx|Leads|
+(platform)/console/leads/new/page.tsx|New lead|
+(platform)/console/leads/[leadId]/page.tsx|Lead|
+(platform)/console/clients/page.tsx|Clients|
+(platform)/console/clients/new/page.tsx|New client|
+(platform)/console/clients/[clientId]/page.tsx|Client|
+(platform)/console/proposals/page.tsx|Proposals|
+(platform)/console/proposals/new/page.tsx|New proposal|
+(platform)/console/proposals/[proposalId]/page.tsx|Proposal|
+(platform)/console/proposals/templates/page.tsx|Proposal templates|
+(platform)/console/campaigns/page.tsx|Campaigns|
+
+# PLATFORM — finance
+(platform)/console/finance/page.tsx|Finance|Cash, AR, AP, budget roll-up
+(platform)/console/finance/invoices/page.tsx|Invoices|
+(platform)/console/finance/invoices/new/page.tsx|New invoice|
+(platform)/console/finance/invoices/[invoiceId]/page.tsx|Invoice|
+(platform)/console/finance/expenses/page.tsx|Expenses|
+(platform)/console/finance/expenses/new/page.tsx|New expense|
+(platform)/console/finance/expenses/[expenseId]/page.tsx|Expense|
+(platform)/console/finance/budgets/page.tsx|Budgets|
+(platform)/console/finance/budgets/new/page.tsx|New budget|
+(platform)/console/finance/budgets/[budgetId]/page.tsx|Budget|
+(platform)/console/finance/time/page.tsx|Time tracking|
+(platform)/console/finance/time/new/page.tsx|New time entry|
+(platform)/console/finance/time/[entryId]/page.tsx|Time entry|
+(platform)/console/finance/mileage/page.tsx|Mileage|
+(platform)/console/finance/mileage/new/page.tsx|New mileage|
+(platform)/console/finance/mileage/[mileageId]/page.tsx|Mileage|
+(platform)/console/finance/advances/page.tsx|Advances|
+(platform)/console/finance/advances/new/page.tsx|Request advance|
+(platform)/console/finance/advances/[advanceId]/page.tsx|Advance|
+(platform)/console/finance/payouts/page.tsx|Payouts|Stripe Connect
+(platform)/console/finance/reports/page.tsx|Reports|P&L, cash flow, project profitability
+
+# PLATFORM — procurement
+(platform)/console/procurement/page.tsx|Procurement|
+(platform)/console/procurement/requisitions/page.tsx|Requisitions|
+(platform)/console/procurement/requisitions/new/page.tsx|New requisition|
+(platform)/console/procurement/requisitions/[reqId]/page.tsx|Requisition|
+(platform)/console/procurement/purchase-orders/page.tsx|Purchase orders|
+(platform)/console/procurement/purchase-orders/new/page.tsx|New PO|
+(platform)/console/procurement/purchase-orders/[poId]/page.tsx|PO|
+(platform)/console/procurement/vendors/page.tsx|Vendors|
+(platform)/console/procurement/vendors/new/page.tsx|New vendor|
+(platform)/console/procurement/vendors/[vendorId]/page.tsx|Vendor|
+(platform)/console/procurement/rfqs/page.tsx|RFQs|
+(platform)/console/procurement/rfqs/new/page.tsx|New RFQ|
+(platform)/console/procurement/rfqs/[rfqId]/page.tsx|RFQ|
+(platform)/console/procurement/catalog/page.tsx|Catalog|Approved item catalog
+
+# PLATFORM — production
+(platform)/console/production/fabrication/page.tsx|Fabrication|
+(platform)/console/production/fabrication/new/page.tsx|New fab order|
+(platform)/console/production/fabrication/[orderId]/page.tsx|Fab order|
+(platform)/console/production/dispatch/page.tsx|Dispatch|
+(platform)/console/production/dispatch/live/page.tsx|Live dispatch|
+(platform)/console/production/dispatch/[dispatchId]/page.tsx|Dispatch|
+(platform)/console/production/rentals/page.tsx|Rentals|
+(platform)/console/production/rentals/availability/page.tsx|Rental availability|
+(platform)/console/production/rentals/new/page.tsx|New rental|
+(platform)/console/production/rentals/[rentalId]/page.tsx|Rental|
+(platform)/console/production/equipment/page.tsx|Equipment|
+(platform)/console/production/equipment/new/page.tsx|New equipment|
+(platform)/console/production/equipment/[equipmentId]/page.tsx|Equipment|
+(platform)/console/production/warehouse/page.tsx|Warehouse|
+(platform)/console/production/warehouse/inventory/page.tsx|Inventory|
+(platform)/console/production/warehouse/locations/page.tsx|Warehouse locations|
+(platform)/console/production/logistics/page.tsx|Logistics|
+
+# PLATFORM — people
+(platform)/console/people/page.tsx|Directory|
+(platform)/console/people/[personId]/page.tsx|Person|
+(platform)/console/people/crew/page.tsx|Crew|Roster and scheduling
+(platform)/console/people/crew/[crewId]/page.tsx|Crew member|
+(platform)/console/people/credentials/page.tsx|Credentials|Certs and assets
+(platform)/console/people/credentials/asset-linker/page.tsx|Asset linker|
+(platform)/console/people/roles/page.tsx|Roles|Permission matrix
+(platform)/console/people/invites/page.tsx|Invites|Pending invites
+
+# PLATFORM — AI
+(platform)/console/ai/page.tsx|AI|Hub
+(platform)/console/ai/assistant/page.tsx|AI assistant|
+(platform)/console/ai/assistant/[conversationId]/page.tsx|Conversation|
+(platform)/console/ai/drafting/page.tsx|AI drafting|Document workspace
+(platform)/console/ai/automations/page.tsx|Automations|
+(platform)/console/ai/automations/new/page.tsx|New automation|
+(platform)/console/ai/automations/[automationId]/page.tsx|Automation|
+(platform)/console/ai/agents/page.tsx|Agents|Long-running managed agents
+
+# PLATFORM — collab
+(platform)/console/inbox/page.tsx|Inbox|Unified messages and mentions
+(platform)/console/files/page.tsx|Files|Global file browser
+(platform)/console/forms/page.tsx|Forms|
+(platform)/console/forms/new/page.tsx|New form|
+(platform)/console/forms/[formId]/page.tsx|Form|
+
+# PLATFORM — settings
+(platform)/console/settings/page.tsx|Settings|
+(platform)/console/settings/organization/page.tsx|Organization|
+(platform)/console/settings/billing/page.tsx|Billing|Subscription and payment methods
+(platform)/console/settings/integrations/page.tsx|Integrations|
+(platform)/console/settings/integrations/marketplace/page.tsx|Marketplace|
+(platform)/console/settings/integrations/[integrationId]/page.tsx|Integration|
+(platform)/console/settings/api/page.tsx|API|Keys, rate limits
+(platform)/console/settings/webhooks/page.tsx|Webhooks|
+(platform)/console/settings/webhooks/new/page.tsx|New webhook|
+(platform)/console/settings/webhooks/[webhookId]/page.tsx|Webhook|
+(platform)/console/settings/audit/page.tsx|Audit log|
+(platform)/console/settings/compliance/page.tsx|Compliance|Retention, DPA, exports
+(platform)/console/settings/branding/page.tsx|Branding|Portal and email branding
+(platform)/console/settings/domains/page.tsx|Domains|Custom domains for portals
+
+# PORTAL — gateway
+(portal)/p/[slug]/page.tsx|Gateway|Auth-resolves persona
+(portal)/p/[slug]/overview/page.tsx|Overview|
+
+# PORTAL — artist
+(portal)/p/[slug]/artist/page.tsx|Artist portal|
+(portal)/p/[slug]/artist/advancing/page.tsx|Advancing|Riders, input list, stage plot uploads
+(portal)/p/[slug]/artist/catering/page.tsx|Catering|
+(portal)/p/[slug]/artist/venue/page.tsx|Venue|Specs, load-in, parking
+(portal)/p/[slug]/artist/schedule/page.tsx|Schedule|Day-of-show
+(portal)/p/[slug]/artist/travel/page.tsx|Travel|Flights, hotel, ground
+
+# PORTAL — vendor
+(portal)/p/[slug]/vendor/page.tsx|Vendor portal|
+(portal)/p/[slug]/vendor/submissions/page.tsx|Submissions|
+(portal)/p/[slug]/vendor/equipment-pull-list/page.tsx|Equipment pull list|
+(portal)/p/[slug]/vendor/purchase-orders/page.tsx|Purchase orders|POs issued to me
+(portal)/p/[slug]/vendor/invoices/page.tsx|Invoices|Submit invoice and track status
+(portal)/p/[slug]/vendor/credentials/page.tsx|Credentials|Upload COI, W-9, licenses
+
+# PORTAL — client
+(portal)/p/[slug]/client/page.tsx|Client portal|
+(portal)/p/[slug]/client/proposals/page.tsx|Proposals|Review, approve, e-sign
+(portal)/p/[slug]/client/deliverables/page.tsx|Deliverables|
+(portal)/p/[slug]/client/invoices/page.tsx|Invoices|
+(portal)/p/[slug]/client/messages/page.tsx|Messages|
+(portal)/p/[slug]/client/files/page.tsx|Files|
+
+# PORTAL — sponsor
+(portal)/p/[slug]/sponsor/page.tsx|Sponsor portal|
+(portal)/p/[slug]/sponsor/activations/page.tsx|Activations|
+(portal)/p/[slug]/sponsor/assets/page.tsx|Brand assets|
+(portal)/p/[slug]/sponsor/reporting/page.tsx|Reporting|
+
+# PORTAL — guest
+(portal)/p/[slug]/guest/page.tsx|Guest portal|
+(portal)/p/[slug]/guest/tickets/page.tsx|Tickets|Buy, claim, transfer
+(portal)/p/[slug]/guest/schedule/page.tsx|Schedule|
+(portal)/p/[slug]/guest/logistics/page.tsx|Logistics|Parking, entrances, rideshare
+
+# PORTAL — crew
+(portal)/p/[slug]/crew/page.tsx|Crew portal|
+(portal)/p/[slug]/crew/call-sheet/page.tsx|Call sheet|
+(portal)/p/[slug]/crew/time/page.tsx|Time|Submit hours
+(portal)/p/[slug]/crew/advances/page.tsx|Advances|Request per-diem or advance
+
+# MOBILE
+(mobile)/m/page.tsx|Mobile|Role-routed landing
+(mobile)/m/check-in/page.tsx|Check-in|Scanner home
+(mobile)/m/check-in/scan/[slug]/page.tsx|Scan ticket|QR scan UI
+(mobile)/m/check-in/manual/page.tsx|Manual lookup|
+(mobile)/m/crew/page.tsx|Today|Call sheet
+(mobile)/m/crew/clock/page.tsx|Clock|Geo-verified clock in/out
+(mobile)/m/tasks/page.tsx|Tasks|Offline queue
+(mobile)/m/inventory/scan/page.tsx|Inventory scan|Equipment scan in/out
+(mobile)/m/incidents/new/page.tsx|Incident|Safety report
+(mobile)/m/settings/page.tsx|Mobile settings|Offline sync, camera perms

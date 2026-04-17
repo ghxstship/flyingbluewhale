@@ -26,12 +26,13 @@ export function PageStub({ title, description }: { title: string; description?: 
 
 export function MarketingHeader() {
   const items: NavItem[] = [
+    { label: "Solutions", href: "/solutions" },
     { label: "Features", href: "/features" },
-    { label: "Solutions", href: "/solutions/live-events" },
     { label: "Pricing", href: "/pricing" },
     { label: "Customers", href: "/customers" },
+    { label: "Compare", href: "/compare" },
+    { label: "Guides", href: "/guides" },
     { label: "Blog", href: "/blog" },
-    { label: "Docs", href: "/docs" },
   ];
   return (
     <header className="sticky top-0 z-40 glass-nav">

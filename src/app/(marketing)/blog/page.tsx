@@ -1,27 +1,59 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { JsonLd } from "@/components/marketing/JsonLd";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { POST_LIST } from "@/lib/blog";
 
-const POSTS = [
-  { slug: "launch", title: "Launching flyingbluewhale", date: "2026-04-16", blurb: "Three shells, one database, zero spreadsheets." },
-  { slug: "boarding-pass", title: "KBYG guides, now native", date: "2026-04-18", blurb: "We integrated the Boarding Pass pattern into portals + mobile." },
-  { slug: "ai-assistant", title: "AI assistant shipped", date: "2026-04-22", blurb: "Streaming Claude responses grounded in your workspace." },
-];
+export const metadata: Metadata = buildMetadata({
+  title: "Blog — updates from the flyingbluewhale team",
+  description:
+    "Essays on production operations, platform architecture, and how to run shows with less duct tape. From the GHXSTSHIP team.",
+  path: "/blog",
+  keywords: ["production blog", "event production software blog", "flyingbluewhale blog"],
+  ogImageEyebrow: "Blog",
+  ogImageTitle: "Updates from the team.",
+});
 
 export default function BlogIndex() {
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+  ];
+
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
-      <div className="text-xs font-semibold uppercase tracking-wider text-[var(--org-primary)]">Blog</div>
-      <h1 className="mt-3 text-4xl font-semibold tracking-tight">Updates from the team</h1>
-      <ul className="mt-10 space-y-4">
-        {POSTS.map((p) => (
-          <li key={p.slug}>
-            <Link href={`/blog/${p.slug}`} className="surface hover-lift block p-5">
-              <div className="font-mono text-xs text-[var(--text-muted)]">{p.date}</div>
-              <div className="mt-1 text-lg font-semibold">{p.title}</div>
-              <div className="mt-1 text-sm text-[var(--text-secondary)]">{p.blurb}</div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div>
+      <JsonLd data={[breadcrumbSchema(crumbs)]} />
+      <Breadcrumbs crumbs={crumbs} />
+
+      <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Blog</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Updates from the team.</h1>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+          Essays on production operations, platform architecture, and how to run shows with less duct tape.
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-4xl px-6 py-8">
+        <ul className="space-y-4">
+          {POST_LIST.map((p) => (
+            <li key={p.slug}>
+              <Link href={`/blog/${p.slug}`} className="surface-raised hover-lift block p-6">
+                <div className="font-mono text-xs text-[var(--text-muted)]">{p.date} · {p.readingTime}</div>
+                <div className="mt-2 text-xl font-semibold tracking-tight">{p.title}</div>
+                <div className="mt-2 text-sm text-[var(--text-secondary)]">{p.blurb}</div>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {p.keywords.slice(0, 4).map((k) => (
+                    <span key={k} className="rounded-full bg-[var(--surface-inset)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]">
+                      {k}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

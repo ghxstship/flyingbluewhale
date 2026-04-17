@@ -133,15 +133,10 @@ const ALL_CAPABILITIES: Capability[] = [
   'branding:manage', 'domains:manage',
 ];
 
-const PLATFORM_ROLE_CAPABILITIES: Partial<Record<PlatformRole, Capability[]>> = {
+export const PLATFORM_ROLE_CAPABILITIES: Partial<Record<PlatformRole, Capability[]>> = {
   developer: ALL_CAPABILITIES,
   owner: ALL_CAPABILITIES,
   admin: ALL_CAPABILITIES.filter(c => c !== 'billing:manage'), // billing is owner-only
-  talent_management: [
-    'projects:read', 'tasks:read', 'tasks:create', 'schedule:read',
-    'locations:read', 'time:read', 'time:submit', 'credentials:read',
-    'ai:assistant', 'inbox:read', 'files:read',
-  ],
   team_member: [
     'projects:read', 'projects:create', 'projects:update',
     'tasks:read', 'tasks:create', 'tasks:update',
@@ -189,15 +184,6 @@ const PLATFORM_ROLE_CAPABILITIES: Partial<Record<PlatformRole, Capability[]>> = 
     'ai:assistant',
     'inbox:read', 'files:read',
   ],
-  talent_performer: [
-    'projects:read', 'schedule:read', 'locations:read',
-    'time:read', 'credentials:read', 'inbox:read',
-  ],
-  talent_crew: [
-    'projects:read', 'tasks:read', 'tasks:update',
-    'schedule:read', 'time:read', 'time:submit',
-    'credentials:read', 'inbox:read',
-  ],
   crew: [
     'projects:read',
     'tasks:read',
@@ -210,9 +196,6 @@ const PLATFORM_ROLE_CAPABILITIES: Partial<Record<PlatformRole, Capability[]>> = 
     'proposals:read',
     'invoices:read',
     'files:read',
-  ],
-  industry_guest: [
-    'projects:read', 'schedule:read',
   ],
 };
 

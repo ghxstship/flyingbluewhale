@@ -13,10 +13,6 @@ export const ROLE_LABELS: Record<string, string> = {
   owner: 'Owner',
   admin: 'Admin',
   team_member: 'Team Member',
-  talent_management: 'Talent Management',
-  talent_performer: 'Talent Performer',
-  talent_crew: 'Talent Crew',
-  industry_guest: 'Industry Guest',
   collaborator: 'Collaborator',
   // Project roles
   executive: 'Executive',

@@ -10,7 +10,16 @@ const ME_NAV = [
   { href: '/me/organizations', label: 'Organizations' },
 ];
 
-export default function PersonalLayout({ children }: { children: React.ReactNode }) {
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+
+export default async function PersonalLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    redirect('/login');
+  }
+
   return (
     <div className="flex min-h-screen bg-background">
       <aside className="w-56 border-r border-border bg-surface p-4 shrink-0 hidden md:block">

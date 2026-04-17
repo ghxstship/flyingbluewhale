@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { getVisibleSections, type OrgTier } from '@/lib/rbac/capabilities';
@@ -19,6 +20,11 @@ export default async function ConsoleLayout({
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    redirect('/login');
+  }
+
   const headersList = await headers();
   const pathname = headersList.get('x-next-pathname') ?? headersList.get('x-invoke-path') ?? '/console';
 

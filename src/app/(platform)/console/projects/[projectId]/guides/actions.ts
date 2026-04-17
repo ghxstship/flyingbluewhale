@@ -25,7 +25,7 @@ export async function upsertGuideAction(projectId: string, _: State, fd: FormDat
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
 
-  let config: unknown;
+  let config: import("@/lib/supabase/database.types").Json;
   try { config = JSON.parse(parsed.data.config || "{}"); }
   catch { return { error: "Config is not valid JSON" }; }
 

@@ -22,8 +22,8 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   const parsed = UpdateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
-  let blocks: unknown;
-  try { blocks = JSON.parse(parsed.data.blocks || "[]"); }
+  let blocks: import("@/lib/supabase/database.types").Json;
+  try { blocks = JSON.parse(parsed.data.blocks || "[]") as import("@/lib/supabase/database.types").Json; }
   catch { return { error: "Blocks JSON is invalid" }; }
 
   const supabase = await createClient();
@@ -64,7 +64,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   return { ok: true };
 }
 
-export async function createShareLinkAction(proposalId: string, audience: string | null) {
+export async function createShareLinkAction(proposalId: string, audience: string | null, recipientEmail?: string | null) {
   const session = await requireSession();
   const supabase = await createClient();
   const token = Array.from(crypto.getRandomValues(new Uint8Array(24))).map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -83,6 +83,19 @@ export async function createShareLinkAction(proposalId: string, audience: string
     .select()
     .single();
   if (error) return { error: error.message };
+
+  if (recipientEmail) {
+    const { sendProposalShareEmail } = await import("@/lib/email");
+    const { data: p } = await supabase.from("proposals").select("title").eq("id", proposalId).maybeSingle();
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    await sendProposalShareEmail({
+      to: recipientEmail,
+      proposalTitle: p?.title ?? "Proposal",
+      url: `${appUrl}/proposals/${data.token}`,
+      senderName: session.email,
+    });
+  }
+
   revalidatePath(`/console/proposals/${proposalId}/edit`);
   return { ok: { token: data.token, url: `/proposals/${data.token}`, expires: data.expires_at } };
 }

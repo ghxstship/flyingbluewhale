@@ -8,6 +8,11 @@ const schema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+  NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
+  SENTRY_AUTH_TOKEN: z.string().optional(),
+  RESEND_API_KEY: z.string().optional(),
+  RESEND_FROM: z.string().optional(),
+  ALLOWED_ORIGINS: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -18,6 +23,13 @@ export const env = schema.parse({
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  RESEND_FROM: process.env.RESEND_FROM,
+  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+export const hasSentry = Boolean(env.NEXT_PUBLIC_SENTRY_DSN);
+export const hasResend = Boolean(env.RESEND_API_KEY);

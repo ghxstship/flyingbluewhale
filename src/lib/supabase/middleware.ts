@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { env, hasSupabase } from "../env";
-import type { Database } from "./types";
+import type { Database } from "./database.types";
 
 export async function updateSession(request: NextRequest) {
   if (!hasSupabase) return NextResponse.next();

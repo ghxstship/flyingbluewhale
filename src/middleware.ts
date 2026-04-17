@@ -1,7 +1,39 @@
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
-import type { NextRequest } from "next/server";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
+
+const PROTECTED: Array<{ match: RegExp; bucket: keyof typeof RATE_BUDGETS }> = [
+  { match: /^\/api\/v1\/ai\//, bucket: "ai" },
+  { match: /^\/api\/v1\/tickets\/scan/, bucket: "scan" },
+  { match: /^\/api\/v1\/webhooks\//, bucket: "webhook" },
+  { match: /^\/login|^\/signup|^\/forgot-password|^\/reset-password|^\/auth\//, bucket: "auth" },
+];
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  for (const rule of PROTECTED) {
+    if (rule.match.test(pathname)) {
+      const budget = RATE_BUDGETS[rule.bucket];
+      const key = keyFromRequest(request, `${rule.bucket}:${pathname}`);
+      const result = ratelimit({ key, ...budget });
+      if (!result.ok) {
+        return new NextResponse(
+          JSON.stringify({ ok: false, error: { code: "rate_limited", message: "Too many requests" } }),
+          {
+            status: 429,
+            headers: {
+              "content-type": "application/json",
+              "retry-after": String(Math.max(1, Math.ceil((result.resetAt - Date.now()) / 1000))),
+              "x-ratelimit-remaining": "0",
+              "x-ratelimit-reset": String(result.resetAt),
+            },
+          },
+        );
+      }
+    }
+  }
+
   return updateSession(request);
 }
 

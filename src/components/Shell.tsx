@@ -1,6 +1,15 @@
 import Link from "next/link";
+import { Home, QrCode, BookOpen, CheckSquare, User } from "lucide-react";
 import type { NavGroup, NavItem } from "@/lib/nav";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+
+const MOBILE_TAB_ICONS: Record<string, typeof Home> = {
+  "/m": Home,
+  "/m/check-in": QrCode,
+  "/m/guide": BookOpen,
+  "/m/tasks": CheckSquare,
+  "/m/settings": User,
+};
 
 export function PageStub({ title, description }: { title: string; description?: string }) {
   return (
@@ -105,15 +114,19 @@ export function PortalRail({ items, title, currentPath }: { items: NavItem[]; ti
 export function MobileTabBar({ items }: { items: NavItem[] }) {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-[var(--border-color)] bg-[var(--background)]/95 backdrop-blur">
-      {items.map((i) => (
-        <Link
-          key={i.href}
-          href={i.href}
-          className="py-3 text-center text-[0.65rem] font-medium uppercase tracking-wide text-[var(--text-muted)] hover:text-[var(--org-primary)]"
-        >
-          {i.label}
-        </Link>
-      ))}
+      {items.map((i) => {
+        const Icon = MOBILE_TAB_ICONS[i.href] ?? Home;
+        return (
+          <Link
+            key={i.href}
+            href={i.href}
+            className="flex flex-col items-center justify-center gap-1 py-2.5 text-[0.62rem] font-medium uppercase tracking-wide text-[var(--text-muted)] hover:text-[var(--org-primary)]"
+          >
+            <Icon size={18} />
+            <span>{i.label}</span>
+          </Link>
+        );
+      })}
     </nav>
   );
 }

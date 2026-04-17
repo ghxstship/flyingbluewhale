@@ -2,10 +2,17 @@
 
 import { useActionState, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import { Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { SortableList } from "@/components/ui/SortableList";
 import { BLOCK_LABELS, BLOCK_TYPES, type ProposalBlock, type ProposalBlockType } from "@/lib/proposals/types";
 import { saveProposalAction, type EditState } from "./actions";
+
+// Give each block a stable id for sortable purposes.
+type IdentifiedBlock = ProposalBlock & { _dragId: string };
+let counter = 0;
+const tagId = () => `blk-${Date.now()}-${++counter}`;
 
 const BLOCK_DEFAULTS: Record<ProposalBlockType, ProposalBlock> = {
   hero: { type: "hero", eyebrow: "Proposal", title: "New proposal", subtitle: "A short subtitle" },
@@ -40,13 +47,16 @@ export function ProposalEditor({
   proposalId: string;
   defaults: { title: string; doc_number: string; currency: string; deposit_percent: number; theme: { primary: string; secondary: string }; blocks: unknown[] };
 }) {
-  const [blocks, setBlocks] = useState<ProposalBlock[]>(() => defaults.blocks as ProposalBlock[]);
-  const [json, setJson] = useState<string>(() => JSON.stringify(defaults.blocks, null, 2));
+  const [blocks, setBlocks] = useState<IdentifiedBlock[]>(() =>
+    (defaults.blocks as ProposalBlock[]).map((b) => ({ ...b, _dragId: tagId() })),
+  );
+  const serializeBlocks = (bs: IdentifiedBlock[]) => bs.map(({ _dragId: _ignored, ...rest }) => rest as ProposalBlock);
+  const [json, setJson] = useState<string>(() => JSON.stringify(serializeBlocks(blocks), null, 2));
   const [mode, setMode] = useState<"outline" | "json">("outline");
 
   const [state, formAction, pending] = useActionState<EditState, FormData>(
     async (prev, fd) => {
-      fd.set("blocks", mode === "json" ? json : JSON.stringify(blocks));
+      fd.set("blocks", mode === "json" ? json : JSON.stringify(serializeBlocks(blocks)));
       const res = await saveProposalAction(proposalId, prev, fd);
       if (res?.error) toast.error(res.error);
       else if (res?.ok) toast.success("Proposal saved · v bumped");
@@ -57,27 +67,16 @@ export function ProposalEditor({
 
   const addBlock = (type: ProposalBlockType) => {
     setBlocks((b) => {
-      const next = [...b, BLOCK_DEFAULTS[type]];
-      setJson(JSON.stringify(next, null, 2));
+      const next: IdentifiedBlock[] = [...b, { ...BLOCK_DEFAULTS[type], _dragId: tagId() }];
+      setJson(JSON.stringify(serializeBlocks(next), null, 2));
       return next;
     });
   };
 
-  const removeBlock = (idx: number) => {
+  const removeBlock = (id: string) => {
     setBlocks((b) => {
-      const next = b.filter((_, i) => i !== idx);
-      setJson(JSON.stringify(next, null, 2));
-      return next;
-    });
-  };
-
-  const move = (idx: number, dir: -1 | 1) => {
-    setBlocks((b) => {
-      const next = [...b];
-      const target = idx + dir;
-      if (target < 0 || target >= next.length) return b;
-      [next[idx], next[target]] = [next[target], next[idx]];
-      setJson(JSON.stringify(next, null, 2));
+      const next = b.filter((x) => x._dragId !== id);
+      setJson(JSON.stringify(serializeBlocks(next), null, 2));
       return next;
     });
   };
@@ -117,21 +116,28 @@ export function ProposalEditor({
 
       {mode === "outline" ? (
         <div className="space-y-2">
-          <ol className="space-y-2">
-            {blocks.map((b, i) => (
-              <li key={i} className="surface flex items-start justify-between gap-3 p-3">
+          <SortableList
+            items={blocks.map((b) => ({ id: b._dragId, block: b }))}
+            onReorder={(items) => {
+              const next = items.map((i) => i.block);
+              setBlocks(next);
+              setJson(JSON.stringify(serializeBlocks(next), null, 2));
+            }}
+            renderItem={(item, i) => (
+              <div className="surface flex items-start justify-between gap-3 p-3">
                 <div className="min-w-0">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{i + 1} · {BLOCK_LABELS[b.type]}</div>
-                  <div className="mt-0.5 truncate text-sm">{describeBlock(b)}</div>
+                  <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{i + 1} · {BLOCK_LABELS[item.block.type]}</div>
+                  <div className="mt-0.5 truncate text-sm">{describeBlock(item.block)}</div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button type="button" onClick={() => move(i, -1)} className="btn btn-ghost btn-sm" aria-label="Move up">↑</button>
-                  <button type="button" onClick={() => move(i, 1)} className="btn btn-ghost btn-sm" aria-label="Move down">↓</button>
-                  <button type="button" onClick={() => removeBlock(i)} className="btn btn-ghost btn-sm text-[var(--color-error)]" aria-label="Remove">✕</button>
-                </div>
-              </li>
-            ))}
-          </ol>
+                <button
+                  type="button"
+                  onClick={() => removeBlock(item.block._dragId)}
+                  className="btn btn-ghost btn-sm text-[var(--color-error)]"
+                  aria-label="Remove"
+                ><Trash2 size={14} /></button>
+              </div>
+            )}
+          />
 
           <div className="surface-inset p-3">
             <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">Add block</div>
@@ -141,9 +147,9 @@ export function ProposalEditor({
                   key={t}
                   type="button"
                   onClick={() => addBlock(t)}
-                  className="rounded-full border border-[var(--border-color)] px-2.5 py-1 text-xs hover:bg-[var(--bg-secondary)]"
+                  className="inline-flex items-center gap-1 rounded-full border border-[var(--border-color)] px-2.5 py-1 text-xs hover:bg-[var(--bg-secondary)]"
                 >
-                  + {BLOCK_LABELS[t]}
+                  <Plus size={10} /> {BLOCK_LABELS[t]}
                 </button>
               ))}
             </div>

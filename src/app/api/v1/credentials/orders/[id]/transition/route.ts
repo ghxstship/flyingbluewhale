@@ -10,7 +10,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { status: newStatus, reason, notes } = body as { status: string; reason?: string; notes?: string };
-    const { data, error } = await supabase
+    const { data, error: dbError } = await supabase
       .from('credential_orders')
       .update({
         status: newStatus as 'requested' | 'approved' | 'denied' | 'issued' | 'picked_up' | 'revoked',
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       .eq('id', id)
       .select()
       .single();
-    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    if (dbError) return NextResponse.json({ error: dbError.message }, { status: 400 });
     return NextResponse.json({ data });
   } catch {
     return NextResponse.json({ error: 'Authentication required' }, { status: 401 });

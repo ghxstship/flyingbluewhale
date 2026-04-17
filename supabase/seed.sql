@@ -15,7 +15,8 @@ insert into advance_category_groups (id, name, slug, description, sort_order) va
   ('a0000001-0000-0000-0000-000000000007', 'Labor', 'labor', 'Stagehands, riggers, electricians, loaders', 7),
   ('a0000001-0000-0000-0000-000000000008', 'Waste Management', 'waste', 'Dumpsters, recycling, portables, sanitation', 8),
   ('a0000001-0000-0000-0000-000000000009', 'Weather Protection', 'weather', 'Tents, shade, rain, wind, HVAC', 9),
-  ('a0000001-0000-0000-0000-000000000010', 'Custom', 'custom', 'User-defined items', 10);
+  ('a0000001-0000-0000-0000-000000000010', 'Custom', 'custom', 'User-defined items', 10)
+on conflict (id) do nothing;
 
 -- ═══ CATEGORIES (24+) ═══
 
@@ -502,3 +503,118 @@ insert into advance_items (subcategory_id, name, slug, manufacturer, model, unit
   ('c0000001-0000-0000-0000-000000000025', 'String Lights (per 100ft)', 'string-lights', 'Various', '100ft String', 'each', '{production}', '{"type": "decorative_lighting"}'),
   ('c0000001-0000-0000-0000-000000000025', 'Path Lighting (per fixture)', 'path-light', 'Various', 'LED Path', 'each', '{production}', '{"type": "pathway_lighting"}'),
   ('c0000001-0000-0000-0000-000000000025', 'Uplighting (Battery LED)', 'uplight-battery', 'Various', 'Battery LED RGBW', 'each', '{production}', '{"type": "uplighting"}');
+
+-- ═══ Sample Component Items (DJ Booth → Catalog) ════
+
+-- CDJ-3000 × 4
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-d000b0070001',
+   (select id from advance_items where slug = 'cdj-3000' limit 1),
+   4, 250.00,
+   'Standard 4-deck rider for Satiiiva',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- DJM-V10 × 1
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-d000b0070001',
+   (select id from advance_items where slug = 'djm-v10' limit 1),
+   1, 350.00,
+   'Primary mixer',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- RMX-1000 × 1
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-d000b0070001',
+   (select id from advance_items where slug = 'rmx-1000' limit 1),
+   1, 150.00,
+   'Remix station per rider',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- DJ Table (4-player) × 1
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-d000b0070001',
+   (select id from advance_items where slug = 'dj-table-4' limit 1),
+   1, 200.00,
+   '4-player table for 4-deck setup',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- DJ Monitor (15-inch wedge) × 2
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-d000b0070001',
+   (select id from advance_items where slug = 'dj-monitor-15' limit 1),
+   2, 100.00,
+   'DJ booth monitors',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- ═══ Sample Component Items (Main PA) ══════════════
+
+-- L-Acoustics K2 × 12
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-a100a0000001',
+   (select id from advance_items where slug = 'k2' limit 1),
+   12, 500.00,
+   'Main hangs: 12x K2 per side',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- KS28 subs × 8
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-a100a0000001',
+   (select id from advance_items where slug = 'ks28' limit 1),
+   8, 400.00,
+   'Sub array: 8x KS28 ground-stacked',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- DiGiCo SD7 FOH × 1
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-a100a0000001',
+   (select id from advance_items where slug = 'sd7' limit 1),
+   1, 2500.00,
+   'FOH console',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- ═══ Sample Component Items (Lighting Rig) ═════════
+
+-- grandMA3 × 1
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-119074190001',
+   (select id from advance_items where slug = 'grandma3' limit 1),
+   1, 3000.00,
+   'Primary lighting console',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- Robe MegaPointe × 16
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-119074190001',
+   (select id from advance_items where slug = 'megapointe' limit 1),
+   16, 175.00,
+   'Primary aerial fixtures',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- GLP JDC1 × 8
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-119074190001',
+   (select id from advance_items where slug = 'jdc1' limit 1),
+   8, 200.00,
+   'Strobe/wash fixtures',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+
+-- MDG theONE hazer × 2
+insert into component_items (component_id, item_id, quantity, unit_cost, notes, status) values
+  ('50000001-0000-0000-0000-119074190001',
+   (select id from advance_items where slug = 'mdg-theone' limit 1),
+   2, 250.00,
+   'Main stage hazers',
+   'advancing')
+on conflict (component_id, item_id) do nothing;
+

@@ -1,4 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
+import { ModuleHeader } from '@/components/layout/ModuleHeader';
+import { DataTable, type DataTableColumn } from '@/components/data/DataTable';
+import { SectionHeading } from '@/components/data/SectionHeading';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 
 export const metadata = {
   title: 'Users & Roles -- GVTEWAY',
@@ -28,9 +33,39 @@ const projectRoleDescriptions: Record<string, string> = {
   attendee: 'Attendee-level access, minimal portal',
 };
 
+type MemberRow = {
+  id: string;
+  role: string;
+  created_at: string;
+  profiles: { full_name?: string; display_name?: string } | null;
+};
+
+const MEMBER_COLUMNS: DataTableColumn<MemberRow>[] = [
+  {
+    key: 'name',
+    header: 'Name',
+    render: (m) => <span className="text-text-primary">{m.profiles?.display_name || m.profiles?.full_name || 'Unknown'}</span>,
+  },
+  {
+    key: 'role',
+    header: 'Role',
+    render: (m) => <Badge variant="cyan">{m.role.replace(/_/g, ' ')}</Badge>,
+  },
+  {
+    key: 'joined',
+    header: 'Joined',
+    render: (m) => <span className="text-text-tertiary text-xs">{new Date(m.created_at).toLocaleDateString()}</span>,
+  },
+  {
+    key: 'actions',
+    header: '',
+    align: 'right',
+    render: () => <Button variant="ghost" size="sm">Edit</Button>,
+  },
+];
+
 export default async function UsersPage() {
   const supabase = await createClient();
-
   const { data: members } = await supabase
     .from('organization_members')
     .select(`
@@ -39,103 +74,64 @@ export default async function UsersPage() {
     `)
     .order('created_at', { ascending: false });
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b border-border px-8 py-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-heading text-lg text-text-primary">Users & Roles</h1>
-            <p className="text-sm text-text-secondary mt-1">{members?.length ?? 0} members &middot; 5 platform + 12 project roles</p>
-          </div>
-          <button className="btn btn-primary text-xs py-2 px-4">Invite Member</button>
-        </div>
-      </header>
+  const typedMembers = (members ?? []) as MemberRow[];
 
-      <div className="flex-1 px-8 py-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Platform Role Reference */}
-          <section className="mb-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-1 h-6 bg-cyan rounded-full" />
-              <h2 className="text-heading text-sm text-text-primary">Platform Roles (Internal)</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {Object.entries(platformRoleDescriptions).map(([role, desc]) => (
+  return (
+    <>
+      <ModuleHeader
+        title="Users & Roles"
+        subtitle={`${typedMembers.length} members · 5 platform + 12 project roles`}
+        maxWidth="6xl"
+      >
+        <Button variant="primary" size="sm">Invite Member</Button>
+      </ModuleHeader>
+
+      <div className="page-content" style={{ maxWidth: '6xl' }}>
+        
+        {/* Platform Role Reference */}
+        <section className="mb-10">
+          <SectionHeading accentColor="var(--color-cyan)">Platform Roles (Internal)</SectionHeading>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {Object.entries(platformRoleDescriptions).map(([role, desc]) => (
+              <div key={role} className="card-elevated p-4">
+                <div className="mb-2">
+                  <Badge variant="cyan">{role.replace(/_/g, ' ')}</Badge>
+                </div>
+                <p className="text-xs text-text-tertiary">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Project Role Reference */}
+        <section className="mb-10">
+          <SectionHeading accentColor="var(--color-info)">Project Roles (External)</SectionHeading>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {Object.entries(projectRoleDescriptions).map(([role, desc]) => {
+              const isOps = ['executive', 'production', 'management', 'crew', 'staff'].includes(role);
+              return (
                 <div key={role} className="card-elevated p-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="badge border text-cyan border-cyan/20 bg-cyan-subtle">
-                      {role.replace(/_/g, ' ')}
-                    </span>
+                  <div className="mb-2">
+                    <Badge variant={isOps ? 'info' : 'muted'}>{role.replace(/_/g, ' ')}</Badge>
                   </div>
                   <p className="text-xs text-text-tertiary">{desc}</p>
                 </div>
-              ))}
-            </div>
-          </section>
+              );
+            })}
+          </div>
+        </section>
 
-          {/* Project Role Reference */}
-          <section className="mb-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-1 h-6 bg-info rounded-full" />
-              <h2 className="text-heading text-sm text-text-primary">Project Roles (External)</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {Object.entries(projectRoleDescriptions).map(([role, desc]) => {
-                const isOps = ['executive', 'production', 'management', 'crew', 'staff'].includes(role);
-                return (
-                  <div key={role} className="card-elevated p-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`badge border ${isOps ? 'text-info border-info/30 bg-info/10' : 'text-text-secondary border-border bg-surface-raised'}`}>
-                        {role.replace(/_/g, ' ')}
-                      </span>
-                    </div>
-                    <p className="text-xs text-text-tertiary">{desc}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Members Table */}
-          <section>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-1 h-6 bg-cyan rounded-full" />
-              <h2 className="text-heading text-sm text-text-primary">Organization Members</h2>
-            </div>
-
-            {(members?.length ?? 0) === 0 ? (
-              <div className="card p-12 text-center">
-                <p className="text-text-tertiary text-sm mb-2">No members yet</p>
-                <p className="text-text-disabled text-xs">Invite team members, talent, vendors, and clients</p>
-              </div>
-            ) : (
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Joined</th>
-                    <th className="w-24" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {members?.map((member) => {
-                    const profile = member.profiles as { full_name?: string; display_name?: string } | null;
-                    return (
-                      <tr key={member.id}>
-                        <td className="text-text-primary">{profile?.display_name || profile?.full_name || 'Unknown'}</td>
-                        <td><span className="badge border text-cyan border-cyan/20 bg-cyan-subtle">{member.role.replace(/_/g, ' ')}</span></td>
-                        <td className="text-text-tertiary text-xs">{new Date(member.created_at).toLocaleDateString()}</td>
-                        <td><button className="btn btn-ghost text-xs py-1 px-3">Edit</button></td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
-          </section>
-        </div>
+        {/* Members Table */}
+        <section>
+          <SectionHeading>Organization Members</SectionHeading>
+          <DataTable
+            columns={MEMBER_COLUMNS}
+            data={typedMembers}
+            emptyText="No members yet"
+          />
+        </section>
+        
       </div>
-    </div>
+    </>
   );
 }

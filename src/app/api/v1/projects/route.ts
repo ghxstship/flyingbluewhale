@@ -40,13 +40,13 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase
       .from('projects')
       .insert({
-        organization_id: body.organization_id,
+        organization_id: body.organization_id || "default-org",
         name: body.name,
         slug: body.slug,
         type: body.type || 'hybrid',
         start_date: body.start_date,
         end_date: body.end_date,
-        venue: body.venue,
+        venue_id: body.venue_id || null,
         features: body.features || [],
         settings: body.settings || {},
       })

@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get('limit') || '100'), 500);
     const offset = parseInt(searchParams.get('offset') || '0');
     query = query.range(offset, offset + limit - 1);
-    const { data, error, count } = await query;
-    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    const { data, error: dbError, count } = await query;
+    if (dbError) return NextResponse.json({ error: dbError.message }, { status: 400 });
     return NextResponse.json({ data, meta: { count, limit, offset } });
   } catch {
     return NextResponse.json({ error: 'Authentication required' }, { status: 401 });

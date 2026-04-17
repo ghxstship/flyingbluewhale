@@ -30,7 +30,7 @@ export async function loginWithPassword(
     return { error: error.message };
   }
 
-  redirect('/console');
+  redirect('/auth/resolve');
 }
 
 export async function loginWithMagicLink(

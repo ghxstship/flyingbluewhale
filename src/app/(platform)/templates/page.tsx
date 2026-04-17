@@ -1,10 +1,46 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
+import { ModuleHeader } from '@/components/layout/ModuleHeader';
+import { ContentGrid } from '@/components/layout/ContentGrid';
+import { DataTable, type DataTableColumn } from '@/components/data/DataTable';
+import { SectionHeading } from '@/components/data/SectionHeading';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 
 export const metadata = {
   title: 'Templates -- GVTEWAY',
   description: 'Manage project and submission templates.',
 };
+
+type SubmissionTplRow = {
+  type: string;
+  name: string;
+  description: string;
+};
+
+const SUBMISSION_COLUMNS: DataTableColumn<SubmissionTplRow>[] = [
+  {
+    key: 'type',
+    header: 'Type',
+    render: (tpl) => <Badge variant="cyan">{tpl.type.replace(/_/g, ' ')}</Badge>,
+  },
+  {
+    key: 'name',
+    header: 'Name',
+    render: (tpl) => <span className="text-text-primary">{tpl.name}</span>,
+  },
+  {
+    key: 'description',
+    header: 'Description',
+    render: (tpl) => <span className="text-text-tertiary text-xs">{tpl.description}</span>,
+  },
+  {
+    key: 'actions',
+    header: 'Action',
+    align: 'right',
+    render: () => <Button variant="ghost" size="sm">Edit</Button>,
+  },
+];
 
 export default async function TemplatesPage() {
   const supabase = await createClient();
@@ -49,84 +85,61 @@ export default async function TemplatesPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b border-border px-8 py-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-heading text-lg text-text-primary">Templates</h1>
-            <p className="text-sm text-text-secondary mt-1">Project blueprints and submission form templates</p>
-          </div>
-          <button className="btn btn-primary text-xs py-2 px-4">New Template</button>
-        </div>
-      </header>
+    <>
+      <ModuleHeader
+        title="Templates"
+        subtitle="Project blueprints and submission form templates"
+        maxWidth="6xl"
+      >
+        <Button variant="primary" size="sm">New Template</Button>
+      </ModuleHeader>
 
-      <div className="flex-1 px-8 py-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Project Templates */}
-          <section className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-6 bg-cyan rounded-full" />
-              <h2 className="text-heading text-sm text-text-primary">Project Templates</h2>
-              <span className="text-label text-text-disabled text-[0.5rem]">{systemProjectTemplates.length} Templates</span>
-            </div>
+      <div className="page-content" style={{ maxWidth: '6xl' }}>
+        {/* Project Templates */}
+        <section className="mb-12">
+          <SectionHeading>
+            Project Templates
+            <span className="ml-3 badge text-[0.5rem] tracking-wider uppercase bg-surface-raised text-text-disabled border border-border">
+              {systemProjectTemplates.length} Templates
+            </span>
+          </SectionHeading>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {systemProjectTemplates.map((tpl) => (
-                <div key={tpl.id} className="card p-6 flex flex-col">
-                  <h3 className="text-heading text-xs text-text-primary mb-2">{tpl.name}</h3>
-                  <p className="text-xs text-text-tertiary flex-1 mb-4">{tpl.description}</p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {tpl.features.map((f) => (
-                      <span key={f} className="px-2 py-0.5 rounded text-[0.5rem] text-cyan bg-cyan-subtle border border-cyan/10" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                        {f.replace(/_/g, ' ')}
-                      </span>
-                    ))}
-                  </div>
-                  <Link href={`/projects/new?template=${tpl.id}`} className="btn btn-secondary text-xs py-1.5 w-full">
-                    Use Template
-                  </Link>
+          <ContentGrid columns={{ sm: 1, md: 2, lg: 3 }} gap="1rem">
+            {systemProjectTemplates.map((tpl) => (
+              <div key={tpl.id} className="card p-6 flex flex-col">
+                <h3 className="font-heading text-xs text-text-primary mb-2">{tpl.name}</h3>
+                <p className="text-xs text-text-tertiary flex-1 mb-4">{tpl.description}</p>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {tpl.features.map((f) => (
+                    <span key={f} className="px-2 py-0.5 rounded text-[0.5rem] text-cyan bg-cyan-subtle border border-cyan/10 font-heading tracking-wider uppercase">
+                      {f.replace(/_/g, ' ')}
+                    </span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
+                <Button variant="secondary" size="sm" className="w-full" href={`/projects/new?template=${tpl.id}`}>
+                  Use Template
+                </Button>
+              </div>
+            ))}
+          </ContentGrid>
+        </section>
 
-          {/* Submission Templates */}
-          <section>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-6 bg-cyan rounded-full" />
-              <h2 className="text-heading text-sm text-text-primary">Submission Templates</h2>
-              <span className="text-label text-text-disabled text-[0.5rem]">{systemSubmissionTemplates.length} Templates</span>
-            </div>
+        {/* Submission Templates */}
+        <section>
+          <SectionHeading>
+            Submission Templates
+            <span className="ml-3 badge text-[0.5rem] tracking-wider uppercase bg-surface-raised text-text-disabled border border-border">
+              {systemSubmissionTemplates.length} Templates
+            </span>
+          </SectionHeading>
 
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th className="w-24">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {systemSubmissionTemplates.map((tpl, i) => (
-                  <tr key={i}>
-                    <td>
-                      <span className="badge border text-cyan border-cyan/20 bg-cyan-subtle">
-                        {tpl.type.replace(/_/g, ' ')}
-                      </span>
-                    </td>
-                    <td className="text-text-primary">{tpl.name}</td>
-                    <td className="text-text-tertiary text-xs">{tpl.description}</td>
-                    <td>
-                      <button className="btn btn-ghost text-xs py-1 px-3">Edit</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        </div>
+          <DataTable
+            columns={SUBMISSION_COLUMNS}
+            data={systemSubmissionTemplates}
+            emptyText="No submission templates"
+          />
+        </section>
       </div>
-    </div>
+    </>
   );
 }

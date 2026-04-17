@@ -2,12 +2,14 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import type { Database } from './database.types';
 
+import { env } from '../env';
+
 export async function createClient() {
   const cookieStore = await cookies();
 
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -28,21 +30,28 @@ export async function createClient() {
   );
 }
 
-/**
- * Safe wrapper for API routes — returns 401 JSON if auth fails
- * instead of throwing a 500.
- */
-export async function withAuth<T>(
-  handler: (supabase: Awaited<ReturnType<typeof createClient>>, user: { id: string; email?: string }) => Promise<T>
-): Promise<T | Response> {
-  try {
-    const supabase = await createClient();
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error || !user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    return handler(supabase, user);
-  } catch {
-    return Response.json({ error: 'Authentication required' }, { status: 401 });
+export function createServiceClient() {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for service client');
   }
+
+  return createServerClient<Database>(
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.SUPABASE_SERVICE_ROLE_KEY,
+    {
+      cookies: {
+        getAll() {
+          return [];
+        },
+        setAll() {
+          // Service clients don't use cookies
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      }
+    }
+  );
 }
+

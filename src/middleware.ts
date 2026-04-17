@@ -2,6 +2,26 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import type { Database } from '@/lib/supabase/database.types';
 
+/* ─── Role → Portal Track Mapping ─── */
+const ROLE_TRACK_MAP: Record<string, string> = {
+  // Internal roles
+  executive: 'production',
+  production: 'production',
+  management: 'management',
+  // Operations roles
+  crew: 'crew',
+  staff: 'staff',
+  // Talent roles
+  talent: 'artist',
+  // External roles
+  vendor: 'vendor',
+  client: 'client',
+  sponsor: 'sponsor',
+  press: 'press',
+  guest: 'guest',
+  attendee: 'attendee',
+};
+
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -40,8 +60,12 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Protected routes: redirect to login if not authenticated
+  // Guards all four authenticated shells: platform, portal, mobile, personal
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith('/console') ||
+    request.nextUrl.pathname.startsWith('/p/') ||
+    request.nextUrl.pathname.startsWith('/m') ||
+    request.nextUrl.pathname.startsWith('/me') ||
     request.nextUrl.pathname.startsWith('/projects') ||
     request.nextUrl.pathname.startsWith('/catalog') ||
     request.nextUrl.pathname.startsWith('/templates') ||
@@ -67,6 +91,37 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // ═══ Role-Based Portal Routing (GAP-030) ═══
+  // When user hits /p/[slug]/overview (the default portal landing),
+  // redirect to their role-specific track.
+  const portalOverviewMatch = request.nextUrl.pathname.match(/^\/p\/([^/]+)\/overview$/);
+  if (portalOverviewMatch && user) {
+    const slug = portalOverviewMatch[1];
+
+    // Look up project and member role
+    const { data: project } = await supabase
+      .from('projects')
+      .select('id')
+      .eq('slug', slug)
+      .single();
+
+    if (project) {
+      const { data: member } = await supabase
+        .from('project_members')
+        .select('role')
+        .eq('project_id', project.id)
+        .eq('user_id', user.id)
+        .single();
+
+      if (member) {
+        const track = ROLE_TRACK_MAP[member.role] || 'production';
+        const url = request.nextUrl.clone();
+        url.pathname = `/p/${slug}/${track}`;
+        return NextResponse.redirect(url);
+      }
+    }
+  }
+
   return supabaseResponse;
 }
 
@@ -75,3 +130,4 @@ export const config = {
     '/((?!_next/static|_next/image|favicon.ico|api/v1/docs|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
+

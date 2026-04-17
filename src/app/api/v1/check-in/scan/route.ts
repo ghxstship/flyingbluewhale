@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     if (scan_type === 'credential') {
       const { data: order, error } = await supabase.from('credential_orders').select(`*`).eq('id', scan_data).single();
       if (error || !order) return NextResponse.json({ error: 'Credential not found' }, { status: 404 });
-      await supabase.from('credential_check_ins').insert({ credential_order_id: order.id, checked_in_by: user.id, method: 'scan', location: body.location });
+      await supabase.from('credential_check_ins').insert({ credential_order_id: order.id, checked_in_by: user.id, method: 'scan', location_id: body.location_id || null });
       if (order.status === 'issued') await supabase.from('credential_orders').update({ status: 'picked_up' }).eq('id', order.id);
       return NextResponse.json({ data: { type: 'credential', order, action: 'checked_in' } });
     } else if (scan_type === 'catering') {

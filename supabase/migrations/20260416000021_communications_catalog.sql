@@ -3,6 +3,11 @@
 -- Adds radios, earpieces, chargers, batteries, repeaters
 -- ═══════════════════════════════════════════════════════
 
+-- ═══ GROUP: Workplace ═══
+insert into advance_category_groups (id, name, slug, sort_order) values
+  ('a0000001-0000-0000-0000-000000000005', 'Workplace', 'workplace', 5)
+on conflict (id) do nothing;
+
 -- ═══ CATEGORY: Communications (under Workplace group) ═══
 insert into advance_categories (id, group_id, name, slug, sort_order) values
   ('b0000001-0000-0000-0000-000000000025', 'a0000001-0000-0000-0000-000000000005', 'Communications', 'communications', 4);

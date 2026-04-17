@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Bebas_Neue, Share_Tech, Share_Tech_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import "./globals.css";
 
 const anton = Anton({
@@ -42,6 +43,7 @@ export const metadata: Metadata = {
     "unified catalog",
     "live events",
   ],
+  manifest: "/manifest.json",
   openGraph: {
     title: "GVTEWAY -- Universal Production Advancing",
     description:
@@ -59,12 +61,32 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${anton.variable} ${bebasNeue.variable} ${shareTech.variable} ${shareTechMono.variable}`}
+      suppressHydrationWarning
     >
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var localTheme = window.localStorage.getItem('theme');
+                  var theme = localTheme ? localTheme : 'system';
+                  if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.add('light');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <main id="main">{children}</main>
+        <ThemeProvider>
+          <main id="main">{children}</main>
+        </ThemeProvider>
         <Toaster
           position="bottom-right"
           toastOptions={{
@@ -87,6 +109,17 @@ export default function RootLayout({
                 secondary: "#0A0A0A",
               },
             },
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/service-worker.js');
+                });
+              }
+            `,
           }}
         />
       </body>

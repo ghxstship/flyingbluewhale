@@ -11,6 +11,9 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      if (next === '/console') {
+        return NextResponse.redirect(`${origin}/auth/resolve`);
+      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

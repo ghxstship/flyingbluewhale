@@ -1,82 +1,176 @@
 import { createClient } from '@/lib/supabase/server';
+import { ModuleHeader } from '@/components/layout/ModuleHeader';
+import { DataTable, type DataTableColumn } from '@/components/data/DataTable';
+import { StatCard } from '@/components/data/StatCard';
+import { ContentGrid } from '@/components/layout/ContentGrid';
+import { AlertBanner } from '@/components/modules/AlertBanner';
+import { ProgressBar } from '@/components/ui/ProgressBar';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+
 export const metadata = { title: 'Inventory -- GVTEWAY' };
+
+type InvItem = {
+  name: string;
+  manufacturer: string | null;
+  model: string | null;
+  sku: string | null;
+  unit: string;
+  daily_rate: number | null;
+  advance_subcategories: {
+    name: string;
+    advance_categories: {
+      name: string;
+      advance_category_groups: { name: string };
+    };
+  };
+};
+
+type InventoryRow = {
+  id: string;
+  quantity_owned: number;
+  quantity_available: number;
+  warehouse_location: string | null;
+  updated_at: string;
+  advance_items: InvItem | null;
+};
 
 export default async function InventoryPage() {
   const supabase = await createClient();
-  const { data: inventory } = await supabase.from('catalog_item_inventory').select(`*, advance_items (id, name, manufacturer, model, sku, unit, daily_rate, advance_subcategories (name, advance_categories (name, advance_category_groups (name))))`).order('updated_at', { ascending: false });
+  const { data: inventory } = await supabase
+    .from('catalog_item_inventory')
+    .select(`*, advance_items (id, name, manufacturer, model, sku, unit, daily_rate, advance_subcategories (name, advance_categories (name, advance_category_groups (name))))`)
+    .order('updated_at', { ascending: false });
 
-  const totalOwned = (inventory ?? []).reduce((s, i) => s + i.quantity_owned, 0);
-  const totalAvailable = (inventory ?? []).reduce((s, i) => s + i.quantity_available, 0);
-  const lowStockItems = (inventory ?? []).filter((i) => i.quantity_available <= Math.ceil(i.quantity_owned * 0.1));
-  const card = { background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '0.75rem' };
+  const items = (inventory ?? []) as InventoryRow[];
+  const totalOwned = items.reduce((s, i) => s + i.quantity_owned, 0);
+  const totalAvailable = items.reduce((s, i) => s + i.quantity_available, 0);
+  const lowStockItems = items.filter((i) => i.quantity_available <= Math.ceil(i.quantity_owned * 0.1));
+
+  const columns: DataTableColumn<InventoryRow>[] = [
+    {
+      key: 'item',
+      header: 'Item',
+      render: (inv) => (
+        <div>
+          <div className="text-text-primary">{inv.advance_items?.name}</div>
+          <div className="text-[0.5625rem] text-text-disabled">
+            {inv.advance_items?.manufacturer} {inv.advance_items?.model}
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'category',
+      header: 'Category',
+      render: (inv) => (
+        <span className="text-text-tertiary">
+          {inv.advance_items?.advance_subcategories?.advance_categories?.advance_category_groups?.name}
+        </span>
+      ),
+    },
+    {
+      key: 'sku',
+      header: 'SKU',
+      render: (inv) => (
+        <span className="text-mono text-text-disabled">{inv.advance_items?.sku || '-'}</span>
+      ),
+    },
+    {
+      key: 'owned',
+      header: 'Owned',
+      align: 'right',
+      render: (inv) => <span className="text-mono text-text-primary">{inv.quantity_owned}</span>,
+    },
+    {
+      key: 'available',
+      header: 'Available',
+      align: 'right',
+      render: (inv) => {
+        const isLow = inv.quantity_available <= Math.ceil(inv.quantity_owned * 0.1);
+        return (
+          <span className={`text-mono ${isLow ? 'text-[#EF4444]' : 'text-[#22C55E]'}`}>
+            {inv.quantity_available}
+          </span>
+        );
+      },
+    },
+    {
+      key: 'allocated',
+      header: 'Allocated',
+      align: 'right',
+      render: (inv) => (
+        <span className="text-mono text-cyan">{inv.quantity_owned - inv.quantity_available}</span>
+      ),
+    },
+    {
+      key: 'utilization',
+      header: 'Utilization',
+      render: (inv) => {
+        const u = inv.quantity_owned > 0
+          ? Math.round(((inv.quantity_owned - inv.quantity_available) / inv.quantity_owned) * 100)
+          : 0;
+        return <ProgressBar value={u} width={64} showLabel />;
+      },
+    },
+    {
+      key: 'warehouse',
+      header: 'Warehouse',
+      render: (inv) => <span className="text-text-tertiary">{inv.warehouse_location || '-'}</span>,
+    },
+    {
+      key: 'rate',
+      header: 'Rate',
+      render: (inv) => (
+        <span className="text-mono text-text-tertiary">
+          {inv.advance_items?.daily_rate ? `$${inv.advance_items.daily_rate}/d` : '-'}
+        </span>
+      ),
+    },
+  ];
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
-      <header style={{ borderBottom: '1px solid var(--color-border)', padding: '1.5rem 2rem' }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.25rem', color: 'var(--color-text-primary)' }}>Inventory</h1>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)' }}>{inventory?.length ?? 0} tracked items</p>
-          </div>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button style={{ background: 'transparent', color: 'var(--color-text-secondary)', padding: '0.5rem 0.75rem', borderRadius: '0.375rem', fontSize: '0.75rem', border: '1px solid var(--color-border)', cursor: 'pointer' }}>Import CSV</button>
-            <button style={{ background: 'transparent', color: 'var(--color-text-secondary)', padding: '0.5rem 0.75rem', borderRadius: '0.375rem', fontSize: '0.75rem', border: '1px solid var(--color-border)', cursor: 'pointer' }}>Export</button>
-          </div>
-        </div>
-      </header>
-      <div style={{ padding: '2rem' }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
-            {[{ l: 'Total Owned', v: totalOwned, c: 'var(--color-text-primary)' }, { l: 'Available', v: totalAvailable, c: '#22C55E' }, { l: 'Allocated', v: totalOwned - totalAvailable, c: 'var(--color-cyan)' }, { l: 'Low Stock', v: lowStockItems.length, c: lowStockItems.length > 0 ? '#EF4444' : '#22C55E' }].map((s) => (
-              <div key={s.l} style={{ ...card, padding: '1rem', textAlign: 'center' }}><div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: s.c }}>{s.v}</div><div style={{ fontSize: '0.625rem', color: 'var(--color-text-tertiary)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '0.25rem' }}>{s.l}</div></div>
+    <>
+      <ModuleHeader
+        title="Inventory"
+        subtitle={`${items.length} tracked items`}
+      >
+        <Button variant="ghost" size="sm">Import CSV</Button>
+        <Button variant="ghost" size="sm">Export</Button>
+      </ModuleHeader>
+      <div className="page-content">
+        <ContentGrid columns={{ sm: 2, md: 4 }} className="mb-8">
+          <StatCard label="Total Owned" value={totalOwned} />
+          <StatCard label="Available" value={totalAvailable} accent />
+          <StatCard label="Allocated" value={totalOwned - totalAvailable} />
+          <StatCard
+            label="Low Stock"
+            value={lowStockItems.length}
+            accent={lowStockItems.length === 0}
+          />
+        </ContentGrid>
+
+        {lowStockItems.length > 0 && (
+          <AlertBanner variant="error" title="Low Stock Alerts">
+            {lowStockItems.slice(0, 10).map((item) => (
+              <Badge key={item.id} variant="error">
+                {item.advance_items?.name} ({item.quantity_available}/{item.quantity_owned})
+              </Badge>
             ))}
-          </div>
-          {lowStockItems.length > 0 && (
-            <div style={{ ...card, padding: '1rem', marginBottom: '1.5rem', borderColor: 'rgba(239,68,68,0.2)', background: 'rgba(239,68,68,0.05)' }}>
-              <div style={{ fontSize: '0.625rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#EF4444', marginBottom: '0.5rem' }}>Low Stock Alerts</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                {lowStockItems.slice(0, 10).map((item) => {
-                  const ai = item.advance_items as { name: string } | null;
-                  return <span key={item.id} style={{ fontSize: '0.5625rem', padding: '0.125rem 0.5rem', borderRadius: '9999px', background: 'rgba(239,68,68,0.12)', color: '#EF4444' }}>{ai?.name} ({item.quantity_available}/{item.quantity_owned})</span>;
-                })}
-              </div>
-            </div>
-          )}
-          {(inventory?.length ?? 0) === 0 ? (
-            <div style={{ ...card, padding: '4rem', textAlign: 'center' }}><p style={{ color: 'var(--color-text-tertiary)', fontSize: '0.875rem' }}>No inventory data</p></div>
-          ) : (
-            <div style={{ ...card, overflow: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.75rem' }}>
-                <thead><tr style={{ borderBottom: '1px solid var(--color-border)' }}>{['Item', 'Category', 'SKU', 'Owned', 'Available', 'Allocated', 'Utilization', 'Warehouse', 'Rate'].map((h) => <th key={h} style={{ padding: '0.75rem 1rem', textAlign: h === 'Owned' || h === 'Available' || h === 'Allocated' ? 'right' : 'left', color: 'var(--color-text-tertiary)', fontSize: '0.625rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{h}</th>)}</tr></thead>
-                <tbody>{inventory?.map((inv) => {
-                  type InvItem = { name: string; manufacturer: string | null; model: string | null; sku: string | null; unit: string; daily_rate: number | null; advance_subcategories: { name: string; advance_categories: { name: string; advance_category_groups: { name: string } } } };
-                  const it = inv.advance_items as InvItem | null;
-                  const u = inv.quantity_owned > 0 ? Math.round(((inv.quantity_owned - inv.quantity_available) / inv.quantity_owned) * 100) : 0;
-                  const isLow = inv.quantity_available <= Math.ceil(inv.quantity_owned * 0.1);
-                  return (
-                    <tr key={inv.id} style={{ borderBottom: '1px solid var(--color-border-subtle)', background: isLow ? 'rgba(239,68,68,0.04)' : undefined }}>
-                      <td style={{ padding: '0.5rem 1rem' }}><div style={{ color: 'var(--color-text-primary)' }}>{it?.name}</div><div style={{ fontSize: '0.5625rem', color: 'var(--color-text-disabled)' }}>{it?.manufacturer} {it?.model}</div></td>
-                      <td style={{ padding: '0.5rem 1rem', color: 'var(--color-text-tertiary)' }}>{it?.advance_subcategories?.advance_categories?.advance_category_groups?.name}</td>
-                      <td style={{ padding: '0.5rem 1rem', fontFamily: 'var(--font-mono)', color: 'var(--color-text-disabled)' }}>{it?.sku || '-'}</td>
-                      <td style={{ padding: '0.5rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)', color: 'var(--color-text-primary)' }}>{inv.quantity_owned}</td>
-                      <td style={{ padding: '0.5rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)', color: isLow ? '#EF4444' : '#22C55E' }}>{inv.quantity_available}</td>
-                      <td style={{ padding: '0.5rem 1rem', textAlign: 'right', fontFamily: 'var(--font-mono)', color: 'var(--color-cyan)' }}>{inv.quantity_owned - inv.quantity_available}</td>
-                      <td style={{ padding: '0.5rem 1rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <div style={{ width: 64, background: 'var(--color-surface-raised)', borderRadius: 4, height: 6 }}><div style={{ width: `${u}%`, borderRadius: 4, height: 6, background: u > 90 ? '#EF4444' : u > 70 ? '#EAB308' : '#00E5FF' }} /></div>
-                          <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-text-disabled)' }}>{u}%</span>
-                        </div>
-                      </td>
-                      <td style={{ padding: '0.5rem 1rem', color: 'var(--color-text-tertiary)' }}>{inv.warehouse_location || '-'}</td>
-                      <td style={{ padding: '0.5rem 1rem', fontFamily: 'var(--font-mono)', color: 'var(--color-text-tertiary)' }}>{it?.daily_rate ? `$${it.daily_rate}/d` : '-'}</td>
-                    </tr>
-                  );
-                })}</tbody>
-              </table>
-            </div>
-          )}
-        </div>
+          </AlertBanner>
+        )}
+
+        <DataTable
+          columns={columns}
+          data={items}
+          emptyText="No inventory data"
+          rowClassName={(inv) =>
+            inv.quantity_available <= Math.ceil(inv.quantity_owned * 0.1)
+              ? 'bg-[rgba(239,68,68,0.04)]'
+              : ''
+          }
+        />
       </div>
-    </div>
+    </>
   );
 }

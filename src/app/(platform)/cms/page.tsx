@@ -1,5 +1,11 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
+import { ModuleHeader } from '@/components/layout/ModuleHeader';
+import { DataTable, type DataTableColumn } from '@/components/data/DataTable';
+import { EmptyState } from '@/components/data/EmptyState';
+import { SectionHeading } from '@/components/data/SectionHeading';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 
 export const metadata = {
   title: 'CMS -- GVTEWAY',
@@ -12,6 +18,53 @@ const BLOCK_TYPES = [
   'map', 'contact_card', 'file_download', 'schedule_table', 'faq',
 ];
 
+type CMSPageRow = {
+  id: string;
+  title: string;
+  track: string;
+  published: boolean;
+  version: number;
+  updated_at: string;
+};
+
+const CMS_COLUMNS: DataTableColumn<CMSPageRow>[] = [
+  {
+    key: 'title',
+    header: 'Title',
+    render: (p) => <span className="text-text-primary font-medium">{p.title}</span>,
+  },
+  {
+    key: 'track',
+    header: 'Track',
+    render: (p) => <Badge variant="cyan">{p.track}</Badge>,
+  },
+  {
+    key: 'status',
+    header: 'Status',
+    render: (p) => (
+      <Badge variant={p.published ? 'success' : 'muted'}>
+        {p.published ? 'Published' : 'Draft'}
+      </Badge>
+    ),
+  },
+  {
+    key: 'version',
+    header: 'Version',
+    render: (p) => <span className="font-mono text-text-tertiary text-xs">v{p.version}</span>,
+  },
+  {
+    key: 'updated',
+    header: 'Updated',
+    render: (p) => <span className="text-text-tertiary text-xs">{new Date(p.updated_at).toLocaleDateString()}</span>,
+  },
+  {
+    key: 'actions',
+    header: '',
+    align: 'right',
+    render: () => <Button variant="ghost" size="sm">Edit</Button>,
+  },
+];
+
 export default async function CmsPage() {
   const supabase = await createClient();
   const { data: pages } = await supabase
@@ -19,88 +72,66 @@ export default async function CmsPage() {
     .select('*')
     .order('updated_at', { ascending: false });
 
+  const typedPages = (pages ?? []) as CMSPageRow[];
   const tracks = ['artist', 'production', 'talent', 'crew', 'management', 'staff', 'sponsor', 'press', 'guest', 'attendee', 'client'] as const;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b border-border px-8 py-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-heading text-lg text-text-primary">CMS Pages</h1>
-            <p className="text-sm text-text-secondary mt-1">{BLOCK_TYPES.length} block types &middot; {pages?.length ?? 0} pages</p>
-          </div>
-          <button className="btn btn-primary text-xs py-2 px-4">New Page</button>
-        </div>
-      </header>
+    <>
+      <ModuleHeader
+        title="CMS Pages"
+        subtitle={`${BLOCK_TYPES.length} block types · ${typedPages.length} pages`}
+        maxWidth="6xl"
+      >
+        <Button variant="primary" size="sm">New Page</Button>
+      </ModuleHeader>
 
-      <div className="flex-1 px-8 py-8">
-        <div className="max-w-6xl mx-auto">
-          {/* Track Tabs */}
-          <div className="flex gap-2 mb-8">
-            {tracks.map((track) => (
-              <button key={track} className="btn btn-ghost text-xs py-2 px-4 border border-border hover:border-cyan/30">
-                {track.charAt(0).toUpperCase() + track.slice(1)}
-              </button>
+      <div className="page-content" style={{ maxWidth: '6xl' }}>
+        {/* Track Tabs */}
+        <div className="flex gap-2 mb-8 flex-wrap">
+          {tracks.map((track) => (
+            <Button key={track} variant="ghost" size="sm" className="border border-border hover:border-cyan/30 capitalize">
+              {track}
+            </Button>
+          ))}
+        </div>
+
+        {/* Pages List */}
+        {(typedPages.length) === 0 ? (
+          <EmptyState 
+            title="No CMS pages yet" 
+            description={`Create portal-specific content pages using ${BLOCK_TYPES.length} block types including schedules, maps, FAQs, file downloads, and more.`}
+            actionLabel="Create First Page"
+            actionHref="#"
+          />
+        ) : (
+          <DataTable
+            columns={CMS_COLUMNS}
+            data={typedPages}
+            emptyText="No CMS Pages"
+          />
+        )}
+
+        {/* Block Type Reference */}
+        <section className="mt-12">
+          <SectionHeading>
+            Available Block Types
+            <span className="ml-3 badge text-[0.5rem] tracking-wider uppercase bg-surface-raised text-text-disabled border border-border">
+              {BLOCK_TYPES.length} Types
+            </span>
+          </SectionHeading>
+          
+          <div className="flex flex-wrap gap-2">
+            {BLOCK_TYPES.map((type) => (
+              <span 
+                key={type} 
+                className="px-3 py-1.5 rounded text-xs text-text-secondary bg-surface-elevated border border-border-subtle hover:border-cyan/30 hover:text-cyan transition-all cursor-pointer font-heading tracking-wider uppercase" 
+              >
+                {type.replace(/_/g, ' ')}
+              </span>
             ))}
           </div>
-
-          {/* Pages List */}
-          {(pages?.length ?? 0) === 0 ? (
-            <div className="card p-16 text-center">
-              <div className="text-text-tertiary text-sm mb-4">No CMS pages yet</div>
-              <p className="text-text-disabled text-xs max-w-md mx-auto mb-6">
-                Create portal-specific content pages using {BLOCK_TYPES.length} block types including schedules, maps, FAQs, file downloads, and more.
-              </p>
-              <button className="btn btn-primary text-xs py-2 px-6">Create First Page</button>
-            </div>
-          ) : (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Track</th>
-                  <th>Status</th>
-                  <th>Version</th>
-                  <th>Updated</th>
-                  <th className="w-24" />
-                </tr>
-              </thead>
-              <tbody>
-                {pages?.map((page) => (
-                  <tr key={page.id}>
-                    <td className="text-text-primary font-medium">{page.title}</td>
-                    <td><span className="badge border text-cyan border-cyan/20 bg-cyan-subtle">{page.track}</span></td>
-                    <td>
-                      <span className={`badge border ${page.published ? 'text-approved border-approved/30 bg-approved/10' : 'text-draft border-draft/30 bg-draft/10'}`}>
-                        {page.published ? 'Published' : 'Draft'}
-                      </span>
-                    </td>
-                    <td className="text-mono text-text-tertiary text-xs">v{page.version}</td>
-                    <td className="text-text-tertiary text-xs">{new Date(page.updated_at).toLocaleDateString()}</td>
-                    <td><button className="btn btn-ghost text-xs py-1 px-3">Edit</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-
-          {/* Block Type Reference */}
-          <section className="mt-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-6 bg-cyan rounded-full" />
-              <h2 className="text-heading text-sm text-text-primary">Available Block Types</h2>
-              <span className="text-label text-text-disabled text-[0.5rem]">{BLOCK_TYPES.length} Types</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {BLOCK_TYPES.map((type) => (
-                <span key={type} className="px-3 py-1.5 rounded text-xs text-text-secondary bg-surface-elevated border border-border-subtle hover:border-cyan/30 hover:text-cyan transition-all cursor-pointer" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                  {type.replace(/_/g, ' ')}
-                </span>
-              ))}
-            </div>
-          </section>
-        </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 }

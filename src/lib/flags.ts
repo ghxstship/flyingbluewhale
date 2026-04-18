@@ -1,0 +1,98 @@
+/**
+ * Feature flags — GrowthBook-backed, with a safe local fallback.
+ *
+ * Server-side: call `loadFlags(userContext)` once per request and pass the
+ * resulting object to client components via props or React Context.
+ * Client-side: use the GrowthBookProvider (`src/components/providers/GrowthBookProvider.tsx`).
+ *
+ * Env: NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY for client; GROWTHBOOK_API_HOST optional.
+ *
+ * Default returns the explicit fallback when no client key is configured —
+ * enables local dev + tests without a GrowthBook instance.
+ */
+
+export type Flags = {
+  command_palette_v2: boolean;
+  ai_opus_for_pro: boolean;
+  portal_comments: boolean;
+  data_table_saved_views: boolean;
+  passkeys: boolean;
+};
+
+export const FLAG_DEFAULTS: Flags = {
+  command_palette_v2: true,
+  ai_opus_for_pro: false,
+  portal_comments: true,
+  data_table_saved_views: false,
+  passkeys: false,
+};
+
+const GB_HOST = process.env.GROWTHBOOK_API_HOST ?? "https://cdn.growthbook.io";
+const GB_KEY = process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY;
+
+type Attributes = {
+  userId?: string;
+  orgId?: string;
+  tier?: "portal" | "starter" | "professional" | "enterprise";
+  locale?: string;
+};
+
+type GBFeature = {
+  defaultValue?: unknown;
+  rules?: Array<{
+    condition?: Record<string, unknown>;
+    force?: unknown;
+    coverage?: number;
+    hashAttribute?: string;
+  }>;
+};
+type GBPayload = { features?: Record<string, GBFeature> };
+
+/** Server-side feature flag evaluation. Returns a typed Flags map. */
+export async function loadFlags(attrs: Attributes = {}): Promise<Flags> {
+  if (!GB_KEY) return FLAG_DEFAULTS;
+  try {
+    const res = await fetch(`${GB_HOST}/api/features/${GB_KEY}`, {
+      // 60s edge cache — feature flag config changes rarely
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return FLAG_DEFAULTS;
+    const payload = (await res.json()) as GBPayload;
+    const features = payload.features ?? {};
+    const out: Record<string, unknown> = { ...FLAG_DEFAULTS };
+    for (const [key, def] of Object.entries(features)) {
+      out[key] = evaluateFeature(def, attrs) ?? def.defaultValue ?? out[key];
+    }
+    return out as Flags;
+  } catch {
+    return FLAG_DEFAULTS;
+  }
+}
+
+function evaluateFeature(def: GBFeature, attrs: Attributes): unknown {
+  if (!def.rules) return def.defaultValue;
+  for (const rule of def.rules) {
+    if (rule.condition && !matchesCondition(rule.condition, attrs)) continue;
+    if (typeof rule.coverage === "number") {
+      const hashSeed = attrs.userId ?? attrs.orgId ?? "anon";
+      const bucket = hashFloat(hashSeed) % 100;
+      if (bucket >= rule.coverage * 100) continue;
+    }
+    return rule.force;
+  }
+  return def.defaultValue;
+}
+
+function matchesCondition(cond: Record<string, unknown>, attrs: Attributes): boolean {
+  for (const [k, expected] of Object.entries(cond)) {
+    const actual = (attrs as Record<string, unknown>)[k];
+    if (actual !== expected) return false;
+  }
+  return true;
+}
+
+function hashFloat(s: string): number {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = (h * 33) ^ s.charCodeAt(i);
+  return Math.abs(h);
+}

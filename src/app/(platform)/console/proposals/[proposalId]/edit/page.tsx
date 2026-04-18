@@ -98,7 +98,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
           </div>
         </section>
 
-        <ProposalPreviewLink proposal={proposal as Proposal} />
+        <ProposalPreviewLink proposal={proposal as unknown as Proposal} />
       </div>
     </>
   );

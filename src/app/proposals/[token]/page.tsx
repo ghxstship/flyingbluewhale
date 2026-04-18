@@ -53,7 +53,7 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
 
   return (
     <div className="proposal-doc bg-[var(--background)] text-[var(--foreground)]" data-theme="light">
-      <ProposalTopBar proposal={proposal as Proposal} blocks={blocks} />
+      <ProposalTopBar proposal={proposal as unknown as Proposal} blocks={blocks} />
       <main>
         <ProposalBlockRenderer blocks={blocks} theme={theme} currency={proposal.currency ?? "USD"} />
         {signatureBlock && (

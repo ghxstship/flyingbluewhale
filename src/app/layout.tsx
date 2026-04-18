@@ -2,6 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Cormorant_Garamond } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { TooltipProvider } from "@/components/ui/Tooltip";
+import { LiveRegionProvider } from "@/components/ui/LiveRegion";
+import { CookieConsent } from "@/components/compliance/CookieConsent";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { isRtl } from "@/lib/i18n/config";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -41,10 +46,13 @@ const swRegister = process.env.NODE_ENV === "production"
   ? `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}`
   : `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}`;
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getRequestLocale();
+  const dir = isRtl(locale) ? "rtl" : "ltr";
   return (
     <html
-      lang="en"
+      lang={locale}
+      dir={dir}
       className={`h-full ${inter.variable} ${mono.variable} ${serif.variable}`}
       suppressHydrationWarning
     >
@@ -54,7 +62,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-full flex flex-col antialiased">
         <a href="#main" className="skip-link">Skip to content</a>
         <ThemeProvider>
-          <div id="main" className="flex-1 flex flex-col min-w-0">{children}</div>
+          <TooltipProvider delayDuration={350}>
+            <LiveRegionProvider>
+              <div id="main" className="flex-1 flex flex-col min-w-0">{children}</div>
+              <CookieConsent />
+            </LiveRegionProvider>
+          </TooltipProvider>
         </ThemeProvider>
         <Toaster
           position="bottom-right"

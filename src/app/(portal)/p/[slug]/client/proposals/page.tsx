@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     .from("proposals")
     .select("*")
     .eq("project_id", project.id)
-    .order("created_at", { ascending: false })).data as Proposal[] ?? [] : [];
+    .order("created_at", { ascending: false })).data as unknown as Proposal[] ?? [] : [];
   return (
     <PortalSubpage slug={slug} persona="client" title="Proposals" subtitle="Review, approve, e-sign">
       <DataTable<Proposal>

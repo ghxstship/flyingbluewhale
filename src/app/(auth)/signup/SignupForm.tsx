@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
-import { AuthCard } from "@/components/Shell";
+import { useActionState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { AuthShell } from "@/components/auth/AuthShell";
+import { OAuthButtons, AuthDivider } from "@/components/auth/OAuthButtons";
+import { PasswordField } from "@/components/auth/PasswordField";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { signupAction, type FormState } from "../actions";
@@ -10,25 +13,68 @@ import { signupAction, type FormState } from "../actions";
 export function SignupForm() {
   const [state, formAction, pending] = useActionState<FormState, FormData>(signupAction, null);
 
+  useEffect(() => {
+    if (state?.error) toast.error(state.error);
+  }, [state]);
+
   return (
-    <AuthCard title="Create account" subtitle="Start running production in minutes.">
-      <form action={formAction} className="space-y-4">
+    <AuthShell
+      title="Create your account"
+      subtitle="Free forever on the Portal tier. No credit card."
+      footer={
+        <>
+          Already have an account?{" "}
+          <Link href="/login" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+            Sign in
+          </Link>
+        </>
+      }
+    >
+      <OAuthButtons />
+      <AuthDivider />
+      <form action={formAction} className="space-y-4" noValidate>
         <Input label="Name" name="name" required autoComplete="name" />
-        <Input label="Email" name="email" type="email" required autoComplete="email" />
-        <Input label="Password" name="password" type="password" required autoComplete="new-password" minLength={8} />
-        <Input label="Organization" name="orgName" placeholder="Optional" autoComplete="organization" />
-        {state?.error ? (
-          <div className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]">
+        <Input
+          label="Work email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          inputMode="email"
+        />
+        <PasswordField
+          name="password"
+          label="Password"
+          required
+          minLength={8}
+          autoComplete="new-password"
+          showStrength
+          hint="At least 8 characters"
+        />
+        <Input
+          label="Organization"
+          name="orgName"
+          placeholder="Optional"
+          autoComplete="organization"
+          hint="You can create this later from settings."
+        />
+        {state?.error && (
+          <div
+            role="alert"
+            className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]"
+          >
             {state.error}
           </div>
-        ) : null}
-        <Button type="submit" size="lg" className="w-full" disabled={pending}>
-          {pending ? "Creating…" : "Sign up"}
+        )}
+        <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
+          By creating an account you agree to our{" "}
+          <Link href="/legal/terms" className="underline">Terms</Link> and{" "}
+          <Link href="/legal/privacy" className="underline">Privacy Policy</Link>.
+        </p>
+        <Button type="submit" size="lg" className="w-full" loading={pending}>
+          {pending ? "Creating account" : "Create account"}
         </Button>
       </form>
-      <div className="mt-4 text-mono text-xs text-[var(--color-text-tertiary)]">
-        Already have an account? <Link href="/login" className="text-[var(--brand-color)]">Log in</Link>
-      </div>
-    </AuthCard>
+    </AuthShell>
   );
 }

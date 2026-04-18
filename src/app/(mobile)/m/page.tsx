@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { QrCode } from "lucide-react";
+import { FAB } from "@/components/mobile/FAB";
 
 export default function MobileHome() {
   const tiles = [
@@ -21,6 +23,9 @@ export default function MobileHome() {
           </Link>
         ))}
       </div>
+      <FAB href="/m/check-in" label="Scan ticket">
+        <QrCode size={22} />
+      </FAB>
     </div>
   );
 }

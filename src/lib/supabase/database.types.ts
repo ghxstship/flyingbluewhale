@@ -26,6 +26,7 @@ export type Database = {
           requested_at: string
           requester_id: string
           status: string
+          updated_at: string
         }
         Insert: {
           amount_cents: number
@@ -38,6 +39,7 @@ export type Database = {
           requested_at?: string
           requester_id: string
           status?: string
+          updated_at?: string
         }
         Update: {
           amount_cents?: number
@@ -50,6 +52,7 @@ export type Database = {
           requested_at?: string
           requester_id?: string
           status?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -81,6 +84,7 @@ export type Database = {
           id: string
           org_id: string
           title: string
+          updated_at: string
           user_id: string
         }
         Insert: {
@@ -88,6 +92,7 @@ export type Database = {
           id?: string
           org_id: string
           title?: string
+          updated_at?: string
           user_id: string
         }
         Update: {
@@ -95,6 +100,7 @@ export type Database = {
           id?: string
           org_id?: string
           title?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -149,31 +155,46 @@ export type Database = {
       audit_log: {
         Row: {
           action: string
+          actor_email: string | null
           actor_id: string | null
+          after: Json | null
           at: string
+          before: Json | null
           id: string
           metadata: Json | null
+          operation: string | null
           org_id: string
+          request_id: string | null
           target_id: string | null
           target_table: string | null
         }
         Insert: {
           action: string
+          actor_email?: string | null
           actor_id?: string | null
+          after?: Json | null
           at?: string
+          before?: Json | null
           id?: string
           metadata?: Json | null
+          operation?: string | null
           org_id: string
+          request_id?: string | null
           target_id?: string | null
           target_table?: string | null
         }
         Update: {
           action?: string
+          actor_email?: string | null
           actor_id?: string | null
+          after?: Json | null
           at?: string
+          before?: Json | null
           id?: string
           metadata?: Json | null
+          operation?: string | null
           org_id?: string
+          request_id?: string | null
           target_id?: string | null
           target_table?: string | null
         }
@@ -204,6 +225,7 @@ export type Database = {
           org_id: string
           project_id: string | null
           spent_cents: number
+          updated_at: string
         }
         Insert: {
           amount_cents?: number
@@ -214,6 +236,7 @@ export type Database = {
           org_id: string
           project_id?: string | null
           spent_cents?: number
+          updated_at?: string
         }
         Update: {
           amount_cents?: number
@@ -224,6 +247,7 @@ export type Database = {
           org_id?: string
           project_id?: string | null
           spent_cents?: number
+          updated_at?: string
         }
         Relationships: [
           {
@@ -248,10 +272,12 @@ export type Database = {
           contact_phone: string | null
           created_at: string
           created_by: string | null
+          deleted_at: string | null
           id: string
           name: string
           notes: string | null
           org_id: string
+          updated_at: string
           website: string | null
         }
         Insert: {
@@ -259,10 +285,12 @@ export type Database = {
           contact_phone?: string | null
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
           id?: string
           name: string
           notes?: string | null
           org_id: string
+          updated_at?: string
           website?: string | null
         }
         Update: {
@@ -270,10 +298,12 @@ export type Database = {
           contact_phone?: string | null
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
           id?: string
           name?: string
           notes?: string | null
           org_id?: string
+          updated_at?: string
           website?: string | null
         }
         Relationships: [
@@ -304,6 +334,7 @@ export type Database = {
           kind: string
           number: string | null
           org_id: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -315,6 +346,7 @@ export type Database = {
           kind: string
           number?: string | null
           org_id: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -326,6 +358,7 @@ export type Database = {
           kind?: string
           number?: string | null
           org_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -355,6 +388,7 @@ export type Database = {
           org_id: string
           phone: string | null
           role: string | null
+          updated_at: string
           user_id: string | null
         }
         Insert: {
@@ -367,6 +401,7 @@ export type Database = {
           org_id: string
           phone?: string | null
           role?: string | null
+          updated_at?: string
           user_id?: string | null
         }
         Update: {
@@ -379,6 +414,7 @@ export type Database = {
           org_id?: string
           phone?: string | null
           role?: string | null
+          updated_at?: string
           user_id?: string | null
         }
         Relationships: [
@@ -404,6 +440,7 @@ export type Database = {
           created_at: string
           deliverable_id: string
           id: string
+          updated_at: string
           user_id: string
         }
         Insert: {
@@ -411,6 +448,7 @@ export type Database = {
           created_at?: string
           deliverable_id: string
           id?: string
+          updated_at?: string
           user_id: string
         }
         Update: {
@@ -418,6 +456,7 @@ export type Database = {
           created_at?: string
           deliverable_id?: string
           id?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -484,6 +523,7 @@ export type Database = {
           created_at: string
           data: Json
           deadline: string | null
+          deleted_at: string | null
           file_path: string | null
           id: string
           org_id: string
@@ -502,6 +542,7 @@ export type Database = {
           created_at?: string
           data?: Json
           deadline?: string | null
+          deleted_at?: string | null
           file_path?: string | null
           id?: string
           org_id: string
@@ -520,6 +561,7 @@ export type Database = {
           created_at?: string
           data?: Json
           deadline?: string | null
+          deleted_at?: string | null
           file_path?: string | null
           id?: string
           org_id?: string
@@ -571,6 +613,7 @@ export type Database = {
           category: string | null
           created_at: string
           daily_rate_cents: number | null
+          deleted_at: string | null
           id: string
           location_id: string | null
           name: string
@@ -578,12 +621,14 @@ export type Database = {
           org_id: string
           serial: string | null
           status: Database["public"]["Enums"]["equipment_status"]
+          updated_at: string
         }
         Insert: {
           asset_tag?: string | null
           category?: string | null
           created_at?: string
           daily_rate_cents?: number | null
+          deleted_at?: string | null
           id?: string
           location_id?: string | null
           name: string
@@ -591,12 +636,14 @@ export type Database = {
           org_id: string
           serial?: string | null
           status?: Database["public"]["Enums"]["equipment_status"]
+          updated_at?: string
         }
         Update: {
           asset_tag?: string | null
           category?: string | null
           created_at?: string
           daily_rate_cents?: number | null
+          deleted_at?: string | null
           id?: string
           location_id?: string | null
           name?: string
@@ -604,6 +651,7 @@ export type Database = {
           org_id?: string
           serial?: string | null
           status?: Database["public"]["Enums"]["equipment_status"]
+          updated_at?: string
         }
         Relationships: [
           {
@@ -621,6 +669,7 @@ export type Database = {
           config: Json
           created_at: string
           created_by: string | null
+          deleted_at: string | null
           id: string
           org_id: string
           persona: Database["public"]["Enums"]["guide_persona"]
@@ -637,6 +686,7 @@ export type Database = {
           config?: Json
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
           id?: string
           org_id: string
           persona: Database["public"]["Enums"]["guide_persona"]
@@ -653,6 +703,7 @@ export type Database = {
           config?: Json
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
           id?: string
           org_id?: string
           persona?: Database["public"]["Enums"]["guide_persona"]
@@ -700,6 +751,7 @@ export type Database = {
           project_id: string | null
           starts_at: string
           status: Database["public"]["Enums"]["event_status"]
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -712,6 +764,7 @@ export type Database = {
           project_id?: string | null
           starts_at: string
           status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -724,6 +777,7 @@ export type Database = {
           project_id?: string | null
           starts_at?: string
           status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
         }
         Relationships: [
           {
@@ -822,6 +876,7 @@ export type Database = {
           project_id: string | null
           status: string
           title: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -832,6 +887,7 @@ export type Database = {
           project_id?: string | null
           status?: string
           title: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -842,6 +898,7 @@ export type Database = {
           project_id?: string | null
           status?: string
           title?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -860,6 +917,80 @@ export type Database = {
           },
         ]
       }
+      guide_comments: {
+        Row: {
+          author_email: string | null
+          author_name: string | null
+          author_user_id: string | null
+          body: string
+          created_at: string
+          guide_id: string
+          id: string
+          org_id: string
+          parent_id: string | null
+          resolved_at: string | null
+          section_key: string | null
+          updated_at: string
+        }
+        Insert: {
+          author_email?: string | null
+          author_name?: string | null
+          author_user_id?: string | null
+          body: string
+          created_at?: string
+          guide_id: string
+          id?: string
+          org_id: string
+          parent_id?: string | null
+          resolved_at?: string | null
+          section_key?: string | null
+          updated_at?: string
+        }
+        Update: {
+          author_email?: string | null
+          author_name?: string | null
+          author_user_id?: string | null
+          body?: string
+          created_at?: string
+          guide_id?: string
+          id?: string
+          org_id?: string
+          parent_id?: string | null
+          resolved_at?: string | null
+          section_key?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_comments_author_user_id_fkey"
+            columns: ["author_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_comments_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "event_guides"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_comments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "guide_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoice_line_items: {
         Row: {
           description: string
@@ -868,6 +999,7 @@ export type Database = {
           position: number
           quantity: number
           unit_price_cents: number
+          updated_at: string
         }
         Insert: {
           description: string
@@ -876,6 +1008,7 @@ export type Database = {
           position?: number
           quantity?: number
           unit_price_cents?: number
+          updated_at?: string
         }
         Update: {
           description?: string
@@ -884,6 +1017,7 @@ export type Database = {
           position?: number
           quantity?: number
           unit_price_cents?: number
+          updated_at?: string
         }
         Relationships: [
           {
@@ -902,6 +1036,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           currency: string
+          deleted_at: string | null
           due_at: string | null
           id: string
           issued_at: string | null
@@ -921,6 +1056,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           currency?: string
+          deleted_at?: string | null
           due_at?: string | null
           id?: string
           issued_at?: string | null
@@ -940,6 +1076,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           currency?: string
+          deleted_at?: string | null
           due_at?: string | null
           id?: string
           issued_at?: string | null
@@ -1068,6 +1205,7 @@ export type Database = {
           org_id: string
           postcode: string | null
           region: string | null
+          updated_at: string
         }
         Insert: {
           address?: string | null
@@ -1082,6 +1220,7 @@ export type Database = {
           org_id: string
           postcode?: string | null
           region?: string | null
+          updated_at?: string
         }
         Update: {
           address?: string | null
@@ -1096,6 +1235,7 @@ export type Database = {
           org_id?: string
           postcode?: string | null
           region?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -1110,23 +1250,29 @@ export type Database = {
       memberships: {
         Row: {
           created_at: string
+          deleted_at: string | null
           id: string
           org_id: string
           role: Database["public"]["Enums"]["platform_role"]
+          updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
+          deleted_at?: string | null
           id?: string
           org_id: string
           role?: Database["public"]["Enums"]["platform_role"]
+          updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
+          deleted_at?: string | null
           id?: string
           org_id?: string
           role?: Database["public"]["Enums"]["platform_role"]
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -1158,6 +1304,7 @@ export type Database = {
           origin: string
           project_id: string | null
           rate_cents: number
+          updated_at: string
           user_id: string
         }
         Insert: {
@@ -1171,6 +1318,7 @@ export type Database = {
           origin: string
           project_id?: string | null
           rate_cents?: number
+          updated_at?: string
           user_id: string
         }
         Update: {
@@ -1184,6 +1332,7 @@ export type Database = {
           origin?: string
           project_id?: string | null
           rate_cents?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -1214,31 +1363,37 @@ export type Database = {
         Row: {
           body: string | null
           created_at: string
+          deleted_at: string | null
           href: string | null
           id: string
           org_id: string
           read_at: string | null
           title: string
+          updated_at: string
           user_id: string
         }
         Insert: {
           body?: string | null
           created_at?: string
+          deleted_at?: string | null
           href?: string | null
           id?: string
           org_id: string
           read_at?: string | null
           title: string
+          updated_at?: string
           user_id: string
         }
         Update: {
           body?: string | null
           created_at?: string
+          deleted_at?: string | null
           href?: string | null
           id?: string
           org_id?: string
           read_at?: string | null
           title?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -1265,6 +1420,7 @@ export type Database = {
           name: string
           slug: string
           tier: Database["public"]["Enums"]["tier"]
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -1272,6 +1428,7 @@ export type Database = {
           name: string
           slug: string
           tier?: Database["public"]["Enums"]["tier"]
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -1279,6 +1436,7 @@ export type Database = {
           name?: string
           slug?: string
           tier?: Database["public"]["Enums"]["tier"]
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1290,6 +1448,7 @@ export type Database = {
           purchase_order_id: string
           quantity: number
           unit_price_cents: number
+          updated_at: string
         }
         Insert: {
           description: string
@@ -1298,6 +1457,7 @@ export type Database = {
           purchase_order_id: string
           quantity?: number
           unit_price_cents?: number
+          updated_at?: string
         }
         Update: {
           description?: string
@@ -1306,6 +1466,7 @@ export type Database = {
           purchase_order_id?: string
           quantity?: number
           unit_price_cents?: number
+          updated_at?: string
         }
         Relationships: [
           {
@@ -1319,10 +1480,12 @@ export type Database = {
       }
       projects: {
         Row: {
+          branding: Json
           budget_cents: number | null
           client_id: string | null
           created_at: string
           created_by: string
+          deleted_at: string | null
           description: string | null
           end_date: string | null
           id: string
@@ -1334,10 +1497,12 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          branding?: Json
           budget_cents?: number | null
           client_id?: string | null
           created_at?: string
           created_by: string
+          deleted_at?: string | null
           description?: string | null
           end_date?: string | null
           id?: string
@@ -1349,10 +1514,12 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          branding?: Json
           budget_cents?: number | null
           client_id?: string | null
           created_at?: string
           created_by?: string
+          deleted_at?: string | null
           description?: string | null
           end_date?: string | null
           id?: string
@@ -1388,6 +1555,7 @@ export type Database = {
           metadata: Json | null
           proposal_id: string
           share_token: string | null
+          updated_at: string
         }
         Insert: {
           at?: string
@@ -1396,6 +1564,7 @@ export type Database = {
           metadata?: Json | null
           proposal_id: string
           share_token?: string | null
+          updated_at?: string
         }
         Update: {
           at?: string
@@ -1404,6 +1573,7 @@ export type Database = {
           metadata?: Json | null
           proposal_id?: string
           share_token?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -1426,6 +1596,7 @@ export type Database = {
           proposal_id: string
           revoked_at: string | null
           token: string
+          updated_at: string
           view_count: number
         }
         Insert: {
@@ -1438,6 +1609,7 @@ export type Database = {
           proposal_id: string
           revoked_at?: string | null
           token: string
+          updated_at?: string
           view_count?: number
         }
         Update: {
@@ -1450,6 +1622,7 @@ export type Database = {
           proposal_id?: string
           revoked_at?: string | null
           token?: string
+          updated_at?: string
           view_count?: number
         }
         Relationships: [
@@ -1482,6 +1655,7 @@ export type Database = {
           signer_ip: string | null
           signer_name: string
           signer_role: string | null
+          updated_at: string
         }
         Insert: {
           id?: string
@@ -1495,6 +1669,7 @@ export type Database = {
           signer_ip?: string | null
           signer_name: string
           signer_role?: string | null
+          updated_at?: string
         }
         Update: {
           id?: string
@@ -1508,6 +1683,7 @@ export type Database = {
           signer_ip?: string | null
           signer_name?: string
           signer_role?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -1527,6 +1703,7 @@ export type Database = {
           id: string
           proposal_id: string
           theme: Json | null
+          updated_at: string
           version: number
         }
         Insert: {
@@ -1536,6 +1713,7 @@ export type Database = {
           id?: string
           proposal_id: string
           theme?: Json | null
+          updated_at?: string
           version: number
         }
         Update: {
@@ -1545,6 +1723,7 @@ export type Database = {
           id?: string
           proposal_id?: string
           theme?: Json | null
+          updated_at?: string
           version?: number
         }
         Relationships: [
@@ -1572,6 +1751,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           currency: string | null
+          deleted_at: string | null
           deposit_percent: number | null
           doc_number: string | null
           expires_at: string | null
@@ -1598,6 +1778,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           currency?: string | null
+          deleted_at?: string | null
           deposit_percent?: number | null
           doc_number?: string | null
           expires_at?: string | null
@@ -1624,6 +1805,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           currency?: string | null
+          deleted_at?: string | null
           deposit_percent?: number | null
           doc_number?: string | null
           expires_at?: string | null
@@ -1680,6 +1862,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           currency: string
+          deleted_at: string | null
           id: string
           number: string
           org_id: string
@@ -1695,6 +1878,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           currency?: string
+          deleted_at?: string | null
           id?: string
           number: string
           org_id: string
@@ -1710,6 +1894,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           currency?: string
+          deleted_at?: string | null
           id?: string
           number?: string
           org_id?: string
@@ -1758,6 +1943,44 @@ export type Database = {
           },
         ]
       }
+      rate_limit_overrides: {
+        Row: {
+          bucket: string
+          created_at: string
+          id: string
+          limit_count: number
+          org_id: string
+          updated_at: string
+          window_ms: number
+        }
+        Insert: {
+          bucket: string
+          created_at?: string
+          id?: string
+          limit_count: number
+          org_id: string
+          updated_at?: string
+          window_ms: number
+        }
+        Update: {
+          bucket?: string
+          created_at?: string
+          id?: string
+          limit_count?: number
+          org_id?: string
+          updated_at?: string
+          window_ms?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rate_limit_overrides_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rentals: {
         Row: {
           created_at: string
@@ -1769,6 +1992,7 @@ export type Database = {
           project_id: string | null
           rate_cents: number | null
           starts_at: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -1780,6 +2004,7 @@ export type Database = {
           project_id?: string | null
           rate_cents?: number | null
           starts_at: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -1791,6 +2016,7 @@ export type Database = {
           project_id?: string | null
           rate_cents?: number | null
           starts_at?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -1827,6 +2053,7 @@ export type Database = {
           requester_id: string
           status: Database["public"]["Enums"]["req_status"]
           title: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -1838,6 +2065,7 @@ export type Database = {
           requester_id: string
           status?: Database["public"]["Enums"]["req_status"]
           title: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -1849,6 +2077,7 @@ export type Database = {
           requester_id?: string
           status?: Database["public"]["Enums"]["req_status"]
           title?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -2003,6 +2232,7 @@ export type Database = {
           scanned_by: string | null
           status: Database["public"]["Enums"]["ticket_status"]
           tier: string
+          updated_at: string
         }
         Insert: {
           code: string
@@ -2016,6 +2246,7 @@ export type Database = {
           scanned_by?: string | null
           status?: Database["public"]["Enums"]["ticket_status"]
           tier?: string
+          updated_at?: string
         }
         Update: {
           code?: string
@@ -2029,6 +2260,7 @@ export type Database = {
           scanned_by?: string | null
           status?: Database["public"]["Enums"]["ticket_status"]
           tier?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -2065,6 +2297,7 @@ export type Database = {
           org_id: string
           project_id: string | null
           started_at: string
+          updated_at: string
           user_id: string
         }
         Insert: {
@@ -2077,6 +2310,7 @@ export type Database = {
           org_id: string
           project_id?: string | null
           started_at: string
+          updated_at?: string
           user_id: string
         }
         Update: {
@@ -2089,6 +2323,7 @@ export type Database = {
           org_id?: string
           project_id?: string | null
           started_at?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -2115,27 +2350,84 @@ export type Database = {
           },
         ]
       }
+      user_preferences: {
+        Row: {
+          consent: Json
+          density: string | null
+          last_org_id: string | null
+          locale: string | null
+          table_views: Json
+          theme: string | null
+          timezone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          consent?: Json
+          density?: string | null
+          last_org_id?: string | null
+          locale?: string | null
+          table_views?: Json
+          theme?: string | null
+          timezone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          consent?: Json
+          density?: string | null
+          last_org_id?: string | null
+          locale?: string | null
+          table_views?: Json
+          theme?: string | null
+          timezone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_preferences_last_org_id_fkey"
+            columns: ["last_org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           avatar_url: string | null
           created_at: string
+          deleted_at: string | null
           email: string
           id: string
           name: string | null
+          updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          deleted_at?: string | null
           email: string
           id: string
           name?: string | null
+          updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          deleted_at?: string | null
           email?: string
           id?: string
           name?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -2146,11 +2438,13 @@ export type Database = {
           contact_email: string | null
           contact_phone: string | null
           created_at: string
+          deleted_at: string | null
           id: string
           name: string
           notes: string | null
           org_id: string
           payout_account_id: string | null
+          updated_at: string
           w9_on_file: boolean
         }
         Insert: {
@@ -2159,11 +2453,13 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
+          deleted_at?: string | null
           id?: string
           name: string
           notes?: string | null
           org_id: string
           payout_account_id?: string | null
+          updated_at?: string
           w9_on_file?: boolean
         }
         Update: {
@@ -2172,11 +2468,13 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
+          deleted_at?: string | null
           id?: string
           name?: string
           notes?: string | null
           org_id?: string
           payout_account_id?: string | null
+          updated_at?: string
           w9_on_file?: boolean
         }
         Relationships: [
@@ -2196,6 +2494,7 @@ export type Database = {
     Functions: {
       auth_org_ids: { Args: never; Returns: string[] }
       auth_user_email: { Args: never; Returns: string }
+      current_request_id: { Args: never; Returns: string }
       has_org_role: {
         Args: { required: string[]; target_org: string }
         Returns: boolean

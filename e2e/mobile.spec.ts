@@ -56,7 +56,7 @@ test.describe("mobile field shell", () => {
 
   for (const path of PAGES) {
     test(`${path} loads`, async ({ page }) => {
-      const r = await page.goto(path);
+      const r = await page.goto(path, { waitUntil: "domcontentloaded" });
       expect(r?.status()).toBeLessThan(500);
     });
   }

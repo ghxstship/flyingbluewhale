@@ -21,6 +21,24 @@ const initial: ThemeState = {
 
 const Ctx = createContext<ThemeState>(initial);
 
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
+
+function writeCookie(key: string, value: string) {
+  document.cookie = `${key}=${encodeURIComponent(value)}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax`;
+}
+
+async function persistRemote(patch: { theme?: Theme; density?: Density }) {
+  try {
+    await fetch("/api/v1/me/preferences", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(patch),
+    });
+  } catch {
+    /* offline / anon — localStorage is still the source */
+  }
+}
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
@@ -45,7 +63,9 @@ export function ThemeProvider({
     const root = document.documentElement;
     const resolved =
       theme === "system"
-        ? matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+        ? matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
         : theme;
     root.setAttribute("data-theme", resolved);
   }, [theme, mounted]);
@@ -59,12 +79,24 @@ export function ThemeProvider({
 
   const setTheme = (t: Theme) => {
     setThemeState(t);
-    localStorage.setItem("fbw_theme", t);
+    try {
+      localStorage.setItem("fbw_theme", t);
+    } catch {
+      /* ignore */
+    }
+    writeCookie("fbw_theme", t);
+    void persistRemote({ theme: t });
   };
 
   const setDensity = (d: Density) => {
     setDensityState(d);
-    localStorage.setItem("fbw_density", d);
+    try {
+      localStorage.setItem("fbw_density", d);
+    } catch {
+      /* ignore */
+    }
+    writeCookie("fbw_density", d);
+    void persistRemote({ density: d });
   };
 
   return <Ctx.Provider value={{ theme, density, setTheme, setDensity }}>{children}</Ctx.Provider>;

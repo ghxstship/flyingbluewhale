@@ -127,9 +127,67 @@ export function ModuleHeader({
   );
 }
 
-export function PageSkeleton({ rows = 5 }: { rows?: number }) {
+export function PageSkeleton({
+  rows = 5,
+  variant = "list",
+}: {
+  rows?: number;
+  variant?: "list" | "form" | "table" | "detail";
+}) {
+  if (variant === "form") {
+    return (
+      <div className="page-content space-y-4" aria-busy="true">
+        {Array.from({ length: rows }).map((_, i) => (
+          <div key={i} className="space-y-1.5">
+            <div className="skeleton h-3 w-24" />
+            <div className="skeleton h-10" />
+          </div>
+        ))}
+        <div className="flex justify-end gap-2 pt-2">
+          <div className="skeleton h-9 w-20 rounded-md" />
+          <div className="skeleton h-9 w-24 rounded-md" />
+        </div>
+      </div>
+    );
+  }
+  if (variant === "table") {
+    return (
+      <div className="page-content space-y-3" aria-busy="true">
+        <div className="skeleton h-10 rounded-md" />
+        <div className="surface overflow-hidden">
+          {Array.from({ length: rows }).map((_, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-3 border-b border-[var(--border-color)] px-4 py-2.5 last:border-0"
+            >
+              <div className="skeleton h-4 flex-1" />
+              <div className="skeleton h-4 w-24" />
+              <div className="skeleton h-4 w-16" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  if (variant === "detail") {
+    return (
+      <div className="page-content space-y-6" aria-busy="true">
+        <div className="space-y-2">
+          <div className="skeleton h-3 w-20" />
+          <div className="skeleton h-7 w-64" />
+          <div className="skeleton h-4 w-96" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="skeleton h-24" />
+          ))}
+        </div>
+        <div className="skeleton h-40" />
+      </div>
+    );
+  }
   return (
-    <div className="page-content space-y-3">
+    <div className="page-content space-y-3" aria-busy="true">
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="skeleton h-14" />
       ))}

@@ -7,7 +7,7 @@ export { Avatar } from "./Avatar";
 export type { AvatarSize } from "./Avatar";
 export { ProgressBar } from "./ProgressBar";
 export { ThemeToggle } from "./ThemeToggle";
-export { Card, CardHeader, CardBody } from "./Card";
+export { Card, CardHeader, CardBody, CardFooter } from "./Card";
 export { MetricCard } from "./MetricCard";
 export { EmptyState } from "./EmptyState";
 export { StatusBadge } from "./StatusBadge";
@@ -38,6 +38,7 @@ export {
 } from "./Sheet";
 export { Combobox, MultiCombobox, type ComboboxOption } from "./Combobox";
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from "./Popover";
+export { DatePicker } from "./DatePicker";
 export {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioItem,

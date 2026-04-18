@@ -1,0 +1,32 @@
+/*
+ * CHROMA BEACON — glass theme
+ * Family: hybrid (dark with luminous surfaces)
+ * Essence: translucent, refractive, depth without weight.
+ */
+
+[data-theme="glass"] {
+  --bg: #1a0b2e;
+  --bg-hero: radial-gradient(circle at 20% 30%, #ff6b9d 0%, transparent 45%),
+             radial-gradient(circle at 80% 20%, #6bc5ff 0%, transparent 45%),
+             radial-gradient(circle at 60% 80%, #ffb347 0%, transparent 50%),
+             radial-gradient(circle at 30% 70%, #b47cff 0%, transparent 45%),
+             #1a0b2e;
+  --surface: rgba(255, 255, 255, 0.14);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.35);
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.72);
+  --text-subtle: rgba(255, 255, 255, 0.48);
+  --accent: #ffffff;
+  --accent-contrast: #1a0b2e;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --border-width: 1px;
+  --shadow-elev: 0 20px 60px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --shadow-elev-hover: 0 26px 80px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --glass-blur: blur(30px) saturate(180%);
+  --font-display: 'Geist', system-ui, sans-serif;
+  --font-body: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}

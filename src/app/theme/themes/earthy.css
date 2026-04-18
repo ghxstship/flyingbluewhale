@@ -1,0 +1,31 @@
+/*
+ * CHROMA BEACON — earthy theme
+ * Family: light
+ * Essence: warm cream, forest/terracotta/sage, slab-serif, paper texture.
+ */
+
+[data-theme="earthy"] {
+  --bg: #eee3cd;
+  --bg-hero: radial-gradient(ellipse at 20% 10%, rgba(74, 107, 58, 0.12), transparent 50%),
+             radial-gradient(ellipse at 80% 90%, rgba(192, 86, 33, 0.10), transparent 50%),
+             #eee3cd;
+  --surface: #fdf9f1;
+  --surface-2: #f6ecd6;
+  --border: #d4c4a4;
+  --text: #2b2318;
+  --text-muted: #5c5144;
+  --text-subtle: #7a6b4f;
+  --accent: #4a6b3a;
+  --accent-alt: #c05621;
+  --accent-soft: #8fa37e;
+  --accent-contrast: #fdf9f1;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --border-width: 1px;
+  --shadow-elev: 0 2px 6px rgba(74, 50, 30, 0.06);
+  --shadow-elev-hover: 0 4px 12px rgba(74, 50, 30, 0.09);
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Fraunces', Georgia, serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}

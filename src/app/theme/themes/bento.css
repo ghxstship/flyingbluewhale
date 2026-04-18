@@ -1,0 +1,26 @@
+/*
+ * CHROMA BEACON — bento theme
+ * Family: light
+ * Essence: modular rounded cards, clean hierarchy, info-dense.
+ */
+
+[data-theme="bento"] {
+  --bg: #ededed;
+  --surface: #ffffff;
+  --surface-2: #0a0a0a;
+  --border: transparent;
+  --text: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --text-subtle: #999999;
+  --accent: #18a048;
+  --accent-contrast: #ffffff;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --border-width: 0;
+  --shadow-elev: 0 4px 20px rgba(0, 0, 0, 0.04);
+  --shadow-elev-hover: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}

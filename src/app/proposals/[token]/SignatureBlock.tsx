@@ -47,7 +47,12 @@ export function SignatureBlock({
     const ctx = c.getContext("2d");
     if (!ctx) return;
     ctx.scale(ratio, ratio);
-    ctx.strokeStyle = "#111";
+    // Proposal docs stay in light mode intentionally (for print); derive stroke
+    // color from the computed foreground token rather than a hard-coded hex.
+    const computedText = typeof window !== "undefined"
+      ? getComputedStyle(document.documentElement).getPropertyValue("--text").trim()
+      : "";
+    ctx.strokeStyle = computedText || "rgb(17,17,17)";
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
   }, [mode]);

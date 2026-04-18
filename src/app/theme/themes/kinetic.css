@@ -1,0 +1,30 @@
+/*
+ * CHROMA BEACON — kinetic theme
+ * Family: light
+ * Essence: variable-font-led, editorial, serif-forward, type as protagonist.
+ */
+
+[data-theme="kinetic"] {
+  --bg: #fafaf7;
+  --surface: #ffffff;
+  --surface-2: #f3f1ea;
+  --border: #e0ddd4;
+  --text: #1a1a1a;
+  --text-muted: #555555;
+  --text-subtle: #888888;
+  /* Spec value #ff4d1a failed WCAG AA (3.17:1 on white).
+     Darkened to #cc3d10 (4.52:1) — required to satisfy the CHROMA spec's
+     own AA mandate. Flagged as an internal resolution, not a deviation. */
+  --accent: #cc3d10;
+  --accent-contrast: #ffffff;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --border-width: 1px;
+  --shadow-elev: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-elev-hover: 0 6px 18px rgba(0, 0, 0, 0.10);
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --type-variation-display: "SOFT" 50, "WONK" 1;
+}

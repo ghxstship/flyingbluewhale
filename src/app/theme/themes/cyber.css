@@ -1,0 +1,31 @@
+/*
+ * CHROMA BEACON — cyber theme
+ * Family: dark
+ * Essence: deep blacks + electric neon, holographic gradients, main-character energy.
+ */
+
+[data-theme="cyber"] {
+  --bg: #050013;
+  --bg-hero: radial-gradient(circle at 10% 20%, rgba(255, 0, 128, 0.35), transparent 40%),
+             radial-gradient(circle at 90% 10%, rgba(0, 217, 255, 0.30), transparent 40%),
+             radial-gradient(circle at 50% 100%, rgba(138, 43, 226, 0.40), transparent 50%),
+             #050013;
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.60);
+  --text-subtle: rgba(255, 255, 255, 0.40);
+  --accent: linear-gradient(90deg, #ff0080 0%, #00d9ff 100%);
+  --accent-solid: #ff0080;
+  --accent-contrast: #ffffff;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --border-width: 1px;
+  --shadow-elev: 0 0 40px rgba(255, 0, 128, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  --shadow-elev-hover: 0 0 60px rgba(255, 0, 128, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}

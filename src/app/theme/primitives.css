@@ -1,0 +1,93 @@
+/*
+ * CHROMA BEACON — primitive tokens
+ * Raw palette, spacing, type scale. Never consumed directly by components.
+ * Semantic tokens (src/app/theme/themes/*.css) map these into roles.
+ */
+
+:root {
+  /* ─── Typography scale (fluid, clamp-based) ─────────────────────── */
+  --font-size-xs:    0.75rem;
+  --font-size-sm:    0.875rem;
+  --font-size-base:  1rem;
+  --font-size-lg:    1.125rem;
+  --font-size-xl:    1.25rem;
+  --font-size-2xl:   1.5rem;
+  --font-size-3xl:   1.875rem;
+  --font-size-4xl:   2.25rem;
+  --font-size-5xl:   clamp(2.5rem, 1.8rem + 3vw, 4rem);
+  --font-size-6xl:   clamp(3rem, 2rem + 4vw, 5rem);
+
+  /* ─── Spacing scale (4px base) ──────────────────────────────────── */
+  --space-0:   0;
+  --space-0_5: 0.125rem;
+  --space-1:   0.25rem;
+  --space-2:   0.5rem;
+  --space-3:   0.75rem;
+  --space-4:   1rem;
+  --space-5:   1.25rem;
+  --space-6:   1.5rem;
+  --space-8:   2rem;
+  --space-10:  2.5rem;
+  --space-12:  3rem;
+  --space-16:  4rem;
+  --space-20:  5rem;
+  --space-24:  6rem;
+
+  /* ─── Motion ────────────────────────────────────────────────────── */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:      cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:       cubic-bezier(0.4, 0, 1, 1);
+  --theme-transition:
+    background-color 250ms var(--ease-standard),
+    color 250ms var(--ease-standard),
+    border-color 250ms var(--ease-standard),
+    box-shadow 250ms var(--ease-standard),
+    fill 250ms var(--ease-standard),
+    stroke 250ms var(--ease-standard);
+
+  /* ─── Z-index tiers ─────────────────────────────────────────────── */
+  --z-base:     0;
+  --z-dropdown: 10;
+  --z-sticky:   20;
+  --z-banner:   30;
+  --z-overlay:  40;
+  --z-modal:    50;
+  --z-toast:    60;
+  --z-palette:  70;
+
+  /* ─── Legacy aliases — tie old components to the active theme
+         (the token names the rest of the codebase already consumes).
+         These remain the consumer contract; themes/*.css rewires them. */
+  --background:     var(--bg);
+  --foreground:     var(--text);
+  --bg-secondary:   var(--surface);
+  --bg-tertiary:    var(--surface-2);
+  --text-primary:   var(--text);
+  --text-color:     var(--text);
+  --text-secondary: var(--text-muted);
+  --border-color:   var(--border);
+  --surface-inset:  var(--surface-2);
+  --surface-raised: var(--surface);
+  --org-primary:    var(--accent);
+  --org-accent:     var(--accent);
+  --org-on-primary: var(--accent-contrast);
+
+  /* ─── Status pairings — shared across themes ───────────────────── */
+  --color-error:   #DC2626;
+  --color-warning: #D97706;
+  --color-success: #059669;
+  --color-info:    #2563EB;
+
+  /* ─── Layout ────────────────────────────────────────────────────── */
+  --sidebar-width: 16rem;
+}
+
+/* Theme-swap transition — applied globally, guarded by reduced-motion */
+*, *::before, *::after {
+  transition: var(--theme-transition);
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+  }
+}

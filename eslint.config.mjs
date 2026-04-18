@@ -28,6 +28,29 @@ const config = [
       "jsx-a11y/role-has-required-aria-props": "error",
       "jsx-a11y/role-supports-aria-props": "error",
       "jsx-a11y/tabindex-no-positive": "error",
+      // CHROMA BEACON — no hex/rgb/rgba literals in JSX string attributes.
+      // Whitelisted files: brand SVGs, admin color pickers, open graph,
+      // isolated print stylesheets. Everything else must consume tokens.
+      "no-restricted-syntax": ["warn", {
+        selector: "JSXAttribute Literal[value=/#[0-9a-fA-F]{3,8}/]",
+        message: "Use a CSS variable (--text, --surface, --accent...) instead of a hex literal. If this is a brand SVG or user-input default, add the file to the eslint ignores list.",
+      }],
+    },
+  },
+  {
+    // Hex-literal allowlist — these files legitimately need raw colors.
+    files: [
+      "src/components/auth/OAuthButtons.tsx",              // third-party brand SVG marks
+      "src/app/(platform)/console/projects/**/BrandingForm.tsx",
+      "src/app/(platform)/console/proposals/**/actions.ts",
+      "src/app/(platform)/console/proposals/**/edit/page.tsx",
+      "src/app/proposals/**",                              // isolated print stylesheet + themed proposal docs
+      "src/app/og/route.tsx",                              // Open Graph server route
+      "src/app/layout.tsx",                                // themeColor meta
+      "src/app/theme/**",                                  // CHROMA BEACON token definitions
+    ],
+    rules: {
+      "no-restricted-syntax": "off",
     },
   },
   {

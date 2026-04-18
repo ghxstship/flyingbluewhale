@@ -1,0 +1,26 @@
+/*
+ * CHROMA BEACON — brutal theme
+ * Family: light
+ * Essence: thick black borders, offset shadows, chunky pastels, unapologetic type.
+ */
+
+[data-theme="brutal"] {
+  --bg: #f3ead2;
+  --surface: #ffffff;
+  --surface-2: #ffde3a;
+  --border: #000000;
+  --text: #000000;
+  --text-muted: #333333;
+  --text-subtle: #555555;
+  --accent: #ff5ea1;
+  --accent-contrast: #000000;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 3px;
+  --shadow-elev: 6px 6px 0 #000000;
+  --shadow-elev-hover: 8px 8px 0 #000000;
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}

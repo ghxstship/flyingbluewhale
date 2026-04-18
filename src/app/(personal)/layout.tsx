@@ -5,6 +5,7 @@ import { TenantShell, resolveTenant } from "@/components/TenantShell";
 const tabs = [
   { label: "Dashboard", href: "/me" },
   { label: "Profile", href: "/me/profile" },
+  { label: "Appearance", href: "/me/settings/appearance" },
   { label: "Settings", href: "/me/settings" },
   { label: "Notifications", href: "/me/notifications" },
   { label: "Security", href: "/me/security" },

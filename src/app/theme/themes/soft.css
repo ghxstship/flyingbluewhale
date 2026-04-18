@@ -1,0 +1,33 @@
+/*
+ * CHROMA BEACON — soft theme
+ * Family: light
+ * Essence: pastel neumorphic, squishy press states, springy motion.
+ */
+
+[data-theme="soft"] {
+  --bg: linear-gradient(140deg, #fef3f6 0%, #f0e9ff 50%, #e8f4ff 100%);
+  --surface: linear-gradient(160deg, #ffffff, #ece6fb);
+  --surface-2: linear-gradient(160deg, #fdeef4, #efe5ff);
+  --border: transparent;
+  --text: #3a2a5c;
+  --text-muted: #7a6a9c;
+  --text-subtle: #a095bc;
+  --accent: #b490ff;
+  --accent-contrast: #ffffff;
+  --radius-sm: 14px;
+  --radius-md: 22px;
+  --radius-lg: 32px;
+  --border-width: 0;
+  --shadow-elev: 8px 8px 20px rgba(180, 150, 220, 0.35),
+                 -8px -8px 20px rgba(255, 255, 255, 0.90),
+                 inset 0 1px 0 rgba(255, 255, 255, 0.80);
+  --shadow-elev-hover: 10px 10px 26px rgba(180, 150, 220, 0.45),
+                       -10px -10px 26px rgba(255, 255, 255, 0.95),
+                       inset 0 1px 0 rgba(255, 255, 255, 0.90);
+  --shadow-press: inset 5px 5px 12px rgba(180, 150, 220, 0.35),
+                  inset -5px -5px 12px rgba(255, 255, 255, 0.90);
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}

@@ -1,0 +1,38 @@
+/*
+ * CHROMA BEACON — orchestrated token imports.
+ * Import order matters: primitives first, then each theme, then the
+ * kinetic default bootstrap that applies before [data-theme] is set.
+ */
+
+@import "./primitives.css";
+@import "./themes/glass.css";
+@import "./themes/brutal.css";
+@import "./themes/bento.css";
+@import "./themes/kinetic.css";
+@import "./themes/copilot.css";
+@import "./themes/cyber.css";
+@import "./themes/soft.css";
+@import "./themes/earthy.css";
+
+/* Default theme when no [data-theme] attribute is present.
+   Mirrors the kinetic registry so pre-FOUC paint is sane. */
+:root {
+  --bg: #fafaf7;
+  --surface: #ffffff;
+  --surface-2: #f3f1ea;
+  --border: #e0ddd4;
+  --text: #1a1a1a;
+  --text-muted: #555555;
+  --text-subtle: #888888;
+  --accent: #cc3d10; /* AA-safe variant of kinetic's #ff4d1a */
+  --accent-contrast: #ffffff;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --border-width: 1px;
+  --shadow-elev: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-elev-hover: 0 6px 18px rgba(0, 0, 0, 0.10);
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}

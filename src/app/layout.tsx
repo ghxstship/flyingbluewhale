@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Cormorant_Garamond } from "next/font/google";
+import { cookies } from "next/headers";
 import { Toaster } from "sonner";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { ThemeProvider } from "@/app/theme/ThemeProvider";
+import { themeScript, THEME_COOKIE_NAME } from "@/app/theme/theme-script";
+import { isValidThemeSlug, colorSchemeFor } from "@/app/theme/themes.config";
 import { TooltipProvider } from "@/components/ui/Tooltip";
 import { LiveRegionProvider } from "@/components/ui/LiveRegion";
 import { CookieConsent } from "@/components/compliance/CookieConsent";
@@ -9,6 +12,7 @@ import { ShortcutDialog } from "@/components/ShortcutDialog";
 import { getRequestLocale } from "@/lib/i18n/server";
 import { isRtl } from "@/lib/i18n/config";
 import "./globals.css";
+import "./theme/index.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono", display: "swap" });
@@ -41,8 +45,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const themeBootstrap = `(function(){try{var t=localStorage.getItem('fbw_theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.setAttribute('data-theme',d?'dark':'light');var dn=localStorage.getItem('fbw_density');if(dn==='compact')document.documentElement.setAttribute('data-density','compact');}catch(e){}})()`;
-
 const swRegister = process.env.NODE_ENV === "production"
   ? `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}`
   : `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}`;
@@ -50,15 +52,25 @@ const swRegister = process.env.NODE_ENV === "production"
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getRequestLocale();
   const dir = isRtl(locale) ? "rtl" : "ltr";
+
+  // SSR theme from cookie (survives first paint with the right tokens).
+  // Client head script reconciles with localStorage on mount.
+  const cs = await cookies();
+  const cookieTheme = cs.get(THEME_COOKIE_NAME)?.value;
+  const ssrTheme = isValidThemeSlug(cookieTheme) ? cookieTheme : "kinetic";
+  const ssrColorScheme = colorSchemeFor(ssrTheme);
+
   return (
     <html
       lang={locale}
       dir={dir}
+      data-theme={ssrTheme}
+      style={{ colorScheme: ssrColorScheme }}
       className={`h-full ${inter.variable} ${mono.variable} ${serif.variable}`}
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="min-h-full flex flex-col antialiased">
         <a href="#main" className="skip-link">Skip to content</a>

@@ -1,4 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Docs — Architecture, API, Guides CMS, Auth",
+  description:
+    "Technical reference for flyingbluewhale: the three-shell architecture, the envelope-contract REST API, the Guides CMS, and the Supabase-backed auth model.",
+  path: "/docs",
+  keywords: ["flyingbluewhale docs", "API reference", "architecture", "auth model"],
+  ogImageEyebrow: "Docs",
+  ogImageTitle: "How flyingbluewhale works",
+});
 
 const SECTIONS = [
   { title: "Architecture", desc: "Three shells, one database. RLS-scoped per org.", href: "/features" },

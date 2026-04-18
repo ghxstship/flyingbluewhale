@@ -10,7 +10,7 @@ export async function GET() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("ai_conversations")
-    .select("id, title, model, created_at, updated_at")
+    .select("id, title, created_at, updated_at")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
     .order("updated_at", { ascending: false })

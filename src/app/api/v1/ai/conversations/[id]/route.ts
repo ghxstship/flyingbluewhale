@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
 
   const supabase = await createClient();
   const [{ data: convo }, { data: messages }] = await Promise.all([
-    supabase.from("ai_conversations").select("id, title, model").eq("id", parsed.data).single(),
+    supabase.from("ai_conversations").select("id, title").eq("id", parsed.data).single(),
     supabase
       .from("ai_messages")
       .select("id, role, content, created_at")

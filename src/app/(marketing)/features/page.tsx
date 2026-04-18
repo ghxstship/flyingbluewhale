@@ -1,4 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Features — Console, Portals, Mobile, AI, Finance, Procurement",
+  description:
+    "Everything flyingbluewhale ships: the internal console, role-scoped stakeholder portals, offline-first mobile PWA, streaming AI assistant, finance + procurement modules, and compliance tooling.",
+  path: "/features",
+  keywords: ["production software features", "event management platform", "stakeholder portals", "mobile field PWA"],
+  ogImageEyebrow: "Features",
+  ogImageTitle: "Everything in flyingbluewhale",
+});
 
 const CATEGORIES = [
   { key: "console", title: "Platform console", desc: "Projects, finance, procurement, production, people, AI — one sidebar." },

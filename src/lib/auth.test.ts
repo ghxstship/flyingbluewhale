@@ -24,12 +24,17 @@ describe("resolveShell", () => {
     expect(resolveShell("project_manager")).toBe("/console");
     expect(resolveShell("developer")).toBe("/console");
   });
-  it("external personas route to /p", () => {
+  it("external personas with a project context route to /p", () => {
     expect(resolveShell("client")).toBe("/p");
     expect(resolveShell("vendor")).toBe("/p");
     expect(resolveShell("artist")).toBe("/p");
     expect(resolveShell("sponsor")).toBe("/p");
-    expect(resolveShell("guest")).toBe("/p");
+  });
+  it("guest persona (viewer/community roles) routes to /me — they have no slug context", () => {
+    // Regression guard for the /p/select 404 dead end: guest arrives without
+    // a project slug, so /p/select would hit notFound(). /me is the correct
+    // destination (profile + organizations + security).
+    expect(resolveShell("guest")).toBe("/me");
   });
   it("crew routes to /m", () => { expect(resolveShell("crew")).toBe("/m"); });
   it("visitor routes to /me", () => { expect(resolveShell("visitor")).toBe("/me"); });

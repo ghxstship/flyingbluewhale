@@ -238,4 +238,36 @@ See [04-roadmap.md](./04-roadmap.md) for DoD + rollback per item.
 
 ---
 
+## Phase 6 extension — cross-shell handoffs (same day)
+
+Added after the initial H1 close to prove the three-shell topology (atlvs ↔ gvteway ↔ compvss) holds end-to-end through real user sessions, not just component-level assertions.
+
+### New suites
+
+| File | Tests | Covers |
+|---|---:|---|
+| [`e2e/handoff-shells.spec.ts`](../../e2e/handoff-shells.spec.ts) | 28 | `/auth/resolve` landing per role, guide render in portal + mobile, persona-mapping consistency, shell isolation (exactly one `data-platform` per shell), signout drops every protected shell, slug RLS for anon. |
+| [`e2e/cms-to-portal-roundtrip.spec.ts`](../../e2e/cms-to-portal-roundtrip.spec.ts) | 1 | Owner edits a guide in `/console/projects/[id]/guides/[persona]`, logs in as the matching portal persona, sees the new title at `/p/<slug>/guide`. Exercises the real `upsertGuideAction` server action + RLS + render pipeline. |
+| [`e2e/rls-boundaries.spec.ts`](../../e2e/rls-boundaries.spec.ts) | 11 | Cross-tenant read denial (owner cannot GET a project outside their `session.orgId`), single-org-visible projects, UUID validation for path params, unauth'd sensitive endpoints return a canonical 401 envelope, anon cannot leak a non-existent slug. |
+
+### Bugs surfaced + fixed in real time
+
+**IK-065 (High) — `resolveShell(guest) → /p/select` dead-ended.** `viewer` and `community` roles both map to `guest` persona. `/auth/resolve` forwarded them to `/p/select` which has no route → `notFound()` 404. Fixed: `guest` persona routes to `/me`. Regression guard in [src/lib/auth.test.ts](../../src/lib/auth.test.ts).
+
+**IK-066 (High) — `/m` compvss shell had no outer auth guard.** After signout the mobile home kept rendering with stale UI. Fixed: `(mobile)/layout.tsx` now calls `requireSession("/login")` at the shell root. Regression guard in handoff-shells suite.
+
+**IK-067 (Medium) — `/api/v1/projects/[projectId]` returned 500 on non-UUID path params.** `getProject` passes the raw string to Postgres `.eq("id", …)` and 22P02 bubbles as a 500. Fixed: Zod `.uuid()` validation on the route returns a 400 `bad_request` envelope. Regression guard in rls-boundaries suite.
+
+### Fixture strategy
+
+20 `event_guides` rows (5 personas × 4 test projects) seeded via Supabase MCP with deterministic `HANDOFF:<persona>:<slug>` subtitle markers. Idempotent upsert on `(project_id, persona)` — rerunnable against any environment.
+
+### Final totals
+
+- **Vitest:** 46 / 46 passing.
+- **Playwright:** 261 / 270 passing (0 failing, 9 intentionally skipped).
+- **Typecheck:** clean.
+
+---
+
 **Signed:** backend-audit Horizon 1 complete.

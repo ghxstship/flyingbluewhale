@@ -11,10 +11,17 @@ const PatchProject = z.object({
   endDate: z.string().date().nullable().optional(),
 });
 
+// Validate the path param as a UUID before it reaches Postgres. An invalid
+// UUID hitting `.eq("id", …)` returns a 22P02 which the handler would otherwise
+// surface as a 500 — bad signal for clients and leaks DB internals.
+const ProjectIdSchema = z.string().uuid();
+
 export async function GET(_: Request, ctx: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await ctx.params;
+  const parsed = ProjectIdSchema.safeParse(projectId);
+  if (!parsed.success) return apiError("bad_request", "Invalid project id");
   return withAuth(async (session) => {
-    const project = await getProject(session.orgId, projectId);
+    const project = await getProject(session.orgId, parsed.data);
     if (!project) return apiError("not_found", "Project not found");
     return apiOk(project);
   });
@@ -22,11 +29,13 @@ export async function GET(_: Request, ctx: { params: Promise<{ projectId: string
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await ctx.params;
+  const parsed = ProjectIdSchema.safeParse(projectId);
+  if (!parsed.success) return apiError("bad_request", "Invalid project id");
   const input = await parseJson(req, PatchProject);
   if (input instanceof Response) return input;
 
   return withAuth(async (session) => {
-    const project = await updateProject(session.orgId, projectId, {
+    const project = await updateProject(session.orgId, parsed.data, {
       ...(input.name !== undefined ? { name: input.name } : {}),
       ...(input.description !== undefined ? { description: input.description } : {}),
       ...(input.status !== undefined ? { status: input.status } : {}),

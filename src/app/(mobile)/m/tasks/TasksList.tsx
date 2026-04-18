@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PullToRefresh } from "@/components/mobile/PullToRefresh";
@@ -11,17 +11,13 @@ import type { Task } from "@/lib/supabase/types";
 export function TasksList({ initial }: { initial: Task[] }) {
   const [tasks] = useState(initial);
   const router = useRouter();
-  const [, start] = useTransition();
   const open = tasks.filter((r) => r.status !== "done");
 
   async function refresh() {
-    return new Promise<void>((resolve) => {
-      start(() => {
-        router.refresh();
-        // Give Next a tick to fetch fresh server data
-        setTimeout(resolve, 400);
-      });
-    });
+    // Plain refresh — avoids wrapping router.refresh in a transition, which
+    // Playwright sees as a never-settling "load" state on mobile.
+    router.refresh();
+    await new Promise<void>((r) => setTimeout(r, 200));
   }
 
   return (

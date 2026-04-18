@@ -23,8 +23,8 @@ export function LoginForm() {
       subtitle="Welcome back. Pick up where you left off."
       footer={
         <>
-          Don't have an account?{" "}
-          <Link href="/signup" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+          Don&apos;t have an account?{" "}
+          <Link href="/signup" className="text-[var(--org-primary)] underline underline-offset-4">
             Create one
           </Link>
         </>

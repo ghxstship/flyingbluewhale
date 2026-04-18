@@ -8,7 +8,7 @@ export default async function MagicLinkPage({ params }: { params: Promise<{ toke
       title="Signing you in"
       subtitle="Validating your magic link…"
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
           Back to sign in
         </Link>
       }

@@ -28,9 +28,9 @@ export function AuthShell({
 }) {
   return (
     <div className="min-h-[calc(100vh-72px)] grid lg:grid-cols-2">
-      {/* Left rail */}
+      {/* Left rail — decorative; main form pane gets the focus on load */}
       <aside
-        aria-hidden="true"
+        aria-label="About flyingbluewhale"
         className="hidden lg:flex flex-col justify-between bg-[var(--surface-inset)] p-12"
         data-platform="atlvs"
       >

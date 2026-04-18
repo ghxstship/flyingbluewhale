@@ -8,7 +8,7 @@ export default async function VerifyEmailPage({ params }: { params: Promise<{ to
       title="Verify your email"
       subtitle="Confirming your account…"
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
           Back to sign in
         </Link>
       }

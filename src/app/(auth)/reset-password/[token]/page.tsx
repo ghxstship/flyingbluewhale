@@ -10,7 +10,7 @@ export default async function ResetPasswordPage({ params }: { params: Promise<{ 
       title="Set a new password"
       subtitle="Use this token to reset your password."
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
           Back to sign in
         </Link>
       }

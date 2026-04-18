@@ -9,7 +9,7 @@ export default async function AcceptInvitePage({ params }: { params: Promise<{ t
       title="Join your team"
       subtitle="Accept your invitation to flyingbluewhale"
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
           Sign in instead
         </Link>
       }

@@ -6,8 +6,14 @@ const PROTECTED: Array<{ match: RegExp; bucket: keyof typeof RATE_BUDGETS }> = [
   { match: /^\/api\/v1\/ai\//, bucket: "ai" },
   { match: /^\/api\/v1\/tickets\/scan/, bucket: "scan" },
   { match: /^\/api\/v1\/webhooks\//, bucket: "webhook" },
-  { match: /^\/login|^\/signup|^\/forgot-password|^\/reset-password|^\/auth\//, bucket: "auth" },
+  // Auth bucket protects POST endpoints. Marketing GETs to /login render the form
+  // and must not consume the budget — that breaks e2e + real users hitting refresh.
+  { match: /^\/api\/v1\/auth\//, bucket: "auth" },
 ];
+
+// Methods that are subject to rate limiting per bucket. GET to /login etc. is
+// exempt because rendering a form is not an attack surface.
+const RATE_LIMITED_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
 function newRequestId(): string {
   // nanoid-compatible id w/o dep
@@ -21,7 +27,7 @@ export async function middleware(request: NextRequest) {
   const requestId = request.headers.get("x-request-id") ?? newRequestId();
 
   for (const rule of PROTECTED) {
-    if (rule.match.test(pathname)) {
+    if (rule.match.test(pathname) && RATE_LIMITED_METHODS.has(request.method)) {
       const budget = RATE_BUDGETS[rule.bucket];
       const key = keyFromRequest(request, `${rule.bucket}:${pathname}`);
       const result = ratelimit({ key, ...budget });

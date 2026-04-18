@@ -47,18 +47,20 @@
   --animate-skeleton: skeleton-pulse 1500ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-/* ───── Light theme (default) ───── */
+/* ───── Light theme (default) ─────
+   Text tokens audited for WCAG 2.2 AA across surfaces. */
 :root {
   --background: #FFFFFF;
   --foreground: #1A1A1A;
   --bg-secondary: #F7F7F7;
   --bg-tertiary: #F0F0F0;
   --text-color: #1A1A1A;
-  --text-secondary: #555555;
-  --text-muted: #666666;
+  --text-primary: #1A1A1A;
+  --text-secondary: #4B4B4B;  /* ≥7:1 on white & inset surfaces */
+  --text-muted: #595959;       /* ≥6:1 on white & inset surfaces */
   --border-color: #E5E5E5;
   --org-primary: #1A1A1A;
-  --org-secondary: #555555;
+  --org-secondary: #4B4B4B;
   --org-accent: #1A1A1A;
   --sidebar-width: 16rem;
 }
@@ -88,9 +90,11 @@
 }
 
 [data-platform="compvss"] {
-  --org-primary: #D97706;
-  --org-secondary: #92400E;
-  --org-accent: #FACC15;
+  /* amber-700 (#B45309) hits 5.05:1 on white — passes WCAG AA for normal text.
+     amber-600 (#D97706) is only 3.18:1 — fails. */
+  --org-primary: #B45309;
+  --org-secondary: #78350F;
+  --org-accent: #D97706;
 }
 
 [data-platform="gvteway"] {

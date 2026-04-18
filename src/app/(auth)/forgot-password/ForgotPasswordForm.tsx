@@ -16,7 +16,7 @@ export function ForgotPasswordForm() {
       title="Reset password"
       subtitle={sent ? "Check your inbox for the reset link." : "We'll email you a reset link."}
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
           Back to sign in
         </Link>
       }

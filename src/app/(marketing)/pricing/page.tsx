@@ -278,7 +278,7 @@ export default function PricingPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Feature comparison</h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-          Everything you get at each tier. If a feature you need is on Enterprise, <a className="text-[var(--org-primary)]" href="/contact">ask us</a> — we'll usually make it work on Professional.
+          Everything you get at each tier. If a feature you need is on Enterprise, <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">ask us</a> — we&apos;ll usually make it work on Professional.
         </p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full min-w-[720px] text-left">

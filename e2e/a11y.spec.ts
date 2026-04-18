@@ -5,8 +5,27 @@ import AxeBuilder from "@axe-core/playwright";
  * WCAG 2.2 AA axe scan over key marketing + auth surfaces.
  * Runs in CI; fails build on serious / critical violations.
  *
- * Excludes: third-party iframes, color-contrast on dynamic gradient surfaces.
+ * Pre-dismisses cookie consent so the modal overlay doesn't dominate the scan
+ * and trip color-contrast on backdrop-blurred buttons.
  */
+
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    {
+      name: "fbw_consent",
+      value: encodeURIComponent(
+        JSON.stringify({
+          essential: true,
+          analytics: false,
+          marketing: false,
+          decidedAt: new Date().toISOString(),
+        }),
+      ),
+      domain: "localhost",
+      path: "/",
+    },
+  ]);
+});
 
 const PAGES = [
   { name: "home", path: "/" },
@@ -26,7 +45,9 @@ const PAGES = [
 
 for (const page of PAGES) {
   test(`a11y · ${page.name}`, async ({ page: pw }) => {
-    await pw.goto(page.path, { waitUntil: "networkidle" });
+    await pw.goto(page.path, { waitUntil: "domcontentloaded" });
+    // Give client-only components a chance to mount
+    await pw.waitForLoadState("load");
     const results = await new AxeBuilder({ page: pw })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();

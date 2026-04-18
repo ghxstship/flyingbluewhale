@@ -2,18 +2,15 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { env } from "@/lib/env";
+import { httpFetch } from "@/lib/http";
+import { withIdempotency } from "@/lib/idempotency";
 
 const Schema = z.object({
   vendorId: z.string().uuid(),
   returnUrl: z.string().url().optional(),
 });
 
-/**
- * Kick off Stripe Connect Express onboarding for a vendor.
- * Implementation creates an Account + AccountLink via Stripe REST; we call it
- * with fetch() directly so we don't pull in the full `stripe` SDK.
- */
-export async function POST(req: Request) {
+async function handler(req: Request) {
   if (!env.STRIPE_SECRET_KEY) return apiError("internal", "STRIPE_SECRET_KEY is not configured");
   const input = await parseJson(req, Schema);
   if (input instanceof Response) return input;
@@ -25,13 +22,14 @@ export async function POST(req: Request) {
     acctForm.set("type", "express");
     acctForm.set("capabilities[transfers][requested]", "true");
 
-    const acctRes = await fetch("https://api.stripe.com/v1/accounts", {
+    const acctRes = await httpFetch("https://api.stripe.com/v1/accounts", {
       method: "POST",
       headers: {
         "authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
         "content-type": "application/x-www-form-urlencoded",
       },
       body: acctForm.toString(),
+      timeoutMs: 10000,
     });
     if (!acctRes.ok) return apiError("internal", `Stripe account: ${await acctRes.text()}`);
     const acct = (await acctRes.json()) as { id: string };
@@ -42,13 +40,14 @@ export async function POST(req: Request) {
     linkForm.set("return_url", input.returnUrl ?? `${appUrl}/console/procurement/vendors/${input.vendorId}?onboarding=done`);
     linkForm.set("type", "account_onboarding");
 
-    const linkRes = await fetch("https://api.stripe.com/v1/account_links", {
+    const linkRes = await httpFetch("https://api.stripe.com/v1/account_links", {
       method: "POST",
       headers: {
         "authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
         "content-type": "application/x-www-form-urlencoded",
       },
       body: linkForm.toString(),
+      timeoutMs: 10000,
     });
     if (!linkRes.ok) return apiError("internal", `Stripe account_link: ${await linkRes.text()}`);
     const link = (await linkRes.json()) as { url: string };
@@ -56,3 +55,5 @@ export async function POST(req: Request) {
     return apiOk({ connectAccountId: acct.id, onboardingUrl: link.url });
   });
 }
+
+export const POST = withIdempotency(handler as (req: import("next/server").NextRequest) => Promise<Response>);

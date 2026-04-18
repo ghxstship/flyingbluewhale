@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { verifyRegistrationResponse, type RegistrationResponseJSON } from "@simplewebauthn/server";
 import { z } from "zod";
-import { apiError, parseJson } from "@/lib/api";
+import { apiError, apiOk, parseJson } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
 import { getRpConfig } from "@/lib/webauthn";
 
@@ -55,10 +55,16 @@ export async function POST(req: NextRequest) {
   const publicKey = info.credential.publicKey;
   const counter = info.credential.counter;
 
+  // public_key is a bytea column. PostgREST accepts bytea as the Postgres
+  // hex escape format (`\x<hex>`). Previously we stored base64 TEXT into
+  // bytea, which Postgres then treated as raw bytes of the base64 string —
+  // a silent data-integrity bug that would fail every subsequent sign-in.
+  const publicKeyHex = "\\x" + Buffer.from(publicKey).toString("hex");
+
   await supabase.from("user_passkeys").insert({
     user_id: u.user.id,
     credential_id: credentialId,
-    public_key: Buffer.from(publicKey).toString("base64"),
+    public_key: publicKeyHex,
     counter,
     device_name: parsed.deviceName ?? null,
   });
@@ -68,5 +74,5 @@ export async function POST(req: NextRequest) {
     .update({ consumed: true })
     .eq("id", challengeRow.id);
 
-  return NextResponse.json({ ok: true });
+  return apiOk({ verified: true });
 }

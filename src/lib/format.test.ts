@@ -3,7 +3,7 @@ import { dollarsToCents, formatDate, formatMoney, generateNumber, slugify, timeA
 
 describe("formatMoney", () => {
   it("formats cents to USD by default", () => {
-    expect(formatMoney(1234500)).toBe("$12,345");
+    expect(formatMoney(1234500)).toBe("$12,345.00");
   });
   it("returns em-dash for null/undefined", () => {
     expect(formatMoney(null)).toBe("—");

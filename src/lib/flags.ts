@@ -52,9 +52,11 @@ type GBPayload = { features?: Record<string, GBFeature> };
 export async function loadFlags(attrs: Attributes = {}): Promise<Flags> {
   if (!GB_KEY) return FLAG_DEFAULTS;
   try {
-    const res = await fetch(`${GB_HOST}/api/features/${GB_KEY}`, {
-      // 60s edge cache — feature flag config changes rarely
-      next: { revalidate: 60 },
+    const { httpFetch } = await import("./http");
+    // 60s edge cache. httpFetch adds 3s timeout + 2 retries on idempotent reads.
+    const res = await httpFetch(`${GB_HOST}/api/features/${GB_KEY}`, {
+      next: { revalidate: 60 } as unknown as RequestInit["next"],
+      timeoutMs: 3000,
     });
     if (!res.ok) return FLAG_DEFAULTS;
     const payload = (await res.json()) as GBPayload;

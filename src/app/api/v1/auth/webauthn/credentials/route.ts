@@ -1,5 +1,6 @@
-import { NextResponse, type NextRequest } from "next/server";
-import { apiError } from "@/lib/api";
+import { type NextRequest } from "next/server";
+import { z } from "zod";
+import { apiError, apiOk } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
@@ -14,12 +15,13 @@ export async function GET() {
     .order("created_at", { ascending: false });
 
   if (error) return apiError("internal", error.message);
-  return NextResponse.json({ ok: true, data: { credentials: data ?? [] } });
+  return apiOk({ credentials: data ?? [] });
 }
 
 export async function DELETE(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("id");
-  if (!id) return apiError("bad_request", "id required");
+  const parsed = z.string().uuid().safeParse(id);
+  if (!parsed.success) return apiError("bad_request", "id must be a valid UUID");
 
   const supabase = await createClient();
   const { data: u } = await supabase.auth.getUser();
@@ -28,9 +30,9 @@ export async function DELETE(req: NextRequest) {
   const { error } = await supabase
     .from("user_passkeys")
     .delete()
-    .eq("id", id)
+    .eq("id", parsed.data)
     .eq("user_id", u.user.id);
 
   if (error) return apiError("internal", error.message);
-  return NextResponse.json({ ok: true });
+  return apiOk({ deleted: true });
 }

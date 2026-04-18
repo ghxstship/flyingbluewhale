@@ -59,6 +59,47 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  security:
+    name: Security scans
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Needed so gitleaks can walk git history, not just HEAD.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+
+      # Dependency vulnerabilities. Fail the build on anything High or Critical
+      # — Medium and below go to the report but don't block.
+      - name: npm audit (high+)
+        run: npm audit --audit-level=high --omit=dev
+
+      # Generate CycloneDX SBOM for the prod dependency graph. Upload as a
+      # build artifact so downstream tooling (Dependency-Track, etc.) can
+      # ingest it without needing the source tree.
+      - name: Generate SBOM
+        run: |
+          npx --yes @cyclonedx/cyclonedx-npm@^2 --omit dev --output-format JSON --output-file sbom.cyclonedx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: sbom.cyclonedx.json
+          retention-days: 30
+
+      # Static secret scan. Running against git history catches secrets that
+      # were added and reverted but are still reachable in the ref log.
+      - name: Gitleaks secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     name: Next build
     runs-on: ubuntu-latest

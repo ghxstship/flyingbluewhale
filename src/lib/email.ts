@@ -1,5 +1,6 @@
 import "server-only";
 import { env, hasResend } from "./env";
+import { httpFetch } from "./http";
 
 export type EmailPayload = {
   to: string | string[];
@@ -18,7 +19,7 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
     console.info("[email noop]", payload.subject, payload.to);
     return { ok: true };
   }
-  const res = await fetch("https://api.resend.com/emails", {
+  const res = await httpFetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "authorization": `Bearer ${env.RESEND_API_KEY}`,
@@ -32,6 +33,7 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
       text: payload.text,
       reply_to: payload.replyTo,
     }),
+    timeoutMs: 8000,
   });
   if (!res.ok) {
     const body = await res.text();

@@ -7,7 +7,14 @@
  * This file exists for backwards-compatible imports across the codebase.
  */
 
-export { formatMoney, formatDate, formatNumber, formatRelative as timeAgo, formatDateTime } from "@/lib/i18n/format";
+import { formatRelative } from "@/lib/i18n/format";
+
+export { formatMoney, formatDate, formatNumber, formatDateTime } from "@/lib/i18n/format";
+
+/** Compact relative time for dense table cells: "5m ago", "3h ago", "2d ago". */
+export function timeAgo(date: Date | string | number | null | undefined): string {
+  return formatRelative(date, { compact: true });
+}
 
 export function slugify(s: string, max = 48) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, max);

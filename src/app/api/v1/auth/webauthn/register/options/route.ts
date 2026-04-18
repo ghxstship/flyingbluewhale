@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
 import { generateRegistrationOptions } from "@simplewebauthn/server";
-import { apiError } from "@/lib/api";
+import { apiError, apiOk } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
 import { getRpConfig } from "@/lib/webauthn";
 
@@ -44,5 +43,5 @@ export async function POST() {
     type: "registration",
   });
 
-  return NextResponse.json({ ok: true, data: options });
+  return apiOk(options);
 }

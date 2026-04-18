@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { apiError, parseJson } from "@/lib/api";
+import { apiError, apiOk, parseJson } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 
@@ -38,7 +38,7 @@ export async function GET() {
   const uiState = (data?.ui_state as Record<string, unknown> | null) ?? {};
   const flat = data ? { ...data, ...uiState } : null;
 
-  return NextResponse.json({ ok: true, data: flat });
+  return apiOk(flat);
 }
 
 export async function PATCH(req: NextRequest) {
@@ -80,5 +80,5 @@ export async function PATCH(req: NextRequest) {
 
   if (error) return apiError("internal", error.message);
   const uiState = (data?.ui_state as Record<string, unknown> | null) ?? {};
-  return NextResponse.json({ ok: true, data: { ...data, ...uiState } });
+  return apiOk({ ...data, ...uiState });
 }

@@ -38,6 +38,19 @@ const config = [
     },
   },
   {
+    // API envelope enforcement — every /api/v1/* response MUST go through
+    // apiOk / apiCreated / apiError / parseJson from @/lib/api, so the
+    // { ok, data } / { ok, error } contract is not silently broken.
+    // The only legitimate bypass inside src/lib/api.ts itself is allowlisted below.
+    files: ["src/app/api/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-syntax": ["error", {
+        selector: "MemberExpression[object.name='NextResponse'][property.name='json']",
+        message: "Do not use NextResponse.json in /api/v1 routes. Use apiOk / apiCreated / apiError from @/lib/api so the response envelope stays consistent. For file attachments use `new NextResponse(body, { headers })`.",
+      }],
+    },
+  },
+  {
     // Hex-literal allowlist — these files legitimately need raw colors.
     files: [
       "src/components/auth/OAuthButtons.tsx",              // third-party brand SVG marks

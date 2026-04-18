@@ -1,0 +1,130 @@
+openapi: 3.1.0
+info:
+  title: flyingbluewhale API
+  version: v1
+  description: |
+    Unified production platform API. Every response body follows the envelope
+    in `components.schemas.ApiEnvelope`. Treat this file as the source of
+    truth — a CI drift test (`tests/unit/openapi-drift.spec.ts`) asserts that
+    every `src/app/api/v1/**/route.ts` handler exists in `paths` and vice
+    versa. Add new routes here FIRST, then implement.
+
+servers:
+  - url: https://flyingbluewhale.pro
+    description: Production
+  - url: http://localhost:3000
+    description: Local dev
+
+security:
+  - supabaseSession: []
+
+components:
+  securitySchemes:
+    supabaseSession:
+      type: apiKey
+      in: cookie
+      name: sb-xrovijzjbyssajhtwvas-auth-token
+    idempotencyKey:
+      type: apiKey
+      in: header
+      name: Idempotency-Key
+
+  schemas:
+    ApiEnvelope:
+      oneOf:
+        - $ref: "#/components/schemas/ApiOk"
+        - $ref: "#/components/schemas/ApiError"
+    ApiOk:
+      type: object
+      required: [ok, data]
+      properties:
+        ok: { type: boolean, enum: [true] }
+        data: {}
+    ApiError:
+      type: object
+      required: [ok, error]
+      properties:
+        ok: { type: boolean, enum: [false] }
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum: [bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, internal]
+            message: { type: string }
+            details: {}
+
+paths:
+  /api/v1/health:
+    get:
+      summary: Legacy composite health ping (kept for backwards compat).
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+  /api/v1/health/liveness:
+    get:
+      summary: Liveness probe. Always 200 if the process is up.
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+  /api/v1/health/readiness:
+    get:
+      summary: Readiness probe. 200 iff DB reachable + env complete.
+      responses:
+        "200": { description: ready, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "500": { description: not ready, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
+
+  /api/v1/projects:
+    get: { summary: List projects visible to the session. }
+    post: { summary: Create a project (idempotent via Idempotency-Key). }
+  /api/v1/projects/{projectId}:
+    get:   { summary: Get a project. }
+    patch: { summary: Update a project. }
+
+  /api/v1/tickets/scan:
+    post: { summary: Scan a ticket by QR payload. }
+  /api/v1/tickets/{id}/scan:
+    post: { summary: Scan a specific ticket id. }
+
+  /api/v1/deliverables/{id}/download:
+    get: { summary: Redirect to a signed URL for a deliverable file. }
+
+  /api/v1/ai/chat:
+    post: { summary: Streaming chat completion. }
+  /api/v1/ai/conversations:
+    get: { summary: List conversations for the session. Creation is implicit via /api/v1/ai/chat. }
+  /api/v1/ai/conversations/{id}:
+    get:    { summary: Get a conversation + messages. }
+    delete: { summary: Delete a conversation. }
+
+  /api/v1/schedule.ics:
+    get: { summary: iCalendar feed for the session's events. }
+
+  /api/v1/webhooks/stripe:
+    post: { summary: Stripe webhook receiver (HMAC-verified, idempotent). }
+
+  /api/v1/auth/oauth:
+    get: { summary: Initiate Supabase OAuth; redirects to provider. }
+  /api/v1/auth/webauthn/register/options:
+    post: { summary: Generate WebAuthn registration options + challenge. }
+  /api/v1/auth/webauthn/register/verify:
+    post: { summary: Verify WebAuthn attestation + persist credential. }
+  /api/v1/auth/webauthn/credentials:
+    get:    { summary: List the session's registered passkeys. }
+    delete: { summary: Revoke a passkey by credential id. }
+
+  /api/v1/stripe/checkout:
+    post: { summary: Create a Checkout Session (idempotent). }
+  /api/v1/stripe/connect/onboarding:
+    post: { summary: Create a Connect Express onboarding link (idempotent). }
+
+  /api/v1/guides/comments:
+    get:  { summary: List comments for a guide section. }
+    post: { summary: Post a comment to a guide section. }
+
+  /api/v1/me/preferences:
+    get:   { summary: Read the session's UI + locale preferences. }
+    patch: { summary: Merge-update the session's preferences. }
+  /api/v1/me/export:
+    get: { summary: Download a GDPR JSON export of the session's data. }
+  /api/v1/me/delete:
+    post: { summary: Request account deletion with a 30-day grace window. }

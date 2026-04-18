@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server";
-import { apiError } from "@/lib/api";
+import { apiError, apiOk } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
@@ -18,5 +17,5 @@ export async function GET() {
     .limit(50);
 
   if (error) return apiError("internal", error.message);
-  return NextResponse.json({ ok: true, data: { conversations: data ?? [] } });
+  return apiOk({ conversations: data ?? [] });
 }

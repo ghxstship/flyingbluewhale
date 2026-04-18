@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { apiError, parseJson } from "@/lib/api";
+import { apiError, apiOk, parseJson } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -54,11 +54,8 @@ export async function POST(req: NextRequest) {
   // Sign the user out
   await supabase.auth.signOut();
 
-  return NextResponse.json({
-    ok: true,
-    data: {
-      message: "Account scheduled for deletion in 30 days. Sign in within that window to cancel.",
-      purgeAt,
-    },
+  return apiOk({
+    message: "Account scheduled for deletion in 30 days. Sign in within that window to cancel.",
+    purgeAt,
   });
 }

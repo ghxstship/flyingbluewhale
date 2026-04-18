@@ -3,12 +3,14 @@ import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { httpFetch } from "@/lib/http";
+import { withIdempotency } from "@/lib/idempotency";
 
 const Schema = z.object({
   invoiceId: z.string().uuid(),
 });
 
-export async function POST(req: Request) {
+async function handler(req: Request) {
   if (!env.STRIPE_SECRET_KEY) return apiError("internal", "STRIPE_SECRET_KEY is not configured");
   const input = await parseJson(req, Schema);
   if (input instanceof Response) return input;
@@ -34,13 +36,14 @@ export async function POST(req: Request) {
     form.set("cancel_url", `${appUrl}/console/finance/invoices/${invoice.id}?cancelled=1`);
     form.set("metadata[invoice_id]", invoice.id);
 
-    const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+    const res = await httpFetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
       headers: {
         "authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
         "content-type": "application/x-www-form-urlencoded",
       },
       body: form.toString(),
+      timeoutMs: 10000,
     });
     if (!res.ok) return apiError("internal", `Stripe checkout: ${await res.text()}`);
     const s = (await res.json()) as { id: string; url: string; payment_intent?: string };
@@ -56,3 +59,5 @@ export async function POST(req: Request) {
     return apiOk({ checkoutUrl: s.url, sessionId: s.id });
   });
 }
+
+export const POST = withIdempotency(handler as (req: import("next/server").NextRequest) => Promise<Response>);

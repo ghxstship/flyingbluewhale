@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { apiError } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -25,10 +26,7 @@ export async function GET() {
   const supabase = await createClient();
   const { data: userData, error: userErr } = await supabase.auth.getUser();
   if (userErr || !userData.user) {
-    return NextResponse.json(
-      { ok: false, error: { code: "unauthorized", message: "Sign in to export your data" } },
-      { status: 401 },
-    );
+    return apiError("unauthorized", "Sign in to export your data");
   }
   const userId = userData.user.id;
   const bundle: Record<string, unknown> = {

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
+import { log, serverTiming } from "@/lib/log";
 
 const PROTECTED: Array<{ match: RegExp; bucket: keyof typeof RATE_BUDGETS }> = [
   { match: /^\/api\/v1\/ai\//, bucket: "ai" },
@@ -22,9 +23,21 @@ function newRequestId(): string {
   return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+// Routes that are served by infrastructure probes (orchestrator, uptime).
+// They must not trigger a Supabase session refresh round-trip, otherwise
+// the probes can themselves cause database load + false negatives.
+const PROBE_PATHS = /^\/api\/v1\/health(?:\/|$)/;
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const requestId = request.headers.get("x-request-id") ?? newRequestId();
+  const startedAt = performance.now();
+
+  if (PROBE_PATHS.test(pathname)) {
+    const res = NextResponse.next();
+    res.headers.set("x-request-id", requestId);
+    return res;
+  }
 
   for (const rule of PROTECTED) {
     if (rule.match.test(pathname) && RATE_LIMITED_METHODS.has(request.method)) {
@@ -33,6 +46,13 @@ export async function middleware(request: NextRequest) {
       const result = ratelimit({ key, ...budget });
       if (!result.ok) {
         const retryAfterSeconds = Math.max(1, Math.ceil((result.resetAt - Date.now()) / 1000));
+        log.warn("ratelimit.blocked", {
+          request_id: requestId,
+          method: request.method,
+          route: pathname,
+          bucket: rule.bucket,
+          retry_after_s: retryAfterSeconds,
+        });
         return new NextResponse(
           JSON.stringify({
             ok: false,
@@ -60,7 +80,14 @@ export async function middleware(request: NextRequest) {
   }
 
   const response = await updateSession(request);
+  const mwDuration = Math.round((performance.now() - startedAt) * 10) / 10;
   response.headers.set("x-request-id", requestId);
+  // Server-Timing is additive — append if the downstream handler already set it.
+  const existingTiming = response.headers.get("server-timing");
+  response.headers.set(
+    "server-timing",
+    existingTiming ? `${existingTiming}, ${serverTiming(mwDuration, "mw")}` : serverTiming(mwDuration, "mw"),
+  );
   return response;
 }
 

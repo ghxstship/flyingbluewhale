@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { apiCreated, apiError, parseJson } from "@/lib/api";
+import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
+import { withIdempotency } from "@/lib/idempotency";
 
 const Schema = z.object({
   guideId: z.string().uuid(),
@@ -13,7 +14,7 @@ const Schema = z.object({
   sectionKey: z.string().max(80).nullish(),
 });
 
-export async function POST(req: NextRequest) {
+async function postHandler(req: NextRequest) {
   const parsed = await parseJson(req, Schema);
   if (parsed instanceof NextResponse) return parsed;
 
@@ -45,6 +46,8 @@ export async function POST(req: NextRequest) {
   return apiCreated({ comment: data });
 }
 
+export const POST = withIdempotency(postHandler);
+
 export async function GET(req: NextRequest) {
   const guideId = req.nextUrl.searchParams.get("guideId");
   if (!guideId) return apiError("bad_request", "guideId required");
@@ -58,5 +61,5 @@ export async function GET(req: NextRequest) {
     .limit(100);
 
   if (error) return apiError("forbidden", error.message);
-  return NextResponse.json({ ok: true, comments: data ?? [] });
+  return apiOk({ comments: data ?? [] });
 }

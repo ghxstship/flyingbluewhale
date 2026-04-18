@@ -7,6 +7,8 @@ import { DEFAULT_CURRENCY, DEFAULT_LOCALE, DEFAULT_TIMEZONE, type Locale } from 
 
 type FormatterOpts = { locale?: Locale; timezone?: string };
 
+const EMPTY = "—";
+
 /**
  * Amount is in minor units (cents). Converts to major and formats with currency.
  * Accepts either an options object or a currency string as second arg for ergonomics.
@@ -15,7 +17,7 @@ export function formatMoney(
   cents: number | null | undefined,
   optsOrCurrency: (FormatterOpts & { currency?: string; fractionDigits?: number }) | string | null | undefined = {},
 ): string {
-  if (cents == null || Number.isNaN(cents)) return "";
+  if (cents == null || Number.isNaN(cents)) return EMPTY;
   const opts: FormatterOpts & { currency?: string; fractionDigits?: number } =
     typeof optsOrCurrency === "string"
       ? { currency: optsOrCurrency }
@@ -34,7 +36,7 @@ export function formatNumber(
   n: number | null | undefined,
   opts: FormatterOpts & { style?: "decimal" | "percent" | "unit"; maximumFractionDigits?: number; unit?: string } = {},
 ): string {
-  if (n == null || Number.isNaN(n)) return "";
+  if (n == null || Number.isNaN(n)) return EMPTY;
   const locale = opts.locale ?? DEFAULT_LOCALE;
   return new Intl.NumberFormat(locale, {
     style: opts.style ?? "decimal",
@@ -58,9 +60,9 @@ export function formatDate(
     timeStyle?: DateStyle;
   }) | DateStyle | null | undefined = {},
 ): string {
-  if (date == null) return "";
+  if (date == null) return EMPTY;
   const d = typeof date === "string" || typeof date === "number" ? new Date(date) : date;
-  if (Number.isNaN(d.getTime())) return "";
+  if (Number.isNaN(d.getTime())) return EMPTY;
   const opts: FormatterOpts & { dateStyle?: DateStyle; timeStyle?: DateStyle } =
     typeof optsOrStyle === "string"
       ? { dateStyle: optsOrStyle }
@@ -81,16 +83,33 @@ export function formatDateTime(
   return formatDate(date, { ...opts, dateStyle: "medium", timeStyle: "short" });
 }
 
-/** "3 hours ago", "in 2 days", etc. */
+/**
+ * "3 hours ago", "in 2 days", etc. With `compact: true`, emits terse
+ * English-only forms ("3h ago", "in 2d", "just now") for dense table cells.
+ */
 export function formatRelative(
   date: Date | string | number | null | undefined,
-  opts: FormatterOpts = {},
+  opts: FormatterOpts & { compact?: boolean } = {},
 ): string {
-  if (date == null) return "";
+  if (date == null) return EMPTY;
   const d = typeof date === "string" || typeof date === "number" ? new Date(date) : date;
-  if (Number.isNaN(d.getTime())) return "";
-  const locale = opts.locale ?? DEFAULT_LOCALE;
+  if (Number.isNaN(d.getTime())) return EMPTY;
   const diffSeconds = (d.getTime() - Date.now()) / 1000;
+
+  if (opts.compact) {
+    const abs = Math.abs(diffSeconds);
+    const past = diffSeconds < 0;
+    if (abs < 60) return "just now";
+    const [value, suffix] =
+      abs < 3600 ? [Math.round(abs / 60), "m"]
+      : abs < 86400 ? [Math.round(abs / 3600), "h"]
+      : abs < 2592000 ? [Math.round(abs / 86400), "d"]
+      : abs < 31536000 ? [Math.round(abs / 2592000), "mo"]
+      : [Math.round(abs / 31536000), "y"];
+    return past ? `${value}${suffix} ago` : `in ${value}${suffix}`;
+  }
+
+  const locale = opts.locale ?? DEFAULT_LOCALE;
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
   const units: Array<[Intl.RelativeTimeFormatUnit, number]> = [
     ["year", 60 * 60 * 24 * 365],
@@ -106,7 +125,7 @@ export function formatRelative(
       return rtf.format(Math.round(diffSeconds / divisor), unit);
     }
   }
-  return "";
+  return EMPTY;
 }
 
 export function formatList(

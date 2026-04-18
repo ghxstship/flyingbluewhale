@@ -10,6 +10,7 @@ export type Branding = {
   faviconUrl?: string;
   heroImageUrl?: string;
   ogImageUrl?: string;
+  productName?: string;       // replaces "flyingbluewhale" inside the tenant shell
 };
 
 const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
@@ -33,6 +34,7 @@ export function safeBranding(input: unknown): Branding {
   if (typeof r.faviconUrl === "string" && URL_PATTERN.test(r.faviconUrl)) out.faviconUrl = r.faviconUrl;
   if (typeof r.heroImageUrl === "string" && URL_PATTERN.test(r.heroImageUrl)) out.heroImageUrl = r.heroImageUrl;
   if (typeof r.ogImageUrl === "string" && URL_PATTERN.test(r.ogImageUrl)) out.ogImageUrl = r.ogImageUrl;
+  if (typeof r.productName === "string" && r.productName.length <= 48) out.productName = r.productName;
   return out;
 }
 

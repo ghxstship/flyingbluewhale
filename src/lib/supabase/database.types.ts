@@ -1415,26 +1415,38 @@ export type Database = {
       }
       orgs: {
         Row: {
+          branding: Json
           created_at: string
           id: string
+          logo_url: string | null
           name: string
+          name_override: string | null
           slug: string
+          support_email: string | null
           tier: Database["public"]["Enums"]["tier"]
           updated_at: string
         }
         Insert: {
+          branding?: Json
           created_at?: string
           id?: string
+          logo_url?: string | null
           name: string
+          name_override?: string | null
           slug: string
+          support_email?: string | null
           tier?: Database["public"]["Enums"]["tier"]
           updated_at?: string
         }
         Update: {
+          branding?: Json
           created_at?: string
           id?: string
+          logo_url?: string | null
           name?: string
+          name_override?: string | null
           slug?: string
+          support_email?: string | null
           tier?: Database["public"]["Enums"]["tier"]
           updated_at?: string
         }
@@ -2406,6 +2418,7 @@ export type Database = {
           table_views: Json
           theme: string | null
           timezone: string | null
+          ui_state: Json
           updated_at: string
           user_id: string
         }
@@ -2417,6 +2430,7 @@ export type Database = {
           table_views?: Json
           theme?: string | null
           timezone?: string | null
+          ui_state?: Json
           updated_at?: string
           user_id: string
         }
@@ -2428,6 +2442,7 @@ export type Database = {
           table_views?: Json
           theme?: string | null
           timezone?: string | null
+          ui_state?: Json
           updated_at?: string
           user_id?: string
         }

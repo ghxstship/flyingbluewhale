@@ -1,15 +1,8 @@
+import React from "react";
 import Link from "next/link";
-import { Home, QrCode, BookOpen, CheckSquare, User } from "lucide-react";
-import type { NavGroup, NavItem } from "@/lib/nav";
+import type { NavItem } from "@/lib/nav";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-
-const MOBILE_TAB_ICONS: Record<string, typeof Home> = {
-  "/m": Home,
-  "/m/check-in": QrCode,
-  "/m/guide": BookOpen,
-  "/m/tasks": CheckSquare,
-  "/m/settings": User,
-};
+import { MobileTabBarClient } from "./MobileTabBarClient";
 
 export function PageStub({ title, description }: { title: string; description?: string }) {
   return (
@@ -53,32 +46,8 @@ export function MarketingHeader() {
   );
 }
 
-export function PlatformSidebar({ groups, currentPath }: { groups: NavGroup[]; currentPath?: string }) {
-  return (
-    <aside className="w-64 shrink-0 overflow-y-auto border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
-      <Link href="/console" className="block px-3 py-3 text-sm font-semibold tracking-tight text-[var(--foreground)]">
-        flyingbluewhale
-      </Link>
-      {groups.map((g) => (
-        <div key={g.label} className="mt-4">
-          <div className="nav-label">{g.label}</div>
-          <ul className="mt-0.5 space-y-0.5">
-            {g.items.map((i) => {
-              const active = currentPath === i.href;
-              return (
-                <li key={i.href}>
-                  <Link href={i.href} className={active ? "nav-item nav-item-active" : "nav-item"}>
-                    {i.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
-    </aside>
-  );
-}
+// PlatformSidebar v2 lives in ./PlatformSidebar (client, resizable, pinnable, searchable)
+export { PlatformSidebar } from "./PlatformSidebar";
 
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {
   return (
@@ -100,24 +69,8 @@ export function PortalRail({ items, title, currentPath }: { items: NavItem[]; ti
   );
 }
 
-export function MobileTabBar({ items }: { items: NavItem[] }) {
-  return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-[var(--border-color)] bg-[var(--background)]/95 backdrop-blur">
-      {items.map((i) => {
-        const Icon = MOBILE_TAB_ICONS[i.href] ?? Home;
-        return (
-          <Link
-            key={i.href}
-            href={i.href}
-            className="flex flex-col items-center justify-center gap-1 py-2.5 text-[0.62rem] font-medium uppercase tracking-wide text-[var(--text-muted)] hover:text-[var(--org-primary)]"
-          >
-            <Icon size={18} />
-            <span>{i.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
-  );
+export function MobileTabBar({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {
+  return <MobileTabBarClient items={items} badges={badges} />;
 }
 
 export function ModuleHeader({
@@ -125,16 +78,40 @@ export function ModuleHeader({
   subtitle,
   action,
   eyebrow,
+  breadcrumbs,
+  tabs,
 }: {
   title: string;
   subtitle?: string;
   action?: React.ReactNode;
   eyebrow?: string;
+  /** Optional breadcrumb trail rendered above the title (no leading Home needed; pass explicitly). */
+  breadcrumbs?: Array<{ label: string; href?: string }>;
+  /** Optional Tabs slot rendered at the bottom of the header (e.g. <TabsList>). */
+  tabs?: React.ReactNode;
 }) {
   return (
     <div className="module-header">
       <div className="module-header-inner">
-        <div>
+        <div className="min-w-0 flex-1">
+          {breadcrumbs && breadcrumbs.length > 0 && (
+            <nav aria-label="Breadcrumb" className="mb-2 flex items-center gap-1 text-xs text-[var(--text-muted)]">
+              {breadcrumbs.map((b, i) => (
+                <React.Fragment key={`${b.label}-${i}`}>
+                  {i > 0 && <span aria-hidden="true" className="text-[var(--text-muted)]">/</span>}
+                  {b.href ? (
+                    <Link href={b.href} className="hover:text-[var(--text-primary)]">
+                      {b.label}
+                    </Link>
+                  ) : (
+                    <span className="text-[var(--text-primary)]" aria-current="page">
+                      {b.label}
+                    </span>
+                  )}
+                </React.Fragment>
+              ))}
+            </nav>
+          )}
           {eyebrow && (
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--org-primary)]">
               {eyebrow}
@@ -145,6 +122,7 @@ export function ModuleHeader({
         </div>
         {action && <div className="flex items-center gap-2">{action}</div>}
       </div>
+      {tabs && <div className="module-header-tabs px-6">{tabs}</div>}
     </div>
   );
 }

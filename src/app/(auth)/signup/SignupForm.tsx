@@ -8,7 +8,8 @@ import { OAuthButtons, AuthDivider } from "@/components/auth/OAuthButtons";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { signupAction, type FormState } from "../actions";
+import { signupAction } from "../actions";
+import type { FormState } from "@/components/FormShell";
 
 export function SignupForm() {
   const [state, formAction, pending] = useActionState<FormState, FormData>(signupAction, null);

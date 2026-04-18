@@ -6,7 +6,10 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { FormState } from "@/components/FormShell";
 
-export type { FormState };
+// NOTE: Next.js server-action files (`"use server"`) cannot re-export types —
+// every export becomes an RPC endpoint, and a type re-export crashes at runtime
+// (ReferenceError: FormState is not defined). Form components must import
+// FormState from @/components/FormShell directly.
 
 const LoginSchema = z.object({
   email: z.string().email("Enter a valid email"),

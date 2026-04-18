@@ -5,7 +5,8 @@ import { useActionState } from "react";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { forgotPasswordAction, type FormState } from "../actions";
+import { forgotPasswordAction } from "../actions";
+import type { FormState } from "@/components/FormShell";
 
 export function ForgotPasswordForm() {
   const [state, formAction, pending] = useActionState<FormState, FormData>(forgotPasswordAction, null);

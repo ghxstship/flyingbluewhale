@@ -7,12 +7,19 @@ import { DEFAULT_CURRENCY, DEFAULT_LOCALE, DEFAULT_TIMEZONE, type Locale } from 
 
 type FormatterOpts = { locale?: Locale; timezone?: string };
 
-/** Amount is in minor units (cents). Converts to major and formats with currency. */
+/**
+ * Amount is in minor units (cents). Converts to major and formats with currency.
+ * Accepts either an options object or a currency string as second arg for ergonomics.
+ */
 export function formatMoney(
   cents: number | null | undefined,
-  opts: FormatterOpts & { currency?: string; fractionDigits?: number } = {},
+  optsOrCurrency: (FormatterOpts & { currency?: string; fractionDigits?: number }) | string | null | undefined = {},
 ): string {
   if (cents == null || Number.isNaN(cents)) return "";
+  const opts: FormatterOpts & { currency?: string; fractionDigits?: number } =
+    typeof optsOrCurrency === "string"
+      ? { currency: optsOrCurrency }
+      : optsOrCurrency ?? {};
   const locale = opts.locale ?? DEFAULT_LOCALE;
   const currency = (opts.currency ?? DEFAULT_CURRENCY).toUpperCase();
   return new Intl.NumberFormat(locale, {
@@ -36,16 +43,28 @@ export function formatNumber(
   }).format(n);
 }
 
+type DateStyle = "full" | "long" | "medium" | "short";
+
+/**
+ * Format a date. Accepts either an options object or a dateStyle string.
+ *   formatDate(d) → medium
+ *   formatDate(d, "long") → long
+ *   formatDate(d, { dateStyle: "long", locale: "es" })
+ */
 export function formatDate(
   date: Date | string | number | null | undefined,
-  opts: FormatterOpts & {
-    dateStyle?: "full" | "long" | "medium" | "short";
-    timeStyle?: "full" | "long" | "medium" | "short";
-  } = {},
+  optsOrStyle: (FormatterOpts & {
+    dateStyle?: DateStyle;
+    timeStyle?: DateStyle;
+  }) | DateStyle | null | undefined = {},
 ): string {
   if (date == null) return "";
   const d = typeof date === "string" || typeof date === "number" ? new Date(date) : date;
   if (Number.isNaN(d.getTime())) return "";
+  const opts: FormatterOpts & { dateStyle?: DateStyle; timeStyle?: DateStyle } =
+    typeof optsOrStyle === "string"
+      ? { dateStyle: optsOrStyle }
+      : optsOrStyle ?? {};
   const locale = opts.locale ?? DEFAULT_LOCALE;
   const timezone = opts.timezone ?? DEFAULT_TIMEZONE;
   return new Intl.DateTimeFormat(locale, {

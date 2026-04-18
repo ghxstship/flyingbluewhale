@@ -2,17 +2,36 @@
 
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { Square, RefreshCw, Copy, User, Sparkles, Send } from "lucide-react";
+import {
+  Square,
+  RefreshCw,
+  Copy,
+  User,
+  Sparkles,
+  Send,
+  Plus,
+  Trash2,
+  MessageSquare,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Hint } from "@/components/ui/Tooltip";
 import { useAnnounce } from "@/components/ui/LiveRegion";
+import { formatRelative } from "@/lib/i18n/format";
 
 type Message = { role: "user" | "assistant"; content: string };
 type Model = "claude-sonnet-4-6" | "claude-opus-4-7";
+type Conversation = { id: string; title: string | null; model: string | null; updated_at: string };
 
 const MODELS: Array<{ id: Model; label: string; cost: string }> = [
   { id: "claude-sonnet-4-6", label: "Sonnet 4.6", cost: "Fast · low cost" },
   { id: "claude-opus-4-7", label: "Opus 4.7", cost: "Deep reasoning" },
+];
+
+const SLASH_COMMANDS = [
+  { name: "/advancing", label: "Draft advancing email", template: "Draft an advancing email for the upcoming show, asking for tech rider, hospitality, and ground transport details. Format as a short professional email." },
+  { name: "/proposal", label: "Draft proposal", template: "Draft a proposal outline for a new project. Include sections for scope, timeline, pricing tiers, and next steps." },
+  { name: "/incident", label: "Incident summary", template: "Summarize an incident report. Format as: who, what, when, where, immediate actions taken, follow-up required." },
+  { name: "/rfp", label: "Vendor RFP", template: "Draft a vendor RFP for production equipment. Include line items, delivery timeline, payment terms, and submission instructions." },
 ];
 
 export function AssistantChat() {
@@ -21,17 +40,39 @@ export function AssistantChat() {
   const [streaming, setStreaming] = useState(false);
   const [conversationId, setConversationId] = useState<string | undefined>();
   const [model, setModel] = useState<Model>("claude-sonnet-4-6");
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [showSlash, setShowSlash] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const announce = useAnnounce();
 
-  // Auto-scroll on new content unless user has scrolled up
+  // Load conversation list once
+  useEffect(() => {
+    void refreshConversations();
+  }, []);
+
+  async function refreshConversations() {
+    try {
+      const res = await fetch("/api/v1/ai/conversations");
+      if (!res.ok) return;
+      const json = (await res.json()) as { ok: boolean; data?: { conversations: Conversation[] } };
+      if (json.ok && json.data) setConversations(json.data.conversations);
+    } catch {
+      /* ignore */
+    }
+  }
+
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 200;
     if (nearBottom) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [messages]);
+
+  // Slash menu trigger
+  useEffect(() => {
+    setShowSlash(input.startsWith("/") && input.length < 30);
+  }, [input]);
 
   async function streamMessage(text: string) {
     const abort = new AbortController();
@@ -83,6 +124,7 @@ export function AssistantChat() {
         }
       }
       announce("Response complete", "polite");
+      void refreshConversations();
     } catch (e) {
       if ((e as Error).name === "AbortError") {
         announce("Stopped", "polite");
@@ -96,8 +138,16 @@ export function AssistantChat() {
   }
 
   async function send() {
-    const text = input.trim();
+    let text = input.trim();
     if (!text || streaming) return;
+
+    // Slash expansion
+    const matched = SLASH_COMMANDS.find((c) => text.toLowerCase().startsWith(c.name));
+    if (matched) {
+      const remainder = text.slice(matched.name.length).trim();
+      text = remainder ? `${matched.template}\n\nContext: ${remainder}` : matched.template;
+    }
+
     setInput("");
     setMessages((m) => [...m, { role: "user", content: text }, { role: "assistant", content: "" }]);
     await streamMessage(text);
@@ -109,12 +159,10 @@ export function AssistantChat() {
 
   async function regenerate() {
     if (streaming) return;
-    // Find last user turn
     const lastUserIdx = [...messages].reverse().findIndex((m) => m.role === "user");
     if (lastUserIdx === -1) return;
     const idx = messages.length - 1 - lastUserIdx;
     const text = messages[idx].content;
-    // Truncate everything after the last user message, then re-stream
     setMessages((m) => [...m.slice(0, idx + 1), { role: "assistant", content: "" }]);
     await streamMessage(text);
   }
@@ -128,6 +176,42 @@ export function AssistantChat() {
     }
   }
 
+  function newConversation() {
+    setConversationId(undefined);
+    setMessages([]);
+    setInput("");
+  }
+
+  async function loadConversation(id: string) {
+    if (streaming) return;
+    try {
+      const res = await fetch(`/api/v1/ai/conversations/${id}`);
+      const json = (await res.json()) as {
+        ok: boolean;
+        data?: { conversation: { id: string; model: string | null }; messages: Message[] };
+      };
+      if (!json.ok || !json.data) return;
+      setConversationId(json.data.conversation.id);
+      setMessages(json.data.messages);
+      if (json.data.conversation.model) setModel(json.data.conversation.model as Model);
+    } catch {
+      toast.error("Couldn't load conversation");
+    }
+  }
+
+  async function deleteConversation(id: string) {
+    if (!confirm("Delete this conversation? This can't be undone.")) return;
+    try {
+      const res = await fetch(`/api/v1/ai/conversations/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error();
+      if (conversationId === id) newConversation();
+      void refreshConversations();
+      toast.success("Deleted");
+    } catch {
+      toast.error("Couldn't delete");
+    }
+  }
+
   function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -138,132 +222,206 @@ export function AssistantChat() {
   const lastIsAssistant = messages[messages.length - 1]?.role === "assistant";
 
   return (
-    <div className="surface-raised flex h-[70vh] flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2">
-        <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-          <Sparkles size={12} className="text-[var(--org-primary)]" aria-hidden="true" />
-          AI assistant
+    <div className="surface-raised flex h-[78vh] overflow-hidden">
+      {/* Sidebar */}
+      <aside className="hidden w-60 shrink-0 flex-col border-e border-[var(--border-color)] md:flex">
+        <div className="border-b border-[var(--border-color)] p-3">
+          <Button onClick={newConversation} className="w-full" size="sm">
+            <Plus size={12} className="me-1" aria-hidden="true" /> New chat
+          </Button>
         </div>
-        <div className="flex items-center gap-2">
-          <label className="sr-only" htmlFor="model-select">Model</label>
-          <select
-            id="model-select"
-            value={model}
-            onChange={(e) => setModel(e.target.value as Model)}
-            className="rounded border border-[var(--border-color)] bg-[var(--surface)] px-2 py-1 text-xs"
-            disabled={streaming}
-          >
-            {MODELS.map((m) => (
-              <option key={m.id} value={m.id}>{m.label} — {m.cost}</option>
-            ))}
-          </select>
+        <div className="flex-1 overflow-y-auto p-2">
+          {conversations.length === 0 ? (
+            <div className="px-2 py-4 text-center text-xs text-[var(--text-muted)]">
+              No history yet.
+            </div>
+          ) : (
+            <ul className="space-y-1">
+              {conversations.map((c) => (
+                <li key={c.id} className="group">
+                  <button
+                    type="button"
+                    onClick={() => loadConversation(c.id)}
+                    className={`flex w-full items-start justify-between gap-2 rounded px-2 py-1.5 text-start text-xs hover:bg-[var(--surface-inset)] ${
+                      conversationId === c.id ? "bg-[var(--surface-inset)]" : ""
+                    }`}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-medium">{c.title ?? "Untitled"}</div>
+                      <div className="text-[10px] text-[var(--text-muted)]">
+                        {formatRelative(c.updated_at)}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void deleteConversation(c.id);
+                      }}
+                      aria-label="Delete conversation"
+                      className="opacity-0 transition-opacity group-hover:opacity-100"
+                    >
+                      <Trash2 size={11} className="text-[var(--text-muted)] hover:text-[var(--color-error)]" />
+                    </button>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      </div>
+      </aside>
 
-      {/* Messages */}
-      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-5">
-        {messages.length === 0 ? (
-          <EmptyHints onPick={(s) => { setInput(s); }} />
-        ) : (
-          messages.map((m, i) => (
-            <div
-              key={i}
-              className={`flex gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}
+      {/* Main pane */}
+      <div className="flex flex-1 flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2">
+          <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+            <Sparkles size={12} className="text-[var(--org-primary)]" aria-hidden="true" />
+            AI assistant
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="sr-only" htmlFor="model-select">
+              Model
+            </label>
+            <select
+              id="model-select"
+              value={model}
+              onChange={(e) => setModel(e.target.value as Model)}
+              className="rounded border border-[var(--border-color)] bg-[var(--surface)] px-2 py-1 text-xs"
+              disabled={streaming}
             >
-              {m.role === "assistant" && (
-                <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--surface-inset)] text-[var(--org-primary)]">
-                  <Sparkles size={12} />
-                </div>
-              )}
+              {MODELS.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label} — {m.cost}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-5">
+          {messages.length === 0 ? (
+            <EmptyHints onPick={(s) => setInput(s)} />
+          ) : (
+            messages.map((m, i) => (
               <div
-                className={`group max-w-[80%] rounded-lg px-3 py-2 text-sm ${
-                  m.role === "user"
-                    ? "bg-[var(--org-primary)] text-[var(--background)]"
-                    : "bg-[var(--surface-inset)] text-[var(--foreground)]"
-                }`}
+                key={i}
+                className={`flex gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
-                <div className="whitespace-pre-wrap">
-                  {m.content || (
-                    <span className="inline-flex items-center gap-1 text-[var(--text-muted)]">
-                      <span className="motion-safe:animate-pulse">●</span>
-                      <span className="motion-safe:animate-pulse" style={{ animationDelay: "150ms" }}>●</span>
-                      <span className="motion-safe:animate-pulse" style={{ animationDelay: "300ms" }}>●</span>
-                    </span>
+                {m.role === "assistant" && (
+                  <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--surface-inset)] text-[var(--org-primary)]">
+                    <Sparkles size={12} />
+                  </div>
+                )}
+                <div
+                  className={`group max-w-[80%] rounded-lg px-3 py-2 text-sm ${
+                    m.role === "user"
+                      ? "bg-[var(--org-primary)] text-[var(--background)]"
+                      : "bg-[var(--surface-inset)] text-[var(--foreground)]"
+                  }`}
+                >
+                  <div className="whitespace-pre-wrap">
+                    {m.content || (
+                      <span className="inline-flex items-center gap-1 text-[var(--text-muted)]">
+                        <span className="motion-safe:animate-pulse">●</span>
+                        <span className="motion-safe:animate-pulse" style={{ animationDelay: "150ms" }}>●</span>
+                        <span className="motion-safe:animate-pulse" style={{ animationDelay: "300ms" }}>●</span>
+                      </span>
+                    )}
+                  </div>
+                  {m.role === "assistant" && m.content && (
+                    <div className="mt-2 hidden items-center gap-1 text-[var(--text-muted)] group-hover:flex">
+                      <Hint label="Copy">
+                        <button
+                          type="button"
+                          onClick={() => copy(m.content)}
+                          aria-label="Copy message"
+                          className="rounded p-1 hover:text-[var(--text-primary)]"
+                        >
+                          <Copy size={11} />
+                        </button>
+                      </Hint>
+                    </div>
                   )}
                 </div>
-                {m.role === "assistant" && m.content && (
-                  <div className="mt-2 hidden items-center gap-1 text-[var(--text-muted)] group-hover:flex">
-                    <Hint label="Copy">
-                      <button
-                        type="button"
-                        onClick={() => copy(m.content)}
-                        aria-label="Copy message"
-                        className="rounded p-1 hover:text-[var(--text-primary)]"
-                      >
-                        <Copy size={11} />
-                      </button>
-                    </Hint>
+                {m.role === "user" && (
+                  <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--surface-inset)] text-[var(--text-muted)]">
+                    <User size={12} />
                   </div>
                 )}
               </div>
-              {m.role === "user" && (
-                <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--surface-inset)] text-[var(--text-muted)]">
-                  <User size={12} />
-                </div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* Stop / regenerate row */}
-      {(streaming || (messages.length > 0 && lastIsAssistant && !streaming)) && (
-        <div className="flex items-center justify-center gap-2 border-t border-[var(--border-color)] py-2 text-xs">
-          {streaming ? (
-            <button
-              type="button"
-              onClick={stop}
-              className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2.5 py-1 hover:bg-[var(--surface-inset)]"
-            >
-              <Square size={11} aria-hidden="true" /> Stop generating
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={regenerate}
-              className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2.5 py-1 hover:bg-[var(--surface-inset)]"
-            >
-              <RefreshCw size={11} aria-hidden="true" /> Regenerate
-            </button>
+            ))
           )}
         </div>
-      )}
 
-      {/* Composer */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          send();
-        }}
-        className="border-t border-[var(--border-color)] p-3"
-      >
-        <div className="flex items-end gap-2">
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={onKeyDown}
-            disabled={streaming}
-            placeholder="Ask anything about your operations… (⏎ to send, ⇧⏎ for newline)"
-            rows={2}
-            className="input-base flex-1 resize-none"
-            aria-label="Message input"
-          />
-          <Button type="submit" disabled={streaming || !input.trim()} aria-label="Send message">
-            <Send size={14} />
-          </Button>
-        </div>
-      </form>
+        {/* Stop / regenerate row */}
+        {(streaming || (messages.length > 0 && lastIsAssistant && !streaming)) && (
+          <div className="flex items-center justify-center gap-2 border-t border-[var(--border-color)] py-2 text-xs">
+            {streaming ? (
+              <button
+                type="button"
+                onClick={stop}
+                className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2.5 py-1 hover:bg-[var(--surface-inset)]"
+              >
+                <Square size={11} aria-hidden="true" /> Stop generating
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={regenerate}
+                className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2.5 py-1 hover:bg-[var(--surface-inset)]"
+              >
+                <RefreshCw size={11} aria-hidden="true" /> Regenerate
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Composer + slash menu */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            send();
+          }}
+          className="relative border-t border-[var(--border-color)] p-3"
+        >
+          {showSlash && (
+            <div className="absolute bottom-full start-3 mb-2 max-h-60 w-72 overflow-y-auto rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-1 shadow-lg">
+              {SLASH_COMMANDS.map((c) => (
+                <button
+                  key={c.name}
+                  type="button"
+                  onClick={() => {
+                    setInput(c.name + " ");
+                    setShowSlash(false);
+                  }}
+                  className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-start text-xs hover:bg-[var(--surface-inset)]"
+                >
+                  <MessageSquare size={11} className="text-[var(--org-primary)]" aria-hidden="true" />
+                  <code className="font-mono">{c.name}</code>
+                  <span className="text-[var(--text-muted)]">— {c.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+          <div className="flex items-end gap-2">
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={onKeyDown}
+              disabled={streaming}
+              placeholder="Ask anything… (try /advancing, /proposal, /incident)"
+              rows={2}
+              className="input-base flex-1 resize-none"
+              aria-label="Message input"
+            />
+            <Button type="submit" disabled={streaming || !input.trim()} aria-label="Send message">
+              <Send size={14} />
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
@@ -277,7 +435,9 @@ function EmptyHints({ onPick }: { onPick: (s: string) => void }) {
   ];
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-      <div className="text-sm text-[var(--text-muted)]">Ask about a project, invoice, or advancing submission.</div>
+      <div className="text-sm text-[var(--text-muted)]">
+        Ask about a project, invoice, or advancing submission.
+      </div>
       <div className="grid w-full max-w-md gap-2 sm:grid-cols-2">
         {hints.map((h) => (
           <button

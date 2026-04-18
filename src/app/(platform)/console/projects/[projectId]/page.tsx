@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { getProject } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
+import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { ProjectStatusToggle } from "./ProjectStatusToggle";
 
 export const dynamic = "force-dynamic";
@@ -51,11 +52,9 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           <Field label="Slug" mono>{project.slug}</Field>
           <Field label="Start" mono>{project.start_date ?? "—"}</Field>
           <Field label="End" mono>{project.end_date ?? "—"}</Field>
-          <Field label="Budget" mono>
-            {project.budget_cents != null ? `$${(project.budget_cents / 100).toLocaleString()}` : "—"}
-          </Field>
-          <Field label="Created" mono>{new Date(project.created_at).toLocaleDateString()}</Field>
-          <Field label="Updated" mono>{new Date(project.updated_at).toLocaleDateString()}</Field>
+          <Field label="Budget" mono>{formatMoney(project.budget_cents) || "—"}</Field>
+          <Field label="Created" mono>{formatDate(project.created_at)}</Field>
+          <Field label="Updated" mono>{formatDate(project.updated_at)}</Field>
         </div>
 
         <div className="card mt-6 p-6">

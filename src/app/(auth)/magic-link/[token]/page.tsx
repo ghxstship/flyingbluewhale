@@ -1,14 +1,22 @@
 import Link from "next/link";
-import { AuthCard } from "@/components/Shell";
+import { AuthShell } from "@/components/auth/AuthShell";
 
 export default async function MagicLinkPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   return (
-    <AuthCard title="Signing you in" subtitle="Validating your magic link">
-      <p className="text-sm text-[var(--text-secondary)]">
-        If you&apos;re not redirected automatically, <Link href="/login" className="text-[var(--org-primary)]">return to login</Link>.
-      </p>
-      <p className="mt-2 font-mono text-[10px] text-[var(--text-muted)]">token: {token.slice(0, 10)}…</p>
-    </AuthCard>
+    <AuthShell
+      title="Signing you in"
+      subtitle="Validating your magic link…"
+      footer={
+        <Link href="/login" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+          Back to sign in
+        </Link>
+      }
+    >
+      <div role="status" aria-live="polite" className="surface-raised p-4 text-sm text-[var(--text-secondary)]">
+        If you&apos;re not redirected automatically within a few seconds, your link may have expired.
+      </div>
+      <p className="mt-3 font-mono text-[10px] text-[var(--text-muted)]">token: {token.slice(0, 10)}…</p>
+    </AuthShell>
   );
 }

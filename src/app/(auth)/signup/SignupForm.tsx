@@ -14,7 +14,7 @@ export function SignupForm() {
   const [state, formAction, pending] = useActionState<FormState, FormData>(signupAction, null);
 
   useEffect(() => {
-    if (state?.error) toast.error(state.error);
+    if (state?.error && !state?.fieldErrors) toast.error(state.error);
   }, [state]);
 
   return (
@@ -33,7 +33,13 @@ export function SignupForm() {
       <OAuthButtons />
       <AuthDivider />
       <form action={formAction} className="space-y-4" noValidate>
-        <Input label="Name" name="name" required autoComplete="name" />
+        <Input
+          label="Name"
+          name="name"
+          required
+          autoComplete="name"
+          error={state?.fieldErrors?.name}
+        />
         <Input
           label="Work email"
           name="email"
@@ -41,6 +47,7 @@ export function SignupForm() {
           required
           autoComplete="email"
           inputMode="email"
+          error={state?.fieldErrors?.email}
         />
         <PasswordField
           name="password"
@@ -50,6 +57,7 @@ export function SignupForm() {
           autoComplete="new-password"
           showStrength
           hint="At least 8 characters"
+          error={state?.fieldErrors?.password}
         />
         <Input
           label="Organization"
@@ -57,8 +65,9 @@ export function SignupForm() {
           placeholder="Optional"
           autoComplete="organization"
           hint="You can create this later from settings."
+          error={state?.fieldErrors?.orgName}
         />
-        {state?.error && (
+        {state?.error && !state?.fieldErrors && (
           <div
             role="alert"
             className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]"

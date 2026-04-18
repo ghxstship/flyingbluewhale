@@ -14,7 +14,7 @@ export function LoginForm() {
   const [state, formAction, pending] = useActionState<FormState, FormData>(loginAction, null);
 
   useEffect(() => {
-    if (state?.error) toast.error(state.error);
+    if (state?.error && !state?.fieldErrors) toast.error(state.error);
   }, [state]);
 
   return (
@@ -33,9 +33,22 @@ export function LoginForm() {
       <OAuthButtons />
       <AuthDivider />
       <form action={formAction} className="space-y-4" noValidate>
-        <Input label="Email" name="email" type="email" required autoComplete="email" />
-        <PasswordField name="password" label="Password" required autoComplete="current-password" />
-        {state?.error && (
+        <Input
+          label="Email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          error={state?.fieldErrors?.email}
+        />
+        <PasswordField
+          name="password"
+          label="Password"
+          required
+          autoComplete="current-password"
+          error={state?.fieldErrors?.password}
+        />
+        {state?.error && !state?.fieldErrors && (
           <div
             role="alert"
             className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]"

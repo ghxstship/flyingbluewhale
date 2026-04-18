@@ -4,6 +4,7 @@ import { requireSession, personaForRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getGuideByPersona } from "@/lib/db/guides";
 import { GuideView } from "@/components/guides/GuideView";
+import { GuideComments } from "@/components/guides/GuideComments";
 import type { GuideConfig } from "@/lib/guides/types";
 import type { GuidePersona } from "@/lib/supabase/types";
 
@@ -54,6 +55,13 @@ export default async function MobileGuide() {
     );
   }
 
+  const { data: initialComments } = await supabase
+    .from("guide_comments")
+    .select("id, body, author_name, created_at, resolved_at")
+    .eq("guide_id", guide.id)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
   return (
     <div className="px-4 pt-6 pb-24">
       <GuideView
@@ -62,6 +70,13 @@ export default async function MobileGuide() {
         classification={guide.classification}
         tier={guide.tier}
         config={guide.config as GuideConfig}
+        comments={
+          <GuideComments
+            guideId={guide.id}
+            orgId={guide.org_id}
+            initial={(initialComments ?? []) as Parameters<typeof GuideComments>[0]["initial"]}
+          />
+        }
       />
     </div>
   );

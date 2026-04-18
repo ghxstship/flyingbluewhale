@@ -29,8 +29,6 @@ for (const page of PAGES) {
     await pw.goto(page.path, { waitUntil: "networkidle" });
     const results = await new AxeBuilder({ page: pw })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
-      // Exclude noisy false-positives
-      .disableRules(["color-contrast"])
       .analyze();
 
     const serious = results.violations.filter(

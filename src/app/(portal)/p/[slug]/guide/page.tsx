@@ -6,6 +6,8 @@ import { personaForRole } from "@/lib/auth";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { getGuideByPersona } from "@/lib/db/guides";
 import { GuideView } from "@/components/guides/GuideView";
+import { GuideComments } from "@/components/guides/GuideComments";
+import { createClient } from "@/lib/supabase/server";
 import type { GuideConfig } from "@/lib/guides/types";
 import type { GuidePersona } from "@/lib/supabase/types";
 
@@ -41,6 +43,15 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     );
   }
 
+  // Initial comments (server-fetched for first paint)
+  const supabase = await createClient();
+  const { data: initialComments } = await supabase
+    .from("guide_comments")
+    .select("id, body, author_name, created_at, resolved_at")
+    .eq("guide_id", guide.id)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
   return (
     <>
       <ModuleHeader eyebrow={project.name} title={guide.title} subtitle={guide.subtitle ?? undefined} />
@@ -51,6 +62,13 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
           classification={guide.classification}
           tier={guide.tier}
           config={guide.config as GuideConfig}
+          comments={
+            <GuideComments
+              guideId={guide.id}
+              orgId={guide.org_id}
+              initial={(initialComments ?? []) as Parameters<typeof GuideComments>[0]["initial"]}
+            />
+          }
         />
       </div>
     </>

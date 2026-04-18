@@ -53,18 +53,6 @@ export function MarketingHeader() {
   );
 }
 
-export function AuthCard({ children, title, subtitle }: { children: React.ReactNode; title: string; subtitle?: string }) {
-  return (
-    <div className="mx-auto mt-20 w-full max-w-sm animate-slide-up">
-      <div className="surface-raised p-7">
-        <h1 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">{title}</h1>
-        {subtitle ? <p className="mt-1 text-sm text-[var(--text-muted)]">{subtitle}</p> : null}
-        <div className="mt-6">{children}</div>
-      </div>
-    </div>
-  );
-}
-
 export function PlatformSidebar({ groups, currentPath }: { groups: NavGroup[]; currentPath?: string }) {
   return (
     <aside className="w-64 shrink-0 overflow-y-auto border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">

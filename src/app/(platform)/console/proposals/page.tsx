@@ -5,7 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney, timeAgo } from "@/lib/format";
+import { formatMoney, formatDate, timeAgo } from "@/lib/format";
 import type { Proposal } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -33,7 +33,7 @@ export default async function ProposalsPage() {
             { key: "title", header: "Title", render: (r) => r.title },
             { key: "amount", header: "Amount", render: (r) => formatMoney(r.amount_cents ?? 0), className: "font-mono text-xs" },
             { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-            { key: "expires", header: "Expires", render: (r) => r.expires_at ? new Date(r.expires_at).toLocaleDateString() : "—", className: "font-mono text-xs" },
+            { key: "expires", header: "Expires", render: (r) => r.expires_at ? formatDate(r.expires_at) : "—", className: "font-mono text-xs" },
             { key: "updated", header: "Updated", render: (r) => timeAgo(r.updated_at), className: "font-mono text-xs" },
           ]}
         />

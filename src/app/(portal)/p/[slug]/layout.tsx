@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
+import { CommandPalette } from "@/components/CommandPalette";
 
 /**
  * Per-slug portal layout.
@@ -35,6 +36,7 @@ export default async function PortalSlugLayout({
         </a>
       )}
       {children}
+      <CommandPalette scope="portal" portalSlug={slug} />
     </div>
   );
 }

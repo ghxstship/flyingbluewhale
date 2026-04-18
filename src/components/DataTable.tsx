@@ -11,8 +11,41 @@ import {
   ChevronRight,
   X,
   SlidersHorizontal,
+  Save,
 } from "lucide-react";
 import type { ReactNode } from "react";
+
+type ViewState = {
+  query?: string;
+  sort?: { key: string; dir: "asc" | "desc" } | null;
+  density?: "comfortable" | "compact";
+};
+
+async function loadView(tableId: string): Promise<ViewState | null> {
+  try {
+    const res = await fetch("/api/v1/me/preferences");
+    if (!res.ok) return null;
+    const json = (await res.json()) as { ok: boolean; data?: { table_views?: Record<string, ViewState> } };
+    return json.data?.table_views?.[tableId] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function saveView(tableId: string, view: ViewState) {
+  try {
+    const cur = await fetch("/api/v1/me/preferences");
+    const curJson = (await cur.json()) as { ok: boolean; data?: { table_views?: Record<string, ViewState> } };
+    const all = curJson.data?.table_views ?? {};
+    await fetch("/api/v1/me/preferences", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ table_views: { ...all, [tableId]: view } }),
+    });
+  } catch {
+    /* ignore */
+  }
+}
 
 /**
  * DataTable — backwards-compatible with the v1 API.
@@ -75,12 +108,43 @@ export function DataTable<T extends { id: string }>({
   pageSize,
   bulkActions,
   loading,
-  density = "comfortable",
+  density: densityProp = "comfortable",
+  tableId,
 }: DataTableProps<T>) {
   const [sort, setSort] = React.useState<SortState>(null);
   const [query, setQuery] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
+  const [density, setDensity] = React.useState<"comfortable" | "compact">(densityProp);
+  const [viewLoaded, setViewLoaded] = React.useState(!tableId);
+
+  // Load saved view once
+  React.useEffect(() => {
+    if (!tableId) return;
+    let cancelled = false;
+    void loadView(tableId).then((v) => {
+      if (cancelled || !v) {
+        setViewLoaded(true);
+        return;
+      }
+      if (typeof v.query === "string") setQuery(v.query);
+      if (v.sort !== undefined) setSort(v.sort);
+      if (v.density) setDensity(v.density);
+      setViewLoaded(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [tableId]);
+
+  // Persist view changes (debounced)
+  React.useEffect(() => {
+    if (!tableId || !viewLoaded) return;
+    const t = setTimeout(() => {
+      void saveView(tableId, { query, sort, density });
+    }, 600);
+    return () => clearTimeout(t);
+  }, [tableId, viewLoaded, query, sort, density]);
 
   // Filter
   const filtered = React.useMemo(() => {

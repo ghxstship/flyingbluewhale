@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { AuthCard } from "@/components/Shell";
+import { AuthShell } from "@/components/auth/AuthShell";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { forgotPasswordAction, type FormState } from "../actions";
@@ -12,27 +12,32 @@ export function ForgotPasswordForm() {
   const sent = state !== null && !state?.error;
 
   return (
-    <AuthCard title="Reset password" subtitle="We'll email you a reset link.">
+    <AuthShell
+      title="Reset password"
+      subtitle={sent ? "Check your inbox for the reset link." : "We'll email you a reset link."}
+      footer={
+        <Link href="/login" className="text-[var(--org-primary)] underline-offset-4 hover:underline">
+          Back to sign in
+        </Link>
+      }
+    >
       {sent ? (
-        <p className="text-sm text-[var(--color-text-secondary)]">
-          If an account exists for that email, the reset link is on its way.
-        </p>
+        <div role="status" aria-live="polite" className="surface-raised p-4 text-sm text-[var(--text-secondary)]">
+          If an account exists for that email, the reset link is on its way. The link expires in 60 minutes.
+        </div>
       ) : (
-        <form action={formAction} className="space-y-4">
+        <form action={formAction} className="space-y-4" noValidate>
           <Input label="Email" name="email" type="email" required autoComplete="email" />
-          {state?.error ? (
-            <div className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]">
+          {state?.error && (
+            <div role="alert" className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]">
               {state.error}
             </div>
-          ) : null}
-          <Button type="submit" size="lg" className="w-full" disabled={pending}>
-            {pending ? "Sending…" : "Send reset link"}
+          )}
+          <Button type="submit" size="lg" className="w-full" loading={pending}>
+            {pending ? "Sending" : "Send reset link"}
           </Button>
         </form>
       )}
-      <div className="mt-4 text-mono text-xs text-[var(--color-text-tertiary)]">
-        <Link href="/login">Back to log in</Link>
-      </div>
-    </AuthCard>
+    </AuthShell>
   );
 }

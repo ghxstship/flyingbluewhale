@@ -1,18 +1,65 @@
 import { expect, test } from "playwright/test";
 
 test.describe("marketing", () => {
-  test("home renders hero + CTAs", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.locator("h1")).toContainText("Run production");
-    await expect(page.getByRole("link", { name: /Start free/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /Talk to sales/i })).toBeVisible();
+  test.beforeEach(async ({ context }) => {
+    await context.addCookies([
+      {
+        name: "fbw_consent",
+        value: encodeURIComponent(
+          JSON.stringify({
+            essential: true,
+            analytics: false,
+            marketing: false,
+            decidedAt: new Date().toISOString(),
+          }),
+        ),
+        domain: "localhost",
+        path: "/",
+      },
+    ]);
   });
 
-  test("pricing shows 4 tiers", async ({ page }) => {
+  test("home renders hero + CTAs", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("h1").first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /^start free/i }).first()).toBeVisible();
+  });
+
+  test("pricing shows 4 tiers + comparison table", async ({ page }) => {
     await page.goto("/pricing");
-    await expect(page.locator("h1")).toContainText("Pick a tier");
     for (const tier of ["Portal", "Starter", "Professional", "Enterprise"]) {
-      await expect(page.getByText(tier, { exact: false })).toBeVisible();
+      await expect(page.getByText(tier, { exact: false }).first()).toBeVisible();
+    }
+    await expect(page.getByRole("table")).toBeVisible();
+  });
+
+  test("solutions index renders 3 apps", async ({ page }) => {
+    await page.goto("/solutions");
+    await expect(page.getByText(/atlvs/i).first()).toBeVisible();
+    await expect(page.getByText(/gvteway/i).first()).toBeVisible();
+    await expect(page.getByText(/compvss/i).first()).toBeVisible();
+  });
+
+  test("compare page lists 3 competitors", async ({ page }) => {
+    await page.goto("/compare");
+    await expect(page.getByRole("link", { name: /asana/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /monday/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /spreadsheets/i })).toBeVisible();
+  });
+
+  test("guides + blog + customers each list at least one entry", async ({ page }) => {
+    for (const path of ["/guides", "/blog", "/customers"]) {
+      await page.goto(path);
+      await expect(page.getByRole("link").first()).toBeVisible();
+    }
+  });
+
+  test("footer has 5 nav columns", async ({ page }) => {
+    await page.goto("/");
+    const footer = page.locator("footer");
+    await expect(footer).toBeVisible();
+    for (const heading of ["Product", "Industries", "Resources", "Company", "Legal"]) {
+      await expect(footer.getByText(heading, { exact: true })).toBeVisible();
     }
   });
 

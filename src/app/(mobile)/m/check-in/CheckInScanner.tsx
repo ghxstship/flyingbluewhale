@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { useAnnounce } from "@/components/ui/LiveRegion";
+import { haptic } from "@/lib/haptics";
 
 type ScanResp =
   | { ok: true; data: { result: "accepted"; ticketId: string; holderName: string | null; tier: string } }
@@ -23,6 +25,7 @@ export function CheckInScanner() {
   const [log, setLog] = useState<LogEntry[]>([]);
   const [pending, start] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
+  const announce = useAnnounce();
 
   useEffect(() => { inputRef.current?.focus(); }, []);
 
@@ -48,15 +51,30 @@ export function CheckInScanner() {
         const json = (await res.json()) as ScanResp;
 
         if (!json.ok) {
+          haptic("error");
+          announce(`Error: ${json.error.message}`, "assertive");
           toast.error(json.error.message);
           setLog((l) => [{ at: new Date().toISOString(), code: trimmed, result: "not_found" as const }, ...l].slice(0, 50));
         } else {
           const result = json.data.result;
           if (result === "accepted") {
-            toast.success(`✓ ${"holderName" in json.data ? (json.data.holderName ?? "Guest") : "Guest"}`);
-          } else if (result === "duplicate") toast.error("Already scanned");
-          else if (result === "voided") toast.error("Voided ticket");
-          else toast.error("Not found");
+            haptic("success");
+            const name = "holderName" in json.data ? (json.data.holderName ?? "Guest") : "Guest";
+            announce(`Accepted: ${name}`, "polite");
+            toast.success(`✓ ${name}`);
+          } else if (result === "duplicate") {
+            haptic("warning");
+            announce("Duplicate ticket — already scanned", "assertive");
+            toast.error("Already scanned");
+          } else if (result === "voided") {
+            haptic("error");
+            announce("Voided ticket — denied", "assertive");
+            toast.error("Voided ticket");
+          } else {
+            haptic("error");
+            announce("Ticket not found", "assertive");
+            toast.error("Not found");
+          }
           const entry: LogEntry = { at: new Date().toISOString(), code: trimmed, result };
           setLog((l) => [entry, ...l].slice(0, 50));
         }
@@ -127,7 +145,7 @@ export function CheckInScanner() {
               <li key={i} className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-2 text-mono text-xs">
                 <span className="text-[var(--color-text-primary)]">{e.code}</span>
                 <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
-                  {new Date(e.at).toLocaleTimeString()}
+                  {new Date(e.at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                   <Badge
                     variant={
                       e.result === "accepted" ? "success" :

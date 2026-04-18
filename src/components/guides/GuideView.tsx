@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { GuideConfig, GuideSection } from "@/lib/guides/types";
 
 export function GuideView({
@@ -6,12 +7,15 @@ export function GuideView({
   classification,
   config,
   tier,
+  comments,
 }: {
   title: string;
   subtitle?: string | null;
   classification?: string | null;
   config: GuideConfig;
   tier?: number;
+  /** Optional comments slot rendered after sections (typically <GuideComments />). */
+  comments?: ReactNode;
 }) {
   const sections = config.sections ?? [];
 
@@ -39,6 +43,8 @@ export function GuideView({
       </nav>
 
       {sections.map((s, i) => <SectionWrapper key={i} index={i} section={s} />)}
+
+      {comments && <div className="border-t border-[var(--border-color)] pt-6">{comments}</div>}
     </article>
   );
 }

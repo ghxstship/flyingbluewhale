@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { listProjects } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -64,7 +65,7 @@ export default async function ProjectsPage() {
                     <td className="text-mono text-xs">{p.start_date ?? "—"}</td>
                     <td className="text-mono text-xs">{p.end_date ?? "—"}</td>
                     <td className="text-mono text-xs text-[var(--color-text-tertiary)]">
-                      {new Date(p.updated_at).toLocaleDateString()}
+                      {formatDate(p.updated_at)}
                     </td>
                   </tr>
                 ))}

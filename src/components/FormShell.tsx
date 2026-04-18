@@ -1,13 +1,29 @@
 "use client";
 
-import { useActionState, useEffect, useId, useRef, useState, type ReactNode, type FormHTMLAttributes } from "react";
+import {
+  createContext,
+  useActionState,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+  type FormHTMLAttributes,
+} from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/Dialog";
 import { useAnnounce } from "@/components/ui/LiveRegion";
 
-/**
- * State shape — backwards-compatible with v1 (`error`/`ok`),
- * plus optional `fieldErrors: Record<string, string>` for per-field rendering.
- */
 export type FormState = {
   error?: string;
   ok?: true;
@@ -19,7 +35,6 @@ type FormShellProps = {
   submitLabel?: string;
   cancelHref?: string;
   children: ReactNode;
-  /** Block navigation if the form is dirty. */
   dirtyGuard?: boolean;
   className?: string;
 } & Omit<FormHTMLAttributes<HTMLFormElement>, "action">;
@@ -37,9 +52,17 @@ export function FormShell({
   const formRef = useRef<HTMLFormElement>(null);
   const errorId = useId();
   const announce = useAnnounce();
-  const [dirty, setDirty] = useState(false);
+  const router = useRouter();
 
-  // beforeunload guard
+  const [dirty, setDirty] = useState(false);
+  const dirtyRef = useRef(false);
+  useEffect(() => {
+    dirtyRef.current = dirty;
+  }, [dirty]);
+
+  const [blockedUrl, setBlockedUrl] = useState<string | null>(null);
+
+  // beforeunload for full-page refreshes / tab close
   useEffect(() => {
     if (!dirtyGuard || !dirty || pending) return;
     function onBeforeUnload(e: BeforeUnloadEvent) {
@@ -50,16 +73,37 @@ export function FormShell({
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [dirtyGuard, dirty, pending]);
 
+  // Internal link click interceptor — catches next/link + <a> clicks when dirty
+  useEffect(() => {
+    if (!dirtyGuard) return;
+    function onClick(e: MouseEvent) {
+      if (!dirtyRef.current || pending) return;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const anchor = target.closest("a") as HTMLAnchorElement | null;
+      if (!anchor) return;
+      // Only intercept same-origin, left-click, no modifier
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (anchor.target && anchor.target !== "_self") return;
+      const href = anchor.getAttribute("href");
+      if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+      if (anchor.hostname && anchor.hostname !== window.location.hostname) return;
+      e.preventDefault();
+      setBlockedUrl(href);
+    }
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, [dirtyGuard, pending]);
+
   // Announce error/success
   useEffect(() => {
     if (state?.error) announce(state.error, "assertive");
     if (state?.ok) announce("Saved", "polite");
   }, [state, announce]);
 
-  // Mark dirty on input
-  function handleChange() {
+  const handleChange = useCallback(() => {
     if (!dirty) setDirty(true);
-  }
+  }, [dirty]);
 
   return (
     <FormErrorContext.Provider value={state?.fieldErrors ?? null}>
@@ -68,7 +112,6 @@ export function FormShell({
         ref={formRef}
         action={async (fd) => {
           const result = await formAction(fd);
-          // useActionState returns void — the assignment is just for type completeness
           if (result === undefined) setDirty(false);
         }}
         onChange={handleChange}
@@ -98,6 +141,38 @@ export function FormShell({
           </Button>
         </div>
       </form>
+
+      {/* Unsaved-changes confirmation dialog */}
+      <Dialog open={blockedUrl !== null} onOpenChange={(v) => !v && setBlockedUrl(null)}>
+        <DialogContent size="sm">
+          <DialogHeader>
+            <DialogTitle>Leave without saving?</DialogTitle>
+            <DialogDescription>
+              You have unsaved changes. If you leave now, they will be lost.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setBlockedUrl(null)}>
+              Stay on this page
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                const href = blockedUrl;
+                setBlockedUrl(null);
+                setDirty(false);
+                if (href) {
+                  // Use router for in-app; fall back to assign
+                  if (href.startsWith("/")) router.push(href);
+                  else window.location.assign(href);
+                }
+              }}
+            >
+              Leave anyway
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </FormErrorContext.Provider>
   );
 }
@@ -105,8 +180,6 @@ export function FormShell({
 // ────────────────────────────────────────────────────────────────────
 // Field-error context — lets <FormField> read its error by name
 // ────────────────────────────────────────────────────────────────────
-
-import { createContext, useContext } from "react";
 
 const FormErrorContext = createContext<Record<string, string> | null>(null);
 

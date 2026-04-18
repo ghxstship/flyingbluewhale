@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { TooltipProvider } from "@/components/ui/Tooltip";
 import { LiveRegionProvider } from "@/components/ui/LiveRegion";
 import { CookieConsent } from "@/components/compliance/CookieConsent";
+import { ShortcutDialog } from "@/components/ShortcutDialog";
 import { getRequestLocale } from "@/lib/i18n/server";
 import { isRtl } from "@/lib/i18n/config";
 import "./globals.css";
@@ -66,6 +67,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <LiveRegionProvider>
               <div id="main" className="flex-1 flex flex-col min-w-0">{children}</div>
               <CookieConsent />
+              <ShortcutDialog />
             </LiveRegionProvider>
           </TooltipProvider>
         </ThemeProvider>

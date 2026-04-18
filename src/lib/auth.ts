@@ -83,7 +83,9 @@ export function personaForRole(role: PlatformRole): Persona {
 
 export function resolveShell(persona: Persona): "/console" | "/p" | "/m" | "/me" {
   if (["owner", "admin", "controller", "project_manager", "developer"].includes(persona)) return "/console";
-  if (["client", "vendor", "artist", "sponsor", "guest"].includes(persona)) return "/p";
+  // Portal personas need a project slug; guest-by-role (viewer/community) arrives
+  // with no slug context, so they go to /me instead of dead-ending on /p/select.
+  if (["client", "vendor", "artist", "sponsor"].includes(persona)) return "/p";
   if (persona === "crew") return "/m";
   return "/me";
 }

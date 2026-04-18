@@ -3,8 +3,12 @@ import { CommandPalette } from "@/components/CommandPalette";
 import { OfflineBanner } from "@/components/mobile/OfflineBanner";
 import { TenantShell } from "@/components/TenantShell";
 import { mobileTabs } from "@/lib/nav";
+import { requireSession } from "@/lib/auth";
 
 export default async function MobileLayout({ children }: { children: React.ReactNode }) {
+  // Protect the entire compvss shell — no session → redirect to /login.
+  // Individual sub-pages may call requireSession() too; this is the outer guard.
+  await requireSession("/login");
   return (
     <TenantShell>
       <div data-platform="compvss" className="page-shell mobile-shell">

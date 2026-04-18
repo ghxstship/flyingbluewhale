@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Cormorant_Garamond } from "next/font/google";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { TooltipProvider } from "@/components/ui/Tooltip";
 import { LiveRegionProvider } from "@/components/ui/LiveRegion";
@@ -71,14 +71,16 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </ThemeProvider>
         <Toaster
           position="bottom-right"
+          richColors
+          closeButton
+          theme="system"
           toastOptions={{
-            style: {
-              background: "var(--background)",
-              color: "var(--foreground)",
-              border: "1px solid var(--border-color)",
-              fontFamily: "var(--font-inter)",
-              fontSize: "0.875rem",
-              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04)",
+            classNames: {
+              toast: "group toast",
+              title: "font-medium",
+              description: "text-[var(--text-secondary)]",
+              actionButton: "bg-[var(--org-primary)] text-white",
+              cancelButton: "bg-[var(--surface-inset)]",
             },
           }}
         />

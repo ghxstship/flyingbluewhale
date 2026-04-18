@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { setProposalStatusAction } from "../actions";
 import type { ProposalStatus } from "@/lib/supabase/types";

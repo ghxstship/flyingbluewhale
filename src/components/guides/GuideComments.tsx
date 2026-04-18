@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { MessageCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { formatRelative } from "@/lib/i18n/format";

@@ -1,35 +1,61 @@
+"use client";
+
+import * as React from "react";
+import * as ProgressPrimitive from "@radix-ui/react-progress";
+
+type Severity = "default" | "warn" | "critical" | "success";
+
 interface ProgressBarProps {
-  value: number;
-  width?: number | string;
+  /** 0–100. Ignored when `indeterminate` is true. */
+  value?: number;
+  /** Show shimmer instead of a filled bar. */
+  indeterminate?: boolean;
   showLabel?: boolean;
+  /** Severity thresholds (0-100). */
   thresholds?: { warn: number; critical: number };
+  /** Explicit severity override (bypasses thresholds). */
+  severity?: Severity;
+  "aria-label"?: string;
   className?: string;
 }
 
 export function ProgressBar({
   value,
-  width = "100%",
+  indeterminate,
   showLabel = false,
   thresholds = { warn: 70, critical: 90 },
+  severity,
+  "aria-label": ariaLabel,
   className = "",
 }: ProgressBarProps) {
-  const clamped = Math.max(0, Math.min(100, value));
-  const color =
-    clamped > thresholds.critical ? "var(--color-error)" :
-    clamped > thresholds.warn ? "var(--color-warning)" :
-    "var(--org-primary)";
-
-  const widthStyle = typeof width === "number" ? `${width}px` : width;
+  const clamped = indeterminate ? undefined : Math.max(0, Math.min(100, value ?? 0));
+  const inferredSeverity: Severity = severity
+    ? severity
+    : clamped == null
+      ? "default"
+      : clamped > thresholds.critical
+        ? "critical"
+        : clamped > thresholds.warn
+          ? "warn"
+          : "default";
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <div className="h-1.5 rounded-full overflow-hidden bg-[var(--bg-secondary)]" style={{ width: widthStyle }}>
-        <div
-          className="h-1.5 rounded-full transition-all duration-300"
-          style={{ width: `${clamped}%`, background: color }}
+      <ProgressPrimitive.Root
+        value={clamped ?? null}
+        data-severity={inferredSeverity}
+        data-indeterminate={indeterminate ? "" : undefined}
+        aria-label={ariaLabel ?? (showLabel ? `${clamped ?? 0}%` : "Progress")}
+        className="progress-root"
+      >
+        <ProgressPrimitive.Indicator
+          className="progress-indicator"
+          style={indeterminate ? undefined : { transform: `translateX(-${100 - (clamped ?? 0)}%)` }}
         />
-      </div>
-      {showLabel && <span className="font-mono text-[0.625rem] text-[var(--text-muted)]">{clamped}%</span>}
+      </ProgressPrimitive.Root>
+      {showLabel && !indeterminate && (
+        <span className="font-mono text-[10px] text-[var(--text-muted)]">{clamped}%</span>
+      )}
     </div>
   );
 }

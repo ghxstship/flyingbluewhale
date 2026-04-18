@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { OAuthButtons, AuthDivider } from "@/components/auth/OAuthButtons";
 import { PasswordField } from "@/components/auth/PasswordField";

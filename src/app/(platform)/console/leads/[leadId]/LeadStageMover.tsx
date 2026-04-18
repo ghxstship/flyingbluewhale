@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { moveLeadStageAction } from "../actions";
 import type { LeadStage } from "@/lib/supabase/types";

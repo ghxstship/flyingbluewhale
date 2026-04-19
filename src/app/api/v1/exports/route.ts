@@ -6,6 +6,8 @@ import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { EXPORT_REGISTRY, isExportTable, type ExportTable } from "@/lib/export/registry";
 import { rowsToCsv } from "@/lib/export/strategies/csv";
 import { rowsToJson } from "@/lib/export/strategies/json";
+import { rowsToXlsxBuffer } from "@/lib/export/strategies/xlsx";
+import { rowsToZipBuffer } from "@/lib/export/strategies/zip";
 import { log } from "@/lib/log";
 
 /**
@@ -20,9 +22,9 @@ import { log } from "@/lib/log";
  */
 
 const PostSchema = z.object({
-  kind: z.enum(["csv", "json"]),          // xlsx + zip arrive in a follow-up
-  table: z.string().min(1).max(64),       // validated against registry below
-  async: z.boolean().optional(),          // reserved for job-queue follow-up
+  kind: z.enum(["csv", "json", "xlsx", "zip"]),
+  table: z.string().min(1).max(64),
+  async: z.boolean().optional(),           // reserved for job-queue follow-up
   projectId: z.string().uuid().optional(), // optional scope narrower than org
 });
 
@@ -62,12 +64,33 @@ export async function POST(req: NextRequest) {
     if (error) return apiError("internal", error.message);
     const rows = data ?? [];
 
-    const bytes =
-      input.kind === "csv"
-        ? Buffer.from(rowsToCsv(rows as Array<Record<string, unknown>>, meta.csvColumns), "utf8")
-        : Buffer.from(rowsToJson({ orgId: session.orgId, kind: table, rows }), "utf8");
-    const contentType = input.kind === "csv" ? "text/csv; charset=utf-8" : "application/json";
+    let bytes: Buffer;
+    let contentType: string;
     const ext = input.kind;
+    const typedRows = rows as Array<Record<string, unknown>>;
+
+    if (input.kind === "csv") {
+      bytes = Buffer.from(rowsToCsv(typedRows, meta.csvColumns), "utf8");
+      contentType = "text/csv; charset=utf-8";
+    } else if (input.kind === "json") {
+      bytes = Buffer.from(rowsToJson({ orgId: session.orgId, kind: table, rows }), "utf8");
+      contentType = "application/json";
+    } else if (input.kind === "xlsx") {
+      bytes = await rowsToXlsxBuffer({
+        sheetName: meta.label,
+        orgName: session.orgId,
+        rows: typedRows,
+        columns: meta.csvColumns,
+      });
+      contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    } else {
+      // zip: bundle CSV + JSON of the same rows
+      bytes = await rowsToZipBuffer([
+        { name: `${table}.csv`, content: rowsToCsv(typedRows, meta.csvColumns) },
+        { name: `${table}.json`, content: rowsToJson({ orgId: session.orgId, kind: table, rows }) },
+      ]);
+      contentType = "application/zip";
+    }
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
     const path = `${session.orgId}/${table}-${stamp}.${ext}`;
 

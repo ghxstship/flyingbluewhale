@@ -518,6 +518,48 @@ export type Database = {
           },
         ]
       }
+      deliverable_templates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          data: Json
+          deleted_at: string | null
+          description: string | null
+          id: string
+          is_global: boolean
+          name: string
+          org_id: string
+          type: Database["public"]["Enums"]["deliverable_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_global?: boolean
+          name: string
+          org_id: string
+          type: Database["public"]["Enums"]["deliverable_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_global?: boolean
+          name?: string
+          org_id?: string
+          type?: Database["public"]["Enums"]["deliverable_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       deliverables: {
         Row: {
           created_at: string
@@ -606,6 +648,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      email_templates: {
+        Row: {
+          body_html: string
+          body_text: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          is_active: boolean
+          merge_tags: Json
+          name: string
+          org_id: string
+          slug: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body_html: string
+          body_text?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_active?: boolean
+          merge_tags?: Json
+          name: string
+          org_id: string
+          slug: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          body_text?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          is_active?: boolean
+          merge_tags?: Json
+          name?: string
+          org_id?: string
+          slug?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       equipment: {
         Row: {
@@ -1082,6 +1172,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      incidents: {
+        Row: {
+          ai_summary: string | null
+          created_at: string
+          description: string | null
+          id: string
+          location: string | null
+          occurred_at: string
+          org_id: string
+          photos: Json
+          project_id: string | null
+          reporter_id: string
+          severity: Database["public"]["Enums"]["incident_severity"]
+          status: Database["public"]["Enums"]["incident_status"]
+          summary: string
+          updated_at: string
+        }
+        Insert: {
+          ai_summary?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          occurred_at?: string
+          org_id: string
+          photos?: Json
+          project_id?: string | null
+          reporter_id: string
+          severity?: Database["public"]["Enums"]["incident_severity"]
+          status?: Database["public"]["Enums"]["incident_status"]
+          summary: string
+          updated_at?: string
+        }
+        Update: {
+          ai_summary?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          occurred_at?: string
+          org_id?: string
+          photos?: Json
+          project_id?: string | null
+          reporter_id?: string
+          severity?: Database["public"]["Enums"]["incident_severity"]
+          status?: Database["public"]["Enums"]["incident_status"]
+          summary?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       invoice_line_items: {
         Row: {
@@ -2261,6 +2402,54 @@ export type Database = {
           },
         ]
       }
+      stage_plots: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          depth_ft: number | null
+          elements: Json
+          id: string
+          name: string
+          notes: string | null
+          org_id: string
+          project_id: string
+          svg_url: string | null
+          updated_at: string
+          width_ft: number | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          depth_ft?: number | null
+          elements?: Json
+          id?: string
+          name: string
+          notes?: string | null
+          org_id: string
+          project_id: string
+          svg_url?: string | null
+          updated_at?: string
+          width_ft?: number | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          depth_ft?: number | null
+          elements?: Json
+          id?: string
+          name?: string
+          notes?: string | null
+          org_id?: string
+          project_id?: string
+          svg_url?: string | null
+          updated_at?: string
+          width_ft?: number | null
+        }
+        Relationships: []
+      }
       stripe_events: {
         Row: {
           event_id: string
@@ -2906,6 +3095,8 @@ export type Database = {
         | "crew"
         | "staff"
         | "custom"
+      incident_severity: "near_miss" | "minor" | "major" | "critical"
+      incident_status: "open" | "investigating" | "resolved" | "closed"
       invoice_status: "draft" | "sent" | "paid" | "overdue" | "voided"
       job_state: "pending" | "running" | "done" | "failed" | "dead"
       lead_stage:
@@ -3114,6 +3305,8 @@ export const Constants = {
         "staff",
         "custom",
       ],
+      incident_severity: ["near_miss", "minor", "major", "critical"],
+      incident_status: ["open", "investigating", "resolved", "closed"],
       invoice_status: ["draft", "sent", "paid", "overdue", "voided"],
       job_state: ["pending", "running", "done", "failed", "dead"],
       lead_stage: ["new", "qualified", "contacted", "proposal", "won", "lost"],

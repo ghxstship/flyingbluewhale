@@ -91,7 +91,7 @@ export const EXPORT_REGISTRY: Record<ExportTable, ExportTableMeta> = {
       { key: "title", header: "title" },
       { key: "status", header: "status" },
       { key: "priority", header: "priority" },
-      { key: "assignee_id", header: "assignee_id" },
+      { key: "assigned_to", header: "assigned_to" },
       { key: "due_at", header: "due_at" },
     ],
     orgScoped: true,

@@ -141,6 +141,10 @@ paths:
     get: { summary: Render an invoice to PDF and 302-redirect to a signed download URL. }
   /api/v1/guides/{guideId}/pdf:
     get: { summary: Render an event guide to PDF (persona-scoped boarding pass) and 302-redirect to a signed download URL. }
+  /api/v1/deliverables/{id}/pdf:
+    get: { summary: Render a single deliverable (rider, plot, list, etc.) to a type-canonical PDF. }
+  /api/v1/projects/{projectId}/advance-book:
+    get: { summary: Compile every approved/submitted deliverable on a project into one branded advance-book PDF. }
 
   /api/v1/exports:
     get:  { summary: List the caller org's recent export runs. }
@@ -148,3 +152,54 @@ paths:
 
   /api/v1/import/crew-members:
     post: { summary: Bulk-import a CSV of crew into the caller's org, deduped by email or (name, phone). }
+
+  /api/v1/proposals/{proposalId}/pdf:
+    get: { summary: Compile a proposal (cover + scope + pricing + signatures) into a branded PDF. }
+  /api/v1/projects/{projectId}/call-sheet:
+    get: { summary: Daily call sheet PDF — events + crew + venue + weather. `?variant=full|labor`. }
+  /api/v1/projects/{projectId}/expense-report:
+    get: { summary: Expense + time + mileage report PDF for a date range. }
+  /api/v1/projects/{projectId}/task-report:
+    get: { summary: Project task list / punch list PDF. }
+  /api/v1/projects/{projectId}/signage-grid:
+    get: { summary: Project-wide signage grid PDF aggregated from every signage_grid deliverable. }
+  /api/v1/projects/{projectId}/wristbands:
+    get: { summary: Printable 10-up QR wristband sheet for active tickets. }
+  /api/v1/rentals/{rentalId}/pull-sheet:
+    get: { summary: Rental checkout / equipment pull sheet PDF. }
+  /api/v1/compliance/audit-export:
+    get: { summary: Branded PDF dump of audit_log for a date range / actor filter — SOC-2 export shape. }
+  /api/v1/brand-kit:
+    get: { summary: Per-org brand kit PDF — accent color, typography, legal footer. }
+  /api/v1/procurement/vendors/{vendorId}/rfp:
+    post: { summary: Generate a branded Request-for-Proposal PDF for a vendor scoped to a project. }
+  /api/v1/deliverables/{id}/version-diff:
+    get: { summary: Structured diff of a deliverable's data jsonb between two audit-log snapshots. }
+  /api/v1/users/{userId}/calendar.ics:
+    get: { summary: Personal ICS subscribe URL — every event across the user's org memberships. }
+
+  /api/v1/projects/{projectId}/archive:
+    get: { summary: ZIP bundle — every org-scoped table's project rows + manifest.json. Opp #9. }
+  /api/v1/projects/{projectId}/sponsor-deck:
+    post: { summary: Generate a branded PPTX sponsor activation recap. Opp #23. }
+
+  /api/v1/import/tasks:
+    post: { summary: Bulk-import a CSV of tasks into a project. }
+  /api/v1/import/vendors:
+    post: { summary: Bulk-import a CSV of vendors into the caller's org. }
+
+  /api/v1/deliverable-templates:
+    get:  { summary: List deliverable (rider / plot / list) templates visible to the caller. Opp #12. }
+    post: { summary: Create an org-scoped deliverable template. }
+  /api/v1/stage-plots:
+    get:  { summary: List stage plots for a project. Opp #11. }
+    post: { summary: Create a stage plot row with interactive-editor state. }
+  /api/v1/incidents:
+    get:  { summary: List incidents for the caller's org (optionally filtered by project). Opp #18. }
+    post: { summary: Log a new incident report with optional photo references. }
+  /api/v1/email-templates:
+    get:  { summary: List the org's transactional email templates. Opp #21. }
+    post: { summary: Create an org-scoped email template with merge-tag schema. }
+
+  /api/v1/credentials/extract:
+    post: { summary: AI-extract structured fields from COI or W-9 text. Opp #10. }

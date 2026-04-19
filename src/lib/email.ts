@@ -2,12 +2,23 @@ import "server-only";
 import { env, hasResend } from "./env";
 import { httpFetch } from "./http";
 
+/**
+ * Attachments. Resend accepts either:
+ *   - { filename, content: base64 }   — up to ~10 MiB encoded
+ *   - { filename, path: <https url> } — fetched by Resend before send
+ * We accept both shapes; Buffer content is base64-encoded inline.
+ */
+export type EmailAttachment =
+  | { filename: string; content: Buffer; contentType?: string }
+  | { filename: string; path: string; contentType?: string };
+
 export type EmailPayload = {
   to: string | string[];
   subject: string;
   html?: string;
   text?: string;
   replyTo?: string;
+  attachments?: EmailAttachment[];
 };
 
 /**
@@ -32,6 +43,11 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
       html: payload.html,
       text: payload.text,
       reply_to: payload.replyTo,
+      attachments: payload.attachments?.map((a) =>
+        "content" in a
+          ? { filename: a.filename, content: a.content.toString("base64"), content_type: a.contentType }
+          : { filename: a.filename, path: a.path, content_type: a.contentType },
+      ),
     }),
     timeoutMs: 8000,
   });

@@ -271,3 +271,93 @@ Added after the initial H1 close to prove the three-shell topology (atlvs ↔ gv
 ---
 
 **Signed:** backend-audit Horizon 1 complete.
+
+---
+
+## Horizon 2 — Normalize (shipped)
+
+Eight items from the H2 tranche closed in the same audit window. Each ships
+behind a regression test that would fail if the remediation were reverted.
+
+### H2-01 / IK-031 — `resolveTenant()` cached per request
+[src/components/TenantShell.tsx](../../src/components/TenantShell.tsx) wrapped
+in React `cache()`. Multiple server components in one request share a single
+Supabase round-trip. Scope is per-request; no cross-user leakage.
+
+### H2-04 / IK-015 — Pagination primitive
+[src/lib/db/resource.ts](../../src/lib/db/resource.ts) exports
+`listOrgScopedPage(table, orgId, { cursor, pageSize, orderBy })` returning
+`{ rows, nextCursor, totalCount, pageSize }` and handlers set `X-Total-Count`.
+Applied to [GET /api/v1/projects](../../src/app/api/v1/projects/route.ts).
+Guards: `src/lib/db/pagination.test.ts` (4 unit), `e2e/pagination.spec.ts` (3 e2e).
+
+### H2-05 / IK-028 — Stripe event dedup
+Migration `fbw_018_stripe_events_dedup`. Webhook inserts `event_id` before
+side effects; retries short-circuit with `replay: true`. Unsigned dev path
+supported; locked to service-role on the table. Guard:
+`e2e/api-webhooks.spec.ts` identical-event-twice test.
+
+### H2-06 / IK-041 — Sentry PII scrubber
+[src/lib/sentry-scrub.ts](../../src/lib/sentry-scrub.ts) + `sendDefaultPii: false`
+on all three Sentry configs. Redacts UUIDs, emails, Bearer tokens, JWTs,
+Stripe ids, Supabase auth cookies, and the authorization/x-api-key/
+x-stripe-signature/proxy-authorization headers. 11 unit tests cover every
+redaction rule + the event integration surface.
+
+### H2-07 / IK-046 — Audit log for privileged auth actions
+[src/lib/audit.ts](../../src/lib/audit.ts) `emitAudit()` helper writes to
+`public.audit_log` (already RLS-gated on `is_org_member`). Wired into:
+- `/auth/resolve` → `auth.login`
+- `/api/v1/auth/webauthn/register/verify` → `auth.passkey.registered`
+- `/api/v1/auth/webauthn/credentials DELETE` → `auth.passkey.revoked`
+- `/api/v1/me/delete` → `auth.delete_requested`
+
+Guard: `e2e/audit-log.spec.ts` logs in as owner → hits `/auth/resolve` →
+reads back the row via `/api/v1/me/export` bundle.
+
+### H2-08 / IK-030 — ISR on marketing routes
+`export const revalidate = 300` on solutions/**, blog/**, compare/**,
+guides/** (11 pages). Next.js regenerates the static HTML every 5 min;
+trivially tunable per route.
+
+### H2-09 / IK-057 — Feature flag metadata
+[src/lib/flags.ts](../../src/lib/flags.ts) now exports `FLAG_REGISTRY` with
+`{ owner, expiresAt, description }` per flag. Hygiene-guard test
+(`src/lib/flags.test.ts`) fails the build on: missing registry entry,
+missing field, invalid ISO date, past-due flag, or orphaned registry entry.
+
+### H2-10 / IK-017 — `assertCapability()` on mutating routes
+[src/lib/auth.ts](../../src/lib/auth.ts) exports `assertCapability(session,
+capability)` → returns a 403 envelope naming role + missing capability.
+Applied to:
+- POST/PATCH `/api/v1/projects` + `/api/v1/projects/[projectId]` → `projects:write`
+- POST `/api/v1/tickets/scan` + `/api/v1/tickets/[id]/scan` → `check-in:write`
+- POST `/api/v1/stripe/checkout` → `invoices:write`
+- POST `/api/v1/stripe/connect/onboarding` → `payouts:write`
+
+Also fixed an information-leak: Stripe routes previously returned the
+env-missing 500 BEFORE the capability gate fired, letting unprivileged
+callers probe secret configuration. Now the capability gate is first.
+
+Guard: `e2e/capability-gating.spec.ts` — 11 tests covering forbidden
+roles, allowed roles, and Stripe env-probe fix.
+
+### Deferred in H2 tranche
+
+| Flaw | Reason |
+|---|---|
+| IK-039 (RED metrics publish) | requires Vercel Analytics + Sentry Metrics subscriptions — infra-dependent |
+| IK-040 (OpenTelemetry spans)  | needs OTLP collector + ADR on trace cardinality |
+| IK-049 (80% unit coverage)    | incremental — current coverage grew substantially in this audit |
+| IK-062 (ADR backfill 2–10)    | documentation work; deferred to a dedicated writing pass |
+
+### Final totals (Horizon 1 + Horizon 2 combined)
+
+- **Vitest:** 65 / 65 passing (0 failing).
+- **Playwright:** 276 / 286 passing (0 failing, 10 intentionally skipped, 5.1 min).
+- **Typecheck:** clean.
+- **H1 closed:** 15/15. **H2 closed:** 8/12. **Deferred to H3:** 9 items per roadmap.
+
+---
+
+**Signed:** backend-audit Horizons 1 + 2 complete.

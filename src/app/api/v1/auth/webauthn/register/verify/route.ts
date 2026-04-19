@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { verifyRegistrationResponse, type RegistrationResponseJSON } from "@simplewebauthn/server";
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
+import { emitAudit } from "@/lib/audit";
+import { getSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRpConfig } from "@/lib/webauthn";
 
@@ -73,6 +75,21 @@ export async function POST(req: NextRequest) {
     .from("webauthn_challenges")
     .update({ consumed: true })
     .eq("id", challengeRow.id);
+
+  // H2-07 — audit the passkey registration. user_passkeys is not covered by
+  // the SSOT audit trigger, so we emit manually.
+  const session = await getSession();
+  if (session?.orgId) {
+    await emitAudit({
+      actorId: u.user.id,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "auth.passkey.registered",
+      targetTable: "user_passkeys",
+      metadata: { device_name: parsed.deviceName ?? null },
+      requestId: req.headers.get("x-request-id"),
+    });
+  }
 
   return apiOk({ verified: true });
 }

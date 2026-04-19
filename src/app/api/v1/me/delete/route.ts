@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
+import { emitAudit } from "@/lib/audit";
+import { getSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -50,6 +52,20 @@ export async function POST(req: NextRequest) {
   // Revoke memberships immediately
   const nowIso = new Date().toISOString();
   await supabase.from("memberships").update({ deleted_at: nowIso }).eq("user_id", userId);
+
+  // H2-07 — audit the deletion request BEFORE we sign out so the
+  // actor is still on the session used by emitAudit().
+  const session = await getSession();
+  if (session?.orgId) {
+    await emitAudit({
+      actorId: userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "auth.delete_requested",
+      metadata: { purge_at: purgeAt },
+      requestId: req.headers.get("x-request-id"),
+    });
+  }
 
   // Sign the user out
   await supabase.auth.signOut();

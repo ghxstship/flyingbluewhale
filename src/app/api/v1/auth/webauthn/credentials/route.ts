@@ -1,6 +1,8 @@
 import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk } from "@/lib/api";
+import { emitAudit } from "@/lib/audit";
+import { getSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
@@ -34,5 +36,20 @@ export async function DELETE(req: NextRequest) {
     .eq("user_id", u.user.id);
 
   if (error) return apiError("internal", error.message);
+
+  // H2-07 — audit the passkey revocation.
+  const session = await getSession();
+  if (session?.orgId) {
+    await emitAudit({
+      actorId: u.user.id,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "auth.passkey.revoked",
+      targetTable: "user_passkeys",
+      targetId: parsed.data,
+      requestId: req.headers.get("x-request-id"),
+    });
+  }
+
   return apiOk({ deleted: true });
 }

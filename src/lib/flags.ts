@@ -27,6 +27,49 @@ export const FLAG_DEFAULTS: Flags = {
   passkeys: false,
 };
 
+/**
+ * H2-09 / IK-057 — every flag must carry metadata so we can spot flags
+ * that lingered past their intended sunset and retire them.
+ *
+ * `owner`     — GitHub handle or team email responsible for the rollout.
+ * `expiresAt` — ISO date when the flag must either be removed OR explicitly
+ *               extended. Unit test fails when a flag lacks either field
+ *               OR has an ISO date in the past (past-due flag cleanup).
+ */
+export type FlagMeta = {
+  owner: string;
+  expiresAt: string; // ISO date, e.g. "2026-07-01"
+  description: string;
+};
+
+export const FLAG_REGISTRY: Record<keyof Flags, FlagMeta> = {
+  command_palette_v2: {
+    owner: "julian.clarkson@ghxstship.pro",
+    expiresAt: "2026-08-01",
+    description: "Enables v2 command palette with fuzzy search + recents.",
+  },
+  ai_opus_for_pro: {
+    owner: "julian.clarkson@ghxstship.pro",
+    expiresAt: "2026-07-01",
+    description: "Routes Pro-tier orgs to claude-opus instead of claude-sonnet.",
+  },
+  portal_comments: {
+    owner: "julian.clarkson@ghxstship.pro",
+    expiresAt: "2026-09-01",
+    description: "Guide comment thread on /p/[slug]/guide.",
+  },
+  data_table_saved_views: {
+    owner: "julian.clarkson@ghxstship.pro",
+    expiresAt: "2026-09-01",
+    description: "Saved filter presets on data tables.",
+  },
+  passkeys: {
+    owner: "julian.clarkson@ghxstship.pro",
+    expiresAt: "2026-12-01",
+    description: "WebAuthn passkey registration + sign-in flow.",
+  },
+};
+
 const GB_HOST = process.env.GROWTHBOOK_API_HOST ?? "https://cdn.growthbook.io";
 const GB_KEY = process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY;
 

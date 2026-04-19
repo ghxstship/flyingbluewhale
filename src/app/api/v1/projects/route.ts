@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
-import { createProject, listProjects } from "@/lib/db/projects";
+import { createProject } from "@/lib/db/projects";
+import { listOrgScopedPage } from "@/lib/db/resource";
 
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
@@ -14,11 +15,31 @@ const CreateProject = z.object({
   slug: z.string().min(1).max(48).regex(/^[a-z0-9-]+$/).optional(),
 });
 
-export async function GET() {
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const cursor = url.searchParams.get("cursor");
+  const pageSizeParam = url.searchParams.get("pageSize");
+  const pageSize = pageSizeParam ? Number.parseInt(pageSizeParam, 10) : undefined;
+
   return withAuth(async (session) => {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
-    const projects = await listProjects(session.orgId);
-    return apiOk({ orgId: session.orgId, projects });
+    const page = await listOrgScopedPage("projects", session.orgId, {
+      cursor,
+      pageSize: Number.isFinite(pageSize) ? pageSize : undefined,
+      orderBy: "updated_at",
+      ascending: false,
+    });
+    // Canonical pagination envelope: X-Total-Count header + nextCursor in body.
+    return apiOk(
+      {
+        orgId: session.orgId,
+        projects: page.rows,
+        nextCursor: page.nextCursor,
+        pageSize: page.pageSize,
+        totalCount: page.totalCount,
+      },
+      { headers: { "x-total-count": String(page.totalCount) } },
+    );
   });
 }
 

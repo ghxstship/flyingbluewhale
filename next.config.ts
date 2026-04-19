@@ -28,8 +28,10 @@ const csp = [
 
 const config: NextConfig = {
   reactStrictMode: true,
-  // react compiler opt-in; cast because the type may lag behind the runtime support.
-  experimental: { reactCompiler: true } as NextConfig["experimental"],
+  // react compiler opt-in. In Next 16 the key graduated out of `experimental`
+  // to a top-level option; cast guards against type drift if the typing lags
+  // the runtime.
+  reactCompiler: true as never,
 
   async redirects() {
     return [

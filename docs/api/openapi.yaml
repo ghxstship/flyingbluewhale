@@ -203,3 +203,7 @@ paths:
 
   /api/v1/credentials/extract:
     post: { summary: AI-extract structured fields from COI or W-9 text. Opp #10. }
+
+  /api/v1/notifications:
+    get:   { summary: List the session user's 50 most recent notifications + unread count. }
+    patch: { summary: Mark notifications as read by `ids[]` or `readAll=true`. }

@@ -1,21 +1,32 @@
 import { PlatformSidebar } from "@/components/Shell";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CommandPalette, CommandPaletteTrigger } from "@/components/CommandPalette";
+import { NotificationsBell } from "@/components/NotificationsBell";
+import { requireSession } from "@/lib/auth";
 import { TenantShell } from "@/components/TenantShell";
 import { platformNav } from "@/lib/nav";
 
 export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
+  // Protects /console at the outer boundary so every page inherits the
+  // guard; individual pages may still call requireSession() for session data.
+  await requireSession("/login");
   return (
     <TenantShell>
       <div data-platform="atlvs" className="console-shell">
         <PlatformSidebar groups={platformNav} />
         <div className="console-main">
+          {/*
+           * Glass nav — IA redesign (docs/ia/02-navigation-redesign.md §3.3).
+           * The static "Console" label was removed; the page's ModuleHeader
+           * now carries orientation via breadcrumbs. The right-hand cluster
+           * keeps the canonical global actions: command palette trigger,
+           * notifications bell, theme toggle.
+           */}
           <header className="glass-nav sticky top-0 z-30 flex items-center justify-between px-6 py-2.5">
-            <div className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
-              Console
-            </div>
-            <div className="flex items-center gap-3">
+            <div className="flex-1" />
+            <div className="flex items-center gap-2">
               <CommandPaletteTrigger />
+              <NotificationsBell />
               <ThemeToggle />
             </div>
           </header>

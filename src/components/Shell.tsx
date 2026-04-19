@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import type { NavItem } from "@/lib/nav";
 import { MobileTabBarClient } from "./MobileTabBarClient";
+import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
+import { matchRoute } from "@/lib/hooks/useActiveRoute";
 
 export function PageStub({ title, description }: { title: string; description?: string }) {
   return (
@@ -31,10 +33,16 @@ export function PortalRail({ items, title, currentPath }: { items: NavItem[]; ti
       <div className="nav-label">{title}</div>
       <ul className="mt-0.5 space-y-0.5">
         {items.map((i) => {
-          const active = currentPath === i.href;
+          // Unified active-route rule so /p/{slug}/client/invoices/{id} still
+          // marks `Invoices` active. IA spec §7 anti-pattern #2.
+          const { isActive: active } = matchRoute(currentPath ?? "", i.href);
           return (
             <li key={i.href}>
-              <Link href={i.href} className={active ? "nav-item nav-item-active" : "nav-item"}>
+              <Link
+                href={i.href}
+                aria-current={active ? "page" : undefined}
+                className={active ? "nav-item nav-item-active" : "nav-item"}
+              >
                 {i.label}
               </Link>
             </li>
@@ -61,7 +69,10 @@ export function ModuleHeader({
   subtitle?: string;
   action?: React.ReactNode;
   eyebrow?: string;
-  /** Optional breadcrumb trail rendered above the title (no leading Home needed; pass explicitly). */
+  /** Optional breadcrumb trail rendered above the title. Delegates to the
+   *  unified `<Breadcrumbs>` primitive so every shell (console, portal,
+   *  mobile, marketing) shares the same JSON-LD + truncation rules.
+   *  See docs/ia/02-navigation-redesign.md §3.7. */
   breadcrumbs?: Array<{ label: string; href?: string }>;
   /** Optional Tabs slot rendered at the bottom of the header (e.g. <TabsList>). */
   tabs?: React.ReactNode;
@@ -71,22 +82,7 @@ export function ModuleHeader({
       <div className="module-header-inner">
         <div className="min-w-0 flex-1">
           {breadcrumbs && breadcrumbs.length > 0 && (
-            <nav aria-label="Breadcrumb" className="mb-2 flex items-center gap-1 text-xs text-[var(--text-muted)]">
-              {breadcrumbs.map((b, i) => (
-                <React.Fragment key={`${b.label}-${i}`}>
-                  {i > 0 && <span aria-hidden="true" className="text-[var(--text-muted)]">/</span>}
-                  {b.href ? (
-                    <Link href={b.href} className="hover:text-[var(--text-primary)]">
-                      {b.label}
-                    </Link>
-                  ) : (
-                    <span className="text-[var(--text-primary)]" aria-current="page">
-                      {b.label}
-                    </span>
-                  )}
-                </React.Fragment>
-              ))}
-            </nav>
+            <UnifiedBreadcrumbs items={breadcrumbs} className="mb-2" />
           )}
           {eyebrow && (
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--org-primary)]">

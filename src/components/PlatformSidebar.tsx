@@ -14,6 +14,7 @@ import {
 import type { NavGroup, NavItem } from "@/lib/nav";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { useHotkeys, registerShortcut } from "@/lib/hooks/useHotkeys";
+import { matchRoute } from "@/lib/hooks/useActiveRoute";
 import { Hint } from "@/components/ui/Tooltip";
 
 const MIN_WIDTH = 200;
@@ -265,7 +266,9 @@ function SidebarGroup({
       )}
       <ul className="mt-0.5 space-y-0.5">
         {items.map((item) => {
-          const active = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+          // Use the unified active-route matcher so portal + mobile + palette
+          // all agree. IA spec §1.B / §7 anti-pattern #2.
+          const { isActive: active } = matchRoute(pathname ?? "", item.href);
           const isPinned = pinned.includes(item.href);
           return (
             <li key={item.href} className="group relative">

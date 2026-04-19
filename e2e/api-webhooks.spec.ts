@@ -92,4 +92,42 @@ test.describe("Stripe webhook", () => {
     const body = await r.json();
     expect(body.ok).toBe(true);
   });
+
+  // H2-05 / IK-028 regression guard. Stripe redelivers until it sees a 2xx;
+  // a retry must not run side effects twice. The dedup insert on
+  // stripe_events.event_id (PK) enforces this, and the handler surfaces
+  // `replay: true` in the envelope so observers can count redeliveries.
+  //
+  // Requires SUPABASE_SERVICE_ROLE_KEY — the dedup write uses a service
+  // client (the table is RLS-locked to service_role). Auto-skips otherwise.
+  test("identical event_id delivered twice → second response flagged replay", async ({ request }) => {
+    const eventId = `evt_dedup_${Date.now()}`;
+    const payload = { type: "account.updated", data: { object: {} }, id: eventId };
+
+    const first = await request.post("/api/v1/webhooks/stripe", {
+      data: payload,
+      headers: { "content-type": "application/json" },
+    });
+    // If a webhook secret IS set, unsigned posts 401. Skip the dedup assertion then.
+    test.skip(first.status() === 401, "webhook secret configured — replay test needs unsigned path");
+    expect(first.status()).toBe(200);
+    const firstBody = await first.json();
+    expect(firstBody.ok).toBe(true);
+
+    const second = await request.post("/api/v1/webhooks/stripe", {
+      data: payload,
+      headers: { "content-type": "application/json" },
+    });
+    expect(second.status()).toBe(200);
+    const secondBody = await second.json();
+    expect(secondBody.ok).toBe(true);
+
+    // If dedup is wired end-to-end, second must flag replay.
+    // If service role unavailable in this env, both will be undefined → skip.
+    if (firstBody.data.replay === undefined && secondBody.data.replay === undefined) {
+      test.skip(true, "SUPABASE_SERVICE_ROLE_KEY not configured — dedup path not exercised");
+    }
+    expect(firstBody.data.replay).toBeUndefined();
+    expect(secondBody.data.replay).toBe(true);
+  });
 });

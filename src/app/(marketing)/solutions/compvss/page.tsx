@@ -1,3 +1,8 @@
+// ISR (H2-08 / IK-030) — regenerate static HTML every 5 min.
+// Shortens to 60s if editorial cadence picks up; `revalidate` alone is enough,
+// no `dynamic = 'force-static'` because some pages read query params.
+export const revalidate = 300;
+
 import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle2, QrCode, Clock, Wifi, Camera, AlertTriangle, Home, BookOpen } from "lucide-react";

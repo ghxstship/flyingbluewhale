@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars, type Branding } from "@/lib/branding";
@@ -13,8 +14,12 @@ export type Tenant = {
  * Server-side tenant resolver. Looks up the active org via the `last_org_id`
  * preference (or the single membership if only one exists), reads the org's
  * branding jsonb, and returns the tokens for <TenantShell>.
+ *
+ * Wrapped in React's `cache()` so multiple server components in the same
+ * request share one Supabase round-trip (H2-01 / IK-031). Cache scope is
+ * per-request; it does not leak across users.
  */
-export async function resolveTenant(): Promise<Tenant> {
+export const resolveTenant = cache(async (): Promise<Tenant> => {
   try {
     const supabase = await createClient();
     const { data: u } = await supabase.auth.getUser();
@@ -64,7 +69,7 @@ export async function resolveTenant(): Promise<Tenant> {
   } catch {
     return { branding: {} };
   }
-}
+});
 
 /**
  * <TenantShell> — wrap every authenticated route group.

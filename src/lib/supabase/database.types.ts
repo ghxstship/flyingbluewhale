@@ -991,6 +991,53 @@ export type Database = {
           },
         ]
       }
+      idempotency_keys: {
+        Row: {
+          created_at: string
+          expires_at: string
+          key: string
+          method: string
+          org_id: string | null
+          path: string
+          request_hash: string
+          response: Json
+          status_code: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          key: string
+          method: string
+          org_id?: string | null
+          path: string
+          request_hash: string
+          response: Json
+          status_code: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          key?: string
+          method?: string
+          org_id?: string | null
+          path?: string
+          request_hash?: string
+          response?: Json
+          status_code?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "idempotency_keys_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoice_line_items: {
         Row: {
           description: string
@@ -2114,6 +2161,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      stripe_events: {
+        Row: {
+          event_id: string
+          livemode: boolean
+          received_at: string
+          type: string
+        }
+        Insert: {
+          event_id: string
+          livemode?: boolean
+          received_at?: string
+          type: string
+        }
+        Update: {
+          event_id?: string
+          livemode?: boolean
+          received_at?: string
+          type?: string
+        }
+        Relationships: []
       }
       tasks: {
         Row: {

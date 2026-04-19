@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
+import { scrubSentryEvent } from "@/lib/sentry-scrub";
 
 /**
  * Client-side Sentry init.
@@ -18,20 +19,14 @@ if (dsn) {
     tracesSampleRate: 0.1,
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: 1.0,
+    sendDefaultPii: false,
     beforeSend(event) {
-      // Honor cookie consent — if analytics is off, drop the event
+      // Honor cookie consent — if analytics is off, drop the event entirely.
       if (typeof window !== "undefined") {
         const consent = (window as Window & { __consent?: { analytics?: boolean } }).__consent;
         if (consent && consent.analytics !== true) return null;
       }
-      // Strip PII from URL paths (anything that looks like an ID)
-      if (event.request?.url) {
-        event.request.url = event.request.url.replace(
-          /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
-          ":uuid",
-        );
-      }
-      return event;
+      return scrubSentryEvent(event);
     },
   });
 }

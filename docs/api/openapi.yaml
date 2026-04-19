@@ -152,6 +152,8 @@ paths:
   /api/v1/exports:
     get:  { summary: List the caller org's recent export runs. }
     post: { summary: Kick off a synchronous CSV or JSON export for a registry-whitelisted table. }
+  /api/v1/exports/{id}/download:
+    get: { summary: Re-mint a short-lived signed URL for a completed export run. }
 
   /api/v1/import/crew-members:
     post: { summary: Bulk-import a CSV of crew into the caller's org, deduped by email or (name, phone). }
@@ -197,12 +199,21 @@ paths:
   /api/v1/stage-plots:
     get:  { summary: List stage plots for a project. Opp #11. }
     post: { summary: Create a stage plot row with interactive-editor state. }
+  /api/v1/stage-plots/{id}:
+    get:    { summary: Get a single stage plot. }
+    patch:  { summary: Update a stage plot's name, dimensions, elements, or notes (editor save). }
+    delete: { summary: Soft-delete a stage plot. }
   /api/v1/incidents:
     get:  { summary: List incidents for the caller's org (optionally filtered by project). Opp #18. }
     post: { summary: Log a new incident report with optional photo references. }
+  /api/v1/incidents/photo-upload:
+    post: { summary: Issue a signed upload URL into the `incident-photos` bucket scoped to a draft id. }
   /api/v1/email-templates:
     get:  { summary: List the org's transactional email templates. Opp #21. }
     post: { summary: Create an org-scoped email template with merge-tag schema. }
+  /api/v1/email-templates/{id}:
+    patch:  { summary: Update an org-scoped email template's name, subject, body, merge tags, or active flag. }
+    delete: { summary: Soft-delete an org-scoped email template. }
 
   /api/v1/credentials/extract:
     post: { summary: AI-extract structured fields from COI or W-9 text. Opp #10. }

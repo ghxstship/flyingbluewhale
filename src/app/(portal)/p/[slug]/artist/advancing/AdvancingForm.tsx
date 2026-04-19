@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState, useRef } from "react";
+import { useActionState, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { TemplatePicker } from "@/components/deliverable-templates/TemplatePicker";
 import { submitDeliverableAction, type SubmitState } from "./actions";
 
 const TALENT = [
@@ -18,12 +19,17 @@ const TALENT = [
 
 export function AdvancingForm({ slug }: { slug: string }) {
   const formRef = useRef<HTMLFormElement>(null);
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("technical_rider");
+  const [notes, setNotes] = useState("");
   const [state, formAction, pending] = useActionState<SubmitState, FormData>(
     async (prev, fd) => {
       const result = await submitDeliverableAction(prev, fd);
       if (result?.ok) {
         toast.success("Deliverable submitted");
         formRef.current?.reset();
+        setTitle("");
+        setNotes("");
       } else if (result?.error) {
         toast.error(result.error);
       }
@@ -35,18 +41,54 @@ export function AdvancingForm({ slug }: { slug: string }) {
   return (
     <form ref={formRef} action={formAction} className="surface-raised space-y-4 p-6">
       <input type="hidden" name="slug" value={slug} />
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-semibold">New deliverable</div>
+        <TemplatePicker
+          onPick={(t) => {
+            setType(t.type);
+            if (!title) setTitle(t.name);
+            const prefill =
+              typeof (t.data as { notes?: unknown } | null)?.notes === "string"
+                ? String((t.data as { notes: string }).notes)
+                : t.description ?? "";
+            if (prefill) setNotes(prefill);
+            toast.success(`Applied ${t.name}`);
+          }}
+        />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="Title" name="title" required maxLength={200} placeholder="Stage plot v3" />
+        <Input
+          label="Title"
+          name="title"
+          required
+          maxLength={200}
+          placeholder="Stage plot v3"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">Type</label>
-          <select name="type" className="input-base mt-1.5 w-full" defaultValue="technical_rider" required>
+          <select
+            name="type"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="input-base mt-1.5 w-full"
+            required
+          >
             {TALENT.map((t) => <option key={t.type} value={t.type}>{t.label}</option>)}
           </select>
         </div>
       </div>
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">Notes</label>
-        <textarea name="notes" rows={3} maxLength={4000} className="input-base mt-1.5 w-full" />
+        <textarea
+          name="notes"
+          rows={3}
+          maxLength={4000}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          className="input-base mt-1.5 w-full"
+        />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

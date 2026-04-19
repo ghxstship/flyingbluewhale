@@ -1,8 +1,10 @@
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { NewStagePlotButton } from "@/components/stage-plots/NewStagePlotButton";
 
 /** Stage plot list for a project — Opportunity #11 UI surface. */
 
@@ -12,7 +14,12 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
   const supabase = await createClient();
   const [{ data: project }, { data: plots }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("id", projectId).eq("org_id", session.orgId).maybeSingle(),
-    supabase.from("stage_plots").select("id, name, width_ft, depth_ft, updated_at").eq("project_id", projectId).is("deleted_at", null).order("updated_at", { ascending: false }),
+    supabase
+      .from("stage_plots")
+      .select("id, name, width_ft, depth_ft, updated_at")
+      .eq("project_id", projectId)
+      .is("deleted_at", null)
+      .order("updated_at", { ascending: false }),
   ]);
 
   return (
@@ -20,7 +27,13 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
         title="Stage plots"
-        subtitle="Interactive 2D layouts exportable to SVG or PDF."
+        subtitle="Interactive 2D layouts — drag to place mics, amps, risers, and truss."
+        breadcrumbs={[
+          { label: "Projects", href: "/console/projects" },
+          { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
+          { label: "Stage plots" },
+        ]}
+        action={<NewStagePlotButton projectId={projectId} />}
       />
       <div className="page-content max-w-5xl">
         {plots && plots.length > 0 ? (
@@ -35,7 +48,14 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
             <tbody>
               {plots.map((p) => (
                 <tr key={p.id}>
-                  <td>{p.name}</td>
+                  <td>
+                    <Link
+                      href={`/console/projects/${projectId}/stage-plots/${p.id}`}
+                      className="font-medium hover:underline"
+                    >
+                      {p.name}
+                    </Link>
+                  </td>
                   <td className="font-mono text-xs">
                     {p.width_ft && p.depth_ft ? `${p.width_ft}′ × ${p.depth_ft}′` : "—"}
                   </td>
@@ -46,8 +66,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
           </table>
         ) : (
           <div className="surface p-6 text-center text-sm text-[var(--text-muted)]">
-            No stage plots yet. Create one via <code className="font-mono text-xs">POST /api/v1/stage-plots</code>;
-            a canvas editor is on the follow-up sheet.
+            No stage plots yet. Click <strong>New stage plot</strong> above to open the canvas editor.
           </div>
         )}
       </div>

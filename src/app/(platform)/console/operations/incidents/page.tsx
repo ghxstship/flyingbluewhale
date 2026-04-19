@@ -31,8 +31,11 @@ export default async function IncidentsPage() {
         title="Incidents"
         subtitle="Field-logged safety + near-miss reports."
         action={
-          <Link href="/m/incidents/new" className="btn btn-primary btn-sm">
-            Log on mobile
+          <Link
+            href="/console/operations/incidents/new"
+            className="inline-flex items-center gap-1 rounded bg-[var(--org-primary)] px-3 py-1.5 text-xs font-medium text-white"
+          >
+            Log incident
           </Link>
         }
       />
@@ -69,7 +72,11 @@ export default async function IncidentsPage() {
           </table>
         ) : (
           <div className="surface p-6 text-center text-sm text-[var(--text-muted)]">
-            No incidents reported. Crews can log them from the mobile shell at
+            No incidents reported. Log one from
+            <Link className="ml-1 underline" href="/console/operations/incidents/new">
+              here
+            </Link>{" "}
+            or field-log from the mobile shell at
             <Link className="ml-1 underline" href="/m/incidents/new">/m/incidents/new</Link>.
           </div>
         )}

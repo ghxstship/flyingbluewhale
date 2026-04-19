@@ -9,9 +9,9 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema, faqSchema } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Pricing — Portal, Starter, Professional, Enterprise",
+  title: "Pricing — Access, Core, Professional, Enterprise",
   description:
-    "Transparent pricing for flyingbluewhale. Start free with the Portal tier. Scale to Starter ($49/mo), Professional ($199/mo), or Enterprise. Every tier includes RLS-backed org scoping and the REST API.",
+    "Transparent pricing for flyingbluewhale. Start free for life with the Access tier. Scale to Core ($49/mo), Professional ($199/mo), or Enterprise. Every tier includes RLS-backed org scoping and the REST API.",
   path: "/pricing",
   keywords: ["production software pricing", "event management software cost", "flyingbluewhale pricing", "stakeholder portal pricing"],
   ogImageEyebrow: "Pricing",
@@ -20,7 +20,7 @@ export const metadata: Metadata = buildMetadata({
 
 const TIERS = [
   {
-    tier: "Portal",
+    tier: "Access",
     price: "$0",
     per: "forever",
     description: "For freelancers and single-show teams.",
@@ -35,12 +35,12 @@ const TIERS = [
     href: "/signup",
   },
   {
-    tier: "Starter",
+    tier: "Core",
     price: "$49",
     per: "month per org",
     description: "For small production teams shipping their first season.",
     features: [
-      "Everything in Portal",
+      "Everything in Access",
       "Invoicing + expenses + budgets",
       "Advancing deliverables",
       "Up to 10 users",
@@ -56,7 +56,7 @@ const TIERS = [
     per: "month per org",
     description: "For production orgs running multiple shows a month.",
     features: [
-      "Everything in Starter",
+      "Everything in Core",
       "Full procurement + Stripe Connect",
       "AI assistant (Sonnet 4.6)",
       "Interactive proposals",
@@ -87,87 +87,87 @@ const TIERS = [
   },
 ];
 
-const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; portal: boolean | string; starter: boolean | string; pro: boolean | string; ent: boolean | string }> }> = [
+const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; access: boolean | string; core: boolean | string; pro: boolean | string; ent: boolean | string }> }> = [
   {
     category: "Core",
     rows: [
-      { feature: "RLS-backed multi-tenant isolation", portal: true, starter: true, pro: true, ent: true },
-      { feature: "Users per org", portal: "3", starter: "10", pro: "Unlimited", ent: "Unlimited" },
-      { feature: "Projects per org", portal: "1", starter: "5", pro: "Unlimited", ent: "Unlimited" },
-      { feature: "REST API + webhooks", portal: true, starter: true, pro: true, ent: true },
+      { feature: "RLS-backed multi-tenant isolation", access: true, core: true, pro: true, ent: true },
+      { feature: "Users per org", access: "3", core: "10", pro: "Unlimited", ent: "Unlimited" },
+      { feature: "Projects per org", access: "1", core: "5", pro: "Unlimited", ent: "Unlimited" },
+      { feature: "REST API + webhooks", access: true, core: true, pro: true, ent: true },
     ],
   },
   {
     category: "ATLVS console",
     rows: [
-      { feature: "Overview + Projects", portal: true, starter: true, pro: true, ent: true },
-      { feature: "Finance (invoices, budgets, expenses)", portal: false, starter: true, pro: true, ent: true },
-      { feature: "Procurement (POs, vendors)", portal: false, starter: false, pro: true, ent: true },
-      { feature: "Production (equipment, rentals)", portal: false, starter: true, pro: true, ent: true },
-      { feature: "People + credentials", portal: false, starter: true, pro: true, ent: true },
-      { feature: "Advancing (16 deliverable types)", portal: false, starter: true, pro: true, ent: true },
-      { feature: "CMS + event guides", portal: false, starter: false, pro: true, ent: true },
+      { feature: "Overview + Projects", access: true, core: true, pro: true, ent: true },
+      { feature: "Finance (invoices, budgets, expenses)", access: false, core: true, pro: true, ent: true },
+      { feature: "Procurement (POs, vendors)", access: false, core: false, pro: true, ent: true },
+      { feature: "Production (equipment, rentals)", access: false, core: true, pro: true, ent: true },
+      { feature: "People + credentials", access: false, core: true, pro: true, ent: true },
+      { feature: "Advancing (16 deliverable types)", access: false, core: true, pro: true, ent: true },
+      { feature: "CMS + event guides", access: false, core: false, pro: true, ent: true },
     ],
   },
   {
     category: "GVTEWAY portals",
     rows: [
-      { feature: "Guest portal", portal: true, starter: true, pro: true, ent: true },
-      { feature: "Artist portal", portal: true, starter: true, pro: true, ent: true },
-      { feature: "Vendor portal", portal: false, starter: true, pro: true, ent: true },
-      { feature: "Client portal + proposals", portal: false, starter: false, pro: true, ent: true },
-      { feature: "Sponsor portal", portal: false, starter: false, pro: true, ent: true },
-      { feature: "Crew portal", portal: false, starter: true, pro: true, ent: true },
-      { feature: "White-label branding", portal: false, starter: false, pro: true, ent: true },
+      { feature: "Guest portal", access: true, core: true, pro: true, ent: true },
+      { feature: "Artist portal", access: true, core: true, pro: true, ent: true },
+      { feature: "Vendor portal", access: false, core: true, pro: true, ent: true },
+      { feature: "Client portal + proposals", access: false, core: false, pro: true, ent: true },
+      { feature: "Sponsor portal", access: false, core: false, pro: true, ent: true },
+      { feature: "Crew portal", access: false, core: true, pro: true, ent: true },
+      { feature: "White-label branding", access: false, core: false, pro: true, ent: true },
     ],
   },
   {
     category: "COMPVSS mobile",
     rows: [
-      { feature: "Offline ticket scan", portal: true, starter: true, pro: true, ent: true },
-      { feature: "Geo-verified clock in/out", portal: false, starter: true, pro: true, ent: true },
-      { feature: "Inventory scan", portal: false, starter: true, pro: true, ent: true },
-      { feature: "Incident reporting", portal: false, starter: true, pro: true, ent: true },
+      { feature: "Offline ticket scan", access: true, core: true, pro: true, ent: true },
+      { feature: "Geo-verified clock in/out", access: false, core: true, pro: true, ent: true },
+      { feature: "Inventory scan", access: false, core: true, pro: true, ent: true },
+      { feature: "Incident reporting", access: false, core: true, pro: true, ent: true },
     ],
   },
   {
     category: "AI",
     rows: [
-      { feature: "AI assistant (Claude Sonnet 4.6)", portal: false, starter: false, pro: true, ent: true },
-      { feature: "Claude Opus 4.7", portal: false, starter: false, pro: false, ent: true },
-      { feature: "Drafting templates", portal: false, starter: false, pro: true, ent: true },
-      { feature: "Token budget", portal: "—", starter: "—", pro: "200K / mo", ent: "Custom" },
+      { feature: "AI assistant (Claude Sonnet 4.6)", access: false, core: false, pro: true, ent: true },
+      { feature: "Claude Opus 4.7", access: false, core: false, pro: false, ent: true },
+      { feature: "Drafting templates", access: false, core: false, pro: true, ent: true },
+      { feature: "Token budget", access: "—", core: "—", pro: "200K / mo", ent: "Custom" },
     ],
   },
   {
     category: "Integrations",
     rows: [
-      { feature: "Stripe Checkout", portal: false, starter: true, pro: true, ent: true },
-      { feature: "Stripe Connect Express (vendor payouts)", portal: false, starter: false, pro: true, ent: true },
-      { feature: "Webhooks (HMAC-SHA256)", portal: true, starter: true, pro: true, ent: true },
-      { feature: "SSO (SAML)", portal: false, starter: false, pro: false, ent: true },
-      { feature: "SCIM 2.0 provisioning", portal: false, starter: false, pro: false, ent: true },
+      { feature: "Stripe Checkout", access: false, core: true, pro: true, ent: true },
+      { feature: "Stripe Connect Express (vendor payouts)", access: false, core: false, pro: true, ent: true },
+      { feature: "Webhooks (HMAC-SHA256)", access: true, core: true, pro: true, ent: true },
+      { feature: "SSO (SAML)", access: false, core: false, pro: false, ent: true },
+      { feature: "SCIM 2.0 provisioning", access: false, core: false, pro: false, ent: true },
     ],
   },
   {
     category: "Security & compliance",
     rows: [
-      { feature: "Audit log (jsonb before/after)", portal: true, starter: true, pro: true, ent: true },
-      { feature: "Signed-URL file delivery", portal: true, starter: true, pro: true, ent: true },
-      { feature: "Rate-limited endpoints", portal: true, starter: true, pro: true, ent: true },
-      { feature: "CSP + CORS + HSTS", portal: true, starter: true, pro: true, ent: true },
-      { feature: "SOC-2 attestation package", portal: false, starter: false, pro: false, ent: true },
-      { feature: "Data residency selection", portal: false, starter: false, pro: false, ent: true },
+      { feature: "Audit log (jsonb before/after)", access: true, core: true, pro: true, ent: true },
+      { feature: "Signed-URL file delivery", access: true, core: true, pro: true, ent: true },
+      { feature: "Rate-limited endpoints", access: true, core: true, pro: true, ent: true },
+      { feature: "CSP + CORS + HSTS", access: true, core: true, pro: true, ent: true },
+      { feature: "SOC-2 attestation package", access: false, core: false, pro: false, ent: true },
+      { feature: "Data residency selection", access: false, core: false, pro: false, ent: true },
     ],
   },
   {
     category: "Support",
     rows: [
-      { feature: "Community", portal: true, starter: true, pro: true, ent: true },
-      { feature: "Email support", portal: false, starter: true, pro: true, ent: true },
-      { feature: "Priority + onboarding", portal: false, starter: false, pro: true, ent: true },
-      { feature: "Dedicated CSM", portal: false, starter: false, pro: false, ent: true },
-      { feature: "99.9% uptime SLA", portal: false, starter: false, pro: false, ent: true },
+      { feature: "Community", access: true, core: true, pro: true, ent: true },
+      { feature: "Email support", access: false, core: true, pro: true, ent: true },
+      { feature: "Priority + onboarding", access: false, core: false, pro: true, ent: true },
+      { feature: "Dedicated CSM", access: false, core: false, pro: false, ent: true },
+      { feature: "99.9% uptime SLA", access: false, core: false, pro: false, ent: true },
     ],
   },
 ];
@@ -179,11 +179,11 @@ const FAQS = [
   },
   {
     q: "Is there a free tier?",
-    a: "Yes. The Portal tier is free forever: basic projects, guest + artist portals, up to 3 users, and up to 100 tickets per event. No credit card required.",
+    a: "Yes. The Access tier is free forever: basic projects, guest + artist portals, up to 3 users, and up to 100 tickets per event. No credit card required.",
   },
   {
     q: "How does the 14-day trial work?",
-    a: "Starter and Professional come with a 14-day free trial of every feature in the tier. No credit card up front. If you don't upgrade by day 14, you drop back to the free Portal tier — your data stays.",
+    a: "Core and Professional come with a 14-day free trial of every feature in the tier. No credit card up front. If you don't upgrade by day 14, you drop back to the free Access tier — your data stays.",
   },
   {
     q: "Can I switch plans later?",
@@ -191,7 +191,7 @@ const FAQS = [
   },
   {
     q: "What about nonprofits and festivals?",
-    a: "We offer 30% off Starter and Professional for registered nonprofits and community arts festivals. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent.",
+    a: "We offer 30% off Core and Professional for registered nonprofits and community arts festivals. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent.",
   },
   {
     q: "Do you charge per ticket scanned?",
@@ -236,7 +236,7 @@ export default function PricingPage() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Pricing</div>
         <h1 className="mx-auto mt-3 max-w-3xl text-5xl font-semibold tracking-tight sm:text-6xl">
-          Start free. Scale when you need to. Per org, not per seat.
+          Start Free. Scale When You Need to. Per Org, Not Per Seat.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Every tier includes RLS-backed org scoping, Supabase-native auth, the REST API, and an audit log. Upgrade any
@@ -276,7 +276,7 @@ export default function PricingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Feature comparison</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Feature Comparison</h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
           Everything you get at each tier. If a feature you need is on Enterprise, <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">ask us</a> — we&apos;ll usually make it work on Professional.
         </p>
@@ -285,8 +285,8 @@ export default function PricingPage() {
             <thead>
               <tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider text-[var(--text-muted)]">
                 <th className="py-3 pr-4 font-semibold">Feature</th>
-                <th className="py-3 pr-4 text-center font-semibold">Portal</th>
-                <th className="py-3 pr-4 text-center font-semibold">Starter</th>
+                <th className="py-3 pr-4 text-center font-semibold">Access</th>
+                <th className="py-3 pr-4 text-center font-semibold">Core</th>
                 <th className="py-3 pr-4 text-center font-semibold">Professional</th>
                 <th className="py-3 pr-4 text-center font-semibold">Enterprise</th>
               </tr>
@@ -302,8 +302,8 @@ export default function PricingPage() {
                   {cat.rows.map((r) => (
                     <tr key={cat.category + r.feature} className="border-b border-[var(--border)]">
                       <td className="py-3 pr-4 text-sm">{r.feature}</td>
-                      <td className="py-3 pr-4 text-center"><Cell value={r.portal} /></td>
-                      <td className="py-3 pr-4 text-center"><Cell value={r.starter} /></td>
+                      <td className="py-3 pr-4 text-center"><Cell value={r.access} /></td>
+                      <td className="py-3 pr-4 text-center"><Cell value={r.core} /></td>
                       <td className="py-3 pr-4 text-center"><Cell value={r.pro} /></td>
                       <td className="py-3 pr-4 text-center"><Cell value={r.ent} /></td>
                     </tr>

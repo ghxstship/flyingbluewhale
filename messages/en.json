@@ -1,0 +1,43 @@
+{
+  "marketing": {
+    "header": {
+      "login": "Log in",
+      "signup": "Sign up",
+      "themes": "Themes",
+      "language": "Language",
+      "theme": "Theme",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu"
+    },
+    "home": {
+      "hero": {
+        "eyebrow": "Production OS",
+        "title": "The Operating System for Live Events, Fabrication, and Creative Ops",
+        "subtitle": "One platform. Internal console, external stakeholder portals, and mobile PWA — over one Postgres database, with row-level security enforcing every boundary."
+      },
+      "cta": {
+        "primary": "Start Free",
+        "secondary": "Book a Demo"
+      }
+    },
+    "pricing": {
+      "tagline": "Start Free. Scale When You Need to.",
+      "tiers": {
+        "access": { "name": "Access", "positioning": "Free for Life" },
+        "core": { "name": "Core", "positioning": "For shipping teams" },
+        "professional": { "name": "Professional", "positioning": "For production orgs" },
+        "enterprise": { "name": "Enterprise", "positioning": "For agencies + touring companies" }
+      }
+    },
+    "industries": {
+      "live-events": "Live Events",
+      "concerts": "Concerts",
+      "festivals-tours": "Festivals & Tours",
+      "immersive-experiences": "Immersive Experiences",
+      "brand-activations": "Brand Activations",
+      "corporate-events": "Corporate Events",
+      "theatrical-performances": "Theatrical Performances",
+      "broadcast-tv-film": "Broadcast, TV & Film"
+    }
+  }
+}

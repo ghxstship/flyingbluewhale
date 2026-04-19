@@ -48,7 +48,7 @@ export default function ATLVSPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · Internal console</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The operations console</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Operations Console</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Your team runs the show here. Projects, finance, procurement, production, people, and AI — one left
           sidebar, one consistent pattern, and tier-based role gating on every module.
@@ -64,7 +64,7 @@ export default function ATLVSPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Nine domains · 60+ modules</div>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          Every production workflow, in one console.
+          Every Production Workflow, in One Console.
         </h2>
         <div className="mt-8">
           <FeatureGrid
@@ -89,7 +89,7 @@ export default function ATLVSPage() {
         <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Architecture</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built like a platform, not a template.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built Like a Platform, Not a Template.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
               Every module in ATLVS follows the same pattern — list, detail, create, with a status machine where it
               matters (invoices, proposals, POs, tasks). Server actions for mutations, Zod validation at the API
@@ -122,7 +122,7 @@ export default function ATLVSPage() {
 
       {/* Persona tiles */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Who works in ATLVS?</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Who Works in Atlvs?</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {[
             { role: "Owner / Admin", body: "Full access — billing, org settings, members, integrations. Runs the business." },

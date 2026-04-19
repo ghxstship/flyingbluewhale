@@ -93,7 +93,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Why we win.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Why We Win.</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {c.whyWeWin.map((w) => (
             <div key={w.title} className="surface-raised p-6">
@@ -127,7 +127,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       )}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Migration path</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Migration Path</h2>
         <div className="surface-raised mt-6 p-6">
           <ol className="list-decimal space-y-2 pl-5 text-sm text-[var(--text-secondary)]">
             {c.migration.map((m) => <li key={m}>{m}</li>)}
@@ -138,7 +138,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       <FAQSection title={`flyingbluewhale vs. ${c.competitor} · FAQ`} faqs={c.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Other comparisons</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Other Comparisons</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {COMPARE_LIST.filter((x) => x.slug !== c.slug).map((x) => (
             <Link key={x.slug} href={`/compare/${x.slug}`} className="surface-raised hover-lift p-5">
@@ -150,7 +150,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         </div>
       </section>
 
-      <CTASection title="Try flyingbluewhale" subtitle="Free forever on the Portal tier. Migrate when you're ready." />
+      <CTASection title="Try flyingbluewhale" subtitle="Free for Life on the Access tier. Migrate when you're ready." />
     </div>
   );
 }

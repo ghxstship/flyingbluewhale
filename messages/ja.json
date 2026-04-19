@@ -1,0 +1,29 @@
+{
+  "marketing": {
+    "header": {
+      "login": "ログイン",
+      "signup": "登録",
+      "themes": "テーマ",
+      "language": "言語",
+      "theme": "テーマ",
+      "openMenu": "メニューを開く",
+      "closeMenu": "メニューを閉じる"
+    },
+    "home": {
+      "cta": {
+        "primary": "無料で始める",
+        "secondary": "デモを予約"
+      }
+    },
+    "industries": {
+      "live-events": "ライブイベント",
+      "concerts": "コンサート",
+      "festivals-tours": "フェスティバル・ツアー",
+      "immersive-experiences": "イマーシブ体験",
+      "brand-activations": "ブランドアクティベーション",
+      "corporate-events": "企業イベント",
+      "theatrical-performances": "舞台公演",
+      "broadcast-tv-film": "放送・TV・映画"
+    }
+  }
+}

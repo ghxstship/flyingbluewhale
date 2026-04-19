@@ -29,7 +29,7 @@ export default function CustomersPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Customers</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Teams running on flyingbluewhale.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Teams Running on Flyingbluewhale.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Real production orgs, real numbers, real workflows. Every case study covers what they were running before,
           what they changed, and what measurably improved.

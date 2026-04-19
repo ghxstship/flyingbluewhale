@@ -21,7 +21,7 @@ export function SignupForm() {
   return (
     <AuthShell
       title="Create your account"
-      subtitle="Free forever on the Portal tier. No credit card."
+      subtitle="Free for Life on the Access tier. No credit card."
       footer={
         <>
           Already have an account?{" "}

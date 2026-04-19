@@ -33,7 +33,7 @@ export default function BlogIndex() {
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Blog</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Updates from the team.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Updates From the Team.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Essays on production operations, platform architecture, and how to run shows with less duct tape.
         </p>

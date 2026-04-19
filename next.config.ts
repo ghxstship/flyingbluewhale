@@ -36,6 +36,13 @@ const config: NextConfig = {
   async redirects() {
     return [
       { source: "/app/:path*", destination: "/console/:path*", permanent: true },
+      // Industry rename redirects (2026-04-19) — the old 4-industry taxonomy
+      // (live-events / touring / corporate / fabrication) was replaced with
+      // 8 verticals. Permanent redirects so search engines + existing links
+      // land on the closest semantic equivalent.
+      { source: "/solutions/touring", destination: "/solutions/festivals-tours", permanent: true },
+      { source: "/solutions/corporate", destination: "/solutions/corporate-events", permanent: true },
+      { source: "/solutions/fabrication", destination: "/solutions/immersive-experiences", permanent: true },
     ];
   },
 

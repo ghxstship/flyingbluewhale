@@ -34,7 +34,7 @@ export default function GuidesPage() {
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Guides</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Written by operators.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Written by Operators.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Deep-dive guides to the fundamentals of production operations — the disciplines, the taxonomies, and the
           tooling that makes a show work.
@@ -55,7 +55,7 @@ export default function GuidesPage() {
         </ul>
       </section>
 
-      <CTASection title="Ship your ops" subtitle="Start free on the Portal tier." />
+      <CTASection title="Ship your ops" subtitle="Start free on the Access tier." />
     </div>
   );
 }

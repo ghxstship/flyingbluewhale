@@ -6,8 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 
 const TIERS = [
-  { tier: "portal", price: "Free", features: ["Basic project + ticketing", "Up to 3 users", "Community support"] },
-  { tier: "starter", price: "$49/mo", features: ["Invoicing, expenses, tasks", "Up to 10 users", "Email support"] },
+  { tier: "access", price: "Free", features: ["Basic project + ticketing", "Up to 3 users", "Community support"] },
+  { tier: "core", price: "$49/mo", features: ["Invoicing, expenses, tasks", "Up to 10 users", "Email support"] },
   { tier: "professional", price: "$199/mo", features: ["Full finance, procurement, AI", "Unlimited users", "Priority support"] },
   { tier: "enterprise", price: "Contact sales", features: ["SSO, SCIM, audit", "Custom integrations", "Dedicated CSM"] },
 ];

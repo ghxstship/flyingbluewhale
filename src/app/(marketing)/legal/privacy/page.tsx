@@ -5,11 +5,11 @@ export default function PrivacyPage() {
       <p className="mt-4 text-xs text-[var(--text-muted)]">Last updated: 2026-04-16</p>
       <div className="mt-8 space-y-6 text-sm text-[var(--text-secondary)]">
         <section>
-          <h2 className="text-base font-semibold text-[var(--foreground)]">What we collect</h2>
+          <h2 className="text-base font-semibold text-[var(--foreground)]">What We Collect</h2>
           <p className="mt-2">Account info, workspace content you upload, and operational telemetry (pageviews, errors, API timing).</p>
         </section>
         <section>
-          <h2 className="text-base font-semibold text-[var(--foreground)]">How we use it</h2>
+          <h2 className="text-base font-semibold text-[var(--foreground)]">How We Use It</h2>
           <p className="mt-2">To run the Service, prevent abuse, and improve reliability. We do not sell customer data.</p>
         </section>
         <section>

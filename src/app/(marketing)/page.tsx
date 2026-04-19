@@ -48,16 +48,49 @@ export default function Home() {
           Production OS · v1
         </div>
         <h1 className="mt-4 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
-          Run production.<br />Not spreadsheets.
+          Run Production.<br />Not Spreadsheets.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The operating system for live events, fabrication, and creative ops. Internal console, external
-          stakeholder portals, and a field-ready mobile PWA — one platform, one database, one source of truth.
+          The operating system for Live Events, Concerts, Festivals &amp; Tours, Immersive Experiences,
+          Brand Activations, Corporate Events, Theatrical Performances, and Broadcast, TV &amp; Film.
+          Internal console, external stakeholder portals, and a field-ready mobile PWA — one platform,
+          one database, one source of truth.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
-          <Button href="/signup" size="lg">Start free</Button>
-          <Button href="/contact" size="lg" variant="secondary">Book a demo</Button>
-          <Link href="/docs" className="btn btn-ghost btn-lg">View the docs →</Link>
+          <Button href="/signup" size="lg">Start Free for Life</Button>
+          <Button href="/contact" size="lg" variant="secondary">Book a Demo</Button>
+          <Link href="/docs" className="btn btn-ghost btn-lg">View the Docs →</Link>
+        </div>
+
+        {/* M3-03 — Live portal preview. Anon visitors see real product chrome
+            (the mmw26-hialeah guest guide) at reduced scale, no signup wall.
+            `sandbox=""` blocks scripts, forms, + popups from inside the iframe —
+            it's read-only product-eye-candy. `loading="lazy"` defers the paint
+            until the iframe enters the viewport, which is below the fold on
+            most desktop renders. */}
+        <div className="mt-14">
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--surface-inset)] elevation-2">
+            <div className="flex items-center gap-1.5 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]" aria-hidden="true" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]" aria-hidden="true" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]" aria-hidden="true" />
+              <span className="ml-3 font-mono text-xs text-[var(--text-muted)]">
+                flyingbluewhale.app/p/mmw26-hialeah/guide
+              </span>
+            </div>
+            <iframe
+              src="/p/mmw26-hialeah/guide"
+              title="Live product preview — MMW26 Hialeah guest guide"
+              sandbox=""
+              loading="lazy"
+              className="h-[640px] w-full bg-[var(--background)]"
+            />
+          </div>
+          <p className="mt-3 text-center text-xs text-[var(--text-muted)]">
+            Live preview — the same portal a guest sees when they hit
+            <code className="mx-1 font-mono text-[11px]">/p/mmw26-hialeah/guide</code>.
+            No signup required.
+          </p>
         </div>
       </section>
 
@@ -147,7 +180,7 @@ export default function Home() {
         <div className="mx-auto max-w-3xl text-center">
           <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Capabilities</div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl text-balance">
-            Everything your production team runs, replaced.
+            Everything Your Production Team Runs, Replaced.
           </h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             From proposal to wrap — pitch, advance, produce, reconcile, recap.
@@ -172,7 +205,7 @@ export default function Home() {
 
       {/* Built for section */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="text-3xl font-semibold tracking-tight">Built for the entire production stack</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Built for the Entire Production Stack</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {[
             { slug: "live-events", title: "Live events", sub: "Festivals, activations, residencies" },
@@ -197,7 +230,7 @@ export default function Home() {
           <div className="grid gap-10 p-10 md:grid-cols-2 md:items-center">
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Why flyingbluewhale</div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">One source of truth beats ten SaaS tools.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">One Source of Truth Beats Ten SaaS Tools.</h2>
               <p className="mt-4 text-sm text-[var(--text-secondary)]">
                 Most production teams are duct-taping Asana, Monday, a spreadsheet for advancing, DocuSign for
                 proposals, QuickBooks for invoices, and a group chat for everything else. Every seam leaks money —
@@ -263,7 +296,7 @@ const HOME_FAQ = [
   },
   {
     q: "Is there a free tier?",
-    a: "Yes. The Portal tier is free forever — up to 3 users, basic projects and ticketing, community support. Starter is $49/mo, Professional is $199/mo, Enterprise is custom. See pricing for the full matrix.",
+    a: "Yes. The Access tier is free forever — up to 3 users, basic projects and ticketing, community support. Core is $49/mo, Professional is $199/mo, Enterprise is custom. See pricing for the full matrix.",
   },
   {
     q: "Do you integrate with Stripe?",

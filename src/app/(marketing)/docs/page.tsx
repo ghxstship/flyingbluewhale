@@ -23,7 +23,7 @@ export default function DocsLanding() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-16">
       <div className="text-xs font-semibold uppercase tracking-wider text-[var(--org-primary)]">Docs</div>
-      <h1 className="mt-3 text-4xl font-semibold tracking-tight">How flyingbluewhale works</h1>
+      <h1 className="mt-3 text-4xl font-semibold tracking-tight">How Flyingbluewhale Works</h1>
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
         {SECTIONS.map((s) => (
           <Link key={s.title} href={s.href} className="surface hover-lift p-5">

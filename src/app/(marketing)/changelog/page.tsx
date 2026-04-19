@@ -153,7 +153,7 @@ export default function ChangelogPage() {
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Changelog</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">What shipped.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">What Shipped.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Every release since v0.6, with enough context to understand why we shipped it. Subscribe via RSS at{" "}
           <a className="underline" href="/changelog.rss">/changelog.rss</a>.

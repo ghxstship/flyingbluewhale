@@ -27,7 +27,8 @@ test.describe("marketing", () => {
 
   test("pricing shows 4 tiers + comparison table", async ({ page }) => {
     await page.goto("/pricing");
-    for (const tier of ["Portal", "Starter", "Professional", "Enterprise"]) {
+    // Tier rename (fbw_022 / 2026-04-19): Portal → Access, Starter → Core.
+    for (const tier of ["Access", "Core", "Professional", "Enterprise"]) {
       await expect(page.getByText(tier, { exact: false }).first()).toBeVisible();
     }
     await expect(page.getByRole("table")).toBeVisible();

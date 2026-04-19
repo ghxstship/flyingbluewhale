@@ -35,13 +35,13 @@ export async function getSession(): Promise<Session | null> {
       email: user.email ?? "",
       orgId: "",
       role: "community",
-      tier: "portal",
+      tier: "access",
       persona: "visitor",
     };
   }
 
   const role = membership.role as PlatformRole;
-  const tier = (membership.orgs as unknown as { tier: Tier } | null)?.tier ?? "portal";
+  const tier = (membership.orgs as unknown as { tier: Tier } | null)?.tier ?? "access";
   return {
     userId: user.id,
     email: user.email ?? "",

@@ -97,7 +97,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
       <FAQSection title={`${g.title} · FAQ`} faqs={g.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Other guides</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Other Guides</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {MARKETING_GUIDE_LIST.filter((x) => x.slug !== g.slug).map((x) => (
             <Link key={x.slug} href={`/guides/${x.slug}`} className="surface-raised hover-lift p-5">

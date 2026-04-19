@@ -47,7 +47,7 @@ export default function GvtewayPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">GVTEWAY · External portals</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">External portals that do the work.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">External Portals That Do the Work.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Stop emailing PDFs. Every external stakeholder gets a slug-scoped workspace with exactly the data they
           need — and nothing else. Artists advance. Vendors submit quotes. Clients sign proposals. Guests see
@@ -61,7 +61,7 @@ export default function GvtewayPage() {
 
       {/* Personas */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Six persona portals.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Six Persona Portals.</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
           Each persona sees a curated subset of the project, with its own rail, flows, and gate conditions.
         </p>

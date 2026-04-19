@@ -42,7 +42,7 @@ describe("resolveShell", () => {
 
 describe("can (capability gating)", () => {
   const session = () =>
-    ({ userId: "u", email: "x@y.z", orgId: "o", role: "admin", tier: "portal", persona: "admin" }) as unknown as NonNullable<Parameters<typeof can>[0]>;
+    ({ userId: "u", email: "x@y.z", orgId: "o", role: "admin", tier: "access", persona: "admin" }) as unknown as NonNullable<Parameters<typeof can>[0]>;
 
   it("denies null session", () => {
     expect(can(null, "projects:read")).toBe(false);

@@ -44,7 +44,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">About</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Built by operators, for operators.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Built by Operators, for Operators.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           flyingbluewhale is the production operating system from GHXSTSHIP. We built it because every production team
           we worked with was duct-taping a dozen SaaS tools together — Asana for tasks, Notion for wiki, Google Sheets
@@ -57,7 +57,7 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What we believe.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What We Believe.</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {PRINCIPLES.map(({ icon: Icon, title, body }) => (
             <div key={title} className="surface-raised p-6">
@@ -74,7 +74,7 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">How we got here.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">How We Got Here.</h2>
         <ul className="mt-8 space-y-6">
           {MILESTONES.map((m) => (
             <li key={m.date} className="surface-raised grid gap-2 p-6 md:grid-cols-[140px_1fr] md:items-start md:gap-6">
@@ -90,7 +90,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface-raised p-10">
-          <h2 className="text-3xl font-semibold tracking-tight">Who we are.</h2>
+          <h2 className="text-3xl font-semibold tracking-tight">Who We Are.</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
             GHXSTSHIP is a production + technology studio. We've staffed festivals, corporate activations, private
             events, and artist tours — and we've built software for every one of them. flyingbluewhale is the
@@ -108,7 +108,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <CTASection title="Try the platform" subtitle="Free forever on the Portal tier. 14-day trial of everything else." />
+      <CTASection title="Try the platform" subtitle="Free for Life on the Access tier. 14-day trial of everything else." />
     </div>
   );
 }

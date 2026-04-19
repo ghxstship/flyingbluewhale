@@ -1,0 +1,29 @@
+{
+  "marketing": {
+    "header": {
+      "login": "تسجيل الدخول",
+      "signup": "إنشاء حساب",
+      "themes": "الأنماط",
+      "language": "اللغة",
+      "theme": "النمط",
+      "openMenu": "فتح القائمة",
+      "closeMenu": "إغلاق القائمة"
+    },
+    "home": {
+      "cta": {
+        "primary": "ابدأ مجانًا",
+        "secondary": "احجز عرضًا توضيحيًا"
+      }
+    },
+    "industries": {
+      "live-events": "فعاليات مباشرة",
+      "concerts": "حفلات موسيقية",
+      "festivals-tours": "مهرجانات وجولات",
+      "immersive-experiences": "تجارب غامرة",
+      "brand-activations": "تفعيلات العلامات التجارية",
+      "corporate-events": "فعاليات الشركات",
+      "theatrical-performances": "عروض مسرحية",
+      "broadcast-tv-film": "البث والتلفزيون والسينما"
+    }
+  }
+}

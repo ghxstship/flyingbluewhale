@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Globe, Check, ChevronDown } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { SUPPORTED_LOCALES, isSupportedLocale, type Locale, DEFAULT_LOCALE } from "@/lib/i18n/config";
+import { track } from "@/lib/marketing-telemetry";
 
 // Native-name labels — the universally-correct way to expose language
 // options. A French user reading an English site should still recognize
@@ -59,6 +60,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
     // 1-year cookie; `lax` keeps it safe from CSRF while still sending on
     // top-level navigations so the server picks it up on the next paint.
     document.cookie = `locale=${encodeURIComponent(next)}; Max-Age=${60 * 60 * 24 * 365}; Path=/; SameSite=Lax`;
+    track("marketing.locale.switched", { from: active, to: next });
     startTransition(() => router.refresh());
   }
 

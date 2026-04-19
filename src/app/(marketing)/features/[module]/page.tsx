@@ -623,7 +623,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What this module does.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What This Module Does.</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {config.highlights.map((h) => (
             <div key={h.title} className="surface-raised p-6">
@@ -652,7 +652,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <FAQSection title={`${config.name} · FAQ`} faqs={config.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Related modules</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Related Modules</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {config.related.map((r) => (
             <Link

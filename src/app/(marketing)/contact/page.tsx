@@ -26,7 +26,7 @@ const ROUTES = [
 const FAQS = [
   {
     q: "Do I have to talk to sales to try flyingbluewhale?",
-    a: "No. Sign up at /signup and you're in, free forever on the Portal tier. Professional trial is 14 days, no credit card up front. Sales is for Enterprise, custom deployments, or if you just want a walkthrough.",
+    a: "No. Sign up at /signup and you're in, free forever on the Access tier. Professional trial is 14 days, no credit card up front. Sales is for Enterprise, custom deployments, or if you just want a walkthrough.",
   },
   {
     q: "How fast is your response time?",
@@ -55,7 +55,7 @@ export default function ContactPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Contact</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Talk to us.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Talk to Us.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           No dark patterns, no forced sales call. Start free at <a className="underline" href="/signup">/signup</a>. Or
           book a demo below — we respond within one business day, usually faster.
@@ -80,7 +80,7 @@ export default function ContactPage() {
       </section>
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Send us a note.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Send Us a Note.</h2>
         <form
           className="surface-raised mt-8 space-y-4 p-6"
           method="post"

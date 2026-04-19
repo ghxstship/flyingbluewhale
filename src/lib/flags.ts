@@ -98,7 +98,7 @@ const GB_KEY = process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY;
 type Attributes = {
   userId?: string;
   orgId?: string;
-  tier?: "portal" | "starter" | "professional" | "enterprise";
+  tier?: "access" | "core" | "professional" | "enterprise";
   locale?: string;
 };
 

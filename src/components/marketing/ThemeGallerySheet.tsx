@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { AppearanceGallery } from "@/app/theme/AppearanceGallery";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/Sheet";
+import { track } from "@/lib/marketing-telemetry";
+import { useTheme } from "@/app/theme/ThemeProvider";
 
 /**
  * CHROMA BEACON on the marketing site.
@@ -22,6 +25,19 @@ export function ThemeGallerySheet({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
+  // Telemetry — fire when the user lands on a new theme via this sheet.
+  // We watch `theme` from the provider (not the sheet's own state) so we
+  // catch clicks inside AppearanceGallery without plumbing a callback.
+  const { theme } = useTheme();
+  const prevThemeRef = useRef(theme);
+  useEffect(() => {
+    if (!open) return;
+    if (theme !== prevThemeRef.current) {
+      track("marketing.theme.picked", { from: prevThemeRef.current, to: theme });
+      prevThemeRef.current = theme;
+    }
+  }, [theme, open]);
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full sm:max-w-xl lg:max-w-2xl">

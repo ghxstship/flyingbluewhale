@@ -47,7 +47,7 @@ export default function CompvssPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">COMPVSS · Mobile PWA</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The mobile field kit.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Mobile Field Kit.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Install once from the browser. Service-worker cached. QR ticket scanning with race-safe atomic
           updates. Geo-verified clock-in with GPS fallback. Inventory scan. Incident reports. All on the phone,
@@ -61,7 +61,7 @@ export default function CompvssPage() {
 
       {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What crew does in COMPVSS.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What Crew Does in Compvss.</h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
@@ -84,7 +84,7 @@ export default function CompvssPage() {
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">
               <Wifi size={14} /> Offline-first
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Venues kill signal. We don't care.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Venues Kill Signal. We Don't Care.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
               A service worker caches the application shell on first install. Check-in, manual lookup, and the
               field home all load instantly from cache even with zero connectivity. Scans queue locally and

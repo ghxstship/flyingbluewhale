@@ -1,0 +1,29 @@
+{
+  "marketing": {
+    "header": {
+      "login": "Anmelden",
+      "signup": "Registrieren",
+      "themes": "Designs",
+      "language": "Sprache",
+      "theme": "Design",
+      "openMenu": "Menü öffnen",
+      "closeMenu": "Menü schließen"
+    },
+    "home": {
+      "cta": {
+        "primary": "Kostenlos starten",
+        "secondary": "Demo buchen"
+      }
+    },
+    "industries": {
+      "live-events": "Live-Events",
+      "concerts": "Konzerte",
+      "festivals-tours": "Festivals und Tourneen",
+      "immersive-experiences": "Immersive Erlebnisse",
+      "brand-activations": "Markenaktivierungen",
+      "corporate-events": "Firmenveranstaltungen",
+      "theatrical-performances": "Theateraufführungen",
+      "broadcast-tv-film": "Rundfunk, TV und Film"
+    }
+  }
+}

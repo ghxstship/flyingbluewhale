@@ -3,7 +3,7 @@ export type PlatformRole =
   | "contractor" | "crew" | "client" | "viewer" | "community";
 
 export type ProjectRole = "creator" | "collaborator" | "viewer" | "vendor";
-export type Tier = "portal" | "starter" | "professional" | "enterprise";
+export type Tier = "access" | "core" | "professional" | "enterprise";
 
 export type Persona =
   | "visitor" | "owner" | "admin" | "controller" | "project_manager"

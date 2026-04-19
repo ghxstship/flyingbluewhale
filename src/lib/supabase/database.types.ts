@@ -2892,7 +2892,7 @@ export type Database = {
       req_status: "draft" | "submitted" | "approved" | "rejected" | "converted"
       task_status: "todo" | "in_progress" | "blocked" | "review" | "done"
       ticket_status: "issued" | "transferred" | "scanned" | "voided"
-      tier: "portal" | "starter" | "professional" | "enterprise"
+      tier: "access" | "core" | "professional" | "enterprise"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3094,7 +3094,7 @@ export const Constants = {
       req_status: ["draft", "submitted", "approved", "rejected", "converted"],
       task_status: ["todo", "in_progress", "blocked", "review", "done"],
       ticket_status: ["issued", "transferred", "scanned", "voided"],
-      tier: ["portal", "starter", "professional", "enterprise"],
+      tier: ["access", "core", "professional", "enterprise"],
     },
   },
 } as const

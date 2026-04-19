@@ -1,14 +1,15 @@
 import { MarketingHeader } from "@/components/Shell";
 import Link from "next/link";
+import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
 
 const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: string }> }> = [
   {
     heading: "Product",
     items: [
       { label: "Solutions", href: "/solutions" },
-      { label: "ATLVS console", href: "/solutions/atlvs" },
-      { label: "GVTEWAY portals", href: "/solutions/gvteway" },
-      { label: "COMPVSS mobile", href: "/solutions/compvss" },
+      { label: "ATLVS Console", href: "/solutions/atlvs" },
+      { label: "GVTEWAY Portals", href: "/solutions/gvteway" },
+      { label: "COMPVSS Mobile", href: "/solutions/compvss" },
       { label: "Features", href: "/features" },
       { label: "Pricing", href: "/pricing" },
       { label: "Changelog", href: "/changelog" },
@@ -17,10 +18,14 @@ const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: s
   {
     heading: "Industries",
     items: [
-      { label: "Live events", href: "/solutions/live-events" },
-      { label: "Touring", href: "/solutions/touring" },
-      { label: "Corporate", href: "/solutions/corporate" },
-      { label: "Fabrication", href: "/solutions/fabrication" },
+      { label: "Live Events", href: "/solutions/live-events" },
+      { label: "Concerts", href: "/solutions/concerts" },
+      { label: "Festivals & Tours", href: "/solutions/festivals-tours" },
+      { label: "Immersive Experiences", href: "/solutions/immersive-experiences" },
+      { label: "Brand Activations", href: "/solutions/brand-activations" },
+      { label: "Corporate Events", href: "/solutions/corporate-events" },
+      { label: "Theatrical Performances", href: "/solutions/theatrical-performances" },
+      { label: "Broadcast, TV & Film", href: "/solutions/broadcast-tv-film" },
     ],
   },
   {
@@ -57,6 +62,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <div className="page-shell">
       <MarketingHeader />
+      <WebVitalsReporter />
       <main>{children}</main>
       <footer className="mt-24 border-t border-[var(--border-color)] bg-[var(--surface-inset)]">
         <div className="mx-auto max-w-6xl px-6 py-16">

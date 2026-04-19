@@ -73,6 +73,14 @@ paths:
         "200": { description: ready, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
         "500": { description: not ready, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
 
+  /api/v1/telemetry/marketing:
+    post:
+      summary: Anonymous marketing telemetry beacon (M3-05 / IK-039). Writes events into usage_events under the system org.
+      security: []
+      responses:
+        "200": { description: received, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "400": { description: invalid event or payload too large, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
+
   /api/v1/projects:
     get: { summary: List projects visible to the session. }
     post: { summary: Create a project (idempotent via Idempotency-Key). }

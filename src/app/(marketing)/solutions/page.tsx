@@ -13,11 +13,21 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Solutions — three apps, four industries",
+  title: "Solutions — Three Apps, Eight Industries",
   description:
-    "Explore the three integrated apps that make up flyingbluewhale — ATLVS (internal console), GVTEWAY (external portals), and COMPVSS (mobile PWA) — plus the industries we serve: live events, fabrication, touring, and corporate.",
+    "Explore the three integrated apps that make up flyingbluewhale — ATLVS (internal console), GVTEWAY (external portals), and COMPVSS (mobile PWA) — plus the industries we serve: Live Events, Concerts, Festivals & Tours, Immersive Experiences, Brand Activations, Corporate Events, Theatrical Performances, and Broadcast, TV & Film.",
   path: "/solutions",
-  keywords: ["production software apps", "event platform solutions", "ATLVS GVTEWAY COMPVSS"],
+  keywords: [
+    "live events software",
+    "concerts production platform",
+    "festivals and tours software",
+    "immersive experience operations",
+    "brand activation platform",
+    "corporate events software",
+    "theatrical production software",
+    "broadcast tv film production",
+    "ATLVS GVTEWAY COMPVSS",
+  ],
 });
 
 export default function SolutionsIndex() {
@@ -29,7 +39,7 @@ export default function SolutionsIndex() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Solutions</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three apps. One database. Zero seams.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Database. Zero Seams.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
           flyingbluewhale is not three SaaS tools glued together. It's three purpose-built shells (internal,
           external, mobile) over one Postgres database — with row-level security enforcing every boundary.
@@ -38,7 +48,7 @@ export default function SolutionsIndex() {
 
       {/* Apps */}
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h2 className="text-3xl font-semibold tracking-tight">The three apps</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">The Three Apps</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {APPS.map((a) => (
             <Link key={a.slug} href={a.href} data-platform={a.slug} className="surface-raised hover-lift relative overflow-hidden p-7">
@@ -69,9 +79,9 @@ export default function SolutionsIndex() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">By industry</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">By Industry</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each industry gets a tuned setup: starter blocks, default role matrix, and reference case studies.
+          Each industry gets a tuned setup: Core starter blocks, default role matrix, and reference case studies.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
@@ -156,8 +166,12 @@ const APPS = [
 ] as const;
 
 const INDUSTRIES = [
-  { slug: "live-events", name: "Live events", blurb: "Festivals, activations, residencies" },
-  { slug: "fabrication", name: "Fabrication", blurb: "Scenic, signage, custom build" },
-  { slug: "touring", name: "Touring", blurb: "Per-city advancing + crew" },
-  { slug: "corporate", name: "Corporate", blurb: "Launches, AGMs, summits" },
+  { slug: "live-events", name: "Live Events", blurb: "Venue residencies, club nights, one-offs" },
+  { slug: "concerts", name: "Concerts", blurb: "Single-night shows, amphitheatres, arenas" },
+  { slug: "festivals-tours", name: "Festivals & Tours", blurb: "Multi-day, multi-stage, multi-city" },
+  { slug: "immersive-experiences", name: "Immersive Experiences", blurb: "Installations, walk-throughs, pop-ups" },
+  { slug: "brand-activations", name: "Brand Activations", blurb: "Pop-ups, product launches, experiential marketing" },
+  { slug: "corporate-events", name: "Corporate Events", blurb: "Conferences, AGMs, summits, internal events" },
+  { slug: "theatrical-performances", name: "Theatrical Performances", blurb: "Residencies, touring productions, galas" },
+  { slug: "broadcast-tv-film", name: "Broadcast, TV & Film", blurb: "Studio, remote, location-based production" },
 ];

@@ -53,7 +53,7 @@ export default function ComparePage() {
         </div>
       </section>
 
-      <CTASection title="Try flyingbluewhale" subtitle="Free forever on the Portal tier. No credit card." />
+      <CTASection title="Try flyingbluewhale" subtitle="Free for Life on the Access tier. No credit card." />
     </div>
   );
 }

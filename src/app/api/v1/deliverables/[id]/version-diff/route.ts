@@ -16,8 +16,7 @@ import { createClient } from "@/lib/supabase/server";
 const ParamsSchema = z.object({ id: z.string().uuid() });
 const QuerySchema = z.object({ from: z.string().optional(), to: z.string().optional() });
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 type Jsonish = Record<string, unknown>;
 

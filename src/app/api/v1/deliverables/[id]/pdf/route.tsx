@@ -19,8 +19,7 @@ import { log } from "@/lib/log";
 
 const ParamsSchema = z.object({ id: z.string().uuid() });
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;

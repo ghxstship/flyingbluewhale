@@ -9,8 +9,7 @@ import { log } from "@/lib/log";
 
 /** GET /api/v1/brand-kit — Opportunity #20. */
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const guard = await withAuth(async (session) => ({ session }));

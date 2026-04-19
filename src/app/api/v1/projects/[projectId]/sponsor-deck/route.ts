@@ -27,8 +27,7 @@ const BodySchema = z.object({
   topMarkets: z.array(z.string().max(120)).max(10).optional(),
 });
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await ctx.params;

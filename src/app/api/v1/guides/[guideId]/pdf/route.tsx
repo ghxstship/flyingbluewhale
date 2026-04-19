@@ -20,8 +20,7 @@ import type { GuideConfig } from "@/lib/guides/types";
 
 const ParamsSchema = z.object({ guideId: z.string().uuid() });
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export async function GET(_req: Request, ctx: { params: Promise<{ guideId: string }> }) {
   const { guideId } = await ctx.params;

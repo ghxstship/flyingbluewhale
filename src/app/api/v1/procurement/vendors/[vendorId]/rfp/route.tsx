@@ -19,8 +19,7 @@ const BodySchema = z.object({
   deadline: z.string().optional(),
 });
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request, ctx: { params: Promise<{ vendorId: string }> }) {
   const { vendorId } = await ctx.params;

@@ -14,8 +14,7 @@ const QuerySchema = z.object({
   actor: z.string().email().optional(),
 });
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);

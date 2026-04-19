@@ -14,8 +14,7 @@ const QuerySchema = z.object({
   to: z.string().regex(/^\d{4}-\d{2}-\d{2}/).optional(),
 });
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await ctx.params;

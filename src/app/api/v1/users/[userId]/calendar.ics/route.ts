@@ -19,8 +19,7 @@ import { createClient } from "@/lib/supabase/server";
 
 const ParamsSchema = z.object({ userId: z.string().uuid() });
 
-const dynamic = "force-dynamic";
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 function fmtIcs(d: string | Date): string {
   const date = typeof d === "string" ? new Date(d) : d;

@@ -3,6 +3,14 @@ import { updateSession } from "@/lib/supabase/middleware";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import { log, serverTiming } from "@/lib/log";
 
+// Next 16 renamed the `middleware.ts` convention to `proxy.ts` with an
+// exported `proxy` function. The runtime behavior is identical; this file
+// was moved verbatim to silence the deprecation warning and to avoid
+// breaking on the eventual Next 17 removal. `Server-Timing` still uses
+// the `mw` tag because that's the observability contract our e2e suite
+// + dashboards key on — the file rename is cosmetic, the timing bucket
+// is semantic.
+
 const PROTECTED: Array<{ match: RegExp; bucket: keyof typeof RATE_BUDGETS }> = [
   { match: /^\/api\/v1\/ai\//, bucket: "ai" },
   { match: /^\/api\/v1\/tickets\/scan/, bucket: "scan" },
@@ -28,7 +36,7 @@ function newRequestId(): string {
 // the probes can themselves cause database load + false negatives.
 const PROBE_PATHS = /^\/api\/v1\/health(?:\/|$)/;
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const requestId = request.headers.get("x-request-id") ?? newRequestId();
   const startedAt = performance.now();

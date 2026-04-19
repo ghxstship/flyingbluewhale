@@ -866,6 +866,51 @@ export type Database = {
           },
         ]
       }
+      export_runs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          file_path: string | null
+          id: string
+          kind: Database["public"]["Enums"]["export_kind"]
+          last_error: string | null
+          org_id: string
+          params: Json
+          requested_by: string | null
+          row_count: number | null
+          size_bytes: number | null
+          status: Database["public"]["Enums"]["export_status"]
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          file_path?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["export_kind"]
+          last_error?: string | null
+          org_id: string
+          params?: Json
+          requested_by?: string | null
+          row_count?: number | null
+          size_bytes?: number | null
+          status?: Database["public"]["Enums"]["export_status"]
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          file_path?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["export_kind"]
+          last_error?: string | null
+          org_id?: string
+          params?: Json
+          requested_by?: string | null
+          row_count?: number | null
+          size_bytes?: number | null
+          status?: Database["public"]["Enums"]["export_status"]
+        }
+        Relationships: []
+      }
       fabrication_orders: {
         Row: {
           created_at: string
@@ -2850,6 +2895,8 @@ export type Database = {
         | "retired"
       event_status: "draft" | "scheduled" | "live" | "complete" | "cancelled"
       expense_status: "pending" | "approved" | "rejected" | "reimbursed"
+      export_kind: "csv" | "json" | "xlsx" | "zip" | "project_archive"
+      export_status: "pending" | "running" | "done" | "failed"
       guide_persona:
         | "artist"
         | "vendor"
@@ -3055,6 +3102,8 @@ export const Constants = {
       ],
       event_status: ["draft", "scheduled", "live", "complete", "cancelled"],
       expense_status: ["pending", "approved", "rejected", "reimbursed"],
+      export_kind: ["csv", "json", "xlsx", "zip", "project_archive"],
+      export_status: ["pending", "running", "done", "failed"],
       guide_persona: [
         "artist",
         "vendor",

@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { FileDown } from "lucide-react";
 import { PortalSubpage } from "@/components/PortalSubpage";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -28,6 +30,20 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           { key: "amount", header: "Amount", render: (r) => formatMoney(r.amount_cents, r.currency), className: "font-mono text-xs" },
           { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
           { key: "due", header: "Due", render: (r) => r.due_at ?? "—", className: "font-mono text-xs" },
+          {
+            key: "download",
+            header: "PDF",
+            render: (r) => (
+              <Link
+                href={`/api/v1/invoices/${r.id}/pdf`}
+                className="inline-flex items-center gap-1 text-xs hover:underline"
+                aria-label={`Download invoice ${r.number} as PDF`}
+              >
+                <FileDown size={12} aria-hidden="true" />
+                Download
+              </Link>
+            ),
+          },
         ]}
       />
     </PortalSubpage>

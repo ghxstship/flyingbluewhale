@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { FileDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { hasSupabase } from "@/lib/env";
@@ -54,7 +56,21 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
 
   return (
     <>
-      <ModuleHeader eyebrow={project.name} title={guide.title} subtitle={guide.subtitle ?? undefined} />
+      <ModuleHeader
+        eyebrow={project.name}
+        title={guide.title}
+        subtitle={guide.subtitle ?? undefined}
+        action={
+          <Link
+            href={`/api/v1/guides/${guide.id}/pdf`}
+            className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
+            aria-label="Download this guide as a PDF"
+          >
+            <FileDown size={14} aria-hidden="true" />
+            Download PDF
+          </Link>
+        }
+      />
       <div className="page-content max-w-4xl">
         <GuideView
           title={guide.title}

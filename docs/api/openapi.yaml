@@ -136,3 +136,15 @@ paths:
     get: { summary: Download a GDPR JSON export of the session's data. }
   /api/v1/me/delete:
     post: { summary: Request account deletion with a 30-day grace window. }
+
+  /api/v1/invoices/{invoiceId}/pdf:
+    get: { summary: Render an invoice to PDF and 302-redirect to a signed download URL. }
+  /api/v1/guides/{guideId}/pdf:
+    get: { summary: Render an event guide to PDF (persona-scoped boarding pass) and 302-redirect to a signed download URL. }
+
+  /api/v1/exports:
+    get:  { summary: List the caller org's recent export runs. }
+    post: { summary: Kick off a synchronous CSV or JSON export for a registry-whitelisted table. }
+
+  /api/v1/import/crew-members:
+    post: { summary: Bulk-import a CSV of crew into the caller's org, deduped by email or (name, phone). }

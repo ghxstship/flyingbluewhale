@@ -27,14 +27,16 @@ function walk(dir: string): string[] {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     if (statSync(full).isDirectory()) out.push(...walk(full));
-    else if (entry === "route.ts") out.push(full);
+    // Next.js accepts both `route.ts` and `route.tsx` (for routes whose
+    // handler returns JSX, e.g. React-PDF PDF routes).
+    else if (entry === "route.ts" || entry === "route.tsx") out.push(full);
   }
   return out;
 }
 
 // Translate `src/app/api/v1/ai/conversations/[id]/route.ts` → `/api/v1/ai/conversations/{id}`
 function routePathFromFile(file: string): string {
-  const rel = relative(join(process.cwd(), "src/app"), file).replace(/\/route\.ts$/, "");
+  const rel = relative(join(process.cwd(), "src/app"), file).replace(/\/route\.tsx?$/, "");
   const withParams = rel.replace(/\[([^\]]+)\]/g, "{$1}");
   return "/" + withParams;
 }

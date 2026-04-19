@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { FileDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { hasSupabase } from "@/lib/env";
 import { requireSession, personaForRole } from "@/lib/auth";
@@ -64,6 +66,16 @@ export default async function MobileGuide() {
 
   return (
     <div className="px-4 pt-6 pb-24">
+      <div className="mb-4 flex justify-end">
+        <Link
+          href={`/api/v1/guides/${guide.id}/pdf`}
+          className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
+          aria-label="Download this guide as a PDF"
+        >
+          <FileDown size={14} aria-hidden="true" />
+          Download PDF
+        </Link>
+      </div>
       <GuideView
         title={guide.title}
         subtitle={guide.subtitle}

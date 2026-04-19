@@ -1,6 +1,17 @@
+// ISR (H2-08 / IK-030) — regenerate static HTML every 5 min.
+// Shortens to 60s if editorial cadence picks up; `revalidate` alone is enough,
+// no `dynamic = 'force-static'` because some pages read query params.
+export const revalidate = 300;
+
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/seo";
+import {
+  MarketingHero,
+  MarketingSection,
+  MarketingGrid,
+  MarketingPageShell,
+} from "@/components/marketing/MarketingPrimitives";
 
 export const metadata: Metadata = buildMetadata({
   title: "Features — Console, Portals, Mobile, AI, Finance, Procurement",
@@ -25,20 +36,26 @@ const CATEGORIES = [
 
 export default function FeaturesPage() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-16">
-      <div className="text-xs font-semibold uppercase tracking-wider text-[var(--org-primary)]">Features</div>
-      <h1 className="mt-3 text-4xl font-semibold tracking-tight">Everything in flyingbluewhale</h1>
-      <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-        Built on Next.js 16 (App Router), Supabase (Postgres + RLS), Stripe Connect, and Anthropic Claude.
-      </p>
-      <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {CATEGORIES.map((c) => (
-          <Link key={c.key} href={`/features/${c.key}`} className="surface hover-lift p-5">
-            <div className="text-sm font-semibold">{c.title}</div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">{c.desc}</div>
-          </Link>
-        ))}
-      </div>
-    </div>
+    <MarketingPageShell>
+      <MarketingHero
+        eyebrow="Features"
+        title="Everything in flyingbluewhale"
+        subtitle="Built on Next.js 16 (App Router), Supabase (Postgres + RLS), Stripe Connect, and Anthropic Claude."
+      />
+      <MarketingSection aria-label="Feature categories">
+        <MarketingGrid cols={4}>
+          {CATEGORIES.map((c) => (
+            <Link
+              key={c.key}
+              href={`/features/${c.key}`}
+              className="surface hover-lift p-5 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--accent-solid,var(--org-primary))] rounded-lg"
+            >
+              <div className="text-sm font-semibold">{c.title}</div>
+              <div className="mt-1 text-xs text-[var(--text-muted)]">{c.desc}</div>
+            </Link>
+          ))}
+        </MarketingGrid>
+      </MarketingSection>
+    </MarketingPageShell>
   );
 }

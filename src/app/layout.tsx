@@ -11,6 +11,7 @@ import { CookieConsent } from "@/components/compliance/CookieConsent";
 import { ShortcutDialog } from "@/components/ShortcutDialog";
 import { getRequestLocale } from "@/lib/i18n/server";
 import { isRtl } from "@/lib/i18n/config";
+import { StructuredData, organization } from "@/lib/seo/structured-data";
 import "./globals.css";
 import "./theme/index.css";
 
@@ -71,6 +72,18 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* M2-04 — Organization schema appears on every page so Google's
+            knowledge panel can resolve the brand. Populates once at the root
+            and inherits across every route. */}
+        <StructuredData
+          data={organization({
+            name: "flyingbluewhale",
+            url: process.env.NEXT_PUBLIC_APP_URL ?? "https://flyingbluewhale.app",
+            description:
+              "Production operations platform — console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
+            logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://flyingbluewhale.app"}/og/logo.png`,
+          })}
+        />
       </head>
       <body className="min-h-full flex flex-col antialiased">
         <a href="#main" className="skip-link">Skip to content</a>

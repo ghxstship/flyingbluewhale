@@ -18,13 +18,6 @@ export function PageStub({ title, description }: { title: string; description?: 
   );
 }
 
-// MarketingHeader was extracted to ./MarketingHeader (client component) so
-// it can host state for the locale switcher + theme gallery sheet + mobile
-// nav. Re-exported here to keep existing imports (`@/components/Shell`)
-// working for consumers that already reference it.
-export { MarketingHeader } from "./MarketingHeader";
-
-// PlatformSidebar v2 lives in ./PlatformSidebar (client, resizable, pinnable, searchable)
 export { PlatformSidebar } from "./PlatformSidebar";
 
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {

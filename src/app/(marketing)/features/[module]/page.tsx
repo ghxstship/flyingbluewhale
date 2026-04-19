@@ -16,13 +16,12 @@ import {
   CheckCircle2,
   ArrowRight,
 } from "lucide-react";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
-import { buildMetadata, breadcrumbSchema, softwareApplicationSchema } from "@/lib/seo";
-
+import { buildMetadata, softwareApplicationSchema } from "@/lib/seo";
 type ModuleConfig = {
   slug: string;
   name: string;
@@ -593,24 +592,22 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
   }
 
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Features", path: "/features" },
-    { name: config.name, path: `/features/${config.slug}` },
+    { label: "Home", href: "/" },
+    { label: "Features", href: "/features" },
+    { label: config.name, href: `/features/${config.slug}` },
   ];
 
   return (
     <div>
       <JsonLd
-        data={[
-          breadcrumbSchema(crumbs),
-          softwareApplicationSchema({
+        data={[softwareApplicationSchema({
             name: `flyingbluewhale — ${config.name}`,
             description: config.blurb,
             url: `https://flyingbluewhale.app/features/${config.slug}`,
           }),
         ]}
       />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">{config.eyebrow}</div>

@@ -7,13 +7,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle2, Command, Database, FileSignature, DollarSign, ClipboardList, Users, Brain, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, productSchema } from "@/lib/seo";
-
+import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "ATLVS — the internal operations console for production teams",
   description:
@@ -26,17 +25,15 @@ export const metadata: Metadata = buildMetadata({
 
 export default function ATLVSPage() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Solutions", path: "/solutions" },
-    { name: "ATLVS", path: "/solutions/atlvs" },
+    { label: "Home", href: "/" },
+    { label: "Solutions", href: "/solutions" },
+    { label: "ATLVS", href: "/solutions/atlvs" },
   ];
 
   return (
     <div data-platform="atlvs">
       <JsonLd
-        data={[
-          breadcrumbSchema(crumbs),
-          productSchema({
+        data={[productSchema({
             name: "ATLVS — Internal Operations Console",
             description: "Production operations console with projects, finance, procurement, production, people, and AI modules.",
             url: "https://flyingbluewhale.app/solutions/atlvs",
@@ -44,7 +41,7 @@ export default function ATLVSPage() {
           }),
         ]}
       />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · Internal console</div>

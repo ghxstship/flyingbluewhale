@@ -1,4 +1,4 @@
-import { MarketingHeader } from "@/components/Shell";
+import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
 import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
 

@@ -1,15 +1,4 @@
-/**
- * Legacy format helpers — re-exported from src/lib/i18n/format.ts.
- *
- * Use the locale-aware versions directly in new code:
- *   import { formatMoney, formatDate, formatRelative } from "@/lib/i18n/format";
- *
- * This file exists for backwards-compatible imports across the codebase.
- */
-
 import { formatRelative } from "@/lib/i18n/format";
-
-export { formatMoney, formatDate, formatNumber, formatDateTime } from "@/lib/i18n/format";
 
 /** Compact relative time for dense table cells: "5m ago", "3h ago", "2d ago". */
 export function timeAgo(date: Date | string | number | null | undefined): string {

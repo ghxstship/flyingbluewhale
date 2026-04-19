@@ -8,13 +8,12 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { StatStrip } from "@/components/marketing/StatStrip";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
-
+import { buildMetadata } from "@/lib/seo";
 type IndustryConfig = {
   name: string;
   tagline: string;
@@ -434,15 +433,14 @@ export default async function IndustryPage({ params }: Props) {
   if (!info) notFound();
 
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Solutions", path: "/solutions" },
-    { name: info.name, path: `/solutions/${industry}` },
+    { label: "Home", href: "/" },
+    { label: "Solutions", href: "/solutions" },
+    { label: info.name, href: `/solutions/${industry}` },
   ];
 
   return (
     <>
-      <JsonLd data={breadcrumbSchema(crumbs)} />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">{info.hero.eyebrow}</div>

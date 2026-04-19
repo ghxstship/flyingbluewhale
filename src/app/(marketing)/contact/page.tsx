@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Mail, MessageCircle, Calendar, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
-import { buildMetadata, breadcrumbSchema, organizationSchema } from "@/lib/seo";
-
+import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Contact — talk to sales, support, or partnerships",
   description:
@@ -44,14 +43,14 @@ const FAQS = [
 
 export default function ContactPage() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Contact", path: "/contact" },
+    { label: "Home", href: "/" },
+    { label: "Contact", href: "/contact" },
   ];
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs), organizationSchema()]} />
-      <Breadcrumbs crumbs={crumbs} />
+      <JsonLd data={[organizationSchema()]} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Contact</div>

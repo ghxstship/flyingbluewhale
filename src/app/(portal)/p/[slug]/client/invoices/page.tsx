@@ -5,7 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
-import { formatMoney } from "@/lib/format";
+import { formatMoney } from "@/lib/i18n/format";
 import type { Invoice } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";

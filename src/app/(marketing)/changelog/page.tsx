@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Sparkles, Wrench, ShieldCheck, Zap } from "lucide-react";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
-
+import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Changelog — what shipped on flyingbluewhale",
   description:
@@ -142,14 +141,13 @@ const ENTRIES: Array<{ date: string; version: string; title: string; kind: Entry
 
 export default function ChangelogPage() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Changelog", path: "/changelog" },
+    { label: "Home", href: "/" },
+    { label: "Changelog", href: "/changelog" },
   ];
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs)]} />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Changelog</div>

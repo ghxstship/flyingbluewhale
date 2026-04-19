@@ -3,7 +3,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney } from "@/lib/format";
+import { formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 

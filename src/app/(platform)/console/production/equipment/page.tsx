@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney } from "@/lib/format";
+import { formatMoney } from "@/lib/i18n/format";
 import type { Equipment, EquipmentStatus } from "@/lib/supabase/types";
 
 const STATUS_BG: Record<EquipmentStatus, "success"|"warning"|"info"|"muted"|"error"> = {

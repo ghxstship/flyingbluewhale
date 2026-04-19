@@ -7,13 +7,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle2, QrCode, Clock, Wifi, Camera, AlertTriangle, Home, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, productSchema } from "@/lib/seo";
-
+import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "COMPVSS — offline-first mobile PWA for production crew",
   description:
@@ -26,24 +25,22 @@ export const metadata: Metadata = buildMetadata({
 
 export default function CompvssPage() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Solutions", path: "/solutions" },
-    { name: "COMPVSS", path: "/solutions/compvss" },
+    { label: "Home", href: "/" },
+    { label: "Solutions", href: "/solutions" },
+    { label: "COMPVSS", href: "/solutions/compvss" },
   ];
 
   return (
     <div data-platform="compvss">
       <JsonLd
-        data={[
-          breadcrumbSchema(crumbs),
-          productSchema({
+        data={[productSchema({
             name: "COMPVSS — Mobile Field PWA",
             description: "Offline-first mobile progressive web app for production crew — ticketing, clock-in, inventory, incidents.",
             url: "https://flyingbluewhale.app/solutions/compvss",
           }),
         ]}
       />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">COMPVSS · Mobile PWA</div>

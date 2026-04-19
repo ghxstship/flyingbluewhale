@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Compass, Layers, Rocket, ShieldCheck } from "lucide-react";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, organizationSchema } from "@/lib/seo";
-
+import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "About flyingbluewhale — built by operators, for operators",
   description:
@@ -33,14 +32,14 @@ const MILESTONES = [
 
 export default function AboutPage() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
   ];
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs), organizationSchema()]} />
-      <Breadcrumbs crumbs={crumbs} />
+      <JsonLd data={[organizationSchema()]} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">About</div>

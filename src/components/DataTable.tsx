@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { DataTableInteractive } from "./DataTableInteractive";
 
 /**
  * DataTable — server component.
@@ -8,10 +7,8 @@ import { DataTableInteractive } from "./DataTableInteractive";
  * Renders a tenant-scoped table with one column-per-cell. Accepts function
  * props (`rowHref`, `column.render`) because it stays on the server.
  *
- * For sort / filter / pagination / saved views, wrap in <DataTableInteractive>
- * (a "use client" sibling). The base table is intentionally simple so it
- * works inside server components without the Next 16 "function as prop"
- * client-boundary constraint.
+ * For sort / filter / pagination / saved views, import DataTableInteractive
+ * directly from `@/components/DataTableInteractive` (a "use client" sibling).
  */
 
 export type Column<T> = {
@@ -129,5 +126,3 @@ function DataTableSkeleton({ columns, rows }: { columns: number; rows: number })
   );
 }
 
-// Re-export the interactive variant for pages that opt in
-export { DataTableInteractive };

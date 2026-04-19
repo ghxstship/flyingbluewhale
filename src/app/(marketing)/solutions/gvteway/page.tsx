@@ -7,13 +7,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle2, Mic2, Truck, Users, Award, Ticket, HardHat, BookOpen, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, productSchema } from "@/lib/seo";
-
+import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "GVTEWAY — external stakeholder portals for production",
   description:
@@ -26,24 +25,22 @@ export const metadata: Metadata = buildMetadata({
 
 export default function GvtewayPage() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Solutions", path: "/solutions" },
-    { name: "GVTEWAY", path: "/solutions/gvteway" },
+    { label: "Home", href: "/" },
+    { label: "Solutions", href: "/solutions" },
+    { label: "GVTEWAY", href: "/solutions/gvteway" },
   ];
 
   return (
     <div data-platform="gvteway">
       <JsonLd
-        data={[
-          breadcrumbSchema(crumbs),
-          productSchema({
+        data={[productSchema({
             name: "GVTEWAY — External Stakeholder Portals",
             description: "Slug-scoped external portals with 6 persona surfaces (artist, vendor, client, sponsor, guest, crew).",
             url: "https://flyingbluewhale.app/solutions/gvteway",
           }),
         ]}
       />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">GVTEWAY · External portals</div>

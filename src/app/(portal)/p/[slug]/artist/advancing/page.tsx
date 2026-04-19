@@ -6,7 +6,8 @@ import { portalNav } from "@/lib/nav";
 import { hasSupabase } from "@/lib/env";
 import { listDeliverables, projectIdFromSlug, TALENT_TYPES, labelForType } from "@/lib/db/advancing";
 import { AdvancingForm } from "./AdvancingForm";
-import { formatDate, timeAgo } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
+import { timeAgo } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 

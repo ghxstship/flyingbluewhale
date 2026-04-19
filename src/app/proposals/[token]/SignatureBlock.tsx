@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { signProposalAction, type SignState } from "./actions";
-import { formatDate } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
 
 type Party = { role: string; name?: string; email?: string };
 

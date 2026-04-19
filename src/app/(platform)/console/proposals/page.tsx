@@ -5,7 +5,8 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney, formatDate, timeAgo } from "@/lib/format";
+import { formatMoney, formatDate } from "@/lib/i18n/format";
+import { timeAgo } from "@/lib/format";
 import type { Proposal } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";

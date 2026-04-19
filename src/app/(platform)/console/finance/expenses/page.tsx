@@ -5,7 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney } from "@/lib/format";
+import { formatMoney } from "@/lib/i18n/format";
 import type { Expense } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";

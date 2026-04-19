@@ -5,9 +5,9 @@ export const revalidate = 300;
 
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { buildMetadata } from "@/lib/seo";
 import { POST_LIST } from "@/lib/blog";
 
 export const metadata: Metadata = buildMetadata({
@@ -22,14 +22,13 @@ export const metadata: Metadata = buildMetadata({
 
 export default function BlogIndex() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Blog", path: "/blog" },
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
   ];
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs)]} />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Blog</div>

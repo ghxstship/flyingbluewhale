@@ -6,12 +6,11 @@ export const revalidate = 300;
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
-
+import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Solutions — Three Apps, Eight Industries",
   description:
@@ -31,11 +30,10 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function SolutionsIndex() {
-  const crumbs = [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions" }];
+  const crumbs = [{ label: "Home", href: "/" }, { label: "Solutions", href: "/solutions" }];
   return (
     <>
-      <JsonLd data={breadcrumbSchema(crumbs)} />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Solutions</div>

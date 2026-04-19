@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { dollarsToCents, formatDate, formatMoney, generateNumber, slugify, timeAgo } from "./format";
+import { dollarsToCents, generateNumber, slugify, timeAgo } from "./format";
+import { formatDate, formatMoney } from "./i18n/format";
 
 describe("formatMoney", () => {
   it("formats cents to USD by default", () => {

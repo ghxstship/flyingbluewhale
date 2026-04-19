@@ -7,11 +7,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Check, X, Minus, Quote, CheckCircle2 } from "lucide-react";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, faqSchema } from "@/lib/seo";
+import { buildMetadata, faqSchema } from "@/lib/seo";
 import { COMPARE, COMPARE_LIST } from "@/lib/compare";
 
 export function generateStaticParams() {
@@ -45,15 +45,15 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
   if (!c) notFound();
 
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Compare", path: "/compare" },
-    { name: `vs. ${c.competitor}`, path: `/compare/${c.slug}` },
+    { label: "Home", href: "/" },
+    { label: "Compare", href: "/compare" },
+    { label: `vs. ${c.competitor}`, href: `/compare/${c.slug}` },
   ];
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs), faqSchema(c.faqs)]} />
-      <Breadcrumbs crumbs={crumbs} />
+      <JsonLd data={[faqSchema(c.faqs)]} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Compare · flyingbluewhale vs. {c.competitor}</div>

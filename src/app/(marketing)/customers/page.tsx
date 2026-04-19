@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { buildMetadata } from "@/lib/seo";
 import { CUSTOMER_LIST } from "@/lib/customers";
 
 export const metadata: Metadata = buildMetadata({
@@ -18,14 +18,13 @@ export const metadata: Metadata = buildMetadata({
 
 export default function CustomersPage() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Customers", path: "/customers" },
+    { label: "Home", href: "/" },
+    { label: "Customers", href: "/customers" },
   ];
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs)]} />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Customers</div>

@@ -6,11 +6,11 @@ export const revalidate = 300;
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, articleSchema, faqSchema } from "@/lib/seo";
+import { buildMetadata, articleSchema, faqSchema } from "@/lib/seo";
 import { MARKETING_GUIDES, MARKETING_GUIDE_LIST } from "@/lib/marketing-guides";
 
 export function generateStaticParams() {
@@ -37,17 +37,15 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
   if (!g) notFound();
 
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Guides", path: "/guides" },
-    { name: g.title, path: `/guides/${g.slug}` },
+    { label: "Home", href: "/" },
+    { label: "Guides", href: "/guides" },
+    { label: g.title, href: `/guides/${g.slug}` },
   ];
 
   return (
     <div>
       <JsonLd
-        data={[
-          breadcrumbSchema(crumbs),
-          articleSchema({
+        data={[articleSchema({
             headline: g.title,
             description: g.blurb,
             datePublished: "2026-04-01",
@@ -56,7 +54,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
           faqSchema(g.faqs),
         ]}
       />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Guide</div>

@@ -2,10 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CheckCircle2, Quote } from "lucide-react";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, articleSchema } from "@/lib/seo";
+import { buildMetadata, articleSchema } from "@/lib/seo";
 import { CUSTOMERS, CUSTOMER_LIST } from "@/lib/customers";
 
 export function generateStaticParams() {
@@ -32,17 +32,15 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
   if (!c) notFound();
 
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Customers", path: "/customers" },
-    { name: c.name, path: `/customers/${c.slug}` },
+    { label: "Home", href: "/" },
+    { label: "Customers", href: "/customers" },
+    { label: c.name, href: `/customers/${c.slug}` },
   ];
 
   return (
     <div>
       <JsonLd
-        data={[
-          breadcrumbSchema(crumbs),
-          articleSchema({
+        data={[articleSchema({
             headline: c.headline,
             description: c.blurb,
             datePublished: "2026-01-01",
@@ -50,7 +48,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
           }),
         ]}
       />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Case study · {c.industry}</div>

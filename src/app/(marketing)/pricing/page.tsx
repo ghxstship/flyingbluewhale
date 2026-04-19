@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { Check, X, Minus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, faqSchema } from "@/lib/seo";
-
+import { buildMetadata, faqSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Pricing — Access, Core, Professional, Enterprise",
   description:
@@ -224,14 +223,14 @@ function Cell({ value }: { value: boolean | string }) {
 
 export default function PricingPage() {
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Pricing", path: "/pricing" },
+    { label: "Home", href: "/" },
+    { label: "Pricing", href: "/pricing" },
   ];
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs), faqSchema(FAQS)]} />
-      <Breadcrumbs crumbs={crumbs} />
+      <JsonLd data={[faqSchema(FAQS)]} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Pricing</div>

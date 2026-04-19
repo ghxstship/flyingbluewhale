@@ -2,7 +2,7 @@ import { PortalSubpage } from "@/components/PortalSubpage";
 import { DataTable } from "@/components/DataTable";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
-import { formatDate } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
 import type { EventRow } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";

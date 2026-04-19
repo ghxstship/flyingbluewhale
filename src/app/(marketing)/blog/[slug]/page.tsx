@@ -6,10 +6,10 @@ export const revalidate = 300;
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/marketing/Breadcrumb";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, articleSchema } from "@/lib/seo";
+import { buildMetadata, articleSchema } from "@/lib/seo";
 import { POSTS, POST_LIST } from "@/lib/blog";
 
 export function generateStaticParams() {
@@ -36,17 +36,15 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   if (!post) notFound();
 
   const crumbs = [
-    { name: "Home", path: "/" },
-    { name: "Blog", path: "/blog" },
-    { name: post.title, path: `/blog/${post.slug}` },
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: post.title, href: `/blog/${post.slug}` },
   ];
 
   return (
     <div>
       <JsonLd
-        data={[
-          breadcrumbSchema(crumbs),
-          articleSchema({
+        data={[articleSchema({
             headline: post.title,
             description: post.blurb,
             datePublished: post.date,
@@ -55,7 +53,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           }),
         ]}
       />
-      <Breadcrumbs crumbs={crumbs} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">

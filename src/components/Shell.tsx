@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import type { NavItem } from "@/lib/nav";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { MobileTabBarClient } from "./MobileTabBarClient";
 
 export function PageStub({ title, description }: { title: string; description?: string }) {
@@ -17,34 +16,11 @@ export function PageStub({ title, description }: { title: string; description?: 
   );
 }
 
-export function MarketingHeader() {
-  const items: NavItem[] = [
-    { label: "Solutions", href: "/solutions" },
-    { label: "Features", href: "/features" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Customers", href: "/customers" },
-    { label: "Compare", href: "/compare" },
-    { label: "Guides", href: "/guides" },
-    { label: "Blog", href: "/blog" },
-  ];
-  return (
-    <header className="sticky top-0 z-40 glass-nav">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-        <Link href="/" className="text-base font-semibold tracking-tight text-[var(--foreground)]">
-          flyingbluewhale
-        </Link>
-        <nav className="hidden gap-1 md:flex">
-          {items.map((i) => <Link key={i.href} href={i.href} className="nav-item">{i.label}</Link>)}
-        </nav>
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <Link href="/login" className="btn btn-ghost btn-sm">Log in</Link>
-          <Link href="/signup" className="btn btn-primary btn-sm">Sign up</Link>
-        </div>
-      </div>
-    </header>
-  );
-}
+// MarketingHeader was extracted to ./MarketingHeader (client component) so
+// it can host state for the locale switcher + theme gallery sheet + mobile
+// nav. Re-exported here to keep existing imports (`@/components/Shell`)
+// working for consumers that already reference it.
+export { MarketingHeader } from "./MarketingHeader";
 
 // PlatformSidebar v2 lives in ./PlatformSidebar (client, resizable, pinnable, searchable)
 export { PlatformSidebar } from "./PlatformSidebar";

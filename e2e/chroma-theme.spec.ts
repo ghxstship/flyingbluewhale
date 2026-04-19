@@ -64,7 +64,11 @@ test.describe("CHROMA BEACON", () => {
     await login(page);
     await page.goto("/me/settings/appearance");
     await expect(page.getByRole("heading", { name: "Appearance", level: 1 })).toBeVisible();
-    const radios = page.getByRole("radio");
+    // Scope to the AppearanceGallery's own radiogroup — the /me shell chrome
+    // also renders the mode toggle (Light/System/Dark) as a radiogroup, so an
+    // unscoped `getByRole("radio")` now returns 11 (8 + 3) after M1-01 added
+    // proper radio semantics to the mode toggle.
+    const radios = page.getByRole("radiogroup", { name: "Theme", exact: true }).getByRole("radio");
     await expect(radios).toHaveCount(8);
   });
 
@@ -103,14 +107,16 @@ test.describe("CHROMA BEACON", () => {
     await login(page);
     await page.goto("/me/settings/appearance");
 
-    // Focus the first radio card
-    const firstCard = page.getByRole("radio").first();
+    // Scope to the appearance radiogroup so we don't fall into the mode toggle
+    // that also lives on /me shell chrome.
+    const gallery = page.getByRole("radiogroup", { name: "Theme", exact: true });
+    const firstCard = gallery.getByRole("radio").first();
     await firstCard.focus();
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("Enter");
-    // Some card should now be aria-checked=true that isn't the first one
-    const checkedCount = await page.getByRole("radio", { checked: true }).count();
+    // Some card should now be aria-checked=true that isn't the first one.
+    const checkedCount = await gallery.getByRole("radio", { checked: true }).count();
     expect(checkedCount).toBe(1);
   });
 

@@ -4,6 +4,8 @@ import * as React from "react";
 import { THEMES, isValidThemeSlug, colorSchemeFor, type ThemeSlug, type ThemeFamily } from "./themes.config";
 import { THEME_COOKIE_NAME, THEME_STORAGE_KEY } from "./theme-script";
 
+export type ColorMode = "light" | "dark" | "system";
+
 export interface ThemeContextValue {
   theme: ThemeSlug;
   family: ThemeFamily;
@@ -14,6 +16,13 @@ export interface ThemeContextValue {
   /** Density is orthogonal to theme. */
   density: "comfortable" | "compact";
   setDensity: (d: "comfortable" | "compact") => void;
+  /**
+   * Color mode — orthogonal to the design theme slug. `system` honors
+   * `prefers-color-scheme`. Applied as `data-mode` on <html>, independent
+   * of the `data-theme` attribute that carries the CHROMA BEACON slug.
+   */
+  mode: ColorMode;
+  setMode: (m: ColorMode) => void;
 }
 
 const ThemeContext = React.createContext<ThemeContextValue | null>(null);
@@ -48,6 +57,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = React.useState<ThemeSlug>("kinetic");
   const [isSystemDriven, setSystemDriven] = React.useState(true);
   const [density, setDensityState] = React.useState<"comfortable" | "compact">("comfortable");
+  const [mode, setModeState] = React.useState<ColorMode>("system");
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -65,6 +75,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     const d = (localStorage.getItem("chroma.density") as "comfortable" | "compact" | null) ?? "comfortable";
     setDensityState(d);
+
+    // Color mode hydration — cookie first, then localStorage, then default "system".
+    const cookieMode = (() => {
+      const m = document.cookie.match(/(?:^|;\s*)fbw_mode=([^;]+)/);
+      const v = m ? decodeURIComponent(m[1]) : null;
+      return v === "light" || v === "dark" || v === "system" ? (v as ColorMode) : null;
+    })();
+    const storedMode = (() => {
+      try {
+        const v = localStorage.getItem("chroma.mode");
+        return v === "light" || v === "dark" || v === "system" ? (v as ColorMode) : null;
+      } catch {
+        return null;
+      }
+    })();
+    setModeState(cookieMode ?? storedMode ?? "system");
+
     setMounted(true);
   }, []);
 
@@ -81,6 +108,30 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (density === "compact") root.setAttribute("data-density", "compact");
     else root.removeAttribute("data-density");
   }, [density, mounted]);
+
+  // Color mode application — independent of the theme slug. Writes
+  // `data-mode="light|dark"` (resolving `system` against the media query)
+  // so CSS can gate token overrides on that attribute without clobbering
+  // `data-theme`. Also sets `color-scheme` so the UA picks scrollbars +
+  // form controls that match.
+  React.useEffect(() => {
+    if (!mounted) return;
+    const resolved = mode === "system"
+      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : mode;
+    document.documentElement.setAttribute("data-mode", resolved);
+  }, [mode, mounted]);
+
+  React.useEffect(() => {
+    if (!mounted || mode !== "system") return;
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    function onChange() {
+      const next = mql.matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-mode", next);
+    }
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, [mode, mounted]);
 
   // Cross-tab sync — listen for storage events from other tabs of the same app
   React.useEffect(() => {
@@ -144,6 +195,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     void persistRemote({ density: d });
   }, []);
 
+  const setMode = React.useCallback((m: ColorMode) => {
+    setModeState(m);
+    try {
+      localStorage.setItem("chroma.mode", m);
+    } catch {
+      /* ignore */
+    }
+    writeCookie("fbw_mode", m);
+  }, []);
+
   const value = React.useMemo<ThemeContextValue>(
     () => ({
       theme,
@@ -153,8 +214,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       resetToSystem,
       density,
       setDensity,
+      mode,
+      setMode,
     }),
-    [theme, isSystemDriven, setTheme, resetToSystem, density, setDensity],
+    [theme, isSystemDriven, setTheme, resetToSystem, density, setDensity, mode, setMode],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

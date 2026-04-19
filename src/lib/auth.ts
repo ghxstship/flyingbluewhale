@@ -118,3 +118,21 @@ export function can(session: Session | null, capability: string): boolean {
   const [domain] = capability.split(":");
   return caps.some((c) => c === capability || c === `${domain}:*`);
 }
+
+/**
+ * Hard-gate a mutating route on a capability. Returns a Response-shaped
+ * 403 envelope when denied; returns null when allowed. Pairs with
+ * `withAuth` to form a two-step gate — withAuth proves "who", this
+ * function proves "may". H2-10 / IK-017.
+ *
+ * Usage:
+ *   return withAuth(async (session) => {
+ *     const denial = assertCapability(session, "projects:write");
+ *     if (denial) return denial;
+ *     ...mutation...
+ *   });
+ */
+export function assertCapability(session: Session, capability: string): Response | null {
+  if (can(session, capability)) return null;
+  return apiError("forbidden", `Role "${session.role}" lacks capability "${capability}"`);
+}

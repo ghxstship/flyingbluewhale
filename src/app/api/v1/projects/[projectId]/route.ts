@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
+import { assertCapability, withAuth } from "@/lib/auth";
 import { getProject, updateProject } from "@/lib/db/projects";
 
 const PatchProject = z.object({
@@ -35,6 +35,8 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ projectId: st
   if (input instanceof Response) return input;
 
   return withAuth(async (session) => {
+    const denial = assertCapability(session, "projects:write");
+    if (denial) return denial;
     const project = await updateProject(session.orgId, parsed.data, {
       ...(input.name !== undefined ? { name: input.name } : {}),
       ...(input.description !== undefined ? { description: input.description } : {}),

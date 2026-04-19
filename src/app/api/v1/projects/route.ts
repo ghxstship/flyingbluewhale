@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
+import { assertCapability, withAuth } from "@/lib/auth";
 import { createProject, listProjects } from "@/lib/db/projects";
 
 const slugify = (s: string) =>
@@ -28,6 +28,8 @@ export async function POST(req: Request) {
 
   return withAuth(async (session) => {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
+    const denial = assertCapability(session, "projects:write");
+    if (denial) return denial;
     try {
       const project = await createProject({
         orgId: session.orgId,

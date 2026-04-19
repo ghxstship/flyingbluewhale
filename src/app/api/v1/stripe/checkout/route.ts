@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
+import { assertCapability, withAuth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { httpFetch } from "@/lib/http";
@@ -11,11 +11,17 @@ const Schema = z.object({
 });
 
 async function handler(req: Request) {
-  if (!env.STRIPE_SECRET_KEY) return apiError("internal", "STRIPE_SECRET_KEY is not configured");
   const input = await parseJson(req, Schema);
   if (input instanceof Response) return input;
 
   return withAuth(async (session) => {
+    // Creating a Stripe checkout is a billing action — controller/owner/admin
+    // only. Clients can pay (via the resulting URL) but can't initiate.
+    // Gate BEFORE the Stripe env check so an unprivileged caller never gets
+    // to probe whether secrets are configured.
+    const denial = assertCapability(session, "invoices:write");
+    if (denial) return denial;
+    if (!env.STRIPE_SECRET_KEY) return apiError("internal", "STRIPE_SECRET_KEY is not configured");
     const supabase = await createClient();
     const { data: invoice } = await supabase
       .from("invoices")

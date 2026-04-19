@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
+import { assertCapability, withAuth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { httpFetch } from "@/lib/http";
 import { withIdempotency } from "@/lib/idempotency";
@@ -11,11 +11,17 @@ const Schema = z.object({
 });
 
 async function handler(req: Request) {
-  if (!env.STRIPE_SECRET_KEY) return apiError("internal", "STRIPE_SECRET_KEY is not configured");
   const input = await parseJson(req, Schema);
   if (input instanceof Response) return input;
 
-  return withAuth(async () => {
+  return withAuth(async (session) => {
+    // Kicking off a Stripe Connect onboarding is a payouts action. Only
+    // controller/owner/admin can bind a vendor to a bank account. Gate
+    // BEFORE the Stripe env check so an unprivileged caller doesn't learn
+    // whether secrets are configured.
+    const denial = assertCapability(session, "payouts:write");
+    if (denial) return denial;
+    if (!env.STRIPE_SECRET_KEY) return apiError("internal", "STRIPE_SECRET_KEY is not configured");
     const appUrl = env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
     const acctForm = new URLSearchParams();

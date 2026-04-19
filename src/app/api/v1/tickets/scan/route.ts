@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
+import { assertCapability, withAuth } from "@/lib/auth";
 import { scanTicket } from "@/lib/db/tickets";
 
 const ScanInput = z.object({
@@ -16,6 +16,8 @@ export async function POST(req: Request) {
 
   return withAuth(async (session) => {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
+    const denial = assertCapability(session, "check-in:write");
+    if (denial) return denial;
     const result = await scanTicket({
       orgId: session.orgId,
       scannerUserId: session.userId,

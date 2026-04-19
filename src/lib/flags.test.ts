@@ -11,7 +11,7 @@
  * zombie-flag problem where code branches linger for years after a rollout.
  */
 import { describe, it, expect } from "vitest";
-import { FLAG_DEFAULTS, FLAG_REGISTRY } from "./flags";
+import { FLAG_DEFAULTS, FLAG_REGISTRY, cohortFromUserId } from "./flags";
 
 describe("flag registry hygiene", () => {
   it("every flag in FLAG_DEFAULTS has a registry entry", () => {
@@ -54,5 +54,34 @@ describe("flag registry hygiene", () => {
     const knownKeys = new Set(Object.keys(FLAG_DEFAULTS));
     const orphans = Object.keys(FLAG_REGISTRY).filter((k) => !knownKeys.has(k));
     expect(orphans, `Registry orphans: ${orphans.join(", ")}`).toEqual([]);
+  });
+});
+
+describe("cohortFromUserId (H3-08)", () => {
+  it("returns a bucket in [0, 99]", () => {
+    for (const id of ["a", "julian", "00000000-0000-0000-0000-000000000000", "x".repeat(50)]) {
+      const c = cohortFromUserId(id);
+      expect(c).toBeGreaterThanOrEqual(0);
+      expect(c).toBeLessThan(100);
+      expect(Number.isInteger(c)).toBe(true);
+    }
+  });
+  it("is deterministic", () => {
+    expect(cohortFromUserId("user-1")).toBe(cohortFromUserId("user-1"));
+    expect(cohortFromUserId("user-2")).toBe(cohortFromUserId("user-2"));
+  });
+  it("distributes roughly uniformly across 1000 random UUIDs", () => {
+    // Not a chi-square test — just a smoke check that we're not pinning
+    // everyone to one bucket. Expect ~10 users per bucket with variance.
+    const counts = new Array(10).fill(0);
+    for (let i = 0; i < 1000; i++) {
+      const id = `id-${i}-${Math.random().toString(36).slice(2)}`;
+      counts[Math.floor(cohortFromUserId(id) / 10)]++;
+    }
+    // Each decile bucket should have at least 30 users, well under 300.
+    for (const c of counts) {
+      expect(c).toBeGreaterThanOrEqual(30);
+      expect(c).toBeLessThan(300);
+    }
   });
 });

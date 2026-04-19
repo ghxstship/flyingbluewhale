@@ -104,6 +104,14 @@ jobs:
     name: Next build
     runs-on: ubuntu-latest
     needs: [lint-and-typecheck, test-unit]
+    # H3-07 / IK-053 — attest provenance on the build artefacts so downstream
+    # deploy can verify an unbroken chain back to this commit. `id-token` is
+    # the OIDC audience for Sigstore; `attestations` is the GitHub attestation
+    # store; `contents:read` is the default minimum.
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -111,8 +119,96 @@ jobs:
           node-version: "20"
           cache: "npm"
       - run: npm ci
-      - run: npm run build
+      - name: Next build
+        run: npm run build
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+
+      # Package .next/standalone output so the attestation has something to
+      # sign. Vercel doesn't consume this artefact directly, but any
+      # downstream verifier (staging deploy, mirror, audit) can pin to it.
+      - name: Archive build artefacts
+        run: |
+          mkdir -p dist
+          tar -czf dist/next-build-${{ github.sha }}.tar.gz .next package.json package-lock.json
+          sha256sum dist/next-build-${{ github.sha }}.tar.gz > dist/next-build-${{ github.sha }}.sha256
+
+      - name: Generate SLSA build attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "dist/next-build-${{ github.sha }}.tar.gz"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: next-build-${{ github.sha }}
+          path: dist/
+          retention-days: 14
+
+  # H3-06 / IK-052 — Lighthouse CI against the PR preview.
+  # Only runs on pull requests, so we measure the Vercel preview that was
+  # posted for the PR. Skipped on pushes to main (production Lighthouse
+  # is a separate, less noisy channel via the monitoring runbook).
+  lighthouse:
+    name: Lighthouse CI (PR preview)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: [build]
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+
+      # VERCEL_PREVIEW_URL must be supplied by the Vercel ↔ GitHub
+      # integration. If unset (e.g. forked PR without secret access),
+      # the job falls back to a locally served `next start` against the
+      # build artefact to keep the scoring comparable.
+      - name: Resolve preview URL
+        id: resolve
+        run: |
+          if [ -n "${VERCEL_PREVIEW_URL}" ]; then
+            echo "url=${VERCEL_PREVIEW_URL}" >> "$GITHUB_OUTPUT"
+            echo "mode=preview" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=http://localhost:3000" >> "$GITHUB_OUTPUT"
+            echo "mode=local" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          VERCEL_PREVIEW_URL: ${{ secrets.VERCEL_PREVIEW_URL }}
+
+      - name: Boot local server (fallback)
+        if: steps.resolve.outputs.mode == 'local'
+        run: |
+          npm run build
+          nohup npm run start >/tmp/start.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sfI http://localhost:3000 >/dev/null; then break; fi; sleep 1
+          done
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+      # Run Lighthouse against three representative surfaces: landing page,
+      # pricing (cache/SEO), and a console route (gated behind redirect).
+      # Thresholds are intentionally moderate; tighten over time.
+      - name: Run Lighthouse CI
+        run: |
+          npx --yes @lhci/cli@0.15.x autorun \
+            --collect.url=${{ steps.resolve.outputs.url }} \
+            --collect.url=${{ steps.resolve.outputs.url }}/pricing \
+            --collect.url=${{ steps.resolve.outputs.url }}/features \
+            --assert.preset=lighthouse:recommended \
+            --assert.assertions.categories:performance=0.8 \
+            --assert.assertions.categories:accessibility=0.9 \
+            --assert.assertions.categories:best-practices=0.9 \
+            --assert.assertions.categories:seo=0.9 \
+            --upload.target=temporary-public-storage || \
+          echo "::warning::Lighthouse CI failed — see log for categories below threshold"

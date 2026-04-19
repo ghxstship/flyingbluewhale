@@ -42,6 +42,28 @@ export type FlagMeta = {
   description: string;
 };
 
+/**
+ * H3-08 / IK-055 — canary cohort attribute.
+ *
+ * `cohortFromUserId` deterministically maps a user id into a 0-99 bucket.
+ * A rollout rule in GrowthBook (or the local fallback) can read this as
+ * the `cohort` attribute and gate on `cohort < 10` for a 10% canary,
+ * `cohort < 1` for 1%, etc.
+ *
+ * Same user always lands in the same cohort across requests, which means
+ * a user on a canary never sees the flag flicker mid-session. The hash
+ * is stable (FNV-1a 32-bit) so rollout can be reproduced offline.
+ */
+export function cohortFromUserId(userId: string): number {
+  let hash = 0x811c9dc5; // FNV-1a offset basis
+  for (let i = 0; i < userId.length; i++) {
+    hash ^= userId.charCodeAt(i);
+    // FNV prime — `>>> 0` coerces to unsigned 32-bit
+    hash = (hash * 0x01000193) >>> 0;
+  }
+  return hash % 100;
+}
+
 export const FLAG_REGISTRY: Record<keyof Flags, FlagMeta> = {
   command_palette_v2: {
     owner: "julian.clarkson@ghxstship.pro",

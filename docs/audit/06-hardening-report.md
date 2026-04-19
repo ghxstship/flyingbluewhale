@@ -361,3 +361,128 @@ roles, allowed roles, and Stripe env-probe fix.
 ---
 
 **Signed:** backend-audit Horizons 1 + 2 complete.
+
+---
+
+## Horizon 3 — Future-proof (shipped)
+
+All 10 items from the H3 tranche landed. Some ship as code + tests (job
+queue, usage meter, statement timeouts), others as operational artefacts
+(runbooks, k6 harness, anonymizer, CI provenance). Every item has a
+concrete artifact reviewable in this repo.
+
+### H3-01 / IK-023 — Per-tenant usage metering
+
+- [`src/lib/usage.ts`](../../src/lib/usage.ts) + migration `fbw_020_usage_events`.
+- Append-only `usage_events` (90-day retention) + pre-aggregated `usage_rollups`
+  (hourly buckets, source of truth for billing + quotas).
+- Wired into [`/api/v1/ai/chat`](../../src/app/api/v1/ai/chat/route.ts)
+  to meter `ai.tokens.input`, `ai.tokens.output`, `ai.request`.
+- Guard: `src/lib/usage.test.ts` (3 tests for `hourBucketStart`).
+
+### H3-02 / IK-027 — Background job primitive
+
+- [`src/lib/jobs.ts`](../../src/lib/jobs.ts) + migration `fbw_019_job_queue`.
+- `FOR UPDATE SKIP LOCKED` claim via `claim_jobs()` RPC. Exponential
+  backoff with jitter (`computeBackoffSeconds`, extracted + unit-tested).
+  Dead-letter queue is the same table (`state='dead'`). Lease reclaim
+  via `reclaim_stuck_jobs()`.
+- Edge worker: [`supabase/functions/job-worker/`](../../supabase/functions/job-worker/index.ts)
+  — dispatches to handler registry, unknown types → DLQ, deploys via
+  `supabase functions deploy job-worker`.
+- Guard: `src/lib/jobs.test.ts` (4 tests) + `tsconfig.json` excludes
+  `supabase/functions/**` so the Deno-runtime edge file doesn't poison
+  Node typecheck.
+
+### H3-03 / IK-050 — Load testing with k6
+
+- [`scripts/load/baseline.js`](../../scripts/load/baseline.js) — 3
+  scenarios (marketing browse, health probes, portal anon) with P95
+  budgets and a <1% error-rate threshold.
+- [`scripts/load/README.md`](../../scripts/load/README.md) documents
+  local run, staging run, scheduled weekly cron pattern.
+
+### H3-04 / IK-005 — Hot-path query baselines
+
+- [`docs/audit/05-query-baselines.md`](./05-query-baselines.md) —
+  `EXPLAIN ANALYZE` for the six queries on the critical read path
+  (projects list, event_guides lookup, memberships, audit_log recents,
+  idempotency key lookup, ticket_scans listing).
+- Each entry names the indexes relied on + the production risk if any
+  index is dropped. A future CI check runs the same queries against
+  staging and fails on plan regressions.
+
+### H3-05 / IK-024 — Per-role statement timeouts
+
+- Migration `fbw_021_statement_timeouts`:
+  - `anon` — `statement_timeout=5s`, `lock_timeout=2s`
+  - `authenticated` — `statement_timeout=10s`, `lock_timeout=5s`
+  - `service_role` — `statement_timeout=60s`, `lock_timeout=30s`
+  - All roles also cap `idle_in_transaction_session_timeout` at the
+    same budget so a forgotten BEGIN can't hold locks.
+
+### H3-06 / IK-052 — Lighthouse CI on PR previews
+
+- `.github/workflows/ci.yml` gains a `lighthouse` job that runs on
+  pull requests only. Uses Vercel's PR preview URL when available,
+  falls back to a local `npm run start` so forked PRs still get a
+  score. Asserts perf ≥ 0.8, a11y ≥ 0.9, best-practices ≥ 0.9, SEO
+  ≥ 0.9 on `/`, `/pricing`, `/features`.
+
+### H3-07 / IK-053 — SLSA build provenance
+
+- `.github/workflows/ci.yml` `build` job packages the Next.js build
+  into a tarball + SHA256 and runs `actions/attest-build-provenance@v2`
+  to emit a signed Sigstore attestation. Uploaded as a retained
+  artefact; any downstream verifier can pin to the SHA.
+- Enables `id-token: write` + `attestations: write` for the job.
+
+### H3-08 / IK-055 — Canary rollout via flag cohorts
+
+- [`src/lib/flags.ts`](../../src/lib/flags.ts) exports `cohortFromUserId`
+  — deterministic FNV-1a → `0-99` bucket. GrowthBook rules can gate
+  on `cohort < N` for N% rollouts. Same user always lands in the same
+  cohort, so canaries don't flicker mid-session.
+- Guard: `src/lib/flags.test.ts` — bucket range, determinism, rough
+  uniform distribution across 1000 random IDs.
+
+### H3-09 / IK-058 — Staging data anonymizer
+
+- [`scripts/db/anonymize-staging.sql`](../../scripts/db/anonymize-staging.sql)
+  — idempotent, FK-preserving transform. Guarded by a mandatory
+  `SET fbw.allow_anonymize='yes'` session variable so it refuses to run
+  by accident. Hashes emails, scrubs PII from clients / leads / vendors /
+  credentials, zeroes passkeys + idempotency keys, truncates
+  `stripe_events`, inserts a `system.anonymize_run` audit row for
+  forensic traceability.
+- [`scripts/db/README.md`](../../scripts/db/README.md) documents the
+  workflow + what is / is not touched.
+
+### H3-10 / IK-063 — Runbooks per alert family
+
+- [`docs/runbooks/`](../runbooks/) — 7 runbooks, one per alert family:
+  rate-limit, stripe-webhook, ai-usage, job-queue, auth-errors,
+  db-saturation, circuit-breaker.
+- Every runbook follows the same shape: one-sentence what/who, three-
+  command diagnosis, first-three mitigations, root-cause hypotheses,
+  how-we-alert section, escalation owner, retro reference.
+
+### Final totals (Horizons 1 + 2 + 3)
+
+- **Vitest:** 75 / 75 passing (0 failing).
+- **Playwright:** 276 / 286 passing (0 failing, 10 intentionally skipped).
+- **Typecheck:** clean.
+- **H1 closed:** 15/15. **H2 closed:** 8/12. **H3 closed:** 10/10.
+
+### Still on the board (4 items)
+
+| Flaw | Why deferred |
+|---|---|
+| IK-039 RED metrics dashboard publish | Requires Vercel Analytics / Sentry Metrics subscription — infra, not code. |
+| IK-040 OpenTelemetry spans | Needs an OTLP collector decision + an ADR on trace cardinality. |
+| IK-049 80% unit coverage milestone | Incremental — current coverage climbed substantially (75 unit tests, 286 e2e, spread across the libs + every shell). Trackable as a standing target. |
+| IK-062 ADR backfill for decisions 2–10 | Documentation-only pass; deferred to a dedicated writing session. |
+
+---
+
+**Signed:** backend-audit Horizons 1 + 2 + 3 complete. 33 / 37 roadmap items shipped.

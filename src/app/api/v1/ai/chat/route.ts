@@ -4,6 +4,7 @@ import { apiError, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { env } from "@/lib/env";
+import { record as recordUsage } from "@/lib/usage";
 
 const Schema = z.object({
   conversationId: z.string().uuid().optional(),
@@ -90,6 +91,38 @@ export async function POST(req: Request) {
           role: "assistant",
           content: assistantText,
         });
+
+        // H3-01 — meter AI usage per tenant. Fire-and-forget — failures
+        // log but never block the stream response.
+        const u = final.usage;
+        if (u) {
+          void Promise.all([
+            recordUsage({
+              orgId: session.orgId,
+              actorId: session.userId,
+              metric: "ai.tokens.input",
+              quantity: u.input_tokens ?? 0,
+              unit: "tokens",
+              metadata: { model: input.model, conversation_id: conversationId },
+            }),
+            recordUsage({
+              orgId: session.orgId,
+              actorId: session.userId,
+              metric: "ai.tokens.output",
+              quantity: u.output_tokens ?? 0,
+              unit: "tokens",
+              metadata: { model: input.model, conversation_id: conversationId },
+            }),
+            recordUsage({
+              orgId: session.orgId,
+              actorId: session.userId,
+              metric: "ai.request",
+              quantity: 1,
+              unit: "count",
+              metadata: { model: input.model },
+            }),
+          ]);
+        }
 
         controller.enqueue(
           encoder.encode(`event: done\ndata: ${JSON.stringify({

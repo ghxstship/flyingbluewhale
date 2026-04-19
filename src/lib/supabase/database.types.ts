@@ -1168,6 +1168,60 @@ export type Database = {
           },
         ]
       }
+      job_queue: {
+        Row: {
+          attempts: number
+          completed_at: string | null
+          created_at: string
+          dedup_key: string | null
+          id: string
+          last_error: string | null
+          locked_by: string | null
+          locked_until: string | null
+          max_attempts: number
+          org_id: string
+          payload: Json
+          run_at: string
+          state: Database["public"]["Enums"]["job_state"]
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          completed_at?: string | null
+          created_at?: string
+          dedup_key?: string | null
+          id?: string
+          last_error?: string | null
+          locked_by?: string | null
+          locked_until?: string | null
+          max_attempts?: number
+          org_id: string
+          payload?: Json
+          run_at?: string
+          state?: Database["public"]["Enums"]["job_state"]
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          completed_at?: string | null
+          created_at?: string
+          dedup_key?: string | null
+          id?: string
+          last_error?: string | null
+          locked_by?: string | null
+          locked_until?: string | null
+          max_attempts?: number
+          org_id?: string
+          payload?: Json
+          run_at?: string
+          state?: Database["public"]["Enums"]["job_state"]
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           assigned_to: string | null
@@ -2430,6 +2484,69 @@ export type Database = {
           },
         ]
       }
+      usage_events: {
+        Row: {
+          actor_id: string | null
+          id: string
+          metadata: Json
+          metric: string
+          occurred_at: string
+          org_id: string
+          quantity: number
+          unit: string
+        }
+        Insert: {
+          actor_id?: string | null
+          id?: string
+          metadata?: Json
+          metric: string
+          occurred_at?: string
+          org_id: string
+          quantity: number
+          unit: string
+        }
+        Update: {
+          actor_id?: string | null
+          id?: string
+          metadata?: Json
+          metric?: string
+          occurred_at?: string
+          org_id?: string
+          quantity?: number
+          unit?: string
+        }
+        Relationships: []
+      }
+      usage_rollups: {
+        Row: {
+          bucket_duration_s: number
+          bucket_start: string
+          metric: string
+          org_id: string
+          quantity: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          bucket_duration_s?: number
+          bucket_start: string
+          metric: string
+          org_id: string
+          quantity: number
+          unit: string
+          updated_at?: string
+        }
+        Update: {
+          bucket_duration_s?: number
+          bucket_start?: string
+          metric?: string
+          org_id?: string
+          quantity?: number
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_passkeys: {
         Row: {
           counter: number
@@ -2665,6 +2782,32 @@ export type Database = {
     Functions: {
       auth_org_ids: { Args: never; Returns: string[] }
       auth_user_email: { Args: never; Returns: string }
+      claim_jobs: {
+        Args: { p_batch: number; p_visibility_s: number; p_worker: string }
+        Returns: {
+          attempts: number
+          completed_at: string | null
+          created_at: string
+          dedup_key: string | null
+          id: string
+          last_error: string | null
+          locked_by: string | null
+          locked_until: string | null
+          max_attempts: number
+          org_id: string
+          payload: Json
+          run_at: string
+          state: Database["public"]["Enums"]["job_state"]
+          type: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "job_queue"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       current_request_id: { Args: never; Returns: string }
       has_org_role: {
         Args: { required: string[]; target_org: string }
@@ -2672,6 +2815,7 @@ export type Database = {
       }
       is_org_member: { Args: { target_org: string }; Returns: boolean }
       proposal_org_id: { Args: { p_id: string }; Returns: string }
+      reclaim_stuck_jobs: { Args: never; Returns: number }
     }
     Enums: {
       deliverable_status:
@@ -2716,6 +2860,7 @@ export type Database = {
         | "staff"
         | "custom"
       invoice_status: "draft" | "sent" | "paid" | "overdue" | "voided"
+      job_state: "pending" | "running" | "done" | "failed" | "dead"
       lead_stage:
         | "new"
         | "qualified"
@@ -2921,6 +3066,7 @@ export const Constants = {
         "custom",
       ],
       invoice_status: ["draft", "sent", "paid", "overdue", "voided"],
+      job_state: ["pending", "running", "done", "failed", "dead"],
       lead_stage: ["new", "qualified", "contacted", "proposal", "won", "lost"],
       platform_role: [
         "developer",

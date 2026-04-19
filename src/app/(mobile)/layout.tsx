@@ -1,6 +1,6 @@
 import { MobileTabBar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
-import { OfflineBanner } from "@/components/mobile/OfflineBanner";
+import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
 import { TenantShell } from "@/components/TenantShell";
 import { mobileTabs } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
@@ -12,7 +12,7 @@ export default async function MobileLayout({ children }: { children: React.React
   return (
     <TenantShell>
       <div data-platform="compvss" className="page-shell mobile-shell">
-        <OfflineBanner />
+        <ConnectivityBanner />
         <main className="animate-fade-in">{children}</main>
         <MobileTabBar items={mobileTabs} />
         <CommandPalette scope="mobile" />

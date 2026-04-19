@@ -504,12 +504,17 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
 .measure { max-width: 65ch; }
 .measure-narrow { max-width: 45ch; }
 
-/* ───── Density (compact) ───── */
+/* ───── Density (compact / comfortable / spacious) ───── */
 
 [data-density="compact"] .input-base { padding: 0.375rem 0.625rem; font-size: 0.8125rem; }
 [data-density="compact"] .data-table th,
 [data-density="compact"] .data-table td { padding-top: 0.375rem; padding-bottom: 0.375rem; }
 [data-density="compact"] .nav-item { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+
+[data-density="spacious"] .input-base { padding: 0.75rem 1rem; font-size: 0.9375rem; }
+[data-density="spacious"] .data-table th,
+[data-density="spacious"] .data-table td { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+[data-density="spacious"] .nav-item { padding-top: 0.625rem; padding-bottom: 0.625rem; }
 
 /* ───── Overlay ───── */
 

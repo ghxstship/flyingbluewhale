@@ -5,6 +5,12 @@ import { THEMES, isValidThemeSlug, colorSchemeFor, type ThemeSlug, type ThemeFam
 import { THEME_COOKIE_NAME, THEME_STORAGE_KEY } from "./theme-script";
 
 export type ColorMode = "light" | "dark" | "system";
+export type Density = "compact" | "comfortable" | "spacious";
+
+const DENSITIES: Density[] = ["compact", "comfortable", "spacious"];
+function isValidDensity(v: unknown): v is Density {
+  return typeof v === "string" && (DENSITIES as string[]).includes(v);
+}
 
 export interface ThemeContextValue {
   theme: ThemeSlug;
@@ -13,9 +19,9 @@ export interface ThemeContextValue {
   /** True when the user hasn't picked a theme manually. */
   isSystemDriven: boolean;
   resetToSystem: () => void;
-  /** Density is orthogonal to theme. */
-  density: "comfortable" | "compact";
-  setDensity: (d: "comfortable" | "compact") => void;
+  /** Density is orthogonal to theme. Three modes per IA spec §5.4. */
+  density: Density;
+  setDensity: (d: Density) => void;
   /**
    * Color mode — orthogonal to the design theme slug. `system` honors
    * `prefers-color-scheme`. Applied as `data-mode` on <html>, independent
@@ -33,7 +39,7 @@ function writeCookie(key: string, value: string) {
   document.cookie = `${key}=${encodeURIComponent(value)}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax`;
 }
 
-async function persistRemote(patch: { theme?: ThemeSlug; density?: "comfortable" | "compact" }) {
+async function persistRemote(patch: { theme?: ThemeSlug; density?: Density }) {
   try {
     await fetch("/api/v1/me/preferences", {
       method: "PATCH",
@@ -56,7 +62,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // effect to avoid hydration mismatch.
   const [theme, setThemeState] = React.useState<ThemeSlug>("kinetic");
   const [isSystemDriven, setSystemDriven] = React.useState(true);
-  const [density, setDensityState] = React.useState<"comfortable" | "compact">("comfortable");
+  const [density, setDensityState] = React.useState<Density>("comfortable");
   const [mode, setModeState] = React.useState<ColorMode>("system");
   const [mounted, setMounted] = React.useState(false);
 
@@ -73,8 +79,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setThemeState(t);
     setSystemDriven(!stored);
 
-    const d = (localStorage.getItem("chroma.density") as "comfortable" | "compact" | null) ?? "comfortable";
-    setDensityState(d);
+    const storedDensity = localStorage.getItem("chroma.density");
+    setDensityState(isValidDensity(storedDensity) ? storedDensity : "comfortable");
 
     // Color mode hydration — cookie first, then localStorage, then default "system".
     const cookieMode = (() => {
@@ -105,8 +111,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     if (!mounted) return;
     const root = document.documentElement;
-    if (density === "compact") root.setAttribute("data-density", "compact");
-    else root.removeAttribute("data-density");
+    if (density === "comfortable") root.removeAttribute("data-density");
+    else root.setAttribute("data-density", density);
   }, [density, mounted]);
 
   // Color mode application — independent of the theme slug. Writes
@@ -184,7 +190,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setSystemDriven(true);
   }, []);
 
-  const setDensity = React.useCallback((d: "comfortable" | "compact") => {
+  const setDensity = React.useCallback((d: Density) => {
     setDensityState(d);
     try {
       localStorage.setItem("chroma.density", d);

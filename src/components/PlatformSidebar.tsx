@@ -16,12 +16,21 @@ import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { useHotkeys, registerShortcut } from "@/lib/hooks/useHotkeys";
 import { matchRoute } from "@/lib/hooks/useActiveRoute";
 import { Hint } from "@/components/ui/Tooltip";
+import { WorkspaceSwitcher } from "@/components/WorkspaceSwitcher";
 
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 400;
 const COLLAPSED_WIDTH = 56;
 
-export function PlatformSidebar({ groups }: { groups: NavGroup[] }) {
+export function PlatformSidebar({
+  groups,
+  workspaceName,
+}: {
+  groups: NavGroup[];
+  /** Pre-resolved active workspace name so the server-rendered sidebar
+   *  doesn't flash "Workspace" before the switcher hydrates. */
+  workspaceName?: string;
+}) {
   const pathname = usePathname();
   const { prefs, setPrefs } = useUserPreferences();
 
@@ -128,13 +137,11 @@ export function PlatformSidebar({ groups }: { groups: NavGroup[] }) {
       style={{ width: `${currentWidth}px` }}
     >
       <div className="flex h-full flex-col">
-        {/* Header: logo + collapse toggle */}
-        <div className="flex items-center justify-between border-b border-[var(--border-color)] px-3 py-3">
-          {!collapsed && (
-            <Link href="/console" className="text-sm font-semibold tracking-tight">
-              flyingbluewhale
-            </Link>
-          )}
+        {/* Header: workspace switcher + collapse toggle */}
+        <div className="flex items-center gap-1 border-b border-[var(--border-color)] px-2 py-2">
+          <div className="min-w-0 flex-1">
+            <WorkspaceSwitcher collapsed={collapsed} initialName={workspaceName} />
+          </div>
           <Hint label={collapsed ? "Expand sidebar (⌘B)" : "Collapse sidebar (⌘B)"} side="right">
             <button
               type="button"
@@ -143,7 +150,7 @@ export function PlatformSidebar({ groups }: { groups: NavGroup[] }) {
                 setCollapsed(next);
                 void setPrefs({ sidebar_collapsed: next });
               }}
-              className="rounded p-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+              className="shrink-0 rounded p-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               {collapsed ? <PanelLeftOpen size={14} /> : <PanelLeftClose size={14} />}

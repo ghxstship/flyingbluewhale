@@ -3,17 +3,18 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CommandPalette, CommandPaletteTrigger } from "@/components/CommandPalette";
 import { NotificationsBell } from "@/components/NotificationsBell";
 import { requireSession } from "@/lib/auth";
-import { TenantShell } from "@/components/TenantShell";
+import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { platformNav } from "@/lib/nav";
 
 export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
   // Protects /console at the outer boundary so every page inherits the
   // guard; individual pages may still call requireSession() for session data.
   await requireSession("/login");
+  const tenant = await resolveTenant();
   return (
-    <TenantShell>
+    <TenantShell tenant={tenant}>
       <div data-platform="atlvs" className="console-shell">
-        <PlatformSidebar groups={platformNav} />
+        <PlatformSidebar groups={platformNav} workspaceName={tenant.orgName} />
         <div className="console-main">
           {/*
            * Glass nav — IA redesign (docs/ia/02-navigation-redesign.md §3.3).

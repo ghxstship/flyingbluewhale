@@ -6,7 +6,7 @@ import type { Json } from "@/lib/supabase/database.types";
 
 const PatchSchema = z.object({
   theme: z.enum(["light", "dark", "system"]).optional(),
-  density: z.enum(["comfortable", "compact"]).optional(),
+  density: z.enum(["compact", "comfortable", "spacious"]).optional(),
   locale: z.string().min(2).max(8).optional(),
   timezone: z.string().min(1).max(64).optional(),
   consent: z.record(z.string(), z.boolean()).optional(),

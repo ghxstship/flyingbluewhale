@@ -23,4 +23,18 @@
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* Global semantic token bindings (audit M1) */
+  --background: #ededed;
+  --foreground: #1a1a1a;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e0e0e0;
+  --text-color: #1a1a1a;
+  --text-primary: #1a1a1a;
+  --text-secondary: #444444;
+  --text-muted: #666666;
+  --border-color: #d6d6d6;
+  --org-primary: #0a0a0a;
+  --org-secondary: #444444;
+  --org-accent: #18a048;
 }

@@ -30,4 +30,22 @@
   --font-body: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Global semantic token bindings (audit M1).
+     The CHROMA --bg is a linear-gradient; a solid fallback (#f3ecfb) is
+     used for `--background` so inputs / hover states / skeletons that
+     apply `background-color` still render correctly. */
+  --background: #f3ecfb;
+  --foreground: #3a2a5c;
+  --bg-secondary: #e8dff7;
+  --bg-tertiary: #dcd0f0;
+  --text-color: #3a2a5c;
+  --text-primary: #3a2a5c;
+  --text-secondary: #5a4a7c;
+  --text-muted: #7a6a9c;
+  --border-color: #d8cfec;
+  /* #b490ff is 2.25:1 on white — below AA. Darken for --org-primary. */
+  --org-primary: #6b3fe0;
+  --org-secondary: #4a2ba0;
+  --org-accent: #b490ff;
 }

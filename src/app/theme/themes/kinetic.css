@@ -27,4 +27,18 @@
   --font-body: 'Instrument Serif', Georgia, serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
   --type-variation-display: "SOFT" 50, "WONK" 1;
+
+  /* Global semantic token bindings (audit M1) */
+  --background: #fafaf7;
+  --foreground: #1a1a1a;
+  --bg-secondary: #f3f1ea;
+  --bg-tertiary: #ece9df;
+  --text-color: #1a1a1a;
+  --text-primary: #1a1a1a;
+  --text-secondary: #404040;
+  --text-muted: #555555;
+  --border-color: #e0ddd4;
+  --org-primary: #cc3d10;
+  --org-secondary: #8f2a0b;
+  --org-accent: #cc3d10;
 }

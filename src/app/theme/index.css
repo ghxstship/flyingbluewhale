@@ -36,3 +36,50 @@
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
+
+/* ═════ Brand overlays per shell — MUST load after CHROMA themes ═════
+   Pins `--org-primary/secondary/accent` to shell brand (ATLVS red,
+   COMPVSS amber, GVTEWAY blue) so platform shells keep their brand
+   identity regardless of active CHROMA theme. Marketing (no
+   data-platform) inherits the CHROMA theme's own accent. Audit M1. */
+
+[data-platform="atlvs"] {
+  --org-primary: #DC2626;
+  --org-secondary: #7F1D1D;
+  --org-accent: #EF4444;
+}
+
+[data-platform="compvss"] {
+  /* amber-700 (#B45309) = 5.05:1 on white — passes WCAG AA.
+     amber-600 (#D97706) = 3.18:1 — fails. */
+  --org-primary: #B45309;
+  --org-secondary: #78350F;
+  --org-accent: #D97706;
+}
+
+[data-platform="gvteway"] {
+  --org-primary: #2563EB;
+  --org-secondary: #1E3A8A;
+  --org-accent: #3B82F6;
+}
+
+/* Dark-family CHROMA themes flip the platform accents to brighter shades
+   so contrast holds against the deep theme background. */
+[data-theme="cyber"] [data-platform="atlvs"],
+[data-theme="glass"] [data-platform="atlvs"] {
+  --org-primary: #EF4444;
+  --org-secondary: #FCA5A5;
+  --org-accent: #F87171;
+}
+[data-theme="cyber"] [data-platform="compvss"],
+[data-theme="glass"] [data-platform="compvss"] {
+  --org-primary: #FACC15;
+  --org-secondary: #FDE68A;
+  --org-accent: #FDE047;
+}
+[data-theme="cyber"] [data-platform="gvteway"],
+[data-theme="glass"] [data-platform="gvteway"] {
+  --org-primary: #60A5FA;
+  --org-secondary: #BFDBFE;
+  --org-accent: #93C5FD;
+}

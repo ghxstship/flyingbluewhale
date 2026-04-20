@@ -1,0 +1,113 @@
+name: Themes × Responsive matrix
+
+# CHROMA BEACON × responsive × browser matrix — full sweep runs nightly
+# (cost: ~40 CPU-minutes × 3 browsers). PRs that touch theme tokens,
+# component-layer CSS, or marketing shell code trigger a smoke sweep
+# (chromium only, 3 breakpoints on 5 routes) to catch regressions fast.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/app/globals.css"
+      - "src/app/theme/**"
+      - "src/components/MarketingHeader.tsx"
+      - "src/components/Shell.tsx"
+      - "e2e/audit/**"
+      - "playwright.audit.config.ts"
+      - ".github/workflows/themes-matrix.yml"
+  schedule:
+    - cron: "0 7 * * *" # 07:00 UTC daily, full sweep
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Run the full 6-breakpoint × 3-browser × all-routes matrix"
+        required: false
+        default: "false"
+      browsers:
+        description: "Browsers to run (comma-sep: chromium,firefox,webkit)"
+        required: false
+        default: "chromium,firefox,webkit"
+
+concurrency:
+  group: themes-matrix-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  matrix:
+    name: Themes matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+
+      # Scope: PRs run a smoke sweep (chromium only, narrow route set) so
+      # the gate is fast. Nightly and manual dispatch run the full matrix.
+      - name: Configure scope
+        id: scope
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "browsers=chromium" >> "$GITHUB_OUTPUT"
+            echo "routes=/,/pricing,/about,/contact,/login" >> "$GITHUB_OUTPUT"
+            echo "full=" >> "$GITHUB_OUTPUT"
+          else
+            echo "browsers=${{ inputs.browsers || 'chromium,firefox,webkit' }}" >> "$GITHUB_OUTPUT"
+            echo "routes=" >> "$GITHUB_OUTPUT"
+            if [[ "${{ inputs.full }}" == "true" || "${{ github.event_name }}" == "schedule" ]]; then
+              echo "full=1" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - name: Install Playwright browsers
+        run: |
+          IFS=',' read -ra BROWSERS <<< "${{ steps.scope.outputs.browsers }}"
+          npx playwright install --with-deps "${BROWSERS[@]}"
+
+      - name: Run audit matrix
+        env:
+          AUDIT_BROWSERS: ${{ steps.scope.outputs.browsers }}
+          AUDIT_ROUTES: ${{ steps.scope.outputs.routes }}
+          AUDIT_FULL: ${{ steps.scope.outputs.full }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+        run: npx playwright test --config=playwright.audit.config.ts
+
+      # Upload the full evidence tree (screenshots + coverage CSV/JSONL)
+      # so reviewers can diff against the last green run.
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: themes-matrix-evidence-${{ github.sha }}
+          path: docs/audits/evidence/
+          retention-days: 30
+
+      - name: Summarize
+        if: always()
+        run: |
+          if [[ -f docs/audits/evidence/coverage.jsonl ]]; then
+            python3 - <<'PY'
+          import json, collections
+          keyed = {}
+          order = {"PASS":0,"WARN":1,"SKIP":2,"FAIL":3}
+          with open("docs/audits/evidence/coverage.jsonl") as f:
+            for line in f:
+              r = json.loads(line)
+              k = (r.get("route"), r.get("theme"), r.get("breakpoint"), r.get("browser"))
+              cur = keyed.get(k)
+              if cur is None or order.get(r.get("result"),9) < order.get(cur.get("result"),9):
+                keyed[k] = r
+          c = collections.Counter(r["result"] for r in keyed.values())
+          print(f"::notice title=Matrix summary::{len(keyed)} cells · {dict(c)}")
+          fails = [r for r in keyed.values() if r["result"] == "FAIL"]
+          for r in fails[:20]:
+            print(f"::error file=src/app/theme/themes/{r['theme']}.css::{r['route']} × {r['theme']} × {r['breakpoint']} × {r['browser']}: {r.get('reason','')[:120]}")
+          PY
+          fi

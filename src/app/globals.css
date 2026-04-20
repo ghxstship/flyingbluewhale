@@ -81,48 +81,11 @@
 }
 
 /* ═════ Brand overlays per shell ═════
-   Apply [data-platform] on each shell root to replace org accents. */
-
-[data-platform="atlvs"] {
-  --org-primary: #DC2626;
-  --org-secondary: #7F1D1D;
-  --org-accent: #EF4444;
-}
-
-[data-platform="compvss"] {
-  /* amber-700 (#B45309) hits 5.05:1 on white — passes WCAG AA for normal text.
-     amber-600 (#D97706) is only 3.18:1 — fails. */
-  --org-primary: #B45309;
-  --org-secondary: #78350F;
-  --org-accent: #D97706;
-}
-
-[data-platform="gvteway"] {
-  --org-primary: #2563EB;
-  --org-secondary: #1E3A8A;
-  --org-accent: #3B82F6;
-}
-
-[data-theme="dark"][data-platform="atlvs"],
-[data-theme="dark"] [data-platform="atlvs"] {
-  --org-primary: #EF4444;
-  --org-secondary: #FCA5A5;
-  --org-accent: #F87171;
-}
-
-[data-theme="dark"][data-platform="compvss"],
-[data-theme="dark"] [data-platform="compvss"] {
-  --org-primary: #FACC15;
-  --org-secondary: #FDE68A;
-  --org-accent: #FDE047;
-}
-
-[data-theme="dark"][data-platform="gvteway"],
-[data-theme="dark"] [data-platform="gvteway"] {
-  --org-primary: #60A5FA;
-  --org-secondary: #BFDBFE;
-  --org-accent: #93C5FD;
-}
+   Moved to src/app/theme/index.css AFTER the CHROMA theme imports so
+   `[data-platform]` consistently wins over per-theme `--org-primary`
+   bindings — audit M1 resolution. Marketing (no data-platform) inherits
+   the active CHROMA theme's accent; platform/portal/mobile shells pin
+   to their brand red/amber/blue. */
 
 /* ───── Base ───── */
 
@@ -132,6 +95,15 @@ body {
   font-family: var(--font-sans, Inter, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings must break long brand/word tokens rather than force a
+   horizontal scrollbar at narrow viewports. Audit m1-alt — caught on
+   /features + /customers where "flyingbluewhale" (15ch) overflows the
+   375px hero at text-5xl. */
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 code, pre, .font-mono { font-family: var(--font-mono, ui-monospace, monospace); }
@@ -153,6 +125,18 @@ code, pre, .font-mono { font-family: var(--font-mono, ui-monospace, monospace); 
 @keyframes skeleton-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 @keyframes status-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 @keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Component layer.
+   Every reusable class below (.btn, .badge, .nav-item, .surface-*,
+   .input-base, .data-table, grids, shells, elevations, dots, …) is
+   scoped into `@layer components` so Tailwind utilities — which live in
+   the `utilities` layer emitted after this block — always outrank them
+   regardless of specificity. That's what lets `md:hidden` reliably
+   hide a `.btn` on the desktop marketing header (audit §3.1, B1).
+   ───────────────────────────────────────────────────────────────────── */
+
+@layer components {
 
 /* Radix progress */
 .progress-root {
@@ -520,6 +504,8 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
 
 .overlay-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); }
 [data-theme="dark"] .overlay-backdrop { background: rgba(0, 0, 0, 0.6); }
+
+} /* end @layer components */
 
 /* ───── Print ───── */
 

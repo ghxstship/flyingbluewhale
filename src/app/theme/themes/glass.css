@@ -29,4 +29,22 @@
   --font-display: 'Geist', system-ui, sans-serif;
   --font-body: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* ─── Global semantic tokens (audit M1) ───
+     Components binding to `var(--background)`, `var(--foreground)`, …
+     must resolve correctly under every CHROMA theme — not just the
+     light-default or the vestigial `[data-theme="dark"]` branch. */
+  --background: #1a0b2e;
+  --foreground: #ffffff;
+  --bg-secondary: #231139;
+  --bg-tertiary: #2c184a;
+  --text-color: #ffffff;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.78);
+  --text-muted: rgba(255, 255, 255, 0.62);
+  --border-color: rgba(255, 255, 255, 0.18);
+  --org-primary: #ffffff;
+  --org-secondary: rgba(255, 255, 255, 0.72);
+  --org-accent: #b47cff;
+  color-scheme: dark;
 }

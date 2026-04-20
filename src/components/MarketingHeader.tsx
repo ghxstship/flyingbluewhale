@@ -36,7 +36,7 @@ export function MarketingHeader() {
 
   return (
     <header className="sticky top-0 z-40 glass-nav">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link
           href="/"
           className="text-base font-semibold tracking-tight text-[var(--foreground)]"
@@ -45,8 +45,9 @@ export function MarketingHeader() {
           flyingbluewhale
         </Link>
 
-        {/* Desktop primary nav */}
-        <nav className="hidden gap-1 md:flex" aria-label="Primary">
+        {/* Desktop primary nav — gated at `lg` because 7 items + a 5-control
+            right-cluster does not fit under 1024 without overflow. */}
+        <nav className="hidden gap-1 lg:flex" aria-label="Primary">
           {items.map((i) => (
             <Link key={i.href} href={i.href} className="nav-item">
               {i.label}
@@ -55,7 +56,7 @@ export function MarketingHeader() {
         </nav>
 
         {/* Desktop right-hand cluster */}
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <button
             type="button"
             onClick={() => setThemePickerOpen(true)}
@@ -63,7 +64,7 @@ export function MarketingHeader() {
             aria-label="Open design-system theme picker"
           >
             <Palette size={14} aria-hidden="true" />
-            <span className="hidden lg:inline">Themes</span>
+            <span className="hidden xl:inline">Themes</span>
           </button>
           <LocaleSwitcher />
           <ThemeToggle />
@@ -71,14 +72,15 @@ export function MarketingHeader() {
           <Link href="/signup" className="btn btn-primary btn-sm">Sign up</Link>
         </div>
 
-        {/* Mobile trigger */}
+        {/* Mobile / tablet trigger — shown below `lg` since the desktop nav
+            collapses into the sheet at that breakpoint. */}
         <button
           type="button"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav-sheet"
-          className="btn btn-ghost btn-sm md:hidden"
+          className="btn btn-ghost btn-sm lg:hidden"
         >
           {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
         </button>
@@ -88,7 +90,7 @@ export function MarketingHeader() {
       {mobileOpen && (
         <div
           id="mobile-nav-sheet"
-          className="md:hidden border-t border-[var(--border-color)] bg-[var(--background)]"
+          className="lg:hidden border-t border-[var(--border-color)] bg-[var(--background)]"
         >
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5">
             <nav className="flex flex-col gap-1" aria-label="Mobile primary">

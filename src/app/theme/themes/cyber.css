@@ -28,4 +28,19 @@
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* Global semantic token bindings (audit M1) */
+  --background: #050013;
+  --foreground: #ffffff;
+  --bg-secondary: #0c0320;
+  --bg-tertiary: #12082c;
+  --text-color: #ffffff;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.80);
+  --text-muted: rgba(255, 255, 255, 0.62);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --org-primary: #ff0080;
+  --org-secondary: #c3005f;
+  --org-accent: #00d9ff;
+  color-scheme: dark;
 }

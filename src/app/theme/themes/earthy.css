@@ -28,4 +28,18 @@
   --font-display: 'DM Serif Display', Georgia, serif;
   --font-body: 'Fraunces', Georgia, serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* Global semantic token bindings (audit M1) */
+  --background: #eee3cd;
+  --foreground: #2b2318;
+  --bg-secondary: #f6ecd6;
+  --bg-tertiary: #e4d6b2;
+  --text-color: #2b2318;
+  --text-primary: #2b2318;
+  --text-secondary: #48392a;
+  --text-muted: #5c5144;
+  --border-color: #d4c4a4;
+  --org-primary: #4a6b3a;
+  --org-secondary: #2f4625;
+  --org-accent: #c05621;
 }

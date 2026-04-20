@@ -7,3 +7,12 @@ node_modules
 next-env.d.ts
 playwright-report
 test-results
+
+# Themes × responsive audit — per-cell screenshots (80MB+). Retained for
+# 30 days as CI artifacts via .github/workflows/themes-matrix.yml instead.
+# Text evidence (coverage.csv/jsonl, probe JSONs, report.json) stays.
+docs/audits/evidence/chromium/
+docs/audits/evidence/firefox/
+docs/audits/evidence/webkit/
+docs/audits/evidence/.report/
+test-results/

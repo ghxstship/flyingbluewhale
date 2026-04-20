@@ -23,4 +23,18 @@
   --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-body: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* Global semantic token bindings (audit M1) */
+  --background: #f3ead2;
+  --foreground: #000000;
+  --bg-secondary: #ffde3a;
+  --bg-tertiary: #ffffff;
+  --text-color: #000000;
+  --text-primary: #000000;
+  --text-secondary: #2a2a2a;
+  --text-muted: #444444;
+  --border-color: #000000;
+  --org-primary: #000000;
+  --org-secondary: #333333;
+  --org-accent: #ff5ea1;
 }

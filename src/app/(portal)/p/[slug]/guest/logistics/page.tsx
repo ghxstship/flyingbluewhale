@@ -6,8 +6,11 @@ export const dynamic = "force-dynamic";
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   return (
-    <PortalSubpage slug={slug} persona="guest" title="Logistics" subtitle="Parking, entrances, rideshare">
-      <EmptyState title="Day-of logistics" description="Map, entrance, and rideshare drop-off info posts here 72 hours before the event." />
+    <PortalSubpage slug={slug} persona="guest" title="Logistics" subtitle="Parking, gates, ADA, weather">
+      <EmptyState
+        title="Logistics publish day-of"
+        description="Parking gates, ADA access points, and weather notes post here the morning of the show. Your ticket + event guide will still have the entry details."
+      />
     </PortalSubpage>
   );
 }

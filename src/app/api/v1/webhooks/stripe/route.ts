@@ -59,10 +59,24 @@ export async function POST(req: Request) {
       case "payment_intent.succeeded": {
         const pi = event.data.object;
         if (pi?.id && supabase) {
-          await supabase
+          const { data: paid } = await supabase
             .from("invoices")
             .update({ status: "paid", paid_at: new Date().toISOString() })
-            .eq("stripe_payment_intent", pi.id);
+            .eq("stripe_payment_intent", pi.id)
+            .select("id, org_id, number, title, amount_cents, created_by")
+            .maybeSingle();
+          if (paid) {
+            const { notify } = await import("@/lib/notify");
+            await notify({
+              orgId: paid.org_id,
+              userId: paid.created_by,
+              eventType: "invoice.paid",
+              title: `Invoice ${paid.number ?? paid.id.slice(0, 8)} paid`,
+              body: paid.title ?? undefined,
+              href: `/console/finance/invoices/${paid.id}`,
+              data: { invoiceId: paid.id, amountCents: paid.amount_cents, stripePaymentIntent: pi.id },
+            });
+          }
         }
         break;
       }

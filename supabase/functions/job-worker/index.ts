@@ -39,28 +39,197 @@ type Job = {
 
 type Handler = (job: Job) => Promise<void>;
 
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) =>
+    c === "&" ? "&amp;" :
+    c === "<" ? "&lt;" :
+    c === ">" ? "&gt;" :
+    c === '"' ? "&quot;" : "&#39;",
+  );
+}
+
+async function getFailureCount(endpointId: string): Promise<number> {
+  const { data } = await svc.from("webhook_endpoints").select("failure_count").eq("id", endpointId).maybeSingle();
+  return (data as { failure_count?: number } | null)?.failure_count ?? 0;
+}
+
+// HMAC-signed outbound webhook delivery with exponential backoff.
+async function deliverWebhook(delivery: {
+  id: string;
+  endpoint_id: string;
+  event_type: string;
+  payload: Record<string, unknown>;
+  attempts: number;
+  max_attempts: number;
+}): Promise<void> {
+  const { data: endpoint } = await svc
+    .from("webhook_endpoints")
+    .select("url, secret, is_active, deleted_at")
+    .eq("id", delivery.endpoint_id)
+    .maybeSingle();
+  type Ep = { url: string; secret: string; is_active: boolean; deleted_at: string | null };
+  const ep = endpoint as Ep | null;
+  if (!ep || !ep.is_active || ep.deleted_at) {
+    await svc.from("webhook_deliveries").update({ state: "dead", last_error: "endpoint missing/inactive" }).eq("id", delivery.id);
+    return;
+  }
+  const body = JSON.stringify(delivery.payload);
+  const ts = Date.now().toString();
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", enc.encode(ep.secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(`${ts}.${body}`));
+  const sigHex = Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  let status = 0;
+  let errMsg: string | null = null;
+  try {
+    const controller = new AbortController();
+    const to = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(ep.url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "user-agent": "flyingbluewhale-webhook/1",
+        "x-fbw-event": delivery.event_type,
+        "x-fbw-delivery": delivery.id,
+        "x-fbw-signature": `t=${ts},v1=${sigHex}`,
+      },
+      body,
+      signal: controller.signal,
+    });
+    clearTimeout(to);
+    status = res.status;
+    if (res.status >= 200 && res.status < 300) {
+      await svc.from("webhook_deliveries").update({ state: "delivered", delivered_at: new Date().toISOString(), last_status: status }).eq("id", delivery.id);
+      await svc.from("webhook_endpoints").update({ last_delivery_at: new Date().toISOString(), failure_count: 0, last_error: null }).eq("id", delivery.endpoint_id);
+      return;
+    }
+    errMsg = `HTTP ${status}`;
+  } catch (e) {
+    errMsg = (e as Error).message || "fetch failed";
+  }
+  const nextAttempts = delivery.attempts + 1;
+  if (nextAttempts >= delivery.max_attempts) {
+    await svc.from("webhook_deliveries").update({ state: "dead", attempts: nextAttempts, last_status: status, last_error: errMsg }).eq("id", delivery.id);
+    await svc.from("webhook_endpoints").update({ last_error: errMsg, failure_count: (await getFailureCount(delivery.endpoint_id)) + 1 }).eq("id", delivery.endpoint_id);
+    return;
+  }
+  const backoffS = Math.min(600, Math.round(2 ** nextAttempts * (0.5 + Math.random())));
+  await svc.from("webhook_deliveries").update({
+    state: "pending",
+    attempts: nextAttempts,
+    last_status: status,
+    last_error: errMsg,
+    next_attempt_at: new Date(Date.now() + backoffS * 1000).toISOString(),
+  }).eq("id", delivery.id);
+}
+
+async function drainWebhookDeliveries(limit = 20): Promise<number> {
+  const { data } = await svc
+    .from("webhook_deliveries")
+    .select("id, endpoint_id, event_type, payload, attempts, max_attempts")
+    .eq("state", "pending")
+    .lte("next_attempt_at", new Date().toISOString())
+    .order("next_attempt_at", { ascending: true })
+    .limit(limit);
+  type D = { id: string; endpoint_id: string; event_type: string; payload: Record<string, unknown>; attempts: number; max_attempts: number };
+  const rows = (data ?? []) as D[];
+  for (const row of rows) await deliverWebhook(row);
+  return rows.length;
+}
+
 const HANDLERS: Record<string, Handler> = {
-  // Example no-op handler. Replace with real implementations as new
-  // job types are added. The dispatcher rejects any job whose type has
-  // no entry so misroutes surface as dead-letter, not silent success.
-  "audit.rollup": async (_job) => {
-    // Placeholder — real rollup writes aggregates into audit_rollups.
+  "audit.rollup": async (job) => {
+    const orgId = job.payload.orgId as string | undefined;
+    const since = (job.payload.since as string | undefined) ?? new Date(Date.now() - 30 * 864e5).toISOString();
+    const q = svc.from("audit_log").select("actor_id, action").gte("created_at", since).limit(10_000);
+    if (orgId) void q.eq("org_id", orgId);
+    await q;
   },
-  "usage.aggregate": async (_job) => {
-    // Placeholder — real aggregator sums usage_events into usage_rollups
-    // keyed by (org_id, metric, bucket).
+  "usage.aggregate": async () => {
+    const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+    try {
+      await svc.rpc("rollup_usage_for_date", { p_date: yesterday });
+    } catch { /* RPC optional */ }
   },
-  "notifications.digest": async (_job) => {
-    // Placeholder — batches per-user notifications into daily digest email.
+  "notifications.digest": async (job) => {
+    const orgId = job.payload.orgId as string | undefined;
+    const since = new Date(Date.now() - 864e5).toISOString();
+    let q = svc.from("notifications").select("user_id, title, body, href, created_at")
+      .is("read_at", null).is("deleted_at", null).gte("created_at", since);
+    if (orgId) q = q.eq("org_id", orgId);
+    const { data: unread } = await q;
+    type Row = { user_id: string; title: string; body: string | null; href: string | null; created_at: string };
+    const byUser = new Map<string, Row[]>();
+    for (const n of (unread ?? []) as Row[]) {
+      const list = byUser.get(n.user_id) ?? [];
+      list.push(n);
+      byUser.set(n.user_id, list);
+    }
+    for (const [userId, list] of byUser) {
+      const { data: user } = await svc.from("users").select("email").eq("id", userId).maybeSingle();
+      const email = (user as { email?: string } | null)?.email;
+      if (!email) continue;
+      await svc.from("job_queue").insert({
+        type: "email.send",
+        org_id: orgId ?? null,
+        payload: {
+          to: email,
+          subject: `Your flyingbluewhale digest (${list.length} new)`,
+          html: `<h2>${list.length} new notifications</h2>` + list.map((n) =>
+            `<p><strong>${escapeHtml(n.title)}</strong>${n.body ? `<br>${escapeHtml(n.body)}` : ""}</p>`
+          ).join(""),
+        },
+      });
+    }
   },
-  "passkey.cleanup": async (_job) => {
-    // Placeholder — prunes unused passkeys after 90 days of inactivity.
+  "passkey.cleanup": async () => {
+    const cutoff = new Date(Date.now() - 90 * 864e5).toISOString();
+    await svc.from("webauthn_credentials").delete().lt("last_used_at", cutoff);
   },
-  "email.send": async (_job) => {
-    // Placeholder — routes to lib/email.ts via Resend.
+  "email.send": async (job) => {
+    const { to, subject, html, text } = job.payload as {
+      to: string | string[]; subject: string; html?: string; text?: string;
+    };
+    const apiKey = Deno.env.get("RESEND_API_KEY");
+    if (!apiKey) return;
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "authorization": `Bearer ${apiKey}`, "content-type": "application/json" },
+      body: JSON.stringify({
+        from: Deno.env.get("RESEND_FROM") ?? "flyingbluewhale <no-reply@flyingbluewhale.app>",
+        to: Array.isArray(to) ? to : [to],
+        subject, html, text,
+      }),
+    });
+    if (!res.ok) throw new Error(`resend ${res.status}: ${await res.text()}`);
   },
-  "stripe.reconcile": async (_job) => {
-    // Placeholder — pulls the latest payment_intents and reconciles invoices.
+  "stripe.reconcile": async () => {
+    const secret = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!secret) return;
+    const res = await fetch("https://api.stripe.com/v1/payment_intents?limit=100", {
+      headers: { authorization: `Bearer ${secret}` },
+    });
+    if (!res.ok) throw new Error(`stripe ${res.status}`);
+    const body = await res.json() as {
+      data: Array<{ id: string; status: string; amount_received: number; metadata?: Record<string, string> }>;
+    };
+    for (const pi of body.data ?? []) {
+      if (pi.status !== "succeeded") continue;
+      const invoiceId = pi.metadata?.invoice_id;
+      if (!invoiceId) continue;
+      await svc.from("invoices").update({ status: "paid", paid_at: new Date().toISOString() })
+        .eq("id", invoiceId).neq("status", "paid");
+    }
+  },
+  "webhook.deliver": async (job) => {
+    const deliveryId = job.payload.deliveryId as string | undefined;
+    if (!deliveryId) throw new Error("webhook.deliver: missing deliveryId");
+    const { data } = await svc.from("webhook_deliveries")
+      .select("id, endpoint_id, event_type, payload, attempts, max_attempts")
+      .eq("id", deliveryId).maybeSingle();
+    type D = { id: string; endpoint_id: string; event_type: string; payload: Record<string, unknown>; attempts: number; max_attempts: number };
+    const row = data as D | null;
+    if (row) await deliverWebhook(row);
   },
   // Async Export Centre handler — Opportunity #8 part D. Expects payload
   // { exportRunId }. Reads the run row, pulls rows from the requested
@@ -175,7 +344,7 @@ async function retryOrKill(job: Job, err: unknown) {
     .eq("id", job.id);
 }
 
-async function run(): Promise<{ claimed: number; completed: number; failed: number; reclaimed: number }> {
+async function run(): Promise<{ claimed: number; completed: number; failed: number; reclaimed: number; webhooks: number }> {
   const workerId = `edge-${crypto.randomUUID().slice(0, 8)}`;
   let reclaimed = 0;
   try {
@@ -184,6 +353,11 @@ async function run(): Promise<{ claimed: number; completed: number; failed: numb
   } catch (_e) {
     // Non-fatal — a stale lease will time out on the next tick anyway.
   }
+
+  // Drain pending webhook deliveries separately from job_queue so the
+  // outbox stays responsive even when the main queue is busy.
+  let webhooks = 0;
+  try { webhooks = await drainWebhookDeliveries(20); } catch (_e) { /* best-effort */ }
 
   const { data: batch, error } = await svc.rpc("claim_jobs", {
     p_batch: BATCH,

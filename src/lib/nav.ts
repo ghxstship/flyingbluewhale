@@ -20,7 +20,6 @@ export const platformNav: NavGroup[] = [
       { label: "Leads", href: "/console/leads" },
       { label: "Clients", href: "/console/clients" },
       { label: "Proposals", href: "/console/proposals" },
-      { label: "Campaigns", href: "/console/campaigns" },
     ],
   },
   {
@@ -44,7 +43,6 @@ export const platformNav: NavGroup[] = [
       { label: "Requisitions", href: "/console/procurement/requisitions" },
       { label: "Purchase Orders", href: "/console/procurement/purchase-orders" },
       { label: "Vendors", href: "/console/procurement/vendors" },
-      { label: "RFQs", href: "/console/procurement/rfqs" },
       { label: "Catalog", href: "/console/procurement/catalog" },
     ],
   },
@@ -55,7 +53,6 @@ export const platformNav: NavGroup[] = [
       { label: "Dispatch", href: "/console/production/dispatch" },
       { label: "Rentals", href: "/console/production/rentals" },
       { label: "Equipment", href: "/console/production/equipment" },
-      { label: "Warehouse", href: "/console/production/warehouse" },
       { label: "Logistics", href: "/console/production/logistics" },
     ],
   },
@@ -76,7 +73,6 @@ export const platformNav: NavGroup[] = [
       { label: "Assistant", href: "/console/ai/assistant" },
       { label: "Drafting", href: "/console/ai/drafting" },
       { label: "Automations", href: "/console/ai/automations" },
-      { label: "Agents", href: "/console/ai/agents" },
     ],
   },
   {
@@ -84,7 +80,6 @@ export const platformNav: NavGroup[] = [
     items: [
       { label: "Inbox", href: "/console/inbox" },
       { label: "Files", href: "/console/files" },
-      { label: "Forms", href: "/console/forms" },
     ],
   },
   {

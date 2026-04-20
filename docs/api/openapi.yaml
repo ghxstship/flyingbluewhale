@@ -90,6 +90,8 @@ paths:
 
   /api/v1/tickets/scan:
     post: { summary: Scan a ticket by QR payload. }
+  /api/v1/equipment/scan:
+    post: { summary: Scan an equipment asset tag to toggle / check-in / check-out. Emits status updates. }
   /api/v1/tickets/{id}/scan:
     post: { summary: Scan a specific ticket id. }
 
@@ -109,6 +111,12 @@ paths:
 
   /api/v1/webhooks/stripe:
     post: { summary: Stripe webhook receiver (HMAC-verified, idempotent). }
+  /api/v1/webhooks/endpoints:
+    get:  { summary: List outbound webhook endpoints registered for the caller's org. }
+    post: { summary: Register a new outbound webhook endpoint; returns the HMAC signing secret once. }
+  /api/v1/webhooks/endpoints/{id}:
+    patch:  { summary: Update an endpoint's URL, event allowlist, description, or active flag. }
+    delete: { summary: Soft-delete a webhook endpoint. }
 
   /api/v1/auth/oauth:
     get: { summary: Initiate Supabase OAuth; redirects to provider. }

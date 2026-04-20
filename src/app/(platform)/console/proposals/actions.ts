@@ -45,11 +45,31 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
 export async function setProposalStatusAction(id: string, status: "draft"|"sent"|"approved"|"rejected"|"expired"|"signed") {
   const session = await requireSession();
   const supabase = await createClient();
+  const { data: before } = await supabase
+    .from("proposals")
+    .select("doc_number, title, amount_cents, created_by")
+    .eq("org_id", session.orgId)
+    .eq("id", id)
+    .maybeSingle();
   const patch: { status: typeof status; sent_at?: string; signed_at?: string } = { status };
   if (status === "sent") patch.sent_at = new Date().toISOString();
   if (status === "signed") patch.signed_at = new Date().toISOString();
   const { error } = await supabase.from("proposals").update(patch).eq("org_id", session.orgId).eq("id", id);
   if (error) return { error: error.message };
+  if (before && (status === "sent" || status === "signed")) {
+    const { notify } = await import("@/lib/notify");
+    await notify({
+      orgId: session.orgId,
+      userId: before.created_by ?? session.userId,
+      eventType: status === "signed" ? "proposal.signed" : "proposal.sent",
+      title: status === "signed"
+        ? `Proposal ${before.doc_number ?? id.slice(0, 8)} signed`
+        : `Proposal ${before.doc_number ?? id.slice(0, 8)} sent`,
+      body: before.title ?? undefined,
+      href: `/console/proposals/${id}`,
+      data: { proposalId: id, amountCents: before.amount_cents, number: before.doc_number },
+    });
+  }
   revalidatePath(`/console/proposals/${id}`);
   revalidatePath("/console/proposals");
   return { ok: true as const };

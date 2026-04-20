@@ -26,7 +26,8 @@ export type JobType =
   | "notifications.digest"
   | "passkey.cleanup"
   | "audit.rollup"
-  | "export.package";
+  | "export.package"
+  | "webhook.deliver";
 
 export type JobRow = {
   id: string;

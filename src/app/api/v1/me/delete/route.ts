@@ -65,6 +65,31 @@ export async function POST(req: NextRequest) {
       metadata: { purge_at: purgeAt },
       requestId: req.headers.get("x-request-id"),
     });
+    // Broadcast webhook-only event + queue confirmation email.
+    const { notify } = await import("@/lib/notify");
+    await notify({
+      orgId: session.orgId,
+      userId: null,
+      eventType: "account.deletion_requested",
+      title: `Account deletion requested`,
+      body: session.email ?? undefined,
+      data: { userId, purgeAt },
+    });
+    if (session.email) {
+      const { createServiceClient } = await import("@/lib/supabase/server");
+      const svc = createServiceClient();
+      await (svc.from("job_queue") as unknown as {
+        insert: (p: Record<string, unknown>) => Promise<unknown>;
+      }).insert({
+        type: "email.send",
+        org_id: session.orgId,
+        payload: {
+          to: session.email,
+          subject: "Account deletion requested — 30-day grace",
+          html: `<p>Your flyingbluewhale account is scheduled for permanent deletion on <strong>${new Date(purgeAt).toLocaleDateString()}</strong>.</p><p>Sign in within that window to cancel the deletion. After 30 days all your data will be unrecoverable.</p>`,
+        },
+      });
+    }
   }
 
   // Sign the user out

@@ -24,6 +24,17 @@ export async function POST(req: Request) {
       code: input.code,
       location: input.location,
     });
+    if ((result as { result?: string } | null)?.result === "accepted") {
+      const r = result as { ticketId?: string; holderName?: string | null };
+      const { notify } = await import("@/lib/notify");
+      await notify({
+        orgId: session.orgId,
+        userId: null, // broadcast — webhook-only
+        eventType: "ticket.scanned",
+        title: `Ticket scanned: ${r.holderName ?? r.ticketId?.slice(0, 8) ?? "unknown"}`,
+        data: { ticketId: r.ticketId, scannerUserId: session.userId },
+      });
+    }
     return apiOk(result);
   });
 }

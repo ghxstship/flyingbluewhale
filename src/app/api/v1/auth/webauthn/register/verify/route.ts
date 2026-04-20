@@ -89,6 +89,15 @@ export async function POST(req: NextRequest) {
       metadata: { device_name: parsed.deviceName ?? null },
       requestId: req.headers.get("x-request-id"),
     });
+    const { notify } = await import("@/lib/notify");
+    await notify({
+      orgId: session.orgId,
+      userId: u.user.id,
+      eventType: "passkey.registered",
+      title: `Passkey registered${parsed.deviceName ? `: ${parsed.deviceName}` : ""}`,
+      href: `/me/security`,
+      data: { deviceName: parsed.deviceName ?? null },
+    });
   }
 
   return apiOk({ verified: true });

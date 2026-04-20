@@ -53,8 +53,28 @@ export async function setInvoiceStatusAction(id: string, status: "draft"|"sent"|
   const supabase = await createClient();
   const patch: { status: typeof status; paid_at?: string } = { status };
   if (status === "paid") patch.paid_at = new Date().toISOString();
+  const { data: before } = await supabase
+    .from("invoices")
+    .select("number, title, amount_cents, created_by")
+    .eq("id", id)
+    .maybeSingle();
   const { error } = await supabase.from("invoices").update(patch).eq("org_id", session.orgId).eq("id", id);
   if (error) return { error: error.message };
+  // Lifecycle emit → notification + webhook fan-out + optional email.
+  if (before && (status === "paid" || status === "sent")) {
+    const { notify } = await import("@/lib/notify");
+    await notify({
+      orgId: session.orgId,
+      userId: before.created_by ?? session.userId,
+      eventType: status === "paid" ? "invoice.paid" : "invoice.sent",
+      title: status === "paid"
+        ? `Invoice ${before.number ?? id.slice(0, 8)} paid`
+        : `Invoice ${before.number ?? id.slice(0, 8)} sent`,
+      body: before.title ?? undefined,
+      href: `/console/finance/invoices/${id}`,
+      data: { invoiceId: id, amountCents: before.amount_cents, number: before.number },
+    });
+  }
   revalidatePath(`/console/finance/invoices/${id}`);
   revalidatePath("/console/finance/invoices");
   return { ok: true as const };

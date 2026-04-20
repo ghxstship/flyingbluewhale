@@ -1,22 +1,38 @@
-import { ModuleHeader } from "@/components/Shell";
-import { EmptyState } from "@/components/ui/EmptyState";
+export const dynamic = "force-dynamic";
 
-export default function BrandingPage() {
+import { ModuleHeader } from "@/components/Shell";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { safeBranding } from "@/lib/branding";
+import { BrandingForm } from "./BrandingForm";
+
+export default async function BrandingPage() {
+  const session = await requireSession();
+  const supabase = await createClient();
+  const { data: org } = await supabase
+    .from("orgs")
+    .select("id, name, name_override, logo_url, branding")
+    .eq("id", session.orgId)
+    .maybeSingle();
+  const branding = safeBranding(org?.branding ?? {});
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Branding" subtitle="Logo, colors, and email template customization" />
-      <div className="page-content space-y-4">
-        <div className="surface p-5 space-y-3">
-          <div className="text-sm font-semibold">Preview</div>
-          <div className="surface-inset p-5 space-y-2">
-            <div data-platform="atlvs" className="text-sm"><span className="text-[var(--org-primary)]">●</span> Console shell · ATLVS red</div>
-            <div data-platform="gvteway" className="text-sm"><span className="text-[var(--org-primary)]">●</span> Portal shell · GVTEWAY blue</div>
-            <div data-platform="compvss" className="text-sm"><span className="text-[var(--org-primary)]">●</span> Mobile shell · COMPVSS yellow</div>
-          </div>
-        </div>
-        <EmptyState
-          title="Custom branding on Enterprise"
-          description="Upload your logo, set custom colors, and tailor email templates. Available on Enterprise tier."
+      <ModuleHeader
+        eyebrow="Settings"
+        title="Branding"
+        subtitle="Logo, colors, and customization. Applied across every shell and PDF export."
+      />
+      <div className="page-content max-w-4xl space-y-4">
+        <BrandingForm
+          initial={{
+            productName: org?.name_override ?? "",
+            logoUrl: org?.logo_url ?? "",
+            accentColor: branding.accentColor ?? "",
+            accentForeground: branding.accentForeground ?? "",
+            faviconUrl: branding.faviconUrl ?? "",
+            heroImageUrl: branding.heroImageUrl ?? "",
+            ogImageUrl: branding.ogImageUrl ?? "",
+          }}
         />
       </div>
     </>

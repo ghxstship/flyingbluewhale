@@ -61,6 +61,16 @@ export async function POST(req: Request) {
         endDate: input.endDate,
         createdBy: session.userId,
       });
+      const { notifyOrgAdmins } = await import("@/lib/notify");
+      const projectId = (project as { id?: string }).id;
+      const projectName = (project as { name?: string }).name ?? input.name;
+      await notifyOrgAdmins({
+        orgId: session.orgId,
+        eventType: "project.created",
+        title: `New project: ${projectName}`,
+        href: projectId ? `/console/projects/${projectId}` : undefined,
+        data: { projectId, name: projectName },
+      });
       return apiCreated(project);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Could not create project";

@@ -81,7 +81,27 @@ export async function setDeliverableStatusAction(
   if (status === "submitted") {
     patch.submitted_by = session.userId;
   }
+  // Capture org/project before write so the notify event has context.
+  const { data: before } = await supabase
+    .from("deliverables")
+    .select("org_id, project_id, title, type, submitted_by")
+    .eq("id", deliverableId)
+    .maybeSingle();
   const { error } = await supabase.from("deliverables").update(patch).eq("id", deliverableId);
   if (error) return { error: error.message };
+  if (before && (status === "submitted" || status === "approved")) {
+    const { notify } = await import("@/lib/notify");
+    await notify({
+      orgId: before.org_id,
+      userId: before.submitted_by ?? session.userId,
+      eventType: status === "submitted" ? "deliverable.submitted" : "deliverable.approved",
+      title: status === "submitted"
+        ? `Deliverable submitted: ${before.title}`
+        : `Deliverable approved: ${before.title}`,
+      body: `Type: ${before.type}`,
+      href: `/console/projects/${before.project_id}/advancing`,
+      data: { deliverableId, projectId: before.project_id, type: before.type },
+    });
+  }
   return { ok: true as const };
 }

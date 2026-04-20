@@ -58,6 +58,18 @@ export async function POST(req: NextRequest) {
       .select("id, summary, severity, occurred_at")
       .single();
     if (error) return apiError("internal", error.message);
+    // Fan out to org admins — severity major/critical also triggers email.
+    const { notifyOrgAdmins } = await import("@/lib/notify");
+    await notifyOrgAdmins({
+      orgId: session.orgId,
+      eventType: "incident.filed",
+      title: `Incident: ${input.summary}`,
+      body: input.severity === "critical"
+        ? "CRITICAL — review immediately"
+        : `Severity: ${input.severity}${input.location ? ` · ${input.location}` : ""}`,
+      href: `/console/operations/incidents/${data.id}`,
+      data: { incidentId: data.id, severity: input.severity, projectId: input.projectId },
+    });
     return apiCreated({ incident: data });
   });
 }

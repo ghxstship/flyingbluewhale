@@ -6,8 +6,11 @@ export const dynamic = "force-dynamic";
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   return (
-    <PortalSubpage slug={slug} persona="sponsor" title="Brand assets" subtitle="Logos, style guides, approved art">
-      <EmptyState title="Upload brand assets" description="Drop logos, brand standards, and approved creative so production can use the right files." />
+    <PortalSubpage slug={slug} persona="sponsor" title="Assets" subtitle="Brand guidelines, logos, photography">
+      <EmptyState
+        title="Asset drop"
+        description="Brand assets, logos, and approved photography land here after the production team reviews your brand guidelines."
+      />
     </PortalSubpage>
   );
 }

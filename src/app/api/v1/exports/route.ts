@@ -52,6 +52,39 @@ export async function POST(req: NextRequest) {
       return apiError("bad_request", `Table "${table}" is not directly org-scoped; use a joined export instead.`);
     }
 
+    // Async path — enqueue an `export.package` job and return the run row
+    // immediately so the UI can poll. Only CSV + JSON are supported by
+    // the worker today (see supabase/functions/job-worker/index.ts);
+    // XLSX + ZIP still go through the sync branch below.
+    if (input.async && (input.kind === "csv" || input.kind === "json")) {
+      const svc = createServiceClient();
+      const { data: run, error: runErr } = await supabase
+        .from("export_runs")
+        .insert({
+          org_id: session.orgId,
+          kind: input.kind,
+          params: { table, projectId: input.projectId ?? null },
+          status: "pending",
+          requested_by: session.userId,
+        })
+        .select("id, status, kind, created_at")
+        .single();
+      if (runErr) return apiError("internal", runErr.message);
+      const { error: qErr } = await (svc.from("job_queue") as unknown as {
+        insert: (p: Record<string, unknown>) => Promise<{ error: unknown }>;
+      }).insert({
+        type: "export.package",
+        org_id: session.orgId,
+        payload: { exportRunId: run.id },
+        dedup_key: `export.package:${run.id}`,
+      });
+      if (qErr) {
+        log.warn("exports.enqueue_failed", { err: (qErr as { message?: string }).message });
+        return apiError("internal", "Failed to enqueue export job");
+      }
+      return apiCreated({ run, signedUrl: null, queued: true });
+    }
+
     // Dynamic table lookup — the Supabase client types collapse to
     // `never` across the 9-table union here, so we drop to `any` for
     // the chain and reassert at the consume site. Same escape hatch

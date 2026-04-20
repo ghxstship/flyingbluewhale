@@ -25,7 +25,8 @@ export type JobType =
   | "email.send"
   | "notifications.digest"
   | "passkey.cleanup"
-  | "audit.rollup";
+  | "audit.rollup"
+  | "export.package";
 
 export type JobRow = {
   id: string;

@@ -63,33 +63,96 @@ const HANDLERS: Record<string, Handler> = {
     // Placeholder — pulls the latest payment_intents and reconciles invoices.
   },
   // Async Export Centre handler — Opportunity #8 part D. Expects payload
-  // { exportRunId }. Reads the run row, executes the strategy server-side,
-  // writes bytes to the `exports` bucket, then flips status→done. Invoked
-  // when the POST /api/v1/exports path is given `async: true` for a large
-  // table that can't finish inside the 10s statement_timeout budget.
+  // { exportRunId }. Reads the run row, pulls rows from the requested
+  // table, renders CSV or JSON, uploads to the `exports` bucket, then
+  // flips status→done with file_path + size + row count. XLSX + ZIP still
+  // go through the sync POST path because their generators aren't
+  // Deno-friendly; this worker exists so large CSV/JSON dumps that
+  // exceed the 10s statement_timeout can finish in the background.
   "export.package": async (job) => {
     const runId = (job.payload.exportRunId ?? job.payload.runId) as string | undefined;
     if (!runId) throw new Error("export.package: missing exportRunId");
-    const { data: run, error } = await svc
+
+    const { data: run, error: readErr } = await svc
       .from("export_runs")
       .select("id, org_id, kind, params")
       .eq("id", runId)
       .maybeSingle();
-    if (error || !run) throw new Error("export run not found");
-    // For the worker path we reuse the same strategy code the sync
-    // route uses, but via an HTTP call back to /api/v1/exports/{id}/run
-    // — keeps strategy logic in one place. If that hop is too slow,
-    // inline the strategies here against the service client.
+    if (readErr || !run) throw new Error("export run not found");
+
+    const params = (run.params ?? {}) as { table?: string; projectId?: string };
+    const table = params.table;
+    if (!table) throw new Error("export.package: params.table missing");
+
+    const SUPPORTED = new Set(["csv", "json"]);
+    if (!SUPPORTED.has(run.kind)) {
+      throw new Error(`export.package: kind=${run.kind} must use the sync path`);
+    }
+
     await svc.from("export_runs").update({ status: "running" }).eq("id", run.id);
-    // Minimum viable: flip the row to done with a note. Strategy inlining
-    // is a scope-tight follow-up; today the sync path handles every
-    // supported kind within the time budget.
+
+    // Select rows. RLS is bypassed here because we hold service_role;
+    // enforce org scoping manually via the org_id filter. Narrow to
+    // 50k rows to stay well within Edge Function memory/time budgets.
+    let q = (svc.from(table as never) as any)
+      .select("*")
+      .eq("org_id", run.org_id)
+      .limit(50_000);
+    if (params.projectId) q = q.eq("project_id", params.projectId);
+    const { data: rows, error: selErr } = await q;
+    if (selErr) throw new Error(`select failed: ${selErr.message}`);
+    const list = (rows ?? []) as Record<string, unknown>[];
+
+    // Render. CSV uses a tiny inline writer so we avoid pulling in any
+    // npm. JSON is trivial.
+    let body: Uint8Array;
+    let contentType: string;
+    let ext: string;
+    if (run.kind === "json") {
+      body = new TextEncoder().encode(JSON.stringify(list, null, 2));
+      contentType = "application/json";
+      ext = "json";
+    } else {
+      body = new TextEncoder().encode(renderCsv(list));
+      contentType = "text/csv";
+      ext = "csv";
+    }
+
+    const path = `${run.org_id}/${run.id}.${ext}`;
+    const { error: upErr } = await svc.storage
+      .from("exports")
+      .upload(path, body, { contentType, upsert: true });
+    if (upErr) throw new Error(`upload failed: ${upErr.message}`);
+
     await svc
       .from("export_runs")
-      .update({ status: "done", completed_at: new Date().toISOString(), last_error: "worker path inert — reply via sync /api/v1/exports" })
+      .update({
+        status: "done",
+        completed_at: new Date().toISOString(),
+        file_path: path,
+        size_bytes: body.byteLength,
+        row_count: list.length,
+        last_error: null,
+      })
       .eq("id", run.id);
   },
 };
+
+function renderCsv(rows: Record<string, unknown>[]): string {
+  if (rows.length === 0) return "";
+  const headers = Array.from(new Set(rows.flatMap((r) => Object.keys(r))));
+  const escape = (v: unknown): string => {
+    if (v == null) return "";
+    const s = typeof v === "string" ? v : typeof v === "object" ? JSON.stringify(v) : String(v);
+    if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  };
+  const lines = [headers.join(",")];
+  for (const row of rows) {
+    lines.push(headers.map((h) => escape(row[h])).join(","));
+  }
+  return lines.join("\n");
+}
 
 async function retryOrKill(job: Job, err: unknown) {
   const msg = err instanceof Error ? err.message : String(err);

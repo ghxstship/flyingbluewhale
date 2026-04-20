@@ -24,7 +24,17 @@ export async function POST(req: NextRequest) {
       contentType?: string;
     };
     if (!draftId || !filename) return apiError("bad_request", "draftId + filename required");
-    if (!/^[\w./-]+$/.test(filename)) return apiError("bad_request", "Invalid filename");
+    // Reject path separators, parent-dir tokens, and anything that isn't a
+    // simple `name.ext` string. Storage writes the file under
+    // `{orgId}/{draftId}/{filename}` so traversal is strictly forbidden.
+    if (
+      filename.includes("/") ||
+      filename.includes("\\") ||
+      filename.includes("..") ||
+      !/^[\w.-]+$/.test(filename)
+    ) {
+      return apiError("bad_request", "Invalid filename");
+    }
     if (!/^[0-9a-f-]{36}$/.test(draftId)) return apiError("bad_request", "Invalid draftId");
 
     const supabase = await createClient();

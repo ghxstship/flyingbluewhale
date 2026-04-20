@@ -62,6 +62,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
   const [runs, setRuns] = useState<Run[]>(initial);
   const [kind, setKind] = useState("csv");
   const [table, setTable] = useState("projects");
+  const [asyncMode, setAsyncMode] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const anyBusy = runs.some((r) => r.status === "pending" || r.status === "running");
@@ -85,20 +86,25 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
   }, [anyBusy, refresh]);
 
   function submit() {
+    const useAsync = asyncMode && (kind === "csv" || kind === "json");
     startTransition(async () => {
       const r = await fetch("/api/v1/exports", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ kind, table }),
+        body: JSON.stringify({ kind, table, async: useAsync }),
       });
       const body = await r.json().catch(() => ({}));
       if (!r.ok || body.ok === false) {
         toast.error(body.error?.message ?? "Export failed");
         return;
       }
-      toast.success("Export complete");
-      if (body.data?.signedUrl) {
-        window.open(body.data.signedUrl, "_blank");
+      if (body.data?.queued) {
+        toast.success("Export queued — polling for completion");
+      } else {
+        toast.success("Export complete");
+        if (body.data?.signedUrl) {
+          window.open(body.data.signedUrl, "_blank");
+        }
       }
       void refresh();
     });
@@ -154,6 +160,16 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
           <Button type="button" onClick={submit} disabled={isPending}>
             {isPending ? "Generating…" : "Run export"}
           </Button>
+          {(kind === "csv" || kind === "json") && (
+            <label className="ml-2 flex items-center gap-1 text-xs text-[var(--text-muted)]">
+              <input
+                type="checkbox"
+                checked={asyncMode}
+                onChange={(e) => setAsyncMode(e.target.checked)}
+              />
+              Queue in background
+            </label>
+          )}
         </div>
       </section>
 

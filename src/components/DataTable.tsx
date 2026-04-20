@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 /**
  * DataTable — server component.
@@ -50,9 +51,7 @@ export function DataTable<T extends { id: string }>({
   }
 
   if (rows.length === 0) {
-    return (
-      <div className="surface px-6 py-10 text-center text-sm text-[var(--text-muted)]">{emptyLabel}</div>
-    );
+    return <EmptyState title={emptyLabel} />;
   }
 
   const rowPad = density === "compact" ? "py-1.5" : "py-2.5";

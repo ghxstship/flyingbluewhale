@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 type Row = { id: string; role: string; orgs: { id: string; name: string; slug: string; tier: string } | null };
 
@@ -22,10 +23,16 @@ export default async function OrgsPage() {
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">Organizations</h1>
       <p className="mt-2 text-sm text-[var(--text-muted)]">Every org you're a member of</p>
+      {rows.length === 0 ? (
+        <div className="mt-6">
+          <EmptyState
+            title="No memberships yet"
+            description="Create an organization from the console to get started."
+          />
+        </div>
+      ) : (
       <div className="surface mt-6 divide-y divide-[var(--border-color)]">
-        {rows.length === 0 ? (
-          <div className="p-5 text-sm text-[var(--text-muted)]">No memberships yet — create an org from the console.</div>
-        ) : rows.map((r) => (
+        {rows.map((r) => (
           <div key={r.id} className="flex items-center justify-between p-5">
             <div>
               <div className="text-sm font-semibold">{r.orgs?.name ?? "—"}</div>
@@ -38,6 +45,7 @@ export default async function OrgsPage() {
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 }

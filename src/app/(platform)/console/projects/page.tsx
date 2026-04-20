@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listProjects } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 
@@ -33,12 +34,11 @@ export default async function ProjectsPage() {
       />
       <div className="page-content">
         {projects.length === 0 ? (
-          <div className="card p-8 text-center">
-            <p className="text-sm text-[var(--color-text-secondary)]">No projects yet.</p>
-            <div className="mt-4">
-              <Button href="/console/projects/new">Create your first project</Button>
-            </div>
-          </div>
+          <EmptyState
+            title="No projects yet"
+            description="A project is the top-level container for events, deliverables, invoices, and crew."
+            action={<Button href="/console/projects/new">Create your first project</Button>}
+          />
         ) : (
           <div className="card-elevated">
             <table className="data-table">

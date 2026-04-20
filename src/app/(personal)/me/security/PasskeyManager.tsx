@@ -6,6 +6,7 @@ import { startRegistration, browserSupportsWebAuthn } from "@simplewebauthn/brow
 import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/server";
 import { Fingerprint, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { formatRelative } from "@/lib/i18n/format";
 
 type Credential = {
@@ -91,9 +92,13 @@ export function PasskeyManager() {
   }
 
   return (
-    <div className="surface divide-y divide-[var(--border-color)]">
+    <div className={creds.length === 0 ? "" : "surface divide-y divide-[var(--border-color)]"}>
       {creds.length === 0 ? (
-        <div className="p-5 text-xs text-[var(--text-muted)]">No passkeys yet.</div>
+        <EmptyState
+          title="No passkeys yet"
+          description="Register a passkey to sign in without a password."
+          icon={<Fingerprint size={32} />}
+        />
       ) : (
         creds.map((c) => (
           <div key={c.id} className="flex items-center justify-between p-4">

@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +53,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
             <Link href={`/console/proposals?clientId=${client.id}`} className="text-xs text-[var(--org-primary)]">View all →</Link>
           </div>
           {proposals.length === 0 ? (
-            <div className="p-5 text-sm text-[var(--text-muted)]">No proposals yet.</div>
+            <EmptyState size="compact" title="No proposals yet" />
           ) : (
             <table className="data-table">
               <thead><tr><th>Title</th><th>Amount</th><th>Status</th><th>Created</th></tr></thead>
@@ -76,7 +77,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
             <Link href={`/console/finance/invoices?clientId=${client.id}`} className="text-xs text-[var(--org-primary)]">View all →</Link>
           </div>
           {invoices.length === 0 ? (
-            <div className="p-5 text-sm text-[var(--text-muted)]">No invoices yet.</div>
+            <EmptyState size="compact" title="No invoices yet" />
           ) : (
             <table className="data-table">
               <thead><tr><th>Number</th><th>Title</th><th>Amount</th><th>Status</th><th>Due</th></tr></thead>

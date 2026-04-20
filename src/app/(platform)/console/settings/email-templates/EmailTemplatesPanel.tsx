@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 /**
  * Email-template editor with merge-tag autocomplete.
@@ -138,7 +139,11 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
           </Button>
         </div>
         {templates.length === 0 ? (
-          <p className="text-sm text-[var(--text-muted)]">No templates yet.</p>
+          <EmptyState
+            title="No templates yet"
+            description="Transactional email shapes for proposals, invoices, and notifications."
+            action={<Button type="button" onClick={() => setMode("new")}>New template</Button>}
+          />
         ) : (
           <table className="data-table w-full text-sm">
             <thead>

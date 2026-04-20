@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { listProjects, projectStats } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 
@@ -52,9 +53,16 @@ export default async function ConsoleDashboard() {
             <Link href="/console/projects" className="text-mono text-xs text-[var(--brand-color)]">View all →</Link>
           </div>
           {projects.length === 0 ? (
-            <div className="px-4 py-8 text-center text-sm text-[var(--color-text-tertiary)]">
-              No projects yet. <Link href="/console/projects/new" className="text-[var(--brand-color)]">Create your first.</Link>
-            </div>
+            <EmptyState
+              size="compact"
+              title="No projects yet"
+              description="Spin up your first project to see it here."
+              action={
+                <Link href="/console/projects/new" className="text-xs text-[var(--brand-color)]">
+                  Create your first →
+                </Link>
+              }
+            />
           ) : (
             <table className="data-table">
               <thead>

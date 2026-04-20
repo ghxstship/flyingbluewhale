@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Hint } from "@/components/ui/Tooltip";
 import { useAnnounce } from "@/components/ui/LiveRegion";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { formatRelative } from "@/lib/i18n/format";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -232,9 +233,7 @@ export function AssistantChat() {
         </div>
         <div className="flex-1 overflow-y-auto p-2">
           {conversations.length === 0 ? (
-            <div className="px-2 py-4 text-center text-xs text-[var(--text-muted)]">
-              No history yet.
-            </div>
+            <EmptyState size="compact" title="No history yet" />
           ) : (
             <ul className="space-y-1">
               {conversations.map((c) => (

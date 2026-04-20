@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
 /**
@@ -167,7 +168,11 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
           )}
         </div>
         {runs.length === 0 ? (
-          <p className="text-sm text-[var(--text-muted)]">No exports yet. Run one above to see it here.</p>
+          <EmptyState
+            size="compact"
+            title="No exports yet"
+            description="Run one above and it will appear here with status, size, and row count."
+          />
         ) : (
           <table className="data-table w-full text-sm">
             <thead>

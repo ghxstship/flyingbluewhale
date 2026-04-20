@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { useAnnounce } from "@/components/ui/LiveRegion";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { haptic } from "@/lib/haptics";
 
 type ScanResp =
@@ -136,9 +137,7 @@ export function CheckInScanner() {
       <div className="card-elevated">
         <div className="border-b border-[var(--color-border)] px-4 py-3 text-heading text-sm">Recent</div>
         {log.length === 0 ? (
-          <div className="px-4 py-6 text-center text-mono text-xs text-[var(--color-text-tertiary)]">
-            No scans yet
-          </div>
+          <EmptyState size="compact" title="No scans yet" />
         ) : (
           <ul>
             {log.map((e, i) => (

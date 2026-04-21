@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 
 export type WizardStep<Ctx = unknown> = {
   id: string;
@@ -159,12 +160,7 @@ export function Wizard<Ctx = void>({
         )}
         <div className="mt-6">{current.render(ctx)}</div>
         {error && (
-          <div
-            role="alert"
-            className="mt-4 rounded border border-[var(--color-error)]/40 bg-[var(--color-error)]/10 p-2 text-xs text-[var(--color-error)]"
-          >
-            {error}
-          </div>
+          <Alert kind="error">{error}</Alert>
         )}
       </div>
 

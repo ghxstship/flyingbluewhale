@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fmtDate } from "@/components/detail/DetailShell";
@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
           { label: "Advancing" },
         ]}
-        action={project ? <Link className="inline-flex items-center gap-1 rounded bg-[var(--org-primary)] px-3 py-1.5 text-xs font-medium text-white" href={`/p/${project.slug}/artist/advancing`}>Open portal view →</Link> : undefined}
+        action={project ? <Button href={`/p/${project.slug}/artist/advancing`} size="sm">Open portal view →</Button> : undefined}
       />
       <div className="page-content max-w-5xl">
         {!deliverables || deliverables.length === 0 ? (

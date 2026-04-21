@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { GuideConfig, GuideSection } from "@/lib/guides/types";
+import { Alert } from "@/components/ui/Alert";
 
 export function GuideView({
   title,
@@ -74,17 +75,15 @@ function SectionBody({ section }: { section: GuideSection }) {
         <div className="space-y-3">
           <p className="whitespace-pre-wrap text-sm text-[var(--text-secondary)]">{section.body}</p>
           {section.callouts?.map((c, i) => (
-            <div
+            <Alert
               key={i}
-              className={`rounded-lg border p-4 text-sm ${
-                c.kind === "red" ? "border-[var(--color-error)]/40 bg-[var(--color-error)]/10 text-[var(--color-error)]" :
-                c.kind === "gold" ? "border-[var(--color-warning)]/40 bg-[var(--color-warning)]/10" :
-                "border-[var(--org-primary)]/40 bg-[var(--org-primary)]/10"
-              }`}
+              kind={c.kind === "red" ? "error" : c.kind === "gold" ? "warning" : "info"}
+              title={c.title}
+              className="p-4 text-sm"
+              hideIcon
             >
-              {c.title && <div className="text-xs font-semibold uppercase tracking-wider">{c.title}</div>}
-              <div className="mt-1">{c.body}</div>
-            </div>
+              {c.body}
+            </Alert>
           ))}
         </div>
       );
@@ -267,10 +266,9 @@ function SectionBody({ section }: { section: GuideSection }) {
             </tbody>
           </table>
           {section.assemblyPoint && (
-            <div className="rounded-lg border border-[var(--color-error)]/40 bg-[var(--color-error)]/10 p-3 text-sm">
-              <div className="text-xs font-semibold uppercase tracking-wider">Assembly point</div>
-              <div className="mt-1">{section.assemblyPoint}</div>
-            </div>
+            <Alert kind="error" title="Assembly point" className="text-sm">
+              {section.assemblyPoint}
+            </Alert>
           )}
         </div>
       );

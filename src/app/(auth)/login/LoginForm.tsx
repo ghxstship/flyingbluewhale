@@ -7,6 +7,7 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { OAuthButtons, AuthDivider } from "@/components/auth/OAuthButtons";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { loginAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
@@ -50,12 +51,7 @@ export function LoginForm() {
           error={state?.fieldErrors?.password}
         />
         {state?.error && !state?.fieldErrors && (
-          <div
-            role="alert"
-            className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]"
-          >
-            {state.error}
-          </div>
+          <Alert kind="error">{state.error}</Alert>
         )}
         <Button type="submit" size="lg" className="w-full" loading={pending}>
           {pending ? "Signing in" : "Sign in"}

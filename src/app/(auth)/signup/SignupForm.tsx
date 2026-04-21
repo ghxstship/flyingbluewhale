@@ -7,6 +7,7 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { OAuthButtons, AuthDivider } from "@/components/auth/OAuthButtons";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { signupAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
@@ -69,12 +70,7 @@ export function SignupForm() {
           error={state?.fieldErrors?.orgName}
         />
         {state?.error && !state?.fieldErrors && (
-          <div
-            role="alert"
-            className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]"
-          >
-            {state.error}
-          </div>
+          <Alert kind="error">{state.error}</Alert>
         )}
         <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
           By creating an account you agree to our{" "}

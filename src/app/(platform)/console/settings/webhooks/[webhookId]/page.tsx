@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { StatusChip } from "@/components/ui/StatusChip";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDateTime } from "@/components/detail/DetailShell";
@@ -77,19 +78,16 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
                     <td className="font-mono text-xs">{fmtDateTime(d.created_at)}</td>
                     <td className="font-mono text-xs">{d.event_type}</td>
                     <td>
-                      <span
-                        className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-                          d.state === "delivered"
-                            ? "bg-emerald-500/10 text-emerald-700"
-                            : d.state === "pending"
-                              ? "bg-sky-500/10 text-sky-700"
-                              : d.state === "failed"
-                                ? "bg-amber-500/10 text-amber-700"
-                                : "bg-rose-500/10 text-rose-700"
-                        }`}
+                      <StatusChip
+                        tone={
+                          d.state === "delivered" ? "success"
+                          : d.state === "pending" ? "info"
+                          : d.state === "failed" ? "warning"
+                          : "danger"
+                        }
                       >
                         {d.state}
-                      </span>
+                      </StatusChip>
                     </td>
                     <td className="font-mono text-xs">{d.last_status ?? "—"}</td>
                     <td className="font-mono text-xs">{d.attempts}</td>

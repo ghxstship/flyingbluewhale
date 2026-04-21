@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { createProjectAction, type CreateProjectState } from "../actions";
 
@@ -20,9 +21,7 @@ export function NewProjectForm() {
         <Input label="End date" name="endDate" type="date" />
       </div>
       {state?.error ? (
-        <div className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]">
-          {state.error}
-        </div>
+        <Alert kind="error">{state.error}</Alert>
       ) : null}
       <div className="flex justify-end gap-2">
         <Button href="/console/projects" variant="ghost">Cancel</Button>

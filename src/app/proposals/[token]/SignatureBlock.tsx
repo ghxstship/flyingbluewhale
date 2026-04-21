@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { signProposalAction, type SignState } from "./actions";
 import { formatDate } from "@/lib/i18n/format";
@@ -168,7 +169,7 @@ export function SignatureBlock({
           )}
 
           {state?.error && (
-            <div className="rounded-lg border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]">{state.error}</div>
+            <Alert kind="error">{state.error}</Alert>
           )}
 
           <div className="flex items-center justify-end gap-2">

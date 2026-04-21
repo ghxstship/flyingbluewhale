@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Upload, X, Camera, AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Incident-report form — used by /console/operations/incidents/new and
@@ -264,13 +265,9 @@ export function IncidentForm({
           <AlertTriangle size={12} className="text-amber-500" />
           In emergencies, call local services first — then log here.
         </div>
-        <button
-          type="submit"
-          disabled={submitting || uploading}
-          className="inline-flex items-center gap-1 rounded bg-[var(--color-error)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
-        >
+        <Button type="submit" variant="danger" disabled={submitting || uploading}>
           {submitting ? "Submitting…" : "Submit report"}
-        </button>
+        </Button>
       </div>
     </form>
   );

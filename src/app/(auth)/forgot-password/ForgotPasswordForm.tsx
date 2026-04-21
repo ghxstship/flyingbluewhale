@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { forgotPasswordAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
@@ -30,9 +31,7 @@ export function ForgotPasswordForm() {
         <form action={formAction} className="space-y-4" noValidate>
           <Input label="Email" name="email" type="email" required autoComplete="email" />
           {state?.error && (
-            <div role="alert" className="rounded border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]">
-              {state.error}
-            </div>
+            <Alert kind="error">{state.error}</Alert>
           )}
           <Button type="submit" size="lg" className="w-full" loading={pending}>
             {pending ? "Sending" : "Send reset link"}

@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { PortalSubpage } from "@/components/PortalSubpage";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { StatusChip } from "@/components/ui/StatusChip";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
@@ -35,17 +36,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <td className="font-mono text-xs">{fmtDate(c.issued_on)}</td>
                   <td className="font-mono text-xs">{fmtDate(c.expires_on)}</td>
                   <td>
-                    <span
-                      className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-                        state === "expired"
-                          ? "bg-[var(--color-error)]/10 text-[var(--color-error)]"
-                          : state === "expiring"
-                            ? "bg-amber-500/10 text-amber-700"
-                            : "bg-emerald-500/10 text-emerald-700"
-                      }`}
+                    <StatusChip
+                      tone={state === "expired" ? "danger" : state === "expiring" ? "warning" : "success"}
                     >
                       {state}
-                    </span>
+                    </StatusChip>
                   </td>
                 </tr>
               );

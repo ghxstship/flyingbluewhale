@@ -4,6 +4,7 @@ import { useActionState, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { SortableList } from "@/components/ui/SortableList";
 import { BLOCK_LABELS, BLOCK_TYPES, type ProposalBlock, type ProposalBlockType } from "@/lib/proposals/types";
@@ -169,7 +170,7 @@ export function ProposalEditor({
       )}
 
       {state?.error && (
-        <div className="rounded-lg border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]">{state.error}</div>
+        <Alert kind="error">{state.error}</Alert>
       )}
 
       <div className="flex items-center justify-end gap-2">

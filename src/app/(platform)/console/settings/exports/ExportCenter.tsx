@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { StatusChip } from "@/components/ui/StatusChip";
 import { Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
 /**
@@ -48,14 +49,12 @@ const KINDS = [
   { value: "zip", label: "ZIP (CSV + JSON)" },
 ];
 
-const STATUS_STYLES: Record<
-  Run["status"],
-  { bg: string; fg: string; Icon: React.ComponentType<{ size?: number; className?: string }> }
-> = {
-  pending: { bg: "bg-slate-500/10", fg: "text-slate-600", Icon: Loader2 },
-  running: { bg: "bg-sky-500/10", fg: "text-sky-700", Icon: Loader2 },
-  done: { bg: "bg-emerald-500/10", fg: "text-emerald-700", Icon: CheckCircle2 },
-  failed: { bg: "bg-rose-500/10", fg: "text-rose-700", Icon: AlertCircle },
+type StatusIcon = React.ComponentType<{ size?: number; className?: string }>;
+const STATUS_TONES: Record<Run["status"], { tone: "neutral" | "info" | "success" | "danger"; Icon: StatusIcon }> = {
+  pending: { tone: "neutral", Icon: Loader2 },
+  running: { tone: "info", Icon: Loader2 },
+  done: { tone: "success", Icon: CheckCircle2 },
+  failed: { tone: "danger", Icon: AlertCircle },
 };
 
 export function ExportCenter({ initial }: { initial: Run[] }) {
@@ -205,7 +204,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
             <tbody>
               {runs.map((r) => {
                 const params = (r.params ?? {}) as { table?: string };
-                const styles = STATUS_STYLES[r.status];
+                const styles = STATUS_TONES[r.status];
                 const spinning = r.status === "pending" || r.status === "running";
                 return (
                   <tr key={r.id}>
@@ -215,12 +214,12 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                     <td className="font-mono text-xs">{r.row_count ?? "—"}</td>
                     <td className="font-mono text-xs">{formatBytes(r.size_bytes)}</td>
                     <td>
-                      <span
-                        className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${styles.bg} ${styles.fg}`}
+                      <StatusChip
+                        tone={styles.tone}
+                        icon={<styles.Icon size={10} className={spinning ? "animate-spin" : undefined} />}
                       >
-                        <styles.Icon size={10} className={spinning ? "animate-spin" : undefined} />
                         {r.status}
-                      </span>
+                      </StatusChip>
                       {r.status === "failed" && r.last_error && (
                         <div className="mt-1 max-w-xs truncate text-[10px] text-[var(--color-error)]" title={r.last_error}>
                           {r.last_error}

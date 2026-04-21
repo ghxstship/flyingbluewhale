@@ -2,16 +2,19 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
+import { StatusChip, type StatusTone } from "@/components/ui/StatusChip";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /** Incidents list — Opportunity #18 UI surface. */
 
-const SEVERITY_COLORS: Record<string, string> = {
-  near_miss: "#A16207",
-  minor: "#2563EB",
-  major: "#EA580C",
-  critical: "#991B1B",
+const SEVERITY_TONE: Record<string, StatusTone> = {
+  near_miss: "warning",
+  minor: "info",
+  major: "warning",
+  critical: "danger",
 };
 
 export default async function IncidentsPage() {
@@ -30,14 +33,7 @@ export default async function IncidentsPage() {
         eyebrow="Operations"
         title="Incidents"
         subtitle="Field-logged safety + near-miss reports."
-        action={
-          <Link
-            href="/console/operations/incidents/new"
-            className="inline-flex items-center gap-1 rounded bg-[var(--org-primary)] px-3 py-1.5 text-xs font-medium text-white"
-          >
-            Log incident
-          </Link>
-        }
+        action={<Button href="/console/operations/incidents/new" size="sm">Log incident</Button>}
       />
       <div className="page-content max-w-6xl">
         {incidents && incidents.length > 0 ? (
@@ -56,12 +52,9 @@ export default async function IncidentsPage() {
                 <tr key={i.id}>
                   <td className="font-mono text-xs">{new Date(i.occurred_at).toLocaleString()}</td>
                   <td>
-                    <span
-                      className="inline-flex items-center rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white"
-                      style={{ backgroundColor: SEVERITY_COLORS[i.severity] ?? "#666" }}
-                    >
+                    <StatusChip tone={SEVERITY_TONE[i.severity] ?? "neutral"}>
                       {i.severity}
-                    </span>
+                    </StatusChip>
                   </td>
                   <td>{i.summary}</td>
                   <td className="text-[var(--text-muted)]">{i.location ?? "—"}</td>
@@ -71,14 +64,15 @@ export default async function IncidentsPage() {
             </tbody>
           </table>
         ) : (
-          <div className="surface p-6 text-center text-sm text-[var(--text-muted)]">
-            No incidents reported. Log one from
-            <Link className="ml-1 underline" href="/console/operations/incidents/new">
-              here
-            </Link>{" "}
-            or field-log from the mobile shell at
-            <Link className="ml-1 underline" href="/m/incidents/new">/m/incidents/new</Link>.
-          </div>
+          <EmptyState
+            title="No incidents reported"
+            description="Log one from the console or field-log from the mobile shell at /m/incidents/new."
+            action={
+              <Link className="text-xs text-[var(--org-primary)]" href="/console/operations/incidents/new">
+                Log incident →
+              </Link>
+            }
+          />
         )}
       </div>
     </>

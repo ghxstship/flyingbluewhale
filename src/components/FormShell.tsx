@@ -14,6 +14,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import {
   Dialog,
   DialogContent,
@@ -122,12 +123,8 @@ export function FormShell({
       >
         {children}
         {state?.error && (
-          <div
-            id={errorId}
-            role="alert"
-            className="rounded-lg border border-[var(--color-error)]/40 bg-[var(--color-error)]/10 p-2 text-xs text-[var(--color-error)]"
-          >
-            {state.error}
+          <div id={errorId}>
+            <Alert kind="error">{state.error}</Alert>
           </div>
         )}
         <div className="flex items-center justify-end gap-2">

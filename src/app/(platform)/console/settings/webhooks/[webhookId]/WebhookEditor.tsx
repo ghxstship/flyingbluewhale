@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
 
 const EVENT_OPTIONS = [
   "*",
@@ -39,6 +47,7 @@ export function WebhookEditor({
   const [isActive, setActive] = useState(initialActive);
   const [isPending, startTransition] = useTransition();
   const [isDeleting, startDelete] = useTransition();
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   function toggle(ev: string) {
     setEvents((prev) => {
@@ -80,9 +89,6 @@ export function WebhookEditor({
   }
 
   function remove() {
-    if (!window.confirm("Delete this endpoint? Deliveries stop immediately; the secret can't be recovered.")) {
-      return;
-    }
     startDelete(async () => {
       const res = await fetch(`/api/v1/webhooks/endpoints/${id}`, { method: "DELETE" });
       const body = await res.json().catch(() => ({}));
@@ -138,13 +144,39 @@ export function WebhookEditor({
       </div>
 
       <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-4">
-        <Button variant="danger" onClick={remove} disabled={isDeleting}>
+        <Button variant="danger" onClick={() => setConfirmOpen(true)} disabled={isDeleting}>
           {isDeleting ? "Deleting…" : "Delete endpoint"}
         </Button>
         <Button onClick={save} disabled={isPending}>
           {isPending ? "Saving…" : "Save changes"}
         </Button>
       </div>
+
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent size="sm">
+          <DialogHeader>
+            <DialogTitle>Delete webhook endpoint?</DialogTitle>
+            <DialogDescription>
+              Deliveries stop immediately. The signing secret cannot be recovered — a replacement endpoint gets a new one.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setConfirmOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                setConfirmOpen(false);
+                remove();
+              }}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting…" : "Delete endpoint"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

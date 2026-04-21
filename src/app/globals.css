@@ -65,7 +65,13 @@
   --sidebar-width: 16rem;
 }
 
-[data-theme="dark"] {
+/* Dark-mode fallback for themes without their own dark palette. CHROMA
+   themes (glass, cyber) declare `color-scheme: dark` and their own
+   background/foreground tokens; light-family themes (kinetic, bento,
+   brutal, copilot, earthy, soft) adopt this block when `data-mode="dark"`
+   is applied to <html>. Previously keyed on the dead `[data-mode="dark"]`
+   attribute, which no CHROMA theme ever sets. (UI audit m4.) */
+[data-mode="dark"]:not([data-theme="glass"]):not([data-theme="cyber"]) {
   --background: #0A0A0A;
   --foreground: #FAFAFA;
   --bg-secondary: #171717;
@@ -74,9 +80,6 @@
   --text-secondary: #C8C8C8;
   --text-muted: #A3A3A3;
   --border-color: #2E2E2E;
-  --org-primary: #FAFAFA;
-  --org-secondary: #A3A3A3;
-  --org-accent: #FAFAFA;
   color-scheme: dark;
 }
 
@@ -260,11 +263,11 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
 .elevation-4 { box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10), 0 4px 12px rgba(0, 0, 0, 0.05); }
 .elevation-float { box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.06); }
 
-[data-theme="dark"] .elevation-1 { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04); }
-[data-theme="dark"] .elevation-2 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04); }
-[data-theme="dark"] .elevation-3 { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04); }
-[data-theme="dark"] .elevation-4 { box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04); }
-[data-theme="dark"] .elevation-float { box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06); }
+[data-mode="dark"] .elevation-1 { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04); }
+[data-mode="dark"] .elevation-2 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04); }
+[data-mode="dark"] .elevation-3 { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04); }
+[data-mode="dark"] .elevation-4 { box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04); }
+[data-mode="dark"] .elevation-float { box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06); }
 
 /* ───── Glass ───── */
 
@@ -273,14 +276,14 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
-[data-theme="dark"] .glass { background: rgba(23, 23, 23, 0.7); border: 1px solid rgba(255, 255, 255, 0.06); }
+[data-mode="dark"] .glass { background: rgba(23, 23, 23, 0.7); border: 1px solid rgba(255, 255, 255, 0.06); }
 
 .glass-nav {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px) saturate(1.5); -webkit-backdrop-filter: blur(12px) saturate(1.5);
   border-bottom: 1px solid var(--border-color);
 }
-[data-theme="dark"] .glass-nav { background: rgba(10, 10, 10, 0.85); }
+[data-mode="dark"] .glass-nav { background: rgba(10, 10, 10, 0.85); }
 
 /* ───── Interactive states ───── */
 
@@ -312,7 +315,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
   border-radius: 0.5rem;
 }
 
-[data-theme="dark"] .surface-raised {
+[data-mode="dark"] .surface-raised {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
@@ -503,7 +506,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
 /* ───── Overlay ───── */
 
 .overlay-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); }
-[data-theme="dark"] .overlay-backdrop { background: rgba(0, 0, 0, 0.6); }
+[data-mode="dark"] .overlay-backdrop { background: rgba(0, 0, 0, 0.6); }
 
 } /* end @layer components */
 

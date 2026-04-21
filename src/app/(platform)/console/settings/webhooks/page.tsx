@@ -3,7 +3,9 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { StatusChip } from "@/components/ui/StatusChip";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
@@ -40,14 +42,7 @@ export default async function WebhooksPage() {
         eyebrow="Settings"
         title="Webhooks"
         subtitle="Outgoing event notifications to your endpoints — HMAC-signed, retried up to 5× with exponential backoff."
-        action={
-          <Link
-            href="/console/settings/webhooks/new"
-            className="inline-flex items-center gap-1 rounded bg-[var(--org-primary)] px-3 py-1.5 text-xs font-medium text-white"
-          >
-            + New endpoint
-          </Link>
-        }
+        action={<Button href="/console/settings/webhooks/new" size="sm">+ New endpoint</Button>}
       />
       <div className="page-content space-y-4">
         <div className="surface p-5">
@@ -103,11 +98,9 @@ export default async function WebhooksPage() {
                       </div>
                     </td>
                     <td>
-                      <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-                        r.is_active ? "bg-emerald-500/10 text-emerald-700" : "bg-slate-500/10 text-slate-600"
-                      }`}>
+                      <StatusChip tone={r.is_active ? "success" : "neutral"}>
                         {r.is_active ? "active" : "paused"}
-                      </span>
+                      </StatusChip>
                     </td>
                     <td className="font-mono text-xs">{fmtDate(r.last_delivery_at)}</td>
                     <td className="font-mono text-xs">{r.failure_count}</td>

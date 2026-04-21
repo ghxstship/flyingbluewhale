@@ -15,6 +15,7 @@ import {
   Save,
   Undo2,
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 /**
  * 2D stage plot editor. SVG-based drag-and-drop — every palette item
@@ -283,14 +284,9 @@ export function StagePlotCanvas({
           >
             <Trash2 size={12} /> Delete
           </button>
-          <button
-            type="button"
-            onClick={save}
-            disabled={saving}
-            className="inline-flex items-center gap-1 rounded bg-[var(--org-primary)] px-3 py-1 text-xs font-medium text-white disabled:opacity-50"
-          >
+          <Button type="button" onClick={save} disabled={saving} size="sm">
             <Save size={12} /> {saving ? "Saving…" : "Save"}
-          </button>
+          </Button>
         </div>
       </div>
 

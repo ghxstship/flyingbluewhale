@@ -4,6 +4,7 @@ import { useActionState, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Alert } from "@/components/ui/Alert";
 import { TemplatePicker } from "@/components/deliverable-templates/TemplatePicker";
 import { submitDeliverableAction, type SubmitState } from "./actions";
 
@@ -97,11 +98,7 @@ export function AdvancingForm({ slug }: { slug: string }) {
         </div>
         <Input label="Deadline" name="deadline" type="date" />
       </div>
-      {state?.error ? (
-        <div className="rounded-lg border border-[var(--color-error)]/40 bg-[var(--color-error)]/10 p-2 text-xs text-[var(--color-error)]">
-          {state.error}
-        </div>
-      ) : null}
+      {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
       <div className="flex justify-end">
         <Button type="submit" disabled={pending}>{pending ? "Uploading…" : "Submit deliverable"}</Button>
       </div>

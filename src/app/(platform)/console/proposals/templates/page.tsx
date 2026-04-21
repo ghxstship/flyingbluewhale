@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { money, fmtDate } from "@/components/detail/DetailShell";
 
@@ -30,14 +31,7 @@ export default async function TemplatesPage() {
         eyebrow="Sales"
         title="Proposal templates"
         subtitle="Draft proposals that can be duplicated into a new engagement."
-        action={
-          <Link
-            href="/console/proposals/new"
-            className="inline-flex items-center gap-1 rounded bg-[var(--org-primary)] px-3 py-1.5 text-xs font-medium text-white"
-          >
-            + New draft
-          </Link>
-        }
+        action={<Button href="/console/proposals/new" size="sm">+ New draft</Button>}
       />
       <div className="page-content max-w-5xl">
         {rows.length === 0 ? (

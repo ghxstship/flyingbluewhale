@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Alert } from "@/components/ui/Alert";
 import { upsertGuideAction, type State } from "../actions";
 import type { GuidePersona } from "@/lib/supabase/types";
 
@@ -51,9 +52,7 @@ export function GuideEditor({
           Sections: <span className="font-mono">overview · schedule · set_times · timeline · credentials · contacts · faq · sops · ppe · radio · resources · evacuation · fire_safety · accessibility · sustainability · code_of_conduct · custom</span>
         </div>
       </div>
-      {state?.error && (
-        <div className="rounded-lg border border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10 p-2 text-xs text-[color:var(--color-error)]">{state.error}</div>
-      )}
+      {state?.error && <Alert kind="error">{state.error}</Alert>}
       <div className="flex items-center justify-end gap-2">
         <Button href={`/console/projects/${projectId}/guides`} variant="ghost">Back</Button>
         <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save guide"}</Button>

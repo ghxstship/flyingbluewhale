@@ -72,7 +72,6 @@ export const platformNav: NavGroup[] = [
       { label: "Hub", href: "/console/ai" },
       { label: "Assistant", href: "/console/ai/assistant" },
       { label: "Drafting", href: "/console/ai/drafting" },
-      { label: "Automations", href: "/console/ai/automations" },
     ],
   },
   {

@@ -51,7 +51,10 @@ export function OAuthButtons({ next }: { next?: string }) {
       window.location.assign(url);
     } catch (err) {
       toast.error(`Couldn't start ${provider} sign-in`);
-      console.error(err);
+      // Kept as console.error because a client-side OAuth redirect crash
+      // precedes our observability pipeline (no session cookie yet, no
+      // Sentry hook attached). The toast carries user-facing context.
+      if (process.env.NODE_ENV !== "production") console.error(err);
       setPending(null);
     }
   }

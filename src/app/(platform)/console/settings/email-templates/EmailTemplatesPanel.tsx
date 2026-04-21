@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 /**
  * Email-template editor with merge-tag autocomplete.
@@ -247,7 +248,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
           <div className="text-[10px] text-[var(--text-muted)]">Body</div>
           <div
             className="prose prose-sm mt-1 max-w-none rounded bg-white p-3 text-[#0f172a]"
-            dangerouslySetInnerHTML={{ __html: renderPreview(form.body_html ?? "") }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(renderPreview(form.body_html ?? "")) }}
           />
         </div>
       </div>

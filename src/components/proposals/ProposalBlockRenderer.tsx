@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { PhaseBlock } from "./PhaseBlock";
 
 function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
@@ -48,7 +49,7 @@ function BlockSwitch({ block, theme, currency }: { block: ProposalBlock; theme: 
       </div>
     );
     case "spacer": return <div className={block.size === "lg" ? "h-16" : block.size === "sm" ? "h-4" : "h-10"} />;
-    case "custom": return <div className="prose mx-auto max-w-2xl" dangerouslySetInnerHTML={{ __html: block.body }} />;
+    case "custom": return <div className="prose mx-auto max-w-2xl" dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.body) }} />;
   }
 }
 

@@ -43,14 +43,17 @@ export async function POST(req: Request, ctx: { params: Promise<{ projectId: str
   if (denial) return denial;
 
   const supabase = await createClient();
-  const [{ data: project }, { data: org }, { count: scanCount }, { data: tickets }] = await Promise.all([
+  const [{ data: project }, { data: org }, { data: tickets }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("id", p.data.projectId).eq("org_id", session.orgId).maybeSingle(),
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
-    supabase.from("ticket_scans").select("*", { count: "exact", head: true }).in("ticket_id",
-      (await supabase.from("tickets").select("id").eq("project_id", p.data.projectId)).data?.map((t) => t.id) ?? [],
-    ),
-    supabase.from("tickets").select("id").eq("project_id", p.data.projectId),
+    // Cap at 100k; real events never exceed this ceiling, and the query
+    // feeds a count + sponsor-deck summary that doesn't need every row.
+    supabase.from("tickets").select("id").eq("project_id", p.data.projectId).limit(100_000),
   ]);
+  const ticketIds = (tickets ?? []).map((t) => t.id);
+  const { count: scanCount } = ticketIds.length
+    ? await supabase.from("ticket_scans").select("*", { count: "exact", head: true }).in("ticket_id", ticketIds)
+    : { count: 0 };
   if (!project) return apiError("not_found", "Project not found");
   if (!org) return apiError("internal", "Missing organization row");
 

@@ -103,7 +103,7 @@ export async function buildSponsorDeck(input: SponsorDeckInput): Promise<Buffer>
   s5.addText(`${input.producerName} × ${input.sponsorName}`, { x: 0.5, y: 4.0, w: 9, h: 0.5, fontSize: 16, color: "FFFFFF" });
 
   // Buffer return
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const nodeBuf = (await pptx.write({ outputType: "nodebuffer" })) as any;
   return Buffer.isBuffer(nodeBuf) ? nodeBuf : Buffer.from(nodeBuf);
 }

@@ -32,7 +32,10 @@ export async function listDeliverables(projectId: string, types?: DeliverableTyp
   const supabase = await createClient();
   let q = supabase.from("deliverables").select("*").eq("project_id", projectId);
   if (types && types.length > 0) q = q.in("type", types);
-  const { data, error } = await q.order("created_at", { ascending: false });
+  // Cap at 1000 deliverables per project view; the advancing UI paginates
+  // beyond that anyway and unbounded scans risk Supabase's 60s timeout
+  // on long-running projects with vendor revisions.
+  const { data, error } = await q.order("created_at", { ascending: false }).limit(1000);
   if (error) throw error;
   return (data ?? []) as Deliverable[];
 }

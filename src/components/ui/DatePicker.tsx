@@ -195,7 +195,7 @@ function Calendar_({
               key={i}
               type="button"
               tabIndex={isFocused ? 0 : -1}
-              aria-selected={!!isSelected}
+              aria-pressed={isSelected ? "true" : "false"}
               aria-label={formatDate(d)}
               disabled={dis}
               onFocus={() => setFocused(d)}

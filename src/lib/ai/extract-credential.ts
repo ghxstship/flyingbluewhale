@@ -64,7 +64,7 @@ async function callAnthropic(systemPrompt: string, userText: string): Promise<{ 
     });
     const text = res.content
       .filter((c) => c.type === "text")
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       .map((c) => (c as any).text as string)
       .join("");
     const match = text.match(/\{[\s\S]*\}/);

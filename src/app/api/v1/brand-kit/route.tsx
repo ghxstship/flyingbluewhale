@@ -25,9 +25,14 @@ export async function GET() {
   if (!org) return apiError("internal", "Missing organization row");
 
   const brand = resolvePdfBrand({ org, client: null });
+  // Construct the PDF doc element outside the try block so the React
+  // error-boundary rule doesn't think we're catching JSX render errors
+  // (these errors are caught by the @react-pdf renderer's own pipeline,
+  // not by React Suspense). The try wraps the async compile + upload.
+  const doc = <BrandKitPdf brand={brand} />;
   try {
     const { signedUrl } = await compileAndStore({
-      doc: <BrandKitPdf brand={brand} />,
+      doc,
       bucket: "branding",
       path: `${session.orgId}/brand-kit.pdf`,
       signedUrlTtlSeconds: 60,

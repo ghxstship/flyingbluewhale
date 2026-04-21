@@ -24,7 +24,10 @@ export async function POST(req: NextRequest) {
     const result = parseAndValidateCsv<VendorRow>(input.csv, VendorRowSchema);
     if (result.rowCount > MAX_SYNC_ROWS) return apiError("bad_request", `Row count ${result.rowCount} exceeds sync cap ${MAX_SYNC_ROWS}`);
 
-    const { data: existing } = await supabase.from("vendors").select("name, contact_email").eq("org_id", session.orgId);
+    // Cap dedup-lookup at 50k vendors per org — well above any realistic
+    // production count; prevents an unbounded scan if a tenant ever
+    // approaches that threshold.
+    const { data: existing } = await supabase.from("vendors").select("name, contact_email").eq("org_id", session.orgId).limit(50_000);
     const existingKeys = new Set((existing ?? []).map((r) => (r.contact_email ?? r.name).toLowerCase()));
 
     const dedup = new Map<string, VendorRow>();

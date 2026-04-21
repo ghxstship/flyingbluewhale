@@ -42,7 +42,9 @@ export function AssistantChat() {
   const [conversationId, setConversationId] = useState<string | undefined>();
   const [model, setModel] = useState<Model>("claude-sonnet-4-6");
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [showSlash, setShowSlash] = useState(false);
+  // Derived from `input`, not stored. Avoids the cascading-render
+  // anti-pattern of setState inside a useEffect that mirrors a prop.
+  // Explicit dismissal happens by clearing input or picking a command.
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const announce = useAnnounce();
@@ -70,10 +72,9 @@ export function AssistantChat() {
     if (nearBottom) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  // Slash menu trigger
-  useEffect(() => {
-    setShowSlash(input.startsWith("/") && input.length < 30);
-  }, [input]);
+  // Slash-menu open state is derived from the live input — no effect
+  // needed. The picker explicitly clears input to dismiss.
+  const showSlash = input.startsWith("/") && input.length < 30;
 
   async function streamMessage(text: string) {
     const abort = new AbortController();
@@ -392,8 +393,11 @@ export function AssistantChat() {
                   key={c.name}
                   type="button"
                   onClick={() => {
+                    // Setting input to "<command> " — the trailing space
+                    // pushes the length past the slash-menu threshold
+                    // (input.length >= 30 keeps it open; here the menu
+                    // closes once the user types beyond `<command>`).
                     setInput(c.name + " ");
-                    setShowSlash(false);
                   }}
                   className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-start text-xs hover:bg-[var(--surface-inset)]"
                 >

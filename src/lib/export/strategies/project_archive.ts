@@ -22,7 +22,7 @@ import { EXPORT_REGISTRY } from "../registry";
 
 const SKIP_FROM_ARCHIVE = new Set(["audit_log"]);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 type AnySupabase = SupabaseClient<any, any, any>;
 
 export async function buildProjectArchive(args: {
@@ -37,7 +37,7 @@ export async function buildProjectArchive(args: {
 
   for (const [table, meta] of Object.entries(EXPORT_REGISTRY)) {
     if (SKIP_FROM_ARCHIVE.has(table)) continue;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let q = (args.supabase.from(table) as any).select("*");
     // Narrow the registry-whitelisted tables with a project filter when
     // they have one; otherwise keep the full org scope.

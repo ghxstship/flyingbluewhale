@@ -1,5 +1,5 @@
 import "server-only";
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/types";
 

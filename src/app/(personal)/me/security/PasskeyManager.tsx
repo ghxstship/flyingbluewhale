@@ -19,10 +19,15 @@ type Credential = {
 export function PasskeyManager() {
   const [creds, setCreds] = useState<Credential[]>([]);
   const [adding, setAdding] = useState(false);
-  const [supported, setSupported] = useState(true);
+  // Lazy initializer — `browserSupportsWebAuthn` is browser-only, so we
+  // can run it once on mount via the lazy-state form rather than calling
+  // setState inside an effect (which triggers cascading renders).
+  const [supported] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    try { return browserSupportsWebAuthn(); } catch { return true; }
+  });
 
   useEffect(() => {
-    setSupported(browserSupportsWebAuthn());
     void refresh();
   }, []);
 

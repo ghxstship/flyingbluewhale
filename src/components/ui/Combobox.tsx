@@ -38,6 +38,7 @@ export function Combobox({
   className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
+  const listboxId = React.useId();
   const selected = options.find((o) => o.value === value);
 
   return (
@@ -47,6 +48,7 @@ export function Combobox({
           type="button"
           role="combobox"
           aria-expanded={open}
+          aria-controls={listboxId}
           aria-label={placeholder}
           className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
@@ -58,6 +60,7 @@ export function Combobox({
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
+          id={listboxId}
           align="start"
           sideOffset={4}
           className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] shadow-lg"
@@ -118,6 +121,7 @@ export function MultiCombobox({
   className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
+  const listboxId = React.useId();
   const selectedSet = new Set(value);
   const selectedLabels = options.filter((o) => selectedSet.has(o.value)).map((o) => o.label);
 
@@ -128,6 +132,7 @@ export function MultiCombobox({
           type="button"
           role="combobox"
           aria-expanded={open}
+          aria-controls={listboxId}
           aria-label={placeholder}
           className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
@@ -139,6 +144,7 @@ export function MultiCombobox({
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
+          id={listboxId}
           align="start"
           sideOffset={4}
           className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] shadow-lg"

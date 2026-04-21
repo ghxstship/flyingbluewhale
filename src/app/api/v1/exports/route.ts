@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     // `never` across the 9-table union here, so we drop to `any` for
     // the chain and reassert at the consume site. Same escape hatch
     // that lib/db/resource.ts uses.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let q = (supabase.from(table) as any).select("*").eq("org_id", session.orgId);
     if (input.projectId) q = q.eq("project_id", input.projectId);
 

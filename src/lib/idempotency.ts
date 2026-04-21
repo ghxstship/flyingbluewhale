@@ -46,7 +46,7 @@ export function withIdempotency(handler: Handler): Handler {
     const supabase = await createClient();
     const { data: existing } = await supabase
       .from("idempotency_keys" as never)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       .select("*" as any)
       .eq("key" as never, key)
       .maybeSingle();

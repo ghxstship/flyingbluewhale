@@ -74,7 +74,7 @@ type Entry<T> = {
 
 // `any` at the registry boundary — each entry's narrower schema re-types
 // the data on the way in via `renderDeliverable()` below.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export const DELIVERABLE_REGISTRY: Record<DeliverableType, Entry<any>> = {
   technical_rider:    { label: "Technical rider",      schema: TechnicalRiderSchema,    render: (d) => <TechnicalRiderView data={d} /> },
   hospitality_rider:  { label: "Hospitality rider",    schema: HospitalityRiderSchema,  render: (d) => <HospitalityRiderView data={d} /> },

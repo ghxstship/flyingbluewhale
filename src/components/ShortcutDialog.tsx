@@ -45,10 +45,10 @@ export function ShortcutDialog() {
   ]);
 
   React.useEffect(() => {
-    if (open) {
-      setQuery("");
-      setTimeout(() => searchRef.current?.focus(), 40);
-    }
+    if (!open) return;
+    setQuery("");
+    const h = setTimeout(() => searchRef.current?.focus(), 40);
+    return () => clearTimeout(h);
   }, [open]);
 
   const filtered = React.useMemo(() => {

@@ -93,7 +93,7 @@ export async function currentBucket(orgId: string, metric: Metric | string): Pro
     // when narrowing by column — we cast to `any` for the query chain and
     // reassert the row shape on the way out. Same escape hatch the rest
     // of `src/lib/db` uses (see `lib/db/resource.ts#anyFrom`).
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const { data, error } = await (svc.from("usage_rollups") as any)
       .select("quantity")
       .eq("org_id", orgId)

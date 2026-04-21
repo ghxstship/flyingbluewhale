@@ -100,17 +100,22 @@ export function StagePlotCanvas({
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const [saving, setSaving] = React.useState(false);
   const historyRef = React.useRef<StageElement[][]>([]);
+  // Mirror history length in state so the Undo button's `disabled` prop
+  // doesn't read a ref during render (React 19 anti-pattern).
+  const [historyLength, setHistoryLength] = React.useState(0);
   const svgRef = React.useRef<SVGSVGElement>(null);
   const dragRef = React.useRef<{ id: string; startX: number; startY: number; origX: number; origY: number } | null>(null);
 
   const pushHistory = React.useCallback((next: StageElement[]) => {
     historyRef.current.push(elements);
     if (historyRef.current.length > 25) historyRef.current.shift();
+    setHistoryLength(historyRef.current.length);
     setElements(next);
   }, [elements]);
 
   const undo = React.useCallback(() => {
     const prev = historyRef.current.pop();
+    setHistoryLength(historyRef.current.length);
     if (prev) setElements(prev);
   }, []);
 
@@ -179,6 +184,7 @@ export function StagePlotCanvas({
       // Commit final position into history as one entry
       historyRef.current.push(elements);
       if (historyRef.current.length > 25) historyRef.current.shift();
+      setHistoryLength(historyRef.current.length);
     }
     dragRef.current = null;
   }
@@ -222,6 +228,7 @@ export function StagePlotCanvas({
       if (json?.ok) {
         toast.success("Stage plot saved");
         historyRef.current = [];
+        setHistoryLength(0);
       } else {
         toast.error(json?.error?.message ?? "Save failed");
       }
@@ -269,7 +276,7 @@ export function StagePlotCanvas({
           <button
             type="button"
             onClick={undo}
-            disabled={historyRef.current.length === 0}
+            disabled={historyLength === 0}
             aria-label="Undo last change"
             className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs disabled:opacity-50"
           >

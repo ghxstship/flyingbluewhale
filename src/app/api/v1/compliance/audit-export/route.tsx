@@ -56,25 +56,29 @@ export async function GET(req: Request) {
   if (!org) return apiError("internal", "Missing organization row");
 
   const brand = resolvePdfBrand({ org, client: null });
+  // Pre-construct so the react-hooks/error-boundaries lint rule doesn't
+  // mistake JSX-as-data for a render-error suppressor. Errors from the
+  // @react-pdf renderer + storage upload below are caught by the try.
+  const doc = (
+    <AuditExportPdf
+      brand={brand}
+      rangeFrom={rangeFrom.slice(0, 10)}
+      rangeTo={rangeTo.slice(0, 10)}
+      actor={q.data.actor}
+      rows={(data ?? []).map((r) => ({
+        at: r.at as string,
+        actor_email: r.actor_email ?? null,
+        action: r.action,
+        target_table: r.target_table ?? null,
+        target_id: (r.target_id as string | null) ?? null,
+        operation: r.operation ?? null,
+        request_id: r.request_id ?? null,
+      }))}
+    />
+  );
   try {
     const { signedUrl } = await compileAndStore({
-      doc: (
-        <AuditExportPdf
-          brand={brand}
-          rangeFrom={rangeFrom.slice(0, 10)}
-          rangeTo={rangeTo.slice(0, 10)}
-          actor={q.data.actor}
-          rows={(data ?? []).map((r) => ({
-            at: r.at as string,
-            actor_email: r.actor_email ?? null,
-            action: r.action,
-            target_table: r.target_table ?? null,
-            target_id: (r.target_id as string | null) ?? null,
-            operation: r.operation ?? null,
-            request_id: r.request_id ?? null,
-          }))}
-        />
-      ),
+      doc,
       bucket: "exports",
       path: `${session.orgId}/audit-${rangeFrom.slice(0, 10)}-${rangeTo.slice(0, 10)}.pdf`,
       signedUrlTtlSeconds: 60,

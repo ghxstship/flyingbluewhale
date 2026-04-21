@@ -30,7 +30,9 @@ export async function POST(req: NextRequest) {
     const result = parseAndValidateCsv<TaskRow>(input.csv, TaskRowSchema);
     if (result.rowCount > MAX_SYNC_ROWS) return apiError("bad_request", `Row count ${result.rowCount} exceeds sync cap ${MAX_SYNC_ROWS}`);
 
-    const { data: existing } = await supabase.from("tasks").select("title, due_at").eq("project_id", project.id);
+    // Cap dedup-lookup at 50k tasks per project — keeps the scan bounded
+    // even on long-running projects with thousands of tasks.
+    const { data: existing } = await supabase.from("tasks").select("title, due_at").eq("project_id", project.id).limit(50_000);
     const existingKeys = new Set((existing ?? []).map((r) => `${r.title}::${r.due_at ?? ""}`.toLowerCase()));
 
     const dedup = new Map<string, TaskRow>();

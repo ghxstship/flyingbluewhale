@@ -16,7 +16,7 @@ import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "ATLVS — the internal operations console for production teams",
   description:
-    "ATLVS is the internal operations console inside flyingbluewhale. Projects, finance, procurement, production, people, AI — one sidebar, role-gated by tier, with an audit log on every mutation. 60+ modules across 9 domains. Built on Next.js and Supabase.",
+    "ATLVS is the internal operations console from Second Star Technologies. Projects, finance, procurement, production, people, AI — one sidebar, role-gated by tier, with an audit log on every mutation. 60+ modules across 9 domains. Built on Next.js and Supabase.",
   path: "/solutions/atlvs",
   keywords: ["ATLVS", "production operations console", "event production dashboard", "internal production platform", "operations console software"],
   ogImageEyebrow: "ATLVS",
@@ -139,7 +139,7 @@ export default function ATLVSPage() {
         faqs={[
           {
             q: "What does ATLVS stand for?",
-            a: "ATLVS is the codename for flyingbluewhale's internal operations console — the red-branded shell where your team works. Every module runs inside it, including finance, procurement, AI, and proposals.",
+            a: "ATLVS is the name of the internal operations console from Second Star Technologies — the red-branded shell where your team works. Every module runs inside it, including finance, procurement, AI, and proposals.",
           },
           {
             q: "How does role-gating work?",

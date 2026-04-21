@@ -91,9 +91,9 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
         ],
       },
       {
-        heading: "How flyingbluewhale handles advancing",
+        heading: "How the Second Star Technologies suite handles advancing",
         body: [
-          "Every project in flyingbluewhale has a deliverables module with the 16 standard types available out of the box. You can add custom types per org.",
+          "Every project in ATLVS has a deliverables module with the 16 standard types available out of the box. You can add custom types per org.",
           "Each deliverable has a status workflow, comments (threaded), file attachments stored in Supabase Storage, and a full deliverable_history row per state change.",
           "Artists and vendors see only the deliverables assigned to them, via GVTEWAY portals. They can upload responses, mark their end complete, and comment — all writing back into the shared history.",
           "Read more at /solutions/atlvs or /features/advancing.",
@@ -179,7 +179,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
         body: [
           "The Boarding Pass pattern — popularized by Black Coffee's 2025 tour KBYG (github.com/ghxstship/boardingpass) — treats the KBYG as an interactive, role-scoped, mobile-first website rather than a PDF.",
           "Key innovations: tier 1–5 classification banners for venue zones, role-specific timelines, embedded radio channel allocations, offline-accessible on the crew phone.",
-          "flyingbluewhale adopts this pattern as the event guides module. One authoring flow in ATLVS CMS; six persona renders on portal + mobile, shared by <GuideView>. See /solutions/atlvs#guides.",
+          "The Second Star Technologies suite adopts this pattern as the event guides module. One authoring flow in ATLVS CMS; six persona renders on portal + mobile, shared by <GuideView>. See /solutions/atlvs#guides.",
         ],
       },
       {
@@ -193,7 +193,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
     faqs: [
       {
         q: "How is a KBYG different from a run-of-show document?",
-        a: "KBYG is stakeholder-facing, sent before the event. Run-of-show is production-facing, used during the event. They share data (schedule, contacts, timeline) but are rendered differently. In flyingbluewhale, both derive from the same underlying project data.",
+        a: "KBYG is stakeholder-facing, sent before the event. Run-of-show is production-facing, used during the event. They share data (schedule, contacts, timeline) but are rendered differently. In ATLVS, GVTEWAY, and COMPVSS, both derive from the same underlying project data.",
       },
       {
         q: "Do we need a designer to make a KBYG look good?",
@@ -201,7 +201,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
       },
       {
         q: "Can external partners see the KBYG without signing up?",
-        a: "Yes. Published guides in flyingbluewhale are readable by anonymous viewers via a targeted RLS policy. Share the URL; your guest is reading it seconds later. No login required.",
+        a: "Yes. Published guides are readable by anonymous viewers via a targeted RLS policy. Share the URL; your guest is reading it seconds later. No login required.",
       },
     ],
   },
@@ -262,7 +262,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
         body: [
           "The shift in 2026 is away from best-of-breed point tools and toward integrated production platforms.",
           "The argument: production data is deeply interconnected. A vendor PO depends on a project budget depends on a client-accepted proposal depends on advancing deliverables depends on a show schedule. If these live in one database, reporting is trivial. If they live in eight, reporting is a full-time job.",
-          "flyingbluewhale is the explicit consolidation play. One Postgres schema, one auth, one set of RLS rules, three shells (ATLVS internal, GVTEWAY external, COMPVSS mobile). See /about for the thesis in detail.",
+          "Second Star Technologies is the explicit consolidation play. One Postgres schema, one auth, one set of RLS rules, three shells (ATLVS internal, GVTEWAY external, COMPVSS mobile). See /about for the thesis in detail.",
         ],
       },
       {

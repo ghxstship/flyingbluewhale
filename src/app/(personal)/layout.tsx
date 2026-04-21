@@ -16,7 +16,7 @@ const tabs = [
 
 export default async function PersonalLayout({ children }: { children: React.ReactNode }) {
   const tenant = await resolveTenant();
-  const brandName = tenant.branding.productName ?? tenant.orgName ?? "flyingbluewhale";
+  const brandName = tenant.branding.productName ?? tenant.orgName ?? "Second Star Technologies";
   return (
     <TenantShell tenant={tenant}>
       <div className="page-shell">

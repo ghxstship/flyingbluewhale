@@ -47,7 +47,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
             maxLength={48}
-            placeholder="flyingbluewhale"
+            placeholder="Second Star Technologies"
           />
           <Input
             label="Logo URL (HTTPS)"
@@ -132,7 +132,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             Ghost
           </button>
           <span className="text-xs" style={{ color: accent }}>
-            Sample brand text · {productName || "flyingbluewhale"}
+            Sample brand text · {productName || "Second Star Technologies"}
           </span>
         </div>
       </section>

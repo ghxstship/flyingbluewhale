@@ -22,7 +22,7 @@ export const CUSTOMERS: Record<string, CaseStudy> = {
     industry: "Live events · festival",
     blurb: "15K guests, 3 stages, 6-role KBYG rollout. Open-Air at Hialeah Park.",
     headline: "How Black Coffee ran a 15K-cap festival on a single platform.",
-    hero: "Miami Music Week 2026 — Black Coffee's Open-Air at Hialeah Park. Three stages, 15,000 capacity, six stakeholder personas, one weekend. Zero tools outside flyingbluewhale.",
+    hero: "Miami Music Week 2026 — Black Coffee's Open-Air at Hialeah Park. Three stages, 15,000 capacity, six stakeholder personas, one weekend. Zero tools outside ATLVS, GVTEWAY, and COMPVSS.",
     stats: [
       { value: "15K", label: "Guests scanned in" },
       { value: "14,982", label: "Scans replayed from offline queue" },
@@ -36,7 +36,7 @@ export const CUSTOMERS: Record<string, CaseStudy> = {
       "Six distinct stakeholder personas (guest, artist, crew, vendor, sponsor, club) with wildly different information needs — a single PDF KBYG was unmanageable.",
     ],
     solution: [
-      "Migrated to flyingbluewhale three months before show. One Supabase project, one schema, one design system across internal + external + mobile.",
+      "Migrated to the Second Star Technologies suite three months before show. One Supabase project, one schema, one design system across internal + external + mobile.",
       "Authored one canonical KBYG in ATLVS CMS. The Boarding Pass pattern rendered six different persona views from the same config — no PDF duplication, no sync drift.",
       "Crew installed COMPVSS PWA from the URL. Zero App Store review. Scanner cached app shell + today's data before doors; queued scans during the signal dead-zone at peak.",
       "Vendor portal (GVTEWAY) handled 14 vendors' COIs, W-9s, POs, and Stripe Connect payouts. Finance closed books on the Monday after show.",
@@ -62,7 +62,7 @@ export const CUSTOMERS: Record<string, CaseStudy> = {
     industry: "Corporate activations · agency",
     blurb: "Moved production ops off Notion + Excel + DocuSign and cut invoicing cycle from 14 to 2 days.",
     headline: "How Live Events Inc. compressed their invoicing cycle by 86%.",
-    hero: "Live Events Inc. is a 22-person corporate activation agency running 40–60 shows a year. They migrated to flyingbluewhale to kill their internal duct tape. The invoicing cycle compression was the surprise.",
+    hero: "Live Events Inc. is a 22-person corporate activation agency running 40–60 shows a year. They migrated to the Second Star Technologies suite to kill their internal duct tape. The invoicing cycle compression was the surprise.",
     stats: [
       { value: "86%", label: "Faster invoicing cycle" },
       { value: "14 → 2", label: "Days from show close to client invoice" },
@@ -99,7 +99,7 @@ export const CUSTOMERS: Record<string, CaseStudy> = {
     industry: "Artist management · touring",
     blurb: "40+ shows/year, unified advancing + artist portal for every artist on roster.",
     headline: "How North Pole moved 40+ shows/year off email threads.",
-    hero: "North Pole Touring manages eight artists and advances 40+ shows a year. Every show used to be an email thread that outlived it. Now every show is a flyingbluewhale project with typed deliverables, a role-scoped artist portal, and history that outlives the show.",
+    hero: "North Pole Touring manages eight artists and advances 40+ shows a year. Every show used to be an email thread that outlived it. Now every show is an ATLVS project with typed deliverables, a role-scoped artist portal, and history that outlives the show.",
     stats: [
       { value: "40+", label: "Shows advanced per year" },
       { value: "8", label: "Artists on unified roster" },

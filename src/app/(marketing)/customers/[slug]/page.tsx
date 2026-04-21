@@ -131,7 +131,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
         </div>
       </section>
 
-      <CTASection title="Ship your next show on flyingbluewhale" subtitle="Free on the Access tier. 14-day trial of Professional." />
+      <CTASection title="Ship your next show on Second Star Technologies" subtitle="Free on the Access tier. 14-day trial of Professional." />
     </div>
   );
 }

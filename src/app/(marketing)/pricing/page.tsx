@@ -10,9 +10,9 @@ import { buildMetadata, faqSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Pricing — Access, Core, Professional, Enterprise",
   description:
-    "Transparent pricing for flyingbluewhale. Start free for life with the Access tier. Scale to Core ($49/mo), Professional ($199/mo), or Enterprise. Every tier includes RLS-backed org scoping and the REST API.",
+    "Transparent pricing for the Second Star Technologies platform. Start free for life with the Access tier. Scale to Core ($49/mo), Professional ($199/mo), or Enterprise. Every tier includes RLS-backed org scoping and the REST API.",
   path: "/pricing",
-  keywords: ["production software pricing", "event management software cost", "flyingbluewhale pricing", "stakeholder portal pricing"],
+  keywords: ["production software pricing", "event management software cost", "Second Star Technologies pricing", "ATLVS pricing", "GVTEWAY pricing", "COMPVSS pricing", "stakeholder portal pricing"],
   ogImageEyebrow: "Pricing",
   ogImageTitle: "Start free. Scale when you need to.",
 });
@@ -174,7 +174,7 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
 const FAQS = [
   {
     q: "Do I have to pay per user?",
-    a: "No. flyingbluewhale charges per org, not per seat. Professional is unlimited users for $199/month. You'll never get surprised by your own team getting more productive.",
+    a: "No. Second Star Technologies charges per org, not per seat. Professional is unlimited users for $199/month. You'll never get surprised by your own team getting more productive.",
   },
   {
     q: "Is there a free tier?",
@@ -317,7 +317,7 @@ export default function PricingPage() {
       <FAQSection title="Pricing FAQ" faqs={FAQS} />
 
       <CTASection
-        title="Ship the next show on flyingbluewhale"
+        title="Ship the next show on Second Star Technologies"
         subtitle="Start free in under two minutes. No credit card. No forced sales call."
       />
     </div>

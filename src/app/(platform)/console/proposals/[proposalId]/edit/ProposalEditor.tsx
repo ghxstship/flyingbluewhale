@@ -35,7 +35,7 @@ const BLOCK_DEFAULTS: Record<ProposalBlockType, ProposalBlock> = {
   exclusions: { type: "exclusions", items: [{ term: "Travel", body: "Travel and lodging are billed at cost with receipts." }] },
   terms_grid: { type: "terms_grid", items: [{ section: "S1", title: "Scope", body: "Scope as set forth in this proposal." }] },
   legal_panel: { type: "legal_panel", panels: [{ slug: "msa", label: "Master Services Agreement", body: "MSA placeholder — replace with full text or a signed link." }] },
-  signature_block: { type: "signature_block", parties: [{ role: "Client" }, { role: "Producer", name: "flyingbluewhale" }], instructions: "Sign below to accept this proposal." },
+  signature_block: { type: "signature_block", parties: [{ role: "Client" }, { role: "Producer", name: "Second Star Technologies" }], instructions: "Sign below to accept this proposal." },
   cta: { type: "cta", label: "Accept proposal", href: "#authorize", variant: "primary" },
   spacer: { type: "spacer", size: "md" },
   custom: { type: "custom", body: "<p>Custom HTML</p>" },

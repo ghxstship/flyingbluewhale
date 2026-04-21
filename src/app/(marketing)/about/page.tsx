@@ -6,11 +6,11 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "About flyingbluewhale — built by operators, for operators",
+  title: "About Second Star Technologies — built by operators, for operators",
   description:
-    "flyingbluewhale is the unified production platform from GHXSTSHIP. Three shells — ATLVS, GVTEWAY, COMPVSS — one schema, one identity, one set of RLS rules. Built for event production teams who are tired of duct tape.",
+    "Second Star Technologies is the company behind ATLVS, GVTEWAY, and COMPVSS — a unified production platform. Three shells, one schema, one identity, one set of RLS rules. Built for event production teams who are tired of duct tape.",
   path: "/about",
-  keywords: ["flyingbluewhale about", "GHXSTSHIP", "event production platform", "production software company"],
+  keywords: ["Second Star Technologies about", "ATLVS", "GVTEWAY", "COMPVSS", "event production platform", "production software company"],
   ogImageEyebrow: "About",
   ogImageTitle: "Built by operators, for operators.",
 });
@@ -27,7 +27,7 @@ const MILESTONES = [
   { date: "2025 Q4", title: "Boarding Pass pattern integrated", body: "Role-scoped KBYG event guides, authored once in ATLVS CMS, rendered across portal + mobile." },
   { date: "2025 Q3", title: "Interactive proposals", body: "Synthesized best practices from F1-Miami scroll storytelling and proposalzero structured pricing." },
   { date: "2025 Q2", title: "Stripe Connect + advancing", body: "Vendor payouts via Connect Express. 16 typed deliverables with history, comments, attachments." },
-  { date: "2025 Q1", title: "First show shipped", body: "Staffed and scanned our first 2,000-cap festival end-to-end on flyingbluewhale." },
+  { date: "2025 Q1", title: "First show shipped", body: "Staffed and scanned our first 2,000-cap festival end-to-end on the Second Star Technologies platform." },
 ];
 
 export default function AboutPage() {
@@ -45,10 +45,10 @@ export default function AboutPage() {
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">About</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Built by Operators, for Operators.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          flyingbluewhale is the production operating system from GHXSTSHIP. We built it because every production team
-          we worked with was duct-taping a dozen SaaS tools together — Asana for tasks, Notion for wiki, Google Sheets
-          for budgets, DocuSign for proposals, Eventbrite for tickets, a clipboard for the gate — and losing money in
-          the seams.
+          Second Star Technologies is the production operating system behind ATLVS, GVTEWAY, and COMPVSS. We built it
+          because every production team we worked with was duct-taping a dozen SaaS tools together — Asana for tasks,
+          Notion for wiki, Google Sheets for budgets, DocuSign for proposals, Eventbrite for tickets, a clipboard for
+          the gate — and losing money in the seams.
         </p>
         <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
           One platform. Three shells. Everyone on the same page — from proposal to wrap.
@@ -91,9 +91,10 @@ export default function AboutPage() {
         <div className="surface-raised p-10">
           <h2 className="text-3xl font-semibold tracking-tight">Who We Are.</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-            GHXSTSHIP is a production + technology studio. We've staffed festivals, corporate activations, private
-            events, and artist tours — and we've built software for every one of them. flyingbluewhale is the
-            consolidation of a decade of in-the-field duct tape into a single platform.
+            Second Star Technologies is a production + technology studio. We've staffed festivals, corporate
+            activations, private events, and artist tours — and we've built software for every one of them. The
+            platform is the consolidation of a decade of in-the-field duct tape into a single suite: ATLVS, GVTEWAY,
+            and COMPVSS.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <Link className="underline underline-offset-4" href="/careers">Careers</Link>

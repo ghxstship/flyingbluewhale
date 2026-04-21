@@ -6,7 +6,7 @@ export default function TermsPage() {
       <div className="mt-8 space-y-6 text-sm text-[var(--text-secondary)]">
         <section>
           <h2 className="text-base font-semibold text-[var(--foreground)]">1. Acceptance of Terms</h2>
-          <p className="mt-2">By accessing or using flyingbluewhale you agree to these Terms. If you do not agree, do not use the Service.</p>
+          <p className="mt-2">By accessing or using the Second Star Technologies platform you agree to these Terms. If you do not agree, do not use the Service.</p>
         </section>
         <section>
           <h2 className="text-base font-semibold text-[var(--foreground)]">2. Accounts</h2>

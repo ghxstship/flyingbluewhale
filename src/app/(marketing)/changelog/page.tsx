@@ -5,11 +5,11 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "Changelog — what shipped on flyingbluewhale",
+  title: "Changelog — what shipped on Second Star Technologies",
   description:
-    "Release notes for flyingbluewhale. Every shipping change, with context. Feature launches, reliability, security, and performance.",
+    "Release notes for the Second Star Technologies platform. Every shipping change, with context. Feature launches, reliability, security, and performance.",
   path: "/changelog",
-  keywords: ["flyingbluewhale changelog", "release notes", "product updates"],
+  keywords: ["Second Star Technologies changelog", "ATLVS changelog", "GVTEWAY changelog", "COMPVSS changelog", "release notes", "product updates"],
   ogImageEyebrow: "Changelog",
   ogImageTitle: "What shipped.",
 });

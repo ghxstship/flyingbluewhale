@@ -7,7 +7,7 @@ export default async function AcceptInvitePage({ params }: { params: Promise<{ t
   return (
     <AuthShell
       title="Join your team"
-      subtitle="Accept your invitation to flyingbluewhale"
+      subtitle="Accept your invitation to Second Star Technologies"
       footer={
         <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
           Sign in instead
@@ -15,7 +15,7 @@ export default async function AcceptInvitePage({ params }: { params: Promise<{ t
       }
     >
       <p className="text-sm text-[var(--text-secondary)]">
-        You&apos;ve been invited to a flyingbluewhale workspace. Accept below and we&apos;ll take you straight in.
+        You&apos;ve been invited to a Second Star Technologies workspace. Accept below and we&apos;ll take you straight in.
       </p>
       <form action="/auth/resolve" method="post" className="mt-6">
         <input type="hidden" name="invite_token" value={token} />

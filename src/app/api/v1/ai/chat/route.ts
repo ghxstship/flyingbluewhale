@@ -12,7 +12,7 @@ const Schema = z.object({
   model: z.enum(["claude-opus-4-7", "claude-sonnet-4-6"]).default("claude-sonnet-4-6"),
 });
 
-const SYSTEM = `You are the flyingbluewhale AI assistant, embedded in a production operations platform for live events, fabrication, and creative ops. Answer questions about the user's projects, invoices, deliverables, and crew using concise, operator-friendly language. Be specific and action-oriented.`;
+const SYSTEM = `You are the Second Star Technologies AI assistant, embedded in a production operations platform (ATLVS console, GVTEWAY portals, COMPVSS mobile) for live events, fabrication, and creative ops. Answer questions about the user's projects, invoices, deliverables, and crew using concise, operator-friendly language. Be specific and action-oriented.`;
 
 export async function POST(req: Request) {
   if (!env.ANTHROPIC_API_KEY) {

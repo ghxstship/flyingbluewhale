@@ -7,13 +7,13 @@ import { buildMetadata } from "@/lib/seo";
 import { CUSTOMER_LIST } from "@/lib/customers";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Customers — teams running on flyingbluewhale",
+  title: "Customers — teams running on Second Star Technologies",
   description:
-    "Case studies from festivals, touring agencies, and corporate event shops running their production operations on flyingbluewhale. Real numbers, real workflows.",
+    "Case studies from festivals, touring agencies, and corporate event shops running their production operations on Second Star Technologies — ATLVS, GVTEWAY, and COMPVSS. Real numbers, real workflows.",
   path: "/customers",
-  keywords: ["production software case studies", "event production customers", "flyingbluewhale customers"],
+  keywords: ["production software case studies", "event production customers", "Second Star Technologies customers"],
   ogImageEyebrow: "Customers",
-  ogImageTitle: "Teams running on flyingbluewhale.",
+  ogImageTitle: "Teams running on Second Star Technologies.",
 });
 
 export default function CustomersPage() {
@@ -28,7 +28,7 @@ export default function CustomersPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Customers</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Teams Running on Flyingbluewhale.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Teams Running on Second Star Technologies.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Real production orgs, real numbers, real workflows. Every case study covers what they were running before,
           what they changed, and what measurably improved.

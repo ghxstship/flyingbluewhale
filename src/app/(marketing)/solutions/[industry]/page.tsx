@@ -31,11 +31,11 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Live Events",
     tagline: "Venue residencies, club nights, one-offs",
     description:
-      "flyingbluewhale is the production management platform for Live Events — club residencies, brand-hosted nights, album release parties, pop-up rooftop series. Ticketing and on-site scan, artist advancing, Stripe Connect vendor payouts, and per-persona Know-Before-You-Go guides come pre-wired.",
+      "Second Star Technologies is the production management platform for Live Events — club residencies, brand-hosted nights, album release parties, pop-up rooftop series. Ticketing and on-site scan, artist advancing, Stripe Connect vendor payouts, and per-persona Know-Before-You-Go guides come pre-wired.",
     hero: {
       eyebrow: "Live Events",
       title: "From Pitch to Wrap — One Platform.",
-      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. flyingbluewhale unifies all of it on one Postgres-backed core.",
+      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. The Second Star Technologies platform unifies all of it on one Postgres-backed core.",
     },
     stats: [
       { value: "15k+", label: "guests / night" },
@@ -61,7 +61,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     ],
     faqs: [
       {
-        q: "How many guests can flyingbluewhale handle?",
+        q: "How many guests can the platform handle?",
         a: "We've scanned 15,000+ guests per event without a blip. The atomic-update check-in pattern handles any throughput Postgres can handle, so the bottleneck is your network, not us.",
       },
       {
@@ -84,7 +84,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     hero: {
       eyebrow: "Concerts",
       title: "One Rider. Every Venue.",
-      body: "Concert touring operations live in 40 spreadsheets. flyingbluewhale keeps the canonical rider in one place and scopes per-venue variants on top — no copy-paste, no lost revisions.",
+      body: "Concert touring operations live in 40 spreadsheets. The Second Star Technologies platform keeps the canonical rider in one place and scopes per-venue variants on top — no copy-paste, no lost revisions.",
     },
     stats: [
       { value: "1×", label: "rider edit" },
@@ -127,7 +127,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Festivals & Tours",
     tagline: "Multi-day, multi-stage, multi-city",
     description:
-      "Festivals and Tours are the hardest shape in live production — dozens of artists, multiple stages, multi-day windows, traveling crew, and a calendar that looks like a subway map. flyingbluewhale is built for that scale from day one.",
+      "Festivals and Tours are the hardest shape in live production — dozens of artists, multiple stages, multi-day windows, traveling crew, and a calendar that looks like a subway map. The Second Star Technologies platform is built for that scale from day one.",
     hero: {
       eyebrow: "Festivals & Tours",
       title: "Run the Festival. Not the Spreadsheet.",
@@ -156,12 +156,12 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     ],
     faqs: [
       {
-        q: "Does flyingbluewhale handle RFID wristbands?",
+        q: "Does the platform handle RFID wristbands?",
         a: "Yes — we integrate with the major RFID vendors (Intellitix, ID&C, Plus ID) via our credential endpoints. Wristbands can be pre-assigned or bound at pickup; access tiers enforce at scan.",
       },
       {
         q: "Can I run a multi-day festival and a city tour on the same account?",
-        a: "Yes. Each production is its own project; flyingbluewhale is multi-project from day one. The same team works across them without logging out.",
+        a: "Yes. Each production is its own project; the platform is multi-project from day one. The same team works across them without logging out.",
       },
       {
         q: "What happens when venue Wi-Fi dies?",
@@ -179,7 +179,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     hero: {
       eyebrow: "Immersive Experiences",
       title: "The Show Runs You. We Run the Show.",
-      body: "Immersive runs live or die by seconds. flyingbluewhale handles the operations plumbing — timed entries, per-zone capacity, cast + crew scheduling — so your team stays in the experience, not the spreadsheet.",
+      body: "Immersive runs live or die by seconds. The Second Star Technologies platform handles the operations plumbing — timed entries, per-zone capacity, cast + crew scheduling — so your team stays in the experience, not the spreadsheet.",
     },
     stats: [
       { value: "< 15s", label: "entry gap drift" },
@@ -222,11 +222,11 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Brand Activations",
     tagline: "Pop-ups, product launches, experiential marketing",
     description:
-      "Brand Activations turn marketing dollars into memorable moments. flyingbluewhale handles the operations — agency-to-client proposals, vendor COIs, RSVP flow, on-site capture, post-event analytics — so the creative team stays creative.",
+      "Brand Activations turn marketing dollars into memorable moments. The Second Star Technologies platform handles the operations — agency-to-client proposals, vendor COIs, RSVP flow, on-site capture, post-event analytics — so the creative team stays creative.",
     hero: {
       eyebrow: "Brand Activations",
       title: "From RFP to Recap. Same Platform.",
-      body: "Activations live or die by the speed of the hand-off: agency to client, creative to production, production to vendors. flyingbluewhale shortens every hand-off to zero.",
+      body: "Activations live or die by the speed of the hand-off: agency to client, creative to production, production to vendors. The Second Star Technologies platform shortens every hand-off to zero.",
     },
     stats: [
       { value: "< 1 day", label: "proposal → signed project" },
@@ -269,11 +269,11 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Corporate Events",
     tagline: "Conferences, AGMs, summits, internal events",
     description:
-      "flyingbluewhale for Corporate Events — conferences, shareholder meetings, executive summits, internal kickoffs. Client-facing proposals with e-sign, vendor COI tracking, stakeholder portals, and executive-grade guest experiences.",
+      "The Second Star Technologies platform for Corporate Events — conferences, shareholder meetings, executive summits, internal kickoffs. Client-facing proposals with e-sign, vendor COI tracking, stakeholder portals, and executive-grade guest experiences.",
     hero: {
       eyebrow: "Corporate Events",
       title: "Executive Grade. Field Ready.",
-      body: "Corporate teams want proposals they can review and sign. Executives want KBYG guides. Vendors need COIs managed. Compliance wants an audit log. flyingbluewhale does all four, tuned for corporate cadence.",
+      body: "Corporate teams want proposals they can review and sign. Executives want KBYG guides. Vendors need COIs managed. Compliance wants an audit log. The platform does all four, tuned for corporate cadence.",
     },
     stats: [
       { value: "14 → 2", label: "days to invoice" },
@@ -297,7 +297,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     ],
     faqs: [
       {
-        q: "Does flyingbluewhale support SOC-2 or ISO compliance?",
+        q: "Does the platform support SOC-2 or ISO compliance?",
         a: "We ship enterprise-grade primitives today — RLS, audit log, encryption in transit and at rest, signed URLs, rate limiting, CSP. Formal SOC-2 report is in progress for Enterprise-tier customers; contact sales for current status.",
       },
       {
@@ -316,11 +316,11 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Theatrical Performances",
     tagline: "Residencies, touring productions, galas",
     description:
-      "Theatrical Performances — Broadway runs, off-Broadway limited engagements, regional residencies, gala productions. flyingbluewhale handles cast + crew scheduling, cue notes, understudy tracking, per-house advancing, and compliance-ready audit trails.",
+      "Theatrical Performances — Broadway runs, off-Broadway limited engagements, regional residencies, gala productions. The Second Star Technologies platform handles cast + crew scheduling, cue notes, understudy tracking, per-house advancing, and compliance-ready audit trails.",
     hero: {
       eyebrow: "Theatrical Performances",
       title: "Eight Shows a Week. Zero Drift.",
-      body: "Long-running productions live or die by consistency. Cast changes, understudies, rider tweaks, venue quirks — flyingbluewhale keeps the canonical production in one place and logs every deviation.",
+      body: "Long-running productions live or die by consistency. Cast changes, understudies, rider tweaks, venue quirks — the Second Star Technologies platform keeps the canonical production in one place and logs every deviation.",
     },
     stats: [
       { value: "8", label: "shows / week" },
@@ -363,11 +363,11 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Broadcast, TV & Film",
     tagline: "Studio, remote, location-based production",
     description:
-      "Broadcast, TV & Film — multi-camera studio broadcasts, remote productions, location-based shoots, episodic series. flyingbluewhale handles call-sheets, day-of-shoot logistics, vendor management, union-compliant time tracking, and per-production financial reporting.",
+      "Broadcast, TV & Film — multi-camera studio broadcasts, remote productions, location-based shoots, episodic series. The Second Star Technologies platform handles call-sheets, day-of-shoot logistics, vendor management, union-compliant time tracking, and per-production financial reporting.",
     hero: {
       eyebrow: "Broadcast, TV & Film",
       title: "Prep to Wrap, on One Platform.",
-      body: "Film and television production carry more moving pieces than any other live-ops format. flyingbluewhale unifies call-sheets, day-of logistics, vendor COIs, union payroll, and per-production P&L so the line producer stays on set, not behind a desk.",
+      body: "Film and television production carry more moving pieces than any other live-ops format. The Second Star Technologies platform unifies call-sheets, day-of logistics, vendor COIs, union payroll, and per-production P&L so the line producer stays on set, not behind a desk.",
     },
     stats: [
       { value: "120+", label: "crew per shoot day" },
@@ -414,7 +414,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const info = INDUSTRIES[industry];
   if (!info) return buildMetadata({ title: "Solution", description: "Industry solution", path: `/solutions/${industry}` });
   return buildMetadata({
-    title: `${info.name} — ${info.tagline} on flyingbluewhale`,
+    title: `${info.name} — ${info.tagline} on Second Star Technologies`,
     description: info.description,
     path: `/solutions/${industry}`,
     keywords: [info.name.toLowerCase(), info.tagline.toLowerCase()],

@@ -8,9 +8,9 @@ import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Contact — talk to sales, support, or partnerships",
   description:
-    "Contact flyingbluewhale. Sales responds within one business day. Start a free account any time — no forced sales call. Partnerships, support, and press welcome.",
+    "Contact Second Star Technologies. Sales responds within one business day. Start a free account any time — no forced sales call. Partnerships, support, and press welcome.",
   path: "/contact",
-  keywords: ["flyingbluewhale contact", "talk to sales", "production software demo", "book demo"],
+  keywords: ["Second Star Technologies contact", "talk to sales", "production software demo", "book demo"],
   ogImageEyebrow: "Contact",
   ogImageTitle: "Talk to sales.",
 });
@@ -24,7 +24,7 @@ const ROUTES = [
 
 const FAQS = [
   {
-    q: "Do I have to talk to sales to try flyingbluewhale?",
+    q: "Do I have to talk to sales to try the platform?",
     a: "No. Sign up at /signup and you're in, free forever on the Access tier. Professional trial is 14 days, no credit card up front. Sales is for Enterprise, custom deployments, or if you just want a walkthrough.",
   },
   {

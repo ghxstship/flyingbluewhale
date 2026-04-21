@@ -12,11 +12,11 @@ import { buildMetadata } from "@/lib/seo";
 import { COMPARE_LIST } from "@/lib/compare";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Compare flyingbluewhale to Asana, Monday, and spreadsheets",
+  title: "Compare Second Star Technologies to Asana, Monday, and spreadsheets",
   description:
-    "Head-to-head comparisons of flyingbluewhale against the tools production teams use today. Honest about when we win and when we don't.",
+    "Head-to-head comparisons of the Second Star Technologies platform against the tools production teams use today. Honest about when we win and when we don't.",
   path: "/compare",
-  keywords: ["flyingbluewhale comparison", "asana alternative events", "monday alternative events", "spreadsheet alternative"],
+  keywords: ["Second Star Technologies comparison", "asana alternative events", "monday alternative events", "spreadsheet alternative"],
   ogImageEyebrow: "Compare",
   ogImageTitle: "How we compare.",
 });
@@ -35,8 +35,8 @@ export default function ComparePage() {
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Compare</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Head-to-head.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Honest comparisons of flyingbluewhale against the tools production teams already use. We'll tell you when
-          we win and when we don't.
+          Honest comparisons of the Second Star Technologies platform against the tools production teams already use.
+          We'll tell you when we win and when we don't.
         </p>
       </section>
 
@@ -52,7 +52,7 @@ export default function ComparePage() {
         </div>
       </section>
 
-      <CTASection title="Try flyingbluewhale" subtitle="Free for Life on the Access tier. No credit card." />
+      <CTASection title="Try Second Star Technologies" subtitle="Free for Life on the Access tier. No credit card." />
     </div>
   );
 }

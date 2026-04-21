@@ -16,7 +16,7 @@ import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "GVTEWAY — external stakeholder portals for production",
   description:
-    "GVTEWAY is flyingbluewhale's portal surface. One slug per project, one tailored view per persona — artist, vendor, client, sponsor, guest, crew. Interactive proposals with e-sign, artist advancing with deliverables, per-role event guides (KBYG).",
+    "GVTEWAY is the external portal surface from Second Star Technologies. One slug per project, one tailored view per persona — artist, vendor, client, sponsor, guest, crew. Interactive proposals with e-sign, artist advancing with deliverables, per-role event guides (KBYG).",
   path: "/solutions/gvteway",
   keywords: ["GVTEWAY", "stakeholder portal", "artist portal", "vendor portal", "client portal", "event portal software"],
   ogImageEyebrow: "GVTEWAY",
@@ -146,7 +146,7 @@ export default function GvtewayPage() {
         faqs={[
           {
             q: "What does GVTEWAY stand for?",
-            a: "GVTEWAY is the codename for flyingbluewhale's external portal surface — the blue-branded shell served at /p/[slug]/<persona>. Each slug is a project; each persona is a role (artist, vendor, client, sponsor, guest, crew).",
+            a: "GVTEWAY is the name of the external portal surface from Second Star Technologies — the blue-branded shell served at /p/[slug]/<persona>. Each slug is a project; each persona is a role (artist, vendor, client, sponsor, guest, crew).",
           },
           {
             q: "Do external stakeholders need to sign up?",

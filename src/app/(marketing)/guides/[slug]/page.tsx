@@ -106,7 +106,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
-      <CTASection title="Run your ops on flyingbluewhale" subtitle="Start free. No credit card." />
+      <CTASection title="Run your ops on Second Star Technologies" subtitle="Start free. No credit card." />
     </div>
   );
 }

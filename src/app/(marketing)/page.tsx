@@ -11,9 +11,9 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, SITE } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "flyingbluewhale — Production OS for live events, fabrication, and creative ops",
+  title: "Production OS for live events, fabrication, and creative ops",
   description:
-    "Run production on one platform. flyingbluewhale unifies an internal operations console (ATLVS), external stakeholder portals (GVTEWAY), and a field-ready mobile PWA (COMPVSS) — proposals, advancing, ticketing, finance, procurement, AI, and more. Built on Next.js, Supabase, and Claude. Free tier available.",
+    "Run production on one platform. Second Star Technologies unifies an internal operations console (ATLVS), external stakeholder portals (GVTEWAY), and a field-ready mobile PWA (COMPVSS) — proposals, advancing, ticketing, finance, procurement, AI, and more. Built on Next.js, Supabase, and Claude. Free tier available.",
   path: "/",
   keywords: [
     "production management software",
@@ -23,6 +23,10 @@ export const metadata: Metadata = buildMetadata({
     "event advancing tool",
     "crew management software",
     "event ticketing platform",
+    "Second Star Technologies",
+    "ATLVS",
+    "GVTEWAY",
+    "COMPVSS",
   ],
   ogImageTitle: "Run production. Not spreadsheets.",
 });
@@ -34,7 +38,7 @@ export default function Home() {
         data={[
           organizationSchema(),
           softwareApplicationSchema({
-            name: "flyingbluewhale",
+            name: "Second Star Technologies",
             description: SITE.description,
             url: SITE.baseUrl,
             price: "0",
@@ -75,7 +79,7 @@ export default function Home() {
               <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]" aria-hidden="true" />
               <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]" aria-hidden="true" />
               <span className="ml-3 font-mono text-xs text-[var(--text-muted)]">
-                flyingbluewhale.app/p/mmw26-hialeah/guide
+                secondstar.tech/p/mmw26-hialeah/guide
               </span>
             </div>
             <iframe
@@ -229,7 +233,7 @@ export default function Home() {
         <div className="surface-raised overflow-hidden">
           <div className="grid gap-10 p-10 md:grid-cols-2 md:items-center">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Why flyingbluewhale</div>
+              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Why Second Star Technologies</div>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight">One Source of Truth Beats Ten SaaS Tools.</h2>
               <p className="mt-4 text-sm text-[var(--text-secondary)]">
                 Most production teams are duct-taping Asana, Monday, a spreadsheet for advancing, DocuSign for
@@ -237,8 +241,8 @@ export default function Home() {
                 proposals that miss line items, POs without COIs, tickets without scans, invoices no one chases.
               </p>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">
-                flyingbluewhale removes the seams. One database, three shells, enforced row-level security per
-                organization, and the right data visible to the right stakeholder at the right time.
+                ATLVS, GVTEWAY, and COMPVSS remove the seams. One database, three shells, enforced row-level security
+                per organization, and the right data visible to the right stakeholder at the right time.
               </p>
               <div className="mt-6 flex gap-2">
                 <Button href="/compare/vs-spreadsheets" variant="secondary" size="sm">vs spreadsheets</Button>
@@ -279,16 +283,16 @@ export default function Home() {
 
 const HOME_FAQ = [
   {
-    q: "What is flyingbluewhale?",
-    a: "flyingbluewhale is a unified production management platform for live events, fabrication, and creative operations teams. It combines an internal operations console (ATLVS), external stakeholder portals (GVTEWAY), and a field-ready mobile PWA (COMPVSS) into a single Postgres-backed system secured by row-level security.",
+    q: "What is Second Star Technologies?",
+    a: "Second Star Technologies is the company behind ATLVS, GVTEWAY, and COMPVSS — a unified production management platform for live events, fabrication, and creative operations teams. ATLVS is the internal operations console, GVTEWAY is the external stakeholder portal, and COMPVSS is the field-ready mobile PWA — all on a single Postgres-backed system secured by row-level security.",
   },
   {
-    q: "Who is flyingbluewhale for?",
-    a: "Production companies, promoters, festivals, fabrication shops, touring operations, and experiential agencies. If your team runs live events or creative builds and works with external stakeholders (artists, vendors, clients, sponsors, guests), flyingbluewhale replaces 5–10 SaaS tools.",
+    q: "Who is the platform for?",
+    a: "Production companies, promoters, festivals, fabrication shops, touring operations, and experiential agencies. If your team runs live events or creative builds and works with external stakeholders (artists, vendors, clients, sponsors, guests), ATLVS, GVTEWAY, and COMPVSS together replace 5–10 SaaS tools.",
   },
   {
-    q: "How is flyingbluewhale different from Asana, Monday, or Airtable?",
-    a: "Those are generic project management tools. flyingbluewhale is domain-specific: native ticket scanning, artist advancing with deliverables, Stripe Connect vendor payouts, signed proposals with per-phase gates, role-scoped event guides (KBYG), and a mobile PWA for field ops. You don't stitch together templates — production workflows are built in.",
+    q: "How is the Second Star Technologies platform different from Asana, Monday, or Airtable?",
+    a: "Those are generic project management tools. The Second Star Technologies platform is domain-specific: native ticket scanning, artist advancing with deliverables, Stripe Connect vendor payouts, signed proposals with per-phase gates, role-scoped event guides (KBYG), and a mobile PWA for field ops. You don't stitch together templates — production workflows are built in.",
   },
   {
     q: "What are ATLVS, GVTEWAY, and COMPVSS?",
@@ -303,7 +307,7 @@ const HOME_FAQ = [
     a: "Yes. Stripe Checkout powers invoice payments and Stripe Connect Express handles vendor payouts. Webhook receiver verifies HMAC-SHA256 signatures; we never rely on unsigned callbacks.",
   },
   {
-    q: "Does flyingbluewhale work offline?",
+    q: "Does the platform work offline?",
     a: "The COMPVSS mobile PWA caches the application shell and check-in flow via a service worker, so crew can work through spotty venue connections. Scans queue locally and sync when the network returns.",
   },
   {
@@ -311,7 +315,7 @@ const HOME_FAQ = [
     a: "Row-level security (RLS) is enforced on every Postgres table via canonical helpers (is_org_member, has_org_role). Every mutation is audit-logged with before/after JSONB. Signed file uploads use 60-second expiring URLs. Stripe webhooks are HMAC-signature verified. CSP, HSTS, CSRF mitigation, and per-API CORS are configured at the edge.",
   },
   {
-    q: "Does flyingbluewhale have an AI assistant?",
+    q: "Does the platform have an AI assistant?",
     a: "Yes. The ATLVS console ships with a streaming Anthropic Claude assistant (Sonnet 4.6 default, Opus 4.7 available) that grounds responses in your workspace. Conversations persist to Postgres for audit. Drafting templates cover proposals, riders, call sheets, and safety briefings.",
   },
   {

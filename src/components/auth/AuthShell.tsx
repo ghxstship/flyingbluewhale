@@ -38,13 +38,13 @@ export function AuthShell({
   /** White-label rail content (driven by orgs.branding for tenant deployments). */
   rail?: AuthRailContent;
 }) {
-  const productName = rail?.productName ?? "flyingbluewhale";
+  const productName = rail?.productName ?? "Second Star Technologies";
   const tagline = rail?.tagline ?? "The unified production platform.";
   const description =
     rail?.description ??
     "One Postgres. One identity. Three shells — internal, external, mobile. Built for the ops teams behind festivals, tours, and corporate activations.";
   const highlights = rail?.highlights ?? DEFAULT_HIGHLIGHTS;
-  const copyright = rail?.copyright ?? `© ${new Date().getFullYear()} GHXSTSHIP`;
+  const copyright = rail?.copyright ?? `© ${new Date().getFullYear()} Second Star Technologies`;
   return (
     <div className="min-h-[calc(100vh-72px)] grid lg:grid-cols-2">
       <aside

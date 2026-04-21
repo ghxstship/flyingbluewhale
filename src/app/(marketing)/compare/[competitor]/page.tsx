@@ -56,7 +56,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Compare · flyingbluewhale vs. {c.competitor}</div>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Compare · Second Star Technologies vs. {c.competitor}</div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
         <div className="surface-raised mt-8 p-5">
@@ -72,7 +72,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
             <thead>
               <tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider text-[var(--text-muted)]">
                 <th className="py-3 pr-4 font-semibold">Feature</th>
-                <th className="py-3 pr-4 text-center font-semibold text-[var(--org-primary)]">flyingbluewhale</th>
+                <th className="py-3 pr-4 text-center font-semibold text-[var(--org-primary)]">Second Star</th>
                 <th className="py-3 pr-4 text-center font-semibold">{c.competitor}</th>
               </tr>
             </thead>
@@ -135,7 +135,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         </div>
       </section>
 
-      <FAQSection title={`flyingbluewhale vs. ${c.competitor} · FAQ`} faqs={c.faqs} />
+      <FAQSection title={`Second Star Technologies vs. ${c.competitor} · FAQ`} faqs={c.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-2xl font-semibold tracking-tight">Other Comparisons</h2>
@@ -150,7 +150,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         </div>
       </section>
 
-      <CTASection title="Try flyingbluewhale" subtitle="Free for Life on the Access tier. Migrate when you're ready." />
+      <CTASection title="Try Second Star Technologies" subtitle="Free for Life on the Access tier. Migrate when you're ready." />
     </div>
   );
 }

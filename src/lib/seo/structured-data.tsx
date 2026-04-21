@@ -47,10 +47,17 @@ export function organization(args: {
   return {
     "@type": "Organization",
     name: args.name,
+    legalName: "Second Star Technologies, Inc.",
     url: args.url,
     ...(args.logo ? { logo: args.logo } : {}),
     ...(args.sameAs && args.sameAs.length ? { sameAs: args.sameAs } : {}),
     ...(args.description ? { description: args.description } : {}),
+    parentOrganization: { "@type": "Organization", name: "GHXSTSHIP Industries" },
+    brand: [
+      { "@type": "Brand", name: "ATLVS" },
+      { "@type": "Brand", name: "GVTEWAY" },
+      { "@type": "Brand", name: "COMPVSS" },
+    ],
   };
 }
 
@@ -72,8 +79,8 @@ export function article(args: {
     ...(args.description ? { description: args.description } : {}),
     url: args.url,
     mainEntityOfPage: args.url,
-    author: { "@type": "Person", name: args.author ?? "flyingbluewhale" },
-    publisher: { "@type": "Organization", name: "flyingbluewhale" },
+    author: { "@type": "Person", name: args.author ?? "Second Star Technologies" },
+    publisher: { "@type": "Organization", name: "Second Star Technologies" },
     datePublished: args.datePublished,
     dateModified: args.dateModified ?? args.datePublished,
     ...(args.image ? { image: args.image } : {}),

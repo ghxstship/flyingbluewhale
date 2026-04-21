@@ -22,22 +22,26 @@ const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400", "5
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
-    default: "flyingbluewhale — Unified Production Platform",
-    template: "%s · flyingbluewhale",
+    default: "Second Star Technologies — ATLVS, GVTEWAY, COMPVSS",
+    template: "%s · Second Star Technologies",
   },
   description:
-    "Internal operations console, external stakeholder portals, and mobile field PWA for live events, fabrication, and creative ops.",
-  keywords: ["production management", "live events", "fabrication", "advancing", "ticketing", "PWA"],
+    "ATLVS, GVTEWAY, and COMPVSS — the unified production suite from Second Star Technologies. Internal operations console, external stakeholder portals, and mobile field PWA for live events, fabrication, and creative ops.",
+  keywords: ["production management", "live events", "fabrication", "advancing", "ticketing", "PWA", "ATLVS", "GVTEWAY", "COMPVSS", "Second Star Technologies"],
   manifest: "/manifest.json",
   openGraph: {
-    title: "flyingbluewhale",
-    description: "Unified production platform.",
-    siteName: "flyingbluewhale",
+    title: "Second Star Technologies",
+    description: "ATLVS, GVTEWAY, and COMPVSS — the unified production suite.",
+    siteName: "Second Star Technologies",
     type: "website",
   },
-  twitter: { card: "summary_large_image", title: "flyingbluewhale", description: "Unified production platform." },
+  twitter: {
+    card: "summary_large_image",
+    title: "Second Star Technologies",
+    description: "ATLVS, GVTEWAY, and COMPVSS — the unified production suite.",
+  },
   robots: { index: true, follow: true },
-  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "flyingbluewhale" },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Second Star" },
 };
 
 export const viewport: Viewport = {
@@ -77,11 +81,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             and inherits across every route. */}
         <StructuredData
           data={organization({
-            name: "flyingbluewhale",
-            url: process.env.NEXT_PUBLIC_APP_URL ?? "https://flyingbluewhale.app",
+            name: "Second Star Technologies",
+            url: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
             description:
-              "Production operations platform — console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
-            logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://flyingbluewhale.app"}/og/logo.png`,
+              "ATLVS, GVTEWAY, and COMPVSS — the unified production suite. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
+            logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech"}/og/logo.png`,
           })}
         />
       </head>

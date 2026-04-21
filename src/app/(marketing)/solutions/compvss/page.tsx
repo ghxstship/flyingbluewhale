@@ -16,7 +16,7 @@ import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "COMPVSS — offline-first mobile PWA for production crew",
   description:
-    "COMPVSS is flyingbluewhale's mobile field kit. Offline ticket scanning with race-safe atomic updates, geo-verified clock-in, inventory scan, incident reports, and the day's call sheet — all on the phone, all fast.",
+    "COMPVSS is the mobile field kit from Second Star Technologies. Offline ticket scanning with race-safe atomic updates, geo-verified clock-in, inventory scan, incident reports, and the day's call sheet — all on the phone, all fast.",
   path: "/solutions/compvss",
   keywords: ["COMPVSS", "event ticket scan PWA", "offline ticket scanning", "production mobile app", "crew mobile app", "event check-in software"],
   ogImageEyebrow: "COMPVSS",

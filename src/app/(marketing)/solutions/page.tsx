@@ -14,7 +14,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Solutions — Three Apps, Eight Industries",
   description:
-    "Explore the three integrated apps that make up flyingbluewhale — ATLVS (internal console), GVTEWAY (external portals), and COMPVSS (mobile PWA) — plus the industries we serve: Live Events, Concerts, Festivals & Tours, Immersive Experiences, Brand Activations, Corporate Events, Theatrical Performances, and Broadcast, TV & Film.",
+    "Explore the three integrated apps from Second Star Technologies — ATLVS (internal console), GVTEWAY (external portals), and COMPVSS (mobile PWA) — plus the industries we serve: Live Events, Concerts, Festivals & Tours, Immersive Experiences, Brand Activations, Corporate Events, Theatrical Performances, and Broadcast, TV & Film.",
   path: "/solutions",
   keywords: [
     "live events software",
@@ -39,8 +39,8 @@ export default function SolutionsIndex() {
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Solutions</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Database. Zero Seams.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          flyingbluewhale is not three SaaS tools glued together. It's three purpose-built shells (internal,
-          external, mobile) over one Postgres database — with row-level security enforcing every boundary.
+          ATLVS, GVTEWAY, and COMPVSS aren't three SaaS tools glued together. They're three purpose-built shells
+          (internal, external, mobile) over one Postgres database — with row-level security enforcing every boundary.
         </p>
       </section>
 

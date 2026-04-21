@@ -20,13 +20,15 @@ export type BlogPost = {
 export const POSTS: Record<string, BlogPost> = {
   launch: {
     slug: "launch",
-    title: "Launching flyingbluewhale: three shells, one database, zero spreadsheets",
+    title: "Launching the suite: three shells, one database, zero spreadsheets",
     date: "2026-04-16",
-    author: "GHXSTSHIP team",
+    author: "Second Star Technologies team",
     blurb:
       "Why we consolidated a decade of production duct tape into a single platform — and the architectural decisions that made it possible.",
     keywords: [
-      "flyingbluewhale launch",
+      "ATLVS launch",
+      "GVTEWAY launch",
+      "COMPVSS launch",
       "event production platform",
       "production operations software",
       "three-shell architecture",
@@ -35,7 +37,7 @@ export const POSTS: Record<string, BlogPost> = {
     readingTime: "8 min read",
     body: [
       { kind: "p", text: "Every production team we've worked with was running the same stack: Asana for tasks, Notion for the wiki, Google Sheets for budgets, DocuSign for proposals, Eventbrite or Ticket Tailor for tickets, a clipboard at the gate, a group text for the crew, and a prayer that nothing fell through the seams. It usually did." },
-      { kind: "p", text: "flyingbluewhale is the consolidation of a decade of that duct tape. Today we're launching the three-shell GA: ATLVS for internal ops, GVTEWAY for external stakeholders, COMPVSS for the field. One database. One identity. One set of RLS rules." },
+      { kind: "p", text: "The Second Star Technologies suite is the consolidation of a decade of that duct tape. Today we're launching the three-shell GA: ATLVS for internal ops, GVTEWAY for external stakeholders, COMPVSS for the field. One database. One identity. One set of RLS rules." },
 
       { kind: "h2", text: "Why three shells, not three apps" },
       { kind: "p", text: "The single biggest architectural decision was to treat ATLVS, GVTEWAY, and COMPVSS as three route groups inside one Next.js app, not three separate deployments. It is one Supabase project, one schema, one auth, one set of policies. The shells differ only in layout, nav, and a data-platform attribute that swaps the accent color and OG image." },
@@ -66,9 +68,9 @@ export const POSTS: Record<string, BlogPost> = {
     slug: "boarding-pass",
     title: "KBYG, role-scoped: the Boarding Pass pattern, now native",
     date: "2026-04-10",
-    author: "GHXSTSHIP team",
+    author: "Second Star Technologies team",
     blurb:
-      "We integrated the Boarding Pass Know-Before-You-Go pattern from Black Coffee's tour into flyingbluewhale. Here's how it works — and why a PDF can't do this.",
+      "We integrated the Boarding Pass Know-Before-You-Go pattern from Black Coffee's tour into the platform. Here's how it works — and why a PDF can't do this.",
     keywords: [
       "boarding pass KBYG",
       "know before you go",
@@ -86,7 +88,7 @@ export const POSTS: Record<string, BlogPost> = {
       { kind: "p", text: "A PDF also can't be updated at 9am on show day when the weather changes the load-in schedule. You can generate a new PDF, rename it, re-upload it to a link — and hope every stakeholder refreshes from the new one. They won't." },
 
       { kind: "h2", text: "One schema, six persona renders" },
-      { kind: "p", text: "An event guide in flyingbluewhale is a single row in event_guides per project × persona. The JSONB config column holds a typed list of sections: overview, schedule, set_times, timeline, credentials, contacts, faq, sops, ppe, radio, resources, evacuation, fire_safety, accessibility, sustainability, code_of_conduct, or custom." },
+      { kind: "p", text: "An event guide is a single row in event_guides per project × persona. The JSONB config column holds a typed list of sections: overview, schedule, set_times, timeline, credentials, contacts, faq, sops, ppe, radio, resources, evacuation, fire_safety, accessibility, sustainability, code_of_conduct, or custom." },
       { kind: "p", text: "In ATLVS CMS, you author one canonical guide. In the portal (GVTEWAY) and mobile (COMPVSS), a single <GuideView> component renders the sections that viewer's persona is entitled to see. A guest sees parking, schedule, FAQ. Crew sees radio channels, SOPs, PPE. Same data, filtered view." },
 
       { kind: "h2", text: "Public guides readable by anon" },
@@ -117,7 +119,7 @@ export const POSTS: Record<string, BlogPost> = {
     slug: "ai-assistant",
     title: "Streaming Claude in the console: the AI assistant, grounded in your workspace",
     date: "2026-04-01",
-    author: "GHXSTSHIP team",
+    author: "Second Star Technologies team",
     blurb:
       "We wired Claude Sonnet 4.6 and Opus 4.7 directly into ATLVS. Streaming responses, persistent history, RLS-scoped tool use.",
     keywords: [

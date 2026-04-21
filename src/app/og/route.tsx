@@ -4,7 +4,7 @@ export const runtime = "edge";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const title = searchParams.get("title") ?? "flyingbluewhale";
+  const title = searchParams.get("title") ?? "Second Star Technologies";
   const eyebrow = searchParams.get("eyebrow") ?? "Production OS";
   const platform = (searchParams.get("platform") ?? "") as "atlvs" | "gvteway" | "compvss" | "";
   const accent =
@@ -54,9 +54,9 @@ export async function GET(req: Request) {
           {title}
         </div>
         <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ fontSize: 28, fontWeight: 700, letterSpacing: "-0.01em" }}>flyingbluewhale</div>
+          <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>Second Star Technologies</div>
           <div style={{ fontSize: 16, color: "#555", fontFamily: "ui-monospace, SFMono-Regular, monospace" }}>
-            flyingbluewhale.app
+            ATLVS · GVTEWAY · COMPVSS
           </div>
         </div>
       </div>

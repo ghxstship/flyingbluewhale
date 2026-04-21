@@ -16,11 +16,11 @@ import {
 export const metadata: Metadata = buildMetadata({
   title: "Features — Console, Portals, Mobile, AI, Finance, Procurement",
   description:
-    "Everything flyingbluewhale ships: the internal console, role-scoped stakeholder portals, offline-first mobile PWA, streaming AI assistant, finance + procurement modules, and compliance tooling.",
+    "Everything the Second Star Technologies platform ships: the internal console (ATLVS), role-scoped stakeholder portals (GVTEWAY), offline-first mobile PWA (COMPVSS), streaming AI assistant, finance + procurement modules, and compliance tooling.",
   path: "/features",
   keywords: ["production software features", "event management platform", "stakeholder portals", "mobile field PWA"],
   ogImageEyebrow: "Features",
-  ogImageTitle: "Everything in flyingbluewhale",
+  ogImageTitle: "Everything in the Second Star Technologies platform",
 });
 
 const CATEGORIES = [
@@ -39,7 +39,7 @@ export default function FeaturesPage() {
     <MarketingPageShell>
       <MarketingHero
         eyebrow="Features"
-        title="Everything in flyingbluewhale"
+        title="Everything in ATLVS, GVTEWAY, and COMPVSS"
         subtitle="Built on Next.js 16 (App Router), Supabase (Postgres + RLS), Stripe Connect, and Anthropic Claude."
       />
       <MarketingSection aria-label="Feature categories">

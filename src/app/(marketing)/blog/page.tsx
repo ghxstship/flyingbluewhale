@@ -11,11 +11,11 @@ import { buildMetadata } from "@/lib/seo";
 import { POST_LIST } from "@/lib/blog";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Blog — updates from the flyingbluewhale team",
+  title: "Blog — updates from the Second Star Technologies team",
   description:
-    "Essays on production operations, platform architecture, and how to run shows with less duct tape. From the GHXSTSHIP team.",
+    "Essays on production operations, platform architecture, and how to run shows with less duct tape. From the Second Star Technologies team.",
   path: "/blog",
-  keywords: ["production blog", "event production software blog", "flyingbluewhale blog"],
+  keywords: ["production blog", "event production software blog", "Second Star Technologies blog"],
   ogImageEyebrow: "Blog",
   ogImageTitle: "Updates from the team.",
 });

@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 
 export const SITE = {
-  name: "flyingbluewhale",
-  domain: "flyingbluewhale.app",
-  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://flyingbluewhale.app",
+  name: "Second Star Technologies",
+  shortName: "Second Star",
+  domain: "secondstar.tech",
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
   tagline: "The operating system for live events, fabrication, and creative ops",
   description:
-    "flyingbluewhale is the unified production platform for live events and fabrication teams — internal operations console (ATLVS), external stakeholder portals (GVTEWAY), and field mobile PWA (COMPVSS) in one Postgres-backed, RLS-secured platform.",
-  twitter: "@flyingbluewhale",
+    "ATLVS, GVTEWAY, and COMPVSS — the unified production suite from Second Star Technologies for live events and fabrication teams. Internal operations console, external stakeholder portals, and a field-ready mobile PWA on one Postgres-backed, RLS-secured platform.",
+  twitter: "@secondstartech",
+  /** Parent company chain — surfaces in Organization JSON-LD + legal footer. */
+  parent: {
+    name: "G H X S T S H I P Industries",
+    nameSearch: "GHXSTSHIP Industries",
+  },
   keywords: [
     "production management platform",
     "event production software",
@@ -101,6 +107,7 @@ export function organizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: SITE.name,
+    legalName: "Second Star Technologies, Inc.",
     url: SITE.baseUrl,
     logo: `${SITE.baseUrl}/icon-512.png`,
     sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],
@@ -110,6 +117,17 @@ export function organizationSchema() {
       email: `support@${SITE.domain}`,
       availableLanguage: "en",
     },
+    // Alphabet/Google-style parent lineage — consumed by Google Knowledge Graph
+    // and mentioned in the marketing footer trademark line.
+    parentOrganization: {
+      "@type": "Organization",
+      name: SITE.parent.nameSearch,
+    },
+    brand: [
+      { "@type": "Brand", name: "ATLVS" },
+      { "@type": "Brand", name: "GVTEWAY" },
+      { "@type": "Brand", name: "COMPVSS" },
+    ],
   };
 }
 

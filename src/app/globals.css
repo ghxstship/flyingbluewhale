@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════
-   flyingbluewhale · design system
+   Second Star Technologies · design system
    Base token architecture adapted from FlyteDeck (redsealion).
    Brand overlay system (ATLVS/COMPVSS/GVTEWAY) via [data-platform].
    ═══════════════════════════════════════════════════════════════════ */
@@ -102,7 +102,7 @@ body {
 
 /* Headings must break long brand/word tokens rather than force a
    horizontal scrollbar at narrow viewports. Audit m1-alt — caught on
-   /features + /customers where "flyingbluewhale" (15ch) overflows the
+   /features + /customers where a long compound brand overflows the
    375px hero at text-5xl. */
 h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;

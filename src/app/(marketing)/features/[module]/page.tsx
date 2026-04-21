@@ -355,7 +355,7 @@ const MODULES: Record<string, ModuleConfig> = {
       "Per-org RLS enforced at the database, structured audit log, retention policies, SSO/SCIM on enterprise tiers.",
     heroTitle: "Built to pass a security review.",
     heroBody:
-      "flyingbluewhale's security posture is not a checklist — it's enforced in code. Every table has RLS. Every mutation writes audit_log. Webhooks are HMAC-verified. File delivery uses signed, expiring URLs. Rate limits protect every auth-adjacent endpoint. SSO/SCIM and SOC-2 certification are available on enterprise.",
+      "The Second Star Technologies platform's security posture is not a checklist — it's enforced in code. Every table has RLS. Every mutation writes audit_log. Webhooks are HMAC-verified. File delivery uses signed, expiring URLs. Rate limits protect every auth-adjacent endpoint. SSO/SCIM and SOC-2 certification are available on enterprise.",
     highlights: [
       { title: "RLS on every table", body: "No exceptions. is_org_member and has_org_role enforced in Postgres, not in application code." },
       { title: "Structured audit_log", body: "jsonb before/after, actor, IP, session — queryable and exportable." },
@@ -561,7 +561,7 @@ export async function generateMetadata({ params }: { params: Promise<{ module: s
   if (!config) {
     return buildMetadata({
       title: "Feature",
-      description: "flyingbluewhale — the unified production management platform.",
+      description: "Second Star Technologies — the unified production management platform.",
       path: `/features/${module}`,
     });
   }
@@ -601,7 +601,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
     <div>
       <JsonLd
         data={[softwareApplicationSchema({
-            name: `flyingbluewhale — ${config.name}`,
+            name: `Second Star Technologies — ${config.name}`,
             description: config.blurb,
             url: `https://flyingbluewhale.app/features/${config.slug}`,
           }),

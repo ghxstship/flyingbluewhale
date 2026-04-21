@@ -6,7 +6,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     eyebrow: "Production proposal",
     title: "Open Air — Hialeah",
     subtitle: "Miami Music Week 2026 · Partnership proposal",
-    partners: ["Black Coffee", "Hialeah Park", "flyingbluewhale"],
+    partners: ["Black Coffee", "Hialeah Park", "Second Star Technologies"],
     narrative: "A turnkey production engagement to deliver Open Air at the Racetrack — 15,000 guests, three stages, and full advancing support.",
     meta: [
       { label: "Document", value: "FBW-2026-001" },
@@ -30,7 +30,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     num: 1,
     name: "Discovery & creative direction",
     tag: "Phase 1",
-    narrative: "Align on the creative brief, venue constraints, and programming. Deliverables shipped via the flyingbluewhale advancing portal.",
+    narrative: "Align on the creative brief, venue constraints, and programming. Deliverables shipped via the GVTEWAY advancing portal.",
     core: [
       { name: "Creative direction workshop", desc: "Two-day workshop, 6 stakeholders", price: { cents: 800000 } },
       { name: "Site walkthrough & venue docs", desc: "Photo survey, dims, power map", price: { cents: 400000 } },
@@ -74,7 +74,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     num: 3,
     name: "Show week & wrap",
     tag: "Phase 3",
-    narrative: "Run-of-show execution, real-time comms via flyingbluewhale mobile, post-show reconciliation.",
+    narrative: "Run-of-show execution, real-time comms via the COMPVSS mobile PWA, post-show reconciliation.",
     core: [
       { name: "Show-week production", desc: "Load-in through curfew", price: { cents: 5200000 } },
       { name: "Guest check-in & ticketing", desc: "Mobile PWA, geo-verified crew clock", price: { cents: 400000 } },
@@ -138,7 +138,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     type: "payment_method",
     method: "ach",
     details: {
-      "Beneficiary": "flyingbluewhale Inc.",
+      "Beneficiary": "Second Star Technologies Inc.",
       "Bank": "Mercury",
       "Routing (ACH)": "084106768",
       "Account": "wire on request",
@@ -196,7 +196,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     type: "signature_block",
     parties: [
       { role: "Client", name: "— to be completed —" },
-      { role: "Producer", name: "flyingbluewhale Inc.", email: "producer@flyingbluewhale.app" },
+      { role: "Producer", name: "Second Star Technologies Inc.", email: "producer@flyingbluewhale.app" },
     ],
     instructions: "Sign below to accept this engagement. An e-sign receipt with reference hash is emailed on completion.",
   },

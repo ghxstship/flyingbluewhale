@@ -336,7 +336,7 @@ export function PdfDocument({
   children: React.ReactNode;
 }) {
   return (
-    <Document title={title} author={author} subject={subject ?? title} creator="flyingbluewhale" producer="flyingbluewhale">
+    <Document title={title} author={author} subject={subject ?? title} creator="Second Star Technologies" producer="Second Star Technologies">
       {children}
     </Document>
   );

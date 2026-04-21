@@ -39,10 +39,11 @@ export function MarketingHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link
           href="/"
-          className="text-base font-semibold tracking-tight text-[var(--foreground)]"
+          className="text-base font-semibold tracking-[0.14em] uppercase text-[var(--foreground)]"
           onClick={() => setMobileOpen(false)}
+          aria-label="Second Star Technologies — home"
         >
-          flyingbluewhale
+          Second Star
         </Link>
 
         {/* Desktop primary nav — gated at `lg` because 7 items + a 5-control

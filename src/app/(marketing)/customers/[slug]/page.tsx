@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CheckCircle2, Quote } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Badge } from "@/components/ui/Badge";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, articleSchema } from "@/lib/seo";
@@ -109,9 +110,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
           <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Modules used</div>
           <div className="mt-4 flex flex-wrap gap-2">
             {c.modules.map((m) => (
-              <span key={m} className="rounded-full bg-[var(--org-primary)]/10 px-3 py-1 text-xs text-[var(--org-primary)]">
-                {m}
-              </span>
+              <Badge key={m} variant="brand-soft">{m}</Badge>
             ))}
           </div>
         </div>

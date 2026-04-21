@@ -122,6 +122,34 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
+  it("no hand-rolled brand-tinted tag pills (use <Badge variant=\"brand-soft\">)", () => {
+    const ALLOW = new Set<string>([
+      "src/components/ui/Badge.tsx",
+      // Icon backgrounds, not tag pills (h-9 w-9 rounded-full container)
+      "src/app/(marketing)/contact/page.tsx",
+      "src/app/(marketing)/about/page.tsx",
+      // Changelog editorial category palette
+      "src/app/(marketing)/changelog/page.tsx",
+      // Proposal progress segmented control
+      "src/app/proposals/[token]/ProposalTopBar.tsx",
+      // Self-reference
+      "src/app/design-system.test.ts",
+    ]);
+    const offenders: string[] = [];
+    for (const file of ALL_FILES) {
+      const rel = relative(REPO_ROOT, file);
+      if (ALLOW.has(rel)) continue;
+      const txt = readFileSync(file, "utf8");
+      if (/bg-\[var\(--org-primary\)\]\/10[^"]*text-\[var\(--org-primary\)\]/.test(txt)) {
+        offenders.push(rel);
+      }
+    }
+    expect(
+      offenders,
+      `Hand-rolled brand-tinted pills — use <Badge variant="brand-soft">: ${offenders.join(", ")}`,
+    ).toEqual([]);
+  });
+
   it("no `[data-theme=\"dark\"]` CSS selectors (dead — should be `[data-mode=\"dark\"]`)", () => {
     const css = readFileSync(join(REPO_ROOT, "src/app/globals.css"), "utf8");
     const offenders = css.split("\n").filter((l) => /\[data-theme="dark"\]/.test(l));

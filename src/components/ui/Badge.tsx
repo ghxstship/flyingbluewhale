@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 
 export type BadgeVariant =
   | "default" | "success" | "warning" | "error" | "info"
-  | "brand" | "muted" | "cyan" | "purple";
+  | "brand" | "brand-soft" | "muted" | "cyan" | "purple";
 
 export type BadgeShape = "default" | "dot" | "count";
 
@@ -16,6 +16,7 @@ const VARIANT: Record<BadgeVariant, string> = {
   error:   "badge-error",
   info:    "badge-info",
   brand:   "badge-brand",
+  "brand-soft": "badge-brand-soft",
   muted:   "badge-muted",
   cyan:    "badge-info",
   purple:  "badge-brand",
@@ -28,6 +29,7 @@ const DOT_BG: Record<BadgeVariant, string> = {
   error:   "bg-[var(--color-error)]",
   info:    "bg-[var(--org-primary)]",
   brand:   "bg-[var(--org-primary)]",
+  "brand-soft": "bg-[var(--org-primary)]",
   muted:   "bg-[var(--text-muted)]",
   cyan:    "bg-[var(--org-primary)]",
   purple:  "bg-[var(--org-primary)]",

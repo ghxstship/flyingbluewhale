@@ -398,6 +398,7 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
 .badge-muted   { background: var(--bg-secondary); color: var(--text-muted); }
 .badge-default { background: var(--bg-secondary); color: var(--text-secondary); }
 .badge-brand   { background: var(--org-primary); color: var(--org-on-primary, #fff); }
+.badge-brand-soft { background: color-mix(in srgb, var(--org-primary) 10%, transparent); color: var(--org-primary); }
 
 /* ───── Navigation ───── */
 

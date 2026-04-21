@@ -94,9 +94,18 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               </div>
             ))}
           </div>
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
-            <span>© {new Date().getFullYear()} GHXSTSHIP · flyingbluewhale</span>
-            <span>Built for production teams who are tired of duct tape.</span>
+          <div className="mt-12 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <span>© {new Date().getFullYear()} flyingbluewhale</span>
+              <span>Built for production teams who are tired of duct tape.</span>
+            </div>
+            <div className="mt-3 text-[11px] leading-relaxed">
+              flyingbluewhale is a Second Star Technologies product · A{" "}
+              <span className="font-medium tracking-[0.18em] text-[var(--text-secondary)]">
+                G H X S T S H I P
+              </span>{" "}
+              Industries Company.
+            </div>
           </div>
         </div>
       </footer>

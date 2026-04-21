@@ -24,7 +24,11 @@ export default async function PlatformLayout({ children }: { children: React.Rea
            * notifications bell, theme toggle.
            */}
           <header className="glass-nav sticky top-0 z-30 flex items-center justify-between px-6 py-2.5">
-            <div className="flex-1" />
+            <div className="flex flex-1 items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--text-muted)]">
+              <span className="text-[var(--org-primary)]">ATLVS</span>
+              <span aria-hidden className="text-[var(--text-muted)]">·</span>
+              <span className="hidden sm:inline">Operations Console</span>
+            </div>
             <div className="flex items-center gap-2">
               <CommandPaletteTrigger />
               <NotificationsBell />

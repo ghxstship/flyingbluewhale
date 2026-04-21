@@ -230,6 +230,19 @@ export function PlatformSidebar({
             </div>
           )}
         </nav>
+
+        {/* Sidebar footer — surfaces the shell brand + parent attribution
+            so every authenticated page in the console reminds the operator
+            which app they're inside, plus who builds it. */}
+        {!collapsed && (
+          <div className="border-t border-[var(--border-color)] px-3 py-3 text-[10px] leading-relaxed text-[var(--text-muted)]">
+            <div className="flex items-center gap-1 font-semibold uppercase tracking-[0.28em] text-[var(--org-primary)]">
+              ATLVS
+            </div>
+            <div className="mt-1.5">A Second Star Technologies product</div>
+            <div className="opacity-80">A G H X S T S H I P Industries Company</div>
+          </div>
+        )}
       </div>
 
       {/* Resize handle */}

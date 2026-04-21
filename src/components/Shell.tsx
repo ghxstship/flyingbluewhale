@@ -22,7 +22,10 @@ export { PlatformSidebar } from "./PlatformSidebar";
 
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {
   return (
-    <aside className="w-56 shrink-0 border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
+    <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
+      <div className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--org-primary)]">
+        GVTEWAY
+      </div>
       <div className="nav-label">{title}</div>
       <ul className="mt-0.5 space-y-0.5">
         {items.map((i) => {
@@ -42,6 +45,10 @@ export function PortalRail({ items, title, currentPath }: { items: NavItem[]; ti
           );
         })}
       </ul>
+      <div className="mt-auto pt-4 text-[10px] leading-relaxed text-[var(--text-muted)]">
+        <div>A Second Star Technologies product</div>
+        <div className="opacity-80">A G H X S T S H I P Industries Company</div>
+      </div>
     </aside>
   );
 }

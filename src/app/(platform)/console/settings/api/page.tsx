@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function ApiSettingsPage() {
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="API" subtitle="Programmatic access to flyingbluewhale" />
+      <ModuleHeader eyebrow="Settings" title="API" subtitle="Programmatic access to ATLVS" />
       <div className="page-content space-y-4 max-w-3xl">
         <div className="surface p-5">
           <h3 className="text-sm font-semibold">Base URL</h3>

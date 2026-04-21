@@ -25,10 +25,8 @@ export default function MobileSettings() {
         <form action="/auth/signout" method="post">
           <button type="submit" className="btn btn-ghost w-full">Sign out</button>
         </form>
-        <div className="text-center text-[10px] leading-relaxed text-[var(--text-muted)]">
+        <div className="text-center text-[10px] text-[var(--text-muted)]">
           <Link href="/" className="font-medium text-[var(--text-muted)]">COMPVSS · v0.1</Link>
-          <div className="mt-1">A Second Star Technologies product</div>
-          <div className="opacity-80">A G H X S T S H I P Industries Company</div>
         </div>
       </div>
     </div>

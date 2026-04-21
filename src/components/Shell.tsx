@@ -45,10 +45,6 @@ export function PortalRail({ items, title, currentPath }: { items: NavItem[]; ti
           );
         })}
       </ul>
-      <div className="mt-auto pt-4 text-[10px] leading-relaxed text-[var(--text-muted)]">
-        <div>A Second Star Technologies product</div>
-        <div className="opacity-80">A G H X S T S H I P Industries Company</div>
-      </div>
     </aside>
   );
 }

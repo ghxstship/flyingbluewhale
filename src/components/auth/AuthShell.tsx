@@ -51,12 +51,18 @@ export function AuthShell({
         aria-label={`About ${productName}`}
         className="hidden lg:flex flex-col justify-between bg-[var(--surface-inset)] p-12"
       >
-        <Link href="/" className="inline-flex items-center gap-2 text-base font-semibold tracking-tight">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-base font-semibold tracking-tight"
+          aria-label={productName}
+        >
           {rail?.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={rail.logoUrl} alt="" className="h-6 w-auto" />
           ) : null}
-          <span>{productName}</span>
+          <span className={rail?.productName ? "" : "tracking-[0.14em] uppercase"}>
+            {rail?.productName ?? "SECOND STVR"}
+          </span>
         </Link>
         <div>
           <h2 className="text-3xl font-semibold tracking-tight">{tagline}</h2>

@@ -43,7 +43,7 @@ export function MarketingHeader() {
           onClick={() => setMobileOpen(false)}
           aria-label="Second Star Technologies — home"
         >
-          Second Star
+          SECOND STVR
         </Link>
 
         {/* Desktop primary nav — gated at `lg` because 7 items + a 5-control

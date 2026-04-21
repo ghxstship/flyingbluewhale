@@ -73,7 +73,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 className="text-base font-semibold tracking-[0.18em] uppercase"
                 aria-label="Second Star Technologies — home"
               >
-                Second Star
+                SECOND STVR
               </Link>
               <p className="mt-3 text-xs text-[var(--text-muted)]">
                 The unified production platform — ATLVS, GVTEWAY, COMPVSS. One schema. Three shells.

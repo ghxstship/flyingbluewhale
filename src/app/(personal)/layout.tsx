@@ -16,7 +16,9 @@ const tabs = [
 
 export default async function PersonalLayout({ children }: { children: React.ReactNode }) {
   const tenant = await resolveTenant();
-  const brandName = tenant.branding.productName ?? tenant.orgName ?? "Second Star Technologies";
+  const brandName = tenant.branding.productName ?? tenant.orgName ?? "SECOND STVR";
+  const brandAria = tenant.branding.productName ?? tenant.orgName ?? "Second Star Technologies";
+  const isDefaultBrand = !tenant.branding.productName && !tenant.orgName;
   return (
     <TenantShell tenant={tenant}>
       <div className="page-shell">
@@ -25,12 +27,15 @@ export default async function PersonalLayout({ children }: { children: React.Rea
             <Link
               href="/"
               className="inline-flex items-center gap-2 text-sm font-semibold tracking-tight text-[var(--foreground)]"
+              aria-label={brandAria}
             >
               {tenant.branding.logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={tenant.branding.logoUrl} alt="" className="h-5 w-auto" />
               ) : null}
-              <span>{brandName}</span>
+              <span className={isDefaultBrand ? "tracking-[0.14em] uppercase" : ""}>
+                {brandName}
+              </span>
             </Link>
             <ThemeToggle />
           </div>

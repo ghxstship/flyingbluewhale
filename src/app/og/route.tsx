@@ -54,7 +54,7 @@ export async function GET(req: Request) {
           {title}
         </div>
         <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>Second Star Technologies</div>
+          <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>SECOND STVR TECHNOLOGIES</div>
           <div style={{ fontSize: 16, color: "#555", fontFamily: "ui-monospace, SFMono-Regular, monospace" }}>
             ATLVS · GVTEWAY · COMPVSS
           </div>

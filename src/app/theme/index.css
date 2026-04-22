@@ -15,8 +15,15 @@
 @import "./themes/earthy.css";
 
 /* Default theme when no [data-theme] attribute is present.
-   Mirrors the kinetic registry so pre-FOUC paint is sane. */
-:root {
+ * Mirrors the kinetic registry so pre-FOUC paint is sane.
+ *
+ * Scoped to :not([data-theme]) so it ONLY applies when no theme is active.
+ * Without the :not(), this block — which lives AFTER the theme @imports —
+ * ties each theme's `:root` / `[data-theme]` selector on specificity and
+ * wins on cascade order, silently overriding every non-kinetic theme's
+ * tokens. Caught during auth-flow QA on the cyber theme where white
+ * OAuth buttons were unreadable. */
+:root:not([data-theme]) {
   --bg: #fafaf7;
   --surface: #ffffff;
   --surface-2: #f3f1ea;

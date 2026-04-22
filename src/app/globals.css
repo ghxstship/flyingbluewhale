@@ -247,39 +247,42 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
 
 /* ───── Elevation ───── */
 
-.elevation-0 { box-shadow: none; }
-.elevation-1 { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04); }
-.elevation-2 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04); }
-.elevation-3 { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04); }
-.elevation-4 { box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10), 0 4px 12px rgba(0, 0, 0, 0.05); }
-.elevation-float { box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.06); }
-
-[data-mode="dark"] .elevation-1 { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04); }
-[data-mode="dark"] .elevation-2 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04); }
-[data-mode="dark"] .elevation-3 { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04); }
-[data-mode="dark"] .elevation-4 { box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04); }
-[data-mode="dark"] .elevation-float { box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06); }
+/* Elevation scale — every level uses the active theme's `--shadow-elev` /
+ * `--shadow-elev-hover` tokens so brutal's offset 6px 6px 0 #000 reads
+ * correctly, cyber's neon glow reads correctly, and soft's spring shadow
+ * reads correctly. `data-mode="dark"` overrides removed: each CHROMA
+ * theme already owns its dark/light shadow. */
+.elevation-0     { box-shadow: none; }
+.elevation-1     { box-shadow: var(--shadow-elev); }
+.elevation-2     { box-shadow: var(--shadow-elev); }
+.elevation-3     { box-shadow: var(--shadow-elev-hover); }
+.elevation-4     { box-shadow: var(--shadow-elev-hover); }
+.elevation-float { box-shadow: var(--shadow-elev-hover); }
 
 /* ───── Glass ───── */
 
+/* Glass surfaces — render a translucent layer of the theme's own bg with
+ * the theme's own blur (`--glass-blur`). Hardcoded `rgba(255,255,255,...)`
+ * was the cause of the sticky header looking identical in every theme;
+ * each theme's accent + density should come through here. */
 .glass {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: color-mix(in oklab, var(--background) 65%, transparent);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--border-width) solid var(--border-color);
 }
-[data-mode="dark"] .glass { background: rgba(23, 23, 23, 0.7); border: 1px solid rgba(255, 255, 255, 0.06); }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px) saturate(1.5); -webkit-backdrop-filter: blur(12px) saturate(1.5);
-  border-bottom: 1px solid var(--border-color);
+  background: color-mix(in oklab, var(--background) 82%, transparent);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: var(--border-width) solid var(--border-color);
 }
-[data-mode="dark"] .glass-nav { background: rgba(10, 10, 10, 0.85); }
 
 /* ───── Interactive states ───── */
 
-.hover-lift { transition: transform 200ms var(--transition-timing-function-ease-out), box-shadow 200ms var(--transition-timing-function-ease-out); }
-.hover-lift:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04); }
+.hover-lift { transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out); }
+.hover-lift:hover { transform: translateY(-2px); box-shadow: var(--shadow-elev-hover); }
 .hover-lift:active { transform: translateY(0); }
 
 .press-scale { transition: transform 100ms var(--transition-timing-function-ease-default); }
@@ -287,35 +290,36 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
 
 /* ───── Surfaces ───── */
 
+/* Surface primitives — all three read the active theme's radius + border
+ * width + shadow. Previously hardcoded 0.75rem radius / 1px border / a
+ * static rgba shadow, which meant brutal's sharp corners, brutal's 3px
+ * border, and cyber's neon glow NEVER rendered on any surface primitive.
+ * `data-mode="dark"` override removed: themes own their shadows. */
 .surface {
   background: var(--background);
-  border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-md);
 }
 
 .surface-raised {
   background: var(--background);
-  border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elev);
 }
 
 .surface-inset {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-}
-
-[data-mode="dark"] .surface-raised {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background: var(--surface-inset);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-sm);
 }
 
 /* ───── Form input base ───── */
 
 .input-base {
   width: 100%;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  border: var(--border-width) solid var(--border-color);
   background-color: var(--background);
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
@@ -332,11 +336,11 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
   font-size: 0.875rem; font-weight: 500;
   transition: background-color 150ms, border-color 150ms, transform 100ms, box-shadow 150ms;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: var(--border-width) solid transparent;
   white-space: nowrap;
 }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }

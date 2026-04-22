@@ -9,7 +9,7 @@ const ProviderSchema = z.enum(["google", "github", "azure"]);
 const NextSchema = z
   .string()
   .regex(/^\/(?!\/)[\w\-./?&=%#]{0,512}$/, "must be a same-origin path")
-  .default("/me");
+  .default("/auth/resolve");
 
 /**
  * Initiates Supabase OAuth — redirects to provider, then back to /auth/callback.
@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
   }
   const provider = providerParsed.data;
 
-  const nextParsed = NextSchema.safeParse(url.searchParams.get("next") ?? "/me");
-  const next = nextParsed.success ? nextParsed.data : "/me";
+  const nextParsed = NextSchema.safeParse(url.searchParams.get("next") ?? "/auth/resolve");
+  const next = nextParsed.success ? nextParsed.data : "/auth/resolve";
 
   const supabase = await createClient();
   const redirectTo = new URL(`/auth/callback?next=${encodeURIComponent(next)}`, url).toString();

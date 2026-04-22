@@ -1,6 +1,7 @@
 import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
 import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
+import { FooterUtility } from "@/components/marketing/FooterUtility";
 
 const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: string }> }> = [
   {
@@ -76,7 +77,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 SECOND STVR
               </Link>
               <p className="mt-3 text-xs text-[var(--text-muted)]">
-                The unified production platform — ATLVS, GVTEWAY, COMPVSS. One schema. Three shells.
+                ATLVS, GVTEWAY, and COMPVSS — three connected apps for production teams.
               </p>
               <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
                 <a href="https://twitter.com/secondstartech" target="_blank" rel="noreferrer" className="hover:text-[var(--text-primary)]">Twitter</a>
@@ -103,7 +104,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           <div className="mt-12 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span>© {new Date().getFullYear()} Second Star Technologies</span>
-              <span>Built for production teams who are tired of duct tape.</span>
+              <FooterUtility />
             </div>
             <div className="mt-3 text-[11px] leading-relaxed">
               ATLVS, GVTEWAY, and COMPVSS are registered trademarks of Second Star

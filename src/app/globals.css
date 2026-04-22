@@ -65,23 +65,14 @@
   --sidebar-width: 16rem;
 }
 
-/* Dark-mode fallback for themes without their own dark palette. CHROMA
-   themes (glass, cyber) declare `color-scheme: dark` and their own
-   background/foreground tokens; light-family themes (kinetic, bento,
-   brutal, copilot, earthy, soft) adopt this block when `data-mode="dark"`
-   is applied to <html>. Previously keyed on the dead `[data-mode="dark"]`
-   attribute, which no CHROMA theme ever sets. (UI audit m4.) */
-[data-mode="dark"]:not([data-theme="glass"]):not([data-theme="cyber"]) {
-  --background: #0A0A0A;
-  --foreground: #FAFAFA;
-  --bg-secondary: #171717;
-  --bg-tertiary: #262626;
-  --text-color: #FAFAFA;
-  --text-secondary: #C8C8C8;
-  --text-muted: #A3A3A3;
-  --border-color: #2E2E2E;
-  color-scheme: dark;
-}
+/* Removed: the legacy `[data-mode="dark"]` fallback that overrode every
+ * CHROMA theme's `--background` with a generic black. CHROMA BEACON's
+ * design intent is that each theme ships its own canonical palette —
+ * brutal is always cream, bento is always pale grey, soft is always
+ * gradient pink. Dark mode = pick `cyber` or `glass`; light mode = pick
+ * any of the six light-family themes. The Sun/Monitor/Moon toggle in
+ * the header is a preset picker (Sun → kinetic, Moon → cyber, Monitor
+ * → system), not an orthogonal mode override. */
 
 /* ═════ Brand overlays per shell ═════
    Moved to src/app/theme/index.css AFTER the CHROMA theme imports so

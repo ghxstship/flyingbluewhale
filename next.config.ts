@@ -43,6 +43,11 @@ const config: NextConfig = {
       { source: "/solutions/touring", destination: "/solutions/festivals-tours", permanent: true },
       { source: "/solutions/corporate", destination: "/solutions/corporate-events", permanent: true },
       { source: "/solutions/fabrication", destination: "/solutions/immersive-experiences", permanent: true },
+      // Customers → Community rename (2026-04-21). Positioning shift from
+      // "case studies about our customers" to "the production community
+      // building on ATLVS, GVTEWAY, and COMPVSS".
+      { source: "/customers", destination: "/community", permanent: true },
+      { source: "/customers/:slug", destination: "/community/:slug", permanent: true },
     ];
   },
 

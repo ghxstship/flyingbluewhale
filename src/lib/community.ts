@@ -15,7 +15,7 @@ export type CaseStudy = {
   keywords: string[];
 };
 
-export const CUSTOMERS: Record<string, CaseStudy> = {
+export const COMMUNITY: Record<string, CaseStudy> = {
   "black-coffee-mmw26": {
     slug: "black-coffee-mmw26",
     name: "Black Coffee · Miami Music Week 2026",
@@ -131,4 +131,4 @@ export const CUSTOMERS: Record<string, CaseStudy> = {
   },
 };
 
-export const CUSTOMER_LIST = Object.values(CUSTOMERS);
+export const COMMUNITY_LIST = Object.values(COMMUNITY);

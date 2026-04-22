@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { POST_LIST } from "@/lib/blog";
-import { CUSTOMER_LIST } from "@/lib/customers";
+import { COMMUNITY_LIST } from "@/lib/community";
 import { COMPARE_LIST } from "@/lib/compare";
 import { MARKETING_GUIDE_LIST } from "@/lib/marketing-guides";
 
@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/solutions", priority: 0.9, changeFrequency: "monthly" },
     { path: "/features", priority: 0.8, changeFrequency: "monthly" },
     { path: "/compare", priority: 0.85, changeFrequency: "monthly" },
-    { path: "/customers", priority: 0.85, changeFrequency: "monthly" },
+    { path: "/community", priority: 0.85, changeFrequency: "monthly" },
     { path: "/blog", priority: 0.8, changeFrequency: "weekly" },
     { path: "/guides", priority: 0.85, changeFrequency: "monthly" },
     { path: "/about", priority: 0.7, changeFrequency: "monthly" },
@@ -41,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...INDUSTRY_SLUGS.map((s) => ({ path: `/solutions/${s}`, priority: 0.85, changeFrequency: "monthly" as const })),
     ...FEATURE_SLUGS.map((s) => ({ path: `/features/${s}`, priority: 0.8, changeFrequency: "monthly" as const })),
     ...POST_LIST.map((p) => ({ path: `/blog/${p.slug}`, priority: 0.7, changeFrequency: "monthly" as const })),
-    ...CUSTOMER_LIST.map((c) => ({ path: `/customers/${c.slug}`, priority: 0.75, changeFrequency: "monthly" as const })),
+    ...COMMUNITY_LIST.map((c) => ({ path: `/community/${c.slug}`, priority: 0.75, changeFrequency: "monthly" as const })),
     ...COMPARE_LIST.map((c) => ({ path: `/compare/${c.slug}`, priority: 0.85, changeFrequency: "monthly" as const })),
     ...MARKETING_GUIDE_LIST.map((g) => ({ path: `/guides/${g.slug}`, priority: 0.8, changeFrequency: "monthly" as const })),
   ];

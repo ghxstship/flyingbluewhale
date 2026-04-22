@@ -66,7 +66,15 @@
   --text-color:     var(--text);
   --text-secondary: var(--text-muted);
   --border-color:   var(--border);
-  --surface-inset:  var(--surface-2);
+  /* `--surface-inset` means "subtle recessed bg" — one tiny step off the
+   * page background. Previously aliased to `--surface-2`, which is each
+   * theme's prominent *accent* surface (brutal `#ffde3a`, bento black,
+   * etc.). That made the footer, embedded previews, and inset panels pick
+   * up the theme accent color — producing, e.g., a neon-yellow footer on
+   * brutal. A proper inset tracks the page bg with a small color-mix
+   * shift that stays subtle in every theme. Themes can still override
+   * this with an explicit `--surface-inset: …` if they want a custom feel. */
+  --surface-inset:  color-mix(in oklab, var(--bg) 92%, var(--text) 8%);
   --surface-raised: var(--surface);
   --org-primary:    var(--accent);
   --org-accent:     var(--accent);

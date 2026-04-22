@@ -1,3 +1,7 @@
+// Home page is fully static. Pin it so Next.js serves pre-rendered HTML
+// without a Suspense boundary on client-side nav — no loading flash.
+export const dynamic = "force-static";
+
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Zap, Users, Sparkles, FileSignature, QrCode, DollarSign, ClipboardCheck, Globe } from "lucide-react";
 import type { Metadata } from "next";

@@ -32,7 +32,7 @@ const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: s
   {
     heading: "Resources",
     items: [
-      { label: "Customers", href: "/customers" },
+      { label: "Community", href: "/community" },
       { label: "Compare", href: "/compare" },
       { label: "Guides", href: "/guides" },
       { label: "Blog", href: "/blog" },

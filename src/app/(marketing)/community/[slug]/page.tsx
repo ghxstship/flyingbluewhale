@@ -7,20 +7,20 @@ import { Badge } from "@/components/ui/Badge";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, articleSchema } from "@/lib/seo";
-import { CUSTOMERS, CUSTOMER_LIST } from "@/lib/customers";
+import { COMMUNITY, COMMUNITY_LIST } from "@/lib/community";
 
 export function generateStaticParams() {
-  return CUSTOMER_LIST.map((c) => ({ slug: c.slug }));
+  return COMMUNITY_LIST.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const c = CUSTOMERS[slug];
-  if (!c) return buildMetadata({ title: "Case study", description: "", path: `/customers/${slug}` });
+  const c = COMMUNITY[slug];
+  if (!c) return buildMetadata({ title: "Case study", description: "", path: `/community/${slug}` });
   return buildMetadata({
     title: `${c.name} — ${c.headline}`,
     description: c.blurb,
-    path: `/customers/${c.slug}`,
+    path: `/community/${c.slug}`,
     keywords: c.keywords,
     ogImageEyebrow: "Case study",
     ogImageTitle: c.name,
@@ -29,13 +29,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function CaseStudy({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const c = CUSTOMERS[slug];
+  const c = COMMUNITY[slug];
   if (!c) notFound();
 
   const crumbs = [
     { label: "Home", href: "/" },
-    { label: "Customers", href: "/customers" },
-    { label: c.name, href: `/customers/${c.slug}` },
+    { label: "Community", href: "/community" },
+    { label: c.name, href: `/community/${c.slug}` },
   ];
 
   return (
@@ -45,7 +45,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             headline: c.headline,
             description: c.blurb,
             datePublished: "2026-01-01",
-            url: `https://flyingbluewhale.app/customers/${c.slug}`,
+            url: `https://flyingbluewhale.app/community/${c.slug}`,
           }),
         ]}
       />
@@ -118,12 +118,12 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">Other Case Studies</h2>
-          <Link href="/customers" className="text-sm text-[var(--org-primary)]">All customers →</Link>
+          <h2 className="text-2xl font-semibold tracking-tight">More from the community</h2>
+          <Link href="/community" className="text-sm text-[var(--org-primary)]">See all →</Link>
         </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {CUSTOMER_LIST.filter((x) => x.slug !== c.slug).map((x) => (
-            <Link key={x.slug} href={`/customers/${x.slug}`} className="surface-raised hover-lift p-5">
+          {COMMUNITY_LIST.filter((x) => x.slug !== c.slug).map((x) => (
+            <Link key={x.slug} href={`/community/${x.slug}`} className="surface-raised hover-lift p-5">
               <div className="text-sm font-semibold">{x.name}</div>
               <div className="mt-1 text-xs text-[var(--text-muted)]">{x.blurb}</div>
             </Link>

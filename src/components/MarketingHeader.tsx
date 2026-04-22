@@ -114,7 +114,7 @@ export function MarketingHeader() {
           <NavDropdown group={PRODUCT} />
           <NavDropdown group={INDUSTRIES} />
           <Link href="/pricing" className="nav-item">Pricing</Link>
-          <Link href="/customers" className="nav-item">Customers</Link>
+          <Link href="/community" className="nav-item">Community</Link>
           <NavDropdown group={RESOURCES} />
         </nav>
 
@@ -162,11 +162,11 @@ export function MarketingHeader() {
                 Pricing
               </Link>
               <Link
-                href="/customers"
+                href="/community"
                 className="nav-item text-base"
                 onClick={() => setMobileOpen(false)}
               >
-                Customers
+                Community
               </Link>
             </nav>
             <MobileNavSection group={RESOURCES} onClick={() => setMobileOpen(false)} />

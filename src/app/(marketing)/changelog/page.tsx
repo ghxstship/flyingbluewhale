@@ -1,3 +1,6 @@
+// Static page — pre-render at build, no streaming Suspense on client nav.
+export const dynamic = "force-static";
+
 import type { Metadata } from "next";
 import { Sparkles, Wrench, ShieldCheck, Zap } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";

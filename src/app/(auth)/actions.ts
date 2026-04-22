@@ -60,10 +60,12 @@ export async function signupAction(_: FormState, formData: FormData): Promise<Fo
   }
 
   const supabase = await createClient();
+  const origin = process.env.NEXT_PUBLIC_APP_URL ?? "";
+  const emailRedirectTo = `${origin}/auth/callback?next=${encodeURIComponent("/auth/resolve")}`;
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
-    options: { data: { name: parsed.data.name } },
+    options: { data: { name: parsed.data.name }, emailRedirectTo },
   });
   if (error) {
     // Duplicate email — surface as field error
@@ -77,7 +79,33 @@ export async function signupAction(_: FormState, formData: FormData): Promise<Fo
   }
   if (!data.user) return { error: "Signup failed — no user returned." };
 
+  // Email confirmation required — Supabase returns no session until the user
+  // clicks the link. Route to /verify-email so they aren't dumped on a
+  // useless /auth/resolve that would just bounce them to /login.
+  if (!data.session) {
+    redirect(`/verify-email?email=${encodeURIComponent(parsed.data.email)}`);
+  }
+
   redirect("/auth/resolve");
+}
+
+export async function resendVerificationAction(_: FormState, formData: FormData): Promise<FormState> {
+  if (!hasSupabase) return { error: "Supabase not configured." };
+  const parsed = EmailOnlySchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return { fieldErrors: zodToFieldErrors(parsed.error.issues) };
+  }
+
+  const origin = process.env.NEXT_PUBLIC_APP_URL ?? "";
+  const emailRedirectTo = `${origin}/auth/callback?next=${encodeURIComponent("/auth/resolve")}`;
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email: parsed.data.email,
+    options: { emailRedirectTo },
+  });
+  if (error) return { error: error.message };
+  return { ok: true };
 }
 
 export async function logoutAction() {
@@ -85,6 +113,70 @@ export async function logoutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/");
+}
+
+const AcceptInviteSchema = z.object({
+  token: z.string().min(8).max(128),
+});
+
+export async function acceptInviteAction(_: FormState, formData: FormData): Promise<FormState> {
+  if (!hasSupabase) return { error: "Supabase not configured." };
+  const parsed = AcceptInviteSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { error: "Invalid invite token" };
+  const { token } = parsed.data;
+
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData.user;
+  if (!user) {
+    // Bounce through /login (or /signup) preserving the invite target so the
+    // user lands back here after auth. The server action forces a server
+    // redirect — NextResponse-style — so the client form sees a native nav.
+    redirect(`/login?next=${encodeURIComponent(`/accept-invite/${token}`)}`);
+  }
+
+  // RLS allows recipient to select a pending, unexpired invite whose email
+  // matches auth.users.email. If zero rows, either the token is invalid,
+  // the invite expired, or it was addressed to another email.
+  const { data: invite, error: fetchError } = await supabase
+    .from("invites")
+    .select("id, org_id, email, role, status, expires_at")
+    .eq("token", token)
+    .eq("status", "pending")
+    .maybeSingle();
+
+  if (fetchError) return { error: fetchError.message };
+  if (!invite) {
+    return {
+      error:
+        "This invite is invalid, expired, or addressed to a different email. Ask the org admin to resend.",
+    };
+  }
+
+  // Create the membership (role taken from the invite). Unique index on
+  // (org_id, user_id) makes a duplicate accept idempotent — treat the
+  // conflict as success.
+  const { error: membershipError } = await supabase
+    .from("memberships")
+    .insert({ org_id: invite.org_id, user_id: user.id, role: invite.role });
+  if (membershipError && !membershipError.message.toLowerCase().includes("duplicate")) {
+    return { error: `Couldn't join org: ${membershipError.message}` };
+  }
+
+  // Mark the invite accepted. RLS policy invites_accept_recipient constrains
+  // the WITH CHECK to status='accepted' + accepted_by=auth.uid().
+  const { error: updateError } = await supabase
+    .from("invites")
+    .update({
+      status: "accepted",
+      accepted_at: new Date().toISOString(),
+      accepted_by: user.id,
+    })
+    .eq("id", invite.id);
+
+  if (updateError) return { error: `Membership created but invite update failed: ${updateError.message}` };
+
+  redirect("/auth/resolve");
 }
 
 export async function forgotPasswordAction(_: FormState, formData: FormData): Promise<FormState> {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Palette } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -11,16 +11,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { Hint } from "@/components/ui/Tooltip";
+import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
+import { ThemeGallerySheet } from "@/components/marketing/ThemeGallerySheet";
 
 /**
- * Marketing header — consolidated to the SaaS-standard five-nav pattern
- * (Linear, Vercel, Stripe, ClickUp, Notion all land here in 2026): three
- * grouped dropdowns + two direct links + a primary CTA.
- *
- * Utility controls (theme palette, locale, light/dark mode) moved to the
- * marketing footer — no public SaaS marketing nav in the reference set
- * keeps them up top. They reappear in /me/settings/appearance for
- * authenticated users.
+ * Marketing header — three grouped dropdowns + two direct links + a
+ * primary CTA, plus a utility cluster (palette / locale / light-dark) on
+ * the right. Theme-picking is a deliberate product-personality signal
+ * for this app (eight fully-realized CHROMA themes), so the palette gets
+ * top-chrome discoverability rather than being buried in the footer.
  */
 
 type NavLink = { label: string; href: string; description?: string };
@@ -95,6 +96,7 @@ function NavDropdown({ group }: { group: NavGroup }) {
 
 export function MarketingHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [themePickerOpen, setThemePickerOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 glass-nav">
@@ -118,8 +120,22 @@ export function MarketingHeader() {
           <NavDropdown group={RESOURCES} />
         </nav>
 
-        {/* Desktop right cluster — Log in (secondary text link) + Start Free (primary CTA) */}
-        <div className="hidden items-center gap-3 lg:flex">
+        {/* Desktop right cluster — utility icons (palette / locale / mode) +
+            Log in (secondary text link) + Start free (primary CTA). */}
+        <div className="hidden items-center gap-2 lg:flex">
+          <Hint label="Design themes">
+            <button
+              type="button"
+              onClick={() => setThemePickerOpen(true)}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--foreground)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)]"
+              aria-label="Open design themes"
+            >
+              <Palette size={14} aria-hidden="true" />
+            </button>
+          </Hint>
+          <LocaleSwitcher />
+          <ThemeToggle />
+          <div aria-hidden="true" className="h-5 w-px bg-[var(--border-color)] mx-1" />
           <Link
             href="/login"
             className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)]"
@@ -171,6 +187,31 @@ export function MarketingHeader() {
             </nav>
             <MobileNavSection group={RESOURCES} onClick={() => setMobileOpen(false)} />
             <div className="flex flex-col gap-2 border-t border-[var(--border-color)] pt-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
+                  Theme
+                </span>
+                <ThemeToggle />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
+                  Language
+                </span>
+                <LocaleSwitcher />
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  setThemePickerOpen(true);
+                }}
+                className="btn btn-ghost btn-sm inline-flex items-center gap-2 justify-center"
+              >
+                <Palette size={14} aria-hidden="true" />
+                Design themes
+              </button>
+            </div>
+            <div className="flex flex-col gap-2 border-t border-[var(--border-color)] pt-4">
               <Link
                 href="/login"
                 className="btn btn-ghost btn-sm w-full justify-center"
@@ -189,6 +230,7 @@ export function MarketingHeader() {
           </div>
         </div>
       )}
+      <ThemeGallerySheet open={themePickerOpen} onOpenChange={setThemePickerOpen} />
     </header>
   );
 }

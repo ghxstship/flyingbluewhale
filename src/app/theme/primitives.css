@@ -89,7 +89,6 @@
   /* ─── Specialty token fallbacks (audit m1) ─────────────────────────
      Themes are free to override these; neutral fallbacks make sure a
      consumer referencing the token never resolves to `initial`. */
-  --bg-hero:       var(--bg);               /* hero radial gradients → solid bg */
   --glass-blur:    blur(12px) saturate(1.2); /* default frosted-glass effect */
   --shadow-press:  inset 0 1px 2px rgba(0, 0, 0, 0.08); /* subtle press feedback */
   --accent-solid:  var(--accent);           /* non-gradient accent fallback */
@@ -100,6 +99,20 @@
 
   /* ─── Layout ────────────────────────────────────────────────────── */
   --sidebar-width: 16rem;
+}
+
+/* `--bg-hero` falls back to the theme's own `--bg` per scope. This MUST be
+ * declared on `[data-theme]` (not `:root`) so the value re-resolves at
+ * every element that carries a data-theme attribute — not just <html>.
+ *
+ * Without this scope, an AppearanceGallery card tagged `data-theme="brutal"`
+ * would inherit `--bg-hero` computed at `:root` (using the active theme's
+ * `--bg`), defeating the gallery's whole purpose as a theme reference.
+ * Themes like cyber, glass, and earthy that declare their own `--bg-hero`
+ * gradient still win via cascade order (their CSS files are imported
+ * after primitives). */
+[data-theme] {
+  --bg-hero: var(--bg);
 }
 
 /* Theme-swap transition — applied globally, guarded by reduced-motion */

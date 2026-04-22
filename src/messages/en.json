@@ -1,6 +1,7 @@
 {
   "common": {
     "appName": "Second Star Technologies",
+    "appNameStylized": "SECOND STVR",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -20,6 +21,7 @@
     "signOut": "Sign out",
     "signIn": "Sign in",
     "signUp": "Sign up",
+    "startFree": "Start free",
     "back": "Back",
     "next": "Next",
     "previous": "Previous",
@@ -28,25 +30,75 @@
     "retry": "Retry",
     "copy": "Copy",
     "copied": "Copied",
+    "copyLink": "Copy link",
     "all": "All",
     "none": "None",
     "yes": "Yes",
     "no": "No",
     "optional": "Optional",
     "required": "Required",
-    "required_field": "{field} is required"
+    "required_field": "{field} is required",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "revoked": "Revoked",
+    "expired": "Expired"
+  },
+  "nav": {
+    "product": "Product",
+    "industries": "Industries",
+    "pricing": "Pricing",
+    "community": "Community",
+    "resources": "Resources",
+    "features": "Features",
+    "solutions": "Solutions",
+    "compare": "Compare",
+    "blog": "Blog",
+    "guides": "Guides",
+    "docs": "Docs",
+    "changelog": "Changelog",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "careers": "Careers",
+    "trust": "Trust",
+    "legal": {
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "dpa": "DPA",
+      "sla": "SLA"
+    }
+  },
+  "marketing": {
+    "footer": {
+      "copyright": "© {year} Second Star Technologies",
+      "trademark": "ATLVS, GVTEWAY, and COMPVSS are registered trademarks of Second Star Technologies, a G H X S T S H I P Industries company.",
+      "tagline": "ATLVS, GVTEWAY, and COMPVSS — three connected apps for production teams.",
+      "ctaTired": "Built for production teams who are tired of duct tape."
+    },
+    "cta": {
+      "startFree": "Start free",
+      "bookDemo": "Book a Demo",
+      "viewDocs": "View the Docs",
+      "startFreeForLife": "Start Free for Life",
+      "contactSales": "Contact sales",
+      "pitchStory": "Pitch a story"
+    }
   },
   "auth": {
     "login": {
       "title": "Sign in",
-      "subtitle": "Welcome back",
+      "subtitle": "Welcome back. Pick up where you left off.",
       "email": "Email",
       "password": "Password",
       "rememberMe": "Remember me",
-      "forgotPassword": "Forgot your password?",
+      "forgotPassword": "Forgot password?",
+      "emailMeALink": "Email me a link",
       "noAccount": "Don't have an account?",
       "createOne": "Create one",
       "orContinueWith": "Or continue with",
+      "orContinueWithEmail": "Or continue with email",
       "submit": "Sign in",
       "submitting": "Signing in…"
     },
@@ -69,6 +121,36 @@
         "veryStrong": "Very strong"
       }
     },
+    "oauth": {
+      "continueWith": "Continue with {provider}",
+      "google": "Google",
+      "github": "GitHub",
+      "microsoft": "Microsoft",
+      "couldntStart": "Couldn't start {provider} sign-in",
+      "notConfigured": "OAuth provider not configured",
+      "invalidProvider": "Invalid provider",
+      "missingCode": "Sign-in did not complete — please try again"
+    },
+    "magicLink": {
+      "title": "Email me a magic link",
+      "subtitle": "We'll send a sign-in link to your inbox — no password required.",
+      "submit": "Send magic link",
+      "submitting": "Sending",
+      "success": "Check your inbox — we sent a sign-in link that expires in 1 hour.",
+      "backToLogin": "Back to sign in"
+    },
+    "verifyEmail": {
+      "title": "Check your inbox",
+      "subtitleWithEmail": "We sent a verification link to {email}.",
+      "subtitleGeneric": "We sent a verification link to your email.",
+      "info": "Click the link in the email to activate your account. The link expires in 24 hours.",
+      "didntGetIt": "Didn't get it? Check your spam folder, then request a new one below.",
+      "resend": "Resend verification email",
+      "resendCooldown": "Resend in {seconds}s",
+      "resendSending": "Sending…",
+      "resendSuccess": "Verification email resent.",
+      "backToLogin": "Back to sign in"
+    },
     "forgotPassword": {
       "title": "Forgot password",
       "subtitle": "We'll email you a reset link",
@@ -78,16 +160,128 @@
     },
     "resetPassword": {
       "title": "Set a new password",
+      "subtitle": "Choose a password you haven't used before.",
       "newPassword": "New password",
       "confirmPassword": "Confirm password",
+      "hint": "At least 8 characters",
       "submit": "Update password",
-      "mismatch": "Passwords do not match"
+      "submitting": "Updating",
+      "mismatch": "Passwords don't match",
+      "expired": "Your reset link has expired or wasn't recognized. Request a new one from Forgot password.",
+      "backToLogin": "Back to sign in"
+    },
+    "acceptInvite": {
+      "title": "Join your team",
+      "subtitle": "Accept your invitation to Second Star Technologies",
+      "body": "You've been invited to a Second Star Technologies workspace. Accept below and we'll take you straight in.",
+      "submit": "Accept invite",
+      "submitting": "Joining…",
+      "signInInstead": "Sign in instead",
+      "invalidOrExpired": "This invite is invalid, expired, or addressed to a different email. Ask the org admin to resend.",
+      "joinFailed": "Couldn't join org: {message}",
+      "updateFailed": "Membership created but invite update failed: {message}"
     },
     "errors": {
       "invalidCredentials": "Invalid email or password",
-      "accountExists": "An account with this email already exists — try signing in",
+      "accountExists": "An account with this email exists — try signing in",
+      "duplicateEmail": "This email is already registered",
       "weakPassword": "Password must be at least 8 characters",
+      "notConfigured": "Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+      "signupNoUser": "Signup failed — no user returned.",
       "unknown": "Something went wrong — please try again"
+    }
+  },
+  "invites": {
+    "moduleHeader": {
+      "eyebrow": "People",
+      "title": "Invites",
+      "subtitle": "Pending organization invitations"
+    },
+    "form": {
+      "heading": "Invite someone",
+      "description": "They'll get an email with a link to accept. Expires in 7 days.",
+      "email": "Email",
+      "role": "Role",
+      "submit": "Send invite",
+      "submitting": "Sending…"
+    },
+    "roles": {
+      "admin": "Admin — full org control",
+      "controller": "Controller — finance + ops",
+      "collaborator": "Collaborator — read/write ops",
+      "contractor": "Contractor — scoped access",
+      "crew": "Crew — field / mobile",
+      "client": "Client — external portal",
+      "viewer": "Viewer — read only",
+      "community": "Community — minimal"
+    },
+    "pending": {
+      "heading": "Pending ({count})",
+      "emptyAdmin": "Send one above to get started.",
+      "emptyMember": "Ask an admin to invite new members.",
+      "columns": {
+        "email": "Email",
+        "role": "Role",
+        "expires": "Expires",
+        "link": "Link"
+      }
+    },
+    "history": {
+      "heading": "History",
+      "columns": {
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "when": "When"
+      }
+    },
+    "emailSubject": "You're invited to join a Second Star Technologies workspace",
+    "emailHeading": "You've been invited",
+    "emailBody": "{inviter} invited you to join their workspace as {role}.",
+    "emailCta": "Accept invitation",
+    "emailExpiry": "Link expires in 7 days. If the button doesn't work:",
+    "errors": {
+      "onlyAdmins": "Only owners, admins, and developers can invite.",
+      "pendingExists": "A pending invite already exists for this email.",
+      "invalidToken": "Invalid invite token",
+      "validationGeneric": "Invalid input"
+    }
+  },
+  "theme": {
+    "sheet": {
+      "title": "Pick a design theme",
+      "description": "Eight fully-realized themes. Your choice applies instantly across every page — no reload, no signup. We'll remember it on this device.",
+      "appearanceHeading": "Appearance",
+      "appearanceSubtitle": "Pick a look for your workspace. Applies instantly everywhere.",
+      "matchSystem": "Match system",
+      "matchingSystem": "Matching system",
+      "currentlyLabel": "Currently:",
+      "upsell": "Like what you see? Create an account to sync themes across all your devices.",
+      "upsellCta": "Create an account"
+    },
+    "toggle": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "Match system",
+      "themes": "Themes",
+      "colorTheme": "Color theme"
+    }
+  },
+  "footerUtility": {
+    "designThemes": "Design themes",
+    "changeLanguage": "Change language"
+  },
+  "shell": {
+    "platform": {
+      "brand": "ATLVS",
+      "consoleEyebrow": "Operations Console"
+    },
+    "portal": {
+      "brand": "GVTEWAY"
+    },
+    "mobile": {
+      "brand": "COMPVSS",
+      "aboutSuffix": "· v{version}"
     }
   },
   "a11y": {
@@ -96,10 +290,43 @@
     "toggleTheme": "Toggle theme",
     "toggleMenu": "Toggle menu",
     "openMenu": "Open menu",
+    "homeAriaLabel": "Second Star Technologies — home",
     "loading": "Loading",
     "saving": "Saving",
     "saved": "Saved",
-    "error": "Error"
+    "error": "Error",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar"
+  },
+  "community": {
+    "meta": {
+      "title": "Community — the production teams building on Second Star",
+      "description": "The festivals, tours, agencies, and fabrication shops running their production on ATLVS, GVTEWAY, and COMPVSS. Member stories, numbers, and what they actually ship."
+    },
+    "hero": {
+      "eyebrow": "Community",
+      "title": "Production teams, building in public.",
+      "subtitle": "The festivals, tours, agencies, and fabrication shops running their shows on Second Star Technologies. Real workflows. Real numbers. Real receipts."
+    },
+    "metrics": {
+      "productionTeams": "production teams",
+      "ticketsScanned": "tickets scanned",
+      "showsAdvanced": "shows advanced",
+      "countries": "countries"
+    },
+    "stories": {
+      "heading": "Member stories",
+      "subtitle": "What they were running before, what they switched, what measurably improved."
+    },
+    "join": {
+      "eyebrow": "Join the roster",
+      "title": "Your team, here.",
+      "body": "Shipping real shows on Second Star Technologies? We're always looking to document new member stories. A short interview, anonymized numbers, your words."
+    },
+    "finalCta": {
+      "title": "Be the next story",
+      "subtitle": "Start free. Ship a show. We'll talk afterward."
+    }
   },
   "rate": {
     "tooMany": "Too many requests — please try again shortly",

@@ -4,8 +4,8 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Docs — Architecture, API, Guides CMS, Auth",
-  description:
-    "Technical reference for the Second Star Technologies platform: the three-shell architecture, the envelope-contract REST API, the Guides CMS, and the Supabase-backed auth model.",
+    description:
+    "Technical reference for the Second Star Technologies platform — architecture, integrations, the Guides CMS, and the auth model. The deep details for teams who want them.",
   path: "/docs",
   keywords: ["Second Star Technologies docs", "ATLVS docs", "GVTEWAY docs", "COMPVSS docs", "API reference", "architecture", "auth model"],
   ogImageEyebrow: "Docs",
@@ -13,10 +13,10 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const SECTIONS = [
-  { title: "Architecture", desc: "Three shells, one database. RLS-scoped per org.", href: "/features" },
-  { title: "API v1", desc: "Zod-validated REST API with ok/error envelopes.", href: "/console/settings/api" },
-  { title: "Guides CMS", desc: "Author a per-role Know-Before-You-Go from ATLVS, served in portals + mobile.", href: "/features" },
-  { title: "Auth model", desc: "Supabase SSR + 10 platform roles + 4 project roles.", href: "/features" },
+  { title: "Architecture", desc: "Three connected apps on one backbone. Every org's data walled off.", href: "/features" },
+  { title: "API v1", desc: "A clean REST API with validated inputs and predictable responses.", href: "/console/settings/api" },
+  { title: "Guides CMS", desc: "Author a Know Before You Go from ATLVS. Render it role-scoped across portal and mobile.", href: "/features" },
+  { title: "Auth model", desc: "Ten platform roles and four project roles — enforced at the data layer.", href: "/features" },
 ];
 
 export default function DocsLanding() {

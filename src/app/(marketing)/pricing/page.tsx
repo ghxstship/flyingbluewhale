@@ -10,7 +10,7 @@ import { buildMetadata, faqSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Pricing — Access, Core, Professional, Enterprise",
   description:
-    "Transparent pricing for the Second Star Technologies platform. Start free for life with the Access tier. Scale to Core ($49/mo), Professional ($199/mo), or Enterprise. Every tier includes RLS-backed org scoping and the REST API.",
+    "Transparent pricing for Second Star Technologies. Start free for life on the Access tier. Scale to Core ($49/mo), Professional ($199/mo), or Enterprise. Every tier includes data walled off per organization and full integrations.",
   path: "/pricing",
   keywords: ["production software pricing", "event management software cost", "Second Star Technologies pricing", "ATLVS pricing", "GVTEWAY pricing", "COMPVSS pricing", "stakeholder portal pricing"],
   ogImageEyebrow: "Pricing",
@@ -56,12 +56,12 @@ const TIERS = [
     description: "For production orgs running multiple shows a month.",
     features: [
       "Everything in Core",
-      "Full procurement + Stripe Connect",
-      "AI assistant (Sonnet 4.6)",
+      "Full procurement with direct vendor payouts",
+      "AI assistant grounded in your data",
       "Interactive proposals",
       "Event guides CMS",
       "Unlimited users",
-      "Priority support + onboarding",
+      "Priority support and onboarding",
     ],
     cta: "Start 14-day trial",
     href: "/signup",
@@ -74,11 +74,11 @@ const TIERS = [
     description: "For agencies, touring companies, festivals.",
     features: [
       "Everything in Professional",
-      "SSO (SAML) + SCIM provisioning",
-      "Claude Opus 4.7",
-      "Custom RLS policies + roles",
-      "SOC-2 attestation package",
-      "Dedicated CSM + 99.9% SLA",
+      "SSO (SAML) and SCIM provisioning",
+      "Deep-reasoning AI model",
+      "Custom roles and access policies",
+      "SOC 2 attestation package and signed DPA",
+      "Dedicated CSM and 99.9% uptime SLA",
       "Custom integrations",
     ],
     cta: "Talk to sales",
@@ -90,22 +90,22 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
   {
     category: "Core",
     rows: [
-      { feature: "RLS-backed multi-tenant isolation", access: true, core: true, pro: true, ent: true },
+      { feature: "Data walled off per organization", access: true, core: true, pro: true, ent: true },
       { feature: "Users per org", access: "3", core: "10", pro: "Unlimited", ent: "Unlimited" },
       { feature: "Projects per org", access: "1", core: "5", pro: "Unlimited", ent: "Unlimited" },
-      { feature: "REST API + webhooks", access: true, core: true, pro: true, ent: true },
+      { feature: "Integrations and webhooks", access: true, core: true, pro: true, ent: true },
     ],
   },
   {
     category: "ATLVS console",
     rows: [
-      { feature: "Overview + Projects", access: true, core: true, pro: true, ent: true },
+      { feature: "Overview and Projects", access: true, core: true, pro: true, ent: true },
       { feature: "Finance (invoices, budgets, expenses)", access: false, core: true, pro: true, ent: true },
       { feature: "Procurement (POs, vendors)", access: false, core: false, pro: true, ent: true },
       { feature: "Production (equipment, rentals)", access: false, core: true, pro: true, ent: true },
-      { feature: "People + credentials", access: false, core: true, pro: true, ent: true },
+      { feature: "People and credentials", access: false, core: true, pro: true, ent: true },
       { feature: "Advancing (16 deliverable types)", access: false, core: true, pro: true, ent: true },
-      { feature: "CMS + event guides", access: false, core: false, pro: true, ent: true },
+      { feature: "CMS and event guides", access: false, core: false, pro: true, ent: true },
     ],
   },
   {
@@ -114,7 +114,7 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
       { feature: "Guest portal", access: true, core: true, pro: true, ent: true },
       { feature: "Artist portal", access: true, core: true, pro: true, ent: true },
       { feature: "Vendor portal", access: false, core: true, pro: true, ent: true },
-      { feature: "Client portal + proposals", access: false, core: false, pro: true, ent: true },
+      { feature: "Client portal and proposals", access: false, core: false, pro: true, ent: true },
       { feature: "Sponsor portal", access: false, core: false, pro: true, ent: true },
       { feature: "Crew portal", access: false, core: true, pro: true, ent: true },
       { feature: "White-label branding", access: false, core: false, pro: true, ent: true },
@@ -132,30 +132,30 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
   {
     category: "AI",
     rows: [
-      { feature: "AI assistant (Claude Sonnet 4.6)", access: false, core: false, pro: true, ent: true },
-      { feature: "Claude Opus 4.7", access: false, core: false, pro: false, ent: true },
+      { feature: "AI assistant grounded in your data", access: false, core: false, pro: true, ent: true },
+      { feature: "Deep-reasoning model", access: false, core: false, pro: false, ent: true },
       { feature: "Drafting templates", access: false, core: false, pro: true, ent: true },
-      { feature: "Token budget", access: "—", core: "—", pro: "200K / mo", ent: "Custom" },
+      { feature: "Monthly AI budget", access: "—", core: "—", pro: "Included", ent: "Custom" },
     ],
   },
   {
     category: "Integrations",
     rows: [
-      { feature: "Stripe Checkout", access: false, core: true, pro: true, ent: true },
-      { feature: "Stripe Connect Express (vendor payouts)", access: false, core: false, pro: true, ent: true },
-      { feature: "Webhooks (HMAC-SHA256)", access: true, core: true, pro: true, ent: true },
+      { feature: "Card and ACH invoice payments", access: false, core: true, pro: true, ent: true },
+      { feature: "Direct vendor payouts", access: false, core: false, pro: true, ent: true },
+      { feature: "Signed webhooks", access: true, core: true, pro: true, ent: true },
       { feature: "SSO (SAML)", access: false, core: false, pro: false, ent: true },
-      { feature: "SCIM 2.0 provisioning", access: false, core: false, pro: false, ent: true },
+      { feature: "SCIM provisioning", access: false, core: false, pro: false, ent: true },
     ],
   },
   {
     category: "Security & compliance",
     rows: [
-      { feature: "Audit log (jsonb before/after)", access: true, core: true, pro: true, ent: true },
-      { feature: "Signed-URL file delivery", access: true, core: true, pro: true, ent: true },
+      { feature: "Immutable audit log", access: true, core: true, pro: true, ent: true },
+      { feature: "Auto-expiring file share links", access: true, core: true, pro: true, ent: true },
       { feature: "Rate-limited endpoints", access: true, core: true, pro: true, ent: true },
-      { feature: "CSP + CORS + HSTS", access: true, core: true, pro: true, ent: true },
-      { feature: "SOC-2 attestation package", access: false, core: false, pro: false, ent: true },
+      { feature: "Edge security (strict content and origin rules)", access: true, core: true, pro: true, ent: true },
+      { feature: "SOC 2 attestation package", access: false, core: false, pro: false, ent: true },
       { feature: "Data residency selection", access: false, core: false, pro: false, ent: true },
     ],
   },
@@ -164,7 +164,7 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
     rows: [
       { feature: "Community", access: true, core: true, pro: true, ent: true },
       { feature: "Email support", access: false, core: true, pro: true, ent: true },
-      { feature: "Priority + onboarding", access: false, core: false, pro: true, ent: true },
+      { feature: "Priority plus onboarding", access: false, core: false, pro: true, ent: true },
       { feature: "Dedicated CSM", access: false, core: false, pro: false, ent: true },
       { feature: "99.9% uptime SLA", access: false, core: false, pro: false, ent: true },
     ],
@@ -174,43 +174,43 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
 const FAQS = [
   {
     q: "Do I have to pay per user?",
-    a: "No. Second Star Technologies charges per org, not per seat. Professional is unlimited users for $199/month. You'll never get surprised by your own team getting more productive.",
+    a: "No. We charge per org, not per seat. Professional is unlimited users for $199/month. Your team getting bigger never becomes a surprise line item.",
   },
   {
     q: "Is there a free tier?",
-    a: "Yes. The Access tier is free forever: basic projects, guest + artist portals, up to 3 users, and up to 100 tickets per event. No credit card required.",
+    a: "Yes. Access is free forever — basic projects, guest and artist portals, up to 3 users, up to 100 tickets per event. No credit card required.",
   },
   {
     q: "How does the 14-day trial work?",
-    a: "Core and Professional come with a 14-day free trial of every feature in the tier. No credit card up front. If you don't upgrade by day 14, you drop back to the free Access tier — your data stays.",
+    a: "Core and Professional include a 14-day free trial of every feature in the tier. No credit card up front. If you don't upgrade by day 14, you drop back to the free Access tier — your data stays.",
   },
   {
     q: "Can I switch plans later?",
-    a: "Any time. Upgrade is instant. Downgrade takes effect at the end of the current billing period. Nothing is ever deleted on downgrade — features above your tier just become read-only or disabled.",
+    a: "Anytime. Upgrades are instant. Downgrades take effect at the end of the billing period. Nothing is ever deleted — features above your tier just become read-only.",
   },
   {
     q: "What about nonprofits and festivals?",
-    a: "We offer 30% off Core and Professional for registered nonprofits and community arts festivals. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent.",
+    a: "Yes — 30% off Core and Professional for registered nonprofits and community arts festivals. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent.",
   },
   {
     q: "Do you charge per ticket scanned?",
     a: "No. Scans are included. Some competitors charge per-scan fees that spike on festival weekends. We think that's hostile pricing. Scan as many tickets as your event requires.",
   },
   {
-    q: "What does the Enterprise tier include that Professional doesn't?",
-    a: "SSO (SAML), SCIM provisioning, Claude Opus 4.7, custom RLS policies for bespoke roles, a formal SOC-2 attestation package, a dedicated customer success manager, a 99.9% uptime SLA, and custom integrations. Contact sales for a quote.",
+    q: "What does Enterprise add over Professional?",
+    a: "SSO (SAML), SCIM provisioning, the deep-reasoning AI model, custom roles and access policies, a formal SOC 2 attestation package, a signed DPA, a dedicated customer success manager, a 99.9% uptime SLA, and custom integrations.",
   },
   {
-    q: "How is this priced compared to Asana / Monday / Notion + point tools?",
-    a: "Stacking Asana + a portal product + an AI add-on + a ticketing platform + finance glue typically runs $500–$2000/month for a 10-person team. Professional is $199/month unlimited users and covers all of it natively. See /compare for detailed breakdowns.",
+    q: "How does this price out vs. Asana, Monday, or Notion plus point tools?",
+    a: "Stacking Asana, a portal product, an AI add-on, a ticketing platform, and finance glue typically runs $500–$2000/month for a 10-person team. Professional is $199/month unlimited users and covers all of it natively. See /compare for detailed breakdowns.",
   },
   {
     q: "Can I self-host?",
-    a: "Self-host is available on Enterprise with a source-available license. It's not our recommended deployment — our managed infrastructure handles RLS, Storage, edge runtime, and Supabase for you. Contact sales if you need on-prem.",
+    a: "Self-host is available on Enterprise with a source-available license. It's not our recommended deployment — our managed infrastructure handles security, storage, and uptime. Contact sales if you need on-prem.",
   },
   {
     q: "What happens to my data if I cancel?",
-    a: "You can export all your data to CSV + JSON any time from within the console. After cancellation your data is retained for 30 days (re-subscribe and it's back) and then purged. Signed logs of the purge are available on request.",
+    a: "You can export everything — CSV or JSON — anytime from the console. After cancellation your data is retained for 30 days (re-subscribe and it's back) and then purged. Signed logs of the purge are available on request.",
   },
 ];
 
@@ -238,8 +238,8 @@ export default function PricingPage() {
           Start Free. Scale When You Need to. Per Org, Not Per Seat.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Every tier includes RLS-backed org scoping, Supabase-native auth, the REST API, and an audit log. Upgrade any
-          time. No per-seat fees. No per-scan fees. No charge for your team getting bigger.
+          Every tier includes data walled off per organization, integrations, and an immutable audit log. Upgrade
+          anytime. No per-seat fees. No per-scan fees. No charge for your team getting bigger.
         </p>
       </section>
 

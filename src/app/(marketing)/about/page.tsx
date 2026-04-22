@@ -8,7 +8,7 @@ import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "About Second Star Technologies — built by operators, for operators",
   description:
-    "Second Star Technologies is the company behind ATLVS, GVTEWAY, and COMPVSS — a unified production platform. Three shells, one schema, one identity, one set of RLS rules. Built for event production teams who are tired of duct tape.",
+    "Second Star Technologies is the company behind ATLVS, GVTEWAY, and COMPVSS — a unified production platform. Three connected apps, one backbone. Built for event production teams who are tired of duct tape.",
   path: "/about",
   keywords: ["Second Star Technologies about", "ATLVS", "GVTEWAY", "COMPVSS", "event production platform", "production software company"],
   ogImageEyebrow: "About",
@@ -16,18 +16,18 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const PRINCIPLES = [
-  { icon: Layers, title: "One schema, many shells", body: "ATLVS, GVTEWAY, COMPVSS share identity, RLS, and design tokens. No duct tape between apps — because there's only one app." },
-  { icon: ShieldCheck, title: "Security is not a feature", body: "RLS on every table. Audit log for every mutation. HMAC on every webhook. These are not enterprise upsells." },
+  { icon: Layers, title: "Three apps, one platform", body: "ATLVS, GVTEWAY, and COMPVSS share identity, data, and design. No duct tape between apps — because it's one platform." },
+  { icon: ShieldCheck, title: "Security is not a feature", body: "Data walled off per organization. Immutable audit log on every change. Signed webhooks. These are not enterprise upsells." },
   { icon: Rocket, title: "Ship what we use", body: "We dogfood. Every major release runs on a real production we're staffing that weekend before it ships to you." },
-  { icon: Compass, title: "Honest pricing", body: "Per org, not per seat. No per-scan surcharges. No fake 'enterprise' gates on features that should be standard." },
+  { icon: Compass, title: "Honest pricing", body: "Per org, not per seat. No per-scan surcharges. No fake enterprise gates on features that should be standard." },
 ];
 
 const MILESTONES = [
-  { date: "2026 Q1", title: "Three-shell topology shipped", body: "ATLVS + GVTEWAY + COMPVSS live on a unified schema. 33+ tables, full RLS, streaming AI." },
-  { date: "2025 Q4", title: "Boarding Pass pattern integrated", body: "Role-scoped KBYG event guides, authored once in ATLVS CMS, rendered across portal + mobile." },
-  { date: "2025 Q3", title: "Interactive proposals", body: "Synthesized best practices from F1-Miami scroll storytelling and proposalzero structured pricing." },
-  { date: "2025 Q2", title: "Stripe Connect + advancing", body: "Vendor payouts via Connect Express. 16 typed deliverables with history, comments, attachments." },
-  { date: "2025 Q1", title: "First show shipped", body: "Staffed and scanned our first 2,000-cap festival end-to-end on the Second Star Technologies platform." },
+  { date: "2026 Q1", title: "Three apps live", body: "ATLVS, GVTEWAY, and COMPVSS connected on a single backbone — office, stakeholders, field." },
+  { date: "2025 Q4", title: "Event guides", body: "One Know Before You Go, authored once, rendered role-scoped across portal and mobile." },
+  { date: "2025 Q3", title: "Interactive proposals", body: "Scroll storytelling, live pricing, and e-sign in place — one URL replaces the PDF attachment." },
+  { date: "2025 Q2", title: "Direct vendor payouts + advancing", body: "Vendors get paid out directly. Sixteen typed deliverables with history, comments, attachments." },
+  { date: "2025 Q1", title: "First show shipped", body: "Staffed and scanned our first 2,000-cap festival end to end on Second Star Technologies." },
 ];
 
 export default function AboutPage() {
@@ -45,13 +45,13 @@ export default function AboutPage() {
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">About</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Built by Operators, for Operators.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Second Star Technologies is the production operating system behind ATLVS, GVTEWAY, and COMPVSS. We built it
-          because every production team we worked with was duct-taping a dozen SaaS tools together — Asana for tasks,
-          Notion for wiki, Google Sheets for budgets, DocuSign for proposals, Eventbrite for tickets, a clipboard for
-          the gate — and losing money in the seams.
+          Second Star Technologies is the production OS behind ATLVS, GVTEWAY, and COMPVSS. We built it because
+          every production team we worked with was duct-taping a dozen tools together — Asana for tasks, a wiki
+          for the docs, spreadsheets for budgets, DocuSign for proposals, a third-party for tickets, a clipboard
+          at the gate — and losing money in the seams.
         </p>
         <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-          One platform. Three shells. Everyone on the same page — from proposal to wrap.
+          One platform. Three apps. Everyone on the same page — from first pitch to final settlement.
         </p>
       </section>
 
@@ -91,10 +91,10 @@ export default function AboutPage() {
         <div className="surface-raised p-10">
           <h2 className="text-3xl font-semibold tracking-tight">Who We Are.</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-            Second Star Technologies is a production + technology studio. We've staffed festivals, corporate
-            activations, private events, and artist tours — and we've built software for every one of them. The
-            platform is the consolidation of a decade of in-the-field duct tape into a single suite: ATLVS, GVTEWAY,
-            and COMPVSS.
+            Second Star Technologies is a production and technology studio. We've staffed festivals, corporate
+            activations, private events, and artist tours — and we've built software for every one of them.
+            The platform is a decade of in-the-field duct tape consolidated into a single connected suite:
+            ATLVS, GVTEWAY, and COMPVSS.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <Link className="underline underline-offset-4" href="/careers">Careers</Link>
@@ -108,7 +108,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <CTASection title="Try the platform" subtitle="Free for Life on the Access tier. 14-day trial of everything else." />
+      <CTASection title="Try the platform" subtitle="Free for life on the Access tier. 14-day trial of everything else." />
     </div>
   );
 }

@@ -14,9 +14,9 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — the internal operations console for production teams",
+  title: "ATLVS — the office console for production teams",
   description:
-    "ATLVS is the internal operations console from Second Star Technologies. Projects, finance, procurement, production, people, AI — one sidebar, role-gated by tier, with an audit log on every mutation. 60+ modules across 9 domains. Built on Next.js and Supabase.",
+    "ATLVS is the office console from Second Star Technologies. Projects, finance, procurement, production, people, AI — one sidebar, role-aware access, and an immutable audit log. Sixty-plus modules across nine domains.",
   path: "/solutions/atlvs",
   keywords: ["ATLVS", "production operations console", "event production dashboard", "internal production platform", "operations console software"],
   ogImageEyebrow: "ATLVS",
@@ -34,8 +34,8 @@ export default function ATLVSPage() {
     <div data-platform="atlvs">
       <JsonLd
         data={[productSchema({
-            name: "ATLVS — Internal Operations Console",
-            description: "Production operations console with projects, finance, procurement, production, people, and AI modules.",
+            name: "ATLVS — Office Operations Console",
+            description: "The office console for production teams. Projects, finance, procurement, production, people, and AI — in one connected workspace.",
             url: "https://flyingbluewhale.app/solutions/atlvs",
             price: "0",
           }),
@@ -44,11 +44,11 @@ export default function ATLVSPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · Internal console</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Operations Console</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · Office console</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Run the Office.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Your team runs the show here. Projects, finance, procurement, production, people, and AI — one left
-          sidebar, one consistent pattern, and tier-based role gating on every module.
+          Your team's command center. Projects, finance, procurement, production, people, and AI —
+          one sidebar, one consistent workflow, role-aware access on every module.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href="/signup">Start free</Button>
@@ -59,23 +59,23 @@ export default function ATLVSPage() {
 
       {/* Nine domain modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Nine domains · 60+ modules</div>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Nine domains · Sixty-plus modules</div>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          Every Production Workflow, in One Console.
+          Every Production Workflow. In One Console.
         </h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
             features={[
-              { icon: Command, title: "Work", body: "Projects, tasks, Gantt, schedule (RRULE + ICS), events, canonical locations." },
-              { icon: FileSignature, title: "Sales", body: "Pipeline, leads, clients, interactive proposals with 23 block types + e-sign." },
-              { icon: DollarSign, title: "Finance", body: "Invoices, expenses, budgets (with utilization), time, mileage, advances, payouts, live P&L." },
-              { icon: ClipboardList, title: "Procurement", body: "Requisitions, POs, vendors, catalog, COI / W-9 tracking, Stripe Connect payouts." },
-              { icon: Database, title: "Production", body: "Equipment inventory, rentals with availability, fabrication orders, dispatch, logistics." },
-              { icon: Users, title: "People", body: "Directory, crew roster, credentials with expiry alerts, role matrix, invites." },
-              { icon: Brain, title: "AI", body: "Streaming Claude assistant, drafting templates, automations, managed agents." },
-              { icon: ShieldCheck, title: "Settings", body: "Organization, billing, integrations, API keys, webhooks, audit, compliance, branding." },
-              { icon: CheckCircle2, title: "Collaboration", body: "Inbox, files, forms, command palette." },
+              { icon: Command, title: "Work", body: "Projects, tasks, Gantt, schedule, events, and canonical locations." },
+              { icon: FileSignature, title: "Sales", body: "Pipeline, leads, clients, and interactive proposals signed in place." },
+              { icon: DollarSign, title: "Finance", body: "Invoices, expenses, budgets with utilization, time, mileage, advances, payouts, and live P&L." },
+              { icon: ClipboardList, title: "Procurement", body: "Requisitions, POs, vendors, catalog, COI and W-9 tracking, direct vendor payouts." },
+              { icon: Database, title: "Production", body: "Equipment inventory, rentals with availability, fabrication orders, dispatch, and logistics." },
+              { icon: Users, title: "People", body: "Directory, crew roster, credentials with expiry alerts, role matrix, and invites." },
+              { icon: Brain, title: "AI", body: "An assistant that drafts from your data — plus templates and automations for the busywork." },
+              { icon: ShieldCheck, title: "Settings", body: "Organization, billing, integrations, webhooks, audit, compliance, and branding." },
+              { icon: CheckCircle2, title: "Collaboration", body: "Inbox, files, forms, and the command palette." },
             ]}
           />
         </div>
@@ -85,28 +85,28 @@ export default function ATLVSPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Architecture</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built Like a Platform, Not a Template.</h2>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">How it's built</div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built Like a Platform. Not a Template.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Every module in ATLVS follows the same pattern — list, detail, create, with a status machine where it
-              matters (invoices, proposals, POs, tasks). Server actions for mutations, Zod validation at the API
-              boundary, and Postgres RLS as the final authority on who-sees-what.
+              Every module follows the same pattern — list, detail, create — with clean status flow where it
+              matters (invoices, proposals, POs, tasks). Validation at the boundary. Your org's data walled off
+              at the data layer.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              That uniformity is why new modules ship in days, not months — and why your team learns the console
-              once, not nine times.
+              That consistency is why new modules ship in days, not months — and why your team learns the
+              console once, not nine times.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "Next.js 16 App Router + React 19 with React Compiler",
-              "Supabase Postgres + RLS on every table",
-              "10 platform roles × 4 project roles × 4 tiers",
-              "Audit log on every mutation (before + after JSONB)",
-              "Server actions + Zod at the boundary",
-              "Streaming AI assistant (Claude Sonnet 4.6 default)",
-              "Stripe Connect for vendor payouts",
-              "Sentry + Resend gated by env (production-ready)",
+              "Every tool a production team needs — office, stakeholders, field",
+              "Your data walled off per organization — enforced at the database",
+              "Role-aware access across every tier and every module",
+              "Immutable audit log — who, when, what changed, what it was before",
+              "AI grounded in your projects, crew, and budgets — not the public internet",
+              "Direct vendor payouts — ACH, card, or international wire",
+              "99.9% uptime SLA on Enterprise",
+              "SSO, SCIM, and signed DPA available",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -119,12 +119,12 @@ export default function ATLVSPage() {
 
       {/* Persona tiles */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Who Works in Atlvs?</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Who Works in ATLVS?</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {[
             { role: "Owner / Admin", body: "Full access — billing, org settings, members, integrations. Runs the business." },
-            { role: "Controller", body: "Finance + procurement lead. Owns invoices, expenses, budgets, POs, payouts, audit." },
-            { role: "Project manager", body: "Collaborator tier — projects, tasks, crew, proposals, clients. Daily driver." },
+            { role: "Controller", body: "Finance and procurement lead. Owns invoices, expenses, budgets, POs, payouts, and audit." },
+            { role: "Project manager", body: "Daily driver — projects, tasks, crew, proposals, clients." },
           ].map((p) => (
             <div key={p.role} className="surface p-5">
               <div className="text-sm font-semibold">{p.role}</div>
@@ -138,24 +138,24 @@ export default function ATLVSPage() {
         title="ATLVS · FAQ"
         faqs={[
           {
-            q: "What does ATLVS stand for?",
-            a: "ATLVS is the name of the internal operations console from Second Star Technologies — the red-branded shell where your team works. Every module runs inside it, including finance, procurement, AI, and proposals.",
+            q: "What is ATLVS?",
+            a: "ATLVS is the office console from Second Star Technologies — the red-branded app where your team works. Every office module lives here: projects, finance, procurement, production, people, AI, proposals.",
           },
           {
-            q: "How does role-gating work?",
-            a: "ATLVS uses 10 platform roles (owner, admin, controller, collaborator, contractor, crew, client, viewer, community, developer) and 4 tiers (portal, starter, professional, enterprise). The `can()` helper gates every capability; RLS policies on Postgres enforce the same gates at the database.",
+            q: "How does role-based access work?",
+            a: "Ten platform roles (owner, admin, controller, collaborator, contractor, crew, client, viewer, and more) across four tiers. Every capability is gated by role, and the same gates are enforced at the data layer — not just in the app.",
           },
           {
             q: "Does ATLVS support SSO?",
-            a: "SSO (SAML + OIDC) and SCIM provisioning are Enterprise-tier features, backed by Supabase auth. Contact sales to enable.",
+            a: "Yes. SSO (SAML and OIDC) and SCIM provisioning are Enterprise-tier features. Contact sales to enable.",
           },
           {
             q: "Can I customize the sidebar?",
-            a: "The sidebar is driven by a single source of truth (src/lib/nav.ts#platformNav). Self-serve customization via Settings → Branding lands with Enterprise; for now, file a PR.",
+            a: "The sidebar is consistent across every workspace today. Self-serve customization via Settings → Branding lands with Enterprise.",
           },
           {
-            q: "What AI models does the assistant use?",
-            a: "Anthropic Claude — Sonnet 4.6 by default, Opus 4.7 available on Professional+. Conversations stream into your workspace and persist to Postgres for audit.",
+            q: "What AI powers the assistant?",
+            a: "A fast model by default for day-to-day work, with a deep-reasoning model available on Professional and up. Every conversation is scoped to your workspace and logged for audit.",
           },
         ]}
       />

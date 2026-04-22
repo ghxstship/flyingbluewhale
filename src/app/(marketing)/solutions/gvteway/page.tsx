@@ -14,9 +14,9 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "GVTEWAY — external stakeholder portals for production",
+  title: "GVTEWAY — stakeholder portals for production",
   description:
-    "GVTEWAY is the external portal surface from Second Star Technologies. One slug per project, one tailored view per persona — artist, vendor, client, sponsor, guest, crew. Interactive proposals with e-sign, artist advancing with deliverables, per-role event guides (KBYG).",
+    "GVTEWAY is the stakeholder portal from Second Star Technologies. One tailored workspace per persona — artist, vendor, client, sponsor, guest, crew. Interactive proposals, artist advancing, role-scoped Know Before You Go guides.",
   path: "/solutions/gvteway",
   keywords: ["GVTEWAY", "stakeholder portal", "artist portal", "vendor portal", "client portal", "event portal software"],
   ogImageEyebrow: "GVTEWAY",
@@ -34,8 +34,8 @@ export default function GvtewayPage() {
     <div data-platform="gvteway">
       <JsonLd
         data={[productSchema({
-            name: "GVTEWAY — External Stakeholder Portals",
-            description: "Slug-scoped external portals with 6 persona surfaces (artist, vendor, client, sponsor, guest, crew).",
+            name: "GVTEWAY — Stakeholder Portals",
+            description: "A tailored workspace for every stakeholder outside your org — artist, vendor, client, sponsor, guest, crew.",
             url: "https://flyingbluewhale.app/solutions/gvteway",
           }),
         ]}
@@ -43,11 +43,11 @@ export default function GvtewayPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">GVTEWAY · External portals</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">External Portals That Do the Work.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">GVTEWAY · Stakeholder portals</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Loop In Everyone Outside.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Stop emailing PDFs. Every external stakeholder gets a slug-scoped workspace with exactly the data they
-          need — and nothing else. Artists advance. Vendors submit quotes. Clients sign proposals. Guests see
+          Stop emailing PDFs. Every stakeholder gets their own workspace with exactly the data they need —
+          and nothing else. Artists advance. Vendors submit quotes. Clients sign proposals. Guests see their
           tickets. Crew gets the call sheet. Same project, six tailored views.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -60,18 +60,18 @@ export default function GvtewayPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Six Persona Portals.</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each persona sees a curated subset of the project, with its own rail, flows, and gate conditions.
+          Each persona sees its own lane — with a nav, flows, and deliverables built for their role.
         </p>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
             features={[
-              { icon: Mic2, title: "Artist", body: "Technical rider, hospitality rider, input list, stage plot, crew list, guest list, schedule, travel." },
-              { icon: Truck, title: "Vendor", body: "Submissions, equipment pull list, purchase orders, invoices, credential uploads (COI, W-9)." },
-              { icon: Users, title: "Client", body: "Proposals with e-sign, deliverables, invoices with Stripe Checkout, messages, shared files." },
-              { icon: Award, title: "Sponsor", body: "Activations, brand assets, reporting, impression tracking." },
-              { icon: Ticket, title: "Guest", body: "Tickets (buy/claim/transfer), schedule, day-of logistics (parking, entrances, rideshare)." },
-              { icon: HardHat, title: "Crew", body: "Call sheet, time submission, advance requests, safety briefing, SOP access." },
+              { icon: Mic2, title: "Artist", body: "Tech rider, hospitality rider, input list, stage plot, crew list, guest list, schedule, travel." },
+              { icon: Truck, title: "Vendor", body: "Submissions, pull list, purchase orders, invoices, COI and W-9 uploads." },
+              { icon: Users, title: "Client", body: "Proposals signed in place, deliverables, invoices payable by card or ACH, messages, shared files." },
+              { icon: Award, title: "Sponsor", body: "Activations, brand assets, reporting, and impression tracking." },
+              { icon: Ticket, title: "Guest", body: "Tickets — buy, claim, transfer — plus schedule and day-of logistics (parking, entrances, rideshare)." },
+              { icon: HardHat, title: "Crew", body: "Call sheet, time submission, advance requests, safety briefing, and SOPs." },
             ]}
           />
         </div>
@@ -86,9 +86,9 @@ export default function GvtewayPage() {
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">Proposals that close themselves.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              23 block types, scroll-spy navigation, per-phase contract refs, add-on pickers with live totals,
-              two-mode e-sign (typed + canvas), share-link auth, version history, analytics on every scroll.
-              Print CSS that turns a proposal into a PDF without headless Chrome.
+              Twenty-three block types, scroll-spy navigation, per-phase contract refs, add-on pickers with live
+              totals, e-sign in place (typed or drawn), revocable share links, version history, and engagement
+              analytics on every scroll. Clean PDF export when you need one.
             </p>
             <Link href="/features/proposals" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]">
               Explore proposals →
@@ -100,8 +100,8 @@ export default function GvtewayPage() {
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">Know Before You Go, built in.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Author a Boarding-Pass style guide once in ATLVS; it renders role-scoped in both the portal and the
-              mobile PWA. Artists see riders; crew sees radio channels + SOPs; guests see logistics. 16 section
+              Write a single KBYG in ATLVS. It renders role-scoped in the portal and in the field app.
+              Artists see riders, crew sees radio channels and SOPs, guests see logistics. Sixteen section
               types cover every production detail.
             </p>
             <Link href="/features/guides" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]">
@@ -116,21 +116,20 @@ export default function GvtewayPage() {
         <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Security</div>
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight">Slug is the boundary.</h3>
+            <h3 className="mt-3 text-3xl font-semibold tracking-tight">The link is the access.</h3>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Every portal route is slug-scoped (<code>/p/[slug]/<i>persona</i></code>). The slug is the security
-              boundary — combined with row-level security, there's no way to accidentally query across projects.
-              Share links are HMAC-signed, expirable, revocable, and logged.
+              Every portal is scoped to a single project. Share links are signed, expirable, revocable, and
+              logged. There's no way to slip across projects — access is enforced on the data, not in the app.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "Slug-scoped routes — one slug per project",
+              "Per-project portals — one link, one project",
               "Per-persona nav, per-persona data",
-              "Signed share links with expiry + revocation",
-              "60-second expiring signed download URLs",
-              "Every view recorded in proposal_events",
-              "Two-mode e-sign (typed + canvas) with SHA-256 hash",
+              "Signed share links with expiry and revocation",
+              "Auto-expiring file download links",
+              "Every view captured in engagement analytics",
+              "E-sign in place — typed or drawn",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -145,24 +144,24 @@ export default function GvtewayPage() {
         title="GVTEWAY · FAQ"
         faqs={[
           {
-            q: "What does GVTEWAY stand for?",
-            a: "GVTEWAY is the name of the external portal surface from Second Star Technologies — the blue-branded shell served at /p/[slug]/<persona>. Each slug is a project; each persona is a role (artist, vendor, client, sponsor, guest, crew).",
+            q: "What is GVTEWAY?",
+            a: "GVTEWAY is the stakeholder portal from Second Star Technologies — the blue-branded app where everyone outside your org works. Each project has six persona views: artist, vendor, client, sponsor, guest, and crew.",
           },
           {
             q: "Do external stakeholders need to sign up?",
-            a: "No for read access via share links (HMAC-signed, time-boxed). Yes if they want to contribute (submit a rider, upload a COI, sign a proposal) — a lightweight signup creates a user scoped to that project only.",
+            a: "No for read access — share a link, they're in. Yes if they want to contribute (submit a rider, upload a COI, sign a proposal). A lightweight signup creates a user scoped to that project only.",
           },
           {
             q: "Can I white-label a portal?",
-            a: "Custom branding (logo, colors, email) and custom domains are Enterprise-tier. Self-serve setup lives at /console/settings/domains.",
+            a: "Yes, on Enterprise. Custom branding — logo, colors, email — and custom domains for your portals. Your clients see your brand; your vendors see your vendors' brand.",
           },
           {
             q: "How is data isolated between projects?",
-            a: "Postgres row-level security. Every domain table is scoped by org_id and (for portals) project_id. The slug in the URL maps to project_id; RLS enforces the rest.",
+            a: "At the data layer. Every record is scoped to its organization and project. The link you share maps to a single project; no view can reach into another one.",
           },
           {
-            q: "Can a single person see multiple personas?",
-            a: "Yes — a user's session maps to the right persona via personaForRole(), but a user with access to multiple projects/personas can switch between them from the portal gateway.",
+            q: "Can a single person have multiple personas?",
+            a: "Yes. Someone who's both a vendor on one project and a sponsor on another can switch cleanly from their portal gateway.",
           },
         ]}
       />

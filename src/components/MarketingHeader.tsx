@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, X, Palette } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { Hint } from "@/components/ui/Tooltip";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 import { ThemeGallerySheet } from "@/components/marketing/ThemeGallerySheet";
 
@@ -58,15 +59,16 @@ export function MarketingHeader() {
 
         {/* Desktop right-hand cluster */}
         <div className="hidden items-center gap-2 lg:flex">
-          <button
-            type="button"
-            onClick={() => setThemePickerOpen(true)}
-            className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
-            aria-label="Open design-system theme picker"
-          >
-            <Palette size={14} aria-hidden="true" />
-            <span className="hidden xl:inline">Themes</span>
-          </button>
+          <Hint label="Themes">
+            <button
+              type="button"
+              onClick={() => setThemePickerOpen(true)}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--foreground)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)]"
+              aria-label="Themes"
+            >
+              <Palette size={14} aria-hidden="true" />
+            </button>
+          </Hint>
           <LocaleSwitcher />
           <ThemeToggle />
           <Link href="/login" className="btn btn-ghost btn-sm">Log in</Link>

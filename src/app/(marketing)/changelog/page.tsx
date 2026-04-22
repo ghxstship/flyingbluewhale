@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Changelog — what shipped on Second Star Technologies",
   description:
-    "Release notes for the Second Star Technologies platform. Every shipping change, with context. Feature launches, reliability, security, and performance.",
+    "Release notes for Second Star Technologies. Every shipping change, with context. Feature launches, reliability, security, and performance.",
   path: "/changelog",
   keywords: ["Second Star Technologies changelog", "ATLVS changelog", "GVTEWAY changelog", "COMPVSS changelog", "release notes", "product updates"],
   ogImageEyebrow: "Changelog",
@@ -27,14 +27,14 @@ const ENTRIES: Array<{ date: string; version: string; title: string; kind: Entry
   {
     date: "2026-04-17",
     version: "v1.4",
-    title: "Marketing + SEO expansion",
+    title: "Marketing and SEO expansion",
     kind: "feature",
-    body: "Full marketing site rebuild with per-module deep-dives, comparison tables, blog, case studies, and structured data across every page.",
+    body: "Full marketing site rebuild — per-module deep dives, comparison tables, blog, case studies, and cleaner metadata across every page.",
     items: [
-      "New /solutions/{atlvs,gvteway,compvss} deep-dive pages",
-      "Dynamic OG image route at /og with eyebrow + title params",
-      "FAQPage, BreadcrumbList, Product, SoftwareApplication JSON-LD",
-      "Generative Engine Optimization (GEO) — definitive FAQs on every page",
+      "New solution pages for ATLVS, GVTEWAY, and COMPVSS",
+      "Dynamic OG images for every page",
+      "Rich search result data on every page",
+      "Definitive FAQs on every page",
     ],
   },
   {
@@ -42,25 +42,25 @@ const ENTRIES: Array<{ date: string; version: string; title: string; kind: Entry
     version: "v1.3",
     title: "Interactive proposals",
     kind: "feature",
-    body: "Client-facing scroll-activated proposals with structured pricing, accept-in-place, and revocable share links. Synthesizes patterns from F1-Miami and proposalzero.",
+    body: "Client-facing scrolling proposals with live pricing, accept in place, and revocable share links. Stop attaching PDFs.",
     items: [
-      "proposals + proposal_versions + proposal_share_links tables",
-      "proposal_org_id() SECURITY DEFINER helper (fixes RLS recursion)",
-      "Template library (festival, tour, corporate, private)",
-      "Accept/decline signs into audit_log with IP + version hash",
+      "Proposals with versioning and revocable share links",
+      "Signed acceptance with IP, timestamp, and version captured",
+      "Template library — festival, tour, corporate, private event",
+      "Every action logged to the audit trail",
     ],
   },
   {
     date: "2026-04-03",
     version: "v1.2",
-    title: "Boarding Pass event guides",
+    title: "Event guides (KBYG)",
     kind: "feature",
-    body: "Role-scoped KBYG guides managed in ATLVS CMS and rendered on portal + mobile. One authoring flow, six persona renders.",
+    body: "Role-scoped KBYG, authored once in ATLVS and rendered cleanly across portal and mobile. One flow, six persona views.",
     items: [
-      "event_guides table with JSONB config",
-      "17 standard section types (schedule, SOPs, PPE, radio, evacuation, etc.)",
-      "event_guides_select_public RLS policy for anon-visible guides",
-      "GuideView component shared by /p/[slug]/guide and /m/guide",
+      "One guide per project, every persona auto-scoped",
+      "Seventeen standard section types — schedule, SOPs, PPE, radio channels, evacuation, and more",
+      "Anon-accessible guides share by link",
+      "Same component renders portal and mobile",
     ],
   },
   {
@@ -68,49 +68,49 @@ const ENTRIES: Array<{ date: string; version: string; title: string; kind: Entry
     version: "v1.1",
     title: "Advancing deliverables",
     kind: "feature",
-    body: "Refactored advancing from a finance submodule into a standalone module with 16 typed deliverables (tech rider, hospitality, stage plot, hotel block, etc.).",
+    body: "Advancing graduated from a finance submodule into its own module with sixteen typed deliverables — tech rider, hospitality, stage plot, hotel block, and more.",
     items: [
-      "deliverables + deliverable_comments + deliverable_history tables",
-      "advancing Storage bucket with signed-URL delivery",
-      "Portal exposure: artists + vendors see their deliverables",
-      "Overdue dashboard surfacing what's slipping",
+      "Typed deliverables with comments and history",
+      "File attachments delivered via auto-expiring links",
+      "Artists and vendors see their deliverables in their portal",
+      "Overdue dashboard surfaces what's slipping",
     ],
   },
   {
     date: "2026-03-20",
     version: "v1.0",
-    title: "Three-shell GA",
+    title: "Three apps GA",
     kind: "feature",
-    body: "General availability of the three-shell topology — ATLVS (internal console), GVTEWAY (stakeholder portals), COMPVSS (mobile PWA).",
+    body: "General availability of the three connected apps — ATLVS for the office, GVTEWAY for stakeholders, COMPVSS for the field.",
     items: [
-      "Unified Supabase schema (33+ tables, RLS on every row)",
-      "is_org_member(), has_org_role(), auth_user_email() helpers",
-      "Per-shell brand overlay via data-platform (red/blue/yellow)",
-      "Streaming Anthropic chat (Claude Sonnet 4.6 + Opus 4.7)",
+      "Unified backbone — every org's data walled off",
+      "Role-aware access across every tier",
+      "Per-app brand overlay (red, blue, yellow)",
+      "AI assistant grounded in your workspace",
     ],
   },
   {
     date: "2026-03-10",
     version: "v0.9",
-    title: "Stripe Connect payouts",
+    title: "Direct vendor payouts",
     kind: "feature",
-    body: "Vendor payouts via Stripe Connect Express. Onboarding flow, HMAC-SHA256 webhook verification, payout-on-approval.",
+    body: "Vendors onboard a payout account and get paid directly — ACH, card, or international wire. Payout on approval. We never touch your money.",
     items: [
-      "/api/v1/stripe/connect/onboarding endpoint",
-      "/api/v1/webhooks/stripe receiver with signature verification",
-      "Vendor portal surfaces connect status + balance",
+      "Vendor onboarding flow from the portal",
+      "Signed webhooks for payment events",
+      "Vendor portal surfaces payout status and balance",
     ],
   },
   {
     date: "2026-03-03",
     version: "v0.8",
-    title: "Rate limiter + CSP",
+    title: "Rate limiter and edge security",
     kind: "security",
-    body: "In-memory sliding-window rate limiter on AI, scan, webhook, and auth buckets. Strict Content Security Policy shipped in vercel.json.",
+    body: "Per-bucket rate limits on AI, scan, webhook, and auth endpoints. Strict edge security headers rolled out.",
     items: [
-      "middleware.ts protects /api/v1/ai/*, /api/v1/tickets/scan, /api/v1/webhooks/*, /login, /signup",
-      "429 responses include retry-after and reset headers",
-      "CSP + HSTS + X-Frame-Options + X-Content-Type-Options",
+      "Abuse protection on AI, scan, webhook, and auth endpoints",
+      "Rate-limit responses include retry-after and reset headers",
+      "Strict content, origin, and framing rules at the edge",
     ],
   },
   {
@@ -118,23 +118,23 @@ const ENTRIES: Array<{ date: string; version: string; title: string; kind: Entry
     version: "v0.7",
     title: "Offline scan queue",
     kind: "performance",
-    body: "COMPVSS scanner falls back to IndexedDB queue when offline and replays in order on reconnect. Zero dropped scans.",
+    body: "The field scanner queues offline scans on the device and replays them in order when signal returns. Zero dropped scans.",
     items: [
-      "Service worker caches scanner shell + today's data",
-      "Scan queue replays ordered with exponential backoff",
-      "Sub-100ms server-side scan latency at p50",
+      "Scanner, today's call sheet, and guide cached on the device",
+      "Queue replays in order with backoff",
+      "Sub-100ms server-side scan response",
     ],
   },
   {
     date: "2026-02-17",
     version: "v0.6",
-    title: "Audit log",
+    title: "Immutable audit log",
     kind: "security",
-    body: "Every mutation writes a structured audit_log entry: actor, IP, user agent, before/after jsonb payloads, session id.",
+    body: "Every change writes a structured audit entry — actor, IP, user agent, before and after, session.",
     items: [
       "Retention configurable per tenant",
       "Exportable to JSON for compliance reviews",
-      "Queryable from /console/compliance",
+      "Queryable from the compliance dashboard",
     ],
   },
 ];
@@ -182,7 +182,7 @@ export default function ChangelogPage() {
         </ul>
       </section>
 
-      <CTASection title="Try what's new" subtitle="Every change ships to free + trial accounts immediately." />
+      <CTASection title="Try what's new" subtitle="Every change ships to free and trial accounts immediately." />
     </div>
   );
 }

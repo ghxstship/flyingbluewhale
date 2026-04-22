@@ -14,7 +14,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Solutions — Three Apps, Eight Industries",
   description:
-    "Explore the three integrated apps from Second Star Technologies — ATLVS (internal console), GVTEWAY (external portals), and COMPVSS (mobile PWA) — plus the industries we serve: Live Events, Concerts, Festivals & Tours, Immersive Experiences, Brand Activations, Corporate Events, Theatrical Performances, and Broadcast, TV & Film.",
+    "Three connected apps from Second Star Technologies — ATLVS for the office, GVTEWAY for your stakeholders, COMPVSS for the field — tuned for live events, concerts, festivals and tours, immersive experiences, brand activations, corporate events, theatre, and broadcast.",
   path: "/solutions",
   keywords: [
     "live events software",
@@ -37,10 +37,11 @@ export default function SolutionsIndex() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Solutions</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Database. Zero Seams.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Platform. Zero Seams.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          ATLVS, GVTEWAY, and COMPVSS aren't three SaaS tools glued together. They're three purpose-built shells
-          (internal, external, mobile) over one Postgres database — with row-level security enforcing every boundary.
+          ATLVS, GVTEWAY, and COMPVSS aren't a bundle of separately-bought tools with sync issues. They're three
+          purpose-built apps — office, stakeholders, field — all reading from the same backbone. Every org's data
+          walled off at the data layer.
         </p>
       </section>
 
@@ -79,7 +80,7 @@ export default function SolutionsIndex() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight">By Industry</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each industry gets a tuned setup: Core starter blocks, default role matrix, and reference case studies.
+          Every industry gets a tuned setup: starter templates, a default role matrix, and case studies from peers.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
@@ -96,19 +97,19 @@ export default function SolutionsIndex() {
         faqs={[
           {
             q: "How are the three apps different?",
-            a: "ATLVS is the internal console where your team works. GVTEWAY is the external portal surface (artists, vendors, clients, sponsors, guests, crew). COMPVSS is the mobile PWA for field operations (ticket scan, clock, inventory). Same backend, different audiences.",
+            a: "ATLVS is your office console — where your team runs the show. GVTEWAY is the outside world — artists, vendors, clients, sponsors, guests, crew. COMPVSS is the field — ticket scan, clock-in, inventory, incidents. Same backbone, three audiences.",
           },
           {
             q: "Do I have to use all three apps?",
-            a: "No. Every tier includes all three, but teams adopt gradually: most start with ATLVS + one portal persona (usually artist or client), add COMPVSS at show time, then expand.",
+            a: "No. Every tier includes all three, but teams adopt gradually. Most start with ATLVS and one portal persona (usually artist or client), add COMPVSS at show time, then expand.",
           },
           {
-            q: "Is the platform multi-tenant?",
-            a: "Yes. Each organization lives in its own row-level-security scope — members, projects, tickets, proposals, and every other domain table are org-scoped by Postgres RLS. You cannot accidentally see another org's data.",
+            q: "Is my org's data walled off from other orgs?",
+            a: "Yes. Every organization's data is walled off at the database layer — not just in the app. A user in one org cannot read or touch anything belonging to another org, by design.",
           },
           {
             q: "Do you support white-labeled portals?",
-            a: "Custom branding (logo, colors, email templates) and custom domains for portals are available on Enterprise. See /console/settings/branding once you're set up.",
+            a: "Yes, on Enterprise. Custom branding — logo, colors, email templates — plus custom domains for portals. Your clients see your brand; your vendors see your vendors' brand.",
           },
         ]}
       />
@@ -122,42 +123,42 @@ const APPS = [
   {
     slug: "atlvs",
     name: "ATLVS",
-    tier: "INTERNAL",
+    tier: "OFFICE",
     title: "The operations console",
-    body: "Projects, finance, procurement, production, people, AI — one sidebar, role-gated by tier. Your team runs the show here.",
+    body: "Projects, finance, procurement, production, people, AI — one sidebar, role-aware access. Your team's command center.",
     bullets: [
-      "60+ real modules across 9 domains",
-      "AI assistant + drafting + managed agents",
-      "Full audit log + RLS per org",
-      "Role matrix: 10 platform × 4 project × 4 tiers",
+      "Sixty-plus modules across nine domains",
+      "AI assistant that drafts from your real data",
+      "Immutable audit log — who, when, what changed",
+      "Role matrix for every tier and every module",
     ],
     href: "/solutions/atlvs",
   },
   {
     slug: "gvteway",
     name: "GVTEWAY",
-    tier: "EXTERNAL",
+    tier: "STAKEHOLDERS",
     title: "Stakeholder portals",
-    body: "Slug-scoped workspaces for every party outside your org. Artists, vendors, clients, sponsors, guests, crew — each gets a tailored view.",
+    body: "A tailored workspace for every party outside your org. Artists, vendors, clients, sponsors, guests, crew — each sees their lane.",
     bullets: [
-      "6 persona portals per project slug",
-      "Interactive proposals with e-sign",
-      "Advancing with deliverable tracking",
-      "Per-role KBYG event guides",
+      "Six persona portals per project",
+      "Interactive proposals, signed in place",
+      "Artist advancing with deliverable tracking",
+      "Role-scoped Know Before You Go guides",
     ],
     href: "/solutions/gvteway",
   },
   {
     slug: "compvss",
     name: "COMPVSS",
-    tier: "MOBILE",
+    tier: "FIELD",
     title: "The field kit",
-    body: "Offline-first. Ticket scan, geo-verified clock-in, inventory scan, incident reports — all on the phone, all fast.",
+    body: "Ticket scan, geo-verified clock-in, inventory, incident reports — from any phone. Keeps working when venue signal drops.",
     bullets: [
-      "QR ticket scan, race-safe atomic update",
+      "QR check-in with zero duplicates",
       "Geo-verified crew time tracking",
-      "Service-worker offline shell",
-      "Today's call sheet + KBYG guide",
+      "Offline-first — scans queue, then sync",
+      "Today's call sheet plus the role-scoped guide",
     ],
     href: "/solutions/compvss",
   },

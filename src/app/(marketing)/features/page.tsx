@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = buildMetadata({
   title: "Features — Console, Portals, Mobile, AI, Finance, Procurement",
   description:
-    "Everything the Second Star Technologies platform ships: the internal console (ATLVS), role-scoped stakeholder portals (GVTEWAY), offline-first mobile PWA (COMPVSS), streaming AI assistant, finance + procurement modules, and compliance tooling.",
+    "Everything in the Second Star Technologies platform: ATLVS for the office, GVTEWAY for every outside stakeholder, COMPVSS for the field. AI, finance, procurement, compliance — one connected system.",
   path: "/features",
   keywords: ["production software features", "event management platform", "stakeholder portals", "mobile field PWA"],
   ogImageEyebrow: "Features",
@@ -24,14 +24,14 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const CATEGORIES = [
-  { key: "console", title: "Platform console", desc: "Projects, finance, procurement, production, people, AI — one sidebar." },
-  { key: "portals", title: "Stakeholder portals", desc: "Slug-scoped workspaces for artists, vendors, clients, sponsors, guests, crew." },
-  { key: "mobile", title: "Mobile PWA", desc: "Offline ticket scan, geo-verified clock, inventory scan, incident reports." },
-  { key: "ai", title: "AI tooling", desc: "Streaming assistant, drafting, automations, and managed agents." },
-  { key: "finance", title: "Finance", desc: "Invoices, expenses, budgets, time, mileage, advances, payouts, live P&L." },
-  { key: "procurement", title: "Procurement", desc: "Requisitions, POs, vendor COIs, W-9s, Stripe Connect payouts." },
+  { key: "console", title: "Office console", desc: "Projects, finance, procurement, production, people, AI — all in one sidebar." },
+  { key: "portals", title: "Stakeholder portals", desc: "A tailored workspace for artists, vendors, clients, sponsors, guests, and crew." },
+  { key: "mobile", title: "Field mobile app", desc: "Ticket scan, geo-verified clock-in, inventory, incident reports — from any phone." },
+  { key: "ai", title: "AI assistant", desc: "Drafts riders, RFPs, call sheets, and recaps from your actual data." },
+  { key: "finance", title: "Finance", desc: "Invoices, expenses, budgets, time, mileage, advances, vendor payouts, live P&L." },
+  { key: "procurement", title: "Procurement", desc: "Requisitions, POs, vendor COIs, W-9s — all in one place." },
   { key: "production", title: "Production", desc: "Equipment, rentals, fabrication, dispatch, logistics." },
-  { key: "compliance", title: "Compliance", desc: "Per-org RLS, audit log, retention, SSO/SCIM on enterprise." },
+  { key: "compliance", title: "Compliance", desc: "Immutable audit log, retention, SSO and SCIM on Enterprise." },
 ];
 
 export default function FeaturesPage() {
@@ -40,7 +40,7 @@ export default function FeaturesPage() {
       <MarketingHero
         eyebrow="Features"
         title="Everything in ATLVS, GVTEWAY, and COMPVSS"
-        subtitle="Built on Next.js 16 (App Router), Supabase (Postgres + RLS), Stripe Connect, and Anthropic Claude."
+        subtitle="Every tool a production team needs — from first pitch to final settlement. Connected, not cobbled together."
       />
       <MarketingSection aria-label="Feature categories">
         <MarketingGrid cols={4}>

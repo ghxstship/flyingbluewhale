@@ -106,7 +106,7 @@ export default function ATLVSPage() {
               "AI grounded in your projects, crew, and budgets — not the public internet",
               "Direct vendor payouts — ACH, card, or international wire",
               "99.9% uptime SLA on Enterprise",
-              "SSO, SCIM, and signed DPA available",
+              "Signed DPA available on Enterprise",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -144,10 +144,6 @@ export default function ATLVSPage() {
           {
             q: "How does role-based access work?",
             a: "Ten platform roles (owner, admin, controller, collaborator, contractor, crew, client, viewer, and more) across four tiers. Every capability is gated by role, and the same gates are enforced at the data layer — not just in the app.",
-          },
-          {
-            q: "Does ATLVS support SSO?",
-            a: "Yes. SSO (SAML and OIDC) and SCIM provisioning are Enterprise-tier features. Contact sales to enable.",
           },
           {
             q: "Can I customize the sidebar?",

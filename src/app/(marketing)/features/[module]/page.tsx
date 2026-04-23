@@ -52,7 +52,7 @@ const MODULES: Record<string, ModuleConfig> = {
       { title: "Data walled off", body: "Every row scoped to your organization at the database layer — not just in the app." },
       { title: "Immutable audit log", body: "Who, when, what changed, what it was before. Every action. Exportable." },
       { title: "AI built in", body: "An assistant that reads your projects, crew, and budgets — and drafts from them." },
-      { title: "Enterprise-ready", body: "SSO, SCIM, signed DPA, 99.9% uptime SLA on the Enterprise tier." },
+      { title: "Enterprise-ready", body: "Signed DPA and 99.9% uptime SLA on the Enterprise tier." },
     ],
     faqs: [
       {
@@ -301,9 +301,9 @@ const MODULES: Record<string, ModuleConfig> = {
     slug: "compliance",
     name: "Compliance",
     eyebrow: "ATLVS · Compliance",
-    title: "Audit, retention, SSO, SOC 2 posture.",
+    title: "Audit, retention, SOC 2 posture.",
     blurb:
-      "Data walled off per organization. Immutable audit log. Retention policies. SSO and SCIM on Enterprise.",
+      "Data walled off per organization. Immutable audit log. Retention policies. Signed DPA on Enterprise.",
     heroTitle: "Built to pass a security review.",
     heroBody:
       "The Second Star Technologies platform's security posture is not a checklist — it's enforced on the data. Every organization's data walled off at the deepest layer. Every change written to an immutable audit trail. Files shared through auto-expiring links, not public buckets.",
@@ -311,7 +311,6 @@ const MODULES: Record<string, ModuleConfig> = {
       { title: "Data walled off per org", body: "No exceptions. Enforced at the database, not in the app." },
       { title: "Immutable audit trail", body: "Every change captured — before, after, who, when, from where. Queryable and exportable." },
       { title: "Retention", body: "Configurable per-category retention with soft-delete and purge." },
-      { title: "SSO and SCIM", body: "SAML and SCIM on the Enterprise tier. Bring your IdP." },
       { title: "Auto-expiring file links", body: "Sensitive files share through signed links with short expiry. No public buckets." },
       { title: "Edge security", body: "Strict content and origin rules enforced at the edge." },
     ],

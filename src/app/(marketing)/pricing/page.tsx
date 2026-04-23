@@ -77,7 +77,6 @@ const TIERS = [
     description: "For agencies, touring companies, festivals.",
     features: [
       "Everything in Professional",
-      "SSO (SAML) and SCIM provisioning",
       "Deep-reasoning AI model",
       "Custom roles and access policies",
       "SOC 2 attestation package and signed DPA",
@@ -147,8 +146,6 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
       { feature: "Card and ACH invoice payments", access: false, core: true, pro: true, ent: true },
       { feature: "Direct vendor payouts", access: false, core: false, pro: true, ent: true },
       { feature: "Signed webhooks", access: true, core: true, pro: true, ent: true },
-      { feature: "SSO (SAML)", access: false, core: false, pro: false, ent: true },
-      { feature: "SCIM provisioning", access: false, core: false, pro: false, ent: true },
     ],
   },
   {
@@ -201,7 +198,7 @@ const FAQS = [
   },
   {
     q: "What does Enterprise add over Professional?",
-    a: "SSO (SAML), SCIM provisioning, the deep-reasoning AI model, custom roles and access policies, a formal SOC 2 attestation package, a signed DPA, a dedicated customer success manager, a 99.9% uptime SLA, and custom integrations.",
+    a: "The deep-reasoning AI model, custom roles and access policies, a formal SOC 2 attestation package, a signed DPA, a dedicated customer success manager, a 99.9% uptime SLA, and custom integrations.",
   },
   {
     q: "How does this price out vs. Asana, Monday, or Notion plus point tools?",

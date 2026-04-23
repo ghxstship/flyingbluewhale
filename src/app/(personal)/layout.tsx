@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
+import { requireSession } from "@/lib/auth";
 
 const tabs = [
   { label: "Dashboard", href: "/me" },
@@ -15,6 +16,11 @@ const tabs = [
 ];
 
 export default async function PersonalLayout({ children }: { children: React.ReactNode }) {
+  // Outer auth guard — matches (platform) and (mobile) shell convention.
+  // Previously `/me/*` pages rendered chrome + empty forms to anon visitors,
+  // leaking shell structure and risking partial data exposure through any
+  // client component that assumed a session existed. UJV cell R1-R10·S1/S3.
+  await requireSession("/login");
   const tenant = await resolveTenant();
   const brandName = tenant.branding.productName ?? tenant.orgName ?? "SECOND STVR";
   const brandAria = tenant.branding.productName ?? tenant.orgName ?? "Second Star Technologies";

@@ -16,7 +16,7 @@ const MARKETING = [
   "/compare",
   "/features",
   "/about",
-  "/customers",
+  "/community",
   "/guides",
   "/blog",
   "/changelog",

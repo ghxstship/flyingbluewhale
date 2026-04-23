@@ -48,8 +48,8 @@ test.describe("marketing", () => {
     await expect(page.getByRole("link", { name: /spreadsheets/i })).toBeVisible();
   });
 
-  test("guides + blog + customers each list at least one entry", async ({ page }) => {
-    for (const path of ["/guides", "/blog", "/customers"]) {
+  test("guides + blog + community each list at least one entry", async ({ page }) => {
+    for (const path of ["/guides", "/blog", "/community"]) {
       await page.goto(path);
       await expect(page.getByRole("link").first()).toBeVisible();
     }

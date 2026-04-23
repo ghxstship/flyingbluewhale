@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-22",
+  "repo": "flyingbluewhale",
+  "head": "72f45e750ee08e864268e88429ca9c2b01917c59",
+  "roles": [
+    "developer", "owner", "admin", "controller", "collaborator",
+    "contractor", "crew", "client", "viewer", "community"
+  ],
+  "stages": [
+    { "id": "S1", "label": "Account creation", "surface": "(auth)" },
+    { "id": "S2", "label": "Team formation", "surface": "console.people.invites + accept-invite" },
+    { "id": "S3", "label": "Project setup", "surface": "console.projects" },
+    { "id": "S4", "label": "ATLVS console", "surface": "(platform)" },
+    { "id": "S5", "label": "GVTEWAY portal", "surface": "(portal)" },
+    { "id": "S6", "label": "COMPVSS mobile", "surface": "(mobile)" },
+    { "id": "S7", "label": "Reconciliation", "surface": "console.finance" },
+    { "id": "S8", "label": "Archive", "surface": "soft-delete + RLS" }
+  ],
+  "cells": {
+    "developer":    { "S1": "ok",  "S2": "ok",  "S3": "ok",  "S4": "ok",  "S5": "na", "S6": "na", "S7": "ok",  "S8": "ok"  },
+    "owner":        { "S1": "ok",  "S2": "ok",  "S3": "ok",  "S4": "ok",  "S5": "na", "S6": "na", "S7": "ok",  "S8": "ok"  },
+    "admin":        { "S1": "ok",  "S2": "ok",  "S3": "ok",  "S4": "ok",  "S5": "na", "S6": "na", "S7": "ok",  "S8": "ok"  },
+    "controller":   { "S1": "ok",  "S2": "partial", "S3": "partial", "S4": "ok", "S5": "na", "S6": "na", "S7": "ok", "S8": "partial" },
+    "collaborator": { "S1": "ok",  "S2": "na",  "S3": "ok",  "S4": "ok",  "S5": "na", "S6": "na", "S7": "partial", "S8": "partial" },
+    "contractor":   { "S1": "ok",  "S2": "na",  "S3": "na",  "S4": "na",  "S5": "ok", "S6": "na", "S7": "partial", "S8": "na"  },
+    "crew":         { "S1": "ok",  "S2": "na",  "S3": "na",  "S4": "na",  "S5": "na", "S6": "ok", "S7": "partial", "S8": "na"  },
+    "client":       { "S1": "ok",  "S2": "na",  "S3": "na",  "S4": "na",  "S5": "ok", "S6": "na", "S7": "partial", "S8": "na"  },
+    "viewer":       { "S1": "ok",  "S2": "na",  "S3": "na",  "S4": "na",  "S5": "na", "S6": "na", "S7": "na",  "S8": "na"  },
+    "community":    { "S1": "ok",  "S2": "na",  "S3": "na",  "S4": "na",  "S5": "na", "S6": "na", "S7": "na",  "S8": "na"  }
+  },
+  "summary": { "executable": 39, "na": 41 }
+}

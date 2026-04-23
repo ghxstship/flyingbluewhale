@@ -31,7 +31,7 @@ const CATEGORIES = [
   { key: "finance", title: "Finance", desc: "Invoices, expenses, budgets, time, mileage, advances, vendor payouts, live P&L." },
   { key: "procurement", title: "Procurement", desc: "Requisitions, POs, vendor COIs, W-9s — all in one place." },
   { key: "production", title: "Production", desc: "Equipment, rentals, fabrication, dispatch, logistics." },
-  { key: "compliance", title: "Compliance", desc: "Immutable audit log, retention, SSO and SCIM on Enterprise." },
+  { key: "compliance", title: "Compliance", desc: "Immutable audit log, retention, signed DPA on Enterprise." },
 ];
 
 export default function FeaturesPage() {

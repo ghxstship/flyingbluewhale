@@ -304,10 +304,6 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
         q: "Can we route proposals through legal?",
         a: "Yes. Create a separate internal review link from the client link. Annotate and revise. Send the final version when you're ready. Version history tracks every edit.",
       },
-      {
-        q: "Does the client portal support SSO?",
-        a: "Yes, on Enterprise. SSO via SAML and OIDC. Access can be scoped per proposal or per project.",
-      },
     ],
     related: ["brand-activations", "theatrical-performances", "broadcast-tv-film"],
   },

@@ -214,7 +214,7 @@ export default function Home() {
               { icon: DollarSign, title: "Finance", body: "Invoices, expenses, budgets, and direct vendor payouts.", href: "/features/finance" },
               { icon: ClipboardCheck, title: "Procurement", body: "Requisitions, POs, vendor COIs, W-9s — all in one place.", href: "/features/procurement" },
               { icon: Zap, title: "AI assistant", body: "Answers from your projects, crew, and budgets — not the public internet.", href: "/features/ai" },
-              { icon: ShieldCheck, title: "Enterprise-grade", body: "SSO, SCIM, signed DPA, immutable audit log, 99.9% uptime SLA.", href: "/features/compliance" },
+              { icon: ShieldCheck, title: "Enterprise-grade", body: "Signed DPA, immutable audit log, 99.9% uptime SLA.", href: "/features/compliance" },
             ]}
           />
         </div>
@@ -327,7 +327,7 @@ const HOME_FAQ = [
   },
   {
     q: "How is security handled?",
-    a: "Seriously. Your org's data is walled off from every other org, enforced at the deepest layer — not just in the app. Every change writes to an immutable audit trail. Files share via auto-expiring signed URLs, not public buckets. SSO, SCIM user provisioning, and SOC 2 are available on Enterprise. Full security documentation at /trust.",
+    a: "Seriously. Your org's data is walled off from every other org, enforced at the deepest layer — not just in the app. Every change writes to an immutable audit trail. Files share via auto-expiring signed URLs, not public buckets. A signed DPA and SOC 2 attestation package are available on Enterprise. Full security documentation at /trust.",
   },
   {
     q: "Do you have an AI assistant?",

@@ -55,7 +55,7 @@ export const ROUTES: Array<{
   { path: "/solutions/compvss", name: "marketing-solutions-compvss", shell: "marketing", authed: false },
   { path: "/features", name: "marketing-features", shell: "marketing", authed: false },
   { path: "/contact", name: "marketing-contact", shell: "marketing", authed: false },
-  { path: "/customers", name: "marketing-customers", shell: "marketing", authed: false },
+  { path: "/community", name: "marketing-community", shell: "marketing", authed: false },
   { path: "/compare", name: "marketing-compare", shell: "marketing", authed: false },
   { path: "/guides", name: "marketing-guides", shell: "marketing", authed: false },
   { path: "/blog", name: "marketing-blog", shell: "marketing", authed: false },

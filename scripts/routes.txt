@@ -239,3 +239,285 @@
 (mobile)/m/inventory/scan/page.tsx|Inventory scan|Equipment scan in/out
 (mobile)/m/incidents/new/page.tsx|Incident|Safety report
 (mobile)/m/settings/page.tsx|Mobile settings|Offline sync, camera perms
+
+# ════════════════════════════════════════════════════════════════════════
+# OLYMPIC-GRADE SCOPE — ATLVS / GVTEWAY / COMPVSS (see docs/ia/benchmarks)
+# ════════════════════════════════════════════════════════════════════════
+
+# ATLVS — Programs (WF-004, 005, 006, 024, 028, 029, 150, 151, 152, 154, 260, 261)
+(platform)/console/programs/page.tsx|Programs|Master schedule, risk, readiness
+(platform)/console/programs/schedule/page.tsx|Master schedule|Gantt with dependencies and baselines
+(platform)/console/programs/risk/page.tsx|Risk register|RAID log across the portfolio
+(platform)/console/programs/risk/new/page.tsx|New risk|
+(platform)/console/programs/risk/[riskId]/page.tsx|Risk|
+(platform)/console/programs/reviews/page.tsx|Reviews|Program review cadence
+(platform)/console/programs/reviews/[reviewId]/page.tsx|Review|
+(platform)/console/programs/readiness/page.tsx|Readiness exercises|TTX and full-scale exercises
+(platform)/console/programs/readiness/[exerciseId]/page.tsx|Exercise|
+(platform)/console/programs/scope/page.tsx|Program scope|Disciplines, events, quotas
+(platform)/console/programs/sessions/page.tsx|Sessions|Heat, round, medal session
+(platform)/console/programs/ceremonies/page.tsx|Ceremonies|Opening, closing, victory, mixed zone
+(platform)/console/programs/ceremonies/[ceremonyId]/page.tsx|Ceremony|
+(platform)/console/programs/protocol/page.tsx|Protocol|VIP itinerary and dignitary rules
+(platform)/console/programs/pressconf/page.tsx|Press conferences|Schedule and booking
+(platform)/console/programs/cases/page.tsx|Cases|Protests and appeals
+
+# ATLVS — Venues (WF-010, 011, 012, 013, 014, 015, 017, 018)
+(platform)/console/venues/page.tsx|Venues|Portfolio, clusters, zones
+(platform)/console/venues/new/page.tsx|New venue|
+(platform)/console/venues/[venueId]/page.tsx|Venue|
+(platform)/console/venues/[venueId]/zones/page.tsx|Zones|Venue zones and precincts
+(platform)/console/venues/[venueId]/design/page.tsx|Design|Overlay spec and revisions
+(platform)/console/venues/[venueId]/build/page.tsx|Build|Construction oversight
+(platform)/console/venues/[venueId]/handover/page.tsx|Handover|Commissioning and takeover
+(platform)/console/venues/[venueId]/certifications/page.tsx|Certifications|FOP homologation and permits
+(platform)/console/venues/[venueId]/vop/page.tsx|VOP|Venue Operations Plan
+(platform)/console/venues/[venueId]/ros/page.tsx|Run of Show|Daily BOD and EOD
+(platform)/console/venues/[venueId]/closeout/page.tsx|Closeout|Demob and reinstatement
+
+# ATLVS — Accreditation (WF-050, 051, 052, 053, 054)
+(platform)/console/accreditation/page.tsx|Accreditation|Policy, vetting, print, scans
+(platform)/console/accreditation/policy/page.tsx|Policy|Categories and zone matrix
+(platform)/console/accreditation/categories/page.tsx|Categories|
+(platform)/console/accreditation/zones/page.tsx|Zones|Zone definitions and privileges
+(platform)/console/accreditation/vetting/page.tsx|Vetting queue|Background check status
+(platform)/console/accreditation/vetting/[applicationId]/page.tsx|Application|
+(platform)/console/accreditation/print/page.tsx|Print queue|Card production
+(platform)/console/accreditation/scans/page.tsx|Scans|Gate access log
+(platform)/console/accreditation/changes/page.tsx|Changes|Upgrades, revocations, replacements
+(platform)/console/accreditation/changes/[changeId]/page.tsx|Change|
+
+# ATLVS — Workforce (WF-016, 190, 191, 192, 193, 194, 195, 196, 197, 082)
+(platform)/console/workforce/page.tsx|Workforce|Plan, roster, services
+(platform)/console/workforce/planning/page.tsx|Planning|FTE strategy and headcount
+(platform)/console/workforce/deployment/page.tsx|Deployment|By venue, zone, shift
+(platform)/console/workforce/staff/page.tsx|Paid staff|Applicant pipeline and onboarding
+(platform)/console/workforce/staff/[staffId]/page.tsx|Staff member|
+(platform)/console/workforce/volunteers/page.tsx|Volunteers|Program pipeline
+(platform)/console/workforce/volunteers/[volunteerId]/page.tsx|Volunteer|
+(platform)/console/workforce/contractors/page.tsx|Contractors|Vendor personnel
+(platform)/console/workforce/contractors/[contractorId]/page.tsx|Contractor|
+(platform)/console/workforce/uniforms/page.tsx|Uniforms|Distribution and rate card
+(platform)/console/workforce/services/page.tsx|Services|Meals, breaks, amenities
+(platform)/console/workforce/training/page.tsx|Training|Catalog and assignment
+(platform)/console/workforce/training/[courseId]/page.tsx|Course|
+(platform)/console/workforce/rosters/page.tsx|Rosters|Shift engine
+(platform)/console/workforce/rosters/[rosterId]/page.tsx|Roster|
+(platform)/console/workforce/housing/page.tsx|Housing|Workforce billeting
+
+# ATLVS — Safety & Incidents (WF-060, 061, 062, 064, 065, 090, 092, 094, 142, 241, 252, 035)
+(platform)/console/safety/page.tsx|Safety|Threats, incidents, crisis
+(platform)/console/safety/threats/page.tsx|Threats|Intelligence register
+(platform)/console/safety/playbooks/page.tsx|Playbooks|ConOps library
+(platform)/console/safety/guard-tours/page.tsx|Guard tours|Patrol plans and logs
+(platform)/console/safety/incidents/page.tsx|Incidents|Unified security + cyber
+(platform)/console/safety/major-incident/page.tsx|Major incident|Crisis mode
+(platform)/console/safety/major-incident/[eventId]/page.tsx|Incident event|War room
+(platform)/console/safety/cyber-ir/page.tsx|Cyber IR|Contain, eradicate, recover
+(platform)/console/safety/medical/page.tsx|Medical|Plans and encounters
+(platform)/console/safety/medical/plan/page.tsx|Medical plan|
+(platform)/console/safety/medical/encounters/page.tsx|Encounters|PHI-scoped
+(platform)/console/safety/environmental/page.tsx|Environmental|Heat, air, weather
+(platform)/console/safety/crisis/page.tsx|Crisis comms|Mass-notify
+(platform)/console/safety/crisis/new/page.tsx|New alert|
+(platform)/console/safety/safeguarding/page.tsx|Safeguarding|Confidential reports
+(platform)/console/safety/safeguarding/[reportId]/page.tsx|Safeguarding report|
+(platform)/console/safety/bcdr/page.tsx|BC/DR|Runbooks and exercises
+
+# ATLVS — Transport (WF-031, 071, 072, 073, 074, 076)
+(platform)/console/transport/page.tsx|Transport|Dispatch and A&D
+(platform)/console/transport/dispatch/page.tsx|Dispatch|T1 T2 T3 fleets
+(platform)/console/transport/dispatch/[runId]/page.tsx|Run|
+(platform)/console/transport/ad/page.tsx|Arrivals & departures|Flight feed and ground ops
+(platform)/console/transport/ad/[manifestId]/page.tsx|Manifest|
+(platform)/console/transport/workforce/page.tsx|Workforce shuttles|Shift-linked routes
+(platform)/console/transport/fleets/page.tsx|Fleets|Vehicles and drivers
+
+# ATLVS — Accommodation (WF-030, 080, 081)
+(platform)/console/accommodation/page.tsx|Accommodation|Hotel program
+(platform)/console/accommodation/blocks/page.tsx|Group blocks|OF hotel program
+(platform)/console/accommodation/blocks/[blockId]/page.tsx|Block|
+(platform)/console/accommodation/village/page.tsx|Village|Residential zone
+
+# ATLVS — Participants (WF-021, 040, 256)
+(platform)/console/participants/page.tsx|Participants|Delegations and entries
+(platform)/console/participants/delegations/page.tsx|Delegations|Stakeholder accounts
+(platform)/console/participants/delegations/[delegationId]/page.tsx|Delegation|
+(platform)/console/participants/entries/page.tsx|Entries|Submission registry
+(platform)/console/participants/visa/page.tsx|Visa|Letter of invite and status
+(platform)/console/participants/visa/[caseId]/page.tsx|Visa case|
+
+# ATLVS — Commercial (WF-170-176, 183)
+(platform)/console/commercial/page.tsx|Commercial|Sponsors, tickets, brand
+(platform)/console/commercial/sponsors/page.tsx|Sponsors|Entitlement management
+(platform)/console/commercial/sponsors/[sponsorId]/page.tsx|Sponsor|
+(platform)/console/commercial/hospitality/page.tsx|Hospitality|Packages and guests
+(platform)/console/commercial/hospitality/[packageId]/page.tsx|Package|
+(platform)/console/commercial/tickets/page.tsx|Ticketing|Pricing and allocation
+(platform)/console/commercial/tickets/[ticketTypeId]/page.tsx|Ticket type|
+(platform)/console/commercial/licensing/page.tsx|Licensing|Royalty and merchandise
+(platform)/console/commercial/brand/page.tsx|Brand|Look of Games and kit
+
+# ATLVS — Logistics (WF-200, 201, 202, 203, 212)
+(platform)/console/logistics/page.tsx|Logistics|Rate card, freight, warehouse
+(platform)/console/logistics/ratecard/page.tsx|Rate card|Shared catalog engine
+(platform)/console/logistics/ratecard/[itemId]/page.tsx|Catalog item|
+(platform)/console/logistics/freight/page.tsx|Freight|Customs and bonded
+(platform)/console/logistics/freight/[shipmentId]/page.tsx|Shipment|
+(platform)/console/logistics/warehouse/page.tsx|Warehouse|FF&E WMS
+(platform)/console/logistics/services/page.tsx|Services|Waste and cleaning
+(platform)/console/logistics/disposition/page.tsx|Disposition|Circularity and reuse
+
+# ATLVS — Production expand (WF-113, 114, 135)
+(platform)/console/production/compounds/page.tsx|Compounds|Broadcast compounds and cable plant
+(platform)/console/production/av/page.tsx|AV systems|Scoreboards and sound
+(platform)/console/production/ros/page.tsx|Run of show|Cue authoring
+
+# ATLVS — Integrations / TOC (WF-131, 134)
+(platform)/console/integrations/page.tsx|Integrations|Connector registry
+(platform)/console/integrations/[connectorId]/page.tsx|Connector|
+(platform)/console/ops/page.tsx|Operations|TOC and ITIL
+(platform)/console/ops/toc/page.tsx|TOC|Incident, problem, change
+(platform)/console/ops/toc/problems/page.tsx|Problems|
+(platform)/console/ops/toc/changes/page.tsx|Changes|
+
+# ATLVS — Legal & Privacy (WF-230, 232, 240)
+(platform)/console/legal/page.tsx|Legal|IP, privacy, insurance
+(platform)/console/legal/ip/page.tsx|IP|Trademark register
+(platform)/console/legal/ip/[markId]/page.tsx|Mark|
+(platform)/console/legal/privacy/page.tsx|Privacy|DSAR queue and consent
+(platform)/console/legal/privacy/dsar/page.tsx|DSAR|Data subject requests
+(platform)/console/legal/privacy/dsar/[requestId]/page.tsx|DSAR request|
+(platform)/console/legal/privacy/consent/page.tsx|Consent|Registry
+(platform)/console/legal/privacy/datamap/page.tsx|Data map|
+(platform)/console/legal/insurance/page.tsx|Insurance|Policies and claims
+
+# ATLVS — Comms (WF-250, 251, 252)
+(platform)/console/comms/page.tsx|Comms|Campaigns
+(platform)/console/comms/internal/page.tsx|Internal comms|Workforce campaigns
+(platform)/console/comms/internal/new/page.tsx|New campaign|
+(platform)/console/comms/external/page.tsx|External PR|Media list
+
+# ATLVS — Sustainability (WF-210, 211)
+(platform)/console/sustainability/page.tsx|Sustainability|Strategy and reporting
+(platform)/console/sustainability/carbon/page.tsx|Carbon|Footprint and offsets
+
+# ATLVS — Knowledge Base (WF-261)
+(platform)/console/kb/page.tsx|Knowledge base|OGKM-style capture
+(platform)/console/kb/[articleId]/page.tsx|Article|
+
+# ATLVS — Governance (WF-002)
+(platform)/console/settings/governance/page.tsx|Governance|Board, committees, officers
+
+# ATLVS — Meetings (WF-042, 043)
+(platform)/console/meetings/page.tsx|Meetings|Technical and CdM
+(platform)/console/meetings/[meetingId]/page.tsx|Meeting|
+
+# ATLVS — Rate card shortcut for delegation (WF-041)
+(platform)/console/ratecard/page.tsx|Rate card (admin)|Delegation orders
+
+# ATLVS — Services desk (WF-032)
+(platform)/console/services/page.tsx|Service desk|Resident and participant requests
+(platform)/console/services/requests/page.tsx|Requests|
+(platform)/console/services/requests/[requestId]/page.tsx|Request|
+
+# ATLVS — Training venues (WF-033)
+(platform)/console/venues/training/page.tsx|Training venues|Bookable
+
+# ════════════════════════════════════════════════════════════════════════
+# GVTEWAY — new personas: delegation, media, vip, volunteer, athlete
+# ════════════════════════════════════════════════════════════════════════
+
+# PORTAL — delegation (NOC / team)
+(portal)/p/[slug]/delegation/page.tsx|Delegation|Overview
+(portal)/p/[slug]/delegation/entries/page.tsx|Entries|Athlete entries
+(portal)/p/[slug]/delegation/ratecard/page.tsx|Rate card|Order delegation services
+(portal)/p/[slug]/delegation/bookings/page.tsx|Bookings|Training venues
+(portal)/p/[slug]/delegation/meetings/page.tsx|Meetings|Technical and CdM
+(portal)/p/[slug]/delegation/cases/page.tsx|Cases|Protests and appeals
+(portal)/p/[slug]/delegation/transport/page.tsx|Transport|Team movements
+(portal)/p/[slug]/delegation/accommodation/page.tsx|Accommodation|Block assignments
+(portal)/p/[slug]/delegation/privacy/page.tsx|Privacy|DSAR self-service
+(portal)/p/[slug]/delegation/visa/page.tsx|Visa|Letters of invite
+
+# PORTAL — media (accredited press / RHB)
+(portal)/p/[slug]/media/page.tsx|Media|Overview
+(portal)/p/[slug]/media/services/page.tsx|Services|MPC rate card
+(portal)/p/[slug]/media/accommodation/page.tsx|Accommodation|Media village
+(portal)/p/[slug]/media/transport/page.tsx|Transport|Shuttles
+(portal)/p/[slug]/media/pressconf/page.tsx|Press conferences|RSVP
+(portal)/p/[slug]/media/info/page.tsx|Info-on-demand|Results, bios, docs
+
+# PORTAL — vip / hospitality
+(portal)/p/[slug]/vip/page.tsx|VIP|Overview
+(portal)/p/[slug]/vip/transport/page.tsx|Transport|Dedicated fleet
+(portal)/p/[slug]/vip/accommodation/page.tsx|Accommodation|Hotel allocation
+(portal)/p/[slug]/vip/itinerary/page.tsx|Itinerary|
+(portal)/p/[slug]/hospitality/page.tsx|Hospitality|Package and guest portal
+(portal)/p/[slug]/hospitality/guests/page.tsx|Guests|
+(portal)/p/[slug]/hospitality/itinerary/page.tsx|Itinerary|
+
+# PORTAL — volunteer / applicant
+(portal)/p/[slug]/volunteer/page.tsx|Volunteer|Overview
+(portal)/p/[slug]/volunteer/application/page.tsx|Application|
+(portal)/p/[slug]/volunteer/training/page.tsx|Training|Assignments
+(portal)/p/[slug]/volunteer/schedule/page.tsx|Schedule|Shifts
+(portal)/p/[slug]/volunteer/uniform/page.tsx|Uniform|Pickup booking
+(portal)/p/[slug]/apply/page.tsx|Apply|General accreditation application
+(portal)/p/[slug]/apply/changes/page.tsx|Changes|Lost card, upgrade requests
+
+# PORTAL — athlete
+(portal)/p/[slug]/athlete/page.tsx|Athlete|Overview
+(portal)/p/[slug]/athlete/requests/page.tsx|Requests|Resident services
+(portal)/p/[slug]/athlete/training/page.tsx|Training|Bookings
+(portal)/p/[slug]/athlete/safeguarding/page.tsx|Safeguarding|Confidential report
+(portal)/p/[slug]/athlete/visa/page.tsx|Visa|
+(portal)/p/[slug]/athlete/privacy/page.tsx|Privacy|DSAR self-service
+
+# PORTAL — client / sponsor / vendor / guest privacy self-service
+(portal)/p/[slug]/client/privacy/page.tsx|Privacy|DSAR self-service
+(portal)/p/[slug]/sponsor/entitlements/page.tsx|Entitlements|Rights tracker
+(portal)/p/[slug]/sponsor/privacy/page.tsx|Privacy|DSAR self-service
+(portal)/p/[slug]/vendor/training/page.tsx|Training|Compliance courses
+(portal)/p/[slug]/vendor/privacy/page.tsx|Privacy|DSAR self-service
+(portal)/p/[slug]/guest/privacy/page.tsx|Privacy|DSAR self-service
+
+# ════════════════════════════════════════════════════════════════════════
+# COMPVSS — mobile ops PWA
+# ════════════════════════════════════════════════════════════════════════
+
+(mobile)/m/gate/page.tsx|Gate|Accreditation + ticket scanner
+(mobile)/m/gate/scan/page.tsx|Scan|Camera QR scan
+(mobile)/m/wallet/page.tsx|Wallet|My credential
+(mobile)/m/shift/page.tsx|Shift|Today's shift
+(mobile)/m/shift/swap/page.tsx|Swap shift|
+(mobile)/m/checkin/page.tsx|Check-in|Clock and meal credit
+(mobile)/m/incident/page.tsx|Incident|Field intake
+(mobile)/m/incident/new/page.tsx|New incident|
+(mobile)/m/medic/page.tsx|Medic|Triage
+(mobile)/m/medic/new/page.tsx|New encounter|
+(mobile)/m/safeguarding/page.tsx|Safeguarding|Confidential report
+(mobile)/m/alerts/page.tsx|Alerts|Crisis notifications
+(mobile)/m/driver/page.tsx|Driver|Manifest
+(mobile)/m/driver/run/[runId]/page.tsx|Run|
+(mobile)/m/ad/page.tsx|A&D|Airport ground ops
+(mobile)/m/ros/page.tsx|Run of show|Live cues
+(mobile)/m/ros/[showId]/page.tsx|Show|
+(mobile)/m/guard/page.tsx|Guard|Tour log
+(mobile)/m/wms/page.tsx|Warehouse|Pick and put-away
+(mobile)/m/punch/page.tsx|Punch list|Inspection
+(mobile)/m/handover/page.tsx|Handover|Walk and sign
+(mobile)/m/requests/page.tsx|Requests|Cleaning and waste
+(mobile)/m/coc/page.tsx|Chain of custody|Sample and evidence
+(mobile)/m/wayfind/page.tsx|Wayfind|Indoor map
+(mobile)/m/notifications/page.tsx|Notifications|
+
+# Chain of custody (WF-101) — generic COC for doping/evidence
+(platform)/console/compliance/coc/page.tsx|Chain of custody|Sample and evidence tracking
+
+# Finance extensions — multi-currency + variance
+(platform)/console/finance/treasury/page.tsx|Treasury|Multi-currency positions and FX rates
+
+# Procurement extensions
+(platform)/console/procurement/sourcing/page.tsx|Sourcing|RFQ and contract-linked sourcing events
+(platform)/console/procurement/scorecards/page.tsx|Supplier scorecards|SLA and KPI performance tracking

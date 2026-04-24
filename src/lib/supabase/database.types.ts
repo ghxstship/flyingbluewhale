@@ -14,6 +14,322 @@ export type Database = {
   }
   public: {
     Tables: {
+      access_scans: {
+        Row: {
+          accreditation_id: string | null
+          device_id: string | null
+          gate_code: string | null
+          id: string
+          org_id: string
+          reason: string | null
+          result: string
+          scanned_at: string
+          scanned_by: string | null
+          venue_id: string | null
+          zone_id: string | null
+        }
+        Insert: {
+          accreditation_id?: string | null
+          device_id?: string | null
+          gate_code?: string | null
+          id?: string
+          org_id: string
+          reason?: string | null
+          result: string
+          scanned_at?: string
+          scanned_by?: string | null
+          venue_id?: string | null
+          zone_id?: string | null
+        }
+        Update: {
+          accreditation_id?: string | null
+          device_id?: string | null
+          gate_code?: string | null
+          id?: string
+          org_id?: string
+          reason?: string | null
+          result?: string
+          scanned_at?: string
+          scanned_by?: string | null
+          venue_id?: string | null
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "access_scans_accreditation_id_fkey"
+            columns: ["accreditation_id"]
+            isOneToOne: false
+            referencedRelation: "accreditations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "access_scans_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "access_scans_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "venue_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      accommodation_blocks: {
+        Row: {
+          city: string | null
+          contract_path: string | null
+          created_at: string
+          ends_on: string | null
+          id: string
+          name: string
+          org_id: string
+          property: string
+          rooms_confirmed: number
+          rooms_reserved: number
+          stakeholder_group: string | null
+          starts_on: string | null
+        }
+        Insert: {
+          city?: string | null
+          contract_path?: string | null
+          created_at?: string
+          ends_on?: string | null
+          id?: string
+          name: string
+          org_id: string
+          property: string
+          rooms_confirmed?: number
+          rooms_reserved?: number
+          stakeholder_group?: string | null
+          starts_on?: string | null
+        }
+        Update: {
+          city?: string | null
+          contract_path?: string | null
+          created_at?: string
+          ends_on?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          property?: string
+          rooms_confirmed?: number
+          rooms_reserved?: number
+          stakeholder_group?: string | null
+          starts_on?: string | null
+        }
+        Relationships: []
+      }
+      accreditation_categories: {
+        Row: {
+          code: string
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          org_id: string
+          zone_privileges: Json
+        }
+        Insert: {
+          code: string
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          org_id: string
+          zone_privileges?: Json
+        }
+        Update: {
+          code?: string
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          zone_privileges?: Json
+        }
+        Relationships: []
+      }
+      accreditation_changes: {
+        Row: {
+          accreditation_id: string
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          id: string
+          kind: string
+          note: string | null
+          org_id: string
+          requested_by: string | null
+          status: string
+        }
+        Insert: {
+          accreditation_id: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          kind: string
+          note?: string | null
+          org_id: string
+          requested_by?: string | null
+          status?: string
+        }
+        Update: {
+          accreditation_id?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          kind?: string
+          note?: string | null
+          org_id?: string
+          requested_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accreditation_changes_accreditation_id_fkey"
+            columns: ["accreditation_id"]
+            isOneToOne: false
+            referencedRelation: "accreditations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      accreditations: {
+        Row: {
+          card_barcode: string | null
+          category_id: string | null
+          created_at: string
+          delegation_id: string | null
+          id: string
+          issued_at: string | null
+          metadata: Json
+          org_id: string
+          person_email: string | null
+          person_name: string
+          photo_path: string | null
+          revoke_reason: string | null
+          revoked_at: string | null
+          state: Database["public"]["Enums"]["accreditation_state"]
+          updated_at: string
+          user_id: string | null
+          valid_from: string | null
+          valid_to: string | null
+          vetting: Database["public"]["Enums"]["vetting_state"]
+        }
+        Insert: {
+          card_barcode?: string | null
+          category_id?: string | null
+          created_at?: string
+          delegation_id?: string | null
+          id?: string
+          issued_at?: string | null
+          metadata?: Json
+          org_id: string
+          person_email?: string | null
+          person_name: string
+          photo_path?: string | null
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          state?: Database["public"]["Enums"]["accreditation_state"]
+          updated_at?: string
+          user_id?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+          vetting?: Database["public"]["Enums"]["vetting_state"]
+        }
+        Update: {
+          card_barcode?: string | null
+          category_id?: string | null
+          created_at?: string
+          delegation_id?: string | null
+          id?: string
+          issued_at?: string | null
+          metadata?: Json
+          org_id?: string
+          person_email?: string | null
+          person_name?: string
+          photo_path?: string | null
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          state?: Database["public"]["Enums"]["accreditation_state"]
+          updated_at?: string
+          user_id?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+          vetting?: Database["public"]["Enums"]["vetting_state"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accreditations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "accreditation_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ad_manifests: {
+        Row: {
+          actual_at: string | null
+          carrier: string | null
+          created_at: string
+          delegation_id: string | null
+          flight_ref: string | null
+          id: string
+          kind: string
+          notes: string | null
+          org_id: string
+          party_size: number
+          scheduled_at: string | null
+          status: string
+        }
+        Insert: {
+          actual_at?: string | null
+          carrier?: string | null
+          created_at?: string
+          delegation_id?: string | null
+          flight_ref?: string | null
+          id?: string
+          kind?: string
+          notes?: string | null
+          org_id: string
+          party_size?: number
+          scheduled_at?: string | null
+          status?: string
+        }
+        Update: {
+          actual_at?: string | null
+          carrier?: string | null
+          created_at?: string
+          delegation_id?: string | null
+          flight_ref?: string | null
+          id?: string
+          kind?: string
+          notes?: string | null
+          org_id?: string
+          party_size?: number
+          scheduled_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_manifests_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "delegations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       advances: {
         Row: {
           amount_cents: number
@@ -323,6 +639,39 @@ export type Database = {
           },
         ]
       }
+      consent_records: {
+        Row: {
+          granted: boolean
+          granted_at: string | null
+          id: string
+          org_id: string
+          purpose: string
+          revoked_at: string | null
+          user_id: string | null
+          version: string | null
+        }
+        Insert: {
+          granted?: boolean
+          granted_at?: string | null
+          id?: string
+          org_id: string
+          purpose: string
+          revoked_at?: string | null
+          user_id?: string | null
+          version?: string | null
+        }
+        Update: {
+          granted?: boolean
+          granted_at?: string | null
+          id?: string
+          org_id?: string
+          purpose?: string
+          revoked_at?: string | null
+          user_id?: string | null
+          version?: string | null
+        }
+        Relationships: []
+      }
       credentials: {
         Row: {
           created_at: string
@@ -433,6 +782,169 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crisis_alert_receipts: {
+        Row: {
+          acknowledged_at: string | null
+          alert_id: string
+          channel: string | null
+          delivered_at: string | null
+          id: string
+          org_id: string
+          user_id: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          alert_id: string
+          channel?: string | null
+          delivered_at?: string | null
+          id?: string
+          org_id: string
+          user_id: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          alert_id?: string
+          channel?: string | null
+          delivered_at?: string | null
+          id?: string
+          org_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crisis_alert_receipts_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "crisis_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crisis_alerts: {
+        Row: {
+          audience: Json
+          body: string
+          channels: Json
+          created_at: string
+          created_by: string | null
+          id: string
+          org_id: string
+          scheduled_at: string | null
+          sent_at: string | null
+          severity: string
+          title: string
+        }
+        Insert: {
+          audience?: Json
+          body: string
+          channels?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          org_id: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          severity?: string
+          title: string
+        }
+        Update: {
+          audience?: Json
+          body?: string
+          channels?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          org_id?: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          severity?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      delegation_entries: {
+        Row: {
+          created_at: string
+          delegation_id: string
+          discipline: string | null
+          event: string | null
+          id: string
+          org_id: string
+          participant_name: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          delegation_id: string
+          discipline?: string | null
+          event?: string | null
+          id?: string
+          org_id: string
+          participant_name: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          delegation_id?: string
+          discipline?: string | null
+          event?: string | null
+          id?: string
+          org_id?: string
+          participant_name?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delegation_entries_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "delegations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delegations: {
+        Row: {
+          attache_user_id: string | null
+          code: string
+          contact_email: string | null
+          contact_phone: string | null
+          country: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          name: string
+          org_id: string
+          updated_at: string
+        }
+        Insert: {
+          attache_user_id?: string | null
+          code: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          name: string
+          org_id: string
+          updated_at?: string
+        }
+        Update: {
+          attache_user_id?: string | null
+          code?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          name?: string
+          org_id?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       deliverable_comments: {
         Row: {
@@ -649,6 +1161,120 @@ export type Database = {
           },
         ]
       }
+      dispatch_runs: {
+        Row: {
+          actual_arrive: string | null
+          actual_depart: string | null
+          created_at: string
+          destination_venue_id: string | null
+          driver_id: string | null
+          fleet: Database["public"]["Enums"]["dispatch_fleet"]
+          id: string
+          manifest: Json
+          org_id: string
+          origin_venue_id: string | null
+          scheduled_arrive: string | null
+          scheduled_depart: string
+          status: string
+          vehicle_ref: string | null
+        }
+        Insert: {
+          actual_arrive?: string | null
+          actual_depart?: string | null
+          created_at?: string
+          destination_venue_id?: string | null
+          driver_id?: string | null
+          fleet?: Database["public"]["Enums"]["dispatch_fleet"]
+          id?: string
+          manifest?: Json
+          org_id: string
+          origin_venue_id?: string | null
+          scheduled_arrive?: string | null
+          scheduled_depart: string
+          status?: string
+          vehicle_ref?: string | null
+        }
+        Update: {
+          actual_arrive?: string | null
+          actual_depart?: string | null
+          created_at?: string
+          destination_venue_id?: string | null
+          driver_id?: string | null
+          fleet?: Database["public"]["Enums"]["dispatch_fleet"]
+          id?: string
+          manifest?: Json
+          org_id?: string
+          origin_venue_id?: string | null
+          scheduled_arrive?: string | null
+          scheduled_depart?: string
+          status?: string
+          vehicle_ref?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispatch_runs_destination_venue_id_fkey"
+            columns: ["destination_venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dispatch_runs_origin_venue_id_fkey"
+            columns: ["origin_venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dsar_requests: {
+        Row: {
+          created_at: string
+          due_by: string | null
+          fulfilled_at: string | null
+          id: string
+          identity_verified: boolean
+          kind: Database["public"]["Enums"]["dsar_kind"]
+          notes: string | null
+          org_id: string
+          payload_path: string | null
+          requester_email: string
+          requester_user_id: string | null
+          status: Database["public"]["Enums"]["dsar_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          due_by?: string | null
+          fulfilled_at?: string | null
+          id?: string
+          identity_verified?: boolean
+          kind?: Database["public"]["Enums"]["dsar_kind"]
+          notes?: string | null
+          org_id: string
+          payload_path?: string | null
+          requester_email: string
+          requester_user_id?: string | null
+          status?: Database["public"]["Enums"]["dsar_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          due_by?: string | null
+          fulfilled_at?: string | null
+          id?: string
+          identity_verified?: boolean
+          kind?: Database["public"]["Enums"]["dsar_kind"]
+          notes?: string | null
+          org_id?: string
+          payload_path?: string | null
+          requester_email?: string
+          requester_user_id?: string | null
+          status?: Database["public"]["Enums"]["dsar_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       email_templates: {
         Row: {
           body_html: string
@@ -696,6 +1322,50 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      environmental_events: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          id: string
+          kind: string
+          org_id: string
+          reading: Json
+          severity: string
+          started_at: string
+          venue_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          kind: string
+          org_id: string
+          reading?: Json
+          severity: string
+          started_at?: string
+          venue_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          kind?: string
+          org_id?: string
+          reading?: Json
+          severity?: string
+          started_at?: string
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "environmental_events_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       equipment: {
         Row: {
@@ -1224,6 +1894,84 @@ export type Database = {
         }
         Relationships: []
       }
+      insurance_policies: {
+        Row: {
+          carrier: string
+          created_at: string
+          document_path: string | null
+          effective_on: string | null
+          expires_on: string | null
+          id: string
+          kind: string
+          limits: Json
+          org_id: string
+          policy_no: string
+        }
+        Insert: {
+          carrier: string
+          created_at?: string
+          document_path?: string | null
+          effective_on?: string | null
+          expires_on?: string | null
+          id?: string
+          kind: string
+          limits?: Json
+          org_id: string
+          policy_no: string
+        }
+        Update: {
+          carrier?: string
+          created_at?: string
+          document_path?: string | null
+          effective_on?: string | null
+          expires_on?: string | null
+          id?: string
+          kind?: string
+          limits?: Json
+          org_id?: string
+          policy_no?: string
+        }
+        Relationships: []
+      }
+      integration_connectors: {
+        Row: {
+          config: Json
+          created_at: string
+          enabled: boolean
+          id: string
+          kind: string
+          name: string
+          org_id: string
+          secret_ref: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          kind: string
+          name: string
+          org_id: string
+          secret_ref?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          kind?: string
+          name?: string
+          org_id?: string
+          secret_ref?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       invites: {
         Row: {
           accepted_at: string | null
@@ -1472,6 +2220,45 @@ export type Database = {
         }
         Relationships: []
       }
+      kb_articles: {
+        Row: {
+          author_id: string | null
+          body_markdown: string
+          created_at: string
+          id: string
+          org_id: string
+          slug: string
+          tags: Json
+          title: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          author_id?: string | null
+          body_markdown: string
+          created_at?: string
+          id?: string
+          org_id: string
+          slug: string
+          tags?: Json
+          title: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          author_id?: string | null
+          body_markdown?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          slug?: string
+          tags?: Json
+          title?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           assigned_to: string | null
@@ -1594,6 +2381,110 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      major_incidents: {
+        Row: {
+          closed_at: string | null
+          created_at: string
+          ics_roles: Json
+          id: string
+          incident_id: string | null
+          name: string
+          opened_at: string
+          org_id: string
+          status: string
+          timeline: Json
+        }
+        Insert: {
+          closed_at?: string | null
+          created_at?: string
+          ics_roles?: Json
+          id?: string
+          incident_id?: string | null
+          name: string
+          opened_at?: string
+          org_id: string
+          status?: string
+          timeline?: Json
+        }
+        Update: {
+          closed_at?: string | null
+          created_at?: string
+          ics_roles?: Json
+          id?: string
+          incident_id?: string | null
+          name?: string
+          opened_at?: string
+          org_id?: string
+          status?: string
+          timeline?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "major_incidents_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medical_encounters: {
+        Row: {
+          chief_complaint: string | null
+          clinician_id: string | null
+          created_at: string
+          disposition: string | null
+          id: string
+          incident_id: string | null
+          org_id: string
+          patient_ref: string | null
+          phi_encrypted: Json | null
+          triage: string | null
+          venue_id: string | null
+        }
+        Insert: {
+          chief_complaint?: string | null
+          clinician_id?: string | null
+          created_at?: string
+          disposition?: string | null
+          id?: string
+          incident_id?: string | null
+          org_id: string
+          patient_ref?: string | null
+          phi_encrypted?: Json | null
+          triage?: string | null
+          venue_id?: string | null
+        }
+        Update: {
+          chief_complaint?: string | null
+          clinician_id?: string | null
+          created_at?: string
+          disposition?: string | null
+          id?: string
+          incident_id?: string | null
+          org_id?: string
+          patient_ref?: string | null
+          phi_encrypted?: Json | null
+          triage?: string | null
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_encounters_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_encounters_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
             referencedColumns: ["id"]
           },
         ]
@@ -1843,6 +2734,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      program_reviews: {
+        Row: {
+          actions: Json
+          agenda: Json
+          attendees: Json
+          created_at: string
+          created_by: string | null
+          decisions: Json
+          id: string
+          notes: string | null
+          org_id: string
+          scheduled_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          actions?: Json
+          agenda?: Json
+          attendees?: Json
+          created_at?: string
+          created_by?: string | null
+          decisions?: Json
+          id?: string
+          notes?: string | null
+          org_id: string
+          scheduled_at: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          actions?: Json
+          agenda?: Json
+          attendees?: Json
+          created_at?: string
+          created_by?: string | null
+          decisions?: Json
+          id?: string
+          notes?: string | null
+          org_id?: string
+          scheduled_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       projects: {
         Row: {
@@ -2309,6 +3245,101 @@ export type Database = {
           },
         ]
       }
+      rate_card_items: {
+        Row: {
+          active: boolean
+          catalog: string
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          metadata: Json
+          name: string
+          org_id: string
+          sku: string
+          unit_price_cents: number
+        }
+        Insert: {
+          active?: boolean
+          catalog?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          metadata?: Json
+          name: string
+          org_id: string
+          sku: string
+          unit_price_cents?: number
+        }
+        Update: {
+          active?: boolean
+          catalog?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          metadata?: Json
+          name?: string
+          org_id?: string
+          sku?: string
+          unit_price_cents?: number
+        }
+        Relationships: []
+      }
+      rate_card_orders: {
+        Row: {
+          catalog: string
+          created_at: string
+          currency: string
+          delegation_id: string | null
+          id: string
+          line_items: Json
+          notes: string | null
+          org_id: string
+          requester_id: string | null
+          status: string
+          total_cents: number
+          updated_at: string
+        }
+        Insert: {
+          catalog?: string
+          created_at?: string
+          currency?: string
+          delegation_id?: string | null
+          id?: string
+          line_items?: Json
+          notes?: string | null
+          org_id: string
+          requester_id?: string | null
+          status?: string
+          total_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          catalog?: string
+          created_at?: string
+          currency?: string
+          delegation_id?: string | null
+          id?: string
+          line_items?: Json
+          notes?: string | null
+          org_id?: string
+          requester_id?: string | null
+          status?: string
+          total_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rate_card_orders_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "delegations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rate_limit_overrides: {
         Row: {
           bucket: string
@@ -2346,6 +3377,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      readiness_exercises: {
+        Row: {
+          aar: Json
+          created_at: string
+          id: string
+          injects: Json
+          kind: string
+          name: string
+          org_id: string
+          project_id: string | null
+          scenario: Json
+          scheduled_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          aar?: Json
+          created_at?: string
+          id?: string
+          injects?: Json
+          kind?: string
+          name: string
+          org_id: string
+          project_id?: string | null
+          scenario?: Json
+          scheduled_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          aar?: Json
+          created_at?: string
+          id?: string
+          injects?: Json
+          kind?: string
+          name?: string
+          org_id?: string
+          project_id?: string | null
+          scenario?: Json
+          scheduled_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       rentals: {
         Row: {
@@ -2469,6 +3542,277 @@ export type Database = {
           },
         ]
       }
+      risks: {
+        Row: {
+          category: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_on: string | null
+          id: string
+          impact: Database["public"]["Enums"]["risk_impact"]
+          inherent_score: number | null
+          kind: Database["public"]["Enums"]["raid_kind"]
+          likelihood: Database["public"]["Enums"]["risk_likelihood"]
+          org_id: string
+          owner_id: string | null
+          project_id: string | null
+          residual_score: number | null
+          status: Database["public"]["Enums"]["risk_status"]
+          title: string
+          treatment: string | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_on?: string | null
+          id?: string
+          impact?: Database["public"]["Enums"]["risk_impact"]
+          inherent_score?: number | null
+          kind?: Database["public"]["Enums"]["raid_kind"]
+          likelihood?: Database["public"]["Enums"]["risk_likelihood"]
+          org_id: string
+          owner_id?: string | null
+          project_id?: string | null
+          residual_score?: number | null
+          status?: Database["public"]["Enums"]["risk_status"]
+          title: string
+          treatment?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_on?: string | null
+          id?: string
+          impact?: Database["public"]["Enums"]["risk_impact"]
+          inherent_score?: number | null
+          kind?: Database["public"]["Enums"]["raid_kind"]
+          likelihood?: Database["public"]["Enums"]["risk_likelihood"]
+          org_id?: string
+          owner_id?: string | null
+          project_id?: string | null
+          residual_score?: number | null
+          status?: Database["public"]["Enums"]["risk_status"]
+          title?: string
+          treatment?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rosters: {
+        Row: {
+          created_at: string
+          day_of: string
+          id: string
+          name: string
+          org_id: string
+          published_at: string | null
+          state: Database["public"]["Enums"]["roster_state"]
+          updated_at: string
+          venue_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          day_of: string
+          id?: string
+          name: string
+          org_id: string
+          published_at?: string | null
+          state?: Database["public"]["Enums"]["roster_state"]
+          updated_at?: string
+          venue_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          day_of?: string
+          id?: string
+          name?: string
+          org_id?: string
+          published_at?: string | null
+          state?: Database["public"]["Enums"]["roster_state"]
+          updated_at?: string
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rosters_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      safeguarding_reports: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          evidence_paths: Json
+          id: string
+          narrative: string
+          org_id: string
+          reporter_id: string | null
+          status: string
+          subject_ref: string | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          evidence_paths?: Json
+          id?: string
+          narrative: string
+          org_id: string
+          reporter_id?: string | null
+          status?: string
+          subject_ref?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          evidence_paths?: Json
+          id?: string
+          narrative?: string
+          org_id?: string
+          reporter_id?: string | null
+          status?: string
+          subject_ref?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      shifts: {
+        Row: {
+          attendance: Database["public"]["Enums"]["shift_attendance"]
+          break_minutes: number
+          checked_in_at: string | null
+          checked_out_at: string | null
+          created_at: string
+          ends_at: string
+          id: string
+          meal_credit: boolean
+          org_id: string
+          role: string | null
+          roster_id: string | null
+          starts_at: string
+          venue_id: string | null
+          workforce_member_id: string | null
+          zone_id: string | null
+        }
+        Insert: {
+          attendance?: Database["public"]["Enums"]["shift_attendance"]
+          break_minutes?: number
+          checked_in_at?: string | null
+          checked_out_at?: string | null
+          created_at?: string
+          ends_at: string
+          id?: string
+          meal_credit?: boolean
+          org_id: string
+          role?: string | null
+          roster_id?: string | null
+          starts_at: string
+          venue_id?: string | null
+          workforce_member_id?: string | null
+          zone_id?: string | null
+        }
+        Update: {
+          attendance?: Database["public"]["Enums"]["shift_attendance"]
+          break_minutes?: number
+          checked_in_at?: string | null
+          checked_out_at?: string | null
+          created_at?: string
+          ends_at?: string
+          id?: string
+          meal_credit?: boolean
+          org_id?: string
+          role?: string | null
+          roster_id?: string | null
+          starts_at?: string
+          venue_id?: string | null
+          workforce_member_id?: string | null
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shifts_roster_id_fkey"
+            columns: ["roster_id"]
+            isOneToOne: false
+            referencedRelation: "rosters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shifts_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shifts_workforce_member_id_fkey"
+            columns: ["workforce_member_id"]
+            isOneToOne: false
+            referencedRelation: "workforce_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shifts_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "venue_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsor_entitlements: {
+        Row: {
+          created_at: string
+          delivered: number
+          due_by: string | null
+          evidence_path: string | null
+          id: string
+          org_id: string
+          quantity: number
+          sponsor_client_id: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delivered?: number
+          due_by?: string | null
+          evidence_path?: string | null
+          id?: string
+          org_id: string
+          quantity?: number
+          sponsor_client_id?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delivered?: number
+          due_by?: string | null
+          evidence_path?: string | null
+          id?: string
+          org_id?: string
+          quantity?: number
+          sponsor_client_id?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       stage_plots: {
         Row: {
           created_at: string
@@ -2535,6 +3879,42 @@ export type Database = {
           livemode?: boolean
           received_at?: string
           type?: string
+        }
+        Relationships: []
+      }
+      sustainability_metrics: {
+        Row: {
+          created_at: string
+          id: string
+          kg_co2e: number
+          method: string | null
+          org_id: string
+          period_end: string
+          period_start: string
+          scope: number
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kg_co2e?: number
+          method?: string | null
+          org_id: string
+          period_end: string
+          period_start: string
+          scope?: number
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kg_co2e?: number
+          method?: string | null
+          org_id?: string
+          period_end?: string
+          period_start?: string
+          scope?: number
+          source?: string | null
         }
         Relationships: []
       }
@@ -2653,6 +4033,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ticket_types: {
+        Row: {
+          allocation: number
+          channel: string
+          created_at: string
+          currency: string
+          event_id: string | null
+          id: string
+          name: string
+          org_id: string
+          price_cents: number
+          sold: number
+        }
+        Insert: {
+          allocation?: number
+          channel?: string
+          created_at?: string
+          currency?: string
+          event_id?: string | null
+          id?: string
+          name: string
+          org_id: string
+          price_cents?: number
+          sold?: number
+        }
+        Update: {
+          allocation?: number
+          channel?: string
+          created_at?: string
+          currency?: string
+          event_id?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          price_cents?: number
+          sold?: number
+        }
+        Relationships: []
       }
       tickets: {
         Row: {
@@ -2784,6 +4203,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      trademarks: {
+        Row: {
+          created_at: string
+          expires_on: string | null
+          id: string
+          jurisdiction: string | null
+          mark: string
+          org_id: string
+          registered_on: string | null
+          registration_no: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          expires_on?: string | null
+          id?: string
+          jurisdiction?: string | null
+          mark: string
+          org_id: string
+          registered_on?: string | null
+          registration_no?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          expires_on?: string | null
+          id?: string
+          jurisdiction?: string | null
+          mark?: string
+          org_id?: string
+          registered_on?: string | null
+          registration_no?: string | null
+          status?: string
+        }
+        Relationships: []
       }
       usage_events: {
         Row: {
@@ -3035,6 +4490,190 @@ export type Database = {
           },
         ]
       }
+      venue_certifications: {
+        Row: {
+          certificate: string
+          created_at: string
+          expires_on: string | null
+          file_path: string | null
+          id: string
+          issued_on: string | null
+          issuer: string
+          org_id: string
+          venue_id: string
+        }
+        Insert: {
+          certificate: string
+          created_at?: string
+          expires_on?: string | null
+          file_path?: string | null
+          id?: string
+          issued_on?: string | null
+          issuer: string
+          org_id: string
+          venue_id: string
+        }
+        Update: {
+          certificate?: string
+          created_at?: string
+          expires_on?: string | null
+          file_path?: string | null
+          id?: string
+          issued_on?: string | null
+          issuer?: string
+          org_id?: string
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_certifications_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      venue_zones: {
+        Row: {
+          allowed_categories: Json
+          code: string
+          created_at: string
+          id: string
+          name: string
+          org_id: string
+          parent_zone_id: string | null
+          venue_id: string
+        }
+        Insert: {
+          allowed_categories?: Json
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+          org_id: string
+          parent_zone_id?: string | null
+          venue_id: string
+        }
+        Update: {
+          allowed_categories?: Json
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          org_id?: string
+          parent_zone_id?: string | null
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_zones_parent_zone_id_fkey"
+            columns: ["parent_zone_id"]
+            isOneToOne: false
+            referencedRelation: "venue_zones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venue_zones_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      venues: {
+        Row: {
+          capacity: number | null
+          cluster: string | null
+          created_at: string
+          handover_state: Database["public"]["Enums"]["handover_state"]
+          id: string
+          kind: Database["public"]["Enums"]["venue_kind"]
+          location_id: string | null
+          metadata: Json
+          name: string
+          org_id: string
+          project_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number | null
+          cluster?: string | null
+          created_at?: string
+          handover_state?: Database["public"]["Enums"]["handover_state"]
+          id?: string
+          kind?: Database["public"]["Enums"]["venue_kind"]
+          location_id?: string | null
+          metadata?: Json
+          name: string
+          org_id: string
+          project_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number | null
+          cluster?: string | null
+          created_at?: string
+          handover_state?: Database["public"]["Enums"]["handover_state"]
+          id?: string
+          kind?: Database["public"]["Enums"]["venue_kind"]
+          location_id?: string | null
+          metadata?: Json
+          name?: string
+          org_id?: string
+          project_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      visa_cases: {
+        Row: {
+          created_at: string
+          delegation_id: string | null
+          id: string
+          letter_path: string | null
+          nationality: string | null
+          org_id: string
+          passport_no: string | null
+          person_name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delegation_id?: string | null
+          id?: string
+          letter_path?: string | null
+          nationality?: string | null
+          org_id: string
+          passport_no?: string | null
+          person_name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delegation_id?: string | null
+          id?: string
+          letter_path?: string | null
+          nationality?: string | null
+          org_id?: string
+          passport_no?: string | null
+          person_name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visa_cases_delegation_id_fkey"
+            columns: ["delegation_id"]
+            isOneToOne: false
+            referencedRelation: "delegations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       webauthn_challenges: {
         Row: {
           challenge: string
@@ -3205,6 +4844,113 @@ export type Database = {
           },
         ]
       }
+      workforce_deployments: {
+        Row: {
+          actual_fte: number
+          created_at: string
+          functional_area: string | null
+          id: string
+          org_id: string
+          planned_fte: number
+          shift_window: unknown
+          venue_id: string
+          zone_id: string | null
+        }
+        Insert: {
+          actual_fte?: number
+          created_at?: string
+          functional_area?: string | null
+          id?: string
+          org_id: string
+          planned_fte?: number
+          shift_window?: unknown
+          venue_id: string
+          zone_id?: string | null
+        }
+        Update: {
+          actual_fte?: number
+          created_at?: string
+          functional_area?: string | null
+          id?: string
+          org_id?: string
+          planned_fte?: number
+          shift_window?: unknown
+          venue_id?: string
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workforce_deployments_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workforce_deployments_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "venue_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workforce_members: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          kind: Database["public"]["Enums"]["workforce_kind"]
+          metadata: Json
+          org_id: string
+          phone: string | null
+          role: string | null
+          skills: Json
+          updated_at: string
+          user_id: string | null
+          venue_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          kind?: Database["public"]["Enums"]["workforce_kind"]
+          metadata?: Json
+          org_id: string
+          phone?: string | null
+          role?: string | null
+          skills?: Json
+          updated_at?: string
+          user_id?: string | null
+          venue_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["workforce_kind"]
+          metadata?: Json
+          org_id?: string
+          phone?: string | null
+          role?: string | null
+          skills?: Json
+          updated_at?: string
+          user_id?: string | null
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workforce_members_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -3260,6 +5006,14 @@ export type Database = {
       reclaim_stuck_jobs: { Args: never; Returns: number }
     }
     Enums: {
+      accreditation_state:
+        | "applied"
+        | "vetting"
+        | "approved"
+        | "issued"
+        | "suspended"
+        | "revoked"
+        | "expired"
       deliverable_status:
         | "draft"
         | "submitted"
@@ -3284,6 +5038,19 @@ export type Database = {
         | "comms_plan"
         | "signage_grid"
         | "custom"
+      dispatch_fleet: "t1" | "t2" | "t3" | "media" | "workforce" | "spectator"
+      dsar_kind:
+        | "access"
+        | "deletion"
+        | "correction"
+        | "portability"
+        | "objection"
+      dsar_status:
+        | "received"
+        | "verifying"
+        | "in_progress"
+        | "fulfilled"
+        | "rejected"
       equipment_status:
         | "available"
         | "reserved"
@@ -3303,6 +5070,13 @@ export type Database = {
         | "crew"
         | "staff"
         | "custom"
+      handover_state:
+        | "not_started"
+        | "inspection"
+        | "snag"
+        | "sign_off"
+        | "accepted"
+        | "closeout"
       incident_severity: "near_miss" | "minor" | "major" | "critical"
       incident_status: "open" | "investigating" | "resolved" | "closed"
       invoice_status: "draft" | "sent" | "paid" | "overdue" | "voided"
@@ -3335,10 +5109,36 @@ export type Database = {
         | "rejected"
         | "expired"
         | "signed"
+      raid_kind: "risk" | "assumption" | "issue" | "dependency"
       req_status: "draft" | "submitted" | "approved" | "rejected" | "converted"
+      risk_impact: "insignificant" | "minor" | "moderate" | "major" | "severe"
+      risk_likelihood:
+        | "rare"
+        | "unlikely"
+        | "possible"
+        | "likely"
+        | "almost_certain"
+      risk_status: "open" | "mitigating" | "accepted" | "closed"
+      roster_state: "draft" | "published" | "locked"
+      shift_attendance:
+        | "scheduled"
+        | "checked_in"
+        | "on_break"
+        | "checked_out"
+        | "no_show"
       task_status: "todo" | "in_progress" | "blocked" | "review" | "done"
       ticket_status: "issued" | "transferred" | "scanned" | "voided"
       tier: "access" | "core" | "professional" | "enterprise"
+      venue_kind:
+        | "competition"
+        | "training"
+        | "live_site"
+        | "ibc"
+        | "mpc"
+        | "village"
+        | "support"
+      vetting_state: "pending" | "in_progress" | "clear" | "flagged" | "failed"
+      workforce_kind: "paid_staff" | "volunteer" | "contractor" | "official"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3466,6 +5266,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      accreditation_state: [
+        "applied",
+        "vetting",
+        "approved",
+        "issued",
+        "suspended",
+        "revoked",
+        "expired",
+      ],
       deliverable_status: [
         "draft",
         "submitted",
@@ -3492,6 +5301,21 @@ export const Constants = {
         "signage_grid",
         "custom",
       ],
+      dispatch_fleet: ["t1", "t2", "t3", "media", "workforce", "spectator"],
+      dsar_kind: [
+        "access",
+        "deletion",
+        "correction",
+        "portability",
+        "objection",
+      ],
+      dsar_status: [
+        "received",
+        "verifying",
+        "in_progress",
+        "fulfilled",
+        "rejected",
+      ],
       equipment_status: [
         "available",
         "reserved",
@@ -3512,6 +5336,14 @@ export const Constants = {
         "crew",
         "staff",
         "custom",
+      ],
+      handover_state: [
+        "not_started",
+        "inspection",
+        "snag",
+        "sign_off",
+        "accepted",
+        "closeout",
       ],
       incident_severity: ["near_miss", "minor", "major", "critical"],
       incident_status: ["open", "investigating", "resolved", "closed"],
@@ -3541,10 +5373,39 @@ export const Constants = {
         "expired",
         "signed",
       ],
+      raid_kind: ["risk", "assumption", "issue", "dependency"],
       req_status: ["draft", "submitted", "approved", "rejected", "converted"],
+      risk_impact: ["insignificant", "minor", "moderate", "major", "severe"],
+      risk_likelihood: [
+        "rare",
+        "unlikely",
+        "possible",
+        "likely",
+        "almost_certain",
+      ],
+      risk_status: ["open", "mitigating", "accepted", "closed"],
+      roster_state: ["draft", "published", "locked"],
+      shift_attendance: [
+        "scheduled",
+        "checked_in",
+        "on_break",
+        "checked_out",
+        "no_show",
+      ],
       task_status: ["todo", "in_progress", "blocked", "review", "done"],
       ticket_status: ["issued", "transferred", "scanned", "voided"],
       tier: ["access", "core", "professional", "enterprise"],
+      venue_kind: [
+        "competition",
+        "training",
+        "live_site",
+        "ibc",
+        "mpc",
+        "village",
+        "support",
+      ],
+      vetting_state: ["pending", "in_progress", "clear", "flagged", "failed"],
+      workforce_kind: ["paid_staff", "volunteer", "contractor", "official"],
     },
   },
 } as const

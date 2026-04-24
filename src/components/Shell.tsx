@@ -5,19 +5,6 @@ import { MobileTabBarClient } from "./MobileTabBarClient";
 import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
 import { matchRoute } from "@/lib/hooks/useActiveRoute";
 
-export function PageStub({ title, description }: { title: string; description?: string }) {
-  return (
-    <>
-      <ModuleHeader title={title} subtitle={description} />
-      <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--text-muted)]">
-          Placeholder view — wire real module content here. See <code className="font-mono">docs/ia/01-topology.md</code>.
-        </div>
-      </div>
-    </>
-  );
-}
-
 export { PlatformSidebar } from "./PlatformSidebar";
 
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {

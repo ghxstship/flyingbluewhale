@@ -220,6 +220,221 @@ export type EventGuide = {
   created_at: string; updated_at: string;
 };
 
+// ═══ Olympic-scope row types (fbw_030) ════════════════════════════════════
+export type RiskLikelihood = "rare" | "unlikely" | "possible" | "likely" | "almost_certain";
+export type RiskImpact = "insignificant" | "minor" | "moderate" | "major" | "severe";
+export type RiskStatus = "open" | "mitigating" | "accepted" | "closed";
+export type RaidKind = "risk" | "assumption" | "issue" | "dependency";
+export type VenueKind = "competition" | "training" | "live_site" | "ibc" | "mpc" | "village" | "support";
+export type HandoverState = "not_started" | "inspection" | "snag" | "sign_off" | "accepted" | "closeout";
+export type AccreditationState = "applied" | "vetting" | "approved" | "issued" | "suspended" | "revoked" | "expired";
+export type VettingState = "pending" | "in_progress" | "clear" | "flagged" | "failed";
+export type WorkforceKind = "paid_staff" | "volunteer" | "contractor" | "official";
+export type RosterState = "draft" | "published" | "locked";
+export type ShiftAttendance = "scheduled" | "checked_in" | "on_break" | "checked_out" | "no_show";
+export type DispatchFleet = "t1" | "t2" | "t3" | "media" | "workforce" | "spectator";
+export type DsarKind = "access" | "deletion" | "correction" | "portability" | "objection";
+export type DsarStatus = "received" | "verifying" | "in_progress" | "fulfilled" | "rejected";
+
+export type Risk = {
+  id: string; org_id: string; project_id: string | null; kind: RaidKind;
+  title: string; description: string | null; category: string | null;
+  likelihood: RiskLikelihood; impact: RiskImpact;
+  inherent_score: number; residual_score: number | null;
+  status: RiskStatus; owner_id: string | null; treatment: string | null;
+  due_on: string | null; created_by: string | null;
+  created_at: string; updated_at: string;
+};
+export type ProgramReview = {
+  id: string; org_id: string; title: string; scheduled_at: string;
+  attendees: unknown; agenda: unknown; actions: unknown; decisions: unknown;
+  notes: string | null; created_by: string | null; created_at: string; updated_at: string;
+};
+export type ReadinessExercise = {
+  id: string; org_id: string; project_id: string | null; name: string; kind: string;
+  scheduled_at: string | null; scenario: unknown; injects: unknown; aar: unknown;
+  created_at: string; updated_at: string;
+};
+export type Venue = {
+  id: string; org_id: string; project_id: string | null; location_id: string | null;
+  name: string; kind: VenueKind; cluster: string | null; capacity: number | null;
+  handover_state: HandoverState; metadata: unknown; created_at: string; updated_at: string;
+};
+export type VenueZone = {
+  id: string; org_id: string; venue_id: string; code: string; name: string;
+  parent_zone_id: string | null; allowed_categories: unknown; created_at: string;
+};
+export type VenueCertification = {
+  id: string; org_id: string; venue_id: string; issuer: string; certificate: string;
+  issued_on: string | null; expires_on: string | null; file_path: string | null; created_at: string;
+};
+export type AccreditationCategory = {
+  id: string; org_id: string; code: string; name: string;
+  color: string | null; description: string | null; zone_privileges: unknown; created_at: string;
+};
+export type Accreditation = {
+  id: string; org_id: string; person_name: string; person_email: string | null;
+  user_id: string | null; delegation_id: string | null; category_id: string | null;
+  state: AccreditationState; vetting: VettingState; card_barcode: string | null;
+  valid_from: string | null; valid_to: string | null;
+  issued_at: string | null; revoked_at: string | null; revoke_reason: string | null;
+  photo_path: string | null; metadata: unknown; created_at: string; updated_at: string;
+};
+export type AccessScan = {
+  id: string; org_id: string; accreditation_id: string | null;
+  venue_id: string | null; zone_id: string | null; gate_code: string | null;
+  result: string; reason: string | null; scanned_by: string | null;
+  scanned_at: string; device_id: string | null;
+};
+export type AccreditationChange = {
+  id: string; org_id: string; accreditation_id: string; kind: string;
+  requested_by: string | null; status: string; decided_by: string | null;
+  decided_at: string | null; note: string | null; created_at: string;
+};
+export type WorkforceMember = {
+  id: string; org_id: string; user_id: string | null; kind: WorkforceKind;
+  full_name: string; email: string | null; phone: string | null; role: string | null;
+  skills: unknown; venue_id: string | null; metadata: unknown;
+  created_at: string; updated_at: string;
+};
+export type Roster = {
+  id: string; org_id: string; venue_id: string | null; name: string; day_of: string;
+  state: RosterState; published_at: string | null; created_at: string; updated_at: string;
+};
+export type Shift = {
+  id: string; org_id: string; roster_id: string | null;
+  workforce_member_id: string | null; venue_id: string | null; zone_id: string | null;
+  starts_at: string; ends_at: string; role: string | null; attendance: ShiftAttendance;
+  checked_in_at: string | null; checked_out_at: string | null;
+  break_minutes: number; meal_credit: boolean; created_at: string;
+};
+export type WorkforceDeployment = {
+  id: string; org_id: string; venue_id: string; zone_id: string | null;
+  shift_window: unknown; planned_fte: number; actual_fte: number;
+  functional_area: string | null; created_at: string;
+};
+export type MajorIncident = {
+  id: string; org_id: string; incident_id: string | null; name: string;
+  opened_at: string; closed_at: string | null;
+  ics_roles: unknown; timeline: unknown; status: string; created_at: string;
+};
+export type SafeguardingReport = {
+  id: string; org_id: string; reporter_id: string | null; subject_ref: string | null;
+  narrative: string; evidence_paths: unknown; status: string;
+  assigned_to: string | null; created_at: string; updated_at: string;
+};
+export type MedicalEncounter = {
+  id: string; org_id: string; incident_id: string | null; venue_id: string | null;
+  patient_ref: string | null; triage: string | null; chief_complaint: string | null;
+  disposition: string | null; clinician_id: string | null; phi_encrypted: unknown;
+  created_at: string;
+};
+export type EnvironmentalEvent = {
+  id: string; org_id: string; venue_id: string | null;
+  kind: string; severity: string; reading: unknown;
+  started_at: string; ended_at: string | null; created_at: string;
+};
+export type CrisisAlert = {
+  id: string; org_id: string; title: string; body: string; severity: string;
+  channels: unknown; audience: unknown; scheduled_at: string | null;
+  sent_at: string | null; created_by: string | null; created_at: string;
+};
+export type CrisisAlertReceipt = {
+  id: string; org_id: string; alert_id: string; user_id: string;
+  delivered_at: string | null; acknowledged_at: string | null; channel: string | null;
+};
+export type Delegation = {
+  id: string; org_id: string; code: string; name: string; country: string | null;
+  attache_user_id: string | null; contact_email: string | null; contact_phone: string | null;
+  metadata: unknown; created_at: string; updated_at: string;
+};
+export type DelegationEntry = {
+  id: string; org_id: string; delegation_id: string; discipline: string | null;
+  event: string | null; participant_name: string; status: string; created_at: string;
+};
+export type VisaCase = {
+  id: string; org_id: string; delegation_id: string | null; person_name: string;
+  nationality: string | null; passport_no: string | null; status: string;
+  letter_path: string | null; created_at: string; updated_at: string;
+};
+export type RateCardItem = {
+  id: string; org_id: string; catalog: string; sku: string; name: string;
+  description: string | null; unit_price_cents: number; currency: string;
+  metadata: unknown; active: boolean; created_at: string;
+};
+export type RateCardOrder = {
+  id: string; org_id: string; catalog: string; delegation_id: string | null;
+  requester_id: string | null; status: string; total_cents: number; currency: string;
+  line_items: unknown; notes: string | null; created_at: string; updated_at: string;
+};
+export type DispatchRun = {
+  id: string; org_id: string; fleet: DispatchFleet; vehicle_ref: string | null;
+  driver_id: string | null; origin_venue_id: string | null; destination_venue_id: string | null;
+  scheduled_depart: string; scheduled_arrive: string | null;
+  actual_depart: string | null; actual_arrive: string | null;
+  manifest: unknown; status: string; created_at: string;
+};
+export type AdManifest = {
+  id: string; org_id: string; kind: string; flight_ref: string | null;
+  carrier: string | null; scheduled_at: string | null; actual_at: string | null;
+  party_size: number; delegation_id: string | null; notes: string | null;
+  status: string; created_at: string;
+};
+export type AccommodationBlock = {
+  id: string; org_id: string; name: string; property: string; city: string | null;
+  stakeholder_group: string | null; rooms_reserved: number; rooms_confirmed: number;
+  starts_on: string | null; ends_on: string | null; contract_path: string | null;
+  created_at: string;
+};
+export type TicketType = {
+  id: string; org_id: string; event_id: string | null; name: string;
+  channel: string; price_cents: number; currency: string;
+  allocation: number; sold: number; created_at: string;
+};
+export type SponsorEntitlement = {
+  id: string; org_id: string; sponsor_client_id: string | null;
+  title: string; quantity: number; delivered: number; status: string;
+  due_by: string | null; evidence_path: string | null;
+  created_at: string; updated_at: string;
+};
+export type DsarRequest = {
+  id: string; org_id: string; requester_user_id: string | null;
+  requester_email: string; kind: DsarKind; status: DsarStatus;
+  identity_verified: boolean; due_by: string | null; fulfilled_at: string | null;
+  payload_path: string | null; notes: string | null;
+  created_at: string; updated_at: string;
+};
+export type ConsentRecord = {
+  id: string; org_id: string; user_id: string | null; purpose: string;
+  granted: boolean; version: string | null;
+  granted_at: string | null; revoked_at: string | null;
+};
+export type Trademark = {
+  id: string; org_id: string; mark: string; jurisdiction: string | null;
+  registration_no: string | null; registered_on: string | null;
+  expires_on: string | null; status: string; created_at: string;
+};
+export type InsurancePolicy = {
+  id: string; org_id: string; carrier: string; policy_no: string; kind: string;
+  effective_on: string | null; expires_on: string | null;
+  limits: unknown; document_path: string | null; created_at: string;
+};
+export type IntegrationConnector = {
+  id: string; org_id: string; slug: string; name: string; kind: string;
+  enabled: boolean; config: unknown; secret_ref: string | null;
+  created_at: string; updated_at: string;
+};
+export type SustainabilityMetric = {
+  id: string; org_id: string; period_start: string; period_end: string;
+  scope: number; kg_co2e: number; source: string | null; method: string | null;
+  created_at: string;
+};
+export type KbArticle = {
+  id: string; org_id: string; slug: string; title: string; body_markdown: string;
+  tags: unknown; author_id: string | null; version: number;
+  created_at: string; updated_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -436,6 +651,45 @@ export type Database = {
           created_at?: string; updated_at?: string; },
         Partial<EventGuide>
       >;
+
+      // ═══ Olympic-scope (fbw_030) ═══════════════════════════════════════
+      risks: TableDef<Risk, Partial<Risk> & { org_id: string; title: string }, Partial<Risk>>;
+      program_reviews: TableDef<ProgramReview, Partial<ProgramReview> & { org_id: string; title: string; scheduled_at: string }, Partial<ProgramReview>>;
+      readiness_exercises: TableDef<ReadinessExercise, Partial<ReadinessExercise> & { org_id: string; name: string }, Partial<ReadinessExercise>>;
+      venues: TableDef<Venue, Partial<Venue> & { org_id: string; name: string }, Partial<Venue>>;
+      venue_zones: TableDef<VenueZone, Partial<VenueZone> & { org_id: string; venue_id: string; code: string; name: string }, Partial<VenueZone>>;
+      venue_certifications: TableDef<VenueCertification, Partial<VenueCertification> & { org_id: string; venue_id: string; issuer: string; certificate: string }, Partial<VenueCertification>>;
+      accreditation_categories: TableDef<AccreditationCategory, Partial<AccreditationCategory> & { org_id: string; code: string; name: string }, Partial<AccreditationCategory>>;
+      accreditations: TableDef<Accreditation, Partial<Accreditation> & { org_id: string; person_name: string }, Partial<Accreditation>>;
+      access_scans: TableDef<AccessScan, Partial<AccessScan> & { org_id: string; result: string }, Partial<AccessScan>>;
+      accreditation_changes: TableDef<AccreditationChange, Partial<AccreditationChange> & { org_id: string; accreditation_id: string; kind: string }, Partial<AccreditationChange>>;
+      workforce_members: TableDef<WorkforceMember, Partial<WorkforceMember> & { org_id: string; full_name: string }, Partial<WorkforceMember>>;
+      rosters: TableDef<Roster, Partial<Roster> & { org_id: string; name: string; day_of: string }, Partial<Roster>>;
+      shifts: TableDef<Shift, Partial<Shift> & { org_id: string; starts_at: string; ends_at: string }, Partial<Shift>>;
+      workforce_deployments: TableDef<WorkforceDeployment, Partial<WorkforceDeployment> & { org_id: string; venue_id: string }, Partial<WorkforceDeployment>>;
+      major_incidents: TableDef<MajorIncident, Partial<MajorIncident> & { org_id: string; name: string }, Partial<MajorIncident>>;
+      safeguarding_reports: TableDef<SafeguardingReport, Partial<SafeguardingReport> & { org_id: string; narrative: string }, Partial<SafeguardingReport>>;
+      medical_encounters: TableDef<MedicalEncounter, Partial<MedicalEncounter> & { org_id: string }, Partial<MedicalEncounter>>;
+      environmental_events: TableDef<EnvironmentalEvent, Partial<EnvironmentalEvent> & { org_id: string; kind: string; severity: string }, Partial<EnvironmentalEvent>>;
+      crisis_alerts: TableDef<CrisisAlert, Partial<CrisisAlert> & { org_id: string; title: string; body: string }, Partial<CrisisAlert>>;
+      crisis_alert_receipts: TableDef<CrisisAlertReceipt, Partial<CrisisAlertReceipt> & { org_id: string; alert_id: string; user_id: string }, Partial<CrisisAlertReceipt>>;
+      delegations: TableDef<Delegation, Partial<Delegation> & { org_id: string; code: string; name: string }, Partial<Delegation>>;
+      delegation_entries: TableDef<DelegationEntry, Partial<DelegationEntry> & { org_id: string; delegation_id: string; participant_name: string }, Partial<DelegationEntry>>;
+      visa_cases: TableDef<VisaCase, Partial<VisaCase> & { org_id: string; person_name: string }, Partial<VisaCase>>;
+      rate_card_items: TableDef<RateCardItem, Partial<RateCardItem> & { org_id: string; sku: string; name: string }, Partial<RateCardItem>>;
+      rate_card_orders: TableDef<RateCardOrder, Partial<RateCardOrder> & { org_id: string }, Partial<RateCardOrder>>;
+      dispatch_runs: TableDef<DispatchRun, Partial<DispatchRun> & { org_id: string; scheduled_depart: string }, Partial<DispatchRun>>;
+      ad_manifests: TableDef<AdManifest, Partial<AdManifest> & { org_id: string }, Partial<AdManifest>>;
+      accommodation_blocks: TableDef<AccommodationBlock, Partial<AccommodationBlock> & { org_id: string; name: string; property: string }, Partial<AccommodationBlock>>;
+      ticket_types: TableDef<TicketType, Partial<TicketType> & { org_id: string; name: string }, Partial<TicketType>>;
+      sponsor_entitlements: TableDef<SponsorEntitlement, Partial<SponsorEntitlement> & { org_id: string; title: string }, Partial<SponsorEntitlement>>;
+      dsar_requests: TableDef<DsarRequest, Partial<DsarRequest> & { org_id: string; requester_email: string }, Partial<DsarRequest>>;
+      consent_records: TableDef<ConsentRecord, Partial<ConsentRecord> & { org_id: string; purpose: string }, Partial<ConsentRecord>>;
+      trademarks: TableDef<Trademark, Partial<Trademark> & { org_id: string; mark: string }, Partial<Trademark>>;
+      insurance_policies: TableDef<InsurancePolicy, Partial<InsurancePolicy> & { org_id: string; carrier: string; policy_no: string; kind: string }, Partial<InsurancePolicy>>;
+      integration_connectors: TableDef<IntegrationConnector, Partial<IntegrationConnector> & { org_id: string; slug: string; name: string; kind: string }, Partial<IntegrationConnector>>;
+      sustainability_metrics: TableDef<SustainabilityMetric, Partial<SustainabilityMetric> & { org_id: string; period_start: string; period_end: string }, Partial<SustainabilityMetric>>;
+      kb_articles: TableDef<KbArticle, Partial<KbArticle> & { org_id: string; slug: string; title: string; body_markdown: string }, Partial<KbArticle>>;
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };

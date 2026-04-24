@@ -680,3 +680,27 @@ create unique index if not exists kb_articles_slug_idx on kb_articles (org_id, s
 alter table kb_articles enable row level security;
 create policy kb_articles_select on kb_articles for select to authenticated using (is_org_member(org_id));
 create policy kb_articles_write  on kb_articles for all to authenticated using (has_org_role(org_id, array['owner','admin','controller','collaborator'])) with check (has_org_role(org_id, array['owner','admin','controller','collaborator']));
+
+-- Covering indexes for FK columns (performance advisor).
+create index if not exists access_scans_venue_idx          on access_scans (venue_id);
+create index if not exists access_scans_zone_idx           on access_scans (zone_id);
+create index if not exists accreditation_changes_accred_idx on accreditation_changes (accreditation_id);
+create index if not exists accreditations_category_idx    on accreditations (category_id);
+create index if not exists ad_manifests_delegation_idx    on ad_manifests (delegation_id);
+create index if not exists delegation_entries_delegation_idx on delegation_entries (delegation_id);
+create index if not exists dispatch_runs_destination_idx  on dispatch_runs (destination_venue_id);
+create index if not exists dispatch_runs_origin_idx       on dispatch_runs (origin_venue_id);
+create index if not exists environmental_events_venue_idx on environmental_events (venue_id);
+create index if not exists major_incidents_incident_idx   on major_incidents (incident_id);
+create index if not exists medical_encounters_incident_idx on medical_encounters (incident_id);
+create index if not exists medical_encounters_venue_idx   on medical_encounters (venue_id);
+create index if not exists rate_card_orders_delegation_idx on rate_card_orders (delegation_id);
+create index if not exists rosters_venue_idx              on rosters (venue_id);
+create index if not exists shifts_roster_idx              on shifts (roster_id);
+create index if not exists shifts_zone_idx                on shifts (zone_id);
+create index if not exists venue_certifications_venue_idx on venue_certifications (venue_id);
+create index if not exists venue_zones_parent_idx         on venue_zones (parent_zone_id);
+create index if not exists visa_cases_delegation_idx      on visa_cases (delegation_id);
+create index if not exists workforce_deployments_venue_idx on workforce_deployments (venue_id);
+create index if not exists workforce_deployments_zone_idx on workforce_deployments (zone_id);
+create index if not exists workforce_members_venue_idx    on workforce_members (venue_id);

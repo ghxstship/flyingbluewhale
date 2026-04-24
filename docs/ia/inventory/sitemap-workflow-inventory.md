@@ -4,13 +4,13 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 ## Summary
 
-- Pages documented: **439**
+- Pages documented: **442**
 - Components: **31** · Elements: **20** · Micro-interactions: **13**
-- In-scope Olympic workflows cross-referenced: **106**
+- In-scope Olympic workflows cross-referenced: **228**
 
 ### By platform
-- ATLVS: 280
-- GVTEWAY: 75
+- ATLVS: 281
+- GVTEWAY: 77
 - COMPVSS: 36
 - Marketing: 27
 - Auth: 11
@@ -19,10 +19,10 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 ### By template
 - bespoke: 171
-- info: 150
+- info: 152
 - list: 59
 - detail: 36
-- hub: 16
+- hub: 17
 - form: 7
 
 ## Component library (shared across templates)
@@ -106,7 +106,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 ## Pages (full atomic schema)
 
-### ATLVS — 280 pages
+### ATLVS — 281 pages
 
 #### ATLVS · accommodation — 4 pages
 
@@ -114,6 +114,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/accommodation/page.tsx`](src/app/(platform)/console/accommodation/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-201 Accommodation hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -133,6 +134,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/accommodation/blocks/[blockId]/page.tsx`](src/app/(platform)/console/accommodation/blocks/[blockId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-201 Accommodation hub (P1)
 - **Upstream:** accommodation_blocks · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -142,7 +144,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/accommodation/village/page.tsx`](src/app/(platform)/console/accommodation/village/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-030 Olympic / Paralympic Village planning (P1)
+- **Workflows:** WF-030 Olympic / Paralympic Village planning (P1); PF-201 Accommodation hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -155,6 +157,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/accreditation/page.tsx`](src/app/(platform)/console/accreditation/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-200 Accreditation hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -164,6 +167,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/accreditation/categories/page.tsx`](src/app/(platform)/console/accreditation/categories/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-200 Accreditation hub (P1)
 - **Upstream:** accreditation_categories · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -183,6 +187,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/accreditation/changes/[changeId]/page.tsx`](src/app/(platform)/console/accreditation/changes/[changeId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-200 Accreditation hub (P1)
 - **Upstream:** accreditation_changes · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -232,6 +237,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/accreditation/vetting/[applicationId]/page.tsx`](src/app/(platform)/console/accreditation/vetting/[applicationId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-200 Accreditation hub (P1)
 - **Upstream:** accreditations · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -241,6 +247,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/accreditation/zones/page.tsx`](src/app/(platform)/console/accreditation/zones/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-200 Accreditation hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -253,6 +260,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/ai/page.tsx`](src/app/(platform)/console/ai/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-050 AI hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -262,6 +270,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/ai/agents/page.tsx`](src/app/(platform)/console/ai/agents/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-053 Agents (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -271,6 +280,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/ai/assistant/page.tsx`](src/app/(platform)/console/ai/assistant/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-051 Assistant (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -280,6 +290,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/ai/assistant/[conversationId]/page.tsx`](src/app/(platform)/console/ai/assistant/[conversationId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-051 Assistant (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -289,6 +300,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/ai/automations/page.tsx`](src/app/(platform)/console/ai/automations/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-054 Automations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -298,6 +310,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/ai/automations/[automationId]/page.tsx`](src/app/(platform)/console/ai/automations/[automationId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-054 Automations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -307,6 +320,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/ai/automations/new/page.tsx`](src/app/(platform)/console/ai/automations/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-054 Automations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -316,6 +330,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/ai/drafting/page.tsx`](src/app/(platform)/console/ai/drafting/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-052 Drafting (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -328,6 +343,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/campaigns/page.tsx`](src/app/(platform)/console/campaigns/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-064 Campaigns (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -340,6 +356,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/clients/page.tsx`](src/app/(platform)/console/clients/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-008 Client directory (P1)
 - **Upstream:** clients · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -349,6 +366,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/clients/[clientId]/page.tsx`](src/app/(platform)/console/clients/[clientId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-008 Client directory (P1)
 - **Upstream:** proposals · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -358,6 +376,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/clients/new/page.tsx`](src/app/(platform)/console/clients/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-008 Client directory (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -370,6 +389,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/command/page.tsx`](src/app/(platform)/console/command/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-062 Command palette (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -382,6 +402,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/commercial/page.tsx`](src/app/(platform)/console/commercial/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-202 Commercial hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -391,7 +412,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/commercial/brand/page.tsx`](src/app/(platform)/console/commercial/brand/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-183 Look of the Games & city dressing (P2)
+- **Workflows:** WF-183 Look of the Games & city dressing (P2); PF-202 Commercial hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -401,7 +422,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/commercial/hospitality/page.tsx`](src/app/(platform)/console/commercial/hospitality/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-173 Hospitality program (P2)
+- **Workflows:** WF-173 Hospitality program (P2); PF-202 Commercial hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -411,6 +432,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/commercial/hospitality/[packageId]/page.tsx`](src/app/(platform)/console/commercial/hospitality/[packageId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-202 Commercial hub (P1)
 - **Upstream:** rate_card_items · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -420,7 +442,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/commercial/licensing/page.tsx`](src/app/(platform)/console/commercial/licensing/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-172 Licensing & merchandise program (P2)
+- **Workflows:** WF-172 Licensing & merchandise program (P2); PF-202 Commercial hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -440,6 +462,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/commercial/sponsors/[sponsorId]/page.tsx`](src/app/(platform)/console/commercial/sponsors/[sponsorId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-202 Commercial hub (P1)
 - **Upstream:** sponsor_entitlements · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -459,6 +482,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/commercial/tickets/[ticketTypeId]/page.tsx`](src/app/(platform)/console/commercial/tickets/[ticketTypeId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-202 Commercial hub (P1)
 - **Upstream:** ticket_types · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -471,6 +495,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/comms/page.tsx`](src/app/(platform)/console/comms/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-203 Comms hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -500,6 +525,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** form
 - **Source:** [`src/app/(platform)/console/comms/internal/new/page.tsx`](src/app/(platform)/console/comms/internal/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, form-submit, validate-required
+- **Workflows:** PF-203 Comms hub (P1)
 - **Upstream:** — · **Downstream:** /api/v1/email_templates
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -512,7 +538,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/compliance/coc/page.tsx`](src/app/(platform)/console/compliance/coc/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-101 Sample collection (urine / blood / DBS) (P2)
+- **Workflows:** WF-101 Sample collection (urine / blood / DBS) (P2); PF-216 Compliance / COC (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -537,6 +563,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/events/page.tsx`](src/app/(platform)/console/events/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-003 Events calendar (P1)
 - **Upstream:** events · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -546,6 +573,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/events/[eventId]/page.tsx`](src/app/(platform)/console/events/[eventId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-003 Events calendar (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -555,6 +583,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/events/new/page.tsx`](src/app/(platform)/console/events/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-003 Events calendar (P1)
 - **Upstream:** projects · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -567,6 +596,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/files/page.tsx`](src/app/(platform)/console/files/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-061 Files (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -579,6 +609,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/finance/page.tsx`](src/app/(platform)/console/finance/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-010 Finance hub (P1)
 - **Upstream:** invoices · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -588,6 +619,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/finance/advances/page.tsx`](src/app/(platform)/console/finance/advances/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-016 Advances (P1)
 - **Upstream:** advances · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -615,7 +647,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/finance/budgets/page.tsx`](src/app/(platform)/console/finance/budgets/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
-- **Workflows:** WF-220 Budget planning & control (P1)
+- **Workflows:** WF-220 Budget planning & control (P1); PF-013 Budgets (P1)
 - **Upstream:** budgets · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -643,6 +675,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/finance/expenses/page.tsx`](src/app/(platform)/console/finance/expenses/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-012 Expenses (P1)
 - **Upstream:** expenses · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -670,6 +703,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/finance/invoices/page.tsx`](src/app/(platform)/console/finance/invoices/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-011 Invoicing (P1)
 - **Upstream:** invoices · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -679,6 +713,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/finance/invoices/[invoiceId]/page.tsx`](src/app/(platform)/console/finance/invoices/[invoiceId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-011 Invoicing (P1)
 - **Upstream:** invoices · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -697,6 +732,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/finance/mileage/page.tsx`](src/app/(platform)/console/finance/mileage/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-015 Mileage (P1)
 - **Upstream:** mileage_logs · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -724,6 +760,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/finance/payouts/page.tsx`](src/app/(platform)/console/finance/payouts/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-017 Payouts (P1)
 - **Upstream:** vendors · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -733,6 +770,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/finance/reports/page.tsx`](src/app/(platform)/console/finance/reports/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-018 Reporting (P1)
 - **Upstream:** invoices · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -742,6 +780,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/finance/time/page.tsx`](src/app/(platform)/console/finance/time/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-014 Time tracking (P1)
 - **Upstream:** time_entries · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -769,7 +808,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/finance/treasury/page.tsx`](src/app/(platform)/console/finance/treasury/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-221 Treasury, payments & cash (P2)
+- **Workflows:** WF-221 Treasury, payments & cash (P2); PF-019 Treasury / FX (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -782,6 +821,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/forms/page.tsx`](src/app/(platform)/console/forms/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-063 Forms (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -791,6 +831,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/forms/[formId]/page.tsx`](src/app/(platform)/console/forms/[formId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-063 Forms (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -800,6 +841,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/forms/new/page.tsx`](src/app/(platform)/console/forms/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-063 Forms (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -812,6 +854,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/inbox/page.tsx`](src/app/(platform)/console/inbox/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-060 Inbox (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -834,6 +877,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/integrations/[connectorId]/page.tsx`](src/app/(platform)/console/integrations/[connectorId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-204 Integrations hub (P1)
 - **Upstream:** integration_connectors · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -856,6 +900,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/kb/[articleId]/page.tsx`](src/app/(platform)/console/kb/[articleId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-130 KB detail (P1)
 - **Upstream:** kb_articles · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -868,6 +913,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/leads/page.tsx`](src/app/(platform)/console/leads/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-007 Lead management (P1)
 - **Upstream:** leads · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -877,6 +923,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/leads/[leadId]/page.tsx`](src/app/(platform)/console/leads/[leadId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-007 Lead management (P1)
 - **Upstream:** leads · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -886,6 +933,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/leads/new/page.tsx`](src/app/(platform)/console/leads/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-007 Lead management (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -898,6 +946,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/legal/page.tsx`](src/app/(platform)/console/legal/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-205 Legal hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -927,6 +976,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/legal/ip/[markId]/page.tsx`](src/app/(platform)/console/legal/ip/[markId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-205 Legal hub (P1)
 - **Upstream:** trademarks · **Downstream:** —
 - **RBAC visible:** owner, admin, controller
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -936,6 +986,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/legal/privacy/page.tsx`](src/app/(platform)/console/legal/privacy/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-205 Legal hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -945,6 +996,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/legal/privacy/consent/page.tsx`](src/app/(platform)/console/legal/privacy/consent/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-205 Legal hub (P1)
 - **Upstream:** consent_records · **Downstream:** —
 - **RBAC visible:** owner, admin, controller
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -954,6 +1006,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/legal/privacy/datamap/page.tsx`](src/app/(platform)/console/legal/privacy/datamap/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-205 Legal hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -973,6 +1026,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/legal/privacy/dsar/[requestId]/page.tsx`](src/app/(platform)/console/legal/privacy/dsar/[requestId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-205 Legal hub (P1)
 - **Upstream:** dsar_requests · **Downstream:** —
 - **RBAC visible:** owner, admin, controller
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -985,6 +1039,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/locations/page.tsx`](src/app/(platform)/console/locations/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-004 Canonical locations (P1)
 - **Upstream:** locations · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -994,6 +1049,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/locations/[locationId]/page.tsx`](src/app/(platform)/console/locations/[locationId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-004 Canonical locations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1003,6 +1059,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/locations/new/page.tsx`](src/app/(platform)/console/locations/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-004 Canonical locations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1012,6 +1069,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/locations/picker/page.tsx`](src/app/(platform)/console/locations/picker/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-004 Canonical locations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1024,6 +1082,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/logistics/page.tsx`](src/app/(platform)/console/logistics/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-206 Logistics hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1053,6 +1112,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/logistics/freight/[shipmentId]/page.tsx`](src/app/(platform)/console/logistics/freight/[shipmentId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-206 Logistics hub (P1)
 - **Upstream:** purchase_orders · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1072,6 +1132,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/logistics/ratecard/[itemId]/page.tsx`](src/app/(platform)/console/logistics/ratecard/[itemId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-206 Logistics hub (P1)
 - **Upstream:** rate_card_items · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1104,7 +1165,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/meetings/page.tsx`](src/app/(platform)/console/meetings/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-042 IF technical meetings & team leaders' meetings (P2); WF-043 Chef de Mission seminar & CdM-OCOG interface (P2)
+- **Workflows:** WF-042 IF technical meetings & team leaders' meetings (P2); WF-043 Chef de Mission seminar & CdM-OCOG interface (P2); PF-218 Meetings (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1114,13 +1175,24 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/meetings/[meetingId]/page.tsx`](src/app/(platform)/console/meetings/[meetingId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-218 Meetings (P1)
 - **Upstream:** events · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
   - *Section:* **PageContent** → FieldDumpDL, BackButton
 
 
-#### ATLVS · operations — 2 pages
+#### ATLVS · operations — 3 pages
+
+### Operations  `/console/operations`
+- **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
+- **Source:** [`src/app/(platform)/console/operations/page.tsx`](src/app/(platform)/console/operations/page.tsx)
+- **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-070 Incidents (ops) (P1)
+- **Upstream:** — · **Downstream:** —
+- **RBAC visible:** owner, admin, controller, collaborator
+  - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
+  - *Section:* **PageContent** → LinkGrid, CardLink*
 
 ### Incidents  `/console/operations/incidents`
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
@@ -1147,6 +1219,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/ops/page.tsx`](src/app/(platform)/console/ops/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-207 Ops / TOC hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1156,7 +1229,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/ops/toc/page.tsx`](src/app/(platform)/console/ops/toc/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
-- **Workflows:** WF-134 Technology operations centre (TOC) (P1)
+- **Workflows:** WF-134 Technology operations centre (TOC) (P1); PF-207 Ops / TOC hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1166,6 +1239,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/ops/toc/changes/page.tsx`](src/app/(platform)/console/ops/toc/changes/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-207 Ops / TOC hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1175,6 +1249,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/ops/toc/problems/page.tsx`](src/app/(platform)/console/ops/toc/problems/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-207 Ops / TOC hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1187,6 +1262,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/participants/page.tsx`](src/app/(platform)/console/participants/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-208 Participants hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1206,6 +1282,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/participants/delegations/[delegationId]/page.tsx`](src/app/(platform)/console/participants/delegations/[delegationId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-208 Participants hub (P1)
 - **Upstream:** delegations · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1235,6 +1312,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/participants/visa/[caseId]/page.tsx`](src/app/(platform)/console/participants/visa/[caseId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-208 Participants hub (P1)
 - **Upstream:** visa_cases · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1247,7 +1325,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/people/page.tsx`](src/app/(platform)/console/people/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
-- **Workflows:** WF-023 Technical officials appointment & training (P2)
+- **Workflows:** WF-023 Technical officials appointment & training (P2); PF-040 Directory (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1266,6 +1344,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/people/credentials/page.tsx`](src/app/(platform)/console/people/credentials/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-042 Credentials (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1275,6 +1354,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/people/credentials/asset-linker/page.tsx`](src/app/(platform)/console/people/credentials/asset-linker/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-042 Credentials (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1284,6 +1364,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/people/crew/page.tsx`](src/app/(platform)/console/people/crew/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-041 Crew (P1)
 - **Upstream:** crew_members · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1311,6 +1392,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/people/invites/page.tsx`](src/app/(platform)/console/people/invites/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-044 Invites (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1320,6 +1402,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/people/roles/page.tsx`](src/app/(platform)/console/people/roles/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-043 Roles (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1332,6 +1415,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/pipeline/page.tsx`](src/app/(platform)/console/pipeline/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-006 Pipeline / CRM (P1)
 - **Upstream:** leads · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1341,6 +1425,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/pipeline/[dealId]/page.tsx`](src/app/(platform)/console/pipeline/[dealId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-006 Pipeline / CRM (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1353,6 +1438,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/procurement/page.tsx`](src/app/(platform)/console/procurement/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-020 Procurement hub (P1)
 - **Upstream:** vendors · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1362,6 +1448,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/procurement/catalog/page.tsx`](src/app/(platform)/console/procurement/catalog/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-024 Catalog (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1371,6 +1458,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/procurement/purchase-orders/page.tsx`](src/app/(platform)/console/procurement/purchase-orders/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-022 Purchase orders (P1)
 - **Upstream:** purchase_orders · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1380,6 +1468,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/procurement/purchase-orders/[poId]/page.tsx`](src/app/(platform)/console/procurement/purchase-orders/[poId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-022 Purchase orders (P1)
 - **Upstream:** purchase_orders · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1398,6 +1487,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/procurement/requisitions/page.tsx`](src/app/(platform)/console/procurement/requisitions/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-021 Requisitions (P1)
 - **Upstream:** requisitions · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1425,6 +1515,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/procurement/rfqs/page.tsx`](src/app/(platform)/console/procurement/rfqs/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-025 RFQs (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1434,6 +1525,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/procurement/rfqs/[rfqId]/page.tsx`](src/app/(platform)/console/procurement/rfqs/[rfqId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-025 RFQs (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1443,6 +1535,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/procurement/rfqs/new/page.tsx`](src/app/(platform)/console/procurement/rfqs/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-025 RFQs (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1452,7 +1545,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/procurement/scorecards/page.tsx`](src/app/(platform)/console/procurement/scorecards/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-223 Supplier performance & SLA management (P1)
+- **Workflows:** WF-223 Supplier performance & SLA management (P1); PF-027 Supplier scorecards (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1462,7 +1555,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/procurement/sourcing/page.tsx`](src/app/(platform)/console/procurement/sourcing/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-222 Procurement strategy & contracts (P1)
+- **Workflows:** WF-222 Procurement strategy & contracts (P1); PF-026 Sourcing events (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1472,6 +1565,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/procurement/vendors/page.tsx`](src/app/(platform)/console/procurement/vendors/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-023 Vendor directory (P1)
 - **Upstream:** vendors · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1522,6 +1616,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/production/dispatch/page.tsx`](src/app/(platform)/console/production/dispatch/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-031 Dispatch (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1531,6 +1626,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/production/dispatch/[dispatchId]/page.tsx`](src/app/(platform)/console/production/dispatch/[dispatchId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-031 Dispatch (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1540,6 +1636,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/production/dispatch/live/page.tsx`](src/app/(platform)/console/production/dispatch/live/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-031 Dispatch (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1549,6 +1646,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/production/equipment/page.tsx`](src/app/(platform)/console/production/equipment/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-033 Equipment (P1)
 - **Upstream:** equipment · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1576,6 +1674,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/production/fabrication/page.tsx`](src/app/(platform)/console/production/fabrication/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-030 Fabrication orders (P1)
 - **Upstream:** fabrication_orders · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1603,6 +1702,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/production/logistics/page.tsx`](src/app/(platform)/console/production/logistics/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-034 Logistics (prod) (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1612,6 +1712,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/production/rentals/page.tsx`](src/app/(platform)/console/production/rentals/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-032 Rentals (P1)
 - **Upstream:** rentals · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1630,6 +1731,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/production/rentals/availability/page.tsx`](src/app/(platform)/console/production/rentals/availability/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-032 Rentals (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1658,6 +1760,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/production/warehouse/page.tsx`](src/app/(platform)/console/production/warehouse/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-035 Warehouse (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1667,6 +1770,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/production/warehouse/inventory/page.tsx`](src/app/(platform)/console/production/warehouse/inventory/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-035 Warehouse (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1676,6 +1780,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/production/warehouse/locations/page.tsx`](src/app/(platform)/console/production/warehouse/locations/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-035 Warehouse (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1688,6 +1793,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/programs/page.tsx`](src/app/(platform)/console/programs/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-209 Programs hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1717,6 +1823,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/programs/ceremonies/[ceremonyId]/page.tsx`](src/app/(platform)/console/programs/ceremonies/[ceremonyId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-209 Programs hub (P1)
 - **Upstream:** events · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1756,6 +1863,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/programs/readiness/[exerciseId]/page.tsx`](src/app/(platform)/console/programs/readiness/[exerciseId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-209 Programs hub (P1)
 - **Upstream:** readiness_exercises · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1775,6 +1883,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/programs/reviews/[reviewId]/page.tsx`](src/app/(platform)/console/programs/reviews/[reviewId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-209 Programs hub (P1)
 - **Upstream:** program_reviews · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1794,6 +1903,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/programs/risk/[riskId]/page.tsx`](src/app/(platform)/console/programs/risk/[riskId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-209 Programs hub (P1)
 - **Upstream:** risks · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1803,6 +1913,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** form
 - **Source:** [`src/app/(platform)/console/programs/risk/new/page.tsx`](src/app/(platform)/console/programs/risk/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, form-submit, validate-required
+- **Workflows:** PF-209 Programs hub (P1)
 - **Upstream:** — · **Downstream:** /api/v1/risks
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1845,6 +1956,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/projects/page.tsx`](src/app/(platform)/console/projects/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-001 Projects lifecycle (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1854,6 +1966,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/projects/[projectId]/page.tsx`](src/app/(platform)/console/projects/[projectId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-001 Projects lifecycle (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -1998,6 +2111,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/projects/new/page.tsx`](src/app/(platform)/console/projects/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-001 Projects lifecycle (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2010,6 +2124,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/proposals/page.tsx`](src/app/(platform)/console/proposals/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-009 Proposals (P1)
 - **Upstream:** proposals · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2019,6 +2134,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/proposals/[proposalId]/page.tsx`](src/app/(platform)/console/proposals/[proposalId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-009 Proposals (P1)
 - **Upstream:** proposals · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2037,6 +2153,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/proposals/new/page.tsx`](src/app/(platform)/console/proposals/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-009 Proposals (P1)
 - **Upstream:** clients · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2058,7 +2175,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/ratecard/page.tsx`](src/app/(platform)/console/ratecard/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
-- **Workflows:** WF-041 Team delegation registration & rate card (P1)
+- **Workflows:** WF-041 Team delegation registration & rate card (P1); PF-215 Rate card (admin) (P1)
 - **Upstream:** rate_card_items · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2071,6 +2188,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/safety/page.tsx`](src/app/(platform)/console/safety/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-210 Safety hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2100,6 +2218,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** form
 - **Source:** [`src/app/(platform)/console/safety/crisis/new/page.tsx`](src/app/(platform)/console/safety/crisis/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, form-submit, validate-required
+- **Workflows:** PF-210 Safety hub (P1)
 - **Upstream:** — · **Downstream:** /api/v1/crisis_alerts
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2159,6 +2278,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/safety/major-incident/[eventId]/page.tsx`](src/app/(platform)/console/safety/major-incident/[eventId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-210 Safety hub (P1)
 - **Upstream:** major_incidents · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2168,7 +2288,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/safety/medical/page.tsx`](src/app/(platform)/console/safety/medical/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-092 Venue medical services (FOP to spectator) (P0)
+- **Workflows:** WF-092 Venue medical services (FOP to spectator) (P0); PF-210 Safety hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2178,6 +2298,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/safety/medical/encounters/page.tsx`](src/app/(platform)/console/safety/medical/encounters/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** WF-092 Venue medical services (FOP to spectator) (P0)
 - **Upstream:** medical_encounters · **Downstream:** —
 - **RBAC visible:** owner, admin, controller
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2217,6 +2338,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/safety/safeguarding/[reportId]/page.tsx`](src/app/(platform)/console/safety/safeguarding/[reportId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-210 Safety hub (P1)
 - **Upstream:** safeguarding_reports · **Downstream:** —
 - **RBAC visible:** owner, admin, +reporter
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2239,6 +2361,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/schedule/page.tsx`](src/app/(platform)/console/schedule/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-005 Master schedule (ICS) (P1)
 - **Upstream:** events · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2251,6 +2374,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/services/page.tsx`](src/app/(platform)/console/services/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-211 Services desk hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2270,6 +2394,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/services/requests/[requestId]/page.tsx`](src/app/(platform)/console/services/requests/[requestId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-211 Services desk hub (P1)
 - **Upstream:** tasks · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2282,6 +2407,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/page.tsx`](src/app/(platform)/console/settings/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-080 Settings hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2291,6 +2417,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/api/page.tsx`](src/app/(platform)/console/settings/api/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-084 API keys (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2300,6 +2427,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/settings/audit/page.tsx`](src/app/(platform)/console/settings/audit/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-086 Audit log (P1)
 - **Upstream:** audit_log · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2309,6 +2437,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/billing/page.tsx`](src/app/(platform)/console/settings/billing/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-082 Billing (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2318,6 +2447,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/branding/page.tsx`](src/app/(platform)/console/settings/branding/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-091 Branding (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2327,6 +2457,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/compliance/page.tsx`](src/app/(platform)/console/settings/compliance/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-087 Compliance (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2336,6 +2467,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/domains/page.tsx`](src/app/(platform)/console/settings/domains/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-092 Domains (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2345,6 +2477,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/email-templates/page.tsx`](src/app/(platform)/console/settings/email-templates/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-090 Email templates (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2354,6 +2487,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/exports/page.tsx`](src/app/(platform)/console/settings/exports/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-088 Export runs (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2363,7 +2497,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/settings/governance/page.tsx`](src/app/(platform)/console/settings/governance/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-002 OCOG incorporation & governance setup (P2)
+- **Workflows:** WF-002 OCOG incorporation & governance setup (P2); PF-217 Settings · governance (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2373,6 +2507,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/imports/page.tsx`](src/app/(platform)/console/settings/imports/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-089 Import tools (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2382,6 +2517,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/integrations/page.tsx`](src/app/(platform)/console/settings/integrations/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-083 Integrations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2391,6 +2527,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/settings/integrations/[integrationId]/page.tsx`](src/app/(platform)/console/settings/integrations/[integrationId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-083 Integrations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2400,6 +2537,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/settings/integrations/marketplace/page.tsx`](src/app/(platform)/console/settings/integrations/marketplace/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-083 Integrations (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2409,6 +2547,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/organization/page.tsx`](src/app/(platform)/console/settings/organization/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-081 Organization (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2418,6 +2557,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/settings/webhooks/page.tsx`](src/app/(platform)/console/settings/webhooks/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-085 Webhooks (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2471,6 +2611,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/tasks/page.tsx`](src/app/(platform)/console/tasks/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
+- **Workflows:** PF-002 Tasks & assignment (P1)
 - **Upstream:** tasks · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2480,6 +2621,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/tasks/[taskId]/page.tsx`](src/app/(platform)/console/tasks/[taskId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-002 Tasks & assignment (P1)
 - **Upstream:** tasks · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2489,6 +2631,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** bespoke
 - **Source:** [`src/app/(platform)/console/tasks/new/page.tsx`](src/app/(platform)/console/tasks/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-002 Tasks & assignment (P1)
 - **Upstream:** projects · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2501,6 +2644,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/transport/page.tsx`](src/app/(platform)/console/transport/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-212 Transport hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2520,6 +2664,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/transport/ad/[manifestId]/page.tsx`](src/app/(platform)/console/transport/ad/[manifestId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-212 Transport hub (P1)
 - **Upstream:** ad_manifests · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2539,6 +2684,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/transport/dispatch/[runId]/page.tsx`](src/app/(platform)/console/transport/dispatch/[runId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-212 Transport hub (P1)
 - **Upstream:** dispatch_runs · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2548,6 +2694,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/transport/fleets/page.tsx`](src/app/(platform)/console/transport/fleets/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-212 Transport hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2557,7 +2704,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/transport/workforce/page.tsx`](src/app/(platform)/console/transport/workforce/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
-- **Workflows:** WF-074 Workforce transport (P1)
+- **Workflows:** WF-074 Workforce transport (P1); PF-212 Transport hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2580,6 +2727,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/venues/[venueId]/page.tsx`](src/app/(platform)/console/venues/[venueId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** WF-010 Venue master plan (P0)
 - **Upstream:** venues · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2659,6 +2807,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** info
 - **Source:** [`src/app/(platform)/console/venues/[venueId]/zones/page.tsx`](src/app/(platform)/console/venues/[venueId]/zones/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-213 Venues hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2668,6 +2817,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** form
 - **Source:** [`src/app/(platform)/console/venues/new/page.tsx`](src/app/(platform)/console/venues/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, form-submit, validate-required
+- **Workflows:** PF-213 Venues hub (P1)
 - **Upstream:** — · **Downstream:** /api/v1/venues
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2677,7 +2827,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** list
 - **Source:** [`src/app/(platform)/console/venues/training/page.tsx`](src/app/(platform)/console/venues/training/page.tsx)
 - **Capabilities:** render-header, auth-guard, list-records, row-click-detail, empty-state, force-dynamic
-- **Workflows:** WF-033 Training venue access & bookings (P1)
+- **Workflows:** WF-033 Training venue access & bookings (P1); PF-213 Venues hub (P1)
 - **Upstream:** venues · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2690,6 +2840,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** hub
 - **Source:** [`src/app/(platform)/console/workforce/page.tsx`](src/app/(platform)/console/workforce/page.tsx)
 - **Capabilities:** render-header, auth-guard, link-grid
+- **Workflows:** PF-214 Workforce hub (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2709,6 +2860,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/workforce/contractors/[contractorId]/page.tsx`](src/app/(platform)/console/workforce/contractors/[contractorId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-214 Workforce hub (P1)
 - **Upstream:** workforce_members · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2758,6 +2910,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/workforce/rosters/[rosterId]/page.tsx`](src/app/(platform)/console/workforce/rosters/[rosterId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-214 Workforce hub (P1)
 - **Upstream:** rosters · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2787,6 +2940,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/workforce/staff/[staffId]/page.tsx`](src/app/(platform)/console/workforce/staff/[staffId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-214 Workforce hub (P1)
 - **Upstream:** workforce_members · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2806,6 +2960,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/workforce/training/[courseId]/page.tsx`](src/app/(platform)/console/workforce/training/[courseId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-214 Workforce hub (P1)
 - **Upstream:** kb_articles · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2835,13 +2990,14 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** ATLVS · **Template:** detail
 - **Source:** [`src/app/(platform)/console/workforce/volunteers/[volunteerId]/page.tsx`](src/app/(platform)/console/workforce/volunteers/[volunteerId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, get-record, not-found, back-nav, field-dump
+- **Workflows:** PF-214 Workforce hub (P1)
 - **Upstream:** workforce_members · **Downstream:** —
 - **RBAC visible:** owner, admin, controller, collaborator
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
   - *Section:* **PageContent** → FieldDumpDL, BackButton
 
 
-### GVTEWAY — 75 pages
+### GVTEWAY — 77 pages
 
 #### GVTEWAY · apply — 2 pages
 
@@ -2866,12 +3022,13 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
   - *Section:* **PageContent** → ProseSurface
 
 
-#### GVTEWAY · artist — 6 pages
+#### GVTEWAY · artist — 7 pages
 
 ### Artist  `/p/[slug]/artist`
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/artist/page.tsx`](src/app/(portal)/p/[slug]/artist/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-222 Artist portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2881,6 +3038,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/artist/advancing/page.tsx`](src/app/(portal)/p/[slug]/artist/advancing/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-222 Artist portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2890,15 +3048,27 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/artist/catering/page.tsx`](src/app/(portal)/p/[slug]/artist/catering/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-222 Artist portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
   - *Section:* **PageContent** → (page-specific — inspect source)
 
+### Privacy  `/p/[slug]/artist/privacy`
+- **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
+- **Source:** [`src/app/(portal)/p/[slug]/artist/privacy/page.tsx`](src/app/(portal)/p/[slug]/artist/privacy/page.tsx)
+- **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-222 Artist portal (P1)
+- **Upstream:** — · **Downstream:** —
+- **RBAC visible:** persona-authenticated for this org slug
+  - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
+  - *Section:* **PageContent** → ProseSurface
+
 ### Show schedule  `/p/[slug]/artist/schedule`
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/artist/schedule/page.tsx`](src/app/(portal)/p/[slug]/artist/schedule/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-222 Artist portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2908,6 +3078,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/artist/travel/page.tsx`](src/app/(portal)/p/[slug]/artist/travel/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-222 Artist portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2917,6 +3088,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/artist/venue/page.tsx`](src/app/(portal)/p/[slug]/artist/venue/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-222 Artist portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2929,6 +3101,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/athlete/page.tsx`](src/app/(portal)/p/[slug]/athlete/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-035 Athlete wellbeing & safeguarding (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2938,6 +3111,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/athlete/privacy/page.tsx`](src/app/(portal)/p/[slug]/athlete/privacy/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-035 Athlete wellbeing & safeguarding (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2967,6 +3141,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/athlete/training/page.tsx`](src/app/(portal)/p/[slug]/athlete/training/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-035 Athlete wellbeing & safeguarding (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2976,6 +3151,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/athlete/visa/page.tsx`](src/app/(portal)/p/[slug]/athlete/visa/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-035 Athlete wellbeing & safeguarding (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2988,6 +3164,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/client/page.tsx`](src/app/(portal)/p/[slug]/client/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-223 Client portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -2997,6 +3174,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/client/deliverables/page.tsx`](src/app/(portal)/p/[slug]/client/deliverables/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-223 Client portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3006,6 +3184,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/client/files/page.tsx`](src/app/(portal)/p/[slug]/client/files/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-223 Client portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3015,6 +3194,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/client/invoices/page.tsx`](src/app/(portal)/p/[slug]/client/invoices/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-223 Client portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3024,6 +3204,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/client/messages/page.tsx`](src/app/(portal)/p/[slug]/client/messages/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-223 Client portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3033,6 +3214,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/client/privacy/page.tsx`](src/app/(portal)/p/[slug]/client/privacy/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-223 Client portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3042,18 +3224,20 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/client/proposals/page.tsx`](src/app/(portal)/p/[slug]/client/proposals/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-223 Client portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
   - *Section:* **PageContent** → (page-specific — inspect source)
 
 
-#### GVTEWAY · crew — 4 pages
+#### GVTEWAY · crew — 5 pages
 
 ### Crew  `/p/[slug]/crew`
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/crew/page.tsx`](src/app/(portal)/p/[slug]/crew/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-224 Crew portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3063,6 +3247,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/crew/advances/page.tsx`](src/app/(portal)/p/[slug]/crew/advances/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-224 Crew portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3072,15 +3257,27 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/crew/call-sheet/page.tsx`](src/app/(portal)/p/[slug]/crew/call-sheet/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-224 Crew portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
   - *Section:* **PageContent** → (page-specific — inspect source)
 
+### Privacy  `/p/[slug]/crew/privacy`
+- **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
+- **Source:** [`src/app/(portal)/p/[slug]/crew/privacy/page.tsx`](src/app/(portal)/p/[slug]/crew/privacy/page.tsx)
+- **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-224 Crew portal (P1)
+- **Upstream:** — · **Downstream:** —
+- **RBAC visible:** persona-authenticated for this org slug
+  - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
+  - *Section:* **PageContent** → ProseSurface
+
 ### Time  `/p/[slug]/crew/time`
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/crew/time/page.tsx`](src/app/(portal)/p/[slug]/crew/time/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-224 Crew portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3103,6 +3300,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/delegation/accommodation/page.tsx`](src/app/(portal)/p/[slug]/delegation/accommodation/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-040 NOC services & attaché program (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3195,6 +3393,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/guest/page.tsx`](src/app/(portal)/p/[slug]/guest/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-225 Guest portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3204,6 +3403,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/guest/logistics/page.tsx`](src/app/(portal)/p/[slug]/guest/logistics/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-225 Guest portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3213,6 +3413,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/guest/privacy/page.tsx`](src/app/(portal)/p/[slug]/guest/privacy/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-225 Guest portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3222,6 +3423,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/guest/schedule/page.tsx`](src/app/(portal)/p/[slug]/guest/schedule/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-225 Guest portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3231,7 +3433,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/guest/tickets/page.tsx`](src/app/(portal)/p/[slug]/guest/tickets/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
-- **Workflows:** WF-175 Ticketing sales channels (public, NOC, sponsor) (P1)
+- **Workflows:** WF-175 Ticketing sales channels (public, NOC, sponsor) (P1); PF-225 Guest portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3244,6 +3446,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/guide/page.tsx`](src/app/(portal)/p/[slug]/guide/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-228 Guide (Boarding Pass) (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3266,6 +3469,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/hospitality/guests/page.tsx`](src/app/(portal)/p/[slug]/hospitality/guests/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-173 Hospitality program (P2)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3275,6 +3479,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/hospitality/itinerary/page.tsx`](src/app/(portal)/p/[slug]/hospitality/itinerary/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-173 Hospitality program (P2)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3359,6 +3564,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/overview/page.tsx`](src/app/(portal)/p/[slug]/overview/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-221 Portal overview (persona-agnostic) (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3371,7 +3577,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/sponsor/page.tsx`](src/app/(portal)/p/[slug]/sponsor/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
-- **Workflows:** WF-170 TOP partner servicing (Worldwide Olympic Partners) (P1); WF-171 Domestic sponsor program & activation rights (P1)
+- **Workflows:** WF-170 TOP partner servicing (Worldwide Olympic Partners) (P1); WF-171 Domestic sponsor program & activation rights (P1); PF-226 Sponsor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3381,6 +3587,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/sponsor/activations/page.tsx`](src/app/(portal)/p/[slug]/sponsor/activations/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-226 Sponsor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3390,6 +3597,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/sponsor/assets/page.tsx`](src/app/(portal)/p/[slug]/sponsor/assets/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-226 Sponsor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3399,6 +3607,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/sponsor/entitlements/page.tsx`](src/app/(portal)/p/[slug]/sponsor/entitlements/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-226 Sponsor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3408,6 +3617,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/sponsor/privacy/page.tsx`](src/app/(portal)/p/[slug]/sponsor/privacy/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-226 Sponsor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3417,6 +3627,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/sponsor/reporting/page.tsx`](src/app/(portal)/p/[slug]/sponsor/reporting/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-226 Sponsor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3429,7 +3640,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/vendor/page.tsx`](src/app/(portal)/p/[slug]/vendor/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
-- **Workflows:** WF-193 Contractor management (P1)
+- **Workflows:** WF-193 Contractor management (P1); PF-227 Vendor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3439,6 +3650,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/vendor/credentials/page.tsx`](src/app/(portal)/p/[slug]/vendor/credentials/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-227 Vendor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3448,6 +3660,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/vendor/equipment-pull-list/page.tsx`](src/app/(portal)/p/[slug]/vendor/equipment-pull-list/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-227 Vendor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3457,6 +3670,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/vendor/invoices/page.tsx`](src/app/(portal)/p/[slug]/vendor/invoices/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-227 Vendor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3466,6 +3680,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/vendor/privacy/page.tsx`](src/app/(portal)/p/[slug]/vendor/privacy/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-227 Vendor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3475,6 +3690,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/vendor/purchase-orders/page.tsx`](src/app/(portal)/p/[slug]/vendor/purchase-orders/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-227 Vendor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3484,6 +3700,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** bespoke
 - **Source:** [`src/app/(portal)/p/[slug]/vendor/submissions/page.tsx`](src/app/(portal)/p/[slug]/vendor/submissions/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-227 Vendor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3493,6 +3710,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/vendor/training/page.tsx`](src/app/(portal)/p/[slug]/vendor/training/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** PF-227 Vendor portal (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3525,6 +3743,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/vip/itinerary/page.tsx`](src/app/(portal)/p/[slug]/vip/itinerary/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-152 Olympic protocol & dignitary management (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3557,6 +3776,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** GVTEWAY · **Template:** info
 - **Source:** [`src/app/(portal)/p/[slug]/volunteer/application/page.tsx`](src/app/(portal)/p/[slug]/volunteer/application/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-192 Volunteer program (recruitment → deployment) (P0)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** persona-authenticated for this org slug
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3627,6 +3847,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/check-in/page.tsx`](src/app/(mobile)/m/check-in/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-113 Check-in (legacy) (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3636,6 +3857,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/check-in/manual/page.tsx`](src/app/(mobile)/m/check-in/manual/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-113 Check-in (legacy) (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3645,6 +3867,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/check-in/scan/[slug]/page.tsx`](src/app/(mobile)/m/check-in/scan/[slug]/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-113 Check-in (legacy) (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3683,6 +3906,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/crew/page.tsx`](src/app/(mobile)/m/crew/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-116 Legacy crew (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3692,6 +3916,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/crew/clock/page.tsx`](src/app/(mobile)/m/crew/clock/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-116 Legacy crew (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3714,6 +3939,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** info
 - **Source:** [`src/app/(mobile)/m/driver/run/[runId]/page.tsx`](src/app/(mobile)/m/driver/run/[runId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-071 Athlete & team transport (T1/T2) (P0)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3736,6 +3962,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** info
 - **Source:** [`src/app/(mobile)/m/gate/scan/page.tsx`](src/app/(mobile)/m/gate/scan/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-053 Access control & zone management (gates) (P0)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3761,7 +3988,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/guide/page.tsx`](src/app/(mobile)/m/guide/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
-- **Workflows:** WF-015 Venue Operations Plan (VOP) (P0)
+- **Workflows:** WF-015 Venue Operations Plan (VOP) (P0); PF-111 Guide (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3797,6 +4024,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** info
 - **Source:** [`src/app/(mobile)/m/incident/new/page.tsx`](src/app/(mobile)/m/incident/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-065 Crisis / major incident response (P0)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3809,6 +4037,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/incidents/new/page.tsx`](src/app/(mobile)/m/incidents/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-115 Legacy incidents (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3821,6 +4050,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/inventory/scan/page.tsx`](src/app/(mobile)/m/inventory/scan/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-114 Inventory scan (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3855,6 +4085,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** info
 - **Source:** [`src/app/(mobile)/m/medic/new/page.tsx`](src/app/(mobile)/m/medic/new/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-092 Venue medical services (FOP to spectator) (P0)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3916,6 +4147,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** info
 - **Source:** [`src/app/(mobile)/m/ros/[showId]/page.tsx`](src/app/(mobile)/m/ros/[showId]/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-150 Opening ceremony (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3941,6 +4173,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** form
 - **Source:** [`src/app/(mobile)/m/settings/page.tsx`](src/app/(mobile)/m/settings/page.tsx)
 - **Capabilities:** render-header, auth-guard, form-submit, validate-required
+- **Workflows:** PF-117 Settings (P1)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3963,6 +4196,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** info
 - **Source:** [`src/app/(mobile)/m/shift/swap/page.tsx`](src/app/(mobile)/m/shift/swap/page.tsx)
 - **Capabilities:** render-header, auth-guard, descriptive-text
+- **Workflows:** WF-197 Scheduling, shifts & time attendance (P0)
 - **Upstream:** — · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -3975,6 +4209,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 - **Atomic:** Page · **Platform:** COMPVSS · **Template:** bespoke
 - **Source:** [`src/app/(mobile)/m/tasks/page.tsx`](src/app/(mobile)/m/tasks/page.tsx)
 - **Capabilities:** render-header, auth-guard, bespoke-logic
+- **Workflows:** PF-112 Tasks (P1)
 - **Upstream:** tasks · **Downstream:** —
 - **RBAC visible:** any authenticated user with an org membership
   - *Section:* **PageChrome** → Breadcrumbs, ModuleHeader
@@ -4588,58 +4823,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 ### Orphaned elements
 Pages in a product shell (ATLVS/GVTEWAY/COMPVSS) with **zero workflow memberships**. These are shell navigation / hub / informational surfaces that exist for UX but aren't tied to an Olympic workflow. That's expected — hubs + aux pages don't need workflow bindings.
 
-Count: **128**
-- `/m/driver/run/[runId]`
-- `/m/gate/scan`
-- `/m/incident/new`
-- `/m/medic/new`
-- `/m/ros/[showId]`
-- `/m/settings`
-- `/m/shift/swap`
-- `/console/accommodation/blocks/[blockId]`
-- `/console/accommodation`
-- `/console/accreditation/categories`
-- `/console/accreditation/changes/[changeId]`
-- `/console/accreditation`
-- `/console/accreditation/vetting/[applicationId]`
-- `/console/accreditation/zones`
-- `/console/ai/agents`
-- `/console/ai/assistant/[conversationId]`
-- `/console/ai/automations/[automationId]`
-- `/console/ai/automations/new`
-- `/console/ai/automations`
-- `/console/campaigns`
-- `/console/clients/[clientId]`
-- `/console/clients`
-- `/console/commercial/hospitality/[packageId]`
-- `/console/commercial`
-- `/console/commercial/sponsors/[sponsorId]`
-- `/console/commercial/tickets/[ticketTypeId]`
-- `/console/comms/internal/new`
-- `/console/comms`
-- `/console/events`
-- `/console/finance/advances`
-- `/console/finance/expenses`
-- `/console/finance/invoices/[invoiceId]`
-- `/console/finance/invoices`
-- `/console/finance/mileage`
-- `/console/finance/payouts`
-- `/console/finance/time`
-- `/console/forms/[formId]`
-- `/console/forms/new`
-- `/console/forms`
-- `/console/integrations/[connectorId]`
-- `/console/kb/[articleId]`
-- `/console/leads/[leadId]`
-- `/console/leads`
-- `/console/legal/ip/[markId]`
-- `/console/legal`
-- `/console/legal/privacy/consent`
-- `/console/legal/privacy/datamap`
-- `/console/legal/privacy/dsar/[requestId]`
-- `/console/legal/privacy`
-- `/console/locations`
-- …and 78 more
+None.
 
 ### Dead-end workflows
 Workflow surfaces referenced in the gap analysis that have **no corresponding page on disk**.

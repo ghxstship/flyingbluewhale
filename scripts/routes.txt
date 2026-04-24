@@ -521,3 +521,10 @@
 # Procurement extensions
 (platform)/console/procurement/sourcing/page.tsx|Sourcing|RFQ and contract-linked sourcing events
 (platform)/console/procurement/scorecards/page.tsx|Supplier scorecards|SLA and KPI performance tracking
+
+# Operations hub (pre-Olympic incidents landing)
+(platform)/console/operations/page.tsx|Operations|Legacy incidents view
+
+# Privacy self-service for remaining portal personas
+(portal)/p/[slug]/artist/privacy/page.tsx|Privacy|DSAR self-service
+(portal)/p/[slug]/crew/privacy/page.tsx|Privacy|DSAR self-service

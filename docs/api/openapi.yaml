@@ -229,3 +229,21 @@ paths:
   /api/v1/notifications:
     get:   { summary: List the session user's 50 most recent notifications + unread count. }
     patch: { summary: Mark notifications as read by `ids[]` or `readAll=true`. }
+
+  /api/v1/risks:
+    get:  { summary: List RAID-register rows (risks/assumptions/issues/dependencies) for the caller's org. WF-006. }
+    post: { summary: Create a new RAID entry with likelihood × impact scoring. WF-006. }
+
+  /api/v1/accreditation/scan:
+    post: { summary: Decision endpoint for COMPVSS gate scans — validates barcode, category, and zone privileges; writes access_scans audit row. WF-053. }
+
+  /api/v1/crisis/alerts:
+    get:  { summary: List crisis mass-notifications for the caller's org. WF-252. }
+    post: { summary: Create and fan out a crisis alert to push/SMS/email channels by audience filter. WF-252. }
+
+  /api/v1/privacy/dsar:
+    get:  { summary: List DSAR requests visible to the caller (org members see all; data subjects see their own). WF-232. }
+    post: { summary: Intake a new Data Subject Access Request with auto-computed 30-day SLA. WF-232. }
+
+  /api/v1/shifts/checkin:
+    post: { summary: Record a shift check-in / check-out / break-start / break-end on COMPVSS. WF-197. }

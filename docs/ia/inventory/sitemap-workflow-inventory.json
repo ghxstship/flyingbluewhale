@@ -1,28 +1,28 @@
 {
   "generated_at": "2026-04-24",
   "summary": {
-    "total_pages": 439,
+    "total_pages": 442,
     "by_platform": {
       "Auth": 11,
       "Marketing": 27,
       "COMPVSS": 36,
       "Personal": 9,
-      "ATLVS": 280,
-      "GVTEWAY": 75,
+      "ATLVS": 281,
+      "GVTEWAY": 77,
       "Other": 1
     },
     "by_template": {
       "bespoke": 171,
-      "info": 150,
+      "info": 152,
       "form": 7,
       "detail": 36,
       "list": 59,
-      "hub": 16
+      "hub": 17
     },
     "components_catalogued": 31,
     "elements_catalogued": 20,
     "micro_interactions_catalogued": 13,
-    "in_scope_workflows": 106
+    "in_scope_workflows": 228
   },
   "components": [
     {
@@ -3291,7 +3291,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-113",
+          "name": "Check-in (legacy)",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -3363,7 +3372,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-113",
+          "name": "Check-in (legacy)",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -3435,7 +3453,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-113",
+          "name": "Check-in (legacy)",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -3669,7 +3696,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-116",
+          "name": "Legacy crew",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -3741,7 +3777,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-116",
+          "name": "Legacy crew",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -3902,7 +3947,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-071",
+          "name": "Athlete & team transport (T1/T2)",
+          "category": "Transport",
+          "phase": "GT",
+          "severity": "P0",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -4063,7 +4117,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-053",
+          "name": "Access control & zone management (gates)",
+          "category": "Accreditation",
+          "phase": "GT",
+          "severity": "P0",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -4224,6 +4287,14 @@
           "phase": "PRE",
           "severity": "P0",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-111",
+          "name": "Guide",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -4378,7 +4449,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-065",
+          "name": "Crisis / major incident response",
+          "category": "Security",
+          "phase": "GT",
+          "severity": "P0",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -4539,7 +4619,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-115",
+          "name": "Legacy incidents",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -4611,7 +4700,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-114",
+          "name": "Inventory scan",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -4683,7 +4781,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-092",
+          "name": "Venue medical services (FOP to spectator)",
+          "category": "Medical & Health",
+          "phase": "GT",
+          "severity": "P0",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -5159,7 +5266,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-150",
+          "name": "Opening ceremony",
+          "category": "Ceremonies & Protocol",
+          "phase": "GT",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -5456,7 +5572,16 @@
           "description": "Browser required-field validation"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-117",
+          "name": "Settings",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -5628,7 +5753,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-197",
+          "name": "Scheduling, shifts & time attendance",
+          "category": "Workforce",
+          "phase": "GT",
+          "severity": "P0",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -5700,7 +5834,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-112",
+          "name": "Tasks",
+          "category": "Mobile",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -6631,7 +6774,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-201",
+          "name": "Accommodation hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -6830,7 +6982,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-201",
+          "name": "Accommodation hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -6915,6 +7076,14 @@
           "name": "Olympic / Paralympic Village planning",
           "category": "Athlete Services",
           "phase": "PRE",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-201",
+          "name": "Accommodation hub",
+          "category": "Shell",
+          "phase": "XG",
           "severity": "P1",
           "role_in_workflow": "Trigger"
         }
@@ -7012,7 +7181,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-200",
+          "name": "Accreditation hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -7111,7 +7289,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-200",
+          "name": "Accreditation hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -7302,7 +7489,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-200",
+          "name": "Accreditation hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -7700,7 +7896,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-200",
+          "name": "Accreditation hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -7891,7 +8096,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-200",
+          "name": "Accreditation hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -7969,7 +8183,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-053",
+          "name": "Agents",
+          "category": "AI",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8047,7 +8270,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-051",
+          "name": "Assistant",
+          "category": "AI",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8125,7 +8357,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-051",
+          "name": "Assistant",
+          "category": "AI",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8203,7 +8444,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-054",
+          "name": "Automations",
+          "category": "AI",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8281,7 +8531,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-054",
+          "name": "Automations",
+          "category": "AI",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8359,7 +8618,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-054",
+          "name": "Automations",
+          "category": "AI",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8437,7 +8705,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-052",
+          "name": "Drafting",
+          "category": "AI",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8515,7 +8792,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-050",
+          "name": "AI hub",
+          "category": "AI",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8593,7 +8879,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-064",
+          "name": "Campaigns",
+          "category": "Collaboration",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8687,7 +8982,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-008",
+          "name": "Client directory",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -8770,7 +9074,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-008",
+          "name": "Client directory",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -8864,7 +9177,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-008",
+          "name": "Client directory",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -8947,7 +9269,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-062",
+          "name": "Command palette",
+          "category": "Collaboration",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -9032,6 +9363,14 @@
           "category": "Spectator Experience",
           "phase": "PRE",
           "severity": "P2",
+          "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-202",
+          "name": "Commercial hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
           "role_in_workflow": "Trigger"
         }
       ],
@@ -9128,7 +9467,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-202",
+          "name": "Commercial hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -9219,6 +9567,14 @@
           "phase": "XG",
           "severity": "P2",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-202",
+          "name": "Commercial hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -9306,6 +9662,14 @@
           "phase": "XG",
           "severity": "P2",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-202",
+          "name": "Commercial hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -9385,7 +9749,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-202",
+          "name": "Commercial hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -9480,7 +9853,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-202",
+          "name": "Commercial hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -9695,7 +10077,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-202",
+          "name": "Commercial hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -9996,7 +10387,16 @@
           "description": "Browser required-field validation"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-203",
+          "name": "Comms hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [
@@ -10168,7 +10568,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-203",
+          "name": "Comms hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -10255,6 +10664,14 @@
           "phase": "GT",
           "severity": "P2",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-216",
+          "name": "Compliance / COC",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -10334,7 +10751,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-003",
+          "name": "Events calendar",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -10412,7 +10838,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-003",
+          "name": "Events calendar",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -10510,7 +10945,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-003",
+          "name": "Events calendar",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -10593,7 +11037,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-061",
+          "name": "Files",
+          "category": "Collaboration",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -10843,7 +11296,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-016",
+          "name": "Advances",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -11106,6 +11568,14 @@
           "phase": "XG",
           "severity": "P1",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-013",
+          "name": "Budgets",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -11362,7 +11832,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-012",
+          "name": "Expenses",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -11461,7 +11940,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-011",
+          "name": "Invoicing",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -11642,7 +12130,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-011",
+          "name": "Invoicing",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -11897,7 +12394,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-015",
+          "name": "Mileage",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -11980,7 +12486,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-010",
+          "name": "Finance hub",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -12078,7 +12593,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-017",
+          "name": "Payouts",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -12161,7 +12685,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-018",
+          "name": "Reporting",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -12415,7 +12948,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-014",
+          "name": "Time tracking",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -12506,6 +13048,14 @@
           "phase": "XG",
           "severity": "P2",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-019",
+          "name": "Treasury / FX",
+          "category": "Finance",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -12585,7 +13135,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-063",
+          "name": "Forms",
+          "category": "Collaboration",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -12663,7 +13222,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-063",
+          "name": "Forms",
+          "category": "Collaboration",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -12741,7 +13309,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-063",
+          "name": "Forms",
+          "category": "Collaboration",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -12819,7 +13396,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-060",
+          "name": "Inbox",
+          "category": "Collaboration",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -12913,7 +13499,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-204",
+          "name": "Integrations hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -13120,7 +13715,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-130",
+          "name": "KB detail",
+          "category": "Knowledge",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -13327,7 +13931,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-007",
+          "name": "Lead management",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -13410,7 +14023,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-007",
+          "name": "Lead management",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -13504,7 +14126,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-007",
+          "name": "Lead management",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -13704,7 +14335,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-205",
+          "name": "Legal hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -13881,7 +14521,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-205",
+          "name": "Legal hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -13969,7 +14618,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-205",
+          "name": "Legal hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -14045,7 +14703,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-205",
+          "name": "Legal hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -14132,7 +14799,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-205",
+          "name": "Legal hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -14309,7 +14985,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-205",
+          "name": "Legal hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -14381,7 +15066,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-004",
+          "name": "Canonical locations",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -14459,7 +15153,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-004",
+          "name": "Canonical locations",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -14553,7 +15256,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-004",
+          "name": "Canonical locations",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -14636,7 +15348,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-004",
+          "name": "Canonical locations",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -14817,7 +15538,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-206",
+          "name": "Logistics hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -14987,7 +15717,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-206",
+          "name": "Logistics hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -15082,7 +15821,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-206",
+          "name": "Logistics hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -15463,7 +16211,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-218",
+          "name": "Meetings",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -15561,6 +16318,14 @@
           "category": "NOC & IF Relations",
           "phase": "PRE",
           "severity": "P2",
+          "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-218",
+          "name": "Meetings",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
           "role_in_workflow": "Trigger"
         }
       ],
@@ -15775,6 +16540,94 @@
         "name": "Operations",
         "atomic_level": "Page",
         "parent": "ATLVS",
+        "location_path": "/console/operations",
+        "platform": "ATLVS",
+        "template": "hub",
+        "source": "src/app/(platform)/console/operations/page.tsx"
+      },
+      "capabilities": [
+        {
+          "name": "render-header",
+          "type": "UI",
+          "description": "Render ModuleHeader with page title"
+        },
+        {
+          "name": "auth-guard",
+          "type": "middleware",
+          "description": "Redirect unauthenticated users to /login"
+        },
+        {
+          "name": "link-grid",
+          "type": "navigation",
+          "description": "Grid of links to sub-modules"
+        }
+      ],
+      "workflows": [
+        {
+          "wf": "PF-070",
+          "name": "Incidents (ops)",
+          "category": "Operations",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
+      "relationships": {
+        "upstream_inputs": [],
+        "downstream_outputs": [],
+        "sibling_coordination": [],
+        "cross_page_connections": [],
+        "shared_state": [
+          "auth.session",
+          "theme",
+          "locale"
+        ]
+      },
+      "rbac": {
+        "visible_to": [
+          "owner",
+          "admin",
+          "controller",
+          "collaborator"
+        ],
+        "actionable_by": {
+          "create/update": [
+            "owner",
+            "admin",
+            "controller",
+            "collaborator"
+          ],
+          "delete": [
+            "owner",
+            "admin"
+          ]
+        },
+        "notes": "ATLVS admin + operational roles. RLS is_org_member() for reads; has_org_role() for writes."
+      },
+      "sections": [
+        {
+          "name": "PageChrome",
+          "atomic": "Section",
+          "children": [
+            "Breadcrumbs",
+            "ModuleHeader"
+          ]
+        },
+        {
+          "name": "PageContent",
+          "atomic": "Section",
+          "children": [
+            "LinkGrid",
+            "CardLink*"
+          ]
+        }
+      ]
+    },
+    {
+      "identity": {
+        "name": "Operations",
+        "atomic_level": "Page",
+        "parent": "ATLVS",
         "location_path": "/console/ops",
         "platform": "ATLVS",
         "template": "hub",
@@ -15797,7 +16650,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-207",
+          "name": "Ops / TOC hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -15876,7 +16738,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-207",
+          "name": "Ops / TOC hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -15962,6 +16833,14 @@
           "phase": "GT",
           "severity": "P1",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-207",
+          "name": "Ops / TOC hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -16042,7 +16921,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-207",
+          "name": "Ops / TOC hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -16214,7 +17102,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-208",
+          "name": "Participants hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -16513,7 +17410,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-208",
+          "name": "Participants hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -16608,7 +17514,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-208",
+          "name": "Participants hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -16877,7 +17792,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-042",
+          "name": "Credentials",
+          "category": "People",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -16955,7 +17879,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-042",
+          "name": "Credentials",
+          "category": "People",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -17205,7 +18138,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-041",
+          "name": "Crew",
+          "category": "People",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -17288,7 +18230,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-044",
+          "name": "Invites",
+          "category": "People",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -17374,6 +18325,14 @@
           "phase": "PRE",
           "severity": "P2",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-040",
+          "name": "Directory",
+          "category": "People",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -17453,7 +18412,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-043",
+          "name": "Roles",
+          "category": "People",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -17531,7 +18499,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-006",
+          "name": "Pipeline / CRM",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -17609,7 +18586,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-006",
+          "name": "Pipeline / CRM",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -17691,7 +18677,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-024",
+          "name": "Catalog",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -17769,7 +18764,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-020",
+          "name": "Procurement hub",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -17867,7 +18871,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-022",
+          "name": "Purchase orders",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -18048,7 +19061,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-022",
+          "name": "Purchase orders",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -18303,7 +19325,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-021",
+          "name": "Requisitions",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -18386,7 +19417,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-025",
+          "name": "RFQs",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -18464,7 +19504,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-025",
+          "name": "RFQs",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -18542,7 +19591,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-025",
+          "name": "RFQs",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -18625,6 +19683,14 @@
           "wf": "WF-223",
           "name": "Supplier performance & SLA management",
           "category": "Finance & Commercial",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-027",
+          "name": "Supplier scorecards",
+          "category": "Procurement",
           "phase": "XG",
           "severity": "P1",
           "role_in_workflow": "Trigger"
@@ -18713,6 +19779,14 @@
           "name": "Procurement strategy & contracts",
           "category": "Finance & Commercial",
           "phase": "PRE",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-026",
+          "name": "Sourcing events",
+          "category": "Procurement",
+          "phase": "XG",
           "severity": "P1",
           "role_in_workflow": "Trigger"
         }
@@ -18966,7 +20040,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-023",
+          "name": "Vendor directory",
+          "category": "Procurement",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -19223,7 +20306,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-031",
+          "name": "Dispatch",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -19301,7 +20393,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-031",
+          "name": "Dispatch",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -19379,7 +20480,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-031",
+          "name": "Dispatch",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -19629,7 +20739,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-033",
+          "name": "Equipment",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -19884,7 +21003,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-030",
+          "name": "Fabrication orders",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -19967,7 +21095,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-034",
+          "name": "Logistics (prod)",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -20123,7 +21260,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-032",
+          "name": "Rentals",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -20299,7 +21445,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-032",
+          "name": "Rentals",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -20477,7 +21632,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-035",
+          "name": "Warehouse",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -20555,7 +21719,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-035",
+          "name": "Warehouse",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -20633,7 +21806,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-035",
+          "name": "Warehouse",
+          "category": "Production",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -20814,7 +21996,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-209",
+          "name": "Programs hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -21016,7 +22207,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-209",
+          "name": "Programs hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -21285,7 +22485,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-209",
+          "name": "Programs hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -21500,7 +22709,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-209",
+          "name": "Programs hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -21707,7 +22925,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-209",
+          "name": "Programs hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -21797,7 +23024,16 @@
           "description": "Browser required-field validation"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-209",
+          "name": "Programs hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [
@@ -23031,7 +24267,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-001",
+          "name": "Projects lifecycle",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -23499,7 +24744,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-001",
+          "name": "Projects lifecycle",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -23577,7 +24831,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-001",
+          "name": "Projects lifecycle",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -23749,7 +25012,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-009",
+          "name": "Proposals",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -23832,7 +25104,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-009",
+          "name": "Proposals",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -23930,7 +25211,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-009",
+          "name": "Proposals",
+          "category": "Sales",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -24115,6 +25405,14 @@
           "phase": "PRE",
           "severity": "P1",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-215",
+          "name": "Rate card (admin)",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -24293,7 +25591,16 @@
           "description": "Browser required-field validation"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-210",
+          "name": "Safety hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [
@@ -24871,7 +26178,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-210",
+          "name": "Safety hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -25078,7 +26394,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-092",
+          "name": "Venue medical services (FOP to spectator)",
+          "category": "Medical & Health",
+          "phase": "GT",
+          "severity": "P0",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -25162,6 +26487,14 @@
           "category": "Medical & Health",
           "phase": "GT",
           "severity": "P0",
+          "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-210",
+          "name": "Safety hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
           "role_in_workflow": "Trigger"
         }
       ],
@@ -25317,7 +26650,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-210",
+          "name": "Safety hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -25499,7 +26841,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-210",
+          "name": "Safety hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -25779,7 +27130,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-005",
+          "name": "Master schedule (ICS)",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -25862,7 +27222,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-211",
+          "name": "Services desk hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -25957,7 +27326,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-211",
+          "name": "Services desk hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -26127,7 +27505,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-084",
+          "name": "API keys",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -26221,7 +27608,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-086",
+          "name": "Audit log",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -26304,7 +27700,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-082",
+          "name": "Billing",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -26382,7 +27787,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-091",
+          "name": "Branding",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -26460,7 +27874,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-087",
+          "name": "Compliance",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -26538,7 +27961,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-092",
+          "name": "Domains",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -26616,7 +28048,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-090",
+          "name": "Email templates",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -26694,7 +28135,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-088",
+          "name": "Export runs",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -26780,6 +28230,14 @@
           "phase": "PRE",
           "severity": "P2",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-217",
+          "name": "Settings \u00b7 governance",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -26859,7 +28317,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-089",
+          "name": "Import tools",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -26937,7 +28404,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-083",
+          "name": "Integrations",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -27015,7 +28491,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-083",
+          "name": "Integrations",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -27093,7 +28578,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-083",
+          "name": "Integrations",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -27171,7 +28665,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-081",
+          "name": "Organization",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -27249,7 +28752,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-080",
+          "name": "Settings hub",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -27483,7 +28995,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-085",
+          "name": "Webhooks",
+          "category": "Settings",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -27773,7 +29294,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-002",
+          "name": "Tasks & assignment",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -27856,7 +29386,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-002",
+          "name": "Tasks & assignment",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -27954,7 +29493,16 @@
           "description": "export const dynamic='force-dynamic'"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-002",
+          "name": "Tasks & assignment",
+          "category": "Work",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -28053,7 +29601,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-212",
+          "name": "Transport hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -28268,7 +29825,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-212",
+          "name": "Transport hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -28475,7 +30041,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-212",
+          "name": "Transport hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -28553,7 +30128,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-212",
+          "name": "Transport hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -28638,6 +30222,14 @@
           "name": "Workforce transport",
           "category": "Transport",
           "phase": "GT",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-212",
+          "name": "Transport hub",
+          "category": "Shell",
+          "phase": "XG",
           "severity": "P1",
           "role_in_workflow": "Trigger"
         }
@@ -29170,7 +30762,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-010",
+          "name": "Venue master plan",
+          "category": "Venue Management",
+          "phase": "PRE",
+          "severity": "P0",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -29427,7 +31028,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-213",
+          "name": "Venues hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -29512,7 +31122,16 @@
           "description": "Browser required-field validation"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-213",
+          "name": "Venues hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [
@@ -29737,6 +31356,14 @@
           "phase": "GT",
           "severity": "P1",
           "role_in_workflow": "Trigger"
+        },
+        {
+          "wf": "PF-213",
+          "name": "Venues hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
         }
       ],
       "relationships": {
@@ -29837,7 +31464,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-214",
+          "name": "Workforce hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -30223,7 +31859,16 @@
           "description": "Grid of links to sub-modules"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-214",
+          "name": "Workforce hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Trigger"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -30405,7 +32050,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-214",
+          "name": "Workforce hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -30699,7 +32353,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-214",
+          "name": "Workforce hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -30906,7 +32569,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-214",
+          "name": "Workforce hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -31179,7 +32851,16 @@
           "description": "Show every column as dt/dd pair"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-214",
+          "name": "Workforce hub",
+          "category": "Shell",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [
           {
@@ -31532,7 +33213,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-222",
+          "name": "Artist portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -31600,7 +33290,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-222",
+          "name": "Artist portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -31668,7 +33367,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-222",
+          "name": "Artist portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -31711,6 +33419,83 @@
     },
     {
       "identity": {
+        "name": "Privacy",
+        "atomic_level": "Page",
+        "parent": "GVTEWAY",
+        "location_path": "/p/[slug]/artist/privacy",
+        "platform": "GVTEWAY",
+        "template": "info",
+        "source": "src/app/(portal)/p/[slug]/artist/privacy/page.tsx"
+      },
+      "capabilities": [
+        {
+          "name": "render-header",
+          "type": "UI",
+          "description": "Render ModuleHeader with page title"
+        },
+        {
+          "name": "auth-guard",
+          "type": "middleware",
+          "description": "Redirect unauthenticated users to /login"
+        },
+        {
+          "name": "descriptive-text",
+          "type": "UI",
+          "description": "Contextual copy describing the module"
+        }
+      ],
+      "workflows": [
+        {
+          "wf": "PF-222",
+          "name": "Artist portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
+      "relationships": {
+        "upstream_inputs": [],
+        "downstream_outputs": [],
+        "sibling_coordination": [],
+        "cross_page_connections": [],
+        "shared_state": [
+          "auth.session",
+          "theme",
+          "locale"
+        ]
+      },
+      "rbac": {
+        "visible_to": [
+          "persona-authenticated for this org slug"
+        ],
+        "actionable_by": {
+          "scoped actions": [
+            "persona-authenticated"
+          ]
+        },
+        "notes": "Scoped to the slug; middleware verifies session-to-org mapping. Each persona gets its nav set."
+      },
+      "sections": [
+        {
+          "name": "PageChrome",
+          "atomic": "Section",
+          "children": [
+            "Breadcrumbs",
+            "ModuleHeader"
+          ]
+        },
+        {
+          "name": "PageContent",
+          "atomic": "Section",
+          "children": [
+            "ProseSurface"
+          ]
+        }
+      ]
+    },
+    {
+      "identity": {
         "name": "Show schedule",
         "atomic_level": "Page",
         "parent": "GVTEWAY",
@@ -31736,7 +33521,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-222",
+          "name": "Artist portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -31804,7 +33598,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-222",
+          "name": "Artist portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -31872,7 +33675,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-222",
+          "name": "Artist portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -31940,7 +33752,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-035",
+          "name": "Athlete wellbeing & safeguarding",
+          "category": "Athlete Services",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32008,7 +33829,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-035",
+          "name": "Athlete wellbeing & safeguarding",
+          "category": "Athlete Services",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32230,7 +34060,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-035",
+          "name": "Athlete wellbeing & safeguarding",
+          "category": "Athlete Services",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32298,7 +34137,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-035",
+          "name": "Athlete wellbeing & safeguarding",
+          "category": "Athlete Services",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32366,7 +34214,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-223",
+          "name": "Client portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32434,7 +34291,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-223",
+          "name": "Client portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32502,7 +34368,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-223",
+          "name": "Client portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32570,7 +34445,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-223",
+          "name": "Client portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32638,7 +34522,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-223",
+          "name": "Client portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32706,7 +34599,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-223",
+          "name": "Client portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32774,7 +34676,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-223",
+          "name": "Client portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32842,7 +34753,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-224",
+          "name": "Crew portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32910,7 +34830,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-224",
+          "name": "Crew portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -32978,7 +34907,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-224",
+          "name": "Crew portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -33021,6 +34959,83 @@
     },
     {
       "identity": {
+        "name": "Privacy",
+        "atomic_level": "Page",
+        "parent": "GVTEWAY",
+        "location_path": "/p/[slug]/crew/privacy",
+        "platform": "GVTEWAY",
+        "template": "info",
+        "source": "src/app/(portal)/p/[slug]/crew/privacy/page.tsx"
+      },
+      "capabilities": [
+        {
+          "name": "render-header",
+          "type": "UI",
+          "description": "Render ModuleHeader with page title"
+        },
+        {
+          "name": "auth-guard",
+          "type": "middleware",
+          "description": "Redirect unauthenticated users to /login"
+        },
+        {
+          "name": "descriptive-text",
+          "type": "UI",
+          "description": "Contextual copy describing the module"
+        }
+      ],
+      "workflows": [
+        {
+          "wf": "PF-224",
+          "name": "Crew portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
+      "relationships": {
+        "upstream_inputs": [],
+        "downstream_outputs": [],
+        "sibling_coordination": [],
+        "cross_page_connections": [],
+        "shared_state": [
+          "auth.session",
+          "theme",
+          "locale"
+        ]
+      },
+      "rbac": {
+        "visible_to": [
+          "persona-authenticated for this org slug"
+        ],
+        "actionable_by": {
+          "scoped actions": [
+            "persona-authenticated"
+          ]
+        },
+        "notes": "Scoped to the slug; middleware verifies session-to-org mapping. Each persona gets its nav set."
+      },
+      "sections": [
+        {
+          "name": "PageChrome",
+          "atomic": "Section",
+          "children": [
+            "Breadcrumbs",
+            "ModuleHeader"
+          ]
+        },
+        {
+          "name": "PageContent",
+          "atomic": "Section",
+          "children": [
+            "ProseSurface"
+          ]
+        }
+      ]
+    },
+    {
+      "identity": {
         "name": "Time",
         "atomic_level": "Page",
         "parent": "GVTEWAY",
@@ -33046,7 +35061,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-224",
+          "name": "Crew portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -33114,7 +35138,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-040",
+          "name": "NOC services & attach\u00e9 program",
+          "category": "NOC & IF Relations",
+          "phase": "PRE",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -33891,7 +35924,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-225",
+          "name": "Guest portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -33959,7 +36001,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-225",
+          "name": "Guest portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -34027,7 +36078,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-225",
+          "name": "Guest portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -34095,7 +36155,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-225",
+          "name": "Guest portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -34171,6 +36240,14 @@
           "phase": "PRE",
           "severity": "P1",
           "role_in_workflow": "Step"
+        },
+        {
+          "wf": "PF-225",
+          "name": "Guest portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
         }
       ],
       "relationships": {
@@ -34240,7 +36317,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-228",
+          "name": "Guide (Boarding Pass)",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -34308,7 +36394,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-173",
+          "name": "Hospitality program",
+          "category": "Commercial",
+          "phase": "XG",
+          "severity": "P2",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -34376,7 +36471,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-173",
+          "name": "Hospitality program",
+          "category": "Commercial",
+          "phase": "XG",
+          "severity": "P2",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -34983,7 +37087,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-221",
+          "name": "Portal overview (persona-agnostic)",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35119,7 +37232,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-226",
+          "name": "Sponsor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35187,7 +37309,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-226",
+          "name": "Sponsor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35255,7 +37386,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-226",
+          "name": "Sponsor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35339,6 +37479,14 @@
           "phase": "XG",
           "severity": "P1",
           "role_in_workflow": "Step"
+        },
+        {
+          "wf": "PF-226",
+          "name": "Sponsor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
         }
       ],
       "relationships": {
@@ -35408,7 +37556,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-226",
+          "name": "Sponsor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35476,7 +37633,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-226",
+          "name": "Sponsor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35544,7 +37710,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-227",
+          "name": "Vendor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35612,7 +37787,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-227",
+          "name": "Vendor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35680,7 +37864,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-227",
+          "name": "Vendor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35756,6 +37949,14 @@
           "phase": "XG",
           "severity": "P1",
           "role_in_workflow": "Step"
+        },
+        {
+          "wf": "PF-227",
+          "name": "Vendor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
         }
       ],
       "relationships": {
@@ -35825,7 +38026,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-227",
+          "name": "Vendor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35893,7 +38103,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-227",
+          "name": "Vendor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -35961,7 +38180,16 @@
           "description": "Pre-existing page \u2014 see source for specifics"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-227",
+          "name": "Vendor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -36029,7 +38257,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "PF-227",
+          "name": "Vendor portal",
+          "category": "Portal",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -36174,7 +38411,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-152",
+          "name": "Olympic protocol & dignitary management",
+          "category": "Ceremonies & Protocol",
+          "phase": "XG",
+          "severity": "P1",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -36396,7 +38642,16 @@
           "description": "Contextual copy describing the module"
         }
       ],
-      "workflows": [],
+      "workflows": [
+        {
+          "wf": "WF-192",
+          "name": "Volunteer program (recruitment \u2192 deployment)",
+          "category": "Workforce",
+          "phase": "PRE",
+          "severity": "P0",
+          "role_in_workflow": "Step"
+        }
+      ],
       "relationships": {
         "upstream_inputs": [],
         "downstream_outputs": [],
@@ -36807,136 +39062,7 @@
     }
   ],
   "quality_flags": {
-    "orphaned_elements": [
-      "/m/driver/run/[runId]",
-      "/m/gate/scan",
-      "/m/incident/new",
-      "/m/medic/new",
-      "/m/ros/[showId]",
-      "/m/settings",
-      "/m/shift/swap",
-      "/console/accommodation/blocks/[blockId]",
-      "/console/accommodation",
-      "/console/accreditation/categories",
-      "/console/accreditation/changes/[changeId]",
-      "/console/accreditation",
-      "/console/accreditation/vetting/[applicationId]",
-      "/console/accreditation/zones",
-      "/console/ai/agents",
-      "/console/ai/assistant/[conversationId]",
-      "/console/ai/automations/[automationId]",
-      "/console/ai/automations/new",
-      "/console/ai/automations",
-      "/console/campaigns",
-      "/console/clients/[clientId]",
-      "/console/clients",
-      "/console/commercial/hospitality/[packageId]",
-      "/console/commercial",
-      "/console/commercial/sponsors/[sponsorId]",
-      "/console/commercial/tickets/[ticketTypeId]",
-      "/console/comms/internal/new",
-      "/console/comms",
-      "/console/events",
-      "/console/finance/advances",
-      "/console/finance/expenses",
-      "/console/finance/invoices/[invoiceId]",
-      "/console/finance/invoices",
-      "/console/finance/mileage",
-      "/console/finance/payouts",
-      "/console/finance/time",
-      "/console/forms/[formId]",
-      "/console/forms/new",
-      "/console/forms",
-      "/console/integrations/[connectorId]",
-      "/console/kb/[articleId]",
-      "/console/leads/[leadId]",
-      "/console/leads",
-      "/console/legal/ip/[markId]",
-      "/console/legal",
-      "/console/legal/privacy/consent",
-      "/console/legal/privacy/datamap",
-      "/console/legal/privacy/dsar/[requestId]",
-      "/console/legal/privacy",
-      "/console/locations",
-      "/console/locations/picker",
-      "/console/logistics/freight/[shipmentId]",
-      "/console/logistics",
-      "/console/logistics/ratecard/[itemId]",
-      "/console/meetings/[meetingId]",
-      "/console/ops",
-      "/console/ops/toc/changes",
-      "/console/ops/toc/problems",
-      "/console/participants/delegations/[delegationId]",
-      "/console/participants",
-      "/console/participants/visa/[caseId]",
-      "/console/people/credentials/asset-linker",
-      "/console/people/crew",
-      "/console/procurement/purchase-orders/[poId]",
-      "/console/procurement/purchase-orders",
-      "/console/procurement/requisitions",
-      "/console/procurement/rfqs/[rfqId]",
-      "/console/procurement/rfqs/new",
-      "/console/procurement/rfqs",
-      "/console/procurement/vendors",
-      "/console/production/dispatch/[dispatchId]",
-      "/console/production/dispatch/live",
-      "/console/production/equipment",
-      "/console/production/fabrication",
-      "/console/production/rentals/availability",
-      "/console/production/rentals",
-      "/console/production/warehouse/inventory",
-      "/console/production/warehouse/locations",
-      "/console/production/warehouse",
-      "/console/programs/ceremonies/[ceremonyId]",
-      "/console/programs",
-      "/console/programs/readiness/[exerciseId]",
-      "/console/programs/reviews/[reviewId]",
-      "/console/programs/risk/[riskId]",
-      "/console/programs/risk/new",
-      "/console/proposals/[proposalId]",
-      "/console/proposals",
-      "/console/safety/crisis/new",
-      "/console/safety/major-incident/[eventId]",
-      "/console/safety/medical/encounters",
-      "/console/safety",
-      "/console/safety/safeguarding/[reportId]",
-      "/console/schedule",
-      "/console/services",
-      "/console/services/requests/[requestId]",
-      "/console/settings/audit",
-      "/console/settings/integrations/[integrationId]",
-      "/console/settings/integrations/marketplace",
-      "/console/tasks/[taskId]",
-      "/console/tasks",
-      "/console/transport/ad/[manifestId]",
-      "/console/transport/dispatch/[runId]",
-      "/console/transport/fleets",
-      "/console/transport",
-      "/console/venues/[venueId]",
-      "/console/venues/[venueId]/zones",
-      "/console/venues/new",
-      "/console/workforce/contractors/[contractorId]",
-      "/console/workforce",
-      "/console/workforce/rosters/[rosterId]",
-      "/console/workforce/staff/[staffId]",
-      "/console/workforce/training/[courseId]",
-      "/console/workforce/volunteers/[volunteerId]",
-      "/p/[slug]/athlete",
-      "/p/[slug]/athlete/privacy",
-      "/p/[slug]/athlete/training",
-      "/p/[slug]/athlete/visa",
-      "/p/[slug]/client/privacy",
-      "/p/[slug]/delegation/accommodation",
-      "/p/[slug]/guest/privacy",
-      "/p/[slug]/hospitality/guests",
-      "/p/[slug]/hospitality/itinerary",
-      "/p/[slug]/sponsor/entitlements",
-      "/p/[slug]/sponsor/privacy",
-      "/p/[slug]/vendor/privacy",
-      "/p/[slug]/vendor/training",
-      "/p/[slug]/vip/itinerary",
-      "/p/[slug]/volunteer/application"
-    ],
+    "orphaned_elements": [],
     "dead_end_workflows": [],
     "permission_gaps": [],
     "dangling_dependencies": []

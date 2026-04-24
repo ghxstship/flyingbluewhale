@@ -1,6 +1,6 @@
 /*
  * CHROMA BEACON — soft theme
- * Family: light
+ * Family: light (with dark-mode override)
  * Essence: pastel neumorphic, squishy press states, springy motion.
  */
 
@@ -26,15 +26,12 @@
                        inset 0 1px 0 rgba(255, 255, 255, 0.90);
   --shadow-press: inset 5px 5px 12px rgba(180, 150, 220, 0.35),
                   inset -5px -5px 12px rgba(255, 255, 255, 0.90);
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Geist', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Global semantic token bindings (audit M1).
-     The CHROMA --bg is a linear-gradient; a solid fallback (#f3ecfb) is
-     used for `--background` so inputs / hover states / skeletons that
-     apply `background-color` still render correctly. */
+  /* `--bg` is a gradient; solid fallback for inputs/skeletons. */
   --background: #f3ecfb;
   --foreground: #3a2a5c;
   --bg-secondary: #e8dff7;
@@ -44,8 +41,44 @@
   --text-secondary: #5a4a7c;
   --text-muted: #7a6a9c;
   --border-color: #d8cfec;
-  /* #b490ff is 2.25:1 on white — below AA. Darken for --org-primary. */
+  /* #b490ff = 2.25:1 on white — below AA. Darken for --org-primary. */
   --org-primary: #6b3fe0;
   --org-secondary: #4a2ba0;
   --org-accent: #b490ff;
+}
+
+/* Dark-mode override — neumorphic twilight. Gradient shifts to deep plum,
+   neumorphic shadows flip to deeper purple shadows + soft glow highlights. */
+[data-theme="soft"][data-mode="dark"] {
+  --bg: linear-gradient(140deg, #1a102e 0%, #22173a 50%, #111a2e 100%);
+  --surface: linear-gradient(160deg, #251b3c, #2e2048);
+  --surface-2: linear-gradient(160deg, #2a1d45, #201637);
+  --border: transparent;
+  --text: #efeaff;
+  --text-muted: #b4a7d0;
+  --text-subtle: #8578a0;
+  --accent: #c8b0ff;
+  --accent-contrast: #1a102e;
+  --shadow-elev: 8px 8px 22px rgba(0, 0, 0, 0.55),
+                 -8px -8px 22px rgba(120, 90, 180, 0.18),
+                 inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow-elev-hover: 10px 10px 28px rgba(0, 0, 0, 0.65),
+                       -10px -10px 28px rgba(120, 90, 180, 0.24),
+                       inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --shadow-press: inset 5px 5px 12px rgba(0, 0, 0, 0.55),
+                  inset -5px -5px 12px rgba(120, 90, 180, 0.18);
+
+  --background: #1a102e;
+  --foreground: #efeaff;
+  --bg-secondary: #251b3c;
+  --bg-tertiary: #2e2048;
+  --text-color: #efeaff;
+  --text-primary: #efeaff;
+  --text-secondary: #d0c5e8;
+  --text-muted: #b4a7d0;
+  --border-color: #3a2a5c;
+  --org-primary: #c8b0ff;
+  --org-secondary: #e4d5ff;
+  --org-accent: #b490ff;
+  color-scheme: dark;
 }

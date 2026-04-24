@@ -1,5 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Cormorant_Garamond } from "next/font/google";
+import {
+  Inter,
+  JetBrains_Mono,
+  Cormorant_Garamond,
+  // CHROMA BEACON theme typography — loaded once, consumed per palette via
+  // `--font-body` / `--font-display` in each theme's CSS.
+  Fraunces,
+  Instrument_Serif,
+  DM_Serif_Display,
+  Bricolage_Grotesque,
+  Space_Grotesk,
+  Geist,
+  Geist_Mono,
+} from "next/font/google";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/app/theme/ThemeProvider";
@@ -18,6 +31,16 @@ import "./theme/index.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono", display: "swap" });
 const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400", "500", "700"], variable: "--font-serif", display: "swap" });
+
+// CHROMA BEACON theme fonts — the CSS variable names match what each theme's
+// `--font-display` / `--font-body` declarations reference.
+const fraunces   = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap" });
+const instrument = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-instrument-serif", display: "swap" });
+const dmSerif    = DM_Serif_Display({ subsets: ["latin"], weight: "400", variable: "--font-dm-serif-display", display: "swap" });
+const bricolage  = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-bricolage", display: "swap" });
+const spaceGrot  = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
+const geist      = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+const geistMono  = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
@@ -71,7 +94,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       dir={dir}
       data-theme={ssrTheme}
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${inter.variable} ${mono.variable} ${serif.variable}`}
+      className={`h-full ${inter.variable} ${mono.variable} ${serif.variable} ${fraunces.variable} ${instrument.variable} ${dmSerif.variable} ${bricolage.variable} ${spaceGrot.variable} ${geist.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head>

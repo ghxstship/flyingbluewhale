@@ -5,44 +5,34 @@ import { useTheme } from "@/app/theme/ThemeProvider";
 import { Hint } from "@/components/ui/Tooltip";
 
 /**
- * Light / System / Dark quick-preset picker — icon-only segmented control.
+ * Light / System / Dark mode picker — icon-only segmented control.
  *
- * CHROMA BEACON intent: every design theme ships its own canonical palette,
- * so "dark mode" is a specific theme (`cyber`), not a generic filter. This
- * toggle treats Sun/Monitor/Moon as **preset selectors** over the theme
- * slug itself:
+ * CHROMA BEACON intent: **mode is orthogonal to palette.** The user picks
+ * a palette (brutal/bento/…/kinetic/cyber) independently via the
+ * Appearance gallery. This toggle flips `data-mode` between
+ * light / dark / system **without changing the palette slug**.
  *
- *   Sun     → switch to `kinetic` (canonical light theme)
- *   Monitor → reset to system preference (kinetic on light OS, cyber on dark)
- *   Moon    → switch to `cyber`   (canonical dark theme)
- *
- * Users who want non-default themes (brutal, bento, glass, etc.) pick from
- * the full gallery via the Themes palette icon. This toggle is for the
- * 80% SaaS-quick-switch use case.
+ * Each of the eight palettes ships both `[data-theme="X"]` (light) and
+ * `[data-theme="X"][data-mode="dark"]` (dark) overrides, so every
+ * palette renders correctly in both modes.
  */
 export function ThemeToggle() {
-  const { theme, setTheme, isSystemDriven, resetToSystem } = useTheme();
-
-  const active: "light" | "dark" | "system" = isSystemDriven
-    ? "system"
-    : theme === "cyber" || theme === "glass"
-      ? "dark"
-      : "light";
+  const { mode, setMode } = useTheme();
 
   const presets = [
-    { key: "light", icon: Sun, label: "Light", apply: () => setTheme("kinetic") },
-    { key: "system", icon: Monitor, label: "Match system", apply: () => resetToSystem() },
-    { key: "dark", icon: Moon, label: "Dark", apply: () => setTheme("cyber") },
-  ] as const;
+    { key: "light" as const, icon: Sun, label: "Light" },
+    { key: "system" as const, icon: Monitor, label: "Match system" },
+    { key: "dark" as const, icon: Moon, label: "Dark" },
+  ];
 
   return (
     <div
       className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5"
       role="radiogroup"
-      aria-label="Color theme"
+      aria-label="Color mode"
     >
-      {presets.map(({ key, icon: Icon, label, apply }) => {
-        const isActive = active === key;
+      {presets.map(({ key, icon: Icon, label }) => {
+        const isActive = mode === key;
         return (
           <Hint key={key} label={label}>
             <button
@@ -50,7 +40,7 @@ export function ThemeToggle() {
               role="radio"
               aria-checked={isActive}
               aria-label={label}
-              onClick={apply}
+              onClick={() => setMode(key)}
               className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition ${
                 isActive
                   ? "bg-[var(--background)] text-[var(--foreground)] elevation-1"

@@ -1,6 +1,6 @@
 /*
  * CHROMA BEACON — bento theme
- * Family: light
+ * Family: light (with dark-mode override)
  * Essence: modular rounded cards, clean hierarchy, info-dense.
  */
 
@@ -20,11 +20,10 @@
   --border-width: 0;
   --shadow-elev: 0 4px 20px rgba(0, 0, 0, 0.04);
   --shadow-elev-hover: 0 10px 30px rgba(0, 0, 0, 0.08);
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Geist', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Global semantic token bindings (audit M1) */
   --background: #ededed;
   --foreground: #1a1a1a;
   --bg-secondary: #ffffff;
@@ -37,4 +36,34 @@
   --org-primary: #0a0a0a;
   --org-secondary: #444444;
   --org-accent: #18a048;
+}
+
+/* Dark-mode override — rounded cards on deep charcoal. Accent green kept
+   but brightened for AA on dark. Inverted primary (white on black). */
+[data-theme="bento"][data-mode="dark"] {
+  --bg: #0a0a0a;
+  --surface: #151515;
+  --surface-2: #ffffff;
+  --border: transparent;
+  --text: #fafafa;
+  --text-muted: #a6a6a6;
+  --text-subtle: #737373;
+  --accent: #2cd46a;
+  --accent-contrast: #0a0a0a;
+  --shadow-elev: 0 4px 20px rgba(0, 0, 0, 0.50);
+  --shadow-elev-hover: 0 10px 30px rgba(0, 0, 0, 0.65);
+
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --bg-secondary: #151515;
+  --bg-tertiary: #1f1f1f;
+  --text-color: #fafafa;
+  --text-primary: #fafafa;
+  --text-secondary: #d4d4d4;
+  --text-muted: #a6a6a6;
+  --border-color: #2a2a2a;
+  --org-primary: #fafafa;
+  --org-secondary: #a6a6a6;
+  --org-accent: #2cd46a;
+  color-scheme: dark;
 }

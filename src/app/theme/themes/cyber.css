@@ -1,6 +1,6 @@
 /*
  * CHROMA BEACON — cyber theme
- * Family: dark
+ * Family: dark (with light-mode override)
  * Essence: deep blacks + electric neon, holographic gradients, main-character energy.
  */
 
@@ -25,11 +25,10 @@
   --border-width: 1px;
   --shadow-elev: 0 0 40px rgba(255, 0, 128, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.10);
   --shadow-elev-hover: 0 0 60px rgba(255, 0, 128, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'Geist', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-body: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Global semantic token bindings (audit M1) */
   --background: #050013;
   --foreground: #ffffff;
   --bg-secondary: #0c0320;
@@ -43,4 +42,39 @@
   --org-secondary: #c3005f;
   --org-accent: #00d9ff;
   color-scheme: dark;
+}
+
+/* Light-mode override — cyber palette inverted to white with darkened neons
+   so the hot-pink + cyan accent still reads WCAG-AA on white surfaces. */
+[data-theme="cyber"][data-mode="light"] {
+  --bg: #f8f7ff;
+  --bg-hero: radial-gradient(circle at 10% 20%, rgba(214, 0, 119, 0.14), transparent 40%),
+             radial-gradient(circle at 90% 10%, rgba(0, 122, 168, 0.14), transparent 40%),
+             radial-gradient(circle at 50% 100%, rgba(138, 43, 226, 0.14), transparent 50%),
+             #f8f7ff;
+  --surface: #ffffff;
+  --surface-2: #ede9ff;
+  --border: #d6d0f0;
+  --text: #0a0820;
+  --text-muted: #5a506e;
+  --text-subtle: #8a8098;
+  --accent: linear-gradient(90deg, #d60077 0%, #007aa8 100%);
+  --accent-solid: #d60077;
+  --accent-contrast: #ffffff;
+  --shadow-elev: 0 0 20px rgba(214, 0, 119, 0.12), 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-elev-hover: 0 0 32px rgba(214, 0, 119, 0.22), 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  --background: #f8f7ff;
+  --foreground: #0a0820;
+  --bg-secondary: #ede9ff;
+  --bg-tertiary: #ddd4f5;
+  --text-color: #0a0820;
+  --text-primary: #0a0820;
+  --text-secondary: #2d2540;
+  --text-muted: #5a506e;
+  --border-color: #d6d0f0;
+  --org-primary: #d60077;
+  --org-secondary: #8f004f;
+  --org-accent: #007aa8;
+  color-scheme: light;
 }

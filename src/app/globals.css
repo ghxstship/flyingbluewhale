@@ -86,16 +86,19 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans, Inter, system-ui, sans-serif);
+  /* Body copy follows the active CHROMA theme's `--font-body`. Falls through
+     to the next/font --font-sans (Inter) so themes that elect sans for body
+     (brutal, bento, cyber, glass, soft) resolve cleanly; serif body themes
+     (kinetic, copilot, earthy) land on their font-stack's Georgia fallback. */
+  font-family: var(--font-body, var(--font-sans, Inter, system-ui, sans-serif));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings must break long brand/word tokens rather than force a
-   horizontal scrollbar at narrow viewports. Audit m1-alt — caught on
-   /features + /customers where a long compound brand overflows the
-   375px hero at text-5xl. */
+/* Headings consume the theme's display stack. Break long brand/word tokens
+   rather than force a horizontal scrollbar at narrow viewports (audit m1-alt). */
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display, var(--font-body, var(--font-sans, Inter, system-ui, sans-serif)));
   overflow-wrap: break-word;
   word-break: normal;
 }

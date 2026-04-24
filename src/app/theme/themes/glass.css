@@ -1,6 +1,6 @@
 /*
  * CHROMA BEACON — glass theme
- * Family: hybrid (dark with luminous surfaces)
+ * Family: hybrid (dark default, with light-mode override)
  * Essence: translucent, refractive, depth without weight.
  */
 
@@ -26,14 +26,10 @@
   --shadow-elev: 0 20px 60px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6);
   --shadow-elev-hover: 0 26px 80px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   --glass-blur: blur(30px) saturate(180%);
-  --font-display: 'Geist', system-ui, sans-serif;
-  --font-body: 'Geist', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-geist), system-ui, sans-serif;
+  --font-body: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* ─── Global semantic tokens (audit M1) ───
-     Components binding to `var(--background)`, `var(--foreground)`, …
-     must resolve correctly under every CHROMA theme — not just the
-     light-default or the vestigial `[data-theme="dark"]` branch. */
   --background: #1a0b2e;
   --foreground: #ffffff;
   --bg-secondary: #231139;
@@ -47,4 +43,39 @@
   --org-secondary: rgba(255, 255, 255, 0.72);
   --org-accent: #b47cff;
   color-scheme: dark;
+}
+
+/* Light-mode override — same refractive palette but over airy pastel base,
+   with translucent surfaces darkened toward the gradient bg for readability. */
+[data-theme="glass"][data-mode="light"] {
+  --bg: #f8f3ff;
+  --bg-hero: radial-gradient(circle at 20% 30%, rgba(255, 107, 157, 0.55) 0%, transparent 45%),
+             radial-gradient(circle at 80% 20%, rgba(107, 197, 255, 0.55) 0%, transparent 45%),
+             radial-gradient(circle at 60% 80%, rgba(255, 179, 71, 0.55) 0%, transparent 50%),
+             radial-gradient(circle at 30% 70%, rgba(180, 124, 255, 0.55) 0%, transparent 45%),
+             #f8f3ff;
+  --surface: rgba(255, 255, 255, 0.75);
+  --surface-2: rgba(255, 255, 255, 0.55);
+  --border: rgba(26, 11, 46, 0.18);
+  --text: #1a0b2e;
+  --text-muted: rgba(26, 11, 46, 0.72);
+  --text-subtle: rgba(26, 11, 46, 0.48);
+  --accent: #6b3fe0;
+  --accent-contrast: #ffffff;
+  --shadow-elev: 0 20px 60px rgba(26, 11, 46, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --shadow-elev-hover: 0 26px 80px rgba(26, 11, 46, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  --background: #f8f3ff;
+  --foreground: #1a0b2e;
+  --bg-secondary: #efe8ff;
+  --bg-tertiary: #e3d8ff;
+  --text-color: #1a0b2e;
+  --text-primary: #1a0b2e;
+  --text-secondary: #3a2e54;
+  --text-muted: #5e5079;
+  --border-color: rgba(26, 11, 46, 0.18);
+  --org-primary: #6b3fe0;
+  --org-secondary: #4a2ba0;
+  --org-accent: #b47cff;
+  color-scheme: light;
 }

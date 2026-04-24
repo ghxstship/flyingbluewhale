@@ -1,7 +1,7 @@
 /*
  * CHROMA BEACON — brutal theme
- * Family: light
- * Essence: thick black borders, offset shadows, chunky pastels, unapologetic type.
+ * Family: light (with dark-mode override)
+ * Essence: thick borders, offset shadows, chunky pastels, unapologetic type.
  */
 
 [data-theme="brutal"] {
@@ -20,11 +20,10 @@
   --border-width: 3px;
   --shadow-elev: 6px 6px 0 #000000;
   --shadow-elev-hover: 8px 8px 0 #000000;
-  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
-  --font-body: 'Geist', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-body: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Global semantic token bindings (audit M1) */
   --background: #f3ead2;
   --foreground: #000000;
   --bg-secondary: #ffde3a;
@@ -37,4 +36,34 @@
   --org-primary: #000000;
   --org-secondary: #333333;
   --org-accent: #ff5ea1;
+}
+
+/* Dark-mode override — inverted brutal. White borders on deep black, chunky yellow
+   accent surface preserved. Offset shadow flips to white for legibility. */
+[data-theme="brutal"][data-mode="dark"] {
+  --bg: #161616;
+  --surface: #1e1e1e;
+  --surface-2: #ffde3a;
+  --border: #ffffff;
+  --text: #fafafa;
+  --text-muted: #d0d0d0;
+  --text-subtle: #a6a6a6;
+  --accent: #ff85bd;
+  --accent-contrast: #000000;
+  --shadow-elev: 6px 6px 0 #ffffff;
+  --shadow-elev-hover: 8px 8px 0 #ffffff;
+
+  --background: #161616;
+  --foreground: #fafafa;
+  --bg-secondary: #262626;
+  --bg-tertiary: #303030;
+  --text-color: #fafafa;
+  --text-primary: #fafafa;
+  --text-secondary: #e0e0e0;
+  --text-muted: #b8b8b8;
+  --border-color: #ffffff;
+  --org-primary: #ffffff;
+  --org-secondary: #d0d0d0;
+  --org-accent: #ff85bd;
+  color-scheme: dark;
 }

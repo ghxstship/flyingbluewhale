@@ -1,6 +1,6 @@
 /*
  * CHROMA BEACON — kinetic theme
- * Family: light
+ * Family: light (with dark-mode override)
  * Essence: variable-font-led, editorial, serif-forward, type as protagonist.
  */
 
@@ -12,9 +12,7 @@
   --text: #1a1a1a;
   --text-muted: #555555;
   --text-subtle: #888888;
-  /* Spec value #ff4d1a failed WCAG AA (3.17:1 on white).
-     Darkened to #cc3d10 (4.52:1) — required to satisfy the CHROMA spec's
-     own AA mandate. Flagged as an internal resolution, not a deviation. */
+  /* #ff4d1a fails AA (3.17:1). Darkened to #cc3d10 (4.52:1). */
   --accent: #cc3d10;
   --accent-contrast: #ffffff;
   --radius-sm: 2px;
@@ -23,12 +21,11 @@
   --border-width: 1px;
   --shadow-elev: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-elev-hover: 0 6px 18px rgba(0, 0, 0, 0.10);
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Instrument Serif', Georgia, serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-instrument-serif), Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --type-variation-display: "SOFT" 50, "WONK" 1;
 
-  /* Global semantic token bindings (audit M1) */
   --background: #fafaf7;
   --foreground: #1a1a1a;
   --bg-secondary: #f3f1ea;
@@ -41,4 +38,33 @@
   --org-primary: #cc3d10;
   --org-secondary: #8f2a0b;
   --org-accent: #cc3d10;
+}
+
+/* Dark-mode override — deep warm charcoal. Accent brightened for AA on dark. */
+[data-theme="kinetic"][data-mode="dark"] {
+  --bg: #14120e;
+  --surface: #1e1c17;
+  --surface-2: #28251e;
+  --border: #33302a;
+  --text: #f5f2e8;
+  --text-muted: #b0a895;
+  --text-subtle: #8a8472;
+  --accent: #ff6a3e;
+  --accent-contrast: #14120e;
+  --shadow-elev: 0 2px 10px rgba(0, 0, 0, 0.45);
+  --shadow-elev-hover: 0 6px 22px rgba(0, 0, 0, 0.55);
+
+  --background: #14120e;
+  --foreground: #f5f2e8;
+  --bg-secondary: #28251e;
+  --bg-tertiary: #35312a;
+  --text-color: #f5f2e8;
+  --text-primary: #f5f2e8;
+  --text-secondary: #d8d2bc;
+  --text-muted: #b0a895;
+  --border-color: #33302a;
+  --org-primary: #ff6a3e;
+  --org-secondary: #ff8d68;
+  --org-accent: #ff6a3e;
+  color-scheme: dark;
 }

@@ -1,6 +1,6 @@
 /*
  * CHROMA BEACON — earthy theme
- * Family: light
+ * Family: light (with dark-mode override)
  * Essence: warm cream, forest/terracotta/sage, slab-serif, paper texture.
  */
 
@@ -25,11 +25,10 @@
   --border-width: 1px;
   --shadow-elev: 0 2px 6px rgba(74, 50, 30, 0.06);
   --shadow-elev-hover: 0 4px 12px rgba(74, 50, 30, 0.09);
-  --font-display: 'DM Serif Display', Georgia, serif;
-  --font-body: 'Fraunces', Georgia, serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-dm-serif-display), Georgia, serif;
+  --font-body: var(--font-fraunces), Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Global semantic token bindings (audit M1) */
   --background: #eee3cd;
   --foreground: #2b2318;
   --bg-secondary: #f6ecd6;
@@ -42,4 +41,39 @@
   --org-primary: #4a6b3a;
   --org-secondary: #2f4625;
   --org-accent: #c05621;
+}
+
+/* Dark-mode override — forest at dusk. Cream swaps to deep umber,
+   sage + terracotta stay as accents but brightened. */
+[data-theme="earthy"][data-mode="dark"] {
+  --bg: #1a1812;
+  --bg-hero: radial-gradient(ellipse at 20% 10%, rgba(143, 163, 126, 0.18), transparent 50%),
+             radial-gradient(ellipse at 80% 90%, rgba(224, 130, 74, 0.14), transparent 50%),
+             #1a1812;
+  --surface: #242019;
+  --surface-2: #2e2920;
+  --border: #443c2d;
+  --text: #f3ead3;
+  --text-muted: #b8ad8e;
+  --text-subtle: #8a8068;
+  --accent: #8fa37e;
+  --accent-alt: #e0824a;
+  --accent-soft: #4a6b3a;
+  --accent-contrast: #1a1812;
+  --shadow-elev: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-elev-hover: 0 4px 14px rgba(0, 0, 0, 0.55);
+
+  --background: #1a1812;
+  --foreground: #f3ead3;
+  --bg-secondary: #2e2920;
+  --bg-tertiary: #3a3328;
+  --text-color: #f3ead3;
+  --text-primary: #f3ead3;
+  --text-secondary: #d7cbae;
+  --text-muted: #b8ad8e;
+  --border-color: #443c2d;
+  --org-primary: #8fa37e;
+  --org-secondary: #b5c6a4;
+  --org-accent: #e0824a;
+  color-scheme: dark;
 }

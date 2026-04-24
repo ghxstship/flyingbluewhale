@@ -1,6 +1,6 @@
 /*
  * CHROMA BEACON — copilot theme
- * Family: light
+ * Family: light (with dark-mode override)
  * Essence: editorial quiet, AI surfaces adjacent, sidebar-forward.
  */
 
@@ -20,11 +20,10 @@
   --border-width: 1px;
   --shadow-elev: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.04);
   --shadow-elev-hover: 0 2px 6px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.06);
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Instrument Serif', Georgia, serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-instrument-serif), Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Global semantic token bindings (audit M1) */
   --background: #fbfaf7;
   --foreground: #1a1a1a;
   --bg-secondary: #f3f1e8;
@@ -38,4 +37,34 @@
   --org-primary: #6b3fe0;
   --org-secondary: #4a2ba0;
   --org-accent: #b47cff;
+}
+
+/* Dark-mode override — editorial quiet, inverted. Purple accent brightens
+   on dark bg so it still reads AI/AA-safe. */
+[data-theme="copilot"][data-mode="dark"] {
+  --bg: #0d0b12;
+  --surface: #17141e;
+  --surface-2: #1f1b29;
+  --border: #2b2536;
+  --text: #f3f0ff;
+  --text-muted: #a8a1bf;
+  --text-subtle: #85809a;
+  --accent: #c79eff;
+  --accent-contrast: #0d0b12;
+  --shadow-elev: 0 1px 3px rgba(0, 0, 0, 0.40), 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-elev-hover: 0 2px 6px rgba(0, 0, 0, 0.50), 0 8px 20px rgba(0, 0, 0, 0.45);
+
+  --background: #0d0b12;
+  --foreground: #f3f0ff;
+  --bg-secondary: #1f1b29;
+  --bg-tertiary: #2a2436;
+  --text-color: #f3f0ff;
+  --text-primary: #f3f0ff;
+  --text-secondary: #d0c8e8;
+  --text-muted: #a8a1bf;
+  --border-color: #2b2536;
+  --org-primary: #c79eff;
+  --org-secondary: #e0c6ff;
+  --org-accent: #c79eff;
+  color-scheme: dark;
 }

@@ -2,7 +2,12 @@
 
 import * as React from "react";
 import { THEMES, isValidThemeSlug, colorSchemeFor, type ThemeSlug, type ThemeFamily } from "./themes.config";
-import { THEME_COOKIE_NAME, THEME_STORAGE_KEY } from "./theme-script";
+import {
+  THEME_COOKIE_NAME,
+  THEME_STORAGE_KEY,
+  MODE_COOKIE_NAME,
+  MODE_STORAGE_KEY,
+} from "./theme-script";
 
 export type ColorMode = "light" | "dark" | "system";
 export type Density = "compact" | "comfortable" | "spacious";
@@ -84,13 +89,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     // Color mode hydration — cookie first, then localStorage, then default "system".
     const cookieMode = (() => {
-      const m = document.cookie.match(/(?:^|;\s*)fbw_mode=([^;]+)/);
+      const re = new RegExp(`(?:^|;\\s*)${MODE_COOKIE_NAME}=([^;]+)`);
+      const m = document.cookie.match(re);
       const v = m ? decodeURIComponent(m[1]) : null;
       return v === "light" || v === "dark" || v === "system" ? (v as ColorMode) : null;
     })();
     const storedMode = (() => {
       try {
-        const v = localStorage.getItem("chroma.mode");
+        const v = localStorage.getItem(MODE_STORAGE_KEY);
         return v === "light" || v === "dark" || v === "system" ? (v as ColorMode) : null;
       } catch {
         return null;
@@ -101,11 +107,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setMounted(true);
   }, []);
 
-  // Re-apply data-theme + color-scheme whenever theme changes client-side
+  // Re-apply data-theme when the palette slug changes client-side.
+  // `color-scheme` is now driven by `data-mode` below (not the palette
+  // family), so mode overrides get matching native form controls + scrollbars.
   React.useEffect(() => {
     if (!mounted) return;
     document.documentElement.setAttribute("data-theme", theme);
-    document.documentElement.style.colorScheme = colorSchemeFor(theme);
   }, [theme, mounted]);
 
   React.useEffect(() => {
@@ -119,13 +126,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // `data-mode="light|dark"` (resolving `system` against the media query)
   // so CSS can gate token overrides on that attribute without clobbering
   // `data-theme`. Also sets `color-scheme` so the UA picks scrollbars +
-  // form controls that match.
+  // form controls that match the resolved mode (not the palette family).
   React.useEffect(() => {
     if (!mounted) return;
     const resolved = mode === "system"
       ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
       : mode;
     document.documentElement.setAttribute("data-mode", resolved);
+    document.documentElement.style.colorScheme = resolved;
+    // Reference used so bundlers don't dead-code the imported helper.
+    void colorSchemeFor;
   }, [mode, mounted]);
 
   React.useEffect(() => {
@@ -134,6 +144,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     function onChange() {
       const next = mql.matches ? "dark" : "light";
       document.documentElement.setAttribute("data-mode", next);
+      document.documentElement.style.colorScheme = next;
     }
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
@@ -204,11 +215,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setMode = React.useCallback((m: ColorMode) => {
     setModeState(m);
     try {
-      localStorage.setItem("chroma.mode", m);
+      localStorage.setItem(MODE_STORAGE_KEY, m);
     } catch {
       /* ignore */
     }
-    writeCookie("fbw_mode", m);
+    writeCookie(MODE_COOKIE_NAME, m);
   }, []);
 
   const value = React.useMemo<ThemeContextValue>(

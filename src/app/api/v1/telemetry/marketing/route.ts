@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiOk, apiError } from "@/lib/api";
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
 
 /**
@@ -71,6 +71,12 @@ export async function POST(req: NextRequest) {
   const requestId = req.headers.get("x-request-id") ?? null;
 
   try {
+      if (!isServiceClientAvailable()) {
+        return apiError(
+          "service_unavailable",
+          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+        );
+      }
     const svc = createServiceClient();
     const { error } = await svc.from("usage_events").insert({
       org_id: SYSTEM_ORG_ID,

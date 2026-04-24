@@ -2,7 +2,7 @@ import { apiError, apiOk } from "@/lib/api";
 import { env } from "@/lib/env";
 import { log } from "@/lib/log";
 import { verifyStripeWebhook } from "@/lib/stripe";
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 
 type StripeEventData = { object: { metadata?: Record<string, string>; id?: string; amount?: number; status?: string } };
 type StripeEvent = { type: string; data: StripeEventData; id: string; livemode?: boolean };
@@ -27,6 +27,12 @@ export async function POST(req: Request) {
   // Insert the event id first; ON CONFLICT DO NOTHING means the second call
   // returns zero rows and we acknowledge without re-running side effects.
   try {
+      if (!isServiceClientAvailable()) {
+        return apiError(
+          "service_unavailable",
+          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+        );
+      }
     const svc = createServiceClient();
     const { data: inserted, error: insErr } = await svc
       .from("stripe_events")

@@ -76,7 +76,13 @@ export async function POST(req: NextRequest) {
       data: { userId, purgeAt },
     });
     if (session.email) {
-      const { createServiceClient } = await import("@/lib/supabase/server");
+      const { createServiceClient, isServiceClientAvailable } = await import("@/lib/supabase/server");
+        if (!isServiceClientAvailable()) {
+          return apiError(
+            "service_unavailable",
+            "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+          );
+        }
       const svc = createServiceClient();
       await (svc.from("job_queue") as unknown as {
         insert: (p: Record<string, unknown>) => Promise<unknown>;

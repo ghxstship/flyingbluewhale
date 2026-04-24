@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { apiError } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { BrandKitPdf } from "@/lib/pdf/brand-kit";
@@ -15,6 +15,16 @@ export async function GET() {
   const guard = await withAuth(async (session) => ({ session }));
   if (guard instanceof Response) return guard;
   const { session } = guard;
+
+  // Brand-kit upload requires the service client (writes to the branding
+  // storage bucket). Surface a clear 503 when the deploy is missing the
+  // service-role key rather than letting the throw bubble to a 500.
+  if (!isServiceClientAvailable()) {
+    return apiError(
+      "service_unavailable",
+      "Brand kit PDF rendering needs SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+    );
+  }
 
   const supabase = await createClient();
   const { data: org } = await supabase

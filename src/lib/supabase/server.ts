@@ -32,3 +32,13 @@ export function createServiceClient() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }
+
+/**
+ * True iff the service-role client can be constructed in the current
+ * environment. Use this to guard endpoints that need elevated privileges
+ * (storage uploads, admin user mutations, telemetry writes) so a missing
+ * env-var surfaces as 503 service_unavailable rather than 500 internal.
+ */
+export function isServiceClientAvailable(): boolean {
+  return hasSupabase && Boolean(env.SUPABASE_SERVICE_ROLE_KEY);
+}

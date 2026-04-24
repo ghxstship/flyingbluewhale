@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { apiError, apiOk } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 
 /**
  * Re-mint a short-lived signed URL for a completed export run. Lets the
@@ -25,6 +25,12 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
       return apiError("bad_request", "Run is not complete");
     }
     // Signed URLs for storage require service role on private buckets
+      if (!isServiceClientAvailable()) {
+        return apiError(
+          "service_unavailable",
+          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+        );
+      }
     const svc = createServiceClient();
     const { data: signed, error: signErr } = await svc.storage
       .from("exports")

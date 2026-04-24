@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { apiError, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { buildSponsorDeck } from "@/lib/pptx/sponsor-deck";
 import { log } from "@/lib/log";
@@ -73,6 +73,18 @@ export async function POST(req: Request, ctx: { params: Promise<{ projectId: str
       activations: b.activations,
       photos: [],
     });
+
+      if (!isServiceClientAvailable()) {
+
+        return apiError(
+
+          "service_unavailable",
+
+          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+
+        );
+
+      }
 
     const svc = createServiceClient();
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");

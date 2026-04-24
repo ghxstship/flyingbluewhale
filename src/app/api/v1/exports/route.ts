@@ -2,7 +2,7 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { EXPORT_REGISTRY, isExportTable, type ExportTable } from "@/lib/export/registry";
 import { rowsToCsv } from "@/lib/export/strategies/csv";
 import { rowsToJson } from "@/lib/export/strategies/json";
@@ -57,6 +57,12 @@ export async function POST(req: NextRequest) {
     // the worker today (see supabase/functions/job-worker/index.ts);
     // XLSX + ZIP still go through the sync branch below.
     if (input.async && (input.kind === "csv" || input.kind === "json")) {
+        if (!isServiceClientAvailable()) {
+          return apiError(
+            "service_unavailable",
+            "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+          );
+        }
       const svc = createServiceClient();
       const { data: run, error: runErr } = await supabase
         .from("export_runs")

@@ -8,7 +8,8 @@ export type ApiErrorCode =
   | "not_found"
   | "conflict"
   | "rate_limited"
-  | "internal";
+  | "internal"
+  | "service_unavailable";
 
 const STATUS: Record<ApiErrorCode, number> = {
   bad_request: 400,
@@ -18,6 +19,7 @@ const STATUS: Record<ApiErrorCode, number> = {
   conflict: 409,
   rate_limited: 429,
   internal: 500,
+  service_unavailable: 503,
 };
 
 export function apiOk<T>(data: T, init?: ResponseInit) {

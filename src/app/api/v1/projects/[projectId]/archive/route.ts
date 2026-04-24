@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { apiError } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { buildProjectArchive } from "@/lib/export/strategies/project_archive";
 import { log } from "@/lib/log";
 
@@ -42,6 +42,18 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
       projectId: project.id,
       projectName: project.name,
     });
+
+      if (!isServiceClientAvailable()) {
+
+        return apiError(
+
+          "service_unavailable",
+
+          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+
+        );
+
+      }
 
     const svc = createServiceClient();
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");

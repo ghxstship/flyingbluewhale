@@ -12,9 +12,9 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "Solutions — Three Acts. Eight Kinds of Night.",
+  title: "The Rig — Three Rooms. One Atlas.",
   description:
-    "ATLVS — the office. GVTEWAY — every stakeholder&apos;s door. COMPVSS — the crew PWA on the floor. One rig runs live events, concerts, festivals, tours, immersive, activations, corporate, theatrical, broadcast.",
+    "ATLVS — the office. GVTEWAY — every guest&apos;s door. COMPVSS — the floor, in your pocket. The Atlas for the producers who ship the nights, residencies, and seasons people fly in for.",
   path: "/solutions",
   keywords: [
     "live events software",
@@ -36,16 +36,16 @@ export default function SolutionsIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Lineup</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Acts. One Stage. Zero Seams.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">The Rig</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Rooms. One Atlas.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          ATLVS, GVTEWAY, and COMPVSS aren&apos;t a bundle of tools bought separately and praying they sync. Three acts on one stage — office, door, floor — reading the same manifest. Your org&apos;s data walled off in the database, not in the pitch deck.
+          The office, the door, the floor. One manifest — private by architecture, shared by design. Written for the producers who book the rooms people talk about.
         </p>
       </section>
 
       {/* Apps */}
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h2 className="text-3xl font-semibold tracking-tight">Tonight&apos;s Lineup</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">The Three Rooms</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {APPS.map((a) => (
             <Link key={a.slug} href={a.href} data-platform={a.slug} className="surface-raised hover-lift relative overflow-hidden p-7">
@@ -67,7 +67,7 @@ export default function SolutionsIndex() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Backstage pass <ArrowRight size={12} />
+                Walk the room <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -76,9 +76,9 @@ export default function SolutionsIndex() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Kinds of Night We Run</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">The Rooms We Ship</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each kind of show gets a tuned setup: starter templates, default role matrix, case files from peers who already ran the night.
+          Each room gets a tuned setup — starter templates, default role matrix, and private notes from producers who already ran the night.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
@@ -94,20 +94,20 @@ export default function SolutionsIndex() {
         title="Solutions · FAQ"
         faqs={[
           {
-            q: "How are the three acts different?",
-            a: "ATLVS is the office — your team lives here M–F. GVTEWAY is the door — every stakeholder outside your org has their own lane. COMPVSS is the floor — crew PWA on show night. Same backbone, three audiences, zero sync drama.",
+            q: "How are the three rooms different?",
+            a: "ATLVS is the office — the studio lives here. GVTEWAY is the door — every guest, artist, vendor, and sponsor arrives through their own lane. COMPVSS is the floor — the night in your pocket. One manifest underneath.",
           },
           {
-            q: "Do I have to book all three?",
-            a: "No — but every tier ships all three. Most teams open with ATLVS + one GVTEWAY persona (artist or client), bolt on COMPVSS for load-in, then expand. Adopt at your tempo.",
+            q: "Do I have to use all three?",
+            a: "Every tier ships all three. Most studios open with ATLVS + one GVTEWAY door (artist or client), add COMPVSS at load-in, then expand. Adopt at your tempo.",
           },
           {
             q: "Can other orgs see my manifest?",
-            a: "No. Every org&apos;s data is walled off at the database layer — not just in the UI. A user in one org cannot read or touch anything in another. Enforced in the data, not the marketing.",
+            a: "No. Private by architecture — walled at the database layer, not the UI. A member in one org cannot read or touch anything in another. Enforced in the data.",
           },
           {
             q: "White-labeled doors?",
-            a: "Yes — Festival tier. Your logo, colors, email templates, and custom domain for every door. Clients see your brand. Your vendors see your vendors&apos; brand. The building is always yours.",
+            a: "Festival tier. Your mark, your colors, your email templates, your custom domain on every door. The house is always yours.",
           },
         ]}
       />
@@ -122,11 +122,11 @@ const APPS = [
     slug: "atlvs",
     name: "ATLVS",
     tier: "OFFICE",
-    title: "Runs the show from the desk",
-    body: "Nine domains, 60+ modules, one sidebar. Proposals to payouts, POs to ceremonies. The production office that doesn&apos;t need eleven tabs.",
+    title: "The room runs from the desk",
+    body: "Nine rooms, one sidebar. Proposals to payouts, POs to ceremonies. The production studio, quietly precise.",
     bullets: [
-      "60+ modules across 9 domains",
-      "AI runner that drafts from your manifest",
+      "60+ modules across 9 rooms",
+      "AI runner grounded in your manifest",
       "Immutable audit log — who, when, before, after",
       "Role matrix on every tier, every module",
     ],
@@ -136,12 +136,12 @@ const APPS = [
     slug: "gvteway",
     name: "GVTEWAY",
     tier: "DOOR",
-    title: "Every stakeholder. Their own entrance.",
-    body: "Twelve personas, twelve doors, one manifest. Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete.",
+    title: "Every guest, their own way in",
+    body: "Twelve doors, one manifest. Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Each lane private by design.",
     bullets: [
-      "12 persona doors per project",
+      "12 persona doors per room",
       "Proposals signed in place — 23 block types",
-      "Live advancing + deliverable tracking",
+      "Live advancing with deliverable tracking",
       "Per-persona KBYG door passes",
     ],
     href: "/solutions/gvteway",
@@ -150,10 +150,10 @@ const APPS = [
     slug: "compvss",
     name: "COMPVSS",
     tier: "FLOOR",
-    title: "Runs the night from your pocket",
-    body: "Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour, warehouse scans. Offline-first. Installs in one tap.",
+    title: "The night, in your pocket",
+    body: "Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour, warehouse. Offline-first. Installs in one tap.",
     bullets: [
-      "<100ms gate scan — offline or on",
+      "<100ms gate scan — signal or none",
       "Geo-verified shift + meal credits",
       "Offline queue replays in order",
       "Tonight&apos;s call sheet + KBYG in pocket",
@@ -163,12 +163,12 @@ const APPS = [
 ] as const;
 
 const INDUSTRIES = [
-  { slug: "live-events", name: "Live Events", blurb: "Residencies, club nights, one-offs" },
+  { slug: "live-events", name: "Residencies + nights", blurb: "Sold-out weeks, recurring programming" },
   { slug: "concerts", name: "Concerts", blurb: "Single night, amphitheatre, arena" },
-  { slug: "festivals-tours", name: "Festivals & Tours", blurb: "Multi-day, multi-stage, multi-city" },
+  { slug: "festivals-tours", name: "Festivals + tours", blurb: "Multi-day, multi-stage, multi-city" },
   { slug: "immersive-experiences", name: "Immersive", blurb: "Installations, walk-throughs, pop-ups" },
-  { slug: "brand-activations", name: "Brand Activations", blurb: "Launches, pop-ups, experiential" },
-  { slug: "corporate-events", name: "Corporate", blurb: "Conferences, AGMs, summits, off-sites" },
+  { slug: "brand-activations", name: "Activations", blurb: "Launches, pop-ups, experiential" },
+  { slug: "corporate-events", name: "Private programs", blurb: "Summits, closed-room, invite-only" },
   { slug: "theatrical-performances", name: "Theatrical", blurb: "Residencies, tours, galas" },
   { slug: "broadcast-tv-film", name: "Broadcast / TV / Film", blurb: "Studio, remote, location" },
 ];

@@ -14,13 +14,13 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "COMPVSS — the crew PWA that runs the night",
+  title: "COMPVSS — The Floor",
   description:
-    "Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour. Offline-first. Runs on any phone from the browser — no app store. When the venue signal dies, you don&apos;t.",
+    "The night, in your pocket. Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour. Offline-first. Installs from the browser in one tap.",
   path: "/solutions/compvss",
   keywords: ["COMPVSS", "event ticket scan PWA", "offline ticket scanning", "production mobile app", "crew mobile app", "event check-in software"],
   ogImageEyebrow: "COMPVSS",
-  ogImageTitle: "Runs the night. From your pocket.",
+  ogImageTitle: "The Night, In Your Pocket.",
 });
 
 export default function CompvssPage() {
@@ -43,14 +43,14 @@ export default function CompvssPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">COMPVSS · the floor</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Runs the Night.<br />From Your Pocket.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">COMPVSS · The Floor</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Night,<br />In Your Pocket.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Install from the browser in one tap — no app store. QR gate scans in under 100ms. Geo-verified shift check-ins. Medic triage. Crisis alerts. Driver manifests. Guard tours. Warehouse scans. Offline-first everywhere. When the venue Wi-Fi goes home, you stay on.
+          Installs from the browser in one tap. Sub-100ms QR gate scans. Geo-verified shift check-ins. Medic triage. Crisis alerts. Driver manifests. Guard tours. Warehouse scans. Offline-first throughout. When the venue Wi-Fi goes home, you stay on.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Doors open</Button>
-          <Button href="/contact" variant="secondary">Backstage walkthrough</Button>
+          <Button href="/signup">Get on the list</Button>
+          <Button href="/contact" variant="secondary">Private walkthrough</Button>
         </div>
       </section>
 
@@ -79,24 +79,24 @@ export default function CompvssPage() {
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">
               <Wifi size={14} /> Offline-first
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Venue Wi-Fi Died. The Show Didn&apos;t.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Venue Wi-Fi Retires at Sunset. The Floor Doesn&apos;t.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Gate scan, manual lookup, tonight&apos;s call sheet — cached on device. Scans queue locally and replay in order the second signal comes back. Nothing drops. Nobody waits.
+              Gate scan, manual lookup, tonight&apos;s call sheet — cached on device. Scans queue locally and replay in order the second signal returns. Nothing drops. Nobody waits.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              No app store. No review queue. No version drift across the crew. Open the link, tap Install, full-screen launcher on the home screen. Done before soundcheck.
+              Install straight from the browser — open the link, tap Install, full-screen launcher on the home screen. Done before soundcheck.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "Installs from the browser — zero app store drama",
-              "Offline scan queue replays in order. Zero drops",
-              "No duplicates at the gate, even under 15k/night",
+              "Installs from the browser — one tap",
+              "Offline scan queue replays in order. Zero drops.",
+              "Precise at fifteen thousand per night",
               "Clear scan states — accepted · duplicate · voided · not found",
               "Geo-verified clock-in with accuracy bounds",
               "Camera + GPS requested only when needed",
               "Bottom tab bar — the five hits that matter tonight",
-              "Compass yellow on every screen. You&apos;ll know it from across the floor.",
+              "Compass yellow on every screen. Readable from across the floor.",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -112,28 +112,28 @@ export default function CompvssPage() {
         faqs={[
           {
             q: "Is COMPVSS a native iOS / Android app?",
-            a: "No — and that&apos;s the whole point. PWA. Open the URL, tap Install, full-screen launcher. No App Store review to wait on. No fleet update the morning of. No version drift across your 400-person gate team.",
+            a: "No. PWA. Open the URL, tap Install, full-screen launcher. No App Store review to wait on. No fleet update the morning of. No version drift across your four-hundred-person gate team.",
           },
           {
             q: "What if the venue has no cell signal?",
-            a: "The scanner, tonight&apos;s call sheet, and the door pass cache on the device. Scans queue locally and replay in order the moment signal comes back. No scan ever gets lost. The tower&apos;s problem, not yours.",
+            a: "The scanner, tonight&apos;s call sheet, and the door pass cache on the device. Scans queue locally and replay in order the moment signal comes back. The tower&apos;s problem, not yours.",
           },
           {
             q: "How fast is the gate?",
-            a: "Sub-100ms server-side. US cell adds 200-400ms round-trip. Offline scans are instant locally. Duplicates, voided, not-found — all distinct scan states, all on-screen in a glance.",
+            a: "Sub-100ms server-side. US cell adds 200–400ms round-trip. Offline scans are instant locally. Duplicates, voided, not-found — all distinct states, all on-screen in a glance.",
           },
           {
-            q: "Offline check-in — does it really work?",
-            a: "Yes. Scans queue on device. Replay in order when signal returns. During an offline window, duplicates the scanner can&apos;t yet confirm are flagged pending — the server reconciles on sync.",
+            q: "Offline check-in — really?",
+            a: "Really. Scans queue on device. Replay in order when signal returns. During an offline window, duplicates the scanner can&apos;t yet confirm are flagged pending — the server reconciles on sync.",
           },
           {
             q: "Camera access?",
-            a: "Yes — for QR + barcode scans. Manual input is the fallback for damaged codes or blocked permissions. The crew member at the gate never waits on IT.",
+            a: "For QR + barcode scans. Manual input is the fallback for damaged codes or blocked permissions. The crew member at the gate never waits on IT.",
           },
         ]}
       />
 
-      <CTASection title="Ship the Night. Run It From Your Pocket." subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap." />
+      <CTASection title="Walk the Floor." subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap." />
     </div>
   );
 }

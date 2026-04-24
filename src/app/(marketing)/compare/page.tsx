@@ -12,13 +12,13 @@ import { buildMetadata } from "@/lib/seo";
 import { COMPARE_LIST } from "@/lib/compare";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Compare — Head-to-Head with Asana, Monday, Spreadsheets",
+  title: "Category Notes",
   description:
-    "Honest head-to-head. Asana is a to-do list in a suit. Monday is a spreadsheet that learned to smile. We run shows. Read the bill.",
+    "Short notes on how the Atlas sits against the general-purpose tools producers still juggle. No point-by-point scorecards — just the posture.",
   path: "/compare",
   keywords: ["Second Star Technologies comparison", "asana alternative events", "monday alternative events", "spreadsheet alternative"],
-  ogImageEyebrow: "Head-to-Head",
-  ogImageTitle: "Read the bill.",
+  ogImageEyebrow: "Category Notes",
+  ogImageTitle: "The Atlas, in context.",
 });
 
 export default function ComparePage() {
@@ -32,10 +32,10 @@ export default function ComparePage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Read the bill</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Head-to-Head.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Category Notes</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Atlas, in Context.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Honest comparisons against the tools already on your tour rider. We&apos;ll tell you when we win. We&apos;ll tell you when we don&apos;t. No chart-of-fives sales trick — we respect you too much.
+          Producers land here because a general-purpose tool taught them what they didn&apos;t want. These pages are notes for the search-engine crawl, not scorecards. We don&apos;t compare. We define.
         </p>
       </section>
 
@@ -43,15 +43,15 @@ export default function ComparePage() {
         <div className="grid gap-4 md:grid-cols-3">
           {COMPARE_LIST.map((c) => (
             <Link key={c.slug} href={`/compare/${c.slug}`} className="surface-raised hover-lift p-6">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">vs.</div>
-              <div className="mt-3 text-2xl font-semibold tracking-tight">{c.competitor}</div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Landed from {c.competitor}</div>
+              <div className="mt-3 text-2xl font-semibold tracking-tight">Read the notes</div>
               <div className="mt-3 text-sm text-[var(--text-secondary)]">{c.blurb}</div>
             </Link>
           ))}
         </div>
       </section>
 
-      <CTASection title="Pick the Show You&apos;re Running." subtitle="GA is free, forever. No card. No rehearsal required." />
+      <CTASection title="The Room Is Ready." subtitle="GA is free, forever. No card. No rehearsal required." />
     </div>
   );
 }

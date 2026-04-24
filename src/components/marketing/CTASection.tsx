@@ -1,11 +1,11 @@
 import Link from "next/link";
 
 export function CTASection({
-  title = "Doors Open at 6. Run the Show at 7.",
-  subtitle = "Free forever on GA. No card. No countdown. No lock-in.",
-  primaryLabel = "Doors open",
+  title = "The List Is Open.",
+  subtitle = "GA is free, forever. No card. No countdown. No lock-in.",
+  primaryLabel = "Get on the list",
   primaryHref = "/signup",
-  secondaryLabel = "Backstage walkthrough",
+  secondaryLabel = "Private walkthrough",
   secondaryHref = "/contact",
 }: {
   title?: string;

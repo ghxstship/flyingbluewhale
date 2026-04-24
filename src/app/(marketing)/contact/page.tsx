@@ -9,38 +9,38 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "Contact — Ring the Promoter",
+  title: "Contact — Call the Studio",
   description:
-    "Talk to the crew. Sales rings back within a business day. Free on GA forever. Walkthroughs, partnerships, support, press — all routed to humans who&apos;ve worked doors.",
+    "A direct line to the studio. Private walkthroughs, Festival-tier access, partnerships, support. Routed to humans who&apos;ve booked the rooms.",
   path: "/contact",
   keywords: ["Second Star Technologies contact", "talk to sales", "production software demo", "book demo"],
   ogImageEyebrow: "Contact",
-  ogImageTitle: "Ring the Promoter.",
+  ogImageTitle: "Call the Studio.",
 });
 
 const ROUTES = [
-  { icon: Calendar, title: "Backstage walkthrough", body: "30 minutes, tailored to your kind of night. We screen-share the console and answer anything.", cta: "Get on the calendar", href: "#form" },
-  { icon: Mail, title: "Ring the promoter", body: "Direct line to a human who&apos;s worked doors. One business day, usually faster.", cta: "sales@flyingbluewhale.app", href: "mailto:sales@flyingbluewhale.app" },
-  { icon: MessageCircle, title: "Support", body: "Current acts only — triaged by tier. Festival tier gets SLA&apos;d.", cta: "support@flyingbluewhale.app", href: "mailto:support@flyingbluewhale.app" },
+  { icon: Calendar, title: "Private walkthrough", body: "Thirty minutes, tailored to your room. We screen-share the Atlas and answer anything.", cta: "Get on the calendar", href: "#form" },
+  { icon: Mail, title: "Call the studio", body: "Direct line to a producer. One business day, usually faster.", cta: "sales@flyingbluewhale.app", href: "mailto:sales@flyingbluewhale.app" },
+  { icon: MessageCircle, title: "Members&apos; line", body: "For current acts — triaged by tier. Festival gets an SLA.", cta: "support@flyingbluewhale.app", href: "mailto:support@flyingbluewhale.app" },
   { icon: Building2, title: "Co-headliners", body: "Integrations, agencies, distribution. Let&apos;s split the bill.", cta: "partners@flyingbluewhale.app", href: "mailto:partners@flyingbluewhale.app" },
 ];
 
 const FAQS = [
   {
-    q: "Do I have to talk to sales to try it?",
-    a: "No. /signup and you&apos;re on the GA tier — free forever. 14-night soundcheck on All-Access or Headliner, no card. Sales is for Festival tier, custom deployments, or backstage walkthroughs with a human.",
+    q: "Do I need to call to try it?",
+    a: "No. /signup and you&apos;re on GA — free forever. A fourteen-night soundcheck on All-Access or Headliner, no card. The studio is for Festival tier, custom deployments, or a private walkthrough.",
   },
   {
     q: "How fast do you ring back?",
-    a: "Sales: one business day. Support on All-Access: 24 business hours. Headliner: 4. Festival: contractual SLA, usually 1 hour for P0. We pick up fast — shows don&apos;t wait.",
+    a: "Studio: one business day. Members&apos; line on All-Access: twenty-four business hours. Headliner: four. Festival: contractual SLA, usually one hour for P0. Shows don&apos;t wait.",
   },
   {
-    q: "Can we talk to an operator, not a salesperson?",
-    a: "Yes — check the box in the form. We&apos;ll schedule a call with someone from the ops crew who&apos;s shipped shows on this rig.",
+    q: "Can we talk to a producer, not a salesperson?",
+    a: "Check the box in the form. We&apos;ll schedule a call with someone from the studio who&apos;s shipped nights on the Atlas.",
   },
   {
     q: "Where are you based?",
-    a: "Distributed across the US — operators in NYC, LA, Miami, Chicago, Austin. Happy to roll up in-person anywhere a show is happening.",
+    a: "Distributed across the US — producers in NYC, LA, Miami, Chicago, Austin. Happy to turn up in-person wherever the room is.",
   },
 ];
 
@@ -57,9 +57,9 @@ export default function ContactPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Contact</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Ring the Promoter.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Call the Studio.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          No dark patterns. No forced sales calls. Skip the line and get on the list at <a className="underline" href="/signup">/signup</a>. Or request a backstage walkthrough below — one business day, usually faster.
+          No dark patterns. No forced calls. Skip the line and get on the list at <a className="underline" href="/signup">/signup</a>. Or request a private walkthrough below — one business day, usually faster.
         </p>
       </section>
 
@@ -81,7 +81,7 @@ export default function ContactPage() {
       </section>
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Drop a Note Backstage.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leave a Note.</h2>
         <form
           className="surface-raised mt-8 space-y-4 p-6"
           method="post"
@@ -127,7 +127,7 @@ export default function ContactPage() {
           </label>
           <div className="flex items-center justify-end gap-2">
             <Button href="/signup" variant="secondary">Get on the list instead</Button>
-            <Button type="submit">Send to backstage</Button>
+            <Button type="submit">Send to the studio</Button>
           </div>
         </form>
       </section>

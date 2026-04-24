@@ -5,9 +5,9 @@ export const SITE = {
   shortName: "Second Star",
   domain: "secondstar.tech",
   baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
-  tagline: "Run the show. Not the spreadsheets.",
+  tagline: "The Atlas for experiential producers.",
   description:
-    "ATLVS · GVTEWAY · COMPVSS — one rig for the whole run-of-show. The production office, every stakeholder&apos;s door, and the crew PWA on the floor. Postgres-backed, RLS-secured, scan-proof.",
+    "ATLVS · GVTEWAY · COMPVSS — one manifest, three rooms. The office, the door, and the floor. Written for the producers who book the rooms people talk about. Postgres-backed, RLS-secured, private by architecture.",
   twitter: "@secondstartech",
   /** Parent company chain — surfaces in Organization JSON-LD + legal footer. */
   parent: {
@@ -32,9 +32,9 @@ export const SITE = {
     "creative operations platform",
   ],
   apps: {
-    atlvs:   { name: "ATLVS",   tagline: "The office · runs the show from the desk",     color: "#DC2626" },
-    gvteway: { name: "GVTEWAY", tagline: "The door · every stakeholder&apos;s own entrance", color: "#2563EB" },
-    compvss: { name: "COMPVSS", tagline: "The floor · runs the night from your pocket", color: "#D97706" },
+    atlvs:   { name: "ATLVS",   tagline: "The office · the room runs from the desk",    color: "#DC2626" },
+    gvteway: { name: "GVTEWAY", tagline: "The door · every guest, their own way in",    color: "#2563EB" },
+    compvss: { name: "COMPVSS", tagline: "The floor · the night, in your pocket",        color: "#D97706" },
   },
 } as const;
 

@@ -14,13 +14,13 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "GVTEWAY — twelve stakeholder doors. One manifest.",
+  title: "GVTEWAY — The Door",
   description:
-    "Every stakeholder gets their own entrance. Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Signed proposals, live advancing, per-persona door passes.",
+    "Every guest, artist, and vendor — their own way in. Twelve doors. One manifest. Signed proposals, live advancing, per-persona door passes. Private by design.",
   path: "/solutions/gvteway",
   keywords: ["GVTEWAY", "stakeholder portal", "artist portal", "vendor portal", "client portal", "event portal software"],
   ogImageEyebrow: "GVTEWAY",
-  ogImageTitle: "Every stakeholder. Their own entrance.",
+  ogImageTitle: "Every Guest, Their Own Way In.",
 });
 
 export default function GvtewayPage() {
@@ -43,14 +43,14 @@ export default function GvtewayPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">GVTEWAY · the door</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Every Stakeholder. Their Own Entrance.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">GVTEWAY · The Door</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Every Guest. Their Own Way In.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Stop emailing PDFs to twelve different people at midnight. Every stakeholder gets their own door, their own data, their own lane. Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same show — a dozen different reads, zero crossover.
+          Twelve doors. One manifest. Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same night — a dozen private reads, no crossover by design.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Doors open</Button>
-          <Button href="/contact" variant="secondary">Backstage walkthrough</Button>
+          <Button href="/signup">Get on the list</Button>
+          <Button href="/contact" variant="secondary">Private walkthrough</Button>
         </div>
       </section>
 
@@ -58,7 +58,7 @@ export default function GvtewayPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Twelve Doors. One Manifest.</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Every persona gets its own entrance — nav, flows, deliverables built for their lane. The artist never sees the sponsor&apos;s invoice. The delegation never sees the vendor&apos;s COI. Nobody confused, nobody oversharing.
+          Every persona gets its own entrance — nav, flows, deliverables tuned to their lane. The artist never sees the sponsor&apos;s invoice. The delegation never sees the vendor&apos;s COI. Private by design.
         </p>
         <div className="mt-8">
           <FeatureGrid
@@ -90,22 +90,22 @@ export default function GvtewayPage() {
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">Proposals That Close Themselves.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              23 block types. Scroll-spy nav. Per-phase contract refs. Add-on pickers with live totals. E-sign in place — typed or drawn. Revocable share links. Version history. Engagement analytics on every scroll. Ships a clean PDF when your legal team still wants paper.
+              Twenty-three block types. Scroll-spy nav. Per-phase contract refs. Add-on pickers with live totals. E-sign in place — typed or drawn. Revocable share links. Version history. Engagement analytics on every scroll. A clean PDF if your legal team still wants paper.
             </p>
             <Link href="/features/proposals" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]">
-              See the run-sheet →
+              Read the run-sheet →
             </Link>
           </div>
           <div className="surface-raised p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">
               <BookOpen size={14} /> KBYG · door passes
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Write It Once. Everybody Reads Theirs.</h3>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Written Once. Read Twelve Ways.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              One Know-Before-You-Go doc in ATLVS. It renders per-persona in the portal and in the field PWA. Artists get riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. 16 section types. One source, twelve reads.
+              One Know-Before-You-Go doc in ATLVS. Renders per-persona in the portal and in the floor PWA. Artists get riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. Sixteen section types. One source, twelve reads.
             </p>
             <Link href="/features/guides" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]">
-              See the door pass →
+              Read the door pass →
             </Link>
           </div>
         </div>
@@ -144,28 +144,28 @@ export default function GvtewayPage() {
         faqs={[
           {
             q: "What is GVTEWAY?",
-            a: "The door. Blue-branded. Every stakeholder outside your org lives here. Twelve personas today — artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Each gets its own lane and only its own lane.",
+            a: "The door. Blue-branded. Every guest, artist, vendor, sponsor, and collaborator arrives through their own lane. Twelve personas today — each sees only their lane.",
           },
           {
-            q: "Do guests need to sign up?",
-            a: "Read-only? Share the link — they&apos;re in. Contributing (ridings, COIs, signatures)? A lightweight signup creates a user scoped to that project. Fastest two-step in the building.",
+            q: "Do guests need an account?",
+            a: "Read-only? Share the link — they&apos;re in. Contributing (riders, COIs, signatures)? A lightweight signup creates a user scoped to that project. Fast by design.",
           },
           {
             q: "Can I white-label the door?",
-            a: "Yes — Festival tier. Your logo, your colors, your email, your custom domain. Clients see your brand. Vendors see your vendors&apos; brand. The building is always yours.",
+            a: "Festival tier. Your mark, colors, email, custom domain. Clients see your brand. Vendors see your vendors&apos; brand. The house is always yours.",
           },
           {
-            q: "How is data isolated between projects?",
-            a: "At the database. Every record is scoped to its org + project. The link you share maps to one project — nobody walks out of the sponsor suite into the artist compound.",
+            q: "How is data isolated between rooms?",
+            a: "At the database. Every record is scoped to its org and project. The link you share maps to one project — nobody slips from the sponsor suite into the artist compound.",
           },
           {
             q: "Can one person hold two door passes?",
-            a: "Yes. A vendor on Festival A and a sponsor on Festival B switches cleanly from their portal entryway. One login, two lanes.",
+            a: "Yes. A vendor on one room and a sponsor on another switches cleanly from their portal entryway. One login, two lanes.",
           },
         ]}
       />
 
-      <CTASection title="Ship Twelve Doors in an Afternoon." subtitle="Twelve personas wired default. Reskin if you want. Open it if you don&apos;t." />
+      <CTASection title="Twelve Doors. One Manifest." subtitle="Twelve personas wired default. Reskin if you want. Open it if you don&apos;t." />
     </div>
   );
 }

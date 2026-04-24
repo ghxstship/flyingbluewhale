@@ -14,13 +14,13 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — the production office. In one sidebar.",
+  title: "ATLVS — The Office",
   description:
-    "ATLVS is the office that runs the show — M-F, load-in to load-out. Nine domains, 60+ modules, one sidebar, role-aware everywhere. Proposals to payouts, POs to ceremonies.",
+    "The production studio, load-in to load-out. Nine rooms, sixty-plus modules, one sidebar. Role-aware on every act. Built by producers for the producers who book the rooms.",
   path: "/solutions/atlvs",
   keywords: ["ATLVS", "production operations console", "event production dashboard", "internal production platform", "operations console software"],
   ogImageEyebrow: "ATLVS",
-  ogImageTitle: "The production office — in one sidebar",
+  ogImageTitle: "The Office · One Sidebar",
 });
 
 export default function ATLVSPage() {
@@ -44,37 +44,37 @@ export default function ATLVSPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · the office</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Runs the Show From the Desk.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · The Office</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Room Runs From the Desk.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Your production office, load-in to load-out. Nine domains, 60+ modules, one sidebar. Proposals to payouts, POs to ceremonies, crew to cash. Role-aware on every act of every module.
+          The production studio, load-in to load-out. Nine rooms, sixty-plus modules, one sidebar. Proposals to payouts, POs to ceremonies, crew to cash. Role-aware on every act.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Doors open</Button>
-          <Button href="/contact" variant="secondary">Backstage walkthrough</Button>
+          <Button href="/signup">Get on the list</Button>
+          <Button href="/contact" variant="secondary">Private walkthrough</Button>
           <Link href="/pricing" className="btn btn-ghost">Tickets →</Link>
         </div>
       </section>
 
       {/* Nine domain modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Nine domains · Sixty-plus modules</div>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Nine rooms · Sixty-plus modules</div>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          Every Act of Every Show. Same Sidebar.
+          Every Act of Every Night. Same Sidebar.
         </h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
             features={[
               { icon: Command, title: "Work", body: "Projects, tasks, Gantt, schedule, events, canonical locations. The run-sheet." },
-              { icon: FileSignature, title: "Sales", body: "Pipeline, leads, clients, proposals that get signed in the app — not the inbox." },
+              { icon: FileSignature, title: "Sales", body: "Pipeline, leads, clients, proposals signed in place. Not in the inbox." },
               { icon: DollarSign, title: "Finance", body: "Invoices, expenses, budgets with utilization, time, mileage, advances, payouts, live P&L." },
-              { icon: ClipboardList, title: "Procurement", body: "Reqs, POs, vendors, catalog, COI + W-9 tracking, direct vendor payouts." },
+              { icon: ClipboardList, title: "Procurement", body: "Reqs, POs, vendors, catalog, COI + W-9 tracking, live vendor payouts." },
               { icon: Database, title: "Production", body: "Equipment, rentals with availability, fab orders, dispatch, logistics. The road case." },
               { icon: Users, title: "People", body: "Directory, crew, credentials with expiry alerts, role matrix, invites." },
-              { icon: Brain, title: "AI runner", body: "Drafts from your manifest — riders, RFPs, recaps. Templates + automations for the busywork." },
+              { icon: Brain, title: "AI runner", body: "Drafts from your manifest — riders, RFPs, recaps. Templates and automations for the busywork." },
               { icon: ShieldCheck, title: "Settings", body: "Org, billing, integrations, webhooks, audit, compliance, branding." },
-              { icon: CheckCircle2, title: "Collab", body: "Inbox, files, forms, command palette. No third-party chat tax." },
+              { icon: CheckCircle2, title: "Collab", body: "Inbox, files, forms, command palette. Quiet as the back bar." },
             ]}
           />
         </div>
@@ -85,24 +85,24 @@ export default function ATLVSPage() {
         <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Under the hood</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">A Real Main Stage. Not a Folding Table.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built Like a Venue. Not a Template.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Every module rides the same rails — list, detail, create — with status flow where it counts (invoices, proposals, POs, tasks). Validation at the door. Your manifest walled off at the database layer, not in the pitch deck.
+              Every module rides the same rails — list, detail, create — with status flow where it counts (invoices, proposals, POs, tasks). Validation at the door. Your manifest walled at the database, private by architecture.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Same rails mean your team learns the console once. New modules ship in days, not quarters. The act changes — the stage crew stays.
+              Same rails mean your studio learns the console once. New modules ship in days. The act changes — the stage crew stays.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "Every tool the show needs — office, door, floor",
-              "Your manifest walled off per org — enforced in the database",
+              "One manifest, three rooms — office, door, floor",
+              "Walled at the database — private by architecture",
               "Role-aware on every act of every module",
               "Immutable audit log — who, when, before, after. Forever.",
-              "AI grounded in your lineup — not the public internet",
-              "Direct vendor payouts — ACH, card, international wire",
-              "99.9% uptime SLA on Festival tier",
-              "Signed DPA available on Festival tier",
+              "AI grounded in your manifest — never the public internet",
+              "Live vendor payouts — ACH, card, international wire",
+              "99.9% uptime SLA on the Festival tier",
+              "Signed DPA on the Festival tier",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -135,15 +135,15 @@ export default function ATLVSPage() {
         faqs={[
           {
             q: "What is ATLVS?",
-            a: "The production office. Red branded, desk-bound, always on. Proposals, finance, procurement, production, people, AI — the desk job that runs the show.",
+            a: "The production office. Red-branded, desk-bound, always on. Proposals, finance, procurement, production, people, AI. Where the studio lives.",
           },
           {
-            q: "How does role-based access work?",
-            a: "Ten roles across four tiers (owner, admin, controller, collaborator, contractor, crew, client, viewer, and cameos). Every capability is gated by role — and the gate is enforced in the database, not the UI.",
+            q: "How does role-aware access work?",
+            a: "Ten roles across four tiers (owner, admin, controller, collaborator, contractor, crew, client, viewer, and cameos). Every capability is gated by role — enforced in the database, not the UI.",
           },
           {
             q: "Can I re-skin the sidebar?",
-            a: "Consistent today — everyone ships on the same rails. Self-serve brand skins under Settings → Branding land on Festival tier.",
+            a: "Consistent today — everyone ships on the same rails. Self-serve brand skins under Settings → Branding land on the Festival tier.",
           },
           {
             q: "What AI is on the bill?",
@@ -152,7 +152,7 @@ export default function ATLVSPage() {
         ]}
       />
 
-      <CTASection title="Open the House." subtitle="Free forever on GA. Three seats in the production office, on us." />
+      <CTASection title="Walk the Office." subtitle="GA is free, forever. Three seats in the studio, on us." />
     </div>
   );
 }

@@ -1,267 +1,170 @@
 export type NavItem = { label: string; href: string };
 export type NavGroup = { label: string; items: NavItem[] };
 
+/**
+ * Primary console navigation. Compressed from 24 → 9 groups in 2026-04
+ * per `docs/ia/03-ia-compression-proposal.md`. Conventional SaaS labels;
+ * admin moves to the avatar menu (see `settingsNav`); AI is ambient via
+ * ⌘K, not a destination.
+ */
 export const platformNav: NavGroup[] = [
   { label: "Dashboard", items: [{ label: "Overview", href: "/console" }] },
   {
-    label: "Programs",
+    label: "Projects",
     items: [
-      { label: "Hub", href: "/console/programs" },
-      { label: "Master schedule", href: "/console/programs/schedule" },
-      { label: "Risk register", href: "/console/programs/risk" },
-      { label: "Reviews", href: "/console/programs/reviews" },
+      { label: "All Projects", href: "/console/projects" },
+      { label: "Programs", href: "/console/programs" },
+      { label: "Venues", href: "/console/venues" },
+      { label: "Risk Register", href: "/console/programs/risk" },
       { label: "Readiness", href: "/console/programs/readiness" },
-      { label: "Scope", href: "/console/programs/scope" },
-      { label: "Sessions", href: "/console/programs/sessions" },
+      { label: "Reviews", href: "/console/programs/reviews" },
+    ],
+  },
+  {
+    label: "Operations",
+    items: [
+      { label: "Schedule", href: "/console/schedule" },
+      { label: "Tasks", href: "/console/tasks" },
+      { label: "Events", href: "/console/events" },
+      { label: "Run of Show", href: "/console/production/ros" },
       { label: "Ceremonies", href: "/console/programs/ceremonies" },
-      { label: "Protocol", href: "/console/programs/protocol" },
-      { label: "Press conferences", href: "/console/programs/pressconf" },
-      { label: "Cases", href: "/console/programs/cases" },
-    ],
-  },
-  {
-    label: "Venues",
-    items: [
-      { label: "All venues", href: "/console/venues" },
-      { label: "Training venues", href: "/console/venues/training" },
-    ],
-  },
-  {
-    label: "Accreditation",
-    items: [
-      { label: "Hub", href: "/console/accreditation" },
-      { label: "Policy", href: "/console/accreditation/policy" },
-      { label: "Categories", href: "/console/accreditation/categories" },
-      { label: "Zones", href: "/console/accreditation/zones" },
-      { label: "Vetting", href: "/console/accreditation/vetting" },
-      { label: "Print queue", href: "/console/accreditation/print" },
-      { label: "Scans", href: "/console/accreditation/scans" },
-      { label: "Changes", href: "/console/accreditation/changes" },
-    ],
-  },
-  {
-    label: "Workforce",
-    items: [
-      { label: "Hub", href: "/console/workforce" },
-      { label: "Planning", href: "/console/workforce/planning" },
-      { label: "Deployment", href: "/console/workforce/deployment" },
-      { label: "Paid staff", href: "/console/workforce/staff" },
-      { label: "Volunteers", href: "/console/workforce/volunteers" },
-      { label: "Contractors", href: "/console/workforce/contractors" },
-      { label: "Uniforms", href: "/console/workforce/uniforms" },
-      { label: "Services", href: "/console/workforce/services" },
-      { label: "Training", href: "/console/workforce/training" },
-      { label: "Rosters", href: "/console/workforce/rosters" },
-      { label: "Housing", href: "/console/workforce/housing" },
-    ],
-  },
-  {
-    label: "Safety",
-    items: [
-      { label: "Hub", href: "/console/safety" },
-      { label: "Threats", href: "/console/safety/threats" },
-      { label: "Playbooks", href: "/console/safety/playbooks" },
-      { label: "Guard tours", href: "/console/safety/guard-tours" },
       { label: "Incidents", href: "/console/safety/incidents" },
-      { label: "Major incident", href: "/console/safety/major-incident" },
-      { label: "Cyber IR", href: "/console/safety/cyber-ir" },
+      { label: "Crisis", href: "/console/safety/crisis" },
       { label: "Medical", href: "/console/safety/medical" },
-      { label: "Environmental", href: "/console/safety/environmental" },
-      { label: "Crisis comms", href: "/console/safety/crisis" },
       { label: "Safeguarding", href: "/console/safety/safeguarding" },
-      { label: "BC/DR", href: "/console/safety/bcdr" },
-    ],
-  },
-  {
-    label: "Transport",
-    items: [
-      { label: "Hub", href: "/console/transport" },
-      { label: "Dispatch", href: "/console/transport/dispatch" },
-      { label: "A&D", href: "/console/transport/ad" },
-      { label: "Workforce shuttles", href: "/console/transport/workforce" },
-      { label: "Fleets", href: "/console/transport/fleets" },
-    ],
-  },
-  {
-    label: "Accommodation",
-    items: [
-      { label: "Hub", href: "/console/accommodation" },
-      { label: "Group blocks", href: "/console/accommodation/blocks" },
-      { label: "Village", href: "/console/accommodation/village" },
-    ],
-  },
-  {
-    label: "Participants",
-    items: [
-      { label: "Hub", href: "/console/participants" },
-      { label: "Delegations", href: "/console/participants/delegations" },
-      { label: "Entries", href: "/console/participants/entries" },
-      { label: "Visa", href: "/console/participants/visa" },
-    ],
-  },
-  {
-    label: "Commercial",
-    items: [
-      { label: "Hub", href: "/console/commercial" },
-      { label: "Sponsors", href: "/console/commercial/sponsors" },
-      { label: "Hospitality", href: "/console/commercial/hospitality" },
-      { label: "Ticketing", href: "/console/commercial/tickets" },
-      { label: "Licensing", href: "/console/commercial/licensing" },
-      { label: "Brand", href: "/console/commercial/brand" },
+      { label: "TOC", href: "/console/ops/toc" },
+      { label: "Services Desk", href: "/console/services/requests" },
     ],
   },
   {
     label: "Logistics",
     items: [
-      { label: "Hub", href: "/console/logistics" },
-      { label: "Rate card", href: "/console/logistics/ratecard" },
+      { label: "Transport", href: "/console/transport" },
+      { label: "Accommodation", href: "/console/accommodation" },
+      { label: "Dispatch", href: "/console/transport/dispatch" },
       { label: "Freight", href: "/console/logistics/freight" },
       { label: "Warehouse", href: "/console/logistics/warehouse" },
-      { label: "Services", href: "/console/logistics/services" },
+      { label: "Catering", href: "/console/logistics/services" },
       { label: "Disposition", href: "/console/logistics/disposition" },
-    ],
-  },
-  {
-    label: "Work",
-    items: [
-      { label: "Projects", href: "/console/projects" },
-      { label: "Tasks", href: "/console/tasks" },
-      { label: "Schedule", href: "/console/schedule" },
-      { label: "Events", href: "/console/events" },
-      { label: "Locations", href: "/console/locations" },
-      { label: "Meetings", href: "/console/meetings" },
-      { label: "Services desk", href: "/console/services/requests" },
-    ],
-  },
-  {
-    label: "Sales",
-    items: [
-      { label: "Pipeline", href: "/console/pipeline" },
-      { label: "Leads", href: "/console/leads" },
-      { label: "Clients", href: "/console/clients" },
-      { label: "Proposals", href: "/console/proposals" },
-    ],
-  },
-  {
-    label: "Finance",
-    items: [
-      { label: "Hub", href: "/console/finance" },
-      { label: "Invoices", href: "/console/finance/invoices" },
-      { label: "Expenses", href: "/console/finance/expenses" },
-      { label: "Budgets", href: "/console/finance/budgets" },
-      { label: "Time", href: "/console/finance/time" },
-      { label: "Mileage", href: "/console/finance/mileage" },
-      { label: "Advances", href: "/console/finance/advances" },
-      { label: "Payouts", href: "/console/finance/payouts" },
-      { label: "Reports", href: "/console/finance/reports" },
-    ],
-  },
-  {
-    label: "Procurement",
-    items: [
-      { label: "Hub", href: "/console/procurement" },
-      { label: "Requisitions", href: "/console/procurement/requisitions" },
-      { label: "Purchase Orders", href: "/console/procurement/purchase-orders" },
-      { label: "Vendors", href: "/console/procurement/vendors" },
-      { label: "Catalog", href: "/console/procurement/catalog" },
-    ],
-  },
-  {
-    label: "Production",
-    items: [
-      { label: "Fabrication", href: "/console/production/fabrication" },
-      { label: "Dispatch", href: "/console/production/dispatch" },
-      { label: "Rentals", href: "/console/production/rentals" },
-      { label: "Equipment", href: "/console/production/equipment" },
-      { label: "Logistics", href: "/console/production/logistics" },
-      { label: "Compounds", href: "/console/production/compounds" },
-      { label: "AV systems", href: "/console/production/av" },
-      { label: "Run of show", href: "/console/production/ros" },
     ],
   },
   {
     label: "People",
     items: [
       { label: "Directory", href: "/console/people" },
+      { label: "Workforce", href: "/console/workforce" },
       { label: "Crew", href: "/console/people/crew" },
       { label: "Credentials", href: "/console/people/credentials" },
-      { label: "Roles", href: "/console/people/roles" },
-      { label: "Invites", href: "/console/people/invites" },
+      { label: "Accreditation", href: "/console/accreditation" },
+      { label: "Delegations", href: "/console/participants/delegations" },
+      { label: "Visa", href: "/console/participants/visa" },
+      { label: "Rosters", href: "/console/workforce/rosters" },
+      { label: "Training", href: "/console/workforce/training" },
     ],
   },
   {
-    label: "Operations",
+    label: "Revenue",
     items: [
-      { label: "Hub", href: "/console/ops" },
-      { label: "TOC", href: "/console/ops/toc" },
-      { label: "Problems", href: "/console/ops/toc/problems" },
-      { label: "Changes", href: "/console/ops/toc/changes" },
-      { label: "Integrations", href: "/console/integrations" },
+      { label: "Leads", href: "/console/leads" },
+      { label: "Clients", href: "/console/clients" },
+      { label: "Proposals", href: "/console/proposals" },
+      { label: "Sponsors", href: "/console/commercial/sponsors" },
+      { label: "Hospitality", href: "/console/commercial/hospitality" },
+      { label: "Tickets", href: "/console/commercial/tickets" },
     ],
   },
   {
-    label: "Legal",
+    label: "Finance",
     items: [
-      { label: "Hub", href: "/console/legal" },
-      { label: "IP", href: "/console/legal/ip" },
-      { label: "Privacy", href: "/console/legal/privacy" },
-      { label: "DSAR", href: "/console/legal/privacy/dsar" },
-      { label: "Consent", href: "/console/legal/privacy/consent" },
-      { label: "Data map", href: "/console/legal/privacy/datamap" },
-      { label: "Insurance", href: "/console/legal/insurance" },
+      { label: "Invoices", href: "/console/finance/invoices" },
+      { label: "Expenses", href: "/console/finance/expenses" },
+      { label: "Budgets", href: "/console/finance/budgets" },
+      { label: "Payouts", href: "/console/finance/payouts" },
+      { label: "Time", href: "/console/finance/time" },
+      { label: "Mileage", href: "/console/finance/mileage" },
+      { label: "Advances", href: "/console/finance/advances" },
+      { label: "Reports", href: "/console/finance/reports" },
     ],
   },
   {
-    label: "Comms",
+    label: "Procurement",
     items: [
-      { label: "Hub", href: "/console/comms" },
-      { label: "Internal", href: "/console/comms/internal" },
-      { label: "External PR", href: "/console/comms/external" },
-    ],
-  },
-  {
-    label: "Sustainability",
-    items: [
-      { label: "Hub", href: "/console/sustainability" },
-      { label: "Carbon", href: "/console/sustainability/carbon" },
-    ],
-  },
-  {
-    label: "AI",
-    items: [
-      { label: "Hub", href: "/console/ai" },
-      { label: "Assistant", href: "/console/ai/assistant" },
-      { label: "Drafting", href: "/console/ai/drafting" },
+      { label: "Vendors", href: "/console/procurement/vendors" },
+      { label: "Requisitions", href: "/console/procurement/requisitions" },
+      { label: "Purchase Orders", href: "/console/procurement/purchase-orders" },
+      { label: "RFQs", href: "/console/procurement/rfqs" },
+      { label: "Catalog", href: "/console/procurement/catalog" },
+      { label: "Rate Card", href: "/console/logistics/ratecard" },
+      { label: "Equipment", href: "/console/production/equipment" },
+      { label: "Rentals", href: "/console/production/rentals" },
+      { label: "Fabrication", href: "/console/production/fabrication" },
     ],
   },
   {
     label: "Knowledge",
-    items: [{ label: "KB", href: "/console/kb" }],
-  },
-  {
-    label: "Collaboration",
     items: [
-      { label: "Inbox", href: "/console/inbox" },
-      { label: "Files", href: "/console/files" },
+      { label: "Articles", href: "/console/kb" },
+      { label: "Guides", href: "/console/guides" },
+      { label: "Playbooks", href: "/console/safety/playbooks" },
+      { label: "BC/DR", href: "/console/safety/bcdr" },
+      { label: "Threats", href: "/console/safety/threats" },
+      { label: "Automations", href: "/console/ai/automations" },
+      { label: "Sustainability", href: "/console/sustainability" },
+    ],
+  },
+];
+
+/**
+ * Settings sidebar — rendered inside `/console/settings/layout.tsx` as a
+ * dedicated 2-col admin area. Extracted from `platformNav` 2026-04 so the
+ * primary sidebar doesn't carry 14 admin items.
+ */
+export const settingsNav: NavGroup[] = [
+  {
+    label: "Workspace",
+    items: [
+      { label: "Organization", href: "/console/settings/organization" },
+      { label: "Branding", href: "/console/settings/branding" },
+      { label: "Domains", href: "/console/settings/domains" },
+      { label: "Email Templates", href: "/console/settings/email-templates" },
+      { label: "Locations", href: "/console/locations" },
     ],
   },
   {
-    label: "Settings",
+    label: "Team & Access",
     items: [
-      { label: "Hub", href: "/console/settings" },
-      { label: "Organization", href: "/console/settings/organization" },
+      { label: "Roles", href: "/console/people/roles" },
+      { label: "Invites", href: "/console/people/invites" },
       { label: "Governance", href: "/console/settings/governance" },
+    ],
+  },
+  {
+    label: "Billing & Data",
+    items: [
       { label: "Billing", href: "/console/settings/billing" },
-      { label: "Integrations", href: "/console/settings/integrations" },
-      { label: "API", href: "/console/settings/api" },
-      { label: "Webhooks", href: "/console/settings/webhooks" },
-      { label: "Audit", href: "/console/settings/audit" },
-      { label: "Compliance", href: "/console/settings/compliance" },
       { label: "Exports", href: "/console/settings/exports" },
       { label: "Imports", href: "/console/settings/imports" },
-      { label: "Email templates", href: "/console/settings/email-templates" },
-      { label: "Branding", href: "/console/settings/branding" },
-      { label: "Domains", href: "/console/settings/domains" },
+    ],
+  },
+  {
+    label: "Integrations",
+    items: [
+      { label: "Apps", href: "/console/settings/integrations" },
+      { label: "API", href: "/console/settings/api" },
+      { label: "Webhooks", href: "/console/settings/webhooks" },
+    ],
+  },
+  {
+    label: "Compliance",
+    items: [
+      { label: "Audit Log", href: "/console/settings/audit" },
+      { label: "Compliance", href: "/console/settings/compliance" },
+      { label: "Privacy", href: "/console/legal/privacy" },
+      { label: "DSAR", href: "/console/legal/privacy/dsar" },
+      { label: "Consent", href: "/console/legal/privacy/consent" },
+      { label: "Data Map", href: "/console/legal/privacy/datamap" },
+      { label: "IP / Trademarks", href: "/console/legal/ip" },
+      { label: "Insurance", href: "/console/legal/insurance" },
     ],
   },
 ];
@@ -343,7 +246,7 @@ export function portalNav(slug: string, persona: PortalPersona) {
       { label: "Overview", href: base },
       guide,
       { label: "Entries", href: `${base}/entries` },
-      { label: "Rate card", href: `${base}/ratecard` },
+      { label: "Rate Card", href: `${base}/ratecard` },
       { label: "Bookings", href: `${base}/bookings` },
       { label: "Meetings", href: `${base}/meetings` },
       { label: "Cases", href: `${base}/cases` },
@@ -358,8 +261,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
       { label: "Services", href: `${base}/services` },
       { label: "Accommodation", href: `${base}/accommodation` },
       { label: "Transport", href: `${base}/transport` },
-      { label: "Press conferences", href: `${base}/pressconf` },
-      { label: "Info-on-demand", href: `${base}/info` },
+      { label: "Press Conferences", href: `${base}/pressconf` },
+      { label: "Info-On-Demand", href: `${base}/info` },
     ],
     vip: [
       { label: "Overview", href: base },
@@ -404,7 +307,7 @@ export const mobileTabs: NavItem[] = [
 ];
 
 export const mobileSurfaces: NavItem[] = [
-  { label: "Gate scan", href: "/m/gate" },
+  { label: "Gate Scan", href: "/m/gate" },
   { label: "Wallet", href: "/m/wallet" },
   { label: "Shift", href: "/m/shift" },
   { label: "Check-in", href: "/m/checkin" },
@@ -414,12 +317,12 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Alerts", href: "/m/alerts" },
   { label: "Driver", href: "/m/driver" },
   { label: "A&D", href: "/m/ad" },
-  { label: "Run of show", href: "/m/ros" },
+  { label: "Run of Show", href: "/m/ros" },
   { label: "Guard", href: "/m/guard" },
   { label: "Warehouse", href: "/m/wms" },
   { label: "Punch", href: "/m/punch" },
   { label: "Handover", href: "/m/handover" },
   { label: "Requests", href: "/m/requests" },
-  { label: "Chain of custody", href: "/m/coc" },
+  { label: "Chain of Custody", href: "/m/coc" },
   { label: "Wayfind", href: "/m/wayfind" },
 ];

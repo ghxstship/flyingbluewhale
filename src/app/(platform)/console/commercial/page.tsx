@@ -11,7 +11,7 @@ export default function Page() {
           <Link className="surface hover-lift p-4" href="/console/commercial/hospitality"><div className="text-sm font-medium">Hospitality</div></Link>
           <Link className="surface hover-lift p-4" href="/console/commercial/tickets"><div className="text-sm font-medium">Ticketing</div></Link>
           <Link className="surface hover-lift p-4" href="/console/commercial/licensing"><div className="text-sm font-medium">Licensing</div></Link>
-          <Link className="surface hover-lift p-4" href="/console/commercial/brand"><div className="text-sm font-medium">Brand</div></Link>
+          <Link className="surface hover-lift p-4" href="/console/settings/branding"><div className="text-sm font-medium">Brand</div></Link>
         </div>
       </div>
     </>

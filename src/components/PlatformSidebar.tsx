@@ -10,6 +10,7 @@ import {
   Pin,
   PinOff,
   ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import type { NavGroup, NavItem } from "@/lib/nav";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
@@ -37,6 +38,9 @@ export function PlatformSidebar({
   const [collapsed, setCollapsed] = React.useState<boolean>(prefs.sidebar_collapsed ?? false);
   const [width, setWidth] = React.useState<number>(prefs.sidebar_width ?? 240);
   const [pinned, setPinned] = React.useState<string[]>(prefs.sidebar_pinned ?? []);
+  const [collapsedGroups, setCollapsedGroups] = React.useState<string[]>(
+    prefs.sidebar_collapsed_groups ?? [],
+  );
   const [query, setQuery] = React.useState("");
   const [showSearch, setShowSearch] = React.useState(false);
   const searchRef = React.useRef<HTMLInputElement>(null);
@@ -46,7 +50,13 @@ export function PlatformSidebar({
     if (prefs.sidebar_collapsed != null) setCollapsed(prefs.sidebar_collapsed);
     if (prefs.sidebar_width != null) setWidth(prefs.sidebar_width);
     if (prefs.sidebar_pinned != null) setPinned(prefs.sidebar_pinned);
-  }, [prefs.sidebar_collapsed, prefs.sidebar_width, prefs.sidebar_pinned]);
+    if (prefs.sidebar_collapsed_groups != null) setCollapsedGroups(prefs.sidebar_collapsed_groups);
+  }, [
+    prefs.sidebar_collapsed,
+    prefs.sidebar_width,
+    prefs.sidebar_pinned,
+    prefs.sidebar_collapsed_groups,
+  ]);
 
   // Register shortcuts for the cheatsheet
   React.useEffect(() => {
@@ -105,6 +115,14 @@ export function PlatformSidebar({
     setPinned((prev) => {
       const next = prev.includes(href) ? prev.filter((h) => h !== href) : [...prev, href];
       void setPrefs({ sidebar_pinned: next });
+      return next;
+    });
+  }
+
+  function toggleGroup(label: string) {
+    setCollapsedGroups((prev) => {
+      const next = prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label];
+      void setPrefs({ sidebar_collapsed_groups: next });
       return next;
     });
   }
@@ -211,19 +229,37 @@ export function PlatformSidebar({
               collapsed={collapsed}
               pinned={pinned}
               onTogglePin={togglePin}
+              // Pinned is always expanded — the whole point is one-click access.
+              isOpen
+              onToggleGroup={null}
             />
           )}
-          {filtered.map((g) => (
-            <SidebarGroup
-              key={g.label}
-              label={g.label}
-              items={g.items}
-              pathname={pathname}
-              collapsed={collapsed}
-              pinned={pinned}
-              onTogglePin={togglePin}
-            />
-          ))}
+          {filtered.map((g) => {
+            // A group is "open" when: sidebar-narrow-mode is off AND
+            // (search query is active OR the active route lives in this group
+            //  OR the user hasn't collapsed it). Search + active-route
+            //  overrides guarantee nav can never hide where you are.
+            const hasActive = g.items.some(
+              (i) => matchRoute(pathname ?? "", i.href).isActive,
+            );
+            const userCollapsed = collapsedGroups.includes(g.label);
+            const isOpen = collapsed ? false : Boolean(query) || hasActive || !userCollapsed;
+            return (
+              <SidebarGroup
+                key={g.label}
+                label={g.label}
+                items={g.items}
+                pathname={pathname}
+                collapsed={collapsed}
+                pinned={pinned}
+                onTogglePin={togglePin}
+                isOpen={isOpen}
+                // Disable the toggle when the group is forced open (active route
+                // lives inside) — hiding the current page would be hostile.
+                onToggleGroup={query || hasActive ? null : toggleGroup}
+              />
+            );
+          })}
           {query && filtered.length === 0 && (
             <div className="px-2 py-4 text-center text-xs text-[var(--text-muted)]">
               No results
@@ -265,6 +301,8 @@ function SidebarGroup({
   collapsed,
   pinned,
   onTogglePin,
+  isOpen,
+  onToggleGroup,
 }: {
   label: string;
   items: NavItem[];
@@ -272,16 +310,49 @@ function SidebarGroup({
   collapsed: boolean;
   pinned: string[];
   onTogglePin: (href: string) => void;
+  /** Whether the group body is visible. Always true when the whole sidebar is
+   *  narrow (collapsed mode), when search is active, or when an item in the
+   *  group is the active route. */
+  isOpen: boolean;
+  /** Toggle callback. `null` disables the collapse control — used for the
+   *  Pinned pseudo-group and when the group is force-open. */
+  onToggleGroup: ((label: string) => void) | null;
 }) {
+  const headerId = `sidebar-group-${label.toLowerCase().replace(/\s+/g, "-")}`;
   return (
     <div className="mb-3">
-      {!collapsed && (
-        <div className="px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
-          {label}
-        </div>
-      )}
-      <ul className="mt-0.5 space-y-0.5">
-        {items.map((item) => {
+      {!collapsed &&
+        (onToggleGroup ? (
+          <button
+            type="button"
+            id={headerId}
+            onClick={() => onToggleGroup(label)}
+            aria-expanded={isOpen}
+            aria-controls={`${headerId}-items`}
+            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)]"
+          >
+            <span className="truncate">{label}</span>
+            <ChevronDown
+              size={10}
+              aria-hidden="true"
+              className={`shrink-0 transition-transform duration-150 ${isOpen ? "" : "-rotate-90"}`}
+            />
+          </button>
+        ) : (
+          <div
+            id={headerId}
+            className="px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]"
+          >
+            {label}
+          </div>
+        ))}
+      {(collapsed || isOpen) && (
+        <ul
+          id={`${headerId}-items`}
+          aria-labelledby={headerId}
+          className="mt-0.5 space-y-0.5"
+        >
+          {items.map((item) => {
           // Use the unified active-route matcher so portal + mobile + palette
           // all agree. IA spec §1.B / §7 anti-pattern #2.
           const { isActive: active } = matchRoute(pathname ?? "", item.href);
@@ -329,7 +400,8 @@ function SidebarGroup({
             </li>
           );
         })}
-      </ul>
+        </ul>
+      )}
     </div>
   );
 }

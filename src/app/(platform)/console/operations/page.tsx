@@ -10,7 +10,7 @@ export default function Page() {
           <Link className="surface hover-lift p-4" href="/console/operations/incidents"><div className="text-sm font-medium">Incidents</div></Link>
           <Link className="surface hover-lift p-4" href="/console/ops/toc"><div className="text-sm font-medium">TOC (ITIL)</div></Link>
           <Link className="surface hover-lift p-4" href="/console/safety/incidents"><div className="text-sm font-medium">Safety incidents</div></Link>
-          <Link className="surface hover-lift p-4" href="/console/integrations"><div className="text-sm font-medium">Integrations</div></Link>
+          <Link className="surface hover-lift p-4" href="/console/settings/integrations"><div className="text-sm font-medium">Integrations</div></Link>
         </div>
       </div>
     </>

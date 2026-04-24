@@ -25,7 +25,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
-import { platformNav, portalNav, mobileTabs } from "@/lib/nav";
+import { platformNav, portalNav, mobileTabs, settingsNav } from "@/lib/nav";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { registerShortcut } from "@/lib/hooks/useHotkeys";
 
@@ -128,6 +128,23 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
           });
         }
       }
+      // Settings items are not in the primary sidebar but should still be
+      // searchable from anywhere — that's the whole point of ⌘K when admin
+      // moves out of the sidebar (docs/ia/03-ia-compression-proposal.md).
+      for (const group of settingsNav) {
+        for (const item of group.items) {
+          list.push({
+            id: `settings-${item.href}`,
+            label: item.label,
+            hint: `Settings · ${group.label}`,
+            group: "Navigate",
+            icon: iconForRoute(item.href),
+            perform: () => goto(item.href),
+            performAlt: () => gotoNewTab(item.href),
+            keywords: ["settings", group.label.toLowerCase()],
+          });
+        }
+      }
       [
         { label: "New project", href: "/console/projects/new", icon: Briefcase },
         { label: "New client", href: "/console/clients/new", icon: Users },
@@ -145,15 +162,6 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
           performAlt: () => gotoNewTab(c.href),
         }),
       );
-      list.push({
-        id: "nav-ai",
-        label: "Open AI assistant",
-        group: "Navigate",
-        icon: Sparkles,
-        perform: () => goto("/console/ai/assistant"),
-        performAlt: () => gotoNewTab("/console/ai/assistant"),
-        shortcut: "G A",
-      });
     } else if (scope === "portal" && portalSlug) {
       for (const persona of ["client", "vendor", "artist", "sponsor", "guest", "crew"] as const) {
         const items = portalNav(portalSlug, persona);

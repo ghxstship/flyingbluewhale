@@ -14,6 +14,10 @@ export type UserPreferences = {
   sidebar_width?: number;
   sidebar_pinned?: string[];
   sidebar_collapsed?: boolean;
+  /** Nav group labels the user has collapsed. Stored as a block-list (not an
+   *  allow-list) so new groups added to `platformNav` default to open and
+   *  never silently hide themselves from existing users. */
+  sidebar_collapsed_groups?: string[];
 };
 
 let cache: UserPreferences | null = null;

@@ -2,6 +2,7 @@ import { PlatformSidebar } from "@/components/Shell";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CommandPalette, CommandPaletteTrigger } from "@/components/CommandPalette";
 import { NotificationsBell } from "@/components/NotificationsBell";
+import { AvatarMenu } from "@/components/AvatarMenu";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { platformNav } from "@/lib/nav";
@@ -9,7 +10,7 @@ import { platformNav } from "@/lib/nav";
 export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
   // Protects /console at the outer boundary so every page inherits the
   // guard; individual pages may still call requireSession() for session data.
-  await requireSession("/login");
+  const session = await requireSession("/login");
   const tenant = await resolveTenant();
   return (
     <TenantShell tenant={tenant}>
@@ -33,6 +34,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
               <CommandPaletteTrigger />
               <NotificationsBell />
               <ThemeToggle />
+              <AvatarMenu name={session.email || "User"} email={session.email} />
             </div>
           </header>
           <div className="console-content animate-page-enter">{children}</div>

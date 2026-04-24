@@ -42,7 +42,6 @@ export async function createLeadAction(_: State, fd: FormData): Promise<State> {
     .single();
   if (error) return { error: error.message };
   revalidatePath("/console/leads");
-  revalidatePath("/console/pipeline");
   redirect(`/console/leads/${data.id}`);
 }
 
@@ -56,6 +55,5 @@ export async function moveLeadStageAction(leadId: string, stage: z.infer<typeof 
     .eq("id", leadId);
   if (error) return { error: error.message };
   revalidatePath("/console/leads");
-  revalidatePath("/console/pipeline");
   return { ok: true as const };
 }

@@ -1,10 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function RootError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
-    // Sentry/other error reporters pick this up via their hooks; here we just console.
     console.error("[root error]", error);
   }, [error]);
 
@@ -18,7 +18,7 @@ export default function RootError({ error, reset }: { error: Error & { digest?: 
       </p>
       <div className="mt-6 flex justify-center gap-2">
         <button onClick={reset} className="btn btn-primary">Try again</button>
-        <a href="/" className="btn btn-secondary">Home</a>
+        <Link href="/" className="btn btn-secondary">Home</Link>
       </div>
     </div>
   );

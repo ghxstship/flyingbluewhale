@@ -247,7 +247,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         <div>
           <div className="text-[10px] text-[var(--text-muted)]">Body</div>
           <div
-            className="prose prose-sm mt-1 max-w-none rounded bg-white p-3 text-[#0f172a]"
+            className="prose prose-sm mt-1 max-w-none rounded bg-[var(--white)] p-3 text-[var(--text-inverted)]"
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(renderPreview(form.body_html ?? "")) }}
           />
         </div>

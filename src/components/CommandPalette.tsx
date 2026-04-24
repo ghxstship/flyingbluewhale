@@ -50,7 +50,10 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
   const [search, setSearch] = React.useState("");
   const router = useRouter();
   const { prefs, setPrefs } = useUserPreferences();
-  const recents = (prefs.palette_recents ?? []) as string[];
+  const recents = React.useMemo(
+    () => (prefs.palette_recents ?? []) as string[],
+    [prefs.palette_recents],
+  );
 
   // Register shortcut in the cheatsheet registry
   React.useEffect(() => {

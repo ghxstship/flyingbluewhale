@@ -14,13 +14,13 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "COMPVSS — The Floor",
+  title: "COMPVSS — The Open Deck",
   description:
-    "The night, in your pocket. Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour. Offline-first. Installs from the browser in one tap.",
+    "The night, on the water. Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour. Offline-first. Installs from the browser in one tap.",
   path: "/solutions/compvss",
   keywords: ["COMPVSS", "event ticket scan PWA", "offline ticket scanning", "production mobile app", "crew mobile app", "event check-in software"],
   ogImageEyebrow: "COMPVSS",
-  ogImageTitle: "The Night, In Your Pocket.",
+  ogImageTitle: "The Night, On the Water.",
 });
 
 export default function CompvssPage() {
@@ -43,20 +43,20 @@ export default function CompvssPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">COMPVSS · The Floor</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Night,<br />In Your Pocket.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">COMPVSS · The Open Deck</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Night,<br />On the Water.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Installs from the browser in one tap. Sub-100ms QR gate scans. Geo-verified shift check-ins. Medic triage. Crisis alerts. Driver manifests. Guard tours. Warehouse scans. Offline-first throughout. When the venue Wi-Fi goes home, you stay on.
+          Installs from the browser in one tap. Sub-100ms QR gate scans. Geo-verified shift check-ins. Medic triage. Crisis alerts. Driver manifests. Guard tours. Warehouse scans. Offline-first throughout. When the venue Wi-Fi retires, the deck sails on.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Get on the list</Button>
-          <Button href="/contact" variant="secondary">Private walkthrough</Button>
+          <Button href="/signup">Book passage</Button>
+          <Button href="/contact" variant="secondary">Captain&apos;s briefing</Button>
         </div>
       </section>
 
       {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What the Crew Actually Runs.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What the Crew Runs, Deck-Side.</h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
@@ -79,12 +79,12 @@ export default function CompvssPage() {
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">
               <Wifi size={14} /> Offline-first
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Venue Wi-Fi Retires at Sunset. The Floor Doesn&apos;t.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Venue Wi-Fi Retires at Sunset. The Deck Doesn&apos;t.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
               Gate scan, manual lookup, tonight&apos;s call sheet — cached on device. Scans queue locally and replay in order the second signal returns. Nothing drops. Nobody waits.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Install straight from the browser — open the link, tap Install, full-screen launcher on the home screen. Done before soundcheck.
+              Install from the browser — open the link, tap Install, full-screen launcher on the home screen. Done before soundcheck.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
@@ -95,8 +95,8 @@ export default function CompvssPage() {
               "Clear scan states — accepted · duplicate · voided · not found",
               "Geo-verified clock-in with accuracy bounds",
               "Camera + GPS requested only when needed",
-              "Bottom tab bar — the five hits that matter tonight",
-              "Compass yellow on every screen. Readable from across the floor.",
+              "Bottom tab bar — the five deck-side hits",
+              "Compass yellow on every screen. Readable from across the deck.",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -133,7 +133,7 @@ export default function CompvssPage() {
         ]}
       />
 
-      <CTASection title="Walk the Floor." subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap." />
+      <CTASection title="Board the Deck." subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap." />
     </div>
   );
 }

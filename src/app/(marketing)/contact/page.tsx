@@ -11,7 +11,7 @@ import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Contact — Call the Studio",
   description:
-    "A direct line to the studio. Private walkthroughs, Festival-tier access, partnerships, support. Routed to humans who&apos;ve booked the rooms.",
+    "A direct line to the taste-makers&apos; studio. Captain&apos;s briefings, Private Charter access, partnerships, concierge support. Routed to producers who&apos;ve charted the crossings.",
   path: "/contact",
   keywords: ["Second Star Technologies contact", "talk to sales", "production software demo", "book demo"],
   ogImageEyebrow: "Contact",
@@ -19,28 +19,28 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const ROUTES = [
-  { icon: Calendar, title: "Private walkthrough", body: "Thirty minutes, tailored to your room. We screen-share the Atlas and answer anything.", cta: "Get on the calendar", href: "#form" },
+  { icon: Calendar, title: "Captain&apos;s briefing", body: "Thirty minutes, tailored to your crossing. We screen-share the Atlas and answer anything.", cta: "Get on the calendar", href: "#form" },
   { icon: Mail, title: "Call the studio", body: "Direct line to a producer. One business day, usually faster.", cta: "sales@flyingbluewhale.app", href: "mailto:sales@flyingbluewhale.app" },
-  { icon: MessageCircle, title: "Members&apos; line", body: "For current acts — triaged by tier. Festival gets an SLA.", cta: "support@flyingbluewhale.app", href: "mailto:support@flyingbluewhale.app" },
-  { icon: Building2, title: "Co-headliners", body: "Integrations, agencies, distribution. Let&apos;s split the bill.", cta: "partners@flyingbluewhale.app", href: "mailto:partners@flyingbluewhale.app" },
+  { icon: MessageCircle, title: "Concierge", body: "For current pass holders — triaged by cabin. Private Charter gets an SLA.", cta: "support@flyingbluewhale.app", href: "mailto:support@flyingbluewhale.app" },
+  { icon: Building2, title: "Co-pilots", body: "Integrations, agencies, distribution. Let&apos;s chart the voyage together.", cta: "partners@flyingbluewhale.app", href: "mailto:partners@flyingbluewhale.app" },
 ];
 
 const FAQS = [
   {
-    q: "Do I need to call to try it?",
-    a: "No. /signup and you&apos;re on GA — free forever. A fourteen-night soundcheck on All-Access or Headliner, no card. The studio is for Festival tier, custom deployments, or a private walkthrough.",
+    q: "Do I need to call to book passage?",
+    a: "No. /signup and you&apos;re on the Day Pass — free forever. A fourteen-night soundcheck on Festival Pass or Voyager, no card. The studio is for Private Charter, custom crossings, or a captain&apos;s briefing.",
   },
   {
-    q: "How fast do you ring back?",
-    a: "Studio: one business day. Members&apos; line on All-Access: twenty-four business hours. Headliner: four. Festival: contractual SLA, usually one hour for P0. Shows don&apos;t wait.",
+    q: "How fast does the studio ring back?",
+    a: "Studio: one business day. Concierge on Festival Pass: twenty-four business hours. Voyager: four. Private Charter: contractual SLA, usually one hour for P0. Crossings don&apos;t wait.",
   },
   {
     q: "Can we talk to a producer, not a salesperson?",
-    a: "Check the box in the form. We&apos;ll schedule a call with someone from the studio who&apos;s shipped nights on the Atlas.",
+    a: "Check the box in the form. We&apos;ll schedule a call with someone from the studio who&apos;s charted crossings on the Atlas.",
   },
   {
     q: "Where are you based?",
-    a: "Distributed across the US — producers in NYC, LA, Miami, Chicago, Austin. Happy to turn up in-person wherever the room is.",
+    a: "Distributed across the US — producers in NYC, LA, Miami, Chicago, Austin. Happy to turn up in-person wherever the crossing lands.",
   },
 ];
 
@@ -59,7 +59,7 @@ export default function ContactPage() {
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Contact</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Call the Studio.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          No dark patterns. No forced calls. Skip the line and get on the list at <a className="underline" href="/signup">/signup</a>. Or request a private walkthrough below — one business day, usually faster.
+          No dark patterns. No forced calls. Book passage straight from <a className="underline" href="/signup">/signup</a>. Or request a captain&apos;s briefing below — one business day, usually faster.
         </p>
       </section>
 
@@ -120,13 +120,13 @@ export default function ContactPage() {
             </select>
           </label>
           <label className="block text-xs font-medium text-[var(--text-secondary)]">
-            What are you running?<textarea name="message" rows={4} className="input-base mt-1.5 w-full" />
+            What are you charting?<textarea name="message" rows={4} className="input-base mt-1.5 w-full" />
           </label>
           <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
             <input type="checkbox" name="demo" /> I&apos;d rather walk it through live than trade emails.
           </label>
           <div className="flex items-center justify-end gap-2">
-            <Button href="/signup" variant="secondary">Get on the list instead</Button>
+            <Button href="/signup" variant="secondary">Book passage instead</Button>
             <Button type="submit">Send to the studio</Button>
           </div>
         </form>

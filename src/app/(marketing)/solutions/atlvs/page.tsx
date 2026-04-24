@@ -14,13 +14,13 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — The Office",
+  title: "ATLVS — The Bridge",
   description:
-    "The production studio, load-in to load-out. Nine rooms, sixty-plus modules, one sidebar. Role-aware on every act. Built by producers for the producers who book the rooms.",
+    "The studio&apos;s chart room. From pitch to homecoming in one sidebar. Nine rooms, sixty-plus modules, role-aware on every act. Written by taste-makers for taste-makers.",
   path: "/solutions/atlvs",
   keywords: ["ATLVS", "production operations console", "event production dashboard", "internal production platform", "operations console software"],
   ogImageEyebrow: "ATLVS",
-  ogImageTitle: "The Office · One Sidebar",
+  ogImageTitle: "The Bridge · Charts the Voyage",
 });
 
 export default function ATLVSPage() {
@@ -44,15 +44,15 @@ export default function ATLVSPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · The Office</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Room Runs From the Desk.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · The Bridge</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Charts the Voyage From the Desk.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The production studio, load-in to load-out. Nine rooms, sixty-plus modules, one sidebar. Proposals to payouts, POs to ceremonies, crew to cash. Role-aware on every act.
+          The studio&apos;s chart room. From pitch to homecoming. Nine rooms, sixty-plus modules, one sidebar — proposals to payouts, POs to ceremonies, crew to cash. Role-aware on every act.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Get on the list</Button>
-          <Button href="/contact" variant="secondary">Private walkthrough</Button>
-          <Link href="/pricing" className="btn btn-ghost">Tickets →</Link>
+          <Button href="/signup">Book passage</Button>
+          <Button href="/contact" variant="secondary">Captain&apos;s briefing</Button>
+          <Link href="/pricing" className="btn btn-ghost">Passage →</Link>
         </div>
       </section>
 
@@ -60,7 +60,7 @@ export default function ATLVSPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Nine rooms · Sixty-plus modules</div>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          Every Act of Every Night. Same Sidebar.
+          Every Act of Every Voyage. Same Chart Room.
         </h2>
         <div className="mt-8">
           <FeatureGrid
@@ -85,24 +85,24 @@ export default function ATLVSPage() {
         <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Under the hood</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built Like a Venue. Not a Template.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built Like a Charter. Not a Template.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
               Every module rides the same rails — list, detail, create — with status flow where it counts (invoices, proposals, POs, tasks). Validation at the door. Your manifest walled at the database, private by architecture.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Same rails mean your studio learns the console once. New modules ship in days. The act changes — the stage crew stays.
+              Same rails mean the studio learns the chart room once. New rooms ship in days. The act changes — the crew stays.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "One manifest, three rooms — office, door, floor",
+              "One manifest, three rooms — bridge, ports, deck",
               "Walled at the database — private by architecture",
               "Role-aware on every act of every module",
               "Immutable audit log — who, when, before, after. Forever.",
               "AI grounded in your manifest — never the public internet",
               "Live vendor payouts — ACH, card, international wire",
-              "99.9% uptime SLA on the Festival tier",
-              "Signed DPA on the Festival tier",
+              "99.9% uptime SLA on the Private Charter",
+              "Signed DPA on the Private Charter",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -135,24 +135,24 @@ export default function ATLVSPage() {
         faqs={[
           {
             q: "What is ATLVS?",
-            a: "The production office. Red-branded, desk-bound, always on. Proposals, finance, procurement, production, people, AI. Where the studio lives.",
+            a: "The bridge. Red-branded, desk-bound, always on. Proposals, finance, procurement, production, people, AI. Where the studio charts the voyage.",
           },
           {
             q: "How does role-aware access work?",
             a: "Ten roles across four tiers (owner, admin, controller, collaborator, contractor, crew, client, viewer, and cameos). Every capability is gated by role — enforced in the database, not the UI.",
           },
           {
-            q: "Can I re-skin the sidebar?",
-            a: "Consistent today — everyone ships on the same rails. Self-serve brand skins under Settings → Branding land on the Festival tier.",
+            q: "Can I re-skin the bridge?",
+            a: "Consistent today — everyone sails the same rails. Self-serve brand skins under Settings → Branding land on the Private Charter.",
           },
           {
             q: "What AI is on the bill?",
-            a: "A fast runner model for daily hits, with a deep-reasoning co-headliner on All-Access and up. Every thread logs to your workspace, scoped tight.",
+            a: "A fast runner model for daily crossings, with a deep-reasoning co-pilot on All-Access and up. Every thread logs to your workspace, scoped tight.",
           },
         ]}
       />
 
-      <CTASection title="Walk the Office." subtitle="GA is free, forever. Three seats in the studio, on us." />
+      <CTASection title="Board the Bridge." subtitle="GA is free, forever. Three seats in the chart room, on us." />
     </div>
   );
 }

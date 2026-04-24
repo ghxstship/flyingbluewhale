@@ -12,9 +12,9 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "The Rig — Three Rooms. One Atlas.",
+  title: "The Itinerary — Three Rooms. One Manifest.",
   description:
-    "ATLVS — the office. GVTEWAY — every guest&apos;s door. COMPVSS — the floor, in your pocket. The Atlas for the producers who ship the nights, residencies, and seasons people fly in for.",
+    "ATLVS — the bridge. GVTEWAY — twelve ports of call. COMPVSS — the open deck. The itinerary for cultural tastemakers, from horizon to homecoming.",
   path: "/solutions",
   keywords: [
     "live events software",
@@ -36,10 +36,10 @@ export default function SolutionsIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">The Rig</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Rooms. One Atlas.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">The Itinerary</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Rooms. One Manifest.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The office, the door, the floor. One manifest — private by architecture, shared by design. Written for the producers who book the rooms people talk about.
+          The bridge, the ports of call, the open deck. One manifest — private by architecture, shared by design. Written for cultural tastemakers charting the next crossing.
         </p>
       </section>
 
@@ -67,7 +67,7 @@ export default function SolutionsIndex() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Walk the room <ArrowRight size={12} />
+                Chart the room <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -76,9 +76,9 @@ export default function SolutionsIndex() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">The Rooms We Ship</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Crossings We Chart</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each room gets a tuned setup — starter templates, default role matrix, and private notes from producers who already ran the night.
+          Each crossing gets a tuned itinerary — starter templates, default role matrix, and private notes from producers who&apos;ve made the journey.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
@@ -91,23 +91,23 @@ export default function SolutionsIndex() {
       </section>
 
       <FAQSection
-        title="Solutions · FAQ"
+        title="The Itinerary · FAQ"
         faqs={[
           {
             q: "How are the three rooms different?",
-            a: "ATLVS is the office — the studio lives here. GVTEWAY is the door — every guest, artist, vendor, and sponsor arrives through their own lane. COMPVSS is the floor — the night in your pocket. One manifest underneath.",
+            a: "ATLVS is the bridge — the studio charts here. GVTEWAY is the ports of call — every guest, artist, vendor, and sponsor arrives through their own lane. COMPVSS is the open deck — the night, on the water. One manifest underneath.",
           },
           {
-            q: "Do I have to use all three?",
-            a: "Every tier ships all three. Most studios open with ATLVS + one GVTEWAY door (artist or client), add COMPVSS at load-in, then expand. Adopt at your tempo.",
+            q: "Do I book all three?",
+            a: "Every passage ships all three. Most studios open with ATLVS + one GVTEWAY port (artist or client), add COMPVSS at load-in, then expand. Cast off at your tempo.",
           },
           {
             q: "Can other orgs see my manifest?",
-            a: "No. Private by architecture — walled at the database layer, not the UI. A member in one org cannot read or touch anything in another. Enforced in the data.",
+            a: "No. Private by architecture — walled at the database layer, not the UI. A pass holder in one org cannot read or touch anything in another. Enforced in the data.",
           },
           {
-            q: "White-labeled doors?",
-            a: "Festival tier. Your mark, your colors, your email templates, your custom domain on every door. The house is always yours.",
+            q: "White-labeled ports of call?",
+            a: "Private Charter. Your mark, your colors, your email, your custom domain on every port. The house is always yours.",
           },
         ]}
       />
@@ -121,13 +121,13 @@ const APPS = [
   {
     slug: "atlvs",
     name: "ATLVS",
-    tier: "OFFICE",
-    title: "The room runs from the desk",
-    body: "Nine rooms, one sidebar. Proposals to payouts, POs to ceremonies. The production studio, quietly precise.",
+    tier: "BRIDGE",
+    title: "Charts the voyage from the desk",
+    body: "Nine rooms, one sidebar. From pitch to homecoming. Proposals to payouts, POs to ceremonies. The studio&apos;s chart room.",
     bullets: [
       "60+ modules across 9 rooms",
       "AI runner grounded in your manifest",
-      "Immutable audit log — who, when, before, after",
+      "Immutable log — who, when, before, after",
       "Role matrix on every tier, every module",
     ],
     href: "/solutions/atlvs",
@@ -135,22 +135,22 @@ const APPS = [
   {
     slug: "gvteway",
     name: "GVTEWAY",
-    tier: "DOOR",
-    title: "Every guest, their own way in",
-    body: "Twelve doors, one manifest. Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Each lane private by design.",
+    tier: "PORTS OF CALL",
+    title: "Every guest, their own way aboard",
+    body: "Twelve ports, one manifest. Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Each lane private by design.",
     bullets: [
-      "12 persona doors per room",
+      "12 persona ports per voyage",
       "Proposals signed in place — 23 block types",
       "Live advancing with deliverable tracking",
-      "Per-persona KBYG door passes",
+      "Per-persona KBYG boarding passes",
     ],
     href: "/solutions/gvteway",
   },
   {
     slug: "compvss",
     name: "COMPVSS",
-    tier: "FLOOR",
-    title: "The night, in your pocket",
+    tier: "OPEN DECK",
+    title: "The night, on the water",
     body: "Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour, warehouse. Offline-first. Installs in one tap.",
     bullets: [
       "<100ms gate scan — signal or none",
@@ -165,7 +165,7 @@ const APPS = [
 const INDUSTRIES = [
   { slug: "live-events", name: "Residencies + nights", blurb: "Sold-out weeks, recurring programming" },
   { slug: "concerts", name: "Concerts", blurb: "Single night, amphitheatre, arena" },
-  { slug: "festivals-tours", name: "Festivals + tours", blurb: "Multi-day, multi-stage, multi-city" },
+  { slug: "festivals-tours", name: "Festivals + tours", blurb: "Multi-day, multi-stage, multi-port" },
   { slug: "immersive-experiences", name: "Immersive", blurb: "Installations, walk-throughs, pop-ups" },
   { slug: "brand-activations", name: "Activations", blurb: "Launches, pop-ups, experiential" },
   { slug: "corporate-events", name: "Private programs", blurb: "Summits, closed-room, invite-only" },

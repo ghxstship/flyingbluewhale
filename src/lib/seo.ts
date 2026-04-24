@@ -5,9 +5,9 @@ export const SITE = {
   shortName: "Second Star",
   domain: "secondstar.tech",
   baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
-  tagline: "The Atlas for experiential producers.",
+  tagline: "The Itinerary for Cultural Tastemakers.",
   description:
-    "ATLVS · GVTEWAY · COMPVSS — one manifest, three rooms. The office, the door, and the floor. Written for the producers who book the rooms people talk about. Postgres-backed, RLS-secured, private by architecture.",
+    "ATLVS · GVTEWAY · COMPVSS — one manifest, three rooms. The bridge, the ports of call, the open deck. From horizon to homecoming — written for cultural tastemakers charting the next crossing. Postgres-backed, RLS-secured, private by architecture.",
   twitter: "@secondstartech",
   /** Parent company chain — surfaces in Organization JSON-LD + legal footer. */
   parent: {
@@ -32,9 +32,9 @@ export const SITE = {
     "creative operations platform",
   ],
   apps: {
-    atlvs:   { name: "ATLVS",   tagline: "The office · the room runs from the desk",    color: "#DC2626" },
-    gvteway: { name: "GVTEWAY", tagline: "The door · every guest, their own way in",    color: "#2563EB" },
-    compvss: { name: "COMPVSS", tagline: "The floor · the night, in your pocket",        color: "#D97706" },
+    atlvs:   { name: "ATLVS",   tagline: "The bridge · charts the voyage from the desk",    color: "#DC2626" },
+    gvteway: { name: "GVTEWAY", tagline: "The ports of call · every guest, their own way aboard", color: "#2563EB" },
+    compvss: { name: "COMPVSS", tagline: "The open deck · the night, on the water",         color: "#D97706" },
   },
 } as const;
 

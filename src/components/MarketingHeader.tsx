@@ -30,8 +30,8 @@ type NavGroup = { label: string; items: NavLink[] };
 const PRODUCT: NavGroup = {
   label: "Product",
   items: [
-    { label: "The Rig", href: "/features", description: "Everything the room needs" },
-    { label: "Rooms", href: "/solutions", description: "Three rooms, one Atlas" },
+    { label: "The Itinerary", href: "/features", description: "Every port. Every act." },
+    { label: "Rooms", href: "/solutions", description: "The bridge, the ports, the deck" },
   ],
 };
 
@@ -142,7 +142,7 @@ export function MarketingHeader() {
             Log in
           </Link>
           <Link href="/signup" className="btn btn-primary btn-sm">
-            Get on the list
+            Book passage
           </Link>
         </div>
 
@@ -223,7 +223,7 @@ export function MarketingHeader() {
                 className="btn btn-primary btn-sm w-full justify-center"
                 onClick={() => setMobileOpen(false)}
               >
-                Get on the list
+                Book passage
               </Link>
             </div>
           </div>

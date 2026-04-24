@@ -14,33 +14,33 @@ import {
 } from "@/components/marketing/MarketingPrimitives";
 
 export const metadata: Metadata = buildMetadata({
-  title: "The Rig — Everything the Room Needs",
+  title: "The Itinerary — Every Port of Call",
   description:
-    "ATLVS — the office. GVTEWAY — every door. COMPVSS — the floor. AI, finance, procurement, compliance. One manifest, three rooms. Written for producers.",
+    "Horizon to homecoming. ATLVS — the bridge. GVTEWAY — twelve ports of call. COMPVSS — the open deck. AI, finance, procurement, charter-grade security. One manifest, three rooms.",
   path: "/features",
   keywords: ["production software features", "event management platform", "stakeholder portals", "mobile field PWA"],
-  ogImageEyebrow: "The Rig",
-  ogImageTitle: "Everything the Room Needs.",
+  ogImageEyebrow: "The Itinerary",
+  ogImageTitle: "Every Port. Every Act.",
 });
 
 const CATEGORIES = [
-  { key: "console", title: "The office", desc: "Nine rooms, 60+ modules, one sidebar. ATLVS runs the desk." },
-  { key: "portals", title: "The doors", desc: "Twelve personas, twelve lanes. GVTEWAY is every guest&apos;s entrance." },
-  { key: "mobile", title: "The floor", desc: "Gate scan, shift, medic, alerts, driver, guard. COMPVSS runs the night." },
+  { key: "console", title: "The bridge", desc: "Nine rooms, 60+ modules, one sidebar. ATLVS charts the voyage." },
+  { key: "portals", title: "The ports of call", desc: "Twelve personas, twelve lanes. GVTEWAY is every guest&apos;s way aboard." },
+  { key: "mobile", title: "The open deck", desc: "Gate scan, shift, medic, alerts, driver, guard. COMPVSS sails the night." },
   { key: "ai", title: "AI runner", desc: "Drafts riders, RFPs, call sheets, recaps — grounded in your manifest." },
   { key: "finance", title: "Finance", desc: "Invoices, expenses, budgets, time, mileage, advances, live vendor payouts, P&L." },
-  { key: "procurement", title: "Procurement", desc: "Reqs, POs, vendor COIs, W-9s — one file cabinet, quiet as the back bar." },
+  { key: "procurement", title: "Procurement", desc: "Reqs, POs, vendor COIs, W-9s — one chart cabinet, quietly archived." },
   { key: "production", title: "Production", desc: "Equipment, rentals, fabrication, dispatch, logistics. The road case." },
-  { key: "compliance", title: "Tour-grade security", desc: "Immutable audit log, retention rules, signed DPA on the Festival tier." },
+  { key: "compliance", title: "Charter-grade security", desc: "Immutable audit log, retention rules, signed DPA on the Private Charter." },
 ];
 
 export default function FeaturesPage() {
   return (
     <MarketingPageShell>
       <MarketingHero
-        eyebrow="The Rig"
-        title="Everything the Room Needs."
-        subtitle="First pitch to final settlement. One manifest, three rooms, written for the producers who ship the nights."
+        eyebrow="The Itinerary"
+        title="Every Port. Every Act."
+        subtitle="From horizon to homecoming. One manifest, three rooms, written for the cultural tastemakers charting the next crossing."
       />
       <MarketingSection aria-label="Feature categories">
         <MarketingGrid cols={4}>

@@ -15,9 +15,9 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, SITE } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "The Atlas for Experiential Producers",
+  title: "The Itinerary for Cultural Tastemakers",
   description:
-    "The console. The door. The floor. ATLVS · GVTEWAY · COMPVSS — one rig for the producers shipping the nights, residencies, and seasons people fly in for.",
+    "Every production is a voyage. The Atlas is the itinerary. Three rooms — ATLVS · GVTEWAY · COMPVSS — one manifest, from horizon to homecoming.",
   path: "/",
   keywords: [
     "production management software",
@@ -32,7 +32,7 @@ export const metadata: Metadata = buildMetadata({
     "GVTEWAY",
     "COMPVSS",
   ],
-  ogImageTitle: "Run the Room.",
+  ogImageTitle: "From Horizon to Homecoming.",
 });
 
 export default function Home() {
@@ -53,18 +53,18 @@ export default function Home() {
       {/* Hero */}
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">
-          By invitation · now on the list
+          The manifest · now open for the next crossing
         </div>
         <h1 className="mt-4 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
-          Run the Room.
+          From Horizon<br />to Homecoming.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The Atlas for experiential producers. One console for the office. One door for every guest, artist, and vendor. One pass for the floor. Written for the residencies that sell out, the nights the press doesn&apos;t cover, the seasons people fly in for.
+          Every production is a voyage — a pitch, a run, a wrap. The Atlas is the itinerary that holds all three. Three rooms, one manifest. Written for the cultural tastemakers curating the next crossing.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
-          <Button href="/signup" size="lg">Get on the List</Button>
-          <Button href="/contact" size="lg" variant="secondary">Private Walkthrough</Button>
-          <Link href="/docs" className="btn btn-ghost btn-lg">Read the Run-Sheet →</Link>
+          <Button href="/signup" size="lg">Book Passage</Button>
+          <Button href="/contact" size="lg" variant="secondary">Captain&apos;s Briefing</Button>
+          <Link href="/docs" className="btn btn-ghost btn-lg">Read the Itinerary →</Link>
         </div>
 
         {/* M3-03 — Live portal preview. Anon visitors see real product chrome
@@ -92,7 +92,7 @@ export default function Home() {
             />
           </div>
           <p className="mt-3 text-center text-xs text-[var(--text-muted)]">
-            A live door-pass — what your guest sees on their phone tonight. Signed in-place.
+            A live boarding pass — what your guest sees on their phone tonight.
           </p>
         </div>
       </section>
@@ -103,13 +103,13 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-6 pt-10 pb-16">
         <div className="text-center">
           <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--text-muted)]">
-            The rig · three rooms · one Atlas
+            The itinerary · three rooms · one manifest
           </div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
             ATLVS · GVTEWAY · COMPVSS
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-            The office, the door, the floor. Three rooms reading the same manifest. Built by producers, for the ones who book the rooms people talk about.
+            The bridge, the ports of call, the open deck. Three rooms reading the same manifest. Written by the taste-makers&apos; studio for the producers curating the next crossing.
           </p>
         </div>
 
@@ -117,33 +117,33 @@ export default function Home() {
           {[
             {
               slug: "atlvs",
-              eyebrow: "ATLVS · The Office",
-              title: "The room runs from the desk.",
-              body: "Nine rooms, one sidebar. Proposals to payouts, POs to ceremonies. The production studio, quiet and precise.",
+              eyebrow: "ATLVS · The Bridge",
+              title: "Charts the voyage from the desk.",
+              body: "Nine rooms, one sidebar. From pitch to homecoming. Proposals to payouts, POs to ceremonies. The studio&apos;s chart room.",
               bullets: [
-                "Proposals, invoices, POs, crew, schedule — one studio",
-                "AI drafts riders, RFPs, and recaps from your own manifest",
+                "Proposals, invoices, POs, crew, schedule — one chart room",
+                "AI drafts riders, RFPs, and recaps from your manifest",
                 "Every change logged — who, when, before, after",
               ],
               href: "/solutions/atlvs",
             },
             {
               slug: "gvteway",
-              eyebrow: "GVTEWAY · The Door",
-              title: "Every guest, their own way in.",
-              body: "Artists, vendors, clients, sponsors, guests, crew, delegations, media, VIPs, volunteers, athletes. Twelve doors. One manifest. Each lane private by design.",
+              eyebrow: "GVTEWAY · The Ports of Call",
+              title: "Every guest. Their own way aboard.",
+              body: "Artists, vendors, clients, sponsors, guests, crew, delegations, media, VIPs, volunteers, athletes. Twelve ports. One manifest. Each lane private by design.",
               bullets: [
                 "Live artist advancing with deliverables",
                 "Proposals signed in place — twenty-three block types",
-                "Per-persona Know-Before-You-Go door passes",
+                "Per-persona Know-Before-You-Go boarding passes",
               ],
               href: "/solutions/gvteway",
             },
             {
               slug: "compvss",
-              eyebrow: "COMPVSS · The Floor",
-              title: "The night, in your pocket.",
-              body: "Gate scan, shift clock-in, medic triage, crisis alerts, driver manifest, guard tour. Offline-first. The tower can tap out — you don&apos;t.",
+              eyebrow: "COMPVSS · The Open Deck",
+              title: "The night, on the water.",
+              body: "Gate scan, shift clock-in, medic triage, crisis alerts, driver manifest, guard tour. Offline-first. Sails on when the signal taps out.",
               bullets: [
                 "Sub-100ms QR + barcode scans, signal or none",
                 "Shift check-in with meal credits and breaks",
@@ -173,7 +173,7 @@ export default function Home() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Backstage pass <ArrowRight size={12} />
+                Chart the room <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -182,36 +182,85 @@ export default function Home() {
 
       <StatStrip
         stats={[
-          { value: "15k+", label: "guests on the list" },
+          { value: "15k+", label: "guests on the manifest" },
           { value: "98%", label: "riders landed on time" },
-          { value: "14→2", label: "days from load-out to invoice" },
-          { value: "<100ms", label: "gate scan, offline or on" },
+          { value: "14→2", label: "days from wrap to invoice" },
+          { value: "<100ms", label: "gate scan, signal or none" },
         ]}
       />
+
+      {/* Three-Act Journey */}
+      <section className="mx-auto max-w-6xl px-6 py-16">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">The Voyage</div>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl text-balance">
+            Every Production Has Three Acts.
+          </h2>
+          <p className="mt-3 text-sm text-[var(--text-secondary)]">
+            The Atlas holds all three. From the first pitch to the homecoming log book.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
+          {[
+            {
+              act: "ACT I",
+              title: "Depart",
+              body: "The pitch becomes a contract. The team gets cast. The advance lands. The manifest opens. Proposals are signed in place, POs route in hours, the rider hits the inbox before the hold expires.",
+              stops: ["Proposals + e-sig", "Contracts + phase gates", "Crew cast + credentials", "Advancing · 16 deliverables", "Manifest + ticketing open"],
+            },
+            {
+              act: "ACT II",
+              title: "Sail",
+              body: "Load-in hits. The room opens. Twelve ports of call receive their guests. The crew clocks on. The gate scans. The medic triages. The weather shifts — you adjust the itinerary without touching the manifest.",
+              stops: ["Gate + ticket scan", "Shift check-in + meal credits", "Live dispatch + A&D", "Medic + safeguarding intake", "Crisis comms + run-of-show"],
+            },
+            {
+              act: "ACT III",
+              title: "Return",
+              body: "Load-out starts at sunrise. Vendors get paid out by Monday. The recap writes itself from the log book. The legacy folder holds every cue, every scan, every signature — searchable, exportable, yours.",
+              stops: ["Vendor payouts · ACH/card/wire", "Closeout + disposition", "AI-written recap from your data", "Immutable audit trail", "Knowledge Base for next crossing"],
+            },
+          ].map((a) => (
+            <div key={a.act} className="surface-raised p-6">
+              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--text-muted)]">{a.act}</div>
+              <h3 className="mt-2 text-2xl font-semibold tracking-tight">{a.title}</h3>
+              <p className="mt-3 text-sm text-[var(--text-secondary)]">{a.body}</p>
+              <ul className="mt-5 space-y-1.5 text-xs text-[var(--text-secondary)]">
+                {a.stops.map((s) => (
+                  <li key={s} className="flex items-start gap-2">
+                    <span className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full" style={{ background: "var(--org-primary)" }} />
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Feature grid */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">The Rig</div>
+          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">The Itinerary</div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl text-balance">
-            Everything the Room Needs.
+            Every Port, Every Act.
           </h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
-            Written by producers, for the producers who ship the nights.
+            Written by the taste-makers&apos; studio, for the producers who curate the crossing.
           </p>
         </div>
         <div className="mt-10">
           <FeatureGrid
             cols={4}
             features={[
-              { icon: FileSignature, title: "Proposals · signed live", body: "Twenty-three block types. Sign-in-place. One URL stands in for the PDF thread.", href: "/features/proposals" },
-              { icon: Sparkles, title: "KBYG door passes", body: "One guide, twelve reads. Every persona sees its own lane.", href: "/features/guides" },
-              { icon: QrCode, title: "Gate + ticket scan", body: "Sub-100ms scan, offline or on. Precise at 15k/night.", href: "/features/ticketing" },
+              { icon: FileSignature, title: "Proposals · signed live", body: "Twenty-three block types. E-sign in place. The first port every voyage needs.", href: "/features/proposals" },
+              { icon: Sparkles, title: "Boarding passes (KBYG)", body: "One itinerary, twelve reads. Every pass holder sees their own lane.", href: "/features/guides" },
+              { icon: QrCode, title: "Gate + manifest scan", body: "Sub-100ms scan, signal or none. Calm at fifteen thousand a night.", href: "/features/ticketing" },
               { icon: Users, title: "Advancing", body: "Riders, input lists, stage plots, catering, travel — typed, not texted.", href: "/features/advancing" },
               { icon: DollarSign, title: "Finance + payouts", body: "Invoices, expenses, budgets, live vendor payouts. ACH, card, wire.", href: "/features/finance" },
-              { icon: ClipboardCheck, title: "Procurement", body: "Reqs, POs, vendor COIs, W-9s — one file cabinet, quiet as the back bar.", href: "/features/procurement" },
+              { icon: ClipboardCheck, title: "Procurement", body: "Reqs, POs, vendor COIs, W-9s — one chart cabinet, quietly archived.", href: "/features/procurement" },
               { icon: Zap, title: "AI runner", body: "Drafts riders, recaps, and RFPs from your manifest — never the public internet.", href: "/features/ai" },
-              { icon: ShieldCheck, title: "Tour-grade security", body: "Signed DPA. Immutable audit log. 99.9% uptime. Members&apos;-Suite standard.", href: "/features/compliance" },
+              { icon: ShieldCheck, title: "Charter-grade security", body: "Signed DPA. Immutable audit log. 99.9% uptime. Private-charter standard.", href: "/features/compliance" },
             ]}
           />
         </div>
@@ -219,19 +268,19 @@ export default function Home() {
 
       {/* Built for section */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="text-3xl font-semibold tracking-tight">The Rooms We Ship.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Crossings We Chart.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {[
             { slug: "live-events", title: "Residencies + nights", sub: "Sold-out weeks, recurring programming" },
             { slug: "fabrication", title: "Scenic + fabrication", sub: "Build shops, custom installs" },
-            { slug: "touring", title: "Touring", sub: "Multi-city runs, per-city advancing" },
+            { slug: "touring", title: "Touring", sub: "Multi-port runs, per-city advancing" },
             { slug: "corporate", title: "Private programs", sub: "Launches, summits, closed-room" },
           ].map((x) => (
             <Link key={x.slug} href={`/solutions/${x.slug}`} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{x.title}</div>
               <div className="mt-1 text-xs text-[var(--text-muted)]">{x.sub}</div>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                Walk it <ArrowRight size={12} />
+                Chart it <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -244,27 +293,27 @@ export default function Home() {
           <div className="grid gap-10 p-10 md:grid-cols-2 md:items-center">
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">The Studio</div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">Written by Producers. For the Ones Who Ship the Nights.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">The Taste-Makers&apos; Studio.</h2>
               <p className="mt-4 text-sm text-[var(--text-secondary)]">
-                The Atlas is a decade of ship-it-Saturday instinct made quiet and precise. Every module came out of a load-in that didn&apos;t go to plan. Every tab in the sidebar is a thing we were tired of building twice.
+                The Atlas is a decade of crossings made quiet and precise. Every room came out of a load-in that didn&apos;t go to plan. Every column on the itinerary is a thing we were tired of charting twice.
               </p>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">
-                One manifest. Three rooms. Your org&apos;s data private by architecture — walled at the database, not in the marketing. Built for the producers who book the rooms and don&apos;t post about it.
+                One manifest. Three rooms. Your org&apos;s data private by architecture — walled at the database, not in the marketing. Written for the producers who curate the rooms people fly in for.
               </p>
               <div className="mt-6">
-                <Button href="/about" variant="secondary" size="sm">Read the Credo</Button>
+                <Button href="/about" variant="secondary" size="sm">Read the Log Book</Button>
               </div>
             </div>
             <ul className="space-y-3 text-sm">
               {[
                 "Your manifest walled off at the database — private by architecture",
-                "Live vendor payouts — ACH, card, international wire. Settle clean.",
-                "File shares that self-destruct. No public buckets. No 2 a.m. leaks.",
-                "Offline gate scan — the cell tower&apos;s problem, not yours",
-                "AI grounded in your lineup, crew, and budget — never the public internet",
+                "Live vendor payouts — ACH, card, international wire. Settle on return.",
+                "File shares that self-expire. No public buckets. No 2 a.m. leaks.",
+                "Offline gate scan — the cell tower&apos;s problem, not the voyage&apos;s",
+                "AI grounded in your manifest — never the public internet",
                 "Every change logged — who, when, before, after. Forever.",
-                "Three rooms, one Atlas: console, door, floor",
-                "KBYG door passes — one manifest, every persona its own view",
+                "Three rooms, one Atlas: bridge, ports of call, open deck",
+                "Boarding passes (KBYG) — one itinerary, every pass holder its own read",
               ].map((x) => (
                 <li key={x} className="flex items-start gap-2">
                   <span className="status-dot status-dot-success mt-2" />
@@ -277,7 +326,7 @@ export default function Home() {
       </section>
 
       <FAQSection
-        title="From the Studio · FAQ"
+        title="From the Log Book · FAQ"
         faqs={HOME_FAQ}
       />
 
@@ -289,50 +338,50 @@ export default function Home() {
 const HOME_FAQ = [
   {
     q: "What is the Atlas?",
-    a: "The operating system for experiential producers. Three rooms — ATLVS (the office), GVTEWAY (the door), COMPVSS (the floor) — sharing one manifest. Written by the producers who ship the nights, for the ones who do the same.",
+    a: "The itinerary platform for cultural tastemakers. Three rooms — ATLVS (the bridge), GVTEWAY (the ports of call), COMPVSS (the open deck) — sharing one manifest. Every production is a voyage with three acts; the Atlas holds all three.",
   },
   {
     q: "Who is it written for?",
-    a: "The producer running multi-night residencies, festival programs, brand activations, touring productions, experiential campaigns. The one who has staffed a 15,000-guest Saturday and a 40-guest private dinner in the same month. If that sounds like your week, this was written for you.",
+    a: "The cultural tastemaker. The producer running multi-night residencies, festival programs, brand activations, touring productions, experiential campaigns. The one who has booked a 15,000-guest Saturday and a 40-guest private dinner in the same week.",
   },
   {
-    q: "Which rooms do you run well?",
-    a: "Residencies, sold-out weeks, touring runs, scenic + fab shops, private launches, corporate summits, experiential campaigns, immersive installations, broadcast compounds. If it has a call sheet and a guest list, it belongs here.",
+    q: "Which crossings do you chart well?",
+    a: "Residencies, sold-out weeks, touring runs, scenic and fabrication shops, private launches, corporate summits, experiential campaigns, immersive installations, broadcast compounds. If it has an itinerary and a manifest, it belongs here.",
   },
   {
     q: "What are ATLVS, GVTEWAY, and COMPVSS?",
-    a: "Three rooms. ATLVS — the production studio runs here (projects, finance, procurement, people, AI). GVTEWAY — twelve personas, each with their own door (artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete). COMPVSS — the floor PWA: gate scan, shift check-in, incident, medic, driver, guard, warehouse.",
+    a: "Three rooms. ATLVS — the bridge (projects, finance, procurement, people, AI). GVTEWAY — twelve ports of call, one per persona (artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete). COMPVSS — the open deck PWA: gate scan, shift check-in, incident, medic, driver, guard, warehouse.",
   },
   {
-    q: "How does the door work?",
-    a: "GA is open to everyone — free, forever. Three seats, basic projects and ticketing. All-Access steps you up. Headliner opens the studio. Festival is the Members' Suite. Full ticket chart at /pricing.",
+    q: "How does passage work?",
+    a: "GA is open — free, forever. Three seats, basic crossings. All-Access steps you up. Headliner opens the bridge. Private Charter is the Admiral&apos;s table. Full passage chart at /pricing.",
   },
   {
     q: "How do the payouts move?",
-    a: "Clients settle by card or ACH. Vendors get paid live — ACH, card, international wire. We never touch the money; payouts route through your connected Stripe account. Settle clean, settle fast.",
+    a: "Clients settle by card or ACH. Vendors get paid on the open water — ACH, card, international wire. We never touch the money; payouts route through your connected Stripe account. Settle clean, settle fast.",
   },
   {
-    q: "Venue Wi-Fi retires at sunset. Does the floor?",
-    a: "No. COMPVSS is offline-first. The gate scanner, the shift clock-in, the incident form — all keep shipping when the cell tower taps out. Everything queues. Everything syncs when signal returns. No scan goes missing.",
+    q: "Venue Wi-Fi retires at sunset. Does the deck?",
+    a: "No. COMPVSS sails offline-first. The gate scanner, the shift clock-in, the incident form — all keep shipping when the cell tower taps out. Everything queues. Everything syncs when signal returns.",
   },
   {
     q: "How tight is the privacy?",
-    a: "Tight. Your manifest is walled off at the database layer — private by architecture. Every change writes to an immutable audit log. File shares auto-expire. Signed DPA and SOC-2 attestation land on Festival tier. Full security posture at /trust.",
+    a: "Tight. Your manifest is walled at the database layer — private by architecture. Every change writes to an immutable log. File shares self-expire. Signed DPA and SOC-2 attestation land on Private Charter. Full posture at /trust.",
   },
   {
     q: "Is the AI useful or performative?",
-    a: "Useful. It reads your projects, budgets, crew, and schedule — never the public internet — and drafts riders, RFPs, call sheets, recaps, and safety briefings on demand. Every thread logs to your workspace. Nothing leaks out.",
+    a: "Useful. It reads your manifest — never the public internet — and drafts riders, RFPs, call sheets, recaps, and safety briefings on demand. Every thread logs to your workspace.",
   },
   {
-    q: "What's a KBYG door pass?",
-    a: "Know-Before-You-Go. One guide, twelve personas, twelve different reads. Artists see riders + catering + times. Crew sees call sheet + PPE + radio. Guests see logistics + public times. Written once in ATLVS, rendered per lane in GVTEWAY and COMPVSS.",
+    q: "What&apos;s a KBYG boarding pass?",
+    a: "Know-Before-You-Go. One itinerary, twelve personas, twelve different reads. Artists see riders + catering + times. Crew sees call sheet + PPE + radio. Guests see logistics + public times. Written once in ATLVS, rendered per lane in GVTEWAY and COMPVSS.",
   },
   {
-    q: "Can I take my manifest with me?",
-    a: "Anytime. CSV exports on every tier. Full data exports on Festival. You own the manifest — full stop.",
+    q: "Can I take the manifest with me?",
+    a: "Anytime. CSV exports on every tier. Full data exports on Private Charter. You own the manifest — full stop.",
   },
   {
-    q: "How do I get on the list?",
-    a: "Hit \"Get on the List\" — thirty seconds. Or request a private walkthrough with someone who's booked the rooms you're trying to run.",
+    q: "How do I book passage?",
+    a: "Hit \"Book Passage\" — thirty seconds to the open sea. Or request a captain&apos;s briefing with someone who&apos;s charted the rooms you&apos;re running.",
   },
 ];

@@ -49,19 +49,19 @@ export const metadata: Metadata = {
     template: "%s · Second Star Technologies",
   },
   description:
-    "ATLVS · GVTEWAY · COMPVSS — the Atlas for experiential producers. The office, the door, the floor. Written for the rooms people talk about.",
+    "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. The bridge, the ports of call, the open deck. From horizon to homecoming.",
   keywords: ["production management", "live events", "fabrication", "advancing", "ticketing", "PWA", "ATLVS", "GVTEWAY", "COMPVSS", "Second Star Technologies"],
   manifest: "/manifest.json",
   openGraph: {
     title: "Second Star Technologies",
-    description: "ATLVS · GVTEWAY · COMPVSS — the Atlas for experiential producers.",
+    description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
     siteName: "Second Star Technologies",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Second Star Technologies",
-    description: "ATLVS · GVTEWAY · COMPVSS — the Atlas for experiential producers.",
+    description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
   },
   robots: { index: true, follow: true },
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Second Star" },
@@ -107,7 +107,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             name: "Second Star Technologies",
             url: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
             description:
-              "ATLVS · GVTEWAY · COMPVSS — the Atlas for experiential producers. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
+              "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
             logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech"}/og/logo.png`,
           })}
         />

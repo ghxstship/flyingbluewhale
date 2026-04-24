@@ -11,79 +11,79 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, faqSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "Tickets — GA, All-Access, Headliner, Festival",
+  title: "Passage — Four Cabins, One Manifest",
   description:
-    "Four tiers. No per-seat tax. No per-scan tax. GA is free forever. All-Access is $49/mo. Headliner is $199/mo. Festival is custom. Doors open the second you sign up.",
+    "Four ways to board. Day Pass is free forever. Festival Pass is $49/mo. Voyager is $199/mo. Private Charter is custom. No per-seat tax. No per-scan tax.",
   path: "/pricing",
   keywords: ["production software pricing", "event management software cost", "Second Star Technologies pricing", "ATLVS pricing", "GVTEWAY pricing", "COMPVSS pricing", "stakeholder portal pricing"],
-  ogImageEyebrow: "Tickets",
-  ogImageTitle: "Four tiers. No per-seat tax.",
+  ogImageEyebrow: "Passage",
+  ogImageTitle: "Four cabins. One manifest.",
 });
 
 const TIERS = [
   {
-    tier: "GA",
+    tier: "Day Pass",
     price: "$0",
     per: "forever",
-    description: "Freelancers + single-night teams. The list is open.",
+    description: "Freelancers + single-night crossings. The manifest is open.",
     features: [
       "Basic projects + tasks",
-      "Guest + artist doors",
-      "Up to 3 people on the list",
-      "Up to 100 tickets / event",
+      "Guest + artist ports",
+      "Up to 3 pass holders",
+      "Up to 100 boarding passes / voyage",
       "Community room",
     ],
-    cta: "Doors open",
+    cta: "Book passage",
     href: "/signup",
   },
   {
-    tier: "All-Access",
+    tier: "Festival Pass",
     price: "$49",
     per: "month per org",
-    description: "Small production teams shipping their first season.",
+    description: "Small studios charting their first season.",
     features: [
-      "Everything on GA",
+      "Everything on Day Pass",
       "Invoicing + expenses + budgets",
       "Live advancing deliverables",
-      "Up to 10 on the list",
-      "Up to 2,000 tickets / event",
+      "Up to 10 pass holders",
+      "Up to 2,000 boarding passes / voyage",
       "Email support",
     ],
     cta: "14-night soundcheck",
     href: "/signup",
   },
   {
-    tier: "Headliner",
+    tier: "Voyager",
     price: "$199",
     per: "month per org",
-    description: "Orgs running multiple shows a month. Tour buses start here.",
+    description: "Studios running multiple crossings a month. Taste-makers start here.",
     features: [
-      "Everything on All-Access",
+      "Everything on Festival Pass",
       "Full procurement + live vendor payouts",
       "AI runner grounded in your manifest",
       "Proposals signed in place",
-      "Door-pass (KBYG) CMS",
-      "Unlimited people on the list",
-      "Priority support + onboarding walkthrough",
+      "Boarding-pass (KBYG) CMS",
+      "Unlimited pass holders",
+      "Priority concierge + onboarding",
     ],
     cta: "14-night soundcheck",
     href: "/signup",
     highlight: true,
   },
   {
-    tier: "Festival",
+    tier: "Private Charter",
     price: "Custom",
     per: "",
-    description: "Agencies, touring companies, festivals, OCOG-scale.",
+    description: "Agencies, touring companies, festivals, OCOG-scale crossings.",
     features: [
-      "Everything on Headliner",
-      "Deep-reasoning AI co-headliner",
+      "Everything on Voyager",
+      "Deep-reasoning AI co-pilot",
       "Custom roles + access policies",
       "SOC 2 attestation pack + signed DPA",
       "Dedicated CSM + 99.9% uptime SLA",
       "Custom integrations (we build with you)",
     ],
-    cta: "Call the promoter",
+    cta: "Call the studio",
     href: "/contact",
   },
 ];
@@ -173,40 +173,40 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
 
 const FAQS = [
   {
-    q: "Is this priced per seat?",
-    a: "Per org, flat. Headliner is unlimited people on the list for $199/month. Your studio getting bigger never becomes a surprise line item.",
+    q: "Is passage priced per seat?",
+    a: "Per org, flat. Voyager is unlimited pass holders for $199/month. The studio getting bigger never becomes a surprise line item.",
   },
   {
-    q: "Is there really a free ticket?",
-    a: "GA is free, forever. Basic projects, guest + artist doors, three seats, up to 100 tickets per event. No card required. The list is open.",
+    q: "Is there really a free passage?",
+    a: "Day Pass is free, forever. Basic projects, guest + artist ports, three pass holders, up to 100 boarding passes per voyage. No card required. The manifest is open.",
   },
   {
     q: "How does the 14-night soundcheck work?",
-    a: "All-Access and Headliner unlock every feature in the tier for fourteen nights. No card up front. Don&apos;t upgrade by night 14? You drop back to GA — your manifest stays right where you left it.",
+    a: "Festival Pass and Voyager unlock every feature in the cabin for fourteen nights. No card up front. Don&apos;t upgrade by night 14? You drop back to Day Pass — your manifest stays right where you left it.",
   },
   {
-    q: "Can I change tiers later?",
-    a: "Anytime. Upgrades hit instantly. Downgrades kick in at the end of the billing period. Nothing gets deleted — features above your tier go read-only until you come back.",
+    q: "Can I change cabins later?",
+    a: "Anytime. Upgrades hit instantly. Downgrades kick in at the end of the billing period. Nothing gets deleted — features above your cabin go read-only until you come back.",
   },
   {
     q: "Nonprofits and community programs?",
-    a: "Thirty percent off All-Access and Headliner for registered nonprofits and community-arts programs. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent. We like the good rooms.",
+    a: "Thirty percent off Festival Pass and Voyager for registered nonprofits and community-arts programs. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent. We like the good crossings.",
   },
   {
     q: "Do you tax per scan?",
-    a: "No. Scans are included. Scan till the doors close, every weekend of the season.",
+    a: "No. Scans are included. Scan till the sun comes up, every weekend of the season.",
   },
   {
-    q: "What does Festival unlock over Headliner?",
-    a: "Deep-reasoning AI co-headliner, custom roles and access policies, SOC-2 attestation pack, signed DPA, dedicated CSM, 99.9% uptime SLA, custom integrations we build with you. Members&apos;-Suite standard.",
+    q: "What does Private Charter unlock over Voyager?",
+    a: "Deep-reasoning AI co-pilot, custom roles and access policies, SOC-2 attestation pack, signed DPA, dedicated CSM, 99.9% uptime SLA, custom integrations we build with you. Admiral&apos;s-table standard.",
   },
   {
     q: "Can I self-host?",
-    a: "Self-host ships on the Festival tier with a source-available license. Our managed infrastructure is the recommended path — it handles security, storage, and uptime. Call the studio if you need on-prem.",
+    a: "Self-host ships on the Private Charter with a source-available license. Our managed infrastructure is the recommended route — it handles security, storage, and uptime. Call the studio if you need on-prem.",
   },
   {
     q: "What if I cancel? Does my manifest survive?",
-    a: "Export everything — CSV or JSON — anytime, from the console. After cancel, your data lives thirty days (re-subscribe and you&apos;re back) and then purges. Signed logs of the purge on request. You own the manifest.",
+    a: "Export everything — CSV or JSON — anytime, from the chart room. After cancel, your data lives thirty days (re-subscribe and you&apos;re back) and then purges. Signed logs of the purge on request. You own the manifest.",
   },
 ];
 
@@ -229,12 +229,12 @@ export default function PricingPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Tickets · on sale now</div>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Passage · the manifest opens</div>
         <h1 className="mx-auto mt-3 max-w-3xl text-5xl font-semibold tracking-tight sm:text-6xl">
-          Four Tickets. Per Org, Not Per Seat.
+          Four Cabins. Per Org, Not Per Seat.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Every tier: manifest walled off, integrations open, audit log immutable. Upgrade the night the tour outgrows the room. Nothing extra for your studio getting bigger.
+          Every tier: manifest walled off, integrations open, audit log immutable. Upgrade the night the voyage outgrows the cabin. Nothing extra for the studio getting bigger.
         </p>
       </section>
 
@@ -270,19 +270,19 @@ export default function PricingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">The Full Bill</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">The Full Itinerary</h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-          Every act at every tier. If the act you need is on Festival, <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">call the studio</a> — we usually make it work on Headliner.
+          Every port at every cabin. If the port you need is on Private Charter, <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">call the studio</a> — we usually make it work on Voyager.
         </p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full min-w-[720px] text-left">
             <thead>
               <tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider text-[var(--text-muted)]">
-                <th className="py-3 pr-4 font-semibold">Act on the lineup</th>
-                <th className="py-3 pr-4 text-center font-semibold">GA</th>
-                <th className="py-3 pr-4 text-center font-semibold">All-Access</th>
-                <th className="py-3 pr-4 text-center font-semibold">Headliner</th>
-                <th className="py-3 pr-4 text-center font-semibold">Festival</th>
+                <th className="py-3 pr-4 font-semibold">Port of call</th>
+                <th className="py-3 pr-4 text-center font-semibold">Day Pass</th>
+                <th className="py-3 pr-4 text-center font-semibold">Festival Pass</th>
+                <th className="py-3 pr-4 text-center font-semibold">Voyager</th>
+                <th className="py-3 pr-4 text-center font-semibold">Private Charter</th>
               </tr>
             </thead>
             <tbody>
@@ -312,8 +312,8 @@ export default function PricingPage() {
       <FAQSection title="Pricing FAQ" faqs={FAQS} />
 
       <CTASection
-        title="The List Is Open."
-        subtitle="Two-minute soundcheck to get on. No card. No forced call. GA is yours, forever."
+        title="The Manifest Is Open."
+        subtitle="Two-minute soundcheck to book passage. No card. No forced call. The Day Pass is yours, forever."
       />
     </div>
   );

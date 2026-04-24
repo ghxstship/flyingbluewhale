@@ -5,9 +5,9 @@ export const SITE = {
   shortName: "Second Star",
   domain: "secondstar.tech",
   baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
-  tagline: "The operating system for live events, fabrication, and creative ops",
+  tagline: "Run the show. Not the spreadsheets.",
   description:
-    "ATLVS, GVTEWAY, and COMPVSS — the unified production suite from Second Star Technologies for live events and fabrication teams. Internal operations console, external stakeholder portals, and a field-ready mobile PWA on one Postgres-backed, RLS-secured platform.",
+    "ATLVS · GVTEWAY · COMPVSS — one rig for the whole run-of-show. The production office, every stakeholder&apos;s door, and the crew PWA on the floor. Postgres-backed, RLS-secured, scan-proof.",
   twitter: "@secondstartech",
   /** Parent company chain — surfaces in Organization JSON-LD + legal footer. */
   parent: {
@@ -32,9 +32,9 @@ export const SITE = {
     "creative operations platform",
   ],
   apps: {
-    atlvs:   { name: "ATLVS",   tagline: "Internal operations console",       color: "#DC2626" },
-    gvteway: { name: "GVTEWAY", tagline: "External stakeholder portals",      color: "#2563EB" },
-    compvss: { name: "COMPVSS", tagline: "Field-ready mobile PWA",            color: "#D97706" },
+    atlvs:   { name: "ATLVS",   tagline: "The office · runs the show from the desk",     color: "#DC2626" },
+    gvteway: { name: "GVTEWAY", tagline: "The door · every stakeholder&apos;s own entrance", color: "#2563EB" },
+    compvss: { name: "COMPVSS", tagline: "The floor · runs the night from your pocket", color: "#D97706" },
   },
 } as const;
 

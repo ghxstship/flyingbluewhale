@@ -14,13 +14,13 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "GVTEWAY — stakeholder portals for production",
+  title: "GVTEWAY — twelve stakeholder doors. One manifest.",
   description:
-    "GVTEWAY is the stakeholder portal from Second Star Technologies. One tailored workspace per persona — artist, vendor, client, sponsor, guest, crew. Interactive proposals, artist advancing, role-scoped Know Before You Go guides.",
+    "Every stakeholder gets their own entrance. Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Signed proposals, live advancing, per-persona door passes.",
   path: "/solutions/gvteway",
   keywords: ["GVTEWAY", "stakeholder portal", "artist portal", "vendor portal", "client portal", "event portal software"],
   ogImageEyebrow: "GVTEWAY",
-  ogImageTitle: "External portals that do the work",
+  ogImageTitle: "Every stakeholder. Their own entrance.",
 });
 
 export default function GvtewayPage() {
@@ -43,35 +43,39 @@ export default function GvtewayPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">GVTEWAY · Stakeholder portals</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Loop In Everyone Outside.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">GVTEWAY · the door</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Every Stakeholder. Their Own Entrance.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Stop emailing PDFs. Every stakeholder gets their own workspace with exactly the data they need —
-          and nothing else. Artists advance. Vendors submit quotes. Clients sign proposals. Guests see their
-          tickets. Crew gets the call sheet. Same project, six tailored views.
+          Stop emailing PDFs to twelve different people at midnight. Every stakeholder gets their own door, their own data, their own lane. Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same show — a dozen different reads, zero crossover.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Start free</Button>
-          <Button href="/contact" variant="secondary">Book a demo</Button>
+          <Button href="/signup">Doors open</Button>
+          <Button href="/contact" variant="secondary">Backstage walkthrough</Button>
         </div>
       </section>
 
       {/* Personas */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Six Persona Portals.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Twelve Doors. One Manifest.</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each persona sees its own lane — with a nav, flows, and deliverables built for their role.
+          Every persona gets its own entrance — nav, flows, deliverables built for their lane. The artist never sees the sponsor&apos;s invoice. The delegation never sees the vendor&apos;s COI. Nobody confused, nobody oversharing.
         </p>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
             features={[
-              { icon: Mic2, title: "Artist", body: "Tech rider, hospitality rider, input list, stage plot, crew list, guest list, schedule, travel." },
-              { icon: Truck, title: "Vendor", body: "Submissions, pull list, purchase orders, invoices, COI and W-9 uploads." },
-              { icon: Users, title: "Client", body: "Proposals signed in place, deliverables, invoices payable by card or ACH, messages, shared files." },
-              { icon: Award, title: "Sponsor", body: "Activations, brand assets, reporting, and impression tracking." },
-              { icon: Ticket, title: "Guest", body: "Tickets — buy, claim, transfer — plus schedule and day-of logistics (parking, entrances, rideshare)." },
-              { icon: HardHat, title: "Crew", body: "Call sheet, time submission, advance requests, safety briefing, and SOPs." },
+              { icon: Mic2, title: "Artist", body: "Tech rider, hospitality rider, input list, stage plot, guest list, schedule, travel." },
+              { icon: Truck, title: "Vendor", body: "Submissions, pull list, POs, invoices, COI + W-9 uploads, training." },
+              { icon: Users, title: "Client", body: "Proposals signed in place, deliverables, invoices by card/ACH, messages, files." },
+              { icon: Award, title: "Sponsor", body: "Entitlements tracker, activations, brand assets, reporting, impressions." },
+              { icon: Ticket, title: "Guest", body: "Tickets — buy, claim, transfer. Schedule. Day-of logistics. Rideshare hand-off." },
+              { icon: HardHat, title: "Crew", body: "Call sheet, time submission, advances, safety briefing, SOPs." },
+              { icon: Users, title: "Delegation", body: "Entries, rate card, training venues, meetings, cases, transport, accommodation, visa." },
+              { icon: BookOpen, title: "Media", body: "MPC rate card, accommodation, shuttles, press-conf RSVP, info-on-demand." },
+              { icon: Award, title: "VIP + Hospitality", body: "Dedicated fleet, hotel allocation, itinerary, guest list, package access." },
+              { icon: HardHat, title: "Volunteer", body: "Application, training, shift schedule, uniform pickup, door pass." },
+              { icon: Mic2, title: "Athlete", body: "Training bookings, resident services, safeguarding, visa, privacy self-service." },
+              { icon: Share2, title: "Privacy (all)", body: "Every persona gets DSAR self-service + consent management. GDPR, handled." },
             ]}
           />
         </div>
@@ -82,30 +86,26 @@ export default function GvtewayPage() {
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           <div className="surface-raised p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">
-              <Share2 size={14} /> Interactive proposals
+              <Share2 size={14} /> Proposals · signed live
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Proposals that close themselves.</h3>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Proposals That Close Themselves.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Twenty-three block types, scroll-spy navigation, per-phase contract refs, add-on pickers with live
-              totals, e-sign in place (typed or drawn), revocable share links, version history, and engagement
-              analytics on every scroll. Clean PDF export when you need one.
+              23 block types. Scroll-spy nav. Per-phase contract refs. Add-on pickers with live totals. E-sign in place — typed or drawn. Revocable share links. Version history. Engagement analytics on every scroll. Ships a clean PDF when your legal team still wants paper.
             </p>
             <Link href="/features/proposals" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]">
-              Explore proposals →
+              See the run-sheet →
             </Link>
           </div>
           <div className="surface-raised p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">
-              <BookOpen size={14} /> Event guides (KBYG)
+              <BookOpen size={14} /> KBYG · door passes
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Know Before You Go, built in.</h3>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Write It Once. Everybody Reads Theirs.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Write a single KBYG in ATLVS. It renders role-scoped in the portal and in the field app.
-              Artists see riders, crew sees radio channels and SOPs, guests see logistics. Sixteen section
-              types cover every production detail.
+              One Know-Before-You-Go doc in ATLVS. It renders per-persona in the portal and in the field PWA. Artists get riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. 16 section types. One source, twelve reads.
             </p>
             <Link href="/features/guides" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]">
-              Explore event guides →
+              See the door pass →
             </Link>
           </div>
         </div>
@@ -116,19 +116,18 @@ export default function GvtewayPage() {
         <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Security</div>
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight">The link is the access.</h3>
+            <h3 className="mt-3 text-3xl font-semibold tracking-tight">The Link Is the Access.</h3>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Every portal is scoped to a single project. Share links are signed, expirable, revocable, and
-              logged. There's no way to slip across projects — access is enforced on the data, not in the app.
+              Every door maps to one project. Share links are signed, expirable, revocable, and logged. Nobody slips from the sponsor lounge into the artist compound — access is enforced on the data, not just in the UI.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "Per-project portals — one link, one project",
-              "Per-persona nav, per-persona data",
-              "Signed share links with expiry and revocation",
-              "Auto-expiring file download links",
-              "Every view captured in engagement analytics",
+              "Per-project doors — one link, one project",
+              "Per-persona nav, per-persona manifest",
+              "Signed share links with expiry + revocation",
+              "File downloads auto-expire — no backstage leaks",
+              "Every view logged in engagement analytics",
               "E-sign in place — typed or drawn",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
@@ -145,28 +144,28 @@ export default function GvtewayPage() {
         faqs={[
           {
             q: "What is GVTEWAY?",
-            a: "GVTEWAY is the stakeholder portal from Second Star Technologies — the blue-branded app where everyone outside your org works. Each project has six persona views: artist, vendor, client, sponsor, guest, and crew.",
+            a: "The door. Blue-branded. Every stakeholder outside your org lives here. Twelve personas today — artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Each gets its own lane and only its own lane.",
           },
           {
-            q: "Do external stakeholders need to sign up?",
-            a: "No for read access — share a link, they're in. Yes if they want to contribute (submit a rider, upload a COI, sign a proposal). A lightweight signup creates a user scoped to that project only.",
+            q: "Do guests need to sign up?",
+            a: "Read-only? Share the link — they&apos;re in. Contributing (ridings, COIs, signatures)? A lightweight signup creates a user scoped to that project. Fastest two-step in the building.",
           },
           {
-            q: "Can I white-label a portal?",
-            a: "Yes, on Enterprise. Custom branding — logo, colors, email — and custom domains for your portals. Your clients see your brand; your vendors see your vendors' brand.",
+            q: "Can I white-label the door?",
+            a: "Yes — Festival tier. Your logo, your colors, your email, your custom domain. Clients see your brand. Vendors see your vendors&apos; brand. The building is always yours.",
           },
           {
             q: "How is data isolated between projects?",
-            a: "At the data layer. Every record is scoped to its organization and project. The link you share maps to a single project; no view can reach into another one.",
+            a: "At the database. Every record is scoped to its org + project. The link you share maps to one project — nobody walks out of the sponsor suite into the artist compound.",
           },
           {
-            q: "Can a single person have multiple personas?",
-            a: "Yes. Someone who's both a vendor on one project and a sponsor on another can switch cleanly from their portal gateway.",
+            q: "Can one person hold two door passes?",
+            a: "Yes. A vendor on Festival A and a sponsor on Festival B switches cleanly from their portal entryway. One login, two lanes.",
           },
         ]}
       />
 
-      <CTASection title="Ship portals in an afternoon" subtitle="Six personas wired by default. Customize as needed." />
+      <CTASection title="Ship Twelve Doors in an Afternoon." subtitle="Twelve personas wired default. Reskin if you want. Open it if you don&apos;t." />
     </div>
   );
 }

@@ -11,79 +11,79 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, faqSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "Pricing — Access, Core, Professional, Enterprise",
+  title: "Tickets — GA, All-Access, Headliner, Festival",
   description:
-    "Transparent pricing for Second Star Technologies. Start free for life on the Access tier. Scale to Core ($49/mo), Professional ($199/mo), or Enterprise. Every tier includes data walled off per organization and full integrations.",
+    "Four tiers. No per-seat tax. No per-scan tax. GA is free forever. All-Access is $49/mo. Headliner is $199/mo. Festival is custom. Doors open the second you sign up.",
   path: "/pricing",
   keywords: ["production software pricing", "event management software cost", "Second Star Technologies pricing", "ATLVS pricing", "GVTEWAY pricing", "COMPVSS pricing", "stakeholder portal pricing"],
-  ogImageEyebrow: "Pricing",
-  ogImageTitle: "Start free. Scale when you need to.",
+  ogImageEyebrow: "Tickets",
+  ogImageTitle: "Four tiers. No per-seat tax.",
 });
 
 const TIERS = [
   {
-    tier: "Access",
+    tier: "GA",
     price: "$0",
     per: "forever",
-    description: "For freelancers and single-show teams.",
+    description: "Freelancers + single-night teams. The list is open.",
     features: [
       "Basic projects + tasks",
-      "Guest + artist portals",
-      "Up to 3 users",
+      "Guest + artist doors",
+      "Up to 3 people on the list",
       "Up to 100 tickets / event",
-      "Community support",
+      "Community room",
     ],
-    cta: "Start free",
+    cta: "Doors open",
     href: "/signup",
   },
   {
-    tier: "Core",
+    tier: "All-Access",
     price: "$49",
     per: "month per org",
-    description: "For small production teams shipping their first season.",
+    description: "Small production teams shipping their first season.",
     features: [
-      "Everything in Access",
+      "Everything on GA",
       "Invoicing + expenses + budgets",
-      "Advancing deliverables",
-      "Up to 10 users",
+      "Live advancing deliverables",
+      "Up to 10 on the list",
       "Up to 2,000 tickets / event",
       "Email support",
     ],
-    cta: "Start 14-day trial",
+    cta: "14-night soundcheck",
     href: "/signup",
   },
   {
-    tier: "Professional",
+    tier: "Headliner",
     price: "$199",
     per: "month per org",
-    description: "For production orgs running multiple shows a month.",
+    description: "Orgs running multiple shows a month. Tour buses start here.",
     features: [
-      "Everything in Core",
-      "Full procurement with direct vendor payouts",
-      "AI assistant grounded in your data",
-      "Interactive proposals",
-      "Event guides CMS",
-      "Unlimited users",
-      "Priority support and onboarding",
+      "Everything on All-Access",
+      "Full procurement + live vendor payouts",
+      "AI runner grounded in your manifest",
+      "Proposals signed in place",
+      "Door-pass (KBYG) CMS",
+      "Unlimited people on the list",
+      "Priority support + onboarding walkthrough",
     ],
-    cta: "Start 14-day trial",
+    cta: "14-night soundcheck",
     href: "/signup",
     highlight: true,
   },
   {
-    tier: "Enterprise",
+    tier: "Festival",
     price: "Custom",
     per: "",
-    description: "For agencies, touring companies, festivals.",
+    description: "Agencies, touring companies, festivals, OCOG-scale.",
     features: [
-      "Everything in Professional",
-      "Deep-reasoning AI model",
-      "Custom roles and access policies",
-      "SOC 2 attestation package and signed DPA",
-      "Dedicated CSM and 99.9% uptime SLA",
-      "Custom integrations",
+      "Everything on Headliner",
+      "Deep-reasoning AI co-headliner",
+      "Custom roles + access policies",
+      "SOC 2 attestation pack + signed DPA",
+      "Dedicated CSM + 99.9% uptime SLA",
+      "Custom integrations (we build with you)",
     ],
-    cta: "Talk to sales",
+    cta: "Call the promoter",
     href: "/contact",
   },
 ];
@@ -173,44 +173,44 @@ const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; acces
 
 const FAQS = [
   {
-    q: "Do I have to pay per user?",
-    a: "No. We charge per org, not per seat. Professional is unlimited users for $199/month. Your team getting bigger never becomes a surprise line item.",
+    q: "Is this priced per seat?",
+    a: "No. Per org, flat. Headliner is unlimited people on the list for $199/month. Your team getting bigger never becomes a surprise line item on the 1st.",
   },
   {
-    q: "Is there a free tier?",
-    a: "Yes. Access is free forever — basic projects, guest and artist portals, up to 3 users, up to 100 tickets per event. No credit card required.",
+    q: "Is there really a free ticket?",
+    a: "Yes — GA is free forever. Basic projects, guest + artist doors, up to 3 people on the list, up to 100 tickets per event. No card required. The list is open.",
   },
   {
-    q: "How does the 14-day trial work?",
-    a: "Core and Professional include a 14-day free trial of every feature in the tier. No credit card up front. If you don't upgrade by day 14, you drop back to the free Access tier — your data stays.",
+    q: "How does the 14-night soundcheck work?",
+    a: "All-Access and Headliner unlock every feature in the tier for 14 days. No card up front. Don&apos;t upgrade by day 14? You drop back to GA — your manifest stays right where you left it.",
   },
   {
-    q: "Can I switch plans later?",
-    a: "Anytime. Upgrades are instant. Downgrades take effect at the end of the billing period. Nothing is ever deleted — features above your tier just become read-only.",
+    q: "Can I change tiers later?",
+    a: "Anytime. Upgrades hit instantly. Downgrades kick in at the end of the billing period. Nothing gets deleted — features above your tier just go read-only until you come back.",
   },
   {
-    q: "What about nonprofits and festivals?",
-    a: "Yes — 30% off Core and Professional for registered nonprofits and community arts festivals. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent.",
+    q: "Nonprofits and community festivals?",
+    a: "30% off All-Access + Headliner for registered nonprofits and community-arts festivals. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent. We like the good shows.",
   },
   {
-    q: "Do you charge per ticket scanned?",
-    a: "No. Scans are included. Some competitors charge per-scan fees that spike on festival weekends. We think that's hostile pricing. Scan as many tickets as your event requires.",
+    q: "Do you tax per scan?",
+    a: "No. Scans are free. Some gate platforms charge per-scan fees that spike the weekend your festival pops off. Hostile pricing. We don&apos;t do that. Scan till the doors close.",
   },
   {
-    q: "What does Enterprise add over Professional?",
-    a: "The deep-reasoning AI model, custom roles and access policies, a formal SOC 2 attestation package, a signed DPA, a dedicated customer success manager, a 99.9% uptime SLA, and custom integrations.",
+    q: "What does Festival unlock over Headliner?",
+    a: "Deep-reasoning AI co-headliner, custom roles + access policies, SOC-2 attestation pack, signed DPA, dedicated CSM, 99.9% uptime SLA, custom integrations we build with you. Tour-grade.",
   },
   {
-    q: "How does this price out vs. Asana, Monday, or Notion plus point tools?",
-    a: "Stacking Asana, a portal product, an AI add-on, a ticketing platform, and finance glue typically runs $500–$2000/month for a 10-person team. Professional is $199/month unlimited users and covers all of it natively. See /compare for detailed breakdowns.",
+    q: "How does this price out vs. Asana + Monday + Notion + point tools?",
+    a: "Stacking Asana + a portal product + an AI add-on + a ticketing platform + finance glue runs $500–$2000/month for a ten-person team. Headliner is $199/month unlimited people and covers every one of them natively. The bill&apos;s in /compare.",
   },
   {
     q: "Can I self-host?",
-    a: "Self-host is available on Enterprise with a source-available license. It's not our recommended deployment — our managed infrastructure handles security, storage, and uptime. Contact sales if you need on-prem.",
+    a: "Self-host ships on Festival with a source-available license. Not our recommended setup — our managed infra handles security, storage, and uptime. Ring the promoter if you need on-prem.",
   },
   {
-    q: "What happens to my data if I cancel?",
-    a: "You can export everything — CSV or JSON — anytime from the console. After cancellation your data is retained for 30 days (re-subscribe and it's back) and then purged. Signed logs of the purge are available on request.",
+    q: "What if I cancel? Does my manifest survive?",
+    a: "Export everything — CSV or JSON — anytime, from the console. After cancel, your data lives 30 days (re-subscribe and you&apos;re back) and then purges. Signed logs of the purge on request. You own the manifest. Period.",
   },
 ];
 
@@ -233,13 +233,12 @@ export default function PricingPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Pricing</div>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Tickets on sale now</div>
         <h1 className="mx-auto mt-3 max-w-3xl text-5xl font-semibold tracking-tight sm:text-6xl">
-          Start Free. Scale When You Need to. Per Org, Not Per Seat.
+          Four Tickets. No Per-Seat Tax. No Per-Scan Tax.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Every tier includes data walled off per organization, integrations, and an immutable audit log. Upgrade
-          anytime. No per-seat fees. No per-scan fees. No charge for your team getting bigger.
+          Every tier: manifest walled off, integrations open, audit log immutable. Upgrade the moment the tour outgrows the minivan. Zero charge for your team getting bigger.
         </p>
       </section>
 
@@ -275,19 +274,19 @@ export default function PricingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Feature Comparison</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">The Full Bill</h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-          Everything you get at each tier. If a feature you need is on Enterprise, <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">ask us</a> — we&apos;ll usually make it work on Professional.
+          Every act at every tier. If the act you need is on Festival, <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">call the promoter</a> — we usually make it work on Headliner.
         </p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full min-w-[720px] text-left">
             <thead>
               <tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider text-[var(--text-muted)]">
-                <th className="py-3 pr-4 font-semibold">Feature</th>
-                <th className="py-3 pr-4 text-center font-semibold">Access</th>
-                <th className="py-3 pr-4 text-center font-semibold">Core</th>
-                <th className="py-3 pr-4 text-center font-semibold">Professional</th>
-                <th className="py-3 pr-4 text-center font-semibold">Enterprise</th>
+                <th className="py-3 pr-4 font-semibold">Act on the lineup</th>
+                <th className="py-3 pr-4 text-center font-semibold">GA</th>
+                <th className="py-3 pr-4 text-center font-semibold">All-Access</th>
+                <th className="py-3 pr-4 text-center font-semibold">Headliner</th>
+                <th className="py-3 pr-4 text-center font-semibold">Festival</th>
               </tr>
             </thead>
             <tbody>
@@ -317,8 +316,8 @@ export default function PricingPage() {
       <FAQSection title="Pricing FAQ" faqs={FAQS} />
 
       <CTASection
-        title="Ship the next show on Second Star Technologies"
-        subtitle="Start free in under two minutes. No credit card. No forced sales call."
+        title="Doors at Six. Your Next Show at Seven."
+        subtitle="Two-minute soundcheck to get on the list. No card. No forced sales call. The GA tier is yours, forever."
       />
     </div>
   );

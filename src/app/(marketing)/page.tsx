@@ -15,9 +15,9 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, SITE } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Production OS for live events, touring, and experiential",
+  title: "Production OS for the show. Every show.",
   description:
-    "Run production on one platform — not ten. ATLVS for the office, GVTEWAY for your stakeholders, COMPVSS for the field. Every tool a production team needs, connected. Free to start.",
+    "One console runs the office. One portal loops in the guests. One PWA owns the field. ATLVS · GVTEWAY · COMPVSS — the whole lineup in one road case. Doors open free.",
   path: "/",
   keywords: [
     "production management software",
@@ -32,7 +32,7 @@ export const metadata: Metadata = buildMetadata({
     "GVTEWAY",
     "COMPVSS",
   ],
-  ogImageTitle: "Run production. Not spreadsheets.",
+  ogImageTitle: "Run the show. Not the spreadsheets.",
 });
 
 export default function Home() {
@@ -53,20 +53,18 @@ export default function Home() {
       {/* Hero */}
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">
-          Production OS · v1
+          Doors open · v1 · now on sale
         </div>
         <h1 className="mt-4 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
-          Run Production.<br />Not Spreadsheets.
+          Run the Show.<br />Not the Spreadsheets.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The operating system for live events, touring, experiential, fabrication, and broadcast
-          production. One platform for your office, your stakeholders, and the field. No more
-          checking four tabs to answer one question.
+          The operating system for festivals, tours, activations, fabrication, and broadcast. One console for the office. One portal for every guest, artist, vendor, and sponsor. One PWA for the crew on-site. Nobody refreshes a tab to ask what time the doors open.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
-          <Button href="/signup" size="lg">Start Free for Life</Button>
-          <Button href="/contact" size="lg" variant="secondary">Book a Demo</Button>
-          <Link href="/docs" className="btn btn-ghost btn-lg">View the Docs →</Link>
+          <Button href="/signup" size="lg">Doors Open — Free, Forever</Button>
+          <Button href="/contact" size="lg" variant="secondary">Backstage Walkthrough</Button>
+          <Link href="/docs" className="btn btn-ghost btn-lg">Read the Run-Sheet →</Link>
         </div>
 
         {/* M3-03 — Live portal preview. Anon visitors see real product chrome
@@ -94,7 +92,7 @@ export default function Home() {
             />
           </div>
           <p className="mt-3 text-center text-xs text-[var(--text-muted)]">
-            Live preview — exactly what a guest sees on their phone. No signup required.
+            That's a real door-pass — what a guest sees on their phone. No list. No login.
           </p>
         </div>
       </section>
@@ -105,14 +103,13 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-6 pt-10 pb-16">
         <div className="text-center">
           <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--text-muted)]">
-            Three apps · one platform
+            Tonight's lineup · three acts · one stage
           </div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
             ATLVS · GVTEWAY · COMPVSS
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-            Three connected apps — not a bundle of separately-bought tools with sync issues.
-            Your office, your stakeholders, and your crew are always reading from the same page.
+            Three acts on the same stage — no sync issues, no bundle tax, no integrations nobody owns. The office, the door, and the floor all reading from the same manifest.
           </p>
         </div>
 
@@ -120,37 +117,37 @@ export default function Home() {
           {[
             {
               slug: "atlvs",
-              eyebrow: "ATLVS",
-              title: "Run the office",
-              body: "Projects, finance, procurement, production, people, AI. Your team's command center — everything in one sidebar.",
+              eyebrow: "ATLVS · The Office",
+              title: "Runs the show from the desk.",
+              body: "Nine domains, one sidebar. Proposals to payouts, POs to ceremonies. Your production office — minus six tabs and a group chat named chaos.",
               bullets: [
-                "Proposals, invoices, POs, crew, schedule — in one place",
-                "AI that drafts riders, RFPs, and recaps from your actual data",
-                "Every action logged — who, when, what changed",
+                "Proposals, invoices, POs, crew, schedule — same room",
+                "AI that drafts riders and recaps from your own data",
+                "Every change logged — who, when, before, after",
               ],
               href: "/solutions/atlvs",
             },
             {
               slug: "gvteway",
-              eyebrow: "GVTEWAY",
-              title: "Loop in everyone outside",
-              body: "A tailored workspace for every stakeholder — artists, vendors, clients, sponsors, guests, crew. They see only their lane.",
+              eyebrow: "GVTEWAY · The Door",
+              title: "Every stakeholder. Their own entrance.",
+              body: "Artists, vendors, clients, sponsors, guests, crew, delegations, media, VIPs, volunteers, athletes. Twelve doors. One brain. They only see their lane.",
               bullets: [
-                "Artist advancing with deliverables tracking",
-                "Client proposals, e-signature, invoicing",
-                "Know Before You Go guides — per role",
+                "Artist advancing with live deliverables",
+                "Client proposals, e-sig, invoices",
+                "Per-persona Know-Before-You-Go door passes",
               ],
               href: "/solutions/gvteway",
             },
             {
               slug: "compvss",
-              eyebrow: "COMPVSS",
-              title: "Own the field",
-              body: "Ticket scan, geo-verified clock-in, inventory, incident reports — all from a phone. Keeps working when venue signal drops.",
+              eyebrow: "COMPVSS · The Floor",
+              title: "Runs the night from your pocket.",
+              body: "Gate scan, shift clock-in, medic triage, crisis alerts, driver manifest, guard tour. Offline-first. Works when the cell tower forgets you exist.",
               bullets: [
-                "QR scans (even when the signal goes)",
-                "Geo-verified clock in and clock out",
-                "Today's call sheet + role-scoped guide",
+                "QR + barcode scans under <100ms — signal or no signal",
+                "Shift check-in with meal credits + breaks",
+                "Field incident + safeguarding intake, encrypted",
               ],
               href: "/solutions/compvss",
             },
@@ -176,7 +173,7 @@ export default function Home() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Learn more <ArrowRight size={12} />
+                Backstage pass <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -185,36 +182,36 @@ export default function Home() {
 
       <StatStrip
         stats={[
-          { value: "15k+", label: "guests / event" },
-          { value: "98%", label: "advancing on time" },
-          { value: "14→2", label: "days to invoice" },
-          { value: "< 100ms", label: "ticket scan" },
+          { value: "15k+", label: "guests on the list" },
+          { value: "98%", label: "riders landed on time" },
+          { value: "14→2", label: "days from load-out to invoice" },
+          { value: "<100ms", label: "gate scan, offline or not" },
         ]}
       />
 
       {/* Feature grid */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Capabilities</div>
+          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Tonight&apos;s Lineup</div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl text-balance">
-            Every Tool You&apos;re Already Paying For. Now One Subscription.
+            The Eight Headliners on the Bill.
           </h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
-            From first pitch to final recap. Cancel five subscriptions this month.
+            The five subscriptions you&apos;ve been juggling — on one ticket. Cancel the openers.
           </p>
         </div>
         <div className="mt-10">
           <FeatureGrid
             cols={4}
             features={[
-              { icon: FileSignature, title: "Interactive proposals", body: "Build, send, sign, track — no DocuSign, no PDF-in-an-email-chain.", href: "/features/proposals" },
-              { icon: Sparkles, title: "Event guides (KBYG)", body: "One Know Before You Go. Every role sees the version written for them.", href: "/features/guides" },
-              { icon: QrCode, title: "Ticketing + scan", body: "QR check-in that works on day one — and when venue signal drops.", href: "/features/ticketing" },
-              { icon: Users, title: "Advancing", body: "Riders, input lists, stage plots, catering, travel — typed, not threaded.", href: "/features/advancing" },
-              { icon: DollarSign, title: "Finance", body: "Invoices, expenses, budgets, and direct vendor payouts.", href: "/features/finance" },
-              { icon: ClipboardCheck, title: "Procurement", body: "Requisitions, POs, vendor COIs, W-9s — all in one place.", href: "/features/procurement" },
-              { icon: Zap, title: "AI assistant", body: "Answers from your projects, crew, and budgets — not the public internet.", href: "/features/ai" },
-              { icon: ShieldCheck, title: "Enterprise-grade", body: "Signed DPA, immutable audit log, 99.9% uptime SLA.", href: "/features/compliance" },
+              { icon: FileSignature, title: "Proposals (signed live)", body: "Build, send, sign, book. No DocuSign. No PDF thread older than the show.", href: "/features/proposals" },
+              { icon: Sparkles, title: "KBYG door passes", body: "Write the guide once. Every persona reads their own lane.", href: "/features/guides" },
+              { icon: QrCode, title: "Gate + ticket scan", body: "QR check-in in under 100ms — when the venue Wi-Fi taps out, it still ships.", href: "/features/ticketing" },
+              { icon: Users, title: "Advancing", body: "Riders, input lists, stage plots, catering, travel — typed, not texted.", href: "/features/advancing" },
+              { icon: DollarSign, title: "Finance + payouts", body: "Invoices, expenses, budgets, live vendor payouts. ACH, card, or wire.", href: "/features/finance" },
+              { icon: ClipboardCheck, title: "Procurement", body: "Reqs, POs, vendor COIs, W-9s — one file cabinet, no loose paper.", href: "/features/procurement" },
+              { icon: Zap, title: "AI runner", body: "Drafts riders, recaps, and RFPs from your projects — not the public internet.", href: "/features/ai" },
+              { icon: ShieldCheck, title: "Main-stage security", body: "Signed DPA. Immutable audit log. 99.9% uptime. Tour-proof.", href: "/features/compliance" },
             ]}
           />
         </div>
@@ -222,7 +219,7 @@ export default function Home() {
 
       {/* Built for section */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="text-3xl font-semibold tracking-tight">Built for the Whole Production Industry.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Every Kind of Show. Same Road Case.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {[
             { slug: "live-events", title: "Live events", sub: "Festivals, activations, residencies" },
@@ -234,7 +231,7 @@ export default function Home() {
               <div className="text-sm font-semibold">{x.title}</div>
               <div className="mt-1 text-xs text-[var(--text-muted)]">{x.sub}</div>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                Explore <ArrowRight size={12} />
+                Walk it <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -246,18 +243,13 @@ export default function Home() {
         <div className="surface-raised overflow-hidden">
           <div className="grid gap-10 p-10 md:grid-cols-2 md:items-center">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Why Second Star Technologies</div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">One Platform Beats Ten Tabs.</h2>
+              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Why Second Star</div>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">One Road Case. Not Eleven.</h2>
               <p className="mt-4 text-sm text-[var(--text-secondary)]">
-                Most production teams are running Asana for tasks, a spreadsheet for advancing, DocuSign
-                for proposals, QuickBooks for invoices, and a group chat for the panic. Every gap leaks
-                time and money — riders missing line items, POs without COIs, tickets that never got
-                scanned, invoices nobody chased.
+                Right now the average show is held together by Asana, a rider spreadsheet, DocuSign, QuickBooks, Dropbox, a shared inbox, three WhatsApps, and a deep breath. Every seam leaks. Riders ship short. POs ship without COIs. Tickets scan but nobody reconciles. Invoices sit in &ldquo;sent&rdquo; for six weeks.
               </p>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">
-                ATLVS, GVTEWAY, and COMPVSS close the gaps. One platform — your office, your
-                stakeholders, your crew — with the right data surfaced to the right person at the
-                right moment. And yes, every org&apos;s data stays walled off from every other org.
+                ATLVS · GVTEWAY · COMPVSS pack the whole run-of-show into one console, one portal, one PWA. Right data, right lane, right moment. Nobody else&apos;s org ever peeks into yours — that&apos;s enforced in the database, not promised in a pitch deck.
               </p>
               <div className="mt-6 flex gap-2">
                 <Button href="/compare/vs-spreadsheets" variant="secondary" size="sm">vs spreadsheets</Button>
@@ -267,14 +259,14 @@ export default function Home() {
             </div>
             <ul className="space-y-3 text-sm">
               {[
-                "Your data walled off from every other organization — enforced at the database, not just the app",
-                "Direct vendor payouts — ACH, card, or international wire",
-                "File sharing that auto-expires. No public buckets, no accidental leaks",
-                "Offline ticket scanning that keeps working when venue signal dies",
-                "AI that reads your projects, crew, and budgets — not the public internet",
-                "Immutable audit trail — who, when, what changed, what it was before",
-                "Three purpose-built apps — office, stakeholders, field",
-                "Know Before You Go guides — one source, role-scoped views",
+                "Your manifest walled off from every other org — in the database, not the marketing",
+                "Direct vendor payouts — ACH, card, international wire. Settle on Monday",
+                "File shares that self-destruct. No public buckets. No leak at 2 a.m.",
+                "Offline gate scan — the cell tower&apos;s problem, not yours",
+                "AI that reads your lineup, crew, and budget — not the public internet",
+                "Every change logged — who, when, before, after. Forever.",
+                "Three apps, one stage: console, portal, PWA",
+                "KBYG door passes — one source, every persona its own view",
               ].map((x) => (
                 <li key={x} className="flex items-start gap-2">
                   <span className="status-dot status-dot-success mt-2" />
@@ -287,7 +279,7 @@ export default function Home() {
       </section>
 
       <FAQSection
-        title="Production OS · FAQ"
+        title="Doors, Drinks, Data · FAQ"
         faqs={HOME_FAQ}
       />
 
@@ -298,51 +290,51 @@ export default function Home() {
 
 const HOME_FAQ = [
   {
-    q: "What is Second Star Technologies?",
-    a: "Second Star Technologies builds three connected apps for production teams. ATLVS runs your office (projects, finance, procurement, crew). GVTEWAY gives every outside stakeholder — artists, vendors, clients, sponsors, guests — their own role-scoped view. COMPVSS is for the field: ticket scan, clock-in, incident reports. All three share one backbone, so nothing falls through the cracks.",
+    q: "What is this thing, exactly?",
+    a: "Three apps on one stage. ATLVS — the production office. GVTEWAY — every stakeholder's own door. COMPVSS — the crew PWA in your back pocket. All three share one backbone, so nobody's asking each other what time the doors actually open.",
   },
   {
     q: "Who is it for?",
-    a: "Production companies, festival promoters, fabrication shops, touring operations, experiential agencies, and creative ops teams. If you run shows and have to coordinate with artists, vendors, clients, sponsors, or guests — Second Star replaces five to ten of your current tools.",
+    a: "Festival promoters, tour production, scenic fab shops, experiential agencies, residency ops, broadcast compounds, corporate-summit builders. Anyone whose life is run-sheets and load-in calls. If your day involves a rider, a COI, and a panic DM — we replace five to ten of your current tools.",
   },
   {
-    q: "How is Second Star different from Asana, Monday, or Airtable?",
-    a: "Asana, Monday, and Airtable are great for generic work management. We aren't. We're built specifically for production: native ticket scanning, artist advancing with deliverables, direct vendor payouts, signed proposals with phase gates, role-scoped Know Before You Go guides, and a mobile app for the field. You don't have to build your workflow from scratch — the workflow is the product.",
+    q: "How is this different from Asana, Monday, or Airtable?",
+    a: "Asana is a to-do list in a suit. Monday is a spreadsheet that learned to smile. Airtable is a database that hosts a cocktail party. None of them scan a ticket, run an artist rider, or pay a vendor. We do. The run-of-show isn't a thing you build in our app — it's the product itself.",
   },
   {
     q: "What are ATLVS, GVTEWAY, and COMPVSS?",
-    a: "Three apps, one platform. ATLVS is where your team works — projects, finance, procurement, production, people. GVTEWAY is where your outside stakeholders work — each one (artist, vendor, client, sponsor, guest, crew) gets a tailored view with only their data. COMPVSS is for the field — ticket scan, crew clock-in, inventory, incident reports — from any phone.",
+    a: "Three acts on the lineup. ATLVS — your office runs here (projects, finance, procurement, people, AI). GVTEWAY — twelve stakeholder personas each get their own portal (artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete). COMPVSS — the field PWA: gate scan, shift check-in, incident, medic, driver, guard, warehouse.",
   },
   {
-    q: "Is there a free tier?",
-    a: "Yes. The Access tier is free forever — up to 3 users, basic projects and ticketing, community support. Core is $49/mo, Professional is $199/mo, Enterprise is custom. See pricing for the full breakdown.",
+    q: "Is there a free ticket?",
+    a: "Yes — GA is free forever. Three seats, basic projects and ticketing, community room. All-Access is $49/mo. Headliner is $199/mo. Festival tier is custom. Full ticket chart on /pricing.",
   },
   {
-    q: "How do payments work?",
-    a: "Clients pay invoices by card or ACH. Vendors get paid out directly — ACH, card, or international wire. We never touch your money; payouts route through a connected Stripe account you control.",
+    q: "How do the payouts work?",
+    a: "Clients settle by card or ACH. Vendors get paid out live — ACH, card, international wire. We never touch the money; payouts route through your connected Stripe account. Settle on Monday, not in November.",
   },
   {
-    q: "Does it work offline?",
-    a: "Yes — where it matters. COMPVSS keeps working when venue signal drops. Your crew can scan tickets and clock in without bars. Everything queues up and syncs when connectivity returns. No scan ever gets lost.",
+    q: "What about venue Wi-Fi that dies at sunset?",
+    a: "COMPVSS runs offline-first. The gate scanner, the shift clock-in, the incident form — all keep shipping when the cell tower retires for the night. Everything queues. Everything syncs when signal comes back. No scan goes missing.",
   },
   {
-    q: "How is security handled?",
-    a: "Seriously. Your org's data is walled off from every other org, enforced at the deepest layer — not just in the app. Every change writes to an immutable audit trail. Files share via auto-expiring signed URLs, not public buckets. A signed DPA and SOC 2 attestation package are available on Enterprise. Full security documentation at /trust.",
+    q: "How tight is the security?",
+    a: "Tight. Your manifest is walled off from every other org at the database layer — not just in the UI. Every change writes to an immutable audit log. File shares auto-expire. Signed DPA and SOC-2 attestation pack land on Festival tier. Full rider at /trust.",
   },
   {
-    q: "Do you have an AI assistant?",
-    a: "Yes — and it actually knows your org. The AI reads your projects, budgets, crew, and schedule (not the public internet) and drafts riders, RFPs, call sheets, recaps, and safety briefings on demand. Every conversation is logged and scoped to your workspace.",
+    q: "Is the AI a parlor trick?",
+    a: "No — it works the manifest, not the internet. It reads your projects, budgets, crew, and schedule and drafts riders, RFPs, call sheets, recaps, and safety briefings on demand. Every thread logs to your workspace. Nothing leaks out.",
   },
   {
-    q: "What's a KBYG guide?",
-    a: "KBYG = Know Before You Go — a per-role event handbook. Artists see riders, catering, venue specs, and the schedule. Crew sees the call sheet, PPE, radio channels, and SOPs. Guests see logistics, tickets, and the public schedule. Written once in ATLVS, rendered differently for each audience.",
+    q: "What's a KBYG door pass?",
+    a: "KBYG = Know Before You Go. One event guide, twelve personas, twelve different reads. Artists see riders + catering + times. Crew sees the call sheet + PPE + radio. Guests see logistics + public times. Written once in ATLVS, rendered per lane in GVTEWAY + COMPVSS.",
   },
   {
-    q: "Can I export my data?",
-    a: "Anytime. CSV exports are available on every tier. Full data exports are available on Enterprise. You own your data — full stop.",
+    q: "Can I take my data with me?",
+    a: "Anytime. CSV exports on every tier. Full data exports on Festival. You own your manifest — full stop.",
   },
   {
-    q: "How do I get started?",
-    a: "Sign up free — takes 30 seconds. Or book a demo and we'll walk you through it with a real human.",
+    q: "How do I get on the list?",
+    a: "Hit \"Doors Open\" — 30 seconds. Or grab a backstage walkthrough with a human who used to book shows for a living.",
   },
 ];

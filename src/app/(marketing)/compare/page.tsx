@@ -12,13 +12,13 @@ import { buildMetadata } from "@/lib/seo";
 import { COMPARE_LIST } from "@/lib/compare";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Compare Second Star Technologies to Asana, Monday, and spreadsheets",
+  title: "Compare — Head-to-Head with Asana, Monday, Spreadsheets",
   description:
-    "Head-to-head comparisons of the Second Star Technologies platform against the tools production teams use today. Honest about when we win and when we don't.",
+    "Honest head-to-head. Asana is a to-do list in a suit. Monday is a spreadsheet that learned to smile. We run shows. Read the bill.",
   path: "/compare",
   keywords: ["Second Star Technologies comparison", "asana alternative events", "monday alternative events", "spreadsheet alternative"],
-  ogImageEyebrow: "Compare",
-  ogImageTitle: "How we compare.",
+  ogImageEyebrow: "Head-to-Head",
+  ogImageTitle: "Read the bill.",
 });
 
 export default function ComparePage() {
@@ -32,11 +32,10 @@ export default function ComparePage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Compare</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Head-to-head.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Read the bill</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Head-to-Head.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Honest comparisons of the Second Star Technologies platform against the tools production teams already use.
-          We'll tell you when we win and when we don't.
+          Honest comparisons against the tools already on your tour rider. We&apos;ll tell you when we win. We&apos;ll tell you when we don&apos;t. No chart-of-fives sales trick — we respect you too much.
         </p>
       </section>
 
@@ -52,7 +51,7 @@ export default function ComparePage() {
         </div>
       </section>
 
-      <CTASection title="Try Second Star Technologies" subtitle="Free for Life on the Access tier. No credit card." />
+      <CTASection title="Pick the Show You&apos;re Running." subtitle="GA is free, forever. No card. No rehearsal required." />
     </div>
   );
 }

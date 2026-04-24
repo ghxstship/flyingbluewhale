@@ -12,9 +12,9 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "Solutions — Three Apps, Eight Industries",
+  title: "Solutions — Three Acts. Eight Kinds of Night.",
   description:
-    "Three connected apps from Second Star Technologies — ATLVS for the office, GVTEWAY for your stakeholders, COMPVSS for the field — tuned for live events, concerts, festivals and tours, immersive experiences, brand activations, corporate events, theatre, and broadcast.",
+    "ATLVS — the office. GVTEWAY — every stakeholder&apos;s door. COMPVSS — the crew PWA on the floor. One rig runs live events, concerts, festivals, tours, immersive, activations, corporate, theatrical, broadcast.",
   path: "/solutions",
   keywords: [
     "live events software",
@@ -36,18 +36,16 @@ export default function SolutionsIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Solutions</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Platform. Zero Seams.</h1>
+        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Lineup</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Acts. One Stage. Zero Seams.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          ATLVS, GVTEWAY, and COMPVSS aren't a bundle of separately-bought tools with sync issues. They're three
-          purpose-built apps — office, stakeholders, field — all reading from the same backbone. Every org's data
-          walled off at the data layer.
+          ATLVS, GVTEWAY, and COMPVSS aren&apos;t a bundle of tools bought separately and praying they sync. Three acts on one stage — office, door, floor — reading the same manifest. Your org&apos;s data walled off in the database, not in the pitch deck.
         </p>
       </section>
 
       {/* Apps */}
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h2 className="text-3xl font-semibold tracking-tight">The Three Apps</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Tonight&apos;s Lineup</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {APPS.map((a) => (
             <Link key={a.slug} href={a.href} data-platform={a.slug} className="surface-raised hover-lift relative overflow-hidden p-7">
@@ -69,7 +67,7 @@ export default function SolutionsIndex() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Deep dive <ArrowRight size={12} />
+                Backstage pass <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -78,9 +76,9 @@ export default function SolutionsIndex() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">By Industry</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Kinds of Night We Run</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Every industry gets a tuned setup: starter templates, a default role matrix, and case studies from peers.
+          Each kind of show gets a tuned setup: starter templates, default role matrix, case files from peers who already ran the night.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
@@ -96,20 +94,20 @@ export default function SolutionsIndex() {
         title="Solutions · FAQ"
         faqs={[
           {
-            q: "How are the three apps different?",
-            a: "ATLVS is your office console — where your team runs the show. GVTEWAY is the outside world — artists, vendors, clients, sponsors, guests, crew. COMPVSS is the field — ticket scan, clock-in, inventory, incidents. Same backbone, three audiences.",
+            q: "How are the three acts different?",
+            a: "ATLVS is the office — your team lives here M–F. GVTEWAY is the door — every stakeholder outside your org has their own lane. COMPVSS is the floor — crew PWA on show night. Same backbone, three audiences, zero sync drama.",
           },
           {
-            q: "Do I have to use all three apps?",
-            a: "No. Every tier includes all three, but teams adopt gradually. Most start with ATLVS and one portal persona (usually artist or client), add COMPVSS at show time, then expand.",
+            q: "Do I have to book all three?",
+            a: "No — but every tier ships all three. Most teams open with ATLVS + one GVTEWAY persona (artist or client), bolt on COMPVSS for load-in, then expand. Adopt at your tempo.",
           },
           {
-            q: "Is my org's data walled off from other orgs?",
-            a: "Yes. Every organization's data is walled off at the database layer — not just in the app. A user in one org cannot read or touch anything belonging to another org, by design.",
+            q: "Can other orgs see my manifest?",
+            a: "No. Every org&apos;s data is walled off at the database layer — not just in the UI. A user in one org cannot read or touch anything in another. Enforced in the data, not the marketing.",
           },
           {
-            q: "Do you support white-labeled portals?",
-            a: "Yes, on Enterprise. Custom branding — logo, colors, email templates — plus custom domains for portals. Your clients see your brand; your vendors see your vendors' brand.",
+            q: "White-labeled doors?",
+            a: "Yes — Festival tier. Your logo, colors, email templates, and custom domain for every door. Clients see your brand. Your vendors see your vendors&apos; brand. The building is always yours.",
           },
         ]}
       />
@@ -124,53 +122,53 @@ const APPS = [
     slug: "atlvs",
     name: "ATLVS",
     tier: "OFFICE",
-    title: "The operations console",
-    body: "Projects, finance, procurement, production, people, AI — one sidebar, role-aware access. Your team's command center.",
+    title: "Runs the show from the desk",
+    body: "Nine domains, 60+ modules, one sidebar. Proposals to payouts, POs to ceremonies. The production office that doesn&apos;t need eleven tabs.",
     bullets: [
-      "Sixty-plus modules across nine domains",
-      "AI assistant that drafts from your real data",
-      "Immutable audit log — who, when, what changed",
-      "Role matrix for every tier and every module",
+      "60+ modules across 9 domains",
+      "AI runner that drafts from your manifest",
+      "Immutable audit log — who, when, before, after",
+      "Role matrix on every tier, every module",
     ],
     href: "/solutions/atlvs",
   },
   {
     slug: "gvteway",
     name: "GVTEWAY",
-    tier: "STAKEHOLDERS",
-    title: "Stakeholder portals",
-    body: "A tailored workspace for every party outside your org. Artists, vendors, clients, sponsors, guests, crew — each sees their lane.",
+    tier: "DOOR",
+    title: "Every stakeholder. Their own entrance.",
+    body: "Twelve personas, twelve doors, one manifest. Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete.",
     bullets: [
-      "Six persona portals per project",
-      "Interactive proposals, signed in place",
-      "Artist advancing with deliverable tracking",
-      "Role-scoped Know Before You Go guides",
+      "12 persona doors per project",
+      "Proposals signed in place — 23 block types",
+      "Live advancing + deliverable tracking",
+      "Per-persona KBYG door passes",
     ],
     href: "/solutions/gvteway",
   },
   {
     slug: "compvss",
     name: "COMPVSS",
-    tier: "FIELD",
-    title: "The field kit",
-    body: "Ticket scan, geo-verified clock-in, inventory, incident reports — from any phone. Keeps working when venue signal drops.",
+    tier: "FLOOR",
+    title: "Runs the night from your pocket",
+    body: "Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour, warehouse scans. Offline-first. Installs in one tap.",
     bullets: [
-      "QR check-in with zero duplicates",
-      "Geo-verified crew time tracking",
-      "Offline-first — scans queue, then sync",
-      "Today's call sheet plus the role-scoped guide",
+      "<100ms gate scan — offline or on",
+      "Geo-verified shift + meal credits",
+      "Offline queue replays in order",
+      "Tonight&apos;s call sheet + KBYG in pocket",
     ],
     href: "/solutions/compvss",
   },
 ] as const;
 
 const INDUSTRIES = [
-  { slug: "live-events", name: "Live Events", blurb: "Venue residencies, club nights, one-offs" },
-  { slug: "concerts", name: "Concerts", blurb: "Single-night shows, amphitheatres, arenas" },
+  { slug: "live-events", name: "Live Events", blurb: "Residencies, club nights, one-offs" },
+  { slug: "concerts", name: "Concerts", blurb: "Single night, amphitheatre, arena" },
   { slug: "festivals-tours", name: "Festivals & Tours", blurb: "Multi-day, multi-stage, multi-city" },
-  { slug: "immersive-experiences", name: "Immersive Experiences", blurb: "Installations, walk-throughs, pop-ups" },
-  { slug: "brand-activations", name: "Brand Activations", blurb: "Pop-ups, product launches, experiential marketing" },
-  { slug: "corporate-events", name: "Corporate Events", blurb: "Conferences, AGMs, summits, internal events" },
-  { slug: "theatrical-performances", name: "Theatrical Performances", blurb: "Residencies, touring productions, galas" },
-  { slug: "broadcast-tv-film", name: "Broadcast, TV & Film", blurb: "Studio, remote, location-based production" },
+  { slug: "immersive-experiences", name: "Immersive", blurb: "Installations, walk-throughs, pop-ups" },
+  { slug: "brand-activations", name: "Brand Activations", blurb: "Launches, pop-ups, experiential" },
+  { slug: "corporate-events", name: "Corporate", blurb: "Conferences, AGMs, summits, off-sites" },
+  { slug: "theatrical-performances", name: "Theatrical", blurb: "Residencies, tours, galas" },
+  { slug: "broadcast-tv-film", name: "Broadcast / TV / Film", blurb: "Studio, remote, location" },
 ];

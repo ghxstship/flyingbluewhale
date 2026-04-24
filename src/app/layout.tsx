@@ -49,19 +49,19 @@ export const metadata: Metadata = {
     template: "%s · Second Star Technologies",
   },
   description:
-    "ATLVS, GVTEWAY, and COMPVSS — the unified production suite from Second Star Technologies. Internal operations console, external stakeholder portals, and mobile field PWA for live events, fabrication, and creative ops.",
+    "ATLVS · GVTEWAY · COMPVSS — one rig for the whole run-of-show. The production office, every stakeholder&apos;s door, and the crew PWA on the floor. Run the show, not the spreadsheets.",
   keywords: ["production management", "live events", "fabrication", "advancing", "ticketing", "PWA", "ATLVS", "GVTEWAY", "COMPVSS", "Second Star Technologies"],
   manifest: "/manifest.json",
   openGraph: {
     title: "Second Star Technologies",
-    description: "ATLVS, GVTEWAY, and COMPVSS — the unified production suite.",
+    description: "ATLVS · GVTEWAY · COMPVSS — run the show, not the spreadsheets.",
     siteName: "Second Star Technologies",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Second Star Technologies",
-    description: "ATLVS, GVTEWAY, and COMPVSS — the unified production suite.",
+    description: "ATLVS · GVTEWAY · COMPVSS — run the show, not the spreadsheets.",
   },
   robots: { index: true, follow: true },
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Second Star" },
@@ -107,7 +107,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             name: "Second Star Technologies",
             url: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
             description:
-              "ATLVS, GVTEWAY, and COMPVSS — the unified production suite. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
+              "ATLVS · GVTEWAY · COMPVSS — run the show, not the spreadsheets. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
             logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech"}/og/logo.png`,
           })}
         />

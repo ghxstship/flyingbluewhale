@@ -30,8 +30,8 @@ type NavGroup = { label: string; items: NavLink[] };
 const PRODUCT: NavGroup = {
   label: "Product",
   items: [
-    { label: "Features", href: "/features", description: "Everything in ATLVS, GVTEWAY, and COMPVSS" },
-    { label: "Solutions", href: "/solutions", description: "Three connected apps, one platform" },
+    { label: "Lineup", href: "/features", description: "Tonight&apos;s eight headliners" },
+    { label: "Solutions", href: "/solutions", description: "Three acts, one stage" },
     { label: "Compare", href: "/compare", description: "vs. Asana, Monday, spreadsheets" },
   ],
 };
@@ -53,9 +53,9 @@ const INDUSTRIES: NavGroup = {
 const RESOURCES: NavGroup = {
   label: "Resources",
   items: [
-    { label: "Blog", href: "/blog", description: "Launches, product notes, industry takes" },
-    { label: "Guides", href: "/guides", description: "Long-form primers for producers" },
-    { label: "Docs", href: "/docs", description: "Reference + API" },
+    { label: "Blog", href: "/blog", description: "Launches, tour notes, industry takes" },
+    { label: "Guides", href: "/guides", description: "Long-form runs for promoters" },
+    { label: "Docs", href: "/docs", description: "The run-sheet + API" },
     { label: "Changelog", href: "/changelog", description: "Every release, dated" },
   ],
 };
@@ -143,7 +143,7 @@ export function MarketingHeader() {
             Log in
           </Link>
           <Link href="/signup" className="btn btn-primary btn-sm">
-            Start free
+            Doors open
           </Link>
         </div>
 
@@ -224,7 +224,7 @@ export function MarketingHeader() {
                 className="btn btn-primary btn-sm w-full justify-center"
                 onClick={() => setMobileOpen(false)}
               >
-                Start free
+                Doors open
               </Link>
             </div>
           </div>

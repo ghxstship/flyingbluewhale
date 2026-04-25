@@ -4,6 +4,17 @@ import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
+/**
+ * Select — Radix Select wrapper. Use for fixed enum-like option sets that
+ * fit on screen (e.g. status, priority, role). For async-loaded or
+ * very-large option sets, use `<Combobox>` instead — it has built-in
+ * fuzzy search, async loaders, and selected-label caching.
+ *
+ * Decision rationale: Linear / Stripe / Vercel make the same split. A
+ * search-less Select stays accessible and predictable for ≤20 options;
+ * a Combobox handles 100+ or server-resident sets.
+ */
+
 export const Select = SelectPrimitive.Root;
 export const SelectValue = SelectPrimitive.Value;
 export const SelectGroup = SelectPrimitive.Group;

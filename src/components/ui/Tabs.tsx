@@ -7,12 +7,19 @@ export const Tabs = TabsPrimitive.Root;
 
 export const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(function TabsList({ className = "", ...props }, ref) {
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> & {
+    /** Allow the list to scroll horizontally on overflow instead of wrapping.
+     *  Common in product detail pages with many tabs (Linear / Notion). */
+    scrollable?: boolean;
+  }
+>(function TabsList({ className = "", scrollable, ...props }, ref) {
+  const scroll = scrollable
+    ? "overflow-x-auto whitespace-nowrap scrollbar-thin"
+    : "";
   return (
     <TabsPrimitive.List
       ref={ref}
-      className={`flex items-center gap-1 border-b border-[var(--border-color)] ${className}`}
+      className={`flex items-center gap-1 border-b border-[var(--border-color)] ${scroll} ${className}`}
       {...props}
     />
   );

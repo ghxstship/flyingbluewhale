@@ -15,6 +15,7 @@ import {
   EyeOff,
   Pin,
   PinOff,
+  Download,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useUrlState } from "@/lib/hooks/useUrlState";
@@ -257,6 +258,15 @@ export function DataTableInteractive({
         )}
         <div className="flex items-center gap-2">
           <span className="text-xs text-[var(--text-muted)]">{sorted.length} rows</span>
+          <button
+            type="button"
+            onClick={() => exportCsv(renderedCols, sorted, tableId)}
+            aria-label="Export visible rows to CSV"
+            className="rounded-md border border-[var(--border-color)] px-2 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+          >
+            <Download size={12} className="me-1 inline" aria-hidden="true" />
+            Export CSV
+          </button>
           <DensityToggle value={density} onChange={setDensity} />
           <ColumnMenu
             columns={columns}
@@ -600,3 +610,42 @@ type SavedView = {
   hidden?: string[];
   pinned?: string[];
 };
+
+/**
+ * Export the visible (filtered + sorted + currently-rendered) columns to a
+ * CSV download. Uses `row.values[i]` for each column when present (so
+ * server-rendered cells like `<Badge>` map to their underlying scalar);
+ * falls back to a stripped string of the cell node otherwise.
+ */
+function exportCsv(
+  cols: InteractiveColumn[],
+  rows: InteractiveRow[],
+  tableId?: string,
+) {
+  const colKeyToIdx = new Map<string, number>();
+  cols.forEach((c, i) => colKeyToIdx.set(c.key, i));
+  const escape = (s: string) =>
+    /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  const headerLine = cols.map((c) => escape(c.header)).join(",");
+  const lines = rows.map((r) =>
+    cols
+      .map((c) => {
+        const i = colKeyToIdx.get(c.key);
+        const value = i != null ? r.values?.[i] : undefined;
+        if (value == null) return "";
+        return escape(String(value));
+      })
+      .join(","),
+  );
+  const csv = [headerLine, ...lines].join("\n");
+  const blob = new Blob([`﻿${csv}`], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `${tableId ?? "export"}-${stamp}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}

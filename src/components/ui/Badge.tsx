@@ -40,6 +40,8 @@ interface BadgeProps {
   shape?: BadgeShape;
   children?: React.ReactNode;
   className?: string;
+  /** Optional leading icon (e.g. <CheckCircle size={10} />). */
+  icon?: React.ReactNode;
   onDismiss?: () => void;
   "aria-label"?: string;
 }
@@ -49,6 +51,7 @@ export function Badge({
   shape = "default",
   children,
   className = "",
+  icon,
   onDismiss,
   "aria-label": ariaLabel,
 }: BadgeProps) {
@@ -74,7 +77,8 @@ export function Badge({
     );
   }
   return (
-    <span className={`badge ${VARIANT[variant]} ${className}`}>
+    <span className={`badge inline-flex items-center gap-1 ${VARIANT[variant]} ${className}`}>
+      {icon && <span className="inline-flex shrink-0">{icon}</span>}
       {children}
       {onDismiss && (
         <button

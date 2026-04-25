@@ -25,6 +25,7 @@ export function DatePicker({
   placeholder = "Select date",
   clearable,
   disabled,
+  withTime,
   "aria-label": ariaLabel,
   className = "",
 }: {
@@ -36,6 +37,9 @@ export function DatePicker({
   placeholder?: string;
   clearable?: boolean;
   disabled?: boolean;
+  /** When true, show an HH:MM input below the calendar. The selected day
+   *  + time form a single Date that the caller receives via onChange. */
+  withTime?: boolean;
   "aria-label"?: string;
   className?: string;
 }) {
@@ -50,7 +54,11 @@ export function DatePicker({
     onChange?.(d);
   }
 
-  const display = selected ? formatDate(selected) : placeholder;
+  const display = selected
+    ? withTime
+      ? `${formatDate(selected)} ${selected.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`
+      : formatDate(selected)
+    : placeholder;
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
@@ -76,12 +84,32 @@ export function DatePicker({
             onMonthChange={setViewMonth}
             value={selected}
             onSelect={(d) => {
+              if (withTime && selected) {
+                d.setHours(selected.getHours(), selected.getMinutes(), 0, 0);
+              }
               commit(d);
-              setOpen(false);
+              if (!withTime) setOpen(false);
             }}
             min={min}
             max={max}
           />
+          {withTime && (
+            <div className="mt-2 flex items-center gap-2 border-t border-[var(--border-color)] pt-2">
+              <span className="text-xs text-[var(--text-muted)]">Time</span>
+              <input
+                type="time"
+                value={selected ? toTimeStr(selected) : ""}
+                onChange={(e) => {
+                  if (!selected) return;
+                  const [hh, mm] = e.target.value.split(":").map(Number);
+                  const next = new Date(selected);
+                  next.setHours(hh ?? 0, mm ?? 0, 0, 0);
+                  commit(next);
+                }}
+                className="input-base flex-1 text-sm"
+              />
+            </div>
+          )}
           {clearable && selected && (
             <button
               type="button"
@@ -337,6 +365,11 @@ function sameDay(a: Date, b: Date) {
   return (
     a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
   );
+}
+function toTimeStr(d: Date): string {
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${hh}:${mm}`;
 }
 function buildMonth(month: Date): Date[] {
   const firstOfMonth = new Date(month.getFullYear(), month.getMonth(), 1);

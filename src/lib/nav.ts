@@ -82,7 +82,6 @@ export const platformNav: NavGroup[] = [
       { label: "Payouts", href: "/console/finance/payouts" },
       { label: "Time", href: "/console/finance/time" },
       { label: "Mileage", href: "/console/finance/mileage" },
-      { label: "Advances", href: "/console/finance/advances" },
       { label: "Reports", href: "/console/finance/reports" },
     ],
   },
@@ -240,7 +239,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
       guide,
       { label: "Call Sheet", href: `${base}/call-sheet` },
       { label: "Time", href: `${base}/time` },
-      { label: "Advances", href: `${base}/advances` },
     ],
     delegation: [
       { label: "Overview", href: base },

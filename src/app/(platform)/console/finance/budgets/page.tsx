@@ -20,6 +20,7 @@ export default async function BudgetsPage() {
       <div className="page-content">
         <DataTable<Budget>
           rows={rows}
+          rowHref={(r) => `/console/finance/budgets/${r.id}`}
           columns={[
             { key: "name", header: "Name", render: (r) => r.name },
             { key: "category", header: "Category", render: (r) => r.category ?? "—", className: "font-mono text-xs" },

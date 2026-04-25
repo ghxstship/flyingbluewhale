@@ -26,7 +26,14 @@ export type AuditAction =
   | "auth.delete_requested"
   | "auth.org.switched"
   | "auth.mfa.enabled"
-  | "auth.mfa.disabled";
+  | "auth.mfa.disabled"
+  // Advancing state-machine transitions — driven by
+  // POST /api/v1/deliverables/:id/transition
+  | "deliverable.in_review"
+  | "deliverable.approved"
+  | "deliverable.rejected"
+  | "deliverable.revision_requested"
+  | "deliverable.fulfilled";
 
 export type AuditInput = {
   /** Actor's user id (auth.users.id). */

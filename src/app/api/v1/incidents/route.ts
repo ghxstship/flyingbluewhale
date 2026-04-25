@@ -59,17 +59,30 @@ export async function POST(req: NextRequest) {
       .single();
     if (error) return apiError("internal", error.message);
     // Fan out to org admins — severity major/critical also triggers email.
-    const { notifyOrgAdmins } = await import("@/lib/notify");
-    await notifyOrgAdmins({
-      orgId: session.orgId,
-      eventType: "incident.filed",
-      title: `Incident: ${input.summary}`,
-      body: input.severity === "critical"
-        ? "CRITICAL — review immediately"
-        : `Severity: ${input.severity}${input.location ? ` · ${input.location}` : ""}`,
-      href: `/console/operations/incidents/${data.id}`,
-      data: { incidentId: data.id, severity: input.severity, projectId: input.projectId },
-    });
+    // The notification fan-out is best-effort: if SUPABASE_SERVICE_ROLE_KEY
+    // isn't configured (dev / preview deploys) we still record the
+    // incident; admins won't get notified, but the row is canonical.
+    const { isServiceClientAvailable } = await import("@/lib/supabase/server");
+    if (isServiceClientAvailable()) {
+      const { notifyOrgAdmins } = await import("@/lib/notify");
+      try {
+        await notifyOrgAdmins({
+          orgId: session.orgId,
+          eventType: "incident.filed",
+          title: `Incident: ${input.summary}`,
+          body:
+            input.severity === "critical"
+              ? "CRITICAL — review immediately"
+              : `Severity: ${input.severity}${input.location ? ` · ${input.location}` : ""}`,
+          href: `/console/operations/incidents/${data.id}`,
+          data: { incidentId: data.id, severity: input.severity, projectId: input.projectId },
+        });
+      } catch (e) {
+        // Notify failures must not roll back the record.
+        const { log } = await import("@/lib/log");
+        log.warn("incidents.notify_failed", { err: e instanceof Error ? e.message : String(e) });
+      }
+    }
     return apiCreated({ incident: data });
   });
 }

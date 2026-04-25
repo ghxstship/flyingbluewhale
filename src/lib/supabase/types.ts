@@ -25,7 +25,6 @@ export type ReqStatus = "draft" | "submitted" | "approved" | "rejected" | "conve
 export type EquipmentStatus = "available" | "reserved" | "in_use" | "maintenance" | "retired";
 export type TaskStatus = "todo" | "in_progress" | "blocked" | "review" | "done";
 export type EventStatus = "draft" | "scheduled" | "live" | "complete" | "cancelled";
-export type AdvanceStatus = "pending" | "approved" | "rejected" | "paid";
 export type FabricationStatus = "open" | "in_progress" | "blocked" | "complete";
 
 type TableDef<R, I, U> = { Row: R; Insert: I; Update: U; Relationships: [] };
@@ -130,11 +129,6 @@ export type MileageLog = {
   id: string; org_id: string; project_id: string | null; user_id: string;
   origin: string; destination: string; miles: number; rate_cents: number;
   logged_on: string; notes: string | null; created_at: string;
-};
-export type Advance = {
-  id: string; org_id: string; project_id: string | null; requester_id: string;
-  amount_cents: number; currency: string; reason: string | null; status: AdvanceStatus;
-  requested_at: string; decided_at: string | null;
 };
 
 // Procurement
@@ -435,6 +429,41 @@ export type KbArticle = {
   created_at: string; updated_at: string;
 };
 
+// ── 2026-04-25 automations + form definitions ──────────────────────────
+export type Automation = {
+  id: string; org_id: string; name: string; description: string | null;
+  trigger_kind: "manual" | "schedule" | "webhook" | "event";
+  trigger_config: Record<string, unknown>; steps: unknown;
+  enabled: boolean; last_run_at: string | null; last_run_status: string | null;
+  created_by: string | null; created_at: string; updated_at: string;
+};
+export type FormDef = {
+  id: string; org_id: string; slug: string; title: string;
+  description: string | null; schema: Record<string, unknown>;
+  status: "draft" | "published" | "archived";
+  created_by: string | null; created_at: string; updated_at: string;
+};
+
+// ── 2026-04-25 procurement RFQs ─────────────────────────────────────────
+export type Rfq = {
+  id: string; org_id: string; project_id: string | null; title: string;
+  description: string | null;
+  status: "draft" | "sent" | "closed" | "awarded" | "cancelled";
+  due_at: string | null; awarded_to_vendor_id: string | null;
+  created_by: string | null; created_at: string; updated_at: string;
+};
+
+// ── 2026-04-25 run-of-show cues ─────────────────────────────────────────
+export type Cue = {
+  id: string; org_id: string; event_id: string | null;
+  scheduled_at: string;
+  lane: "show" | "lights" | "audio" | "video" | "talent" | "safety" | "transport";
+  label: string; description: string | null;
+  status: "pending" | "standby" | "live" | "done" | "skipped";
+  owner_id: string | null; duration_seconds: number | null;
+  created_by: string | null; created_at: string; updated_at: string;
+};
+
 // ── 2026-04-25 settings completion row types ─────────────────────────────
 export type ApiKey = {
   id: string; org_id: string; name: string; prefix: string; hashed_secret: string;
@@ -598,12 +627,6 @@ export type Database = {
         { id?: string; org_id: string; project_id?: string | null; user_id: string; origin: string; destination: string; miles: number; rate_cents?: number; logged_on: string; notes?: string | null; created_at?: string },
         Partial<MileageLog>
       >;
-      advances: TableDef<
-        Advance,
-        { id?: string; org_id: string; project_id?: string | null; requester_id: string; amount_cents: number; currency?: string; reason?: string | null; status?: AdvanceStatus; requested_at?: string; decided_at?: string | null },
-        Partial<Advance>
-      >;
-
       vendors: TableDef<
         Vendor,
         { id?: string; org_id: string; name: string; contact_email?: string | null; contact_phone?: string | null; category?: string | null; w9_on_file?: boolean; coi_expires_at?: string | null; payout_account_id?: string | null; notes?: string | null; created_at?: string },
@@ -743,6 +766,10 @@ export type Database = {
       governance_policies: TableDef<GovernancePolicy, Partial<GovernancePolicy> & { org_id: string; name: string }, Partial<GovernancePolicy>>;
       org_roles: TableDef<OrgRole, Partial<OrgRole> & { org_id: string; slug: string; label: string }, Partial<OrgRole>>;
       asset_links: TableDef<AssetLink, Partial<AssetLink> & { org_id: string; credential_id: string; asset_kind: string; asset_serial: string }, Partial<AssetLink>>;
+      cues: TableDef<Cue, Partial<Cue> & { org_id: string; scheduled_at: string; label: string }, Partial<Cue>>;
+      rfqs: TableDef<Rfq, Partial<Rfq> & { org_id: string; title: string }, Partial<Rfq>>;
+      automations: TableDef<Automation, Partial<Automation> & { org_id: string; name: string }, Partial<Automation>>;
+      form_defs: TableDef<FormDef, Partial<FormDef> & { org_id: string; slug: string; title: string }, Partial<FormDef>>;
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };

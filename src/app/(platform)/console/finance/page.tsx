@@ -11,17 +11,15 @@ export const dynamic = "force-dynamic";
 export default async function FinanceHub() {
   if (!hasSupabase) return <><ModuleHeader title="Finance" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
   const session = await requireSession();
-  const [invoices, expenses, budgets, advances] = await Promise.all([
+  const [invoices, expenses, budgets] = await Promise.all([
     listOrgScoped("invoices", session.orgId),
     listOrgScoped("expenses", session.orgId),
     listOrgScoped("budgets", session.orgId),
-    listOrgScoped("advances", session.orgId),
   ]);
   const outstanding = invoices.filter((i) => ["sent", "overdue"].includes(i.status)).reduce((s, r) => s + r.amount_cents, 0);
   const paid = invoices.filter((i) => i.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
   const spent = expenses.reduce((s, r) => s + r.amount_cents, 0);
   const budgetTotal = budgets.reduce((s, r) => s + r.amount_cents, 0);
-  const advancesPending = advances.filter((a) => a.status === "pending").reduce((s, r) => s + r.amount_cents, 0);
 
   const tiles = [
     { href: "/console/finance/invoices", label: "Invoices" },
@@ -29,7 +27,6 @@ export default async function FinanceHub() {
     { href: "/console/finance/budgets", label: "Budgets" },
     { href: "/console/finance/time", label: "Time" },
     { href: "/console/finance/mileage", label: "Mileage" },
-    { href: "/console/finance/advances", label: "Advances" },
     { href: "/console/finance/payouts", label: "Payouts" },
     { href: "/console/finance/reports", label: "Reports" },
   ];
@@ -48,7 +45,6 @@ export default async function FinanceHub() {
           <MetricCard label="Invoices" value={invoices.length} />
           <MetricCard label="Expense items" value={expenses.length} />
           <MetricCard label="Budgets" value={budgets.length} />
-          <MetricCard label="Advances pending" value={formatMoney(advancesPending)} />
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {tiles.map((t) => (

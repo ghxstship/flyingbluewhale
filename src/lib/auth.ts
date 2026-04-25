@@ -95,7 +95,7 @@ const CAPABILITIES: Partial<Record<PlatformRole, readonly string[]>> = {
   admin: ["*"],
   controller: [
     "projects:read", "projects:write",
-    "invoices:*", "expenses:*", "budgets:*", "time:*", "mileage:*", "advances:*", "payouts:*",
+    "invoices:*", "expenses:*", "budgets:*", "time:*", "mileage:*", "payouts:*",
     "procurement:*",
     "billing:*",
   ],

@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { NavItem } from "@/lib/nav";
 import { MobileTabBarClient } from "./MobileTabBarClient";
 import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
-import { matchRoute } from "@/lib/hooks/useActiveRoute";
+import { matchRoute } from "@/lib/match-route";
 
 export { PlatformSidebar } from "./PlatformSidebar";
 

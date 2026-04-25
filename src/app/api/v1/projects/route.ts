@@ -61,16 +61,27 @@ export async function POST(req: Request) {
         endDate: input.endDate,
         createdBy: session.userId,
       });
-      const { notifyOrgAdmins } = await import("@/lib/notify");
       const projectId = (project as { id?: string }).id;
       const projectName = (project as { name?: string }).name ?? input.name;
-      await notifyOrgAdmins({
-        orgId: session.orgId,
-        eventType: "project.created",
-        title: `New project: ${projectName}`,
-        href: projectId ? `/console/projects/${projectId}` : undefined,
-        data: { projectId, name: projectName },
-      });
+      // Best-effort fan-out: if the deploy lacks SUPABASE_SERVICE_ROLE_KEY
+      // we still create the project; admins miss the notification but the
+      // canonical row is in place.
+      const { isServiceClientAvailable } = await import("@/lib/supabase/server");
+      if (isServiceClientAvailable()) {
+        try {
+          const { notifyOrgAdmins } = await import("@/lib/notify");
+          await notifyOrgAdmins({
+            orgId: session.orgId,
+            eventType: "project.created",
+            title: `New project: ${projectName}`,
+            href: projectId ? `/console/projects/${projectId}` : undefined,
+            data: { projectId, name: projectName },
+          });
+        } catch (e) {
+          const { log } = await import("@/lib/log");
+          log.warn("projects.notify_failed", { err: e instanceof Error ? e.message : String(e) });
+        }
+      }
       return apiCreated(project);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Could not create project";

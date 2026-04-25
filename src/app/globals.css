@@ -282,9 +282,33 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible, summary:fo
   border-bottom: var(--border-width) solid var(--border-color);
 }
 
+/* ───── Motion tokens ─────
+ * One language for entrance / exit / hover micro-interactions. Each token
+ * has a duration AND an ease so callers can compose `var(--motion-fast)
+ * var(--ease-out)` instead of hardcoding `200ms ease-in-out` across the
+ * codebase. Aligned with Linear / Vercel / Stripe standards (~120ms for
+ * fast, ~200ms for normal, ~360ms for slow).
+ */
+:root {
+  --motion-fast: 120ms;
+  --motion-normal: 200ms;
+  --motion-slow: 360ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);     /* gentle decelerate */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* tiny overshoot */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);   /* material standard */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-normal: 0ms;
+    --motion-slow: 0ms;
+  }
+}
+
 /* ───── Interactive states ───── */
 
-.hover-lift { transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out); }
+.hover-lift { transition: transform var(--motion-normal) var(--ease-out), box-shadow var(--motion-normal) var(--ease-out); }
 .hover-lift:hover { transform: translateY(-2px); box-shadow: var(--shadow-elev-hover); }
 .hover-lift:active { transform: translateY(0); }
 

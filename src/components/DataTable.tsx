@@ -36,6 +36,13 @@ export type DataTableProps<T extends { id: string }> = {
   emptyLabel?: string;
   loading?: boolean;
   density?: "comfortable" | "compact";
+  /** Pin the table header to the top of its scroll container. Gets the
+   *  surface background so rows scroll cleanly underneath. Modern data
+   *  grid expectation. */
+  stickyHeader?: boolean;
+  /** Bound the table height; rows scroll inside this container, header
+   *  stays pinned (use with `stickyHeader`). */
+  maxHeight?: string;
 };
 
 export function DataTable<T extends { id: string }>({
@@ -45,6 +52,8 @@ export function DataTable<T extends { id: string }>({
   emptyLabel = "No records yet",
   loading,
   density = "comfortable",
+  stickyHeader,
+  maxHeight,
 }: DataTableProps<T>) {
   if (loading) {
     return <DataTableSkeleton columns={columns.length} rows={6} />;
@@ -57,9 +66,12 @@ export function DataTable<T extends { id: string }>({
   const rowPad = density === "compact" ? "py-1.5" : "py-2.5";
 
   return (
-    <div className="surface overflow-x-auto">
+    <div
+      className="surface overflow-auto"
+      style={maxHeight ? { maxHeight } : undefined}
+    >
       <table className="data-table" role="grid" aria-rowcount={rows.length}>
-        <thead>
+        <thead className={stickyHeader ? "sticky top-0 z-10 bg-[var(--background)]" : undefined}>
           <tr>
             {columns.map((c) => (
               <th key={c.key} className={c.className}>

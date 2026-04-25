@@ -435,6 +435,50 @@ export type KbArticle = {
   created_at: string; updated_at: string;
 };
 
+// ── 2026-04-25 settings completion row types ─────────────────────────────
+export type ApiKey = {
+  id: string; org_id: string; name: string; prefix: string; hashed_secret: string;
+  scopes: string[]; last_used_at: string | null; expires_at: string | null;
+  revoked_at: string | null; created_by: string | null; created_at: string;
+};
+export type OrgDomain = {
+  id: string; org_id: string; hostname: string; purpose: string;
+  verification_method: string; verification_token: string;
+  verified_at: string | null; created_at: string;
+};
+export type OrgIntegration = {
+  id: string; org_id: string; connector: string; status: string;
+  config: Record<string, unknown>; installed_at: string | null;
+  last_error: string | null; created_at: string; updated_at: string;
+};
+export type ImportRun = {
+  id: string; org_id: string; kind: string; source: string;
+  filename: string | null; rows_total: number; rows_imported: number;
+  rows_failed: number; status: string; error: string | null;
+  log: unknown; created_by: string | null;
+  started_at: string | null; finished_at: string | null; created_at: string;
+};
+export type GovernanceCommittee = {
+  id: string; org_id: string; name: string; charter: string | null;
+  cadence: string | null; chair_user_id: string | null;
+  members: unknown; created_at: string;
+};
+export type GovernancePolicy = {
+  id: string; org_id: string; name: string; category: string | null;
+  body: string | null; effective_at: string | null; reviewed_at: string | null;
+  next_review_at: string | null; status: string; owner_user_id: string | null;
+  created_at: string;
+};
+export type OrgRole = {
+  id: string; org_id: string; slug: string; label: string;
+  description: string | null; permissions: string[]; is_system: boolean;
+  created_at: string;
+};
+export type AssetLink = {
+  id: string; org_id: string; credential_id: string; asset_kind: string;
+  asset_serial: string; issued_at: string; revoked_at: string | null;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -690,6 +734,15 @@ export type Database = {
       integration_connectors: TableDef<IntegrationConnector, Partial<IntegrationConnector> & { org_id: string; slug: string; name: string; kind: string }, Partial<IntegrationConnector>>;
       sustainability_metrics: TableDef<SustainabilityMetric, Partial<SustainabilityMetric> & { org_id: string; period_start: string; period_end: string }, Partial<SustainabilityMetric>>;
       kb_articles: TableDef<KbArticle, Partial<KbArticle> & { org_id: string; slug: string; title: string; body_markdown: string }, Partial<KbArticle>>;
+      // ── 2026-04-25 settings completion ────────────────────────────────
+      api_keys: TableDef<ApiKey, Partial<ApiKey> & { org_id: string; name: string; prefix: string; hashed_secret: string }, Partial<ApiKey>>;
+      org_domains: TableDef<OrgDomain, Partial<OrgDomain> & { org_id: string; hostname: string }, Partial<OrgDomain>>;
+      org_integrations: TableDef<OrgIntegration, Partial<OrgIntegration> & { org_id: string; connector: string }, Partial<OrgIntegration>>;
+      import_runs: TableDef<ImportRun, Partial<ImportRun> & { org_id: string; kind: string }, Partial<ImportRun>>;
+      governance_committees: TableDef<GovernanceCommittee, Partial<GovernanceCommittee> & { org_id: string; name: string }, Partial<GovernanceCommittee>>;
+      governance_policies: TableDef<GovernancePolicy, Partial<GovernancePolicy> & { org_id: string; name: string }, Partial<GovernancePolicy>>;
+      org_roles: TableDef<OrgRole, Partial<OrgRole> & { org_id: string; slug: string; label: string }, Partial<OrgRole>>;
+      asset_links: TableDef<AssetLink, Partial<AssetLink> & { org_id: string; credential_id: string; asset_kind: string; asset_serial: string }, Partial<AssetLink>>;
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };

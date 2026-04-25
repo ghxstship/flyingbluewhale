@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 
 /**
  * Combobox — searchable single-select.
@@ -21,7 +21,9 @@ export type ComboboxOption = {
 };
 
 export function Combobox({
-  options,
+  options: staticOptions,
+  optionsLoader,
+  loaderDebounceMs = 200,
   value,
   onChange,
   placeholder = "Select…",
@@ -29,7 +31,12 @@ export function Combobox({
   emptyLabel = "No results",
   className = "",
 }: {
-  options: ComboboxOption[];
+  options?: ComboboxOption[];
+  /** Async option loader. Takes the current search query and returns options.
+   *  Use over `options` when the candidate set is large (>500) or
+   *  server-resident (user picker, location lookup, vendor search). */
+  optionsLoader?: (query: string) => Promise<ComboboxOption[]>;
+  loaderDebounceMs?: number;
   value?: string | null;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -38,8 +45,36 @@ export function Combobox({
   className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [asyncOptions, setAsyncOptions] = React.useState<ComboboxOption[]>([]);
+  const [loading, setLoading] = React.useState(false);
+  const [lastSelectedLabel, setLastSelectedLabel] = React.useState<string | undefined>(undefined);
   const listboxId = React.useId();
+
+  // Debounced async load.
+  React.useEffect(() => {
+    if (!optionsLoader || !open) return;
+    setLoading(true);
+    const handle = setTimeout(async () => {
+      try {
+        const next = await optionsLoader(query);
+        setAsyncOptions(next);
+      } finally {
+        setLoading(false);
+      }
+    }, loaderDebounceMs);
+    return () => clearTimeout(handle);
+  }, [optionsLoader, query, open, loaderDebounceMs]);
+
+  const options = optionsLoader ? asyncOptions : (staticOptions ?? []);
   const selected = options.find((o) => o.value === value);
+  // Remember the last-known label for the selected value across refreshes
+  // of the async option set (otherwise the trigger flickers to placeholder
+  // when the popover closes).
+  React.useEffect(() => {
+    if (selected) setLastSelectedLabel(selected.label);
+  }, [selected]);
+  const selectedLabel = selected?.label ?? lastSelectedLabel;
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
@@ -52,8 +87,8 @@ export function Combobox({
           aria-label={placeholder}
           className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
-          <span className={selected ? "" : "text-[var(--text-muted)]"}>
-            {selected?.label ?? placeholder}
+          <span className={selectedLabel ? "" : "text-[var(--text-muted)]"}>
+            {selectedLabel ?? placeholder}
           </span>
           <ChevronsUpDown size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
         </button>
@@ -65,16 +100,26 @@ export function Combobox({
           sideOffset={4}
           className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] shadow-lg"
         >
-          <CommandPrimitive className="flex flex-col">
-            <div className="border-b border-[var(--border-color)] px-3 py-2">
+          {/* shouldFilter=false when async, so cmdk doesn't strip server results */}
+          <CommandPrimitive className="flex flex-col" shouldFilter={!optionsLoader}>
+            <div className="flex items-center gap-2 border-b border-[var(--border-color)] px-3 py-2">
               <CommandPrimitive.Input
                 placeholder={searchPlaceholder}
+                value={query}
+                onValueChange={setQuery}
                 className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
               />
+              {loading && (
+                <Loader2
+                  size={12}
+                  className="shrink-0 text-[var(--text-muted)] motion-safe:animate-spin"
+                  aria-hidden="true"
+                />
+              )}
             </div>
             <CommandPrimitive.List className="max-h-60 overflow-y-auto p-1">
               <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--text-muted)]">
-                {emptyLabel}
+                {loading ? "Loading…" : emptyLabel}
               </CommandPrimitive.Empty>
               {options.map((o) => (
                 <CommandPrimitive.Item
@@ -83,6 +128,7 @@ export function Combobox({
                   disabled={o.disabled}
                   onSelect={() => {
                     onChange(o.value);
+                    setLastSelectedLabel(o.label);
                     setOpen(false);
                   }}
                   className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm data-[disabled=true]:opacity-50 data-[selected=true]:bg-[var(--surface-inset)]"

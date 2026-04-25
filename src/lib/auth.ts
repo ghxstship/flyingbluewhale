@@ -97,6 +97,7 @@ const CAPABILITIES: Partial<Record<PlatformRole, readonly string[]>> = {
     "projects:read", "projects:write",
     "invoices:*", "expenses:*", "budgets:*", "time:*", "mileage:*", "advances:*", "payouts:*",
     "procurement:*",
+    "billing:*",
   ],
   collaborator: [
     "projects:read", "projects:write",

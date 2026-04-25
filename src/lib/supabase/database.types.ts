@@ -468,6 +468,101 @@ export type Database = {
           },
         ]
       }
+      api_keys: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          hashed_secret: string
+          id: string
+          last_used_at: string | null
+          name: string
+          org_id: string
+          prefix: string
+          revoked_at: string | null
+          scopes: string[]
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          hashed_secret: string
+          id?: string
+          last_used_at?: string | null
+          name: string
+          org_id: string
+          prefix: string
+          revoked_at?: string | null
+          scopes?: string[]
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          hashed_secret?: string
+          id?: string
+          last_used_at?: string | null
+          name?: string
+          org_id?: string
+          prefix?: string
+          revoked_at?: string | null
+          scopes?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      asset_links: {
+        Row: {
+          asset_kind: string
+          asset_serial: string
+          credential_id: string
+          id: string
+          issued_at: string
+          org_id: string
+          revoked_at: string | null
+        }
+        Insert: {
+          asset_kind: string
+          asset_serial: string
+          credential_id: string
+          id?: string
+          issued_at?: string
+          org_id: string
+          revoked_at?: string | null
+        }
+        Update: {
+          asset_kind?: string
+          asset_serial?: string
+          credential_id?: string
+          id?: string
+          issued_at?: string
+          org_id?: string
+          revoked_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "asset_links_credential_id_fkey"
+            columns: ["credential_id"]
+            isOneToOne: false
+            referencedRelation: "credentials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asset_links_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string
@@ -1722,6 +1817,97 @@ export type Database = {
           },
         ]
       }
+      governance_committees: {
+        Row: {
+          cadence: string | null
+          chair_user_id: string | null
+          charter: string | null
+          created_at: string
+          id: string
+          members: Json
+          name: string
+          org_id: string
+        }
+        Insert: {
+          cadence?: string | null
+          chair_user_id?: string | null
+          charter?: string | null
+          created_at?: string
+          id?: string
+          members?: Json
+          name: string
+          org_id: string
+        }
+        Update: {
+          cadence?: string | null
+          chair_user_id?: string | null
+          charter?: string | null
+          created_at?: string
+          id?: string
+          members?: Json
+          name?: string
+          org_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "governance_committees_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      governance_policies: {
+        Row: {
+          body: string | null
+          category: string | null
+          created_at: string
+          effective_at: string | null
+          id: string
+          name: string
+          next_review_at: string | null
+          org_id: string
+          owner_user_id: string | null
+          reviewed_at: string | null
+          status: string
+        }
+        Insert: {
+          body?: string | null
+          category?: string | null
+          created_at?: string
+          effective_at?: string | null
+          id?: string
+          name: string
+          next_review_at?: string | null
+          org_id: string
+          owner_user_id?: string | null
+          reviewed_at?: string | null
+          status?: string
+        }
+        Update: {
+          body?: string | null
+          category?: string | null
+          created_at?: string
+          effective_at?: string | null
+          id?: string
+          name?: string
+          next_review_at?: string | null
+          org_id?: string
+          owner_user_id?: string | null
+          reviewed_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "governance_policies_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guide_comments: {
         Row: {
           author_email: string | null
@@ -1836,6 +2022,68 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "idempotency_keys_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      import_runs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          error: string | null
+          filename: string | null
+          finished_at: string | null
+          id: string
+          kind: string
+          log: Json | null
+          org_id: string
+          rows_failed: number
+          rows_imported: number
+          rows_total: number
+          source: string
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          filename?: string | null
+          finished_at?: string | null
+          id?: string
+          kind: string
+          log?: Json | null
+          org_id: string
+          rows_failed?: number
+          rows_imported?: number
+          rows_total?: number
+          source?: string
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          filename?: string | null
+          finished_at?: string | null
+          id?: string
+          kind?: string
+          log?: Json | null
+          org_id?: string
+          rows_failed?: number
+          rows_imported?: number
+          rows_total?: number
+          source?: string
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "import_runs_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -2658,39 +2906,174 @@ export type Database = {
           },
         ]
       }
+      org_domains: {
+        Row: {
+          created_at: string
+          hostname: string
+          id: string
+          org_id: string
+          purpose: string
+          verification_method: string
+          verification_token: string
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          hostname: string
+          id?: string
+          org_id: string
+          purpose?: string
+          verification_method?: string
+          verification_token?: string
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          hostname?: string
+          id?: string
+          org_id?: string
+          purpose?: string
+          verification_method?: string
+          verification_token?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_domains_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      org_integrations: {
+        Row: {
+          config: Json
+          connector: string
+          created_at: string
+          id: string
+          installed_at: string | null
+          last_error: string | null
+          org_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          connector: string
+          created_at?: string
+          id?: string
+          installed_at?: string | null
+          last_error?: string | null
+          org_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          connector?: string
+          created_at?: string
+          id?: string
+          installed_at?: string | null
+          last_error?: string | null
+          org_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_integrations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      org_roles: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_system: boolean
+          label: string
+          org_id: string
+          permissions: string[]
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_system?: boolean
+          label: string
+          org_id: string
+          permissions?: string[]
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_system?: boolean
+          label?: string
+          org_id?: string
+          permissions?: string[]
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_roles_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orgs: {
         Row: {
           branding: Json
+          compliance_settings: Json
           created_at: string
+          datamap: Json
           id: string
           logo_url: string | null
           name: string
           name_override: string | null
           slug: string
+          stripe_customer_id: string | null
           support_email: string | null
           tier: Database["public"]["Enums"]["tier"]
           updated_at: string
         }
         Insert: {
           branding?: Json
+          compliance_settings?: Json
           created_at?: string
+          datamap?: Json
           id?: string
           logo_url?: string | null
           name: string
           name_override?: string | null
           slug: string
+          stripe_customer_id?: string | null
           support_email?: string | null
           tier?: Database["public"]["Enums"]["tier"]
           updated_at?: string
         }
         Update: {
           branding?: Json
+          compliance_settings?: Json
           created_at?: string
+          datamap?: Json
           id?: string
           logo_url?: string | null
           name?: string
           name_override?: string | null
           slug?: string
+          stripe_customer_id?: string | null
           support_email?: string | null
           tier?: Database["public"]["Enums"]["tier"]
           updated_at?: string

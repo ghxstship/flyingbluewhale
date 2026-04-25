@@ -5,6 +5,7 @@ import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { parseAndValidateCsv } from "@/lib/import/csv";
 import { VendorRowSchema, type VendorRow, dedupeKey } from "@/lib/import/transformers/vendors";
+import { logImportRun } from "@/lib/import/log";
 import { log } from "@/lib/log";
 
 const PostSchema = z.object({ csv: z.string().min(1).max(5 * 1024 * 1024) });
@@ -51,10 +52,30 @@ export async function POST(req: NextRequest) {
       const { error, data } = await supabase.from("vendors").insert(rowsForDb).select("id");
       if (error) {
         log.warn("import.vendors.insert_failed", { err: error.message, org_id: session.orgId });
+        await logImportRun({
+          orgId: session.orgId,
+          userId: session.userId,
+          kind: "vendors",
+          rowsTotal: result.rowCount,
+          rowsImported: 0,
+          rowsFailed: result.rowCount,
+          status: "failed",
+          error: error.message,
+        });
         return apiError("internal", error.message);
       }
       insertedCount = data?.length ?? 0;
     }
+
+    await logImportRun({
+      orgId: session.orgId,
+      userId: session.userId,
+      kind: "vendors",
+      rowsTotal: result.rowCount,
+      rowsImported: insertedCount,
+      rowsFailed: result.invalid.length,
+      status: "succeeded",
+    });
 
     return apiCreated({
       rowCount: result.rowCount,

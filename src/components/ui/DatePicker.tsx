@@ -219,6 +219,103 @@ function Calendar_({
   );
 }
 
+/**
+ * RangeDatePicker — pick a [from, to] window with quick presets. Stripe,
+ * Linear, and Ramp surface "Today / This Week / Last 30 days" so the
+ * common case is one click. The custom range still uses the same
+ * keyboard-first calendar as DatePicker.
+ */
+export type DateRange = { from: Date | null; to: Date | null };
+
+const RANGE_PRESETS: { label: string; compute: () => DateRange }[] = [
+  { label: "Today", compute: () => { const t = startOfDay(new Date()); return { from: t, to: t }; } },
+  { label: "Yesterday", compute: () => { const y = startOfDay(addDays(new Date(), -1)); return { from: y, to: y }; } },
+  { label: "Last 7 days", compute: () => ({ from: startOfDay(addDays(new Date(), -6)), to: startOfDay(new Date()) }) },
+  { label: "Last 30 days", compute: () => ({ from: startOfDay(addDays(new Date(), -29)), to: startOfDay(new Date()) }) },
+  { label: "This month", compute: () => { const n = new Date(); return { from: new Date(n.getFullYear(), n.getMonth(), 1), to: startOfDay(n) }; } },
+  { label: "Last month", compute: () => { const n = new Date(); const start = new Date(n.getFullYear(), n.getMonth() - 1, 1); const end = new Date(n.getFullYear(), n.getMonth(), 0); return { from: start, to: end }; } },
+];
+
+export function RangeDatePicker({
+  value,
+  onChange,
+  placeholder = "Select range",
+  className = "",
+}: {
+  value: DateRange;
+  onChange: (range: DateRange) => void;
+  placeholder?: string;
+  className?: string;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [pickingEnd, setPickingEnd] = React.useState(false);
+  const [viewMonth, setViewMonth] = React.useState<Date>(() => value.from ?? new Date());
+
+  const display = value.from && value.to
+    ? `${formatDate(value.from)} – ${formatDate(value.to)}`
+    : value.from
+      ? `${formatDate(value.from)} – …`
+      : placeholder;
+
+  function onSelect(d: Date) {
+    if (!pickingEnd) {
+      onChange({ from: d, to: null });
+      setPickingEnd(true);
+      return;
+    }
+    const from = value.from!;
+    const ordered = d < from ? { from: d, to: from } : { from, to: d };
+    onChange(ordered);
+    setPickingEnd(false);
+    setOpen(false);
+  }
+
+  return (
+    <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
+      <PopoverPrimitive.Trigger asChild>
+        <button
+          type="button"
+          aria-label={placeholder}
+          className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
+        >
+          <span className={value.from ? "" : "text-[var(--text-muted)]"}>{display}</span>
+          <Calendar size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
+        </button>
+      </PopoverPrimitive.Trigger>
+      <PopoverPrimitive.Portal>
+        <PopoverPrimitive.Content
+          align="start"
+          sideOffset={4}
+          className="z-50 flex gap-3 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-3 shadow-lg"
+        >
+          <div className="flex w-32 flex-col gap-0.5 border-e border-[var(--border-color)] pe-3 text-xs">
+            {RANGE_PRESETS.map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => {
+                  onChange(p.compute());
+                  setPickingEnd(false);
+                  setOpen(false);
+                }}
+                className="rounded px-2 py-1 text-start text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <Calendar_
+            month={viewMonth}
+            onMonthChange={setViewMonth}
+            value={pickingEnd ? null : value.from}
+            onSelect={onSelect}
+          />
+        </PopoverPrimitive.Content>
+      </PopoverPrimitive.Portal>
+    </PopoverPrimitive.Root>
+  );
+}
+
 // ─── date helpers (local-timezone) ─────────────────────────────────────
 
 function addDays(d: Date, n: number) {

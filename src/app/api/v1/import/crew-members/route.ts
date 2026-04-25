@@ -5,6 +5,7 @@ import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { parseAndValidateCsv } from "@/lib/import/csv";
 import { CrewRowSchema, type CrewRow, dedupeKey } from "@/lib/import/transformers/crew";
+import { logImportRun } from "@/lib/import/log";
 import { log } from "@/lib/log";
 
 /**
@@ -82,10 +83,30 @@ export async function POST(req: NextRequest) {
         .select("id");
       if (upErr) {
         log.warn("import.crew_members.insert_failed", { err: upErr.message, org_id: session.orgId });
+        await logImportRun({
+          orgId: session.orgId,
+          userId: session.userId,
+          kind: "crew_members",
+          rowsTotal: result.rowCount,
+          rowsImported: 0,
+          rowsFailed: result.rowCount,
+          status: "failed",
+          error: upErr.message,
+        });
         return apiError("internal", upErr.message);
       }
       insertedCount = inserted?.length ?? 0;
     }
+
+    await logImportRun({
+      orgId: session.orgId,
+      userId: session.userId,
+      kind: "crew_members",
+      rowsTotal: result.rowCount,
+      rowsImported: insertedCount,
+      rowsFailed: result.invalid.length,
+      status: "succeeded",
+    });
 
     return apiCreated({
       rowCount: result.rowCount,

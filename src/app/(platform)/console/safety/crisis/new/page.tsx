@@ -1,19 +1,38 @@
 import { ModuleHeader } from "@/components/Shell";
-import { Button } from "@/components/ui/Button";
+import { FormShell } from "@/components/FormShell";
+import { Input } from "@/components/ui/Input";
+import { createCrisisAlertAction } from "./actions";
 
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Create" title="New alert" />
-      <div className="page-content">
-        <form action="/api/v1/crisis_alerts" method="post" className="surface p-6 grid gap-4 max-w-xl">
-        <label htmlFor="fld-title" className="flex flex-col gap-1 text-sm"><span>Title</span><input id="fld-title" type="text" name="title" className="surface-inset p-3 rounded" required /></label>
-        <label htmlFor="fld-body" className="flex flex-col gap-1 text-sm"><span>Body</span><textarea id="fld-body" name="body" rows={4} className="surface-inset p-3 rounded" required /></label>
-        <label className="flex flex-col gap-1 text-sm"><span>Severity</span><select name="severity" className="surface-inset p-3 rounded" required><option value="info">info</option><option value="warn">warn</option><option value="critical">critical</option></select></label>
-          <div className="flex gap-2">
-            <Button type="submit">Create</Button>
+      <ModuleHeader eyebrow="Crisis" title="New alert" />
+      <div className="page-content max-w-xl">
+        <FormShell
+          action={createCrisisAlertAction}
+          cancelHref="/console/safety/crisis"
+          submitLabel="Send alert"
+        >
+          <Input label="Title" name="title" required maxLength={200} />
+          <div>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">Body</label>
+            <textarea
+              name="body"
+              rows={4}
+              required
+              maxLength={4000}
+              className="input-base mt-1.5 w-full"
+            />
           </div>
-        </form>
+          <div>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">Severity</label>
+            <select name="severity" defaultValue="info" className="input-base mt-1.5 w-full">
+              <option value="info">Info</option>
+              <option value="warn">Warning</option>
+              <option value="critical">Critical</option>
+            </select>
+          </div>
+        </FormShell>
       </div>
     </>
   );

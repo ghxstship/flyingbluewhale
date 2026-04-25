@@ -1,20 +1,30 @@
 import { ModuleHeader } from "@/components/Shell";
-import { Button } from "@/components/ui/Button";
+import { FormShell } from "@/components/FormShell";
+import { Input } from "@/components/ui/Input";
+import { createVenueAction } from "./actions";
 
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Create" title="New venue" />
-      <div className="page-content">
-        <form action="/api/v1/venues" method="post" className="surface p-6 grid gap-4 max-w-xl">
-        <label htmlFor="fld-name" className="flex flex-col gap-1 text-sm"><span>Name</span><input id="fld-name" type="text" name="name" className="surface-inset p-3 rounded" required /></label>
-        <label className="flex flex-col gap-1 text-sm"><span>Kind</span><select name="kind" className="surface-inset p-3 rounded" required><option value="competition">competition</option><option value="training">training</option><option value="live_site">live_site</option><option value="ibc">ibc</option><option value="mpc">mpc</option><option value="village">village</option><option value="support">support</option></select></label>
-        <label htmlFor="fld-cluster" className="flex flex-col gap-1 text-sm"><span>Cluster</span><input id="fld-cluster" type="text" name="cluster" className="surface-inset p-3 rounded" /></label>
-        <label htmlFor="fld-capacity" className="flex flex-col gap-1 text-sm"><span>Capacity</span><input id="fld-capacity" type="number" name="capacity" className="surface-inset p-3 rounded" /></label>
-          <div className="flex gap-2">
-            <Button type="submit">Create</Button>
+      <ModuleHeader eyebrow="Venues" title="New venue" />
+      <div className="page-content max-w-xl">
+        <FormShell action={createVenueAction} cancelHref="/console/venues" submitLabel="Create venue">
+          <Input label="Name" name="name" required maxLength={120} />
+          <div>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
+            <select name="kind" defaultValue="competition" className="input-base mt-1.5 w-full">
+              <option value="competition">Competition</option>
+              <option value="training">Training</option>
+              <option value="live_site">Live site</option>
+              <option value="ibc">IBC</option>
+              <option value="mpc">MPC</option>
+              <option value="village">Village</option>
+              <option value="support">Support</option>
+            </select>
           </div>
-        </form>
+          <Input label="Cluster" name="cluster" maxLength={80} />
+          <Input label="Capacity" name="capacity" type="number" />
+        </FormShell>
       </div>
     </>
   );

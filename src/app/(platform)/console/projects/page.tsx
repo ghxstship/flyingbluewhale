@@ -7,6 +7,7 @@ import { listProjects } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ProjectPortfolioGrid, type PortfolioEntry } from "./ProjectPortfolioGrid";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,7 @@ export default async function ProjectsPage() {
         subtitle={`${projects.length} total`}
         action={<Button href="/console/projects/new">+ New project</Button>}
       />
-      <div className="page-content">
+      <div className="page-content space-y-5">
         {projects.length === 0 ? (
           <EmptyState
             title="No projects yet"
@@ -40,7 +41,18 @@ export default async function ProjectsPage() {
             action={<Button href="/console/projects/new">Create your first project</Button>}
           />
         ) : (
-          <div className="card-elevated">
+          <>
+            <ProjectPortfolioGrid
+              entries={projects.map<PortfolioEntry>((p) => ({
+                id: p.id,
+                name: p.name,
+                status: p.status,
+                startDate: p.start_date ?? null,
+                endDate: p.end_date ?? null,
+                budgetCents: p.budget_cents ?? 0,
+              }))}
+            />
+            <div className="card-elevated">
             <table className="data-table">
               <thead>
                 <tr>
@@ -71,7 +83,8 @@ export default async function ProjectsPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+          </>
         )}
       </div>
     </>

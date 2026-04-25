@@ -92,6 +92,11 @@ const config = [
       "src/lib/pdf/**",                                    // @react-pdf/renderer — style objects require hex; no CSS var support
       "src/components/stage-plots/StagePlotCanvas.tsx",    // user-input shape colors; brand-free canvas editor
       "src/app/(platform)/console/settings/branding/**",   // brand-color picker UI — raw hex is the data, not a style
+      "src/components/charts/**",                          // chart palettes — recharts/maplibre need raw hex
+      "src/app/(platform)/console/finance/reports/ReportsCharts.tsx",
+      "src/app/(platform)/console/sustainability/carbon/CarbonCharts.tsx",
+      "src/app/(platform)/console/production/dispatch/live/LiveDispatchMap.tsx",
+      "src/app/(platform)/console/projects/[projectId]/gantt/GanttChart.tsx",
     ],
     rules: {
       "no-restricted-syntax": "off",

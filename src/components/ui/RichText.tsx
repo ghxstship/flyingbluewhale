@@ -208,21 +208,21 @@ export function RichText({
         </ToolbarButton>
         <div aria-hidden="true" className="mx-1 h-4 w-px bg-[var(--border-color)]" />
         <ToolbarButton
-          label="Bulleted list"
+          label="Bulleted List"
           pressed={editor.isActive("bulletList")}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
           <List size={12} />
         </ToolbarButton>
         <ToolbarButton
-          label="Numbered list"
+          label="Numbered List"
           pressed={editor.isActive("orderedList")}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >
           <ListOrdered size={12} />
         </ToolbarButton>
         <ToolbarButton
-          label="Block quote"
+          label="Block Quote"
           pressed={editor.isActive("blockquote")}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
         >

@@ -33,17 +33,17 @@ export default async function FinanceHub() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="Finance hub" subtitle="AR, AP, budgets, and reporting at a glance" />
+      <ModuleHeader eyebrow="Finance" title="Finance Hub" subtitle="AR, AP, budgets, and reporting at a glance" />
       <div className="page-content space-y-6">
         <div className="metric-grid">
           <MetricCard label="Outstanding" value={formatMoney(outstanding)} accent />
           <MetricCard label="Paid" value={formatMoney(paid)} />
           <MetricCard label="Expenses" value={formatMoney(spent)} />
-          <MetricCard label="Budget total" value={formatMoney(budgetTotal)} />
+          <MetricCard label="Budget Total" value={formatMoney(budgetTotal)} />
         </div>
         <div className="metric-grid">
           <MetricCard label="Invoices" value={invoices.length} />
-          <MetricCard label="Expense items" value={expenses.length} />
+          <MetricCard label="Expense Items" value={expenses.length} />
           <MetricCard label="Budgets" value={budgets.length} />
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

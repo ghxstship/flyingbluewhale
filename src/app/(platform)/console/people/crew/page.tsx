@@ -27,7 +27,7 @@ export default async function CrewPage() {
             { key: "role", header: "Role", render: (r) => r.role ?? "—", className: "font-mono text-xs" },
             { key: "email", header: "Email", render: (r) => r.email ?? "—", className: "font-mono text-xs" },
             { key: "phone", header: "Phone", render: (r) => r.phone ?? "—", className: "font-mono text-xs" },
-            { key: "rate", header: "Day rate", render: (r) => formatMoney(r.day_rate_cents), className: "font-mono text-xs" },
+            { key: "rate", header: "Day Rate", render: (r) => formatMoney(r.day_rate_cents), className: "font-mono text-xs" },
           ]}
         />
         <div className="mt-4 text-xs text-[var(--text-muted)]">

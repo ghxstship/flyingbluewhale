@@ -16,11 +16,15 @@ export default async function FabricationPage() {
   const rows = await listOrgScoped("fabrication_orders", session.orgId, { orderBy: "created_at" });
   return (
     <>
-      <ModuleHeader eyebrow="Production" title="Fabrication orders" subtitle={`${rows.length} orders`}
+      <ModuleHeader eyebrow="Production" title="Fabrication Orders" subtitle={`${rows.length} orders`}
         action={<Button href="/console/production/fabrication/new">+ New order</Button>} />
       <div className="page-content">
         <DataTable<FabricationOrder>
           rows={rows}
+          rowHref={(r) => `/console/production/fabrication/${r.id}`}
+          emptyLabel="No fabrication orders"
+          emptyDescription="Custom-build work that goes to the shop — runs status from open through complete."
+          emptyAction={<Button href="/console/production/fabrication/new" size="sm">+ New order</Button>}
           columns={[
             { key: "title", header: "Title", render: (r) => r.title },
             { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },

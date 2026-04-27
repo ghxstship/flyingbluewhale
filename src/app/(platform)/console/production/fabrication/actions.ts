@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { FabricationStatus } from "@/lib/supabase/types";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -27,6 +28,42 @@ export async function createFabAction(_: State, fd: FormData): Promise<State> {
     project_id: parsed.data.project_id || null,
   });
   if (error) return { error: error.message };
+  revalidatePath("/console/production/fabrication");
+  redirect("/console/production/fabrication");
+}
+
+const StatusEnum = z.enum(["open", "in_progress", "blocked", "complete"]);
+
+/**
+ * Drive a fabrication order through its lifecycle:
+ * open → in_progress → complete (or blocked, with un-block returning to
+ * in_progress).
+ */
+export async function setFabStatus(formData: FormData) {
+  const session = await requireSession();
+  const id = String(formData.get("id") ?? "");
+  const next = StatusEnum.safeParse(formData.get("status"));
+  if (!id || !next.success) return;
+  const supabase = await createClient();
+  await supabase
+    .from("fabrication_orders")
+    .update({ status: next.data as FabricationStatus })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  revalidatePath("/console/production/fabrication");
+  revalidatePath(`/console/production/fabrication/${id}`);
+}
+
+export async function deleteFab(formData: FormData) {
+  const session = await requireSession();
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  const supabase = await createClient();
+  await supabase
+    .from("fabrication_orders")
+    .delete()
+    .eq("id", id)
+    .eq("org_id", session.orgId);
   revalidatePath("/console/production/fabrication");
   redirect("/console/production/fabrication");
 }

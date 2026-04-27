@@ -11,7 +11,7 @@ export function NewLocationForm() {
       <div className="grid gap-4 sm:grid-cols-3">
         <Input label="City" name="city" />
         <Input label="Region" name="region" />
-        <Input label="Postal code" name="postcode" />
+        <Input label="Postal Code" name="postcode" />
       </div>
       <Input label="Country" name="country" />
       <div>

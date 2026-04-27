@@ -46,7 +46,7 @@ export default async function ApiSettingsPage() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Workspace settings"
+        title="Workspace Settings"
         subtitle="API & keys"
       />
       <div className="page-content max-w-3xl space-y-5">

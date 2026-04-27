@@ -15,7 +15,7 @@ export function ForgotPasswordForm() {
 
   return (
     <AuthShell
-      title="Reset password"
+      title="Reset Password"
       subtitle={sent ? "Check your inbox for the reset link." : "We'll email you a reset link."}
       footer={
         <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">

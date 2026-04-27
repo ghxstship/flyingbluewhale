@@ -16,7 +16,7 @@ export default async function GuestHome({ params }: { params: Promise<{ slug: st
     <div className="flex min-h-screen">
       <PortalRail items={portalNav(slug, "guest")} title="Guest" />
       <div className="flex-1">
-        <ModuleHeader eyebrow={project.name} title="Guest portal" subtitle="Tickets, schedule, and logistics" />
+        <ModuleHeader eyebrow={project.name} title="Guest Portal" subtitle="Tickets, schedule, and logistics" />
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-3">
             {[

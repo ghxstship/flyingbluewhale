@@ -11,14 +11,14 @@ export function NewProjectForm() {
 
   return (
     <form action={formAction} className="card-elevated space-y-4 p-6">
-      <Input label="Project name" name="name" required maxLength={120} />
+      <Input label="Project Name" name="name" required maxLength={120} />
       <div>
         <label className="text-label text-[var(--color-text-tertiary)]">Description</label>
         <textarea name="description" rows={4} maxLength={2000} className="input mt-1.5 w-full" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="Start date" name="startDate" type="date" />
-        <Input label="End date" name="endDate" type="date" />
+        <Input label="Start Date" name="startDate" type="date" />
+        <Input label="End Date" name="endDate" type="date" />
       </div>
       {state?.error ? (
         <Alert kind="error">{state.error}</Alert>

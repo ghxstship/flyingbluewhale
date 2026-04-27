@@ -20,11 +20,11 @@ export default async function PayoutsPage() {
           rows={vendors}
           columns={[
             { key: "name", header: "Vendor", render: (r) => r.name },
-            { key: "account", header: "Connect account", render: (r) => r.payout_account_id
+            { key: "account", header: "Connect Account", render: (r) => r.payout_account_id
               ? <span className="font-mono text-xs">{r.payout_account_id}</span>
               : <Badge variant="muted">Not onboarded</Badge> },
             { key: "w9", header: "W-9", render: (r) => r.w9_on_file ? <Badge variant="success">On file</Badge> : <Badge variant="warning">Missing</Badge> },
-            { key: "coi", header: "COI expires", render: (r) => r.coi_expires_at ?? "—", className: "font-mono text-xs" },
+            { key: "coi", header: "COI Expires", render: (r) => r.coi_expires_at ?? "—", className: "font-mono text-xs" },
           ]}
         />
       </div>

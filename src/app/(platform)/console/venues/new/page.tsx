@@ -6,7 +6,7 @@ import { createVenueAction } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Venues" title="New venue" />
+      <ModuleHeader eyebrow="Venues" title="New Venue" />
       <div className="page-content max-w-xl">
         <FormShell action={createVenueAction} cancelHref="/console/venues" submitLabel="Create venue">
           <Input label="Name" name="name" required maxLength={120} />

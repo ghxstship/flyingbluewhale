@@ -23,7 +23,7 @@ export default function MobileHome() {
           </Link>
         ))}
       </div>
-      <FAB href="/m/check-in" label="Scan ticket">
+      <FAB href="/m/check-in" label="Scan Ticket">
         <QrCode size={22} />
       </FAB>
     </div>

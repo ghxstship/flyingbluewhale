@@ -20,6 +20,10 @@ export default async function RentalsPage() {
       <div className="page-content">
         <DataTable<Rental>
           rows={rows}
+          rowHref={(r) => `/console/production/rentals/${r.id}`}
+          emptyLabel="No active rentals"
+          emptyDescription="A rental records when an asset is reserved or out of the warehouse for a date range."
+          emptyAction={<Button href="/console/production/rentals/new" size="sm">+ New rental</Button>}
           columns={[
             { key: "equipment_id", header: "Equipment", render: (r) => <span className="font-mono text-xs">{r.equipment_id.slice(0, 8)}</span> },
             { key: "starts", header: "Starts", render: (r) => formatDate(r.starts_at, "long"), className: "font-mono text-xs" },

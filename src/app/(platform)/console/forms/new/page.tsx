@@ -6,7 +6,7 @@ import { createFormDefAction } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Forms" title="New form" />
+      <ModuleHeader eyebrow="Forms" title="New Form" />
       <div className="page-content max-w-xl">
         <FormShell action={createFormDefAction} cancelHref="/console/forms" submitLabel="Create form">
           <Input

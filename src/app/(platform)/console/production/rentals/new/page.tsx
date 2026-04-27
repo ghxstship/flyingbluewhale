@@ -20,7 +20,7 @@ export default async function NewRentalPage() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Production" title="New rental" />
+      <ModuleHeader eyebrow="Production" title="New Rental" />
       <div className="page-content max-w-xl"><NewRentalForm equipment={equipment} projects={projects} /></div>
     </>
   );

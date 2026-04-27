@@ -41,7 +41,7 @@ export default async function SchedulePage() {
     <>
       <ModuleHeader
         eyebrow="Operations"
-        title="Master schedule"
+        title="Master Schedule"
         subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"}`}
         action={
           <div className="flex gap-2">

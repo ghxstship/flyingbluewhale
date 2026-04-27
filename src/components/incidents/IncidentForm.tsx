@@ -144,7 +144,7 @@ export function IncidentForm({
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-[var(--text-muted)]">Occurred at</label>
+          <label className="block text-xs font-medium text-[var(--text-muted)]">Occurred At</label>
           <input
             type="datetime-local"
             value={occurredAt}

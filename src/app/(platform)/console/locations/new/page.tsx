@@ -4,7 +4,7 @@ import { NewLocationForm } from "./NewLocationForm";
 export default function NewLocationPage() {
   return (
     <>
-      <ModuleHeader eyebrow="Work" title="Add location" />
+      <ModuleHeader eyebrow="Work" title="Add Location" />
       <div className="page-content max-w-xl"><NewLocationForm /></div>
     </>
   );

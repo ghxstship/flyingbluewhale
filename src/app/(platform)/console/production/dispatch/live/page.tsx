@@ -16,7 +16,7 @@ export default async function LiveDispatchPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Live dispatch" />
+        <ModuleHeader eyebrow="Production" title="Live Dispatch" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -86,7 +86,7 @@ export default async function LiveDispatchPage() {
     <>
       <ModuleHeader
         eyebrow="Production"
-        title="Live dispatch"
+        title="Live Dispatch"
         subtitle={`${points.length} run${points.length === 1 ? "" : "s"} with a fix`}
       />
       <div className="page-content space-y-5">

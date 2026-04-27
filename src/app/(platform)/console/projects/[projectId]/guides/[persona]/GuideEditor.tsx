@@ -34,7 +34,7 @@ export function GuideEditor({
         <Input label="Title" name="title" required defaultValue={defaultValues.title} />
         <Input label="Subtitle" name="subtitle" defaultValue={defaultValues.subtitle} />
       </div>
-      <Input label="Classification banner" name="classification" defaultValue={defaultValues.classification} />
+      <Input label="Classification Banner" name="classification" defaultValue={defaultValues.classification} />
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="published" defaultChecked={defaultValues.published} />
         Published (visible in portal + mobile)

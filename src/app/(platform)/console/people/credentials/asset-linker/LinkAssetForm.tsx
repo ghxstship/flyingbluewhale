@@ -33,7 +33,7 @@ export function LinkAssetForm({
         </select>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Asset kind</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">Asset Kind</label>
         <select name="asset_kind" defaultValue="nfc_tag" className="input-base mt-1.5 w-full">
           <option value="nfc_tag">NFC tag</option>
           <option value="rfid_card">RFID card</option>

@@ -42,7 +42,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Input
-            label="Product name override"
+            label="Product Name Override"
             name="productName"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
@@ -67,7 +67,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="block text-xs font-medium text-[var(--text-muted)]">Accent color</label>
+            <label className="block text-xs font-medium text-[var(--text-muted)]">Accent Color</label>
             <div className="mt-1 flex items-center gap-2">
               <input
                 type="color"
@@ -87,7 +87,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-[var(--text-muted)]">Text on accent</label>
+            <label className="block text-xs font-medium text-[var(--text-muted)]">Text on Accent</label>
             <div className="mt-1 flex items-center gap-2">
               <input
                 type="color"
@@ -116,7 +116,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Input label="Favicon URL" name="faviconUrl" type="url" defaultValue={initial.faviconUrl} placeholder="https://.../favicon.ico" />
-          <Input label="Hero image URL" name="heroImageUrl" type="url" defaultValue={initial.heroImageUrl} placeholder="https://.../hero.jpg" />
+          <Input label="Hero Image URL" name="heroImageUrl" type="url" defaultValue={initial.heroImageUrl} placeholder="https://.../hero.jpg" />
           <Input label="Open Graph image URL" name="ogImageUrl" type="url" defaultValue={initial.ogImageUrl} placeholder="https://.../og.png" />
         </div>
       </section>

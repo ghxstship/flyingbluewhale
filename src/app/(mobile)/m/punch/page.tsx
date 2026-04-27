@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Mobile" title="Punch list" />
+      <ModuleHeader eyebrow="Mobile" title="Punch List" />
       <div className="page-content">
         <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Construction inspection.</div>
       </div>

@@ -43,7 +43,7 @@ export default async function DatamapPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Privacy" title="Data map" />
+        <ModuleHeader eyebrow="Privacy" title="Data Map" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -70,7 +70,7 @@ export default async function DatamapPage() {
     <>
       <ModuleHeader
         eyebrow="Privacy"
-        title="Data map"
+        title="Data Map"
         subtitle="GDPR Article 30 processing register"
       />
       <div className="page-content max-w-5xl space-y-4">

@@ -20,7 +20,7 @@ export default async function NewEventPage() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Work" title="New event" />
+      <ModuleHeader eyebrow="Work" title="New Event" />
       <div className="page-content max-w-xl"><NewEventForm projects={projects} locations={locations} /></div>
     </>
   );

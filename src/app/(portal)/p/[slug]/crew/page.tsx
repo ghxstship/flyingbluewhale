@@ -16,7 +16,7 @@ export default async function CrewHome({ params }: { params: Promise<{ slug: str
     <div className="flex min-h-screen">
       <PortalRail items={portalNav(slug, "crew")} title="Crew" />
       <div className="flex-1">
-        <ModuleHeader eyebrow={project.name} title="Crew portal" subtitle="Call sheet, time, advances" />
+        <ModuleHeader eyebrow={project.name} title="Crew Portal" subtitle="Call sheet, time, advances" />
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-3">
             {[

@@ -16,7 +16,7 @@ export default async function VendorHome({ params }: { params: Promise<{ slug: s
     <div className="flex min-h-screen">
       <PortalRail items={portalNav(slug, "vendor")} title="Vendor" />
       <div className="flex-1">
-        <ModuleHeader eyebrow={project.name} title="Vendor portal" subtitle="Quotes, POs, invoicing, credentials" />
+        <ModuleHeader eyebrow={project.name} title="Vendor Portal" subtitle="Quotes, POs, invoicing, credentials" />
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[

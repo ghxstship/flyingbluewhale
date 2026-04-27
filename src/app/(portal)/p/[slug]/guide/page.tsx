@@ -35,7 +35,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   if (!guide || !guide.published) {
     return (
       <>
-        <ModuleHeader eyebrow={project.name} title="Event guide" subtitle="Your Know-Before-You-Go" />
+        <ModuleHeader eyebrow={project.name} title="Event Guide" subtitle="Your Know-Before-You-Go" />
         <div className="page-content">
           <div className="surface p-6 text-sm text-[var(--text-muted)]">
             The production team hasn&apos;t published a guide for your role yet. Check back soon.

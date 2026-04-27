@@ -16,7 +16,7 @@ export default async function SponsorHome({ params }: { params: Promise<{ slug: 
     <div className="flex min-h-screen">
       <PortalRail items={portalNav(slug, "sponsor")} title="Sponsor" />
       <div className="flex-1">
-        <ModuleHeader eyebrow={project.name} title="Sponsor portal" subtitle="Activations, brand assets, reporting" />
+        <ModuleHeader eyebrow={project.name} title="Sponsor Portal" subtitle="Activations, brand assets, reporting" />
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-3">
             {[

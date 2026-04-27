@@ -12,7 +12,7 @@ export default async function AssetLinkerPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Credentials" title="Asset linker" />
+        <ModuleHeader eyebrow="Credentials" title="Asset Linker" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -38,7 +38,7 @@ export default async function AssetLinkerPage() {
     <>
       <ModuleHeader
         eyebrow="Credentials"
-        title="Asset linker"
+        title="Asset Linker"
         subtitle="Bind a credential to its physical badge / card / QR"
       />
       <div className="page-content max-w-4xl space-y-5">

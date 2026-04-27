@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Mobile" title="New encounter" />
+      <ModuleHeader eyebrow="Mobile" title="New Encounter" />
       <div className="page-content">
         <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Log a new medical encounter.</div>
       </div>

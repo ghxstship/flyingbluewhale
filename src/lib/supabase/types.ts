@@ -159,7 +159,8 @@ export type Equipment = {
   id: string; org_id: string; name: string; category: string | null;
   asset_tag: string | null; serial: string | null; status: EquipmentStatus;
   location_id: string | null; daily_rate_cents: number | null;
-  notes: string | null; created_at: string;
+  notes: string | null; created_at: string; updated_at: string;
+  deleted_at: string | null;
 };
 export type Rental = {
   id: string; org_id: string; project_id: string | null; equipment_id: string;

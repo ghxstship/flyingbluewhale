@@ -11,7 +11,7 @@ export function NewReqForm() {
         <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
         <textarea name="description" rows={3} className="input-base mt-1.5 w-full" />
       </div>
-      <Input label="Estimated cost (USD)" name="estimated" type="number" step="0.01" />
+      <Input label="Estimated Cost (USD)" name="estimated" type="number" step="0.01" />
     </FormShell>
   );
 }

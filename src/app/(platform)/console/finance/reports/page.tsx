@@ -61,7 +61,7 @@ export default async function ReportsPage() {
           />
           <MetricCard label="Expenses" value={formatMoney(costs)} />
           <MetricCard
-            label="Gross margin"
+            label="Gross Margin"
             value={formatMoney(gross)}
             delta={{ value: `${marginPct}%`, positive: gross >= 0 }}
           />

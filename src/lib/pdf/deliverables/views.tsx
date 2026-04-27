@@ -157,7 +157,7 @@ export function GuestListView({ data }: { data: GuestListData }) {
 export function EquipmentPullListView({ data }: { data: EquipmentPullListData }) {
   return (
     <>
-      <SectionHeading title="Equipment pull list" />
+      <SectionHeading title="Equipment Pull List" />
       <PdfTable
         columns={[
           { key: "qty", label: "Qty", width: 0.8, align: "center" },

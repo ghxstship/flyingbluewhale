@@ -36,7 +36,7 @@ export default async function ImportsPage() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Workspace settings"
+        title="Workspace Settings"
         subtitle="Imports"
       />
       <div className="page-content max-w-4xl space-y-6">

@@ -18,7 +18,10 @@ export const dynamic = "force-dynamic";
 export default async function EquipmentPage() {
   if (!hasSupabase) return <><ModuleHeader title="Equipment" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
   const session = await requireSession();
-  const rows = await listOrgScoped("equipment", session.orgId, { orderBy: "name", ascending: true });
+  const allRows = await listOrgScoped("equipment", session.orgId, { orderBy: "name", ascending: true });
+  // Hide soft-deleted rows from the list. Retired equipment stays visible
+  // (it's part of the org history); only true deletes get hidden.
+  const rows = allRows.filter((r) => r.deleted_at == null);
   const available = rows.filter((r) => r.status === "available").length;
   return (
     <>
@@ -27,12 +30,16 @@ export default async function EquipmentPage() {
       <div className="page-content">
         <DataTable<Equipment>
           rows={rows}
+          rowHref={(r) => `/console/production/equipment/${r.id}`}
+          emptyLabel="No equipment yet"
+          emptyDescription="Track every owned + rented asset with rates, asset tags, and lifecycle status."
+          emptyAction={<Button href="/console/production/equipment/new" size="sm">+ Add equipment</Button>}
           columns={[
             { key: "name", header: "Name", render: (r) => r.name },
             { key: "category", header: "Category", render: (r) => r.category ?? "—", className: "font-mono text-xs" },
-            { key: "tag", header: "Asset tag", render: (r) => r.asset_tag ?? "—", className: "font-mono text-xs" },
+            { key: "tag", header: "Asset Tag", render: (r) => r.asset_tag ?? "—", className: "font-mono text-xs" },
             { key: "status", header: "Status", render: (r) => <Badge variant={STATUS_BG[r.status]}>{r.status.replace("_"," ")}</Badge> },
-            { key: "rate", header: "Daily rate", render: (r) => formatMoney(r.daily_rate_cents), className: "font-mono text-xs" },
+            { key: "rate", header: "Daily Rate", render: (r) => formatMoney(r.daily_rate_cents), className: "font-mono text-xs" },
           ]}
         />
       </div>

@@ -12,7 +12,7 @@ export function CueForm() {
   const [state, action, pending] = useActionState<State, FormData>(createCueAction, null);
   return (
     <form action={action} className="grid gap-3 md:grid-cols-2">
-      <Input label="Scheduled at" name="scheduled_at" type="datetime-local" required />
+      <Input label="Scheduled At" name="scheduled_at" type="datetime-local" required />
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">Lane</label>
         <select name="lane" defaultValue="show" className="input-base mt-1.5 w-full">

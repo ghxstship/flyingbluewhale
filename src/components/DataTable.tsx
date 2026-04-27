@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { EmptyState } from "@/components/ui/EmptyState";
 
 /**
  * DataTable — server component.
@@ -16,7 +15,13 @@ export type Column<T> = {
   key: string;
   header: string;
   render: (row: T) => ReactNode;
+  /** Per-cell className applied to `<td>` only. Use for cell-level
+   *  utilities like `font-mono text-xs` — they must NOT leak into the
+   *  header (where they would override the theme's display-serif font). */
   className?: string;
+  /** Optional header-only className (`<th>`). Most callers don't need this;
+   *  the table header inherits the active theme's display font. */
+  headerClassName?: string;
   /** Used by interactive wrapper for sort + filter. */
   sortable?: boolean;
   accessor?: (row: T) => string | number | null | undefined;
@@ -34,6 +39,10 @@ export type DataTableProps<T extends { id: string }> = {
   columns: Column<T>[];
   rowHref?: (row: T) => string;
   emptyLabel?: string;
+  /** Optional second line under `emptyLabel` in the empty-state overlay. */
+  emptyDescription?: string;
+  /** Optional CTA rendered inside the empty-state overlay (e.g. "+ New X"). */
+  emptyAction?: ReactNode;
   loading?: boolean;
   density?: "comfortable" | "compact";
   /** Pin the table header to the top of its scroll container. Gets the
@@ -50,6 +59,8 @@ export function DataTable<T extends { id: string }>({
   columns,
   rowHref,
   emptyLabel = "No records yet",
+  emptyDescription,
+  emptyAction,
   loading,
   density = "comfortable",
   stickyHeader,
@@ -60,7 +71,14 @@ export function DataTable<T extends { id: string }>({
   }
 
   if (rows.length === 0) {
-    return <EmptyState title={emptyLabel} />;
+    return (
+      <DataTableEmpty
+        columns={columns}
+        title={emptyLabel}
+        description={emptyDescription}
+        action={emptyAction}
+      />
+    );
   }
 
   const rowPad = density === "compact" ? "py-1.5" : "py-2.5";
@@ -74,7 +92,7 @@ export function DataTable<T extends { id: string }>({
         <thead className={stickyHeader ? "sticky top-0 z-10 bg-[var(--background)]" : undefined}>
           <tr>
             {columns.map((c) => (
-              <th key={c.key} className={c.className}>
+              <th key={c.key} className={c.headerClassName}>
                 {c.header}
               </th>
             ))}
@@ -104,6 +122,68 @@ export function DataTable<T extends { id: string }>({
           })}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+/**
+ * DataTableEmpty — structure-preserving empty state. Headers stay live so
+ * operators can read the data model at a glance; ghost rows show field
+ * shape; centered overlay carries the title / description / CTA. Modeled
+ * on Linear, Stripe, Ramp, Attio, and Notion empty data views.
+ */
+function DataTableEmpty<T>({
+  columns,
+  title,
+  description,
+  action,
+  ghostRows = 4,
+}: {
+  columns: Column<T>[];
+  title: string;
+  description?: string;
+  action?: ReactNode;
+  ghostRows?: number;
+}) {
+  return (
+    <div className="surface relative overflow-x-auto" aria-label={title}>
+      <table className="data-table" role="grid">
+        <thead>
+          <tr>
+            {columns.map((c) => (
+              <th key={c.key} className={c.headerClassName}>
+                {c.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody aria-hidden="true">
+          {Array.from({ length: ghostRows }).map((_, r) => (
+            <tr
+              key={r}
+              className="opacity-30"
+              style={{ borderBottomStyle: "dashed" }}
+            >
+              {columns.map((c) => (
+                <td key={c.key} className={c.className}>
+                  <span className="text-[var(--text-muted)]">—</span>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div
+        role="status"
+        className="absolute inset-x-0 top-1/2 mx-auto flex max-w-sm -translate-y-1/2 flex-col items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-5 py-4 text-center shadow-sm"
+        style={{ marginTop: 12 }}
+      >
+        <h3 className="text-sm font-semibold text-[var(--text-primary)]">{title}</h3>
+        {description && (
+          <p className="text-xs text-[var(--text-muted)]">{description}</p>
+        )}
+        {action && <div className="mt-1">{action}</div>}
+      </div>
     </div>
   );
 }

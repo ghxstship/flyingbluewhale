@@ -43,7 +43,7 @@ export function SignupForm() {
           error={state?.fieldErrors?.name}
         />
         <Input
-          label="Work email"
+          label="Work Email"
           name="email"
           type="email"
           required

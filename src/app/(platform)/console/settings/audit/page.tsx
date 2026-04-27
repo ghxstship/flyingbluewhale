@@ -12,7 +12,7 @@ export default async function AuditPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Audit log" />
+        <ModuleHeader title="Audit Log" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -30,7 +30,7 @@ export default async function AuditPage() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Workspace settings"
+        title="Workspace Settings"
         subtitle={`Audit log · ${rows.length} events`}
       />
       <div className="page-content max-w-6xl">

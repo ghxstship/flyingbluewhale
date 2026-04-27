@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -14,10 +15,19 @@ export default async function Page() {
   const rows = await listOrgScoped("dispatch_runs", session.orgId, { orderBy: "created_at", ascending: false, limit: 500 });
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="Dispatch" subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`} />
+      <ModuleHeader
+        eyebrow="Transport"
+        title="Dispatch"
+        subtitle={`${rows.length} run${rows.length === 1 ? "" : "s"}`}
+        action={<Button href="/console/transport/dispatch/new" size="sm">+ New run</Button>}
+      />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          rowHref={(r) => `/console/transport/dispatch/${r.id}`}
+          emptyLabel="No dispatch runs yet"
+          emptyDescription="Schedule a vehicle from origin to destination — fleet T1/T2/T3, media, workforce, or spectator."
+          emptyAction={<Button href="/console/transport/dispatch/new" size="sm">+ New run</Button>}
           columns={[
             { key: "fleet", header: "Fleet", render: (r) => String(r.fleet ?? "—") },
             { key: "vehicle_ref", header: "Vehicle", render: (r) => <span className="font-mono text-xs">{String(r.vehicle_ref ?? "—")}</span> },

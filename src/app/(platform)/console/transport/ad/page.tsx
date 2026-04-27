@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -14,10 +15,19 @@ export default async function Page() {
   const rows = await listOrgScoped("ad_manifests", session.orgId, { orderBy: "created_at", ascending: false, limit: 500 });
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="A&D manifests" subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`} />
+      <ModuleHeader
+        eyebrow="Transport"
+        title="A&D manifests"
+        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        action={<Button href="/console/transport/ad/new" size="sm">+ New manifest</Button>}
+      />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          rowHref={(r) => `/console/transport/ad/${r.id}`}
+          emptyLabel="No A&D manifests yet"
+          emptyDescription="Track every athlete and Olympic-family arrival or departure — flight ref, carrier, party size."
+          emptyAction={<Button href="/console/transport/ad/new" size="sm">+ New manifest</Button>}
           columns={[
             { key: "kind", header: "Kind", render: (r) => String(r.kind ?? "—") },
             { key: "flight_ref", header: "Flight", render: (r) => <span className="font-mono text-xs">{String(r.flight_ref ?? "—")}</span> },

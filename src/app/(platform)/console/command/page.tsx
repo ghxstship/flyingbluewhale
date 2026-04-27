@@ -15,7 +15,7 @@ const QUICK_LINKS = [
 export default function CommandPage() {
   return (
     <>
-      <ModuleHeader title="Command palette" subtitle="Quick actions and navigation" />
+      <ModuleHeader title="Command Palette" subtitle="Quick actions and navigation" />
       <div className="page-content">
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {QUICK_LINKS.map((l) => (

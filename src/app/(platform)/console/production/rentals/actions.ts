@@ -33,3 +33,31 @@ export async function createRentalAction(_: State, fd: FormData): Promise<State>
   revalidatePath("/console/production/rentals");
   redirect("/console/production/rentals");
 }
+
+/**
+ * "End rental now" — sets ends_at to now() so an active rental closes
+ * out immediately. Useful when gear comes back early.
+ */
+export async function endRentalNow(formData: FormData) {
+  const session = await requireSession();
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  const supabase = await createClient();
+  await supabase
+    .from("rentals")
+    .update({ ends_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  revalidatePath("/console/production/rentals");
+  revalidatePath(`/console/production/rentals/${id}`);
+}
+
+export async function deleteRental(formData: FormData) {
+  const session = await requireSession();
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  const supabase = await createClient();
+  await supabase.from("rentals").delete().eq("id", id).eq("org_id", session.orgId);
+  revalidatePath("/console/production/rentals");
+  redirect("/console/production/rentals");
+}

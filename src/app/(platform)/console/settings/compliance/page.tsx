@@ -46,7 +46,7 @@ export default async function CompliancePage() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Workspace settings"
+        title="Workspace Settings"
         subtitle="Compliance"
       />
       <div className="page-content max-w-3xl space-y-5">

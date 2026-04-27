@@ -6,7 +6,7 @@ import { createCrisisAlertAction } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Crisis" title="New alert" />
+      <ModuleHeader eyebrow="Crisis" title="New Alert" />
       <div className="page-content max-w-xl">
         <FormShell
           action={createCrisisAlertAction}

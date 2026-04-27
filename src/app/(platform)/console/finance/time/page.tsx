@@ -17,13 +17,13 @@ function fmtMinutes(m: number | null) {
 }
 
 export default async function TimePage() {
-  if (!hasSupabase) return <><ModuleHeader title="Time tracking" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+  if (!hasSupabase) return <><ModuleHeader title="Time Tracking" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
   const session = await requireSession();
   const rows = await listOrgScoped("time_entries", session.orgId, { orderBy: "started_at" });
   const totalMin = rows.reduce((s, r) => s + (r.duration_minutes ?? 0), 0);
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="Time tracking" subtitle={`${rows.length} entries · ${fmtMinutes(totalMin)} logged`}
+      <ModuleHeader eyebrow="Finance" title="Time Tracking" subtitle={`${rows.length} entries · ${fmtMinutes(totalMin)} logged`}
         action={<Button href="/console/finance/time/new">+ New entry</Button>} />
       <div className="page-content">
         <DataTable<TimeEntry>

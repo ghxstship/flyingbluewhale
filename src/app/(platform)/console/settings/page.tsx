@@ -16,7 +16,7 @@ const TILES = [
 export default function SettingsHub() {
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Workspace settings" subtitle="Configure your organization" />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Configure your organization" />
       <div className="page-content">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {TILES.map((t) => (

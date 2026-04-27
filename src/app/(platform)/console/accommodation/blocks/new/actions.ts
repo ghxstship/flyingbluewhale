@@ -1,0 +1,43 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+
+const Schema = z.object({
+  name: z.string().min(1).max(120),
+  property: z.string().min(1).max(160),
+  city: z.string().max(120).optional(),
+  stakeholder_group: z.string().max(80).optional(),
+  rooms_reserved: z.coerce.number().int().min(0).max(100000).default(0),
+  starts_on: z.string().optional(),
+  ends_on: z.string().optional(),
+});
+
+export type State = { error?: string } | null;
+
+export async function createAccommodationBlock(_: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("accommodation_blocks")
+    .insert({
+      org_id: session.orgId,
+      name: parsed.data.name,
+      property: parsed.data.property,
+      city: parsed.data.city || null,
+      stakeholder_group: parsed.data.stakeholder_group || null,
+      rooms_reserved: parsed.data.rooms_reserved,
+      starts_on: parsed.data.starts_on || null,
+      ends_on: parsed.data.ends_on || null,
+    })
+    .select("id")
+    .single();
+  if (error) return { error: error.message };
+  revalidatePath("/console/accommodation/blocks");
+  redirect(`/console/accommodation/blocks/${data.id}`);
+}

@@ -37,7 +37,7 @@ export default async function GovernancePage() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Workspace settings"
+        title="Workspace Settings"
         subtitle="Governance"
       />
       <div className="page-content max-w-4xl space-y-6">

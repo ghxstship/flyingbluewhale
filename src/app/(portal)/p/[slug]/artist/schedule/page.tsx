@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     events = (data ?? []) as typeof events;
   }
   return (
-    <PortalSubpage slug={slug} persona="artist" title="Show schedule" subtitle="Set times, load-in, sound-check">
+    <PortalSubpage slug={slug} persona="artist" title="Show Schedule" subtitle="Set times, load-in, sound-check">
       {events.length === 0 ? (
         <EmptyState title="Awaiting schedule" description="Your schedule posts as soon as production confirms set times." />
       ) : (

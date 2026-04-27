@@ -25,7 +25,7 @@ export default async function RolesPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="People" title="Role matrix" />
+        <ModuleHeader eyebrow="People" title="Role Matrix" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -44,7 +44,7 @@ export default async function RolesPage() {
     <>
       <ModuleHeader
         eyebrow="People"
-        title="Role matrix"
+        title="Role Matrix"
         subtitle="Platform roles + your custom roles"
       />
       <div className="page-content max-w-5xl space-y-6">

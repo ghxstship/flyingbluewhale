@@ -28,7 +28,7 @@ export function BrandKitPdf({ brand }: { brand: PdfBrand }) {
           <View style={{ backgroundColor: brand.producerAccent, width: 72, height: 72, borderRadius: 8 }} />
           <View>
             <KeyValue label="Accent" value={brand.producerAccent} />
-            <KeyValue label="Legal footer" value={brand.legalFooter} />
+            <KeyValue label="Legal Footer" value={brand.legalFooter} />
           </View>
         </View>
         <SectionHeading title="Typography" />

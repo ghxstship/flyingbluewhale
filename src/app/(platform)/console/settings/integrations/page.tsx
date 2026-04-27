@@ -38,7 +38,7 @@ export default async function IntegrationsPage() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Workspace settings"
+        title="Workspace Settings"
         subtitle="Integrations"
       />
       <div className="page-content">

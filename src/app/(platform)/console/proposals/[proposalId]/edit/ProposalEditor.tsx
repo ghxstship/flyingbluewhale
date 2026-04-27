@@ -103,8 +103,8 @@ export function ProposalEditor({
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="Theme primary" name="theme_primary" defaultValue={defaults.theme.primary} />
-        <Input label="Theme secondary" name="theme_secondary" defaultValue={defaults.theme.secondary} />
+        <Input label="Theme Primary" name="theme_primary" defaultValue={defaults.theme.primary} />
+        <Input label="Theme Secondary" name="theme_secondary" defaultValue={defaults.theme.secondary} />
       </div>
 
       <div className="flex items-center justify-between">

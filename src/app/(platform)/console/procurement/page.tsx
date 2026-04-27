@@ -19,13 +19,13 @@ export default async function ProcurementHub() {
   const open = pos.filter((p) => !["fulfilled","cancelled"].includes(p.status)).reduce((s,r)=>s+r.amount_cents,0);
   return (
     <>
-      <ModuleHeader eyebrow="Procurement" title="Procurement hub" subtitle="Vendors, requisitions, POs" />
+      <ModuleHeader eyebrow="Procurement" title="Procurement Hub" subtitle="Vendors, requisitions, POs" />
       <div className="page-content space-y-6">
         <div className="metric-grid">
           <MetricCard label="Vendors" value={vendors.length} />
-          <MetricCard label="Open requisitions" value={reqs.filter((r) => r.status !== "converted").length} />
+          <MetricCard label="Open Requisitions" value={reqs.filter((r) => r.status !== "converted").length} />
           <MetricCard label="Open POs" value={pos.filter((p) => !["fulfilled","cancelled"].includes(p.status)).length} accent />
-          <MetricCard label="Open commitments" value={formatMoney(open)} />
+          <MetricCard label="Open Commitments" value={formatMoney(open)} />
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[

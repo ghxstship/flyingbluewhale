@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     items = (data ?? []) as Row[];
   }
   return (
-    <PortalSubpage slug={slug} persona="vendor" title="Equipment pull list" subtitle="Confirmed gear for this job">
+    <PortalSubpage slug={slug} persona="vendor" title="Equipment Pull List" subtitle="Confirmed gear for this job">
       {items.length === 0 ? (
         <EmptyState title="Pull list not published yet" description="Production posts the confirmed pull list here once the advancing cycle settles." />
       ) : (

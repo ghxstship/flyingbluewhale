@@ -34,7 +34,7 @@ export default async function DomainsPage() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Workspace settings"
+        title="Workspace Settings"
         subtitle="Custom domains"
       />
       <div className="page-content max-w-3xl space-y-5">

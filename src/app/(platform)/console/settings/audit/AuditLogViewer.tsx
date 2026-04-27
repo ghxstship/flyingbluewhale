@@ -68,7 +68,7 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
           </select>
         </div>
         <div className="min-w-[160px]">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Target table</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">Target Table</label>
           <select
             value={tableFilter}
             onChange={(e) => setTableFilter(e.target.value)}

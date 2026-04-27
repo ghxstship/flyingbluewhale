@@ -4,7 +4,7 @@ import { NewVendorForm } from "./NewVendorForm";
 export default function NewVendorPage() {
   return (
     <>
-      <ModuleHeader eyebrow="Procurement" title="New vendor" />
+      <ModuleHeader eyebrow="Procurement" title="New Vendor" />
       <div className="page-content max-w-xl"><NewVendorForm /></div>
     </>
   );

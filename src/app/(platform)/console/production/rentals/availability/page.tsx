@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="Rental availability" />
+      <ModuleHeader eyebrow="Console" title="Rental Availability" />
       <div className="page-content">
         <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Equipment availability matrix.</div>
       </div>

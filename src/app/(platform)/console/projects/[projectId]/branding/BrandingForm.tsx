@@ -32,7 +32,7 @@ export function BrandingForm({
       <FormShell action={saveBrandingAction} submitLabel="Save branding" dirtyGuard>
         <input type="hidden" name="projectId" value={projectId} />
         <Input
-          label="Accent color"
+          label="Accent Color"
           name="accentColor"
           value={accent}
           onChange={(e) => setAccent(e.target.value)}
@@ -40,7 +40,7 @@ export function BrandingForm({
           placeholder="#DC2626"
         />
         <Input
-          label="Accent foreground"
+          label="Accent Foreground"
           name="accentForeground"
           value={accentFg}
           onChange={(e) => setAccentFg(e.target.value)}
@@ -64,7 +64,7 @@ export function BrandingForm({
           placeholder="https://…"
         />
         <Input
-          label="Hero image URL"
+          label="Hero Image URL"
           name="heroImageUrl"
           value={hero}
           onChange={(e) => setHero(e.target.value)}

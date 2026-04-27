@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     .limit(100);
   const rows = (data ?? []) as Array<{ id: string; number: string; title: string; amount_cents: number; status: string; created_at: string }>;
   return (
-    <PortalSubpage slug={slug} persona="vendor" title="Purchase orders" subtitle="Open + paid POs">
+    <PortalSubpage slug={slug} persona="vendor" title="Purchase Orders" subtitle="Open + paid POs">
       {rows.length === 0 ? (
         <EmptyState title="No purchase orders" description="POs routed to your vendor profile appear here. Ack a PO to move it forward." />
       ) : (

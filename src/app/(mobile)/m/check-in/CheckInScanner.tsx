@@ -115,7 +115,7 @@ export function CheckInScanner() {
         onSubmit={(e) => { e.preventDefault(); submit(code); }}
         className="card-elevated p-4"
       >
-        <label className="text-label text-[var(--color-text-tertiary)]">Ticket code</label>
+        <label className="text-label text-[var(--color-text-tertiary)]">Ticket Code</label>
         <input
           ref={inputRef}
           value={code}

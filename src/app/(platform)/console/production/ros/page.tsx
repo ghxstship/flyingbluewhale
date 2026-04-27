@@ -12,7 +12,7 @@ export default async function RunOfShowPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Run of show" />
+        <ModuleHeader eyebrow="Production" title="Run of Show" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -41,7 +41,7 @@ export default async function RunOfShowPage() {
     <>
       <ModuleHeader
         eyebrow="Production"
-        title="Run of show"
+        title="Run of Show"
         subtitle={`${rows.length} cue${rows.length === 1 ? "" : "s"} on the show plan`}
       />
       <div className="page-content max-w-5xl space-y-5">

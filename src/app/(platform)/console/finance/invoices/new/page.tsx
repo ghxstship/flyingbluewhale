@@ -20,7 +20,7 @@ export default async function NewInvoicePage() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="New invoice" />
+      <ModuleHeader eyebrow="Finance" title="New Invoice" />
       <div className="page-content max-w-2xl"><NewInvoiceForm clients={clients} projects={projects} /></div>
     </>
   );

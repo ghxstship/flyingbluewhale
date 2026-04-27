@@ -12,7 +12,7 @@ export function NewCrewForm() {
         <Input label="Email" name="email" type="email" />
         <Input label="Phone" name="phone" />
       </div>
-      <Input label="Day rate (USD)" name="day_rate" type="number" step="0.01" />
+      <Input label="Day Rate (USD)" name="day_rate" type="number" step="0.01" />
     </FormShell>
   );
 }

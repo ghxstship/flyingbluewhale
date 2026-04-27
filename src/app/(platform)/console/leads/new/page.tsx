@@ -4,7 +4,7 @@ import { NewLeadForm } from "./NewLeadForm";
 export default function NewLeadPage() {
   return (
     <>
-      <ModuleHeader eyebrow="Sales" title="New lead" />
+      <ModuleHeader eyebrow="Sales" title="New Lead" />
       <div className="page-content max-w-2xl"><NewLeadForm /></div>
     </>
   );

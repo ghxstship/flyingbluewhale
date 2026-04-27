@@ -70,7 +70,7 @@ export function InventoryScanner() {
           submit(tag);
         }}
       >
-        <label className="text-label text-[var(--color-text-tertiary)]">Asset tag</label>
+        <label className="text-label text-[var(--color-text-tertiary)]">Asset Tag</label>
         <input
           value={tag}
           onChange={(e) => setTag(e.target.value)}

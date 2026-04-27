@@ -17,7 +17,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Risk register" />
+        <ModuleHeader eyebrow="Programs" title="Risk Register" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -59,7 +59,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Programs"
-        title="Risk register"
+        title="Risk Register"
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={<Button href="/console/programs/risk/new" size="sm">+ New risk</Button>}
       />

@@ -13,7 +13,7 @@ export default async function PortalOverview({ params }: { params: Promise<{ slu
   if (!project) notFound();
   return (
     <>
-      <ModuleHeader eyebrow={project.name} title="Project overview" subtitle="Pick your portal to continue" />
+      <ModuleHeader eyebrow={project.name} title="Project Overview" subtitle="Pick your portal to continue" />
       <div className="page-content">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {["artist", "vendor", "client", "sponsor", "guest", "crew"].map((p) => (

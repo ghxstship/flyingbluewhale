@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   if (!hasSupabase) return (
-    <><ModuleHeader eyebrow="Console" title="Knowledge base" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>
+    <><ModuleHeader eyebrow="Console" title="Knowledge Base" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>
   );
   const session = await requireSession();
   const rows = await listOrgScoped("kb_articles", session.orgId, { orderBy: "created_at", ascending: false, limit: 500 });
@@ -17,7 +17,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Knowledge"
-        title="Knowledge base"
+        title="Knowledge Base"
         subtitle={`${rows.length} article${rows.length === 1 ? "" : "s"}`}
         action={<Button href="/console/kb/new" size="sm">+ New article</Button>}
       />

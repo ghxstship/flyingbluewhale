@@ -28,7 +28,7 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
     <form action={action} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
-          label="Audit-log retention (days)"
+          label="Audit-Log Retention (Days)"
           name="retention_audit_days"
           type="number"
           defaultValue={initial.retention_audit_days ?? 365}
@@ -36,7 +36,7 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
           max={3650}
         />
         <Input
-          label="Application-log retention (days)"
+          label="Application-Log Retention (Days)"
           name="retention_logs_days"
           type="number"
           defaultValue={initial.retention_logs_days ?? 90}
@@ -61,7 +61,7 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
         </div>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Data residency</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">Data Residency</label>
         <select
           name="data_residency"
           defaultValue={initial.data_residency ?? "us"}

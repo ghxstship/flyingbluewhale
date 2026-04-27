@@ -45,17 +45,17 @@ export default async function Page() {
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label="Total kg CO₂e"
+            label="Total Kg CO₂e"
             value={Number(totalKg).toLocaleString()}
             sparkline={byMonth.map((m) => m.actual)}
             accent
           />
           <MetricCard
-            label="Scopes covered"
+            label="Scopes Covered"
             value={byScope.length}
           />
           <MetricCard
-            label="Reporting periods"
+            label="Reporting Periods"
             value={rows.length}
           />
         </div>

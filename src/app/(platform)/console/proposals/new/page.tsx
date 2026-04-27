@@ -22,7 +22,7 @@ export default async function NewProposalPage({ searchParams }: { searchParams: 
   }
   return (
     <>
-      <ModuleHeader eyebrow="Sales" title="New proposal" />
+      <ModuleHeader eyebrow="Sales" title="New Proposal" />
       <div className="page-content max-w-2xl">
         <NewProposalForm clients={clients} projects={projects} defaultClientId={defaultClientId} />
       </div>

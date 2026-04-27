@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     events = ((data ?? []) as unknown) as Event[];
   }
   return (
-    <PortalSubpage slug={slug} persona="crew" title="Call sheet" subtitle="Day-of info, load-in, parking, contacts">
+    <PortalSubpage slug={slug} persona="crew" title="Call Sheet" subtitle="Day-of info, load-in, parking, contacts">
       {events.length === 0 ? (
         <EmptyState title="Awaiting call sheet" description="Production publishes the call sheet the day before each show." />
       ) : (

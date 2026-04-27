@@ -30,7 +30,7 @@ export function ResetPasswordForm() {
       <form action={formAction} className="space-y-4" noValidate>
         <PasswordField
           name="password"
-          label="New password"
+          label="New Password"
           required
           minLength={8}
           autoComplete="new-password"
@@ -40,7 +40,7 @@ export function ResetPasswordForm() {
         />
         <PasswordField
           name="password_confirm"
-          label="Confirm password"
+          label="Confirm Password"
           required
           minLength={8}
           autoComplete="new-password"

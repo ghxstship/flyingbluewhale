@@ -23,7 +23,7 @@ export function NewLeadForm() {
           </select>
         </div>
       </div>
-      <Input label="Estimated value (USD)" name="estimated_value" type="number" inputMode="decimal" step="0.01" />
+      <Input label="Estimated Value (USD)" name="estimated_value" type="number" inputMode="decimal" step="0.01" />
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">Notes</label>
         <textarea name="notes" rows={3} className="input-base mt-1.5 w-full" />

@@ -39,7 +39,7 @@ export default async function PeoplePage() {
               </div>
             ) },
             { key: "role", header: "Role", render: (r) => <Badge variant="brand">{r.role}</Badge> },
-            { key: "since", header: "Member since", render: (r) => timeAgo(r.created_at), className: "font-mono text-xs" },
+            { key: "since", header: "Member Since", render: (r) => timeAgo(r.created_at), className: "font-mono text-xs" },
           ]}
         />
       </div>

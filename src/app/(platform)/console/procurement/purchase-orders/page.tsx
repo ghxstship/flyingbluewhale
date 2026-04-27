@@ -12,13 +12,13 @@ import type { PurchaseOrder } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 export default async function POsPage() {
-  if (!hasSupabase) return <><ModuleHeader title="Purchase orders" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+  if (!hasSupabase) return <><ModuleHeader title="Purchase Orders" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
   const session = await requireSession();
   const rows = await listOrgScoped("purchase_orders", session.orgId, { orderBy: "created_at" });
   const committed = rows.filter((r) => ["sent","acknowledged","fulfilled"].includes(r.status)).reduce((s, r) => s + r.amount_cents, 0);
   return (
     <>
-      <ModuleHeader eyebrow="Procurement" title="Purchase orders" subtitle={`${rows.length} POs · ${formatMoney(committed)} committed`}
+      <ModuleHeader eyebrow="Procurement" title="Purchase Orders" subtitle={`${rows.length} POs · ${formatMoney(committed)} committed`}
         action={<Button href="/console/procurement/purchase-orders/new">+ New PO</Button>} />
       <div className="page-content">
         <DataTable<PurchaseOrder>

@@ -51,7 +51,7 @@ export default async function BillingPage() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Workspace settings"
+        title="Workspace Settings"
         subtitle="Billing"
       />
       <div className="page-content space-y-5">

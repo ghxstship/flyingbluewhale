@@ -6,7 +6,7 @@ import { createKbArticleAction } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Knowledge" title="New article" />
+      <ModuleHeader eyebrow="Knowledge" title="New Article" />
       <div className="page-content max-w-2xl">
         <FormShell action={createKbArticleAction} cancelHref="/console/kb" submitLabel="Publish article">
           <Input label="Slug" name="slug" required maxLength={120} placeholder="event-setup-checklist" hint="Lowercase, dashes ok. Used in the URL." />

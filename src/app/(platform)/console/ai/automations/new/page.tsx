@@ -6,7 +6,7 @@ import { createAutomationAction } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Automations" title="New automation" />
+      <ModuleHeader eyebrow="Automations" title="New Automation" />
       <div className="page-content max-w-xl">
         <FormShell action={createAutomationAction} cancelHref="/console/ai/automations" submitLabel="Create automation">
           <Input label="Name" name="name" required maxLength={120} />

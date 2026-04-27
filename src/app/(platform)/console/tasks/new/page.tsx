@@ -15,7 +15,7 @@ export default async function NewTaskPage() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Work" title="New task" />
+      <ModuleHeader eyebrow="Work" title="New Task" />
       <div className="page-content max-w-xl"><NewTaskForm projects={projects} /></div>
     </>
   );

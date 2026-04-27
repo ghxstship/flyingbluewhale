@@ -8,13 +8,13 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   if (!hasSupabase) return (
-    <><ModuleHeader eyebrow="Console" title="Paid staff" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>
+    <><ModuleHeader eyebrow="Console" title="Paid Staff" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>
   );
   const session = await requireSession();
   const rows = await listOrgScoped("workforce_members", session.orgId, { orderBy: "created_at", ascending: false, limit: 500, filters: [{ column: "kind", op: "eq", value: "paid_staff" }] });
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="Paid staff" subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`} />
+      <ModuleHeader eyebrow="Console" title="Paid Staff" subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`} />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}

@@ -1,0 +1,55 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+
+const Schema = z.object({
+  name: z.string().min(1, "Name is required").max(200),
+  address: z.string().max(300).optional().or(z.literal("")),
+  city: z.string().max(120).optional().or(z.literal("")),
+  region: z.string().max(120).optional().or(z.literal("")),
+  postcode: z.string().max(40).optional().or(z.literal("")),
+  country: z.string().max(120).optional().or(z.literal("")),
+  lat: z.string().optional(),
+  lng: z.string().optional(),
+  notes: z.string().max(4000).optional().or(z.literal("")),
+});
+
+export type State = { error?: string } | null;
+
+export async function updateLocation(id: string, _: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("locations")
+    .update({
+      name: parsed.data.name,
+      address: parsed.data.address || null,
+      city: parsed.data.city || null,
+      region: parsed.data.region || null,
+      postcode: parsed.data.postcode || null,
+      country: parsed.data.country || null,
+      lat: parsed.data.lat ? Number(parsed.data.lat) : null,
+      lng: parsed.data.lng ? Number(parsed.data.lng) : null,
+      notes: parsed.data.notes || null,
+    })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  if (error) return { error: error.message };
+  revalidatePath(`/console/locations/${id}`);
+  revalidatePath("/console/locations");
+  redirect(`/console/locations/${id}`);
+}
+
+export async function deleteLocation(id: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  await supabase.from("locations").delete().eq("id", id).eq("org_id", session.orgId);
+  revalidatePath("/console/locations");
+  redirect("/console/locations");
+}

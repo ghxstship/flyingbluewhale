@@ -2,11 +2,14 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getProject } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { ProjectStatusToggle } from "./ProjectStatusToggle";
+import { deleteProject } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -35,12 +38,26 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
       <ModuleHeader
         title={project.name}
         subtitle={project.description ?? "No description"}
-        action={<ProjectStatusToggle projectId={project.id} status={project.status} />}
+        action={
+          <div className="flex items-center gap-2">
+            <ProjectStatusToggle projectId={project.id} status={project.status} />
+            <Button href={`/console/projects/${projectId}/edit`} size="sm" variant="secondary">
+              Edit
+            </Button>
+            <DeleteForm
+              action={deleteProject.bind(null, projectId)}
+              confirm={`Archive project "${project.name}"? It will be soft-deleted; no data is lost.`}
+              label="Archive"
+            />
+          </div>
+        }
       />
       <div className="border-b border-[var(--color-border)] px-8">
         <nav className="mx-auto flex max-w-6xl flex-wrap gap-1">
           {subTabs.map((t) => (
-            <Link key={t.href} href={t.href} className="nav-item">{t.label}</Link>
+            <Link key={t.href} href={t.href} className="nav-item">
+              {t.label}
+            </Link>
           ))}
         </nav>
       </div>
@@ -49,17 +66,29 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           <Field label="Status">
             <Badge variant={project.status === "active" ? "success" : "muted"}>{project.status}</Badge>
           </Field>
-          <Field label="Slug" mono>{project.slug}</Field>
-          <Field label="Start" mono>{project.start_date ?? "—"}</Field>
-          <Field label="End" mono>{project.end_date ?? "—"}</Field>
-          <Field label="Budget" mono>{formatMoney(project.budget_cents) || "—"}</Field>
-          <Field label="Created" mono>{formatDate(project.created_at)}</Field>
-          <Field label="Updated" mono>{formatDate(project.updated_at)}</Field>
+          <Field label="Slug" mono>
+            {project.slug}
+          </Field>
+          <Field label="Start" mono>
+            {project.start_date ?? "—"}
+          </Field>
+          <Field label="End" mono>
+            {project.end_date ?? "—"}
+          </Field>
+          <Field label="Budget" mono>
+            {formatMoney(project.budget_cents) || "—"}
+          </Field>
+          <Field label="Created" mono>
+            {formatDate(project.created_at)}
+          </Field>
+          <Field label="Updated" mono>
+            {formatDate(project.updated_at)}
+          </Field>
         </div>
 
         <div className="card mt-6 p-6">
           <h2 className="text-heading text-sm">Description</h2>
-          <p className="mt-3 text-sm text-[var(--color-text-secondary)] whitespace-pre-wrap">
+          <p className="mt-3 text-sm whitespace-pre-wrap text-[var(--color-text-secondary)]">
             {project.description || "No description provided yet."}
           </p>
         </div>
@@ -69,7 +98,10 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
             Stakeholders access this project via slug-scoped portal.
           </p>
-          <Link href={`/p/${project.slug}/overview`} className="mt-3 inline-block text-mono text-xs text-[var(--brand-color)]">
+          <Link
+            href={`/p/${project.slug}/overview`}
+            className="text-mono mt-3 inline-block text-xs text-[var(--brand-color)]"
+          >
             /p/{project.slug}/overview →
           </Link>
         </div>

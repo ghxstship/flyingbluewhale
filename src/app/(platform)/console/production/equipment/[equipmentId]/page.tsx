@@ -54,26 +54,27 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
           { label: row.name },
         ]}
         action={
-          transitions.length > 0 ? (
-            <div className="flex items-center gap-1">
-              {transitions.map((to) => (
-                <form key={to} action={setEquipmentStatus} className="inline">
-                  <input type="hidden" name="id" value={row.id} />
-                  <input type="hidden" name="status" value={to} />
-                  <button
-                    type="submit"
-                    className={`rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium transition-colors ${
-                      to === "retired"
-                        ? "text-[color:var(--color-error)] hover:bg-[color:var(--color-error)]/10"
-                        : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-                    }`}
-                  >
-                    Mark {to.replace("_", " ")}
-                  </button>
-                </form>
-              ))}
-            </div>
-          ) : undefined
+          <div className="flex items-center gap-1">
+            {transitions.map((to) => (
+              <form key={to} action={setEquipmentStatus} className="inline">
+                <input type="hidden" name="id" value={row.id} />
+                <input type="hidden" name="status" value={to} />
+                <button
+                  type="submit"
+                  className={`rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium transition-colors ${
+                    to === "retired"
+                      ? "text-[color:var(--color-error)] hover:bg-[color:var(--color-error)]/10"
+                      : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                  }`}
+                >
+                  Mark {to.replace("_", " ")}
+                </button>
+              </form>
+            ))}
+            <a href={`/console/production/equipment/${row.id}/edit`} className="btn btn-secondary btn-sm">
+              Edit
+            </a>
+          </div>
         }
       />
       <div className="page-content max-w-3xl space-y-4">
@@ -98,10 +99,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             <Badge variant="muted">Lifecycle</Badge>
             <form action={deleteEquipment}>
               <input type="hidden" name="id" value={row.id} />
-              <button
-                type="submit"
-                className="text-[color:var(--color-error)] hover:underline"
-              >
+              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
                 Retire & remove
               </button>
             </form>
@@ -112,18 +110,10 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   );
 }
 
-function Field({
-  label,
-  value,
-  mono,
-}: {
-  label: string;
-  value: React.ReactNode;
-  mono?: boolean;
-}) {
+function Field({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">{label}</div>
+      <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">{label}</div>
       <div className={`mt-1 text-sm ${mono ? "font-mono text-xs" : ""}`}>{value}</div>
     </div>
   );

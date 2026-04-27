@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
@@ -7,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { LeadStageMover } from "./LeadStageMover";
+import { deleteLead } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -23,11 +26,24 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
         eyebrow="Lead"
         title={lead.name}
         subtitle={lead.email ?? "No email"}
-        action={<LeadStageMover leadId={lead.id} stage={lead.stage} />}
+        action={
+          <div className="flex items-center gap-2">
+            <LeadStageMover leadId={lead.id} stage={lead.stage} />
+            <Button href={`/console/leads/${leadId}/edit`} size="sm" variant="secondary">
+              Edit
+            </Button>
+            <DeleteForm
+              action={deleteLead.bind(null, leadId)}
+              confirm={`Delete lead "${lead.name}"? This cannot be undone.`}
+            />
+          </div>
+        }
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label="Stage"><StatusBadge status={lead.stage} /></Field>
+          <Field label="Stage">
+            <StatusBadge status={lead.stage} />
+          </Field>
           <Field label="Value">{formatMoney(lead.estimated_value_cents)}</Field>
           <Field label="Source">{lead.source ?? "—"}</Field>
           <Field label="Updated">{timeAgo(lead.updated_at)}</Field>
@@ -35,7 +51,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
         {lead.notes && (
           <div className="surface p-5">
             <h3 className="text-sm font-semibold">Notes</h3>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-[var(--text-secondary)]">{lead.notes}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{lead.notes}</p>
           </div>
         )}
       </div>
@@ -46,7 +62,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface-raised p-3">
-      <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{children}</div>
     </div>
   );

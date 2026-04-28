@@ -13,7 +13,9 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("rentals")
-    .select("id, equipment_id, project_id, starts_at, ends_at, rate_cents, notes, created_at, equipment(name, asset_tag)")
+    .select(
+      "id, equipment_id, project_id, starts_at, ends_at, rate_cents, notes, created_at, equipment(name, asset_tag)",
+    )
     .eq("org_id", session.orgId)
     .eq("id", rentalId)
     .maybeSingle();
@@ -32,11 +34,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
   const eq = row.equipment as { name?: string; asset_tag?: string | null } | null;
   const now = Date.now();
   const status =
-    new Date(row.ends_at).getTime() < now
-      ? "ended"
-      : new Date(row.starts_at).getTime() <= now
-        ? "active"
-        : "scheduled";
+    new Date(row.ends_at).getTime() < now ? "ended" : new Date(row.starts_at).getTime() <= now ? "active" : "scheduled";
 
   return (
     <>
@@ -50,17 +48,22 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
           { label: eq?.name ?? "Rental" },
         ]}
         action={
-          status === "active" ? (
-            <form action={endRentalNow} className="inline">
-              <input type="hidden" name="id" value={row.id} />
-              <button
-                type="submit"
-                className="rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-              >
-                End rental now
-              </button>
-            </form>
-          ) : undefined
+          <div className="flex items-center gap-2">
+            {status === "active" && (
+              <form action={endRentalNow} className="inline">
+                <input type="hidden" name="id" value={row.id} />
+                <button
+                  type="submit"
+                  className="rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                >
+                  End rental now
+                </button>
+              </form>
+            )}
+            <a href={`/console/production/rentals/${row.id}/edit`} className="btn btn-secondary btn-sm">
+              Edit
+            </a>
+          </div>
         }
       />
       <div className="page-content max-w-3xl space-y-4">
@@ -90,10 +93,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
             <Badge variant="muted">Lifecycle</Badge>
             <form action={deleteRental}>
               <input type="hidden" name="id" value={row.id} />
-              <button
-                type="submit"
-                className="text-[color:var(--color-error)] hover:underline"
-              >
+              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
                 Delete rental
               </button>
             </form>
@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">{label}</div>
+      <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{value}</div>
     </div>
   );

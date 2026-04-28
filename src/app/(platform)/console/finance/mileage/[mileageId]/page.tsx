@@ -3,7 +3,9 @@ export const dynamic = "force-dynamic";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { DetailShell, money, fmtDate } from "@/components/detail/DetailShell";
-
+import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
+import { deleteMileage } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ mileageId: string }> }) {
   const { mileageId } = await params;
@@ -21,14 +23,35 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
       eyebrow="Finance"
       title={(r) => `${r.origin} → ${r.destination}`}
       subtitle={(r) => `${r.miles} mi`}
-      breadcrumbs={[{ label: "Finance", href: "/console/finance" }, { label: "Mileage", href: "/console/finance/mileage" }, { label: row ? `${row.origin} → ${row.destination}` : "Mileage" }]}
-      fields={row ? [
-        { label: "Miles", value: `${row.miles}` },
-        { label: "Rate", value: money(row.rate_cents) },
-        { label: "Total", value: money(Math.round(row.miles * row.rate_cents)) },
-        { label: "Logged on", value: fmtDate(row.logged_on) },
-        { label: "Notes", value: row.notes ?? "—" },
-      ] : undefined}
+      breadcrumbs={[
+        { label: "Finance", href: "/console/finance" },
+        { label: "Mileage", href: "/console/finance/mileage" },
+        { label: row ? `${row.origin} → ${row.destination}` : "Mileage" },
+      ]}
+      fields={
+        row
+          ? [
+              { label: "Miles", value: `${row.miles}` },
+              { label: "Rate", value: money(row.rate_cents) },
+              { label: "Total", value: money(Math.round(row.miles * row.rate_cents)) },
+              { label: "Logged on", value: fmtDate(row.logged_on) },
+              { label: "Notes", value: row.notes ?? "—" },
+            ]
+          : undefined
+      }
+      action={
+        row ? (
+          <div className="flex items-center gap-2">
+            <Button href={`/console/finance/mileage/${mileageId}/edit`} size="sm" variant="secondary">
+              Edit
+            </Button>
+            <DeleteForm
+              action={deleteMileage.bind(null, mileageId)}
+              confirm={`Delete this mileage log? This cannot be undone.`}
+            />
+          </div>
+        ) : undefined
+      }
     />
   );
 }

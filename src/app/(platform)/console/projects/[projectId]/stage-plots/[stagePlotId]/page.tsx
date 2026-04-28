@@ -2,23 +2,16 @@ export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { StagePlotCanvas } from "@/components/stage-plots/StagePlotCanvas";
+import { deleteStagePlot } from "./edit/actions";
 
 type StoredElement = {
   id: string;
-  kind:
-    | "mic"
-    | "monitor"
-    | "amp"
-    | "drum_kit"
-    | "guitar"
-    | "keys"
-    | "speaker"
-    | "di_box"
-    | "light_truss"
-    | "riser";
+  kind: "mic" | "monitor" | "amp" | "drum_kit" | "guitar" | "keys" | "speaker" | "di_box" | "light_truss" | "riser";
   x: number;
   y: number;
   w: number;
@@ -36,12 +29,7 @@ export default async function StagePlotDetailPage({
   const supabase = await createClient();
 
   const [{ data: project }, { data: plot }] = await Promise.all([
-    supabase
-      .from("projects")
-      .select("id, name")
-      .eq("id", projectId)
-      .eq("org_id", session.orgId)
-      .maybeSingle(),
+    supabase.from("projects").select("id, name").eq("id", projectId).eq("org_id", session.orgId).maybeSingle(),
     supabase
       .from("stage_plots")
       .select("id, name, width_ft, depth_ft, elements")
@@ -66,6 +54,21 @@ export default async function StagePlotDetailPage({
           { label: "Stage plots", href: `/console/projects/${projectId}/stage-plots` },
           { label: plot.name },
         ]}
+        action={
+          <div className="flex items-center gap-2">
+            <Button
+              href={`/console/projects/${projectId}/stage-plots/${stagePlotId}/edit`}
+              size="sm"
+              variant="secondary"
+            >
+              Edit metadata
+            </Button>
+            <DeleteForm
+              action={deleteStagePlot.bind(null, projectId, stagePlotId)}
+              confirm={`Delete stage plot "${plot.name}"? It will be soft-deleted.`}
+            />
+          </div>
+        }
       />
       <div className="page-content">
         <StagePlotCanvas
@@ -74,7 +77,7 @@ export default async function StagePlotDetailPage({
             name: plot.name,
             widthFt: plot.width_ft ?? 32,
             depthFt: plot.depth_ft ?? 24,
-            elements: ((plot.elements as unknown) as StoredElement[] | null) ?? [],
+            elements: (plot.elements as unknown as StoredElement[] | null) ?? [],
           }}
         />
       </div>

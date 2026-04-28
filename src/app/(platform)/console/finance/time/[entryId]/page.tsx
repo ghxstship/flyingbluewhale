@@ -2,8 +2,11 @@ export const dynamic = "force-dynamic";
 
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { DetailShell, money, fmtDate } from "@/components/detail/DetailShell";
+import { DetailShell } from "@/components/detail/DetailShell";
 import { fmtDateTime } from "@/components/detail/DetailShell";
+import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
+import { deleteTimeEntry } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ entryId: string }> }) {
   const { entryId } = await params;
@@ -20,15 +23,39 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
       row={row}
       eyebrow="Finance"
       title={(r) => r.description ?? "Time entry"}
-      subtitle={(r) => r.duration_minutes ? `${Math.round(r.duration_minutes / 60 * 10) / 10} hr` : null}
-      breadcrumbs={[{ label: "Finance", href: "/console/finance" }, { label: "Time", href: "/console/finance/time" }, { label: row?.description ?? "Entry" }]}
-      fields={row ? [
-        { label: "Started", value: fmtDateTime(row.started_at) },
-        { label: "Ended", value: fmtDateTime(row.ended_at) },
-        { label: "Duration", value: row.duration_minutes != null ? `${Math.round(row.duration_minutes / 60 * 100) / 100} hr` : "—" },
-        { label: "Billable", value: row.billable ? "Yes" : "No" },
-        { label: "Description", value: row.description ?? "—" },
-      ] : undefined}
+      subtitle={(r) => (r.duration_minutes ? `${Math.round((r.duration_minutes / 60) * 10) / 10} hr` : null)}
+      breadcrumbs={[
+        { label: "Finance", href: "/console/finance" },
+        { label: "Time", href: "/console/finance/time" },
+        { label: row?.description ?? "Entry" },
+      ]}
+      fields={
+        row
+          ? [
+              { label: "Started", value: fmtDateTime(row.started_at) },
+              { label: "Ended", value: fmtDateTime(row.ended_at) },
+              {
+                label: "Duration",
+                value: row.duration_minutes != null ? `${Math.round((row.duration_minutes / 60) * 100) / 100} hr` : "—",
+              },
+              { label: "Billable", value: row.billable ? "Yes" : "No" },
+              { label: "Description", value: row.description ?? "—" },
+            ]
+          : undefined
+      }
+      action={
+        row ? (
+          <div className="flex items-center gap-2">
+            <Button href={`/console/finance/time/${entryId}/edit`} size="sm" variant="secondary">
+              Edit
+            </Button>
+            <DeleteForm
+              action={deleteTimeEntry.bind(null, entryId)}
+              confirm={`Delete this time entry? This cannot be undone.`}
+            />
+          </div>
+        ) : undefined
+      }
     />
   );
 }

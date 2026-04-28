@@ -7,6 +7,9 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate, money } from "@/components/detail/DetailShell";
 import { reconcileBudget, computeBudgetSpend } from "./actions";
+import { deleteBudget } from "./edit/actions";
+import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
 
 export default async function Page({ params }: { params: Promise<{ budgetId: string }> }) {
   const { budgetId } = await params;
@@ -42,9 +45,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
     .eq("org_id", session.orgId);
   if (budget.project_id) expensesQ = expensesQ.eq("project_id", budget.project_id);
   if (budget.category) expensesQ = expensesQ.eq("category", budget.category);
-  const { data: expenses } = await expensesQ
-    .order("spent_at", { ascending: false })
-    .limit(50);
+  const { data: expenses } = await expensesQ.order("spent_at", { ascending: false }).limit(50);
 
   let invoicesQ = supabase
     .from("invoices")
@@ -55,8 +56,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
   const { data: invoices } = await invoicesQ.order("paid_at", { ascending: false }).limit(50);
 
   const variance = recomputed - budget.spent_cents;
-  const utilization =
-    budget.amount_cents > 0 ? (recomputed / budget.amount_cents) * 100 : 0;
+  const utilization = budget.amount_cents > 0 ? (recomputed / budget.amount_cents) * 100 : 0;
   const remaining = budget.amount_cents - recomputed;
 
   return (
@@ -71,33 +71,40 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
           { label: budget.name },
         ]}
         action={
-          <form action={reconcileBudget}>
-            <input type="hidden" name="id" value={budget.id} />
-            <button
-              type="submit"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-            >
-              Reconcile to actuals
-            </button>
-          </form>
+          <div className="flex items-center gap-2">
+            <form action={reconcileBudget}>
+              <input type="hidden" name="id" value={budget.id} />
+              <button
+                type="submit"
+                className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+              >
+                Reconcile to actuals
+              </button>
+            </form>
+            <Button href={`/console/finance/budgets/${budget.id}/edit`} size="sm" variant="secondary">
+              Edit
+            </Button>
+            <DeleteForm
+              action={deleteBudget.bind(null, budget.id)}
+              confirm={`Delete budget "${budget.name}"? This cannot be undone.`}
+            />
+          </div>
         }
       />
       <div className="page-content max-w-5xl space-y-5">
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">Budget</div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Budget</div>
               <div className="mt-1 text-lg font-semibold">{money(budget.amount_cents)}</div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">Computed actual</div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Computed actual</div>
               <div className="mt-1 text-lg font-semibold">{money(recomputed)}</div>
-              <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
-                Stored: {money(budget.spent_cents)}
-              </div>
+              <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">Stored: {money(budget.spent_cents)}</div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">Remaining</div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Remaining</div>
               <div
                 className={`mt-1 text-lg font-semibold ${
                   remaining >= 0 ? "text-[var(--text-primary)]" : "text-[var(--color-error)]"
@@ -107,7 +114,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               </div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">Variance vs stored</div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Variance vs stored</div>
               <div
                 className={`mt-1 text-lg font-semibold ${
                   variance === 0
@@ -119,9 +126,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               >
                 {variance === 0 ? "—" : `${variance > 0 ? "+" : ""}${money(variance)}`}
               </div>
-              {variance !== 0 && (
-                <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">Reconcile to clear</div>
-              )}
+              {variance !== 0 && <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">Reconcile to clear</div>}
             </div>
           </div>
           <div className="mt-4">
@@ -168,9 +173,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
           <section className="surface">
             <header className="border-b border-[var(--border-color)] px-4 py-2.5">
               <h3 className="text-sm font-semibold">Paid invoices</h3>
-              <p className="mt-0.5 text-xs text-[var(--text-muted)]">
-                {(invoices ?? []).length} matching project
-              </p>
+              <p className="mt-0.5 text-xs text-[var(--text-muted)]">{(invoices ?? []).length} matching project</p>
             </header>
             <table className="data-table w-full text-sm">
               <thead>
@@ -202,8 +205,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
         </div>
 
         <section className="surface p-4 text-xs text-[var(--text-muted)]">
-          <Badge variant="muted">Created</Badge>{" "}
-          <span className="font-mono">{fmtDate(budget.created_at)}</span>
+          <Badge variant="muted">Created</Badge> <span className="font-mono">{fmtDate(budget.created_at)}</span>
         </section>
       </div>
     </>

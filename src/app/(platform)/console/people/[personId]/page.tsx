@@ -4,6 +4,9 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { DetailShell, fmtDate } from "@/components/detail/DetailShell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
+import { removePerson } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ personId: string }> }) {
   const { personId } = await params;
@@ -16,8 +19,13 @@ export default async function Page({ params }: { params: Promise<{ personId: str
     .eq("org_id", session.orgId)
     .eq("user_id", personId)
     .maybeSingle();
-  type Row = { id: string; role: string; created_at: string; users: { id: string; name: string | null; email: string } | null };
-  const typed = (row as unknown as Row | null);
+  type Row = {
+    id: string;
+    role: string;
+    created_at: string;
+    users: { id: string; name: string | null; email: string } | null;
+  };
+  const typed = row as unknown as Row | null;
   return (
     <DetailShell
       row={typed}
@@ -29,11 +37,29 @@ export default async function Page({ params }: { params: Promise<{ personId: str
         { label: "Directory", href: "/console/people" },
         { label: typed?.users?.name ?? typed?.users?.email ?? "Member" },
       ]}
-      fields={typed ? [
-        { label: "Role", value: <Badge variant="brand">{typed.role}</Badge> },
-        { label: "Email", value: typed.users?.email ?? "—" },
-        { label: "Joined", value: fmtDate(typed.created_at) },
-      ] : undefined}
+      fields={
+        typed
+          ? [
+              { label: "Role", value: <Badge variant="brand">{typed.role}</Badge> },
+              { label: "Email", value: typed.users?.email ?? "—" },
+              { label: "Joined", value: fmtDate(typed.created_at) },
+            ]
+          : undefined
+      }
+      action={
+        typed ? (
+          <div className="flex items-center gap-2">
+            <Button href={`/console/people/${personId}/edit`} size="sm" variant="secondary">
+              Edit role
+            </Button>
+            <DeleteForm
+              action={removePerson.bind(null, personId)}
+              confirm={`Remove ${typed.users?.name ?? typed.users?.email ?? "this member"} from the organisation? Their account remains.`}
+              label="Remove"
+            />
+          </div>
+        ) : undefined
+      }
     />
   );
 }

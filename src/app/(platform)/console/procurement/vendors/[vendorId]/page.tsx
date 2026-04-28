@@ -2,8 +2,10 @@ export const dynamic = "force-dynamic";
 
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { DetailShell, money, fmtDate } from "@/components/detail/DetailShell";
-
+import { DetailShell, fmtDate } from "@/components/detail/DetailShell";
+import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
+import { deleteVendor } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ vendorId: string }> }) {
   const { vendorId } = await params;
@@ -21,15 +23,36 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
       eyebrow="Procurement"
       title={(r) => r.name}
       subtitle={(r) => r.category}
-      breadcrumbs={[{ label: "Procurement" }, { label: "Vendors", href: "/console/procurement/vendors" }, { label: row?.name ?? "Vendor" }]}
-      fields={row ? [
-        { label: "Category", value: row.category ?? "—" },
-        { label: "Contact email", value: row.contact_email ?? "—" },
-        { label: "Contact phone", value: row.contact_phone ?? "—" },
-        { label: "COI expires", value: fmtDate(row.coi_expires_at) },
-        { label: "Stripe payout", value: row.payout_account_id ? "Connected" : "Not connected" },
-        { label: "Notes", value: row.notes ?? "—" },
-      ] : undefined}
+      breadcrumbs={[
+        { label: "Procurement" },
+        { label: "Vendors", href: "/console/procurement/vendors" },
+        { label: row?.name ?? "Vendor" },
+      ]}
+      fields={
+        row
+          ? [
+              { label: "Category", value: row.category ?? "—" },
+              { label: "Contact email", value: row.contact_email ?? "—" },
+              { label: "Contact phone", value: row.contact_phone ?? "—" },
+              { label: "COI expires", value: fmtDate(row.coi_expires_at) },
+              { label: "Stripe payout", value: row.payout_account_id ? "Connected" : "Not connected" },
+              { label: "Notes", value: row.notes ?? "—" },
+            ]
+          : undefined
+      }
+      action={
+        row ? (
+          <div className="flex items-center gap-2">
+            <Button href={`/console/procurement/vendors/${vendorId}/edit`} size="sm" variant="secondary">
+              Edit
+            </Button>
+            <DeleteForm
+              action={deleteVendor.bind(null, vendorId)}
+              confirm={`Delete vendor "${row.name}"? This cannot be undone.`}
+            />
+          </div>
+        ) : undefined
+      }
     />
   );
 }

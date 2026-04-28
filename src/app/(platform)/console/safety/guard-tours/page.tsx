@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Guard Tours" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Patrol plans and logs. Mobile patrol via /m/guard.</div>
+        <RoadmapStub
+          title="Guard Tours"
+          description="Patrol plans and logs. Mobile patrol via /m/guard."
+          inTheMeantime={{ href: "/m/guard", label: "Open mobile Guard" }}
+        />
       </div>
     </>
   );

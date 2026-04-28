@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Workforce Shuttles" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Shift-linked routes derived from rosters.</div>
+        <RoadmapStub
+          title="Workforce Shuttles"
+          description="Shift-linked routes derived from rosters."
+          inTheMeantime={{ href: "/console/workforce/rosters", label: "Open Rosters" }}
+        />
       </div>
     </>
   );

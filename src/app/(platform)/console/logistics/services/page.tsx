@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Logistics Services" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Waste and cleaning — service requests.</div>
+        <RoadmapStub
+          title="Logistics Services"
+          description="Waste and cleaning — service requests."
+          inTheMeantime={{ href: "/console/services/requests", label: "Open service requests" }}
+        />
       </div>
     </>
   );

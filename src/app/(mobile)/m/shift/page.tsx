@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Mobile" title="Shift" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Today's shift — check in, break, check out, meal credits.</div>
+        <RoadmapStub
+          title="Shift"
+          description="Today's shift — check in, break, check out, meal credits."
+          inTheMeantime={{ href: "/m/checkin", label: "Open check-in" }}
+        />
       </div>
     </>
   );

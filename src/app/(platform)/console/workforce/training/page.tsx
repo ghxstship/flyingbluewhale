@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Training Catalog" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Training courses and assignments. Integrate an LMS (Docebo, TalentLMS) to deliver content.</div>
+        <RoadmapStub
+          title="Training Catalog"
+          description="Training courses and assignments. Integrate an LMS (Docebo, TalentLMS) to deliver content."
+          inTheMeantime={{ href: "/console/people/credentials", label: "Open Credentials" }}
+        />
       </div>
     </>
   );

@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Freight" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Customs and bonded warehousing. Integrate a TMS (Flexport, project44).</div>
+        <RoadmapStub
+          title="Freight"
+          description="Customs and bonded warehousing. Integrate a TMS (Flexport, project44)."
+          inTheMeantime={{ href: "/console/logistics/ratecard", label: "Open the rate card" }}
+        />
       </div>
     </>
   );

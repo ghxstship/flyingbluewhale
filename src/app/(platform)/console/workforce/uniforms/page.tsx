@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Uniforms" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Uniform distribution — inventory tracked in rate_card_items(catalog='uniform').</div>
+        <RoadmapStub
+          title="Uniforms"
+          description="Uniform distribution — inventory tracked in rate_card_items(catalog='uniform')."
+          inTheMeantime={{ href: "/console/logistics/ratecard", label: "Open the rate card" }}
+        />
       </div>
     </>
   );

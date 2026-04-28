@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
-      <ModuleHeader title="Program Scope" />
+      <ModuleHeader eyebrow="Console" title="Program Scope" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Disciplines, events, and participant quotas. Serves as the source-of-truth for entries, schedule building, and officials assignment.</div>
+        <RoadmapStub
+          title="Program Scope"
+          description="Disciplines, events, and participant quotas. Serves as the source-of-truth for entries, schedule building, and officials assignment."
+          inTheMeantime={{ href: "/console/participants/entries", label: "Open Participant Entries" }}
+        />
       </div>
     </>
   );

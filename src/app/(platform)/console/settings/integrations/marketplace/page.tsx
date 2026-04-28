@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Integrations Marketplace" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Browse available connectors.</div>
+        <RoadmapStub
+          title="Integrations Marketplace"
+          description="Browse available connectors."
+          inTheMeantime={{ href: "/console/settings", label: "Open Settings" }}
+        />
       </div>
     </>
   );

@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Supplier Scorecards" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">SLA and KPI performance tracking per vendor. Feeds back into the Vendor directory for renewal decisions.</div>
+        <RoadmapStub
+          title="Supplier Scorecards"
+          description="SLA and KPI performance tracking per vendor. Feeds back into the Vendor directory for renewal decisions."
+          inTheMeantime={{ href: "/console/procurement/vendors", label: "Open Vendors" }}
+        />
       </div>
     </>
   );

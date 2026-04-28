@@ -1,11 +1,16 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RoadmapStub } from "@/components/RoadmapStub";
 
 export default function Page() {
   return (
     <>
       <ModuleHeader eyebrow="Console" title="Rental Availability" />
       <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--muted)] max-w-2xl">Equipment availability matrix.</div>
+        <RoadmapStub
+          title="Rental Availability"
+          description="Equipment availability matrix."
+          inTheMeantime={{ href: "/console/production/rentals", label: "Open Rentals" }}
+        />
       </div>
     </>
   );

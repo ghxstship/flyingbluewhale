@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -7,17 +8,44 @@ import { hasSupabase } from "@/lib/env";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  if (!hasSupabase) return (
-    <><ModuleHeader eyebrow="Console" title="Visa Cases" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>
-  );
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader eyebrow="Console" title="Visa Cases" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
-  const rows = await listOrgScoped("visa_cases", session.orgId, { orderBy: "created_at", ascending: false, limit: 500 });
+  const rows = await listOrgScoped("visa_cases", session.orgId, {
+    orderBy: "created_at",
+    ascending: false,
+    limit: 500,
+  });
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="Visa Cases" subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`} />
+      <ModuleHeader
+        eyebrow="Participants"
+        title="Visa Cases"
+        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        action={
+          <Button href="/console/participants/visa/new" size="sm">
+            + New case
+          </Button>
+        }
+      />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          rowHref={(r) => `/console/participants/visa/${r.id}`}
+          emptyLabel="No visa cases"
+          emptyDescription="Track invitation letters, ROC submissions, and arrival/exit clearance through the visa workflow."
+          emptyAction={
+            <Button href="/console/participants/visa/new" size="sm">
+              + New case
+            </Button>
+          }
           columns={[
             { key: "person_name", header: "Name", render: (r) => String(r.person_name ?? "—") },
             { key: "nationality", header: "Nationality", render: (r) => String(r.nationality ?? "—") },

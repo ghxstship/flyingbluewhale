@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -41,6 +42,11 @@ export default async function Page() {
         eyebrow="Sustainability"
         title="Carbon"
         subtitle={`${rows.length} measurement${rows.length === 1 ? "" : "s"} on file`}
+        action={
+          <Button href="/console/sustainability/carbon/new" size="sm">
+            + Record measurement
+          </Button>
+        }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
@@ -50,21 +56,22 @@ export default async function Page() {
             sparkline={byMonth.map((m) => m.actual)}
             accent
           />
-          <MetricCard
-            label="Scopes Covered"
-            value={byScope.length}
-          />
-          <MetricCard
-            label="Reporting Periods"
-            value={rows.length}
-          />
+          <MetricCard label="Scopes Covered" value={byScope.length} />
+          <MetricCard label="Reporting Periods" value={rows.length} />
         </div>
 
         <CarbonCharts byMonth={byMonth} byScope={byScope} target={target} />
 
         <DataTable<SustainabilityMetric>
           rows={rows}
+          rowHref={(r) => `/console/sustainability/carbon/${r.id}`}
           emptyLabel="No measurements yet"
+          emptyDescription="Quarterly Scope 1/2/3 measurements with method + source attribution."
+          emptyAction={
+            <Button href="/console/sustainability/carbon/new" size="sm">
+              + Record measurement
+            </Button>
+          }
           columns={[
             {
               key: "period",
@@ -83,23 +90,17 @@ export default async function Page() {
             {
               key: "kg_co2e",
               header: "kg CO₂e",
-              render: (r) => (
-                <span className="font-mono text-xs">{r.kg_co2e.toLocaleString()}</span>
-              ),
+              render: (r) => <span className="font-mono text-xs">{r.kg_co2e.toLocaleString()}</span>,
             },
             {
               key: "source",
               header: "Source",
-              render: (r) => (
-                <span className="text-xs text-[var(--text-secondary)]">{r.source ?? "—"}</span>
-              ),
+              render: (r) => <span className="text-xs text-[var(--text-secondary)]">{r.source ?? "—"}</span>,
             },
             {
               key: "method",
               header: "Method",
-              render: (r) => (
-                <span className="text-xs text-[var(--text-muted)]">{r.method ?? "—"}</span>
-              ),
+              render: (r) => <span className="text-xs text-[var(--text-muted)]">{r.method ?? "—"}</span>,
             },
           ]}
         />

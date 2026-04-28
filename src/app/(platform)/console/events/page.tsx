@@ -11,20 +11,50 @@ import type { EventRow } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 export default async function EventsPage() {
-  if (!hasSupabase) return <><ModuleHeader title="Events" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader title="Events" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
   const rows = await listOrgScoped("events", session.orgId, { orderBy: "starts_at", ascending: true });
   return (
     <>
-      <ModuleHeader eyebrow="Work" title="Events" subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/events/new">+ New event</Button>} />
+      <ModuleHeader
+        eyebrow="Work"
+        title="Events"
+        subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"}`}
+        action={<Button href="/console/events/new">+ New event</Button>}
+      />
       <div className="page-content">
         <DataTable<EventRow>
           rows={rows}
+          rowHref={(r) => `/console/events/${r.id}`}
+          emptyLabel="No events scheduled"
+          emptyDescription="Events anchor schedules, set times, and venue handover. Status flows draft → planned → live → wrapped."
+          emptyAction={
+            <Button href="/console/events/new" size="sm">
+              + New event
+            </Button>
+          }
           columns={[
             { key: "name", header: "Name", render: (r) => r.name },
-            { key: "starts", header: "Starts", render: (r) => formatDate(r.starts_at, "long"), className: "font-mono text-xs" },
-            { key: "ends", header: "Ends", render: (r) => formatDate(r.ends_at, "long"), className: "font-mono text-xs" },
+            {
+              key: "starts",
+              header: "Starts",
+              render: (r) => formatDate(r.starts_at, "long"),
+              className: "font-mono text-xs",
+            },
+            {
+              key: "ends",
+              header: "Ends",
+              render: (r) => formatDate(r.ends_at, "long"),
+              className: "font-mono text-xs",
+            },
             { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
           ]}
         />

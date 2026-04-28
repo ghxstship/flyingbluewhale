@@ -1,0 +1,49 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+
+const Schema = z.object({
+  summary: z.string().min(1).max(500),
+  description: z.string().max(5000).optional(),
+  severity: z.enum(["near_miss", "minor", "major", "critical"]),
+  status: z.enum(["open", "investigating", "resolved", "closed"]),
+  location: z.string().max(200).optional(),
+  occurred_at: z.string().optional(),
+});
+
+export type State = { error?: string } | null;
+
+export async function updateIncident(incidentId: string, _: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("incidents")
+    .update({
+      summary: parsed.data.summary,
+      description: parsed.data.description || null,
+      severity: parsed.data.severity,
+      status: parsed.data.status,
+      location: parsed.data.location || null,
+      occurred_at: parsed.data.occurred_at || undefined,
+    })
+    .eq("id", incidentId)
+    .eq("org_id", session.orgId);
+  if (error) return { error: error.message };
+  revalidatePath(`/console/operations/incidents/${incidentId}`);
+  revalidatePath("/console/operations/incidents");
+  redirect(`/console/operations/incidents/${incidentId}`);
+}
+
+export async function deleteIncident(incidentId: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  await supabase.from("incidents").delete().eq("id", incidentId).eq("org_id", session.orgId);
+  revalidatePath("/console/operations/incidents");
+  redirect("/console/operations/incidents");
+}

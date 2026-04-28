@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -7,19 +8,50 @@ import { hasSupabase } from "@/lib/env";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  if (!hasSupabase) return (
-    <><ModuleHeader eyebrow="Console" title="Categories" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>
-  );
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader eyebrow="Console" title="Categories" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
-  const rows = await listOrgScoped("accreditation_categories", session.orgId, { orderBy: "created_at", ascending: false, limit: 500 });
+  const rows = await listOrgScoped("accreditation_categories", session.orgId, {
+    orderBy: "created_at",
+    ascending: false,
+    limit: 500,
+  });
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="Categories" subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`} />
+      <ModuleHeader
+        eyebrow="Accreditation"
+        title="Categories"
+        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        action={
+          <Button href="/console/accreditation/categories/new" size="sm">
+            + New category
+          </Button>
+        }
+      />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          rowHref={(r) => `/console/accreditation/categories/${r.id}`}
+          emptyLabel="No accreditation categories"
+          emptyDescription="Categories drive credential design, zone access, and the accreditation matrix."
+          emptyAction={
+            <Button href="/console/accreditation/categories/new" size="sm">
+              + New category
+            </Button>
+          }
           columns={[
-            { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{String(r.code ?? "—")}</span> },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => <span className="font-mono text-xs">{String(r.code ?? "—")}</span>,
+            },
             { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
             { key: "description", header: "Description", render: (r) => String(r.description ?? "—") },
           ]}

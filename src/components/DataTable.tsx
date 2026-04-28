@@ -37,7 +37,7 @@ export type BulkAction<T> = {
 export type DataTableProps<T extends { id: string }> = {
   rows: T[];
   columns: Column<T>[];
-  rowHref?: (row: T) => string;
+  rowHref?: (row: T) => string | undefined;
   emptyLabel?: string;
   /** Optional second line under `emptyLabel` in the empty-state overlay. */
   emptyDescription?: string;
@@ -71,23 +71,13 @@ export function DataTable<T extends { id: string }>({
   }
 
   if (rows.length === 0) {
-    return (
-      <DataTableEmpty
-        columns={columns}
-        title={emptyLabel}
-        description={emptyDescription}
-        action={emptyAction}
-      />
-    );
+    return <DataTableEmpty columns={columns} title={emptyLabel} description={emptyDescription} action={emptyAction} />;
   }
 
   const rowPad = density === "compact" ? "py-1.5" : "py-2.5";
 
   return (
-    <div
-      className="surface overflow-auto"
-      style={maxHeight ? { maxHeight } : undefined}
-    >
+    <div className="surface overflow-auto" style={maxHeight ? { maxHeight } : undefined}>
       <table className="data-table" role="grid" aria-rowcount={rows.length}>
         <thead className={stickyHeader ? "sticky top-0 z-10 bg-[var(--background)]" : undefined}>
           <tr>
@@ -159,11 +149,7 @@ function DataTableEmpty<T>({
         </thead>
         <tbody aria-hidden="true">
           {Array.from({ length: ghostRows }).map((_, r) => (
-            <tr
-              key={r}
-              className="opacity-30"
-              style={{ borderBottomStyle: "dashed" }}
-            >
+            <tr key={r} className="opacity-30" style={{ borderBottomStyle: "dashed" }}>
               {columns.map((c) => (
                 <td key={c.key} className={c.className}>
                   <span className="text-[var(--text-muted)]">—</span>
@@ -175,13 +161,11 @@ function DataTableEmpty<T>({
       </table>
       <div
         role="status"
-        className="absolute inset-x-0 top-1/2 mx-auto flex max-w-sm -translate-y-1/2 flex-col items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-5 py-4 text-center shadow-sm"
+        className="absolute inset-x-0 top-1/2 mx-auto flex max-w-sm -translate-y-1/2 flex-col items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--background)] px-5 py-4 text-center shadow-lg backdrop-blur-md"
         style={{ marginTop: 12 }}
       >
         <h3 className="text-sm font-semibold text-[var(--text-primary)]">{title}</h3>
-        {description && (
-          <p className="text-xs text-[var(--text-muted)]">{description}</p>
-        )}
+        {description && <p className="text-xs text-[var(--text-muted)]">{description}</p>}
         {action && <div className="mt-1">{action}</div>}
       </div>
     </div>
@@ -216,4 +200,3 @@ function DataTableSkeleton({ columns, rows }: { columns: number; rows: number })
     </div>
   );
 }
-

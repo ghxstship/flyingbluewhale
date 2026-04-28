@@ -12,26 +12,56 @@ export const dynamic = "force-dynamic";
 
 function fmtMinutes(m: number | null) {
   if (!m) return "—";
-  const h = Math.floor(m / 60), mm = m % 60;
+  const h = Math.floor(m / 60),
+    mm = m % 60;
   return `${h}h ${mm}m`;
 }
 
 export default async function TimePage() {
-  if (!hasSupabase) return <><ModuleHeader title="Time Tracking" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader title="Time Tracking" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
   const rows = await listOrgScoped("time_entries", session.orgId, { orderBy: "started_at" });
   const totalMin = rows.reduce((s, r) => s + (r.duration_minutes ?? 0), 0);
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="Time Tracking" subtitle={`${rows.length} entries · ${fmtMinutes(totalMin)} logged`}
-        action={<Button href="/console/finance/time/new">+ New entry</Button>} />
+      <ModuleHeader
+        eyebrow="Finance"
+        title="Time Tracking"
+        subtitle={`${rows.length} entries · ${fmtMinutes(totalMin)} logged`}
+        action={<Button href="/console/finance/time/new">+ New entry</Button>}
+      />
       <div className="page-content">
         <DataTable<TimeEntry>
           rows={rows}
+          rowHref={(r) => `/console/finance/time/${r.id}`}
+          emptyLabel="No time entries"
+          emptyDescription="Track billable + non-billable work for invoices and labour cost reporting."
+          emptyAction={
+            <Button href="/console/finance/time/new" size="sm">
+              + New entry
+            </Button>
+          }
           columns={[
             { key: "description", header: "Description", render: (r) => r.description ?? "—" },
-            { key: "duration", header: "Duration", render: (r) => fmtMinutes(r.duration_minutes), className: "font-mono text-xs" },
-            { key: "billable", header: "Billable", render: (r) => r.billable ? <Badge variant="success">Yes</Badge> : <Badge variant="muted">No</Badge> },
+            {
+              key: "duration",
+              header: "Duration",
+              render: (r) => fmtMinutes(r.duration_minutes),
+              className: "font-mono text-xs",
+            },
+            {
+              key: "billable",
+              header: "Billable",
+              render: (r) => (r.billable ? <Badge variant="success">Yes</Badge> : <Badge variant="muted">No</Badge>),
+            },
             { key: "started", header: "Started", render: (r) => timeAgo(r.started_at), className: "font-mono text-xs" },
           ]}
         />

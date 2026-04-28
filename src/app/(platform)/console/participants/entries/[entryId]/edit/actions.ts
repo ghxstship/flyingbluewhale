@@ -1,0 +1,45 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+
+const Schema = z.object({
+  participant_name: z.string().min(1).max(200),
+  discipline: z.string().max(120).optional(),
+  event: z.string().max(120).optional(),
+  status: z.string().max(40).optional(),
+});
+
+export type State = { error?: string } | null;
+
+export async function updateEntry(entryId: string, _: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("delegation_entries")
+    .update({
+      participant_name: parsed.data.participant_name,
+      discipline: parsed.data.discipline || null,
+      event: parsed.data.event || null,
+      status: parsed.data.status || "nominated",
+    })
+    .eq("id", entryId)
+    .eq("org_id", session.orgId);
+  if (error) return { error: error.message };
+  revalidatePath(`/console/participants/entries/${entryId}`);
+  revalidatePath("/console/participants/entries");
+  redirect(`/console/participants/entries/${entryId}`);
+}
+
+export async function deleteEntry(entryId: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  await supabase.from("delegation_entries").delete().eq("id", entryId).eq("org_id", session.orgId);
+  revalidatePath("/console/participants/entries");
+  redirect("/console/participants/entries");
+}

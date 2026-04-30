@@ -15,7 +15,7 @@ export default function Page() {
             <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
             <textarea name="description" rows={3} maxLength={500} className="input-base mt-1.5 w-full" />
           </div>
-          <Input label="Color (hex or token)" name="color" maxLength={20} placeholder="e.g. #C8102E" />
+          <Input label="Color (hex or token)" name="color" maxLength={20} placeholder="hex or var(--token)" />
         </FormShell>
       </div>
     </>

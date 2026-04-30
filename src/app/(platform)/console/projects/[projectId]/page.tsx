@@ -28,6 +28,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
     { label: "Files", href: `/console/projects/${projectId}/files` },
     { label: "Calendar", href: `/console/projects/${projectId}/calendar` },
     { label: "Budget", href: `/console/projects/${projectId}/budget` },
+    { label: "P&L", href: `/console/projects/${projectId}/finance` },
     { label: "Crew", href: `/console/projects/${projectId}/crew` },
     { label: "Advancing", href: `/console/projects/${projectId}/advancing` },
     { label: "Guides", href: `/console/projects/${projectId}/guides` },

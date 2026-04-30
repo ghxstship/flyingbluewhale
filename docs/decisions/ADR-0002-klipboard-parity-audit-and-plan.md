@@ -397,11 +397,60 @@ Per epic, production-time metrics:
 - **Designer scope creep.** PDF designer can spiral. Mitigation: Phase 3
   delivers a theme picker only; full WYSIWYG is explicitly out of scope.
 
+## Recommended scope (revised)
+
+After a critical re-read, the 11-epic plan above is roughly half overbuilt.
+Half the gaps are "Klipboard has it so we should too" — wrong frame for an
+experiential platform. The actual recommended build target is **7 items in
+~13 weeks**, with **2 of those items not in the parity audit at all** (they
+came from asking "what do experiential producers actually buy software for?"
+rather than "what does Klipboard have?").
+
+### Build (clear ROI)
+
+| #   | Epic                                                        | Effort | Why                                                                                                                                                                                    |
+| --- | ----------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Mobile media + signature capture                            | 1w     | Smallest effort, biggest leverage. Without it, mobile incident/medic forms produce text-only records that don't survive a safeguarding audit.                                          |
+| 2   | Service requests + SLA tracking                             | 2w     | Highest-ROI epic. Live-event requests (AV buzz, broken lock, soiled bathroom) currently disappear into Slack/radio — invisible to ops.                                                 |
+| 3   | SMS backbone (Twilio)                                       | 1w     | Field crew don't read email. Wire into existing `notifications` matrix. Per-org daily spend cap on `orgs.compliance_settings` prevents festival-night runaway billing.                 |
+| 4   | PPM — narrowly scoped                                       | 2w     | Two specific lanes only: credential expiry chase + scaffold/safety re-checks. Don't build a generic recurring-job scheduler — it competes with `tasks` and the production schedule.    |
+| 5   | QR generation pipeline                                      | 3–4d   | `qrcode` npm already in tree for tickets. Reuse for equipment stickers + accreditation badge sheets. `/console/accreditation/print` is currently a stub.                               |
+| 6   | **Per-event P&L roll-up** _(not in parity audit)_           | 1w     | All data exists: `invoices` + `expenses` + `purchase_orders` + payouts all carry `project_id`. Synthesis page producer accountants ask for every cycle.                                |
+| 7   | **Auto-generated crew call sheets** _(not in parity audit)_ | 2w     | Most-requested feature in production ops. Tomorrow's per-person PDF/SMS with shift, venue, role, contact — generated from `shifts` + `workforce_members` + `dispatch_runs` + `venues`. |
+
+### Defer (low signal until a customer asks)
+
+- **Skill-based dispatch matching** — most experiential orgs are 50–200 crew. People know each other. Matching solves a problem you only have at 1000+ headcount.
+- **PDF designer / themes** — `lib/pdf/layout.tsx` already renders cleanly. Theme-pickering is fiddling, not value.
+- **WMS picking workflow** — real need only for producers who own a warehouse. Many tour-run / residency producers rent everything. Validate the customer profile first.
+- **Drag-drop dispatch interactivity** — ship the read-only calendar matrix view first (~1w), let production managers use it, decide if drag is worth the additional ~3w.
+
+### Don't build at all
+
+- **Asset surveys as a separate epic** — pre/post-venue walks are forms. We just shipped `form_defs`. Add a `target_kind` + `target_id` column (~1d) and document the pattern. Forking the data model for no functional gain is the wrong move.
+- **Xero / QuickBooks at 2 weeks** — real demand, wrong sizing. Either commit to 4w + Xero only (defer QBO), or skip until a customer commits to using it. The "almost done" version is worse than nothing.
+- **Generic recurring jobs / vertical packs / ePOS** — already non-goals.
+
+### Revised sequencing
+
+```
+Sprint 1 (2w):  Mobile media+sig    +  Per-event P&L
+Sprint 2 (2w):  Service+SLA         +  SMS backbone        (parallel; non-overlapping)
+Sprint 3 (2w):  PPM (scoped)        +  QR pipeline
+Sprint 4 (2w):  Auto call sheets
+Sprint 5 (1w):  Read-only dispatch matrix
+[gate]          Validate customer signal before continuing
+Sprint 6+ (4w): Xero one-way sync, if real demand
+```
+
+**~13 weeks total** vs the original 18, and the value-density is higher.
+
 ## Decision
 
-Adopt this plan. Phase 1 starts immediately with Epic 1 (PPM) and Epic 3
-(mobile media capture) in parallel — they don't share files. Re-evaluate
-after Phase 1 ships before committing Phase 2 timeline.
+Adopt the **revised scope** above. The original 11-epic plan is preserved
+in this document as audit reference. Sprint 1 starts immediately with mobile
+media+sig and per-event P&L in parallel — non-overlapping files. Re-evaluate
+after each sprint before committing the next.
 
 ## Out-of-band notes
 

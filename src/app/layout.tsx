@@ -132,10 +132,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <StructuredData
           data={organization({
             name: "L0ST 1SLAND Technologies",
-            url: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
+            url: process.env.NEXT_PUBLIC_APP_URL ?? "https://lostisland.tech",
             description:
               "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
-            logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech"}/og/logo.png`,
+            logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://lostisland.tech"}/og/logo.png`,
           })}
         />
       </head>

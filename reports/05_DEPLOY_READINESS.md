@@ -9,18 +9,18 @@
 
 ## Final Journey Matrix
 
-| Role | S1 signup | S2 invite | S3 project setup | S4 ATLVS | S5 GVTEWAY | S6 COMPVSS | S7 reconciliation | S8 archive |
-|---|---|---|---|---|---|---|---|---|
-| developer | ✅ | ✅ | ✅ | ✅ | N/A | N/A | ✅ | ✅ |
-| owner | ✅ | ✅ | ✅ | ✅ | N/A | N/A | ✅ | ✅ |
-| admin | ✅ | ✅ | ✅ | ✅ | N/A | N/A | ✅ | ✅ |
-| controller | ✅ | 🔶 | 🔶 | ✅ | N/A | N/A | ✅ | 🔶 |
-| collaborator | ✅ | N/A | ✅ | ✅ | N/A | N/A | 🔶 | 🔶 |
-| contractor (vendor) | ✅ | N/A | N/A | N/A | ✅ | N/A | 🔶 | N/A |
-| crew | ✅ | N/A | N/A | N/A | N/A | ✅ | 🔶 | N/A |
-| client | ✅ | N/A | N/A | N/A | ✅ | N/A | 🔶 | N/A |
-| viewer | ✅ | N/A | N/A | N/A | N/A | N/A | N/A | N/A |
-| community | ✅ | N/A | N/A | N/A | N/A | N/A | N/A | N/A |
+| Role                | S1 signup | S2 invite | S3 project setup | S4 ATLVS | S5 GVTEWAY | S6 COMPVSS | S7 reconciliation | S8 archive |
+| ------------------- | --------- | --------- | ---------------- | -------- | ---------- | ---------- | ----------------- | ---------- |
+| developer           | ✅        | ✅        | ✅               | ✅       | N/A        | N/A        | ✅                | ✅         |
+| owner               | ✅        | ✅        | ✅               | ✅       | N/A        | N/A        | ✅                | ✅         |
+| admin               | ✅        | ✅        | ✅               | ✅       | N/A        | N/A        | ✅                | ✅         |
+| controller          | ✅        | 🔶        | 🔶               | ✅       | N/A        | N/A        | ✅                | 🔶         |
+| collaborator        | ✅        | N/A       | ✅               | ✅       | N/A        | N/A        | 🔶                | 🔶         |
+| contractor (vendor) | ✅        | N/A       | N/A              | N/A      | ✅         | N/A        | 🔶                | N/A        |
+| crew                | ✅        | N/A       | N/A              | N/A      | N/A        | ✅         | 🔶                | N/A        |
+| client              | ✅        | N/A       | N/A              | N/A      | ✅         | N/A        | 🔶                | N/A        |
+| viewer              | ✅        | N/A       | N/A              | N/A      | N/A        | N/A        | N/A               | N/A        |
+| community           | ✅        | N/A       | N/A              | N/A      | N/A        | N/A        | N/A               | N/A        |
 
 **Legend:** ✅ GREEN (executable & verified) · 🔶 PARTIAL (role-scoped capability, documented) · N/A code-backed (role is structurally blocked from this stage per CAPABILITIES + RLS + persona routing)
 
@@ -30,9 +30,9 @@
 
 ## Commit log of remediations
 
-| SHA (will be stamped) | Message | Cell(s) |
-|---|---|---|
-| `<this commit>` | `fix(ujv): p0 personal shell auth guard + remove unshipped SSO/SCIM claims + align e2e specs with /customers→/community rename` | R1-R10 · S1/S3; R1-R3 · S1 pitch; e2e drift |
+| SHA (will be stamped) | Message                                                                                                                         | Cell(s)                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `<this commit>`       | `fix(ujv): p0 personal shell auth guard + remove unshipped SSO/SCIM claims + align e2e specs with /customers→/community rename` | R1-R10 · S1/S3; R1-R3 · S1 pitch; e2e drift |
 
 **Remediations applied (this pass):**
 
@@ -46,27 +46,27 @@
 
 ## Native checks
 
-| Check | Command | Result |
-|---|---|---|
-| Lint | `npm run lint` | **PASS** (0 errors, 118 warnings — all legit PDF hex-literal) |
-| Typecheck | `npm run typecheck` | **PASS** |
-| Unit / integration | `npm run test` | **PASS** (108/108) |
-| Build | `npm run build` | **PASS** |
-| Migrations | applied via Supabase MCP `list_migrations` | up-to-date (29 migrations, last `20260421_000029_invites`) |
-| Seed | demo org + MMW26 Hialeah project + guest guide | present in DB |
-| E2E | `npx playwright test` | **PASS** (847 passed / 25 env-gated skipped / **0 failed**) |
+| Check              | Command                                        | Result                                                        |
+| ------------------ | ---------------------------------------------- | ------------------------------------------------------------- |
+| Lint               | `npm run lint`                                 | **PASS** (0 errors, 118 warnings — all legit PDF hex-literal) |
+| Typecheck          | `npm run typecheck`                            | **PASS**                                                      |
+| Unit / integration | `npm run test`                                 | **PASS** (108/108)                                            |
+| Build              | `npm run build`                                | **PASS**                                                      |
+| Migrations         | applied via Supabase MCP `list_migrations`     | up-to-date (29 migrations, last `20260421_000029_invites`)    |
+| Seed               | demo org + MMW26 Hialeah project + guest guide | present in DB                                                 |
+| E2E                | `npx playwright test`                          | **PASS** (847 passed / 25 env-gated skipped / **0 failed**)   |
 
 ---
 
 ## Known issues remaining (all P2 or lower)
 
-| ID | Severity | Issue | Owner recommendation |
-|---|---|---|---|
-| P2-A | P2 | `.env.local` in this dev environment only populates Supabase URL + anon key. Stripe / Anthropic / Resend / GrowthBook / Sentry absent — related flows (3rd-party round-trips) BLOCKED from local e2e. **This is expected**: prod secrets live in Vercel env, not the repo. | Populate Vercel production env + preview env before enabling those features for real users. Confirmed deployable **without** them (code paths gracefully no-op via `hasResend`, `hasStripe`, etc.). |
-| P2-B | P2 | Enterprise SSO / SCIM not implemented. Copy trimmed (see R-2) — not a marketing lie anymore, just an absence. | Build when sales demand documented; revive the marketing bullets on same day. |
-| P3-A | P3 | `CLAUDE.md` says `src/middleware.ts` but actual is `src/proxy.ts` (Next.js 15+ convention). | Doc edit — 1-line CLAUDE.md fix, not blocking. |
-| P3-B | P3 | 118 eslint `no-restricted-syntax` warnings in `src/lib/pdf/*.tsx` for hex literals. Legitimate — `@react-pdf/renderer` doesn't do CSS vars. | Silence with eslint-disable comments if warnings are noisy in CI. Low priority. |
-| P3-C | P3 | Passkeys behind `FLAG_DEFAULTS.passkeys: false` feature flag. WebAuthn wiring present, flag off — not covered by e2e. | Flip flag + build targeted e2e coverage when Enterprise customers ask. |
+| ID   | Severity | Issue                                                                                                                                                                                                                                                                      | Owner recommendation                                                                                                                                                                                |
+| ---- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P2-A | P2       | `.env.local` in this dev environment only populates Supabase URL + anon key. Stripe / Anthropic / Resend / GrowthBook / Sentry absent — related flows (3rd-party round-trips) BLOCKED from local e2e. **This is expected**: prod secrets live in Vercel env, not the repo. | Populate Vercel production env + preview env before enabling those features for real users. Confirmed deployable **without** them (code paths gracefully no-op via `hasResend`, `hasStripe`, etc.). |
+| P2-B | P2       | Enterprise SSO / SCIM not implemented. Copy trimmed (see R-2) — not a marketing lie anymore, just an absence.                                                                                                                                                              | Build when sales demand documented; revive the marketing bullets on same day.                                                                                                                       |
+| P3-A | P3       | `CLAUDE.md` says `src/middleware.ts` but actual is `src/proxy.ts` (Next.js 15+ convention).                                                                                                                                                                                | Doc edit — 1-line CLAUDE.md fix, not blocking.                                                                                                                                                      |
+| P3-B | P3       | 118 eslint `no-restricted-syntax` warnings in `src/lib/pdf/*.tsx` for hex literals. Legitimate — `@react-pdf/renderer` doesn't do CSS vars.                                                                                                                                | Silence with eslint-disable comments if warnings are noisy in CI. Low priority.                                                                                                                     |
+| P3-C | P3       | Passkeys behind `FLAG_DEFAULTS.passkeys: false` feature flag. WebAuthn wiring present, flag off — not covered by e2e.                                                                                                                                                      | Flip flag + build targeted e2e coverage when Enterprise customers ask.                                                                                                                              |
 
 **No P0 or P1 open.**
 
@@ -76,28 +76,30 @@
 
 Mandatory before running in production:
 
-| Variable | Purpose | Source |
-|---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Supabase dashboard |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key | Supabase dashboard |
-| `SUPABASE_SERVICE_ROLE_KEY` | Webhooks + admin flows (invite email sender) | Supabase dashboard |
-| `NEXT_PUBLIC_APP_URL` | Canonical URL for OAuth redirects, sitemap, OG | Deploy domain (e.g., `https://secondstar.tech`) |
+| Variable                        | Purpose                                        | Source                                          |
+| ------------------------------- | ---------------------------------------------- | ----------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL                           | Supabase dashboard                              |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key                              | Supabase dashboard                              |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Webhooks + admin flows (invite email sender)   | Supabase dashboard                              |
+| `NEXT_PUBLIC_APP_URL`           | Canonical URL for OAuth redirects, sitemap, OG | Deploy domain (e.g., `https://lostisland.tech`) |
 
 Optional (features degrade gracefully if absent):
 
-| Variable | Feature | Behaviour when absent |
-|---|---|---|
-| `ANTHROPIC_API_KEY` | AI assistant streaming | `/api/v1/ai/chat` returns 500; UI shows "assistant unavailable" |
-| `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` | Invoice payments + vendor payouts | Stripe-gated routes 400/500; manual ACH still works |
-| `RESEND_API_KEY` + `RESEND_FROM` | Transactional email (invite, proposal share, reset) | `sendEmail` no-ops silently; invites still create DB rows — admin can copy link manually from list view |
-| `NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY` | Feature flags | `FLAG_DEFAULTS` fallback — all features static per defaults |
-| `NEXT_PUBLIC_SENTRY_DSN` | Error tracking | No error reporting; logs still hit Vercel |
-| `NEXT_PUBLIC_APPSIGNAL_KEY` | APM | No perf tracing |
+| Variable                                      | Feature                                             | Behaviour when absent                                                                                   |
+| --------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `ANTHROPIC_API_KEY`                           | AI assistant streaming                              | `/api/v1/ai/chat` returns 500; UI shows "assistant unavailable"                                         |
+| `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` | Invoice payments + vendor payouts                   | Stripe-gated routes 400/500; manual ACH still works                                                     |
+| `RESEND_API_KEY` + `RESEND_FROM`              | Transactional email (invite, proposal share, reset) | `sendEmail` no-ops silently; invites still create DB rows — admin can copy link manually from list view |
+| `NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY`           | Feature flags                                       | `FLAG_DEFAULTS` fallback — all features static per defaults                                             |
+| `NEXT_PUBLIC_SENTRY_DSN`                      | Error tracking                                      | No error reporting; logs still hit Vercel                                                               |
+| `NEXT_PUBLIC_APPSIGNAL_KEY`                   | APM                                                 | No perf tracing                                                                                         |
 
 Migrations (all applied to the connected Supabase project — verify via Supabase dashboard or MCP before switching production project):
+
 - `20260416_000001_identity_tenancy.sql` through `20260421_000029_invites.sql` (29 total)
 
 Feature flags (all default-off except `command_palette_v2` and `portal_comments`):
+
 - `command_palette_v2: true` (default) — keep on
 - `ai_opus_for_pro: false` — enable when Opus pricing finalized
 - `passkeys: false` — enable when WebAuthn E2E coverage lands
@@ -119,6 +121,7 @@ Feature flags (all default-off except `command_palette_v2` and `portal_comments`
 **Recommended first-push target:** Vercel preview environment with Supabase prod creds, confirm `/login` + `/signup` + `/p/mmw26-hialeah/guide` + `/pricing` render on the real domain. Smoke `/auth/callback?error=test` to verify the error-surfacing path. Then promote to production.
 
 **What to do AFTER deploy:**
+
 1. Populate Stripe + Anthropic + Resend env vars as commercial activation demands.
 2. Trim P3 items (CLAUDE.md wording; eslint-disable comments in PDF gen) in a follow-up housekeeping PR.
 3. Decide on SSO/SCIM build vs "remove from roadmap" as a product decision.

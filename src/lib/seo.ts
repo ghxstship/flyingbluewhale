@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 export const SITE = {
   name: "L0ST 1SLAND Technologies",
   shortName: "L0ST 1SLAND",
-  domain: "secondstar.tech",
-  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
+  domain: "lostisland.tech",
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://lostisland.tech",
   tagline: "The Itinerary for Cultural Tastemakers.",
   description:
     "ATLVS · GVTEWAY · COMPVSS — one manifest, three rooms. The bridge, the ports of call, the open deck. From horizon to homecoming — written for cultural tastemakers charting the next crossing. Postgres-backed, RLS-secured, private by architecture.",
-  twitter: "@secondstartech",
+  twitter: "@lostisland.tech",
   /** Parent company chain — surfaces in Organization JSON-LD + legal footer. */
   parent: {
     name: "G H X S T S H I P Industries",

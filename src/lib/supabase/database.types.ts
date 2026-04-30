@@ -2735,6 +2735,131 @@ export type Database = {
           },
         ]
       }
+      maintenance_jobs: {
+        Row: {
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          due_at: string
+          id: string
+          kind: string
+          notes: string | null
+          org_id: string
+          outcome: string | null
+          photos: Json
+          schedule_id: string | null
+          target_id: string | null
+          target_kind: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          due_at: string
+          id?: string
+          kind: string
+          notes?: string | null
+          org_id: string
+          outcome?: string | null
+          photos?: Json
+          schedule_id?: string | null
+          target_id?: string | null
+          target_kind: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          due_at?: string
+          id?: string
+          kind?: string
+          notes?: string | null
+          org_id?: string
+          outcome?: string | null
+          photos?: Json
+          schedule_id?: string | null
+          target_id?: string | null
+          target_kind?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_jobs_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_jobs_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_schedules: {
+        Row: {
+          active: boolean
+          cadence_days: number
+          created_at: string
+          id: string
+          kind: string
+          last_run_at: string | null
+          metadata: Json
+          name: string
+          next_run_at: string | null
+          org_id: string
+          owner_id: string | null
+          target_id: string | null
+          target_kind: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          cadence_days: number
+          created_at?: string
+          id?: string
+          kind: string
+          last_run_at?: string | null
+          metadata?: Json
+          name: string
+          next_run_at?: string | null
+          org_id: string
+          owner_id?: string | null
+          target_id?: string | null
+          target_kind: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          cadence_days?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          last_run_at?: string | null
+          metadata?: Json
+          name?: string
+          next_run_at?: string | null
+          org_id?: string
+          owner_id?: string | null
+          target_id?: string | null
+          target_kind?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_schedules_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       major_incidents: {
         Row: {
           closed_at: string | null
@@ -3334,6 +3459,238 @@ export type Database = {
           },
         ]
       }
+      proposal_activity: {
+        Row: {
+          actor_id: string | null
+          actor_label: string | null
+          id: string
+          kind: string
+          meta: Json
+          occurred_at: string
+          org_id: string
+          proposal_id: string
+          summary: string
+          target_id: string | null
+          target_kind: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_label?: string | null
+          id?: string
+          kind: string
+          meta?: Json
+          occurred_at?: string
+          org_id: string
+          proposal_id: string
+          summary: string
+          target_id?: string | null
+          target_kind?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          actor_label?: string | null
+          id?: string
+          kind?: string
+          meta?: Json
+          occurred_at?: string
+          org_id?: string
+          proposal_id?: string
+          summary?: string
+          target_id?: string | null
+          target_kind?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_activity_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_activity_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_activity_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_approvals: {
+        Row: {
+          body: string | null
+          created_at: string
+          decline_reason: string | null
+          due_at: string | null
+          id: string
+          kind: string
+          org_id: string
+          proposal_id: string
+          signed_at: string | null
+          signed_by: string | null
+          signed_ip: unknown
+          signed_label: string | null
+          state: Database["public"]["Enums"]["approval_state"]
+          target_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          decline_reason?: string | null
+          due_at?: string | null
+          id?: string
+          kind: string
+          org_id: string
+          proposal_id: string
+          signed_at?: string | null
+          signed_by?: string | null
+          signed_ip?: unknown
+          signed_label?: string | null
+          state?: Database["public"]["Enums"]["approval_state"]
+          target_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          decline_reason?: string | null
+          due_at?: string | null
+          id?: string
+          kind?: string
+          org_id?: string
+          proposal_id?: string
+          signed_at?: string | null
+          signed_by?: string | null
+          signed_ip?: unknown
+          signed_label?: string | null
+          state?: Database["public"]["Enums"]["approval_state"]
+          target_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_approvals_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_approvals_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_approvals_signed_by_fkey"
+            columns: ["signed_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_change_orders: {
+        Row: {
+          body: string | null
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_note: string | null
+          delta_cents: number | null
+          id: string
+          meta: Json
+          number: number
+          org_id: string
+          priced_at: string | null
+          proposal_id: string
+          requested_by: string | null
+          requested_label: string | null
+          state: Database["public"]["Enums"]["change_order_state"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_note?: string | null
+          delta_cents?: number | null
+          id?: string
+          meta?: Json
+          number: number
+          org_id: string
+          priced_at?: string | null
+          proposal_id: string
+          requested_by?: string | null
+          requested_label?: string | null
+          state?: Database["public"]["Enums"]["change_order_state"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_note?: string | null
+          delta_cents?: number | null
+          id?: string
+          meta?: Json
+          number?: number
+          org_id?: string
+          priced_at?: string | null
+          proposal_id?: string
+          requested_by?: string | null
+          requested_label?: string | null
+          state?: Database["public"]["Enums"]["change_order_state"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_change_orders_decided_by_fkey"
+            columns: ["decided_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_change_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_change_orders_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_change_orders_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_events: {
         Row: {
           at: string
@@ -3368,6 +3725,362 @@ export type Database = {
             columns: ["proposal_id"]
             isOneToOne: false
             referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_files: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          mime_type: string | null
+          name: string
+          org_id: string
+          proposal_id: string
+          size_bytes: number | null
+          storage_path: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          mime_type?: string | null
+          name: string
+          org_id: string
+          proposal_id: string
+          size_bytes?: number | null
+          storage_path: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          mime_type?: string | null
+          name?: string
+          org_id?: string
+          proposal_id?: string
+          size_bytes?: number | null
+          storage_path?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_files_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_files_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_files_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_gate_items: {
+        Row: {
+          created_at: string
+          done_at: string | null
+          done_by: string | null
+          id: string
+          is_done: boolean
+          label: string
+          ordinal: number
+          org_id: string
+          phase_state_id: string
+          proposal_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          done_at?: string | null
+          done_by?: string | null
+          id?: string
+          is_done?: boolean
+          label: string
+          ordinal: number
+          org_id: string
+          phase_state_id: string
+          proposal_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          done_at?: string | null
+          done_by?: string | null
+          id?: string
+          is_done?: boolean
+          label?: string
+          ordinal?: number
+          org_id?: string
+          phase_state_id?: string
+          proposal_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_gate_items_done_by_fkey"
+            columns: ["done_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_gate_items_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_gate_items_phase_state_id_fkey"
+            columns: ["phase_state_id"]
+            isOneToOne: false
+            referencedRelation: "proposal_phase_states"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_gate_items_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_phase_states: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          id: string
+          meta: Json
+          org_id: string
+          phase_key: string
+          phase_name: string
+          phase_num: number
+          proposal_id: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["proposal_phase_status"]
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          id?: string
+          meta?: Json
+          org_id: string
+          phase_key: string
+          phase_name: string
+          phase_num: number
+          proposal_id: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["proposal_phase_status"]
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          id?: string
+          meta?: Json
+          org_id?: string
+          phase_key?: string
+          phase_name?: string
+          phase_num?: number
+          proposal_id?: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["proposal_phase_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_phase_states_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_phase_states_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_phase_states_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_revision_rounds: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          decided_at: string | null
+          decided_by: string | null
+          decision_note: string | null
+          id: string
+          org_id: string
+          proposal_id: string
+          round_num: number
+          state: Database["public"]["Enums"]["revision_state"]
+          summary: string | null
+          target_id: string | null
+          target_kind: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_note?: string | null
+          id?: string
+          org_id: string
+          proposal_id: string
+          round_num?: number
+          state?: Database["public"]["Enums"]["revision_state"]
+          summary?: string | null
+          target_id?: string | null
+          target_kind: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_note?: string | null
+          id?: string
+          org_id?: string
+          proposal_id?: string
+          round_num?: number
+          state?: Database["public"]["Enums"]["revision_state"]
+          summary?: string | null
+          target_id?: string | null
+          target_kind?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_revision_rounds_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_revision_rounds_decided_by_fkey"
+            columns: ["decided_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_revision_rounds_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_revision_rounds_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      proposal_revisions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          file_path: string | null
+          id: string
+          label: string
+          note: string | null
+          ordinal: number
+          org_id: string
+          preview_url: string | null
+          proposal_id: string
+          round_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          file_path?: string | null
+          id?: string
+          label: string
+          note?: string | null
+          ordinal?: number
+          org_id: string
+          preview_url?: string | null
+          proposal_id: string
+          round_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          file_path?: string | null
+          id?: string
+          label?: string
+          note?: string | null
+          ordinal?: number
+          org_id?: string
+          preview_url?: string | null
+          proposal_id?: string
+          round_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_revisions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_revisions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_revisions_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_revisions_round_id_fkey"
+            columns: ["round_id"]
+            isOneToOne: false
+            referencedRelation: "proposal_revision_rounds"
             referencedColumns: ["id"]
           },
         ]
@@ -4236,6 +4949,214 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      service_request_events: {
+        Row: {
+          actor_id: string | null
+          id: string
+          kind: string
+          occurred_at: string
+          org_id: string
+          payload: Json
+          request_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          id?: string
+          kind: string
+          occurred_at?: string
+          org_id: string
+          payload?: Json
+          request_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          id?: string
+          kind?: string
+          occurred_at?: string
+          org_id?: string
+          payload?: Json
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_request_events_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_request_events_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_requests: {
+        Row: {
+          acknowledged_at: string | null
+          assigned_to: string | null
+          cancelled_at: string | null
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json
+          opened_at: string
+          org_id: string
+          photos: Json
+          project_id: string | null
+          requester_email: string | null
+          requester_id: string | null
+          requester_name: string | null
+          resolution_note: string | null
+          resolved_at: string | null
+          severity: string
+          sla_resolution_breached: boolean
+          sla_resolution_due: string | null
+          sla_response_breached: boolean
+          sla_response_due: string | null
+          status: string
+          summary: string
+          updated_at: string
+          venue_id: string | null
+          zone_id: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          assigned_to?: string | null
+          cancelled_at?: string | null
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json
+          opened_at?: string
+          org_id: string
+          photos?: Json
+          project_id?: string | null
+          requester_email?: string | null
+          requester_id?: string | null
+          requester_name?: string | null
+          resolution_note?: string | null
+          resolved_at?: string | null
+          severity?: string
+          sla_resolution_breached?: boolean
+          sla_resolution_due?: string | null
+          sla_response_breached?: boolean
+          sla_response_due?: string | null
+          status?: string
+          summary: string
+          updated_at?: string
+          venue_id?: string | null
+          zone_id?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          assigned_to?: string | null
+          cancelled_at?: string | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json
+          opened_at?: string
+          org_id?: string
+          photos?: Json
+          project_id?: string | null
+          requester_email?: string | null
+          requester_id?: string | null
+          requester_name?: string | null
+          resolution_note?: string | null
+          resolved_at?: string | null
+          severity?: string
+          sla_resolution_breached?: boolean
+          sla_resolution_due?: string | null
+          sla_response_breached?: boolean
+          sla_response_due?: string | null
+          status?: string
+          summary?: string
+          updated_at?: string
+          venue_id?: string | null
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_requests_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_requests_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_requests_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "venue_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_sla_policies: {
+        Row: {
+          active: boolean
+          business_hours_only: boolean
+          created_at: string
+          id: string
+          org_id: string
+          resolution_minutes: number
+          response_minutes: number
+          severity: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          business_hours_only?: boolean
+          created_at?: string
+          id?: string
+          org_id: string
+          resolution_minutes: number
+          response_minutes: number
+          severity: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          business_hours_only?: boolean
+          created_at?: string
+          id?: string
+          org_id?: string
+          resolution_minutes?: number
+          response_minutes?: number
+          severity?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_sla_policies_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shifts: {
         Row: {
@@ -5551,8 +6472,26 @@ export type Database = {
         Returns: boolean
       }
       is_org_member: { Args: { target_org: string }; Returns: boolean }
+      log_proposal_activity: {
+        Args: {
+          p_actor_id: string
+          p_actor_label: string
+          p_kind: string
+          p_meta?: Json
+          p_org_id: string
+          p_proposal_id: string
+          p_summary: string
+          p_target_id: string
+          p_target_kind: string
+        }
+        Returns: string
+      }
       proposal_org_id: { Args: { p_id: string }; Returns: string }
       reclaim_stuck_jobs: { Args: never; Returns: number }
+      seed_cornbread_abbey_road: {
+        Args: { p_org_slug?: string }
+        Returns: string
+      }
     }
     Enums: {
       accreditation_state:
@@ -5563,6 +6502,15 @@ export type Database = {
         | "suspended"
         | "revoked"
         | "expired"
+      approval_state: "pending" | "signed" | "declined" | "expired"
+      change_order_state:
+        | "draft"
+        | "requested"
+        | "priced"
+        | "client_review"
+        | "approved"
+        | "rejected"
+        | "withdrawn"
       deliverable_status:
         | "draft"
         | "submitted"
@@ -5651,6 +6599,12 @@ export type Database = {
       po_status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled"
       project_role: "creator" | "collaborator" | "viewer" | "vendor"
       project_status: "draft" | "active" | "paused" | "archived" | "complete"
+      proposal_phase_status:
+        | "locked"
+        | "active"
+        | "in_review"
+        | "approved"
+        | "complete"
       proposal_status:
         | "draft"
         | "sent"
@@ -5660,6 +6614,13 @@ export type Database = {
         | "signed"
       raid_kind: "risk" | "assumption" | "issue" | "dependency"
       req_status: "draft" | "submitted" | "approved" | "rejected" | "converted"
+      revision_state:
+        | "open"
+        | "client_review"
+        | "approved"
+        | "changes_requested"
+        | "rejected"
+        | "withdrawn"
       risk_impact: "insignificant" | "minor" | "moderate" | "major" | "severe"
       risk_likelihood:
         | "rare"
@@ -5824,6 +6785,16 @@ export const Constants = {
         "revoked",
         "expired",
       ],
+      approval_state: ["pending", "signed", "declined", "expired"],
+      change_order_state: [
+        "draft",
+        "requested",
+        "priced",
+        "client_review",
+        "approved",
+        "rejected",
+        "withdrawn",
+      ],
       deliverable_status: [
         "draft",
         "submitted",
@@ -5914,6 +6885,13 @@ export const Constants = {
       po_status: ["draft", "sent", "acknowledged", "fulfilled", "cancelled"],
       project_role: ["creator", "collaborator", "viewer", "vendor"],
       project_status: ["draft", "active", "paused", "archived", "complete"],
+      proposal_phase_status: [
+        "locked",
+        "active",
+        "in_review",
+        "approved",
+        "complete",
+      ],
       proposal_status: [
         "draft",
         "sent",
@@ -5924,6 +6902,14 @@ export const Constants = {
       ],
       raid_kind: ["risk", "assumption", "issue", "dependency"],
       req_status: ["draft", "submitted", "approved", "rejected", "converted"],
+      revision_state: [
+        "open",
+        "client_review",
+        "approved",
+        "changes_requested",
+        "rejected",
+        "withdrawn",
+      ],
       risk_impact: ["insignificant", "minor", "moderate", "major", "severe"],
       risk_likelihood: [
         "rare",

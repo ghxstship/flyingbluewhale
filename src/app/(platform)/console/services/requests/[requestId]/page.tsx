@@ -1,60 +1,200 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DeleteForm } from "@/components/DeleteForm";
+import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
-import { getOrgScoped } from "@/lib/db/resource";
+import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { deleteServiceRequest } from "./edit/actions";
+import type { ServiceRequest, ServiceRequestEvent } from "@/lib/supabase/types";
+import { transitionRequest } from "../actions";
 
 export const dynamic = "force-dynamic";
 
+const SEV: Record<ServiceRequest["severity"], "error" | "warning" | "info" | "muted"> = {
+  P1: "error",
+  P2: "warning",
+  P3: "info",
+  P4: "muted",
+};
+
+const STATUS: Record<ServiceRequest["status"], "warning" | "info" | "success" | "muted"> = {
+  open: "warning",
+  acknowledged: "info",
+  in_progress: "info",
+  resolved: "success",
+  cancelled: "muted",
+};
+
+const NEXT_STATES: Record<
+  ServiceRequest["status"],
+  Array<{
+    value: "acknowledged" | "in_progress" | "resolved" | "cancelled";
+    label: string;
+    variant?: "primary" | "secondary" | "danger";
+  }>
+> = {
+  open: [
+    { value: "acknowledged", label: "Acknowledge" },
+    { value: "in_progress", label: "Start work" },
+    { value: "cancelled", label: "Cancel", variant: "danger" },
+  ],
+  acknowledged: [
+    { value: "in_progress", label: "Start work" },
+    { value: "resolved", label: "Resolve" },
+    { value: "cancelled", label: "Cancel", variant: "danger" },
+  ],
+  in_progress: [
+    { value: "resolved", label: "Resolve" },
+    { value: "cancelled", label: "Cancel", variant: "danger" },
+  ],
+  resolved: [],
+  cancelled: [],
+};
+
 export default async function Page({ params }: { params: Promise<{ requestId: string }> }) {
-  const p = await params;
-  if (!hasSupabase)
+  const { requestId } = await params;
+  if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title="Service request" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
       </>
     );
+  }
   const session = await requireSession();
-  const row = await getOrgScoped("tasks", session.orgId, p.requestId);
+  const supabase = await createClient();
+  const { data: row } = await supabase
+    .from("service_requests")
+    .select("*")
+    .eq("org_id", session.orgId)
+    .eq("id", requestId)
+    .maybeSingle();
   if (!row) notFound();
-  const title = (row as Record<string, unknown>)["summary"] as string | undefined;
+  const r = row as ServiceRequest;
+
+  const { data: eventsData } = await supabase
+    .from("service_request_events")
+    .select("id, kind, payload, occurred_at, actor_id")
+    .eq("request_id", requestId)
+    .order("occurred_at", { ascending: false })
+    .limit(50);
+  const events = (eventsData ?? []) as ServiceRequestEvent[];
+
+  const transitions = NEXT_STATES[r.status];
+
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
-        title={title ?? p.requestId}
+        eyebrow="Services · Request"
+        title={r.summary}
         action={
-          <div className="flex items-center gap-2">
-            <Button href="/console/services/requests" variant="ghost" size="sm">
-              Back
-            </Button>
-            <Button href={`/console/services/requests/${p.requestId}/edit`} size="sm">
-              Edit
-            </Button>
-            <DeleteForm
-              action={deleteServiceRequest.bind(null, p.requestId)}
-              confirm={`Delete this record? This cannot be undone.`}
-            />
-          </div>
+          <Button href="/console/services/requests" variant="ghost" size="sm">
+            Back
+          </Button>
         }
       />
-      <div className="page-content">
-        <dl className="surface grid grid-cols-1 gap-3 p-6 sm:grid-cols-2">
-          {Object.entries(row as Record<string, unknown>).map(([k, v]) => (
-            <div key={k} className="flex flex-col gap-1">
-              <dt className="text-xs tracking-wide text-[var(--muted)] uppercase">{k}</dt>
-              <dd className="font-mono text-xs break-all">
-                {v === null || v === undefined ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v)}
+      <div className="page-content max-w-3xl space-y-5">
+        <div className="surface p-5">
+          <div className="flex items-center gap-3">
+            <Badge variant={SEV[r.severity]}>{r.severity}</Badge>
+            <Badge variant={STATUS[r.status]}>{r.status.replace("_", " ")}</Badge>
+            <span className="font-mono text-xs text-[var(--text-muted)]">{r.category}</span>
+          </div>
+          {r.description && (
+            <p className="mt-4 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{r.description}</p>
+          )}
+          <dl className="mt-5 grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <dt className="tracking-wide text-[var(--text-muted)] uppercase">Opened</dt>
+              <dd className="font-mono">{new Date(r.opened_at).toLocaleString()}</dd>
+            </div>
+            <div>
+              <dt className="tracking-wide text-[var(--text-muted)] uppercase">Response SLA</dt>
+              <dd className="font-mono">
+                {r.sla_response_due ? new Date(r.sla_response_due).toLocaleString() : "—"}
+                {r.sla_response_breached && (
+                  <Badge variant="error" className="ml-2">
+                    breached
+                  </Badge>
+                )}
               </dd>
             </div>
-          ))}
-        </dl>
+            <div>
+              <dt className="tracking-wide text-[var(--text-muted)] uppercase">Resolution SLA</dt>
+              <dd className="font-mono">
+                {r.sla_resolution_due ? new Date(r.sla_resolution_due).toLocaleString() : "—"}
+                {r.sla_resolution_breached && (
+                  <Badge variant="error" className="ml-2">
+                    breached
+                  </Badge>
+                )}
+              </dd>
+            </div>
+            <div>
+              <dt className="tracking-wide text-[var(--text-muted)] uppercase">Acknowledged</dt>
+              <dd className="font-mono">{r.acknowledged_at ? new Date(r.acknowledged_at).toLocaleString() : "—"}</dd>
+            </div>
+          </dl>
+        </div>
+
+        {transitions.length > 0 && (
+          <div className="surface p-5">
+            <h3 className="text-sm font-semibold">Transition</h3>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              {transitions.map((t) => (
+                <form key={t.value} action={transitionRequest.bind(null, requestId)}>
+                  <input type="hidden" name="to" value={t.value} />
+                  {t.value === "resolved" && (
+                    <input
+                      name="note"
+                      placeholder="Resolution note (optional)"
+                      maxLength={2000}
+                      className="input-base mr-2 inline-block w-64 align-middle"
+                    />
+                  )}
+                  <Button type="submit" variant={t.variant ?? "secondary"} size="sm">
+                    {t.label}
+                  </Button>
+                </form>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <section className="surface p-5">
+          <h3 className="text-sm font-semibold">Timeline</h3>
+          <ol className="mt-3 space-y-3 text-xs">
+            {events.length === 0 ? (
+              <li className="text-[var(--text-muted)]">No events yet.</li>
+            ) : (
+              events.map((e) => {
+                const p = e.payload as Record<string, unknown> | null;
+                const note =
+                  p && typeof (p as { note?: unknown }).note === "string" ? (p as { note: string }).note : null;
+                const from = p && (p as { from?: unknown }).from;
+                const to = p && (p as { to?: unknown }).to;
+                const transition = from && to ? `${String(from)} → ${String(to)}` : null;
+                return (
+                  <li key={e.id} className="flex items-start gap-3">
+                    <span className="font-mono text-[var(--text-muted)]">
+                      {new Date(e.occurred_at).toLocaleTimeString()}
+                    </span>
+                    <span className="flex-1">
+                      <Badge variant="muted">{e.kind.replace("_", " ")}</Badge>
+                      {(transition || note) && (
+                        <span className="ml-2 text-[var(--text-secondary)]">
+                          {[transition, note].filter(Boolean).join(" · ")}
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                );
+              })
+            )}
+          </ol>
+        </section>
       </div>
     </>
   );

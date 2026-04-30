@@ -71,6 +71,9 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                 </button>
               </form>
             ))}
+            <a href={`/console/production/equipment/${row.id}/qr`} className="btn btn-ghost btn-sm">
+              QR
+            </a>
             <a href={`/console/production/equipment/${row.id}/edit`} className="btn btn-secondary btn-sm">
               Edit
             </a>

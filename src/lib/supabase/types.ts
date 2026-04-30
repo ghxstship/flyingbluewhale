@@ -705,6 +705,87 @@ export type Incident = {
   created_at: string;
   updated_at: string;
 };
+export type ServiceRequest = {
+  id: string;
+  org_id: string;
+  project_id: string | null;
+  venue_id: string | null;
+  zone_id: string | null;
+  category: "AV" | "cleaning" | "repair" | "IT" | "hospitality" | "security" | "other";
+  severity: "P1" | "P2" | "P3" | "P4";
+  summary: string;
+  description: string | null;
+  photos: unknown;
+  requester_id: string | null;
+  requester_email: string | null;
+  requester_name: string | null;
+  assigned_to: string | null;
+  status: "open" | "acknowledged" | "in_progress" | "resolved" | "cancelled";
+  opened_at: string;
+  acknowledged_at: string | null;
+  resolved_at: string | null;
+  cancelled_at: string | null;
+  sla_response_due: string | null;
+  sla_resolution_due: string | null;
+  sla_response_breached: boolean;
+  sla_resolution_breached: boolean;
+  resolution_note: string | null;
+  metadata: unknown;
+  created_at: string;
+  updated_at: string;
+};
+export type ServiceSlaPolicy = {
+  id: string;
+  org_id: string;
+  severity: "P1" | "P2" | "P3" | "P4";
+  response_minutes: number;
+  resolution_minutes: number;
+  business_hours_only: boolean;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+export type ServiceRequestEvent = {
+  id: string;
+  request_id: string;
+  org_id: string;
+  actor_id: string | null;
+  kind: "opened" | "acknowledged" | "assigned" | "status_changed" | "note" | "resolved" | "cancelled" | "sla_breached";
+  payload: unknown;
+  occurred_at: string;
+};
+export type MaintenanceSchedule = {
+  id: string;
+  org_id: string;
+  name: string;
+  kind: "inspection" | "service" | "cert_renewal" | "compliance";
+  cadence_days: number;
+  target_kind: "venue" | "equipment" | "credential" | "workforce" | "custom";
+  target_id: string | null;
+  owner_id: string | null;
+  last_run_at: string | null;
+  next_run_at: string | null;
+  active: boolean;
+  metadata: unknown;
+  created_at: string;
+  updated_at: string;
+};
+export type MaintenanceJob = {
+  id: string;
+  org_id: string;
+  schedule_id: string | null;
+  kind: "inspection" | "service" | "cert_renewal" | "compliance";
+  target_kind: "venue" | "equipment" | "credential" | "workforce" | "custom";
+  target_id: string | null;
+  due_at: string;
+  completed_at: string | null;
+  completed_by: string | null;
+  outcome: "pass" | "fail" | "partial" | null;
+  notes: string | null;
+  photos: unknown;
+  created_at: string;
+  updated_at: string;
+};
 export type MajorIncident = {
   id: string;
   org_id: string;
@@ -1810,6 +1891,47 @@ export type Database = {
         MajorIncident,
         Partial<MajorIncident> & { org_id: string; name: string },
         Partial<MajorIncident>
+      >;
+      service_requests: TableDef<
+        ServiceRequest,
+        Partial<ServiceRequest> & { org_id: string; category: ServiceRequest["category"]; summary: string },
+        Partial<ServiceRequest>
+      >;
+      service_sla_policies: TableDef<
+        ServiceSlaPolicy,
+        Partial<ServiceSlaPolicy> & {
+          org_id: string;
+          severity: ServiceSlaPolicy["severity"];
+          response_minutes: number;
+          resolution_minutes: number;
+        },
+        Partial<ServiceSlaPolicy>
+      >;
+      service_request_events: TableDef<
+        ServiceRequestEvent,
+        Partial<ServiceRequestEvent> & { request_id: string; org_id: string; kind: ServiceRequestEvent["kind"] },
+        Partial<ServiceRequestEvent>
+      >;
+      maintenance_schedules: TableDef<
+        MaintenanceSchedule,
+        Partial<MaintenanceSchedule> & {
+          org_id: string;
+          name: string;
+          kind: MaintenanceSchedule["kind"];
+          cadence_days: number;
+          target_kind: MaintenanceSchedule["target_kind"];
+        },
+        Partial<MaintenanceSchedule>
+      >;
+      maintenance_jobs: TableDef<
+        MaintenanceJob,
+        Partial<MaintenanceJob> & {
+          org_id: string;
+          kind: MaintenanceJob["kind"];
+          target_kind: MaintenanceJob["target_kind"];
+          due_at: string;
+        },
+        Partial<MaintenanceJob>
       >;
       safeguarding_reports: TableDef<
         SafeguardingReport,

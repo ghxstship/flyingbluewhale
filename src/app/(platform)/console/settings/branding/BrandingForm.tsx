@@ -18,15 +18,12 @@ type Initial = {
 };
 
 export function BrandingForm({ initial }: { initial: Initial }) {
-  const [state, formAction, pending] = useActionState<BrandingState, FormData>(
-    async (prev, fd) => {
-      const result = await updateBrandingAction(prev, fd);
-      if (result?.ok) toast.success("Branding saved");
-      else if (result?.error) toast.error(result.error);
-      return result;
-    },
-    null,
-  );
+  const [state, formAction, pending] = useActionState<BrandingState, FormData>(async (prev, fd) => {
+    const result = await updateBrandingAction(prev, fd);
+    if (result?.ok) toast.success("Branding saved");
+    else if (result?.error) toast.error(result.error);
+    return result;
+  }, null);
 
   const [accent, setAccent] = useState(initial.accentColor || "#DC2626");
   const [foreground, setForeground] = useState(initial.accentForeground || "#ffffff");
@@ -47,7 +44,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
             maxLength={48}
-            placeholder="Second Star Technologies"
+            placeholder="L0ST 1SLAND Technologies"
           />
           <Input
             label="Logo URL (HTTPS)"
@@ -115,15 +112,38 @@ export function BrandingForm({ initial }: { initial: Initial }) {
           Hero image + favicon + Open Graph fallback. Used on marketing + shared links.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <Input label="Favicon URL" name="faviconUrl" type="url" defaultValue={initial.faviconUrl} placeholder="https://.../favicon.ico" />
-          <Input label="Hero Image URL" name="heroImageUrl" type="url" defaultValue={initial.heroImageUrl} placeholder="https://.../hero.jpg" />
-          <Input label="Open Graph image URL" name="ogImageUrl" type="url" defaultValue={initial.ogImageUrl} placeholder="https://.../og.png" />
+          <Input
+            label="Favicon URL"
+            name="faviconUrl"
+            type="url"
+            defaultValue={initial.faviconUrl}
+            placeholder="https://.../favicon.ico"
+          />
+          <Input
+            label="Hero Image URL"
+            name="heroImageUrl"
+            type="url"
+            defaultValue={initial.heroImageUrl}
+            placeholder="https://.../hero.jpg"
+          />
+          <Input
+            label="Open Graph image URL"
+            name="ogImageUrl"
+            type="url"
+            defaultValue={initial.ogImageUrl}
+            placeholder="https://.../og.png"
+          />
         </div>
       </section>
 
-      <section className="surface p-5" style={{ ["--org-primary" as string]: accent, ["--org-on-primary" as string]: foreground }}>
+      <section
+        className="surface p-5"
+        style={{ ["--org-primary" as string]: accent, ["--org-on-primary" as string]: foreground }}
+      >
         <h3 className="text-sm font-semibold">Preview</h3>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">Live preview reflects your pending changes; save to apply everywhere.</p>
+        <p className="mt-1 text-xs text-[var(--text-muted)]">
+          Live preview reflects your pending changes; save to apply everywhere.
+        </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <button type="button" className="btn btn-primary btn-sm" disabled>
             {productName || "Primary action"}
@@ -132,7 +152,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             Ghost
           </button>
           <span className="text-xs" style={{ color: accent }}>
-            Sample brand text · {productName || "Second Star Technologies"}
+            Sample brand text · {productName || "L0ST 1SLAND Technologies"}
           </span>
         </div>
       </section>

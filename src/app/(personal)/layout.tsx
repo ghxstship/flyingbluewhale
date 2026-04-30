@@ -23,7 +23,7 @@ export default async function PersonalLayout({ children }: { children: React.Rea
   await requireSession("/login");
   const tenant = await resolveTenant();
   const brandName = tenant.branding.productName ?? tenant.orgName ?? "SECOND STVR";
-  const brandAria = tenant.branding.productName ?? tenant.orgName ?? "Second Star Technologies";
+  const brandAria = tenant.branding.productName ?? tenant.orgName ?? "L0ST 1SLAND Technologies";
   const isDefaultBrand = !tenant.branding.productName && !tenant.orgName;
   return (
     <TenantShell tenant={tenant}>
@@ -39,9 +39,7 @@ export default async function PersonalLayout({ children }: { children: React.Rea
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={tenant.branding.logoUrl} alt="" className="h-5 w-auto" />
               ) : null}
-              <span className={isDefaultBrand ? "tracking-[0.14em] uppercase" : ""}>
-                {brandName}
-              </span>
+              <span className={isDefaultBrand ? "tracking-[0.14em] uppercase" : ""}>{brandName}</span>
             </Link>
             <ThemeToggle />
           </div>
@@ -53,7 +51,7 @@ export default async function PersonalLayout({ children }: { children: React.Rea
             ))}
           </nav>
         </div>
-        <main className="mx-auto max-w-5xl px-6 py-8 animate-page-enter">{children}</main>
+        <main className="animate-page-enter mx-auto max-w-5xl px-6 py-8">{children}</main>
       </div>
     </TenantShell>
   );

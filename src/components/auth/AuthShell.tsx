@@ -38,18 +38,18 @@ export function AuthShell({
   /** White-label rail content (driven by orgs.branding for tenant deployments). */
   rail?: AuthRailContent;
 }) {
-  const productName = rail?.productName ?? "Second Star Technologies";
+  const productName = rail?.productName ?? "L0ST 1SLAND Technologies";
   const tagline = rail?.tagline ?? "The unified production platform.";
   const description =
     rail?.description ??
     "One Postgres. One identity. Three shells — internal, external, mobile. Built for the ops teams behind festivals, tours, and corporate activations.";
   const highlights = rail?.highlights ?? DEFAULT_HIGHLIGHTS;
-  const copyright = rail?.copyright ?? `© ${new Date().getFullYear()} Second Star Technologies`;
+  const copyright = rail?.copyright ?? `© ${new Date().getFullYear()} L0ST 1SLAND Technologies`;
   return (
-    <div className="min-h-[calc(100vh-72px)] grid lg:grid-cols-2">
+    <div className="grid min-h-[calc(100vh-72px)] lg:grid-cols-2">
       <aside
         aria-label={`About ${productName}`}
-        className="hidden lg:flex flex-col justify-between bg-[var(--surface-inset)] p-12"
+        className="hidden flex-col justify-between bg-[var(--surface-inset)] p-12 lg:flex"
       >
         <Link
           href="/"
@@ -83,9 +83,7 @@ export function AuthShell({
       <main className="flex items-center justify-center px-6 py-12 sm:py-16">
         <div className="w-full max-w-sm">
           <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-          {subtitle && (
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">{subtitle}</p>
-          )}
+          {subtitle && <p className="mt-2 text-sm text-[var(--text-secondary)]">{subtitle}</p>}
           <div className="mt-8">{children}</div>
           {footer && <div className="mt-6 text-center text-xs text-[var(--text-muted)]">{footer}</div>}
         </div>

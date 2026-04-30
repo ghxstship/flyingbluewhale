@@ -13,16 +13,40 @@ export const metadata: Metadata = buildMetadata({
   description:
     "A direct line to the taste-makers&apos; studio. Captain&apos;s briefings, Private Charter access, partnerships, concierge support. Routed to producers who&apos;ve charted the crossings.",
   path: "/contact",
-  keywords: ["Second Star Technologies contact", "talk to sales", "production software demo", "book demo"],
+  keywords: ["L0ST 1SLAND Technologies contact", "talk to sales", "production software demo", "book demo"],
   ogImageEyebrow: "Contact",
   ogImageTitle: "Call the Studio.",
 });
 
 const ROUTES = [
-  { icon: Calendar, title: "Captain&apos;s briefing", body: "Thirty minutes, tailored to your crossing. We screen-share the Atlas and answer anything.", cta: "Get on the calendar", href: "#form" },
-  { icon: Mail, title: "Call the studio", body: "Direct line to a producer. One business day, usually faster.", cta: "sales@flyingbluewhale.app", href: "mailto:sales@flyingbluewhale.app" },
-  { icon: MessageCircle, title: "Concierge", body: "For current pass holders — triaged by cabin. Private Charter gets an SLA.", cta: "support@flyingbluewhale.app", href: "mailto:support@flyingbluewhale.app" },
-  { icon: Building2, title: "Co-pilots", body: "Integrations, agencies, distribution. Let&apos;s chart the voyage together.", cta: "partners@flyingbluewhale.app", href: "mailto:partners@flyingbluewhale.app" },
+  {
+    icon: Calendar,
+    title: "Captain&apos;s briefing",
+    body: "Thirty minutes, tailored to your crossing. We screen-share the Atlas and answer anything.",
+    cta: "Get on the calendar",
+    href: "#form",
+  },
+  {
+    icon: Mail,
+    title: "Call the studio",
+    body: "Direct line to a producer. One business day, usually faster.",
+    cta: "sales@flyingbluewhale.app",
+    href: "mailto:sales@flyingbluewhale.app",
+  },
+  {
+    icon: MessageCircle,
+    title: "Concierge",
+    body: "For current pass holders — triaged by cabin. Private Charter gets an SLA.",
+    cta: "support@flyingbluewhale.app",
+    href: "mailto:support@flyingbluewhale.app",
+  },
+  {
+    icon: Building2,
+    title: "Co-pilots",
+    body: "Integrations, agencies, distribution. Let&apos;s chart the voyage together.",
+    cta: "partners@flyingbluewhale.app",
+    href: "mailto:partners@flyingbluewhale.app",
+  },
 ];
 
 const FAQS = [
@@ -56,10 +80,14 @@ export default function ContactPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Contact</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Contact</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Call the Studio.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          No dark patterns. No forced calls. Book passage straight from <a className="underline" href="/signup">/signup</a>. Or request a captain&apos;s briefing below — one business day, usually faster.
+          No dark patterns. No forced calls. Book passage straight from{" "}
+          <a className="underline" href="/signup">
+            /signup
+          </a>
+          . Or request a captain&apos;s briefing below — one business day, usually faster.
         </p>
       </section>
 
@@ -73,7 +101,7 @@ export default function ContactPage() {
               <div>
                 <div className="text-sm font-semibold">{title}</div>
                 <p className="mt-1 text-sm text-[var(--text-secondary)]">{body}</p>
-                <div className="mt-2 text-xs font-mono text-[var(--org-primary)]">{cta}</div>
+                <div className="mt-2 font-mono text-xs text-[var(--org-primary)]">{cta}</div>
               </div>
             </a>
           ))}
@@ -82,22 +110,21 @@ export default function ContactPage() {
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leave a Note.</h2>
-        <form
-          className="surface-raised mt-8 space-y-4 p-6"
-          method="post"
-          action="mailto:sales@flyingbluewhale.app"
-        >
+        <form className="surface-raised mt-8 space-y-4 p-6" method="post" action="mailto:sales@flyingbluewhale.app">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Name<input name="name" required className="input-base mt-1.5 w-full" />
+              Name
+              <input name="name" required className="input-base mt-1.5 w-full" />
             </label>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Work email<input name="email" type="email" required className="input-base mt-1.5 w-full" />
+              Work email
+              <input name="email" type="email" required className="input-base mt-1.5 w-full" />
             </label>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Company<input name="company" className="input-base mt-1.5 w-full" />
+              Company
+              <input name="company" className="input-base mt-1.5 w-full" />
             </label>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
               Show count / year
@@ -120,13 +147,16 @@ export default function ContactPage() {
             </select>
           </label>
           <label className="block text-xs font-medium text-[var(--text-secondary)]">
-            What are you charting?<textarea name="message" rows={4} className="input-base mt-1.5 w-full" />
+            What are you charting?
+            <textarea name="message" rows={4} className="input-base mt-1.5 w-full" />
           </label>
           <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
             <input type="checkbox" name="demo" /> I&apos;d rather walk it through live than trade emails.
           </label>
           <div className="flex items-center justify-end gap-2">
-            <Button href="/signup" variant="secondary">Book passage instead</Button>
+            <Button href="/signup" variant="secondary">
+              Book passage instead
+            </Button>
             <Button type="submit">Send to the studio</Button>
           </div>
         </form>

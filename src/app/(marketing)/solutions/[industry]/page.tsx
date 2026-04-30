@@ -31,11 +31,11 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Live Events",
     tagline: "Venue residencies, club nights, one-offs",
     description:
-      "Second Star Technologies is the production platform for Live Events — club residencies, brand-hosted nights, album release parties, rooftop pop-ups. Ticketing with on-site scan, artist advancing, direct vendor payouts, and per-role Know Before You Go guides — all connected on day one.",
+      "L0ST 1SLAND Technologies is the production platform for Live Events — club residencies, brand-hosted nights, album release parties, rooftop pop-ups. Ticketing with on-site scan, artist advancing, direct vendor payouts, and per-role Know Before You Go guides — all connected on day one.",
     hero: {
       eyebrow: "Live Events",
       title: "From Pitch to Wrap. One Platform.",
-      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. Second Star Technologies unifies all of it.",
+      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. L0ST 1SLAND Technologies unifies all of it.",
     },
     stats: [
       { value: "15k+", label: "guests / night" },
@@ -52,10 +52,22 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
       "Crew clock in through COMPVSS with geo-verification",
     ],
     modules: [
-      { name: "Ticketing", body: "Sub-100ms scan. Zero duplicates. Offline queue. Tiered tickets, transfers, VIP cabanas." },
-      { name: "Artist Advancing", body: "Riders, input lists, stage plots, catering, travel, schedule — all through the portal." },
-      { name: "Vendor Payouts", body: "Vendors onboard a payout account. Direct payout on PO fulfillment — ACH, card, or wire." },
-      { name: "KBYG Guides", body: "One source, role-scoped views. Sixteen section types rendered to portal and mobile." },
+      {
+        name: "Ticketing",
+        body: "Sub-100ms scan. Zero duplicates. Offline queue. Tiered tickets, transfers, VIP cabanas.",
+      },
+      {
+        name: "Artist Advancing",
+        body: "Riders, input lists, stage plots, catering, travel, schedule — all through the portal.",
+      },
+      {
+        name: "Vendor Payouts",
+        body: "Vendors onboard a payout account. Direct payout on PO fulfillment — ACH, card, or wire.",
+      },
+      {
+        name: "KBYG Guides",
+        body: "One source, role-scoped views. Sixteen section types rendered to portal and mobile.",
+      },
       { name: "Finance", body: "Per-event P&L, deposit and balance splits, per-vendor invoicing." },
       { name: "Compliance", body: "Vendor COI tracking with expiry alerts, W-9 storage, immutable audit log." },
     ],
@@ -198,7 +210,10 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     modules: [
       { name: "Timed Entry", body: "Fifteen-minute windows with hard capacity. Waitlist with automated promotion." },
       { name: "Zones & Roles", body: "Zone map, role coverage, break scheduling, escalation routing." },
-      { name: "Incidents", body: "One-tap incident log from the field, routed to the safety lead with chain-of-custody." },
+      {
+        name: "Incidents",
+        body: "One-tap incident log from the field, routed to the safety lead with chain-of-custody.",
+      },
       { name: "Cast Portal", body: "Character bible, blocking notes, safety protocols, per-show call sheet." },
     ],
     faqs: [
@@ -226,7 +241,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     hero: {
       eyebrow: "Brand Activations",
       title: "From RFP to Recap. Same Platform.",
-      body: "Activations live or die by the speed of the hand-off — agency to client, creative to production, production to vendors. Second Star Technologies shortens every hand-off to zero.",
+      body: "Activations live or die by the speed of the hand-off — agency to client, creative to production, production to vendors. L0ST 1SLAND Technologies shortens every hand-off to zero.",
     },
     stats: [
       { value: "< 1 day", label: "proposal → signed project" },
@@ -243,7 +258,10 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
       "Post-event recap deck auto-drafted from the activation data",
     ],
     modules: [
-      { name: "Proposals", body: "Twenty-three block types, scroll-spy nav, e-sign in place, share links, version history." },
+      {
+        name: "Proposals",
+        body: "Twenty-three block types, scroll-spy nav, e-sign in place, share links, version history.",
+      },
       { name: "Client Portal", body: "Proposals, deliverables, invoices, shared files, direct messages." },
       { name: "RSVP + Capture", body: "Email RSVP with ticketing. On-site scan captures lead data to the CRM." },
       { name: "Finance", body: "Card or ACH invoicing, deposit and balance splits, live P&L per activation." },
@@ -269,7 +287,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Corporate Events",
     tagline: "Conferences, AGMs, summits, internal events",
     description:
-      "Second Star Technologies for Corporate Events — conferences, shareholder meetings, executive summits, internal kickoffs. Client-facing proposals, vendor COI tracking, stakeholder portals, and executive-grade guest experiences.",
+      "L0ST 1SLAND Technologies for Corporate Events — conferences, shareholder meetings, executive summits, internal kickoffs. Client-facing proposals, vendor COI tracking, stakeholder portals, and executive-grade guest experiences.",
     hero: {
       eyebrow: "Corporate Events",
       title: "Executive Grade. Field Ready.",
@@ -290,7 +308,10 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
       "Immutable audit log on every change, for compliance and legal",
     ],
     modules: [
-      { name: "Proposals", body: "Twenty-three block types, scroll-spy nav, e-sign in place, share links, version history." },
+      {
+        name: "Proposals",
+        body: "Twenty-three block types, scroll-spy nav, e-sign in place, share links, version history.",
+      },
       { name: "Client Portal", body: "Proposals, deliverables, invoices, shared files, direct messages." },
       { name: "Compliance", body: "Vendor COI tracking, W-9 storage, immutable audit log, SOC 2 controls." },
       { name: "Finance", body: "Card or ACH invoicing, deposit and balance splits, live P&L." },
@@ -380,10 +401,19 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
       "Offline time cards work when location has zero bars",
     ],
     modules: [
-      { name: "Call Sheets", body: "Daily call sheets auto-drafted from schedule and crew pool. Delivered via email and portal." },
-      { name: "Time Tracking", body: "Union-compliant clock with meal penalty logic. DGA, IATSE, SAG rules configurable." },
+      {
+        name: "Call Sheets",
+        body: "Daily call sheets auto-drafted from schedule and crew pool. Delivered via email and portal.",
+      },
+      {
+        name: "Time Tracking",
+        body: "Union-compliant clock with meal penalty logic. DGA, IATSE, SAG rules configurable.",
+      },
       { name: "Locations", body: "Location library with agreements, rights windows, and contact rolodex." },
-      { name: "Procurement", body: "Purchase orders with receiving. Vendor COI and W-9 on every vendor. Petty cash per department." },
+      {
+        name: "Procurement",
+        body: "Purchase orders with receiving. Vendor COI and W-9 on every vendor. Petty cash per department.",
+      },
     ],
     faqs: [
       {
@@ -408,9 +438,10 @@ type Props = { params: Promise<{ industry: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { industry } = await params;
   const info = INDUSTRIES[industry];
-  if (!info) return buildMetadata({ title: "Solution", description: "Industry solution", path: `/solutions/${industry}` });
+  if (!info)
+    return buildMetadata({ title: "Solution", description: "Industry solution", path: `/solutions/${industry}` });
   return buildMetadata({
-    title: `${info.name} — ${info.tagline} on Second Star Technologies`,
+    title: `${info.name} — ${info.tagline} on L0ST 1SLAND Technologies`,
     description: info.description,
     path: `/solutions/${industry}`,
     keywords: [info.name.toLowerCase(), info.tagline.toLowerCase()],
@@ -439,12 +470,16 @@ export default async function IndustryPage({ params }: Props) {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">{info.hero.eyebrow}</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl text-balance">{info.hero.title}</h1>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          {info.hero.eyebrow}
+        </div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">{info.hero.title}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{info.hero.body}</p>
         <div className="mt-8 flex gap-3">
           <Button href="/signup">Start Free</Button>
-          <Button href="/contact" variant="secondary">Book a Demo</Button>
+          <Button href="/contact" variant="secondary">
+            Book a Demo
+          </Button>
         </div>
       </section>
 

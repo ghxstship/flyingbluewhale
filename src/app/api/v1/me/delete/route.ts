@@ -77,22 +77,24 @@ export async function POST(req: NextRequest) {
     });
     if (session.email) {
       const { createServiceClient, isServiceClientAvailable } = await import("@/lib/supabase/server");
-        if (!isServiceClientAvailable()) {
-          return apiError(
-            "service_unavailable",
-            "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
-          );
-        }
+      if (!isServiceClientAvailable()) {
+        return apiError(
+          "service_unavailable",
+          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+        );
+      }
       const svc = createServiceClient();
-      await (svc.from("job_queue") as unknown as {
-        insert: (p: Record<string, unknown>) => Promise<unknown>;
-      }).insert({
+      await (
+        svc.from("job_queue") as unknown as {
+          insert: (p: Record<string, unknown>) => Promise<unknown>;
+        }
+      ).insert({
         type: "email.send",
         org_id: session.orgId,
         payload: {
           to: session.email,
           subject: "Account deletion requested — 30-day grace",
-          html: `<p>Your Second Star Technologies account is scheduled for permanent deletion on <strong>${new Date(purgeAt).toLocaleDateString()}</strong>.</p><p>Sign in within that window to cancel the deletion. After 30 days all your data will be unrecoverable.</p>`,
+          html: `<p>Your L0ST 1SLAND Technologies account is scheduled for permanent deletion on <strong>${new Date(purgeAt).toLocaleDateString()}</strong>.</p><p>Sign in within that window to cancel the deletion. After 30 days all your data will be unrecoverable.</p>`,
         },
       });
     }

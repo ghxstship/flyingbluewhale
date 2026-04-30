@@ -33,11 +33,11 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
   const res = await httpFetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
-      "authorization": `Bearer ${env.RESEND_API_KEY}`,
+      authorization: `Bearer ${env.RESEND_API_KEY}`,
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      from: env.RESEND_FROM ?? "Second Star Technologies <no-reply@flyingbluewhale.app>",
+      from: env.RESEND_FROM ?? "L0ST 1SLAND Technologies <no-reply@flyingbluewhale.app>",
       to: Array.isArray(payload.to) ? payload.to : [payload.to],
       subject: payload.subject,
       html: payload.html,
@@ -65,10 +65,15 @@ export async function sendProposalShareEmail({
   proposalTitle,
   url,
   senderName,
-}: { to: string; proposalTitle: string; url: string; senderName?: string }) {
+}: {
+  to: string;
+  proposalTitle: string;
+  url: string;
+  senderName?: string;
+}) {
   return sendEmail({
     to,
-    subject: `${senderName ?? "Second Star Technologies"} sent you a proposal: ${proposalTitle}`,
+    subject: `${senderName ?? "L0ST 1SLAND Technologies"} sent you a proposal: ${proposalTitle}`,
     html: `
       <div style="font-family:Inter,system-ui,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
         <p style="color:#666;font-size:12px;letter-spacing:.15em;text-transform:uppercase">Proposal</p>

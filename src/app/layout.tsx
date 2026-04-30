@@ -30,41 +30,67 @@ import "./theme/index.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono", display: "swap" });
-const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["300", "400", "500", "700"], variable: "--font-serif", display: "swap" });
+const serif = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 // CHROMA BEACON theme fonts — the CSS variable names match what each theme's
 // `--font-display` / `--font-body` declarations reference.
-const fraunces   = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap" });
-const instrument = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-instrument-serif", display: "swap" });
-const dmSerif    = DM_Serif_Display({ subsets: ["latin"], weight: "400", variable: "--font-dm-serif-display", display: "swap" });
-const bricolage  = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-bricolage", display: "swap" });
-const spaceGrot  = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
-const geist      = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
-const geistMono  = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
+const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap" });
+const instrument = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+const dmSerif = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-dm-serif-display",
+  display: "swap",
+});
+const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-bricolage", display: "swap" });
+const spaceGrot = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
-    default: "Second Star Technologies — ATLVS, GVTEWAY, COMPVSS",
-    template: "%s · Second Star Technologies",
+    default: "L0ST 1SLAND Technologies — ATLVS, GVTEWAY, COMPVSS",
+    template: "%s · L0ST 1SLAND Technologies",
   },
   description:
     "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. The bridge, the ports of call, the open deck. From horizon to homecoming.",
-  keywords: ["production management", "live events", "fabrication", "advancing", "ticketing", "PWA", "ATLVS", "GVTEWAY", "COMPVSS", "Second Star Technologies"],
+  keywords: [
+    "production management",
+    "live events",
+    "fabrication",
+    "advancing",
+    "ticketing",
+    "PWA",
+    "ATLVS",
+    "GVTEWAY",
+    "COMPVSS",
+    "L0ST 1SLAND Technologies",
+  ],
   manifest: "/manifest.json",
   openGraph: {
-    title: "Second Star Technologies",
+    title: "L0ST 1SLAND Technologies",
     description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
-    siteName: "Second Star Technologies",
+    siteName: "L0ST 1SLAND Technologies",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Second Star Technologies",
+    title: "L0ST 1SLAND Technologies",
     description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
   },
   robots: { index: true, follow: true },
-  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Second Star" },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "L0ST 1SLAND" },
 };
 
 export const viewport: Viewport = {
@@ -73,9 +99,10 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const swRegister = process.env.NODE_ENV === "production"
-  ? `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}`
-  : `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}`;
+const swRegister =
+  process.env.NODE_ENV === "production"
+    ? `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}`
+    : `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}`;
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getRequestLocale();
@@ -104,7 +131,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             and inherits across every route. */}
         <StructuredData
           data={organization({
-            name: "Second Star Technologies",
+            name: "L0ST 1SLAND Technologies",
             url: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
             description:
               "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
@@ -112,12 +139,16 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           })}
         />
       </head>
-      <body className="min-h-full flex flex-col antialiased">
-        <a href="#main" className="skip-link">Skip to content</a>
+      <body className="flex min-h-full flex-col antialiased">
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
         <ThemeProvider>
           <TooltipProvider delayDuration={350}>
             <LiveRegionProvider>
-              <div id="main" className="flex-1 flex flex-col min-w-0">{children}</div>
+              <div id="main" className="flex min-w-0 flex-1 flex-col">
+                {children}
+              </div>
               <CookieConsent />
               <ShortcutDialog />
             </LiveRegionProvider>

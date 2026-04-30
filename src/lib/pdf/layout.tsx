@@ -20,11 +20,11 @@ import type { PdfBrand } from "./branding";
  *    because we do not embed those at runtime).
  */
 
-const BASE = 11;          // body font size in pt
-const LINE = 1.45;        // line-height multiplier
-const ACCENT_BAR = 6;     // pt, the top-edge accent rule on branded pages
-const MARGIN = 48;        // pt, page gutter
-const FOOTER_H = 28;      // pt, space reserved for running footer
+const BASE = 11; // body font size in pt
+const LINE = 1.45; // line-height multiplier
+const ACCENT_BAR = 6; // pt, the top-edge accent rule on branded pages
+const MARGIN = 48; // pt, page gutter
+const FOOTER_H = 28; // pt, space reserved for running footer
 
 const styles = StyleSheet.create({
   page: {
@@ -336,7 +336,13 @@ export function PdfDocument({
   children: React.ReactNode;
 }) {
   return (
-    <Document title={title} author={author} subject={subject ?? title} creator="Second Star Technologies" producer="Second Star Technologies">
+    <Document
+      title={title}
+      author={author}
+      subject={subject ?? title}
+      creator="L0ST 1SLAND Technologies"
+      producer="L0ST 1SLAND Technologies"
+    >
       {children}
     </Document>
   );

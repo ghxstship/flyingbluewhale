@@ -17,12 +17,7 @@ type Dict = Record<string, unknown>;
 
 export function StructuredData({ data }: { data: Dict | Dict[] }) {
   const json = Array.isArray(data) ? data.map(withContext) : withContext(data);
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(json) }}
-    />
-  );
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(json) }} />;
 }
 
 function withContext(d: Dict): Dict {
@@ -47,7 +42,7 @@ export function organization(args: {
   return {
     "@type": "Organization",
     name: args.name,
-    legalName: "Second Star Technologies, Inc.",
+    legalName: "L0ST 1SLAND Technologies, Inc.",
     url: args.url,
     ...(args.logo ? { logo: args.logo } : {}),
     ...(args.sameAs && args.sameAs.length ? { sameAs: args.sameAs } : {}),
@@ -79,8 +74,8 @@ export function article(args: {
     ...(args.description ? { description: args.description } : {}),
     url: args.url,
     mainEntityOfPage: args.url,
-    author: { "@type": "Person", name: args.author ?? "Second Star Technologies" },
-    publisher: { "@type": "Organization", name: "Second Star Technologies" },
+    author: { "@type": "Person", name: args.author ?? "L0ST 1SLAND Technologies" },
+    publisher: { "@type": "Organization", name: "L0ST 1SLAND Technologies" },
     datePublished: args.datePublished,
     dateModified: args.dateModified ?? args.datePublished,
     ...(args.image ? { image: args.image } : {}),

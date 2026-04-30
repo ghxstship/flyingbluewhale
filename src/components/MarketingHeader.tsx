@@ -71,20 +71,14 @@ function NavDropdown({ group }: { group: NavGroup }) {
           <ChevronDown size={12} aria-hidden="true" className="text-[var(--text-muted)]" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className="w-64 p-2"
-        style={{ background: "var(--background)" }}
-      >
+      <DropdownMenuContent align="start" className="w-64 p-2" style={{ background: "var(--background)" }}>
         <DropdownMenuLabel>{group.label}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {group.items.map((item) => (
           <DropdownMenuItem key={item.href} asChild className="cursor-pointer p-2">
             <Link href={item.href} className="flex w-full flex-col items-start gap-0.5">
               <span className="text-sm font-medium text-[var(--foreground)]">{item.label}</span>
-              {item.description && (
-                <span className="text-xs text-[var(--text-muted)]">{item.description}</span>
-              )}
+              {item.description && <span className="text-xs text-[var(--text-muted)]">{item.description}</span>}
             </Link>
           </DropdownMenuItem>
         ))}
@@ -98,13 +92,13 @@ export function MarketingHeader() {
   const [themePickerOpen, setThemePickerOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 glass-nav">
+    <header className="glass-nav sticky top-0 z-40">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link
           href="/"
-          className="text-base font-semibold tracking-[0.14em] uppercase text-[var(--foreground)]"
+          className="text-base font-semibold tracking-[0.14em] text-[var(--foreground)] uppercase"
           onClick={() => setMobileOpen(false)}
-          aria-label="Second Star Technologies — home"
+          aria-label="L0ST 1SLAND Technologies — home"
         >
           SECOND STVR
         </Link>
@@ -114,8 +108,12 @@ export function MarketingHeader() {
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           <NavDropdown group={PRODUCT} />
           <NavDropdown group={INDUSTRIES} />
-          <Link href="/pricing" className="nav-item">Pricing</Link>
-          <Link href="/community" className="nav-item">Community</Link>
+          <Link href="/pricing" className="nav-item">
+            Pricing
+          </Link>
+          <Link href="/community" className="nav-item">
+            Community
+          </Link>
           <NavDropdown group={RESOURCES} />
         </nav>
 
@@ -134,7 +132,7 @@ export function MarketingHeader() {
           </Hint>
           <LocaleSwitcher />
           <ThemeToggle />
-          <div aria-hidden="true" className="h-5 w-px bg-[var(--border-color)] mx-1" />
+          <div aria-hidden="true" className="mx-1 h-5 w-px bg-[var(--border-color)]" />
           <Link
             href="/login"
             className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)]"
@@ -161,41 +159,26 @@ export function MarketingHeader() {
 
       {/* Mobile sheet */}
       {mobileOpen && (
-        <div
-          id="mobile-nav-sheet"
-          className="lg:hidden border-t border-[var(--border-color)] bg-[var(--background)]"
-        >
+        <div id="mobile-nav-sheet" className="border-t border-[var(--border-color)] bg-[var(--background)] lg:hidden">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5">
             <MobileNavSection group={PRODUCT} onClick={() => setMobileOpen(false)} />
             <MobileNavSection group={INDUSTRIES} onClick={() => setMobileOpen(false)} />
             <nav className="flex flex-col gap-1" aria-label="Mobile primary">
-              <Link
-                href="/pricing"
-                className="nav-item text-base"
-                onClick={() => setMobileOpen(false)}
-              >
+              <Link href="/pricing" className="nav-item text-base" onClick={() => setMobileOpen(false)}>
                 Pricing
               </Link>
-              <Link
-                href="/community"
-                className="nav-item text-base"
-                onClick={() => setMobileOpen(false)}
-              >
+              <Link href="/community" className="nav-item text-base" onClick={() => setMobileOpen(false)}>
                 Community
               </Link>
             </nav>
             <MobileNavSection group={RESOURCES} onClick={() => setMobileOpen(false)} />
             <div className="flex flex-col gap-2 border-t border-[var(--border-color)] pt-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
-                  Theme
-                </span>
+                <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">Theme</span>
                 <ThemeToggle />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
-                  Language
-                </span>
+                <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">Language</span>
                 <LocaleSwitcher />
               </div>
               <button
@@ -204,7 +187,7 @@ export function MarketingHeader() {
                   setMobileOpen(false);
                   setThemePickerOpen(true);
                 }}
-                className="btn btn-ghost btn-sm inline-flex items-center gap-2 justify-center"
+                className="btn btn-ghost btn-sm inline-flex items-center justify-center gap-2"
               >
                 <Palette size={14} aria-hidden="true" />
                 Design themes
@@ -237,7 +220,7 @@ export function MarketingHeader() {
 function MobileNavSection({ group, onClick }: { group: NavGroup; onClick: () => void }) {
   return (
     <details className="group" open>
-      <summary className="nav-item cursor-pointer text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)] list-none [&::-webkit-details-marker]:hidden">
+      <summary className="nav-item cursor-pointer list-none text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase [&::-webkit-details-marker]:hidden">
         <span className="flex items-center justify-between">
           {group.label}
           <ChevronDown size={12} className="transition group-open:rotate-180" aria-hidden="true" />
@@ -245,12 +228,7 @@ function MobileNavSection({ group, onClick }: { group: NavGroup; onClick: () => 
       </summary>
       <nav className="ms-2 mt-1 flex flex-col gap-0.5" aria-label={group.label}>
         {group.items.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="nav-item text-base"
-            onClick={onClick}
-          >
+          <Link key={item.href} href={item.href} className="nav-item text-base" onClick={onClick}>
             {item.label}
           </Link>
         ))}

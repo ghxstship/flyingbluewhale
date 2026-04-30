@@ -1,4 +1,4 @@
-# Brand Voice — Second Star Technologies
+# Brand Voice — L0ST 1SLAND Technologies
 
 **The blend:** ClickUp × Virgin Voyages × SXSW — delivered as a **journey**, not a dashboard.
 
@@ -14,11 +14,11 @@ The Atlas is the itinerary. The three rooms (ATLVS · GVTEWAY · COMPVSS) are th
 
 ## Three ingredients, re-tuned
 
-| Ingredient | What we take |
-|---|---|
-| **ClickUp** | Feature velocity. Specifics-per-line. Confident modern SaaS punch. Never boastful — tangible. |
+| Ingredient         | What we take                                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **ClickUp**        | Feature velocity. Specifics-per-line. Confident modern SaaS punch. Never boastful — tangible.                                         |
 | **Virgin Voyages** | Voyage-not-cruise swagger. Adults-only confidence. Curated experience. "Sailing orders," "ports of call," "manifest." Design-forward. |
-| **SXSW** | Discovery. Convergence. Cross-genre. Multi-day, multi-venue. Taste-maker energy. Badge holders. The moment the scenes cross. |
+| **SXSW**           | Discovery. Convergence. Cross-genre. Multi-day, multi-venue. Taste-maker energy. Badge holders. The moment the scenes cross.          |
 
 ## The 12 commandments
 
@@ -37,31 +37,32 @@ The Atlas is the itinerary. The three rooms (ATLVS · GVTEWAY · COMPVSS) are th
 
 ## The lifecycle lexicon
 
-| Concept | Voyage vocabulary |
-|---|---|
-| The product | The Atlas · the itinerary · the voyage platform |
-| The whole production | The voyage · the journey · the crossing |
-| Pitch → contract → plan | **Depart** |
-| Build → show → service | **Sail** |
-| Wrap → settle → recap | **Return** |
-| Run-sheet | The itinerary · sailing orders |
-| Show / run / residency | The crossing · the voyage · the passage |
-| Schedule | The itinerary |
-| Guest list | The manifest |
-| Ticket | The boarding pass · the pass |
-| Venues / cities / dates | Ports of call |
-| Walkthrough | Captain's briefing · concierge preview |
-| Support | The concierge |
-| Enterprise / Festival tier | Private charter · Admiral's table |
-| Customer / user | Pass holder · the manifest |
-| Sign up | Book passage · board the voyage · the manifest opens |
-| Demo | Captain's briefing |
-| Studio (us) | The Studio · the taste-makers' studio |
-| Legacy / recap | Homecoming · the log book |
+| Concept                    | Voyage vocabulary                                    |
+| -------------------------- | ---------------------------------------------------- |
+| The product                | The Atlas · the itinerary · the voyage platform      |
+| The whole production       | The voyage · the journey · the crossing              |
+| Pitch → contract → plan    | **Depart**                                           |
+| Build → show → service     | **Sail**                                             |
+| Wrap → settle → recap      | **Return**                                           |
+| Run-sheet                  | The itinerary · sailing orders                       |
+| Show / run / residency     | The crossing · the voyage · the passage              |
+| Schedule                   | The itinerary                                        |
+| Guest list                 | The manifest                                         |
+| Ticket                     | The boarding pass · the pass                         |
+| Venues / cities / dates    | Ports of call                                        |
+| Walkthrough                | Captain's briefing · concierge preview               |
+| Support                    | The concierge                                        |
+| Enterprise / Festival tier | Private charter · Admiral's table                    |
+| Customer / user            | Pass holder · the manifest                           |
+| Sign up                    | Book passage · board the voyage · the manifest opens |
+| Demo                       | Captain's briefing                                   |
+| Studio (us)                | The Studio · the taste-makers' studio                |
+| Legacy / recap             | Homecoming · the log book                            |
 
 ## The producer we're writing to
 
 The cultural tastemaker. The producer who:
+
 - Books the rooms people fly in for — and the ones the press doesn't cover.
 - Works across music, film, brand, food, fashion, and art — because the best nights always do.
 - Knows that every show is a trip with a beginning, middle, and end.
@@ -76,20 +77,20 @@ The cultural tastemaker. The producer who:
 
 ## Swap lookup (quick ref)
 
-| Old | New |
-|---|---|
-| Platform / Dashboard | The Atlas · the itinerary |
-| Project | The voyage · the crossing |
-| Workflow | Sailing orders · the itinerary |
-| Sign up | Book passage · the manifest opens |
-| Book a demo | Captain's briefing |
-| Pricing | Passage · cabin classes |
-| Access (GA) | Day pass · open manifest |
-| Pro / Headliner | Festival pass |
-| Enterprise / Festival | Private charter |
-| Customer | Pass holder |
-| Dashboard | The bridge · the chart room |
-| Support | The concierge |
+| Old                   | New                               |
+| --------------------- | --------------------------------- |
+| Platform / Dashboard  | The Atlas · the itinerary         |
+| Project               | The voyage · the crossing         |
+| Workflow              | Sailing orders · the itinerary    |
+| Sign up               | Book passage · the manifest opens |
+| Book a demo           | Captain's briefing                |
+| Pricing               | Passage · cabin classes           |
+| Access (GA)           | Day pass · open manifest          |
+| Pro / Headliner       | Festival pass                     |
+| Enterprise / Festival | Private charter                   |
+| Customer              | Pass holder                       |
+| Dashboard             | The bridge · the chart room       |
+| Support               | The concierge                     |
 
 ## Hard don'ts
 

@@ -6,8 +6,9 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     eyebrow: "Production proposal",
     title: "Open Air — Hialeah",
     subtitle: "Miami Music Week 2026 · Partnership proposal",
-    partners: ["Black Coffee", "Hialeah Park", "Second Star Technologies"],
-    narrative: "A turnkey production engagement to deliver Open Air at the Racetrack — 15,000 guests, three stages, and full advancing support.",
+    partners: ["Black Coffee", "Hialeah Park", "L0ST 1SLAND Technologies"],
+    narrative:
+      "A turnkey production engagement to deliver Open Air at the Racetrack — 15,000 guests, three stages, and full advancing support.",
     meta: [
       { label: "Document", value: "FBW-2026-001" },
       { label: "Location", value: "Hialeah Park Casino" },
@@ -19,9 +20,30 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
   {
     type: "overview_cards",
     cards: [
-      { tag: "Phase 1", title: "Discovery & design", details: [{ label: "Duration", value: "2 weeks" }, { label: "Cost", value: "$18,000" }] },
-      { tag: "Phase 2", title: "Advance & build", details: [{ label: "Duration", value: "6 weeks" }, { label: "Cost", value: "$122,000" }] },
-      { tag: "Phase 3", title: "Show & wrap", details: [{ label: "Duration", value: "2 weeks" }, { label: "Cost", value: "$64,000" }] },
+      {
+        tag: "Phase 1",
+        title: "Discovery & design",
+        details: [
+          { label: "Duration", value: "2 weeks" },
+          { label: "Cost", value: "$18,000" },
+        ],
+      },
+      {
+        tag: "Phase 2",
+        title: "Advance & build",
+        details: [
+          { label: "Duration", value: "6 weeks" },
+          { label: "Cost", value: "$122,000" },
+        ],
+      },
+      {
+        tag: "Phase 3",
+        title: "Show & wrap",
+        details: [
+          { label: "Duration", value: "2 weeks" },
+          { label: "Cost", value: "$64,000" },
+        ],
+      },
     ],
   },
   { type: "section_eyebrow", label: "Scope of work" },
@@ -30,7 +52,8 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     num: 1,
     name: "Discovery & creative direction",
     tag: "Phase 1",
-    narrative: "Align on the creative brief, venue constraints, and programming. Deliverables shipped via the GVTEWAY advancing portal.",
+    narrative:
+      "Align on the creative brief, venue constraints, and programming. Deliverables shipped via the GVTEWAY advancing portal.",
     core: [
       { name: "Creative direction workshop", desc: "Two-day workshop, 6 stakeholders", price: { cents: 800000 } },
       { name: "Site walkthrough & venue docs", desc: "Photo survey, dims, power map", price: { cents: 400000 } },
@@ -52,9 +75,14 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     num: 2,
     name: "Advance & build",
     tag: "Phase 2",
-    narrative: "All artist advancing, equipment pull lists, and vendor onboarding. Technical package wired through the GVTEWAY portal.",
+    narrative:
+      "All artist advancing, equipment pull lists, and vendor onboarding. Technical package wired through the GVTEWAY portal.",
     core: [
-      { name: "Artist advancing", desc: "Riders, input lists, stage plots, catering, travel", price: { cents: 1800000 } },
+      {
+        name: "Artist advancing",
+        desc: "Riders, input lists, stage plots, catering, travel",
+        price: { cents: 1800000 },
+      },
       { name: "Vendor onboarding", desc: "COIs, W-9s, Stripe Connect payouts", price: { cents: 800000 } },
       { name: "Equipment pull + logistics", desc: "Rentals, trucking, staging", price: { cents: 6200000 } },
     ],
@@ -133,16 +161,22 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     taxNote: "Plus applicable taxes. Add-ons priced separately on approval.",
   },
   { type: "total_block", label: "Total engagement", amount: { cents: 17000000 }, note: "All figures in USD." },
-  { type: "engagement_split", depositPercent: 25, balancePercent: 75, depositLabel: "Due on signature", balanceLabel: "Due 30 days before show" },
+  {
+    type: "engagement_split",
+    depositPercent: 25,
+    balancePercent: 75,
+    depositLabel: "Due on signature",
+    balanceLabel: "Due 30 days before show",
+  },
   {
     type: "payment_method",
     method: "ach",
     details: {
-      "Beneficiary": "Second Star Technologies Inc.",
-      "Bank": "Mercury",
+      Beneficiary: "L0ST 1SLAND Technologies Inc.",
+      Bank: "Mercury",
       "Routing (ACH)": "084106768",
-      "Account": "wire on request",
-      "Reference": "FBW-2026-001",
+      Account: "wire on request",
+      Reference: "FBW-2026-001",
     },
   },
   { type: "section_eyebrow", label: "Technical production" },
@@ -161,8 +195,16 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
   {
     type: "change_orders",
     items: [
-      { name: "Broadcast capture", description: "5-camera multi-cam capture, livestream feed.", price: { cents: 1400000 } },
-      { name: "VIP cabana activation", description: "Additional VIP build on the apron level.", price: { cents: 900000 } },
+      {
+        name: "Broadcast capture",
+        description: "5-camera multi-cam capture, livestream feed.",
+        price: { cents: 1400000 },
+      },
+      {
+        name: "VIP cabana activation",
+        description: "Additional VIP build on the apron level.",
+        price: { cents: 900000 },
+      },
     ],
   },
   { type: "section_eyebrow", label: "Exclusions" },
@@ -180,14 +222,22 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     items: [
       { section: "S2", title: "Scope", body: "Work as set forth in this proposal; change orders on approval." },
       { section: "S6", title: "Payment", body: `${25}% deposit on signature, balance 30 days before the event.` },
-      { section: "S9", title: "Cancellation", body: "Sliding refund schedule by milestone; deposit non-refundable after creative lock." },
+      {
+        section: "S9",
+        title: "Cancellation",
+        body: "Sliding refund schedule by milestone; deposit non-refundable after creative lock.",
+      },
       { section: "S12", title: "Indemnification", body: "Mutual indemnification per the MSA." },
     ],
   },
   {
     type: "legal_panel",
     panels: [
-      { slug: "msa", label: "Master Services Agreement", body: "MSA placeholder — replace with full text or a signed link." },
+      {
+        slug: "msa",
+        label: "Master Services Agreement",
+        body: "MSA placeholder — replace with full text or a signed link.",
+      },
       { slug: "terms", label: "Terms & conditions", body: "Standard terms placeholder." },
       { slug: "privacy", label: "Privacy", body: "Privacy policy placeholder." },
     ],
@@ -196,8 +246,9 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     type: "signature_block",
     parties: [
       { role: "Client", name: "— to be completed —" },
-      { role: "Producer", name: "Second Star Technologies Inc.", email: "producer@flyingbluewhale.app" },
+      { role: "Producer", name: "L0ST 1SLAND Technologies Inc.", email: "producer@flyingbluewhale.app" },
     ],
-    instructions: "Sign below to accept this engagement. An e-sign receipt with reference hash is emailed on completion.",
+    instructions:
+      "Sign below to accept this engagement. An e-sign receipt with reference hash is emailed on completion.",
   },
 ];

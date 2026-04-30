@@ -71,7 +71,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               <Link
                 href="/"
                 className="text-base font-semibold tracking-[0.18em] uppercase"
-                aria-label="Second Star Technologies — home"
+                aria-label="L0ST 1SLAND Technologies — home"
               >
                 SECOND STVR
               </Link>
@@ -79,13 +79,27 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 ATLVS, GVTEWAY, and COMPVSS — three connected apps for production teams.
               </p>
               <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
-                <a href="https://twitter.com/secondstartech" target="_blank" rel="noreferrer" className="hover:text-[var(--text-primary)]">Twitter</a>
-                <a href="https://github.com/ghxstship" target="_blank" rel="noreferrer" className="hover:text-[var(--text-primary)]">GitHub</a>
+                <a
+                  href="https://twitter.com/secondstartech"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[var(--text-primary)]"
+                >
+                  Twitter
+                </a>
+                <a
+                  href="https://github.com/ghxstship"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[var(--text-primary)]"
+                >
+                  GitHub
+                </a>
               </div>
             </div>
             {FOOTER_NAV.map((col) => (
               <div key={col.heading}>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+                <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
                   {col.heading}
                 </div>
                 <ul className="mt-4 space-y-2 text-sm">
@@ -102,15 +116,12 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           </div>
           <div className="mt-12 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span>© {new Date().getFullYear()} Second Star Technologies</span>
+              <span>© {new Date().getFullYear()} L0ST 1SLAND Technologies</span>
               <span>Built for production teams who are tired of duct tape.</span>
             </div>
             <div className="mt-3 text-[11px] leading-relaxed">
-              ATLVS, GVTEWAY, and COMPVSS are registered trademarks of Second Star
-              Technologies, a{" "}
-              <span className="font-medium tracking-[0.18em] text-[var(--text-secondary)]">
-                G H X S T S H I P
-              </span>{" "}
+              ATLVS, GVTEWAY, and COMPVSS are registered trademarks of L0ST 1SLAND Technologies, a{" "}
+              <span className="font-medium tracking-[0.18em] text-[var(--text-secondary)]">G H X S T S H I P</span>{" "}
               Industries company.
             </div>
           </div>

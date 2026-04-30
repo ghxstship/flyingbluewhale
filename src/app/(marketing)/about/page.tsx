@@ -11,26 +11,69 @@ import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "About — The Taste-Makers&apos; Studio",
   description:
-    "Second Star Technologies is the studio behind ATLVS, GVTEWAY, and COMPVSS. A decade of crossings, distilled into one Atlas. Written by the cultural tastemakers charting the next voyage.",
+    "L0ST 1SLAND Technologies is the studio behind ATLVS, GVTEWAY, and COMPVSS. A decade of crossings, distilled into one Atlas. Written by the cultural tastemakers charting the next voyage.",
   path: "/about",
-  keywords: ["Second Star Technologies about", "ATLVS", "GVTEWAY", "COMPVSS", "event production platform", "production software company"],
+  keywords: [
+    "L0ST 1SLAND Technologies about",
+    "ATLVS",
+    "GVTEWAY",
+    "COMPVSS",
+    "event production platform",
+    "production software company",
+  ],
   ogImageEyebrow: "The Studio",
   ogImageTitle: "The Taste-Makers&apos; Studio.",
 });
 
 const PRINCIPLES = [
-  { icon: Layers, title: "One manifest, three rooms", body: "ATLVS, GVTEWAY, and COMPVSS share identity, data, and design. One Atlas underneath." },
-  { icon: ShieldCheck, title: "Private by architecture", body: "Manifest walled at the database. Immutable audit log on every hit. Signed webhooks. Standard on the Day Pass, not promised on the Private Charter." },
-  { icon: Rocket, title: "Tested on the water", body: "Every major release sails on a real crossing the weekend before it ships. If it doesn&apos;t survive load-in, it doesn&apos;t ship." },
-  { icon: Compass, title: "Honest passage", body: "Per org, not per seat. No per-scan tax. No velvet-rope gates on things that should be standard. Pricing reads like an itinerary, not a tax form." },
+  {
+    icon: Layers,
+    title: "One manifest, three rooms",
+    body: "ATLVS, GVTEWAY, and COMPVSS share identity, data, and design. One Atlas underneath.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Private by architecture",
+    body: "Manifest walled at the database. Immutable audit log on every hit. Signed webhooks. Standard on the Day Pass, not promised on the Private Charter.",
+  },
+  {
+    icon: Rocket,
+    title: "Tested on the water",
+    body: "Every major release sails on a real crossing the weekend before it ships. If it doesn&apos;t survive load-in, it doesn&apos;t ship.",
+  },
+  {
+    icon: Compass,
+    title: "Honest passage",
+    body: "Per org, not per seat. No per-scan tax. No velvet-rope gates on things that should be standard. Pricing reads like an itinerary, not a tax form.",
+  },
 ];
 
 const MILESTONES = [
-  { date: "2026 Q1", title: "Three rooms on one Atlas", body: "ATLVS, GVTEWAY, and COMPVSS on one manifest — bridge, ports of call, open deck." },
-  { date: "2025 Q4", title: "KBYG boarding passes", body: "One Know-Before-You-Go, authored once, rendered per-persona across ports and deck." },
-  { date: "2025 Q3", title: "Proposals signed live", body: "Scroll storytelling, live pricing, e-sign in place. One URL replaces the PDF email thread." },
-  { date: "2025 Q2", title: "Vendor payouts + advancing", body: "Live vendor payouts. Sixteen typed deliverables with history, comments, attachments." },
-  { date: "2025 Q1", title: "First crossing shipped", body: "Staffed + scanned a two-thousand-cap voyage end-to-end on the Atlas. Stage dried. System didn&apos;t." },
+  {
+    date: "2026 Q1",
+    title: "Three rooms on one Atlas",
+    body: "ATLVS, GVTEWAY, and COMPVSS on one manifest — bridge, ports of call, open deck.",
+  },
+  {
+    date: "2025 Q4",
+    title: "KBYG boarding passes",
+    body: "One Know-Before-You-Go, authored once, rendered per-persona across ports and deck.",
+  },
+  {
+    date: "2025 Q3",
+    title: "Proposals signed live",
+    body: "Scroll storytelling, live pricing, e-sign in place. One URL replaces the PDF email thread.",
+  },
+  {
+    date: "2025 Q2",
+    title: "Vendor payouts + advancing",
+    body: "Live vendor payouts. Sixteen typed deliverables with history, comments, attachments.",
+  },
+  {
+    date: "2025 Q1",
+    title: "First crossing shipped",
+    body: "Staffed + scanned a two-thousand-cap voyage end-to-end on the Atlas. Stage dried. System didn&apos;t.",
+  },
 ];
 
 export default function AboutPage() {
@@ -45,13 +88,15 @@ export default function AboutPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">The Studio</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">The Studio</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Taste-Makers&apos; Studio.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Second Star Technologies is the studio behind ATLVS, GVTEWAY, and COMPVSS. The Atlas is a decade of crossings — distilled. Every room started as something we were tired of charting twice.
+          L0ST 1SLAND Technologies is the studio behind ATLVS, GVTEWAY, and COMPVSS. The Atlas is a decade of crossings
+          — distilled. Every room started as something we were tired of charting twice.
         </p>
         <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-          One manifest. Three rooms. Private by architecture. Written by the cultural tastemakers booking the next crossing.
+          One manifest. Three rooms. Private by architecture. Written by the cultural tastemakers booking the next
+          crossing.
         </p>
       </section>
 
@@ -91,14 +136,25 @@ export default function AboutPage() {
         <div className="surface-raised p-10">
           <h2 className="text-3xl font-semibold tracking-tight">Who Charts the Voyage</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-            Second Star is a production + technology studio. We&apos;ve staffed residencies, touring runs, private launches, gallery programs, and activations — and we&apos;ve shipped software for every one of them. The Atlas is a decade of in-the-field instinct compressed into one road case: ATLVS, GVTEWAY, COMPVSS.
+            L0ST 1SLAND is a production + technology studio. We&apos;ve staffed residencies, touring runs, private
+            launches, gallery programs, and activations — and we&apos;ve shipped software for every one of them. The
+            Atlas is a decade of in-the-field instinct compressed into one road case: ATLVS, GVTEWAY, COMPVSS.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
-            <Link className="underline underline-offset-4" href="/careers">Join the studio</Link>
+            <Link className="underline underline-offset-4" href="/careers">
+              Join the studio
+            </Link>
             <span className="text-[var(--text-muted)]">·</span>
-            <Link className="underline underline-offset-4" href="/contact">Call the studio</Link>
+            <Link className="underline underline-offset-4" href="/contact">
+              Call the studio
+            </Link>
             <span className="text-[var(--text-muted)]">·</span>
-            <a className="underline underline-offset-4" href="https://github.com/ghxstship" target="_blank" rel="noreferrer">
+            <a
+              className="underline underline-offset-4"
+              href="https://github.com/ghxstship"
+              target="_blank"
+              rel="noreferrer"
+            >
               GitHub
             </a>
           </div>

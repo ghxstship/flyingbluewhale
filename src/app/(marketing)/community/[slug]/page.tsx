@@ -41,7 +41,8 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
   return (
     <div>
       <JsonLd
-        data={[articleSchema({
+        data={[
+          articleSchema({
             headline: c.headline,
             description: c.blurb,
             datePublished: "2026-01-01",
@@ -52,7 +53,9 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Case study · {c.industry}</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          Case study · {c.industry}
+        </div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
         <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{c.timeline}</div>
@@ -63,7 +66,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
           {c.stats.map((s) => (
             <div key={s.label} className="surface-raised p-5">
               <div className="text-3xl font-semibold tracking-tight text-[var(--org-primary)]">{s.value}</div>
-              <div className="mt-2 text-[11px] uppercase tracking-wider text-[var(--text-muted)]">{s.label}</div>
+              <div className="mt-2 text-[11px] tracking-wider text-[var(--text-muted)] uppercase">{s.label}</div>
             </div>
           ))}
         </div>
@@ -72,19 +75,27 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-8 md:grid-cols-3">
           <div className="surface-raised p-6">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Challenge</div>
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+              Challenge
+            </div>
             <ul className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
-              {c.challenge.map((x) => <li key={x}>· {x}</li>)}
+              {c.challenge.map((x) => (
+                <li key={x}>· {x}</li>
+              ))}
             </ul>
           </div>
           <div className="surface-raised p-6">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Solution</div>
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+              Solution
+            </div>
             <ul className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
-              {c.solution.map((x) => <li key={x}>· {x}</li>)}
+              {c.solution.map((x) => (
+                <li key={x}>· {x}</li>
+              ))}
             </ul>
           </div>
           <div className="surface-raised p-6">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Outcome</div>
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Outcome</div>
             <ul className="mt-4 space-y-3 text-sm">
               {c.outcome.map((x) => (
                 <li key={x} className="flex items-start gap-2">
@@ -99,18 +110,22 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-4xl px-6 py-12">
         <div className="surface-raised relative p-10">
-          <Quote size={48} className="absolute left-6 top-6 text-[var(--org-primary)] opacity-20" />
-          <blockquote className="mt-4 text-xl italic text-[var(--text-primary)]">"{c.quote.text}"</blockquote>
-          <cite className="mt-4 block text-sm not-italic text-[var(--text-muted)]">— {c.quote.attribution}</cite>
+          <Quote size={48} className="absolute top-6 left-6 text-[var(--org-primary)] opacity-20" />
+          <blockquote className="mt-4 text-xl text-[var(--text-primary)] italic">"{c.quote.text}"</blockquote>
+          <cite className="mt-4 block text-sm text-[var(--text-muted)] not-italic">— {c.quote.attribution}</cite>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface-raised p-8">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Modules used</div>
+          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            Modules used
+          </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {c.modules.map((m) => (
-              <Badge key={m} variant="brand-soft">{m}</Badge>
+              <Badge key={m} variant="brand-soft">
+                {m}
+              </Badge>
             ))}
           </div>
         </div>
@@ -119,7 +134,9 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold tracking-tight">More from the community</h2>
-          <Link href="/community" className="text-sm text-[var(--org-primary)]">See all →</Link>
+          <Link href="/community" className="text-sm text-[var(--org-primary)]">
+            See all →
+          </Link>
         </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {COMMUNITY_LIST.filter((x) => x.slug !== c.slug).map((x) => (
@@ -131,7 +148,10 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
         </div>
       </section>
 
-      <CTASection title="Ship your next show on Second Star Technologies" subtitle="Free on the Access tier. 14-day trial of Professional." />
+      <CTASection
+        title="Ship your next show on L0ST 1SLAND Technologies"
+        subtitle="Free on the Access tier. 14-day trial of Professional."
+      />
     </div>
   );
 }

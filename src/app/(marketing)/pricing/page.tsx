@@ -15,7 +15,15 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Four ways to board. Day Pass is free forever. Festival Pass is $49/mo. Voyager is $199/mo. Private Charter is custom. No per-seat tax. No per-scan tax.",
   path: "/pricing",
-  keywords: ["production software pricing", "event management software cost", "Second Star Technologies pricing", "ATLVS pricing", "GVTEWAY pricing", "COMPVSS pricing", "stakeholder portal pricing"],
+  keywords: [
+    "production software pricing",
+    "event management software cost",
+    "L0ST 1SLAND Technologies pricing",
+    "ATLVS pricing",
+    "GVTEWAY pricing",
+    "COMPVSS pricing",
+    "stakeholder portal pricing",
+  ],
   ogImageEyebrow: "Passage",
   ogImageTitle: "Four cabins. One manifest.",
 });
@@ -88,7 +96,16 @@ const TIERS = [
   },
 ];
 
-const COMPARISON: Array<{ category: string; rows: Array<{ feature: string; access: boolean | string; core: boolean | string; pro: boolean | string; ent: boolean | string }> }> = [
+const COMPARISON: Array<{
+  category: string;
+  rows: Array<{
+    feature: string;
+    access: boolean | string;
+    core: boolean | string;
+    pro: boolean | string;
+    ent: boolean | string;
+  }>;
+}> = [
   {
     category: "Core",
     rows: [
@@ -229,19 +246,25 @@ export default function PricingPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Passage · the manifest opens</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          Passage · the manifest opens
+        </div>
         <h1 className="mx-auto mt-3 max-w-3xl text-5xl font-semibold tracking-tight sm:text-6xl">
           Four Cabins. Per Org, Not Per Seat.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Every tier: manifest walled off, integrations open, audit log immutable. Upgrade the night the voyage outgrows the cabin. Nothing extra for the studio getting bigger.
+          Every tier: manifest walled off, integrations open, audit log immutable. Upgrade the night the voyage outgrows
+          the cabin. Nothing extra for the studio getting bigger.
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-12">
         <div className="grid gap-4 md:grid-cols-4">
           {TIERS.map((t) => (
-            <div key={t.tier} className={`surface-raised flex flex-col p-6 ${t.highlight ? "ring-2 ring-[var(--org-primary)]" : ""}`}>
+            <div
+              key={t.tier}
+              className={`surface-raised flex flex-col p-6 ${t.highlight ? "ring-2 ring-[var(--org-primary)]" : ""}`}
+            >
               <div className="flex items-center justify-between">
                 <div className="text-sm font-semibold">{t.tier}</div>
                 {t.highlight && <Badge variant="brand">Most popular</Badge>}
@@ -272,12 +295,16 @@ export default function PricingPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">The Full Itinerary</h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-          Every port at every cabin. If the port you need is on Private Charter, <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">call the studio</a> — we usually make it work on Voyager.
+          Every port at every cabin. If the port you need is on Private Charter,{" "}
+          <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">
+            call the studio
+          </a>{" "}
+          — we usually make it work on Voyager.
         </p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full min-w-[720px] text-left">
             <thead>
-              <tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider text-[var(--text-muted)]">
+              <tr className="border-b border-[var(--border)] text-xs tracking-wider text-[var(--text-muted)] uppercase">
                 <th className="py-3 pr-4 font-semibold">Port of call</th>
                 <th className="py-3 pr-4 text-center font-semibold">Day Pass</th>
                 <th className="py-3 pr-4 text-center font-semibold">Festival Pass</th>
@@ -289,17 +316,28 @@ export default function PricingPage() {
               {COMPARISON.map((cat) => (
                 <>
                   <tr key={cat.category} className="bg-[var(--surface-inset)]">
-                    <td colSpan={5} className="py-2 pl-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+                    <td
+                      colSpan={5}
+                      className="py-2 pl-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase"
+                    >
                       {cat.category}
                     </td>
                   </tr>
                   {cat.rows.map((r) => (
                     <tr key={cat.category + r.feature} className="border-b border-[var(--border)]">
                       <td className="py-3 pr-4 text-sm">{r.feature}</td>
-                      <td className="py-3 pr-4 text-center"><Cell value={r.access} /></td>
-                      <td className="py-3 pr-4 text-center"><Cell value={r.core} /></td>
-                      <td className="py-3 pr-4 text-center"><Cell value={r.pro} /></td>
-                      <td className="py-3 pr-4 text-center"><Cell value={r.ent} /></td>
+                      <td className="py-3 pr-4 text-center">
+                        <Cell value={r.access} />
+                      </td>
+                      <td className="py-3 pr-4 text-center">
+                        <Cell value={r.core} />
+                      </td>
+                      <td className="py-3 pr-4 text-center">
+                        <Cell value={r.pro} />
+                      </td>
+                      <td className="py-3 pr-4 text-center">
+                        <Cell value={r.ent} />
+                      </td>
                     </tr>
                   ))}
                 </>

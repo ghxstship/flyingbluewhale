@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Second Star Technologies",
+    "appName": "L0ST 1SLAND Technologies",
     "appNameStylized": "SECOND STVR",
     "save": "Save",
     "cancel": "Cancel",
@@ -72,8 +72,8 @@
   },
   "marketing": {
     "footer": {
-      "copyright": "© {year} Second Star Technologies",
-      "trademark": "ATLVS, GVTEWAY, and COMPVSS are registered trademarks of Second Star Technologies, a G H X S T S H I P Industries company.",
+      "copyright": "© {year} L0ST 1SLAND Technologies",
+      "trademark": "ATLVS, GVTEWAY, and COMPVSS are registered trademarks of L0ST 1SLAND Technologies, a G H X S T S H I P Industries company.",
       "tagline": "ATLVS, GVTEWAY, and COMPVSS — three connected apps for production teams.",
       "ctaTired": "Built for production teams who are tired of duct tape."
     },
@@ -172,8 +172,8 @@
     },
     "acceptInvite": {
       "title": "Join your team",
-      "subtitle": "Accept your invitation to Second Star Technologies",
-      "body": "You've been invited to a Second Star Technologies workspace. Accept below and we'll take you straight in.",
+      "subtitle": "Accept your invitation to L0ST 1SLAND Technologies",
+      "body": "You've been invited to a L0ST 1SLAND Technologies workspace. Accept below and we'll take you straight in.",
       "submit": "Accept invite",
       "submitting": "Joining…",
       "signInInstead": "Sign in instead",
@@ -235,7 +235,7 @@
         "when": "When"
       }
     },
-    "emailSubject": "You're invited to join a Second Star Technologies workspace",
+    "emailSubject": "You're invited to join a L0ST 1SLAND Technologies workspace",
     "emailHeading": "You've been invited",
     "emailBody": "{inviter} invited you to join their workspace as {role}.",
     "emailCta": "Accept invitation",
@@ -290,7 +290,7 @@
     "toggleTheme": "Toggle theme",
     "toggleMenu": "Toggle menu",
     "openMenu": "Open menu",
-    "homeAriaLabel": "Second Star Technologies — home",
+    "homeAriaLabel": "L0ST 1SLAND Technologies — home",
     "loading": "Loading",
     "saving": "Saving",
     "saved": "Saved",
@@ -300,13 +300,13 @@
   },
   "community": {
     "meta": {
-      "title": "Community — the production teams building on Second Star",
+      "title": "Community — the production teams building on L0ST 1SLAND",
       "description": "The festivals, tours, agencies, and fabrication shops running their production on ATLVS, GVTEWAY, and COMPVSS. Member stories, numbers, and what they actually ship."
     },
     "hero": {
       "eyebrow": "Community",
       "title": "Production teams, building in public.",
-      "subtitle": "The festivals, tours, agencies, and fabrication shops running their shows on Second Star Technologies. Real workflows. Real numbers. Real receipts."
+      "subtitle": "The festivals, tours, agencies, and fabrication shops running their shows on L0ST 1SLAND Technologies. Real workflows. Real numbers. Real receipts."
     },
     "metrics": {
       "productionTeams": "production teams",
@@ -321,7 +321,7 @@
     "join": {
       "eyebrow": "Join the roster",
       "title": "Your team, here.",
-      "body": "Shipping real shows on Second Star Technologies? We're always looking to document new member stories. A short interview, anonymized numbers, your words."
+      "body": "Shipping real shows on L0ST 1SLAND Technologies? We're always looking to document new member stories. A short interview, anonymized numbers, your words."
     },
     "finalCta": {
       "title": "Be the next story",

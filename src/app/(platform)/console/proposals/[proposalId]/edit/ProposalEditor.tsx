@@ -21,21 +21,67 @@ const BLOCK_DEFAULTS: Record<ProposalBlockType, ProposalBlock> = {
   heading: { type: "heading", level: 2, text: "Heading" },
   prose: { type: "prose", body: "A paragraph of prose describing the context, approach, or rationale." },
   callout: { type: "callout", kind: "pink", title: "Note", body: "An important callout." },
-  overview_cards: { type: "overview_cards", cards: [{ tag: "Phase 1", title: "Discovery", details: [{ label: "Duration", value: "2 weeks" }] }] },
-  phase: { type: "phase", num: 1, name: "Phase one", narrative: "What happens here.", core: [{ name: "Core deliverable", price: { cents: 500000 } }], addons: [{ id: "a1", name: "Optional add-on", price: { cents: 100000 } }], gate: { title: "Gate", items: ["Client approval"], unlocks: "Phase two" }, contractRefs: ["S2","S6"] },
+  overview_cards: {
+    type: "overview_cards",
+    cards: [{ tag: "Phase 1", title: "Discovery", details: [{ label: "Duration", value: "2 weeks" }] }],
+  },
+  phase: {
+    type: "phase",
+    num: 1,
+    name: "Phase one",
+    narrative: "What happens here.",
+    core: [{ name: "Core deliverable", price: { cents: 500000 } }],
+    addons: [{ id: "a1", name: "Optional add-on", price: { cents: 100000 } }],
+    gate: { title: "Gate", items: ["Client approval"], unlocks: "Phase two" },
+    contractRefs: ["S2", "S6"],
+  },
   journey: { type: "journey", steps: [{ num: 1, title: "Kickoff", description: "Workshop to align on goals." }] },
   schedule_table: { type: "schedule_table", rows: [{ phase: "Phase 1", milestone: "Kickoff", date: "TBD" }] },
   capabilities: { type: "capabilities", cards: [{ title: "Why us", body: "We ship." }] },
-  investment_table: { type: "investment_table", groups: [{ label: "Production", items: [{ name: "Creative direction", price: { cents: 1200000 } }] }], total: { cents: 1200000 }, taxNote: "Plus applicable taxes" },
+  investment_table: {
+    type: "investment_table",
+    groups: [{ label: "Production", items: [{ name: "Creative direction", price: { cents: 1200000 } }] }],
+    total: { cents: 1200000 },
+    taxNote: "Plus applicable taxes",
+  },
   total_block: { type: "total_block", label: "Total investment", amount: { cents: 1200000 } },
   engagement_split: { type: "engagement_split", depositPercent: 25, balancePercent: 75 },
-  payment_method: { type: "payment_method", method: "ach", details: { "Beneficiary": "Your Company LLC", "Routing": "— wire on request", "Account": "— wire on request" } },
-  equipment_manifest: { type: "equipment_manifest", items: [{ name: "Pioneer DJM-A9", quantity: 1, vendor: "Pioneer DJ" }] },
-  change_orders: { type: "change_orders", items: [{ name: "Extended rehearsal", description: "Add a day of rehearsal.", price: { cents: 500000 } }] },
-  exclusions: { type: "exclusions", items: [{ term: "Travel", body: "Travel and lodging are billed at cost with receipts." }] },
-  terms_grid: { type: "terms_grid", items: [{ section: "S1", title: "Scope", body: "Scope as set forth in this proposal." }] },
-  legal_panel: { type: "legal_panel", panels: [{ slug: "msa", label: "Master Services Agreement", body: "MSA placeholder — replace with full text or a signed link." }] },
-  signature_block: { type: "signature_block", parties: [{ role: "Client" }, { role: "Producer", name: "Second Star Technologies" }], instructions: "Sign below to accept this proposal." },
+  payment_method: {
+    type: "payment_method",
+    method: "ach",
+    details: { Beneficiary: "Your Company LLC", Routing: "— wire on request", Account: "— wire on request" },
+  },
+  equipment_manifest: {
+    type: "equipment_manifest",
+    items: [{ name: "Pioneer DJM-A9", quantity: 1, vendor: "Pioneer DJ" }],
+  },
+  change_orders: {
+    type: "change_orders",
+    items: [{ name: "Extended rehearsal", description: "Add a day of rehearsal.", price: { cents: 500000 } }],
+  },
+  exclusions: {
+    type: "exclusions",
+    items: [{ term: "Travel", body: "Travel and lodging are billed at cost with receipts." }],
+  },
+  terms_grid: {
+    type: "terms_grid",
+    items: [{ section: "S1", title: "Scope", body: "Scope as set forth in this proposal." }],
+  },
+  legal_panel: {
+    type: "legal_panel",
+    panels: [
+      {
+        slug: "msa",
+        label: "Master Services Agreement",
+        body: "MSA placeholder — replace with full text or a signed link.",
+      },
+    ],
+  },
+  signature_block: {
+    type: "signature_block",
+    parties: [{ role: "Client" }, { role: "Producer", name: "L0ST 1SLAND Technologies" }],
+    instructions: "Sign below to accept this proposal.",
+  },
   cta: { type: "cta", label: "Accept proposal", href: "#authorize", variant: "primary" },
   spacer: { type: "spacer", size: "md" },
   custom: { type: "custom", body: "<p>Custom HTML</p>" },
@@ -46,7 +92,14 @@ export function ProposalEditor({
   defaults,
 }: {
   proposalId: string;
-  defaults: { title: string; doc_number: string; currency: string; deposit_percent: number; theme: { primary: string; secondary: string }; blocks: unknown[] };
+  defaults: {
+    title: string;
+    doc_number: string;
+    currency: string;
+    deposit_percent: number;
+    theme: { primary: string; secondary: string };
+    blocks: unknown[];
+  };
 }) {
   const [blocks, setBlocks] = useState<IdentifiedBlock[]>(() =>
     (defaults.blocks as ProposalBlock[]).map((b) => ({ ...b, _dragId: tagId() })),
@@ -55,16 +108,13 @@ export function ProposalEditor({
   const [json, setJson] = useState<string>(() => JSON.stringify(serializeBlocks(blocks), null, 2));
   const [mode, setMode] = useState<"outline" | "json">("outline");
 
-  const [state, formAction, pending] = useActionState<EditState, FormData>(
-    async (prev, fd) => {
-      fd.set("blocks", mode === "json" ? json : JSON.stringify(serializeBlocks(blocks)));
-      const res = await saveProposalAction(proposalId, prev, fd);
-      if (res?.error) toast.error(res.error);
-      else if (res?.ok) toast.success("Proposal saved · v bumped");
-      return res;
-    },
-    null,
-  );
+  const [state, formAction, pending] = useActionState<EditState, FormData>(async (prev, fd) => {
+    fd.set("blocks", mode === "json" ? json : JSON.stringify(serializeBlocks(blocks)));
+    const res = await saveProposalAction(proposalId, prev, fd);
+    if (res?.error) toast.error(res.error);
+    else if (res?.ok) toast.success("Proposal saved · v bumped");
+    return res;
+  }, null);
 
   const addBlock = (type: ProposalBlockType) => {
     setBlocks((b) => {
@@ -82,10 +132,13 @@ export function ProposalEditor({
     });
   };
 
-  const summary = useMemo(() => ({
-    count: blocks.length,
-    types: [...new Set(blocks.map((b) => b.type))].sort(),
-  }), [blocks]);
+  const summary = useMemo(
+    () => ({
+      count: blocks.length,
+      types: [...new Set(blocks.map((b) => b.type))].sort(),
+    }),
+    [blocks],
+  );
 
   return (
     <form action={formAction} className="surface-raised space-y-4 p-6">
@@ -96,10 +149,20 @@ export function ProposalEditor({
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Currency</label>
             <select name="currency" defaultValue={defaults.currency} className="input-base mt-1.5 w-full">
-              <option>USD</option><option>EUR</option><option>GBP</option><option>CAD</option>
+              <option>USD</option>
+              <option>EUR</option>
+              <option>GBP</option>
+              <option>CAD</option>
             </select>
           </div>
-          <Input label="Deposit %" name="deposit_percent" type="number" min="0" max="100" defaultValue={defaults.deposit_percent} />
+          <Input
+            label="Deposit %"
+            name="deposit_percent"
+            type="number"
+            min="0"
+            max="100"
+            defaultValue={defaults.deposit_percent}
+          />
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -108,10 +171,30 @@ export function ProposalEditor({
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="text-xs text-[var(--text-muted)]">{summary.count} blocks · {summary.types.length} distinct types</div>
+        <div className="text-xs text-[var(--text-muted)]">
+          {summary.count} blocks · {summary.types.length} distinct types
+        </div>
         <div className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5">
-          <button type="button" onClick={() => { setBlocks(JSON.parse(json)); setMode("outline"); }} className={`rounded-full px-3 py-1 text-xs ${mode === "outline" ? "bg-[var(--background)] elevation-1" : "text-[var(--text-muted)]"}`}>Outline</button>
-          <button type="button" onClick={() => { setJson(JSON.stringify(blocks, null, 2)); setMode("json"); }} className={`rounded-full px-3 py-1 text-xs ${mode === "json" ? "bg-[var(--background)] elevation-1" : "text-[var(--text-muted)]"}`}>JSON</button>
+          <button
+            type="button"
+            onClick={() => {
+              setBlocks(JSON.parse(json));
+              setMode("outline");
+            }}
+            className={`rounded-full px-3 py-1 text-xs ${mode === "outline" ? "elevation-1 bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+          >
+            Outline
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setJson(JSON.stringify(blocks, null, 2));
+              setMode("json");
+            }}
+            className={`rounded-full px-3 py-1 text-xs ${mode === "json" ? "elevation-1 bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+          >
+            JSON
+          </button>
         </div>
       </div>
 
@@ -127,7 +210,9 @@ export function ProposalEditor({
             renderItem={(item, i) => (
               <div className="surface flex items-start justify-between gap-3 p-3">
                 <div className="min-w-0">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">{i + 1} · {BLOCK_LABELS[item.block.type]}</div>
+                  <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+                    {i + 1} · {BLOCK_LABELS[item.block.type]}
+                  </div>
                   <div className="mt-0.5 truncate text-sm">{describeBlock(item.block)}</div>
                 </div>
                 <button
@@ -135,13 +220,15 @@ export function ProposalEditor({
                   onClick={() => removeBlock(item.block._dragId)}
                   className="btn btn-ghost btn-sm text-[var(--color-error)]"
                   aria-label="Remove"
-                ><Trash2 size={14} /></button>
+                >
+                  <Trash2 size={14} />
+                </button>
               </div>
             )}
           />
 
           <div className="surface-inset p-3">
-            <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">Add block</div>
+            <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Add block</div>
             <div className="mt-2 flex flex-wrap gap-1">
               {BLOCK_TYPES.map((t) => (
                 <button
@@ -169,12 +256,12 @@ export function ProposalEditor({
         </div>
       )}
 
-      {state?.error && (
-        <Alert kind="error">{state.error}</Alert>
-      )}
+      {state?.error && <Alert kind="error">{state.error}</Alert>}
 
       <div className="flex items-center justify-end gap-2">
-        <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save proposal"}</Button>
+        <Button type="submit" disabled={pending}>
+          {pending ? "Saving…" : "Save proposal"}
+        </Button>
       </div>
     </form>
   );
@@ -182,20 +269,35 @@ export function ProposalEditor({
 
 function describeBlock(b: ProposalBlock): string {
   switch (b.type) {
-    case "hero": return b.title;
-    case "section_eyebrow": return b.label;
-    case "heading": return b.text;
-    case "prose": return b.body.slice(0, 80);
-    case "callout": return b.title ?? b.body.slice(0, 60);
-    case "phase": return `${b.num}. ${b.name}`;
-    case "investment_table": return `${b.groups.reduce((s, g) => s + g.items.length, 0)} line items`;
-    case "total_block": return b.label;
-    case "engagement_split": return `${b.depositPercent}% / ${b.balancePercent}%`;
-    case "signature_block": return `${b.parties.length} signer(s)`;
-    case "legal_panel": return `${b.panels.length} panel(s)`;
-    case "exclusions": return `${b.items.length} exclusions`;
-    case "equipment_manifest": return `${b.items.length} items`;
-    case "terms_grid": return `${b.items.length} terms`;
-    default: return "";
+    case "hero":
+      return b.title;
+    case "section_eyebrow":
+      return b.label;
+    case "heading":
+      return b.text;
+    case "prose":
+      return b.body.slice(0, 80);
+    case "callout":
+      return b.title ?? b.body.slice(0, 60);
+    case "phase":
+      return `${b.num}. ${b.name}`;
+    case "investment_table":
+      return `${b.groups.reduce((s, g) => s + g.items.length, 0)} line items`;
+    case "total_block":
+      return b.label;
+    case "engagement_split":
+      return `${b.depositPercent}% / ${b.balancePercent}%`;
+    case "signature_block":
+      return `${b.parties.length} signer(s)`;
+    case "legal_panel":
+      return `${b.panels.length} panel(s)`;
+    case "exclusions":
+      return `${b.items.length} exclusions`;
+    case "equipment_manifest":
+      return `${b.items.length} items`;
+    case "terms_grid":
+      return `${b.items.length} terms`;
+    default:
+      return "";
   }
 }

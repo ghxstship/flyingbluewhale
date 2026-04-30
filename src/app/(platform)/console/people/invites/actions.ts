@@ -8,11 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email";
 import type { FormState } from "@/components/FormShell";
 
-const ADMIN_ROLES: ReadonlyArray<"owner" | "admin" | "developer"> = [
-  "owner",
-  "admin",
-  "developer",
-];
+const ADMIN_ROLES: ReadonlyArray<"owner" | "admin" | "developer"> = ["owner", "admin", "developer"];
 
 function isAdmin(role: string): boolean {
   return (ADMIN_ROLES as readonly string[]).includes(role);
@@ -20,17 +16,7 @@ function isAdmin(role: string): boolean {
 
 const CreateSchema = z.object({
   email: z.string().email("Enter a valid email"),
-  role: z.enum([
-    "owner",
-    "admin",
-    "controller",
-    "collaborator",
-    "contractor",
-    "crew",
-    "client",
-    "viewer",
-    "community",
-  ]),
+  role: z.enum(["owner", "admin", "controller", "collaborator", "contractor", "crew", "client", "viewer", "community"]),
 });
 
 export async function createInviteAction(_: FormState, fd: FormData): Promise<FormState> {
@@ -66,7 +52,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
   const acceptUrl = `${origin}/accept-invite/${invite.token}`;
   void sendEmail({
     to: parsed.data.email,
-    subject: `You're invited to join a Second Star Technologies workspace`,
+    subject: `You're invited to join a L0ST 1SLAND Technologies workspace`,
     html: `
       <div style="font-family:Inter,system-ui,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
         <p style="color:#666;font-size:12px;letter-spacing:.15em;text-transform:uppercase">Invitation</p>

@@ -10,13 +10,13 @@ import { COMMUNITY_LIST } from "@/lib/community";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Community — the production teams building on Second Star",
+  title: "Community — the production teams building on L0ST 1SLAND",
   description:
     "The festivals, tours, agencies, and fabrication shops running their production on ATLVS, GVTEWAY, and COMPVSS. Member stories, numbers, and what they actually ship.",
   path: "/community",
-  keywords: ["production community", "event production teams", "Second Star Technologies community"],
+  keywords: ["production community", "event production teams", "L0ST 1SLAND Technologies community"],
   ogImageEyebrow: "Community",
-  ogImageTitle: "Production teams running on Second Star.",
+  ogImageTitle: "Production teams running on L0ST 1SLAND.",
 });
 
 export default function CommunityPage() {
@@ -30,16 +30,13 @@ export default function CommunityPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">
-          Community
-        </div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Community</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
           Production teams, building in public.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The festivals, tours, agencies, and fabrication shops running their
-          shows on Second Star Technologies. Real workflows. Real numbers.
-          Real receipts.
+          The festivals, tours, agencies, and fabrication shops running their shows on L0ST 1SLAND Technologies. Real
+          workflows. Real numbers. Real receipts.
         </p>
       </section>
 
@@ -53,12 +50,8 @@ export default function CommunityPage() {
             { value: "34", label: "countries" },
           ].map((m) => (
             <div key={m.label}>
-              <div className="text-2xl font-semibold tracking-tight text-[var(--org-primary)]">
-                {m.value}
-              </div>
-              <div className="mt-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-                {m.label}
-              </div>
+              <div className="text-2xl font-semibold tracking-tight text-[var(--org-primary)]">{m.value}</div>
+              <div className="mt-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{m.label}</div>
             </div>
           ))}
         </div>
@@ -75,12 +68,8 @@ export default function CommunityPage() {
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {COMMUNITY_LIST.map((c) => (
-            <Link
-              key={c.slug}
-              href={`/community/${c.slug}`}
-              className="surface-raised hover-lift flex flex-col p-6"
-            >
-              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+            <Link key={c.slug} href={`/community/${c.slug}`} className="surface-raised hover-lift flex flex-col p-6">
+              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
                 {c.industry}
               </div>
               <div className="mt-3 text-lg font-semibold">{c.name}</div>
@@ -88,12 +77,8 @@ export default function CommunityPage() {
               <div className="mt-4 grid grid-cols-2 gap-2">
                 {c.stats.slice(0, 2).map((s) => (
                   <div key={s.label} className="surface-inset p-3">
-                    <div className="text-xl font-semibold tracking-tight text-[var(--org-primary)]">
-                      {s.value}
-                    </div>
-                    <div className="mt-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-                      {s.label}
-                    </div>
+                    <div className="text-xl font-semibold tracking-tight text-[var(--org-primary)]">{s.value}</div>
+                    <div className="mt-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{s.label}</div>
                   </div>
                 ))}
               </div>
@@ -105,16 +90,13 @@ export default function CommunityPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface-raised grid gap-6 p-8 md:grid-cols-2 md:items-center">
           <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Join the roster
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">
-              Your team, here.
-            </h3>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Your team, here.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Shipping real shows on Second Star Technologies? We&apos;re always
-              looking to document new member stories. A short interview,
-              anonymized numbers, your words.
+              Shipping real shows on L0ST 1SLAND Technologies? We&apos;re always looking to document new member stories.
+              A short interview, anonymized numbers, your words.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row md:justify-end">
@@ -128,10 +110,7 @@ export default function CommunityPage() {
         </div>
       </section>
 
-      <CTASection
-        title="Be the next story"
-        subtitle="Start free. Ship a show. We'll talk afterward."
-      />
+      <CTASection title="Be the next story" subtitle="Start free. Ship a show. We'll talk afterward." />
     </div>
   );
 }

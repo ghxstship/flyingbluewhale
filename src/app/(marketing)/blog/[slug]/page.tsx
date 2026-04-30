@@ -44,7 +44,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   return (
     <div>
       <JsonLd
-        data={[articleSchema({
+        data={[
+          articleSchema({
             headline: post.title,
             description: post.blurb,
             datePublished: post.date,
@@ -56,8 +57,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">
-          Second Star Technologies · Blog
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          L0ST 1SLAND Technologies · Blog
         </div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{post.title}</h1>
         <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--text-muted)]">
@@ -71,47 +72,72 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         <div className="mt-10 space-y-5 text-[15px] leading-7 text-[var(--text-secondary)]">
           {post.body.map((block, i) => {
             if (block.kind === "p") return <p key={i}>{block.text}</p>;
-            if (block.kind === "h2") return <h2 key={i} className="mt-10 text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{block.text}</h2>;
-            if (block.kind === "h3") return <h3 key={i} className="mt-8 text-lg font-semibold tracking-tight text-[var(--text-primary)]">{block.text}</h3>;
-            if (block.kind === "ul") return (
-              <ul key={i} className="ml-5 list-disc space-y-1.5">
-                {block.items.map((item, j) => <li key={j}>{item}</li>)}
-              </ul>
-            );
-            if (block.kind === "ol") return (
-              <ol key={i} className="ml-5 list-decimal space-y-1.5">
-                {block.items.map((item, j) => <li key={j}>{item}</li>)}
-              </ol>
-            );
-            if (block.kind === "quote") return (
-              <blockquote key={i} className="border-l-2 border-[var(--org-primary)] pl-4 italic">
-                {block.text}
-                {block.cite && <cite className="mt-1 block not-italic text-xs text-[var(--text-muted)]">— {block.cite}</cite>}
-              </blockquote>
-            );
-            if (block.kind === "code") return (
-              <pre key={i} className="surface-inset overflow-x-auto p-4 font-mono text-xs">
-                <code>{block.text}</code>
-              </pre>
-            );
+            if (block.kind === "h2")
+              return (
+                <h2 key={i} className="mt-10 text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+                  {block.text}
+                </h2>
+              );
+            if (block.kind === "h3")
+              return (
+                <h3 key={i} className="mt-8 text-lg font-semibold tracking-tight text-[var(--text-primary)]">
+                  {block.text}
+                </h3>
+              );
+            if (block.kind === "ul")
+              return (
+                <ul key={i} className="ml-5 list-disc space-y-1.5">
+                  {block.items.map((item, j) => (
+                    <li key={j}>{item}</li>
+                  ))}
+                </ul>
+              );
+            if (block.kind === "ol")
+              return (
+                <ol key={i} className="ml-5 list-decimal space-y-1.5">
+                  {block.items.map((item, j) => (
+                    <li key={j}>{item}</li>
+                  ))}
+                </ol>
+              );
+            if (block.kind === "quote")
+              return (
+                <blockquote key={i} className="border-l-2 border-[var(--org-primary)] pl-4 italic">
+                  {block.text}
+                  {block.cite && (
+                    <cite className="mt-1 block text-xs text-[var(--text-muted)] not-italic">— {block.cite}</cite>
+                  )}
+                </blockquote>
+              );
+            if (block.kind === "code")
+              return (
+                <pre key={i} className="surface-inset overflow-x-auto p-4 font-mono text-xs">
+                  <code>{block.text}</code>
+                </pre>
+              );
             return null;
           })}
         </div>
 
         <div className="mt-12 flex flex-wrap gap-1.5 border-t border-[var(--border)] pt-6">
           {post.keywords.map((k) => (
-            <span key={k} className="rounded-full bg-[var(--surface-inset)] px-2.5 py-1 text-[11px] text-[var(--text-muted)]">
+            <span
+              key={k}
+              className="rounded-full bg-[var(--surface-inset)] px-2.5 py-1 text-[11px] text-[var(--text-muted)]"
+            >
               {k}
             </span>
           ))}
         </div>
 
         <div className="mt-8">
-          <Link href="/blog" className="text-sm text-[var(--org-primary)]">← All posts</Link>
+          <Link href="/blog" className="text-sm text-[var(--org-primary)]">
+            ← All posts
+          </Link>
         </div>
       </article>
 
-      <CTASection title="Run your next show on Second Star Technologies" subtitle="Start free. No credit card." />
+      <CTASection title="Run your next show on L0ST 1SLAND Technologies" subtitle="Start free. No credit card." />
     </div>
   );
 }

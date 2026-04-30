@@ -18,21 +18,38 @@ export const COMPARE: Record<string, CompareConfig> = {
   asana: {
     slug: "asana",
     competitor: "Asana",
-    headline: "Second Star Technologies vs. Asana: production-native vs. generic work management.",
-    blurb: "Asana is great project management software. It isn't event production software. Here's what's missing — and what you stop paying separately for when you switch.",
+    headline: "L0ST 1SLAND Technologies vs. Asana: production-native vs. generic work management.",
+    blurb:
+      "Asana is great project management software. It isn't event production software. Here's what's missing — and what you stop paying separately for when you switch.",
     hero: "Asana is the default 'we need to organize this' SaaS. For production teams it's a starting point that quickly needs augmentation: a separate portal tool for clients, a separate ticketing platform for events, a separate finance add-on, a separate KBYG wiki, a separate check-in app for the gate. The bill adds up and the seams leak.",
-    bottomLine: "If you run shows, you'll outgrow Asana by your fifth event. The Second Star Technologies suite is the production-native spine that doesn't need augmentation.",
+    bottomLine:
+      "If you run shows, you'll outgrow Asana by your fifth event. The L0ST 1SLAND Technologies suite is the production-native spine that doesn't need augmentation.",
     features: [
       { feature: "Task + project management", us: true, them: true },
-      { feature: "Stakeholder portals (artist / vendor / client / sponsor / guest / crew)", us: true, them: false, note: "Asana guest access is read-limited and unsuitable for external stakeholders" },
+      {
+        feature: "Stakeholder portals (artist / vendor / client / sponsor / guest / crew)",
+        us: true,
+        them: false,
+        note: "Asana guest access is read-limited and unsuitable for external stakeholders",
+      },
       { feature: "Offline ticket scanning", us: true, them: false },
       { feature: "Race-safe atomic scan (sub-100ms)", us: true, them: false },
-      { feature: "Finance (invoices, budgets, expenses, advances)", us: true, them: false, note: "Asana has no finance primitives" },
+      {
+        feature: "Finance (invoices, budgets, expenses, advances)",
+        us: true,
+        them: false,
+        note: "Asana has no finance primitives",
+      },
       { feature: "Procurement (POs, vendor COI/W-9)", us: true, them: false },
       { feature: "Production (equipment, rentals, fabrication)", us: true, them: false },
       { feature: "Interactive proposals (scroll + accept-in-place)", us: true, them: false },
       { feature: "Event guides (role-scoped KBYG)", us: true, them: false },
-      { feature: "Streaming AI assistant (Claude)", us: true, them: "Limited", note: "Asana AI is summary-only; no streaming, no drafting workflows" },
+      {
+        feature: "Streaming AI assistant (Claude)",
+        us: true,
+        them: "Limited",
+        note: "Asana AI is summary-only; no streaming, no drafting workflows",
+      },
       { feature: "RLS-enforced multi-tenancy", us: true, them: true },
       { feature: "SSO + SCIM on enterprise", us: true, them: true },
       { feature: "Per-org pricing (unlimited users)", us: true, them: false, note: "Asana charges per seat" },
@@ -40,10 +57,22 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Mobile PWA with service worker", us: true, them: "Native app only" },
     ],
     whyWeWin: [
-      { title: "Production-native primitives", body: "Deliverables, ticket scans, call sheets, vendor COIs, event guides aren't add-ons — they're first-class." },
-      { title: "One platform, not seven", body: "You stop paying for Asana + Eventbrite + DocuSign + a portal tool + a KBYG wiki. It's all one subscription." },
-      { title: "Stakeholder portals", body: "Your clients, artists, vendors, and sponsors don't need Asana seats. They get a slug URL and see only what they should see." },
-      { title: "Show-day mobile", body: "Your scanner works without cell signal. Asana doesn't help at the gate — and it doesn't try to." },
+      {
+        title: "Production-native primitives",
+        body: "Deliverables, ticket scans, call sheets, vendor COIs, event guides aren't add-ons — they're first-class.",
+      },
+      {
+        title: "One platform, not seven",
+        body: "You stop paying for Asana + Eventbrite + DocuSign + a portal tool + a KBYG wiki. It's all one subscription.",
+      },
+      {
+        title: "Stakeholder portals",
+        body: "Your clients, artists, vendors, and sponsors don't need Asana seats. They get a slug URL and see only what they should see.",
+      },
+      {
+        title: "Show-day mobile",
+        body: "Your scanner works without cell signal. Asana doesn't help at the gate — and it doesn't try to.",
+      },
     ],
     whenTheyWin: [
       "You don't run events. If you're a marketing team, software team, or generic services agency, Asana is a better fit.",
@@ -73,16 +102,23 @@ export const COMPARE: Record<string, CompareConfig> = {
         a: "Yes. Professional is $199/month per org, unlimited users. Asana Business is $24.99/user/month — a 10-person team is $3,000/year. A 20-person team is $6,000/year. Our Professional tier is $2,388/year regardless.",
       },
     ],
-    keywords: ["ATLVS vs asana", "Second Star Technologies vs asana", "event production vs asana", "asana alternative for events"],
+    keywords: [
+      "ATLVS vs asana",
+      "L0ST 1SLAND Technologies vs asana",
+      "event production vs asana",
+      "asana alternative for events",
+    ],
   },
 
   monday: {
     slug: "monday",
     competitor: "Monday.com",
-    headline: "Second Star Technologies vs. Monday.com: typed primitives vs. a pretty spreadsheet.",
-    blurb: "Monday is a lovely general-purpose board. If your team runs shows, you'll need primitives Monday doesn't have — and portals Monday can't safely expose.",
+    headline: "L0ST 1SLAND Technologies vs. Monday.com: typed primitives vs. a pretty spreadsheet.",
+    blurb:
+      "Monday is a lovely general-purpose board. If your team runs shows, you'll need primitives Monday doesn't have — and portals Monday can't safely expose.",
     hero: "Monday.com is flexible. That's its strength and the reason production teams outgrow it. Event operations need typed primitives (deliverables, scans, call sheets, COIs) not just columns you name 'deliverable status.' And they need a way to bring external stakeholders in without giving them seats.",
-    bottomLine: "If you can build it in Monday with enough discipline, you can run shows on it. That discipline costs more than the software.",
+    bottomLine:
+      "If you can build it in Monday with enough discipline, you can run shows on it. That discipline costs more than the software.",
     features: [
       { feature: "Board-based project views", us: true, them: true },
       { feature: "Gantt + timeline views", us: true, them: true },
@@ -100,9 +136,18 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Mobile PWA with offline scan queue", us: true, them: false },
     ],
     whyWeWin: [
-      { title: "Typed, not freeform", body: "A deliverable in ATLVS is a typed entity — tech rider, hotel block, insurance cert. Monday columns are freeform. Typed primitives prevent the 'which column is status this quarter?' drift." },
-      { title: "Portals without seats", body: "Artists, vendors, clients don't count as users. They open a slug URL scoped by RLS. Your per-org bill doesn't go up as your stakeholder count grows." },
-      { title: "Field tooling", body: "COMPVSS handles the gate. Monday has no scanner, no offline queue, no atomic check-in. You'd pair it with another product." },
+      {
+        title: "Typed, not freeform",
+        body: "A deliverable in ATLVS is a typed entity — tech rider, hotel block, insurance cert. Monday columns are freeform. Typed primitives prevent the 'which column is status this quarter?' drift.",
+      },
+      {
+        title: "Portals without seats",
+        body: "Artists, vendors, clients don't count as users. They open a slug URL scoped by RLS. Your per-org bill doesn't go up as your stakeholder count grows.",
+      },
+      {
+        title: "Field tooling",
+        body: "COMPVSS handles the gate. Monday has no scanner, no offline queue, no atomic check-in. You'd pair it with another product.",
+      },
     ],
     whenTheyWin: [
       "You need a fully custom workflow we haven't modeled. Monday's open-ended columns give you freedom we don't; we optimize for standard production patterns.",
@@ -115,7 +160,7 @@ export const COMPARE: Record<string, CompareConfig> = {
     ],
     faqs: [
       {
-        q: "Can the Second Star Technologies suite do everything Monday can?",
+        q: "Can the L0ST 1SLAND Technologies suite do everything Monday can?",
         a: "For production workflows, yes and more. For generic business tracking — warehouse inventory, hiring pipelines, software bugs — Monday is more flexible. If you run events, we're the better fit. If you're a 500-person conglomerate, Monday covers more ground.",
       },
       {
@@ -123,16 +168,23 @@ export const COMPARE: Record<string, CompareConfig> = {
         a: "Monday Standard is $12/user/month. A 15-person production team is $2,160/year. Our Professional tier is $2,388/year unlimited users — roughly the same headline price but every stakeholder beyond the 15 is free on our side, paid on theirs.",
       },
     ],
-    keywords: ["ATLVS vs monday", "Second Star Technologies vs monday", "monday alternative events", "production software vs monday.com"],
+    keywords: [
+      "ATLVS vs monday",
+      "L0ST 1SLAND Technologies vs monday",
+      "monday alternative events",
+      "production software vs monday.com",
+    ],
   },
 
   spreadsheets: {
     slug: "spreadsheets",
     competitor: "Spreadsheets",
-    headline: "Second Star Technologies vs. spreadsheets: when the duct tape starts costing more than software.",
-    blurb: "Every production team starts on spreadsheets. Most stay there too long. Here's the tipping point — and what you gain the day you stop.",
+    headline: "L0ST 1SLAND Technologies vs. spreadsheets: when the duct tape starts costing more than software.",
+    blurb:
+      "Every production team starts on spreadsheets. Most stay there too long. Here's the tipping point — and what you gain the day you stop.",
     hero: "Spreadsheets are free. They're also infinitely flexible. That's why every production team starts there, and why every production team eventually realizes they're spending 40% of operations on maintaining the spreadsheet, not running the show.",
-    bottomLine: "If you run more than six shows a year, or have more than five people on ops, you are paying for spreadsheets — in hours, not dollars. Here's what you reclaim.",
+    bottomLine:
+      "If you run more than six shows a year, or have more than five people on ops, you are paying for spreadsheets — in hours, not dollars. Here's what you reclaim.",
     features: [
       { feature: "Zero-cost up front", us: false, them: true },
       { feature: "Infinitely flexible schema", us: false, them: true, note: "That's a downside at scale" },
@@ -150,9 +202,18 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Backups you actually trust", us: true, them: "Manual" },
     ],
     whyWeWin: [
-      { title: "Your schema enforces itself", body: "Every row has typed columns. Status is a controlled enum. Due dates are actual dates. Finance rolls up because it was typed correctly the first time — not because someone cleaned it up on Monday morning." },
-      { title: "Access control is real", body: "An intern cannot see exec compensation. A vendor cannot see another vendor's pricing. A client cannot edit the production schedule. RLS enforces all of this in the database." },
-      { title: "It stops being a person's job", body: "'Owning the spreadsheet' is a full-time role at most 10+ person production shops. That role goes away. Your spreadsheet person becomes a producer again." },
+      {
+        title: "Your schema enforces itself",
+        body: "Every row has typed columns. Status is a controlled enum. Due dates are actual dates. Finance rolls up because it was typed correctly the first time — not because someone cleaned it up on Monday morning.",
+      },
+      {
+        title: "Access control is real",
+        body: "An intern cannot see exec compensation. A vendor cannot see another vendor's pricing. A client cannot edit the production schedule. RLS enforces all of this in the database.",
+      },
+      {
+        title: "It stops being a person's job",
+        body: "'Owning the spreadsheet' is a full-time role at most 10+ person production shops. That role goes away. Your spreadsheet person becomes a producer again.",
+      },
     ],
     whenTheyWin: [
       "You're a one-person operation or running your first show. Spreadsheets are fine. Graduate when it starts to hurt.",
@@ -177,7 +238,11 @@ export const COMPARE: Record<string, CompareConfig> = {
         a: "Migration from spreadsheets to Professional ($199/mo) typically takes 1–3 days of your time. The hours you save in the first month cover the annual subscription.",
       },
     ],
-    keywords: ["spreadsheet alternative events", "production management vs spreadsheets", "stop using spreadsheets events"],
+    keywords: [
+      "spreadsheet alternative events",
+      "production management vs spreadsheets",
+      "stop using spreadsheets events",
+    ],
   },
 };
 

@@ -20,10 +20,13 @@ async function recordView(proposalId: string, token: string) {
     .eq("token", token)
     .maybeSingle();
   const next = (existing?.view_count ?? 0) + 1;
-  await supabase.from("proposal_share_links").update({
-    view_count: next,
-    last_viewed_at: new Date().toISOString(),
-  }).eq("token", token);
+  await supabase
+    .from("proposal_share_links")
+    .update({
+      view_count: next,
+      last_viewed_at: new Date().toISOString(),
+    })
+    .eq("token", token);
 }
 
 export default async function PublicProposalPage({ params }: { params: Promise<{ token: string }> }) {
@@ -31,25 +34,22 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
   if (!hasSupabase) notFound();
   const supabase = await createClient();
 
-  const { data: link } = await supabase
-    .from("proposal_share_links")
-    .select("*")
-    .eq("token", token)
-    .maybeSingle();
+  const { data: link } = await supabase.from("proposal_share_links").select("*").eq("token", token).maybeSingle();
   if (!link || link.revoked_at || (link.expires_at && new Date(link.expires_at) < new Date())) notFound();
 
-  const { data: proposal } = await supabase
-    .from("proposals")
-    .select("*")
-    .eq("id", link.proposal_id)
-    .maybeSingle();
+  const { data: proposal } = await supabase.from("proposals").select("*").eq("id", link.proposal_id).maybeSingle();
   if (!proposal) notFound();
 
   recordView(proposal.id, token).catch(() => {});
 
   const blocks = (proposal.blocks ?? []) as ProposalBlock[];
-  const theme = (proposal.theme as { primary: string; secondary: string }) ?? { primary: "#D4782A", secondary: "#6D4A2A" };
-  const signatureBlock = blocks.find((b) => b.type === "signature_block") as Extract<ProposalBlock, { type: "signature_block" }> | undefined;
+  const theme = (proposal.theme as { primary: string; secondary: string }) ?? {
+    primary: "#D4782A",
+    secondary: "#6D4A2A",
+  };
+  const signatureBlock = blocks.find((b) => b.type === "signature_block") as
+    | Extract<ProposalBlock, { type: "signature_block" }>
+    | undefined;
 
   return (
     <div className="proposal-doc bg-[var(--background)] text-[var(--foreground)]" data-theme="light">
@@ -69,7 +69,7 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
         )}
       </main>
       <footer className="mx-auto max-w-4xl border-t border-[var(--border-color)] px-8 py-12 text-center text-xs text-[var(--text-muted)]">
-        Prepared by Second Star Technologies · {proposal.doc_number ?? proposal.id.slice(0, 8)} · v{proposal.version}
+        Prepared by L0ST 1SLAND Technologies · {proposal.doc_number ?? proposal.id.slice(0, 8)} · v{proposal.version}
       </footer>
     </div>
   );

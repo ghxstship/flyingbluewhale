@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const SITE = {
-  name: "Second Star Technologies",
-  shortName: "Second Star",
+  name: "L0ST 1SLAND Technologies",
+  shortName: "L0ST 1SLAND",
   domain: "secondstar.tech",
   baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://secondstar.tech",
   tagline: "The Itinerary for Cultural Tastemakers.",
@@ -32,9 +32,9 @@ export const SITE = {
     "creative operations platform",
   ],
   apps: {
-    atlvs:   { name: "ATLVS",   tagline: "The bridge · charts the voyage from the desk",    color: "#DC2626" },
+    atlvs: { name: "ATLVS", tagline: "The bridge · charts the voyage from the desk", color: "#DC2626" },
     gvteway: { name: "GVTEWAY", tagline: "The ports of call · every guest, their own way aboard", color: "#2563EB" },
-    compvss: { name: "COMPVSS", tagline: "The open deck · the night, on the water",         color: "#D97706" },
+    compvss: { name: "COMPVSS", tagline: "The open deck · the night, on the water", color: "#D97706" },
   },
 } as const;
 
@@ -68,7 +68,17 @@ export function buildMetadata(m: PageMeta): Metadata {
     alternates: { canonical: url },
     robots: m.noIndex
       ? { index: false, follow: false }
-      : { index: true, follow: true, googleBot: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large", "max-video-preview": -1 } },
+      : {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-snippet": -1,
+            "max-image-preview": "large",
+            "max-video-preview": -1,
+          },
+        },
     openGraph: {
       type: m.article ? "article" : "website",
       locale: "en_US",
@@ -107,7 +117,7 @@ export function organizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: SITE.name,
-    legalName: "Second Star Technologies, Inc.",
+    legalName: "L0ST 1SLAND Technologies, Inc.",
     url: SITE.baseUrl,
     logo: `${SITE.baseUrl}/icon-512.png`,
     sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],
@@ -132,7 +142,11 @@ export function organizationSchema() {
 }
 
 export function softwareApplicationSchema({
-  name, description, url, appName, price,
+  name,
+  description,
+  url,
+  appName,
+  price,
 }: {
   name: string;
   description: string;
@@ -175,7 +189,12 @@ export function faqSchema(faqs: { q: string; a: string }[]) {
 }
 
 export function articleSchema({
-  headline, description, url, datePublished, dateModified, author = SITE.name,
+  headline,
+  description,
+  url,
+  datePublished,
+  dateModified,
+  author = SITE.name,
 }: {
   headline: string;
   description: string;
@@ -203,7 +222,12 @@ export function articleSchema({
 }
 
 export function productSchema({
-  name, description, url, sku, price, brand = SITE.name,
+  name,
+  description,
+  url,
+  sku,
+  price,
+  brand = SITE.name,
 }: {
   name: string;
   description: string;

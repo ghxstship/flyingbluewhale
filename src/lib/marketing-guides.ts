@@ -20,10 +20,8 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
     title: "Event advancing: what it is, how it works, and how not to do it in email",
     blurb:
       "A complete primer on event advancing — the 16 standard deliverables, who owns each, and the workflow that keeps shows from falling apart the week before load-in.",
-    hero:
-      "Advancing is the process of confirming, in writing, every detail about a show before it happens. It is the most consequential two weeks of any production, and the single biggest driver of show-day quality. Here's how to do it without losing your mind in email threads.",
-    tldr:
-      "Advancing = the set of typed deliverables (tech rider, hospitality, ground, hotel, stage plot, input list, COI, credentials, etc.) confirmed between promoter, venue, artist team, and production before load-in. Doing it in typed rows beats email threads on every dimension that matters.",
+    hero: "Advancing is the process of confirming, in writing, every detail about a show before it happens. It is the most consequential two weeks of any production, and the single biggest driver of show-day quality. Here's how to do it without losing your mind in email threads.",
+    tldr: "Advancing = the set of typed deliverables (tech rider, hospitality, ground, hotel, stage plot, input list, COI, credentials, etc.) confirmed between promoter, venue, artist team, and production before load-in. Doing it in typed rows beats email threads on every dimension that matters.",
     keywords: [
       "event advancing",
       "show advancing",
@@ -91,7 +89,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
         ],
       },
       {
-        heading: "How the Second Star Technologies suite handles advancing",
+        heading: "How the L0ST 1SLAND Technologies suite handles advancing",
         body: [
           "Every project in ATLVS has a deliverables module with the 16 standard types available out of the box. You can add custom types per org.",
           "Each deliverable has a status workflow, comments (threaded), file attachments stored in Supabase Storage, and a full deliverable_history row per state change.",
@@ -121,10 +119,8 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
     title: "KBYG (Know Before You Go): what it is, why it matters, and why PDFs aren't enough",
     blurb:
       "Know Before You Go is the pre-show information packet that every stakeholder needs. Here's what goes in it — and why a role-scoped KBYG beats a PDF on every show of meaningful size.",
-    hero:
-      "KBYG stands for Know Before You Go. It's the packet of information every stakeholder needs before they arrive at a show — where to park, when to load in, what to bring, who to contact, what the weather call is. Done right, it prevents 80% of the show-day questions that otherwise hit the production radio.",
-    tldr:
-      "KBYG = pre-show info packet per role. A guest's KBYG is different from a crew member's KBYG is different from a vendor's KBYG. PDFs can't handle that; role-scoped digital guides can.",
+    hero: "KBYG stands for Know Before You Go. It's the packet of information every stakeholder needs before they arrive at a show — where to park, when to load in, what to bring, who to contact, what the weather call is. Done right, it prevents 80% of the show-day questions that otherwise hit the production radio.",
+    tldr: "KBYG = pre-show info packet per role. A guest's KBYG is different from a crew member's KBYG is different from a vendor's KBYG. PDFs can't handle that; role-scoped digital guides can.",
     keywords: [
       "KBYG",
       "know before you go",
@@ -179,7 +175,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
         body: [
           "The Boarding Pass pattern — popularized by Black Coffee's 2025 tour KBYG (github.com/ghxstship/boardingpass) — treats the KBYG as an interactive, role-scoped, mobile-first website rather than a PDF.",
           "Key innovations: tier 1–5 classification banners for venue zones, role-specific timelines, embedded radio channel allocations, offline-accessible on the crew phone.",
-          "The Second Star Technologies suite adopts this pattern as the event guides module. One authoring flow in ATLVS CMS; six persona renders on portal + mobile, shared by <GuideView>. See /solutions/atlvs#guides.",
+          "The L0ST 1SLAND Technologies suite adopts this pattern as the event guides module. One authoring flow in ATLVS CMS; six persona renders on portal + mobile, shared by <GuideView>. See /solutions/atlvs#guides.",
         ],
       },
       {
@@ -211,10 +207,8 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
     title: "Production Ops 101: the operating system every show needs",
     blurb:
       "A complete breakdown of what production operations actually covers, the standard roles, the standard tools, and the modern consolidation thesis.",
-    hero:
-      "Production ops is the invisible infrastructure of every event. Done well, nobody notices. Done poorly, everybody does. This is a complete primer on what it covers and how teams are consolidating the tool stack in 2026.",
-    tldr:
-      "Production ops = projects + advancing + finance + procurement + production + people + stakeholder comms + show-day execution. In 2026, most teams stop duct-taping 8 tools and consolidate onto a single production platform.",
+    hero: "Production ops is the invisible infrastructure of every event. Done well, nobody notices. Done poorly, everybody does. This is a complete primer on what it covers and how teams are consolidating the tool stack in 2026.",
+    tldr: "Production ops = projects + advancing + finance + procurement + production + people + stakeholder comms + show-day execution. In 2026, most teams stop duct-taping 8 tools and consolidate onto a single production platform.",
     keywords: [
       "production operations",
       "event production ops",
@@ -262,7 +256,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
         body: [
           "The shift in 2026 is away from best-of-breed point tools and toward integrated production platforms.",
           "The argument: production data is deeply interconnected. A vendor PO depends on a project budget depends on a client-accepted proposal depends on advancing deliverables depends on a show schedule. If these live in one database, reporting is trivial. If they live in eight, reporting is a full-time job.",
-          "Second Star Technologies is the explicit consolidation play. One Postgres schema, one auth, one set of RLS rules, three shells (ATLVS internal, GVTEWAY external, COMPVSS mobile). See /about for the thesis in detail.",
+          "L0ST 1SLAND Technologies is the explicit consolidation play. One Postgres schema, one auth, one set of RLS rules, three shells (ATLVS internal, GVTEWAY external, COMPVSS mobile). See /about for the thesis in detail.",
         ],
       },
       {

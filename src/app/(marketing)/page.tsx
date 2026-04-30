@@ -3,7 +3,18 @@
 export const dynamic = "force-static";
 
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Zap, Users, Sparkles, FileSignature, QrCode, DollarSign, ClipboardCheck, Globe } from "lucide-react";
+import {
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+  Users,
+  Sparkles,
+  FileSignature,
+  QrCode,
+  DollarSign,
+  ClipboardCheck,
+  Globe,
+} from "lucide-react";
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/marketing/JsonLd";
@@ -27,7 +38,7 @@ export const metadata: Metadata = buildMetadata({
     "event advancing tool",
     "crew management software",
     "event ticketing platform",
-    "Second Star Technologies",
+    "L0ST 1SLAND Technologies",
     "ATLVS",
     "GVTEWAY",
     "COMPVSS",
@@ -42,7 +53,7 @@ export default function Home() {
         data={[
           organizationSchema(),
           softwareApplicationSchema({
-            name: "Second Star Technologies",
+            name: "L0ST 1SLAND Technologies",
             description: SITE.description,
             url: SITE.baseUrl,
             price: "0",
@@ -52,19 +63,28 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
           The manifest · now open for the next crossing
         </div>
-        <h1 className="mt-4 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
-          From Horizon<br />to Homecoming.
+        <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
+          From Horizon
+          <br />
+          to Homecoming.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Every production is a voyage — a pitch, a run, a wrap. The Atlas is the itinerary that holds all three. Three rooms, one manifest. Written for the cultural tastemakers curating the next crossing.
+          Every production is a voyage — a pitch, a run, a wrap. The Atlas is the itinerary that holds all three. Three
+          rooms, one manifest. Written for the cultural tastemakers curating the next crossing.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
-          <Button href="/signup" size="lg">Book Passage</Button>
-          <Button href="/contact" size="lg" variant="secondary">Captain&apos;s Briefing</Button>
-          <Link href="/docs" className="btn btn-ghost btn-lg">Read the Itinerary →</Link>
+          <Button href="/signup" size="lg">
+            Book Passage
+          </Button>
+          <Button href="/contact" size="lg" variant="secondary">
+            Captain&apos;s Briefing
+          </Button>
+          <Link href="/docs" className="btn btn-ghost btn-lg">
+            Read the Itinerary →
+          </Link>
         </div>
 
         {/* M3-03 — Live portal preview. Anon visitors see real product chrome
@@ -74,11 +94,20 @@ export default function Home() {
             until the iframe enters the viewport, which is below the fold on
             most desktop renders. */}
         <div className="mt-14">
-          <div className="relative overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--surface-inset)] elevation-2">
+          <div className="elevation-2 relative overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--surface-inset)]">
             <div className="flex items-center gap-1.5 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]" aria-hidden="true" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]" aria-hidden="true" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]" aria-hidden="true" />
+              <span
+                className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]"
+                aria-hidden="true"
+              />
+              <span
+                className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]"
+                aria-hidden="true"
+              />
+              <span
+                className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]"
+                aria-hidden="true"
+              />
               <span className="ml-3 font-mono text-xs text-[var(--text-muted)]">
                 secondstar.tech/p/mmw26-hialeah/guide
               </span>
@@ -102,14 +131,13 @@ export default function Home() {
       {/* Three-app showcase */}
       <section className="mx-auto max-w-6xl px-6 pt-10 pb-16">
         <div className="text-center">
-          <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--text-muted)]">
+          <div className="text-xs font-semibold tracking-[0.25em] text-[var(--text-muted)] uppercase">
             The itinerary · three rooms · one manifest
           </div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            ATLVS · GVTEWAY · COMPVSS
-          </h2>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">ATLVS · GVTEWAY · COMPVSS</h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-            The bridge, the ports of call, the open deck. Three rooms reading the same manifest. Written by the taste-makers&apos; studio for the producers curating the next crossing.
+            The bridge, the ports of call, the open deck. Three rooms reading the same manifest. Written by the
+            taste-makers&apos; studio for the producers curating the next crossing.
           </p>
         </div>
 
@@ -159,7 +187,10 @@ export default function Home() {
               className="surface-raised hover-lift relative overflow-hidden p-6"
             >
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--org-primary)" }} />
-              <div className="text-[11px] font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--org-primary)" }}>
+              <div
+                className="text-[11px] font-semibold tracking-[0.2em] uppercase"
+                style={{ color: "var(--org-primary)" }}
+              >
                 {app.eyebrow}
               </div>
               <h3 className="mt-2 text-lg font-semibold tracking-tight">{app.title}</h3>
@@ -167,7 +198,10 @@ export default function Home() {
               <ul className="mt-4 space-y-1.5 text-xs text-[var(--text-secondary)]">
                 {app.bullets.map((b) => (
                   <li key={b} className="flex items-start gap-2">
-                    <span className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full" style={{ background: "var(--org-primary)" }} />
+                    <span
+                      className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full"
+                      style={{ background: "var(--org-primary)" }}
+                    />
                     {b}
                   </li>
                 ))}
@@ -192,8 +226,8 @@ export default function Home() {
       {/* Three-Act Journey */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">The Voyage</div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl text-balance">
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">The Voyage</div>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
             Every Production Has Three Acts.
           </h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
@@ -206,29 +240,50 @@ export default function Home() {
               act: "ACT I",
               title: "Depart",
               body: "The pitch becomes a contract. The team gets cast. The advance lands. The manifest opens. Proposals are signed in place, POs route in hours, the rider hits the inbox before the hold expires.",
-              stops: ["Proposals + e-sig", "Contracts + phase gates", "Crew cast + credentials", "Advancing · 16 deliverables", "Manifest + ticketing open"],
+              stops: [
+                "Proposals + e-sig",
+                "Contracts + phase gates",
+                "Crew cast + credentials",
+                "Advancing · 16 deliverables",
+                "Manifest + ticketing open",
+              ],
             },
             {
               act: "ACT II",
               title: "Sail",
               body: "Load-in hits. The room opens. Twelve ports of call receive their guests. The crew clocks on. The gate scans. The medic triages. The weather shifts — you adjust the itinerary without touching the manifest.",
-              stops: ["Gate + ticket scan", "Shift check-in + meal credits", "Live dispatch + A&D", "Medic + safeguarding intake", "Crisis comms + run-of-show"],
+              stops: [
+                "Gate + ticket scan",
+                "Shift check-in + meal credits",
+                "Live dispatch + A&D",
+                "Medic + safeguarding intake",
+                "Crisis comms + run-of-show",
+              ],
             },
             {
               act: "ACT III",
               title: "Return",
               body: "Load-out starts at sunrise. Vendors get paid out by Monday. The recap writes itself from the log book. The legacy folder holds every cue, every scan, every signature — searchable, exportable, yours.",
-              stops: ["Vendor payouts · ACH/card/wire", "Closeout + disposition", "AI-written recap from your data", "Immutable audit trail", "Knowledge Base for next crossing"],
+              stops: [
+                "Vendor payouts · ACH/card/wire",
+                "Closeout + disposition",
+                "AI-written recap from your data",
+                "Immutable audit trail",
+                "Knowledge Base for next crossing",
+              ],
             },
           ].map((a) => (
             <div key={a.act} className="surface-raised p-6">
-              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--text-muted)]">{a.act}</div>
+              <div className="font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">{a.act}</div>
               <h3 className="mt-2 text-2xl font-semibold tracking-tight">{a.title}</h3>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">{a.body}</p>
               <ul className="mt-5 space-y-1.5 text-xs text-[var(--text-secondary)]">
                 {a.stops.map((s) => (
                   <li key={s} className="flex items-start gap-2">
-                    <span className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full" style={{ background: "var(--org-primary)" }} />
+                    <span
+                      className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full"
+                      style={{ background: "var(--org-primary)" }}
+                    />
                     {s}
                   </li>
                 ))}
@@ -241,8 +296,10 @@ export default function Home() {
       {/* Feature grid */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">The Itinerary</div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl text-balance">
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+            The Itinerary
+          </div>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
             Every Port, Every Act.
           </h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
@@ -253,14 +310,54 @@ export default function Home() {
           <FeatureGrid
             cols={4}
             features={[
-              { icon: FileSignature, title: "Proposals · signed live", body: "Twenty-three block types. E-sign in place. The first port every voyage needs.", href: "/features/proposals" },
-              { icon: Sparkles, title: "Boarding passes (KBYG)", body: "One itinerary, twelve reads. Every pass holder sees their own lane.", href: "/features/guides" },
-              { icon: QrCode, title: "Gate + manifest scan", body: "Sub-100ms scan, signal or none. Calm at fifteen thousand a night.", href: "/features/ticketing" },
-              { icon: Users, title: "Advancing", body: "Riders, input lists, stage plots, catering, travel — typed, not texted.", href: "/features/advancing" },
-              { icon: DollarSign, title: "Finance + payouts", body: "Invoices, expenses, budgets, live vendor payouts. ACH, card, wire.", href: "/features/finance" },
-              { icon: ClipboardCheck, title: "Procurement", body: "Reqs, POs, vendor COIs, W-9s — one chart cabinet, quietly archived.", href: "/features/procurement" },
-              { icon: Zap, title: "AI runner", body: "Drafts riders, recaps, and RFPs from your manifest — never the public internet.", href: "/features/ai" },
-              { icon: ShieldCheck, title: "Charter-grade security", body: "Signed DPA. Immutable audit log. 99.9% uptime. Private-charter standard.", href: "/features/compliance" },
+              {
+                icon: FileSignature,
+                title: "Proposals · signed live",
+                body: "Twenty-three block types. E-sign in place. The first port every voyage needs.",
+                href: "/features/proposals",
+              },
+              {
+                icon: Sparkles,
+                title: "Boarding passes (KBYG)",
+                body: "One itinerary, twelve reads. Every pass holder sees their own lane.",
+                href: "/features/guides",
+              },
+              {
+                icon: QrCode,
+                title: "Gate + manifest scan",
+                body: "Sub-100ms scan, signal or none. Calm at fifteen thousand a night.",
+                href: "/features/ticketing",
+              },
+              {
+                icon: Users,
+                title: "Advancing",
+                body: "Riders, input lists, stage plots, catering, travel — typed, not texted.",
+                href: "/features/advancing",
+              },
+              {
+                icon: DollarSign,
+                title: "Finance + payouts",
+                body: "Invoices, expenses, budgets, live vendor payouts. ACH, card, wire.",
+                href: "/features/finance",
+              },
+              {
+                icon: ClipboardCheck,
+                title: "Procurement",
+                body: "Reqs, POs, vendor COIs, W-9s — one chart cabinet, quietly archived.",
+                href: "/features/procurement",
+              },
+              {
+                icon: Zap,
+                title: "AI runner",
+                body: "Drafts riders, recaps, and RFPs from your manifest — never the public internet.",
+                href: "/features/ai",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Charter-grade security",
+                body: "Signed DPA. Immutable audit log. 99.9% uptime. Private-charter standard.",
+                href: "/features/compliance",
+              },
             ]}
           />
         </div>
@@ -292,16 +389,22 @@ export default function Home() {
         <div className="surface-raised overflow-hidden">
           <div className="grid gap-10 p-10 md:grid-cols-2 md:items-center">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">The Studio</div>
+              <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+                The Studio
+              </div>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight">The Taste-Makers&apos; Studio.</h2>
               <p className="mt-4 text-sm text-[var(--text-secondary)]">
-                The Atlas is a decade of crossings made quiet and precise. Every room came out of a load-in that didn&apos;t go to plan. Every column on the itinerary is a thing we were tired of charting twice.
+                The Atlas is a decade of crossings made quiet and precise. Every room came out of a load-in that
+                didn&apos;t go to plan. Every column on the itinerary is a thing we were tired of charting twice.
               </p>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">
-                One manifest. Three rooms. Your org&apos;s data private by architecture — walled at the database, not in the marketing. Written for the producers who curate the rooms people fly in for.
+                One manifest. Three rooms. Your org&apos;s data private by architecture — walled at the database, not in
+                the marketing. Written for the producers who curate the rooms people fly in for.
               </p>
               <div className="mt-6">
-                <Button href="/about" variant="secondary" size="sm">Read the Log Book</Button>
+                <Button href="/about" variant="secondary" size="sm">
+                  Read the Log Book
+                </Button>
               </div>
             </div>
             <ul className="space-y-3 text-sm">
@@ -325,10 +428,7 @@ export default function Home() {
         </div>
       </section>
 
-      <FAQSection
-        title="From the Log Book · FAQ"
-        faqs={HOME_FAQ}
-      />
+      <FAQSection title="From the Log Book · FAQ" faqs={HOME_FAQ} />
 
       <CTASection />
     </>
@@ -382,6 +482,6 @@ const HOME_FAQ = [
   },
   {
     q: "How do I book passage?",
-    a: "Hit \"Book Passage\" — thirty seconds to the open sea. Or request a captain&apos;s briefing with someone who&apos;s charted the rooms you&apos;re running.",
+    a: 'Hit "Book Passage" — thirty seconds to the open sea. Or request a captain&apos;s briefing with someone who&apos;s charted the rooms you&apos;re running.',
   },
 ];

@@ -47,11 +47,23 @@ const MODULES: Record<string, ModuleConfig> = {
     heroBody:
       "ATLVS is where your office team works. Nine modules covering projects, finance, procurement, production, people, advancing, CMS, AI, and compliance — all reading from the same backbone, all scoped to your organization.",
     highlights: [
-      { title: "Nine modules", body: "Overview, Projects, Advancing, Finance, Procurement, Production, People, CMS, AI, Compliance." },
-      { title: "Role-aware nav", body: "Owner, admin, manager, member, viewer — each tier sees exactly what they should, nothing they shouldn't." },
-      { title: "Data walled off", body: "Every row scoped to your organization at the database layer — not just in the app." },
+      {
+        title: "Nine modules",
+        body: "Overview, Projects, Advancing, Finance, Procurement, Production, People, CMS, AI, Compliance.",
+      },
+      {
+        title: "Role-aware nav",
+        body: "Owner, admin, manager, member, viewer — each tier sees exactly what they should, nothing they shouldn't.",
+      },
+      {
+        title: "Data walled off",
+        body: "Every row scoped to your organization at the database layer — not just in the app.",
+      },
       { title: "Immutable audit log", body: "Who, when, what changed, what it was before. Every action. Exportable." },
-      { title: "AI built in", body: "An assistant that reads your projects, crew, and budgets — and drafts from them." },
+      {
+        title: "AI built in",
+        body: "An assistant that reads your projects, crew, and budgets — and drafts from them.",
+      },
       { title: "Enterprise-ready", body: "Signed DPA and 99.9% uptime SLA on the Enterprise tier." },
     ],
     faqs: [
@@ -86,12 +98,27 @@ const MODULES: Record<string, ModuleConfig> = {
     heroBody:
       "GVTEWAY gives every outside stakeholder a workspace built for them. Artists see their advancing. Vendors see their POs. Clients see their proposal. Guests see their guide. Each link is the access — rotate it and access revokes everywhere, instantly.",
     highlights: [
-      { title: "Six persona rails", body: "Artist, Vendor, Client, Sponsor, Guest, Crew — each with a nav built for their job." },
-      { title: "Link is the access", body: "Share a URL. Revoke it and access ends. No passwords to reset, no accounts to deprovision." },
-      { title: "Interactive proposals", body: "Clients open their link to a scrolling proposal — read, accept or decline, signed in place." },
+      {
+        title: "Six persona rails",
+        body: "Artist, Vendor, Client, Sponsor, Guest, Crew — each with a nav built for their job.",
+      },
+      {
+        title: "Link is the access",
+        body: "Share a URL. Revoke it and access ends. No passwords to reset, no accounts to deprovision.",
+      },
+      {
+        title: "Interactive proposals",
+        body: "Clients open their link to a scrolling proposal — read, accept or decline, signed in place.",
+      },
       { title: "Role-scoped guides", body: "Each persona sees only the Know Before You Go sections written for them." },
-      { title: "No signup required", body: "Your stakeholders never create an account. They click the link, they see their lane." },
-      { title: "White-label ready", body: "Per-project color, logo, and OG image. It feels like your brand, because it is." },
+      {
+        title: "No signup required",
+        body: "Your stakeholders never create an account. They click the link, they see their lane.",
+      },
+      {
+        title: "White-label ready",
+        body: "Per-project color, logo, and OG image. It feels like your brand, because it is.",
+      },
     ],
     faqs: [
       {
@@ -125,11 +152,23 @@ const MODULES: Record<string, ModuleConfig> = {
     heroBody:
       "COMPVSS installs from the browser — no app store, no build pipeline, no version fragmentation. Your crew opens a link, adds it to the home screen, and has a full-screen scanner that works on day one. And on the worst day, when venue signal drops, it keeps working.",
     highlights: [
-      { title: "Install from the browser", body: "A mobile app you add from the web — no app store, no approval queue. Ready on day one." },
-      { title: "Offline-first", body: "Scanner, today's call sheet, and the guide cached locally. Load with zero bars." },
+      {
+        title: "Install from the browser",
+        body: "A mobile app you add from the web — no app store, no approval queue. Ready on day one.",
+      },
+      {
+        title: "Offline-first",
+        body: "Scanner, today's call sheet, and the guide cached locally. Load with zero bars.",
+      },
       { title: "No duplicate scans", body: "Every ticket scans exactly once, even under concurrent load at the gate." },
-      { title: "Scan queue replays", body: "Offline scans queue on the device, then sync in order when signal returns. No scan gets lost." },
-      { title: "Geo-verified clock-in", body: "GPS check with a graceful manual fallback when the venue's a dead zone." },
+      {
+        title: "Scan queue replays",
+        body: "Offline scans queue on the device, then sync in order when signal returns. No scan gets lost.",
+      },
+      {
+        title: "Geo-verified clock-in",
+        body: "GPS check with a graceful manual fallback when the venue's a dead zone.",
+      },
       { title: "Incident reports", body: "Photos, location, witnesses — admin and EHS paged immediately on network." },
     ],
     faqs: [
@@ -165,9 +204,18 @@ const MODULES: Record<string, ModuleConfig> = {
       "The assistant drafts from your actual data — your projects, your crew, your budgets, your schedule. Ask for a hospitality rider in the venue's voice. Ask for an RFP for lighting. Ask for a recap. Every conversation is scoped to your workspace and logged.",
     highlights: [
       { title: "Streams responses", body: "Answers stream as they generate — no waiting for the wall of text." },
-      { title: "Grounded in your data", body: "Riders, RFPs, call sheets, recaps, safety briefings — drafted from your projects, not the public internet." },
-      { title: "Per-org history", body: "Every conversation scoped to your workspace, searchable, never cross-organization." },
-      { title: "Fast or deep", body: "Pick the quick model for day-to-day, the deep one when you need reasoning — per conversation." },
+      {
+        title: "Grounded in your data",
+        body: "Riders, RFPs, call sheets, recaps, safety briefings — drafted from your projects, not the public internet.",
+      },
+      {
+        title: "Per-org history",
+        body: "Every conversation scoped to your workspace, searchable, never cross-organization.",
+      },
+      {
+        title: "Fast or deep",
+        body: "Pick the quick model for day-to-day, the deep one when you need reasoning — per conversation.",
+      },
       { title: "Cost-controlled", body: "Rate limits and budgets keep runaway usage from ever being a surprise." },
       { title: "Auditable", body: "Every interaction logged — who, when, which model, which data it touched." },
     ],
@@ -232,8 +280,7 @@ const MODULES: Record<string, ModuleConfig> = {
     name: "Procurement",
     eyebrow: "ATLVS · Procurement",
     title: "Requisitions, POs, vendor compliance, payouts.",
-    blurb:
-      "Requisition to PO to delivery to invoice — with COIs and W-9s on file and direct vendor payouts.",
+    blurb: "Requisition to PO to delivery to invoice — with COIs and W-9s on file and direct vendor payouts.",
     heroTitle: "From request to payout. End to end.",
     heroBody:
       "A crew member requests from the field. A manager turns it into a PO against a vendor who has COI and W-9 on file. Delivery gets scanned. The vendor invoices. Payout goes direct — ACH, card, or wire. Every step logged.",
@@ -241,8 +288,14 @@ const MODULES: Record<string, ModuleConfig> = {
       { title: "Vendors", body: "Profiles, categories, COI expiry tracking, W-9 uploads." },
       { title: "Requisitions", body: "Crew-initiated requests with approval thresholds." },
       { title: "Purchase orders", body: "Line-itemed, versioned, signed by the vendor." },
-      { title: "Direct payouts", body: "Vendors onboard a payout account and get paid directly — ACH, card, or international wire." },
-      { title: "Compliance gating", body: "POs blocked if COI is expired or W-9 is missing. No surprises on audit day." },
+      {
+        title: "Direct payouts",
+        body: "Vendors onboard a payout account and get paid directly — ACH, card, or international wire.",
+      },
+      {
+        title: "Compliance gating",
+        body: "POs blocked if COI is expired or W-9 is missing. No surprises on audit day.",
+      },
       { title: "Portal integration", body: "Vendors see their POs and invoices in their own portal." },
     ],
     faqs: [
@@ -267,8 +320,7 @@ const MODULES: Record<string, ModuleConfig> = {
     name: "Production",
     eyebrow: "ATLVS · Production",
     title: "Equipment, rentals, fabrication, logistics.",
-    blurb:
-      "Track inventory across the season, dispatch to shows, reconcile returns — tied to the field scanner.",
+    blurb: "Track inventory across the season, dispatch to shows, reconcile returns — tied to the field scanner.",
     heroTitle: "Where the gear lives between shows.",
     heroBody:
       "Every asset — truss, LED wall, comms, barricade — tracked across its lifecycle. Outbound dispatch, in-field scans, damage reports, sub-rentals, fabrication orders. One source of truth, tied to the field app.",
@@ -302,16 +354,21 @@ const MODULES: Record<string, ModuleConfig> = {
     name: "Compliance",
     eyebrow: "ATLVS · Compliance",
     title: "Audit, retention, SOC 2 posture.",
-    blurb:
-      "Data walled off per organization. Immutable audit log. Retention policies. Signed DPA on Enterprise.",
+    blurb: "Data walled off per organization. Immutable audit log. Retention policies. Signed DPA on Enterprise.",
     heroTitle: "Built to pass a security review.",
     heroBody:
-      "The Second Star Technologies platform's security posture is not a checklist — it's enforced on the data. Every organization's data walled off at the deepest layer. Every change written to an immutable audit trail. Files shared through auto-expiring links, not public buckets.",
+      "The L0ST 1SLAND Technologies platform's security posture is not a checklist — it's enforced on the data. Every organization's data walled off at the deepest layer. Every change written to an immutable audit trail. Files shared through auto-expiring links, not public buckets.",
     highlights: [
       { title: "Data walled off per org", body: "No exceptions. Enforced at the database, not in the app." },
-      { title: "Immutable audit trail", body: "Every change captured — before, after, who, when, from where. Queryable and exportable." },
+      {
+        title: "Immutable audit trail",
+        body: "Every change captured — before, after, who, when, from where. Queryable and exportable.",
+      },
       { title: "Retention", body: "Configurable per-category retention with soft-delete and purge." },
-      { title: "Auto-expiring file links", body: "Sensitive files share through signed links with short expiry. No public buckets." },
+      {
+        title: "Auto-expiring file links",
+        body: "Sensitive files share through signed links with short expiry. No public buckets.",
+      },
       { title: "Edge security", body: "Strict content and origin rules enforced at the edge." },
     ],
     faqs: [
@@ -346,7 +403,10 @@ const MODULES: Record<string, ModuleConfig> = {
       { title: "Accept in place", body: "Accept or decline buttons persist with IP, timestamp, and signature." },
       { title: "Versioned", body: "Every edit creates a new version. Old versions stay addressable." },
       { title: "Revocable share links", body: "Share by link. Revoke instantly. Access dies immediately." },
-      { title: "Template library", body: "Start from proven templates — festival, tour, corporate activation, private event." },
+      {
+        title: "Template library",
+        body: "Start from proven templates — festival, tour, corporate activation, private event.",
+      },
     ],
     faqs: [
       {
@@ -370,17 +430,28 @@ const MODULES: Record<string, ModuleConfig> = {
     name: "Event guides (KBYG)",
     eyebrow: "ATLVS · Event guides",
     title: "One Know Before You Go. Every role sees their version.",
-    blurb:
-      "A role-scoped KBYG shared across portal and mobile. Written once, rendered differently for each audience.",
+    blurb: "A role-scoped KBYG shared across portal and mobile. Written once, rendered differently for each audience.",
     heroTitle: "One source. Six personas. Zero duplication.",
     heroBody:
       "Write a single KBYG per project. A guest sees parking, schedule, FAQ. Crew sees call sheet, radio channels, PPE, SOPs. Artist sees rider, catering, dressing room. Same canonical data, different views — edited once.",
     highlights: [
       { title: "Write once", body: "One guide per project. Every persona auto-scoped to their sections." },
-      { title: "Section library", body: "Overview, schedule, set times, timeline, credentials, contacts, FAQ, SOPs, PPE, radio channels, evacuation, fire safety, accessibility, sustainability, code of conduct — and custom." },
-      { title: "Auto-scoped render", body: "Each viewer lands on the persona view built for them. No manual link-juggling." },
-      { title: "Portal and mobile", body: "Same guide, rendered cleanly whether the viewer is on a laptop or at the gate." },
-      { title: "Publish flow", body: "Draft, preview, publish. Update the morning of the show and every viewer sees the latest." },
+      {
+        title: "Section library",
+        body: "Overview, schedule, set times, timeline, credentials, contacts, FAQ, SOPs, PPE, radio channels, evacuation, fire safety, accessibility, sustainability, code of conduct — and custom.",
+      },
+      {
+        title: "Auto-scoped render",
+        body: "Each viewer lands on the persona view built for them. No manual link-juggling.",
+      },
+      {
+        title: "Portal and mobile",
+        body: "Same guide, rendered cleanly whether the viewer is on a laptop or at the gate.",
+      },
+      {
+        title: "Publish flow",
+        body: "Draft, preview, publish. Update the morning of the show and every viewer sees the latest.",
+      },
       { title: "Revision history", body: "Every publish saves a version. Roll back from the CMS in a click." },
     ],
     faqs: [
@@ -405,15 +476,17 @@ const MODULES: Record<string, ModuleConfig> = {
     name: "Ticketing + check-in",
     eyebrow: "COMPVSS · Ticketing",
     title: "Scan tickets faster than anyone at the gate.",
-    blurb:
-      "Issue, track, and scan tickets — with an offline-first scan queue and sub-100ms response at the gate.",
+    blurb: "Issue, track, and scan tickets — with an offline-first scan queue and sub-100ms response at the gate.",
     heroTitle: "Sub-100ms server-side. Zero duplicates.",
     heroBody:
       "Tickets issue in ATLVS, deliver as QR codes, and scan in COMPVSS. Every ticket scans exactly once, even under concurrent load. Offline scans queue on the device and replay in order when the signal comes back.",
     highlights: [
       { title: "Issue in ATLVS", body: "Generate tickets by allocation, by persona, with QR codes ready to go." },
       { title: "Scan in COMPVSS", body: "Phone camera. Sub-100ms scan response. Four clear result states." },
-      { title: "Zero duplicates", body: "Every ticket scans exactly once, even with multiple gates scanning under pressure." },
+      {
+        title: "Zero duplicates",
+        body: "Every ticket scans exactly once, even with multiple gates scanning under pressure.",
+      },
       { title: "Offline queue", body: "Scans queue on the device and replay in order when the network returns." },
       { title: "Scan history", body: "Every attempt captured with result and scanner identity." },
       { title: "Rate limited", body: "Abuse protection without getting in the way of legitimate traffic." },
@@ -446,12 +519,21 @@ const MODULES: Record<string, ModuleConfig> = {
     heroBody:
       "Every show has a predictable set of deliverables: tech rider, hospitality, ground transport, hotel block, stage plot, input list, insurance certs, credentials. Advancing tracks each as its own typed item — with status, owner, due date, comments, attachments, and full history.",
     highlights: [
-      { title: "16 deliverable types", body: "Tech rider, hospitality, ground transport, hotel, stage plot, input list, COI, passes, and more." },
-      { title: "Per-deliverable thread", body: "Comments, mentions, status changes — every change written to history." },
+      {
+        title: "16 deliverable types",
+        body: "Tech rider, hospitality, ground transport, hotel, stage plot, input list, COI, passes, and more.",
+      },
+      {
+        title: "Per-deliverable thread",
+        body: "Comments, mentions, status changes — every change written to history.",
+      },
       { title: "File attachments", body: "PDFs, diagrams, riders — delivered through auto-expiring signed links." },
       { title: "Status workflow", body: "Draft, sent, received, approved, complete — with automatic notifications." },
       { title: "Overdue tracking", body: "The dashboard surfaces what's slipping against show dates." },
-      { title: "Portal exposure", body: "Artists and vendors see their deliverables in their own portal and upload responses directly." },
+      {
+        title: "Portal exposure",
+        body: "Artists and vendors see their deliverables in their own portal and upload responses directly.",
+      },
     ],
     faqs: [
       {
@@ -482,7 +564,7 @@ export async function generateMetadata({ params }: { params: Promise<{ module: s
   if (!config) {
     return buildMetadata({
       title: "Feature",
-      description: "Second Star Technologies — the unified production management platform.",
+      description: "L0ST 1SLAND Technologies — the unified production management platform.",
       path: `/features/${module}`,
     });
   }
@@ -502,11 +584,13 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
   if (!config) {
     return (
       <div className="mx-auto max-w-3xl px-6 py-16">
-        <div className="text-xs font-semibold uppercase tracking-wider text-[var(--org-primary)]">Feature</div>
+        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Feature</div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">{module}</h1>
         <p className="mt-4 text-sm text-[var(--text-secondary)]">Module detail coming soon.</p>
         <div className="mt-8">
-          <Link href="/features" className="text-sm text-[var(--org-primary)]">← All features</Link>
+          <Link href="/features" className="text-sm text-[var(--org-primary)]">
+            ← All features
+          </Link>
         </div>
       </div>
     );
@@ -521,8 +605,9 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
   return (
     <div>
       <JsonLd
-        data={[softwareApplicationSchema({
-            name: `Second Star Technologies — ${config.name}`,
+        data={[
+          softwareApplicationSchema({
+            name: `L0ST 1SLAND Technologies — ${config.name}`,
             description: config.blurb,
             url: `https://flyingbluewhale.app/features/${config.slug}`,
           }),
@@ -531,12 +616,16 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">{config.eyebrow}</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          {config.eyebrow}
+        </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">{config.heroTitle}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{config.heroBody}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href="/signup">Start free</Button>
-          <Button href="/contact" variant="secondary">Book a demo</Button>
+          <Button href="/contact" variant="secondary">
+            Book a demo
+          </Button>
         </div>
       </section>
 
@@ -564,16 +653,35 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
               className="surface-raised hover-lift group flex items-center justify-between p-5 text-sm"
             >
               <span>{r.label}</span>
-              <ArrowRight size={14} className="text-[var(--text-muted)] transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight
+                size={14}
+                className="text-[var(--text-muted)] transition-transform group-hover:translate-x-0.5"
+              />
             </Link>
           ))}
         </div>
       </section>
 
-      <CTASection title="Ship this module on show day" subtitle="Start free. No credit card. Migrate when you're ready." />
+      <CTASection
+        title="Ship this module on show day"
+        subtitle="Start free. No credit card. Migrate when you're ready."
+      />
     </div>
   );
 }
 
 // Keep icon imports referenced — used for per-module glyphs in a follow-up pass.
-void [Terminal, ExternalLink, Smartphone, Bot, Banknote, ClipboardList, Wrench, ShieldCheck, FileSignature, BookOpen, QrCode, PackageSearch];
+void [
+  Terminal,
+  ExternalLink,
+  Smartphone,
+  Bot,
+  Banknote,
+  ClipboardList,
+  Wrench,
+  ShieldCheck,
+  FileSignature,
+  BookOpen,
+  QrCode,
+  PackageSearch,
+];

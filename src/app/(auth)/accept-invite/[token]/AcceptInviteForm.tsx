@@ -19,7 +19,7 @@ export function AcceptInviteForm({ token }: { token: string }) {
   return (
     <AuthShell
       title="Join your team"
-      subtitle="Accept your invitation to Second Star Technologies"
+      subtitle="Accept your invitation to L0ST 1SLAND Technologies"
       footer={
         <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
           Sign in instead
@@ -27,11 +27,13 @@ export function AcceptInviteForm({ token }: { token: string }) {
       }
     >
       <p className="text-sm text-[var(--text-secondary)]">
-        You&apos;ve been invited to a Second Star Technologies workspace. Accept below and we&apos;ll
-        take you straight in.
+        You&apos;ve been invited to a L0ST 1SLAND Technologies workspace. Accept below and we&apos;ll take you straight
+        in.
       </p>
       {state?.error && (
-        <Alert kind="error" className="mt-4">{state.error}</Alert>
+        <Alert kind="error" className="mt-4">
+          {state.error}
+        </Alert>
       )}
       <form action={formAction} className="mt-6">
         <input type="hidden" name="token" value={token} />

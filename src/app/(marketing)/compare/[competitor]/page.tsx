@@ -56,11 +56,15 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Compare · Second Star Technologies vs. {c.competitor}</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          Compare · L0ST 1SLAND Technologies vs. {c.competitor}
+        </div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
         <div className="surface-raised mt-8 p-5">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Bottom line</div>
+          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            Bottom line
+          </div>
           <div className="mt-2 text-sm font-medium">{c.bottomLine}</div>
         </div>
       </section>
@@ -70,9 +74,9 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         <div className="mt-8 overflow-x-auto">
           <table className="w-full min-w-[640px] text-left">
             <thead>
-              <tr className="border-b border-[var(--border)] text-xs uppercase tracking-wider text-[var(--text-muted)]">
+              <tr className="border-b border-[var(--border)] text-xs tracking-wider text-[var(--text-muted)] uppercase">
                 <th className="py-3 pr-4 font-semibold">Feature</th>
-                <th className="py-3 pr-4 text-center font-semibold text-[var(--org-primary)]">Second Star</th>
+                <th className="py-3 pr-4 text-center font-semibold text-[var(--org-primary)]">L0ST 1SLAND</th>
                 <th className="py-3 pr-4 text-center font-semibold">{c.competitor}</th>
               </tr>
             </thead>
@@ -83,8 +87,12 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
                     <div>{f.feature}</div>
                     {f.note && <div className="mt-0.5 text-[11px] text-[var(--text-muted)]">{f.note}</div>}
                   </td>
-                  <td className="py-3 pr-4 text-center"><Cell value={f.us} /></td>
-                  <td className="py-3 pr-4 text-center"><Cell value={f.them} /></td>
+                  <td className="py-3 pr-4 text-center">
+                    <Cell value={f.us} />
+                  </td>
+                  <td className="py-3 pr-4 text-center">
+                    <Cell value={f.them} />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -109,9 +117,13 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface-raised p-8">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">When {c.competitor} wins</div>
+          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            When {c.competitor} wins
+          </div>
           <ul className="mt-4 space-y-2 text-sm text-[var(--text-secondary)]">
-            {c.whenTheyWin.map((x) => <li key={x}>· {x}</li>)}
+            {c.whenTheyWin.map((x) => (
+              <li key={x}>· {x}</li>
+            ))}
           </ul>
         </div>
       </section>
@@ -119,9 +131,9 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       {c.quote && (
         <section className="mx-auto max-w-4xl px-6 py-12">
           <div className="surface-raised relative p-10">
-            <Quote size={48} className="absolute left-6 top-6 text-[var(--org-primary)] opacity-20" />
+            <Quote size={48} className="absolute top-6 left-6 text-[var(--org-primary)] opacity-20" />
             <blockquote className="mt-4 text-xl italic">"{c.quote.text}"</blockquote>
-            <cite className="mt-4 block text-sm not-italic text-[var(--text-muted)]">— {c.quote.attribution}</cite>
+            <cite className="mt-4 block text-sm text-[var(--text-muted)] not-italic">— {c.quote.attribution}</cite>
           </div>
         </section>
       )}
@@ -130,19 +142,21 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         <h2 className="text-2xl font-semibold tracking-tight">Migration Path</h2>
         <div className="surface-raised mt-6 p-6">
           <ol className="list-decimal space-y-2 pl-5 text-sm text-[var(--text-secondary)]">
-            {c.migration.map((m) => <li key={m}>{m}</li>)}
+            {c.migration.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
           </ol>
         </div>
       </section>
 
-      <FAQSection title={`Second Star Technologies vs. ${c.competitor} · FAQ`} faqs={c.faqs} />
+      <FAQSection title={`L0ST 1SLAND Technologies vs. ${c.competitor} · FAQ`} faqs={c.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-2xl font-semibold tracking-tight">Other Comparisons</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {COMPARE_LIST.filter((x) => x.slug !== c.slug).map((x) => (
             <Link key={x.slug} href={`/compare/${x.slug}`} className="surface-raised hover-lift p-5">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">vs.</div>
+              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">vs.</div>
               <div className="mt-2 text-sm font-semibold">{x.competitor}</div>
               <div className="mt-2 text-xs text-[var(--text-muted)]">{x.blurb}</div>
             </Link>
@@ -150,7 +164,10 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         </div>
       </section>
 
-      <CTASection title="Try Second Star Technologies" subtitle="Free for Life on the Access tier. Migrate when you're ready." />
+      <CTASection
+        title="Try L0ST 1SLAND Technologies"
+        subtitle="Free for Life on the Access tier. Migrate when you're ready."
+      />
     </div>
   );
 }

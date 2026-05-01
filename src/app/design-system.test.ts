@@ -43,9 +43,12 @@ describe("Design system — component primitive adoption", () => {
       "src/components/ui/Checkbox.tsx",
       "src/components/ui/RadioGroup.tsx",
       // Controlled state indicators (not buttons)
-      "src/components/forms/Wizard.tsx",
       "src/components/mobile/FAB.tsx",
       "src/components/NotificationsBell.tsx",
+      // Calendar day-cell highlight (today marker — semantic indicator, not a button)
+      "src/app/(platform)/console/schedule/ScheduleCalendar.tsx",
+      // Sign / Decline mode toggle (segmented-control pattern, not a primary button)
+      "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/approvals/[approvalId]/ApprovalSignBlock.tsx",
       // Clerk / auth UI overrides
       "src/app/layout.tsx",
       // Stage-plot SVG (paper-white fill, not a button)
@@ -74,10 +77,7 @@ describe("Design system — component primitive adoption", () => {
   });
 
   it("no hand-rolled form-error boxes (`border-[color:var(--color-error)]/40`)", () => {
-    const ALLOW = new Set<string>([
-      "src/components/ui/Alert.tsx",
-      "src/app/design-system.test.ts",
-    ]);
+    const ALLOW = new Set<string>(["src/components/ui/Alert.tsx", "src/app/design-system.test.ts"]);
     const offenders: string[] = [];
     for (const file of ALL_FILES) {
       const rel = relative(REPO_ROOT, file);
@@ -86,17 +86,14 @@ describe("Design system — component primitive adoption", () => {
       // Signature of the old pattern: border-*-error + bg-*-error + text-*-error
       // all on the same div.
       if (
-        /border-\[[^\]]*color-error[^\]]*\][^>]*bg-\[[^\]]*color-error[^\]]*\][^>]*text-\[[^\]]*color-error/.test(
-          txt,
-        )
+        /border-\[[^\]]*color-error[^\]]*\][^>]*bg-\[[^\]]*color-error[^\]]*\][^>]*text-\[[^\]]*color-error/.test(txt)
       ) {
         offenders.push(rel);
       }
     }
-    expect(
-      offenders,
-      `Hand-rolled error boxes — use <Alert kind="error"> instead: ${offenders.join(", ")}`,
-    ).toEqual([]);
+    expect(offenders, `Hand-rolled error boxes — use <Alert kind="error"> instead: ${offenders.join(", ")}`).toEqual(
+      [],
+    );
   });
 
   it("no hand-rolled runtime-state pills (`bg-{emerald|amber|sky|rose}-500/10 text-{…}-700`)", () => {
@@ -106,6 +103,8 @@ describe("Design system — component primitive adoption", () => {
       "src/components/ui/GlobalBanner.tsx",
       // Marketing changelog categories (editorial design with fixed palette)
       "src/app/(marketing)/changelog/page.tsx",
+      // Diff renderer — added/removed chunk coloring, not a runtime state pill
+      "src/components/charts/DiffViewer.tsx",
     ]);
     const offenders: string[] = [];
     for (const file of ALL_FILES) {
@@ -122,7 +121,7 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
-  it("no hand-rolled brand-tinted tag pills (use <Badge variant=\"brand-soft\">)", () => {
+  it('no hand-rolled brand-tinted tag pills (use <Badge variant="brand-soft">)', () => {
     const ALLOW = new Set<string>([
       "src/components/ui/Badge.tsx",
       // Icon backgrounds, not tag pills (h-9 w-9 rounded-full container)
@@ -150,7 +149,7 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
-  it("no `[data-theme=\"dark\"]` CSS selectors (dead — should be `[data-mode=\"dark\"]`)", () => {
+  it('no `[data-theme="dark"]` CSS selectors (dead — should be `[data-mode="dark"]`)', () => {
     const css = readFileSync(join(REPO_ROOT, "src/app/globals.css"), "utf8");
     const offenders = css.split("\n").filter((l) => /\[data-theme="dark"\]/.test(l));
     expect(
@@ -162,7 +161,6 @@ describe("Design system — component primitive adoption", () => {
   it("no `window.confirm` destructive prompts outside allowlist (use <Dialog>)", () => {
     const ALLOW = new Set<string>([
       // In-flow editor prompts where a modal is excessive UX.
-      "src/components/ui/RichText.tsx",
       "src/components/stage-plots/NewStagePlotButton.tsx",
     ]);
     const offenders: string[] = [];
@@ -174,9 +172,6 @@ describe("Design system — component primitive adoption", () => {
         offenders.push(rel);
       }
     }
-    expect(
-      offenders,
-      `\`window.confirm\` bypasses <Dialog>: ${offenders.join(", ")}`,
-    ).toEqual([]);
+    expect(offenders, `\`window.confirm\` bypasses <Dialog>: ${offenders.join(", ")}`).toEqual([]);
   });
 });

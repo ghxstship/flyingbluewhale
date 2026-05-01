@@ -44,7 +44,10 @@ function emit(level: LogLevel, message: string, fields: LogFields = {}, err?: un
     ...(err instanceof Error ? { err_name: err.name, err_msg: err.message, stack: err.stack } : {}),
   };
   const line = IS_PROD ? JSON.stringify(record) : prettyLine(record);
-  const writer = level === "error" ? console.error : level === "warn" ? console.warn : console.log;
+  // The logger is the canonical egress for app output — info/debug ride
+  // console.info so the global no-console rule can keep `console.log` as
+  // a never-allowed debug-noise smell while structured logging stays open.
+  const writer = level === "error" ? console.error : level === "warn" ? console.warn : console.info;
   writer(line);
   if (level === "error" && err instanceof Error) {
     Sentry.captureException(err, { extra: fields as Record<string, unknown> });

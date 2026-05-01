@@ -35,6 +35,19 @@ const config = [
       "jsx-a11y/role-supports-aria-props": "error",
       "jsx-a11y/tabindex-no-positive": "error",
 
+      // Type-safety guardrails
+      // - explicit `any` is a hatch we accept ONLY for dynamic Supabase
+      //   table-name queries (the typed client doesn't accept dynamic
+      //   strings). Surfaced as `warn` so each new use is reviewed but
+      //   the existing handful don't block CI.
+      // - implicit any is already blocked by `strict: true` in tsconfig.
+      "@typescript-eslint/no-explicit-any": "warn",
+
+      // Production debug noise — `console.warn` and `console.error` are
+      // the canonical observability surfaces (Sentry hooks them); plain
+      // `console.log` is debug noise and shouldn't ship.
+      "no-console": ["warn", { allow: ["warn", "error", "info", "debug"] }],
+
       // React 19 compiler-style rules — these flag patterns that work
       // correctly under our current React 19.2 runtime but are flagged
       // because the upcoming compiler optimizes them differently. Kept

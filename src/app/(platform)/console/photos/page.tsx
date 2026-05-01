@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -82,8 +83,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
           </div>
         )}
         {photos.length === 0 ? (
-          <div className="surface p-6 text-center text-sm text-[var(--text-muted)]">
-            No photos yet. Upload via mobile or console.
+          <div className="surface">
+            <EmptyState
+              size="compact"
+              title="No photos yet"
+              description="Upload via mobile or console to populate the gallery."
+            />
           </div>
         ) : (
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">

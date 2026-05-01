@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { StatusChip } from "@/components/ui/StatusChip";
 import { fmtDate } from "@/components/detail/DetailShell";
 import { AdvancingTransitionRow } from "./AdvancingTransitionRow";
 
@@ -71,11 +72,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                       <td>
                         <div className="flex items-center gap-2">
                           <StatusBadge status={d.status} />
-                          {data?.fulfilled_at && (
-                            <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600">
-                              Fulfilled
-                            </span>
-                          )}
+                          {data?.fulfilled_at && <StatusChip tone="success">Fulfilled</StatusChip>}
                         </div>
                       </td>
                       <td className="font-mono text-xs">{d.version}</td>

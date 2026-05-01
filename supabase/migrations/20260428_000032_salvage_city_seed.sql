@@ -1,10 +1,12 @@
--- flyingbluewhale · EDCLV26 Salvage City Supper Club seed
--- Creates one project + seven persona-scoped event_guides for the Salvage City
--- Boarding Pass KBYG. Idempotent: re-applying refreshes guide content but does
--- not duplicate the project. Persona banners are overridden with the user-facing
--- labels (PRODUCTION / OPERATIONS / FOOD & BEVERAGE / SPONSORS / TALENT /
--- GUESTS / TEMPORARY ACCESS) so the on-screen classification matches the
--- production org chart instead of the system defaults.
+-- flyingbluewhale · EDCLV26 Salvage City Supper Club seed (v3)
+-- Project + 7 persona-scoped event_guides for the Boarding Pass KBYG.
+-- Idempotent: re-applying refreshes guide content without duplicating the project.
+-- v3 sourced from the 2026 ProductionPlaybook_EDCLV26.SC and EDCLV26_SalvageCity_ProductionPlaybook
+-- Google Sheets. Lean Black-Coffee-style 4-section structure for guest-facing personas
+-- (Guests, Sponsors, Talent, Temporary Access); rich operational structure for internal
+-- personas (Production, Operations, F&B). Persona banners override the system defaults
+-- with the user-facing labels (PRODUCTION / OPERATIONS / FOOD & BEVERAGE / SPONSORS /
+-- TALENT / GUESTS / TEMPORARY ACCESS).
 
 -- 1. Project row -------------------------------------------------------------
 insert into projects (
@@ -14,7 +16,7 @@ select
   o.id,
   'edclv26-salvage-city',
   'EDCLV26 Salvage City Supper Club',
-  'Salvage City Supper Club at EDC Las Vegas 2026 — 60-min progressive supper club + immersive show inside Nomads Land at Las Vegas Motor Speedway. Five seatings nightly, May 15-17 2026. Produced by GHXSTSHIP with Insomniac, Five Senses, No Ceilings / Corazon Entertainment, Levy, Dirty Olive, R-Tech, 4Wall, Paradox, JTPro, The Pineapple Agency, and Ticket Fairy.',
+  'Salvage City Supper Club at EDC Las Vegas 2026 — a 60-minute progressive supper club paired with an immersive show, set inside Nomads Land at the Las Vegas Motor Speedway. Five seatings nightly, May 15 through 17, 2026, presented by Five Senses Group with GHXSTSHIP as production partner. Creative direction by No Ceilings Entertainment / Corazon Entertainment, food and beverage by Levy with Chef Eyal Banayan, dessert by Crème by Me, bar program by Dirty Olive, technical production by R-Tech, 4Wall, Paradox, and JTPro / ROCKFORCE, container build by The Pineapple Agency, and ticketing through Ticket Fairy.',
   'active',
   date '2026-05-15',
   date '2026-05-17',
@@ -24,272 +26,277 @@ cross join users u
 where o.slug = 'demo' and u.email = 'julian.clarkson@ghxstship.pro'
 on conflict (org_id, slug) do nothing;
 
--- 2. Seven persona-scoped guide rows ----------------------------------------
--- Resolve project + creator once, then upsert each guide.
+-- ===========================================================================
+-- 2a. PRODUCTION (staff, tier 1) — RICH
+-- ===========================================================================
 with ctx as (
-  select
-    p.id    as project_id,
-    p.org_id,
-    u.id    as user_id
-  from projects p
-  join orgs    o on o.id = p.org_id
+  select p.id as project_id, p.org_id, u.id as user_id
+  from projects p join orgs o on o.id = p.org_id
   cross join users u
-  where p.slug = 'edclv26-salvage-city'
-    and o.slug = 'demo'
-    and u.email = 'julian.clarkson@ghxstship.pro'
+  where p.slug='edclv26-salvage-city' and o.slug='demo' and u.email='julian.clarkson@ghxstship.pro'
 )
-
--- 2a. PRODUCTION (staff) ----------------------------------------------------
-insert into event_guides (
-  org_id, project_id, persona, tier, classification, title, subtitle, published, config, created_by
-)
+insert into event_guides (org_id, project_id, persona, tier, classification, title, subtitle, published, config, created_by)
 select org_id, project_id, 'staff'::guide_persona, 1, 'PRODUCTION',
   'Salvage City — Production',
-  'Command-center KBYG · 5/11–5/19 build · 5/15–5/17 show',
+  'Command-center KBYG covering load-in (May 8–14), three show nights (May 15–17), and strike (May 18–19).',
   true,
   $JSON${
-  "pageTitles": ["The Show", "Build & Strike", "Contacts", "Safety", "Site"],
+  "pageTitles": ["Show", "Build & Strike", "Contacts", "Safety", "Site"],
   "sections": [
     {
       "type": "overview",
-      "heading": "EDCLV26 Salvage City Supper Club",
-      "body": "Salvage City is a 60-minute progressive supper club + immersive show set inside Nomads Land at Las Vegas Motor Speedway during EDC Las Vegas 2026 (May 15-17). Five seatings nightly. GHXSTSHIP produces with Insomniac as venue partner; creative by No Ceilings / Corazon Entertainment; F&B by Five Senses, Levy & Chef Eyal Banayan; bar by Dirty Olive; technical by R-Tech, 4Wall, Paradox, and JTPro; container build by The Pineapple Agency; ticketing via Ticket Fairy.",
+      "heading": "Salvage City Supper Club at EDC Las Vegas 2026",
+      "body": "Salvage City is a 60-minute progressive supper club paired with an immersive show, set inside Nomads Land at the Las Vegas Motor Speedway. We run five 60-minute seatings each night across May 15, 16, and 17, 2026, with a maximum of 80 guests per seating served family-style on 20-tops. Five Senses Group is producer of record; GHXSTSHIP delivers production. Insomniac is the venue partner. Creative is led by No Ceilings Entertainment with Corazon Entertainment as performance producer. Food and beverage is led by Chef Eyal Banayan (Eyal Sauce Factory) with Crème by Me on dessert. Dirty Olive runs the bar program. Technical production is split across R-Tech (audio), 4Wall (lighting, decking, FX), Paradox Productions (lighting design), and JTPro / ROCKFORCE (stage labor). The Pineapple Agency handles container build. Ticket Fairy is our ticketing platform.",
       "callouts": [
-        {"kind": "red", "title": "Wind contingency 25 mph+", "body": "Insomniac shuts down rooftop bar and aerial elements above 25 mph sustained. Run the wind-contingency SOP — re-route guests under cover, suspend rooftop service, hold aerial and fire cues."},
-        {"kind": "gold", "title": "Lennd advancing", "body": "All Lennd advancing deadlines were missed. IT/Wi-Fi advanced direct with Kona; security with Toshiki Hisaka; creds/meals/parking/radios in the Lennd People tab via Katie Miller."},
-        {"kind": "pink", "title": "Reduced timeline", "body": "Container modification scope was de-scoped after the 4/13 Pineapple Agency call. Lock creative by 4/29 so dot-map and security plot can finalize."}
+        {"kind": "red",  "title": "Wind contingency at sustained 25 mph", "body": "Insomniac's standing rule is full shutdown of elevated and aerial elements at sustained 25 mph wind. The 'Wind 25' code on Channel 1 triggers roof closure, replaces aerial cues with floor-only choreography, and pauses the fire-act cue. Reference the Emergency Weather Action Plan linked in the production playbook."},
+        {"kind": "gold", "title": "Insomniac Safety & Social Media Form", "body": "Every member of the on-site team — production, talent, F&B, bar, vendors — must complete the INSOMNIAC 2026 Safety & Social Media form before first call. Use 'Salvage City — No Ceilings' in the Department / Vendor field. The form link is in the playbook MAPS & LINKS sheet."},
+        {"kind": "pink", "title": "One source of truth", "body": "The 2026 Production Playbook is the canonical reference for contacts, schedule, run of show, maps, credentials, radio assignments, and permits. This guide mirrors the playbook — when in doubt, the playbook wins."}
       ]
     },
     {
       "type": "timeline",
-      "heading": "Build · show · strike",
+      "heading": "Build, show, and strike",
       "entries": [
-        {"time": "Mon 5/11", "activity": "GHXSTSHIP Project Directors on site (Sarah Fry, Vida Sotakoun, Skylar Contini-Enneper)", "note": "Site walk + creds pickup"},
-        {"time": "Tue 5/12", "activity": "4Wall + R-Tech load-in begins (lighting, decking, FX, audio)", "note": "Production crew (Brett, Adam, Josh) on site"},
-        {"time": "Wed 5/13", "activity": "Dirty Olive bar load-in · NCE prop builds · piano shell delivered to Bellagio pickup", "note": "3x cocktail batching window opens"},
-        {"time": "Thu 5/14", "activity": "Talent + driver on site (Mariah Williams). Aerial rigging checks. Tech rehearsal.", "note": "Talent first call 1:00p"},
-        {"time": "Fri 5/15", "activity": "SHOW DAY 1 · invited run + 5 seatings", "note": "Doors per seating call sheet"},
-        {"time": "Sat 5/16", "activity": "SHOW DAY 2 · 5 seatings + after-party (extended hours)", "note": "Saturday burger grill activation added"},
-        {"time": "Sun 5/17", "activity": "SHOW DAY 3 · 5 seatings", "note": "Final-night talent gratitude moment"},
-        {"time": "Mon 5/18", "activity": "Strike day 1 — bar, F&B, scenic, costumes", "note": "Returns to Insomniac warehouse / vendors"},
-        {"time": "Tue 5/19", "activity": "Strike day 2 — technical, decking, container demob", "note": "All GHXSTSHIP off site EOD"}
+        {"time": "Sun 5/10", "activity": "Cast rehearsals continue offsite at The ROCK Center for Dance (09:00–18:00). Production load-in begins on site at 17:00 with trussing call.", "note": "Trussing through the night to 02:00."},
+        {"time": "Mon 5/11", "activity": "Cast rehearsals offsite (09:00–18:00). Lighting and audio load-in begins at 09:00 — 4Wall fixture install, R-Tech audio rig.", "note": "Catering lunch on site 11:00–14:00."},
+        {"time": "Tue 5/12", "activity": "Lighting and audio continues. F&B load-in begins at 09:00. Experiential load-in (furniture, retail fixtures) at 10:00; art, decor, and props at 12:00. Cast moves on site at 13:00.", "note": "First on-site rehearsal block."},
+        {"time": "Wed 5/13", "activity": "On-site cast rehearsals continue. Tech Rehearsal 1 at 18:00 and Tech Rehearsal 2 at 19:30 — full cue review.", "note": "All departments hot for first integrated run."},
+        {"time": "Thu 5/14", "activity": "Full F&B team arrival and prep at 15:00. Dress Rehearsal 1 at 16:00, Dress Rehearsal 2 at 18:00. Friends & Family soft open: cocktail hour at 20:00, seated dinner at 20:30.", "note": "Soft-open feedback rolls into Day 1 cues."},
+        {"time": "Fri 5/15", "activity": "Show Day 1 — call at 16:00, pre-show briefing 17:15, doors 18:00. Five seatings between 18:30 and 23:30. Wrap 23:30–00:00.", "note": "First public night."},
+        {"time": "Sat 5/16", "activity": "Show Day 2 — same call cadence. Speakeasy Social extended (18:00–19:00). Five seatings; Saturday rolls into the after-party (end time per venue).", "note": "Saturday is our peak night."},
+        {"time": "Sun 5/17", "activity": "Show Day 3 — final-night gratitude moment after the closing seating.", "note": "Last public service of the run."},
+        {"time": "Mon 5/18", "activity": "Strike Day 1 — F&B, bar, decor, lighting, and audio load out concurrently from 09:00.", "note": "Container BOH cleared first."},
+        {"time": "Tue 5/19", "activity": "Strike Day 2 — trussing and containers out. Site is clear by end of day.", "note": "All credentials returned to production."}
       ]
     },
     {
       "type": "schedule",
-      "heading": "Daily show-day schedule",
+      "heading": "Show-day call sheet",
       "entries": [
-        {"time": "14:00", "activity": "Production call · prep walk", "location": "Salvage City BOH"},
-        {"time": "16:00", "activity": "Talent call · warm-up", "location": "Greenroom container"},
-        {"time": "16:30", "activity": "Soundcheck", "location": "Main stage"},
-        {"time": "17:00", "activity": "Aerial + rigging checks", "location": "Aerial point"},
-        {"time": "17:30", "activity": "Dinner (staggered, talent + crew)", "location": "BOH"},
-        {"time": "18:30", "activity": "Final tech check · doors hold", "location": "All zones"},
-        {"time": "Per seating", "activity": "Doors → cocktails → opening course → main → show climax → dessert → exit", "note": "60 min runtime · 5 seatings/night"},
-        {"time": "Post-show", "activity": "After-party (Sat extended)", "location": "Rooftop / dance floor"},
-        {"time": "Wrap", "activity": "Tech reset · BOH clean · daysheet debrief", "location": "Salvage City"}
+        {"time": "16:00", "activity": "All-department call. Boxed lunch / dinner available in the greenroom.", "location": "Greenroom and BOH"},
+        {"time": "17:15", "activity": "Pre-show briefing — production manager runs the room, includes show caller, F&B leads, bar leads, security liaison.", "location": "BOH"},
+        {"time": "17:45", "activity": "Departments to position. Last bar batch top-off, last BOH allergen brief.", "location": "All zones"},
+        {"time": "18:00", "activity": "Salvage City Speakeasy Social — doors open, welcome cocktails poured.", "location": "Public Dining"},
+        {"time": "18:30", "activity": "Seating I begins (60 minutes).", "location": "Public Dining"},
+        {"time": "19:30", "activity": "Seating II begins. Mid-show bar batch staged between Seatings II and III.", "location": "Public Dining"},
+        {"time": "20:30", "activity": "Seating III begins.", "location": "Public Dining"},
+        {"time": "21:30", "activity": "Seating IV begins.", "location": "Public Dining"},
+        {"time": "22:30", "activity": "Seating V begins.", "location": "Public Dining"},
+        {"time": "23:30", "activity": "Post-show wrap — debrief, daysheet, BOH and bar reset for next day.", "location": "BOH"}
       ]
     },
     {
       "type": "set_times",
-      "heading": "Show beats (per seating)",
+      "heading": "Show beats per seating (60-minute runtime)",
       "entries": [
-        {"artist": "Pre-show ambience", "stage": "Cocktail floor", "start": "T-15", "end": "T-0"},
-        {"artist": "Scene 0 · Cocktail activation", "stage": "Dancefloor", "start": "00:00", "end": "00:11"},
-        {"artist": "Scene 1 · Sweatbox prelude + Opening", "stage": "Center → Main", "start": "00:11", "end": "00:17"},
-        {"artist": "Scene 3 · Hypnosis (live vocal)", "stage": "Main", "start": "00:17", "end": "00:21"},
-        {"artist": "Mid-show courses + ambient acts", "stage": "Tables / Roving", "start": "00:21", "end": "00:42"},
-        {"artist": "Fire act transition", "stage": "Center", "start": "00:42", "end": "00:46"},
-        {"artist": "Final number + bows", "stage": "Main", "start": "00:46", "end": "00:55"},
-        {"artist": "Dessert + exit music", "stage": "Tables", "start": "00:55", "end": "01:00"}
+        {"artist": "Pre-show ambience and Speakeasy Social", "stage": "Public Dining", "start": "T-30", "end": "T-0"},
+        {"artist": "Scene 1a — Sweatbox prelude", "stage": "Main Stage / Aerial", "start": "00:00", "end": "00:02"},
+        {"artist": "Scene 1b — Opening intro on '1975'", "stage": "Main Stage", "start": "00:02", "end": "00:05"},
+        {"artist": "Scene 1c — Full-cast opening", "stage": "Main Stage and roving", "start": "00:05", "end": "00:09"},
+        {"artist": "Scene 2 — Host script", "stage": "Main Stage and floor", "start": "00:09", "end": "00:13"},
+        {"artist": "Scene 3a — Godspeed (live vocal)", "stage": "Main Stage", "start": "00:13", "end": "00:17"},
+        {"artist": "Scene 3b — Hypnosis mash on Sean Paul remix", "stage": "Main Stage and floor", "start": "00:17", "end": "00:23"},
+        {"artist": "Mid-show roving acts during main course", "stage": "Public Dining floor and Roof", "start": "00:23", "end": "00:33"},
+        {"artist": "Fire-act transition (Match cue armed)", "stage": "Stage front fire-safe perimeter", "start": "00:33", "end": "00:38"},
+        {"artist": "Final number — full cast", "stage": "Main Stage", "start": "00:38", "end": "00:50"},
+        {"artist": "Dessert plate-up and house-out", "stage": "Public Dining", "start": "00:50", "end": "01:00"}
       ]
     },
     {
       "type": "contacts",
       "heading": "Production call sheet",
       "entries": [
-        {"header": "GHXSTSHIP (Production)"},
-        {"role": "Project Producer", "name": "Julian Clarkson", "email": "julian.clarkson@ghxstship.pro", "phone": "407.885.6011"},
-        {"role": "Project Director", "name": "Sarah Fry", "email": "frysarah8@gmail.com"},
-        {"role": "Project Director", "name": "Vida Sotakoun", "email": "Vidasotakoun@gmail.com"},
-        {"role": "Production Manager", "name": "Skylar Contini-Enneper", "email": "skylarenneper@gmail.com"},
-        {"role": "Project Coordinator (remote)", "name": "Amy Reed"},
-        {"role": "Production Crew (HEQ)", "name": "Brett Mosher", "email": "mosher457@yahoo.com"},
-        {"role": "Production Crew (Skilled)", "name": "Adam Waddle", "email": "Awaddle05@msn.com"},
-        {"role": "Production Crew (Skilled)", "name": "Josh Parra", "email": "joshuaparra@live.com"},
-        {"role": "PA / Driver", "name": "Mariah Williams", "email": "mw.mariahwilliams@gmail.com"},
-        {"role": "Operations Support", "email": "sos@ghxstship.pro"},
+        {"header": "Five Senses Group — Producer of Record"},
+        {"role": "Executive Producer", "name": "Paul Seigenthaler", "email": "paul.seigenthaler@insomniac.com", "phone": "(856) 373-6541"},
+        {"role": "Operations Director", "name": "Julian Clarkson", "email": "julian@five-senses.co", "phone": "(407) 885-6011"},
+        {"role": "Production Director", "name": "Sarah Fry", "email": "FrySarah8@gmail.com", "phone": "(615) 708-3676"},
+        {"role": "Production Manager — F&B", "name": "Kade Barrett", "email": "Kadebarrett808@icloud.com", "phone": "(443) 735-887"},
+        {"role": "Production Manager", "name": "Skylar Contini-Enneper", "email": "skylarenneper@gmail.com", "phone": "(702) 689-6907"},
+        {"role": "Production Manager", "name": "Corrine Lepere", "email": "Corrinelepere@gmail.com", "phone": "(845) 406-0261"},
+        {"role": "Hospitality Manager", "name": "Vida Sotakoun", "email": "Vidasotakoun@gmail.com", "phone": "(815) 298-8244"},
+        {"role": "Credentials, Travel & Logistics", "name": "Margo Williams", "email": "margo@five-senses.co", "phone": "(619) 302-7039"},
+        {"role": "Finance Controller", "name": "Alvaro Hernandez"},
+        {"header": "GHXSTSHIP — Production Crew"},
+        {"role": "Production Crew (Heavy Equipment)", "name": "Brett Mosher"},
+        {"role": "Production Crew (Skilled Carpentry / AV)", "name": "Adam Waddle"},
+        {"role": "Production Crew (Skilled Carpentry / AV)", "name": "Josh Parra"},
+        {"role": "Production Assistant / Driver", "name": "Mariah Williams"},
+        {"role": "Project Coordinator (Remote)", "name": "Amy Reed"},
+        {"header": "Stage Production"},
+        {"role": "R-Tech Audio Director", "name": "Ramiro Valenzuela", "email": "ramiro@rtechproductions.com", "phone": "(619) 454-1722"},
+        {"role": "R-Tech Technical Director", "name": "Andrew (AJ) Jacobson", "email": "aj@rtechproductions.com", "phone": "(619) 410-5889"},
+        {"role": "4Wall Lighting / Decking / FX"},
+        {"role": "Paradox Productions Lighting Design"},
+        {"role": "JTPro / ROCKFORCE Stage Labor"},
+        {"header": "Creative — No Ceilings Entertainment & Corazon Entertainment"},
+        {"role": "Corazon Lead", "name": "Rodrigo Guzman", "email": "info@corazonentertainment.com"},
+        {"role": "Corazon Coordinator", "name": "Celine Franco", "email": "info@corazonentertainment.com"},
+        {"role": "Corazon Producer", "name": "Brandy"},
+        {"header": "Food & Beverage — Levy + Chef Eyal Banayan"},
+        {"role": "Executive Chef / Culinary Lead", "name": "Eyal Banayan (Eyal Sauce Factory)", "email": "Chefbanayan@gmail.com", "phone": "(310) 666-5451"},
+        {"role": "Tendiez Lead (BOH 10)", "name": "Robert Anderson", "email": "robander765@gmail.com", "phone": "(702) 596-4344"},
+        {"role": "FOH 01 (Salvage)", "name": "Jon Long", "email": "jonathanlong65@icloud.com", "phone": "(310) 880-8344"},
+        {"header": "Dessert — Crème by Me"},
+        {"role": "Dessert Chef", "name": "Matthew Effendy", "email": "meffendy@cremebyme.com"},
+        {"role": "Dessert Chef", "name": "Ariana Genilla", "email": "agenilla@cremebyme.com"},
+        {"header": "Bar Operations — Dirty Olive"},
+        {"role": "Bar Operations Manager", "name": "Madeleine (Maddie) Bruner", "email": "madeleinebruner@gmail.com", "phone": "(702) 540-6383"},
+        {"role": "Bar Operations Manager", "name": "Brittany Ashton", "email": "bashton_00@yahoo.com", "phone": "(702) 622-5650"},
+        {"role": "Bar Operations Manager", "name": "Alex Bruner", "email": "abru3@yahoo.com", "phone": "(702) 575-1223"},
+        {"role": "Bar Operations Manager", "name": "Dave Severino", "email": "davidmseverino@gmail.com", "phone": "(702) 819-0558"},
+        {"role": "BOH Lead Barback", "name": "Cliff Cabral", "email": "cabral541@yahoo.com", "phone": "(702) 964-9215"},
+        {"header": "Container Build — Pineapple Agency · Print & Signage — Bobrov, Grafico"},
+        {"role": "Pineapple Agency", "name": "Lead TBC"},
+        {"role": "Bobrov Print", "name": "Lead TBC"},
+        {"role": "Grafico Signage", "name": "Lead TBC"},
+        {"header": "Concierge — Salvage City Supper Club"},
+        {"role": "Concierge", "email": "hello@salvagecitysupperclub.com"},
+        {"role": "Help desk", "email": "help@salvagecitysupperclub.com"},
+        {"role": "Social", "name": "@salvagecitysupperclub on Instagram"},
         {"header": "Insomniac (Venue Partner)"},
-        {"role": "SVP Production / Ops / Experience", "name": "Justin Spagg", "email": "justin@insomniac.com", "phone": "323.874.7020"},
-        {"role": "Production (Salvage liaison)", "name": "Paul Seigenthaler", "email": "paul.seigenthaler@insomniac.com"},
-        {"role": "Security", "name": "Toshiki Hisaka", "email": "toshiki.hisaka@insomniac.com"},
-        {"role": "Production Operations", "name": "Erik Grosfeld", "email": "erik.grosfeld@insomniac.com"},
-        {"role": "Production Operations", "name": "Daniel Mazza", "email": "daniel.mazza@insomniac.com"},
-        {"role": "IT / Wi-Fi", "name": "Kona", "email": "kona@insomniac.com"},
-        {"role": "Fire Safety", "name": "Bear", "email": "Bear@insomniac.com"},
-        {"role": "Fire Safety", "name": "Chris Ingerson", "email": "chris.ingerson@insomniac.com"},
-        {"role": "Permits", "name": "Ms Easy", "email": "mseasy@insomniac.com"},
-        {"role": "Warehouse Director", "name": "Melanie Conn", "email": "melanie.conn@insomniac.com"},
-        {"role": "Site Advances", "name": "Corey Canavan", "email": "corey.canavan@insomniac.com"},
-        {"role": "Advancing", "name": "Katie Miller", "email": "katie.miller@insomniac.com"},
-        {"role": "Site Plan", "name": "Jose Iglesias", "email": "jose.iglesias@insomniac.com"},
-        {"role": "Programming", "name": "Brad Riley", "email": "brad.riley@insomniac.com"},
-        {"role": "Programming", "name": "Geoff Godfrey", "email": "geoff.godfrey@insomniac.com"},
-        {"header": "Five Senses (F&B Lead)"},
-        {"role": "F&B Lead", "name": "Paul Seigenthaler", "email": "paul@five-senses.co"},
-        {"role": "F&B Operations", "name": "Alvaro Hernández", "email": "alvaro@five-senses.co"},
-        {"header": "No Ceilings / Corazon Entertainment (Creative)"},
-        {"role": "Creative Director", "name": "Rodrigo Guzman", "email": "info@corazonentertainment.co", "phone": "818.642.6258"},
-        {"role": "Creative Producer", "name": "Celine Franco", "email": "info@corazonentertainment.co"},
-        {"header": "Technical Vendors"},
-        {"role": "R-Tech (Audio + Stage)", "name": "Ramiro Valenzuela", "email": "ramiro@rtechproductions.com"},
-        {"role": "R-Tech (Audio + Stage)", "name": "AJ", "email": "aj@rtechproductions.com"},
-        {"role": "4Wall (Lighting + Decking)"},
-        {"role": "Paradox Productions (LD)"},
-        {"role": "JTPro / ROCKFORCE (Stage Labor)"},
-        {"role": "The Pineapple Agency (Containers)", "name": "Kelly", "email": "kelly@thepineappleagency.com"},
-        {"header": "F&B / Bar"},
-        {"role": "Levy (House F&B)"},
-        {"role": "Executive Chef", "name": "Eyal Banayan"},
-        {"role": "Dessert Chef", "name": "Crème by Me"},
-        {"role": "Bar Operations", "name": "Dirty Olive", "email": "thedirtyolivelv@gmail.com"},
-        {"header": "Print & Signage"},
-        {"role": "Print Production", "name": "Mark Bobrov / BobrovLLC", "email": "BobrovLLC@gmail.com"},
-        {"role": "Signage", "name": "Grafico (Sara / Travis / Spencer)", "email": "sara@grafico.com"},
-        {"header": "Costume"},
-        {"role": "Costume Design", "name": "Jonny Cota", "email": "jonny@jonnycota.com"},
-        {"header": "Ticketing + Travel"},
-        {"role": "Ticket Fairy", "name": "Ritesh", "email": "ritesh@theticketfairy.com"},
-        {"role": "Travel/Lodging", "name": "Fan Experiences (Mary / Dawn)", "email": "fanhousing@gmail.com"}
+        {"role": "Insomniac Production Counterpart", "name": "Paul Seigenthaler", "email": "paul.seigenthaler@insomniac.com", "phone": "(856) 373-6541"},
+        {"role": "Insomniac Security", "name": "Lead TBC"},
+        {"role": "Insomniac IT", "name": "Lead TBC"},
+        {"role": "Insomniac Fire Marshal Liaison", "name": "Lead TBC"},
+        {"role": "Insomniac Permits", "name": "Lead TBC"},
+        {"role": "Insomniac Warehouse", "name": "Lead TBC"},
+        {"role": "Insomniac Site Plan", "name": "Lead TBC"},
+        {"role": "Insomniac Programming", "name": "Lead TBC"},
+        {"role": "Insomniac Advancing", "name": "Lead TBC"},
+        {"header": "Travel & Lodging · Ticketing"},
+        {"role": "Travel and Lodging — Fan Experiences", "name": "Lead TBC"},
+        {"role": "Ticket Fairy Account Manager", "name": "Ritesh Patel", "email": "ritesh@theticketfairy.com"}
       ]
     },
     {
       "type": "credentials",
-      "heading": "Access matrix",
+      "heading": "Access matrix by zone",
       "columns": ["Production", "Operations", "F&B", "Sponsors", "Talent", "Guests", "Temporary"],
       "rows": [
-        {"area": "Public Dining Floor",   "access": {"Production": true, "Operations": true, "F&B": true, "Sponsors": true, "Talent": true, "Guests": true,  "Temporary": "Escorted"}},
-        {"area": "Main Stage / Show Deck","access": {"Production": true, "Operations": true, "F&B": "Service only", "Sponsors": false, "Talent": true, "Guests": false, "Temporary": false}},
-        {"area": "Backstage / Greenroom", "access": {"Production": true, "Operations": true, "F&B": false, "Sponsors": false, "Talent": true, "Guests": false, "Temporary": "Escorted"}},
-        {"area": "BOH Kitchen",           "access": {"Production": true, "Operations": true, "F&B": true, "Sponsors": false, "Talent": false, "Guests": false, "Temporary": false}},
-        {"area": "Bar (Main + Roof)",     "access": {"Production": true, "Operations": true, "F&B": true, "Sponsors": "Activation only", "Talent": false, "Guests": "Service only", "Temporary": false}},
-        {"area": "Container BOH (Storage)","access": {"Production": true, "Operations": true, "F&B": true, "Sponsors": false, "Talent": false, "Guests": false, "Temporary": false}},
-        {"area": "Roof Deck",             "access": {"Production": true, "Operations": true, "F&B": "Service only", "Sponsors": "VIP windows", "Talent": "Cued only", "Guests": "Cued only", "Temporary": false}},
-        {"area": "Aerial / Rigging Zone", "access": {"Production": true, "Operations": "Lead only", "F&B": false, "Sponsors": false, "Talent": "Performing only", "Guests": false, "Temporary": false}},
-        {"area": "Tunnel / Marshalling",  "access": {"Production": true, "Operations": true, "F&B": "Load times", "Sponsors": false, "Talent": "Call only", "Guests": false, "Temporary": "Escorted"}}
+        {"area": "Public Dining (during seating)", "access": {"Production": true, "Operations": true, "F&B": true, "Sponsors": "Activation windows", "Talent": "When cued", "Guests": true, "Temporary": "Escorted"}},
+        {"area": "Main Stage", "access": {"Production": true, "Operations": "Reset only", "F&B": "Service only", "Sponsors": false, "Talent": true, "Guests": false, "Temporary": false}},
+        {"area": "Backstage and Greenroom", "access": {"Production": true, "Operations": "Lead only", "F&B": false, "Sponsors": false, "Talent": true, "Guests": false, "Temporary": "Escorted"}},
+        {"area": "BOH Kitchen", "access": {"Production": true, "Operations": "Service handoff", "F&B": true, "Sponsors": false, "Talent": false, "Guests": false, "Temporary": false}},
+        {"area": "Bar (Main + Roof)", "access": {"Production": true, "Operations": "Runner support", "F&B": true, "Sponsors": "Activation only", "Talent": false, "Guests": "Service-side only", "Temporary": false}},
+        {"area": "Container BOH (Storage)", "access": {"Production": true, "Operations": true, "F&B": true, "Sponsors": false, "Talent": false, "Guests": false, "Temporary": "Delivery windows"}},
+        {"area": "Roof Deck", "access": {"Production": true, "Operations": "Service only", "F&B": "Service only", "Sponsors": "VIP windows", "Talent": "When cued", "Guests": "When cued", "Temporary": false}},
+        {"area": "Aerial / Rigging Zone", "access": {"Production": true, "Operations": false, "F&B": false, "Sponsors": false, "Talent": "While performing", "Guests": false, "Temporary": false}},
+        {"area": "Tunnel / Marshalling", "access": {"Production": true, "Operations": true, "F&B": "Load times", "Sponsors": false, "Talent": "At call only", "Guests": false, "Temporary": "Escorted"}}
       ]
     },
     {
       "type": "radio",
-      "heading": "Radio plan",
+      "heading": "Radio plan and code words",
       "channels": [
-        {"channel": "1 · SC OPS",       "purpose": "GHXSTSHIP production leads + Insomniac liaison"},
-        {"channel": "2 · SHOW CALL",    "purpose": "NCE / Corazon stage manager + tech ops"},
-        {"channel": "3 · FOH/BOH",      "purpose": "Hospitality + service handoff"},
-        {"channel": "4 · BAR",          "purpose": "Bar replenishment + batching"},
-        {"channel": "5 · SECURITY",     "purpose": "Insomniac security + creds checks"},
-        {"channel": "6 · F&B BOH",      "purpose": "Levy / Chef Eyal kitchen channel"}
+        {"channel": "1 — SC OPS", "purpose": "All-team scan. Production leads, Insomniac liaison, incident dispatch."},
+        {"channel": "2 — SHOW CALL", "purpose": "Show caller to talent, lighting, and audio. Stay clear during cues."},
+        {"channel": "3 — FOH/BOH", "purpose": "Front-of-house to back-of-house service handoffs and runners."},
+        {"channel": "4 — BAR", "purpose": "Bar replenishment, batching, and 86 calls."},
+        {"channel": "5 — SECURITY", "purpose": "Insomniac security perimeter, entrance, and exit control."},
+        {"channel": "6 — F&B BOH", "purpose": "Chef Eyal's kitchen line and expediter. Allergen calls land here."}
       ],
       "codeWords": [
-        {"code": "Ace",     "meaning": "Medical assist needed (location to follow)"},
-        {"code": "Spotlight","meaning": "VIP/sponsor moving through floor"},
-        {"code": "Switch",  "meaning": "Wi-Fi / POS failover to backup network"},
-        {"code": "Wind 25", "meaning": "Sustained 25 mph+ — initiate roof + aerial hold"},
-        {"code": "Match",   "meaning": "Fire performer cue armed — clear 20' perimeter"}
+        {"code": "Ace", "meaning": "Medical incident — dispatch the Insomniac medic with a location."},
+        {"code": "Spotlight", "meaning": "VIP escort moving through the floor — clear path."},
+        {"code": "Switch", "meaning": "POS failover — move the bar to the backup terminal."},
+        {"code": "Wind 25", "meaning": "Sustained 25 mph wind. Roof closes, aerial cues replaced with floor choreography, fire cue paused."},
+        {"code": "Match", "meaning": "Fire cue armed and ready — fire watch confirms perimeter."},
+        {"code": "Lost+1", "meaning": "Guest separated from their party. Concierge to reunite."},
+        {"code": "Backup", "meaning": "Additional staff requested at a position."}
       ]
     },
     {
       "type": "sops",
-      "heading": "Day-of SOPs",
+      "heading": "Day-of standard operating procedures",
       "entries": [
-        {"code": "SOP-01", "title": "Doors → seating", "steps": ["Confirm scan list with Ticket Fairy 60 min before doors", "Verify EDC wristband + Salvage reservation at outer rope", "Hand off to host for table assignment (max 80, family-style 20-tops)", "Seat by 15 min before showtime — late guests forfeit opening course", "Communicate dietary on arrival (no advance allergy intake)"]},
-        {"code": "SOP-02", "title": "Show-call handoff", "steps": ["NCE stage manager owns Channel 2 from cocktail through bows", "Scene preset confirms: sweatbox armed · aerial point · LED fans · sphere", "Hold for music timecode start", "Lighting follows ROS doc cues — Paradox LD primary, 4Wall secondary", "Bows + dessert handoff to FOH on Channel 3"]},
-        {"code": "SOP-03", "title": "Wind contingency (25 mph+)", "steps": ["Receive 'Wind 25' on Channel 1", "Suspend rooftop bar service immediately", "Hold aerial cues — performers stand down to backup choreography", "Hold fire act if active", "Re-route exterior shuttles to ADA-covered drop", "Resume only on production lead all-clear"]},
-        {"code": "SOP-04", "title": "Fire performer protocol", "steps": ["Performer must hold Nevada State Fire Marshal Fire Performer Permit", "20-foot perimeter cleared and fly-checked pre-show", "Pre-show fuel test in BOH per Insomniac fire safety", "Fire watch staged with extinguisher in ready position", "Cue 'Match' on Channel 1 to arm — abort cue if perimeter breached"]},
-        {"code": "SOP-05", "title": "Bar batching (3x/day)", "steps": ["Levy provides liquor + mixers — Dirty Olive batches 3x/day", "Pre-show batch (4:00p) → mid-show batch (between seatings 2-3) → after-party batch (Sat only)", "Roof coolers on dedicated power drop — confirm with 4Wall", "Glassware loss tracked per night per the 2026 replacement line"]},
-        {"code": "SOP-06", "title": "POS / Wi-Fi failover", "steps": ["Bar POS runs on primary network", "If POS drops, call 'Switch' on Channel 1 — Kona's IT switches to backup network", "Manual paper-tab fallback if both networks fail (>5 min)"]},
-        {"code": "SOP-07", "title": "Strike", "steps": ["Mon 5/18: bar + F&B + scenic + costumes out", "Tue 5/19: lighting + decking + audio + container demob", "Insomniac warehouse pallet returns coordinated with Melanie Conn", "All keys, radios, and creds returned to Production by EOD 5/19"]}
+        {"code": "SOP-01", "title": "Doors and seating",                "steps": ["Confirm the scan list with Ticket Fairy 60 minutes before doors.", "Verify each guest's EDC wristband and Salvage reservation at the outer rope.", "Hand off to a host within 30 seconds of greeting; host seats family-style on assigned 20-tops.", "Seat all guests no later than the start of Scene 1a — late arrivals forfeit the opening course (room locks at scene 1a).", "Server takes allergens and dietary needs at the table before opening course; relays via Channel 6 to BOH."]},
+        {"code": "SOP-02", "title": "Show-call handoff",                "steps": ["Show caller owns Channel 2 from Scene 0 through bows.", "Pre-show preset confirmation: aerial point, sweatbox cube, LED fans, sphere, fire perimeter.", "Hold all cues for the music timecode start.", "Lighting follows the ROS document — Paradox primary, 4Wall secondary.", "After bows, hand off to FOH for dessert plate-up on Channel 3."]},
+        {"code": "SOP-03", "title": "Wind contingency at 25 mph",      "steps": ["Listen for 'Wind 25' on Channel 1 from production lead or Insomniac.", "Suspend rooftop bar service and retrieve guests under cover.", "Hold all aerial cues — performers fall back to the floor-only choreography.", "Pause the fire-act cue if it is in the next 10 minutes.", "Resume only on the production lead's all-clear."]},
+        {"code": "SOP-04", "title": "Fire-performer protocol",         "steps": ["Performer holds a current Clark County Fire / Nevada State Fire Marshal Performer Permit.", "Clear and fly-check the 20-foot perimeter before doors each night.", "Pre-show fuel test in BOH per Insomniac fire safety; log on the daysheet.", "Stage fire watch with extinguisher in ready position for every show.", "Cue 'Match' on Channel 1 to arm — abort the cue if the perimeter is breached."]},
+        {"code": "SOP-05", "title": "Bar batching three times daily",   "steps": ["Pre-show batch lands at 13:00 each show day.", "Mid-show batch happens between Seatings II and III (≈20:30).", "After-party batch (Saturday only) tops the roof for post-Seating V extended service.", "Roof coolers run on a dedicated power drop — confirm with 4Wall before doors.", "Glassware loss tracked nightly; replacement budget line carries into 2026."]},
+        {"code": "SOP-06", "title": "POS and Wi-Fi failover",           "steps": ["Bar POS runs on the primary network.", "If POS drops, call 'Switch' on Channel 1 — IT switches to the backup network.", "If both networks fail for more than five minutes, fall back to manual paper tabs.", "Document any outage on the daysheet for sponsor reconciliation."]},
+        {"code": "SOP-07", "title": "Strike and load-out",              "steps": ["Mon May 18: F&B, bar, decor, lighting, and audio load out concurrently from 09:00.", "Tue May 19: trussing and containers out.", "Coordinate Insomniac warehouse pallet returns with the warehouse lead ahead of time.", "All credentials, radios, and keys returned to production by end of day on May 19."]}
       ]
     },
     {
       "type": "resources",
-      "heading": "Site resources",
+      "heading": "Site resources and reference points",
       "entries": [
-        {"name": "Insomniac Warehouse",   "location": "4660 Berg St #100, North Las Vegas NV 89081", "details": "Pallet borrow + scenic returns — Melanie Conn"},
-        {"name": "Ice Plan",              "location": "Bar BOH + roof coolers",                       "details": "Confirm power drops for roof; refresh 3x/day with batching"},
-        {"name": "Q-Mat / Water",         "location": "BOH + container storage",                      "details": "Pull from Insomniac F&B advance"},
-        {"name": "Big Shiny Ball",        "location": "Sphere position 3",                            "details": "2 procured for redundancy after 2025 shipping issue"},
-        {"name": "Sweatbox (Cube)",       "location": "Center dancefloor position 2",                 "details": "8 ft x 8 ft, 2-inch poles, install included (Corazon)"},
-        {"name": "Aerial Point",          "location": "Position 3 (lyra/hoop)",                       "details": "Standard motor; not time-coded — manual cue"},
-        {"name": "Piano Shell",           "location": "Bellagio North Valet Garage pickup",           "details": "Pickup confirmed for 5/13 12:00p"},
-        {"name": "Golf Cart Pickup",      "location": "Tunnel marshalling",                           "details": "Insomniac transportation desk"},
-        {"name": "ATMs / Cash",           "location": "Nomads Land main aisle",                       "details": "Public-facing"}
+        {"name": "Emergency Weather Action Plan", "location": "Google Doc", "details": "https://docs.google.com/document/d/1X77SUdMweLZhpuwdu9EjRC-S0F1vkqtvZZh4GzK5vXY/edit"},
+        {"name": "Salvage City Guest Shuttle Route", "location": "Google Slides", "details": "https://docs.google.com/presentation/d/1bHB7oayJY9DYXFeDGZ7-j4GL461tguZ2LWdQ38H56eQ/edit"},
+        {"name": "Container Table Schematics", "location": "Google Slides", "details": "https://docs.google.com/presentation/d/186Vu2OpCY-C6EEtvN9uijqA6YoQ7I6VoSGzG2doHkHo/edit"},
+        {"name": "Insomniac Safety & Social Media Form", "location": "Google Form", "details": "Required for every team member before first call. Department / Vendor: 'Salvage City — No Ceilings'."},
+        {"name": "EDC LV V7 site map", "location": "Production Playbook MAPS & LINKS", "details": "URL TBC — confirm in playbook before Day 1."},
+        {"name": "Salvage City close-up map V6", "location": "Production Playbook MAPS & LINKS", "details": "URL TBC — confirm in playbook before Day 1."},
+        {"name": "Run of Show 2026", "location": "Production Playbook MAPS & LINKS", "details": "URL TBC — current cue sheet carries forward from 2025."},
+        {"name": "Fire extinguishers", "location": "BOH (×2), Bar (×2), Container (×1), Roof (×1)", "details": "Inspect before doors every show day."},
+        {"name": "Aerial point", "location": "Position 3", "details": "Hoop and lyra rigged from a standard motor — manual cue, not time-coded."},
+        {"name": "Sweatbox cube", "location": "Center dancefloor at position 2", "details": "8 ft × 8 ft, 2-inch poles."}
       ]
     },
     {
       "type": "evacuation",
-      "heading": "Evacuation",
+      "heading": "Evacuation routes",
       "routes": [
-        {"from": "Public dining floor", "to": "Nomads Land main aisle",       "via": "Front gate"},
-        {"from": "Main stage / BOH",    "to": "Nomads Land main aisle",       "via": "Tunnel exit"},
-        {"from": "Roof deck",           "to": "Ground via interior stair",    "via": "Container ladder secondary"},
-        {"from": "Greenroom container", "to": "Tunnel marshalling",           "via": "BOH corridor"}
+        {"from": "Public Dining floor", "to": "Nomads Land main aisle", "via": "Speakeasy front (south doors)"},
+        {"from": "Main Stage and BOH",  "to": "Nomads Land main aisle", "via": "Stage-left fire egress and BOH service alley"},
+        {"from": "Roof Deck",           "to": "Ground level",            "via": "Roof stair A primary, stair B secondary"},
+        {"from": "Greenroom",           "to": "Nomads Land main aisle", "via": "Backstage corridor and BOH service alley"}
       ],
-      "assemblyPoint": "Nomads Land main aisle, north end (TBC with Insomniac EHS)"
+      "assemblyPoint": "Nomads Land main aisle, north end (final assembly point per Insomniac EHS — see EDCLV V7 site map)."
     },
     {
       "type": "fire_safety",
-      "heading": "Fire safety",
+      "heading": "Fire safety inventory",
       "entries": [
-        {"item": "ABC extinguishers",        "location": "BOH x2 · Bar x2 · Container x1 · Roof x1", "note": "Inspect pre-show daily"},
-        {"item": "Kitchen Ansul system",     "location": "Hot line",                                  "note": "Levy maintains; verify before service"},
-        {"item": "Fire watch (during show)", "location": "Within 20' of fire performer cue",           "note": "Per Insomniac fire safety"},
-        {"item": "Fire performer permit",    "location": "On file with Insomniac MSE / Bear",         "note": "Nevada State Fire Marshal Performer Permit required"},
-        {"item": "Fire blanket",             "location": "Bar + BOH",                                  "note": ""}
+        {"item": "ABC extinguishers", "location": "BOH (×2), bar (×2), container (×1), roof (×1)", "note": "Inspected before doors every show day."},
+        {"item": "Kitchen Ansul system", "location": "Hot line", "note": "Maintained by Levy; verify armed before every service."},
+        {"item": "Fire watch during the show", "location": "Within 20 feet of the fire-performer cue", "note": "Required by Insomniac fire safety throughout the cue window."},
+        {"item": "Fire-performer permit", "location": "On file with Insomniac Fire Marshal liaison", "note": "Clark County / Nevada State Fire Marshal Performer Permit required."},
+        {"item": "Fire blanket", "location": "Stage-side and BOH", "note": ""}
       ]
     },
     {
       "type": "accessibility",
-      "heading": "Accessibility",
+      "heading": "Accessibility provisions",
       "entries": [
-        {"item": "Wheelchair access", "detail": "Via main festival ADA path — coordinate seating with host on arrival"},
-        {"item": "ADA seating",       "detail": "Reserve table-end positions on family-style 20-tops"},
-        {"item": "Allergens",         "detail": "Communicate to server on arrival — kitchen accommodates with local ingredients"},
-        {"item": "Under 21",          "detail": "Soft drinks + non-alcoholic beverages; wristband marker required"},
-        {"item": "Quiet exit",        "detail": "Tunnel BOH egress for guests needing low-stim path"}
+        {"item": "Wheelchair access", "detail": "Guests use the main festival ADA path; the host coordinates seating on arrival."},
+        {"item": "ADA seating", "detail": "Reserve table-end positions on the family-style 20-tops for guests using mobility devices."},
+        {"item": "Allergens", "detail": "Server takes allergens and dietary needs at the table before opening course; kitchen accommodates with local ingredients."},
+        {"item": "Under-21 service", "detail": "Soft drinks and non-alcoholic beverages only; wristband marker required at the bar."},
+        {"item": "Quiet exit", "detail": "Tunnel BOH egress is available for guests who need a low-stimulation path out."}
       ]
     },
     {
       "type": "sustainability",
-      "heading": "Sustainability",
+      "heading": "Sustainability commitments",
       "entries": [
-        {"item": "Glassware + dinnerware reuse", "detail": "Tracked nightly; replacement budget line carried into 2026"},
-        {"item": "Composting",                   "detail": "BOH organic stream via Insomniac sustainability program"},
-        {"item": "Single-use reduction",         "detail": "Reusable plate-ware where ROS allows"},
-        {"item": "Insomniac sustainability",     "detail": "Salvage participates in venue-wide program"}
+        {"item": "Glassware and dinnerware reuse", "detail": "Tracked nightly; replacement budget line carries 2025 → 2026 to absorb breakage."},
+        {"item": "Composting", "detail": "BOH organics flow into the Insomniac sustainability program."},
+        {"item": "Single-use reduction", "detail": "Reusable plate-ware used wherever the show ROS allows."},
+        {"item": "Insomniac sustainability", "detail": "Salvage participates in the venue-wide sustainability program."}
       ]
     },
     {
       "type": "code_of_conduct",
       "heading": "Code of conduct",
       "entries": [
-        {"item": "Insomniac 2026 Safety Procedures + Social Media Policy", "detail": "Sign on file via Insomniac form — Department/Vendor: 'Salvage City — No Ceilings'"},
-        {"item": "Substance use",  "detail": "Zero tolerance during work hours — immediate termination per deal memo"},
-        {"item": "Guest interaction", "detail": "Maintain show character; concierge handles complaints — escalate to Production via Channel 1"},
-        {"item": "Filming + photography", "detail": "Production-approved only — talent waivers on file via NCE"}
+        {"item": "Insomniac 2026 Safety & Social Media Policy", "detail": "Every member of the Salvage team signs the Insomniac form before first call. Use 'Salvage City — No Ceilings' in the Department / Vendor field."},
+        {"item": "Substance use", "detail": "Zero tolerance during work hours per the deal memo — violations result in immediate termination."},
+        {"item": "Guest interaction", "detail": "Stay in show character. Concierge handles complaints; escalate to production via Channel 1 if needed."},
+        {"item": "Filming and photography", "detail": "Production-approved capture only; talent waivers on file with Corazon."}
       ]
     },
     {
       "type": "faq",
       "heading": "Production FAQ",
       "entries": [
-        {"q": "Where do creds, meals, parking, and radios advance?",  "a": "Lennd People tab via Katie Miller (katie.miller@insomniac.com)."},
-        {"q": "Where do IT and signage advance?",                      "a": "Direct portal links — IT with Kona, signage with Grafico."},
-        {"q": "Travel + lodging?",                                     "a": "Fan Experiences (Mary / Dawn). Outside-block options possible — billed direct."},
-        {"q": "Container modifications?",                              "a": "Pineapple Agency (Kelly). Scope reduced 4/13 — call to lock final mods."},
-        {"q": "When do we lock creative for security plot?",           "a": "Toshi requires creative locked ~1 week before show for dot-map."},
-        {"q": "Wind contingency threshold?",                            "a": "25 mph sustained — see SOP-03."},
-        {"q": "Fire performer requirements?",                          "a": "NV State Fire Marshal Performer Permit + 20' perimeter + pre-show fuel test — see SOP-04."}
+        {"q": "Where is the canonical schedule, contacts, and ROS?", "a": "The 2026 Production Playbook in Google Drive — single source of truth. This guide mirrors the playbook."},
+        {"q": "Who is producer of record?", "a": "Five Senses Group, with GHXSTSHIP delivering production."},
+        {"q": "Where do credentials, meals, parking, and radios advance?", "a": "Through Margo Williams (Five Senses, margo@five-senses.co)."},
+        {"q": "What's our wind-contingency threshold?", "a": "Sustained 25 mph triggers SOP-03 — see the SOPs section."},
+        {"q": "What's required for the fire performer?", "a": "A current Clark County / Nevada State Fire Marshal Performer Permit, a 20-foot perimeter, and a pre-show fuel test — see SOP-04."},
+        {"q": "Where is the Insomniac safety form?", "a": "Linked in the Production Playbook MAPS & LINKS sheet. Use 'Salvage City — No Ceilings' in the Department / Vendor field."}
       ]
     }
   ]
@@ -301,7 +308,9 @@ on conflict (project_id, persona) do update set
   subtitle = excluded.subtitle, published = excluded.published, config = excluded.config,
   updated_at = now();
 
--- 2b. OPERATIONS (crew) -----------------------------------------------------
+-- ===========================================================================
+-- 2b. OPERATIONS (crew, tier 2) — RICH
+-- ===========================================================================
 with ctx as (
   select p.id as project_id, p.org_id, u.id as user_id
   from projects p join orgs o on o.id = p.org_id
@@ -311,7 +320,7 @@ with ctx as (
 insert into event_guides (org_id, project_id, persona, tier, classification, title, subtitle, published, config, created_by)
 select org_id, project_id, 'crew'::guide_persona, 2, 'OPERATIONS',
   'Salvage City — Operations',
-  'Day-of crew KBYG · PAs · hospitality · runners',
+  'Day-of crew KBYG for production assistants, hospitality leads, and runners.',
   true,
   $JSON${
   "pageTitles": ["Run of Day", "Contacts", "Safety"],
@@ -319,47 +328,47 @@ select org_id, project_id, 'crew'::guide_persona, 2, 'OPERATIONS',
     {
       "type": "overview",
       "heading": "Operations brief",
-      "body": "Day-of operations crew running the floor: PAs, hospitality leads, runners, and the GHXSTSHIP production assistants. You report to Skylar Contini-Enneper (Production Manager) and Sarah Fry / Vida Sotakoun (Project Directors). Show is May 15-17 inside Nomads Land at LV Motor Speedway. Five seatings per night, 60 min each.",
+      "body": "This guide is for the day-of operations crew running the Salvage City floor: production assistants, hospitality leads, and runners who keep five 60-minute seatings on time across May 15, 16, and 17 inside Nomads Land. You report to Production Manager Skylar Contini-Enneper (or Corrine Lepere on alternate days), with Hospitality Manager Vida Sotakoun owning floor flow and Production Director Sarah Fry escalation. Five Senses is producer of record; GHXSTSHIP delivers production.",
       "callouts": [
-        {"kind": "gold", "title": "Stay on radio", "body": "Channel 1 SC OPS is your home channel. Channel 3 FOH/BOH for hospitality. Stay off Channel 2 (Show Call) unless cued."},
-        {"kind": "red", "title": "If you see something", "body": "Medical → 'Ace' on Ch 1. Lost guest → escort to host stand. Wind → relay 'Wind 25' if you hear it from leads."}
+        {"kind": "gold", "title": "Stay on the right radio channel", "body": "Channel 1 (SC OPS) is your home channel — keep it on for the full shift. Use Channel 3 (FOH/BOH) for hospitality handoffs and Channel 4 (BAR) only if you're running for the bar. Stay off Channel 2 (Show Call) unless you are specifically cued in."},
+        {"kind": "red",  "title": "If you see something, say something", "body": "For a medical incident, call 'Ace' on Channel 1 with the guest's location. For a lost guest, escort them to the host stand — never leave them unattended. If you hear leadership call 'Wind 25' for a wind hold, relay it to anyone within earshot."}
       ]
     },
     {
       "type": "timeline",
-      "heading": "Build & strike",
+      "heading": "Build days, show days, and strike",
       "entries": [
-        {"time": "Tue 5/12 → Thu 5/14", "activity": "Build days — closed-toe + hi-vis required", "note": "PAs assist Pineapple/4Wall as directed"},
-        {"time": "Thu 5/14", "activity": "Talent on site — runners begin", "note": ""},
-        {"time": "Fri-Sun 5/15-17", "activity": "Show days · 5 seatings/night", "note": "After-party Sat (extended)"},
-        {"time": "Mon-Tue 5/18-19", "activity": "Strike", "note": "Returns + cred returns"}
+        {"time": "Tue 5/12 — Thu 5/14", "activity": "Build days. Closed-toe footwear required all days; high-vis vests during build only.", "note": "PAs assist Pineapple Agency and 4Wall as directed."},
+        {"time": "Thu 5/14", "activity": "Talent on site; runners begin shifts. Friends & Family soft open at 20:00.", "note": ""},
+        {"time": "Fri 5/15 — Sun 5/17", "activity": "Show days — five seatings each night between 18:30 and 23:30.", "note": "Saturday rolls into the after-party."},
+        {"time": "Mon 5/18 — Tue 5/19", "activity": "Strike days — assist with returns, credential turn-in, and load-out.", "note": ""}
       ]
     },
     {
       "type": "schedule",
-      "heading": "Show day call",
+      "heading": "Show-day call",
       "entries": [
-        {"time": "13:00", "activity": "Crew call · radio check + creds", "location": "BOH"},
-        {"time": "14:00", "activity": "Floor reset · seating prep", "location": "Public dining"},
-        {"time": "16:00", "activity": "Talent arrivals — runners deploy", "location": "Greenroom"},
-        {"time": "17:30", "activity": "Crew dinner (staggered)", "location": "BOH"},
-        {"time": "18:30", "activity": "Doors hold + final brief", "location": "Front rope"},
-        {"time": "Per seating", "activity": "Doors → escort → seat → service → exit", "note": "60 min cycle"},
-        {"time": "Wrap", "activity": "Reset for next seating · debrief at EOD", "location": "BOH"}
+        {"time": "16:00", "activity": "Crew call — radio check, credentials check, assignments. Boxed lunch / dinner in greenroom.", "location": "BOH and Greenroom"},
+        {"time": "16:30", "activity": "Floor reset and seating prep — wipe tables, set 20-tops, place menus.", "location": "Public Dining"},
+        {"time": "17:15", "activity": "Pre-show briefing — production manager runs the room.", "location": "BOH"},
+        {"time": "17:45", "activity": "Departments to position. Final walk of the floor.", "location": "All zones"},
+        {"time": "18:00", "activity": "Doors — Salvage City Speakeasy Social. PAs hold the rope, runners deploy.", "location": "Front rope"},
+        {"time": "18:30 / 19:30 / 20:30 / 21:30 / 22:30", "activity": "Seatings I–V, 60 minutes each. Cycle: greet, escort, seat, run service, exit.", "location": "Public Dining"},
+        {"time": "23:30", "activity": "Post-show wrap — reset, debrief, daysheet handoff.", "location": "BOH"}
       ]
     },
     {
       "type": "contacts",
-      "heading": "Lead POCs",
+      "heading": "Lead points of contact",
       "entries": [
-        {"role": "Production Manager", "name": "Skylar Contini-Enneper", "email": "skylarenneper@gmail.com"},
-        {"role": "Project Director", "name": "Sarah Fry", "email": "frysarah8@gmail.com"},
-        {"role": "Project Director", "name": "Vida Sotakoun", "email": "Vidasotakoun@gmail.com"},
-        {"role": "Project Producer (escalation)", "name": "Julian Clarkson", "email": "julian.clarkson@ghxstship.pro"},
-        {"role": "Insomniac Liaison", "name": "Paul Seigenthaler", "email": "paul.seigenthaler@insomniac.com"},
-        {"role": "Insomniac Security", "name": "Toshiki Hisaka", "email": "toshiki.hisaka@insomniac.com"},
-        {"role": "F&B Lead", "name": "Paul Seigenthaler (Five Senses)", "email": "paul@five-senses.co"},
-        {"role": "Bar Lead", "name": "Dirty Olive", "email": "thedirtyolivelv@gmail.com"}
+        {"role": "Production Manager", "name": "Skylar Contini-Enneper", "email": "skylarenneper@gmail.com", "phone": "(702) 689-6907"},
+        {"role": "Production Manager", "name": "Corrine Lepere", "email": "Corrinelepere@gmail.com", "phone": "(845) 406-0261"},
+        {"role": "Production Director (escalation)", "name": "Sarah Fry", "email": "FrySarah8@gmail.com", "phone": "(615) 708-3676"},
+        {"role": "Hospitality Manager", "name": "Vida Sotakoun", "email": "Vidasotakoun@gmail.com", "phone": "(815) 298-8244"},
+        {"role": "Operations Director (final escalation)", "name": "Julian Clarkson", "email": "julian@five-senses.co", "phone": "(407) 885-6011"},
+        {"role": "F&B Lead", "name": "Kade Barrett", "email": "Kadebarrett808@icloud.com", "phone": "(443) 735-887"},
+        {"role": "Bar Operations Manager", "name": "Madeleine Bruner", "email": "madeleinebruner@gmail.com", "phone": "(702) 540-6383"},
+        {"role": "Insomniac Production Counterpart", "name": "Paul Seigenthaler", "email": "paul.seigenthaler@insomniac.com", "phone": "(856) 373-6541"}
       ]
     },
     {
@@ -367,84 +376,84 @@ select org_id, project_id, 'crew'::guide_persona, 2, 'OPERATIONS',
       "heading": "Where you can go",
       "columns": ["Crew"],
       "rows": [
-        {"area": "Public Dining Floor", "access": {"Crew": true}},
-        {"area": "Backstage / Greenroom", "access": {"Crew": true}},
+        {"area": "Public Dining floor", "access": {"Crew": true}},
+        {"area": "Backstage and Greenroom", "access": {"Crew": "Lead only"}},
         {"area": "BOH Kitchen", "access": {"Crew": "Service handoff only"}},
-        {"area": "Main Stage", "access": {"Crew": "During reset only — not during show"}},
+        {"area": "Main Stage", "access": {"Crew": "Reset windows only — never during the show"}},
         {"area": "Roof Deck", "access": {"Crew": "Service only"}},
         {"area": "Aerial Zone", "access": {"Crew": false}}
       ]
     },
     {
       "type": "radio",
-      "heading": "Radio plan",
+      "heading": "Radio channels",
       "channels": [
-        {"channel": "1 · SC OPS",   "purpose": "Your home channel"},
-        {"channel": "3 · FOH/BOH",  "purpose": "Hospitality + service handoff"},
-        {"channel": "5 · SECURITY", "purpose": "Listen-only unless escalating"}
+        {"channel": "1 — SC OPS", "purpose": "Your home channel — keep it on for the full shift."},
+        {"channel": "3 — FOH/BOH", "purpose": "Hospitality and service handoffs between front-of-house and back-of-house."},
+        {"channel": "5 — SECURITY", "purpose": "Listen-only unless you need to escalate to Insomniac security."}
       ],
       "codeWords": [
-        {"code": "Ace",     "meaning": "Medical assist needed"},
-        {"code": "Lost+1",  "meaning": "Lost guest escort needed"},
-        {"code": "Spotlight","meaning": "VIP moving — clear path"}
+        {"code": "Ace", "meaning": "Medical incident — follow up with the guest's location."},
+        {"code": "Lost+1", "meaning": "Lost-guest escort needed; meet at your location."},
+        {"code": "Spotlight", "meaning": "VIP escort moving across the floor — clear path."}
       ]
     },
     {
       "type": "sops",
-      "heading": "Crew SOPs",
+      "heading": "Crew standard operating procedures",
       "entries": [
-        {"code": "SOP-01", "title": "Ingress flow", "steps": ["Greet at outer rope", "Verify EDC wristband + Salvage reservation", "Hand off to host within 30 sec", "If line stalls, call 'Backup' on Ch 1"]},
-        {"code": "SOP-02", "title": "Dinner service handoff", "steps": ["Course-out cue from NCE stage manager on Ch 2", "FOH leads relay course on Ch 3", "Runners reset between courses", "Last-call dessert at T-5"]},
-        {"code": "SOP-03", "title": "Bar replenishment", "steps": ["Bartender calls 'Refill' on Ch 4", "Runner fetches from BOH cooler", "Track depletions per nightly inventory"]},
-        {"code": "SOP-04", "title": "Lost guest", "steps": ["Walk guest to host stand", "Host re-confirms seating", "Do not leave guest unescorted"]},
-        {"code": "SOP-05", "title": "Medical / incident hand-off", "steps": ["Call 'Ace' on Ch 1 with location", "Stay with guest until medic arrives", "Production logs incident — do not post anywhere"]}
+        {"code": "OP-01", "title": "Ingress flow", "steps": ["Greet each guest at the outer rope.", "Verify their EDC wristband and Salvage reservation.", "Hand off to a host within 30 seconds of greeting.", "If the line stalls, call 'Backup' on Channel 1 to surge support."]},
+        {"code": "OP-02", "title": "Dinner-service handoff", "steps": ["Course-out cues come from the show caller on Channel 2.", "FOH leads relay course on Channel 3 to runners.", "Runners reset tables between courses without crossing the show floor.", "Last-call dessert at T-5 — the close beat holds for it."]},
+        {"code": "OP-03", "title": "Bar replenishment runs", "steps": ["Bartender calls 'Refill' on Channel 4 when stock is low.", "A runner fetches the order from the BOH cooler.", "Track depletions on the nightly inventory sheet — sponsor brands are tracked per SKU."]},
+        {"code": "OP-04", "title": "Lost guest", "steps": ["Walk the guest to the host stand calmly.", "Host re-confirms seating against the manifest.", "Never leave the guest unescorted — wait until the host has them."]},
+        {"code": "OP-05", "title": "Medical or incident handoff", "steps": ["Call 'Ace' on Channel 1 with the guest's exact location.", "Stay with the guest until a medic arrives.", "Production logs the incident — do not post about it on social or with personal devices."]}
       ]
     },
     {
       "type": "ppe",
-      "heading": "PPE",
+      "heading": "Personal protective equipment",
       "entries": [
-        {"item": "Closed-toe footwear",  "required": true, "note": "All days, all zones"},
-        {"item": "Hi-vis vest",          "required": true, "note": "During build days only (Tue-Thu)"},
-        {"item": "Gloves (work)",        "required": false, "note": "For prop builds + scenic"},
-        {"item": "Hearing protection",   "required": false, "note": "For stage proximity during sound check"}
+        {"item": "Closed-toe footwear", "required": true, "note": "Required all days, all zones."},
+        {"item": "High-visibility vest", "required": true, "note": "Required during build days only (Tuesday – Thursday)."},
+        {"item": "Work gloves", "required": false, "note": "Recommended for prop builds and scenic loads."},
+        {"item": "Hearing protection", "required": false, "note": "Recommended near the stage during sound check."}
       ]
     },
     {
       "type": "evacuation",
-      "heading": "Evacuation",
+      "heading": "Evacuation routes",
       "routes": [
-        {"from": "Public dining floor", "to": "Nomads Land main aisle", "via": "Front gate"},
-        {"from": "BOH",                 "to": "Tunnel exit",            "via": "BOH corridor"}
+        {"from": "Public Dining floor", "to": "Nomads Land main aisle", "via": "Speakeasy front"},
+        {"from": "BOH",                 "to": "Nomads Land main aisle", "via": "BOH service alley"}
       ],
-      "assemblyPoint": "Nomads Land main aisle, north end"
+      "assemblyPoint": "Nomads Land main aisle, north end."
     },
     {
       "type": "fire_safety",
-      "heading": "Fire safety",
+      "heading": "Fire safety basics",
       "entries": [
-        {"item": "Extinguishers", "location": "BOH / Bar / Container / Roof", "note": "Know your nearest"},
-        {"item": "If you see fire", "location": "Anywhere", "note": "Call 'Match' on Ch 1 with location · do not engage"}
+        {"item": "Extinguishers", "location": "BOH, bar, container, and roof", "note": "Identify your nearest unit before doors each show."},
+        {"item": "If you see fire", "location": "Anywhere on site", "note": "Call 'Match' on Channel 1 with the location and step back — do not engage the fire yourself."}
       ]
     },
     {
       "type": "accessibility",
       "heading": "Accessibility",
       "entries": [
-        {"item": "ADA seating",  "detail": "Coordinate with host on arrival"},
-        {"item": "Allergens",    "detail": "Server logs on arrival — alert kitchen via Ch 6"},
-        {"item": "Quiet exit",   "detail": "Tunnel BOH path for low-stim guests"}
+        {"item": "ADA seating", "detail": "Coordinate seating with the host on the guest's arrival."},
+        {"item": "Allergens", "detail": "Servers log allergies on arrival and alert the kitchen via Channel 6."},
+        {"item": "Quiet exit", "detail": "Use the tunnel BOH path for guests who need a low-stimulation route out."}
       ]
     },
     {
       "type": "faq",
       "heading": "Crew FAQ",
       "entries": [
-        {"q": "Where do I check in?",         "a": "BOH at 13:00 on show days for radio check + creds."},
-        {"q": "Where do I eat?",              "a": "BOH staggered dinner at 17:30. Eat before doors — no eating on floor."},
-        {"q": "Can I take photos?",           "a": "Production-approved only. No social posts during work hours."},
-        {"q": "What if my radio dies?",       "a": "Swap at BOH radio cage — never leave the floor without one."},
-        {"q": "Where's the closest restroom?","a": "Insomniac public restrooms in Nomads Land aisle. Crew restroom at BOH."}
+        {"q": "Where do I check in?", "a": "Report to BOH at 16:00 on show days for radio check and credentials."},
+        {"q": "Where do I eat?", "a": "Boxed lunch / dinner in the greenroom from 16:00. Eat before doors — no eating on the floor."},
+        {"q": "Can I take photos?", "a": "Production-approved capture only. Do not post on social during work hours."},
+        {"q": "What if my radio dies?", "a": "Swap it at the BOH radio cage. Never leave the floor without a working radio."},
+        {"q": "Where's the closest restroom?", "a": "Insomniac public restrooms are along the Nomads Land aisle. Crew restrooms are at the BOH."}
       ]
     }
   ]
@@ -456,7 +465,9 @@ on conflict (project_id, persona) do update set
   subtitle = excluded.subtitle, published = excluded.published, config = excluded.config,
   updated_at = now();
 
--- 2c. FOOD & BEVERAGE (vendor) ----------------------------------------------
+-- ===========================================================================
+-- 2c. FOOD & BEVERAGE (vendor, tier 3) — RICH
+-- ===========================================================================
 with ctx as (
   select p.id as project_id, p.org_id, u.id as user_id
   from projects p join orgs o on o.id = p.org_id
@@ -466,7 +477,7 @@ with ctx as (
 insert into event_guides (org_id, project_id, persona, tier, classification, title, subtitle, published, config, created_by)
 select org_id, project_id, 'vendor'::guide_persona, 3, 'FOOD & BEVERAGE',
   'Salvage City — Food & Beverage',
-  'Kitchen · bar · F&B sponsor activations',
+  'Kitchen, bar, and F&B sponsor activations for the BOH and FOH crews.',
   true,
   $JSON${
   "pageTitles": ["Service", "Contacts", "Safety"],
@@ -474,102 +485,117 @@ select org_id, project_id, 'vendor'::guide_persona, 3, 'FOOD & BEVERAGE',
     {
       "type": "overview",
       "heading": "F&B brief",
-      "body": "Salvage City is a 60-minute progressive supper club: amuse-bouche, opening course, main, sides, dessert. Five seatings nightly, May 15-17. Family-style 20-tops, max 80 guests/seating. Levy operates the house F&B; Five Senses leads program; Chef Eyal Banayan is exec chef; Crème by Me handles dessert; Dirty Olive runs bar with sponsor activations from White Claw, Skyy, Bacardi (Mr Black, Tres Generaciones), Hello Soju, and Hiyo.",
+      "body": "Salvage City is a 60-minute progressive supper club: amuse-bouche, opening course, main, sides, and dessert, served family-style on 20-tops with a hard cap of 80 guests per seating across five seatings nightly (May 15–17). Levy operates the house F&B with Chef Eyal Banayan (Eyal Sauce Factory) leading culinary, and Crème by Me on dessert. Dirty Olive runs the bar program. Sponsor activations come from White Claw, Skyy, Bacardi (with Mr Black and Tres Generaciones), Hello Soju, and Hiyo — each poured against dedicated SKUs in the Square POS so depletions report cleanly per night.",
       "callouts": [
-        {"kind": "gold", "title": "Allergens on arrival", "body": "Salvage policy is allergen intake at the table on arrival — kitchen accommodates with local ingredients. No advance allergy intake."},
-        {"kind": "red",  "title": "Bar batching x3", "body": "Pre-show, mid-show (between seatings 2-3), and after-party (Sat only). Roof coolers on dedicated power drop."}
+        {"kind": "gold", "title": "Allergens are intaken on arrival", "body": "Salvage policy is to take allergen and dietary information at the table when guests arrive — before the opening course. The kitchen accommodates with local ingredients. We do not take advance allergy intake; communicate every time, every guest."},
+        {"kind": "red",  "title": "Bar batches three times a day", "body": "Pre-show batch lands at 13:00. Mid-show batch happens between Seatings II and III (≈20:30). After-party batch is Saturday only. Roof coolers run on a dedicated power drop — confirm the drop with 4Wall before doors each night."}
       ]
     },
     {
       "type": "schedule",
-      "heading": "F&B day",
+      "heading": "F&B day at a glance",
       "entries": [
-        {"time": "10:00", "activity": "BOH receive · prep begins", "location": "BOH"},
-        {"time": "13:00", "activity": "Bar batch #1 (pre-show)", "location": "Bar"},
-        {"time": "16:00", "activity": "Final mise · pickup brief", "location": "BOH"},
-        {"time": "17:00", "activity": "Service start (seating 1)", "location": "Floor"},
-        {"time": "Mid-show", "activity": "Bar batch #2", "location": "Bar"},
-        {"time": "After-party (Sat)", "activity": "Bar batch #3 + burger grill", "location": "Roof / Floor"},
-        {"time": "Wrap", "activity": "BOH clean · depletion log", "location": "BOH"}
+        {"time": "10:00", "activity": "BOH receive and prep begin — verify temps and invoices.", "location": "BOH"},
+        {"time": "13:00", "activity": "Bar batch #1 (pre-show).", "location": "Bar"},
+        {"time": "16:00", "activity": "Final mise-en-place; pickup brief with show caller.", "location": "BOH"},
+        {"time": "17:00", "activity": "Service starts (Seating I doors at 18:00, dinner at 18:30).", "location": "Floor and Bar"},
+        {"time": "≈20:30", "activity": "Bar batch #2 between Seatings II and III.", "location": "Bar"},
+        {"time": "Sat post-show", "activity": "Bar batch #3 plus burger-grill activation (Saturday only).", "location": "Roof and Public Dining"},
+        {"time": "Wrap", "activity": "BOH cleaning, depletion log, and waste log.", "location": "BOH"}
       ]
     },
     {
       "type": "contacts",
       "heading": "F&B leads",
       "entries": [
-        {"role": "F&B Lead",        "name": "Paul Seigenthaler", "email": "paul@five-senses.co"},
-        {"role": "F&B Operations",  "name": "Alvaro Hernández",  "email": "alvaro@five-senses.co"},
-        {"role": "Executive Chef",  "name": "Eyal Banayan"},
-        {"role": "Dessert Chef",    "name": "Crème by Me"},
-        {"role": "House F&B",       "name": "Levy Restaurants"},
-        {"role": "Bar Operations",  "name": "Dirty Olive", "email": "thedirtyolivelv@gmail.com"},
-        {"role": "Kitchen Rentals", "name": "TCI Event Rentals"},
-        {"role": "Kitchen Rentals", "name": "RSVP Rentals"},
-        {"role": "Production POC",  "name": "Sarah Fry",         "email": "frysarah8@gmail.com"},
-        {"role": "Sponsor Reps",    "name": "White Claw · Skyy · Bacardi · Mr Black · Hello Soju · Hiyo"}
+        {"header": "Culinary"},
+        {"role": "Executive Chef / Culinary Lead", "name": "Eyal Banayan (Eyal Sauce Factory)", "email": "Chefbanayan@gmail.com", "phone": "(310) 666-5451"},
+        {"role": "Tendiez Lead (BOH 10)", "name": "Robert Anderson", "email": "robander765@gmail.com", "phone": "(702) 596-4344"},
+        {"role": "FOH 01 (Salvage)", "name": "Jon Long", "email": "jonathanlong65@icloud.com", "phone": "(310) 880-8344"},
+        {"role": "FOH 02", "name": "Michael Litchfield", "email": "djlitchplease@gmail.com", "phone": "(781) 775-4146"},
+        {"role": "FOH 03", "name": "Braheem Washington", "email": "Washington.b288@gmail.com", "phone": "(215) 237-8638"},
+        {"role": "FOH 04", "name": "John Maitam", "email": "Maitam0808@gmail.com", "phone": "(310) 425-9955"},
+        {"header": "Dessert — Crème by Me"},
+        {"role": "Dessert Chef", "name": "Matthew Effendy", "email": "meffendy@cremebyme.com"},
+        {"role": "Dessert Chef", "name": "Ariana Genilla", "email": "agenilla@cremebyme.com"},
+        {"role": "Dessert Chef", "name": "Julius Acoba", "email": "juliusacoba@hotmail.com"},
+        {"role": "Dessert Chef", "name": "Jamie Jin", "email": "Jjin022892@gmail.com"},
+        {"role": "Dessert Chef", "name": "Mark Madarang", "email": "marc.angelico24@gmail.com"},
+        {"role": "Dessert Chef", "name": "Zac Grosso", "email": "zgrosso@gmail.com"},
+        {"header": "Bar Operations — Dirty Olive"},
+        {"role": "Bar Operations Manager", "name": "Madeleine (Maddie) Bruner", "email": "madeleinebruner@gmail.com", "phone": "(702) 540-6383"},
+        {"role": "Bar Operations Manager", "name": "Brittany Ashton", "email": "bashton_00@yahoo.com", "phone": "(702) 622-5650"},
+        {"role": "Bar Operations Manager", "name": "Alex Bruner", "email": "abru3@yahoo.com", "phone": "(702) 575-1223"},
+        {"role": "Bar Operations Manager", "name": "Dave Severino", "email": "davidmseverino@gmail.com", "phone": "(702) 819-0558"},
+        {"role": "BOH Lead Barback", "name": "Cliff Cabral", "email": "cabral541@yahoo.com", "phone": "(702) 964-9215"},
+        {"header": "Production"},
+        {"role": "F&B Production Manager", "name": "Kade Barrett", "email": "Kadebarrett808@icloud.com", "phone": "(443) 735-887"},
+        {"role": "Production Director", "name": "Sarah Fry", "email": "FrySarah8@gmail.com", "phone": "(615) 708-3676"},
+        {"role": "Sponsor Activations Lead", "name": "Margo Williams (Five Senses)", "email": "margo@five-senses.co", "phone": "(619) 302-7039"},
+        {"role": "Ticketing", "name": "Ritesh Patel (Ticket Fairy)", "email": "ritesh@theticketfairy.com"}
       ]
     },
     {
       "type": "sops",
-      "heading": "F&B SOPs",
+      "heading": "F&B standard operating procedures",
       "entries": [
-        {"code": "FB-01", "title": "Kitchen open / close", "steps": ["Receive 10:00 — verify temps + invoices", "Mise complete by 16:00 brief", "Service window 17:00 → final dessert call", "Close: cool, label, log waste, sanitize, hood off"]},
-        {"code": "FB-02", "title": "Allergen handling", "steps": ["Server intakes allergen at table on arrival", "Server flags ticket + relays via Ch 6 to BOH", "Chef confirms substitution before pickup", "Dedicated allergen pickup window — no cross-contact"]},
-        {"code": "FB-03", "title": "Bar batching (3x/day)", "steps": ["Levy provides liquor + mixers", "Dirty Olive batches per recipe card · log volumes", "Pre-show 13:00 → mid-show between seatings 2-3 → after-party Sat only", "Glassware loss logged per night → 2026 replacement budget"]},
-        {"code": "FB-04", "title": "Sponsor product handling", "steps": ["White Claw + Skyy + Bacardi + Mr Black + Hello Soju + Hiyo product on dedicated SKUs", "Track depletions via Square POS for sponsor reporting", "Activation pours in branded glassware where required"]},
-        {"code": "FB-05", "title": "POS / Wi-Fi failover", "steps": ["Primary network for POS", "If POS drops, call 'Switch' on Ch 1 — Kona triggers backup", "Paper-tab fallback if both networks fail >5 min"]}
+        {"code": "FB-01", "title": "Kitchen open and close", "steps": ["Receive deliveries at 10:00 and verify temps and invoices on arrival.", "Mise-en-place complete by the 16:00 brief.", "Service window runs from 17:00 to the final dessert call.", "Close the line by cooling, labeling, logging waste, sanitizing, and shutting down the hood."]},
+        {"code": "FB-02", "title": "Allergen handling", "steps": ["Server takes allergens at the table on arrival before opening course.", "Server flags the ticket and relays the allergen via Channel 6 to BOH.", "Chef-on-duty confirms the substitution before pickup.", "A dedicated allergen pickup window prevents cross-contact; severe allergens (nut, shellfish) get plate-by-plate confirmation."]},
+        {"code": "FB-03", "title": "Bar batching three times daily", "steps": ["Levy provides liquor and mixers; Dirty Olive batches to recipe cards.", "Log batched volumes on the depletion sheet.", "Pre-show batch lands at 13:00, mid-show between Seatings II and III, after-party Saturday only.", "Track glassware loss nightly against the 2026 replacement budget line."]},
+        {"code": "FB-04", "title": "Sponsor product handling", "steps": ["Pour White Claw, Skyy, Bacardi, Mr Black, Hello Soju, and Hiyo into their dedicated Square POS SKUs.", "Track depletions through Square exports for sponsor reporting.", "Use branded glassware for activation pours where the sponsor requires it."]},
+        {"code": "FB-05", "title": "POS and Wi-Fi failover", "steps": ["Bar POS runs on the primary network.", "If POS drops, call 'Switch' on Channel 1 — IT triggers the backup network.", "If both networks fail for more than five minutes, fall back to manual paper tabs."]}
       ]
     },
     {
       "type": "ppe",
-      "heading": "PPE",
+      "heading": "Personal protective equipment",
       "entries": [
-        {"item": "Slip-resistant footwear", "required": true, "note": "BOH all hours"},
-        {"item": "Hairnet / hat",            "required": true, "note": "BOH"},
-        {"item": "Gloves (food-safe)",       "required": true, "note": "Per food code"},
-        {"item": "Closed-toe footwear",      "required": true, "note": "FOH service"},
-        {"item": "Apron / jacket",           "required": true, "note": "Branded per Salvage standards"}
+        {"item": "Slip-resistant footwear", "required": true, "note": "BOH at all hours."},
+        {"item": "Hairnet or hat", "required": true, "note": "BOH per food code."},
+        {"item": "Food-safe gloves", "required": true, "note": "Required at all stations per food code."},
+        {"item": "Closed-toe footwear", "required": true, "note": "FOH service."},
+        {"item": "Apron or jacket", "required": true, "note": "Branded per Salvage standards."}
       ]
     },
     {
       "type": "resources",
       "heading": "F&B resources",
       "entries": [
-        {"name": "Kitchen Equipment Drop", "location": "BOH", "details": "Confirm with TCI + RSVP — invoice tracking with Five Senses"},
-        {"name": "Ice plan",              "location": "Bar BOH + roof coolers", "details": "Power drops confirmed with 4Wall"},
-        {"name": "Chemical storage",      "location": "BOH back wall", "details": "Locked cage — chef + bar leads only"},
-        {"name": "Dishpit",               "location": "BOH", "details": "Glassware loss tracking nightly"},
-        {"name": "Q-Mat / Water",         "location": "BOH + container storage", "details": ""},
-        {"name": "BOH water station",     "location": "BOH", "details": "Hydration drops every seating change"}
+        {"name": "Kitchen equipment drop", "location": "BOH", "details": "Confirmed with TCI and RSVP; invoice tracking sits with Five Senses."},
+        {"name": "Ice plan", "location": "Bar BOH and roof coolers", "details": "Power drops confirmed with 4Wall before doors."},
+        {"name": "Chemical storage", "location": "BOH back wall", "details": "Locked cage — chef and bar leads only."},
+        {"name": "Dishpit", "location": "BOH", "details": "Glassware loss tracked nightly."},
+        {"name": "Q-Mat and water", "location": "BOH and container storage", "details": "Pulled from the Insomniac F&B advance."},
+        {"name": "BOH water station", "location": "BOH", "details": "Hydration drops every seating change."}
       ]
     },
     {
       "type": "radio",
-      "heading": "Radio",
+      "heading": "Radio channels",
       "channels": [
-        {"channel": "6 · F&B BOH", "purpose": "Kitchen channel — chef + leads"},
-        {"channel": "4 · BAR",     "purpose": "Bar replenishment"},
-        {"channel": "3 · FOH/BOH", "purpose": "Service handoff (FOH → BOH)"}
+        {"channel": "6 — F&B BOH", "purpose": "Kitchen channel for chef, sous, and BOH leads. Allergen calls land here."},
+        {"channel": "4 — BAR", "purpose": "Bar replenishment requests, batching coordination, and 86 calls."},
+        {"channel": "3 — FOH/BOH", "purpose": "Service handoffs between front-of-house and back-of-house."}
       ]
     },
     {
       "type": "sustainability",
-      "heading": "Sustainability",
+      "heading": "Sustainability commitments",
       "entries": [
-        {"item": "Composting",                "detail": "BOH organic stream via Insomniac program"},
-        {"item": "Single-use reduction",      "detail": "Reusable plate-ware where ROS allows"},
-        {"item": "Glassware reuse",           "detail": "Tracked nightly · replacement line in 2026 budget"}
+        {"item": "Composting", "detail": "BOH organics flow into the Insomniac sustainability program."},
+        {"item": "Single-use reduction", "detail": "Use reusable plate-ware wherever the show ROS allows."},
+        {"item": "Glassware reuse", "detail": "Tracked nightly with a replacement line in the 2026 budget for breakage."}
       ]
     },
     {
       "type": "faq",
       "heading": "F&B FAQ",
       "entries": [
-        {"q": "Do we take advance allergy notes?",  "a": "No — server intakes at the table on arrival per Salvage policy."},
-        {"q": "Capacity per seating?",              "a": "Max 80 guests, family-style 20-tops."},
-        {"q": "Under-21 service?",                  "a": "Soft drinks + non-alcoholic. Wristband marker required."},
-        {"q": "Sponsor activation reporting?",      "a": "Square POS depletions exported per night."},
-        {"q": "Late guest dessert call?",           "a": "T-5 last call; show climax holds for the close."}
+        {"q": "Do we take advance allergy notes?", "a": "No — servers take allergies at the table on arrival, before opening course."},
+        {"q": "What's the capacity per seating?", "a": "A maximum of 80 guests, served family-style on 20-tops."},
+        {"q": "How do we handle under-21 service?", "a": "Soft drinks and non-alcoholic beverages only. A wristband marker is required at the bar."},
+        {"q": "How is sponsor activation reported?", "a": "Square POS depletions are exported each night for sponsor reports — White Claw, Skyy, Bacardi, Mr Black, Hello Soju, and Hiyo each have dedicated SKUs."},
+        {"q": "When is the late-guest dessert call?", "a": "Last call is at T-5. The show climax holds for the close."}
       ]
     }
   ]
@@ -581,7 +607,9 @@ on conflict (project_id, persona) do update set
   subtitle = excluded.subtitle, published = excluded.published, config = excluded.config,
   updated_at = now();
 
--- 2d. SPONSORS --------------------------------------------------------------
+-- ===========================================================================
+-- 2d. SPONSORS (sponsor, tier 4) — LEAN (Black-Coffee 4-section model)
+-- ===========================================================================
 with ctx as (
   select p.id as project_id, p.org_id, u.id as user_id
   from projects p join orgs o on o.id = p.org_id
@@ -590,90 +618,50 @@ with ctx as (
 )
 insert into event_guides (org_id, project_id, persona, tier, classification, title, subtitle, published, config, created_by)
 select org_id, project_id, 'sponsor'::guide_persona, 4, 'SPONSORS',
-  'Salvage City — Sponsors',
-  'Brand activations · photo moments · footprint',
+  'Salvage City Supper Club — Sponsor Guide',
+  'EDC Las Vegas 2026 · brand activations and sanctioned photo moments inside Nomads Land.',
   true,
   $JSON${
-  "pageTitles": ["The Experience", "Activations", "Schedule"],
+  "pageTitles": ["The Experience", "Schedule", "FAQ", "Contacts"],
   "sections": [
     {
       "type": "overview",
       "heading": "Welcome, partners",
-      "body": "Salvage City Supper Club at EDC Las Vegas 2026 is an immersive 60-min progressive supper club inside Nomads Land. Five seatings nightly, May 15-17 — capacity 80 guests/seating. Your activation lives within a fully-art-directed post-civilization world, with brand-aligned moments built into the bar program, photo opportunities, and on-show signage.",
+      "body": "Salvage City Supper Club is a 60-minute progressive supper club paired with an immersive show, set inside Nomads Land at the Las Vegas Motor Speedway across May 15, 16, and 17, 2026. We run five seatings nightly with a hard cap of 80 guests per seating — roughly 1,200 unique guests across the run. Your activation lives within a fully art-directed post-civilization world, with brand-aligned moments built into the bar program and sanctioned capture zones throughout the footprint. Square POS exports cover depletion reporting per seating for every activated SKU.",
       "callouts": [
-        {"kind": "gold", "title": "Brand activations", "body": "White Claw, Skyy, Bacardi, Mr Black, Hello Soju, and Hiyo run signature pours in branded glassware with Square POS depletion reporting per seating."},
-        {"kind": "pink", "title": "Photo moments", "body": "Sweatbox cube, Big Shiny Ball, neon merch wall, rooftop bar — all sanctioned for brand capture."}
+        {"kind": "gold", "title": "How activations are running this year", "body": "White Claw, Skyy, Bacardi (with Mr Black and Tres Generaciones), Hello Soju, and Hiyo are pouring through dedicated SKUs in branded glassware. Square POS depletions export per seating for nightly sponsor reporting."}
       ]
     },
     {
       "type": "schedule",
-      "heading": "Sponsor-relevant moments",
+      "heading": "Sponsor-relevant moments per night",
       "entries": [
-        {"time": "Pre-show", "activity": "Cocktail reception · activation pours · brand capture", "location": "Cocktail floor"},
-        {"time": "Doors",    "activity": "Guest seating · brand visibility on family-style tables", "location": "Public dining"},
-        {"time": "Mid-show", "activity": "Dinner service · sponsor product on table", "location": "Tables"},
-        {"time": "Show climax", "activity": "Hero moment — sphere + aerial + fire", "location": "Main stage"},
-        {"time": "After-party (Sat)", "activity": "Extended hours · burger grill · rooftop bar", "location": "Roof"}
-      ]
-    },
-    {
-      "type": "set_times",
-      "heading": "Show beats",
-      "entries": [
-        {"artist": "Cocktail activation", "stage": "Cocktail floor", "start": "T-15", "end": "T-0"},
-        {"artist": "Opening number",      "stage": "Main",            "start": "00:00", "end": "00:17"},
-        {"artist": "Mid-show ambient",    "stage": "Tables",          "start": "00:17", "end": "00:42"},
-        {"artist": "Fire + final number", "stage": "Main",            "start": "00:42", "end": "01:00"}
-      ]
-    },
-    {
-      "type": "contacts",
-      "heading": "Commercial leads",
-      "entries": [
-        {"role": "Project Producer", "name": "Julian Clarkson", "email": "julian.clarkson@ghxstship.pro"},
-        {"role": "F&B / Activation Lead", "name": "Paul Seigenthaler (Five Senses)", "email": "paul@five-senses.co"},
-        {"role": "Insomniac Liaison", "name": "Paul Seigenthaler (Insomniac)", "email": "paul.seigenthaler@insomniac.com"},
-        {"role": "Concierge", "email": "hello@salvagecitysupperclub.com"}
-      ]
-    },
-    {
-      "type": "resources",
-      "heading": "Activation footprint",
-      "entries": [
-        {"name": "Branded bar pour",      "location": "Main bar",   "details": "Signature cocktails · Square POS reporting"},
-        {"name": "Rooftop bar",           "location": "Roof",       "details": "Premium pours · sunset moment"},
-        {"name": "Photo wall · neon",     "location": "Entry",      "details": "Custom Salvage neon signage"},
-        {"name": "Sweatbox cube",         "location": "Center",     "details": "Performance moment — brand-safe capture"},
-        {"name": "Salvage merch booth",   "location": "Entry",      "details": "Shared brand visibility — coordinate with concierge"},
-        {"name": "Big Shiny Ball",        "location": "Sphere",     "details": "Hero photo moment"}
-      ]
-    },
-    {
-      "type": "accessibility",
-      "heading": "Accessibility",
-      "entries": [
-        {"item": "ADA access", "detail": "Main festival ADA path · coordinate with concierge"},
-        {"item": "Photographer pool", "detail": "Production-approved only — request via concierge"}
-      ]
-    },
-    {
-      "type": "code_of_conduct",
-      "heading": "On-site conduct",
-      "entries": [
-        {"item": "Brand capture",    "detail": "Photography permitted in sanctioned zones; talent and guest faces require waiver"},
-        {"item": "Ambush activation", "detail": "Not permitted — all activations coordinated via Five Senses"},
-        {"item": "Insomniac policy",  "detail": "All guests follow EDC LV terms of attendance"}
+        {"time": "18:00", "activity": "Salvage City Speakeasy Social — guests arrive, cocktails poured, brand-capture window opens.", "location": "Public Dining"},
+        {"time": "18:30 / 19:30 / 20:30 / 21:30 / 22:30", "activity": "Seatings I–V — 60 minutes each. Sponsor product visible on family-style 20-tops.", "location": "Public Dining"},
+        {"time": "Show climax (≈40 min into seating)", "activity": "Hero moment — sphere lights, aerial soars, fire-act transition into the final number.", "location": "Main Stage"},
+        {"time": "Sat after-party (post-Seating V)", "activity": "Saturday extended hours — rooftop bar and burger-grill activation.", "location": "Roof"}
       ]
     },
     {
       "type": "faq",
       "heading": "Sponsor FAQ",
       "entries": [
-        {"q": "How do we report activation results?",     "a": "Square POS depletions exported per night by F&B Operations."},
-        {"q": "Can we send a photographer?",              "a": "Yes — credentialed via concierge. No personal cell capture of talent."},
-        {"q": "Capacity per seating?",                    "a": "80 guests, five seatings nightly — 1,200 unique guests across the run."},
-        {"q": "After-party access?",                      "a": "Saturday only · extended hours · rooftop + grill."},
-        {"q": "Where is Salvage at the venue?",           "a": "Inside Nomads Land at Las Vegas Motor Speedway. Wristband + reservation required."}
+        {"q": "How do we report activation results?", "a": "Square POS depletions export each night by F&B Operations and ship to your team."},
+        {"q": "Can we send a photographer?", "a": "Yes — credentials run through the concierge ahead of time. Personal cell capture of talent is not allowed; talent and guest faces require a signed waiver before publication."},
+        {"q": "What's the capacity per seating?", "a": "Each seating caps at 80 guests across five seatings nightly — roughly 1,200 unique guests across the run."},
+        {"q": "Can we attend the after-party?", "a": "Saturday only. The after-party runs after Seating V on the rooftop with the burger-grill activation."},
+        {"q": "Where is Salvage at the venue?", "a": "Inside Nomads Land at the Las Vegas Motor Speedway. Guests need an EDC wristband and a Salvage reservation to enter."},
+        {"q": "How do ambush activations work?", "a": "They don't. All activations are coordinated through Five Senses and the Salvage production team."}
+      ]
+    },
+    {
+      "type": "contacts",
+      "heading": "Commercial leads",
+      "entries": [
+        {"role": "Operations Director (Five Senses)", "name": "Julian Clarkson", "email": "julian@five-senses.co", "phone": "(407) 885-6011"},
+        {"role": "Sponsor Activations & Logistics", "name": "Margo Williams (Five Senses)", "email": "margo@five-senses.co", "phone": "(619) 302-7039"},
+        {"role": "Insomniac Production Counterpart", "name": "Paul Seigenthaler", "email": "paul.seigenthaler@insomniac.com", "phone": "(856) 373-6541"},
+        {"role": "Concierge", "email": "hello@salvagecitysupperclub.com"}
       ]
     }
   ]
@@ -685,7 +673,9 @@ on conflict (project_id, persona) do update set
   subtitle = excluded.subtitle, published = excluded.published, config = excluded.config,
   updated_at = now();
 
--- 2e. TALENT (artist) -------------------------------------------------------
+-- ===========================================================================
+-- 2e. TALENT (artist, tier 4) — LEAN (Black-Coffee 4-section model)
+-- ===========================================================================
 with ctx as (
   select p.id as project_id, p.org_id, u.id as user_id
   from projects p join orgs o on o.id = p.org_id
@@ -695,141 +685,54 @@ with ctx as (
 insert into event_guides (org_id, project_id, persona, tier, classification, title, subtitle, published, config, created_by)
 select org_id, project_id, 'artist'::guide_persona, 4, 'TALENT',
   'Salvage City — Talent',
-  'Cast · vocalists · aerialists · fire performer',
+  'Cast, vocalists, aerialists, specialty performers, and the fire performer.',
   true,
   $JSON${
-  "pageTitles": ["Calls", "Show", "Contacts"],
+  "pageTitles": ["Calls", "Show", "FAQ", "Contacts"],
   "sections": [
     {
       "type": "overview",
       "heading": "Welcome to Salvage City",
-      "body": "You are the show. Five seatings nightly, May 15-17 at LV Motor Speedway. Creative led by Rodrigo Guzman and Celine Franco (Corazon Entertainment / NCE). Costumes by Jonny Cota. Aerial point at position 3. Sweatbox cube center. Live female vocalist on Godspeed. Fire performer holds NV State Fire Marshal Performer Permit.",
+      "body": "You are the show. We run five 60-minute seatings each night across May 15, 16, and 17 inside Nomads Land at the Las Vegas Motor Speedway. Creative is led by No Ceilings Entertainment with Corazon Entertainment (Rodrigo Guzman, Celine Franco) as performance producer. The show runs as: Scene 1a sweatbox prelude · Scene 1b opening on '1975' · Scene 1c full-cast opening · Scene 2 host script · Scene 3a Godspeed live vocal · Scene 3b Hypnosis mash on the Sean Paul remix · mid-show roving · fire-act transition · final number · dessert and exit. The aerial point lives at position 3, the sweatbox cube center, and the fire performer carries a current Clark County Fire / Nevada State Fire Marshal Performer Permit.",
       "callouts": [
-        {"kind": "red",  "title": "Insomniac safety form", "body": "Sign 'INSOMNIAC 2026: Safety Procedures & Social Media Policy' before first call. Department: 'Salvage City — No Ceilings'."},
-        {"kind": "gold", "title": "Hydrate", "body": "High desert · 99°F highs · drink water every break. Salt + electrolytes provided in greenroom."},
-        {"kind": "pink", "title": "Sharp objects in", "body": "All sharp props in before doors. Personal flashlights on every performer."}
+        {"kind": "red", "title": "Insomniac safety form is mandatory", "body": "Sign the INSOMNIAC 2026 Safety & Social Media Policy form before your first call. Use 'Salvage City — No Ceilings' in the Department / Vendor field. The link is in the 2026 production playbook."}
       ]
     },
     {
       "type": "schedule",
       "heading": "Talent day",
       "entries": [
-        {"time": "16:00", "activity": "First call · warm-up + gratitude circle", "location": "Greenroom"},
-        {"time": "16:30", "activity": "Soundcheck (vocalists)", "location": "Main stage"},
-        {"time": "17:00", "activity": "Aerial + rigging checks", "location": "Aerial point"},
-        {"time": "17:30", "activity": "Dinner (staggered)", "location": "BOH"},
-        {"time": "18:30", "activity": "Costume + makeup final", "location": "Greenroom"},
-        {"time": "Per seating", "activity": "Show 60 min · 5 nightly", "location": "Floor + Main"},
-        {"time": "Wrap", "activity": "Notes · cool-down · costume returns", "location": "Greenroom"}
-      ]
-    },
-    {
-      "type": "set_times",
-      "heading": "Show beats",
-      "entries": [
-        {"artist": "Pre-show ambience (FD/Roving)", "stage": "Cocktail floor", "start": "T-15", "end": "T-0"},
-        {"artist": "Scene 0 — Cocktail",            "stage": "Floor",          "start": "00:00", "end": "00:11"},
-        {"artist": "Scene 1a — Sweatbox prelude",   "stage": "Center",         "start": "00:11", "end": "00:13"},
-        {"artist": "Scene 1b — Opening intro · 1975","stage": "Sphere · Aerial","start": "00:13", "end": "00:14"},
-        {"artist": "Scene 1c — Opening (full cast)","stage": "Main",           "start": "00:14", "end": "00:17"},
-        {"artist": "Scene 2 — Host script",         "stage": "Main",           "start": "00:17", "end": "00:18"},
-        {"artist": "Scene 3a — Godspeed (live)",    "stage": "Catwalk → Main", "start": "00:18", "end": "00:18:52"},
-        {"artist": "Scene 3b — Hypnosis mash",      "stage": "Main",           "start": "00:18:52","end": "00:21:30"},
-        {"artist": "Mid-show roving + ambient",     "stage": "Tables",         "start": "00:21:30","end": "00:42"},
-        {"artist": "Fire act transition",           "stage": "Center",         "start": "00:42", "end": "00:46"},
-        {"artist": "Final number + bows",           "stage": "Main",           "start": "00:46", "end": "00:55"},
-        {"artist": "Dessert + exit music",          "stage": "Tables",         "start": "00:55", "end": "01:00"}
-      ]
-    },
-    {
-      "type": "timeline",
-      "heading": "Per-scene cues (from 2025 ROS · updated)",
-      "entries": [
-        {"time": "Preset",        "activity": "Flags x6 in containers · 2 gloves (boys) dining · 3 pairs L+R"},
-        {"time": "Scene 0",       "activity": "Cocktails + appetizers · 2 dancers + Alio rotating · 1x FD in sweatbox"},
-        {"time": "Scene 1a",      "activity": "Dancer breaks out of sweatbox · gong/bell summons Dinah"},
-        {"time": "Scene 1b",      "activity": "Dinah in CHROME LAYER · aerial hoop @ position 3 · spin up"},
-        {"time": "Scene 1c",      "activity": "Big opening · all cast on main · acrobats around position 1 · strobe"},
-        {"time": "Scene 2",       "activity": "Host introduces female lead · Doug receives Claire on stage"},
-        {"time": "Scene 3a",      "activity": "Godspeed live vocal · catwalk light from main → position 3 → onto stage"},
-        {"time": "Scene 3b",      "activity": "Hypnosis mash · Sean Paul remix · LED fans · Salvage logo strobe"},
-        {"time": "Mid-show",      "activity": "Roving acts at tables · ambience · costume swaps as cued"},
-        {"time": "Fire transition","activity": "Match cue · 20' perimeter · burnt-orange wash"},
-        {"time": "Final number",  "activity": "Full cast · main stage · bow line"},
-        {"time": "Exit",          "activity": "Dessert music · cool-down · greenroom"}
-      ]
-    },
-    {
-      "type": "contacts",
-      "heading": "Creative + cast leads",
-      "entries": [
-        {"role": "Creative Director",  "name": "Rodrigo Guzman",  "email": "info@corazonentertainment.co", "phone": "818.642.6258"},
-        {"role": "Creative Producer",  "name": "Celine Franco",   "email": "info@corazonentertainment.co"},
-        {"role": "Costume Designer",   "name": "Jonny Cota",      "email": "jonny@jonnycota.com"},
-        {"role": "Production Manager", "name": "Skylar Contini-Enneper", "email": "skylarenneper@gmail.com"},
-        {"role": "Production Director","name": "Sarah Fry",       "email": "frysarah8@gmail.com"},
-        {"role": "Production Director","name": "Vida Sotakoun",   "email": "Vidasotakoun@gmail.com"},
-        {"role": "Project Producer",   "name": "Julian Clarkson", "email": "julian.clarkson@ghxstship.pro"}
-      ]
-    },
-    {
-      "type": "ppe",
-      "heading": "PPE / kit",
-      "entries": [
-        {"item": "Knee pads",          "required": true,  "note": "Per dancer notes"},
-        {"item": "Dance shoes",        "required": true,  "note": "Per choreography"},
-        {"item": "Personal flashlight","required": true,  "note": "Bring every show — venue is dark"},
-        {"item": "Water bottle",       "required": true,  "note": "Hydrate every break"},
-        {"item": "Hearing protection", "required": false, "note": "Optional during sound check"}
-      ]
-    },
-    {
-      "type": "resources",
-      "heading": "On-site resources",
-      "entries": [
-        {"name": "Greenroom",          "location": "Container",                    "details": "Hydration · electrolytes · costume station"},
-        {"name": "Hair / Makeup",      "location": "Greenroom",                    "details": "Schedule per fitting tracker"},
-        {"name": "Aerial point",       "location": "Position 3",                   "details": "Hoop / lyra · standard motor"},
-        {"name": "Sweatbox cube",      "location": "Center dancefloor position 2", "details": "8 ft x 8 ft · 2-inch poles"},
-        {"name": "Piano shell",        "location": "Stage",                        "details": "Pickup from Bellagio North Valet 5/13"},
-        {"name": "Costume fittings",   "location": "Greenroom (off-site Sun-Mon)", "details": "Per rehearsal schedule"}
-      ]
-    },
-    {
-      "type": "code_of_conduct",
-      "heading": "On-set conduct",
-      "entries": [
-        {"item": "Insomniac safety form", "detail": "Required before first call · Department 'Salvage City — No Ceilings'"},
-        {"item": "Photo / social",        "detail": "By attending you consent to filming for promo + social. No personal posts during work hours."},
-        {"item": "Substance use",         "detail": "Zero tolerance during work hours per deal memo · immediate termination"},
-        {"item": "Late call",             "detail": "Notify Skylar via call/text — not Slack — minimum 30 min ahead"}
-      ]
-    },
-    {
-      "type": "accessibility",
-      "heading": "Accessibility",
-      "entries": [
-        {"item": "Heat",        "detail": "99°F highs · drink water every break"},
-        {"item": "Quiet space", "detail": "BOH corridor available for cool-down"}
-      ]
-    },
-    {
-      "type": "sustainability",
-      "heading": "Sustainability",
-      "entries": [
-        {"item": "Costume reuse", "detail": "Branded fittings preserved between shows · returns by 5/19"},
-        {"item": "Single-use",    "detail": "Reusable water bottles required"}
+        {"time": "16:00", "activity": "First call, warm-up, gratitude circle. Boxed lunch / dinner in the greenroom.", "location": "Greenroom"},
+        {"time": "16:30", "activity": "Soundcheck for vocalists.", "location": "Main Stage"},
+        {"time": "17:00", "activity": "Aerial and rigging safety checks.", "location": "Aerial point (position 3)"},
+        {"time": "17:30", "activity": "Staggered dinner.", "location": "BOH"},
+        {"time": "18:00", "activity": "Final costume and makeup; pre-show briefing with the show caller.", "location": "Greenroom"},
+        {"time": "18:30 / 19:30 / 20:30 / 21:30 / 22:30", "activity": "Show — 60 minutes per seating, repeated five times each night.", "location": "Public Dining and Main Stage"},
+        {"time": "23:30", "activity": "Notes, cool-down, costume returns.", "location": "Greenroom"}
       ]
     },
     {
       "type": "faq",
       "heading": "Talent FAQ",
       "entries": [
-        {"q": "Where do I check in?",          "a": "Greenroom container at first call."},
-        {"q": "Where do I eat?",               "a": "BOH staggered dinner at 17:30."},
-        {"q": "Can I post on social?",         "a": "Production-approved only — see Code of Conduct."},
-        {"q": "What if I'm running late?",     "a": "Call/text Skylar ASAP · do not Slack."},
-        {"q": "Where do fittings happen?",     "a": "Off-site Sun-Mon at The ROCK Center for Dance · on-site greenroom from Tue."}
+        {"q": "Where do I check in?", "a": "Greenroom container at first call (16:00)."},
+        {"q": "Where do I eat?", "a": "Boxed lunch / dinner in the greenroom from 16:00, with a staggered dinner block at 17:30."},
+        {"q": "Can I post on social?", "a": "Production-approved capture only during work hours. By performing, you consent to filming for promotional and social use by Salvage / Five Senses / Insomniac."},
+        {"q": "What if I'm running late?", "a": "Call or text Skylar (Production Manager) at (702) 689-6907 at least 30 minutes ahead. Don't Slack."},
+        {"q": "Where do fittings happen?", "a": "Off-site at The ROCK Center for Dance through May 11; on-site greenroom from May 12 onward."},
+        {"q": "What should I bring?", "a": "Knee pads, dance shoes, personal flashlight (the venue is dark backstage), reusable water bottle. Daytime highs run around 99°F — hydrate every break."}
+      ]
+    },
+    {
+      "type": "contacts",
+      "heading": "Creative and production leads",
+      "entries": [
+        {"role": "Corazon Lead (Creative)", "name": "Rodrigo Guzman", "email": "info@corazonentertainment.com"},
+        {"role": "Corazon Coordinator", "name": "Celine Franco", "email": "info@corazonentertainment.com"},
+        {"role": "Production Manager", "name": "Skylar Contini-Enneper", "email": "skylarenneper@gmail.com", "phone": "(702) 689-6907"},
+        {"role": "Production Director", "name": "Sarah Fry", "email": "FrySarah8@gmail.com", "phone": "(615) 708-3676"},
+        {"role": "Hospitality Manager", "name": "Vida Sotakoun", "email": "Vidasotakoun@gmail.com", "phone": "(815) 298-8244"},
+        {"role": "Operations Director (escalation)", "name": "Julian Clarkson", "email": "julian@five-senses.co", "phone": "(407) 885-6011"}
       ]
     }
   ]
@@ -841,7 +744,9 @@ on conflict (project_id, persona) do update set
   subtitle = excluded.subtitle, published = excluded.published, config = excluded.config,
   updated_at = now();
 
--- 2f. GUESTS ----------------------------------------------------------------
+-- ===========================================================================
+-- 2f. GUESTS (guest, tier 5) — LEAN (Black-Coffee 4-section model)
+-- ===========================================================================
 with ctx as (
   select p.id as project_id, p.org_id, u.id as user_id
   from projects p join orgs o on o.id = p.org_id
@@ -851,107 +756,54 @@ with ctx as (
 insert into event_guides (org_id, project_id, persona, tier, classification, title, subtitle, published, config, created_by)
 select org_id, project_id, 'guest'::guide_persona, 5, 'GUESTS',
   'Salvage City Supper Club — Guest Guide',
-  'EDC Las Vegas 2026 · May 15-17 · Nomads Land',
+  'EDC Las Vegas 2026 · May 15–17 · inside Nomads Land at the Las Vegas Motor Speedway.',
   true,
   $JSON${
-  "pageTitles": ["The Experience", "Plan Your Visit", "FAQ"],
+  "pageTitles": ["The Experience", "Schedule", "FAQ", "Concierge"],
   "sections": [
     {
       "type": "overview",
       "heading": "Welcome to Salvage City",
-      "body": "Salvage City is a 60-minute progressive supper club and immersive show — an oasis of abundance beyond the end of civilization. Located inside Nomads Land at Las Vegas Motor Speedway during EDC Las Vegas 2026 (May 15-17), the experience pairs a five-course culinary journey by world-renowned chefs with private performances, free-flowing cocktails, wines, and soft drinks, and elevated views of high-flying acts.",
+      "body": "Salvage City Supper Club is a 60-minute progressive supper club paired with an immersive show — an oasis of abundance set beyond the end of civilization. We're inside Nomads Land at the Las Vegas Motor Speedway during EDC Las Vegas 2026 (May 15 through 17). Your reservation includes a five-course culinary journey by Chef Eyal Banayan and Crème by Me on dessert, free-flowing cocktails, wines, and soft drinks throughout the experience, private performances by our immersive cast, and elevated views of high-flying acts.",
       "callouts": [
-        {"kind": "gold", "title": "Festival wristband required", "body": "Salvage City is only available to EDC Las Vegas pass holders. You must have your EDC wristband on to enter."},
-        {"kind": "pink", "title": "Check in 15 minutes early", "body": "Bring your ticket confirmation and ID. Late guests may forfeit the opening course."}
+        {"kind": "gold", "title": "An EDC wristband is required", "body": "Salvage City is only available to EDC Las Vegas pass holders. Wear your EDC wristband — without it, we can't let you in. Check in 15 minutes before your seating with your ticket confirmation and a valid ID. Late guests forfeit the opening course; the room locks at the start of Scene 1a."}
       ]
     },
     {
       "type": "schedule",
       "heading": "Seatings",
       "entries": [
-        {"time": "Fri 5/15", "activity": "Five seatings · 60 min each", "note": "First seating opens at dusk"},
-        {"time": "Sat 5/16", "activity": "Five seatings + after-party", "note": "Saturday extended hours"},
-        {"time": "Sun 5/17", "activity": "Five seatings", "note": "Final-night gratitude moment"},
-        {"time": "Per seating", "activity": "Check in 15 min before showtime · cocktails → courses → show → dessert", "note": ""}
-      ]
-    },
-    {
-      "type": "set_times",
-      "heading": "What to expect",
-      "entries": [
-        {"artist": "Cocktail welcome",   "stage": "Cocktail floor", "start": "T-15", "end": "T-0"},
-        {"artist": "Opening + first course","stage": "Floor",       "start": "00:00", "end": "00:17"},
-        {"artist": "Main course + show",  "stage": "Tables · Main", "start": "00:17", "end": "00:42"},
-        {"artist": "Show climax",         "stage": "Main",          "start": "00:42", "end": "00:55"},
-        {"artist": "Dessert + exit",      "stage": "Tables",        "start": "00:55", "end": "01:00"}
-      ]
-    },
-    {
-      "type": "contacts",
-      "heading": "Guest concierge",
-      "entries": [
-        {"role": "Concierge",      "email": "hello@salvagecitysupperclub.com",   "name": "Average response 2 hours"},
-        {"role": "Help desk",      "email": "help@salvagecitysupperclub.com"},
-        {"role": "Instagram",      "name": "@salvagecitysupperclub"},
-        {"role": "Tickets",        "name": "Ticket Fairy",                       "email": "support@theticketfairy.com"}
-      ]
-    },
-    {
-      "type": "resources",
-      "heading": "Plan your visit",
-      "entries": [
-        {"name": "Where",            "location": "Nomads Land · Las Vegas Motor Speedway",           "details": "Inside the EDC LV festival footprint"},
-        {"name": "Wristband",        "location": "Required at entry",                                "details": "EDC Las Vegas wristband + Salvage reservation"},
-        {"name": "Check-in",         "location": "Salvage City entry rope",                          "details": "15 minutes before your seating · ticket + ID"},
-        {"name": "Seating",          "location": "Family-style 20-tops",                             "details": "No assigned seats · groups arrive early to coordinate"},
-        {"name": "Capacity",         "location": "Each seating",                                     "details": "Max 80 guests"},
-        {"name": "After-party (Sat)","location": "Rooftop bar + dance floor",                        "details": "Saturday extended hours only"},
-        {"name": "Restrooms",        "location": "Nomads Land aisle",                                "details": "Festival public facilities"},
-        {"name": "Shuttles (early seating)","location": "Exterior shuttle drop",                     "details": "Coordinate with concierge for first seating"}
-      ]
-    },
-    {
-      "type": "accessibility",
-      "heading": "Accessibility",
-      "entries": [
-        {"item": "Wheelchair access",  "detail": "Via main festival ADA path · let host know on arrival"},
-        {"item": "Allergies / dietary","detail": "Communicate to your server on arrival · kitchen accommodates with local ingredients"},
-        {"item": "Under 21",           "detail": "Soft drinks + non-alcoholic beverages · wristband marker required"},
-        {"item": "Group seating",      "detail": "Groups larger than 20 should arrive early to coordinate"}
-      ]
-    },
-    {
-      "type": "sustainability",
-      "heading": "Sustainability",
-      "entries": [
-        {"item": "Reusable service ware", "detail": "Where possible · Insomniac sustainability program"},
-        {"item": "Composting",            "detail": "BOH organic stream"}
-      ]
-    },
-    {
-      "type": "code_of_conduct",
-      "heading": "Conduct",
-      "entries": [
-        {"item": "Ages 18+",        "detail": "Per Ticket Fairy listing — ID required"},
-        {"item": "No outside food", "detail": "Salvage curates the full progressive menu"},
-        {"item": "Photo / social",  "detail": "Personal photos welcome — please no flash during the show"},
-        {"item": "Insomniac terms", "detail": "All EDC Las Vegas terms of attendance apply"}
+        {"time": "Friday, May 15", "activity": "Five seatings between 18:30 and 23:30 — 60 minutes each.", "note": "Doors at 18:00; check in 15 minutes before your seating."},
+        {"time": "Saturday, May 16", "activity": "Five seatings, plus an after-party on the rooftop.", "note": "Saturday is the only night with extended hours."},
+        {"time": "Sunday, May 17", "activity": "Five seatings — final-night gratitude moment closes the run.", "note": "Doors at 18:00."},
+        {"time": "Per seating", "activity": "Cocktail welcome → opening course → main and show → climax → dessert and exit. The show runs 60 minutes from cocktail welcome to dessert.", "note": ""}
       ]
     },
     {
       "type": "faq",
       "heading": "Guest FAQ",
       "entries": [
-        {"q": "How much is a reservation?",        "a": "$189 per person plus 18% service charge, taxes and fees. An Insomniac staff ticket tier is also available at $69."},
-        {"q": "Do I need an EDC ticket?",          "a": "Yes — Salvage City is only available to EDC Las Vegas pass holders. You must have your festival wristband to enter."},
-        {"q": "What's the dress code?",            "a": "Festival-glam · embrace the post-civilization aesthetic. Closed-toe footwear recommended for the Speedway grounds."},
-        {"q": "Is there an age limit?",            "a": "Yes · 18+. Bring valid ID."},
-        {"q": "What's included?",                  "a": "5-course culinary journey, free-flowing cocktails / wines / soft drinks, private performances, and elevated views of high-flying acts. 18% service charge included."},
-        {"q": "Can I make dietary requests in advance?", "a": "No — please share allergies and dietary needs with your server on arrival. Our kitchen accommodates with local ingredients."},
-        {"q": "Can I sit with my friends?",        "a": "Tables seat 20 family-style. Groups should arrive early to coordinate seating with the host."},
-        {"q": "What time should I arrive?",        "a": "Check in 15 minutes before your seating. Late guests may forfeit the opening course."},
-        {"q": "Where is Salvage at the festival?", "a": "Inside Nomads Land at Las Vegas Motor Speedway."},
-        {"q": "How do I cancel or transfer?",       "a": "Refund + transfer policy via Ticket Fairy — see your purchase confirmation."}
+        {"q": "How much is a reservation?", "a": "A Supper Club VIP reservation is $189 per person plus an 18% service charge, taxes, and fees. An Insomniac Staff tier is also available at $69."},
+        {"q": "Do I need an EDC ticket?", "a": "Yes — Salvage City is only available to EDC Las Vegas pass holders. You must wear your festival wristband to enter."},
+        {"q": "What's the dress code?", "a": "Festival-glam works perfectly. Embrace the post-civilization aesthetic. Closed-toe footwear is recommended for the Speedway grounds."},
+        {"q": "Is there an age limit?", "a": "Yes, the experience is 18 and over. Please bring a valid government-issued ID."},
+        {"q": "What's included with my reservation?", "a": "A five-course culinary journey, free-flowing cocktails, wines, and soft drinks, private performances by our immersive cast, and elevated views of the high-flying acts. The 18% service charge is included."},
+        {"q": "Can I make dietary requests in advance?", "a": "We don't take dietary requests in advance. Share allergies and dietary needs with your server on arrival; the kitchen accommodates with local ingredients."},
+        {"q": "Can I sit with my friends?", "a": "Tables seat 20 guests family-style. Groups should arrive early to coordinate seating with the host."},
+        {"q": "What time should I arrive?", "a": "Check in 15 minutes before your seating. Late guests forfeit the opening course (the room locks at Scene 1a)."},
+        {"q": "Where is Salvage at the festival?", "a": "Inside Nomads Land at the Las Vegas Motor Speedway."},
+        {"q": "How do I cancel or transfer my reservation?", "a": "Refunds and transfers are handled by Ticket Fairy. The full policy is on your purchase confirmation."},
+        {"q": "Is there a shuttle?", "a": "Yes — see the Salvage City Guest Shuttle Route shared in your reservation confirmation."}
+      ]
+    },
+    {
+      "type": "contacts",
+      "heading": "Concierge",
+      "entries": [
+        {"role": "Concierge", "name": "Average response about two hours", "email": "hello@salvagecitysupperclub.com"},
+        {"role": "Help desk", "email": "help@salvagecitysupperclub.com"},
+        {"role": "Instagram", "name": "@salvagecitysupperclub"},
+        {"role": "Tickets", "name": "Ticket Fairy", "email": "support@theticketfairy.com"}
       ]
     }
   ]
@@ -963,7 +815,9 @@ on conflict (project_id, persona) do update set
   subtitle = excluded.subtitle, published = excluded.published, config = excluded.config,
   updated_at = now();
 
--- 2g. TEMPORARY ACCESS (custom) ---------------------------------------------
+-- ===========================================================================
+-- 2g. TEMPORARY ACCESS (custom, tier 5) — LEAN (Black-Coffee 4-section model)
+-- ===========================================================================
 with ctx as (
   select p.id as project_id, p.org_id, u.id as user_id
   from projects p join orgs o on o.id = p.org_id
@@ -973,88 +827,48 @@ with ctx as (
 insert into event_guides (org_id, project_id, persona, tier, classification, title, subtitle, published, config, created_by)
 select org_id, project_id, 'custom'::guide_persona, 5, 'TEMPORARY ACCESS',
   'Salvage City — Temporary Access',
-  'Day-pass · journalists · vendor walks · talent +1s',
+  'Day-pass holders, journalists, vendor walks, fire-marshal site visits, photographer pool, and talent +1s.',
   true,
   $JSON${
-  "pageTitles": ["Your Visit", "Where You Can Go"],
+  "pageTitles": ["Your Visit", "Schedule", "FAQ", "Contacts"],
   "sections": [
     {
       "type": "overview",
       "heading": "Welcome — temporary access",
-      "body": "You're entering Salvage City on a one-shot or limited-window credential. Could be a vendor walk-through, a fire marshal site visit, a journalist preview, a photographer pool slot, a Pineapple container delivery, or a talent +1. This guide tells you exactly what you can do, where you can go, and who's responsible for you while you're on site.",
+      "body": "You're entering Salvage City on a one-shot or limited-window credential. That might mean a vendor walk-through, a fire-marshal site visit, a journalist preview, a photographer pool slot, a Pineapple Agency container delivery, or a talent +1. The window printed on your day-pass is hard — we cannot extend access on site. Your shepherd's name and phone are on the day-pass; if you can't find them when you arrive, call the Salvage Ops line on the back of the pass.",
       "callouts": [
-        {"kind": "gold", "title": "You have an on-site shepherd", "body": "Your shepherd's name is on your day-pass. If you can't find them, call the Salvage Ops line — do not wander."},
-        {"kind": "red",  "title": "If unescorted", "body": "Wait at the Salvage City front gate. Do not enter unattended areas."}
+        {"kind": "red", "title": "If you arrive unescorted, wait at the gate", "body": "Wait at the Salvage City front gate until your shepherd arrives. Do not enter unattended areas under any circumstances. Photography is production-approved only; do not capture talent or guests without explicit permission."}
       ]
     },
     {
       "type": "schedule",
       "heading": "Your access window",
       "entries": [
-        {"time": "Per day-pass", "activity": "Access valid only within window printed on your pass", "note": "Hard-out at end time — no extensions on site"},
-        {"time": "Build days (5/12-14)", "activity": "Vendor + delivery + inspection windows", "note": "PPE required"},
-        {"time": "Show days (5/15-17)",  "activity": "Press / photo pool slots only", "note": "Coordinate via concierge"}
-      ]
-    },
-    {
-      "type": "contacts",
-      "heading": "Your shepherd",
-      "entries": [
-        {"role": "On-site shepherd",        "name": "Per your day-pass"},
-        {"role": "Salvage Ops (back-up)",   "name": "Skylar Contini-Enneper", "email": "skylarenneper@gmail.com"},
-        {"role": "Concierge",               "email": "hello@salvagecitysupperclub.com"},
-        {"role": "Project Producer",        "name": "Julian Clarkson", "email": "julian.clarkson@ghxstship.pro"}
-      ]
-    },
-    {
-      "type": "credentials",
-      "heading": "Where you can go",
-      "columns": ["Temporary"],
-      "rows": [
-        {"area": "Salvage City front gate", "access": {"Temporary": true}},
-        {"area": "Public dining floor",     "access": {"Temporary": "Escorted"}},
-        {"area": "Backstage / Greenroom",   "access": {"Temporary": "Escorted only"}},
-        {"area": "BOH Kitchen",             "access": {"Temporary": false}},
-        {"area": "Bar (Main + Roof)",       "access": {"Temporary": false}},
-        {"area": "Container BOH (Storage)", "access": {"Temporary": "Delivery windows only"}},
-        {"area": "Roof Deck",               "access": {"Temporary": false}},
-        {"area": "Aerial / Rigging Zone",   "access": {"Temporary": false}}
-      ]
-    },
-    {
-      "type": "sops",
-      "heading": "Rules of engagement",
-      "entries": [
-        {"code": "T-01", "title": "If escorted", "steps": ["Stay with your escort at all times", "If they step away briefly, wait — do not move", "Carry your day-pass visibly", "Do not photograph or record without permission"]},
-        {"code": "T-02", "title": "If unescorted (waiting)", "steps": ["Wait at Salvage City front gate", "Call the Salvage Ops line on your day-pass", "Do not enter the public dining floor without an escort"]}
-      ]
-    },
-    {
-      "type": "evacuation",
-      "heading": "Evacuation",
-      "routes": [
-        {"from": "Anywhere on site", "to": "Nomads Land main aisle, north end", "via": "Front gate"}
-      ],
-      "assemblyPoint": "Nomads Land main aisle, north end — find your shepherd"
-    },
-    {
-      "type": "code_of_conduct",
-      "heading": "Conduct",
-      "entries": [
-        {"item": "Photography",      "detail": "Production-approved only · no unsanctioned capture of talent or guests"},
-        {"item": "Insomniac terms",  "detail": "All EDC Las Vegas terms of attendance apply"},
-        {"item": "Hard-out",         "detail": "Your access ends at the time on your pass — no extensions on site"}
+        {"time": "Per day-pass", "activity": "Access is valid only within the window printed on your pass.", "note": "The end time is a hard-out — we cannot extend access on site."},
+        {"time": "Build days (May 12 – 14)", "activity": "Vendor, delivery, and inspection windows.", "note": "PPE is required throughout the build (closed-toe footwear; high-vis on the build floor)."},
+        {"time": "Show days (May 15 – 17)", "activity": "Press preview and photographer-pool slots only.", "note": "Coordinate slots through the concierge ahead of time."}
       ]
     },
     {
       "type": "faq",
       "heading": "Temporary access FAQ",
       "entries": [
-        {"q": "Where do I check in?",        "a": "Salvage City front gate — show your day-pass and ID."},
-        {"q": "Can I bring a +1?",            "a": "Only if your day-pass lists +1. Otherwise no."},
-        {"q": "Can I extend my access?",     "a": "No — passes are time-limited and not extensible on site."},
-        {"q": "What if my shepherd is late?","a": "Wait at the front gate · call the Salvage Ops number on your pass."},
-        {"q": "Can I take photos?",          "a": "Production-approved only. No unsanctioned capture of talent or guests."}
+        {"q": "Where do I check in?", "a": "Salvage City front gate. Bring your day-pass and a valid ID."},
+        {"q": "Can I bring a +1?", "a": "Only if your day-pass explicitly lists +1. Otherwise, no."},
+        {"q": "Can I extend my access?", "a": "No — passes are time-limited and cannot be extended on site."},
+        {"q": "What if my shepherd is late?", "a": "Wait at the front gate and call the Salvage Ops number printed on your pass."},
+        {"q": "Can I take photos?", "a": "Production-approved capture only. Do not photograph talent or guests without explicit permission."},
+        {"q": "Can I move around unescorted?", "a": "No. If your escort steps away briefly, wait where you are — do not move."}
+      ]
+    },
+    {
+      "type": "contacts",
+      "heading": "Your shepherd and back-up contacts",
+      "entries": [
+        {"role": "On-site shepherd", "name": "Listed on your day-pass"},
+        {"role": "Salvage Ops (back-up)", "name": "Skylar Contini-Enneper", "email": "skylarenneper@gmail.com", "phone": "(702) 689-6907"},
+        {"role": "Concierge", "email": "hello@salvagecitysupperclub.com"},
+        {"role": "Operations Director (escalation)", "name": "Julian Clarkson", "email": "julian@five-senses.co", "phone": "(407) 885-6011"}
       ]
     }
   ]

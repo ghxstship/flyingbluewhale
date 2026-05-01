@@ -1,29 +1,49 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
+import { headers } from "next/headers";
+import {
+  DataTableInteractive,
+  type InteractiveColumn,
+  type InteractiveRow,
+  type BulkAction as InteractiveBulkAction,
+} from "./DataTableInteractive";
+import type { RowActionItem } from "./ui/RowActions";
 
 /**
- * DataTable — server component.
+ * DataTable — server-side wrapper around DataTableInteractive.
  *
- * Renders a tenant-scoped table with one column-per-cell. Accepts function
- * props (`rowHref`, `column.render`) because it stays on the server.
+ * Pre-renders cells with the caller's per-row `render` functions, derives
+ * scalar `values[]` from the optional `accessor` (or strips text from the
+ * rendered ReactNode), and hands the result to the interactive client
+ * component. The wrapper also auto-derives a stable `tableId` from the
+ * current pathname so saved views, sort, filter, search, and column state
+ * persist per page without callers having to think about it.
  *
- * For sort / filter / pagination / saved views, import DataTableInteractive
- * directly from `@/components/DataTableInteractive` (a "use client" sibling).
+ * The legacy props (`emptyLabel`, `density`, `stickyHeader`, `maxHeight`)
+ * are forwarded so existing call-sites compile unchanged.
+ *
+ * For sort + filter + pin to work on a column the caller must either set
+ * `sortable: true` / `filterable: true` and ideally provide an `accessor`
+ * that returns a string or number. Without an accessor the wrapper falls
+ * back to the plain-text content of the rendered cell.
  */
 
 export type Column<T> = {
   key: string;
   header: string;
   render: (row: T) => ReactNode;
-  /** Per-cell className applied to `<td>` only. Use for cell-level
-   *  utilities like `font-mono text-xs` — they must NOT leak into the
-   *  header (where they would override the theme's display-serif font). */
+  /** Per-cell className applied to `<td>`. */
   className?: string;
-  /** Optional header-only className (`<th>`). Most callers don't need this;
-   *  the table header inherits the active theme's display font. */
+  /** Optional header-only className (`<th>`). */
   headerClassName?: string;
-  /** Used by interactive wrapper for sort + filter. */
+  /** Enable header click-to-sort. */
   sortable?: boolean;
+  /** Enable per-column include-only filter (multi-select on distinct values). */
+  filterable?: boolean;
+  /** Default-hidden columns the user can re-enable from the column menu. */
+  defaultHidden?: boolean;
+  /** Surface this column as a Group-by option. */
+  groupable?: boolean;
+  /** Returns the underlying scalar value for sort / filter / CSV export. */
   accessor?: (row: T) => string | number | null | undefined;
 };
 
@@ -39,22 +59,35 @@ export type DataTableProps<T extends { id: string }> = {
   columns: Column<T>[];
   rowHref?: (row: T) => string | undefined;
   emptyLabel?: string;
-  /** Optional second line under `emptyLabel` in the empty-state overlay. */
   emptyDescription?: string;
-  /** Optional CTA rendered inside the empty-state overlay (e.g. "+ New X"). */
   emptyAction?: ReactNode;
   loading?: boolean;
   density?: "comfortable" | "compact";
-  /** Pin the table header to the top of its scroll container. Gets the
-   *  surface background so rows scroll cleanly underneath. Modern data
-   *  grid expectation. */
   stickyHeader?: boolean;
-  /** Bound the table height; rows scroll inside this container, header
-   *  stays pinned (use with `stickyHeader`). */
   maxHeight?: string;
+  /** Stable identifier — overrides the auto-derived tableId. Use when a
+   *  page renders multiple tables, or you want a deliberate persistence key. */
+  tableId?: string;
+  /** Toolbar search box. Defaults to true when there are 6+ rows. */
+  searchable?: boolean;
+  /** When set, paginate at this size. Mutually exclusive with row virtualization. */
+  pageSize?: number;
+  /** Per-row kebab-menu actions. Function receives the row and returns the
+   *  menu item list (or null/undefined to skip). Runs server-side on the
+   *  initial render; refresh the page after bulk-action completion to refetch. */
+  rowActions?: (row: T) => RowActionItem[] | null | undefined;
+  /** Bulk-action toolbar — receives the selected row IDs (strings). Must
+   *  be a client-safe callable: pass a server action ref or a wrapper that
+   *  fires a fetch. */
+  bulkActions?: Array<{
+    id: string;
+    label: string;
+    variant?: "default" | "danger";
+    perform: (ids: string[]) => void | Promise<void>;
+  }>;
 };
 
-export function DataTable<T extends { id: string }>({
+export async function DataTable<T extends { id: string }>({
   rows,
   columns,
   rowHref,
@@ -62,74 +95,101 @@ export function DataTable<T extends { id: string }>({
   emptyDescription,
   emptyAction,
   loading,
-  density = "comfortable",
+  density,
   stickyHeader,
   maxHeight,
+  tableId,
+  searchable,
+  pageSize,
+  rowActions,
+  bulkActions,
 }: DataTableProps<T>) {
   if (loading) {
     return <DataTableSkeleton columns={columns.length} rows={6} />;
   }
 
   if (rows.length === 0) {
-    return <DataTableEmpty columns={columns} title={emptyLabel} description={emptyDescription} action={emptyAction} />;
+    return (
+      <DataTableEmpty
+        columns={columns.map((c) => ({
+          key: c.key,
+          header: c.header,
+          headerClassName: c.headerClassName,
+          className: c.className,
+        }))}
+        title={emptyLabel}
+        description={emptyDescription}
+        action={emptyAction}
+      />
+    );
   }
 
-  const rowPad = density === "compact" ? "py-1.5" : "py-2.5";
+  // Auto-derive a stable tableId from the current pathname so saved views
+  // persist per-page without callers having to wire it manually. Falls back
+  // to a column-fingerprint hash when the request headers aren't available
+  // (e.g. unit tests).
+  const resolvedTableId = tableId ?? (await deriveTableId(columns));
+
+  const interactiveCols: InteractiveColumn[] = columns.map((c) => ({
+    key: c.key,
+    header: c.header,
+    className: c.className,
+    sortable: c.sortable ?? c.accessor != null,
+    filterable: c.filterable,
+    defaultHidden: c.defaultHidden,
+    groupable: c.groupable,
+  }));
+
+  const interactiveRows: InteractiveRow[] = rows.map((row) => {
+    const cells = columns.map((c) => c.render(row));
+    const values = columns.map((c, i) => (c.accessor ? c.accessor(row) : extractText(cells[i])));
+    const actions = rowActions?.(row) ?? undefined;
+    return {
+      id: row.id,
+      href: rowHref?.(row),
+      cells,
+      values,
+      actions: actions && actions.length ? actions : undefined,
+    };
+  });
+
+  const interactiveBulk: InteractiveBulkAction[] | undefined = bulkActions?.map((a) => ({
+    id: a.id,
+    label: a.label,
+    variant: a.variant,
+    perform: a.perform,
+  }));
 
   return (
-    <div className="surface overflow-auto" style={maxHeight ? { maxHeight } : undefined}>
-      <table className="data-table" role="grid" aria-rowcount={rows.length}>
-        <thead className={stickyHeader ? "sticky top-0 z-10 bg-[var(--background)]" : undefined}>
-          <tr>
-            {columns.map((c) => (
-              <th key={c.key} className={c.headerClassName}>
-                {c.header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => {
-            const href = rowHref?.(row);
-            return (
-              <tr key={row.id} className={rowPad}>
-                {columns.map((c, i) => {
-                  const cell = c.render(row);
-                  return (
-                    <td key={c.key} className={c.className}>
-                      {href && i === 0 ? (
-                        <Link href={href} className="text-[var(--foreground)] hover:underline">
-                          {cell}
-                        </Link>
-                      ) : (
-                        cell
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+    <DataTableInteractive
+      rows={interactiveRows}
+      columns={interactiveCols}
+      emptyLabel={emptyLabel}
+      searchable={searchable ?? rows.length >= 6}
+      pageSize={pageSize}
+      density={density}
+      bulkActions={interactiveBulk}
+      tableId={resolvedTableId}
+    />
   );
+  // `stickyHeader` and `maxHeight` are absorbed: the interactive table
+  // pins the header by default and bounds height to 70vh. If a caller
+  // genuinely needs different bounds we can expose them later.
 }
 
 /**
  * DataTableEmpty — structure-preserving empty state. Headers stay live so
  * operators can read the data model at a glance; ghost rows show field
- * shape; centered overlay carries the title / description / CTA. Modeled
- * on Linear, Stripe, Ramp, Attio, and Notion empty data views.
+ * shape; centered overlay carries the title / description / CTA.
  */
-function DataTableEmpty<T>({
+function DataTableEmpty({
   columns,
   title,
   description,
   action,
   ghostRows = 4,
 }: {
-  columns: Column<T>[];
+  columns: Array<{ key: string; header: string; headerClassName?: string; className?: string }>;
   title: string;
   description?: string;
   action?: ReactNode;
@@ -199,4 +259,46 @@ function DataTableSkeleton({ columns, rows }: { columns: number; rows: number })
       </table>
     </div>
   );
+}
+
+/**
+ * Strip a ReactNode of its rendering and return a plain-text fallback for
+ * sort / filter / CSV. Best-effort — prefer `column.accessor` when the
+ * rendered cell isn't a plain string.
+ */
+function extractText(node: ReactNode): string | number | null {
+  if (node == null || typeof node === "boolean") return null;
+  if (typeof node === "number") return node;
+  if (typeof node === "string") return node;
+  if (Array.isArray(node))
+    return node
+      .map(extractText)
+      .filter((v) => v != null)
+      .join(" ");
+  // ReactElement — peek at .props.children when present.
+  const obj = node as unknown as { props?: { children?: ReactNode } };
+  if (obj && typeof obj === "object" && obj.props && "children" in obj.props) {
+    return extractText(obj.props.children);
+  }
+  return null;
+}
+
+async function deriveTableId<T>(columns: Column<T>[]): Promise<string> {
+  try {
+    const h = await headers();
+    const path = h.get("x-pathname") ?? h.get("x-invoke-path") ?? h.get("referer") ?? "";
+    if (path) return `t:${normalizePath(path)}:${columns.map((c) => c.key).join(",")}`;
+  } catch {
+    /* not in a request scope — fall through to fingerprint */
+  }
+  return `t:${columns.map((c) => c.key).join(",")}`;
+}
+
+function normalizePath(p: string): string {
+  try {
+    const u = p.startsWith("http") ? new URL(p) : { pathname: p };
+    return (u.pathname || "/").replace(/\/+$/, "") || "/";
+  } catch {
+    return p;
+  }
 }

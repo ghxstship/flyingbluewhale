@@ -45,9 +45,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (input.depthFt !== undefined) patch.depth_ft = input.depthFt;
     if (input.elements !== undefined) patch.elements = input.elements;
     if (input.notes !== undefined) patch.notes = input.notes;
-    const { data, error } = await (supabase.from("stage_plots") as never as {
-      update: (p: Record<string, unknown>) => ReturnType<typeof supabase.from>;
-    })
+    const { data, error } = await supabase
+      .from("stage_plots")
       .update(patch)
       .eq("id", id)
       .eq("org_id", session.orgId)

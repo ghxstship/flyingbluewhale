@@ -6,7 +6,8 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listOfferLetters } from "@/lib/offer-letters/queries";
 import { EMPLOYER_SHORT, STATUS_LABEL, STATUS_VARIANT } from "@/lib/offer-letters/types";
-import type { OfferLetter } from "@/lib/offer-letters/types";
+import type { OfferLetterResolved } from "@/lib/offer-letters/types";
+import { formatDollars } from "@/lib/offer-letters/format";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,6 @@ export default async function OfferLettersPage() {
 
   const session = await requireSession();
   const rows = await listOfferLetters(session.orgId);
-
   const counts = rows.reduce<Record<string, number>>((acc, r) => {
     acc[r.status] = (acc[r.status] ?? 0) + 1;
     return acc;
@@ -38,11 +38,11 @@ export default async function OfferLettersPage() {
         subtitle={`${rows.length} ${rows.length === 1 ? "letter" : "letters"} · ${counts["accepted"] ?? 0} accepted · ${counts["draft"] ?? 0} draft`}
       />
       <div className="page-content">
-        <DataTable<OfferLetter>
+        <DataTable<OfferLetterResolved>
           rows={rows}
           rowHref={(r) => `/console/people/offer-letters/${r.id}`}
           emptyLabel="No offer letters yet"
-          emptyDescription="Letters seed from the project crew roster — see the Salvage City project."
+          emptyDescription="Letters seed from the project crew roster. Run seed_salvage_city_ssot('demo') to populate Salvage City."
           columns={[
             {
               key: "recipient",
@@ -60,11 +60,27 @@ export default async function OfferLettersPage() {
               render: (r) => (
                 <div>
                   <div className="text-sm">{r.role_title}</div>
-                  <div className="text-xs text-[var(--text-muted)]">{r.department ?? ""}</div>
+                  <div className="text-xs text-[var(--text-muted)]">{r.role_department ?? ""}</div>
                 </div>
               ),
             },
+            {
+              key: "project",
+              header: "Project",
+              render: (r) => <span className="text-xs">{r.project_name}</span>,
+            },
             { key: "employer", header: "Issuer", render: (r) => <Badge>{EMPLOYER_SHORT[r.employer]}</Badge> },
+            {
+              key: "comp",
+              header: "Compensation",
+              render: (r) =>
+                r.effective_compensation_cents > 0 ? (
+                  <span className="font-mono text-xs">{formatDollars(r.effective_compensation_cents)}</span>
+                ) : (
+                  <span className="text-xs text-[var(--text-muted)]">TBD</span>
+                ),
+              className: "text-end",
+            },
             {
               key: "status",
               header: "Status",
@@ -72,7 +88,7 @@ export default async function OfferLettersPage() {
             },
             {
               key: "code",
-              header: "Access Code",
+              header: "Code",
               render: (r) => <span className="font-mono text-xs tracking-wider">{r.access_code}</span>,
             },
             {

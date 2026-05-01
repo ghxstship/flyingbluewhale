@@ -30,9 +30,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (input.bodyText !== undefined) patch.body_text = input.bodyText;
     if (input.mergeTags !== undefined) patch.merge_tags = input.mergeTags;
     if (input.isActive !== undefined) patch.is_active = input.isActive;
-    const { data, error } = await (supabase.from("email_templates") as never as {
-      update: (p: Record<string, unknown>) => ReturnType<typeof supabase.from>;
-    })
+    const { data, error } = await supabase
+      .from("email_templates")
       .update(patch)
       .eq("id", id)
       .eq("org_id", session.orgId)
@@ -50,9 +49,8 @@ export async function DELETE(_req: NextRequest, ctx: { params: Promise<{ id: str
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     const supabase = await createClient();
-    const { error } = await (supabase.from("email_templates") as never as {
-      update: (p: Record<string, unknown>) => ReturnType<typeof supabase.from>;
-    })
+    const { error } = await supabase
+      .from("email_templates")
       .update({ deleted_at: new Date().toISOString() })
       .eq("id", id)
       .eq("org_id", session.orgId);

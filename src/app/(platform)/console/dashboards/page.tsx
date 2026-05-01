@@ -1,0 +1,153 @@
+import Link from "next/link";
+import { ModuleHeader } from "@/components/Shell";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { formatMoney } from "@/lib/i18n/format";
+
+export const dynamic = "force-dynamic";
+
+type ProjectKpi = {
+  id: string;
+  name: string;
+  open_rfis: number;
+  open_punch: number;
+  open_inspections: number;
+  recordable_30d: number;
+  budget_cents: number;
+  spent_cents: number;
+};
+
+export default async function Page() {
+  if (!hasSupabase) return null;
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  // Load active projects, then run targeted aggregate queries per dimension.
+  const { data: projects } = await supabase
+    .from("projects")
+    .select("id, name, budget_cents")
+    .eq("org_id", session.orgId)
+    .in("status", ["active", "draft"])
+    .order("name")
+    .limit(50);
+
+  const projectIds = (projects ?? []).map((p) => p.id);
+  if (projectIds.length === 0) {
+    return (
+      <>
+        <ModuleHeader eyebrow="Workspace" title="Portfolio Dashboard" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">No active projects.</div>
+        </div>
+      </>
+    );
+  }
+  const since30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+  // Run all per-dimension queries in parallel; we'll bucket counts by project_id.
+  const [rfis, punch, insp, recordable, spent] = await Promise.all([
+    supabase
+      .from("rfis")
+      .select("project_id")
+      .eq("org_id", session.orgId)
+      .eq("status", "open")
+      .in("project_id", projectIds),
+    supabase
+      .from("punch_items")
+      .select("project_id")
+      .eq("org_id", session.orgId)
+      .in("status", ["open", "in_progress", "ready_for_review"])
+      .in("project_id", projectIds),
+    supabase
+      .from("inspections")
+      .select("project_id")
+      .eq("org_id", session.orgId)
+      .in("status", ["scheduled", "in_progress"])
+      .in("project_id", projectIds),
+    supabase
+      .from("incidents")
+      .select("project_id")
+      .eq("org_id", session.orgId)
+      .eq("osha_recordable", true)
+      .gte("occurred_at", since30),
+    supabase.from("budgets").select("project_id, spent_cents").eq("org_id", session.orgId).in("project_id", projectIds),
+  ]);
+
+  const count = (rs: Array<{ project_id: string | null }> | null, pid: string) =>
+    (rs ?? []).filter((r) => r.project_id === pid).length;
+  const sumSpent = (rs: Array<{ project_id: string | null; spent_cents: number }> | null, pid: string) =>
+    (rs ?? []).filter((r) => r.project_id === pid).reduce((s, r) => s + Number(r.spent_cents), 0);
+
+  const kpis: ProjectKpi[] = (projects ?? []).map((p) => ({
+    id: p.id,
+    name: p.name,
+    open_rfis: count(rfis.data, p.id),
+    open_punch: count(punch.data, p.id),
+    open_inspections: count(insp.data, p.id),
+    recordable_30d: count(recordable.data, p.id),
+    budget_cents: p.budget_cents ?? 0,
+    spent_cents: sumSpent(spent.data, p.id),
+  }));
+
+  const totals = kpis.reduce(
+    (acc, k) => ({
+      rfis: acc.rfis + k.open_rfis,
+      punch: acc.punch + k.open_punch,
+      insp: acc.insp + k.open_inspections,
+      recordable: acc.recordable + k.recordable_30d,
+    }),
+    { rfis: 0, punch: 0, insp: 0, recordable: 0 },
+  );
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow="Workspace"
+        title="Portfolio Dashboard"
+        subtitle={`${kpis.length} active project${kpis.length === 1 ? "" : "s"}`}
+      />
+      <div className="page-content space-y-5">
+        <div className="metric-grid-3">
+          <MetricCard label="Open RFIs" value={totals.rfis.toLocaleString()} accent />
+          <MetricCard label="Open punch" value={totals.punch.toLocaleString()} />
+          <MetricCard label="OSHA recordables · 30d" value={totals.recordable.toLocaleString()} />
+        </div>
+        <section className="surface p-4">
+          <h3 className="text-sm font-semibold">Per-project KPIs</h3>
+          <table className="data-table mt-3">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Open RFIs</th>
+                <th>Open punch</th>
+                <th>Open inspections</th>
+                <th>Recordables (30d)</th>
+                <th>Budget</th>
+                <th>Spent</th>
+              </tr>
+            </thead>
+            <tbody>
+              {kpis.map((k) => (
+                <tr key={k.id}>
+                  <td>
+                    <Link href={`/console/projects/${k.id}`} className="hover:underline">
+                      {k.name}
+                    </Link>
+                  </td>
+                  <td className="font-mono text-xs">{k.open_rfis}</td>
+                  <td className="font-mono text-xs">{k.open_punch}</td>
+                  <td className="font-mono text-xs">{k.open_inspections}</td>
+                  <td className="font-mono text-xs">{k.recordable_30d}</td>
+                  <td className="font-mono text-xs">{formatMoney(k.budget_cents)}</td>
+                  <td className="font-mono text-xs">{formatMoney(k.spent_cents)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </>
+  );
+}

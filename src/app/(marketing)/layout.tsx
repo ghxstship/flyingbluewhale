@@ -73,7 +73,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 className="text-base font-semibold tracking-[0.18em] uppercase"
                 aria-label="L0ST 1SLAND Technologies — home"
               >
-                SECOND STVR
+                L0ST 1SLAND
               </Link>
               <p className="mt-3 text-xs text-[var(--text-muted)]">
                 ATLVS, GVTEWAY, and COMPVSS — three connected apps for production teams.

@@ -1,0 +1,59 @@
+import { ModuleHeader } from "@/components/Shell";
+import { FormShell } from "@/components/FormShell";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { createBriefing } from "./actions";
+
+export const dynamic = "force-dynamic";
+
+const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+
+export default async function Page() {
+  if (!hasSupabase) return null;
+  const session = await requireSession();
+  const supabase = await createClient();
+  const { data: projects } = await supabase
+    .from("projects")
+    .select("id, name")
+    .eq("org_id", session.orgId)
+    .order("name");
+
+  return (
+    <>
+      <ModuleHeader eyebrow="Safety" title="Schedule briefing" />
+      <div className="page-content max-w-xl">
+        <FormShell action={createBriefing} cancelHref="/console/safety/briefings" submitLabel="Schedule">
+          <label className="flex flex-col gap-1.5">
+            <span className={LBL}>
+              Topic<span className="ms-0.5 text-[var(--color-error)]">*</span>
+            </span>
+            <input name="topic" required placeholder="Heat illness prevention — outdoor build days" className={INPUT} />
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className={LBL}>Project</span>
+            <select name="project_id" className={INPUT}>
+              <option value="">—</option>
+              {(projects ?? []).map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className={LBL}>
+              Scheduled for<span className="ms-0.5 text-[var(--color-error)]">*</span>
+            </span>
+            <input type="datetime-local" name="scheduled_for" required className={INPUT} />
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className={LBL}>Notes</span>
+            <textarea name="notes" rows={4} className={INPUT} />
+          </label>
+        </FormShell>
+      </div>
+    </>
+  );
+}

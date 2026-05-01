@@ -100,7 +100,7 @@ export function MarketingHeader() {
           onClick={() => setMobileOpen(false)}
           aria-label="L0ST 1SLAND Technologies — home"
         >
-          SECOND STVR
+          L0ST 1SLAND
         </Link>
 
         {/* Desktop primary nav — 3 dropdowns + 2 direct links = 5 visible items,

@@ -2,40 +2,40 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { OfferLetter, OfferLetterStatus } from "./types";
 
+/** Editable FK columns + per-letter overrides (NOT the joined display fields). */
 type UpdatePayload = Partial<
   Pick<
     OfferLetter,
-    | "recipient_name"
-    | "recipient_email"
-    | "recipient_phone"
-    | "role_title"
-    | "department"
+    | "crew_member_id"
+    | "role_id"
+    | "reports_to_crew_member_id"
+    | "venue_id"
     | "employer"
     | "classification"
-    | "reports_to_name"
-    | "reports_to_email"
-    | "work_location"
+    | "rate_card_item_id"
+    | "per_diem_rate_card_item_id"
+    | "compensation_basis"
+    | "override_amount_cents"
+    | "override_per_diem_cents"
     | "engagement_start"
     | "engagement_end"
-    | "compensation_cents"
-    | "compensation_basis"
-    | "compensation_label"
-    | "payment_schedule"
-    | "per_diem_cents"
     | "travel_provided"
     | "lodging_provided"
     | "meals_provided"
-    | "inclusions"
-    | "expectations"
-    | "terms"
-    | "governing_law"
-    | "confidentiality"
+    | "extra_inclusions"
+    | "expectations_override"
+    | "terms_override"
   >
 >;
 
 export async function updateOfferLetter(orgId: string, id: string, patch: UpdatePayload): Promise<void> {
   const supabase = await createClient();
-  const { error } = await supabase.from("offer_letters").update(patch).eq("org_id", orgId).eq("id", id);
+  const { error } = await supabase
+    .from("offer_letters")
+    .update(patch)
+    .eq("org_id", orgId)
+    .eq("id", id)
+    .eq("status", "draft"); // hard guard: cannot edit non-draft letters
   if (error) throw new Error(error.message);
   await logActivity(orgId, id, "edited", "Letter draft edited.");
 }
@@ -47,11 +47,12 @@ export async function markOfferLetterSent(orgId: string, id: string, actorLabel:
     .update({ status: "sent" satisfies OfferLetterStatus, sent_at: new Date().toISOString() })
     .eq("org_id", orgId)
     .eq("id", id)
+    .eq("status", "draft") // only drafts can be sent
     .select("*")
     .maybeSingle();
   if (error) throw new Error(error.message);
-  if (!data) throw new Error("Letter not found");
-  await logActivity(orgId, id, "sent", "Letter marked as sent — public link active.", actorLabel);
+  if (!data) throw new Error("Letter not found or not in draft state");
+  await logActivity(orgId, id, "sent", "Letter marked as sent — public link active. Snapshot frozen.", actorLabel);
   return data as unknown as OfferLetter;
 }
 

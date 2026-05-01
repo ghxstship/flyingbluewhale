@@ -1,19 +1,38 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import type { OfferLetter, OfferLetterActivity } from "./types";
+import type {
+  OfferLetter,
+  OfferLetterResolved,
+  OfferLetterActivity,
+  CrewMemberOption,
+  OrgRoleOption,
+  VenueOption,
+  RateCardOption,
+} from "./types";
 
-export async function listOfferLetters(orgId: string, projectId?: string): Promise<OfferLetter[]> {
+// ── ADMIN READS (org-scoped, RLS-gated) ─────────────────────────────────────
+
+export async function listOfferLetters(orgId: string, projectId?: string): Promise<OfferLetterResolved[]> {
   const supabase = await createClient();
-  let q = supabase.from("offer_letters").select("*").eq("org_id", orgId);
+  let q = supabase.from("offer_letters_resolved").select("*").eq("org_id", orgId);
   if (projectId) q = q.eq("project_id", projectId);
   const { data } = await q.order("recipient_name", { ascending: true });
-  return ((data ?? []) as unknown as OfferLetter[]) ?? [];
+  return ((data ?? []) as unknown as OfferLetterResolved[]) ?? [];
 }
 
-export async function getOfferLetter(orgId: string, id: string): Promise<OfferLetter | null> {
+/** Returns the *raw* row + resolved view in parallel. Admin needs both — the
+ * raw FK columns for the editor, and the resolved view for the preview. */
+export async function getOfferLetter(
+  orgId: string,
+  id: string,
+): Promise<{ raw: OfferLetter; resolved: OfferLetterResolved } | null> {
   const supabase = await createClient();
-  const { data } = await supabase.from("offer_letters").select("*").eq("org_id", orgId).eq("id", id).maybeSingle();
-  return (data as unknown as OfferLetter) ?? null;
+  const [{ data: raw }, { data: resolved }] = await Promise.all([
+    supabase.from("offer_letters").select("*").eq("org_id", orgId).eq("id", id).maybeSingle(),
+    supabase.from("offer_letters_resolved").select("*").eq("org_id", orgId).eq("id", id).maybeSingle(),
+  ]);
+  if (!raw || !resolved) return null;
+  return { raw: raw as unknown as OfferLetter, resolved: resolved as unknown as OfferLetterResolved };
 }
 
 export async function listOfferLetterActivity(orgId: string, letterId: string): Promise<OfferLetterActivity[]> {
@@ -27,28 +46,63 @@ export async function listOfferLetterActivity(orgId: string, letterId: string): 
   return ((data ?? []) as unknown as OfferLetterActivity[]) ?? [];
 }
 
-/**
- * Public read — used by the /offer/[token] route. Resolves a letter by its
- * public token + access code, bypassing org-member RLS via a SECURITY DEFINER
- * RPC. Returns null when the token/code combo is invalid, expired, or
- * the letter has been withdrawn.
- */
-export async function getOfferLetterByToken(token: string, code: string): Promise<OfferLetter | null> {
-  // Use the service client so the anon role is not subject to org-member RLS.
-  // The RPC itself enforces token + access code matching.
+// ── PICKER OPTIONS (for admin FK selectors) ─────────────────────────────────
+
+export async function listCrewMembers(orgId: string): Promise<CrewMemberOption[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("crew_members")
+    .select("id,name,email,phone,role")
+    .eq("org_id", orgId)
+    .order("name", { ascending: true });
+  return ((data ?? []) as unknown as CrewMemberOption[]) ?? [];
+}
+
+export async function listOrgRoles(orgId: string): Promise<OrgRoleOption[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("org_roles")
+    .select("id,slug,label,department")
+    .eq("org_id", orgId)
+    .order("label", { ascending: true });
+  return ((data ?? []) as unknown as OrgRoleOption[]) ?? [];
+}
+
+export async function listVenues(orgId: string, projectId: string): Promise<VenueOption[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("venues")
+    .select("id,name,locations(city)")
+    .eq("org_id", orgId)
+    .eq("project_id", projectId)
+    .order("name", { ascending: true });
+  return (
+    (data ?? []) as unknown as Array<{ id: string; name: string; locations: { city: string | null } | null }>
+  ).map((r) => ({ id: r.id, name: r.name, city: r.locations?.city ?? null }));
+}
+
+export async function listRateCardItems(orgId: string, catalog = "crew_day_rates"): Promise<RateCardOption[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("rate_card_items")
+    .select("id,sku,name,unit_price_cents")
+    .eq("org_id", orgId)
+    .eq("catalog", catalog)
+    .eq("active", true)
+    .order("name", { ascending: true });
+  return ((data ?? []) as unknown as RateCardOption[]) ?? [];
+}
+
+// ── PUBLIC ACCESS (RPCs returning JSONB — snapshot or resolved) ─────────────
+
+export async function getOfferLetterByToken(token: string, code: string): Promise<OfferLetterResolved | null> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_offer_letter_by_token", {
     p_token: token,
     p_code: code,
   });
   if (error || !data) return null;
-  // RPC returns offer_letters composite type. When the underlying row is missing
-  // (invalid token, withdrawn, expired) plpgsql `return null` still emits a row
-  // of all-NULL fields rather than a SQL NULL — so we must check the primary
-  // key explicitly before treating the row as a real letter.
-  const row = data as unknown as OfferLetter & { id: string | null };
-  if (!row.id) return null;
-  return row as OfferLetter;
+  return data as unknown as OfferLetterResolved;
 }
 
 export async function recordOfferLetterView(token: string, code: string): Promise<void> {
@@ -62,7 +116,7 @@ export async function acceptOfferLetterByToken(
   signature: string,
   ip: string | null,
   userAgent: string | null,
-): Promise<OfferLetter> {
+): Promise<OfferLetterResolved> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("accept_offer_letter", {
     p_token: token,
@@ -72,12 +126,14 @@ export async function acceptOfferLetterByToken(
     p_user_agent: userAgent ?? "",
   });
   if (error) throw new Error(error.message);
-  const row = data as unknown as OfferLetter & { id: string | null };
-  if (!row?.id) throw new Error("Letter not found or no longer accepting signatures");
-  return row as OfferLetter;
+  return data as unknown as OfferLetterResolved;
 }
 
-export async function declineOfferLetterByToken(token: string, code: string, reason: string): Promise<OfferLetter> {
+export async function declineOfferLetterByToken(
+  token: string,
+  code: string,
+  reason: string,
+): Promise<OfferLetterResolved> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("decline_offer_letter", {
     p_token: token,
@@ -85,7 +141,5 @@ export async function declineOfferLetterByToken(token: string, code: string, rea
     p_reason: reason,
   });
   if (error) throw new Error(error.message);
-  const row = data as unknown as OfferLetter & { id: string | null };
-  if (!row?.id) throw new Error("Letter not found");
-  return row as OfferLetter;
+  return data as unknown as OfferLetterResolved;
 }

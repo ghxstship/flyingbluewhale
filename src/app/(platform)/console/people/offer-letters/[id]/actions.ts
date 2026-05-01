@@ -15,40 +15,43 @@ export type State = { error?: string; ok?: true } | null;
 export async function saveLetter(id: string, _prev: State, fd: FormData): Promise<State> {
   try {
     const session = await requireSession();
-    const inclusionsRaw = (fd.get("inclusions") as string | null) ?? "";
-    const inclusions = inclusionsRaw
+    const extraInclusionsRaw = (fd.get("extra_inclusions") as string | null) ?? "";
+    const extraInclusions = extraInclusionsRaw
       .split("\n")
       .map((s) => s.trim())
       .filter(Boolean);
-    const compensationDollars = Number(fd.get("compensation_dollars") ?? 0);
-    const perDiemDollars = Number(fd.get("per_diem_dollars") ?? 0);
+
+    const overrideAmountDollarsRaw = fd.get("override_amount_dollars") as string | null;
+    const overridePerDiemDollarsRaw = fd.get("override_per_diem_dollars") as string | null;
+    const overrideAmountCents =
+      overrideAmountDollarsRaw && overrideAmountDollarsRaw.trim() !== ""
+        ? Math.round(Number(overrideAmountDollarsRaw) * 100)
+        : null;
+    const overridePerDiemCents =
+      overridePerDiemDollarsRaw && overridePerDiemDollarsRaw.trim() !== ""
+        ? Math.round(Number(overridePerDiemDollarsRaw) * 100)
+        : null;
 
     await updateOfferLetter(session.orgId, id, {
-      recipient_name: String(fd.get("recipient_name") ?? "").trim(),
-      recipient_email: String(fd.get("recipient_email") ?? "").trim(),
-      recipient_phone: optional(fd.get("recipient_phone")),
-      role_title: String(fd.get("role_title") ?? "").trim(),
-      department: optional(fd.get("department")),
+      crew_member_id: requireString(fd.get("crew_member_id"), "Recipient is required"),
+      role_id: requireString(fd.get("role_id"), "Role is required"),
+      reports_to_crew_member_id: optionalString(fd.get("reports_to_crew_member_id")),
+      venue_id: optionalString(fd.get("venue_id")),
       employer: (fd.get("employer") as OfferLetterEmployer) ?? "ghxstship",
       classification: (fd.get("classification") as OfferLetterClassification) ?? "1099",
-      reports_to_name: optional(fd.get("reports_to_name")),
-      reports_to_email: optional(fd.get("reports_to_email")),
-      work_location: optional(fd.get("work_location")),
-      engagement_start: optional(fd.get("engagement_start")),
-      engagement_end: optional(fd.get("engagement_end")),
-      compensation_cents: Math.round(compensationDollars * 100),
-      compensation_basis: (fd.get("compensation_basis") as CompensationBasis) ?? "flat_fee",
-      compensation_label: optional(fd.get("compensation_label")),
-      payment_schedule: optional(fd.get("payment_schedule")),
-      per_diem_cents: Math.round(perDiemDollars * 100),
-      travel_provided: fd.get("travel_provided") === "on",
-      lodging_provided: fd.get("lodging_provided") === "on",
-      meals_provided: fd.get("meals_provided") === "on",
-      inclusions,
-      expectations: optional(fd.get("expectations")),
-      terms: optional(fd.get("terms")),
-      governing_law: String(fd.get("governing_law") ?? "State of Florida"),
-      confidentiality: fd.get("confidentiality") === "on",
+      rate_card_item_id: optionalString(fd.get("rate_card_item_id")),
+      per_diem_rate_card_item_id: optionalString(fd.get("per_diem_rate_card_item_id")),
+      compensation_basis: (fd.get("compensation_basis") as CompensationBasis) ?? "per_day",
+      override_amount_cents: overrideAmountCents,
+      override_per_diem_cents: overridePerDiemCents,
+      engagement_start: optionalString(fd.get("engagement_start")),
+      engagement_end: optionalString(fd.get("engagement_end")),
+      travel_provided: triState(fd.get("travel_provided")),
+      lodging_provided: triState(fd.get("lodging_provided")),
+      meals_provided: triState(fd.get("meals_provided")),
+      extra_inclusions: extraInclusions,
+      expectations_override: optionalString(fd.get("expectations_override")),
+      terms_override: optionalString(fd.get("terms_override")),
     });
     revalidatePath(`/console/people/offer-letters/${id}`);
     revalidatePath(`/console/people/offer-letters`);
@@ -93,8 +96,24 @@ export async function rotateLetterCode(id: string, _prev: State, _fd: FormData):
   }
 }
 
-function optional(v: FormDataEntryValue | null): string | null {
+function requireString(v: FormDataEntryValue | null, msg: string): string {
+  if (!v) throw new Error(msg);
+  const s = String(v).trim();
+  if (!s) throw new Error(msg);
+  return s;
+}
+
+function optionalString(v: FormDataEntryValue | null): string | null {
   if (v === null) return null;
   const s = String(v).trim();
   return s.length === 0 ? null : s;
+}
+
+/** Tri-state checkbox: "true" | "false" | "" (inherit / null) */
+function triState(v: FormDataEntryValue | null): boolean | null {
+  if (v === null) return null;
+  const s = String(v);
+  if (s === "true") return true;
+  if (s === "false") return false;
+  return null;
 }

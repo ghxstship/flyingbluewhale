@@ -24,9 +24,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (input.description !== undefined) patch.description = input.description;
     if (input.events !== undefined) patch.events = input.events;
     if (input.isActive !== undefined) patch.is_active = input.isActive;
-    const { data, error } = await (supabase.from("webhook_endpoints") as never as {
-      update: (p: Record<string, unknown>) => ReturnType<typeof supabase.from>;
-    })
+    const { data, error } = await supabase
+      .from("webhook_endpoints")
       .update(patch)
       .eq("id", id)
       .eq("org_id", session.orgId ?? "")
@@ -44,9 +43,8 @@ export async function DELETE(_req: NextRequest, ctx: { params: Promise<{ id: str
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     const supabase = await createClient();
-    const { error } = await (supabase.from("webhook_endpoints") as never as {
-      update: (p: Record<string, unknown>) => ReturnType<typeof supabase.from>;
-    })
+    const { error } = await supabase
+      .from("webhook_endpoints")
       .update({ deleted_at: new Date().toISOString() })
       .eq("id", id)
       .eq("org_id", session.orgId ?? "");

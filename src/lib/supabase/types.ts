@@ -1291,6 +1291,548 @@ export type AssetLink = {
   revoked_at: string | null;
 };
 
+// ── 2026-04-30 procore parity ─────────────────────────────────────
+export type Conversation = {
+  id: string;
+  org_id: string;
+  record_type: string;
+  record_id: string;
+  created_at: string;
+};
+export type ConversationMessage = {
+  id: string;
+  org_id: string;
+  conversation_id: string;
+  author_id: string | null;
+  body: string;
+  attachments: unknown;
+  created_at: string;
+};
+export type DailyLog = {
+  id: string;
+  org_id: string;
+  project_id: string;
+  log_date: string;
+  weather_summary: string | null;
+  weather_temp_high_f: number | null;
+  weather_temp_low_f: number | null;
+  weather_precip_in: number | null;
+  weather_wind_mph: number | null;
+  weather_source: string | null;
+  notes: string | null;
+  status: "draft" | "submitted" | "approved";
+  submitted_by: string | null;
+  submitted_at: string | null;
+  approved_by: string | null;
+  approved_at: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type DailyLogManpower = {
+  id: string;
+  org_id: string;
+  daily_log_id: string;
+  trade: string;
+  vendor_id: string | null;
+  headcount: number;
+  hours_worked: number;
+  notes: string | null;
+  created_at: string;
+};
+export type DailyLogEquipment = {
+  id: string;
+  org_id: string;
+  daily_log_id: string;
+  equipment_id: string | null;
+  description: string | null;
+  hours_used: number;
+  hours_idle: number;
+  notes: string | null;
+  created_at: string;
+};
+export type DailyLogDelivery = {
+  id: string;
+  org_id: string;
+  daily_log_id: string;
+  vendor_id: string | null;
+  description: string;
+  arrived_at: string | null;
+  received_by: string | null;
+  notes: string | null;
+  created_at: string;
+};
+export type DailyLogVisitor = {
+  id: string;
+  org_id: string;
+  daily_log_id: string;
+  name: string;
+  organization: string | null;
+  purpose: string | null;
+  arrived_at: string | null;
+  departed_at: string | null;
+  created_at: string;
+};
+export type DailyLogPhoto = {
+  id: string;
+  org_id: string;
+  daily_log_id: string;
+  file_path: string;
+  caption: string | null;
+  taken_at: string;
+  taken_by: string | null;
+  created_at: string;
+};
+export type SitePlan = {
+  id: string;
+  org_id: string;
+  project_id: string | null;
+  venue_id: string | null;
+  code: string;
+  title: string;
+  discipline:
+    | "site"
+    | "rigging"
+    | "power"
+    | "audio"
+    | "video"
+    | "lighting"
+    | "comms"
+    | "evacuation"
+    | "hospitality"
+    | "accessibility"
+    | "sustainability"
+    | "other";
+  current_revision_id: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type SitePlanRevision = {
+  id: string;
+  org_id: string;
+  site_plan_id: string;
+  revision_label: string;
+  file_path: string;
+  notes: string | null;
+  uploaded_by: string | null;
+  uploaded_at: string;
+  created_at: string;
+};
+export type SitePlanPin = {
+  id: string;
+  org_id: string;
+  site_plan_id: string;
+  x_pct: number;
+  y_pct: number;
+  pin_type: "issue" | "note" | "rfi" | "punch" | "inspection" | "rigging" | "power" | "equipment" | "zone";
+  link_record_type: string | null;
+  link_record_id: string | null;
+  label: string | null;
+  created_by: string | null;
+  created_at: string;
+};
+export type InspectionTemplate = {
+  id: string;
+  org_id: string;
+  code: string;
+  name: string;
+  category:
+    | "rigging"
+    | "fire"
+    | "electrical"
+    | "ada"
+    | "food_safety"
+    | "security"
+    | "foh"
+    | "medical"
+    | "sustainability"
+    | "custom";
+  description: string | null;
+  active: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type InspectionTemplateItem = {
+  id: string;
+  org_id: string;
+  template_id: string;
+  position: number;
+  prompt: string;
+  requires_photo: boolean;
+  requires_note_on_fail: boolean;
+  created_at: string;
+};
+export type Inspection = {
+  id: string;
+  org_id: string;
+  project_id: string | null;
+  template_id: string | null;
+  code: string;
+  name: string;
+  category: string | null;
+  status: "scheduled" | "in_progress" | "passed" | "failed" | "cancelled";
+  inspector_id: string | null;
+  scheduled_for: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+  signature_path: string | null;
+  signed_at: string | null;
+  signed_by: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type InspectionItem = {
+  id: string;
+  org_id: string;
+  inspection_id: string;
+  template_item_id: string | null;
+  position: number;
+  prompt: string;
+  result: "pending" | "pass" | "fail" | "na";
+  photo_path: string | null;
+  notes: string | null;
+  created_at: string;
+};
+export type Rfi = {
+  id: string;
+  org_id: string;
+  project_id: string;
+  code: string;
+  subject: string;
+  question: string;
+  category: string | null;
+  asked_by: string | null;
+  ball_in_court_id: string | null;
+  status: "open" | "answered" | "closed" | "void";
+  priority: "low" | "normal" | "high" | "urgent";
+  due_at: string | null;
+  asked_at: string;
+  answered_at: string | null;
+  closed_at: string | null;
+  official_answer: string | null;
+  answered_by: string | null;
+  linked_deliverable_id: string | null;
+  linked_po_id: string | null;
+  linked_site_plan_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type Submittal = {
+  id: string;
+  org_id: string;
+  project_id: string;
+  code: string;
+  title: string;
+  spec_section: string | null;
+  vendor_id: string | null;
+  ball_in_court_id: string | null;
+  status:
+    | "draft"
+    | "submitted"
+    | "in_review"
+    | "approved"
+    | "approved_with_comments"
+    | "revise_resubmit"
+    | "rejected"
+    | "void"
+    | "closed";
+  current_round: number;
+  due_at: string | null;
+  submitted_at: string | null;
+  closed_at: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type SubmittalRevision = {
+  id: string;
+  org_id: string;
+  submittal_id: string;
+  round: number;
+  file_path: string | null;
+  submitted_by: string | null;
+  submitted_at: string;
+  stamp: "no_stamp" | "approved" | "approved_with_comments" | "revise_resubmit" | "rejected";
+  stamp_notes: string | null;
+  stamped_by: string | null;
+  stamped_at: string | null;
+  created_at: string;
+};
+export type PunchList = {
+  id: string;
+  org_id: string;
+  project_id: string;
+  name: string;
+  category: string | null;
+  status: "open" | "closed";
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type PunchItem = {
+  id: string;
+  org_id: string;
+  project_id: string;
+  punch_list_id: string | null;
+  code: string;
+  title: string;
+  description: string | null;
+  status: "open" | "in_progress" | "ready_for_review" | "complete" | "void";
+  priority: "low" | "normal" | "high" | "urgent";
+  assignee_id: string | null;
+  vendor_id: string | null;
+  due_at: string | null;
+  closed_at: string | null;
+  closed_by: string | null;
+  site_plan_id: string | null;
+  pin_x: number | null;
+  pin_y: number | null;
+  photo_path: string | null;
+  show_ready_gate: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type PaymentApplication = {
+  id: string;
+  org_id: string;
+  project_id: string;
+  purchase_order_id: string;
+  vendor_id: string | null;
+  application_number: number;
+  period_start: string;
+  period_end: string;
+  status: "draft" | "submitted" | "in_review" | "approved" | "rejected" | "paid";
+  retention_pct: number;
+  total_completed_cents: number;
+  total_retention_cents: number;
+  total_previously_paid_cents: number;
+  total_due_cents: number;
+  submitted_at: string | null;
+  approved_at: string | null;
+  approved_by: string | null;
+  paid_at: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type PaymentApplicationLine = {
+  id: string;
+  org_id: string;
+  payment_application_id: string;
+  po_line_item_id: string;
+  scheduled_value_cents: number;
+  pct_complete_to_date: number;
+  pct_complete_this_period: number;
+  completed_to_date_cents: number;
+  this_period_cents: number;
+  retention_cents: number;
+  notes: string | null;
+  created_at: string;
+};
+export type PoChangeOrder = {
+  id: string;
+  org_id: string;
+  project_id: string | null;
+  purchase_order_id: string;
+  number: number;
+  title: string;
+  description: string | null;
+  reason: string | null;
+  status: "proposed" | "submitted" | "in_review" | "approved" | "rejected" | "void";
+  amount_cents: number;
+  schedule_impact_days: number;
+  proposed_at: string;
+  approved_at: string | null;
+  approved_by: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type PoChangeOrderLine = {
+  id: string;
+  org_id: string;
+  po_change_order_id: string;
+  description: string;
+  quantity: number;
+  unit_price_cents: number;
+  position: number;
+  created_at: string;
+};
+export type RfqResponse = {
+  id: string;
+  org_id: string;
+  requisition_id: string;
+  vendor_id: string | null;
+  status: "invited" | "viewed" | "responded" | "no_bid" | "withdrawn" | "awarded" | "declined";
+  total_cents: number | null;
+  notes: string | null;
+  submitted_at: string | null;
+  awarded_at: string | null;
+  awarded_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type RfqResponseLine = {
+  id: string;
+  org_id: string;
+  rfq_response_id: string;
+  position: number;
+  description: string;
+  quantity: number;
+  unit_price_cents: number;
+  notes: string | null;
+  created_at: string;
+};
+export type PrequalificationQuestionnaire = {
+  id: string;
+  org_id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  active: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type PrequalificationQuestion = {
+  id: string;
+  org_id: string;
+  questionnaire_id: string;
+  position: number;
+  category: "insurance" | "safety" | "financial" | "references" | "licenses" | "experience" | "other";
+  prompt: string;
+  required: boolean;
+  scoring_weight: number;
+  created_at: string;
+};
+export type VendorPrequalification = {
+  id: string;
+  org_id: string;
+  vendor_id: string;
+  questionnaire_id: string;
+  status: "invited" | "in_progress" | "submitted" | "approved" | "approved_conditional" | "rejected" | "expired";
+  score: number | null;
+  approved_at: string | null;
+  approved_by: string | null;
+  expires_at: string | null;
+  notes: string | null;
+  submitted_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type VendorPrequalificationAnswer = {
+  id: string;
+  org_id: string;
+  vendor_prequalification_id: string;
+  question_id: string;
+  answer: string | null;
+  attachment_path: string | null;
+  score: number | null;
+  created_at: string;
+};
+export type SafetyBriefing = {
+  id: string;
+  org_id: string;
+  project_id: string | null;
+  shift_id: string | null;
+  topic: string;
+  briefer_id: string | null;
+  scheduled_for: string;
+  conducted_at: string | null;
+  notes: string | null;
+  attachment_path: string | null;
+  status: "scheduled" | "conducted" | "cancelled";
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type SafetyBriefingAttendee = {
+  id: string;
+  org_id: string;
+  briefing_id: string;
+  user_id: string | null;
+  crew_member_id: string | null;
+  acknowledged_at: string | null;
+  signature_path: string | null;
+  notes: string | null;
+  created_at: string;
+};
+export type ProjectPhoto = {
+  id: string;
+  org_id: string;
+  project_id: string;
+  album: string | null;
+  file_path: string;
+  caption: string | null;
+  taken_at: string;
+  taken_by: string | null;
+  location_id: string | null;
+  lat: number | null;
+  lng: number | null;
+  created_at: string;
+};
+export type CostCode = {
+  id: string;
+  org_id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+export type WorkOrderBroadcast = {
+  id: string;
+  org_id: string;
+  project_id: string | null;
+  requisition_id: string | null;
+  code: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  budget_cents: number | null;
+  needed_by: string | null;
+  status: "draft" | "open" | "closed" | "awarded" | "cancelled";
+  awarded_to_vendor_id: string | null;
+  awarded_at: string | null;
+  awarded_by: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type WorkOrderBroadcastInvite = {
+  id: string;
+  org_id: string;
+  broadcast_id: string;
+  vendor_id: string;
+  status: "invited" | "viewed" | "accepted" | "declined";
+  responded_at: string | null;
+  notes: string | null;
+  created_at: string;
+};
+export type PoChecklistItem = {
+  id: string;
+  org_id: string;
+  purchase_order_id: string;
+  position: number;
+  prompt: string;
+  requires_photo: boolean;
+  status: "pending" | "complete" | "skipped";
+  completed_at: string | null;
+  completed_by: string | null;
+  photo_path: string | null;
+  notes: string | null;
+  created_at: string;
+};
+export type PunchPriority = "low" | "normal" | "high" | "urgent";
+
 export type Database = {
   public: {
     Tables: {
@@ -2139,6 +2681,203 @@ export type Database = {
         FormDef,
         Partial<FormDef> & { org_id: string; slug: string; title: string },
         Partial<FormDef>
+      >;
+      // ── 2026-04-30 procore parity ────────────────────────────────────
+      conversations: TableDef<
+        Conversation,
+        Partial<Conversation> & { org_id: string; record_type: string; record_id: string },
+        Partial<Conversation>
+      >;
+      conversation_messages: TableDef<
+        ConversationMessage,
+        Partial<ConversationMessage> & { org_id: string; conversation_id: string; body: string },
+        Partial<ConversationMessage>
+      >;
+      daily_logs: TableDef<
+        DailyLog,
+        Partial<DailyLog> & { org_id: string; project_id: string; log_date: string },
+        Partial<DailyLog>
+      >;
+      daily_log_manpower: TableDef<
+        DailyLogManpower,
+        Partial<DailyLogManpower> & { org_id: string; daily_log_id: string; trade: string; headcount: number },
+        Partial<DailyLogManpower>
+      >;
+      daily_log_equipment: TableDef<
+        DailyLogEquipment,
+        Partial<DailyLogEquipment> & { org_id: string; daily_log_id: string },
+        Partial<DailyLogEquipment>
+      >;
+      daily_log_deliveries: TableDef<
+        DailyLogDelivery,
+        Partial<DailyLogDelivery> & { org_id: string; daily_log_id: string; description: string },
+        Partial<DailyLogDelivery>
+      >;
+      daily_log_visitors: TableDef<
+        DailyLogVisitor,
+        Partial<DailyLogVisitor> & { org_id: string; daily_log_id: string; name: string },
+        Partial<DailyLogVisitor>
+      >;
+      daily_log_photos: TableDef<
+        DailyLogPhoto,
+        Partial<DailyLogPhoto> & { org_id: string; daily_log_id: string; file_path: string },
+        Partial<DailyLogPhoto>
+      >;
+      site_plans: TableDef<
+        SitePlan,
+        Partial<SitePlan> & { org_id: string; code: string; title: string },
+        Partial<SitePlan>
+      >;
+      site_plan_revisions: TableDef<
+        SitePlanRevision,
+        Partial<SitePlanRevision> & { org_id: string; site_plan_id: string; revision_label: string; file_path: string },
+        Partial<SitePlanRevision>
+      >;
+      site_plan_pins: TableDef<
+        SitePlanPin,
+        Partial<SitePlanPin> & { org_id: string; site_plan_id: string; x_pct: number; y_pct: number; pin_type: string },
+        Partial<SitePlanPin>
+      >;
+      inspection_templates: TableDef<
+        InspectionTemplate,
+        Partial<InspectionTemplate> & { org_id: string; code: string; name: string },
+        Partial<InspectionTemplate>
+      >;
+      inspection_template_items: TableDef<
+        InspectionTemplateItem,
+        Partial<InspectionTemplateItem> & { org_id: string; template_id: string; prompt: string },
+        Partial<InspectionTemplateItem>
+      >;
+      inspections: TableDef<
+        Inspection,
+        Partial<Inspection> & { org_id: string; code: string; name: string },
+        Partial<Inspection>
+      >;
+      inspection_items: TableDef<
+        InspectionItem,
+        Partial<InspectionItem> & { org_id: string; inspection_id: string; prompt: string },
+        Partial<InspectionItem>
+      >;
+      rfis: TableDef<
+        Rfi,
+        Partial<Rfi> & { org_id: string; project_id: string; code: string; subject: string; question: string },
+        Partial<Rfi>
+      >;
+      submittals: TableDef<
+        Submittal,
+        Partial<Submittal> & { org_id: string; project_id: string; code: string; title: string },
+        Partial<Submittal>
+      >;
+      submittal_revisions: TableDef<
+        SubmittalRevision,
+        Partial<SubmittalRevision> & { org_id: string; submittal_id: string; round: number },
+        Partial<SubmittalRevision>
+      >;
+      punch_lists: TableDef<
+        PunchList,
+        Partial<PunchList> & { org_id: string; project_id: string; name: string },
+        Partial<PunchList>
+      >;
+      punch_items: TableDef<
+        PunchItem,
+        Partial<PunchItem> & { org_id: string; project_id: string; code: string; title: string },
+        Partial<PunchItem>
+      >;
+      payment_applications: TableDef<
+        PaymentApplication,
+        Partial<PaymentApplication> & {
+          org_id: string;
+          project_id: string;
+          purchase_order_id: string;
+          application_number: number;
+          period_start: string;
+          period_end: string;
+        },
+        Partial<PaymentApplication>
+      >;
+      payment_application_lines: TableDef<
+        PaymentApplicationLine,
+        Partial<PaymentApplicationLine> & { org_id: string; payment_application_id: string; po_line_item_id: string },
+        Partial<PaymentApplicationLine>
+      >;
+      po_change_orders: TableDef<
+        PoChangeOrder,
+        Partial<PoChangeOrder> & { org_id: string; purchase_order_id: string; number: number; title: string },
+        Partial<PoChangeOrder>
+      >;
+      po_change_order_lines: TableDef<
+        PoChangeOrderLine,
+        Partial<PoChangeOrderLine> & { org_id: string; po_change_order_id: string; description: string },
+        Partial<PoChangeOrderLine>
+      >;
+      rfq_responses: TableDef<
+        RfqResponse,
+        Partial<RfqResponse> & { org_id: string; requisition_id: string },
+        Partial<RfqResponse>
+      >;
+      rfq_response_lines: TableDef<
+        RfqResponseLine,
+        Partial<RfqResponseLine> & { org_id: string; rfq_response_id: string; description: string },
+        Partial<RfqResponseLine>
+      >;
+      prequalification_questionnaires: TableDef<
+        PrequalificationQuestionnaire,
+        Partial<PrequalificationQuestionnaire> & { org_id: string; code: string; name: string },
+        Partial<PrequalificationQuestionnaire>
+      >;
+      prequalification_questions: TableDef<
+        PrequalificationQuestion,
+        Partial<PrequalificationQuestion> & { org_id: string; questionnaire_id: string; prompt: string },
+        Partial<PrequalificationQuestion>
+      >;
+      vendor_prequalifications: TableDef<
+        VendorPrequalification,
+        Partial<VendorPrequalification> & { org_id: string; vendor_id: string; questionnaire_id: string },
+        Partial<VendorPrequalification>
+      >;
+      vendor_prequalification_answers: TableDef<
+        VendorPrequalificationAnswer,
+        Partial<VendorPrequalificationAnswer> & {
+          org_id: string;
+          vendor_prequalification_id: string;
+          question_id: string;
+        },
+        Partial<VendorPrequalificationAnswer>
+      >;
+      safety_briefings: TableDef<
+        SafetyBriefing,
+        Partial<SafetyBriefing> & { org_id: string; topic: string; scheduled_for: string },
+        Partial<SafetyBriefing>
+      >;
+      safety_briefing_attendees: TableDef<
+        SafetyBriefingAttendee,
+        Partial<SafetyBriefingAttendee> & { org_id: string; briefing_id: string },
+        Partial<SafetyBriefingAttendee>
+      >;
+      project_photos: TableDef<
+        ProjectPhoto,
+        Partial<ProjectPhoto> & { org_id: string; project_id: string; file_path: string },
+        Partial<ProjectPhoto>
+      >;
+      cost_codes: TableDef<
+        CostCode,
+        Partial<CostCode> & { org_id: string; code: string; name: string },
+        Partial<CostCode>
+      >;
+      work_order_broadcasts: TableDef<
+        WorkOrderBroadcast,
+        Partial<WorkOrderBroadcast> & { org_id: string; code: string; title: string },
+        Partial<WorkOrderBroadcast>
+      >;
+      work_order_broadcast_invites: TableDef<
+        WorkOrderBroadcastInvite,
+        Partial<WorkOrderBroadcastInvite> & { org_id: string; broadcast_id: string; vendor_id: string },
+        Partial<WorkOrderBroadcastInvite>
+      >;
+      po_checklist_items: TableDef<
+        PoChecklistItem,
+        Partial<PoChecklistItem> & { org_id: string; purchase_order_id: string; prompt: string },
+        Partial<PoChecklistItem>
       >;
     };
     Views: { [_ in never]: never };

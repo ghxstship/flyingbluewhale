@@ -40,11 +40,7 @@ export async function POST(req: NextRequest) {
     else if (input.action === "check_out") nextStatus = "in_use";
     else nextStatus = row.status === "in_use" ? "available" : "in_use";
 
-    const { error } = await (supabase.from("equipment") as never as {
-      update: (p: Record<string, unknown>) => ReturnType<typeof supabase.from>;
-    })
-      .update({ status: nextStatus })
-      .eq("id", row.id);
+    const { error } = await supabase.from("equipment").update({ status: nextStatus }).eq("id", row.id);
     if (error) return apiError("internal", error.message);
     return apiOk({
       result: "ok" as const,

@@ -1,0 +1,106 @@
+import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
+import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/components/ui/Badge";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+
+export const dynamic = "force-dynamic";
+
+type LogRow = {
+  id: string;
+  log_date: string;
+  status: string;
+  weather_summary: string | null;
+  notes: string | null;
+  project: { name: string | null } | null;
+};
+
+const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
+  draft: "muted",
+  submitted: "info",
+  approved: "success",
+};
+
+function fmt(d: string): string {
+  return new Date(d + "T00:00:00").toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+export default async function Page() {
+  if (!hasSupabase) {
+    return (
+      <>
+        <ModuleHeader eyebrow="Operations" title="Daily Log" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
+  }
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const { data } = await supabase
+    .from("daily_logs")
+    .select("id, log_date, status, weather_summary, notes, project:project_id(name)")
+    .eq("org_id", session.orgId)
+    .gte("log_date", since)
+    .order("log_date", { ascending: false })
+    .limit(200);
+
+  const rows = (data ?? []) as unknown as LogRow[];
+  const drafts = rows.filter((r) => r.status === "draft").length;
+  const submitted = rows.filter((r) => r.status === "submitted").length;
+  const approved = rows.filter((r) => r.status === "approved").length;
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow="Operations"
+        title="Daily Log"
+        subtitle={`${rows.length} logs in last 30 days · ${drafts} draft · ${submitted} submitted · ${approved} approved`}
+        action={
+          <Button href="/console/operations/daily-log/new" size="sm">
+            + New entry
+          </Button>
+        }
+      />
+      <div className="page-content space-y-5">
+        <div className="metric-grid-3">
+          <MetricCard label="Logs · 30d" value={rows.length.toLocaleString()} accent />
+          <MetricCard label="Pending review" value={submitted.toLocaleString()} />
+          <MetricCard label="Approved" value={approved.toLocaleString()} />
+        </div>
+
+        <DataTable<LogRow>
+          rows={rows}
+          rowHref={(r) => `/console/operations/daily-log/${r.id}`}
+          emptyLabel="No daily logs yet"
+          emptyDescription="Daily logs capture weather, manpower, equipment, deliveries, and notes per project per day."
+          emptyAction={
+            <Button href="/console/operations/daily-log/new" size="sm">
+              + New entry
+            </Button>
+          }
+          columns={[
+            { key: "date", header: "Date", render: (r) => fmt(r.log_date), className: "font-mono text-xs" },
+            { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
+            { key: "weather", header: "Weather", render: (r) => r.weather_summary ?? "—" },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+            },
+          ]}
+        />
+      </div>
+    </>
+  );
+}

@@ -26,11 +26,7 @@ export async function GET() {
   const { data: u } = await supabase.auth.getUser();
   if (!u.user) return apiError("unauthorized", "Sign in required");
 
-  const { data, error } = await supabase
-    .from("user_preferences")
-    .select("*")
-    .eq("user_id", u.user.id)
-    .maybeSingle();
+  const { data, error } = await supabase.from("user_preferences").select("*").eq("user_id", u.user.id).maybeSingle();
 
   if (error) return apiError("internal", error.message);
 
@@ -71,14 +67,13 @@ export async function PATCH(req: NextRequest) {
   patch.ui_state = uiPatch as Json;
 
   const upsertRow = { user_id: u.user.id, ...patch };
-  const { data, error } = await (supabase.from("user_preferences") as unknown as {
-    upsert: (p: Record<string, unknown>, opts?: Record<string, unknown>) => ReturnType<typeof supabase.from>;
-  })
+  const { data, error } = await supabase
+    .from("user_preferences")
     .upsert(upsertRow, { onConflict: "user_id" })
     .select()
     .single();
 
   if (error) return apiError("internal", error.message);
-  const uiState = (data?.ui_state as Record<string, unknown> | null) ?? {};
+  const uiState = (data.ui_state as Record<string, unknown> | null) ?? {};
   return apiOk({ ...data, ...uiState });
 }

@@ -61,7 +61,7 @@ export function AuthShell({
             <img src={rail.logoUrl} alt="" className="h-6 w-auto" />
           ) : null}
           <span className={rail?.productName ? "" : "tracking-[0.14em] uppercase"}>
-            {rail?.productName ?? "SECOND STVR"}
+            {rail?.productName ?? "L0ST 1SLAND"}
           </span>
         </Link>
         <div>

@@ -1,0 +1,129 @@
+import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
+import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/components/ui/Badge";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+
+export const dynamic = "force-dynamic";
+
+type Row = {
+  id: string;
+  occurred_at: string;
+  summary: string;
+  osha_classification: string;
+  osha_recordable: boolean;
+  days_away: number;
+  days_restricted: number;
+  body_part: string | null;
+  injury_type: string | null;
+  injury_source: string | null;
+};
+
+const CLASS_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
+  none: "muted",
+  near_miss: "muted",
+  first_aid: "info",
+  medical_treatment: "warning",
+  restricted_duty: "warning",
+  days_away: "error",
+  fatality: "error",
+};
+
+function fmt(iso: string): string {
+  return new Date(iso).toLocaleDateString();
+}
+
+export default async function Page({ searchParams }: { searchParams: Promise<{ year?: string }> }) {
+  const sp = await searchParams;
+  if (!hasSupabase) return null;
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  const year = sp.year ? Number(sp.year) : new Date().getFullYear();
+  const start = new Date(`${year}-01-01T00:00:00Z`).toISOString();
+  const end = new Date(`${year + 1}-01-01T00:00:00Z`).toISOString();
+
+  const { data } = await supabase
+    .from("incidents")
+    .select(
+      "id, occurred_at, summary, osha_classification, osha_recordable, days_away, days_restricted, body_part, injury_type, injury_source",
+    )
+    .eq("org_id", session.orgId)
+    .gte("occurred_at", start)
+    .lt("occurred_at", end)
+    .eq("osha_recordable", true)
+    .order("occurred_at", { ascending: true });
+
+  const rows = (data ?? []) as unknown as Row[];
+  const totalDaysAway = rows.reduce((s, r) => s + (r.days_away ?? 0), 0);
+  const totalDaysRestricted = rows.reduce((s, r) => s + (r.days_restricted ?? 0), 0);
+  const fatalities = rows.filter((r) => r.osha_classification === "fatality").length;
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow="Safety"
+        title={`OSHA 300 — ${year}`}
+        subtitle="Recordable incidents per 29 CFR 1904. Auto-derived from incident records flagged osha_recordable=true."
+        action={
+          <div className="flex items-center gap-2">
+            <Button href={`/console/safety/osha?year=${year - 1}`} size="sm" variant="ghost">
+              ← {year - 1}
+            </Button>
+            <Button href={`/console/safety/osha?year=${year + 1}`} size="sm" variant="ghost">
+              {year + 1} →
+            </Button>
+            <Button href={`/api/v1/exports/osha?year=${year}`} size="sm">
+              Export 300/300A/301 (CSV)
+            </Button>
+          </div>
+        }
+      />
+      <div className="page-content space-y-5">
+        <div className="metric-grid-3">
+          <MetricCard label="Recordables" value={rows.length.toLocaleString()} accent />
+          <MetricCard label="Days away" value={totalDaysAway.toLocaleString()} />
+          <MetricCard label="Days restricted" value={totalDaysRestricted.toLocaleString()} />
+        </div>
+        {fatalities > 0 && (
+          <div className="surface p-4 ring-2 ring-[var(--color-error)]">
+            <strong>
+              {fatalities} fatality record{fatalities === 1 ? "" : "s"}
+            </strong>{" "}
+            · OSHA notification required within 8 hours.
+          </div>
+        )}
+        <DataTable<Row>
+          rows={rows}
+          rowHref={(r) => `/console/safety/incidents/${r.id}`}
+          emptyLabel={`No recordable incidents for ${year}.`}
+          columns={[
+            { key: "date", header: "Date", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
+            { key: "summary", header: "Description", render: (r) => r.summary },
+            {
+              key: "class",
+              header: "Classification",
+              render: (r) => (
+                <Badge variant={CLASS_TONE[r.osha_classification] ?? "muted"}>
+                  {r.osha_classification.replace("_", " ")}
+                </Badge>
+              ),
+            },
+            { key: "body", header: "Body part", render: (r) => r.body_part ?? "—" },
+            { key: "type", header: "Injury type", render: (r) => r.injury_type ?? "—" },
+            { key: "away", header: "Days away", render: (r) => r.days_away.toString(), className: "font-mono text-xs" },
+            {
+              key: "rest",
+              header: "Days restr.",
+              render: (r) => r.days_restricted.toString(),
+              className: "font-mono text-xs",
+            },
+          ]}
+        />
+      </div>
+    </>
+  );
+}

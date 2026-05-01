@@ -2,152 +2,252 @@
 
 import { FormShell, type FormState } from "@/components/FormShell";
 import { FormField, TextInput, TextArea, NativeSelect } from "@/components/forms/FormField";
-import type { OfferLetter } from "@/lib/offer-letters/types";
+import type {
+  OfferLetter,
+  OfferLetterResolved,
+  CrewMemberOption,
+  OrgRoleOption,
+  VenueOption,
+  RateCardOption,
+} from "@/lib/offer-letters/types";
 import { saveLetter } from "./actions";
 
-export function LetterEditor({ letter }: { letter: OfferLetter }) {
+export function LetterEditor({
+  raw,
+  resolved,
+  crew,
+  roles,
+  venues,
+  rates,
+}: {
+  raw: OfferLetter;
+  resolved: OfferLetterResolved;
+  crew: CrewMemberOption[];
+  roles: OrgRoleOption[];
+  venues: VenueOption[];
+  rates: RateCardOption[];
+}) {
   const action = async (prev: FormState, fd: FormData) => {
-    const r = await saveLetter(letter.id, prev as never, fd);
+    const r = await saveLetter(raw.id, prev as never, fd);
     return r as FormState;
   };
 
-  const compensationDollars = letter.compensation_cents / 100;
-  const perDiemDollars = letter.per_diem_cents / 100;
-  const inclusionsValue = (letter.inclusions ?? []).join("\n");
-  const isLocked = ["accepted", "declined", "withdrawn"].includes(letter.status);
+  const isLocked = raw.status !== "draft";
 
   return (
     <section className="surface-raised space-y-1 p-1">
       <div className="px-5 pt-5">
         <h3 className="text-sm font-semibold tracking-wider uppercase">Edit Letter</h3>
+        <p className="mt-1 text-xs text-[var(--text-muted)]">
+          All fields reference canonical SSOT records. Empty boolean / override = inherit from org defaults or rate
+          card.
+        </p>
         {isLocked && (
           <p className="mt-1 text-xs text-[var(--color-warning)]">
-            This letter is locked ({letter.status}). Edits are disabled.
+            This letter is {raw.status}. Edits are disabled — the snapshot is frozen.
           </p>
         )}
       </div>
       <fieldset disabled={isLocked} className="space-y-0">
         <FormShell action={action} submitLabel="Save changes" className="space-y-6 p-5">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <FormField name="recipient_name" label="Recipient name" required>
-              <TextInput name="recipient_name" defaultValue={letter.recipient_name} />
-            </FormField>
-            <FormField name="recipient_email" label="Recipient email" required>
-              <TextInput name="recipient_email" type="email" defaultValue={letter.recipient_email} />
-            </FormField>
-            <FormField name="recipient_phone" label="Phone">
-              <TextInput name="recipient_phone" defaultValue={letter.recipient_phone ?? ""} />
-            </FormField>
-            <FormField name="role_title" label="Role / title" required>
-              <TextInput name="role_title" defaultValue={letter.role_title} />
-            </FormField>
-            <FormField name="department" label="Department">
-              <TextInput name="department" defaultValue={letter.department ?? ""} />
-            </FormField>
-            <FormField name="employer" label="Issuing entity">
-              <NativeSelect name="employer" defaultValue={letter.employer}>
-                <option value="ghxstship">GHXSTSHIP Industries LLC</option>
-                <option value="five_senses">Five Senses Group</option>
-                <option value="joint">GHXSTSHIP × Five Senses</option>
-              </NativeSelect>
-            </FormField>
-            <FormField name="classification" label="Classification">
-              <NativeSelect name="classification" defaultValue={letter.classification}>
-                <option value="1099">1099 Independent Contractor</option>
-                <option value="w2">W-2 Employee</option>
-                <option value="agency">Agency Loan-Out</option>
-                <option value="intern">Intern</option>
-              </NativeSelect>
-            </FormField>
-            <FormField name="reports_to_name" label="Reports to">
-              <TextInput name="reports_to_name" defaultValue={letter.reports_to_name ?? ""} />
-            </FormField>
-            <FormField name="reports_to_email" label="Reports-to email">
-              <TextInput name="reports_to_email" type="email" defaultValue={letter.reports_to_email ?? ""} />
-            </FormField>
-            <FormField name="work_location" label="Work location">
-              <TextInput name="work_location" defaultValue={letter.work_location ?? ""} />
-            </FormField>
-            <FormField name="engagement_start" label="Engagement start">
-              <TextInput name="engagement_start" type="date" defaultValue={letter.engagement_start ?? ""} />
-            </FormField>
-            <FormField name="engagement_end" label="Engagement end">
-              <TextInput name="engagement_end" type="date" defaultValue={letter.engagement_end ?? ""} />
-            </FormField>
-          </div>
+          {/* ── IDENTITY ─────────────────────────────────────────────────── */}
+          <fieldset className="space-y-3">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+              Identity & Position (FK → crew_members, org_roles)
+            </legend>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <FormField name="crew_member_id" label="Recipient (crew_members)" required>
+                <NativeSelect name="crew_member_id" defaultValue={raw.crew_member_id}>
+                  {crew.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} {c.email ? `· ${c.email}` : ""}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormField>
+              <FormField name="role_id" label="Role (org_roles)" required>
+                <NativeSelect name="role_id" defaultValue={raw.role_id}>
+                  {roles.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.label} {r.department ? `· ${r.department}` : ""}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormField>
+              <FormField name="reports_to_crew_member_id" label="Reports to (crew_members)">
+                <NativeSelect name="reports_to_crew_member_id" defaultValue={raw.reports_to_crew_member_id ?? ""}>
+                  <option value="">— None —</option>
+                  {crew.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormField>
+              <FormField name="venue_id" label="Venue (venues)">
+                <NativeSelect name="venue_id" defaultValue={raw.venue_id ?? ""}>
+                  <option value="">— None —</option>
+                  {venues.map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {v.name} {v.city ? `· ${v.city}` : ""}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormField>
+              <FormField name="employer" label="Issuing entity">
+                <NativeSelect name="employer" defaultValue={raw.employer}>
+                  <option value="ghxstship">GHXSTSHIP Industries LLC</option>
+                  <option value="five_senses">Five Senses Group</option>
+                  <option value="joint">GHXSTSHIP × Five Senses</option>
+                </NativeSelect>
+              </FormField>
+              <FormField name="classification" label="Classification">
+                <NativeSelect name="classification" defaultValue={raw.classification}>
+                  <option value="1099">1099 Independent Contractor</option>
+                  <option value="w2">W-2 Employee</option>
+                  <option value="agency">Agency Loan-Out</option>
+                  <option value="intern">Intern</option>
+                </NativeSelect>
+              </FormField>
+            </div>
+          </fieldset>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <FormField name="compensation_basis" label="Compensation basis">
-              <NativeSelect name="compensation_basis" defaultValue={letter.compensation_basis}>
-                <option value="flat_fee">Flat project fee</option>
-                <option value="per_day">Per day</option>
-                <option value="hourly">Hourly</option>
-                <option value="tbd">To be confirmed</option>
-              </NativeSelect>
-            </FormField>
-            <FormField name="compensation_dollars" label="Compensation (USD)">
-              <TextInput
-                name="compensation_dollars"
-                type="number"
-                min="0"
-                step="1"
-                defaultValue={compensationDollars}
-              />
-            </FormField>
-            <FormField name="per_diem_dollars" label="Per diem (USD/day)">
-              <TextInput name="per_diem_dollars" type="number" min="0" step="1" defaultValue={perDiemDollars} />
-            </FormField>
-            <FormField name="compensation_label" label="Compensation label (override)">
-              <TextInput
-                name="compensation_label"
-                defaultValue={letter.compensation_label ?? ""}
-                placeholder="e.g. USD 1,500 per show day"
-              />
+          {/* ── COMPENSATION ─────────────────────────────────────────────── */}
+          <fieldset className="space-y-3">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+              Compensation (FK → rate_card_items)
+            </legend>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <FormField name="rate_card_item_id" label="Rate card (rate_card_items)">
+                <NativeSelect name="rate_card_item_id" defaultValue={raw.rate_card_item_id ?? ""}>
+                  <option value="">— None —</option>
+                  {rates.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.sku} · {r.name}{" "}
+                      {r.unit_price_cents > 0 ? `· $${(r.unit_price_cents / 100).toLocaleString()}` : "· $0 (TBD)"}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormField>
+              <FormField name="per_diem_rate_card_item_id" label="Per diem rate card (rate_card_items)">
+                <NativeSelect name="per_diem_rate_card_item_id" defaultValue={raw.per_diem_rate_card_item_id ?? ""}>
+                  <option value="">— None —</option>
+                  {rates.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.sku} · {r.name}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormField>
+              <FormField name="compensation_basis" label="Compensation basis">
+                <NativeSelect name="compensation_basis" defaultValue={raw.compensation_basis}>
+                  <option value="per_day">Per day (rate × engagement days)</option>
+                  <option value="per_show_day">Per show day</option>
+                  <option value="flat_fee">Flat project fee (uses rate card unit price)</option>
+                  <option value="hourly">Hourly</option>
+                  <option value="tbd">To be confirmed</option>
+                </NativeSelect>
+              </FormField>
+              <FormField
+                name="override_amount_dollars"
+                label="Override total (USD)"
+                hint="Leave blank to compute from rate × days"
+              >
+                <TextInput
+                  name="override_amount_dollars"
+                  type="number"
+                  min="0"
+                  step="1"
+                  defaultValue={raw.override_amount_cents != null ? raw.override_amount_cents / 100 : ""}
+                />
+              </FormField>
+              <FormField
+                name="override_per_diem_dollars"
+                label="Override per diem (USD/day)"
+                hint="Leave blank to use the rate-card per diem"
+              >
+                <TextInput
+                  name="override_per_diem_dollars"
+                  type="number"
+                  min="0"
+                  step="1"
+                  defaultValue={raw.override_per_diem_cents != null ? raw.override_per_diem_cents / 100 : ""}
+                />
+              </FormField>
+              <div className="self-end rounded border border-[var(--border-default)] bg-[var(--surface-inset)] px-3 py-2 text-xs">
+                <div className="text-[var(--text-muted)]">Effective compensation</div>
+                <div className="font-mono">
+                  {resolved.effective_compensation_cents > 0
+                    ? `$${(resolved.effective_compensation_cents / 100).toLocaleString()}`
+                    : "TBD"}
+                </div>
+                <div className="text-[var(--text-muted)]">{resolved.engagement_days} day(s)</div>
+              </div>
+            </div>
+          </fieldset>
+
+          {/* ── ENGAGEMENT WINDOW ────────────────────────────────────────── */}
+          <fieldset className="space-y-3">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+              Engagement window (NULL = inherit from project)
+            </legend>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <FormField
+                name="engagement_start"
+                label="Engagement start"
+                hint={`Project default: ${resolved.project_start_date ?? "—"}`}
+              >
+                <TextInput name="engagement_start" type="date" defaultValue={raw.engagement_start ?? ""} />
+              </FormField>
+              <FormField
+                name="engagement_end"
+                label="Engagement end"
+                hint={`Project default: ${resolved.project_end_date ?? "—"}`}
+              >
+                <TextInput name="engagement_end" type="date" defaultValue={raw.engagement_end ?? ""} />
+              </FormField>
+            </div>
+          </fieldset>
+
+          {/* ── INCLUSIONS / OVERRIDES ────────────────────────────────────── */}
+          <fieldset className="space-y-3">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+              Inclusions &amp; per-letter overrides (NULL = inherit from org settings)
+            </legend>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <TriStateSelect name="travel_provided" label="Travel provided" value={raw.travel_provided} />
+              <TriStateSelect name="lodging_provided" label="Lodging provided" value={raw.lodging_provided} />
+              <TriStateSelect name="meals_provided" label="Meals provided" value={raw.meals_provided} />
+            </div>
+            <FormField name="extra_inclusions" label="Extra inclusions" hint="One per line — appended to org defaults">
+              <TextArea name="extra_inclusions" rows={3} defaultValue={(raw.extra_inclusions ?? []).join("\n")} />
             </FormField>
             <FormField
-              name="payment_schedule"
-              label="Payment schedule"
-              hint="Default: 60 % deposit on signature, 40 % on load-in"
+              name="expectations_override"
+              label="Expectations override"
+              hint="Leave blank to use the role's description + responsibilities"
             >
-              <TextInput name="payment_schedule" defaultValue={letter.payment_schedule ?? ""} />
+              <TextArea name="expectations_override" rows={4} defaultValue={raw.expectations_override ?? ""} />
             </FormField>
-            <FormField name="governing_law" label="Governing law">
-              <TextInput name="governing_law" defaultValue={letter.governing_law} />
+            <FormField name="terms_override" label="Terms override" hint="Leave blank to use the org default terms">
+              <TextArea name="terms_override" rows={4} defaultValue={raw.terms_override ?? ""} />
             </FormField>
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="travel_provided" defaultChecked={letter.travel_provided} />
-              Travel provided
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="lodging_provided" defaultChecked={letter.lodging_provided} />
-              Lodging provided
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="meals_provided" defaultChecked={letter.meals_provided} />
-              Meals provided
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="confidentiality" defaultChecked={letter.confidentiality} />
-              Confidentiality clause
-            </label>
-          </div>
-
-          <FormField name="inclusions" label="Inclusions" hint="One per line">
-            <TextArea name="inclusions" rows={4} defaultValue={inclusionsValue} />
-          </FormField>
-
-          <FormField name="expectations" label="Expectations / scope">
-            <TextArea name="expectations" rows={4} defaultValue={letter.expectations ?? ""} />
-          </FormField>
-
-          <FormField name="terms" label="Additional terms">
-            <TextArea name="terms" rows={4} defaultValue={letter.terms ?? ""} />
-          </FormField>
+          </fieldset>
         </FormShell>
       </fieldset>
     </section>
+  );
+}
+
+function TriStateSelect({ name, label, value }: { name: string; label: string; value: boolean | null }) {
+  const v = value === null ? "" : value ? "true" : "false";
+  return (
+    <FormField name={name} label={label}>
+      <NativeSelect name={name} defaultValue={v}>
+        <option value="">Inherit (org default)</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </NativeSelect>
+    </FormField>
   );
 }

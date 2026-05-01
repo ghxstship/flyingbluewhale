@@ -8,13 +8,21 @@ export type NavGroup = { label: string; items: NavItem[] };
  * ⌘K, not a destination.
  */
 export const platformNav: NavGroup[] = [
-  { label: "Dashboard", items: [{ label: "Overview", href: "/console" }] },
+  {
+    label: "Dashboard",
+    items: [
+      { label: "Overview", href: "/console" },
+      { label: "Portfolio", href: "/console/dashboards" },
+      { label: "Action Items", href: "/console/action-items" },
+    ],
+  },
   {
     label: "Projects",
     items: [
       { label: "All Projects", href: "/console/projects" },
       { label: "Programs", href: "/console/programs" },
       { label: "Venues", href: "/console/venues" },
+      { label: "Site Plans", href: "/console/site-plans" },
       { label: "Risk Register", href: "/console/programs/risk" },
       { label: "Readiness", href: "/console/programs/readiness" },
       { label: "Reviews", href: "/console/programs/reviews" },
@@ -24,8 +32,13 @@ export const platformNav: NavGroup[] = [
     label: "Operations",
     items: [
       { label: "Schedule", href: "/console/schedule" },
+      { label: "Look-ahead (21d)", href: "/console/operations/look-ahead" },
+      { label: "Daily Log", href: "/console/operations/daily-log" },
       { label: "Tasks", href: "/console/tasks" },
       { label: "Events", href: "/console/events" },
+      { label: "Punch List", href: "/console/punch" },
+      { label: "RFIs", href: "/console/rfis" },
+      { label: "Photos", href: "/console/photos" },
       { label: "Run of Show", href: "/console/production/ros" },
       { label: "Ceremonies", href: "/console/programs/ceremonies" },
       { label: "Incidents", href: "/console/safety/incidents" },
@@ -78,8 +91,10 @@ export const platformNav: NavGroup[] = [
     label: "Finance",
     items: [
       { label: "Invoices", href: "/console/finance/invoices" },
+      { label: "Pay Apps", href: "/console/finance/pay-apps" },
       { label: "Expenses", href: "/console/finance/expenses" },
       { label: "Budgets", href: "/console/finance/budgets" },
+      { label: "Cost Codes", href: "/console/finance/cost-codes" },
       { label: "Payouts", href: "/console/finance/payouts" },
       { label: "Time", href: "/console/finance/time" },
       { label: "Mileage", href: "/console/finance/mileage" },
@@ -90,9 +105,13 @@ export const platformNav: NavGroup[] = [
     label: "Procurement",
     items: [
       { label: "Vendors", href: "/console/procurement/vendors" },
+      { label: "Prequalification", href: "/console/procurement/prequalification" },
       { label: "Requisitions", href: "/console/procurement/requisitions" },
       { label: "Purchase Orders", href: "/console/procurement/purchase-orders" },
+      { label: "PO Change Orders", href: "/console/procurement/po-change-orders" },
       { label: "RFQs", href: "/console/procurement/rfqs" },
+      { label: "WO Broadcasts", href: "/console/procurement/wo-broadcasts" },
+      { label: "Submittals", href: "/console/submittals" },
       { label: "Catalog", href: "/console/procurement/catalog" },
       { label: "Rate Card", href: "/console/logistics/ratecard" },
       { label: "Equipment", href: "/console/production/equipment" },
@@ -101,13 +120,21 @@ export const platformNav: NavGroup[] = [
     ],
   },
   {
+    label: "Compliance & Safety",
+    items: [
+      { label: "Inspections", href: "/console/inspections" },
+      { label: "Briefings", href: "/console/safety/briefings" },
+      { label: "OSHA 300", href: "/console/safety/osha" },
+      { label: "Playbooks", href: "/console/safety/playbooks" },
+      { label: "BC/DR", href: "/console/safety/bcdr" },
+      { label: "Threats", href: "/console/safety/threats" },
+    ],
+  },
+  {
     label: "Knowledge",
     items: [
       { label: "Articles", href: "/console/kb" },
       { label: "Guides", href: "/console/guides" },
-      { label: "Playbooks", href: "/console/safety/playbooks" },
-      { label: "BC/DR", href: "/console/safety/bcdr" },
-      { label: "Threats", href: "/console/safety/threats" },
       { label: "Automations", href: "/console/ai/automations" },
       { label: "Sustainability", href: "/console/sustainability" },
     ],
@@ -320,6 +347,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Guard", href: "/m/guard" },
   { label: "Warehouse", href: "/m/wms" },
   { label: "Punch", href: "/m/punch" },
+  { label: "Daily Log", href: "/m/daily-log" },
   { label: "Handover", href: "/m/handover" },
   { label: "Requests", href: "/m/requests" },
   { label: "Chain of Custody", href: "/m/coc" },

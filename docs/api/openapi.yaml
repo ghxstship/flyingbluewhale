@@ -97,6 +97,8 @@ paths:
 
   /api/v1/deliverables/{id}/download:
     get: { summary: Redirect to a signed URL for a deliverable file. }
+  /api/v1/deliverables/{id}/transition:
+    post: { summary: Drive a deliverable through the advancing state machine (submitted → in_review → approved / rejected / revision_requested / fulfilled). Producer-side personas only. }
 
   /api/v1/ai/chat:
     post: { summary: Streaming chat completion. }
@@ -132,6 +134,11 @@ paths:
     post: { summary: Create a Checkout Session (idempotent). }
   /api/v1/stripe/connect/onboarding:
     post: { summary: Create a Connect Express onboarding link (idempotent). }
+  /api/v1/stripe/portal:
+    post: { summary: Mint a Stripe Billing Portal session for the caller's org and return its URL. Owners/admins only; lazy-creates a Stripe customer if the org hasn't transacted yet. }
+
+  /api/v1/locations:
+    get: { summary: Typeahead lookup over the org's saved locations. `?q=<search>` matches name/address/city; up to 25 results. }
 
   /api/v1/guides/comments:
     get:  { summary: List comments for a guide section. }
@@ -162,6 +169,8 @@ paths:
     post: { summary: Kick off a synchronous CSV or JSON export for a registry-whitelisted table. }
   /api/v1/exports/{id}/download:
     get: { summary: Re-mint a short-lived signed URL for a completed export run. }
+  /api/v1/exports/osha:
+    get: { summary: OSHA 300/300A/301-aligned CSV export of recordable incidents for the requested calendar `?year=`. Header row plus one CSV row per incident. }
 
   /api/v1/import/crew-members:
     post: { summary: Bulk-import a CSV of crew into the caller's org, deduped by email or (name, phone). }

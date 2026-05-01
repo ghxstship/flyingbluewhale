@@ -15,7 +15,7 @@ const TABLES_USER_SCOPED = [
   "memberships",
   "ai_conversations",
   "ai_messages",
-  "audit_log",            // entries where actor_id = me
+  "audit_log", // entries where actor_id = me
   "notifications",
   "expenses",
   "time_entries",
@@ -39,18 +39,42 @@ export async function GET() {
   };
 
   // Each table is queried under RLS; the user only gets rows they're entitled to.
-  // For audit_log we additionally narrow to actor_id = me.
+  // Per-table query keeps the typed builder narrowed to the correct columns.
   for (const table of TABLES_USER_SCOPED) {
     try {
-      const tbl = table as string;
-      let query = (supabase.from as (t: string) => ReturnType<typeof supabase.from>)(tbl).select("*");
-      if (table === "audit_log") query = query.eq("actor_id", userId);
-      if (table === "user_preferences") query = query.eq("user_id", userId);
-      if (table === "memberships") query = query.eq("user_id", userId);
-      if (table === "users") query = query.eq("id", userId);
-      if (table === "notifications") query = query.eq("user_id", userId);
-      const { data } = await query.limit(10_000);
-      bundle[table] = data ?? [];
+      let data: unknown[] = [];
+      if (table === "audit_log") {
+        const r = await supabase.from("audit_log").select("*").eq("actor_id", userId).limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "user_preferences") {
+        const r = await supabase.from("user_preferences").select("*").eq("user_id", userId).limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "memberships") {
+        const r = await supabase.from("memberships").select("*").eq("user_id", userId).limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "users") {
+        const r = await supabase.from("users").select("*").eq("id", userId).limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "notifications") {
+        const r = await supabase.from("notifications").select("*").eq("user_id", userId).limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "ai_conversations") {
+        const r = await supabase.from("ai_conversations").select("*").limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "ai_messages") {
+        const r = await supabase.from("ai_messages").select("*").limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "expenses") {
+        const r = await supabase.from("expenses").select("*").limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "time_entries") {
+        const r = await supabase.from("time_entries").select("*").limit(10_000);
+        data = r.data ?? [];
+      } else if (table === "mileage_logs") {
+        const r = await supabase.from("mileage_logs").select("*").limit(10_000);
+        data = r.data ?? [];
+      }
+      bundle[table] = data;
     } catch (err) {
       bundle[table] = { error: String(err) };
     }

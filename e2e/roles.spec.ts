@@ -49,16 +49,18 @@ async function login(page: Page, role: string) {
   await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 10000 });
 }
 
-async function signOut(page: Page) {
-  await page.context().clearCookies();
-}
-
 test.describe("multi-role login + shell resolution", () => {
   test.beforeEach(async ({ page }) => {
     await dismissConsent(page);
   });
 
-  for (const role of [...PERSONAS.internal, ...PERSONAS.field, ...PERSONAS.external[0] === "client" ? ["client"] : [], "viewer", "community"]) {
+  for (const role of [
+    ...PERSONAS.internal,
+    ...PERSONAS.field,
+    ...(PERSONAS.external[0] === "client" ? ["client"] : []),
+    "viewer",
+    "community",
+  ]) {
     test(`login as ${role} succeeds and lands in a shell`, async ({ page }) => {
       await login(page, role);
       const url = page.url();
@@ -118,9 +120,7 @@ test.describe("console pages render for owner", () => {
       page.on("pageerror", (err) => errors.push(err.message));
       await page.waitForLoadState("domcontentloaded");
       // Filter out known noise: 404 favicons, third-party
-      const fatal = errors.filter(
-        (e) => !e.includes("favicon") && !e.includes("404"),
-      );
+      const fatal = errors.filter((e) => !e.includes("favicon") && !e.includes("404"));
       expect(fatal).toEqual([]);
     });
   }

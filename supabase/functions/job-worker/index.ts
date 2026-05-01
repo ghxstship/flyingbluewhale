@@ -445,7 +445,7 @@ async function run(): Promise<{
     }
   }
 
-  return { claimed: jobs.length, completed, failed, reclaimed };
+  return { claimed: jobs.length, completed, failed, reclaimed, webhooks };
 }
 
 // The function is deployed with verify_jwt=false because Supabase cron and

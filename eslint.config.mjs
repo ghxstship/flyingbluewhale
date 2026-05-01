@@ -35,14 +35,6 @@ const config = [
       "jsx-a11y/role-supports-aria-props": "error",
       "jsx-a11y/tabindex-no-positive": "error",
 
-      // Type-safety guardrails
-      // - explicit `any` is a hatch we accept ONLY for dynamic Supabase
-      //   table-name queries (the typed client doesn't accept dynamic
-      //   strings). Surfaced as `warn` so each new use is reviewed but
-      //   the existing handful don't block CI.
-      // - implicit any is already blocked by `strict: true` in tsconfig.
-      "@typescript-eslint/no-explicit-any": "warn",
-
       // Production debug noise — `console.warn` and `console.error` are
       // the canonical observability surfaces (Sentry hooks them); plain
       // `console.log` is debug noise and shouldn't ship.
@@ -52,9 +44,6 @@ const config = [
       // submit a parent <form>. <Button> from @/components/ui defaults
       // to type="button" already.
       "react/button-has-type": "error",
-
-      // Catch unused imports + vars (with `_`-prefix opt-out for params).
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
 
       // React 19 compiler-style rules — these flag patterns that work
       // correctly under our current React 19.2 runtime but are flagged
@@ -83,6 +72,26 @@ const config = [
       "no-restricted-syntax": ["warn", {
         selector: "JSXAttribute Literal[value=/#[0-9a-fA-F]{3,8}/]",
         message: "Use a CSS variable (--text, --surface, --accent...) instead of a hex literal. If this is a brand SVG or user-input default, add the file to the eslint ignores list.",
+      }],
+    },
+  },
+  {
+    // TypeScript-only rules — eslint-config-next registers @typescript-eslint
+    // as a plugin under `**/*.{ts,tsx}` only, so these rules must be scoped
+    // to the same files or ESLint blows up on .js/.mjs configs.
+    files: ["**/*.{ts,tsx}"],
+    rules: {
+      // - explicit `any` is a hatch we accept ONLY for dynamic Supabase
+      //   table-name queries (the typed client doesn't accept dynamic
+      //   strings). Surfaced as `warn` so each new use is reviewed but
+      //   the existing handful don't block CI.
+      // - implicit any is already blocked by `strict: true` in tsconfig.
+      "@typescript-eslint/no-explicit-any": "warn",
+      // Catch unused imports + vars (with `_`-prefix opt-out for params/caught errors).
+      "@typescript-eslint/no-unused-vars": ["error", {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
       }],
     },
   },

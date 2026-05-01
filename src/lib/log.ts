@@ -7,6 +7,7 @@
 // alerts while logs stay the source of truth for context.
 
 import * as Sentry from "@sentry/nextjs";
+import { env } from "@/lib/env";
 
 export type LogLevel = "debug" | "info" | "warn" | "error";
 
@@ -31,7 +32,10 @@ export type LogFields = {
 };
 
 const LEVEL_WEIGHT: Record<LogLevel, number> = { debug: 10, info: 20, warn: 30, error: 40 };
-const MIN_LEVEL: LogLevel = (process.env.LOG_LEVEL as LogLevel | undefined) ?? "info";
+// LOG_LEVEL is one of trace|debug|info|warn|error per env schema. The
+// logger only emits debug/info/warn/error; "trace" is treated as debug.
+const RAW_LEVEL = env.LOG_LEVEL ?? "info";
+const MIN_LEVEL: LogLevel = RAW_LEVEL === "trace" ? "debug" : RAW_LEVEL;
 const IS_PROD = process.env.NODE_ENV === "production";
 
 function emit(level: LogLevel, message: string, fields: LogFields = {}, err?: unknown): void {

@@ -1,5 +1,6 @@
 import "server-only";
 import { httpFetch } from "@/lib/http";
+import { isWeatherEnabled } from "@/lib/env";
 
 /**
  * Weather wrapper — Opportunity #6.
@@ -48,7 +49,7 @@ export async function fetchWeather({
   lng: number;
   date: string; // yyyy-mm-dd
 }): Promise<Weather | null> {
-  if (process.env.WEATHER_DISABLED) return null;
+  if (!isWeatherEnabled) return null;
   const url = `${OPEN_METEO}?latitude=${lat}&longitude=${lng}&daily=weather_code,temperature_2m_max&temperature_unit=fahrenheit&start_date=${date}&end_date=${date}&timezone=UTC`;
   try {
     const res = await httpFetch(url, { timeoutMs: 3000 });

@@ -15,6 +15,15 @@ const schema = z.object({
   ALLOWED_ORIGINS: z.string().optional(),
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+  // Feature-flag service (GrowthBook). Server reads GB_HOST + the public
+  // client key; both are optional — flags fall back to defaults if unset.
+  GROWTHBOOK_API_HOST: z.string().url().optional(),
+  NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY: z.string().optional(),
+  // External weather provider — flip to "1" to disable (e.g. when the
+  // upstream provider is rate-limiting). Empty/unset = enabled.
+  WEATHER_DISABLED: z.string().optional(),
+  // Logger floor: trace | debug | info | warn | error. Defaults to info.
+  LOG_LEVEL: z.enum(["trace", "debug", "info", "warn", "error"]).optional(),
 });
 
 export const env = schema.parse({
@@ -32,9 +41,15 @@ export const env = schema.parse({
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+  GROWTHBOOK_API_HOST: process.env.GROWTHBOOK_API_HOST,
+  NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
+  WEATHER_DISABLED: process.env.WEATHER_DISABLED,
+  LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 export const hasSentry = Boolean(env.NEXT_PUBLIC_SENTRY_DSN);
 export const hasResend = Boolean(env.RESEND_API_KEY);
 export const hasUpstash = Boolean(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN);
+export const hasGrowthbook = Boolean(env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY);
+export const isWeatherEnabled = !env.WEATHER_DISABLED;

@@ -1,3 +1,5 @@
+import { env } from "./env";
+
 /**
  * Feature flags — GrowthBook-backed, with a safe local fallback.
  *
@@ -92,8 +94,8 @@ export const FLAG_REGISTRY: Record<keyof Flags, FlagMeta> = {
   },
 };
 
-const GB_HOST = process.env.GROWTHBOOK_API_HOST ?? "https://cdn.growthbook.io";
-const GB_KEY = process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY;
+const GB_HOST = env.GROWTHBOOK_API_HOST ?? "https://cdn.growthbook.io";
+const GB_KEY = env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY;
 
 type Attributes = {
   userId?: string;

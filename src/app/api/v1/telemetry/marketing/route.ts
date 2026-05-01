@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiOk, apiError } from "@/lib/api";
 import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * Public marketing-analytics beacon — M3-05 / IK-039.
@@ -46,6 +47,16 @@ const Schema = z.object({
 const MAX_PAYLOAD_BYTES = 2048;
 
 export async function POST(req: NextRequest) {
+  // Public endpoint — IP-keyed rate limit before any work happens. Uses the
+  // shared budget so an abusive client can't drown the beacon in noise.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "telemetry:marketing"),
+    ...RATE_BUDGETS.default,
+  });
+  if (!rl.ok) {
+    return apiError("rate_limited", "Too many beacon events; slow down");
+  }
+
   // Reject oversized payloads before Zod so we don't spend Zod cycles on abuse.
   const body = await req.text();
   if (body.length > MAX_PAYLOAD_BYTES) {
@@ -71,12 +82,12 @@ export async function POST(req: NextRequest) {
   const requestId = req.headers.get("x-request-id") ?? null;
 
   try {
-      if (!isServiceClientAvailable()) {
-        return apiError(
-          "service_unavailable",
-          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
-        );
-      }
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
     const svc = createServiceClient();
     const { error } = await svc.from("usage_events").insert({
       org_id: SYSTEM_ORG_ID,

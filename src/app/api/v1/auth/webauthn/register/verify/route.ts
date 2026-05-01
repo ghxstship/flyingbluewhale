@@ -6,6 +6,7 @@ import { emitAudit } from "@/lib/audit";
 import { getSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRpConfig } from "@/lib/webauthn";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const Schema = z.object({
   response: z.unknown(),
@@ -13,6 +14,14 @@ const Schema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Verification is the more sensitive half of the flow — failed attempts
+  // shouldn't be free. Same auth budget as the options endpoint.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "auth:passkey:register-verify"),
+    ...RATE_BUDGETS.auth,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Too many verification attempts");
+
   const parsed = await parseJson(req, Schema);
   if (parsed instanceof NextResponse) return parsed;
 
@@ -71,10 +80,7 @@ export async function POST(req: NextRequest) {
     device_name: parsed.deviceName ?? null,
   });
 
-  await supabase
-    .from("webauthn_challenges")
-    .update({ consumed: true })
-    .eq("id", challengeRow.id);
+  await supabase.from("webauthn_challenges").update({ consumed: true }).eq("id", challengeRow.id);
 
   // H2-07 — audit the passkey registration. user_passkeys is not covered by
   // the SSOT audit trigger, so we emit manually.

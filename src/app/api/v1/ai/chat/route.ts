@@ -5,6 +5,7 @@ import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { env } from "@/lib/env";
 import { record as recordUsage } from "@/lib/usage";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const Schema = z.object({
   conversationId: z.string().uuid().optional(),
@@ -15,6 +16,12 @@ const Schema = z.object({
 const SYSTEM = `You are the L0ST 1SLAND Technologies AI assistant, embedded in a production operations platform (ATLVS console, GVTEWAY portals, COMPVSS mobile) for live events, fabrication, and creative ops. Answer questions about the user's projects, invoices, deliverables, and crew using concise, operator-friendly language. Be specific and action-oriented.`;
 
 export async function POST(req: Request) {
+  // AI calls cost real dollars and are abuse magnets. 30/min per user, per the
+  // documented budget. Limit before model dispatch so we never burn API credit
+  // on a flooding client.
+  const rl = await ratelimit({ key: keyFromRequest(req, "ai:chat"), ...RATE_BUDGETS.ai });
+  if (!rl.ok) return apiError("rate_limited", "AI rate limit reached; try again shortly");
+
   if (!env.ANTHROPIC_API_KEY) {
     return apiError("internal", "ANTHROPIC_API_KEY is not configured");
   }

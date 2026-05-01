@@ -49,14 +49,24 @@ Project-level toggle, not in code.
 After enabling, the Supabase security advisor's
 `auth_leaked_password_protection` finding clears.
 
-## 3 · (Optional) Schedule the `job-worker` edge function
+## 3 · `job-worker` edge function — redeploy + token + schedule
 
-`job-worker` was deployed in commit `3cd8059` but isn't on a recurring
-schedule yet. To wire it to the documented 1-minute cadence:
+The local source was hardened to require `JOB_WORKER_TOKEN`. Redeploy and
+set the secret:
 
 ```bash
-supabase functions schedule create job-worker "*/1 * * * *"
+# 1. Set the secret (any random ≥32-byte value)
+TOKEN=$(openssl rand -base64 32)
+supabase secrets set JOB_WORKER_TOKEN="$TOKEN"
+
+# 2. Redeploy with the hardened source (jwt off — token is the new gate)
+supabase functions deploy job-worker --no-verify-jwt
+
+# 3. Wire to cron with the token in the Authorization header
+supabase functions schedule create job-worker "*/1 * * * *" \
+  --headers "Authorization=Bearer $TOKEN"
 ```
 
-(Requires the Supabase CLI installed locally; the dashboard equivalent
-is Project → Edge Functions → job-worker → Schedule → New schedule.)
+Without `JOB_WORKER_TOKEN` set the function will fail-closed with a 503,
+which is the desired behaviour — better to under-process the queue than
+to expose a publicly-triggerable run loop.

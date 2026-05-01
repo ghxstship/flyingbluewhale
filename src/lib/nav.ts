@@ -54,6 +54,7 @@ export const platformNav: NavGroup[] = [
       { label: "Directory", href: "/console/people" },
       { label: "Workforce", href: "/console/workforce" },
       { label: "Crew", href: "/console/people/crew" },
+      { label: "Offer Letters", href: "/console/people/offer-letters" },
       { label: "Credentials", href: "/console/people/credentials" },
       { label: "Accreditation", href: "/console/accreditation" },
       { label: "Delegations", href: "/console/participants/delegations" },

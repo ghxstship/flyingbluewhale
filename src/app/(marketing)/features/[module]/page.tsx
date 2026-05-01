@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
   Terminal,
@@ -582,18 +583,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
   const { module } = await params;
   const config = MODULES[module];
   if (!config) {
-    return (
-      <div className="mx-auto max-w-3xl px-6 py-16">
-        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Feature</div>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight">{module}</h1>
-        <p className="mt-4 text-sm text-[var(--text-secondary)]">Module detail coming soon.</p>
-        <div className="mt-8">
-          <Link href="/features" className="text-sm text-[var(--org-primary)]">
-            ← All features
-          </Link>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
   const crumbs = [

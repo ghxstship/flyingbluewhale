@@ -22,9 +22,9 @@ begin
   select p.name into v_project_name
   from offer_letters ol
   join projects p on p.id = ol.project_id
-  where ol.access_token = p_token
-    and ol.access_code = p_code
-    and (ol.expires_at is null or ol.expires_at > now());
+  where ol.public_token = p_token
+    and upper(ol.access_code) = upper(p_code)
+    and (ol.token_expires_at is null or ol.token_expires_at > now());
   return v_project_name;
 end;
 $$;

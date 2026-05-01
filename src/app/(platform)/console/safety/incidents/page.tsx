@@ -1,20 +1,151 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { RoadmapStub } from "@/components/RoadmapStub";
+import { Button } from "@/components/ui/Button";
+import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/components/ui/Badge";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
 
-export default function Page() {
+export const dynamic = "force-dynamic";
+
+type IncidentRow = {
+  id: string;
+  occurred_at: string;
+  location: string | null;
+  summary: string;
+  severity: string;
+  status: string;
+};
+
+const SEVERITY_TONE: Record<string, "muted" | "warning" | "error"> = {
+  low: "muted",
+  medium: "warning",
+  high: "error",
+  critical: "error",
+};
+
+const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
+  open: "warning",
+  triage: "info",
+  in_progress: "info",
+  resolved: "success",
+  closed: "muted",
+};
+
+function fmt(iso: string): string {
+  return new Date(iso).toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export default async function Page() {
+  if (!hasSupabase) {
+    return (
+      <>
+        <ModuleHeader eyebrow="Safety" title="Incidents" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
+  }
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const [{ data: incidents }, { count: medCount }, { count: cyberCount }] = await Promise.all([
+    supabase
+      .from("incidents")
+      .select("id, occurred_at, location, summary, severity, status")
+      .eq("org_id", session.orgId)
+      .gte("occurred_at", since)
+      .order("occurred_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("medical_encounters")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .gte("created_at", since),
+    supabase
+      .from("incidents")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .gte("occurred_at", since)
+      .ilike("summary", "%cyber%"),
+  ]);
+
+  const rows = (incidents ?? []) as IncidentRow[];
+  const open = rows.filter((r) => !["resolved", "closed"].includes(r.status)).length;
+  const critical = rows.filter((r) => r.severity === "critical").length;
+  const totalThirtyDay = rows.length;
+
   return (
     <>
-      <ModuleHeader eyebrow="Safety" title="Incidents (unified view)" />
-      <div className="page-content">
-        <RoadmapStub
-          title="Cross-domain incident roll-up"
-          description="A single feed that joins ops incidents, major-incident timelines, cyber-IR cases, and medical encounters with severity-weighted ranking and a per-zone heatmap."
-          capabilities={[
-            "Filter by severity, domain (ops/cyber/medical), or venue",
-            "Roll-up KPIs (open vs closed, mean time to resolve)",
-            "Drill from any row to the source detail page",
+      <ModuleHeader
+        eyebrow="Safety"
+        title="Incidents (unified)"
+        subtitle="Cross-domain feed: ops · cyber · medical · safety. Last 30 days."
+        action={
+          <Button href="/console/operations/incidents/new" size="sm">
+            + Report incident
+          </Button>
+        }
+      />
+      <div className="page-content space-y-5">
+        <div className="metric-grid-3">
+          <MetricCard label="Total · 30d" value={totalThirtyDay.toLocaleString()} accent />
+          <MetricCard label="Open" value={open.toLocaleString()} />
+          <MetricCard label="Critical" value={critical.toLocaleString()} />
+        </div>
+
+        <section className="surface p-4">
+          <h3 className="text-sm font-semibold">Drill into a domain</h3>
+          <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <li>
+              <Link href="/console/operations/incidents" className="surface-raised hover-lift block p-3">
+                <div className="text-sm font-medium">Operations log</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{totalThirtyDay} ops + safety incidents</div>
+              </Link>
+            </li>
+            <li>
+              <Link href="/console/safety/cyber-ir" className="surface-raised hover-lift block p-3">
+                <div className="text-sm font-medium">Cyber IR</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{cyberCount ?? 0} incidents flagged cyber</div>
+              </Link>
+            </li>
+            <li>
+              <Link href="/console/safety/medical/encounters" className="surface-raised hover-lift block p-3">
+                <div className="text-sm font-medium">Medical encounters</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{medCount ?? 0} encounters · 30 days</div>
+              </Link>
+            </li>
+          </ul>
+        </section>
+
+        <DataTable<IncidentRow>
+          rows={rows}
+          rowHref={(r) => `/console/operations/incidents/${r.id}`}
+          emptyLabel="No incidents in the last 30 days"
+          columns={[
+            { key: "summary", header: "Summary", render: (r) => r.summary },
+            { key: "occurred", header: "Occurred", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
+            { key: "location", header: "Location", render: (r) => r.location ?? "—" },
+            {
+              key: "severity",
+              header: "Severity",
+              render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{r.severity}</Badge>,
+            },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+            },
           ]}
-          inTheMeantime={{ href: "/console/operations/incidents", label: "Open the operations incident log" }}
         />
       </div>
     </>

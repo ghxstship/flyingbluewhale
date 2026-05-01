@@ -1,0 +1,82 @@
+"use client";
+
+import { useTransition } from "react";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
+import { toggleGateAction, approvePhaseAction } from "./actions";
+
+type GateRow = { id: string; label: string; is_done: boolean };
+
+export function PhaseGateForm({
+  phaseStateId,
+  slug,
+  proposalId,
+  gateItems,
+  canApprove,
+}: {
+  phaseStateId: string;
+  slug: string;
+  proposalId: string;
+  gateItems: GateRow[];
+  canApprove: boolean;
+}) {
+  const [pending, startTransition] = useTransition();
+
+  function handleToggle(id: string, next: boolean) {
+    const fd = new FormData();
+    fd.set("gateItemId", id);
+    fd.set("isDone", next ? "true" : "false");
+    fd.set("slug", slug);
+    fd.set("proposalId", proposalId);
+    startTransition(async () => {
+      await toggleGateAction(null, fd);
+    });
+  }
+
+  function handleApprove() {
+    const fd = new FormData();
+    fd.set("phaseStateId", phaseStateId);
+    fd.set("slug", slug);
+    fd.set("proposalId", proposalId);
+    startTransition(async () => {
+      await approvePhaseAction(null, fd);
+    });
+  }
+
+  const allDone = gateItems.every((g) => g.is_done);
+
+  return (
+    <div className="space-y-3">
+      <ul className="space-y-2">
+        {gateItems.map((g) => (
+          <li
+            key={g.id}
+            className="flex items-start gap-3 rounded border border-[var(--border-color)] bg-[var(--surface)] p-3"
+          >
+            <Checkbox
+              checked={g.is_done}
+              disabled={pending}
+              onCheckedChange={(c) => handleToggle(g.id, c === true)}
+              aria-label={g.label}
+              id={`gate-${g.id}`}
+            />
+            <label htmlFor={`gate-${g.id}`} className="flex-1 text-sm leading-snug">
+              <span className={g.is_done ? "text-[var(--text-muted)] line-through" : ""}>{g.label}</span>
+            </label>
+          </li>
+        ))}
+      </ul>
+      {canApprove && (
+        <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-3">
+          {!allDone && <Alert kind="info">Check every gate item to advance the phase.</Alert>}
+          <div className="ms-auto">
+            <Button onClick={handleApprove} disabled={!allDone || pending} loading={pending}>
+              Approve phase & unlock next →
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

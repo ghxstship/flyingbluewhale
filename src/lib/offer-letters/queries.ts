@@ -42,8 +42,13 @@ export async function getOfferLetterByToken(token: string, code: string): Promis
     p_code: code,
   });
   if (error || !data) return null;
-  // RPC returns offer_letters row type — Supabase wraps single composite as object
-  return data as unknown as OfferLetter;
+  // RPC returns offer_letters composite type. When the underlying row is missing
+  // (invalid token, withdrawn, expired) plpgsql `return null` still emits a row
+  // of all-NULL fields rather than a SQL NULL — so we must check the primary
+  // key explicitly before treating the row as a real letter.
+  const row = data as unknown as OfferLetter & { id: string | null };
+  if (!row.id) return null;
+  return row as OfferLetter;
 }
 
 export async function recordOfferLetterView(token: string, code: string): Promise<void> {
@@ -67,7 +72,9 @@ export async function acceptOfferLetterByToken(
     p_user_agent: userAgent ?? "",
   });
   if (error) throw new Error(error.message);
-  return data as unknown as OfferLetter;
+  const row = data as unknown as OfferLetter & { id: string | null };
+  if (!row?.id) throw new Error("Letter not found or no longer accepting signatures");
+  return row as OfferLetter;
 }
 
 export async function declineOfferLetterByToken(token: string, code: string, reason: string): Promise<OfferLetter> {
@@ -78,5 +85,7 @@ export async function declineOfferLetterByToken(token: string, code: string, rea
     p_reason: reason,
   });
   if (error) throw new Error(error.message);
-  return data as unknown as OfferLetter;
+  const row = data as unknown as OfferLetter & { id: string | null };
+  if (!row?.id) throw new Error("Letter not found");
+  return row as OfferLetter;
 }

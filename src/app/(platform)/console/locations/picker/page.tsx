@@ -3,6 +3,10 @@ import { LocationPickerDemo } from "./LocationPickerDemo";
 
 export const dynamic = "force-dynamic";
 
+// Internal developer reference for the async location-picker Combobox.
+// Intentionally omitted from `platformNav` — this page is a copy-paste
+// code sample, not a user destination. Reachable via the deep link
+// `/console/locations/picker` for engineers integrating the Combobox.
 export default function Page() {
   return (
     <>

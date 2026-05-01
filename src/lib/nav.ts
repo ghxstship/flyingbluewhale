@@ -14,6 +14,7 @@ export const platformNav: NavGroup[] = [
       { label: "Overview", href: "/console" },
       { label: "Portfolio", href: "/console/dashboards" },
       { label: "Action Items", href: "/console/action-items" },
+      { label: "Command Palette", href: "/console/command" },
     ],
   },
   {
@@ -21,6 +22,7 @@ export const platformNav: NavGroup[] = [
     // See `docs/ia/04-xpms-spine.md` and the v1.0 whitepaper.
     label: "XPMS",
     items: [
+      { label: "Overview", href: "/console/xpms" },
       { label: "Atoms", href: "/console/xpms/atoms" },
       { label: "Codebook", href: "/console/xpms/codebook" },
       { label: "Classes", href: "/console/xpms/classes" },
@@ -37,6 +39,7 @@ export const platformNav: NavGroup[] = [
       { label: "Programs", href: "/console/programs" },
       { label: "Venues", href: "/console/venues" },
       { label: "Site Plans", href: "/console/site-plans" },
+      { label: "Venue Training", href: "/console/venues/training" },
       { label: "Risk Register", href: "/console/programs/risk" },
       { label: "Readiness", href: "/console/programs/readiness" },
       { label: "Reviews", href: "/console/programs/reviews" },
@@ -96,6 +99,7 @@ export const platformNav: NavGroup[] = [
       { label: "Leads", href: "/console/leads" },
       { label: "Clients", href: "/console/clients" },
       { label: "Proposals", href: "/console/proposals" },
+      { label: "Proposal Templates", href: "/console/proposals/templates" },
       { label: "Sponsors", href: "/console/commercial/sponsors" },
       { label: "Hospitality", href: "/console/commercial/hospitality" },
       { label: "Tickets", href: "/console/commercial/tickets" },
@@ -112,6 +116,7 @@ export const platformNav: NavGroup[] = [
       { label: "Payouts", href: "/console/finance/payouts" },
       { label: "Time", href: "/console/finance/time" },
       { label: "Mileage", href: "/console/finance/mileage" },
+      { label: "Treasury", href: "/console/finance/treasury" },
       { label: "Reports", href: "/console/finance/reports" },
     ],
   },
@@ -120,6 +125,8 @@ export const platformNav: NavGroup[] = [
     items: [
       { label: "Vendors", href: "/console/procurement/vendors" },
       { label: "Prequalification", href: "/console/procurement/prequalification" },
+      { label: "Sourcing", href: "/console/procurement/sourcing" },
+      { label: "Scorecards", href: "/console/procurement/scorecards" },
       { label: "Requisitions", href: "/console/procurement/requisitions" },
       { label: "Purchase Orders", href: "/console/procurement/purchase-orders" },
       { label: "PO Change Orders", href: "/console/procurement/po-change-orders" },
@@ -129,8 +136,13 @@ export const platformNav: NavGroup[] = [
       { label: "Catalog", href: "/console/procurement/catalog" },
       { label: "Rate Card", href: "/console/logistics/ratecard" },
       { label: "Equipment", href: "/console/production/equipment" },
+      { label: "AV Inventory", href: "/console/production/av" },
       { label: "Rentals", href: "/console/production/rentals" },
       { label: "Fabrication", href: "/console/production/fabrication" },
+      { label: "Compounds", href: "/console/production/compounds" },
+      { label: "Warehouse", href: "/console/production/warehouse" },
+      { label: "Production Logistics", href: "/console/production/logistics" },
+      { label: "Live Dispatch", href: "/console/production/dispatch/live" },
     ],
   },
   {
@@ -191,6 +203,7 @@ export const settingsNav: NavGroup[] = [
     label: "Integrations",
     items: [
       { label: "Apps", href: "/console/settings/integrations" },
+      { label: "Marketplace", href: "/console/settings/integrations/marketplace" },
       { label: "API", href: "/console/settings/api" },
       { label: "Webhooks", href: "/console/settings/webhooks" },
     ],

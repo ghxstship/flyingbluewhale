@@ -91,19 +91,33 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
             {
               key: "asset_tag",
               header: "Tag",
               render: (r) => <span className="font-mono text-xs">{r.asset_tag ?? "—"}</span>,
             },
-            { key: "category", header: "Category", render: (r) => r.category ?? "—" },
+            {
+              key: "category",
+              header: "Category",
+              render: (r) => r.category ?? "—",
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "serial",
               header: "Serial",
               render: (r) => <span className="font-mono text-xs">{r.serial ?? "—"}</span>,
             },
-            { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <StatusBadge status={r.status} />,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
         <p className="text-xs text-[var(--text-muted)]">

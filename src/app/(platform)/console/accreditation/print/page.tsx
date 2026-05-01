@@ -44,13 +44,25 @@ export default async function Page() {
           emptyLabel="No badges queued"
           emptyDescription="Approve accreditations under /console/accreditation. Approved cards appear here ready for batch print."
           columns={[
-            { key: "person_name", header: "Person", render: (r) => String(r.person_name ?? "—") },
+            {
+              key: "person_name",
+              header: "Person",
+              render: (r) => String(r.person_name ?? "—"),
+              accessor: (r) => r.person_name ?? null,
+            },
             {
               key: "card_barcode",
               header: "Barcode",
               render: (r) => <span className="font-mono text-xs">{String(r.card_barcode ?? "—")}</span>,
             },
-            { key: "state", header: "State", render: (r) => String(r.state ?? "—") },
+            {
+              key: "state",
+              header: "State",
+              render: (r) => String(r.state ?? "—"),
+              accessor: (r) => r.state ?? null,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
       </div>

@@ -43,16 +43,37 @@ export default async function ExpensesPage() {
             </Button>
           }
           columns={[
-            { key: "description", header: "Description", render: (r) => r.description },
-            { key: "category", header: "Category", render: (r) => r.category ?? "—", className: "font-mono text-xs" },
+            { key: "description", header: "Description", render: (r) => r.description, accessor: (r) => r.description },
+            {
+              key: "category",
+              header: "Category",
+              render: (r) => r.category ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "amount",
               header: "Amount",
               render: (r) => formatMoney(r.amount_cents, r.currency),
               className: "font-mono text-xs",
             },
-            { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-            { key: "date", header: "Date", render: (r) => r.spent_at, className: "font-mono text-xs" },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <StatusBadge status={r.status} />,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "date",
+              header: "Date",
+              render: (r) => r.spent_at,
+              className: "font-mono text-xs",
+              accessor: (r) => r.spent_at,
+            },
           ]}
         />
       </div>

@@ -88,16 +88,22 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "summary", header: "Summary", render: (r) => r.summary },
+            { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
             {
               key: "category",
               header: "Category",
               render: (r) => <Badge variant="muted">{r.category}</Badge>,
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "severity",
               header: "Severity",
               render: (r) => <Badge variant={SEVERITY_TONE[r.severity]}>{r.severity}</Badge>,
+              accessor: (r) => r.severity ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "opened",
@@ -109,6 +115,8 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status]}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

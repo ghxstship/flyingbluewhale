@@ -51,14 +51,22 @@ export default async function RentalsPage() {
               header: "Starts",
               render: (r) => formatDate(r.starts_at, "long"),
               className: "font-mono text-xs",
+              accessor: (r) => r.starts_at,
             },
             {
               key: "ends",
               header: "Ends",
               render: (r) => formatDate(r.ends_at, "long"),
               className: "font-mono text-xs",
+              accessor: (r) => r.ends_at,
             },
-            { key: "rate", header: "Rate", render: (r) => formatMoney(r.rate_cents), className: "font-mono text-xs" },
+            {
+              key: "rate",
+              header: "Rate",
+              render: (r) => formatMoney(r.rate_cents),
+              className: "font-mono text-xs",
+              accessor: (r) => Number(r.rate_cents ?? 0),
+            },
           ]}
         />
       </div>

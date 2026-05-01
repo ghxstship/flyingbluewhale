@@ -63,7 +63,7 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
             {
               key: "cadence",
               header: "Cadence",
@@ -90,6 +90,8 @@ export default async function Page() {
               render: (r) => (
                 <Badge variant={STATUS_TONE[String(r.status)] ?? "muted"}>{String(r.status).replace(/_/g, " ")}</Badge>
               ),
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

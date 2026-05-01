@@ -42,8 +42,15 @@ export default async function Page() {
           emptyLabel="No crisis alerts"
           emptyDescription="Activated alerts page leadership and route to the major-incident plan when severity warrants."
           columns={[
-            { key: "title", header: "Title", render: (r) => String(r.title ?? "—") },
-            { key: "severity", header: "Severity", render: (r) => String(r.severity ?? "—") },
+            { key: "title", header: "Title", render: (r) => String(r.title ?? "—"), accessor: (r) => r.title ?? null },
+            {
+              key: "severity",
+              header: "Severity",
+              render: (r) => String(r.severity ?? "—"),
+              accessor: (r) => r.severity ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "sent_at",
               header: "Sent",

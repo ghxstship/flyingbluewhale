@@ -47,9 +47,20 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "code", header: "Code", render: (r) => r.code, className: "font-mono text-xs" },
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "desc", header: "Description", render: (r) => r.description ?? "—" },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => r.code,
+              className: "font-mono text-xs",
+              accessor: (r) => r.code,
+            },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "desc",
+              header: "Description",
+              render: (r) => r.description ?? "—",
+              accessor: (r) => r.description ?? null,
+            },
             {
               key: "active",
               header: "Status",

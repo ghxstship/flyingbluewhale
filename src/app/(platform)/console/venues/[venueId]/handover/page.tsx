@@ -135,8 +135,15 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           emptyLabel="No handover items yet"
           emptyDescription="Author the commissioning checklist — overlay, MEP, IT, signage, broadcast, catering, medical, security, operations. Each item gets owned, due-dated, and signed off."
           columns={[
-            { key: "category", header: "Category", render: (r) => <Badge variant="muted">{r.category}</Badge> },
-            { key: "desc", header: "Item", render: (r) => r.description },
+            {
+              key: "category",
+              header: "Category",
+              render: (r) => <Badge variant="muted">{r.category}</Badge>,
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            { key: "desc", header: "Item", render: (r) => r.description, accessor: (r) => r.description },
             { key: "due", header: "Due", render: (r) => <span className="font-mono text-xs">{fmt(r.due_at)}</span> },
             {
               key: "resolved",
@@ -147,6 +154,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={ITEM_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

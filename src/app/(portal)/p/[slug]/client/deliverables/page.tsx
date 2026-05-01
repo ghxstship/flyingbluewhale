@@ -18,9 +18,28 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         emptyLabel="No deliverables yet"
         columns={[
           { key: "title", header: "Title", render: (r) => r.title ?? labelForType(r.type) },
-          { key: "type", header: "Type", render: (r) => <span className="font-mono text-xs">{labelForType(r.type)}</span> },
-          { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-          { key: "updated", header: "Updated", render: (r) => timeAgo(r.updated_at), className: "font-mono text-xs" },
+          {
+            key: "type",
+            header: "Type",
+            render: (r) => <span className="font-mono text-xs">{labelForType(r.type)}</span>,
+            filterable: true,
+            groupable: true,
+          },
+          {
+            key: "status",
+            header: "Status",
+            render: (r) => <StatusBadge status={r.status} />,
+            accessor: (r) => r.status,
+            filterable: true,
+            groupable: true,
+          },
+          {
+            key: "updated",
+            header: "Updated",
+            render: (r) => timeAgo(r.updated_at),
+            className: "font-mono text-xs",
+            accessor: (r) => r.updated_at,
+          },
         ]}
       />
     </PortalSubpage>

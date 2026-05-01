@@ -35,19 +35,29 @@ export default async function BudgetsPage() {
           rows={rows}
           rowHref={(r) => `/console/finance/budgets/${r.id}`}
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "category", header: "Category", render: (r) => r.category ?? "—", className: "font-mono text-xs" },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "category",
+              header: "Category",
+              render: (r) => r.category ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "spent",
               header: "Spent",
               render: (r) => formatMoney(r.spent_cents),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.spent_cents ?? 0),
             },
             {
               key: "amount",
               header: "Budget",
               render: (r) => formatMoney(r.amount_cents),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.amount_cents ?? 0),
             },
             {
               key: "util",

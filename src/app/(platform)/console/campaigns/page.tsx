@@ -64,9 +64,23 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "channel", header: "Channel", render: (r) => <Badge variant="muted">{r.channel}</Badge> },
-            { key: "kind", header: "Kind", render: (r) => r.kind },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "channel",
+              header: "Channel",
+              render: (r) => <Badge variant="muted">{r.channel}</Badge>,
+              accessor: (r) => r.channel ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => r.kind,
+              accessor: (r) => r.kind,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "window",
               header: "Window",
@@ -83,6 +97,9 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status]}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

@@ -40,15 +40,27 @@ export default async function LocationsPage() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "address", header: "Address", render: (r) => r.address ?? "—", className: "font-mono text-xs" },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "address",
+              header: "Address",
+              render: (r) => r.address ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.address ?? null,
+            },
             {
               key: "city",
               header: "City",
               render: (r) => [r.city, r.region].filter(Boolean).join(", ") || "—",
               className: "font-mono text-xs",
             },
-            { key: "country", header: "Country", render: (r) => r.country ?? "—", className: "font-mono text-xs" },
+            {
+              key: "country",
+              header: "Country",
+              render: (r) => r.country ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.country ?? null,
+            },
           ]}
         />
       </div>

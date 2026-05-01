@@ -50,7 +50,12 @@ export default async function TimePage() {
             </Button>
           }
           columns={[
-            { key: "description", header: "Description", render: (r) => r.description ?? "—" },
+            {
+              key: "description",
+              header: "Description",
+              render: (r) => r.description ?? "—",
+              accessor: (r) => r.description ?? null,
+            },
             {
               key: "duration",
               header: "Duration",
@@ -62,7 +67,13 @@ export default async function TimePage() {
               header: "Billable",
               render: (r) => (r.billable ? <Badge variant="success">Yes</Badge> : <Badge variant="muted">No</Badge>),
             },
-            { key: "started", header: "Started", render: (r) => timeAgo(r.started_at), className: "font-mono text-xs" },
+            {
+              key: "started",
+              header: "Started",
+              render: (r) => timeAgo(r.started_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.started_at,
+            },
           ]}
         />
       </div>

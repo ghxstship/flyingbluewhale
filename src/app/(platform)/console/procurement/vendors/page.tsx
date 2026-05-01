@@ -42,9 +42,23 @@ export default async function VendorsPage() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "category", header: "Category", render: (r) => r.category ?? "—", className: "font-mono text-xs" },
-            { key: "email", header: "Email", render: (r) => r.contact_email ?? "—", className: "font-mono text-xs" },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "category",
+              header: "Category",
+              render: (r) => r.category ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "email",
+              header: "Email",
+              render: (r) => r.contact_email ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.contact_email ?? null,
+            },
             {
               key: "w9",
               header: "W-9",
@@ -56,6 +70,7 @@ export default async function VendorsPage() {
               header: "COI expires",
               render: (r) => formatDate(r.coi_expires_at, "medium"),
               className: "font-mono text-xs",
+              accessor: (r) => r.coi_expires_at,
             },
           ]}
         />

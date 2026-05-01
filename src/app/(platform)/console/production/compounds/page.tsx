@@ -90,15 +90,27 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "kind", header: "Kind", render: (r) => r.kind.toUpperCase(), className: "font-mono text-xs" },
-            { key: "cluster", header: "Cluster", render: (r) => r.cluster ?? "—" },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => r.kind.toUpperCase(),
+              className: "font-mono text-xs",
+              filterable: true,
+              groupable: true,
+            },
+            { key: "cluster", header: "Cluster", render: (r) => r.cluster ?? "—", accessor: (r) => r.cluster ?? null },
             {
               key: "capacity",
               header: "Capacity",
               render: (r) => <span className="font-mono text-xs">{r.capacity?.toLocaleString() ?? "—"}</span>,
             },
-            { key: "handover", header: "Handover", render: (r) => <StatusBadge status={r.handover_state} /> },
+            {
+              key: "handover",
+              header: "Handover",
+              render: (r) => <StatusBadge status={r.handover_state} />,
+              accessor: (r) => r.handover_state,
+            },
           ]}
         />
 

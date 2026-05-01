@@ -62,9 +62,16 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             { key: "slug", header: "Slug", render: (r) => <span className="font-mono text-xs">{r.slug}</span> },
-            { key: "status", header: "Status", render: (r) => r.status },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => r.status,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "updated_at",
               header: "Updated",

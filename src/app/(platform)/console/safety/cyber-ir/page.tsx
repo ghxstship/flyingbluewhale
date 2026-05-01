@@ -99,17 +99,22 @@ export default async function Page() {
           emptyLabel="No cyber incidents flagged"
           emptyDescription="Cyber IR is a sub-type of incidents. Tag a report with terms like 'breach', 'phish', or 'cyber' in the summary and it appears here."
           columns={[
-            { key: "summary", header: "Summary", render: (r) => r.summary },
+            { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
             { key: "occurred", header: "Occurred", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
             {
               key: "severity",
               header: "Severity",
               render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{r.severity}</Badge>,
+              accessor: (r) => r.severity ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

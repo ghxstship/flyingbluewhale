@@ -87,13 +87,22 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "code", header: "Sheet", render: (r) => r.code, className: "font-mono text-xs" },
-            { key: "title", header: "Title", render: (r) => r.title },
+            {
+              key: "code",
+              header: "Sheet",
+              render: (r) => r.code,
+              className: "font-mono text-xs",
+              accessor: (r) => r.code,
+            },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             { key: "venue", header: "Venue", render: (r) => r.venue?.name ?? r.project?.name ?? "—" },
             {
               key: "discipline",
               header: "Discipline",
               render: (r) => <Badge variant={DISCIPLINE_TONE[r.discipline] ?? "muted"}>{r.discipline}</Badge>,
+              accessor: (r) => r.discipline ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "rev",

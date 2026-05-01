@@ -99,8 +99,14 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "code", header: "Code", render: (r) => r.code, className: "font-mono text-xs" },
-            { key: "name", header: "Inspection", render: (r) => r.name },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => r.code,
+              className: "font-mono text-xs",
+              accessor: (r) => r.code,
+            },
+            { key: "name", header: "Inspection", render: (r) => r.name, accessor: (r) => r.name },
             { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
             {
               key: "scheduled",
@@ -112,6 +118,8 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

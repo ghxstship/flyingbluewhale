@@ -77,7 +77,7 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
             {
               key: "city",
               header: "City",
@@ -89,6 +89,7 @@ export default async function Page() {
               header: "Country",
               render: (r) => String(r.country ?? "—"),
               className: "font-mono text-xs",
+              accessor: (r) => r.country ?? null,
             },
             {
               key: "asset_count",

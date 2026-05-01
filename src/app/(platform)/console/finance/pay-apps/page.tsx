@@ -99,7 +99,13 @@ export default async function Page() {
               className: "font-mono text-xs",
             },
             { key: "po", header: "PO", render: (r) => r.purchase_order?.number ?? "—", className: "font-mono text-xs" },
-            { key: "vendor", header: "Vendor", render: (r) => r.vendor?.name ?? "—" },
+            {
+              key: "vendor",
+              header: "Vendor",
+              render: (r) => r.vendor?.name ?? "—",
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "period",
               header: "Period",
@@ -111,17 +117,21 @@ export default async function Page() {
               header: "Completed",
               render: (r) => formatMoney(r.total_completed_cents ?? 0),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.total_completed_cents ?? 0),
             },
             {
               key: "due",
               header: "Due",
               render: (r) => formatMoney(r.total_due_cents ?? 0),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.total_due_cents ?? 0),
             },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

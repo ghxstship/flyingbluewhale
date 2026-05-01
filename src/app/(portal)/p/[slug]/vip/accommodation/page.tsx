@@ -75,9 +75,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           emptyLabel="No VIP accommodation"
           emptyDescription="VIP suite reservations land here once contracted with stakeholder_group = vip."
           columns={[
-            { key: "name", header: "Block", render: (r) => r.name },
-            { key: "property", header: "Property", render: (r) => r.property },
-            { key: "city", header: "City", render: (r) => r.city ?? "—" },
+            { key: "name", header: "Block", render: (r) => r.name, accessor: (r) => r.name },
+            { key: "property", header: "Property", render: (r) => r.property, accessor: (r) => r.property },
+            { key: "city", header: "City", render: (r) => r.city ?? "—", accessor: (r) => r.city ?? null },
             {
               key: "rooms",
               header: "Suites",
@@ -100,6 +100,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               key: "group",
               header: "Group",
               render: (r) => (r.stakeholder_group ? <Badge variant="muted">{r.stakeholder_group}</Badge> : "—"),
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

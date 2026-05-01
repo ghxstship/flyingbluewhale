@@ -37,13 +37,23 @@ export default async function Page() {
           emptyLabel="No applications in vetting"
           emptyDescription="Applications land here once a delegate submits identity + role information for review."
           columns={[
-            { key: "person_name", header: "Person", render: (r) => String(r.person_name ?? "—") },
+            {
+              key: "person_name",
+              header: "Person",
+              render: (r) => String(r.person_name ?? "—"),
+              accessor: (r) => r.person_name ?? null,
+            },
             {
               key: "person_email",
               header: "Email",
               render: (r) => <span className="font-mono text-xs">{String(r.person_email ?? "—")}</span>,
             },
-            { key: "vetting", header: "Status", render: (r) => String(r.vetting ?? "—") },
+            {
+              key: "vetting",
+              header: "Status",
+              render: (r) => String(r.vetting ?? "—"),
+              accessor: (r) => r.vetting ?? null,
+            },
             {
               key: "created_at",
               header: "Submitted",

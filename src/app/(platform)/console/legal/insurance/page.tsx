@@ -47,13 +47,25 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "carrier", header: "Carrier", render: (r) => String(r.carrier ?? "—") },
+            {
+              key: "carrier",
+              header: "Carrier",
+              render: (r) => String(r.carrier ?? "—"),
+              accessor: (r) => r.carrier ?? null,
+            },
             {
               key: "policy_no",
               header: "Policy No.",
               render: (r) => <span className="font-mono text-xs">{String(r.policy_no ?? "—")}</span>,
             },
-            { key: "kind", header: "Kind", render: (r) => String(r.kind ?? "—") },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => String(r.kind ?? "—"),
+              accessor: (r) => r.kind ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "effective_on",
               header: "Effective",

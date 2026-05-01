@@ -11,11 +11,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { slug } = await params;
   const project = await projectIdFromSlug(slug);
   const supabase = await createClient();
-  const rows = project ? (await supabase
-    .from("tickets")
-    .select("*")
-    .eq("project_id", project.id)
-    .order("issued_at", { ascending: false })).data as Ticket[] ?? [] : [];
+  const rows = project
+    ? (((
+        await supabase.from("tickets").select("*").eq("project_id", project.id).order("issued_at", { ascending: false })
+      ).data as Ticket[]) ?? [])
+    : [];
   return (
     <PortalSubpage slug={slug} persona="guest" title="Tickets" subtitle="Your tickets for this event">
       <DataTable<Ticket>
@@ -23,9 +23,28 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         emptyLabel="No tickets yet — buy or claim to get started"
         columns={[
           { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
-          { key: "tier", header: "Tier", render: (r) => r.tier },
-          { key: "holder", header: "Holder", render: (r) => r.holder_name ?? "—" },
-          { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
+          {
+            key: "tier",
+            header: "Tier",
+            render: (r) => r.tier,
+            accessor: (r) => r.tier,
+            filterable: true,
+            groupable: true,
+          },
+          {
+            key: "holder",
+            header: "Holder",
+            render: (r) => r.holder_name ?? "—",
+            accessor: (r) => r.holder_name ?? null,
+          },
+          {
+            key: "status",
+            header: "Status",
+            render: (r) => <StatusBadge status={r.status} />,
+            accessor: (r) => r.status,
+            filterable: true,
+            groupable: true,
+          },
         ]}
       />
     </PortalSubpage>

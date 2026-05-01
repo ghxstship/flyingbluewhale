@@ -14,11 +14,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { slug } = await params;
   const project = await projectIdFromSlug(slug);
   const supabase = await createClient();
-  const rows = project ? (await supabase
-    .from("invoices")
-    .select("*")
-    .eq("project_id", project.id)
-    .order("issued_at", { ascending: false })).data as Invoice[] ?? [] : [];
+  const rows = project
+    ? (((
+        await supabase
+          .from("invoices")
+          .select("*")
+          .eq("project_id", project.id)
+          .order("issued_at", { ascending: false })
+      ).data as Invoice[]) ?? [])
+    : [];
   return (
     <PortalSubpage slug={slug} persona="client" title="Invoices" subtitle="Pay invoices and download receipts">
       <DataTable<Invoice>
@@ -26,10 +30,28 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         emptyLabel="No invoices yet"
         columns={[
           { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
-          { key: "title", header: "Title", render: (r) => r.title },
-          { key: "amount", header: "Amount", render: (r) => formatMoney(r.amount_cents, r.currency), className: "font-mono text-xs" },
-          { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-          { key: "due", header: "Due", render: (r) => r.due_at ?? "—", className: "font-mono text-xs" },
+          { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+          {
+            key: "amount",
+            header: "Amount",
+            render: (r) => formatMoney(r.amount_cents, r.currency),
+            className: "font-mono text-xs",
+          },
+          {
+            key: "status",
+            header: "Status",
+            render: (r) => <StatusBadge status={r.status} />,
+            accessor: (r) => r.status,
+            filterable: true,
+            groupable: true,
+          },
+          {
+            key: "due",
+            header: "Due",
+            render: (r) => r.due_at ?? "—",
+            className: "font-mono text-xs",
+            accessor: (r) => r.due_at ?? null,
+          },
           {
             key: "download",
             header: "PDF",

@@ -43,15 +43,29 @@ export default async function RequisitionsPage() {
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "estimated",
               header: "Estimated",
               render: (r) => formatMoney(r.estimated_cents),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.estimated_cents ?? 0),
             },
-            { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-            { key: "created", header: "Created", render: (r) => timeAgo(r.created_at), className: "font-mono text-xs" },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <StatusBadge status={r.status} />,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "created",
+              header: "Created",
+              render: (r) => timeAgo(r.created_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.created_at,
+            },
           ]}
         />
       </div>

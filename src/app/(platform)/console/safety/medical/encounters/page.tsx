@@ -47,9 +47,24 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "triage", header: "Triage", render: (r) => String(r.triage ?? "—") },
-            { key: "chief_complaint", header: "Complaint", render: (r) => String(r.chief_complaint ?? "—") },
-            { key: "disposition", header: "Disposition", render: (r) => String(r.disposition ?? "—") },
+            {
+              key: "triage",
+              header: "Triage",
+              render: (r) => String(r.triage ?? "—"),
+              accessor: (r) => r.triage ?? null,
+            },
+            {
+              key: "chief_complaint",
+              header: "Complaint",
+              render: (r) => String(r.chief_complaint ?? "—"),
+              accessor: (r) => r.chief_complaint ?? null,
+            },
+            {
+              key: "disposition",
+              header: "Disposition",
+              render: (r) => String(r.disposition ?? "—"),
+              accessor: (r) => r.disposition ?? null,
+            },
             {
               key: "created_at",
               header: "At",

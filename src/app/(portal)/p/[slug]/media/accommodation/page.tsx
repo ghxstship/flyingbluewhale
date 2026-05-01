@@ -76,9 +76,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           emptyLabel="No media accommodation blocks"
           emptyDescription="Media hotel blocks land here once contracted. Each block is tagged with stakeholder_group = media."
           columns={[
-            { key: "name", header: "Block", render: (r) => r.name },
-            { key: "property", header: "Property", render: (r) => r.property },
-            { key: "city", header: "City", render: (r) => r.city ?? "—" },
+            { key: "name", header: "Block", render: (r) => r.name, accessor: (r) => r.name },
+            { key: "property", header: "Property", render: (r) => r.property, accessor: (r) => r.property },
+            { key: "city", header: "City", render: (r) => r.city ?? "—", accessor: (r) => r.city ?? null },
             {
               key: "rooms",
               header: "Rooms",
@@ -101,6 +101,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               key: "group",
               header: "Group",
               render: (r) => (r.stakeholder_group ? <Badge variant="muted">{r.stakeholder_group}</Badge> : "—"),
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

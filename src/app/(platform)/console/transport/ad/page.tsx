@@ -47,19 +47,38 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "kind", header: "Kind", render: (r) => String(r.kind ?? "—") },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => String(r.kind ?? "—"),
+              accessor: (r) => r.kind ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "flight_ref",
               header: "Flight",
               render: (r) => <span className="font-mono text-xs">{String(r.flight_ref ?? "—")}</span>,
             },
-            { key: "carrier", header: "Carrier", render: (r) => String(r.carrier ?? "—") },
+            {
+              key: "carrier",
+              header: "Carrier",
+              render: (r) => String(r.carrier ?? "—"),
+              accessor: (r) => r.carrier ?? null,
+            },
             {
               key: "scheduled_at",
               header: "Scheduled",
               render: (r) => <span className="font-mono text-xs">{String(r.scheduled_at ?? "—")}</span>,
             },
-            { key: "status", header: "Status", render: (r) => String(r.status ?? "—") },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => String(r.status ?? "—"),
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
       </div>

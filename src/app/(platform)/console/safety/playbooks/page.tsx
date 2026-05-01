@@ -79,9 +79,16 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             { key: "slug", header: "Slug", render: (r) => <span className="font-mono text-xs">{r.slug}</span> },
-            { key: "kind", header: "Kind", render: (r) => <Badge variant="muted">{r.kind}</Badge> },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => <Badge variant="muted">{r.kind}</Badge>,
+              accessor: (r) => r.kind ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "version",
               header: "Version",
@@ -91,6 +98,9 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status]}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "updated_at",

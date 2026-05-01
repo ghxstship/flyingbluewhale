@@ -7,22 +7,49 @@ import { hasSupabase } from "@/lib/env";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  if (!hasSupabase) return (
-    <><ModuleHeader eyebrow="Console" title="Rate Card" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>
-  );
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader eyebrow="Console" title="Rate Card" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
-  const rows = await listOrgScoped("rate_card_items", session.orgId, { orderBy: "created_at", ascending: false, limit: 500 });
+  const rows = await listOrgScoped("rate_card_items", session.orgId, {
+    orderBy: "created_at",
+    ascending: false,
+    limit: 500,
+  });
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="Rate Card" subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`} />
+      <ModuleHeader
+        eyebrow="Console"
+        title="Rate Card"
+        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+      />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           columns={[
-            { key: "catalog", header: "Catalog", render: (r) => String(r.catalog ?? "—") },
-            { key: "sku", header: "SKU", render: (r) => <span className="font-mono text-xs">{String(r.sku ?? "—")}</span> },
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
-            { key: "unit_price_cents", header: "Unit ¢", render: (r) => <span className="font-mono text-xs">{String(r.unit_price_cents ?? "—")}</span> },
+            {
+              key: "catalog",
+              header: "Catalog",
+              render: (r) => String(r.catalog ?? "—"),
+              accessor: (r) => r.catalog ?? null,
+            },
+            {
+              key: "sku",
+              header: "SKU",
+              render: (r) => <span className="font-mono text-xs">{String(r.sku ?? "—")}</span>,
+            },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "unit_price_cents",
+              header: "Unit ¢",
+              render: (r) => <span className="font-mono text-xs">{String(r.unit_price_cents ?? "—")}</span>,
+            },
           ]}
         />
       </div>

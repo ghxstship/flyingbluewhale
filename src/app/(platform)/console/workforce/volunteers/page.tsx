@@ -48,8 +48,20 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "full_name", header: "Name", render: (r) => String(r.full_name ?? "—") },
-            { key: "role", header: "Role", render: (r) => String(r.role ?? "—") },
+            {
+              key: "full_name",
+              header: "Name",
+              render: (r) => String(r.full_name ?? "—"),
+              accessor: (r) => r.full_name ?? null,
+            },
+            {
+              key: "role",
+              header: "Role",
+              render: (r) => String(r.role ?? "—"),
+              accessor: (r) => r.role ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "email",
               header: "Email",

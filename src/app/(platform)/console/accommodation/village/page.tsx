@@ -53,8 +53,13 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
-            { key: "cluster", header: "Cluster", render: (r) => String(r.cluster ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "cluster",
+              header: "Cluster",
+              render: (r) => String(r.cluster ?? "—"),
+              accessor: (r) => r.cluster ?? null,
+            },
             {
               key: "capacity",
               header: "Beds",

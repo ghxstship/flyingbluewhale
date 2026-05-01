@@ -85,8 +85,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           emptyLabel="No visa cases"
           emptyDescription="Open cases for delegation members who need entry letters or visa support. We track status and store the issued letter for download."
           columns={[
-            { key: "name", header: "Person", render: (r) => r.person_name },
-            { key: "nat", header: "Nationality", render: (r) => r.nationality ?? "—" },
+            { key: "name", header: "Person", render: (r) => r.person_name, accessor: (r) => r.person_name },
+            {
+              key: "nat",
+              header: "Nationality",
+              render: (r) => r.nationality ?? "—",
+              accessor: (r) => r.nationality ?? null,
+            },
             {
               key: "passport",
               header: "Passport",
@@ -107,6 +112,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

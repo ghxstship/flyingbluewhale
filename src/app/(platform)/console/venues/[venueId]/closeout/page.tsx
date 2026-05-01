@@ -124,8 +124,15 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           emptyLabel="No closeout items yet"
           emptyDescription="Demob, reinstatement, asset return, damage, waste, documentation, and financial reconciliation. Author each item with an owner and due date."
           columns={[
-            { key: "category", header: "Category", render: (r) => <Badge variant="muted">{r.category}</Badge> },
-            { key: "desc", header: "Item", render: (r) => r.description },
+            {
+              key: "category",
+              header: "Category",
+              render: (r) => <Badge variant="muted">{r.category}</Badge>,
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            { key: "desc", header: "Item", render: (r) => r.description, accessor: (r) => r.description },
             { key: "due", header: "Due", render: (r) => <span className="font-mono text-xs">{fmt(r.due_at)}</span> },
             {
               key: "completed",
@@ -136,6 +143,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={ITEM_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

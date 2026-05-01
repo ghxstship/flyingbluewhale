@@ -79,7 +79,7 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "topic", header: "Topic", render: (r) => r.topic },
+            { key: "topic", header: "Topic", render: (r) => r.topic, accessor: (r) => r.topic },
             { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
             { key: "briefer", header: "Briefer", render: (r) => r.briefer?.name ?? r.briefer?.email ?? "—" },
             {
@@ -92,6 +92,9 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

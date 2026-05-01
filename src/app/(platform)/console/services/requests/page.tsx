@@ -115,13 +115,22 @@ export default async function Page() {
               render: (r) => (
                 <Badge variant={SEV_TONE[r.severity as ServiceRequest["severity"]]}>{String(r.severity)}</Badge>
               ),
+              filterable: true,
+              groupable: true,
             },
             {
               key: "category",
               header: "Category",
               render: (r) => <span className="font-mono text-xs">{String(r.category)}</span>,
+              filterable: true,
+              groupable: true,
             },
-            { key: "summary", header: "Summary", render: (r) => String(r.summary ?? "—") },
+            {
+              key: "summary",
+              header: "Summary",
+              render: (r) => String(r.summary ?? "—"),
+              accessor: (r) => r.summary ?? null,
+            },
             {
               key: "status",
               header: "Status",
@@ -138,6 +147,8 @@ export default async function Page() {
                     )}
                 </span>
               ),
+              filterable: true,
+              groupable: true,
             },
             {
               key: "opened",

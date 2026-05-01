@@ -89,19 +89,23 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
             {
               key: "estimate",
               header: "Estimate",
               render: (r) => formatMoney(r.estimated_cents ?? 0),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.estimated_cents ?? 0),
             },
             { key: "created", header: "Created", render: (r) => fmtDate(r.created_at), className: "font-mono text-xs" },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

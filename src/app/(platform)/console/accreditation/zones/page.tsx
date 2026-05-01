@@ -56,8 +56,13 @@ export default async function Page() {
               header: "Code",
               render: (r) => <span className="font-mono text-xs">{String(r.code ?? "—")}</span>,
             },
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
-            { key: "venue", header: "Venue", render: (r) => String(r.venue_name ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "venue",
+              header: "Venue",
+              render: (r) => String(r.venue_name ?? "—"),
+              accessor: (r) => r.venue_name ?? null,
+            },
             {
               key: "parent_zone_id",
               header: "Parent",

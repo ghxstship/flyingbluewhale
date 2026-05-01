@@ -87,9 +87,21 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           emptyLabel="No guests yet"
           emptyDescription="Hospitality and VIP tickets land here. Add guests to your party via the producer or upload a manifest."
           columns={[
-            { key: "name", header: "Guest", render: (r) => r.holder_name ?? "—" },
+            {
+              key: "name",
+              header: "Guest",
+              render: (r) => r.holder_name ?? "—",
+              accessor: (r) => r.holder_name ?? null,
+            },
             { key: "email", header: "Email", render: (r) => <span className="text-xs">{r.holder_email ?? "—"}</span> },
-            { key: "tier", header: "Tier", render: (r) => <Badge variant="muted">{r.tier}</Badge> },
+            {
+              key: "tier",
+              header: "Tier",
+              render: (r) => <Badge variant="muted">{r.tier}</Badge>,
+              accessor: (r) => r.tier ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "code",
               header: "Code",
@@ -104,6 +116,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

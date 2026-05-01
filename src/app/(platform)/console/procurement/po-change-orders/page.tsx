@@ -89,12 +89,13 @@ export default async function Page() {
           columns={[
             { key: "po", header: "PO", render: (r) => r.purchase_order?.number ?? "—", className: "font-mono text-xs" },
             { key: "num", header: "CO #", render: (r) => `#${r.number}`, className: "font-mono text-xs" },
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "amount",
               header: "Amount",
               render: (r) => formatMoney(r.amount_cents),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.amount_cents ?? 0),
             },
             {
               key: "days",
@@ -106,6 +107,8 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

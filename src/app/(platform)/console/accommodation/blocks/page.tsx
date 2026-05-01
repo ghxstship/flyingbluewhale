@@ -47,9 +47,19 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
-            { key: "property", header: "Property", render: (r) => String(r.property ?? "—") },
-            { key: "stakeholder_group", header: "Group", render: (r) => String(r.stakeholder_group ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "property",
+              header: "Property",
+              render: (r) => String(r.property ?? "—"),
+              accessor: (r) => r.property ?? null,
+            },
+            {
+              key: "stakeholder_group",
+              header: "Group",
+              render: (r) => String(r.stakeholder_group ?? "—"),
+              accessor: (r) => r.stakeholder_group ?? null,
+            },
             {
               key: "rooms_reserved",
               header: "Reserved",

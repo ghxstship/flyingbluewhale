@@ -81,7 +81,7 @@ export default async function Page() {
           emptyLabel="No ceremonies"
           emptyDescription="Ceremonies live as Events with names like 'Opening ceremony', 'Closing ceremony', 'Victory ceremony · 100m'. Author cues in Production → Run of Show."
           columns={[
-            { key: "name", header: "Ceremony", render: (r) => r.name },
+            { key: "name", header: "Ceremony", render: (r) => r.name, accessor: (r) => r.name },
             { key: "starts", header: "Starts", render: (r) => fmt(r.starts_at), className: "font-mono text-xs" },
             { key: "ends", header: "Ends", render: (r) => fmt(r.ends_at), className: "font-mono text-xs" },
             { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
@@ -89,6 +89,9 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

@@ -84,9 +84,22 @@ export default async function Page() {
           emptyLabel="Nothing pending disposition"
           emptyDescription="Equipment moves into disposition when its status flips to maintenance or retired. Update an asset's status to surface it here for sale, donation, or recycling."
           columns={[
-            { key: "name", header: "Asset", render: (r) => r.name },
-            { key: "tag", header: "Tag", render: (r) => r.asset_tag ?? "—", className: "font-mono text-xs" },
-            { key: "category", header: "Category", render: (r) => r.category ?? "—" },
+            { key: "name", header: "Asset", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "tag",
+              header: "Tag",
+              render: (r) => r.asset_tag ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.asset_tag ?? null,
+            },
+            {
+              key: "category",
+              header: "Category",
+              render: (r) => r.category ?? "—",
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "rate",
               header: "Daily Rate",
@@ -97,6 +110,9 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

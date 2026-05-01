@@ -43,8 +43,8 @@ export default async function MileagePage() {
             </Button>
           }
           columns={[
-            { key: "origin", header: "Origin", render: (r) => r.origin },
-            { key: "destination", header: "Destination", render: (r) => r.destination },
+            { key: "origin", header: "Origin", render: (r) => r.origin, accessor: (r) => r.origin },
+            { key: "destination", header: "Destination", render: (r) => r.destination, accessor: (r) => r.destination },
             {
               key: "miles",
               header: "Miles",
@@ -57,7 +57,13 @@ export default async function MileagePage() {
               render: (r) => formatMoney(Math.round(Number(r.miles) * Number(r.rate_cents))),
               className: "font-mono text-xs",
             },
-            { key: "date", header: "Date", render: (r) => r.logged_on, className: "font-mono text-xs" },
+            {
+              key: "date",
+              header: "Date",
+              render: (r) => r.logged_on,
+              className: "font-mono text-xs",
+              accessor: (r) => r.logged_on,
+            },
           ]}
         />
       </div>

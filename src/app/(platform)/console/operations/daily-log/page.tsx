@@ -92,11 +92,19 @@ export default async function Page() {
           columns={[
             { key: "date", header: "Date", render: (r) => fmt(r.log_date), className: "font-mono text-xs" },
             { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
-            { key: "weather", header: "Weather", render: (r) => r.weather_summary ?? "—" },
+            {
+              key: "weather",
+              header: "Weather",
+              render: (r) => r.weather_summary ?? "—",
+              accessor: (r) => r.weather_summary ?? null,
+            },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

@@ -47,8 +47,22 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "kind", header: "Kind", render: (r) => String(r.kind ?? "—") },
-            { key: "status", header: "Status", render: (r) => String(r.status ?? "—") },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => String(r.kind ?? "—"),
+              accessor: (r) => r.kind ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => String(r.status ?? "—"),
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "created_at",
               header: "Requested",

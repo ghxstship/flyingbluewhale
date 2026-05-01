@@ -47,13 +47,18 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "catalog", header: "Catalog", render: (r) => String(r.catalog ?? "—") },
+            {
+              key: "catalog",
+              header: "Catalog",
+              render: (r) => String(r.catalog ?? "—"),
+              accessor: (r) => r.catalog ?? null,
+            },
             {
               key: "sku",
               header: "SKU",
               render: (r) => <span className="font-mono text-xs">{String(r.sku ?? "—")}</span>,
             },
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
             {
               key: "unit_price_cents",
               header: "Unit ¢",

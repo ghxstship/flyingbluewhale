@@ -171,7 +171,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             emptyDescription="Invoices created from this project's proposals will land here."
             columns={[
               { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
-              { key: "title", header: "Title", render: (r) => r.title },
+              { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
               {
                 key: "amount",
                 header: "Amount",
@@ -186,8 +186,16 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                     {r.status}
                   </Badge>
                 ),
+                filterable: true,
+                groupable: true,
               },
-              { key: "due", header: "Due", render: (r) => r.due_at ?? "—", className: "font-mono text-xs" },
+              {
+                key: "due",
+                header: "Due",
+                render: (r) => r.due_at ?? "—",
+                className: "font-mono text-xs",
+                accessor: (r) => r.due_at ?? null,
+              },
             ]}
           />
         </section>
@@ -209,14 +217,21 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             emptyDescription="POs raised against this project will land here."
             columns={[
               { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
-              { key: "title", header: "Title", render: (r) => r.title },
+              { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
               {
                 key: "amount",
                 header: "Amount",
                 render: (r) => formatMoney(r.amount_cents, currency),
                 className: "font-mono text-xs",
               },
-              { key: "status", header: "Status", render: (r) => r.status },
+              {
+                key: "status",
+                header: "Status",
+                render: (r) => r.status,
+                accessor: (r) => r.status,
+                filterable: true,
+                groupable: true,
+              },
             ]}
           />
         </section>
@@ -234,16 +249,42 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             emptyLabel="No expenses logged"
             emptyDescription="Expenses tagged with this project will land here."
             columns={[
-              { key: "description", header: "Description", render: (r) => r.description },
-              { key: "category", header: "Category", render: (r) => r.category ?? "—", className: "font-mono text-xs" },
+              {
+                key: "description",
+                header: "Description",
+                render: (r) => r.description,
+                accessor: (r) => r.description,
+              },
+              {
+                key: "category",
+                header: "Category",
+                render: (r) => r.category ?? "—",
+                className: "font-mono text-xs",
+                accessor: (r) => r.category ?? null,
+                filterable: true,
+                groupable: true,
+              },
               {
                 key: "amount",
                 header: "Amount",
                 render: (r) => formatMoney(r.amount_cents, currency),
                 className: "font-mono text-xs",
               },
-              { key: "status", header: "Status", render: (r) => r.status },
-              { key: "spent_at", header: "Date", render: (r) => r.spent_at, className: "font-mono text-xs" },
+              {
+                key: "status",
+                header: "Status",
+                render: (r) => r.status,
+                accessor: (r) => r.status,
+                filterable: true,
+                groupable: true,
+              },
+              {
+                key: "spent_at",
+                header: "Date",
+                render: (r) => r.spent_at,
+                className: "font-mono text-xs",
+                accessor: (r) => r.spent_at,
+              },
             ]}
           />
         </section>

@@ -111,12 +111,20 @@ export default async function Page() {
           }
           columns={[
             { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
-            { key: "title", header: "Title", render: (r) => r.title },
-            { key: "type", header: "Type", render: (r) => <Badge variant="muted">{r.type}</Badge> },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "type",
+              header: "Type",
+              render: (r) => <Badge variant="muted">{r.type}</Badge>,
+              accessor: (r) => r.type ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "risk",
               header: "Risk",
               render: (r) => <Badge variant={RISK_TONE[r.risk] ?? "muted"}>{r.risk}</Badge>,
+              accessor: (r) => r.risk ?? null,
             },
             {
               key: "window",
@@ -128,11 +136,15 @@ export default async function Page() {
               key: "owner",
               header: "Owner",
               render: (r) => r.assigned?.name ?? r.assigned?.email ?? "—",
+              filterable: true,
+              groupable: true,
             },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

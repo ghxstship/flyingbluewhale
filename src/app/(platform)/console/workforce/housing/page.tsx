@@ -75,9 +75,15 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Block", render: (r) => r.name },
-            { key: "property", header: "Property", render: (r) => r.property },
-            { key: "city", header: "City", render: (r) => r.city ?? "—", className: "font-mono text-xs" },
+            { key: "name", header: "Block", render: (r) => r.name, accessor: (r) => r.name },
+            { key: "property", header: "Property", render: (r) => r.property, accessor: (r) => r.property },
+            {
+              key: "city",
+              header: "City",
+              render: (r) => r.city ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.city ?? null,
+            },
             {
               key: "stakeholder",
               header: "Group",

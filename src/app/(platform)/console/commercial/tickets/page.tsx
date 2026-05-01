@@ -47,8 +47,15 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
-            { key: "channel", header: "Channel", render: (r) => String(r.channel ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "channel",
+              header: "Channel",
+              render: (r) => String(r.channel ?? "—"),
+              accessor: (r) => r.channel ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "price_cents",
               header: "Price (¢)",

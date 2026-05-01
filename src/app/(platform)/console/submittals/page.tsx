@@ -95,16 +95,35 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "code", header: "Code", render: (r) => r.code, className: "font-mono text-xs" },
-            { key: "title", header: "Title", render: (r) => r.title },
-            { key: "spec", header: "Spec", render: (r) => r.spec_section ?? "—" },
-            { key: "vendor", header: "Vendor", render: (r) => r.vendor?.name ?? "—" },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => r.code,
+              className: "font-mono text-xs",
+              accessor: (r) => r.code,
+            },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "spec",
+              header: "Spec",
+              render: (r) => r.spec_section ?? "—",
+              accessor: (r) => r.spec_section ?? null,
+            },
+            {
+              key: "vendor",
+              header: "Vendor",
+              render: (r) => r.vendor?.name ?? "—",
+              filterable: true,
+              groupable: true,
+            },
             { key: "round", header: "Round", render: (r) => `#${r.current_round}`, className: "font-mono text-xs" },
             { key: "due", header: "Due", render: (r) => fmt(r.due_at), className: "font-mono text-xs" },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

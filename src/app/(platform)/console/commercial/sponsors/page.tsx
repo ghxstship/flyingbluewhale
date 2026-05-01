@@ -47,7 +47,7 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => String(r.title ?? "—") },
+            { key: "title", header: "Title", render: (r) => String(r.title ?? "—"), accessor: (r) => r.title ?? null },
             {
               key: "quantity",
               header: "Quantity",
@@ -58,7 +58,14 @@ export default async function Page() {
               header: "Delivered",
               render: (r) => <span className="font-mono text-xs">{String(r.delivered ?? "—")}</span>,
             },
-            { key: "status", header: "Status", render: (r) => String(r.status ?? "—") },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => String(r.status ?? "—"),
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "due_by",
               header: "Due By",

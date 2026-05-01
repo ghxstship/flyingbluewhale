@@ -96,8 +96,14 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "code", header: "Code", render: (r) => r.code, className: "font-mono text-xs" },
-            { key: "subject", header: "Subject", render: (r) => r.subject },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => r.code,
+              className: "font-mono text-xs",
+              accessor: (r) => r.code,
+            },
+            { key: "subject", header: "Subject", render: (r) => r.subject, accessor: (r) => r.subject },
             { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
             {
               key: "ball",
@@ -109,11 +115,17 @@ export default async function Page() {
               key: "priority",
               header: "Priority",
               render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{r.priority}</Badge>,
+              accessor: (r) => r.priority ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

@@ -66,8 +66,13 @@ export default async function Page() {
           }
           columns={[
             { key: "sku", header: "SKU", render: (r) => <span className="font-mono text-xs">{r.sku}</span> },
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "description", header: "Description", render: (r) => r.description ?? "—" },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "description",
+              header: "Description",
+              render: (r) => r.description ?? "—",
+              accessor: (r) => r.description ?? null,
+            },
             {
               key: "unit_price_cents",
               header: "Unit Cost",

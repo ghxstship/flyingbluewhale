@@ -59,20 +59,29 @@ export default async function SchedulePage() {
           rows={rows}
           rowHref={(r) => `/console/events/${r.id}`}
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
             {
               key: "starts",
               header: "Starts",
               render: (r) => formatDate(r.starts_at, "long"),
               className: "font-mono text-xs",
+              accessor: (r) => r.starts_at,
             },
             {
               key: "ends",
               header: "Ends",
               render: (r) => formatDate(r.ends_at, "long"),
               className: "font-mono text-xs",
+              accessor: (r) => r.ends_at,
             },
-            { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <StatusBadge status={r.status} />,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
       </div>

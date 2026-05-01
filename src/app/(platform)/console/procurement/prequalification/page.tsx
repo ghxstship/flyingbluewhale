@@ -85,7 +85,13 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "vendor", header: "Vendor", render: (r) => r.vendor?.name ?? "—" },
+            {
+              key: "vendor",
+              header: "Vendor",
+              render: (r) => r.vendor?.name ?? "—",
+              filterable: true,
+              groupable: true,
+            },
             { key: "q", header: "Questionnaire", render: (r) => r.questionnaire?.name ?? "—" },
             {
               key: "score",
@@ -98,6 +104,8 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

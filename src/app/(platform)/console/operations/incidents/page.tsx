@@ -68,15 +68,25 @@ export default async function IncidentsPage() {
               key: "severity",
               header: "Severity",
               render: (r) => <StatusChip tone={SEVERITY_TONE[r.severity] ?? "neutral"}>{r.severity}</StatusChip>,
+              filterable: true,
+              groupable: true,
             },
-            { key: "summary", header: "Summary", render: (r) => r.summary },
+            { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
             {
               key: "location",
               header: "Location",
               render: (r) => r.location ?? "—",
               className: "text-[var(--text-muted)]",
+              accessor: (r) => r.location ?? null,
             },
-            { key: "status", header: "Status", render: (r) => r.status },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => r.status,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
       </div>

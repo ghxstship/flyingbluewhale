@@ -86,6 +86,8 @@ export default async function Page() {
               key: "scope",
               header: "Scope",
               render: (r) => <Badge variant="muted">Scope {r.scope}</Badge>,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "kg_co2e",
@@ -96,11 +98,15 @@ export default async function Page() {
               key: "source",
               header: "Source",
               render: (r) => <span className="text-xs text-[var(--text-secondary)]">{r.source ?? "—"}</span>,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "method",
               header: "Method",
               render: (r) => <span className="text-xs text-[var(--text-muted)]">{r.method ?? "—"}</span>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

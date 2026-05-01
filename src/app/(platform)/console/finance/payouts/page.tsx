@@ -27,7 +27,7 @@ export default async function PayoutsPage() {
         <DataTable<Vendor>
           rows={vendors}
           columns={[
-            { key: "name", header: "Vendor", render: (r) => r.name },
+            { key: "name", header: "Vendor", render: (r) => r.name, accessor: (r) => r.name },
             {
               key: "account",
               header: "Connect Account",
@@ -49,6 +49,7 @@ export default async function PayoutsPage() {
               header: "COI Expires",
               render: (r) => r.coi_expires_at ?? "—",
               className: "font-mono text-xs",
+              accessor: (r) => r.coi_expires_at ?? null,
             },
           ]}
         />

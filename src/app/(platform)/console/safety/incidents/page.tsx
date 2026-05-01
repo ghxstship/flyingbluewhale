@@ -132,18 +132,28 @@ export default async function Page() {
           rowHref={(r) => `/console/operations/incidents/${r.id}`}
           emptyLabel="No incidents in the last 30 days"
           columns={[
-            { key: "summary", header: "Summary", render: (r) => r.summary },
+            { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
             { key: "occurred", header: "Occurred", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
-            { key: "location", header: "Location", render: (r) => r.location ?? "—" },
+            {
+              key: "location",
+              header: "Location",
+              render: (r) => r.location ?? "—",
+              accessor: (r) => r.location ?? null,
+            },
             {
               key: "severity",
               header: "Severity",
               render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{r.severity}</Badge>,
+              accessor: (r) => r.severity ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

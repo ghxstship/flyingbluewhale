@@ -110,20 +110,38 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
             {
               key: "asset_tag",
               header: "Tag",
               render: (r) => <span className="font-mono text-xs">{String(r.asset_tag ?? "—")}</span>,
             },
-            { key: "category", header: "Category", render: (r) => String(r.category ?? "—") },
-            { key: "location", header: "Location", render: (r) => String(r.location_name ?? "—") },
+            {
+              key: "category",
+              header: "Category",
+              render: (r) => String(r.category ?? "—"),
+              accessor: (r) => r.category ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "location",
+              header: "Location",
+              render: (r) => String(r.location_name ?? "—"),
+              accessor: (r) => r.location_name ?? null,
+            },
             {
               key: "serial",
               header: "Serial",
               render: (r) => <span className="font-mono text-xs">{String(r.serial ?? "—")}</span>,
             },
-            { key: "status", header: "Status", render: (r) => <StatusBadge status={String(r.status)} /> },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <StatusBadge status={String(r.status)} />,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
 

@@ -47,7 +47,7 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "fleet", header: "Fleet", render: (r) => String(r.fleet ?? "—") },
+            { key: "fleet", header: "Fleet", render: (r) => String(r.fleet ?? "—"), accessor: (r) => r.fleet ?? null },
             {
               key: "vehicle_ref",
               header: "Vehicle",
@@ -58,7 +58,14 @@ export default async function Page() {
               header: "Depart",
               render: (r) => <span className="font-mono text-xs">{String(r.scheduled_depart ?? "—")}</span>,
             },
-            { key: "status", header: "Status", render: (r) => String(r.status ?? "—") },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => String(r.status ?? "—"),
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
       </div>

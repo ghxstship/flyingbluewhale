@@ -47,14 +47,26 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "mark", header: "Mark", render: (r) => String(r.mark ?? "—") },
-            { key: "jurisdiction", header: "Jurisdiction", render: (r) => String(r.jurisdiction ?? "—") },
+            { key: "mark", header: "Mark", render: (r) => String(r.mark ?? "—"), accessor: (r) => r.mark ?? null },
+            {
+              key: "jurisdiction",
+              header: "Jurisdiction",
+              render: (r) => String(r.jurisdiction ?? "—"),
+              accessor: (r) => r.jurisdiction ?? null,
+            },
             {
               key: "registration_no",
               header: "Reg No.",
               render: (r) => <span className="font-mono text-xs">{String(r.registration_no ?? "—")}</span>,
             },
-            { key: "status", header: "Status", render: (r) => String(r.status ?? "—") },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => String(r.status ?? "—"),
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
       </div>

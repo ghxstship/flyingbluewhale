@@ -47,10 +47,29 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "participant_name", header: "Participant", render: (r) => String(r.participant_name ?? "—") },
-            { key: "discipline", header: "Discipline", render: (r) => String(r.discipline ?? "—") },
-            { key: "event", header: "Event", render: (r) => String(r.event ?? "—") },
-            { key: "status", header: "Status", render: (r) => String(r.status ?? "—") },
+            {
+              key: "participant_name",
+              header: "Participant",
+              render: (r) => String(r.participant_name ?? "—"),
+              accessor: (r) => r.participant_name ?? null,
+            },
+            {
+              key: "discipline",
+              header: "Discipline",
+              render: (r) => String(r.discipline ?? "—"),
+              accessor: (r) => r.discipline ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            { key: "event", header: "Event", render: (r) => String(r.event ?? "—"), accessor: (r) => r.event ?? null },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => String(r.status ?? "—"),
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
       </div>

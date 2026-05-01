@@ -98,7 +98,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           emptyLabel="No entitlements on file"
           emptyDescription="Once your sponsorship contract is signed, the deliverables breakdown lands here with quantity and due dates."
           columns={[
-            { key: "title", header: "Entitlement", render: (r) => r.title },
+            { key: "title", header: "Entitlement", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "qty",
               header: "Quantity",
@@ -113,6 +113,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "evidence",

@@ -63,6 +63,8 @@ export default async function OfferLettersPage() {
                   <div className="text-xs text-[var(--text-muted)]">{r.role_department ?? ""}</div>
                 </div>
               ),
+              filterable: true,
+              groupable: true,
             },
             {
               key: "project",
@@ -85,6 +87,8 @@ export default async function OfferLettersPage() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_VARIANT[r.status]}>{STATUS_LABEL[r.status]}</Badge>,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "code",

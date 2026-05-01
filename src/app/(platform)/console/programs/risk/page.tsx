@@ -72,8 +72,15 @@ export default async function Page() {
           rows={rows as Array<Risk & { id: string }>}
           rowHref={(r) => `/console/programs/risk/${r.id}`}
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
-            { key: "kind", header: "Kind", render: (r) => <Badge variant="muted">{r.kind}</Badge> },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => <Badge variant="muted">{r.kind}</Badge>,
+              accessor: (r) => r.kind ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "matrix",
               header: "L × I",
@@ -104,6 +111,9 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant="muted">{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "due_on",

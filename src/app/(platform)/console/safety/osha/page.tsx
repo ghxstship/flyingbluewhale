@@ -102,7 +102,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
           emptyLabel={`No recordable incidents for ${year}.`}
           columns={[
             { key: "date", header: "Date", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
-            { key: "summary", header: "Description", render: (r) => r.summary },
+            { key: "summary", header: "Description", render: (r) => r.summary, accessor: (r) => r.summary },
             {
               key: "class",
               header: "Classification",
@@ -111,9 +111,23 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
                   {r.osha_classification.replace("_", " ")}
                 </Badge>
               ),
+              filterable: true,
+              groupable: true,
             },
-            { key: "body", header: "Body Part", render: (r) => r.body_part ?? "—" },
-            { key: "type", header: "Injury Type", render: (r) => r.injury_type ?? "—" },
+            {
+              key: "body",
+              header: "Body Part",
+              render: (r) => r.body_part ?? "—",
+              accessor: (r) => r.body_part ?? null,
+            },
+            {
+              key: "type",
+              header: "Injury Type",
+              render: (r) => r.injury_type ?? "—",
+              accessor: (r) => r.injury_type ?? null,
+              filterable: true,
+              groupable: true,
+            },
             { key: "away", header: "Days Away", render: (r) => r.days_away.toString(), className: "font-mono text-xs" },
             {
               key: "rest",

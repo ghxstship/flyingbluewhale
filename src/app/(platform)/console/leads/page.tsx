@@ -38,17 +38,45 @@ export default async function LeadsPage() {
           rows={rows}
           rowHref={(r) => `/console/leads/${r.id}`}
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "stage", header: "Stage", render: (r) => <StatusBadge status={r.stage} /> },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "stage",
+              header: "Stage",
+              render: (r) => <StatusBadge status={r.stage} />,
+              accessor: (r) => r.stage,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "value",
               header: "Value",
               render: (r) => formatMoney(r.estimated_value_cents),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.estimated_value_cents ?? 0),
             },
-            { key: "source", header: "Source", render: (r) => r.source ?? "—", className: "font-mono text-xs" },
-            { key: "email", header: "Email", render: (r) => r.email ?? "—", className: "font-mono text-xs" },
-            { key: "updated", header: "Updated", render: (r) => timeAgo(r.updated_at), className: "font-mono text-xs" },
+            {
+              key: "source",
+              header: "Source",
+              render: (r) => r.source ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.source ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "email",
+              header: "Email",
+              render: (r) => r.email ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.email ?? null,
+            },
+            {
+              key: "updated",
+              header: "Updated",
+              render: (r) => timeAgo(r.updated_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.updated_at,
+            },
           ]}
         />
       </div>

@@ -43,16 +43,35 @@ export default async function InvoicesPage() {
           rowHref={(r) => `/console/finance/invoices/${r.id}`}
           columns={[
             { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "amount",
               header: "Amount",
               render: (r) => formatMoney(r.amount_cents, r.currency),
               className: "font-mono text-xs",
             },
-            { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-            { key: "due", header: "Due", render: (r) => r.due_at ?? "—", className: "font-mono text-xs" },
-            { key: "created", header: "Created", render: (r) => timeAgo(r.created_at), className: "font-mono text-xs" },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <StatusBadge status={r.status} />,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "due",
+              header: "Due",
+              render: (r) => r.due_at ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.due_at ?? null,
+            },
+            {
+              key: "created",
+              header: "Created",
+              render: (r) => timeAgo(r.created_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.created_at,
+            },
           ]}
         />
       </div>

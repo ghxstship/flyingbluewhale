@@ -68,23 +68,30 @@ export default async function Page() {
           }
           columns={[
             { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "severity",
               header: "Severity",
               render: (r) => <Badge variant={SEVERITY_TONE[r.severity]}>{r.severity}</Badge>,
+              accessor: (r) => r.severity ?? null,
+              filterable: true,
+              groupable: true,
             },
             { key: "likelihood", header: "Likelihood", render: (r) => r.likelihood.replace(/_/g, " ") },
-            { key: "treatment", header: "Treatment", render: (r) => r.treatment },
+            { key: "treatment", header: "Treatment", render: (r) => r.treatment, accessor: (r) => r.treatment },
             {
               key: "classification",
               header: "Classification",
               render: (r) => <Badge variant="muted">{r.classification}</Badge>,
+              accessor: (r) => r.classification ?? null,
             },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status]}>{r.status}</Badge>,
+              accessor: (r) => r.status ?? null,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

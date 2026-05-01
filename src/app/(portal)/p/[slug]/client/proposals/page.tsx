@@ -46,8 +46,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             header: "Amount",
             render: (r) => formatMoney(r.amount_cents ?? 0),
             className: "font-mono text-xs",
+            accessor: (r) => Number(r.amount_cents ?? 0),
           },
-          { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
+          {
+            key: "status",
+            header: "Status",
+            render: (r) => <StatusBadge status={r.status} />,
+            accessor: (r) => r.status,
+            filterable: true,
+            groupable: true,
+          },
           {
             key: "sent",
             header: "Sent",

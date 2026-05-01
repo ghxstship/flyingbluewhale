@@ -62,12 +62,20 @@ export default async function PeoplePage() {
                 </div>
               ),
             },
-            { key: "role", header: "Role", render: (r) => <Badge variant="brand">{r.role}</Badge> },
+            {
+              key: "role",
+              header: "Role",
+              render: (r) => <Badge variant="brand">{r.role}</Badge>,
+              accessor: (r) => r.role ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "since",
               header: "Member Since",
               render: (r) => timeAgo(r.created_at),
               className: "font-mono text-xs",
+              accessor: (r) => r.created_at,
             },
           ]}
         />

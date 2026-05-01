@@ -107,11 +107,14 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           emptyLabel="No design specs uploaded"
           emptyDescription="Author overlay, seating, signage, broadcast, and rigging specs here. Each row can link to a Bill-of-Materials requisition."
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "discipline",
               header: "Discipline",
               render: (r) => <Badge variant="muted">{r.discipline}</Badge>,
+              accessor: (r) => r.discipline ?? null,
+              filterable: true,
+              groupable: true,
             },
             { key: "revision", header: "Rev", render: (r) => <span className="font-mono text-xs">{r.revision}</span> },
             {
@@ -133,6 +136,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

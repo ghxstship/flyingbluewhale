@@ -100,8 +100,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           emptyLabel="No certifications uploaded"
           emptyDescription="Track FOP homologation, fire/life-safety, and operating permits here. Each row should link to the issuer's certificate file in storage."
           columns={[
-            { key: "certificate", header: "Certificate", render: (r) => r.certificate },
-            { key: "issuer", header: "Issuer", render: (r) => r.issuer },
+            { key: "certificate", header: "Certificate", render: (r) => r.certificate, accessor: (r) => r.certificate },
+            { key: "issuer", header: "Issuer", render: (r) => r.issuer, accessor: (r) => r.issuer },
             {
               key: "issued",
               header: "Issued",
@@ -116,6 +116,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={expiryTone(r.expires_on)}>{expiryLabel(r.expires_on)}</Badge>,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "file",

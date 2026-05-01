@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           emptyDescription="Author zones to map accreditation categories to physical areas. The accreditation/policy matrix derives from this list × the categories table."
           columns={[
             { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
-            { key: "name", header: "Name", render: (r) => r.name },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
             { key: "parent", header: "Parent", render: (r) => (r.parent_zone_id ? "↳" : "—") },
             {
               key: "cats",

@@ -45,7 +45,7 @@ export default async function Page() {
               header: "Slug",
               render: (r) => <span className="font-mono text-xs">{String(r.slug ?? "—")}</span>,
             },
-            { key: "title", header: "Title", render: (r) => String(r.title ?? "—") },
+            { key: "title", header: "Title", render: (r) => String(r.title ?? "—"), accessor: (r) => r.title ?? null },
             {
               key: "version",
               header: "Ver",

@@ -47,7 +47,7 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => String(r.title ?? "—") },
+            { key: "title", header: "Title", render: (r) => String(r.title ?? "—"), accessor: (r) => r.title ?? null },
             {
               key: "scheduled_at",
               header: "Scheduled",

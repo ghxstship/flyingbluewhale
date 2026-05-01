@@ -33,8 +33,18 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           columns={[
-            { key: "result", header: "Result", render: (r) => String(r.result ?? "—") },
-            { key: "reason", header: "Reason", render: (r) => String(r.reason ?? "—") },
+            {
+              key: "result",
+              header: "Result",
+              render: (r) => String(r.result ?? "—"),
+              accessor: (r) => r.result ?? null,
+            },
+            {
+              key: "reason",
+              header: "Reason",
+              render: (r) => String(r.reason ?? "—"),
+              accessor: (r) => r.reason ?? null,
+            },
             {
               key: "gate_code",
               header: "Gate",

@@ -35,9 +35,29 @@ export default async function MyTicketsPage() {
           emptyLabel="No tickets yet"
           columns={[
             { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
-            { key: "tier", header: "Tier", render: (r) => r.tier },
-            { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-            { key: "issued", header: "Issued", render: (r) => timeAgo(r.issued_at), className: "font-mono text-xs" },
+            {
+              key: "tier",
+              header: "Tier",
+              render: (r) => r.tier,
+              accessor: (r) => r.tier,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <StatusBadge status={r.status} />,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "issued",
+              header: "Issued",
+              render: (r) => timeAgo(r.issued_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.issued_at,
+            },
             {
               key: "scanned",
               header: "Scanned",

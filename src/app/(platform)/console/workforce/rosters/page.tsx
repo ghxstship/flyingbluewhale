@@ -43,13 +43,20 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
             {
               key: "day_of",
               header: "Day",
               render: (r) => <span className="font-mono text-xs">{String(r.day_of ?? "—")}</span>,
             },
-            { key: "state", header: "State", render: (r) => String(r.state ?? "—") },
+            {
+              key: "state",
+              header: "State",
+              render: (r) => String(r.state ?? "—"),
+              accessor: (r) => r.state ?? null,
+              filterable: true,
+              groupable: true,
+            },
           ]}
         />
       </div>

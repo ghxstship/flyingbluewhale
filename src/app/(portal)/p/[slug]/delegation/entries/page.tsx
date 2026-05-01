@@ -74,14 +74,28 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           emptyLabel="No entries yet"
           emptyDescription="Submit athletes against published disciplines and events. Entries flow into accreditation and start lists once approved."
           columns={[
-            { key: "name", header: "Participant", render: (r) => r.participant_name },
-            { key: "discipline", header: "Discipline", render: (r) => r.discipline ?? "—" },
-            { key: "event", header: "Event", render: (r) => r.event ?? "—" },
+            {
+              key: "name",
+              header: "Participant",
+              render: (r) => r.participant_name,
+              accessor: (r) => r.participant_name,
+            },
+            {
+              key: "discipline",
+              header: "Discipline",
+              render: (r) => r.discipline ?? "—",
+              accessor: (r) => r.discipline ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            { key: "event", header: "Event", render: (r) => r.event ?? "—", accessor: (r) => r.event ?? null },
             { key: "delegation", header: "Delegation", render: (r) => r.delegation?.code ?? "—" },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

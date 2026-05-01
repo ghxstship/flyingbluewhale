@@ -37,8 +37,15 @@ export default async function Page() {
           emptyLabel="No training venues"
           emptyDescription="Sub-set of venues filtered to training spaces. Edit the venue record itself for capacity, layout, and handover state."
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
-            { key: "kind", header: "Kind", render: (r) => String(r.kind ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => String(r.kind ?? "—"),
+              accessor: (r) => r.kind ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "capacity",
               header: "Capacity",

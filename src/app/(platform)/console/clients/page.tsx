@@ -36,11 +36,35 @@ export default async function ClientsPage() {
           rows={rows}
           rowHref={(r) => `/console/clients/${r.id}`}
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
-            { key: "email", header: "Email", render: (r) => r.contact_email ?? "—", className: "font-mono text-xs" },
-            { key: "phone", header: "Phone", render: (r) => r.contact_phone ?? "—", className: "font-mono text-xs" },
-            { key: "website", header: "Website", render: (r) => r.website ?? "—", className: "font-mono text-xs" },
-            { key: "created", header: "Added", render: (r) => timeAgo(r.created_at), className: "font-mono text-xs" },
+            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "email",
+              header: "Email",
+              render: (r) => r.contact_email ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.contact_email ?? null,
+            },
+            {
+              key: "phone",
+              header: "Phone",
+              render: (r) => r.contact_phone ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.contact_phone ?? null,
+            },
+            {
+              key: "website",
+              header: "Website",
+              render: (r) => r.website ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.website ?? null,
+            },
+            {
+              key: "created",
+              header: "Added",
+              render: (r) => timeAgo(r.created_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.created_at,
+            },
           ]}
         />
       </div>

@@ -43,8 +43,10 @@ export type Column<T> = {
   defaultHidden?: boolean;
   /** Surface this column as a Group-by option. */
   groupable?: boolean;
-  /** Returns the underlying scalar value for sort / filter / CSV export. */
-  accessor?: (row: T) => string | number | null | undefined;
+  /** Returns the underlying scalar value for sort / filter / CSV export.
+   *  Returning `unknown` is allowed so pages with loosely-typed rows can pass
+   *  a field through; the wrapper coerces non-scalars to a stringified value. */
+  accessor?: (row: T) => string | number | null | undefined | unknown;
 };
 
 export type BulkAction<T> = {
@@ -86,6 +88,57 @@ export type DataTableProps<T extends { id: string }> = {
     perform: (ids: string[]) => void | Promise<void>;
   }>;
 };
+
+// Helpers — defined above the component because Turbopack's server runtime
+// has been observed not to hoist function declarations across an `async`
+// component boundary.
+function coerceScalar(v: unknown): string | number | null {
+  if (v == null || typeof v === "boolean") return null;
+  if (typeof v === "number") return Number.isFinite(v) ? v : null;
+  if (typeof v === "string") return v;
+  if (v instanceof Date) return v.toISOString();
+  try {
+    return String(v);
+  } catch {
+    return null;
+  }
+}
+
+function extractText(node: ReactNode): string | number | null {
+  if (node == null || typeof node === "boolean") return null;
+  if (typeof node === "number") return node;
+  if (typeof node === "string") return node;
+  if (Array.isArray(node))
+    return node
+      .map(extractText)
+      .filter((v) => v != null)
+      .join(" ");
+  const obj = node as unknown as { props?: { children?: ReactNode } };
+  if (obj && typeof obj === "object" && obj.props && "children" in obj.props) {
+    return extractText(obj.props.children);
+  }
+  return null;
+}
+
+function normalizePath(p: string): string {
+  try {
+    const u = p.startsWith("http") ? new URL(p) : { pathname: p };
+    return (u.pathname || "/").replace(/\/+$/, "") || "/";
+  } catch {
+    return p;
+  }
+}
+
+async function deriveTableId<T>(columns: Column<T>[]): Promise<string> {
+  try {
+    const h = await headers();
+    const path = h.get("x-pathname") ?? h.get("x-invoke-path") ?? h.get("referer") ?? "";
+    if (path) return `t:${normalizePath(path)}:${columns.map((c) => c.key).join(",")}`;
+  } catch {
+    /* not in a request scope — fall through to fingerprint */
+  }
+  return `t:${columns.map((c) => c.key).join(",")}`;
+}
 
 export async function DataTable<T extends { id: string }>({
   rows,
@@ -130,11 +183,15 @@ export async function DataTable<T extends { id: string }>({
   // (e.g. unit tests).
   const resolvedTableId = tableId ?? (await deriveTableId(columns));
 
+  // Sort defaults true on every column — the wrapper falls back to text-stripped
+  // cell content when accessor is omitted, so even unannotated columns sort.
+  // Pages that genuinely don't want sort (decorative / actions columns) opt
+  // out with `sortable: false`.
   const interactiveCols: InteractiveColumn[] = columns.map((c) => ({
     key: c.key,
     header: c.header,
     className: c.className,
-    sortable: c.sortable ?? c.accessor != null,
+    sortable: c.sortable ?? true,
     filterable: c.filterable,
     defaultHidden: c.defaultHidden,
     groupable: c.groupable,
@@ -142,7 +199,7 @@ export async function DataTable<T extends { id: string }>({
 
   const interactiveRows: InteractiveRow[] = rows.map((row) => {
     const cells = columns.map((c) => c.render(row));
-    const values = columns.map((c, i) => (c.accessor ? c.accessor(row) : extractText(cells[i])));
+    const values = columns.map((c, i) => (c.accessor ? coerceScalar(c.accessor(row)) : extractText(cells[i])));
     const actions = rowActions?.(row) ?? undefined;
     return {
       id: row.id,
@@ -259,46 +316,4 @@ function DataTableSkeleton({ columns, rows }: { columns: number; rows: number })
       </table>
     </div>
   );
-}
-
-/**
- * Strip a ReactNode of its rendering and return a plain-text fallback for
- * sort / filter / CSV. Best-effort — prefer `column.accessor` when the
- * rendered cell isn't a plain string.
- */
-function extractText(node: ReactNode): string | number | null {
-  if (node == null || typeof node === "boolean") return null;
-  if (typeof node === "number") return node;
-  if (typeof node === "string") return node;
-  if (Array.isArray(node))
-    return node
-      .map(extractText)
-      .filter((v) => v != null)
-      .join(" ");
-  // ReactElement — peek at .props.children when present.
-  const obj = node as unknown as { props?: { children?: ReactNode } };
-  if (obj && typeof obj === "object" && obj.props && "children" in obj.props) {
-    return extractText(obj.props.children);
-  }
-  return null;
-}
-
-async function deriveTableId<T>(columns: Column<T>[]): Promise<string> {
-  try {
-    const h = await headers();
-    const path = h.get("x-pathname") ?? h.get("x-invoke-path") ?? h.get("referer") ?? "";
-    if (path) return `t:${normalizePath(path)}:${columns.map((c) => c.key).join(",")}`;
-  } catch {
-    /* not in a request scope — fall through to fingerprint */
-  }
-  return `t:${columns.map((c) => c.key).join(",")}`;
-}
-
-function normalizePath(p: string): string {
-  try {
-    const u = p.startsWith("http") ? new URL(p) : { pathname: p };
-    return (u.pathname || "/").replace(/\/+$/, "") || "/";
-  } catch {
-    return p;
-  }
 }

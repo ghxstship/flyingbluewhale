@@ -47,7 +47,12 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "functional_area", header: "Area", render: (r) => String(r.functional_area ?? "—") },
+            {
+              key: "functional_area",
+              header: "Area",
+              render: (r) => String(r.functional_area ?? "—"),
+              accessor: (r) => r.functional_area ?? null,
+            },
             {
               key: "planned_fte",
               header: "Planned",

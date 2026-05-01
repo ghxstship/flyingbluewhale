@@ -96,7 +96,13 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "code", header: "Code", render: (r) => r.code, className: "font-mono text-xs" },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => r.code,
+              className: "font-mono text-xs",
+              accessor: (r) => r.code,
+            },
             {
               key: "title",
               header: "Title",
@@ -113,17 +119,28 @@ export default async function Page() {
               ),
             },
             { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
-            { key: "assignee", header: "Assignee", render: (r) => r.assignee?.name ?? r.assignee?.email ?? "—" },
+            {
+              key: "assignee",
+              header: "Assignee",
+              render: (r) => r.assignee?.name ?? r.assignee?.email ?? "—",
+              filterable: true,
+              groupable: true,
+            },
             { key: "due", header: "Due", render: (r) => fmt(r.due_at), className: "font-mono text-xs" },
             {
               key: "priority",
               header: "Priority",
               render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{r.priority}</Badge>,
+              accessor: (r) => r.priority ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

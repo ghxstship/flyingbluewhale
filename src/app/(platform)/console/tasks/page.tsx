@@ -37,16 +37,36 @@ export default async function TasksPage() {
           rows={rows}
           rowHref={(r) => `/console/tasks/${r.id}`}
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
-            { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-            { key: "priority", header: "P", render: (r) => <span className="font-mono text-xs">P{r.priority}</span> },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <StatusBadge status={r.status} />,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "priority",
+              header: "P",
+              render: (r) => <span className="font-mono text-xs">P{r.priority}</span>,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "due",
               header: "Due",
               render: (r) => formatDate(r.due_at, "medium"),
               className: "font-mono text-xs",
+              accessor: (r) => r.due_at,
             },
-            { key: "created", header: "Created", render: (r) => timeAgo(r.created_at), className: "font-mono text-xs" },
+            {
+              key: "created",
+              header: "Created",
+              render: (r) => timeAgo(r.created_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.created_at,
+            },
           ]}
         />
       </div>

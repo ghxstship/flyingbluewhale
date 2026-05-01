@@ -91,7 +91,14 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "kind", header: "Kind", render: (r) => r.kind },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => r.kind,
+              accessor: (r) => r.kind,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "number",
               header: "Number",
@@ -102,6 +109,7 @@ export default async function Page() {
               header: "Issued",
               render: (r) => formatDate(r.issued_on, "medium"),
               className: "font-mono text-xs",
+              accessor: (r) => r.issued_on,
             },
             {
               key: "expires",

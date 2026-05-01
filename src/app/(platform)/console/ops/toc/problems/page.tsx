@@ -105,11 +105,14 @@ export default async function Page() {
           }
           columns={[
             { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
-            { key: "title", header: "Title", render: (r) => r.title },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "priority",
               header: "Priority",
               render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{r.priority}</Badge>,
+              accessor: (r) => r.priority ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
               key: "detected",
@@ -121,11 +124,15 @@ export default async function Page() {
               key: "owner",
               header: "Owner",
               render: (r) => r.assigned?.name ?? r.assigned?.email ?? "—",
+              filterable: true,
+              groupable: true,
             },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

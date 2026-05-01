@@ -38,15 +38,32 @@ export default async function Page() {
           emptyLabel="No venues"
           emptyDescription="Author each venue with kind, cluster, and capacity. Handover state tracks readiness through bump-out."
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
-            { key: "kind", header: "Kind", render: (r) => String(r.kind ?? "—") },
-            { key: "cluster", header: "Cluster", render: (r) => String(r.cluster ?? "—") },
+            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => String(r.kind ?? "—"),
+              accessor: (r) => r.kind ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "cluster",
+              header: "Cluster",
+              render: (r) => String(r.cluster ?? "—"),
+              accessor: (r) => r.cluster ?? null,
+            },
             {
               key: "capacity",
               header: "Capacity",
               render: (r) => <span className="font-mono text-xs">{String(r.capacity ?? "—")}</span>,
             },
-            { key: "handover_state", header: "Handover", render: (r) => String(r.handover_state ?? "—") },
+            {
+              key: "handover_state",
+              header: "Handover",
+              render: (r) => String(r.handover_state ?? "—"),
+              accessor: (r) => r.handover_state ?? null,
+            },
           ]}
         />
       </div>

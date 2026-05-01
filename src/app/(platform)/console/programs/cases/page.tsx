@@ -84,13 +84,22 @@ export default async function Page() {
           emptyLabel="No cases logged"
           emptyDescription="Cases are incidents with terms like 'protest', 'appeal', 'jury' in the summary. Open one via Operations → Incidents."
           columns={[
-            { key: "summary", header: "Case", render: (r) => r.summary },
+            { key: "summary", header: "Case", render: (r) => r.summary, accessor: (r) => r.summary },
             { key: "occurred", header: "Filed", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
-            { key: "severity", header: "Severity", render: (r) => <Badge variant="muted">{r.severity}</Badge> },
+            {
+              key: "severity",
+              header: "Severity",
+              render: (r) => <Badge variant="muted">{r.severity}</Badge>,
+              accessor: (r) => r.severity ?? null,
+              filterable: true,
+              groupable: true,
+            },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              filterable: true,
+              groupable: true,
             },
           ]}
         />

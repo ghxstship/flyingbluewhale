@@ -634,6 +634,7 @@ export type Database = {
           project_id: string | null
           spent_cents: number
           updated_at: string
+          xtc_code: number | null
         }
         Insert: {
           amount_cents?: number
@@ -650,6 +651,7 @@ export type Database = {
           project_id?: string | null
           spent_cents?: number
           updated_at?: string
+          xtc_code?: number | null
         }
         Update: {
           amount_cents?: number
@@ -666,6 +668,7 @@ export type Database = {
           project_id?: string | null
           spent_cents?: number
           updated_at?: string
+          xtc_code?: number | null
         }
         Relationships: [
           {
@@ -681,6 +684,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "budgets_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "budgets_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -923,6 +940,7 @@ export type Database = {
           created_at: string
           id: string
           org_id: string
+          updated_at: string
         }
         Insert: {
           attachments?: Json
@@ -932,6 +950,7 @@ export type Database = {
           created_at?: string
           id?: string
           org_id: string
+          updated_at?: string
         }
         Update: {
           attachments?: Json
@@ -941,6 +960,7 @@ export type Database = {
           created_at?: string
           id?: string
           org_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -973,6 +993,7 @@ export type Database = {
           org_id: string
           record_id: string
           record_type: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -980,6 +1001,7 @@ export type Database = {
           org_id: string
           record_id: string
           record_type: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -987,6 +1009,7 @@ export type Database = {
           org_id?: string
           record_id?: string
           record_type?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -1007,6 +1030,8 @@ export type Database = {
           id: string
           name: string
           org_id: string
+          updated_at: string
+          xtc_code: number | null
         }
         Insert: {
           active?: boolean
@@ -1016,6 +1041,8 @@ export type Database = {
           id?: string
           name: string
           org_id: string
+          updated_at?: string
+          xtc_code?: number | null
         }
         Update: {
           active?: boolean
@@ -1025,6 +1052,8 @@ export type Database = {
           id?: string
           name?: string
           org_id?: string
+          updated_at?: string
+          xtc_code?: number | null
         }
         Relationships: [
           {
@@ -1033,6 +1062,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "orgs"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cost_codes_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "cost_codes_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -1103,6 +1146,8 @@ export type Database = {
           role: string | null
           updated_at: string
           user_id: string | null
+          xpms_atom_id: string | null
+          xtc_code: number | null
         }
         Insert: {
           created_at?: string
@@ -1116,6 +1161,8 @@ export type Database = {
           role?: string | null
           updated_at?: string
           user_id?: string | null
+          xpms_atom_id?: string | null
+          xtc_code?: number | null
         }
         Update: {
           created_at?: string
@@ -1129,6 +1176,8 @@ export type Database = {
           role?: string | null
           updated_at?: string
           user_id?: string | null
+          xpms_atom_id?: string | null
+          xtc_code?: number | null
         }
         Relationships: [
           {
@@ -1144,6 +1193,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "crew_members_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -1591,6 +1661,7 @@ export type Database = {
           status: string
           submitted_at: string | null
           submitted_by: string | null
+          updated_at: string
           weather_precip_in: number | null
           weather_source: string | null
           weather_summary: string | null
@@ -1611,6 +1682,7 @@ export type Database = {
           status?: string
           submitted_at?: string | null
           submitted_by?: string | null
+          updated_at?: string
           weather_precip_in?: number | null
           weather_source?: string | null
           weather_summary?: string | null
@@ -1631,6 +1703,7 @@ export type Database = {
           status?: string
           submitted_at?: string | null
           submitted_by?: string | null
+          updated_at?: string
           weather_precip_in?: number | null
           weather_source?: string | null
           weather_summary?: string | null
@@ -2195,6 +2268,8 @@ export type Database = {
           serial: string | null
           status: Database["public"]["Enums"]["equipment_status"]
           updated_at: string
+          xpms_atom_id: string | null
+          xtc_code: number | null
         }
         Insert: {
           asset_tag?: string | null
@@ -2210,6 +2285,8 @@ export type Database = {
           serial?: string | null
           status?: Database["public"]["Enums"]["equipment_status"]
           updated_at?: string
+          xpms_atom_id?: string | null
+          xtc_code?: number | null
         }
         Update: {
           asset_tag?: string | null
@@ -2225,6 +2302,8 @@ export type Database = {
           serial?: string | null
           status?: Database["public"]["Enums"]["equipment_status"]
           updated_at?: string
+          xpms_atom_id?: string | null
+          xtc_code?: number | null
         }
         Relationships: [
           {
@@ -2233,6 +2312,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "orgs"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "equipment_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -2372,6 +2472,7 @@ export type Database = {
       expenses: {
         Row: {
           amount_cents: number
+          atom_id: string | null
           category: string | null
           created_at: string
           currency: string
@@ -2384,9 +2485,11 @@ export type Database = {
           status: Database["public"]["Enums"]["expense_status"]
           submitter_id: string
           updated_at: string
+          xtc_code: number | null
         }
         Insert: {
           amount_cents: number
+          atom_id?: string | null
           category?: string | null
           created_at?: string
           currency?: string
@@ -2399,9 +2502,11 @@ export type Database = {
           status?: Database["public"]["Enums"]["expense_status"]
           submitter_id: string
           updated_at?: string
+          xtc_code?: number | null
         }
         Update: {
           amount_cents?: number
+          atom_id?: string | null
           category?: string | null
           created_at?: string
           currency?: string
@@ -2414,8 +2519,16 @@ export type Database = {
           status?: Database["public"]["Enums"]["expense_status"]
           submitter_id?: string
           updated_at?: string
+          xtc_code?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "expenses_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "expenses_org_id_fkey"
             columns: ["org_id"]
@@ -2436,6 +2549,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "expenses_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -2495,6 +2622,8 @@ export type Database = {
           status: string
           title: string
           updated_at: string
+          xpms_atom_id: string | null
+          xtc_code: number | null
         }
         Insert: {
           created_at?: string
@@ -2506,6 +2635,8 @@ export type Database = {
           status?: string
           title: string
           updated_at?: string
+          xpms_atom_id?: string | null
+          xtc_code?: number | null
         }
         Update: {
           created_at?: string
@@ -2517,6 +2648,8 @@ export type Database = {
           status?: string
           title?: string
           updated_at?: string
+          xpms_atom_id?: string | null
+          xtc_code?: number | null
         }
         Relationships: [
           {
@@ -2532,6 +2665,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fabrication_orders_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fabrication_orders_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "fabrication_orders_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -3124,6 +3278,7 @@ export type Database = {
           id: string
           name: string
           org_id: string
+          updated_at: string
         }
         Insert: {
           active?: boolean
@@ -3135,6 +3290,7 @@ export type Database = {
           id?: string
           name: string
           org_id: string
+          updated_at?: string
         }
         Update: {
           active?: boolean
@@ -3146,6 +3302,7 @@ export type Database = {
           id?: string
           name?: string
           org_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -3184,6 +3341,7 @@ export type Database = {
           started_at: string | null
           status: string
           template_id: string | null
+          updated_at: string
         }
         Insert: {
           category?: string | null
@@ -3204,6 +3362,7 @@ export type Database = {
           started_at?: string | null
           status?: string
           template_id?: string | null
+          updated_at?: string
         }
         Update: {
           category?: string | null
@@ -3224,6 +3383,7 @@ export type Database = {
           started_at?: string | null
           status?: string
           template_id?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -3414,6 +3574,7 @@ export type Database = {
       }
       invoice_line_items: {
         Row: {
+          atom_id: string | null
           description: string
           id: string
           invoice_id: string
@@ -3421,8 +3582,10 @@ export type Database = {
           quantity: number
           unit_price_cents: number
           updated_at: string
+          xtc_code: number | null
         }
         Insert: {
+          atom_id?: string | null
           description: string
           id?: string
           invoice_id: string
@@ -3430,8 +3593,10 @@ export type Database = {
           quantity?: number
           unit_price_cents?: number
           updated_at?: string
+          xtc_code?: number | null
         }
         Update: {
+          atom_id?: string | null
           description?: string
           id?: string
           invoice_id?: string
@@ -3439,14 +3604,36 @@ export type Database = {
           quantity?: number
           unit_price_cents?: number
           updated_at?: string
+          xtc_code?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "invoice_line_items_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "invoice_line_items_invoice_id_fkey"
             columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_line_items_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "invoice_line_items_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -4949,6 +5136,7 @@ export type Database = {
           total_due_cents: number
           total_previously_paid_cents: number
           total_retention_cents: number
+          updated_at: string
           vendor_id: string | null
         }
         Insert: {
@@ -4972,6 +5160,7 @@ export type Database = {
           total_due_cents?: number
           total_previously_paid_cents?: number
           total_retention_cents?: number
+          updated_at?: string
           vendor_id?: string | null
         }
         Update: {
@@ -4995,6 +5184,7 @@ export type Database = {
           total_due_cents?: number
           total_previously_paid_cents?: number
           total_retention_cents?: number
+          updated_at?: string
           vendor_id?: string | null
         }
         Relationships: [
@@ -5168,6 +5358,7 @@ export type Database = {
           schedule_impact_days: number
           status: string
           title: string
+          updated_at: string
         }
         Insert: {
           amount_cents?: number
@@ -5186,6 +5377,7 @@ export type Database = {
           schedule_impact_days?: number
           status?: string
           title: string
+          updated_at?: string
         }
         Update: {
           amount_cents?: number
@@ -5204,6 +5396,7 @@ export type Database = {
           schedule_impact_days?: number
           status?: string
           title?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -5312,6 +5505,7 @@ export type Database = {
       }
       po_line_items: {
         Row: {
+          atom_id: string | null
           description: string
           id: string
           position: number
@@ -5319,8 +5513,10 @@ export type Database = {
           quantity: number
           unit_price_cents: number
           updated_at: string
+          xtc_code: number | null
         }
         Insert: {
+          atom_id?: string | null
           description: string
           id?: string
           position?: number
@@ -5328,8 +5524,10 @@ export type Database = {
           quantity?: number
           unit_price_cents?: number
           updated_at?: string
+          xtc_code?: number | null
         }
         Update: {
+          atom_id?: string | null
           description?: string
           id?: string
           position?: number
@@ -5337,14 +5535,36 @@ export type Database = {
           quantity?: number
           unit_price_cents?: number
           updated_at?: string
+          xtc_code?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "po_line_items_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "po_line_items_purchase_order_id_fkey"
             columns: ["purchase_order_id"]
             isOneToOne: false
             referencedRelation: "purchase_orders"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "po_line_items_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "po_line_items_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -5358,6 +5578,7 @@ export type Database = {
           id: string
           name: string
           org_id: string
+          updated_at: string
         }
         Insert: {
           active?: boolean
@@ -5368,6 +5589,7 @@ export type Database = {
           id?: string
           name: string
           org_id: string
+          updated_at?: string
         }
         Update: {
           active?: boolean
@@ -5378,6 +5600,7 @@ export type Database = {
           id?: string
           name?: string
           org_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -5576,13 +5799,24 @@ export type Database = {
           deleted_at: string | null
           description: string | null
           end_date: string | null
+          event_token: string | null
+          geographic_scope: Database["public"]["Enums"]["xpms_geo_scope"] | null
           id: string
           name: string
           org_id: string
+          primary_venue_id: string | null
+          production_style:
+            | Database["public"]["Enums"]["xpms_production_style"]
+            | null
           slug: string
           start_date: string | null
           status: Database["public"]["Enums"]["project_status"]
+          tour_structure:
+            | Database["public"]["Enums"]["xpms_tour_structure"]
+            | null
           updated_at: string
+          venue_token: string | null
+          xpms_phase: Database["public"]["Enums"]["xpms_phase"]
         }
         Insert: {
           branding?: Json
@@ -5593,13 +5827,26 @@ export type Database = {
           deleted_at?: string | null
           description?: string | null
           end_date?: string | null
+          event_token?: string | null
+          geographic_scope?:
+            | Database["public"]["Enums"]["xpms_geo_scope"]
+            | null
           id?: string
           name: string
           org_id: string
+          primary_venue_id?: string | null
+          production_style?:
+            | Database["public"]["Enums"]["xpms_production_style"]
+            | null
           slug: string
           start_date?: string | null
           status?: Database["public"]["Enums"]["project_status"]
+          tour_structure?:
+            | Database["public"]["Enums"]["xpms_tour_structure"]
+            | null
           updated_at?: string
+          venue_token?: string | null
+          xpms_phase?: Database["public"]["Enums"]["xpms_phase"]
         }
         Update: {
           branding?: Json
@@ -5610,13 +5857,26 @@ export type Database = {
           deleted_at?: string | null
           description?: string | null
           end_date?: string | null
+          event_token?: string | null
+          geographic_scope?:
+            | Database["public"]["Enums"]["xpms_geo_scope"]
+            | null
           id?: string
           name?: string
           org_id?: string
+          primary_venue_id?: string | null
+          production_style?:
+            | Database["public"]["Enums"]["xpms_production_style"]
+            | null
           slug?: string
           start_date?: string | null
           status?: Database["public"]["Enums"]["project_status"]
+          tour_structure?:
+            | Database["public"]["Enums"]["xpms_tour_structure"]
+            | null
           updated_at?: string
+          venue_token?: string | null
+          xpms_phase?: Database["public"]["Enums"]["xpms_phase"]
         }
         Relationships: [
           {
@@ -5631,6 +5891,13 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_primary_venue_id_fkey"
+            columns: ["primary_venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
             referencedColumns: ["id"]
           },
         ]
@@ -6554,6 +6821,7 @@ export type Database = {
           site_plan_id: string | null
           status: string
           title: string
+          updated_at: string
           vendor_id: string | null
         }
         Insert: {
@@ -6577,6 +6845,7 @@ export type Database = {
           site_plan_id?: string | null
           status?: string
           title: string
+          updated_at?: string
           vendor_id?: string | null
         }
         Update: {
@@ -6600,6 +6869,7 @@ export type Database = {
           site_plan_id?: string | null
           status?: string
           title?: string
+          updated_at?: string
           vendor_id?: string | null
         }
         Relationships: [
@@ -6671,6 +6941,7 @@ export type Database = {
           org_id: string
           project_id: string
           status: string
+          updated_at: string
         }
         Insert: {
           category?: string | null
@@ -6681,6 +6952,7 @@ export type Database = {
           org_id: string
           project_id: string
           status?: string
+          updated_at?: string
         }
         Update: {
           category?: string | null
@@ -6691,6 +6963,7 @@ export type Database = {
           org_id?: string
           project_id?: string
           status?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -6990,6 +7263,7 @@ export type Database = {
           rate_cents: number | null
           starts_at: string
           updated_at: string
+          xpms_atom_id: string | null
         }
         Insert: {
           created_at?: string
@@ -7002,6 +7276,7 @@ export type Database = {
           rate_cents?: number | null
           starts_at: string
           updated_at?: string
+          xpms_atom_id?: string | null
         }
         Update: {
           created_at?: string
@@ -7014,6 +7289,7 @@ export type Database = {
           rate_cents?: number | null
           starts_at?: string
           updated_at?: string
+          xpms_atom_id?: string | null
         }
         Relationships: [
           {
@@ -7035,6 +7311,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rentals_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
         ]
@@ -7123,6 +7406,7 @@ export type Database = {
           question: string
           status: string
           subject: string
+          updated_at: string
         }
         Insert: {
           answered_at?: string | null
@@ -7146,6 +7430,7 @@ export type Database = {
           question: string
           status?: string
           subject: string
+          updated_at?: string
         }
         Update: {
           answered_at?: string | null
@@ -7169,6 +7454,7 @@ export type Database = {
           question?: string
           status?: string
           subject?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -7292,6 +7578,7 @@ export type Database = {
           status: string
           submitted_at: string | null
           total_cents: number | null
+          updated_at: string
           vendor_id: string | null
         }
         Insert: {
@@ -7305,6 +7592,7 @@ export type Database = {
           status?: string
           submitted_at?: string | null
           total_cents?: number | null
+          updated_at?: string
           vendor_id?: string | null
         }
         Update: {
@@ -7318,6 +7606,7 @@ export type Database = {
           status?: string
           submitted_at?: string | null
           total_cents?: number | null
+          updated_at?: string
           vendor_id?: string | null
         }
         Relationships: [
@@ -7641,6 +7930,7 @@ export type Database = {
           shift_id: string | null
           status: string
           topic: string
+          updated_at: string
         }
         Insert: {
           attachment_path?: string | null
@@ -7656,6 +7946,7 @@ export type Database = {
           shift_id?: string | null
           status?: string
           topic: string
+          updated_at?: string
         }
         Update: {
           attachment_path?: string | null
@@ -7671,6 +7962,7 @@ export type Database = {
           shift_id?: string | null
           status?: string
           topic?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -8074,6 +8366,7 @@ export type Database = {
           org_id: string
           revision_label: string
           site_plan_id: string
+          updated_at: string
           uploaded_at: string
           uploaded_by: string | null
         }
@@ -8085,6 +8378,7 @@ export type Database = {
           org_id: string
           revision_label: string
           site_plan_id: string
+          updated_at?: string
           uploaded_at?: string
           uploaded_by?: string | null
         }
@@ -8096,6 +8390,7 @@ export type Database = {
           org_id?: string
           revision_label?: string
           site_plan_id?: string
+          updated_at?: string
           uploaded_at?: string
           uploaded_by?: string | null
         }
@@ -8135,6 +8430,7 @@ export type Database = {
           org_id: string
           project_id: string | null
           title: string
+          updated_at: string
           venue_id: string | null
         }
         Insert: {
@@ -8148,6 +8444,7 @@ export type Database = {
           org_id: string
           project_id?: string | null
           title: string
+          updated_at?: string
           venue_id?: string | null
         }
         Update: {
@@ -8161,6 +8458,7 @@ export type Database = {
           org_id?: string
           project_id?: string | null
           title?: string
+          updated_at?: string
           venue_id?: string | null
         }
         Relationships: [
@@ -8402,6 +8700,7 @@ export type Database = {
           status: string
           submitted_at: string | null
           title: string
+          updated_at: string
           vendor_id: string | null
         }
         Insert: {
@@ -8419,6 +8718,7 @@ export type Database = {
           status?: string
           submitted_at?: string | null
           title: string
+          updated_at?: string
           vendor_id?: string | null
         }
         Update: {
@@ -8436,6 +8736,7 @@ export type Database = {
           status?: string
           submitted_at?: string | null
           title?: string
+          updated_at?: string
           vendor_id?: string | null
         }
         Relationships: [
@@ -8526,6 +8827,7 @@ export type Database = {
           status: Database["public"]["Enums"]["task_status"]
           title: string
           updated_at: string
+          xpms_atom_id: string | null
         }
         Insert: {
           assigned_to?: string | null
@@ -8540,6 +8842,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["task_status"]
           title: string
           updated_at?: string
+          xpms_atom_id?: string | null
         }
         Update: {
           assigned_to?: string | null
@@ -8554,6 +8857,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["task_status"]
           title?: string
           updated_at?: string
+          xpms_atom_id?: string | null
         }
         Relationships: [
           {
@@ -8582,6 +8886,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
         ]
@@ -8802,6 +9113,7 @@ export type Database = {
       }
       time_entries: {
         Row: {
+          atom_id: string | null
           billable: boolean
           cost_code_id: string | null
           created_at: string
@@ -8815,8 +9127,10 @@ export type Database = {
           started_at: string
           updated_at: string
           user_id: string
+          xtc_code: number | null
         }
         Insert: {
+          atom_id?: string | null
           billable?: boolean
           cost_code_id?: string | null
           created_at?: string
@@ -8830,8 +9144,10 @@ export type Database = {
           started_at: string
           updated_at?: string
           user_id: string
+          xtc_code?: number | null
         }
         Update: {
+          atom_id?: string | null
           billable?: boolean
           cost_code_id?: string | null
           created_at?: string
@@ -8845,8 +9161,16 @@ export type Database = {
           started_at?: string
           updated_at?: string
           user_id?: string
+          xtc_code?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "time_entries_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "time_entries_cost_code_id_fkey"
             columns: ["cost_code_id"]
@@ -8874,6 +9198,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entries_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "time_entries_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -9175,6 +9513,7 @@ export type Database = {
           score: number | null
           status: string
           submitted_at: string | null
+          updated_at: string
           vendor_id: string
         }
         Insert: {
@@ -9189,6 +9528,7 @@ export type Database = {
           score?: number | null
           status?: string
           submitted_at?: string | null
+          updated_at?: string
           vendor_id: string
         }
         Update: {
@@ -9203,6 +9543,7 @@ export type Database = {
           score?: number | null
           status?: string
           submitted_at?: string | null
+          updated_at?: string
           vendor_id?: string
         }
         Relationships: [
@@ -10078,6 +10419,7 @@ export type Database = {
           requisition_id: string | null
           status: string
           title: string
+          updated_at: string
         }
         Insert: {
           awarded_at?: string | null
@@ -10096,6 +10438,7 @@ export type Database = {
           requisition_id?: string | null
           status?: string
           title: string
+          updated_at?: string
         }
         Update: {
           awarded_at?: string | null
@@ -10114,6 +10457,7 @@ export type Database = {
           requisition_id?: string | null
           status?: string
           title?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -10264,6 +10608,563 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "venues"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      xpms_atom_tiers: {
+        Row: {
+          atom_id: string
+          is_primary: boolean
+          tier: Database["public"]["Enums"]["xpms_tier"]
+          weight: number
+        }
+        Insert: {
+          atom_id: string
+          is_primary?: boolean
+          tier: Database["public"]["Enums"]["xpms_tier"]
+          weight?: number
+        }
+        Update: {
+          atom_id?: string
+          is_primary?: boolean
+          tier?: Database["public"]["Enums"]["xpms_tier"]
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_atom_tiers_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      xpms_atoms: {
+        Row: {
+          class_code: number
+          cost_cents: number | null
+          created_at: string
+          created_by: string
+          currency: string
+          description: string | null
+          division_code: number
+          event_token: string | null
+          event_year: number | null
+          id: string
+          identifier: string
+          lineage_root_id: string | null
+          name: string
+          org_id: string
+          org_token: string
+          owner_user_id: string | null
+          payload: Json
+          phase: Database["public"]["Enums"]["xpms_phase"]
+          project_id: string | null
+          quantity: number
+          revision: string
+          section_code: number
+          sequence_no: number
+          state: Database["public"]["Enums"]["xpms_state"]
+          tags: string[]
+          uac_origin_id: string | null
+          unit: string | null
+          updated_at: string
+          venue_token: string | null
+          xtc_code: number
+          zone_token: string | null
+        }
+        Insert: {
+          class_code: number
+          cost_cents?: number | null
+          created_at?: string
+          created_by: string
+          currency?: string
+          description?: string | null
+          division_code: number
+          event_token?: string | null
+          event_year?: number | null
+          id?: string
+          identifier: string
+          lineage_root_id?: string | null
+          name: string
+          org_id: string
+          org_token: string
+          owner_user_id?: string | null
+          payload?: Json
+          phase?: Database["public"]["Enums"]["xpms_phase"]
+          project_id?: string | null
+          quantity?: number
+          revision?: string
+          section_code: number
+          sequence_no: number
+          state?: Database["public"]["Enums"]["xpms_state"]
+          tags?: string[]
+          uac_origin_id?: string | null
+          unit?: string | null
+          updated_at?: string
+          venue_token?: string | null
+          xtc_code: number
+          zone_token?: string | null
+        }
+        Update: {
+          class_code?: number
+          cost_cents?: number | null
+          created_at?: string
+          created_by?: string
+          currency?: string
+          description?: string | null
+          division_code?: number
+          event_token?: string | null
+          event_year?: number | null
+          id?: string
+          identifier?: string
+          lineage_root_id?: string | null
+          name?: string
+          org_id?: string
+          org_token?: string
+          owner_user_id?: string | null
+          payload?: Json
+          phase?: Database["public"]["Enums"]["xpms_phase"]
+          project_id?: string | null
+          quantity?: number
+          revision?: string
+          section_code?: number
+          sequence_no?: number
+          state?: Database["public"]["Enums"]["xpms_state"]
+          tags?: string[]
+          uac_origin_id?: string | null
+          unit?: string | null
+          updated_at?: string
+          venue_token?: string | null
+          xtc_code?: number
+          zone_token?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_atoms_class_code_fkey"
+            columns: ["class_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["class_code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_class_code_fkey"
+            columns: ["class_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_classes"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_division_code_fkey"
+            columns: ["division_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["division_code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_division_code_fkey"
+            columns: ["division_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_divisions"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_lineage_root_id_fkey"
+            columns: ["lineage_root_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_owner_user_id_fkey"
+            columns: ["owner_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_section_code_fkey"
+            columns: ["section_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["section_code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_section_code_fkey"
+            columns: ["section_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_sections"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_uac_origin_id_fkey"
+            columns: ["uac_origin_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["line_code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_xtc_code_fkey"
+            columns: ["xtc_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_codes"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      xpms_project_composition: {
+        Row: {
+          computed_at: string
+          metric: string
+          project_id: string
+          share: number
+          tier: Database["public"]["Enums"]["xpms_tier"]
+        }
+        Insert: {
+          computed_at?: string
+          metric?: string
+          project_id: string
+          share: number
+          tier: Database["public"]["Enums"]["xpms_tier"]
+        }
+        Update: {
+          computed_at?: string
+          metric?: string
+          project_id?: string
+          share?: number
+          tier?: Database["public"]["Enums"]["xpms_tier"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_project_composition_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      xpms_provenance_edges: {
+        Row: {
+          created_at: string
+          created_by: string
+          from_atom_id: string
+          id: string
+          kind: Database["public"]["Enums"]["xpms_edge_kind"]
+          org_id: string
+          payload: Json
+          to_atom_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          from_atom_id: string
+          id?: string
+          kind: Database["public"]["Enums"]["xpms_edge_kind"]
+          org_id: string
+          payload?: Json
+          to_atom_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          from_atom_id?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["xpms_edge_kind"]
+          org_id?: string
+          payload?: Json
+          to_atom_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_provenance_edges_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_provenance_edges_from_atom_id_fkey"
+            columns: ["from_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_provenance_edges_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_provenance_edges_to_atom_id_fkey"
+            columns: ["to_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      xpms_variance_ledger: {
+        Row: {
+          cost_delta_cents: number | null
+          id: string
+          notes: string | null
+          org_id: string
+          qty_delta: number | null
+          reason: Database["public"]["Enums"]["xpms_variance_reason"]
+          recorded_at: string
+          recorded_by: string
+          tpc_atom_id: string | null
+          uac_atom_id: string
+        }
+        Insert: {
+          cost_delta_cents?: number | null
+          id?: string
+          notes?: string | null
+          org_id: string
+          qty_delta?: number | null
+          reason: Database["public"]["Enums"]["xpms_variance_reason"]
+          recorded_at?: string
+          recorded_by: string
+          tpc_atom_id?: string | null
+          uac_atom_id: string
+        }
+        Update: {
+          cost_delta_cents?: number | null
+          id?: string
+          notes?: string | null
+          org_id?: string
+          qty_delta?: number | null
+          reason?: Database["public"]["Enums"]["xpms_variance_reason"]
+          recorded_at?: string
+          recorded_by?: string
+          tpc_atom_id?: string | null
+          uac_atom_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_variance_ledger_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_variance_ledger_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_variance_ledger_tpc_atom_id_fkey"
+            columns: ["tpc_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_variance_ledger_uac_atom_id_fkey"
+            columns: ["uac_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      xtc_classes: {
+        Row: {
+          code: number
+          created_at: string
+          description: string | null
+          domain: string
+          name: string
+          ord: number
+        }
+        Insert: {
+          code: number
+          created_at?: string
+          description?: string | null
+          domain: string
+          name: string
+          ord: number
+        }
+        Update: {
+          code?: number
+          created_at?: string
+          description?: string | null
+          domain?: string
+          name?: string
+          ord?: number
+        }
+        Relationships: []
+      }
+      xtc_codes: {
+        Row: {
+          active: boolean
+          code: number
+          created_at: string
+          description: string | null
+          face: Database["public"]["Enums"]["xtc_face"]
+          is_position_root: boolean
+          line_digit: number
+          name: string
+          reserved_range: boolean
+          section_code: number
+        }
+        Insert: {
+          active?: boolean
+          code: number
+          created_at?: string
+          description?: string | null
+          face: Database["public"]["Enums"]["xtc_face"]
+          is_position_root?: boolean
+          line_digit: number
+          name: string
+          reserved_range?: boolean
+          section_code: number
+        }
+        Update: {
+          active?: boolean
+          code?: number
+          created_at?: string
+          description?: string | null
+          face?: Database["public"]["Enums"]["xtc_face"]
+          is_position_root?: boolean
+          line_digit?: number
+          name?: string
+          reserved_range?: boolean
+          section_code?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xtc_codes_section_code_fkey"
+            columns: ["section_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["section_code"]
+          },
+          {
+            foreignKeyName: "xtc_codes_section_code_fkey"
+            columns: ["section_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_sections"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      xtc_divisions: {
+        Row: {
+          class_code: number
+          code: number
+          created_at: string
+          description: string | null
+          digit: number
+          name: string
+        }
+        Insert: {
+          class_code: number
+          code: number
+          created_at?: string
+          description?: string | null
+          digit: number
+          name: string
+        }
+        Update: {
+          class_code?: number
+          code?: number
+          created_at?: string
+          description?: string | null
+          digit?: number
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xtc_divisions_class_code_fkey"
+            columns: ["class_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["class_code"]
+          },
+          {
+            foreignKeyName: "xtc_divisions_class_code_fkey"
+            columns: ["class_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_classes"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      xtc_sections: {
+        Row: {
+          code: number
+          created_at: string
+          description: string | null
+          digit: number
+          division_code: number
+          name: string
+        }
+        Insert: {
+          code: number
+          created_at?: string
+          description?: string | null
+          digit: number
+          division_code: number
+          name: string
+        }
+        Update: {
+          code?: number
+          created_at?: string
+          description?: string | null
+          digit?: number
+          division_code?: number
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xtc_sections_division_code_fkey"
+            columns: ["division_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["division_code"]
+          },
+          {
+            foreignKeyName: "xtc_sections_division_code_fkey"
+            columns: ["division_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_divisions"
+            referencedColumns: ["code"]
           },
         ]
       }
@@ -10508,6 +11409,89 @@ export type Database = {
           },
         ]
       }
+      v_xpms_atom_tier_composition: {
+        Row: {
+          atom_count: number | null
+          cost_cents: number | null
+          org_id: string | null
+          project_id: string | null
+          tier: Database["public"]["Enums"]["xpms_tier"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_atoms_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_xpms_variance_summary: {
+        Row: {
+          class_code: number | null
+          cost_delta_cents_total: number | null
+          entries: number | null
+          org_id: string | null
+          project_id: string | null
+          qty_delta_total: number | null
+          reason: Database["public"]["Enums"]["xpms_variance_reason"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_atoms_class_code_fkey"
+            columns: ["class_code"]
+            isOneToOne: false
+            referencedRelation: "v_xtc_codebook"
+            referencedColumns: ["class_code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_class_code_fkey"
+            columns: ["class_code"]
+            isOneToOne: false
+            referencedRelation: "xtc_classes"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_variance_ledger_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_xtc_codebook: {
+        Row: {
+          class_code: number | null
+          class_name: string | null
+          division_code: number | null
+          division_name: string | null
+          domain: string | null
+          face: Database["public"]["Enums"]["xtc_face"] | null
+          is_position_root: boolean | null
+          line_code: number | null
+          line_name: string | null
+          reserved_range: boolean | null
+          section_code: number | null
+          section_name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       accept_offer_letter: {
@@ -10604,6 +11588,21 @@ export type Database = {
         Returns: string
       }
       seed_salvage_city_ssot: { Args: { p_org_slug?: string }; Returns: number }
+      xpms_build_identifier: {
+        Args: {
+          p_class: number
+          p_division: number
+          p_event_token: string
+          p_event_year: number
+          p_org_token: string
+          p_revision: string
+          p_section: number
+          p_sequence_no: number
+          p_venue_token: string
+          p_zone_token: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       accreditation_state:
@@ -10777,6 +11776,55 @@ export type Database = {
         | "support"
       vetting_state: "pending" | "in_progress" | "clear" | "flagged" | "failed"
       workforce_kind: "paid_staff" | "volunteer" | "contractor" | "official"
+      xpms_edge_kind:
+        | "assignment"
+        | "authorship"
+        | "provenance"
+        | "reference"
+        | "consumes"
+        | "produces"
+      xpms_geo_scope: "local" | "regional" | "national" | "international"
+      xpms_phase:
+        | "discovery"
+        | "concept"
+        | "development"
+        | "advance"
+        | "build"
+        | "show"
+        | "strike"
+        | "wrap"
+      xpms_production_style:
+        | "editorial"
+        | "documentary"
+        | "narrative"
+        | "spectacle"
+        | "intimate"
+        | "brutalist"
+      xpms_state: "uac" | "tpc"
+      xpms_tier:
+        | "social"
+        | "digital"
+        | "virtual"
+        | "physical"
+        | "experiential"
+        | "theatrical"
+      xpms_tour_structure:
+        | "single_stop"
+        | "multi_stop_sequential"
+        | "simultaneous_multi_city"
+      xpms_variance_reason:
+        | "no_show"
+        | "substitution"
+        | "quantity_delta"
+        | "spec_change"
+        | "damage"
+        | "loss"
+        | "overtime"
+        | "weather"
+        | "client_change"
+        | "vendor_change"
+        | "other"
+      xtc_face: "org" | "finance" | "both"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -11087,6 +12135,61 @@ export const Constants = {
       ],
       vetting_state: ["pending", "in_progress", "clear", "flagged", "failed"],
       workforce_kind: ["paid_staff", "volunteer", "contractor", "official"],
+      xpms_edge_kind: [
+        "assignment",
+        "authorship",
+        "provenance",
+        "reference",
+        "consumes",
+        "produces",
+      ],
+      xpms_geo_scope: ["local", "regional", "national", "international"],
+      xpms_phase: [
+        "discovery",
+        "concept",
+        "development",
+        "advance",
+        "build",
+        "show",
+        "strike",
+        "wrap",
+      ],
+      xpms_production_style: [
+        "editorial",
+        "documentary",
+        "narrative",
+        "spectacle",
+        "intimate",
+        "brutalist",
+      ],
+      xpms_state: ["uac", "tpc"],
+      xpms_tier: [
+        "social",
+        "digital",
+        "virtual",
+        "physical",
+        "experiential",
+        "theatrical",
+      ],
+      xpms_tour_structure: [
+        "single_stop",
+        "multi_stop_sequential",
+        "simultaneous_multi_city",
+      ],
+      xpms_variance_reason: [
+        "no_show",
+        "substitution",
+        "quantity_delta",
+        "spec_change",
+        "damage",
+        "loss",
+        "overtime",
+        "weather",
+        "client_change",
+        "vendor_change",
+        "other",
+      ],
+      xtc_face: ["org", "finance", "both"],
     },
   },
 } as const

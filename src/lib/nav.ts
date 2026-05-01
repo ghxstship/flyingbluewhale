@@ -17,6 +17,20 @@ export const platformNav: NavGroup[] = [
     ],
   },
   {
+    // XPMS spine — the addressable layer beneath every other module.
+    // See `docs/ia/04-xpms-spine.md` and the v1.0 whitepaper.
+    label: "XPMS",
+    items: [
+      { label: "Atoms", href: "/console/xpms/atoms" },
+      { label: "Codebook", href: "/console/xpms/codebook" },
+      { label: "Classes", href: "/console/xpms/classes" },
+      { label: "Tier Composition", href: "/console/xpms/tiers" },
+      { label: "Phases", href: "/console/xpms/phases" },
+      { label: "Variance Ledger", href: "/console/xpms/variance" },
+      { label: "Provenance", href: "/console/xpms/provenance" },
+    ],
+  },
+  {
     label: "Projects",
     items: [
       { label: "All Projects", href: "/console/projects" },

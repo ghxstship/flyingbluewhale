@@ -293,6 +293,72 @@ export default function Home() {
         </div>
       </section>
 
+      {/* XPMS — Experiential Project Management System */}
+      <section className="mx-auto max-w-6xl px-6 py-16">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+            The Operating Spine
+          </div>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+            One Address Space. Ten Classes. Six Tiers.
+          </h2>
+          <p className="mt-3 text-sm text-[var(--text-secondary)]">
+            XPMS is the schema beneath the apps. Every element of a production is an atom with a deterministic
+            identifier, a phase, a class, an experience tier, and a unified XTC code. Class and posting code are the
+            same thing.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-3 md:grid-cols-5">
+          {[
+            { code: "0000", name: "Executive", accent: "#7c3aed" },
+            { code: "1000", name: "Creative", accent: "#ec4899" },
+            { code: "2000", name: "Talent", accent: "#f97316" },
+            { code: "3000", name: "Marketing", accent: "#eab308" },
+            { code: "4000", name: "Build", accent: "#a16207" },
+            { code: "5000", name: "Production", accent: "#dc2626" },
+            { code: "6000", name: "Operations", accent: "#16a34a" },
+            { code: "7000", name: "Experience", accent: "#0891b2" },
+            { code: "8000", name: "Hospitality", accent: "#be185d" },
+            { code: "9000", name: "Technology", accent: "#0ea5e9" },
+          ].map((c) => (
+            <div key={c.code} className="surface-raised p-3" style={{ borderTop: `3px solid ${c.accent}` }}>
+              <div className="font-mono text-[10px] tracking-widest text-[var(--text-muted)]">{c.code}</div>
+              <div className="mt-1 text-sm font-semibold">{c.name}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <div className="surface-raised p-5">
+            <div className="font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">
+              XTC Protocol™
+            </div>
+            <h3 className="mt-2 text-xl font-semibold">One codebook</h3>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              Class. Division. Section. Line item. Five digits, 80,190 addresses, append-only forever. The same code
+              that classifies the work also posts the cost.
+            </p>
+          </div>
+          <div className="surface-raised p-5">
+            <div className="font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">UAC ↔ TPC</div>
+            <h3 className="mt-2 text-xl font-semibold">Dual state, one ledger</h3>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              Universal Advance Catalog plans. Total Production Catalog deploys. Variance is a first-class object with a
+              reason code — not a reconciliation gap.
+            </p>
+          </div>
+          <div className="surface-raised p-5">
+            <div className="font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">Six Tiers</div>
+            <h3 className="mt-2 text-xl font-semibold">Composition, not category</h3>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              Social · Digital · Virtual · Physical · Experiential · Theatrical. Every project is a measurable
+              composition across the six — not a single label.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Feature grid */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">

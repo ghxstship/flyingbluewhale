@@ -705,6 +705,70 @@ export type Incident = {
   created_at: string;
   updated_at: string;
 };
+export type Threat = {
+  id: string;
+  org_id: string;
+  code: string;
+  title: string;
+  description: string | null;
+  severity: "low" | "medium" | "high" | "critical";
+  likelihood: "rare" | "unlikely" | "possible" | "likely" | "almost_certain";
+  treatment: "mitigate" | "accept" | "transfer" | "avoid";
+  classification: string;
+  owner_id: string | null;
+  status: "draft" | "active" | "closed" | "superseded";
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+export type Playbook = {
+  id: string;
+  org_id: string;
+  slug: string;
+  title: string;
+  summary: string | null;
+  kind: string;
+  content: unknown;
+  version: number;
+  status: "draft" | "published" | "archived";
+  owner_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type GuardTour = {
+  id: string;
+  org_id: string;
+  name: string;
+  description: string | null;
+  venue_id: string | null;
+  route: unknown;
+  cadence_minutes: number | null;
+  next_run_at: string | null;
+  status: "scheduled" | "in_progress" | "completed" | "cancelled" | "overdue";
+  guard_id: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+export type Campaign = {
+  id: string;
+  org_id: string;
+  name: string;
+  description: string | null;
+  channel: string;
+  kind: string;
+  status: "draft" | "scheduled" | "live" | "paused" | "complete" | "cancelled";
+  starts_on: string | null;
+  ends_on: string | null;
+  budget_cents: number;
+  spent_cents: number;
+  owner_id: string | null;
+  metadata: unknown;
+  created_at: string;
+  updated_at: string;
+};
 export type ServiceRequest = {
   id: string;
   org_id: string;
@@ -1897,6 +1961,18 @@ export type Database = {
         Partial<ServiceRequest> & { org_id: string; category: ServiceRequest["category"]; summary: string },
         Partial<ServiceRequest>
       >;
+      threats: TableDef<
+        Threat,
+        Partial<Threat> & { org_id: string; code: string; title: string; severity: string; likelihood: string },
+        Partial<Threat>
+      >;
+      playbooks: TableDef<
+        Playbook,
+        Partial<Playbook> & { org_id: string; slug: string; title: string },
+        Partial<Playbook>
+      >;
+      guard_tours: TableDef<GuardTour, Partial<GuardTour> & { org_id: string; name: string }, Partial<GuardTour>>;
+      campaigns: TableDef<Campaign, Partial<Campaign> & { org_id: string; name: string }, Partial<Campaign>>;
       service_sla_policies: TableDef<
         ServiceSlaPolicy,
         Partial<ServiceSlaPolicy> & {

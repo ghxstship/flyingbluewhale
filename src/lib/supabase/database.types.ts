@@ -2661,6 +2661,197 @@ export type Database = {
           },
         ]
       }
+      itil_changes: {
+        Row: {
+          actual_end: string | null
+          actual_start: string | null
+          assigned_to: string | null
+          backout_plan: string | null
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          impact: string
+          org_id: string
+          planned_end: string | null
+          planned_start: string | null
+          requested_by: string | null
+          risk: string
+          service_request_id: string | null
+          status: string
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          actual_end?: string | null
+          actual_start?: string | null
+          assigned_to?: string | null
+          backout_plan?: string | null
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          impact?: string
+          org_id: string
+          planned_end?: string | null
+          planned_start?: string | null
+          requested_by?: string | null
+          risk?: string
+          service_request_id?: string | null
+          status?: string
+          title: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          actual_end?: string | null
+          actual_start?: string | null
+          assigned_to?: string | null
+          backout_plan?: string | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          impact?: string
+          org_id?: string
+          planned_end?: string | null
+          planned_start?: string | null
+          requested_by?: string | null
+          risk?: string
+          service_request_id?: string | null
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itil_changes_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itil_changes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itil_changes_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itil_changes_service_request_id_fkey"
+            columns: ["service_request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      itil_problems: {
+        Row: {
+          assigned_to: string | null
+          code: string
+          created_at: string
+          description: string | null
+          detected_at: string
+          id: string
+          linked_change_id: string | null
+          linked_incident_id: string | null
+          org_id: string
+          priority: string
+          reporter_id: string | null
+          resolved_at: string | null
+          root_cause: string | null
+          status: string
+          title: string
+          updated_at: string
+          workaround: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          code: string
+          created_at?: string
+          description?: string | null
+          detected_at?: string
+          id?: string
+          linked_change_id?: string | null
+          linked_incident_id?: string | null
+          org_id: string
+          priority?: string
+          reporter_id?: string | null
+          resolved_at?: string | null
+          root_cause?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          workaround?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          detected_at?: string
+          id?: string
+          linked_change_id?: string | null
+          linked_incident_id?: string | null
+          org_id?: string
+          priority?: string
+          reporter_id?: string | null
+          resolved_at?: string | null
+          root_cause?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          workaround?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itil_problems_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itil_problems_linked_change_id_fkey"
+            columns: ["linked_change_id"]
+            isOneToOne: false
+            referencedRelation: "itil_changes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itil_problems_linked_incident_id_fkey"
+            columns: ["linked_incident_id"]
+            isOneToOne: false
+            referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itil_problems_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itil_problems_reporter_id_fkey"
+            columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_queue: {
         Row: {
           attempts: number

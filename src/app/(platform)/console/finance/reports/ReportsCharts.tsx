@@ -72,7 +72,7 @@ export function ReportsCharts({
             <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} tickFormatter={fmtAxis} />
             <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--surface-inset)" }} />
             <Bar dataKey="amount" name="Outstanding" radius={[4, 4, 0, 0]}>
-              {aging.map((a, i) => (
+              {aging.map((a) => (
                 <Cell
                   key={a.bucket}
                   fill={

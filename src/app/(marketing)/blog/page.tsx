@@ -6,7 +6,6 @@ export const revalidate = 300;
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { JsonLd } from "@/components/marketing/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import { POST_LIST } from "@/lib/blog";
 

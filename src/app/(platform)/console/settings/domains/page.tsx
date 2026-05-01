@@ -1,8 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
-import { addDomainAction, verifyDomainAction, deleteDomainAction } from "./actions";
+import { verifyDomainAction, deleteDomainAction } from "./actions";
 import { AddDomainForm } from "./AddDomainForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";

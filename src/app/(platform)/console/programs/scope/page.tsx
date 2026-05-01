@@ -19,13 +19,6 @@ type EntryRow = {
   delegation: { code: string | null; name: string | null } | null;
 };
 
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
-  draft: "muted",
-  submitted: "info",
-  approved: "success",
-  rejected: "warning",
-};
-
 export default async function Page() {
   if (!hasSupabase) {
     return (

@@ -13,7 +13,6 @@ import {
   QrCode,
   DollarSign,
   ClipboardCheck,
-  Globe,
 } from "lucide-react";
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";

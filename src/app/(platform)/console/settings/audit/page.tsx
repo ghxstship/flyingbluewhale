@@ -1,5 +1,4 @@
 import { ModuleHeader } from "@/components/Shell";
-import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -28,11 +27,7 @@ export default async function AuditPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle={`Audit log · ${rows.length} events`}
-      />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle={`Audit log · ${rows.length} events`} />
       <div className="page-content max-w-6xl">
         <AuditLogViewer rows={rows} />
       </div>

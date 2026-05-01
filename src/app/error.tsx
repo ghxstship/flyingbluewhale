@@ -17,7 +17,7 @@ export default function RootError({ error, reset }: { error: Error & { digest?: 
         {error.digest && <span className="ml-2 font-mono text-xs">ref: {error.digest}</span>}
       </p>
       <div className="mt-6 flex justify-center gap-2">
-        <button onClick={reset} className="btn btn-primary">
+        <button type="button" onClick={reset} className="btn btn-primary">
           Try Again
         </button>
         <Link href="/" className="btn btn-secondary">

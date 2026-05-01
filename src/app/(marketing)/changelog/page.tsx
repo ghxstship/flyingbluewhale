@@ -4,7 +4,6 @@ export const dynamic = "force-static";
 import type { Metadata } from "next";
 import { Sparkles, Wrench, ShieldCheck, Zap } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({

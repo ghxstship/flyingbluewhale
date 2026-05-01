@@ -404,6 +404,7 @@ export function DataTableInteractive({
             />
             {query && (
               <button
+                type="button"
                 onClick={() => setQuery("")}
                 aria-label="Clear search"
                 className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -651,6 +652,7 @@ export function DataTableInteractive({
           </span>
           <div className="flex gap-1">
             <button
+              type="button"
               onClick={() => setPage((p) => Math.max(0, Number(p) - 1))}
               disabled={Number(page) === 0}
               aria-label="Previous page"
@@ -659,6 +661,7 @@ export function DataTableInteractive({
               <ChevronLeft size={14} />
             </button>
             <button
+              type="button"
               onClick={() => setPage((p) => Math.min(pageCount - 1, Number(p) + 1))}
               disabled={Number(page) >= pageCount - 1}
               aria-label="Next page"
@@ -681,6 +684,7 @@ export function DataTableInteractive({
           {bulkActions.map((a) => (
             <button
               key={a.id}
+              type="button"
               onClick={async () => {
                 await a.perform(Array.from(selected));
                 setSelected(new Set());
@@ -695,6 +699,7 @@ export function DataTableInteractive({
             </button>
           ))}
           <button
+            type="button"
             onClick={() => setSelected(new Set())}
             aria-label="Clear selection"
             className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -841,7 +846,7 @@ function GroupByMenu({
 }
 
 function ColumnFilterMenu({
-  columnKey,
+  columnKey: _columnKey,
   columnHeader,
   distincts,
   selected,

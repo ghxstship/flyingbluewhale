@@ -40,7 +40,14 @@ type AsLink = BaseProps & {
 export type ButtonProps = AsButton | AsLink;
 
 export function Button(props: ButtonProps) {
-  const { variant = "primary", size = "md", children, className = "", loading, ...rest } = props as BaseProps & {
+  const {
+    variant = "primary",
+    size = "md",
+    children,
+    className = "",
+    loading,
+    ...rest
+  } = props as BaseProps & {
     children?: ReactNode;
     href?: string;
   } & Record<string, unknown>;
@@ -76,12 +83,16 @@ export function Button(props: ButtonProps) {
 
   const { href: _href, ...buttonProps } = rest as { href?: string };
   void _href;
+  // Spread buttonProps FIRST so an explicit `type="submit"` from the caller
+  // wins. Default to type="button" so buttons inside <form> don't accidentally
+  // submit when the prop is omitted.
   return (
     <button
+      type="button"
+      {...(buttonProps as ButtonHTMLAttributes<HTMLButtonElement>)}
       className={cls}
       aria-busy={loading || undefined}
       disabled={loading || (buttonProps as ButtonHTMLAttributes<HTMLButtonElement>).disabled}
-      {...(buttonProps as ButtonHTMLAttributes<HTMLButtonElement>)}
     >
       {content}
     </button>

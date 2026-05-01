@@ -56,17 +56,14 @@ export function AppearanceGallery() {
         </p>
       </header>
 
-      <div
-        role="radiogroup"
-        aria-label="Theme"
-        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
-      >
+      <div role="radiogroup" aria-label="Theme" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {THEME_SLUGS.map((slug, idx) => {
           const def = THEMES[slug];
           const active = theme === slug;
           return (
             <button
               key={slug}
+              type="button"
               ref={(el) => {
                 cardsRef.current[idx] = el;
               }}
@@ -77,7 +74,7 @@ export function AppearanceGallery() {
               onClick={() => select(slug)}
               onFocus={() => setFocusedIdx(idx)}
               onKeyDown={(e) => onKey(e, idx)}
-              className={`theme-card group relative overflow-hidden text-start outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[var(--accent-solid,var(--accent))] ${
+              className={`theme-card group relative overflow-hidden text-start ring-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-solid,var(--accent))] ${
                 active ? "ring-2 ring-[var(--accent-solid,var(--accent))]" : ""
               }`}
               style={{
@@ -93,10 +90,7 @@ export function AppearanceGallery() {
               <ThemePreview slug={slug} />
               <div className="relative p-4">
                 <div className="flex items-center justify-between gap-2">
-                  <span
-                    className="text-sm font-semibold"
-                    style={{ fontFamily: "var(--font-display)" }}
-                  >
+                  <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-display)" }}>
                     {def.label}
                   </span>
                   {active && (
@@ -112,10 +106,7 @@ export function AppearanceGallery() {
                     </span>
                   )}
                 </div>
-                <p
-                  className="mt-1 text-xs"
-                  style={{ color: "var(--text-muted)" }}
-                >
+                <p className="mt-1 text-xs" style={{ color: "var(--text-muted)" }}>
                   {def.essence}
                 </p>
               </div>
@@ -166,16 +157,13 @@ function ThemePreview({ slug }: { slug: ThemeSlug }) {
           backdropFilter: slug === "glass" ? "blur(20px) saturate(180%)" : undefined,
         }}
       >
-        <div
-          className="text-[11px] font-semibold"
-          style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}
-        >
+        <div className="text-[11px] font-semibold" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
           Aa
         </div>
         <div className="mt-1 h-1 w-10" style={{ background: "var(--text-muted)", opacity: 0.4 }} />
         <div className="mt-1 h-1 w-6" style={{ background: "var(--text-muted)", opacity: 0.3 }} />
         <div
-          className="absolute bottom-1.5 end-1.5 inline-flex h-3 w-6 rounded-full"
+          className="absolute end-1.5 bottom-1.5 inline-flex h-3 w-6 rounded-full"
           style={{
             background: "var(--accent-solid, var(--accent))",
           }}

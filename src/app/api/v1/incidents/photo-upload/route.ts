@@ -1,5 +1,6 @@
-import { type NextRequest } from "next/server";
-import { apiError, apiOk } from "@/lib/api";
+import { NextResponse, type NextRequest } from "next/server";
+import { z } from "zod";
+import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
@@ -12,43 +13,40 @@ import { createClient } from "@/lib/supabase/server";
  * Path layout: `{orgId}/{incidentDraftId}/{filename}`. The caller mints
  * `incidentDraftId` client-side (a uuid) so the same draft can group
  * multiple photos before the incident row exists.
+ *
+ * Filename hardening — block path separators, parent-dir tokens, and
+ * anything that isn't a simple `name.ext` string. Storage writes the
+ * file under `{orgId}/{draftId}/{filename}` so traversal is strictly
+ * forbidden.
  */
+const Schema = z.object({
+  draftId: z.string().regex(/^[0-9a-f-]{36}$/, "draftId must be a uuid"),
+  filename: z
+    .string()
+    .min(1)
+    .max(200)
+    .regex(/^[\w.-]+$/, "filename: alphanumerics, dot, dash, underscore only")
+    .refine((s) => !s.includes(".."), { message: "filename: parent-dir tokens forbidden" }),
+  contentType: z.string().max(120).optional(),
+});
+
 export async function POST(req: NextRequest) {
+  const input = await parseJson(req, Schema);
+  if (input instanceof NextResponse) return input;
+
   return withAuth(async (session) => {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
-    const body = await req.json().catch(() => null);
-    if (!body || typeof body !== "object") return apiError("bad_request", "Invalid payload");
-    const { draftId, filename, contentType } = body as {
-      draftId?: string;
-      filename?: string;
-      contentType?: string;
-    };
-    if (!draftId || !filename) return apiError("bad_request", "draftId + filename required");
-    // Reject path separators, parent-dir tokens, and anything that isn't a
-    // simple `name.ext` string. Storage writes the file under
-    // `{orgId}/{draftId}/{filename}` so traversal is strictly forbidden.
-    if (
-      filename.includes("/") ||
-      filename.includes("\\") ||
-      filename.includes("..") ||
-      !/^[\w.-]+$/.test(filename)
-    ) {
-      return apiError("bad_request", "Invalid filename");
-    }
-    if (!/^[0-9a-f-]{36}$/.test(draftId)) return apiError("bad_request", "Invalid draftId");
 
     const supabase = await createClient();
-    const path = `${session.orgId}/${draftId}/${filename}`;
-    const { data, error } = await supabase.storage
-      .from("incident-photos")
-      .createSignedUploadUrl(path);
+    const path = `${session.orgId}/${input.draftId}/${input.filename}`;
+    const { data, error } = await supabase.storage.from("incident-photos").createSignedUploadUrl(path);
     if (error) return apiError("internal", error.message);
 
     return apiOk({
       path,
       uploadUrl: data.signedUrl,
       token: data.token,
-      contentType: contentType ?? "application/octet-stream",
+      contentType: input.contentType ?? "application/octet-stream",
     });
   });
 }

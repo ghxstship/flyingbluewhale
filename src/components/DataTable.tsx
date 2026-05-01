@@ -149,8 +149,11 @@ export async function DataTable<T extends { id: string }>({
   emptyAction,
   loading,
   density,
-  stickyHeader,
-  maxHeight,
+  // Absorbed by the interactive component (header is always sticky there;
+  // body bound at 70vh). Kept in props for API compatibility with the
+  // legacy DataTable shape — see file-level docstring.
+  stickyHeader: _stickyHeader,
+  maxHeight: _maxHeight,
   tableId,
   searchable,
   pageSize,

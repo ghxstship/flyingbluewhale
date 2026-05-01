@@ -48,6 +48,14 @@ const config = [
       // `console.log` is debug noise and shouldn't ship.
       "no-console": ["warn", { allow: ["warn", "error", "info", "debug"] }],
 
+      // Every <button> needs an explicit type so it can't accidentally
+      // submit a parent <form>. <Button> from @/components/ui defaults
+      // to type="button" already.
+      "react/button-has-type": "error",
+
+      // Catch unused imports + vars (with `_`-prefix opt-out for params).
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+
       // React 19 compiler-style rules — these flag patterns that work
       // correctly under our current React 19.2 runtime but are flagged
       // because the upcoming compiler optimizes them differently. Kept

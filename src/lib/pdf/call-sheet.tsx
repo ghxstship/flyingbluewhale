@@ -1,7 +1,7 @@
 import "server-only";
 
 import React from "react";
-import { Text, View } from "@react-pdf/renderer";
+import { Text } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
 
@@ -44,7 +44,16 @@ function fmtTime(iso: string): string {
   }
 }
 
-export function CallSheetPdf({ brand, project, forDate, weather, venue, events, crew, variant = "full" }: CallSheetInput) {
+export function CallSheetPdf({
+  brand,
+  project,
+  forDate,
+  weather,
+  venue,
+  events,
+  crew,
+  variant = "full",
+}: CallSheetInput) {
   const title = variant === "labor" ? `Labor call · ${project.name}` : `Call sheet · ${project.name}`;
   return (
     <PdfDocument title={title} author={brand.producerName} subject={title}>
@@ -59,7 +68,9 @@ export function CallSheetPdf({ brand, project, forDate, weather, venue, events, 
           <>
             <SectionHeading title="Venue" />
             <KeyValue label="Name" value={venue.name} />
-            {venue.address ? <KeyValue label="Address" value={[venue.address, venue.city, venue.region].filter(Boolean).join(", ")} /> : null}
+            {venue.address ? (
+              <KeyValue label="Address" value={[venue.address, venue.city, venue.region].filter(Boolean).join(", ")} />
+            ) : null}
           </>
         ) : null}
 

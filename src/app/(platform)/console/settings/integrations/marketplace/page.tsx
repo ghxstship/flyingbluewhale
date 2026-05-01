@@ -122,7 +122,7 @@ export default async function Page() {
                           {isInstalled ? "Manage" : "Install"}
                         </Link>
                       ) : (
-                        <button className="btn btn-secondary btn-sm w-full" disabled>
+                        <button type="button" className="btn btn-secondary btn-sm w-full" disabled>
                           Notify me
                         </button>
                       )}

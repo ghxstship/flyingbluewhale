@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";

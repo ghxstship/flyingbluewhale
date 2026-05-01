@@ -3,7 +3,6 @@
 // no `dynamic = 'force-static'` because some pages read query params.
 export const revalidate = 300;
 
-import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle2, QrCode, Clock, Wifi, Camera, AlertTriangle, Home, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/Button";

@@ -89,6 +89,7 @@ export default async function Page() {
                   {r.likelihood} × {r.impact}
                 </span>
               ),
+              accessor: (r) => Number(r.likelihood ?? 0) * Number(r.impact ?? 0),
             },
             {
               key: "inherent_score",
@@ -106,6 +107,7 @@ export default async function Page() {
                   {r.inherent_score}
                 </span>
               ),
+              accessor: (r) => r.inherent_score ?? null,
             },
             {
               key: "status",
@@ -119,6 +121,7 @@ export default async function Page() {
               key: "due_on",
               header: "Due",
               render: (r) => <span className="font-mono text-xs">{r.due_on ?? "—"}</span>,
+              accessor: (r) => r.due_on ?? null,
             },
           ]}
         />

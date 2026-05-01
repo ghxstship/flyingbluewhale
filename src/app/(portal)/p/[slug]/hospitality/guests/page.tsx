@@ -93,7 +93,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               render: (r) => r.holder_name ?? "—",
               accessor: (r) => r.holder_name ?? null,
             },
-            { key: "email", header: "Email", render: (r) => <span className="text-xs">{r.holder_email ?? "—"}</span> },
+            {
+              key: "email",
+              header: "Email",
+              render: (r) => <span className="text-xs">{r.holder_email ?? "—"}</span>,
+              accessor: (r) => r.holder_email ?? null,
+            },
             {
               key: "tier",
               header: "Tier",
@@ -106,11 +111,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               key: "code",
               header: "Code",
               render: (r) => <span className="font-mono text-[10px]">{r.code.slice(-8)}</span>,
+              accessor: (r) => r.code.slice ?? null,
             },
             {
               key: "scanned",
               header: "Checked in",
               render: (r) => <span className="font-mono text-xs">{fmt(r.scanned_at)}</span>,
+              accessor: (r) => r.scanned_at ?? null,
             },
             {
               key: "status",

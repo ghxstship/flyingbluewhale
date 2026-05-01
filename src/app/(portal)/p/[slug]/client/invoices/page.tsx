@@ -29,13 +29,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         rows={rows}
         emptyLabel="No invoices yet"
         columns={[
-          { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
+          {
+            key: "number",
+            header: "Number",
+            render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+            accessor: (r) => r.number ?? null,
+          },
           { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
           {
             key: "amount",
             header: "Amount",
             render: (r) => formatMoney(r.amount_cents, r.currency),
             className: "font-mono text-xs",
+            accessor: (r) => r.amount_cents ?? null,
           },
           {
             key: "status",
@@ -65,6 +71,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 Download
               </Link>
             ),
+            accessor: (r) => r.id ?? null,
           },
         ]}
       />

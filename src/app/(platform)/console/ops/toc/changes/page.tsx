@@ -110,7 +110,12 @@ export default async function Page() {
             </Link>
           }
           columns={[
-            { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+              accessor: (r) => r.code ?? null,
+            },
             { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "type",
@@ -131,6 +136,7 @@ export default async function Page() {
               header: "Window",
               render: (r) => `${fmt(r.planned_start)} → ${fmt(r.planned_end)}`,
               className: "font-mono text-xs",
+              accessor: (r) => r.planned_start ?? null,
             },
             {
               key: "owner",
@@ -138,6 +144,7 @@ export default async function Page() {
               render: (r) => r.assigned?.name ?? r.assigned?.email ?? "—",
               filterable: true,
               groupable: true,
+              accessor: (r) => r.assigned?.name ?? r.assigned?.email ?? null,
             },
             {
               key: "status",
@@ -145,6 +152,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

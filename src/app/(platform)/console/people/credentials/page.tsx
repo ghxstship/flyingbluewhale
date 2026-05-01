@@ -88,6 +88,7 @@ export default async function CredentialsPage() {
                 if (daysUntil < 30) return <Badge variant="warning">{daysUntil}d</Badge>;
                 return <span className="font-mono text-xs">{formatDate(r.expires_on, "medium")}</span>;
               },
+              accessor: (r) => r.expires_on ?? null,
             },
           ]}
         />

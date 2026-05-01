@@ -50,12 +50,14 @@ export default async function MileagePage() {
               header: "Miles",
               render: (r) => Number(r.miles).toFixed(1),
               className: "font-mono text-xs",
+              accessor: (r) => r.miles ?? null,
             },
             {
               key: "reimbursement",
               header: "Reimbursement",
               render: (r) => formatMoney(Math.round(Number(r.miles) * Number(r.rate_cents))),
               className: "font-mono text-xs",
+              accessor: (r) => Math.round(Number(r.miles ?? 0) * Number(r.rate_cents ?? 0)),
             },
             {
               key: "date",

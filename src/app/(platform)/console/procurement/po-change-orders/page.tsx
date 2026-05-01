@@ -87,8 +87,20 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "po", header: "PO", render: (r) => r.purchase_order?.number ?? "—", className: "font-mono text-xs" },
-            { key: "num", header: "CO #", render: (r) => `#${r.number}`, className: "font-mono text-xs" },
+            {
+              key: "po",
+              header: "PO",
+              render: (r) => r.purchase_order?.number ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.purchase_order?.number ?? null,
+            },
+            {
+              key: "num",
+              header: "CO #",
+              render: (r) => `#${r.number}`,
+              className: "font-mono text-xs",
+              accessor: (r) => r.number ?? null,
+            },
             { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "amount",
@@ -102,6 +114,7 @@ export default async function Page() {
               header: "Schedule Δ (days)",
               render: (r) => r.schedule_impact_days.toString(),
               className: "font-mono text-xs",
+              accessor: (r) => r.schedule_impact_days.toString ?? null,
             },
             {
               key: "status",
@@ -109,6 +122,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

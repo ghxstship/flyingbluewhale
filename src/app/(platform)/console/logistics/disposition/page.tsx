@@ -105,6 +105,7 @@ export default async function Page() {
               header: "Daily Rate",
               render: (r) => (r.daily_rate_cents != null ? formatMoney(r.daily_rate_cents) : "—"),
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.daily_rate_cents ?? 0),
             },
             {
               key: "status",

@@ -96,8 +96,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               key: "passport",
               header: "Passport",
               render: (r) => <span className="font-mono text-[10px]">{maskPassport(r.passport_no)}</span>,
+              accessor: (r) => r.passport_no ?? null,
             },
-            { key: "delegation", header: "Delegation", render: (r) => r.delegation?.code ?? "—" },
+            {
+              key: "delegation",
+              header: "Delegation",
+              render: (r) => r.delegation?.code ?? "—",
+              accessor: (r) => r.delegation?.code ?? null,
+            },
             {
               key: "letter",
               header: "Letter",
@@ -107,6 +113,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 ) : (
                   <span className="text-[var(--text-muted)]">—</span>
                 ),
+              accessor: (r) => r.letter_path ?? null,
             },
             {
               key: "status",
@@ -114,6 +121,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

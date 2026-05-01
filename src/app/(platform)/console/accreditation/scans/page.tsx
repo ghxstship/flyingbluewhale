@@ -49,11 +49,13 @@ export default async function Page() {
               key: "gate_code",
               header: "Gate",
               render: (r) => <span className="font-mono text-xs">{String(r.gate_code ?? "—")}</span>,
+              accessor: (r) => r.gate_code ?? null,
             },
             {
               key: "scanned_at",
               header: "At",
               render: (r) => <span className="font-mono text-xs">{String(r.scanned_at ?? "—")}</span>,
+              accessor: (r) => r.scanned_at ?? null,
             },
           ]}
         />

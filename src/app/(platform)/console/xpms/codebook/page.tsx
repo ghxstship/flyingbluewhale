@@ -1,12 +1,15 @@
 import { ModuleHeader } from "@/components/Shell";
-import { Card, CardBody, CardHeader, Badge } from "@/components/ui";
+import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/components/ui";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
-import { XPMS_CLASSES, formatXtcCode } from "@/lib/xpms";
+import { formatXtcCode } from "@/lib/xpms";
 
 export const dynamic = "force-dynamic";
 
 type CodebookRow = {
+  // DataTable requires `id`; we synthesise from the line code
+  id: string;
   class_code: number;
   class_name: string | null;
   division_code: number;
@@ -43,14 +46,8 @@ export default async function CodebookPage() {
       "class_code, class_name, division_code, division_name, section_code, section_name, line_code, line_name, face, is_position_root",
     )
     .order("line_code");
-  const rows = (data ?? []) as CodebookRow[];
-
-  const byClass = new Map<number, CodebookRow[]>();
-  rows.forEach((r) => {
-    const list = byClass.get(r.class_code) ?? [];
-    list.push(r);
-    byClass.set(r.class_code, list);
-  });
+  const rawRows = (data ?? []) as Omit<CodebookRow, "id">[];
+  const rows: CodebookRow[] = rawRows.map((r) => ({ ...r, id: String(r.line_code) }));
 
   return (
     <>
@@ -59,55 +56,76 @@ export default async function CodebookPage() {
         title="Codebook"
         subtitle="Class → Division → Section → Line. Append-only governance — codes are stable forever."
       />
-      <div className="page-content space-y-4">
+      <div className="page-content">
         {error ? <div className="surface p-4 text-sm">Could not load codebook: {error.message}</div> : null}
-        {XPMS_CLASSES.map((c) => {
-          const items = byClass.get(c.code) ?? [];
-          return (
-            <Card key={c.code}>
-              <CardHeader title={`${c.code}000 · ${c.name}`} subtitle={c.domain} />
-              <CardBody>
-                {items.length === 0 ? (
-                  <div className="text-sm text-[var(--text-muted)]">
-                    No published line items in this class yet — divisions and sections are reserved.
-                  </div>
-                ) : (
-                  <table className="data-table w-full text-sm">
-                    <thead>
-                      <tr>
-                        <th className="text-left">Code</th>
-                        <th className="text-left">Class</th>
-                        <th className="text-left">Division</th>
-                        <th className="text-left">Section</th>
-                        <th className="text-left">Line item</th>
-                        <th className="text-left">Face</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {items.map((r) => (
-                        <tr key={r.line_code}>
-                          <td className="font-mono text-xs">{formatXtcCode(r.line_code)}</td>
-                          <td className="text-xs">{r.class_name}</td>
-                          <td className="text-xs">{r.division_name}</td>
-                          <td className="text-xs">{r.section_name}</td>
-                          <td className="text-xs">
-                            {r.line_name}
-                            {r.is_position_root ? (
-                              <span className="ml-2 text-[10px] text-[var(--text-muted)]">root</span>
-                            ) : null}
-                          </td>
-                          <td>
-                            <Badge variant={FACE_VARIANT[r.face]}>{r.face}</Badge>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </CardBody>
-            </Card>
-          );
-        })}
+        <DataTable<CodebookRow>
+          tableId="xpms.codebook"
+          rows={rows}
+          searchable
+          emptyLabel="No published line items yet"
+          emptyDescription="Divisions and sections are reserved; line items publish on demand."
+          columns={[
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => formatXtcCode(r.line_code),
+              accessor: (r) => r.line_code,
+              className: "font-mono text-xs",
+              sortable: true,
+            },
+            {
+              key: "class",
+              header: "Class",
+              render: (r) => r.class_name ?? "—",
+              accessor: (r) => r.class_name ?? null,
+              className: "text-xs",
+              sortable: true,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "division",
+              header: "Division",
+              render: (r) => r.division_name ?? "—",
+              accessor: (r) => r.division_name ?? null,
+              className: "text-xs",
+              sortable: true,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "section",
+              header: "Section",
+              render: (r) => r.section_name ?? "—",
+              accessor: (r) => r.section_name ?? null,
+              className: "text-xs",
+              sortable: true,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "line",
+              header: "Line item",
+              render: (r) => (
+                <span className="text-xs">
+                  {r.line_name}
+                  {r.is_position_root ? <span className="ml-2 text-[10px] text-[var(--text-muted)]">root</span> : null}
+                </span>
+              ),
+              accessor: (r) => r.line_name ?? null,
+              sortable: true,
+            },
+            {
+              key: "face",
+              header: "Face",
+              render: (r) => <Badge variant={FACE_VARIANT[r.face]}>{r.face}</Badge>,
+              accessor: (r) => r.face,
+              sortable: true,
+              filterable: true,
+              groupable: true,
+            },
+          ]}
+        />
       </div>
     </>
   );

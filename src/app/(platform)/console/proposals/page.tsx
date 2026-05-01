@@ -59,6 +59,7 @@ export default async function ProposalsPage() {
               header: "Expires",
               render: (r) => (r.expires_at ? formatDate(r.expires_at) : "—"),
               className: "font-mono text-xs",
+              accessor: (r) => r.expires_at ?? null,
             },
             {
               key: "updated",

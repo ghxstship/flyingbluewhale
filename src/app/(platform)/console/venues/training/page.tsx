@@ -50,6 +50,7 @@ export default async function Page() {
               key: "capacity",
               header: "Capacity",
               render: (r) => <span className="font-mono text-xs">{String(r.capacity ?? "—")}</span>,
+              accessor: (r) => r.capacity ?? null,
             },
           ]}
         />

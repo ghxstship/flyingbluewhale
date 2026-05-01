@@ -80,13 +80,24 @@ export default async function Page() {
           }
           columns={[
             { key: "topic", header: "Topic", render: (r) => r.topic, accessor: (r) => r.topic },
-            { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
-            { key: "briefer", header: "Briefer", render: (r) => r.briefer?.name ?? r.briefer?.email ?? "—" },
+            {
+              key: "project",
+              header: "Project",
+              render: (r) => r.project?.name ?? "—",
+              accessor: (r) => r.project?.name ?? null,
+            },
+            {
+              key: "briefer",
+              header: "Briefer",
+              render: (r) => r.briefer?.name ?? r.briefer?.email ?? "—",
+              accessor: (r) => r.briefer?.name ?? r.briefer?.email ?? null,
+            },
             {
               key: "scheduled",
               header: "Scheduled",
               render: (r) => fmt(r.scheduled_for),
               className: "font-mono text-xs",
+              accessor: (r) => r.scheduled_for ?? null,
             },
             {
               key: "status",

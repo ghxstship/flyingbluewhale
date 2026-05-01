@@ -83,6 +83,7 @@ export default async function Page() {
               header: "City",
               render: (r) => [r.city, r.region].filter(Boolean).join(", ") || "—",
               className: "font-mono text-xs",
+              accessor: (r) => r.city ?? null,
             },
             {
               key: "country",
@@ -95,6 +96,7 @@ export default async function Page() {
               key: "asset_count",
               header: "Assets",
               render: (r) => <span className="font-mono text-xs">{String(r.asset_count ?? 0)}</span>,
+              accessor: (r) => r.asset_count ?? null,
             },
           ]}
         />

@@ -59,6 +59,7 @@ export default async function Page() {
               key: "created_at",
               header: "Filed",
               render: (r) => <span className="font-mono text-xs">{String(r.created_at ?? "—")}</span>,
+              accessor: (r) => r.created_at ?? null,
             },
           ]}
         />

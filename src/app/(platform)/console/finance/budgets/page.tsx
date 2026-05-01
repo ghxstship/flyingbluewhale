@@ -66,6 +66,7 @@ export default async function BudgetsPage() {
                 const pct = r.amount_cents > 0 ? (r.spent_cents / r.amount_cents) * 100 : 0;
                 return <ProgressBar value={pct} showLabel />;
               },
+              accessor: (r) => (Number(r.spent_cents ?? 0) / Math.max(1, Number(r.amount_cents ?? 1))) * 100,
             },
           ]}
         />

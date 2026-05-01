@@ -66,6 +66,7 @@ export default async function Page() {
               key: "email",
               header: "Email",
               render: (r) => <span className="font-mono text-xs">{String(r.email ?? "—")}</span>,
+              accessor: (r) => r.email ?? null,
             },
           ]}
         />

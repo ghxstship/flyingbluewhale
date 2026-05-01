@@ -60,16 +60,19 @@ export default async function Page() {
               key: "price_cents",
               header: "Price (¢)",
               render: (r) => <span className="font-mono text-xs">{String(r.price_cents ?? "—")}</span>,
+              accessor: (r) => Number(r.price_cents ?? 0),
             },
             {
               key: "allocation",
               header: "Allocation",
               render: (r) => <span className="font-mono text-xs">{String(r.allocation ?? "—")}</span>,
+              accessor: (r) => r.allocation ?? null,
             },
             {
               key: "sold",
               header: "Sold",
               render: (r) => <span className="font-mono text-xs">{String(r.sold ?? "—")}</span>,
+              accessor: (r) => r.sold ?? null,
             },
           ]}
         />

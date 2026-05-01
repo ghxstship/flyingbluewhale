@@ -63,6 +63,7 @@ export default async function Page() {
               key: "active",
               header: "",
               render: (r) => <Badge variant={r.active ? "success" : "muted"}>{r.active ? "active" : "archived"}</Badge>,
+              accessor: (r) => r.active ?? null,
             },
           ]}
         />

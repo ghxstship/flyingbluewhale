@@ -53,6 +53,7 @@ export default async function LocationsPage() {
               header: "City",
               render: (r) => [r.city, r.region].filter(Boolean).join(", ") || "—",
               className: "font-mono text-xs",
+              accessor: (r) => r.city ?? null,
             },
             {
               key: "country",

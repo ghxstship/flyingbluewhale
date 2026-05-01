@@ -67,11 +67,13 @@ export default async function Page() {
               key: "started_at",
               header: "Started",
               render: (r) => <span className="font-mono text-xs">{String(r.started_at ?? "—")}</span>,
+              accessor: (r) => r.started_at ?? null,
             },
             {
               key: "ended_at",
               header: "Ended",
               render: (r) => <span className="font-mono text-xs">{String(r.ended_at ?? "—")}</span>,
+              accessor: (r) => r.ended_at ?? null,
             },
           ]}
         />

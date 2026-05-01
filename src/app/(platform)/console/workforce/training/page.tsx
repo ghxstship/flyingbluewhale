@@ -103,6 +103,7 @@ export default async function Page() {
               key: "number",
               header: "Number",
               render: (r) => <span className="font-mono text-xs">{r.number ?? "—"}</span>,
+              accessor: (r) => r.number ?? null,
             },
             {
               key: "issued",
@@ -122,6 +123,7 @@ export default async function Page() {
                 if (days <= 60) return <Badge variant="muted">{days}d</Badge>;
                 return <span className="font-mono text-xs">{formatDate(r.expires_on, "medium")}</span>;
               },
+              accessor: (r) => r.expires_on ?? null,
             },
           ]}
         />

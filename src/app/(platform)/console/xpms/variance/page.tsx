@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -8,6 +9,9 @@ import { XPMS_CLASS_BY_CODE } from "@/lib/xpms";
 export const dynamic = "force-dynamic";
 
 type Row = {
+  // The view groups by (org_id, project_id, class_code, reason) so we
+  // synthesise a stable id from those keys for DataTable.
+  id: string;
   org_id: string;
   project_id: string | null;
   class_code: number;
@@ -34,7 +38,11 @@ export default async function VariancePage() {
     .from("v_xpms_variance_summary")
     .select("org_id, project_id, class_code, reason, entries, qty_delta_total, cost_delta_cents_total")
     .eq("org_id", session.orgId);
-  const rows = (data ?? []) as Row[];
+  const raw = (data ?? []) as Omit<Row, "id">[];
+  const rows: Row[] = raw.map((r) => ({
+    ...r,
+    id: `${r.project_id ?? "_"}:${r.class_code}:${r.reason}`,
+  }));
 
   return (
     <>
@@ -44,40 +52,61 @@ export default async function VariancePage() {
         subtitle="UAC ↔ TPC delta as a first-class object. Reason codes per entry."
       />
       <div className="page-content">
-        {rows.length === 0 ? (
-          <div className="surface p-8 text-center text-sm text-[var(--text-muted)]">
-            No variance entries yet. Variance accrues when a TPC atom diverges from its UAC origin (no-shows,
-            substitutions, quantity deltas, spec changes, weather, …).
-          </div>
-        ) : (
-          <table className="data-table w-full text-sm">
-            <thead>
-              <tr>
-                <th className="text-left">Class</th>
-                <th className="text-left">Reason</th>
-                <th className="text-right">Entries</th>
-                <th className="text-right">Qty Δ</th>
-                <th className="text-right">Cost Δ (cents)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r, i) => {
+        <DataTable<Row>
+          tableId="xpms.variance"
+          rows={rows}
+          searchable
+          emptyLabel="No variance entries yet"
+          emptyDescription="Variance accrues when a TPC atom diverges from its UAC origin (no-shows, substitutions, quantity deltas, spec changes, weather, …)."
+          columns={[
+            {
+              key: "class",
+              header: "Class",
+              render: (r) => {
                 const c = XPMS_CLASS_BY_CODE[r.class_code];
-                return (
-                  <tr key={i}>
-                    <td className="text-xs">{c ? <span style={{ color: c.accent }}>{c.name}</span> : r.class_code}</td>
-                    <td>
-                      <Badge variant="muted">{r.reason}</Badge>
-                    </td>
-                    <td className="text-right font-mono text-xs">{r.entries}</td>
-                    <td className="text-right font-mono text-xs">{r.qty_delta_total ?? 0}</td>
-                    <td className="text-right font-mono text-xs">{r.cost_delta_cents_total ?? 0}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        )}
+                return c ? <span style={{ color: c.accent }}>{c.name}</span> : <>{r.class_code}</>;
+              },
+              accessor: (r) => XPMS_CLASS_BY_CODE[r.class_code]?.name ?? String(r.class_code),
+              className: "text-xs",
+              sortable: true,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "reason",
+              header: "Reason",
+              render: (r) => <Badge variant="muted">{r.reason}</Badge>,
+              accessor: (r) => r.reason,
+              sortable: true,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "entries",
+              header: "Entries",
+              render: (r) => r.entries,
+              accessor: (r) => r.entries,
+              className: "text-right font-mono text-xs",
+              sortable: true,
+            },
+            {
+              key: "qty_delta",
+              header: "Qty Δ",
+              render: (r) => r.qty_delta_total ?? 0,
+              accessor: (r) => Number(r.qty_delta_total ?? 0),
+              className: "text-right font-mono text-xs",
+              sortable: true,
+            },
+            {
+              key: "cost_delta",
+              header: "Cost Δ (cents)",
+              render: (r) => r.cost_delta_cents_total ?? 0,
+              accessor: (r) => Number(r.cost_delta_cents_total ?? 0),
+              className: "text-right font-mono text-xs",
+              sortable: true,
+            },
+          ]}
+        />
       </div>
     </>
   );

@@ -101,7 +101,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
           rowHref={(r) => `/console/safety/incidents/${r.id}`}
           emptyLabel={`No recordable incidents for ${year}.`}
           columns={[
-            { key: "date", header: "Date", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
+            {
+              key: "date",
+              header: "Date",
+              render: (r) => fmt(r.occurred_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.occurred_at ?? null,
+            },
             { key: "summary", header: "Description", render: (r) => r.summary, accessor: (r) => r.summary },
             {
               key: "class",
@@ -113,6 +119,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
               ),
               filterable: true,
               groupable: true,
+              accessor: (r) => r.osha_classification.replace ?? null,
             },
             {
               key: "body",
@@ -128,12 +135,19 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
               filterable: true,
               groupable: true,
             },
-            { key: "away", header: "Days Away", render: (r) => r.days_away.toString(), className: "font-mono text-xs" },
+            {
+              key: "away",
+              header: "Days Away",
+              render: (r) => r.days_away.toString(),
+              className: "font-mono text-xs",
+              accessor: (r) => r.days_away.toString ?? null,
+            },
             {
               key: "rest",
               header: "Days Restr.",
               render: (r) => r.days_restricted.toString(),
               className: "font-mono text-xs",
+              accessor: (r) => r.days_restricted.toString ?? null,
             },
           ]}
         />

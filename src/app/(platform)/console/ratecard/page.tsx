@@ -43,12 +43,14 @@ export default async function Page() {
               key: "sku",
               header: "SKU",
               render: (r) => <span className="font-mono text-xs">{String(r.sku ?? "—")}</span>,
+              accessor: (r) => r.sku ?? null,
             },
             { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
             {
               key: "unit_price_cents",
               header: "Unit ¢",
               render: (r) => <span className="font-mono text-xs">{String(r.unit_price_cents ?? "—")}</span>,
+              accessor: (r) => Number(r.unit_price_cents ?? 0),
             },
           ]}
         />

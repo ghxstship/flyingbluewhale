@@ -63,6 +63,7 @@ export default async function IncidentsPage() {
               header: "When",
               render: (r) => new Date(r.occurred_at).toLocaleString(),
               className: "font-mono text-xs",
+              accessor: (r) => r.occurred_at ?? null,
             },
             {
               key: "severity",
@@ -70,6 +71,7 @@ export default async function IncidentsPage() {
               render: (r) => <StatusChip tone={SEVERITY_TONE[r.severity] ?? "neutral"}>{r.severity}</StatusChip>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.severity ?? null,
             },
             { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
             {

@@ -53,6 +53,7 @@ export default async function OfferLettersPage() {
                   <div className="font-mono text-xs text-[var(--text-muted)]">{r.recipient_email}</div>
                 </div>
               ),
+              accessor: (r) => r.recipient_name ?? null,
             },
             {
               key: "role",
@@ -65,13 +66,20 @@ export default async function OfferLettersPage() {
               ),
               filterable: true,
               groupable: true,
+              accessor: (r) => r.role_title ?? r.role_department ?? null,
             },
             {
               key: "project",
               header: "Project",
               render: (r) => <span className="text-xs">{r.project_name}</span>,
+              accessor: (r) => r.project_name ?? null,
             },
-            { key: "employer", header: "Issuer", render: (r) => <Badge>{EMPLOYER_SHORT[r.employer]}</Badge> },
+            {
+              key: "employer",
+              header: "Issuer",
+              render: (r) => <Badge>{EMPLOYER_SHORT[r.employer]}</Badge>,
+              accessor: (r) => r.employer ?? null,
+            },
             {
               key: "comp",
               header: "Compensation",
@@ -82,6 +90,7 @@ export default async function OfferLettersPage() {
                   <span className="text-xs text-[var(--text-muted)]">TBD</span>
                 ),
               className: "text-end",
+              accessor: (r) => Number(r.effective_compensation_cents ?? 0),
             },
             {
               key: "status",
@@ -89,11 +98,13 @@ export default async function OfferLettersPage() {
               render: (r) => <Badge variant={STATUS_VARIANT[r.status]}>{STATUS_LABEL[r.status]}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status ?? null,
             },
             {
               key: "code",
               header: "Code",
               render: (r) => <span className="font-mono text-xs tracking-wider">{r.access_code}</span>,
+              accessor: (r) => r.access_code ?? null,
             },
             {
               key: "open",
@@ -107,6 +118,7 @@ export default async function OfferLettersPage() {
                 </Link>
               ),
               className: "text-end",
+              accessor: (r) => r.id ?? null,
             },
           ]}
         />

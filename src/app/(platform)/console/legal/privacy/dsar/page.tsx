@@ -51,6 +51,7 @@ export default async function Page() {
               key: "requester_email",
               header: "Requester",
               render: (r) => <span className="font-mono text-xs">{String(r.requester_email ?? "—")}</span>,
+              accessor: (r) => r.requester_email ?? null,
             },
             {
               key: "kind",
@@ -72,6 +73,7 @@ export default async function Page() {
               key: "due_by",
               header: "Due",
               render: (r) => <span className="font-mono text-xs">{String(r.due_by ?? "—")}</span>,
+              accessor: (r) => r.due_by ?? null,
             },
           ]}
         />

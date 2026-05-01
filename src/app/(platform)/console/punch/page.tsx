@@ -117,16 +117,29 @@ export default async function Page() {
                   <span>{r.title}</span>
                 </div>
               ),
+              accessor: (r) => r.show_ready_gate ?? null,
             },
-            { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
+            {
+              key: "project",
+              header: "Project",
+              render: (r) => r.project?.name ?? "—",
+              accessor: (r) => r.project?.name ?? null,
+            },
             {
               key: "assignee",
               header: "Assignee",
               render: (r) => r.assignee?.name ?? r.assignee?.email ?? "—",
               filterable: true,
               groupable: true,
+              accessor: (r) => r.assignee?.name ?? r.assignee?.email ?? null,
             },
-            { key: "due", header: "Due", render: (r) => fmt(r.due_at), className: "font-mono text-xs" },
+            {
+              key: "due",
+              header: "Due",
+              render: (r) => fmt(r.due_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.due_at ?? null,
+            },
             {
               key: "priority",
               header: "Priority",
@@ -141,6 +154,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -43,36 +44,48 @@ export default async function ProvenancePage() {
         subtitle="Cross-class edges. Every TPC atom traces back to its UAC origin, assigned people, authoring documents, and downstream consumers."
       />
       <div className="page-content">
-        {edges.length === 0 ? (
-          <div className="surface p-8 text-center text-sm text-[var(--text-muted)]">
-            No provenance edges recorded yet. Edges materialise when atoms reference each other — an Operations atom
-            assigned to a Production atom, a Creative atom referencing Build atoms, a TPC atom tracing back to its UAC
-            origin.
-          </div>
-        ) : (
-          <table className="data-table w-full text-sm">
-            <thead>
-              <tr>
-                <th className="text-left">Edge</th>
-                <th className="text-left">From atom</th>
-                <th className="text-left">To atom</th>
-                <th className="text-left">Created</th>
-              </tr>
-            </thead>
-            <tbody>
-              {edges.map((e) => (
-                <tr key={e.id}>
-                  <td>
-                    <Badge variant="info">{e.kind}</Badge>
-                  </td>
-                  <td className="font-mono text-[10px]">{e.from_atom_id}</td>
-                  <td className="font-mono text-[10px]">{e.to_atom_id}</td>
-                  <td className="text-xs text-[var(--text-muted)]">{new Date(e.created_at).toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        <DataTable<Edge>
+          tableId="xpms.provenance"
+          rows={edges}
+          searchable
+          emptyLabel="No provenance edges yet"
+          emptyDescription="Edges materialise when atoms reference each other — an Operations atom assigned to a Production atom, a Creative atom referencing Build atoms, a TPC atom tracing back to its UAC origin."
+          columns={[
+            {
+              key: "kind",
+              header: "Edge",
+              render: (e) => <Badge variant="info">{e.kind}</Badge>,
+              accessor: (e) => e.kind,
+              sortable: true,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "from",
+              header: "From atom",
+              render: (e) => e.from_atom_id,
+              accessor: (e) => e.from_atom_id,
+              className: "font-mono text-[10px]",
+              sortable: true,
+            },
+            {
+              key: "to",
+              header: "To atom",
+              render: (e) => e.to_atom_id,
+              accessor: (e) => e.to_atom_id,
+              className: "font-mono text-[10px]",
+              sortable: true,
+            },
+            {
+              key: "created",
+              header: "Created",
+              render: (e) => new Date(e.created_at).toLocaleString(),
+              accessor: (e) => e.created_at,
+              className: "text-xs text-[var(--text-muted)]",
+              sortable: true,
+            },
+          ]}
+        />
       </div>
     </>
   );

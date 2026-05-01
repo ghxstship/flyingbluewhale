@@ -37,12 +37,14 @@ export default async function PayoutsPage() {
                 ) : (
                   <Badge variant="muted">Not Onboarded</Badge>
                 ),
+              accessor: (r) => r.payout_account_id ?? null,
             },
             {
               key: "w9",
               header: "W-9",
               render: (r) =>
                 r.w9_on_file ? <Badge variant="success">On File</Badge> : <Badge variant="warning">Missing</Badge>,
+              accessor: (r) => r.w9_on_file ?? null,
             },
             {
               key: "coi",

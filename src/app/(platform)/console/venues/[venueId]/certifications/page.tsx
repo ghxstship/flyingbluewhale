@@ -106,11 +106,13 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               key: "issued",
               header: "Issued",
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.issued_on)}</span>,
+              accessor: (r) => r.issued_on ?? null,
             },
             {
               key: "expires",
               header: "Expires",
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.expires_on)}</span>,
+              accessor: (r) => r.expires_on ?? null,
             },
             {
               key: "status",
@@ -118,6 +120,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               render: (r) => <Badge variant={expiryTone(r.expires_on)}>{expiryLabel(r.expires_on)}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.expires_on ?? null,
             },
             {
               key: "file",
@@ -128,6 +131,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                 ) : (
                   <span className="text-[var(--text-muted)]">—</span>
                 ),
+              accessor: (r) => r.file_path ?? null,
             },
           ]}
         />

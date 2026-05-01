@@ -91,21 +91,35 @@ export default async function Page() {
               render: (r) => r.vendor?.name ?? "—",
               filterable: true,
               groupable: true,
+              accessor: (r) => r.vendor?.name ?? null,
             },
-            { key: "q", header: "Questionnaire", render: (r) => r.questionnaire?.name ?? "—" },
+            {
+              key: "q",
+              header: "Questionnaire",
+              render: (r) => r.questionnaire?.name ?? "—",
+              accessor: (r) => r.questionnaire?.name ?? null,
+            },
             {
               key: "score",
               header: "Score",
               render: (r) => (r.score != null ? Number(r.score).toFixed(1) : "—"),
               className: "font-mono text-xs",
+              accessor: (r) => r.score ?? null,
             },
-            { key: "exp", header: "Expires", render: (r) => fmt(r.expires_at), className: "font-mono text-xs" },
+            {
+              key: "exp",
+              header: "Expires",
+              render: (r) => fmt(r.expires_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.expires_at ?? null,
+            },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

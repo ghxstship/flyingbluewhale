@@ -45,6 +45,7 @@ export default async function RentalsPage() {
               key: "equipment_id",
               header: "Equipment",
               render: (r) => <span className="font-mono text-xs">{r.equipment_id.slice(0, 8)}</span>,
+              accessor: (r) => r.equipment_id.slice ?? null,
             },
             {
               key: "starts",

@@ -107,14 +107,21 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   {r.delivered}/{r.quantity}
                 </span>
               ),
+              accessor: (r) => Number(r.delivered ?? 0),
             },
-            { key: "due", header: "Due", render: (r) => <span className="font-mono text-xs">{fmt(r.due_by)}</span> },
+            {
+              key: "due",
+              header: "Due",
+              render: (r) => <span className="font-mono text-xs">{fmt(r.due_by)}</span>,
+              accessor: (r) => r.due_by ?? null,
+            },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
             {
               key: "evidence",
@@ -125,6 +132,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 ) : (
                   <span className="text-[var(--text-muted)]">—</span>
                 ),
+              accessor: (r) => r.evidence_path ?? null,
             },
           ]}
         />

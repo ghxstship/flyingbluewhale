@@ -90,7 +90,12 @@ export default async function Page() {
           }
           columns={[
             { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
-            { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
+            {
+              key: "project",
+              header: "Project",
+              render: (r) => r.project?.name ?? "—",
+              accessor: (r) => r.project?.name ?? null,
+            },
             {
               key: "estimate",
               header: "Estimate",
@@ -98,7 +103,13 @@ export default async function Page() {
               className: "font-mono text-xs",
               accessor: (r) => Number(r.estimated_cents ?? 0),
             },
-            { key: "created", header: "Created", render: (r) => fmtDate(r.created_at), className: "font-mono text-xs" },
+            {
+              key: "created",
+              header: "Created",
+              render: (r) => fmtDate(r.created_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.created_at ?? null,
+            },
             {
               key: "status",
               header: "Status",

@@ -52,11 +52,13 @@ export default async function Page() {
               key: "quantity",
               header: "Quantity",
               render: (r) => <span className="font-mono text-xs">{String(r.quantity ?? "—")}</span>,
+              accessor: (r) => r.quantity ?? null,
             },
             {
               key: "delivered",
               header: "Delivered",
               render: (r) => <span className="font-mono text-xs">{String(r.delivered ?? "—")}</span>,
+              accessor: (r) => r.delivered ?? null,
             },
             {
               key: "status",
@@ -70,6 +72,7 @@ export default async function Page() {
               key: "due_by",
               header: "Due By",
               render: (r) => <span className="font-mono text-xs">{String(r.due_by ?? "—")}</span>,
+              accessor: (r) => r.due_by ?? null,
             },
           ]}
         />

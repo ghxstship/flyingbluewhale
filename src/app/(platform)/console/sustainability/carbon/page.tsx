@@ -81,6 +81,7 @@ export default async function Page() {
                   {r.period_start.slice(0, 10)} → {r.period_end.slice(0, 10)}
                 </span>
               ),
+              accessor: (r) => r.period_start ?? null,
             },
             {
               key: "scope",
@@ -88,11 +89,13 @@ export default async function Page() {
               render: (r) => <Badge variant="muted">Scope {r.scope}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.scope ?? null,
             },
             {
               key: "kg_co2e",
               header: "kg CO₂e",
               render: (r) => <span className="font-mono text-xs">{r.kg_co2e.toLocaleString()}</span>,
+              accessor: (r) => r.kg_co2e.toLocaleString ?? null,
             },
             {
               key: "source",
@@ -100,6 +103,7 @@ export default async function Page() {
               render: (r) => <span className="text-xs text-[var(--text-secondary)]">{r.source ?? "—"}</span>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.source ?? null,
             },
             {
               key: "method",
@@ -107,6 +111,7 @@ export default async function Page() {
               render: (r) => <span className="text-xs text-[var(--text-muted)]">{r.method ?? "—"}</span>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.method ?? null,
             },
           ]}
         />

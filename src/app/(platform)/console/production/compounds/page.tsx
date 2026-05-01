@@ -98,12 +98,14 @@ export default async function Page() {
               className: "font-mono text-xs",
               filterable: true,
               groupable: true,
+              accessor: (r) => r.kind.toUpperCase ?? null,
             },
             { key: "cluster", header: "Cluster", render: (r) => r.cluster ?? "—", accessor: (r) => r.cluster ?? null },
             {
               key: "capacity",
               header: "Capacity",
               render: (r) => <span className="font-mono text-xs">{r.capacity?.toLocaleString() ?? "—"}</span>,
+              accessor: (r) => r.capacity?.toLocaleString ?? null,
             },
             {
               key: "handover",

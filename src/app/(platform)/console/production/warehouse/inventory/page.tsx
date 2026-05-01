@@ -115,6 +115,7 @@ export default async function Page() {
               key: "asset_tag",
               header: "Tag",
               render: (r) => <span className="font-mono text-xs">{String(r.asset_tag ?? "—")}</span>,
+              accessor: (r) => r.asset_tag ?? null,
             },
             {
               key: "category",
@@ -134,6 +135,7 @@ export default async function Page() {
               key: "serial",
               header: "Serial",
               render: (r) => <span className="font-mono text-xs">{String(r.serial ?? "—")}</span>,
+              accessor: (r) => r.serial ?? null,
             },
             {
               key: "status",
@@ -141,6 +143,7 @@ export default async function Page() {
               render: (r) => <StatusBadge status={String(r.status)} />,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status ?? null,
             },
           ]}
         />

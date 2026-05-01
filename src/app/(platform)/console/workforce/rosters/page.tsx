@@ -48,6 +48,7 @@ export default async function Page() {
               key: "day_of",
               header: "Day",
               render: (r) => <span className="font-mono text-xs">{String(r.day_of ?? "—")}</span>,
+              accessor: (r) => r.day_of ?? null,
             },
             {
               key: "state",

@@ -115,15 +115,29 @@ export default async function Page() {
               render: (r) => r.vendor?.name ?? "—",
               filterable: true,
               groupable: true,
+              accessor: (r) => r.vendor?.name ?? null,
             },
-            { key: "round", header: "Round", render: (r) => `#${r.current_round}`, className: "font-mono text-xs" },
-            { key: "due", header: "Due", render: (r) => fmt(r.due_at), className: "font-mono text-xs" },
+            {
+              key: "round",
+              header: "Round",
+              render: (r) => `#${r.current_round}`,
+              className: "font-mono text-xs",
+              accessor: (r) => r.current_round ?? null,
+            },
+            {
+              key: "due",
+              header: "Due",
+              render: (r) => fmt(r.due_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.due_at ?? null,
+            },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

@@ -44,17 +44,20 @@ export default async function Page() {
               key: "slug",
               header: "Slug",
               render: (r) => <span className="font-mono text-xs">{String(r.slug ?? "—")}</span>,
+              accessor: (r) => r.slug ?? null,
             },
             { key: "title", header: "Title", render: (r) => String(r.title ?? "—"), accessor: (r) => r.title ?? null },
             {
               key: "version",
               header: "Ver",
               render: (r) => <span className="font-mono text-xs">{String(r.version ?? "—")}</span>,
+              accessor: (r) => r.version ?? null,
             },
             {
               key: "updated_at",
               header: "Updated",
               render: (r) => <span className="font-mono text-xs">{String(r.updated_at ?? "—")}</span>,
+              accessor: (r) => r.updated_at ?? null,
             },
           ]}
         />

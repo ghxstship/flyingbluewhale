@@ -52,11 +52,13 @@ export default async function Page() {
               key: "vehicle_ref",
               header: "Vehicle",
               render: (r) => <span className="font-mono text-xs">{String(r.vehicle_ref ?? "—")}</span>,
+              accessor: (r) => r.vehicle_ref ?? null,
             },
             {
               key: "scheduled_depart",
               header: "Depart",
               render: (r) => <span className="font-mono text-xs">{String(r.scheduled_depart ?? "—")}</span>,
+              accessor: (r) => r.scheduled_depart ?? null,
             },
             {
               key: "status",

@@ -100,7 +100,13 @@ export default async function Page() {
           emptyDescription="Cyber IR is a sub-type of incidents. Tag a report with terms like 'breach', 'phish', or 'cyber' in the summary and it appears here."
           columns={[
             { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
-            { key: "occurred", header: "Occurred", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
+            {
+              key: "occurred",
+              header: "Occurred",
+              render: (r) => fmt(r.occurred_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.occurred_at ?? null,
+            },
             {
               key: "severity",
               header: "Severity",
@@ -115,6 +121,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

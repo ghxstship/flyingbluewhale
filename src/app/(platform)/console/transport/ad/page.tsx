@@ -59,6 +59,7 @@ export default async function Page() {
               key: "flight_ref",
               header: "Flight",
               render: (r) => <span className="font-mono text-xs">{String(r.flight_ref ?? "—")}</span>,
+              accessor: (r) => r.flight_ref ?? null,
             },
             {
               key: "carrier",
@@ -70,6 +71,7 @@ export default async function Page() {
               key: "scheduled_at",
               header: "Scheduled",
               render: (r) => <span className="font-mono text-xs">{String(r.scheduled_at ?? "—")}</span>,
+              accessor: (r) => r.scheduled_at ?? null,
             },
             {
               key: "status",

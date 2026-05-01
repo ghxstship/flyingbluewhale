@@ -133,7 +133,13 @@ export default async function Page() {
           emptyLabel="No incidents in the last 30 days"
           columns={[
             { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
-            { key: "occurred", header: "Occurred", render: (r) => fmt(r.occurred_at), className: "font-mono text-xs" },
+            {
+              key: "occurred",
+              header: "Occurred",
+              render: (r) => fmt(r.occurred_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.occurred_at ?? null,
+            },
             {
               key: "location",
               header: "Location",
@@ -154,6 +160,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

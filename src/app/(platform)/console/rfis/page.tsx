@@ -104,13 +104,25 @@ export default async function Page() {
               accessor: (r) => r.code,
             },
             { key: "subject", header: "Subject", render: (r) => r.subject, accessor: (r) => r.subject },
-            { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
+            {
+              key: "project",
+              header: "Project",
+              render: (r) => r.project?.name ?? "—",
+              accessor: (r) => r.project?.name ?? null,
+            },
             {
               key: "ball",
               header: "Ball in Court",
               render: (r) => r.ball_in_court?.name ?? r.ball_in_court?.email ?? "—",
+              accessor: (r) => r.ball_in_court?.name ?? r.ball_in_court?.email ?? null,
             },
-            { key: "due", header: "Due", render: (r) => fmt(r.due_at), className: "font-mono text-xs" },
+            {
+              key: "due",
+              header: "Due",
+              render: (r) => fmt(r.due_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.due_at ?? null,
+            },
             {
               key: "priority",
               header: "Priority",

@@ -61,6 +61,7 @@ export default async function PeoplePage() {
                   </div>
                 </div>
               ),
+              accessor: (r) => r.users?.name ?? r.users?.email ?? null,
             },
             {
               key: "role",

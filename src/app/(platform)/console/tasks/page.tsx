@@ -52,6 +52,7 @@ export default async function TasksPage() {
               render: (r) => <span className="font-mono text-xs">P{r.priority}</span>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.priority ?? null,
             },
             {
               key: "due",

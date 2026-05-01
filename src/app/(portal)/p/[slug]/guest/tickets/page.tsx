@@ -22,7 +22,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         rows={rows}
         emptyLabel="No tickets yet — buy or claim to get started"
         columns={[
-          { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
+          {
+            key: "code",
+            header: "Code",
+            render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+            accessor: (r) => r.code ?? null,
+          },
           {
             key: "tier",
             header: "Tier",

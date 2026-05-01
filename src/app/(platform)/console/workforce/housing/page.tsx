@@ -88,6 +88,7 @@ export default async function Page() {
               key: "stakeholder",
               header: "Group",
               render: (r) => (r.stakeholder_group ? <Badge variant="muted">{r.stakeholder_group}</Badge> : "—"),
+              accessor: (r) => r.stakeholder_group ?? null,
             },
             {
               key: "rooms",
@@ -97,12 +98,14 @@ export default async function Page() {
                   {r.rooms_confirmed ?? 0} / {r.rooms_reserved ?? 0}
                 </span>
               ),
+              accessor: (r) => Number(r.rooms_confirmed ?? 0),
             },
             {
               key: "dates",
               header: "Dates",
               render: (r) => `${r.starts_on ?? "?"} → ${r.ends_on ?? "?"}`,
               className: "font-mono text-xs",
+              accessor: (r) => r.starts_on ?? null,
             },
           ]}
         />

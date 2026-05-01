@@ -40,6 +40,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 {r.title}
               </Link>
             ),
+            accessor: (r) => r.id ?? null,
           },
           {
             key: "amount",
@@ -61,6 +62,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             header: "Sent",
             render: (r) => (r.sent_at ? timeAgo(r.sent_at) : "—"),
             className: "font-mono text-xs",
+            accessor: (r) => r.sent_at ?? null,
           },
           {
             key: "open",
@@ -74,6 +76,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               </Link>
             ),
             className: "text-end",
+            accessor: (r) => r.id ?? null,
           },
         ]}
       />

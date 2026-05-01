@@ -69,6 +69,7 @@ export default async function Page() {
               header: "Cadence",
               render: (r) => (r.cadence_minutes ? `every ${r.cadence_minutes}m` : "ad-hoc"),
               className: "font-mono text-xs",
+              accessor: (r) => r.cadence_minutes ?? null,
             },
             {
               key: "next_run",
@@ -83,6 +84,7 @@ export default async function Page() {
                     })
                   : "—",
               className: "font-mono text-xs",
+              accessor: (r) => r.next_run_at ?? null,
             },
             {
               key: "status",
@@ -92,6 +94,7 @@ export default async function Page() {
               ),
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status ?? null,
             },
           ]}
         />

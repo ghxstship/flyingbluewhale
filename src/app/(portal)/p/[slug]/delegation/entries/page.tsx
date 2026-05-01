@@ -89,13 +89,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               groupable: true,
             },
             { key: "event", header: "Event", render: (r) => r.event ?? "—", accessor: (r) => r.event ?? null },
-            { key: "delegation", header: "Delegation", render: (r) => r.delegation?.code ?? "—" },
+            {
+              key: "delegation",
+              header: "Delegation",
+              render: (r) => r.delegation?.code ?? "—",
+              accessor: (r) => r.delegation?.code ?? null,
+            },
             {
               key: "status",
               header: "Status",
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

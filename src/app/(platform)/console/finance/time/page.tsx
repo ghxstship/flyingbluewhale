@@ -61,11 +61,13 @@ export default async function TimePage() {
               header: "Duration",
               render: (r) => fmtMinutes(r.duration_minutes),
               className: "font-mono text-xs",
+              accessor: (r) => r.duration_minutes ?? null,
             },
             {
               key: "billable",
               header: "Billable",
               render: (r) => (r.billable ? <Badge variant="success">Yes</Badge> : <Badge variant="muted">No</Badge>),
+              accessor: (r) => r.billable ?? null,
             },
             {
               key: "started",

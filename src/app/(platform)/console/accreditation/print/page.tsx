@@ -54,6 +54,7 @@ export default async function Page() {
               key: "card_barcode",
               header: "Barcode",
               render: (r) => <span className="font-mono text-xs">{String(r.card_barcode ?? "—")}</span>,
+              accessor: (r) => r.card_barcode ?? null,
             },
             {
               key: "state",

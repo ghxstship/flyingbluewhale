@@ -58,6 +58,7 @@ export default async function ExpensesPage() {
               header: "Amount",
               render: (r) => formatMoney(r.amount_cents, r.currency),
               className: "font-mono text-xs",
+              accessor: (r) => r.amount_cents ?? null,
             },
             {
               key: "status",

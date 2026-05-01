@@ -80,7 +80,12 @@ export default async function Page() {
           }
           columns={[
             { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
-            { key: "slug", header: "Slug", render: (r) => <span className="font-mono text-xs">{r.slug}</span> },
+            {
+              key: "slug",
+              header: "Slug",
+              render: (r) => <span className="font-mono text-xs">{r.slug}</span>,
+              accessor: (r) => r.slug ?? null,
+            },
             {
               key: "kind",
               header: "Kind",
@@ -93,6 +98,7 @@ export default async function Page() {
               key: "version",
               header: "Version",
               render: (r) => <span className="font-mono text-xs">v{r.version}</span>,
+              accessor: (r) => r.version ?? null,
             },
             {
               key: "status",
@@ -106,6 +112,7 @@ export default async function Page() {
               key: "updated_at",
               header: "Updated",
               render: (r) => <span className="font-mono text-xs">{r.updated_at?.slice(0, 10)}</span>,
+              accessor: (r) => r.updated_at?.slice ?? null,
             },
           ]}
         />

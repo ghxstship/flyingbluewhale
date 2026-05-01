@@ -95,7 +95,12 @@ export default async function Page() {
               accessor: (r) => r.code,
             },
             { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
-            { key: "venue", header: "Venue", render: (r) => r.venue?.name ?? r.project?.name ?? "—" },
+            {
+              key: "venue",
+              header: "Venue",
+              render: (r) => r.venue?.name ?? r.project?.name ?? "—",
+              accessor: (r) => r.venue?.name ?? r.project?.name ?? null,
+            },
             {
               key: "discipline",
               header: "Discipline",
@@ -109,6 +114,7 @@ export default async function Page() {
               header: "Current Rev",
               render: (r) => r.current_revision?.revision_label ?? "—",
               className: "font-mono text-xs",
+              accessor: (r) => r.current_revision?.revision_label ?? null,
             },
           ]}
         />

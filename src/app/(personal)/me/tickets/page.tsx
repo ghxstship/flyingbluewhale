@@ -34,7 +34,12 @@ export default async function MyTicketsPage() {
           rows={rows}
           emptyLabel="No tickets yet"
           columns={[
-            { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+              accessor: (r) => r.code ?? null,
+            },
             {
               key: "tier",
               header: "Tier",
@@ -63,6 +68,7 @@ export default async function MyTicketsPage() {
               header: "Scanned",
               render: (r) => (r.scanned_at ? timeAgo(r.scanned_at) : "—"),
               className: "font-mono text-xs",
+              accessor: (r) => r.scanned_at ?? null,
             },
           ]}
         />

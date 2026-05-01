@@ -107,12 +107,18 @@ export default async function Page() {
               accessor: (r) => r.code,
             },
             { key: "name", header: "Inspection", render: (r) => r.name, accessor: (r) => r.name },
-            { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
+            {
+              key: "project",
+              header: "Project",
+              render: (r) => r.project?.name ?? "—",
+              accessor: (r) => r.project?.name ?? null,
+            },
             {
               key: "scheduled",
               header: "Scheduled",
               render: (r) => fmt(r.scheduled_for),
               className: "font-mono text-xs",
+              accessor: (r) => r.scheduled_for ?? null,
             },
             {
               key: "status",
@@ -120,6 +126,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

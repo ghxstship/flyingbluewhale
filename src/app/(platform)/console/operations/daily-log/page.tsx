@@ -90,8 +90,19 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "date", header: "Date", render: (r) => fmt(r.log_date), className: "font-mono text-xs" },
-            { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
+            {
+              key: "date",
+              header: "Date",
+              render: (r) => fmt(r.log_date),
+              className: "font-mono text-xs",
+              accessor: (r) => r.log_date ?? null,
+            },
+            {
+              key: "project",
+              header: "Project",
+              render: (r) => r.project?.name ?? "—",
+              accessor: (r) => r.project?.name ?? null,
+            },
             {
               key: "weather",
               header: "Weather",

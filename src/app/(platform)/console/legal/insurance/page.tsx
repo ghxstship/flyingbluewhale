@@ -57,6 +57,7 @@ export default async function Page() {
               key: "policy_no",
               header: "Policy No.",
               render: (r) => <span className="font-mono text-xs">{String(r.policy_no ?? "—")}</span>,
+              accessor: (r) => r.policy_no ?? null,
             },
             {
               key: "kind",
@@ -70,11 +71,13 @@ export default async function Page() {
               key: "effective_on",
               header: "Effective",
               render: (r) => <span className="font-mono text-xs">{String(r.effective_on ?? "—")}</span>,
+              accessor: (r) => r.effective_on ?? null,
             },
             {
               key: "expires_on",
               header: "Expires",
               render: (r) => <span className="font-mono text-xs">{String(r.expires_on ?? "—")}</span>,
+              accessor: (r) => r.expires_on ?? null,
             },
           ]}
         />

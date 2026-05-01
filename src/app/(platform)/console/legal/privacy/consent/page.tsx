@@ -49,6 +49,7 @@ export default async function Page() {
               key: "version",
               header: "Version",
               render: (r) => <span className="font-mono text-xs">{String(r.version ?? "—")}</span>,
+              accessor: (r) => r.version ?? null,
             },
           ]}
         />

@@ -64,11 +64,13 @@ export default async function Page() {
               key: "rooms_reserved",
               header: "Reserved",
               render: (r) => <span className="font-mono text-xs">{String(r.rooms_reserved ?? "—")}</span>,
+              accessor: (r) => r.rooms_reserved ?? null,
             },
             {
               key: "rooms_confirmed",
               header: "Confirmed",
               render: (r) => <span className="font-mono text-xs">{String(r.rooms_confirmed ?? "—")}</span>,
+              accessor: (r) => r.rooms_confirmed ?? null,
             },
           ]}
         />

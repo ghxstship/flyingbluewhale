@@ -69,9 +69,19 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           emptyLabel="No zones yet"
           emptyDescription="Author zones to map accreditation categories to physical areas. The accreditation/policy matrix derives from this list × the categories table."
           columns={[
-            { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+              accessor: (r) => r.code ?? null,
+            },
             { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
-            { key: "parent", header: "Parent", render: (r) => (r.parent_zone_id ? "↳" : "—") },
+            {
+              key: "parent",
+              header: "Parent",
+              render: (r) => (r.parent_zone_id ? "↳" : "—"),
+              accessor: (r) => r.parent_zone_id ?? null,
+            },
             {
               key: "cats",
               header: "Allowed Categories",
@@ -89,6 +99,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                   </div>
                 );
               },
+              accessor: (r) => r.allowed_categories ?? null,
             },
           ]}
         />

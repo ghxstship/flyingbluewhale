@@ -96,6 +96,7 @@ export default async function Page() {
               key: "asset_tag",
               header: "Tag",
               render: (r) => <span className="font-mono text-xs">{r.asset_tag ?? "—"}</span>,
+              accessor: (r) => r.asset_tag ?? null,
             },
             {
               key: "category",
@@ -109,6 +110,7 @@ export default async function Page() {
               key: "serial",
               header: "Serial",
               render: (r) => <span className="font-mono text-xs">{r.serial ?? "—"}</span>,
+              accessor: (r) => r.serial ?? null,
             },
             {
               key: "status",

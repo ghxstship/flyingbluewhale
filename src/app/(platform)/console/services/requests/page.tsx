@@ -117,6 +117,7 @@ export default async function Page() {
               ),
               filterable: true,
               groupable: true,
+              accessor: (r) => r.severity ?? null,
             },
             {
               key: "category",
@@ -124,6 +125,7 @@ export default async function Page() {
               render: (r) => <span className="font-mono text-xs">{String(r.category)}</span>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.category ?? null,
             },
             {
               key: "summary",
@@ -149,6 +151,7 @@ export default async function Page() {
               ),
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status ?? null,
             },
             {
               key: "opened",
@@ -156,6 +159,7 @@ export default async function Page() {
               render: (r) => (
                 <span className="font-mono text-xs">{new Date(String(r.opened_at)).toLocaleString()}</span>
               ),
+              accessor: (r) => r.opened_at ?? null,
             },
           ]}
         />

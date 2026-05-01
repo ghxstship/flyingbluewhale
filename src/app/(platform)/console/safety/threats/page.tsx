@@ -67,7 +67,12 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
+            {
+              key: "code",
+              header: "Code",
+              render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+              accessor: (r) => r.code ?? null,
+            },
             { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "severity",
@@ -77,7 +82,12 @@ export default async function Page() {
               filterable: true,
               groupable: true,
             },
-            { key: "likelihood", header: "Likelihood", render: (r) => r.likelihood.replace(/_/g, " ") },
+            {
+              key: "likelihood",
+              header: "Likelihood",
+              render: (r) => r.likelihood.replace(/_/g, " "),
+              accessor: (r) => r.likelihood.replace ?? null,
+            },
             { key: "treatment", header: "Treatment", render: (r) => r.treatment, accessor: (r) => r.treatment },
             {
               key: "classification",

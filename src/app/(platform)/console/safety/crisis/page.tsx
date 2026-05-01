@@ -55,6 +55,7 @@ export default async function Page() {
               key: "sent_at",
               header: "Sent",
               render: (r) => <span className="font-mono text-xs">{String(r.sent_at ?? "—")}</span>,
+              accessor: (r) => r.sent_at ?? null,
             },
           ]}
         />

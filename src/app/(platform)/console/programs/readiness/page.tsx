@@ -60,6 +60,7 @@ export default async function Page() {
               key: "scheduled_at",
               header: "Scheduled",
               render: (r) => <span className="font-mono text-xs">{String(r.scheduled_at ?? "—")}</span>,
+              accessor: (r) => r.scheduled_at ?? null,
             },
           ]}
         />

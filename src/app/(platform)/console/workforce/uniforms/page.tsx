@@ -65,7 +65,12 @@ export default async function Page() {
             </Button>
           }
           columns={[
-            { key: "sku", header: "SKU", render: (r) => <span className="font-mono text-xs">{r.sku}</span> },
+            {
+              key: "sku",
+              header: "SKU",
+              render: (r) => <span className="font-mono text-xs">{r.sku}</span>,
+              accessor: (r) => r.sku ?? null,
+            },
             { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
             {
               key: "description",
@@ -78,12 +83,14 @@ export default async function Page() {
               header: "Unit Cost",
               render: (r) => formatMoney(r.unit_price_cents, r.currency),
               className: "font-mono text-xs",
+              accessor: (r) => r.unit_price_cents ?? null,
             },
             {
               key: "active",
               header: "Active",
               render: (r) =>
                 r.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Retired</Badge>,
+              accessor: (r) => r.active ?? null,
             },
           ]}
         />

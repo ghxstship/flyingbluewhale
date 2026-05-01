@@ -86,6 +86,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   {r.rooms_confirmed}/{r.rooms_reserved}
                 </span>
               ),
+              accessor: (r) => Number(r.rooms_confirmed ?? 0),
             },
             {
               key: "window",
@@ -95,6 +96,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   {fmt(r.starts_on)} – {fmt(r.ends_on)}
                 </span>
               ),
+              accessor: (r) => r.starts_on ?? null,
             },
             {
               key: "group",
@@ -102,6 +104,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               render: (r) => (r.stakeholder_group ? <Badge variant="muted">{r.stakeholder_group}</Badge> : "—"),
               filterable: true,
               groupable: true,
+              accessor: (r) => r.stakeholder_group ?? null,
             },
           ]}
         />

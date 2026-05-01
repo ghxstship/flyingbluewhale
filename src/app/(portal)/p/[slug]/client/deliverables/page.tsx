@@ -17,13 +17,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         rows={rows}
         emptyLabel="No deliverables yet"
         columns={[
-          { key: "title", header: "Title", render: (r) => r.title ?? labelForType(r.type) },
+          {
+            key: "title",
+            header: "Title",
+            render: (r) => r.title ?? labelForType(r.type),
+            accessor: (r) => r.title ?? r.type ?? null,
+          },
           {
             key: "type",
             header: "Type",
             render: (r) => <span className="font-mono text-xs">{labelForType(r.type)}</span>,
             filterable: true,
             groupable: true,
+            accessor: (r) => r.type ?? null,
           },
           {
             key: "status",

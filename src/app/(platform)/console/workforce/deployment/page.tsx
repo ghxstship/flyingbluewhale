@@ -57,11 +57,13 @@ export default async function Page() {
               key: "planned_fte",
               header: "Planned",
               render: (r) => <span className="font-mono text-xs">{String(r.planned_fte ?? "—")}</span>,
+              accessor: (r) => r.planned_fte ?? null,
             },
             {
               key: "actual_fte",
               header: "Actual",
               render: (r) => <span className="font-mono text-xs">{String(r.actual_fte ?? "—")}</span>,
+              accessor: (r) => r.actual_fte ?? null,
             },
           ]}
         />

@@ -133,11 +133,17 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               groupable: true,
             },
             { key: "desc", header: "Item", render: (r) => r.description, accessor: (r) => r.description },
-            { key: "due", header: "Due", render: (r) => <span className="font-mono text-xs">{fmt(r.due_at)}</span> },
+            {
+              key: "due",
+              header: "Due",
+              render: (r) => <span className="font-mono text-xs">{fmt(r.due_at)}</span>,
+              accessor: (r) => r.due_at ?? null,
+            },
             {
               key: "completed",
               header: "Completed",
               render: (r) => <span className="font-mono text-xs">{fmt(r.completed_at)}</span>,
+              accessor: (r) => r.completed_at ?? null,
             },
             {
               key: "status",
@@ -145,6 +151,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               render: (r) => <Badge variant={ITEM_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

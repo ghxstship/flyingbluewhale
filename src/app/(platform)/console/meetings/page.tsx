@@ -87,9 +87,26 @@ export default async function Page() {
           }
           columns={[
             { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
-            { key: "starts", header: "Starts", render: (r) => fmt(r.starts_at), className: "font-mono text-xs" },
-            { key: "ends", header: "Ends", render: (r) => fmt(r.ends_at), className: "font-mono text-xs" },
-            { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
+            {
+              key: "starts",
+              header: "Starts",
+              render: (r) => fmt(r.starts_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.starts_at ?? null,
+            },
+            {
+              key: "ends",
+              header: "Ends",
+              render: (r) => fmt(r.ends_at),
+              className: "font-mono text-xs",
+              accessor: (r) => r.ends_at ?? null,
+            },
+            {
+              key: "project",
+              header: "Project",
+              render: (r) => r.project?.name ?? "—",
+              accessor: (r) => r.project?.name ?? null,
+            },
             {
               key: "status",
               header: "Status",

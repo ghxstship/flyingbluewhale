@@ -39,13 +39,19 @@ export default async function POsPage() {
           rows={rows}
           rowHref={(r) => `/console/procurement/purchase-orders/${r.id}`}
           columns={[
-            { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
+            {
+              key: "number",
+              header: "Number",
+              render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+              accessor: (r) => r.number ?? null,
+            },
             { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
               key: "amount",
               header: "Amount",
               render: (r) => formatMoney(r.amount_cents, r.currency),
               className: "font-mono text-xs",
+              accessor: (r) => r.amount_cents ?? null,
             },
             {
               key: "status",

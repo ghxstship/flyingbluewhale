@@ -116,11 +116,17 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               filterable: true,
               groupable: true,
             },
-            { key: "revision", header: "Rev", render: (r) => <span className="font-mono text-xs">{r.revision}</span> },
+            {
+              key: "revision",
+              header: "Rev",
+              render: (r) => <span className="font-mono text-xs">{r.revision}</span>,
+              accessor: (r) => r.revision ?? null,
+            },
             {
               key: "updated",
               header: "Updated",
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.updated_at)}</span>,
+              accessor: (r) => r.updated_at ?? null,
             },
             {
               key: "bom",
@@ -131,6 +137,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                 ) : (
                   <span className="text-[var(--text-muted)]">—</span>
                 ),
+              accessor: (r) => r.bom_requisition_id ?? null,
             },
             {
               key: "status",
@@ -138,6 +145,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

@@ -60,11 +60,13 @@ export default async function Page() {
               key: "opened_at",
               header: "Opened",
               render: (r) => <span className="font-mono text-xs">{String(r.opened_at ?? "—")}</span>,
+              accessor: (r) => r.opened_at ?? null,
             },
             {
               key: "closed_at",
               header: "Closed",
               render: (r) => <span className="font-mono text-xs">{String(r.closed_at ?? "—")}</span>,
+              accessor: (r) => r.closed_at ?? null,
             },
           ]}
         />

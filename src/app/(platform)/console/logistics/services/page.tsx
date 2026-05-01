@@ -110,6 +110,7 @@ export default async function Page() {
               header: "Opened",
               render: (r) => relativeTime(r.opened_at),
               className: "font-mono text-xs",
+              accessor: (r) => r.opened_at ?? null,
             },
             {
               key: "status",
@@ -117,6 +118,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status]}>{r.status.replace(/_/g, " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

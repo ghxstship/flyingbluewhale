@@ -170,13 +170,19 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             emptyLabel="No invoices yet"
             emptyDescription="Invoices created from this project's proposals will land here."
             columns={[
-              { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
+              {
+                key: "number",
+                header: "Number",
+                render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+                accessor: (r) => r.number ?? null,
+              },
               { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
               {
                 key: "amount",
                 header: "Amount",
                 render: (r) => formatMoney(r.amount_cents, currency),
                 className: "font-mono text-xs",
+                accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
                 key: "status",
@@ -188,6 +194,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 ),
                 filterable: true,
                 groupable: true,
+                accessor: (r) => r.status ?? null,
               },
               {
                 key: "due",
@@ -216,13 +223,19 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             emptyLabel="No purchase orders"
             emptyDescription="POs raised against this project will land here."
             columns={[
-              { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
+              {
+                key: "number",
+                header: "Number",
+                render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+                accessor: (r) => r.number ?? null,
+              },
               { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
               {
                 key: "amount",
                 header: "Amount",
                 render: (r) => formatMoney(r.amount_cents, currency),
                 className: "font-mono text-xs",
+                accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
                 key: "status",
@@ -269,6 +282,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 header: "Amount",
                 render: (r) => formatMoney(r.amount_cents, currency),
                 className: "font-mono text-xs",
+                accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
                 key: "status",

@@ -64,6 +64,7 @@ export default async function VendorsPage() {
               header: "W-9",
               render: (r) =>
                 r.w9_on_file ? <Badge variant="success">On File</Badge> : <Badge variant="warning">Missing</Badge>,
+              accessor: (r) => r.w9_on_file ?? null,
             },
             {
               key: "coi",

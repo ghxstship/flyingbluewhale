@@ -97,20 +97,29 @@ export default async function Page() {
               header: "Application",
               render: (r) => `#${r.application_number}`,
               className: "font-mono text-xs",
+              accessor: (r) => r.application_number ?? null,
             },
-            { key: "po", header: "PO", render: (r) => r.purchase_order?.number ?? "—", className: "font-mono text-xs" },
+            {
+              key: "po",
+              header: "PO",
+              render: (r) => r.purchase_order?.number ?? "—",
+              className: "font-mono text-xs",
+              accessor: (r) => r.purchase_order?.number ?? null,
+            },
             {
               key: "vendor",
               header: "Vendor",
               render: (r) => r.vendor?.name ?? "—",
               filterable: true,
               groupable: true,
+              accessor: (r) => r.vendor?.name ?? null,
             },
             {
               key: "period",
               header: "Period",
               render: (r) => `${fmt(r.period_start)} — ${fmt(r.period_end)}`,
               className: "font-mono text-xs",
+              accessor: (r) => r.period_start ?? null,
             },
             {
               key: "completed",
@@ -132,6 +141,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
               filterable: true,
               groupable: true,
+              accessor: (r) => r.status.replace ?? null,
             },
           ]}
         />

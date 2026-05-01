@@ -86,12 +86,14 @@ export default async function Page() {
               header: "Window",
               render: (r) => `${r.starts_on ?? "?"} → ${r.ends_on ?? "?"}`,
               className: "font-mono text-xs",
+              accessor: (r) => r.starts_on ?? null,
             },
             {
               key: "budget",
               header: "Budget",
               render: (r) => `${formatMoney(r.spent_cents)} / ${formatMoney(r.budget_cents)}`,
               className: "font-mono text-xs",
+              accessor: (r) => Number(r.spent_cents ?? 0),
             },
             {
               key: "status",

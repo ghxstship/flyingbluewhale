@@ -58,6 +58,7 @@ export default async function Page() {
               key: "registration_no",
               header: "Reg No.",
               render: (r) => <span className="font-mono text-xs">{String(r.registration_no ?? "—")}</span>,
+              accessor: (r) => r.registration_no ?? null,
             },
             {
               key: "status",

@@ -66,11 +66,13 @@ export default async function Page() {
               render: (r) => (
                 <span className="font-mono text-xs">{(r.capacity as number | null)?.toLocaleString() ?? "—"}</span>
               ),
+              accessor: (r) => r.capacity ?? null,
             },
             {
               key: "handover",
               header: "Handover",
               render: (r) => <StatusBadge status={String(r.handover_state ?? "—")} />,
+              accessor: (r) => r.handover_state ?? null,
             },
           ]}
         />

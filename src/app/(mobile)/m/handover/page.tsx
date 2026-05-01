@@ -1,17 +1,110 @@
-import { ModuleHeader } from "@/components/Shell";
-import { RoadmapStub } from "@/components/RoadmapStub";
+import Link from "next/link";
+import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { requireSession } from "@/lib/auth";
+import { listOrgScoped } from "@/lib/db/resource";
+import { hasSupabase } from "@/lib/env";
 
-export default function Page() {
+export const dynamic = "force-dynamic";
+
+type VenueRow = {
+  id: string;
+  name: string;
+  cluster: string | null;
+  capacity: number | null;
+  handover_state:
+    | "not_started"
+    | "in_progress"
+    | "ready_for_handover"
+    | "handed_over"
+    | "complete"
+    | "closed_out"
+    | string;
+};
+
+const HANDOVER_TONE: Record<string, "muted" | "info" | "warning" | "success"> = {
+  not_started: "muted",
+  in_progress: "info",
+  ready_for_handover: "warning",
+  handed_over: "success",
+  complete: "success",
+  closed_out: "success",
+};
+
+export default async function MobileHandoverPage() {
+  if (!hasSupabase) {
+    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  }
+  const session = await requireSession();
+  const venues = (await listOrgScoped("venues", session.orgId, {
+    orderBy: "name",
+    ascending: true,
+    limit: 200,
+  })) as VenueRow[];
+
+  // Bucket: needs walk (not_started + in_progress + ready_for_handover) vs done
+  const open = venues.filter((v) => !["handed_over", "complete", "closed_out"].includes(v.handover_state));
+  const done = venues.filter((v) => ["handed_over", "complete", "closed_out"].includes(v.handover_state));
+
   return (
-    <>
-      <ModuleHeader eyebrow="Mobile" title="Handover" />
-      <div className="page-content">
-        <RoadmapStub
-          title="Handover"
-          description="Commissioning walk and sign-off."
-          inTheMeantime={{ href: "/console/venues", label: "Open Venues" }}
-        />
-      </div>
-    </>
+    <div className="px-4 pt-6 pb-24">
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
+      <h1 className="mt-1 text-2xl font-semibold">Handover</h1>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        Commissioning walks per venue. Tap into a venue on the desktop to mark its handover state.
+      </p>
+
+      <section className="mt-6">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          Needs walk · {open.length}
+        </h2>
+        <ul className="mt-3 space-y-2">
+          {open.length === 0 ? (
+            <li>
+              <EmptyState size="compact" title="All venues handed over" description="Nothing pending today." />
+            </li>
+          ) : (
+            open.map((v) => (
+              <li key={v.id}>
+                <Link href={`/console/venues/${v.id}`} className="surface-raised flex items-center justify-between p-4">
+                  <div>
+                    <div className="text-sm font-semibold">{v.name}</div>
+                    <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                      {v.cluster ?? "—"} · cap {v.capacity?.toLocaleString() ?? "—"}
+                    </div>
+                  </div>
+                  <Badge variant={HANDOVER_TONE[v.handover_state] ?? "muted"}>
+                    {v.handover_state.replace(/_/g, " ")}
+                  </Badge>
+                </Link>
+              </li>
+            ))
+          )}
+        </ul>
+      </section>
+
+      {done.length > 0 && (
+        <section className="mt-6">
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            Handed over · {done.length}
+          </h2>
+          <ul className="mt-3 space-y-2">
+            {done.map((v) => (
+              <li key={v.id}>
+                <Link
+                  href={`/console/venues/${v.id}`}
+                  className="surface flex items-center justify-between p-3 opacity-70"
+                >
+                  <div className="text-sm">
+                    <div className="font-medium">{v.name}</div>
+                  </div>
+                  <Badge variant="success">{v.handover_state.replace(/_/g, " ")}</Badge>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
   );
 }

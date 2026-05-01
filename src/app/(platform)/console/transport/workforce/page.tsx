@@ -1,16 +1,147 @@
 import { ModuleHeader } from "@/components/Shell";
-import { RoadmapStub } from "@/components/RoadmapStub";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
 
-export default function Page() {
+export const dynamic = "force-dynamic";
+
+type RunRow = {
+  id: string;
+  fleet: string;
+  vehicle_ref: string | null;
+  status: string;
+  scheduled_depart: string;
+  scheduled_arrive: string | null;
+  origin: { name: string | null } | null;
+  destination: { name: string | null } | null;
+};
+
+const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
+  scheduled: "muted",
+  in_transit: "info",
+  arrived: "success",
+  delayed: "warning",
+  cancelled: "error",
+};
+
+function fmtTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+}
+
+function fmtDay(d: Date): string {
+  return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+}
+
+export default async function Page() {
+  if (!hasSupabase) {
+    return (
+      <>
+        <ModuleHeader eyebrow="Transport" title="Workforce shuttles" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
+  }
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  // Window: today + next 3 days. Filter by workforce + spectator fleets
+  // (the fleets that move crew + workforce, not VIPs/athletes).
+  const today = new Date();
+  const startOfWindow = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endOfWindow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3);
+
+  const { data } = await supabase
+    .from("dispatch_runs")
+    .select(
+      "id, fleet, vehicle_ref, status, scheduled_depart, scheduled_arrive, " +
+        "origin:origin_venue_id(name), destination:destination_venue_id(name)",
+    )
+    .eq("org_id", session.orgId)
+    .in("fleet", ["workforce", "t3", "spectator"])
+    .gte("scheduled_depart", startOfWindow.toISOString())
+    .lt("scheduled_depart", endOfWindow.toISOString())
+    .order("scheduled_depart", { ascending: true });
+  const runs = (data ?? []) as unknown as RunRow[];
+
+  // Group by day
+  const byDay = runs.reduce<Map<string, RunRow[]>>((map, r) => {
+    const k = new Date(r.scheduled_depart).toDateString();
+    if (!map.has(k)) map.set(k, []);
+    map.get(k)!.push(r);
+    return map;
+  }, new Map());
+  const days = Array.from(byDay.entries()).sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime());
+
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="Workforce Shuttles" />
-      <div className="page-content">
-        <RoadmapStub
-          title="Workforce Shuttles"
-          description="Shift-linked routes derived from rosters."
-          inTheMeantime={{ href: "/console/workforce/rosters", label: "Open Rosters" }}
-        />
+      <ModuleHeader
+        eyebrow="Transport"
+        title="Workforce shuttles"
+        subtitle={`${runs.length} run${runs.length === 1 ? "" : "s"} across workforce + T3 + spectator fleets, next 3 days`}
+        action={
+          <Button href="/console/transport/dispatch/new" size="sm">
+            + Schedule run
+          </Button>
+        }
+      />
+      <div className="page-content space-y-5">
+        {days.length === 0 ? (
+          <EmptyState
+            title="No workforce shuttles scheduled"
+            description="Workforce shuttles are dispatch_runs with fleet ∈ {workforce, t3, spectator}. Schedule a run from /console/transport/dispatch."
+            action={
+              <Button href="/console/transport/dispatch/new" size="sm">
+                + Schedule run
+              </Button>
+            }
+          />
+        ) : (
+          days.map(([day, dayRuns]) => (
+            <section key={day} className="surface">
+              <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-3">
+                <h3 className="text-sm font-semibold">{fmtDay(new Date(day))}</h3>
+                <Badge variant="muted">
+                  {dayRuns.length} run{dayRuns.length === 1 ? "" : "s"}
+                </Badge>
+              </header>
+              <table className="data-table w-full text-sm">
+                <thead>
+                  <tr>
+                    <th>Depart</th>
+                    <th>Arrive</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Fleet</th>
+                    <th>Vehicle</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dayRuns.map((r) => (
+                    <tr key={r.id}>
+                      <td className="font-mono text-xs">{fmtTime(r.scheduled_depart)}</td>
+                      <td className="font-mono text-xs">{r.scheduled_arrive ? fmtTime(r.scheduled_arrive) : "—"}</td>
+                      <td>{r.origin?.name ?? "—"}</td>
+                      <td>{r.destination?.name ?? "—"}</td>
+                      <td>
+                        <Badge variant="muted">{r.fleet}</Badge>
+                      </td>
+                      <td className="font-mono text-xs">{r.vehicle_ref ?? "—"}</td>
+                      <td>
+                        <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          ))
+        )}
       </div>
     </>
   );

@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -45,12 +46,22 @@ export default async function Page() {
         eyebrow="Safety"
         title="Guard tours"
         subtitle={`${rows.length} tour${rows.length === 1 ? "" : "s"} · ${inProgress} in progress · ${overdue} overdue`}
+        action={
+          <Button href="/console/safety/guard-tours/new" size="sm">
+            + Schedule tour
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           emptyLabel="No guard tours scheduled"
           emptyDescription="Patrol plans live here. Each tour has an ordered route of geofenced checkpoints; mobile patrol scans them in order via /m/guard."
+          emptyAction={
+            <Button href="/console/safety/guard-tours/new" size="sm">
+              + Schedule tour
+            </Button>
+          }
           columns={[
             { key: "name", header: "Name", render: (r) => String(r.name ?? "—") },
             {

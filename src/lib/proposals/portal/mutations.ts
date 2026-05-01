@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import type { Json } from "@/lib/supabase/database.types";
 import type { ChangeOrderState, RevisionState } from "./types";
 
 type ActorContext = {
@@ -16,21 +17,28 @@ async function logActivity(
   options: { targetKind?: string; targetId?: string | null; meta?: Record<string, unknown> } = {},
 ) {
   const supabase = await createClient();
-  // The Postgres RPC accepts NULL for the optional text/uuid params and
-  // jsonb for p_meta, but the generated TS types narrow them to non-null
-  // strings + Json. Cast via `as never` keeps runtime behaviour while
-  // satisfying the type checker.
-  await supabase.rpc("log_proposal_activity", {
+  const args: {
+    p_proposal_id: string;
+    p_org_id: string;
+    p_kind: string;
+    p_actor_id: string;
+    p_summary?: string;
+    p_actor_label?: string;
+    p_target_kind?: string;
+    p_target_id?: string;
+    p_meta?: Json;
+  } = {
     p_proposal_id: proposalId,
     p_org_id: actor.orgId,
     p_kind: kind,
     p_actor_id: actor.userId,
-    p_actor_label: actor.userLabel,
-    p_target_kind: options.targetKind ?? null,
-    p_target_id: options.targetId ?? null,
     p_summary: summary,
-    p_meta: options.meta ?? {},
-  } as never);
+  };
+  if (actor.userLabel != null) args.p_actor_label = actor.userLabel;
+  if (options.targetKind) args.p_target_kind = options.targetKind;
+  if (options.targetId) args.p_target_id = options.targetId;
+  if (options.meta) args.p_meta = options.meta as Json;
+  await supabase.rpc("log_proposal_activity", args);
 }
 
 // ── PHASE / GATE MUTATIONS ──────────────────────────────────────────────────

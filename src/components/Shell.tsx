@@ -10,7 +10,7 @@ export { PlatformSidebar } from "./PlatformSidebar";
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {
   return (
     <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
-      <div className="mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--org-primary)]">
+      <div className="mb-3 flex items-center gap-2 text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)] uppercase">
         GVTEWAY
       </div>
       <div className="nav-label">{title}</div>
@@ -49,9 +49,9 @@ export function ModuleHeader({
   tabs,
 }: {
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   action?: React.ReactNode;
-  eyebrow?: string;
+  eyebrow?: React.ReactNode;
   /** Optional breadcrumb trail rendered above the title. Delegates to the
    *  unified `<Breadcrumbs>` primitive so every shell (console, portal,
    *  mobile, marketing) shares the same JSON-LD + truncation rules.
@@ -64,11 +64,9 @@ export function ModuleHeader({
     <div className="module-header">
       <div className="module-header-inner">
         <div className="min-w-0 flex-1">
-          {breadcrumbs && breadcrumbs.length > 0 && (
-            <UnifiedBreadcrumbs items={breadcrumbs} className="mb-2" />
-          )}
+          {breadcrumbs && breadcrumbs.length > 0 && <UnifiedBreadcrumbs items={breadcrumbs} className="mb-2" />}
           {eyebrow && (
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--org-primary)]">
+            <div className="text-[11px] font-semibold tracking-wider text-[var(--org-primary)] uppercase">
               {eyebrow}
             </div>
           )}

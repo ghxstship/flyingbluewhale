@@ -669,6 +669,75 @@ export type Database = {
           },
         ]
       }
+      campaigns: {
+        Row: {
+          budget_cents: number
+          channel: string
+          created_at: string
+          description: string | null
+          ends_on: string | null
+          id: string
+          kind: string
+          metadata: Json
+          name: string
+          org_id: string
+          owner_id: string | null
+          spent_cents: number
+          starts_on: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          budget_cents?: number
+          channel?: string
+          created_at?: string
+          description?: string | null
+          ends_on?: string | null
+          id?: string
+          kind?: string
+          metadata?: Json
+          name: string
+          org_id: string
+          owner_id?: string | null
+          spent_cents?: number
+          starts_on?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          budget_cents?: number
+          channel?: string
+          created_at?: string
+          description?: string | null
+          ends_on?: string | null
+          id?: string
+          kind?: string
+          metadata?: Json
+          name?: string
+          org_id?: string
+          owner_id?: string | null
+          spent_cents?: number
+          starts_on?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           contact_email: string | null
@@ -2010,6 +2079,82 @@ export type Database = {
           },
         ]
       }
+      guard_tours: {
+        Row: {
+          cadence_minutes: number | null
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          guard_id: string | null
+          id: string
+          name: string
+          next_run_at: string | null
+          notes: string | null
+          org_id: string
+          route: Json
+          started_at: string | null
+          status: string
+          updated_at: string
+          venue_id: string | null
+        }
+        Insert: {
+          cadence_minutes?: number | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          guard_id?: string | null
+          id?: string
+          name: string
+          next_run_at?: string | null
+          notes?: string | null
+          org_id: string
+          route?: Json
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          venue_id?: string | null
+        }
+        Update: {
+          cadence_minutes?: number | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          guard_id?: string | null
+          id?: string
+          name?: string
+          next_run_at?: string | null
+          notes?: string | null
+          org_id?: string
+          route?: Json
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guard_tours_guard_id_fkey"
+            columns: ["guard_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guard_tours_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guard_tours_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guide_comments: {
         Row: {
           author_email: string | null
@@ -3133,6 +3278,239 @@ export type Database = {
           },
         ]
       }
+      offer_letter_activity: {
+        Row: {
+          actor_id: string | null
+          actor_label: string | null
+          id: string
+          kind: string
+          meta: Json
+          occurred_at: string
+          offer_letter_id: string
+          org_id: string
+          summary: string
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_label?: string | null
+          id?: string
+          kind: string
+          meta?: Json
+          occurred_at?: string
+          offer_letter_id: string
+          org_id: string
+          summary: string
+        }
+        Update: {
+          actor_id?: string | null
+          actor_label?: string | null
+          id?: string
+          kind?: string
+          meta?: Json
+          occurred_at?: string
+          offer_letter_id?: string
+          org_id?: string
+          summary?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offer_letter_activity_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offer_letter_activity_offer_letter_id_fkey"
+            columns: ["offer_letter_id"]
+            isOneToOne: false
+            referencedRelation: "offer_letters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offer_letter_activity_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offer_letters: {
+        Row: {
+          accepted_at: string | null
+          accepted_ip: unknown
+          accepted_signature: string | null
+          accepted_user_agent: string | null
+          access_code: string
+          brand_logo_url: string | null
+          classification: Database["public"]["Enums"]["offer_letter_classification"]
+          compensation_basis: string
+          compensation_cents: number
+          compensation_label: string | null
+          confidentiality: boolean
+          created_at: string
+          created_by: string | null
+          decline_reason: string | null
+          declined_at: string | null
+          department: string | null
+          employer: Database["public"]["Enums"]["offer_letter_employer"]
+          engagement_end: string | null
+          engagement_start: string | null
+          expectations: string | null
+          first_viewed_at: string | null
+          governing_law: string
+          id: string
+          inclusions: Json
+          last_viewed_at: string | null
+          lodging_provided: boolean
+          meals_provided: boolean
+          org_id: string
+          payment_schedule: string | null
+          pdf_storage_path: string | null
+          per_diem_cents: number
+          project_id: string | null
+          public_token: string
+          recipient_email: string
+          recipient_name: string
+          recipient_phone: string | null
+          reports_to_email: string | null
+          reports_to_name: string | null
+          role_title: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["offer_letter_status"]
+          terms: string | null
+          token_expires_at: string | null
+          travel_provided: boolean
+          updated_at: string
+          view_count: number
+          withdrawn_at: string | null
+          work_location: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_ip?: unknown
+          accepted_signature?: string | null
+          accepted_user_agent?: string | null
+          access_code: string
+          brand_logo_url?: string | null
+          classification?: Database["public"]["Enums"]["offer_letter_classification"]
+          compensation_basis?: string
+          compensation_cents?: number
+          compensation_label?: string | null
+          confidentiality?: boolean
+          created_at?: string
+          created_by?: string | null
+          decline_reason?: string | null
+          declined_at?: string | null
+          department?: string | null
+          employer?: Database["public"]["Enums"]["offer_letter_employer"]
+          engagement_end?: string | null
+          engagement_start?: string | null
+          expectations?: string | null
+          first_viewed_at?: string | null
+          governing_law?: string
+          id?: string
+          inclusions?: Json
+          last_viewed_at?: string | null
+          lodging_provided?: boolean
+          meals_provided?: boolean
+          org_id: string
+          payment_schedule?: string | null
+          pdf_storage_path?: string | null
+          per_diem_cents?: number
+          project_id?: string | null
+          public_token?: string
+          recipient_email: string
+          recipient_name: string
+          recipient_phone?: string | null
+          reports_to_email?: string | null
+          reports_to_name?: string | null
+          role_title: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["offer_letter_status"]
+          terms?: string | null
+          token_expires_at?: string | null
+          travel_provided?: boolean
+          updated_at?: string
+          view_count?: number
+          withdrawn_at?: string | null
+          work_location?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_ip?: unknown
+          accepted_signature?: string | null
+          accepted_user_agent?: string | null
+          access_code?: string
+          brand_logo_url?: string | null
+          classification?: Database["public"]["Enums"]["offer_letter_classification"]
+          compensation_basis?: string
+          compensation_cents?: number
+          compensation_label?: string | null
+          confidentiality?: boolean
+          created_at?: string
+          created_by?: string | null
+          decline_reason?: string | null
+          declined_at?: string | null
+          department?: string | null
+          employer?: Database["public"]["Enums"]["offer_letter_employer"]
+          engagement_end?: string | null
+          engagement_start?: string | null
+          expectations?: string | null
+          first_viewed_at?: string | null
+          governing_law?: string
+          id?: string
+          inclusions?: Json
+          last_viewed_at?: string | null
+          lodging_provided?: boolean
+          meals_provided?: boolean
+          org_id?: string
+          payment_schedule?: string | null
+          pdf_storage_path?: string | null
+          per_diem_cents?: number
+          project_id?: string | null
+          public_token?: string
+          recipient_email?: string
+          recipient_name?: string
+          recipient_phone?: string | null
+          reports_to_email?: string | null
+          reports_to_name?: string | null
+          role_title?: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["offer_letter_status"]
+          terms?: string | null
+          token_expires_at?: string | null
+          travel_provided?: boolean
+          updated_at?: string
+          view_count?: number
+          withdrawn_at?: string | null
+          work_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offer_letters_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offer_letters_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offer_letters_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       org_domains: {
         Row: {
           created_at: string
@@ -3306,6 +3684,66 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      playbooks: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          kind: string
+          org_id: string
+          owner_id: string | null
+          slug: string
+          status: string
+          summary: string | null
+          title: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          id?: string
+          kind?: string
+          org_id: string
+          owner_id?: string | null
+          slug: string
+          status?: string
+          summary?: string | null
+          title: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          kind?: string
+          org_id?: string
+          owner_id?: string | null
+          slug?: string
+          status?: string
+          summary?: string | null
+          title?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playbooks_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playbooks_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       po_line_items: {
         Row: {
@@ -5462,6 +5900,72 @@ export type Database = {
           },
         ]
       }
+      threats: {
+        Row: {
+          active: boolean
+          classification: string
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          likelihood: string
+          org_id: string
+          owner_id: string | null
+          severity: string
+          status: string
+          title: string
+          treatment: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          classification?: string
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          likelihood: string
+          org_id: string
+          owner_id?: string | null
+          severity: string
+          status?: string
+          title: string
+          treatment?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          classification?: string
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          likelihood?: string
+          org_id?: string
+          owner_id?: string | null
+          severity?: string
+          status?: string
+          title?: string
+          treatment?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "threats_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "threats_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ticket_scans: {
         Row: {
           id: string
@@ -6426,6 +6930,71 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_offer_letter: {
+        Args: {
+          p_code: string
+          p_ip: unknown
+          p_signature: string
+          p_token: string
+          p_user_agent: string
+        }
+        Returns: {
+          accepted_at: string | null
+          accepted_ip: unknown
+          accepted_signature: string | null
+          accepted_user_agent: string | null
+          access_code: string
+          brand_logo_url: string | null
+          classification: Database["public"]["Enums"]["offer_letter_classification"]
+          compensation_basis: string
+          compensation_cents: number
+          compensation_label: string | null
+          confidentiality: boolean
+          created_at: string
+          created_by: string | null
+          decline_reason: string | null
+          declined_at: string | null
+          department: string | null
+          employer: Database["public"]["Enums"]["offer_letter_employer"]
+          engagement_end: string | null
+          engagement_start: string | null
+          expectations: string | null
+          first_viewed_at: string | null
+          governing_law: string
+          id: string
+          inclusions: Json
+          last_viewed_at: string | null
+          lodging_provided: boolean
+          meals_provided: boolean
+          org_id: string
+          payment_schedule: string | null
+          pdf_storage_path: string | null
+          per_diem_cents: number
+          project_id: string | null
+          public_token: string
+          recipient_email: string
+          recipient_name: string
+          recipient_phone: string | null
+          reports_to_email: string | null
+          reports_to_name: string | null
+          role_title: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["offer_letter_status"]
+          terms: string | null
+          token_expires_at: string | null
+          travel_provided: boolean
+          updated_at: string
+          view_count: number
+          withdrawn_at: string | null
+          work_location: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "offer_letters"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       auth_org_ids: { Args: never; Returns: string[] }
       auth_user_email: { Args: never; Returns: string }
       claim_jobs: {
@@ -6455,6 +7024,65 @@ export type Database = {
         }
       }
       current_request_id: { Args: never; Returns: string }
+      decline_offer_letter: {
+        Args: { p_code: string; p_reason: string; p_token: string }
+        Returns: {
+          accepted_at: string | null
+          accepted_ip: unknown
+          accepted_signature: string | null
+          accepted_user_agent: string | null
+          access_code: string
+          brand_logo_url: string | null
+          classification: Database["public"]["Enums"]["offer_letter_classification"]
+          compensation_basis: string
+          compensation_cents: number
+          compensation_label: string | null
+          confidentiality: boolean
+          created_at: string
+          created_by: string | null
+          decline_reason: string | null
+          declined_at: string | null
+          department: string | null
+          employer: Database["public"]["Enums"]["offer_letter_employer"]
+          engagement_end: string | null
+          engagement_start: string | null
+          expectations: string | null
+          first_viewed_at: string | null
+          governing_law: string
+          id: string
+          inclusions: Json
+          last_viewed_at: string | null
+          lodging_provided: boolean
+          meals_provided: boolean
+          org_id: string
+          payment_schedule: string | null
+          pdf_storage_path: string | null
+          per_diem_cents: number
+          project_id: string | null
+          public_token: string
+          recipient_email: string
+          recipient_name: string
+          recipient_phone: string | null
+          reports_to_email: string | null
+          reports_to_name: string | null
+          role_title: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["offer_letter_status"]
+          terms: string | null
+          token_expires_at: string | null
+          travel_provided: boolean
+          updated_at: string
+          view_count: number
+          withdrawn_at: string | null
+          work_location: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "offer_letters"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       emit_notification: {
         Args: {
           p_body?: string
@@ -6467,6 +7095,70 @@ export type Database = {
         }
         Returns: string
       }
+      generate_offer_access_code: { Args: never; Returns: string }
+      get_offer_letter_by_token: {
+        Args: { p_code: string; p_token: string }
+        Returns: {
+          accepted_at: string | null
+          accepted_ip: unknown
+          accepted_signature: string | null
+          accepted_user_agent: string | null
+          access_code: string
+          brand_logo_url: string | null
+          classification: Database["public"]["Enums"]["offer_letter_classification"]
+          compensation_basis: string
+          compensation_cents: number
+          compensation_label: string | null
+          confidentiality: boolean
+          created_at: string
+          created_by: string | null
+          decline_reason: string | null
+          declined_at: string | null
+          department: string | null
+          employer: Database["public"]["Enums"]["offer_letter_employer"]
+          engagement_end: string | null
+          engagement_start: string | null
+          expectations: string | null
+          first_viewed_at: string | null
+          governing_law: string
+          id: string
+          inclusions: Json
+          last_viewed_at: string | null
+          lodging_provided: boolean
+          meals_provided: boolean
+          org_id: string
+          payment_schedule: string | null
+          pdf_storage_path: string | null
+          per_diem_cents: number
+          project_id: string | null
+          public_token: string
+          recipient_email: string
+          recipient_name: string
+          recipient_phone: string | null
+          reports_to_email: string | null
+          reports_to_name: string | null
+          role_title: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["offer_letter_status"]
+          terms: string | null
+          token_expires_at: string | null
+          travel_provided: boolean
+          updated_at: string
+          view_count: number
+          withdrawn_at: string | null
+          work_location: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "offer_letters"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      get_offer_letter_project_name: {
+        Args: { p_code: string; p_token: string }
+        Returns: string
+      }
       has_org_role: {
         Args: { required: string[]; target_org: string }
         Returns: boolean
@@ -6475,22 +7167,30 @@ export type Database = {
       log_proposal_activity: {
         Args: {
           p_actor_id: string
-          p_actor_label: string
+          p_actor_label?: string
           p_kind: string
           p_meta?: Json
           p_org_id: string
           p_proposal_id: string
-          p_summary: string
-          p_target_id: string
-          p_target_kind: string
+          p_summary?: string
+          p_target_id?: string
+          p_target_kind?: string
         }
         Returns: string
       }
       proposal_org_id: { Args: { p_id: string }; Returns: string }
       reclaim_stuck_jobs: { Args: never; Returns: number }
+      record_offer_letter_view: {
+        Args: { p_code: string; p_token: string }
+        Returns: undefined
+      }
       seed_cornbread_abbey_road: {
         Args: { p_org_slug?: string }
         Returns: string
+      }
+      seed_salvage_city_offer_letters: {
+        Args: { p_org_slug?: string }
+        Returns: number
       }
     }
     Enums: {
@@ -6585,6 +7285,16 @@ export type Database = {
         | "proposal"
         | "won"
         | "lost"
+      offer_letter_classification: "w2" | "1099" | "agency" | "intern"
+      offer_letter_employer: "ghxstship" | "five_senses" | "joint"
+      offer_letter_status:
+        | "draft"
+        | "sent"
+        | "viewed"
+        | "accepted"
+        | "declined"
+        | "withdrawn"
+        | "expired"
       platform_role:
         | "developer"
         | "owner"
@@ -6870,6 +7580,17 @@ export const Constants = {
       invoice_status: ["draft", "sent", "paid", "overdue", "voided"],
       job_state: ["pending", "running", "done", "failed", "dead"],
       lead_stage: ["new", "qualified", "contacted", "proposal", "won", "lost"],
+      offer_letter_classification: ["w2", "1099", "agency", "intern"],
+      offer_letter_employer: ["ghxstship", "five_senses", "joint"],
+      offer_letter_status: [
+        "draft",
+        "sent",
+        "viewed",
+        "accepted",
+        "declined",
+        "withdrawn",
+        "expired",
+      ],
       platform_role: [
         "developer",
         "owner",

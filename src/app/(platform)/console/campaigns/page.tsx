@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -46,12 +47,22 @@ export default async function Page() {
         eyebrow="Console"
         title="Campaigns"
         subtitle={`${rows.length} campaign${rows.length === 1 ? "" : "s"} · ${live} live · ${formatMoney(totalSpent)} of ${formatMoney(totalBudget)} spent`}
+        action={
+          <Button href="/console/campaigns/new" size="sm">
+            + New campaign
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<Campaign>
           rows={rows}
           emptyLabel="No campaigns"
           emptyDescription="Marketing + comms campaigns live here. Author one per launch, ticket window, or stakeholder push — channel + kind drive segmentation."
+          emptyAction={
+            <Button href="/console/campaigns/new" size="sm">
+              + New campaign
+            </Button>
+          }
           columns={[
             { key: "name", header: "Name", render: (r) => r.name },
             { key: "channel", header: "Channel", render: (r) => <Badge variant="muted">{r.channel}</Badge> },

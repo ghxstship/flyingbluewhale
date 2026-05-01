@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -47,6 +48,11 @@ export default async function Page() {
         eyebrow="Safety"
         title="Playbooks"
         subtitle={`${rows.length} playbook${rows.length === 1 ? "" : "s"} · ${published} published`}
+        action={
+          <Button href="/console/safety/playbooks/new" size="sm">
+            + New playbook
+          </Button>
+        }
       />
       <div className="page-content space-y-5">
         {kindEntries.length > 0 && (
@@ -67,6 +73,11 @@ export default async function Page() {
           rows={rows}
           emptyLabel="No playbooks authored"
           emptyDescription="ConOps playbooks render in the Guide layout. Author one per scenario — crisis comms, evacuation, weather hold, dignitary visit."
+          emptyAction={
+            <Button href="/console/safety/playbooks/new" size="sm">
+              + New playbook
+            </Button>
+          }
           columns={[
             { key: "title", header: "Title", render: (r) => r.title },
             { key: "slug", header: "Slug", render: (r) => <span className="font-mono text-xs">{r.slug}</span> },

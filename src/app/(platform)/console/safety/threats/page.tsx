@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -49,12 +50,22 @@ export default async function Page() {
         eyebrow="Safety"
         title="Threat register"
         subtitle={`${rows.length} entr${rows.length === 1 ? "y" : "ies"} · ${active} active · ${critical} critical`}
+        action={
+          <Button href="/console/safety/threats/new" size="sm">
+            + New threat
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<Threat>
           rows={rows}
           emptyLabel="No threats logged"
           emptyDescription="Intel + threat assessments live here. Each entry carries a severity, likelihood, treatment, and classification level so distribution can be scoped."
+          emptyAction={
+            <Button href="/console/safety/threats/new" size="sm">
+              + New threat
+            </Button>
+          }
           columns={[
             { key: "code", header: "Code", render: (r) => <span className="font-mono text-xs">{r.code}</span> },
             { key: "title", header: "Title", render: (r) => r.title },

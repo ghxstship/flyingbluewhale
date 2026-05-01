@@ -16,16 +16,28 @@ export function ShareLinkPanel({ proposalId }: { proposalId: string }) {
         return;
       }
       if (res?.ok) {
-        try { await navigator.clipboard.writeText(`${window.location.origin}${res.ok.url}`); } catch {}
+        try {
+          await navigator.clipboard.writeText(`${window.location.origin}${res.ok.url}`);
+        } catch {
+          // Clipboard write can fail if the page lost focus or the browser
+          // blocked the API. Best-effort copy; the toast still confirms
+          // the link was created server-side.
+        }
         toast.success("Share link copied to clipboard");
       }
     });
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Button size="sm" onClick={() => generate("client")} disabled={pending}>+ Client link</Button>
-      <Button size="sm" variant="secondary" onClick={() => generate("internal")} disabled={pending}>+ Internal review link</Button>
-      <Button size="sm" variant="ghost" onClick={() => generate(null)} disabled={pending}>+ Generic link</Button>
+      <Button size="sm" onClick={() => generate("client")} disabled={pending}>
+        + Client link
+      </Button>
+      <Button size="sm" variant="secondary" onClick={() => generate("internal")} disabled={pending}>
+        + Internal review link
+      </Button>
+      <Button size="sm" variant="ghost" onClick={() => generate(null)} disabled={pending}>
+        + Generic link
+      </Button>
     </div>
   );
 }

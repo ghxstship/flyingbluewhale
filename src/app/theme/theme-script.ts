@@ -20,7 +20,8 @@ export const themeScript = `
     var c = document.cookie.match(/(?:^|;\\s*)${THEME_COOKIE_NAME}=([^;]+)/);
     var fromCookie = c ? decodeURIComponent(c[1]) : null;
     var stored = null;
-    try { stored = localStorage.getItem('${THEME_STORAGE_KEY}'); } catch (e) {}
+    // localStorage throws in private browsing; ignore and fall back to system preference.
+    try { stored = localStorage.getItem('${THEME_STORAGE_KEY}'); } catch (_) { /* private mode */ }
     var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     var picked = (fromCookie && valid.indexOf(fromCookie) > -1) ? fromCookie
                : (stored && valid.indexOf(stored) > -1) ? stored
@@ -31,7 +32,7 @@ export const themeScript = `
     var mc = document.cookie.match(/(?:^|;\\s*)${MODE_COOKIE_NAME}=([^;]+)/);
     var modeFromCookie = mc ? decodeURIComponent(mc[1]) : null;
     var modeStored = null;
-    try { modeStored = localStorage.getItem('${MODE_STORAGE_KEY}'); } catch (e) {}
+    try { modeStored = localStorage.getItem('${MODE_STORAGE_KEY}'); } catch (_) { /* private mode */ }
     var rawMode = (modeFromCookie && validModes.indexOf(modeFromCookie) > -1) ? modeFromCookie
                 : (modeStored && validModes.indexOf(modeStored) > -1) ? modeStored
                 : 'system';

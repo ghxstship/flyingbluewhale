@@ -4,10 +4,14 @@ import { ModuleHeader } from "@/components/Shell";
 const TILES = [
   { href: "/console/settings/organization", label: "Organization", description: "Name, tier, member management" },
   { href: "/console/settings/billing", label: "Billing", description: "Subscription, payment methods, invoices" },
-  { href: "/console/settings/integrations", label: "Integrations", description: "Stripe, Slack, Google, ClickUp, more" },
+  {
+    href: "/console/settings/integrations",
+    label: "Integrations",
+    description: "Stripe, Slack, Google, ClickUp, more",
+  },
   { href: "/console/settings/api", label: "API keys", description: "Programmatic access + rate limits" },
   { href: "/console/settings/webhooks", label: "Webhooks", description: "Outgoing event notifications" },
-  { href: "/console/settings/audit", label: "Audit log", description: "Every mutation, queryable" },
+  { href: "/console/settings/audit", label: "Audit Log", description: "Every mutation, queryable" },
   { href: "/console/settings/compliance", label: "Compliance", description: "Retention, DPA, data export" },
   { href: "/console/settings/branding", label: "Branding", description: "Portal + email appearance" },
   { href: "/console/settings/domains", label: "Domains", description: "Custom domains for portals" },

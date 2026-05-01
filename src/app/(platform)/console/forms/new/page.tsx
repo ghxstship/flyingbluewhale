@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Forms" title="New Form" />
       <div className="page-content max-w-xl">
-        <FormShell action={createFormDefAction} cancelHref="/console/forms" submitLabel="Create form">
+        <FormShell action={createFormDefAction} cancelHref="/console/forms" submitLabel="Create Form">
           <Input
             label="Slug"
             name="slug"

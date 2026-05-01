@@ -30,9 +30,9 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
         title={`Edit ${((row as Record<string, unknown>)["requester_email"] as string | undefined) ?? "DSAR request"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/legal/privacy/dsar/${p.requestId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/legal/privacy/dsar/${p.requestId}`} submitLabel="Save Changes">
           <Input
-            label="Requester email"
+            label="Requester Email"
             name="requester_email"
             type="email"
             defaultValue={row.requester_email ?? ""}
@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
               <option value="rejected">rejected</option>
             </select>
           </label>
-          <Input label="Due by" name="due_by" type="date" defaultValue={dateOnly(row.due_by)} />
+          <Input label="Due By" name="due_by" type="date" defaultValue={dateOnly(row.due_by)} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Notes</span>
             <textarea name="notes" defaultValue={row.notes ?? ""} rows={5} className="input-base focus-ring w-full" />

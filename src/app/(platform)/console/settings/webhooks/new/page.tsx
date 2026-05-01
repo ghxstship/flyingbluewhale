@@ -6,7 +6,7 @@ export default function Page() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="New webhook endpoint"
+        title="New Webhook Endpoint"
         subtitle="Register a URL to receive HMAC-signed event deliveries."
         breadcrumbs={[
           { label: "Settings" },

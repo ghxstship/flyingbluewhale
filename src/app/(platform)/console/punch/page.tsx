@@ -75,7 +75,7 @@ export default async function Page() {
         subtitle="Show-ready checklist. Pinnable to site plans, gates doors-open when items remain open."
         action={
           <Button href="/console/punch/new" size="sm">
-            + New punch item
+            + New Item
           </Button>
         }
       />
@@ -92,7 +92,7 @@ export default async function Page() {
           emptyDescription="Punch items capture show-ready gaps. Add one per gap; gate the doors-open milestone behind closure."
           emptyAction={
             <Button href="/console/punch/new" size="sm">
-              + New punch item
+              + New Item
             </Button>
           }
           columns={[

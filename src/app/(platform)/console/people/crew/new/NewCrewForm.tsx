@@ -5,7 +5,7 @@ import { createCrewAction } from "../actions";
 
 export function NewCrewForm() {
   return (
-    <FormShell action={createCrewAction} cancelHref="/console/people/crew" submitLabel="Add crew">
+    <FormShell action={createCrewAction} cancelHref="/console/people/crew" submitLabel="Add Crew">
       <Input label="Name" name="name" required />
       <Input label="Role" name="role" placeholder="Gaffer, rigger, audio engineer…" />
       <div className="grid gap-4 sm:grid-cols-2">

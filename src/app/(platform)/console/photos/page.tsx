@@ -56,7 +56,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
           <MetricCard label="Photos" value={photos.length.toLocaleString()} accent />
           <MetricCard label="Albums" value={albums.length.toLocaleString()} />
           <MetricCard
-            label="Projects covered"
+            label="Projects Covered"
             value={String(new Set(photos.map((p) => p.project?.name).filter(Boolean)).size)}
           />
         </div>

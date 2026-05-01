@@ -267,7 +267,7 @@ export default function PricingPage() {
             >
               <div className="flex items-center justify-between">
                 <div className="text-sm font-semibold">{t.tier}</div>
-                {t.highlight && <Badge variant="brand">Most popular</Badge>}
+                {t.highlight && <Badge variant="brand">Most Popular</Badge>}
               </div>
               <div className="mt-4">
                 <span className="text-3xl font-semibold tracking-tight">{t.price}</span>

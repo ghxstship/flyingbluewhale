@@ -16,20 +16,11 @@ const ROLES = [
 
 export function InviteForm() {
   return (
-    <FormShell
-      action={createInviteAction}
-      cancelHref="/console/people/invites"
-      submitLabel="Send invite"
-    >
+    <FormShell action={createInviteAction} cancelHref="/console/people/invites" submitLabel="Send Invite">
       <Input label="Email" name="email" type="email" required autoComplete="off" />
       <label className="block text-xs font-medium">
         <span className="mb-1 block">Role</span>
-        <select
-          name="role"
-          defaultValue="collaborator"
-          className="input-base focus-ring w-full"
-          required
-        >
+        <select name="role" defaultValue="collaborator" className="input-base focus-ring w-full" required>
           {ROLES.map((r) => (
             <option key={r.value} value={r.value}>
               {r.label}

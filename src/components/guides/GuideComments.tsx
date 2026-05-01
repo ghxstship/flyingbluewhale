@@ -72,14 +72,14 @@ export function GuideComments({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name (optional)"
-          aria-label="Your name"
+          aria-label="Your Name"
           className="input-base text-sm"
         />
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder="Add a comment or question…"
-          aria-label="Comment body"
+          aria-label="Comment Body"
           rows={3}
           required
           className="input-base w-full resize-none text-sm"
@@ -105,7 +105,7 @@ export function GuideComments({
                   {formatRelative(c.created_at)}
                 </time>
               </div>
-              <p className="mt-1 whitespace-pre-wrap text-sm">{c.body}</p>
+              <p className="mt-1 text-sm whitespace-pre-wrap">{c.body}</p>
             </li>
           ))
         )}

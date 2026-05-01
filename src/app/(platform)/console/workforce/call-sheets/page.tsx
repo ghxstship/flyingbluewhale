@@ -33,7 +33,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Call sheets" />
+        <ModuleHeader title="Call Sheets" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -78,7 +78,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
     <>
       <ModuleHeader
         eyebrow="Workforce"
-        title="Call sheets"
+        title="Call Sheets"
         subtitle={`${members.length} member${members.length === 1 ? "" : "s"} on shift · ${dateStr}`}
       />
       <div className="page-content space-y-4">

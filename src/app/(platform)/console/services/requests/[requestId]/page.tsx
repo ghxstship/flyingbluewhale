@@ -35,11 +35,11 @@ const NEXT_STATES: Record<
 > = {
   open: [
     { value: "acknowledged", label: "Acknowledge" },
-    { value: "in_progress", label: "Start work" },
+    { value: "in_progress", label: "Start Work" },
     { value: "cancelled", label: "Cancel", variant: "danger" },
   ],
   acknowledged: [
-    { value: "in_progress", label: "Start work" },
+    { value: "in_progress", label: "Start Work" },
     { value: "resolved", label: "Resolve" },
     { value: "cancelled", label: "Cancel", variant: "danger" },
   ],
@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Service request" />
+        <ModuleHeader title="Service Request" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>

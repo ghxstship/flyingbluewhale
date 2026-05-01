@@ -68,14 +68,14 @@ export default async function Page() {
         subtitle={`${rows.length} logs in last 30 days · ${drafts} draft · ${submitted} submitted · ${approved} approved`}
         action={
           <Button href="/console/operations/daily-log/new" size="sm">
-            + New entry
+            + New Log
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Logs · 30d" value={rows.length.toLocaleString()} accent />
-          <MetricCard label="Pending review" value={submitted.toLocaleString()} />
+          <MetricCard label="Pending Review" value={submitted.toLocaleString()} />
           <MetricCard label="Approved" value={approved.toLocaleString()} />
         </div>
 
@@ -86,7 +86,7 @@ export default async function Page() {
           emptyDescription="Daily logs capture weather, manpower, equipment, deliveries, and notes per project per day."
           emptyAction={
             <Button href="/console/operations/daily-log/new" size="sm">
-              + New entry
+              + New Log
             </Button>
           }
           columns={[

@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/programs/readiness/new" size="sm">
-            + New exercise
+            + New Exercise
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyDescription="Tabletop drills, full-scale rehearsals, and after-action reviews live here."
           emptyAction={
             <Button href="/console/programs/readiness/new" size="sm">
-              + New exercise
+              + New Exercise
             </Button>
           }
           columns={[

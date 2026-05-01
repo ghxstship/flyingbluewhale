@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: Promise<{ locationId: s
     <>
       <ModuleHeader eyebrow="Location" title={`Edit ${row.name}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/locations/${p.locationId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/locations/${p.locationId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <Input label="Address" name="address" defaultValue={row.address ?? ""} maxLength={300} />
           <Input label="City" name="city" defaultValue={row.city ?? ""} maxLength={120} />

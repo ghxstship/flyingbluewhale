@@ -82,7 +82,7 @@ export default async function MobileIncidentPage() {
           <li>
             <EmptyState
               size="compact"
-              title="All quiet"
+              title="All Quiet"
               description="Incidents reported here are routed to admin and EHS lead in real time."
             />
           </li>

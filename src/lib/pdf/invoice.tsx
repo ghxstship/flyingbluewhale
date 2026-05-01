@@ -2,15 +2,7 @@ import "server-only";
 
 import React from "react";
 import { Text, View } from "@react-pdf/renderer";
-import {
-  BrandedPage,
-  CoverPage,
-  KeyValue,
-  PdfDocument,
-  PdfTable,
-  SectionHeading,
-  styles,
-} from "./layout";
+import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
 
 /**
@@ -60,12 +52,15 @@ function money(cents: number, currency: string): string {
 
 export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _paymentIntentUrl }: InvoicePdfInput) {
   const total = invoice.amount_cents;
-  const subtotal = lineItems.reduce((sum, li) => sum + Math.round(Number(li.quantity) * Number(li.unit_price_cents)), 0);
+  const subtotal = lineItems.reduce(
+    (sum, li) => sum + Math.round(Number(li.quantity) * Number(li.unit_price_cents)),
+    0,
+  );
   // Anything left over after summing the line items is taxes/fees; surface as a
   // single line rather than misreporting `total`.
   const adjustments = total - subtotal;
 
-  const status = invoice.paid_at ? "PAID" : invoice.status?.toUpperCase() ?? "ISSUED";
+  const status = invoice.paid_at ? "PAID" : (invoice.status?.toUpperCase() ?? "ISSUED");
   const statusEyebrow = `Invoice · ${status}`;
 
   return (
@@ -84,13 +79,13 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
       />
 
       <BrandedPage brand={brand} pageLabel={`Invoice ${invoice.number}`}>
-        <SectionHeading eyebrow="Bill to" title={brand.clientName ?? "Client"} />
+        <SectionHeading eyebrow="Bill To" title={brand.clientName ?? "Client"} />
         <KeyValue label="Invoice #" value={invoice.number} />
         <KeyValue label="Issued" value={invoice.issued_at ?? "—"} />
         <KeyValue label="Due" value={invoice.due_at ?? "—"} />
         <KeyValue label="Currency" value={invoice.currency} />
 
-        <SectionHeading title="Line items" />
+        <SectionHeading title="Line Items" />
         <PdfTable
           accentColor={brand.producerAccent}
           columns={[
@@ -109,13 +104,9 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
 
         <View style={{ marginTop: 12, alignItems: "flex-end" }}>
           <KeyValue label="Subtotal" value={money(subtotal, invoice.currency)} />
-          {adjustments !== 0 ? (
-            <KeyValue label="Taxes / fees" value={money(adjustments, invoice.currency)} />
-          ) : null}
+          {adjustments !== 0 ? <KeyValue label="Taxes / fees" value={money(adjustments, invoice.currency)} /> : null}
           <View style={{ marginTop: 8, borderTopWidth: 1, borderTopColor: brand.producerAccent, paddingTop: 4 }}>
-            <Text style={{ fontSize: 14, fontWeight: 700 }}>
-              {money(total, invoice.currency)}
-            </Text>
+            <Text style={{ fontSize: 14, fontWeight: 700 }}>{money(total, invoice.currency)}</Text>
           </View>
         </View>
 

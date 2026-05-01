@@ -34,7 +34,14 @@ export default async function DispatchPage() {
       .gte("ends_at", nowIso)
       .lte("starts_at", in48h),
   ]);
-  const eventRows = (events ?? []) as Array<{ id: string; name: string; status: string; starts_at: string; ends_at: string; project_id: string | null }>;
+  const eventRows = (events ?? []) as Array<{
+    id: string;
+    name: string;
+    status: string;
+    starts_at: string;
+    ends_at: string;
+    project_id: string | null;
+  }>;
   const rentalCount = rentals?.length ?? 0;
   return (
     <>
@@ -46,7 +53,7 @@ export default async function DispatchPage() {
       <div className="page-content max-w-5xl">
         {eventRows.length === 0 ? (
           <EmptyState
-            title="Nothing dispatches in the next 48 hours"
+            title="Nothing Dispatches in the Next 48 Hours"
             description="Events in your window appear here as they're scheduled. Active rentals across the same window are counted alongside."
           />
         ) : (

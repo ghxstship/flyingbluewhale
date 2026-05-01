@@ -66,15 +66,15 @@ export default async function Page() {
         subtitle="Vendor-side change orders against existing POs. Adjusts commitment + schedule."
         action={
           <Button href="/console/procurement/po-change-orders/new" size="sm">
-            + New change order
+            + New Change Order
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Pending" value={pending.length.toLocaleString()} accent />
-          <MetricCard label="Pending value" value={formatMoney(totalPending)} />
-          <MetricCard label="Approved value" value={formatMoney(totalApproved)} />
+          <MetricCard label="Pending Value" value={formatMoney(totalPending)} />
+          <MetricCard label="Approved Value" value={formatMoney(totalApproved)} />
         </div>
         <DataTable<Row>
           rows={rows}
@@ -83,7 +83,7 @@ export default async function Page() {
           emptyDescription="When scope or quantity changes mid-job, log the impact here. Tracks cost and schedule deltas per PO."
           emptyAction={
             <Button href="/console/procurement/po-change-orders/new" size="sm">
-              + New change order
+              + New Change Order
             </Button>
           }
           columns={[

@@ -28,7 +28,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Safety"
-        title="Schedule inspection"
+        title="Schedule Inspection"
         subtitle="Pick a template and target. The checklist items will be cloned from the template."
       />
       <div className="page-content max-w-2xl">

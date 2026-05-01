@@ -29,8 +29,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   ]);
   type Item = { id: string; label: string; kind: "task" | "milestone"; date: string | null; status: string };
   const items: Item[] = [
-    ...((tasks ?? []).map((t): Item => ({ id: t.id, label: t.title, kind: "task", date: t.due_at, status: t.status ?? "open" }))),
-    ...((events ?? []).map((e): Item => ({ id: e.id, label: e.name, kind: "milestone", date: e.starts_at, status: e.status ?? "scheduled" }))),
+    ...(tasks ?? []).map(
+      (t): Item => ({ id: t.id, label: t.title, kind: "task", date: t.due_at, status: t.status ?? "open" }),
+    ),
+    ...(events ?? []).map(
+      (e): Item => ({ id: e.id, label: e.name, kind: "milestone", date: e.starts_at, status: e.status ?? "scheduled" }),
+    ),
   ];
   const byQuarter = new Map<string, Item[]>();
   for (const i of items) {
@@ -54,26 +58,33 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       />
       <div className="page-content max-w-5xl space-y-6">
         {items.length === 0 ? (
-          <EmptyState title="Roadmap empty" description="Add tasks with due dates or confirmed events to populate this view." />
-        ) : order.map((q) => (
-          <section key={q} className="surface p-5">
-            <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">{q}</div>
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
-              {(byQuarter.get(q) ?? []).map((i) => (
-                <li key={`${i.kind}-${i.id}`} className="flex items-center justify-between py-2 text-sm">
-                  <span>
-                    <span className="me-2 inline-block rounded bg-[var(--surface-inset)] px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-[var(--text-muted)]">{i.kind}</span>
-                    {i.label}
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <StatusBadge status={i.status} />
-                    <span className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(i.date)}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
+          <EmptyState
+            title="Roadmap Empty"
+            description="Add tasks with due dates or confirmed events to populate this view."
+          />
+        ) : (
+          order.map((q) => (
+            <section key={q} className="surface p-5">
+              <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">{q}</div>
+              <ul className="mt-3 divide-y divide-[var(--border-color)]">
+                {(byQuarter.get(q) ?? []).map((i) => (
+                  <li key={`${i.kind}-${i.id}`} className="flex items-center justify-between py-2 text-sm">
+                    <span>
+                      <span className="me-2 inline-block rounded bg-[var(--surface-inset)] px-1.5 py-0.5 text-[9px] tracking-wider text-[var(--text-muted)] uppercase">
+                        {i.kind}
+                      </span>
+                      {i.label}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <StatusBadge status={i.status} />
+                      <span className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(i.date)}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        )}
       </div>
     </>
   );

@@ -64,7 +64,7 @@ export default async function MobileRosPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Run of show</h1>
+      <h1 className="mt-1 text-2xl font-semibold">Run of Show</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {cues.length === 0
           ? "No cues scheduled today."
@@ -76,7 +76,7 @@ export default async function MobileRosPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No cues today"
+              title="No Cues Today"
               description="Cues authored on the desktop ROS will appear here on the day they're scheduled."
             />
           </li>

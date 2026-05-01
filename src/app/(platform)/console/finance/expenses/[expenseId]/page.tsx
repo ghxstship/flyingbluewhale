@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
               { label: "Amount", value: money(row.amount_cents) },
               { label: "Currency", value: row.currency },
               { label: "Category", value: row.category ?? "—" },
-              { label: "Spent on", value: fmtDate(row.spent_at) },
+              { label: "Spent On", value: fmtDate(row.spent_at) },
               { label: "Receipt", value: row.receipt_path ? "Attached" : "None" },
             ]
           : undefined

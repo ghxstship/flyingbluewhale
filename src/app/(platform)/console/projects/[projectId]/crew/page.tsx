@@ -34,14 +34,28 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       />
       <div className="page-content max-w-5xl">
         {!crew || crew.length === 0 ? (
-          <EmptyState title="No crew in the roster" description="Import crew via CSV from People → Crew or add members individually." />
+          <EmptyState
+            title="No Crew in the Roster"
+            description="Import crew via CSV from People → Crew or add members individually."
+          />
         ) : (
           <table className="data-table w-full text-sm">
-            <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Day rate</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Email</th>
+                <th>Day rate</th>
+              </tr>
+            </thead>
             <tbody>
               {crew.map((c) => (
                 <tr key={c.id}>
-                  <td><Link href={`/console/people/crew/${c.id}`} className="hover:underline">{c.name}</Link></td>
+                  <td>
+                    <Link href={`/console/people/crew/${c.id}`} className="hover:underline">
+                      {c.name}
+                    </Link>
+                  </td>
                   <td>{c.role ?? "—"}</td>
                   <td className="text-[var(--text-muted)]">{c.email ?? "—"}</td>
                   <td className="font-mono text-xs">{money(c.day_rate_cents)}</td>

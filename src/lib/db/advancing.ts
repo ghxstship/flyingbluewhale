@@ -3,24 +3,24 @@ import { createClient } from "@/lib/supabase/server";
 import type { Deliverable, DeliverableType } from "@/lib/supabase/types";
 
 export const TALENT_TYPES: { type: DeliverableType; label: string }[] = [
-  { type: "technical_rider", label: "Technical rider" },
-  { type: "hospitality_rider", label: "Hospitality rider" },
-  { type: "input_list", label: "Input list" },
-  { type: "stage_plot", label: "Stage plot" },
-  { type: "crew_list", label: "Touring crew list" },
-  { type: "guest_list", label: "Guest list" },
+  { type: "technical_rider", label: "Technical Rider" },
+  { type: "hospitality_rider", label: "Hospitality Rider" },
+  { type: "input_list", label: "Input List" },
+  { type: "stage_plot", label: "Stage Plot" },
+  { type: "crew_list", label: "Touring Crew List" },
+  { type: "guest_list", label: "Guest List" },
 ];
 
 export const PRODUCTION_TYPES: { type: DeliverableType; label: string }[] = [
-  { type: "equipment_pull_list", label: "Equipment pull list" },
-  { type: "power_plan", label: "Power plan" },
-  { type: "rigging_plan", label: "Rigging plan" },
-  { type: "site_plan", label: "Site plan" },
-  { type: "build_schedule", label: "Build schedule" },
-  { type: "vendor_package", label: "Vendor package" },
+  { type: "equipment_pull_list", label: "Equipment Pull List" },
+  { type: "power_plan", label: "Power Plan" },
+  { type: "rigging_plan", label: "Rigging Plan" },
+  { type: "site_plan", label: "Site Plan" },
+  { type: "build_schedule", label: "Build Schedule" },
+  { type: "vendor_package", label: "Vendor Package" },
   { type: "safety_compliance", label: "Safety & compliance" },
-  { type: "comms_plan", label: "Comms plan" },
-  { type: "signage_grid", label: "Signage grid" },
+  { type: "comms_plan", label: "Comms Plan" },
+  { type: "signage_grid", label: "Signage Grid" },
 ];
 
 export function labelForType(t: DeliverableType): string {

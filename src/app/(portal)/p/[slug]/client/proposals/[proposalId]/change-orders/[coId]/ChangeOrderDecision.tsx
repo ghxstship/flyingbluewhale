@@ -17,7 +17,7 @@ export function ChangeOrderDecision({ slug, proposalId, coId }: { slug: string; 
       <input type="hidden" name="coId" value={coId} />
       <input type="hidden" name="decision" value={decision} />
       <div className="eyebrow text-xs text-[var(--text-muted)]">Your decision</div>
-      <h3 className="text-base font-semibold">Approve or reject this change order</h3>
+      <h3 className="text-base font-semibold">Approve or Reject This Change Order</h3>
 
       <div className="grid gap-2 md:grid-cols-2">
         <button

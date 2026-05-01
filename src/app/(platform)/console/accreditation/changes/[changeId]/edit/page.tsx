@@ -24,14 +24,14 @@ export default async function Page({ params }: { params: Promise<{ changeId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Accreditation change"
+        eyebrow="Accreditation Change"
         title={`Edit ${((row as Record<string, unknown>)["kind"] as string | undefined) ?? "Accreditation change"}`}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/accreditation/changes/${p.changeId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Kind" name="kind" defaultValue={row.kind ?? ""} required maxLength={80} />
           <label className="flex flex-col gap-1.5">

@@ -14,7 +14,9 @@ export default async function ClientsPage() {
     return (
       <>
         <ModuleHeader title="Clients" />
-        <div className="page-content"><div className="surface p-6 text-sm">Configure Supabase to load clients.</div></div>
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase to load clients.</div>
+        </div>
       </>
     );
   }
@@ -27,7 +29,7 @@ export default async function ClientsPage() {
         eyebrow="Sales"
         title="Clients"
         subtitle={`${rows.length} client${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/clients/new">+ New client</Button>}
+        action={<Button href="/console/clients/new">+ New Client</Button>}
       />
       <div className="page-content">
         <DataTable<Client>

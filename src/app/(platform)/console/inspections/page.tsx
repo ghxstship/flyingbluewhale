@@ -77,7 +77,7 @@ export default async function Page() {
               Templates
             </Button>
             <Button href="/console/inspections/new" size="sm">
-              + New inspection
+              + New Inspection
             </Button>
           </div>
         }

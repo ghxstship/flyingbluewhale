@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Schedule of values</h3>
+          <h3 className="text-sm font-semibold">Schedule of Values</h3>
           <table className="data-table mt-3">
             <thead>
               <tr>

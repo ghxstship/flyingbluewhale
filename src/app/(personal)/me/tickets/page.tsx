@@ -10,7 +10,12 @@ export const dynamic = "force-dynamic";
 
 export default async function MyTicketsPage() {
   if (!hasSupabase) {
-    return <div><h1 className="text-2xl font-semibold">My tickets</h1><p className="mt-2 text-sm text-[var(--text-muted)]">Configure Supabase.</p></div>;
+    return (
+      <div>
+        <h1 className="text-2xl font-semibold">My Tickets</h1>
+        <p className="mt-2 text-sm text-[var(--text-muted)]">Configure Supabase.</p>
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -22,7 +27,7 @@ export default async function MyTicketsPage() {
   const rows = (data ?? []) as Ticket[];
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">My tickets</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">My Tickets</h1>
       <p className="mt-2 text-sm text-[var(--text-muted)]">Tickets issued to {session.email}</p>
       <div className="mt-6">
         <DataTable<Ticket>
@@ -33,7 +38,12 @@ export default async function MyTicketsPage() {
             { key: "tier", header: "Tier", render: (r) => r.tier },
             { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
             { key: "issued", header: "Issued", render: (r) => timeAgo(r.issued_at), className: "font-mono text-xs" },
-            { key: "scanned", header: "Scanned", render: (r) => r.scanned_at ? timeAgo(r.scanned_at) : "—", className: "font-mono text-xs" },
+            {
+              key: "scanned",
+              header: "Scanned",
+              render: (r) => (r.scanned_at ? timeAgo(r.scanned_at) : "—"),
+              className: "font-mono text-xs",
+            },
           ]}
         />
       </div>

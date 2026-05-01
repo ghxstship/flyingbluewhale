@@ -39,7 +39,7 @@ export default async function Page() {
     <>
       <ModuleHeader eyebrow="Participants · Entries" title="New Entry" />
       <div className="page-content max-w-xl">
-        <FormShell action={createEntry} cancelHref="/console/participants/entries" submitLabel="Add entry">
+        <FormShell action={createEntry} cancelHref="/console/participants/entries" submitLabel="Add Entry">
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Delegation</label>
             <select name="delegation_id" className="input-base mt-1.5 w-full" required>

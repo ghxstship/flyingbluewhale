@@ -114,7 +114,7 @@ export default function Home() {
             </div>
             <iframe
               src="/p/mmw26-hialeah/guide"
-              title="Live product preview — MMW26 Hialeah guest guide"
+              title="Live Product Preview — MMW26 Hialeah Guest Guide"
               sandbox=""
               loading="lazy"
               className="h-[640px] w-full bg-[var(--background)]"

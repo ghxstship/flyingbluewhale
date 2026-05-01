@@ -49,7 +49,7 @@ export default async function Page() {
         subtitle={`${rows.length} campaign${rows.length === 1 ? "" : "s"} · ${live} live · ${formatMoney(totalSpent)} of ${formatMoney(totalBudget)} spent`}
         action={
           <Button href="/console/campaigns/new" size="sm">
-            + New campaign
+            + New Campaign
           </Button>
         }
       />
@@ -60,7 +60,7 @@ export default async function Page() {
           emptyDescription="Marketing + comms campaigns live here. Author one per launch, ticket window, or stakeholder push — channel + kind drive segmentation."
           emptyAction={
             <Button href="/console/campaigns/new" size="sm">
-              + New campaign
+              + New Campaign
             </Button>
           }
           columns={[

@@ -41,7 +41,7 @@ export function ResponseForms({
           Review the letter above. When you&apos;re ready, accept with a typed signature or decline with a brief reason.
         </p>
         <div className="flex flex-wrap gap-2">
-          <Button onClick={() => setMode("accept")}>Accept and sign</Button>
+          <Button onClick={() => setMode("accept")}>Accept and Sign</Button>
           <Button variant="secondary" onClick={() => setMode("decline")}>
             Decline
           </Button>
@@ -75,8 +75,8 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
           Cancel
         </Button>
       </div>
-      <FormShell action={action} submitLabel="Sign and accept" className="space-y-4">
-        <FormField name="signature" label="Typed signature (full legal name)" required>
+      <FormShell action={action} submitLabel="Sign and Accept" className="space-y-4">
+        <FormField name="signature" label="Typed Signature (Full Legal Name)" required>
           <TextInput
             name="signature"
             defaultValue={defaultName}
@@ -105,7 +105,7 @@ function DeclineForm({ token, onCancel }: { token: string; onCancel: () => void 
           Cancel
         </Button>
       </div>
-      <FormShell action={action} submitLabel="Decline letter" className="space-y-4">
+      <FormShell action={action} submitLabel="Decline Letter" className="space-y-4">
         <FormField name="reason" label="Reason" required>
           <TextArea name="reason" rows={3} placeholder="e.g. Calendar conflict — already booked May 14–18." />
         </FormField>

@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   if (!project) {
     return (
       <>
-        <ModuleHeader title="Project not found" />
+        <ModuleHeader title="Project Not Found" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Project not found in this workspace.</div>
         </div>
@@ -123,8 +123,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           <MetricCard label="Revenue (paid)" value={formatMoney(revenue, currency)} accent />
           <MetricCard label="Spent (committed)" value={formatMoney(spent, currency)} />
           <MetricCard label="Margin" value={formatMoney(margin, currency)} />
-          <MetricCard label="Outstanding invoiced" value={formatMoney(pipeline, currency)} />
-          <MetricCard label="Expenses committed" value={formatMoney(expensesCommitted, currency)} />
+          <MetricCard label="Outstanding Invoiced" value={formatMoney(pipeline, currency)} />
+          <MetricCard label="Expenses Committed" value={formatMoney(expensesCommitted, currency)} />
           <MetricCard label="POs committed" value={formatMoney(poCommitted, currency)} />
         </div>
         <p className="text-xs text-[var(--text-muted)]">
@@ -136,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         {budgetTotal > 0 && (
           <section className="surface p-5">
             <header className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Budget envelope</h3>
+              <h3 className="text-sm font-semibold">Budget Envelope</h3>
               <Link
                 href={`/console/projects/${projectId}/budget`}
                 className="text-xs text-[var(--org-primary)] hover:underline"
@@ -194,7 +194,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         <section>
           <header className="mb-2 flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Purchase orders</h3>
+            <h3 className="text-sm font-semibold">Purchase Orders</h3>
             <Link
               href="/console/procurement/purchase-orders"
               className="text-xs text-[var(--org-primary)] hover:underline"

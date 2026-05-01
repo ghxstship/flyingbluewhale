@@ -157,7 +157,7 @@ export default function ContactPage() {
             <Button href="/signup" variant="secondary">
               Book passage instead
             </Button>
-            <Button type="submit">Send to the studio</Button>
+            <Button type="submit">Send to the Studio</Button>
           </div>
         </form>
       </section>

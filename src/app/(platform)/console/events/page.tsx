@@ -28,7 +28,7 @@ export default async function EventsPage() {
         eyebrow="Work"
         title="Events"
         subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/events/new">+ New event</Button>}
+        action={<Button href="/console/events/new">+ New Event</Button>}
       />
       <div className="page-content">
         <DataTable<EventRow>
@@ -38,7 +38,7 @@ export default async function EventsPage() {
           emptyDescription="Events anchor schedules, set times, and venue handover. Status flows draft → planned → live → wrapped."
           emptyAction={
             <Button href="/console/events/new" size="sm">
-              + New event
+              + New Event
             </Button>
           }
           columns={[

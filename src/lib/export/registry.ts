@@ -73,7 +73,7 @@ export const EXPORT_REGISTRY: Record<ExportTable, ExportTableMeta> = {
     orgScoped: true,
   },
   invoice_line_items: {
-    label: "Invoice line items",
+    label: "Invoice Line Items",
     csvColumns: [
       { key: "id", header: "id" },
       { key: "invoice_id", header: "invoice_id" },
@@ -109,7 +109,7 @@ export const EXPORT_REGISTRY: Record<ExportTable, ExportTableMeta> = {
     orgScoped: true,
   },
   crew_members: {
-    label: "Crew roster",
+    label: "Crew Roster",
     csvColumns: [
       { key: "id", header: "id" },
       { key: "name", header: "name" },
@@ -131,7 +131,7 @@ export const EXPORT_REGISTRY: Record<ExportTable, ExportTableMeta> = {
     orgScoped: true,
   },
   audit_log: {
-    label: "Audit log",
+    label: "Audit Log",
     csvColumns: [
       { key: "id", header: "id" },
       { key: "at", header: "at" },

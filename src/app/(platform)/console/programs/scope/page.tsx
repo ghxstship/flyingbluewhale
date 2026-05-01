@@ -30,7 +30,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Program scope" />
+        <ModuleHeader eyebrow="Programs" title="Program Scope" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -69,11 +69,11 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Programs"
-        title="Program scope"
+        title="Program Scope"
         subtitle={`${disciplines.length} discipline${disciplines.length === 1 ? "" : "s"} · ${totalEvents} event${totalEvents === 1 ? "" : "s"} · ${entries.length} entr${entries.length === 1 ? "y" : "ies"}`}
         action={
           <Button href="/console/participants/entries/new" size="sm">
-            + New entry
+            + New Entry
           </Button>
         }
       />
@@ -86,17 +86,17 @@ export default async function Page() {
 
         {disciplines.length === 0 ? (
           <EmptyState
-            title="No participant entries yet"
+            title="No Participant Entries Yet"
             description="Program scope is derived from delegation_entries. Author entries via Console → Participants → Entries."
             action={
               <Link href="/console/participants/entries/new" className="btn btn-primary btn-sm">
-                + New entry
+                + New Entry
               </Link>
             }
           />
         ) : (
           <section>
-            <h3 className="text-sm font-semibold">By discipline</h3>
+            <h3 className="text-sm font-semibold">By Discipline</h3>
             <div className="mt-3 space-y-3">
               {disciplines.map(([discipline, evs]) => (
                 <div key={discipline} className="surface p-4">

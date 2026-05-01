@@ -10,7 +10,12 @@ export const dynamic = "force-dynamic";
 
 export default async function OrgsPage() {
   if (!hasSupabase) {
-    return <div><h1 className="text-2xl font-semibold">Organizations</h1><p className="mt-2 text-sm text-[var(--text-muted)]">Configure Supabase.</p></div>;
+    return (
+      <div>
+        <h1 className="text-2xl font-semibold">Organizations</h1>
+        <p className="mt-2 text-sm text-[var(--text-muted)]">Configure Supabase.</p>
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -26,25 +31,25 @@ export default async function OrgsPage() {
       {rows.length === 0 ? (
         <div className="mt-6">
           <EmptyState
-            title="No memberships yet"
+            title="No Memberships Yet"
             description="Create an organization from the console to get started."
           />
         </div>
       ) : (
-      <div className="surface mt-6 divide-y divide-[var(--border-color)]">
-        {rows.map((r) => (
-          <div key={r.id} className="flex items-center justify-between p-5">
-            <div>
-              <div className="text-sm font-semibold">{r.orgs?.name ?? "—"}</div>
-              <div className="font-mono text-xs text-[var(--text-muted)]">{r.orgs?.slug}</div>
+        <div className="surface mt-6 divide-y divide-[var(--border-color)]">
+          {rows.map((r) => (
+            <div key={r.id} className="flex items-center justify-between p-5">
+              <div>
+                <div className="text-sm font-semibold">{r.orgs?.name ?? "—"}</div>
+                <div className="font-mono text-xs text-[var(--text-muted)]">{r.orgs?.slug}</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <Badge variant="cyan">{r.orgs?.tier}</Badge>
+                <Badge variant="brand">{r.role}</Badge>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <Badge variant="cyan">{r.orgs?.tier}</Badge>
-              <Badge variant="brand">{r.role}</Badge>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
       )}
     </div>
   );

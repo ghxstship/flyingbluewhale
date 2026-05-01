@@ -29,14 +29,14 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
   return (
     <>
       <ModuleHeader
-        eyebrow="Sponsor entitlement"
+        eyebrow="Sponsor Entitlement"
         title={`Edit ${((row as Record<string, unknown>)["title"] as string | undefined) ?? "Sponsor entitlement"}`}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/commercial/sponsors/${p.sponsorId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Title" name="title" defaultValue={row.title ?? ""} required maxLength={200} />
           <Input
@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
               <option value="missed">missed</option>
             </select>
           </label>
-          <Input label="Due by" name="due_by" type="date" defaultValue={dateOnly(row.due_by)} />
+          <Input label="Due By" name="due_by" type="date" defaultValue={dateOnly(row.due_by)} />
         </FormShell>
       </div>
     </>

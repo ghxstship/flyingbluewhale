@@ -70,7 +70,7 @@ export default async function Page() {
         subtitle={`${meetings.length} meeting${meetings.length === 1 ? "" : "s"}${upcoming ? ` · ${upcoming} upcoming` : ""}`}
         action={
           <Button href="/console/events/new" size="sm">
-            + New event
+            + New Event
           </Button>
         }
       />
@@ -82,7 +82,7 @@ export default async function Page() {
           emptyDescription="Technical meetings, Chef-de-Mission interfaces, team-leader briefings. Author them as Events with a meeting-style name; this view filters automatically."
           emptyAction={
             <Button href="/console/events/new" size="sm">
-              + New event
+              + New Event
             </Button>
           }
           columns={[

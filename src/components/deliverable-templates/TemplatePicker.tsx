@@ -2,13 +2,7 @@
 
 import * as React from "react";
 import { FilePlus2, Search } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
 
 /**
  * Deliverable template picker — lazy-loads templates from
@@ -79,8 +73,7 @@ export function TemplatePicker({
           <DialogHeader>
             <DialogTitle>Pick a template</DialogTitle>
             <DialogDescription>
-              Pre-fill the deliverable with a saved template. Org-scoped templates appear alongside
-              platform globals.
+              Pre-fill the deliverable with a saved template. Org-scoped templates appear alongside platform globals.
             </DialogDescription>
           </DialogHeader>
 
@@ -92,15 +85,13 @@ export function TemplatePicker({
               onChange={(e) => setQuery(e.target.value)}
               autoFocus
               placeholder="Filter templates…"
-              aria-label="Filter templates"
+              aria-label="Filter Templates"
               className="w-full bg-transparent text-xs outline-none"
             />
           </div>
 
           <div className="mt-3 max-h-[50vh] space-y-1 overflow-y-auto pr-1">
-            {loading && (
-              <div className="py-8 text-center text-xs text-[var(--text-muted)]">Loading templates…</div>
-            )}
+            {loading && <div className="py-8 text-center text-xs text-[var(--text-muted)]">Loading templates…</div>}
             {!loading &&
               filtered.map((t) => (
                 <button
@@ -118,11 +109,9 @@ export function TemplatePicker({
                       {t.type}
                     </span>
                   </div>
-                  {t.description && (
-                    <div className="mt-1 text-[var(--text-muted)]">{t.description}</div>
-                  )}
+                  {t.description && <div className="mt-1 text-[var(--text-muted)]">{t.description}</div>}
                   {t.is_global && (
-                    <div className="mt-1 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+                    <div className="mt-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
                       Platform template
                     </div>
                   )}

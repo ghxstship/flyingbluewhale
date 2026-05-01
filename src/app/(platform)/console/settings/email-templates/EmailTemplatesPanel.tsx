@@ -141,9 +141,13 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         </div>
         {templates.length === 0 ? (
           <EmptyState
-            title="No templates yet"
+            title="No Templates Yet"
             description="Transactional email shapes for proposals, invoices, and notifications."
-            action={<Button type="button" onClick={() => setMode("new")}>New template</Button>}
+            action={
+              <Button type="button" onClick={() => setMode("new")}>
+                New template
+              </Button>
+            }
           />
         ) : (
           <table className="data-table w-full text-sm">
@@ -186,9 +190,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
   return (
     <div className="surface-raised space-y-3 p-5">
       <div className="flex items-center justify-between">
-        <div className="text-sm font-semibold">
-          {mode === "new" ? "New template" : "Edit template"}
-        </div>
+        <div className="text-sm font-semibold">{mode === "new" ? "New template" : "Edit template"}</div>
         <button
           type="button"
           onClick={() => setMode("list")}
@@ -239,7 +241,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
       )}
 
       <div className="mt-4 grid gap-3 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-3 text-xs">
-        <div className="font-semibold uppercase tracking-wider text-[var(--text-muted)]">Preview</div>
+        <div className="font-semibold tracking-wider text-[var(--text-muted)] uppercase">Preview</div>
         <div>
           <div className="text-[10px] text-[var(--text-muted)]">Subject</div>
           <div className="mt-0.5 text-[var(--text-primary)]">{renderPreview(form.subject ?? "")}</div>
@@ -267,7 +269,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
 function MergeTagCatalog() {
   return (
     <details className="rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] text-xs">
-      <summary className="cursor-pointer px-3 py-2 font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+      <summary className="cursor-pointer px-3 py-2 font-semibold tracking-wider text-[var(--text-muted)] uppercase">
         Available merge tags ({MERGE_TAGS.length})
       </summary>
       <div className="max-h-56 overflow-y-auto px-3 py-2">
@@ -347,12 +349,14 @@ function MergeTagField({
         ref={ref as never}
         value={value}
         rows={singleLine ? undefined : 10}
-        onChange={(e) => onChangeRaw(e.target.value, (e.target as HTMLInputElement).selectionStart ?? e.target.value.length)}
+        onChange={(e) =>
+          onChangeRaw(e.target.value, (e.target as HTMLInputElement).selectionStart ?? e.target.value.length)
+        }
         onBlur={() => setTimeout(() => setOpen(false), 120)}
         className={`input-base mt-1 w-full ${singleLine ? "" : "font-mono text-xs"}`}
       />
       {open && candidates.length > 0 && (
-        <div className="absolute left-0 right-0 z-20 mt-1 overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] shadow-lg">
+        <div className="absolute right-0 left-0 z-20 mt-1 overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] shadow-lg">
           {candidates.map((m) => (
             <button
               key={m.tag}

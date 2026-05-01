@@ -32,17 +32,13 @@ export default async function DomainsPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle="Custom domains"
-      />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Custom domains" />
       <div className="page-content max-w-3xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Add a domain</h3>
+          <h3 className="text-sm font-semibold">Add a Domain</h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Point a CNAME or TXT verification to your DNS provider. We re-check
-            on demand and issue TLS automatically once verified.
+            Point a CNAME or TXT verification to your DNS provider. We re-check on demand and issue TLS automatically
+            once verified.
           </p>
           <div className="mt-4">
             <AddDomainForm />
@@ -50,9 +46,7 @@ export default async function DomainsPage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            Domains
-          </h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Domains</h3>
           <div className="surface overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>

@@ -1,0 +1,125 @@
+import "server-only";
+import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
+import { createServiceClient, isServiceClientAvailable } from "./supabase/server";
+import { personaForRole } from "./auth";
+import type { Session } from "./auth";
+import type { PlatformRole, Tier } from "./supabase/types";
+
+/**
+ * Org-scoped programmatic access tokens.
+ *
+ * Token format: `sk_<8-char-prefix>_<43-char-secret>` — same format the
+ * console UI at /console/settings/api/actions.ts mints. We re-derive both
+ * the prefix and the hash here so an external caller (CI bot, partner
+ * integration) can authenticate the token they were given.
+ *
+ * Schema: api_keys (org_id, prefix, hashed_secret, scopes, created_by,
+ * last_used_at, expires_at, revoked_at). RLS allows org-members to read,
+ * owner/admin to write/revoke.
+ *
+ * On verify:
+ *   1. Parse `Authorization: Bearer sk_<8>_<rest>`.
+ *   2. Look up by prefix (`sk_<8>` is the indexed handle).
+ *   3. Constant-time compare sha256(full token) against hashed_secret.
+ *   4. Refuse if revoked or expired.
+ *   5. Resolve `created_by` → memberships(org_id) into a Session.
+ *
+ * Tokens with `created_by IS NULL` cannot be used for auth — there's no
+ * user to map to a Session. This is intentional: a token's blast radius
+ * is bounded by the issuing user's role.
+ */
+
+const TOKEN_RE = /^sk_([A-Za-z0-9]{8})_[A-Za-z0-9_-]{20,}$/;
+
+export type ApiKeyRow = {
+  id: string;
+  org_id: string;
+  created_by: string | null;
+  prefix: string;
+  hashed_secret: string;
+  scopes: string[];
+  expires_at: string | null;
+  revoked_at: string | null;
+};
+
+export function mintToken(): { token: string; prefix: string; hashedSecret: string } {
+  const raw = randomBytes(32).toString("base64url"); // ~43 chars
+  const prefix = `sk_${raw.slice(0, 8)}`;
+  const token = `${prefix}_${raw.slice(8)}`;
+  const hashedSecret = sha256(token);
+  return { token, prefix, hashedSecret };
+}
+
+export function parseToken(input: string): { prefix: string; full: string } | null {
+  const m = TOKEN_RE.exec(input);
+  if (!m) return null;
+  return { prefix: `sk_${m[1]}`, full: input };
+}
+
+export function sha256(s: string): string {
+  return createHash("sha256").update(s).digest("hex");
+}
+
+function constantTimeEq(a: string, b: string): boolean {
+  const ab = Buffer.from(a, "hex");
+  const bb = Buffer.from(b, "hex");
+  if (ab.length !== bb.length) return false;
+  return timingSafeEqual(ab, bb);
+}
+
+export async function verifyApiKey(authorizationHeader: string | null | undefined): Promise<Session | null> {
+  if (!authorizationHeader) return null;
+  const m = /^Bearer\s+(.+)$/i.exec(authorizationHeader);
+  if (!m) return null;
+  const parsed = parseToken(m[1].trim());
+  if (!parsed) return null;
+  if (!isServiceClientAvailable()) return null;
+
+  const svc = createServiceClient();
+  const { data: row, error } = await svc
+    .from("api_keys")
+    .select("id, org_id, created_by, prefix, hashed_secret, scopes, expires_at, revoked_at")
+    .eq("prefix", parsed.prefix)
+    .maybeSingle();
+  if (error || !row) return null;
+
+  const k = row as unknown as ApiKeyRow;
+  if (k.revoked_at) return null;
+  if (k.expires_at && new Date(k.expires_at) < new Date()) return null;
+  if (!k.created_by) return null;
+  if (!constantTimeEq(sha256(parsed.full), k.hashed_secret)) return null;
+
+  const { data: membership } = await svc
+    .from("memberships")
+    .select("role, orgs(tier)")
+    .eq("user_id", k.created_by)
+    .eq("org_id", k.org_id)
+    .maybeSingle();
+  if (!membership) return null;
+  const role = (membership as { role: PlatformRole }).role;
+  const tier = ((membership as { orgs: { tier: Tier } | null }).orgs?.tier ?? "access") as Tier;
+
+  // Best-effort write-behind. Failures don't fail the auth.
+  void svc
+    .from("api_keys")
+    .update({ last_used_at: new Date().toISOString() })
+    .eq("id", k.id)
+    .then(() => undefined);
+
+  let email = "";
+  try {
+    const { data } = await svc.auth.admin.getUserById(k.created_by);
+    email = data.user?.email ?? "";
+  } catch {
+    // Email is informational; auth still succeeds.
+  }
+
+  return {
+    userId: k.created_by,
+    email,
+    orgId: k.org_id,
+    role,
+    tier,
+    persona: personaForRole(role),
+  };
+}

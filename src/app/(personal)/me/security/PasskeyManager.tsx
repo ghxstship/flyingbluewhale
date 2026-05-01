@@ -24,7 +24,11 @@ export function PasskeyManager() {
   // setState inside an effect (which triggers cascading renders).
   const [supported] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
-    try { return browserSupportsWebAuthn(); } catch { return true; }
+    try {
+      return browserSupportsWebAuthn();
+    } catch {
+      return true;
+    }
   });
 
   useEffect(() => {
@@ -52,8 +56,7 @@ export function PasskeyManager() {
       const optsJson = (await optsRes.json()) as { ok: boolean; data: PublicKeyCredentialCreationOptionsJSON };
       const attestation = await startRegistration({ optionsJSON: optsJson.data });
 
-      const deviceName =
-        prompt("Name this device (optional):", navigator.userAgent.split("(")[0].trim()) ?? null;
+      const deviceName = prompt("Name this device (optional):", navigator.userAgent.split("(")[0].trim()) ?? null;
 
       const verifyRes = await fetch("/api/v1/auth/webauthn/register/verify", {
         method: "POST",
@@ -100,7 +103,7 @@ export function PasskeyManager() {
     <div className={creds.length === 0 ? "" : "surface divide-y divide-[var(--border-color)]"}>
       {creds.length === 0 ? (
         <EmptyState
-          title="No passkeys yet"
+          title="No Passkeys Yet"
           description="Register a passkey to sign in without a password."
           icon={<Fingerprint size={32} />}
         />

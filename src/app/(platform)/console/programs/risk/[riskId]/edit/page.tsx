@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
         title={`Edit ${((row as Record<string, unknown>)["title"] as string | undefined) ?? "Risk"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/programs/risk/${p.riskId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/programs/risk/${p.riskId}`} submitLabel="Save Changes">
           <Input label="Title" name="title" defaultValue={row.title ?? ""} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
               <option value="closed">closed</option>
             </select>
           </label>
-          <Input label="Due on" name="due_on" type="date" defaultValue={dateOnly(row.due_on)} />
+          <Input label="Due On" name="due_on" type="date" defaultValue={dateOnly(row.due_on)} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Treatment</span>
             <textarea

@@ -98,9 +98,7 @@ export function DataTableInteractive({
   const [page, setPage] = useUrlState<number>(tableId ? `${tableId}.p` : "p", 0);
 
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
-  const [density, setDensity] = React.useState<"comfortable" | "compact">(
-    savedView?.density ?? densityProp,
-  );
+  const [density, setDensity] = React.useState<"comfortable" | "compact">(savedView?.density ?? densityProp);
   const [hiddenCols, setHiddenCols] = React.useState<Set<string>>(
     new Set(savedView?.hidden ?? columns.filter((c) => c.defaultHidden).map((c) => c.key)),
   );
@@ -128,9 +126,7 @@ export function DataTableInteractive({
   const filtered = React.useMemo(() => {
     if (!query) return rows;
     const q = String(query).toLowerCase();
-    return rows.filter((row) =>
-      (row.values ?? []).some((v) => v != null && String(v).toLowerCase().includes(q)),
-    );
+    return rows.filter((row) => (row.values ?? []).some((v) => v != null && String(v).toLowerCase().includes(q)));
   }, [rows, query]);
 
   // Sort
@@ -153,9 +149,7 @@ export function DataTableInteractive({
   // Paginate
   const pageSizeEff = pageSize ?? 0;
   const pageCount = pageSizeEff ? Math.max(1, Math.ceil(sorted.length / pageSizeEff)) : 1;
-  const visible = pageSizeEff
-    ? sorted.slice(Number(page) * pageSizeEff, (Number(page) + 1) * pageSizeEff)
-    : sorted;
+  const visible = pageSizeEff ? sorted.slice(Number(page) * pageSizeEff, (Number(page) + 1) * pageSizeEff) : sorted;
 
   React.useEffect(() => {
     if (Number(page) >= pageCount) setPage(0);
@@ -243,7 +237,7 @@ export function DataTableInteractive({
               }}
               placeholder="Search…"
               className="bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
-              aria-label="Filter rows"
+              aria-label="Filter Rows"
             />
             {query && (
               <button
@@ -293,11 +287,7 @@ export function DataTableInteractive({
       </div>
 
       {/* Table */}
-      <div
-        ref={scrollRef}
-        className="surface overflow-auto"
-        style={{ maxHeight: pageSizeEff ? "auto" : "70vh" }}
-      >
+      <div ref={scrollRef} className="surface overflow-auto" style={{ maxHeight: pageSizeEff ? "auto" : "70vh" }}>
         <table className="data-table w-full" role="grid" aria-rowcount={sorted.length}>
           <thead className="sticky top-0 z-10 bg-[var(--surface)]">
             <tr>
@@ -478,7 +468,11 @@ function TableRow({
   style?: React.CSSProperties;
 }) {
   return (
-    <tr className={`${rowPad} ${selected ? "bg-[var(--surface-inset)]" : ""}`} aria-selected={selected || undefined} style={style}>
+    <tr
+      className={`${rowPad} ${selected ? "bg-[var(--surface-inset)]" : ""}`}
+      aria-selected={selected || undefined}
+      style={style}
+    >
       {bulk && (
         <td className="w-8 text-center">
           <input
@@ -575,11 +569,7 @@ function ColumnMenu({
               }}
               className="flex items-center justify-between gap-2"
             >
-              <button
-                type="button"
-                onClick={() => onToggleHidden(c.key)}
-                className="flex flex-1 items-center gap-2"
-              >
+              <button type="button" onClick={() => onToggleHidden(c.key)} className="flex flex-1 items-center gap-2">
                 {isHidden ? <EyeOff size={12} className="opacity-50" /> : <EyeOff size={12} className="opacity-0" />}
                 <span className={isHidden ? "line-through" : ""}>{c.header}</span>
               </button>
@@ -617,15 +607,10 @@ type SavedView = {
  * server-rendered cells like `<Badge>` map to their underlying scalar);
  * falls back to a stripped string of the cell node otherwise.
  */
-function exportCsv(
-  cols: InteractiveColumn[],
-  rows: InteractiveRow[],
-  tableId?: string,
-) {
+function exportCsv(cols: InteractiveColumn[], rows: InteractiveRow[], tableId?: string) {
   const colKeyToIdx = new Map<string, number>();
   cols.forEach((c, i) => colKeyToIdx.set(c.key, i));
-  const escape = (s: string) =>
-    /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  const escape = (s: string) => (/[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
   const headerLine = cols.map((c) => escape(c.header)).join(",");
   const lines = rows.map((r) =>
     cols

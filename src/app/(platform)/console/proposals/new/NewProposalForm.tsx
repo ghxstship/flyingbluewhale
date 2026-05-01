@@ -5,24 +5,38 @@ import { Input } from "@/components/ui/Input";
 import { createProposalAction } from "../actions";
 
 export function NewProposalForm({
-  clients, projects, defaultClientId,
-}: { clients: { id: string; name: string }[]; projects: { id: string; name: string }[]; defaultClientId?: string }) {
+  clients,
+  projects,
+  defaultClientId,
+}: {
+  clients: { id: string; name: string }[];
+  projects: { id: string; name: string }[];
+  defaultClientId?: string;
+}) {
   return (
-    <FormShell action={createProposalAction} cancelHref="/console/proposals" submitLabel="Create proposal">
+    <FormShell action={createProposalAction} cancelHref="/console/proposals" submitLabel="Create Proposal">
       <Input label="Title" name="title" required maxLength={200} />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">Client</label>
           <select name="client_id" defaultValue={defaultClientId ?? ""} className="input-base mt-1.5 w-full">
             <option value="">— No client —</option>
-            {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {clients.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">Project</label>
           <select name="project_id" className="input-base mt-1.5 w-full">
             <option value="">— No project —</option>
-            {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            {projects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>

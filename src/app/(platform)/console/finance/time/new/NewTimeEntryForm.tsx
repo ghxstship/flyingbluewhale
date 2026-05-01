@@ -5,9 +5,9 @@ import { createTimeEntryAction } from "../actions";
 
 export function NewTimeEntryForm() {
   const now = new Date();
-  const iso = now.toISOString().slice(0,16);
+  const iso = now.toISOString().slice(0, 16);
   return (
-    <FormShell action={createTimeEntryAction} cancelHref="/console/finance/time" submitLabel="Log time">
+    <FormShell action={createTimeEntryAction} cancelHref="/console/finance/time" submitLabel="Log Time">
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Started" name="started_at" type="datetime-local" required defaultValue={iso} />
         <Input label="Ended" name="ended_at" type="datetime-local" />

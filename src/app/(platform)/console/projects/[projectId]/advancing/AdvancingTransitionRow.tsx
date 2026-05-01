@@ -6,35 +6,21 @@ import { useToast } from "@/lib/hooks/useToast";
 
 const NEXT_BUTTONS: Record<string, Array<{ to: string; label: string; variant: "default" | "danger" }>> = {
   submitted: [
-    { to: "in_review", label: "Start review", variant: "default" },
+    { to: "in_review", label: "Start Review", variant: "default" },
     { to: "approved", label: "Approve", variant: "default" },
     { to: "rejected", label: "Reject", variant: "danger" },
   ],
   in_review: [
     { to: "approved", label: "Approve", variant: "default" },
-    { to: "revision_requested", label: "Request revision", variant: "default" },
+    { to: "revision_requested", label: "Request Revision", variant: "default" },
     { to: "rejected", label: "Reject", variant: "danger" },
   ],
-  approved: [
-    { to: "fulfilled", label: "Mark fulfilled", variant: "default" },
-  ],
-  revision_requested: [
-    { to: "in_review", label: "Resume review", variant: "default" },
-  ],
-  rejected: [
-    { to: "revision_requested", label: "Reopen", variant: "default" },
-  ],
+  approved: [{ to: "fulfilled", label: "Mark Fulfilled", variant: "default" }],
+  revision_requested: [{ to: "in_review", label: "Resume Review", variant: "default" }],
+  rejected: [{ to: "revision_requested", label: "Reopen", variant: "default" }],
 };
 
-export function AdvancingTransitionRow({
-  id,
-  status,
-  fulfilled,
-}: {
-  id: string;
-  status: string;
-  fulfilled: boolean;
-}) {
+export function AdvancingTransitionRow({ id, status, fulfilled }: { id: string; status: string; fulfilled: boolean }) {
   const router = useRouter();
   const toast = useToast();
   const [pending, setPending] = React.useState<string | null>(null);

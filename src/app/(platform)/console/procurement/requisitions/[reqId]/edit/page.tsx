@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
         <FormShell
           action={action}
           cancelHref={`/console/procurement/requisitions/${p.reqId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Title" name="title" defaultValue={row.title} required maxLength={200} />
           <label className="flex flex-col gap-1.5">

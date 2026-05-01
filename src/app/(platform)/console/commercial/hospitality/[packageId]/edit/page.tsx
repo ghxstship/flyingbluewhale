@@ -24,14 +24,14 @@ export default async function Page({ params }: { params: Promise<{ packageId: st
   return (
     <>
       <ModuleHeader
-        eyebrow="Hospitality package"
+        eyebrow="Hospitality Package"
         title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Hospitality package"}`}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/commercial/hospitality/${p.packageId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="SKU" name="sku" defaultValue={row.sku ?? ""} required maxLength={80} />
@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ packageId: st
             />
           </label>
           <Input
-            label="Unit price (cents)"
+            label="Unit Price (Cents)"
             name="unit_price_cents"
             type="number"
             defaultValue={row.unit_price_cents != null ? String(row.unit_price_cents) : ""}

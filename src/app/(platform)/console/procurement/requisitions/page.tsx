@@ -29,7 +29,7 @@ export default async function RequisitionsPage() {
         eyebrow="Procurement"
         title="Requisitions"
         subtitle={`${rows.length} requests`}
-        action={<Button href="/console/procurement/requisitions/new">+ New request</Button>}
+        action={<Button href="/console/procurement/requisitions/new">+ New Request</Button>}
       />
       <div className="page-content">
         <DataTable<Requisition>
@@ -39,7 +39,7 @@ export default async function RequisitionsPage() {
           emptyDescription="Submit a request to spend; once approved, it converts to a purchase order."
           emptyAction={
             <Button href="/console/procurement/requisitions/new" size="sm">
-              + New request
+              + New Request
             </Button>
           }
           columns={[

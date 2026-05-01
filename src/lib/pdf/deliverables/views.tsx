@@ -42,7 +42,9 @@ export function TechnicalRiderView({ data }: { data: TechnicalRiderData }) {
           <SectionHeading title={s.heading} />
           {s.body ? <Text style={styles.p}>{s.body}</Text> : null}
           {s.items?.map((it, j) => (
-            <Text key={j} style={{ marginBottom: 2 }}>• {it}</Text>
+            <Text key={j} style={{ marginBottom: 2 }}>
+              • {it}
+            </Text>
           ))}
         </View>
       ))}
@@ -55,7 +57,7 @@ export const HospitalityRiderView = TechnicalRiderView as (p: { data: Hospitalit
 export function InputListView({ data }: { data: InputListData }) {
   return (
     <>
-      <SectionHeading title="Input list" />
+      <SectionHeading title="Input List" />
       <PdfTable
         columns={[
           { key: "channel", label: "Ch", width: 0.5, align: "center" },
@@ -81,12 +83,12 @@ export function StagePlotView({ data }: { data: StagePlotData }) {
     <>
       {data.svgUrl ? (
         <>
-          <SectionHeading title="Stage plot" />
+          <SectionHeading title="Stage Plot" />
           <Image src={data.svgUrl} style={{ width: "100%", maxHeight: 380, objectFit: "contain" }} />
         </>
       ) : (
         <>
-          <SectionHeading title="Stage plot elements" />
+          <SectionHeading title="Stage Plot Elements" />
           <PdfTable
             columns={[
               { key: "label", label: "Element", width: 3 },
@@ -111,7 +113,7 @@ export function StagePlotView({ data }: { data: StagePlotData }) {
 export function CrewListView({ data }: { data: CrewListData }) {
   return (
     <>
-      <SectionHeading title="Crew list" />
+      <SectionHeading title="Crew List" />
       <PdfTable
         columns={[
           { key: "name", label: "Name", width: 3 },
@@ -135,7 +137,7 @@ export function CrewListView({ data }: { data: CrewListData }) {
 export function GuestListView({ data }: { data: GuestListData }) {
   return (
     <>
-      <SectionHeading title="Guest list" />
+      <SectionHeading title="Guest List" />
       <PdfTable
         columns={[
           { key: "name", label: "Name", width: 4 },
@@ -179,7 +181,7 @@ export function EquipmentPullListView({ data }: { data: EquipmentPullListData })
 export function PowerPlanView({ data }: { data: PowerPlanData }) {
   return (
     <>
-      <SectionHeading title="Power services" />
+      <SectionHeading title="Power Services" />
       <PdfTable
         columns={[
           { key: "location", label: "Location", width: 3 },
@@ -224,7 +226,7 @@ export function PowerPlanView({ data }: { data: PowerPlanData }) {
 export function RiggingPlanView({ data }: { data: RiggingPlanData }) {
   return (
     <>
-      <SectionHeading title="Rigging points" />
+      <SectionHeading title="Rigging Points" />
       <PdfTable
         columns={[
           { key: "label", label: "Point", width: 2 },
@@ -249,7 +251,7 @@ export function SitePlanView({ data }: { data: SitePlanData }) {
     <>
       {data.svgUrl ? (
         <>
-          <SectionHeading title="Site plan" />
+          <SectionHeading title="Site Plan" />
           <Image src={data.svgUrl} style={{ width: "100%", maxHeight: 380, objectFit: "contain" }} />
         </>
       ) : null}
@@ -268,7 +270,7 @@ export function SitePlanView({ data }: { data: SitePlanData }) {
 export function BuildScheduleView({ data }: { data: BuildScheduleData }) {
   return (
     <>
-      <SectionHeading title="Build schedule" />
+      <SectionHeading title="Build Schedule" />
       <PdfTable
         columns={[
           { key: "day", label: "Day", width: 1.5 },
@@ -336,7 +338,7 @@ export function SafetyComplianceView({ data }: { data: SafetyComplianceData }) {
 export function CommsPlanView({ data }: { data: CommsPlanData }) {
   return (
     <>
-      <SectionHeading title="Radio channels" />
+      <SectionHeading title="Radio Channels" />
       <PdfTable
         columns={[
           { key: "channel", label: "Channel", width: 1 },
@@ -346,7 +348,7 @@ export function CommsPlanView({ data }: { data: CommsPlanData }) {
       />
       {data.codeWords.length > 0 ? (
         <>
-          <SectionHeading title="Code words" />
+          <SectionHeading title="Code Words" />
           {data.codeWords.map((c, i) => (
             <Text key={i}>
               <Text style={{ fontWeight: 700 }}>{c.code}</Text> — {c.meaning}
@@ -361,7 +363,7 @@ export function CommsPlanView({ data }: { data: CommsPlanData }) {
 export function SignageGridView({ data }: { data: SignageGridData }) {
   return (
     <>
-      <SectionHeading title="Signage grid" />
+      <SectionHeading title="Signage Grid" />
       <PdfTable
         columns={[
           { key: "location", label: "Location", width: 3 },
@@ -401,10 +403,8 @@ export function CustomView({ data }: { data: CustomData }) {
 export function GenericDeliverableView({ data }: { data: unknown }) {
   return (
     <>
-      <SectionHeading title="Deliverable data" />
-      <Text style={{ fontFamily: "Courier", fontSize: 9 }}>
-        {JSON.stringify(data, null, 2)}
-      </Text>
+      <SectionHeading title="Deliverable Data" />
+      <Text style={{ fontFamily: "Courier", fontSize: 9 }}>{JSON.stringify(data, null, 2)}</Text>
     </>
   );
 }

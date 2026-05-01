@@ -23,12 +23,12 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
   const action = updateFabrication.bind(null, p.orderId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Fabrication order" title={`Edit ${row.title}`} />
+      <ModuleHeader eyebrow="Fabrication Order" title={`Edit ${row.title}`} />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/production/fabrication/${p.orderId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Title" name="title" defaultValue={row.title} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
               className="input-base focus-ring w-full"
             />
           </label>
-          <Input label="Due at" name="due_at" type="datetime-local" defaultValue={dateTimeLocal(row.due_at)} />
+          <Input label="Due At" name="due_at" type="datetime-local" defaultValue={dateTimeLocal(row.due_at)} />
           <p className="text-xs text-[var(--text-muted)]">Status transitions are managed from the detail page.</p>
         </FormShell>
       </div>

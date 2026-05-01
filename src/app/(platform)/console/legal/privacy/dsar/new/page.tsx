@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Legal · Privacy" title="New DSAR Request" />
       <div className="page-content max-w-xl">
-        <FormShell action={createDsar} cancelHref="/console/legal/privacy/dsar" submitLabel="Log request">
+        <FormShell action={createDsar} cancelHref="/console/legal/privacy/dsar" submitLabel="Log Request">
           <Input label="Requester Email" name="requester_email" type="email" required />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>

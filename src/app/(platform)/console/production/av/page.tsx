@@ -61,14 +61,14 @@ export default async function Page() {
         subtitle={`${av.length} AV asset${av.length === 1 ? "" : "s"} · ${catEntries.length} categor${catEntries.length === 1 ? "y" : "ies"}`}
         action={
           <Button href="/console/production/equipment/new" size="sm">
-            + New asset
+            + New AV Setup
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {catEntries.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By category</h3>
+            <h3 className="text-sm font-semibold">By Category</h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {catEntries.map(([cat, count]) => (
                 <li key={cat} className="flex items-center justify-between text-sm">
@@ -87,7 +87,7 @@ export default async function Page() {
           emptyDescription="AV assets are equipment whose category matches AV / audio / video / lighting / sound / scoreboard / broadcast / projection / LED / camera / mic. Tag your gear's category to surface it here."
           emptyAction={
             <Button href="/console/production/equipment/new" size="sm">
-              + New asset
+              + New AV Setup
             </Button>
           }
           columns={[

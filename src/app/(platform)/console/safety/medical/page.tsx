@@ -11,8 +11,8 @@ export const dynamic = "force-dynamic";
 
 const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
   { href: "/console/safety/medical/encounters", label: "Encounters", description: "PHI-encrypted clinical log" },
-  { href: "/console/safety/medical/plan", label: "Medical plan", description: "Games medical services plan" },
-  { href: "/m/medic", label: "Mobile triage", description: "Field clinicians log encounters" },
+  { href: "/console/safety/medical/plan", label: "Medical Plan", description: "Games medical services plan" },
+  { href: "/m/medic", label: "Mobile Triage", description: "Field clinicians log encounters" },
   { href: "/console/operations/incidents", label: "Incidents", description: "Cross-domain feed" },
 ];
 
@@ -94,12 +94,12 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Encounters · 24h" value={(enc24 ?? 0).toLocaleString()} accent />
           <MetricCard label="Encounters · 7d" value={(enc7 ?? 0).toLocaleString()} />
-          <MetricCard label="Active env. events" value={env.length.toLocaleString()} />
+          <MetricCard label="Active Env. Events" value={env.length.toLocaleString()} />
         </div>
 
         {env.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Open environmental events</h3>
+            <h3 className="text-sm font-semibold">Open Environmental Events</h3>
             <ul className="mt-3 space-y-1.5">
               {env.map((e) => (
                 <li key={e.id} className="flex items-center justify-between text-sm">
@@ -115,7 +115,7 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill in</h3>
+          <h3 className="text-sm font-semibold">Drill In</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {HUB_TILES.map((t) => (
               <Link key={t.href} href={t.href} className="surface hover-lift p-4">

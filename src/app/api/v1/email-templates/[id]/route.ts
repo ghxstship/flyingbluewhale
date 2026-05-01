@@ -3,6 +3,9 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
+
+type EmailTemplateUpdate = Database["public"]["Tables"]["email_templates"]["Update"];
 
 /** /api/v1/email-templates/[id] — update + soft-delete. */
 
@@ -23,7 +26,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     const supabase = await createClient();
-    const patch: Record<string, unknown> = {};
+    const patch: EmailTemplateUpdate = {};
     if (input.name !== undefined) patch.name = input.name;
     if (input.subject !== undefined) patch.subject = input.subject;
     if (input.bodyHtml !== undefined) patch.body_html = input.bodyHtml;

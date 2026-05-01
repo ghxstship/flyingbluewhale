@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Programs · Readiness" title="New Exercise" />
       <div className="page-content max-w-xl">
-        <FormShell action={createExercise} cancelHref="/console/programs/readiness" submitLabel="Schedule exercise">
+        <FormShell action={createExercise} cancelHref="/console/programs/readiness" submitLabel="Schedule Exercise">
           <Input label="Name" name="name" maxLength={200} placeholder="e.g. Stadium evacuation TTX" required />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>

@@ -24,11 +24,11 @@ export default async function Page({ params }: { params: Promise<{ reportId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Safeguarding report"
+        eyebrow="Safeguarding Report"
         title={`Edit ${((row as Record<string, unknown>)["subject_ref"] as string | undefined) ?? "Safeguarding report"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/safety/safeguarding/${p.reportId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/safety/safeguarding/${p.reportId}`} submitLabel="Save Changes">
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Narrative</span>
             <textarea
@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: Promise<{ reportId: str
               className="input-base focus-ring w-full"
             />
           </label>
-          <Input label="Subject reference" name="subject_ref" defaultValue={row.subject_ref ?? ""} maxLength={200} />
+          <Input label="Subject Reference" name="subject_ref" defaultValue={row.subject_ref ?? ""} maxLength={200} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
             <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">

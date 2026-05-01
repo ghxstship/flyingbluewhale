@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
       />
       <div className="page-content max-w-3xl space-y-4">
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Required steps</h3>
+          <h3 className="text-sm font-semibold">Required Steps</h3>
           {all.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">No checklist items yet. Add the first below.</p>
           ) : (
@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Add step</h3>
+          <h3 className="text-sm font-semibold">Add Step</h3>
           <form action={addChecklistItem.bind(null, poId)} className="mt-3 space-y-2">
             <input name="prompt" required placeholder="Step description" className={INPUT} />
             <label className="flex items-center gap-2 text-xs">

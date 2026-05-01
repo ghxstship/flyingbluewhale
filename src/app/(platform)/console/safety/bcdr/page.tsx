@@ -81,29 +81,29 @@ export default async function Page() {
         subtitle="Business continuity + disaster recovery — runbooks plus exercises."
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
-            + New runbook
+            + New Runbook
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Crisis runbooks" value={playbooks.length.toLocaleString()} accent />
+          <MetricCard label="Crisis Runbooks" value={playbooks.length.toLocaleString()} accent />
           <MetricCard label="Published" value={published.toLocaleString()} />
-          <MetricCard label="Exercises scheduled" value={upcoming.length.toLocaleString()} />
+          <MetricCard label="Exercises Scheduled" value={upcoming.length.toLocaleString()} />
         </div>
 
         <section>
-          <h3 className="text-sm font-semibold">Crisis runbooks</h3>
+          <h3 className="text-sm font-semibold">Crisis Runbooks</h3>
           <ul className="mt-3 space-y-2">
             {playbooks.length === 0 ? (
               <li>
                 <EmptyState
                   size="compact"
-                  title="No crisis runbooks yet"
+                  title="No Crisis Runbooks Yet"
                   description="Author crisis-tagged playbooks (evac, weather hold, IT outage) — they appear here."
                   action={
                     <Link href="/console/safety/playbooks/new" className="btn btn-secondary btn-sm">
-                      + New runbook
+                      + New Runbook
                     </Link>
                   }
                 />
@@ -134,7 +134,7 @@ export default async function Page() {
               <li>
                 <EmptyState
                   size="compact"
-                  title="No exercises scheduled"
+                  title="No Exercises Scheduled"
                   description="TTX, drills, full-scale exercises live in Programs → Readiness."
                   action={
                     <Link href="/console/programs/readiness" className="btn btn-secondary btn-sm">

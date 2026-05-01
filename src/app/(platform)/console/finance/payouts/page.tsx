@@ -9,7 +9,15 @@ import type { Vendor } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 export default async function PayoutsPage() {
-  if (!hasSupabase) return <><ModuleHeader title="Payouts" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader title="Payouts" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
   const vendors = await listOrgScoped("vendors", session.orgId);
   return (
@@ -20,11 +28,28 @@ export default async function PayoutsPage() {
           rows={vendors}
           columns={[
             { key: "name", header: "Vendor", render: (r) => r.name },
-            { key: "account", header: "Connect Account", render: (r) => r.payout_account_id
-              ? <span className="font-mono text-xs">{r.payout_account_id}</span>
-              : <Badge variant="muted">Not onboarded</Badge> },
-            { key: "w9", header: "W-9", render: (r) => r.w9_on_file ? <Badge variant="success">On file</Badge> : <Badge variant="warning">Missing</Badge> },
-            { key: "coi", header: "COI Expires", render: (r) => r.coi_expires_at ?? "—", className: "font-mono text-xs" },
+            {
+              key: "account",
+              header: "Connect Account",
+              render: (r) =>
+                r.payout_account_id ? (
+                  <span className="font-mono text-xs">{r.payout_account_id}</span>
+                ) : (
+                  <Badge variant="muted">Not Onboarded</Badge>
+                ),
+            },
+            {
+              key: "w9",
+              header: "W-9",
+              render: (r) =>
+                r.w9_on_file ? <Badge variant="success">On File</Badge> : <Badge variant="warning">Missing</Badge>,
+            },
+            {
+              key: "coi",
+              header: "COI Expires",
+              render: (r) => r.coi_expires_at ?? "—",
+              className: "font-mono text-xs",
+            },
           ]}
         />
       </div>

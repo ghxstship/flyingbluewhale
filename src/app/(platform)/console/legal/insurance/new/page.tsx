@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Legal · Insurance" title="New Policy" />
       <div className="page-content max-w-xl">
-        <FormShell action={createPolicy} cancelHref="/console/legal/insurance" submitLabel="Add policy">
+        <FormShell action={createPolicy} cancelHref="/console/legal/insurance" submitLabel="Add Policy">
           <Input label="Carrier" name="carrier" maxLength={160} placeholder="e.g. Lloyd's of London" required />
           <Input label="Policy Number" name="policy_no" maxLength={120} placeholder="e.g. LL-2025-00482" required />
           <div>

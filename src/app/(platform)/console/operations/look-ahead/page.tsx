@@ -62,11 +62,13 @@ export default async function Page() {
       .order("scheduled_for"),
     supabase
       .from("dispatch_runs")
-      .select("id, label, scheduled_at, project:project_id(name)")
+      .select(
+        "id, fleet, vehicle_ref, scheduled_depart, origin:origin_venue_id(name), destination:destination_venue_id(name)",
+      )
       .eq("org_id", session.orgId)
-      .gte("scheduled_at", now.toISOString())
-      .lte("scheduled_at", end.toISOString())
-      .order("scheduled_at"),
+      .gte("scheduled_depart", now.toISOString())
+      .lte("scheduled_depart", end.toISOString())
+      .order("scheduled_depart"),
   ]);
 
   const items: Item[] = [
@@ -98,13 +100,18 @@ export default async function Page() {
       when: i.scheduled_for as string,
       project: (i.project as unknown as { name: string | null } | null)?.name ?? null,
     })),
-    ...(dispatchRuns.data ?? []).map((d) => ({
-      kind: "dispatch",
-      id: d.id,
-      title: (d as { label?: string }).label ?? "Dispatch",
-      when: (d as { scheduled_at?: string }).scheduled_at ?? new Date().toISOString(),
-      project: (d.project as unknown as { name: string | null } | null)?.name ?? null,
-    })),
+    ...(dispatchRuns.data ?? []).map((d) => {
+      const origin = (d.origin as unknown as { name: string | null } | null)?.name;
+      const destination = (d.destination as unknown as { name: string | null } | null)?.name;
+      const route = origin && destination ? `${origin} → ${destination}` : (d.vehicle_ref ?? "Dispatch");
+      return {
+        kind: "dispatch" as const,
+        id: d.id,
+        title: `${d.fleet.toUpperCase()} · ${route}`,
+        when: d.scheduled_depart,
+        project: null,
+      };
+    }),
   ].sort((a, b) => new Date(a.when).getTime() - new Date(b.when).getTime());
 
   const buckets = items.reduce<Record<string, Item[]>>((acc, it) => {

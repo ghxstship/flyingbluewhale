@@ -27,7 +27,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/venues/new" size="sm">
-            + New venue
+            + New Venue
           </Button>
         }
       />

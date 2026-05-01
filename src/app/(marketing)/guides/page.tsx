@@ -32,7 +32,7 @@ export default function GuidesPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">Guides</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Guides</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Written by Operators.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Deep-dive guides to the fundamentals of production operations — the disciplines, the taxonomies, and the
@@ -54,7 +54,7 @@ export default function GuidesPage() {
         </ul>
       </section>
 
-      <CTASection title="Ship your ops" subtitle="Start free on the Access tier." />
+      <CTASection title="Ship Your Ops" subtitle="Start free on the Access tier." />
     </div>
   );
 }

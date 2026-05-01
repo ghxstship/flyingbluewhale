@@ -23,7 +23,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Guard tours" />
+        <ModuleHeader eyebrow="Safety" title="Guard Tours" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -44,7 +44,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Safety"
-        title="Guard tours"
+        title="Guard Tours"
         subtitle={`${rows.length} tour${rows.length === 1 ? "" : "s"} · ${inProgress} in progress · ${overdue} overdue`}
         action={
           <Button href="/console/safety/guard-tours/new" size="sm">
@@ -72,7 +72,7 @@ export default async function Page() {
             },
             {
               key: "next_run",
-              header: "Next run",
+              header: "Next Run",
               render: (r) =>
                 r.next_run_at
                   ? new Date(String(r.next_run_at)).toLocaleString(undefined, {

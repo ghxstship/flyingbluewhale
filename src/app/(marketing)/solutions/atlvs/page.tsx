@@ -5,7 +5,17 @@ export const revalidate = 300;
 
 import Link from "next/link";
 import type { Metadata } from "next";
-import { CheckCircle2, Command, Database, FileSignature, DollarSign, ClipboardList, Users, Brain, ShieldCheck } from "lucide-react";
+import {
+  CheckCircle2,
+  Command,
+  Database,
+  FileSignature,
+  DollarSign,
+  ClipboardList,
+  Users,
+  Brain,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
@@ -18,7 +28,13 @@ export const metadata: Metadata = buildMetadata({
   description:
     "The studio&apos;s chart room. From pitch to homecoming in one sidebar. Nine rooms, sixty-plus modules, role-aware on every act. Written by taste-makers for taste-makers.",
   path: "/solutions/atlvs",
-  keywords: ["ATLVS", "production operations console", "event production dashboard", "internal production platform", "operations console software"],
+  keywords: [
+    "ATLVS",
+    "production operations console",
+    "event production dashboard",
+    "internal production platform",
+    "operations console software",
+  ],
   ogImageEyebrow: "ATLVS",
   ogImageTitle: "The Bridge · Charts the Voyage",
 });
@@ -33,9 +49,11 @@ export default function ATLVSPage() {
   return (
     <div data-platform="atlvs">
       <JsonLd
-        data={[productSchema({
+        data={[
+          productSchema({
             name: "ATLVS — Office Operations Console",
-            description: "The office console for production teams. Projects, finance, procurement, production, people, and AI — in one connected workspace.",
+            description:
+              "The office console for production teams. Projects, finance, procurement, production, people, and AI — in one connected workspace.",
             url: "https://flyingbluewhale.app/solutions/atlvs",
             price: "0",
           }),
@@ -44,21 +62,30 @@ export default function ATLVSPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">ATLVS · The Bridge</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          ATLVS · The Bridge
+        </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Charts the Voyage From the Desk.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The studio&apos;s chart room. From pitch to homecoming. Nine rooms, sixty-plus modules, one sidebar — proposals to payouts, POs to ceremonies, crew to cash. Role-aware on every act.
+          The studio&apos;s chart room. From pitch to homecoming. Nine rooms, sixty-plus modules, one sidebar —
+          proposals to payouts, POs to ceremonies, crew to cash. Role-aware on every act.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Book passage</Button>
-          <Button href="/contact" variant="secondary">Captain&apos;s briefing</Button>
-          <Link href="/pricing" className="btn btn-ghost">Passage →</Link>
+          <Button href="/signup">Book Passage</Button>
+          <Button href="/contact" variant="secondary">
+            Captain&apos;s briefing
+          </Button>
+          <Link href="/pricing" className="btn btn-ghost">
+            Passage →
+          </Link>
         </div>
       </section>
 
       {/* Nine domain modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">Nine rooms · Sixty-plus modules</div>
+        <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          Nine rooms · Sixty-plus modules
+        </div>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
           Every Act of Every Voyage. Same Chart Room.
         </h2>
@@ -66,15 +93,51 @@ export default function ATLVSPage() {
           <FeatureGrid
             cols={3}
             features={[
-              { icon: Command, title: "Work", body: "Projects, tasks, Gantt, schedule, events, canonical locations. The run-sheet." },
-              { icon: FileSignature, title: "Sales", body: "Pipeline, leads, clients, proposals signed in place. Not in the inbox." },
-              { icon: DollarSign, title: "Finance", body: "Invoices, expenses, budgets with utilization, time, mileage, advances, payouts, live P&L." },
-              { icon: ClipboardList, title: "Procurement", body: "Reqs, POs, vendors, catalog, COI + W-9 tracking, live vendor payouts." },
-              { icon: Database, title: "Production", body: "Equipment, rentals with availability, fab orders, dispatch, logistics. The road case." },
-              { icon: Users, title: "People", body: "Directory, crew, credentials with expiry alerts, role matrix, invites." },
-              { icon: Brain, title: "AI runner", body: "Drafts from your manifest — riders, RFPs, recaps. Templates and automations for the busywork." },
-              { icon: ShieldCheck, title: "Settings", body: "Org, billing, integrations, webhooks, audit, compliance, branding." },
-              { icon: CheckCircle2, title: "Collab", body: "Inbox, files, forms, command palette. Quiet as the back bar." },
+              {
+                icon: Command,
+                title: "Work",
+                body: "Projects, tasks, Gantt, schedule, events, canonical locations. The run-sheet.",
+              },
+              {
+                icon: FileSignature,
+                title: "Sales",
+                body: "Pipeline, leads, clients, proposals signed in place. Not in the inbox.",
+              },
+              {
+                icon: DollarSign,
+                title: "Finance",
+                body: "Invoices, expenses, budgets with utilization, time, mileage, advances, payouts, live P&L.",
+              },
+              {
+                icon: ClipboardList,
+                title: "Procurement",
+                body: "Reqs, POs, vendors, catalog, COI + W-9 tracking, live vendor payouts.",
+              },
+              {
+                icon: Database,
+                title: "Production",
+                body: "Equipment, rentals with availability, fab orders, dispatch, logistics. The road case.",
+              },
+              {
+                icon: Users,
+                title: "People",
+                body: "Directory, crew, credentials with expiry alerts, role matrix, invites.",
+              },
+              {
+                icon: Brain,
+                title: "AI runner",
+                body: "Drafts from your manifest — riders, RFPs, recaps. Templates and automations for the busywork.",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Settings",
+                body: "Org, billing, integrations, webhooks, audit, compliance, branding.",
+              },
+              {
+                icon: CheckCircle2,
+                title: "Collab",
+                body: "Inbox, files, forms, command palette. Quiet as the back bar.",
+              },
             ]}
           />
         </div>
@@ -84,13 +147,18 @@ export default function ATLVSPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">Under the hood</div>
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+              Under the hood
+            </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built Like a Charter. Not a Template.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Every module rides the same rails — list, detail, create — with status flow where it counts (invoices, proposals, POs, tasks). Validation at the door. Your manifest walled at the database, private by architecture.
+              Every module rides the same rails — list, detail, create — with status flow where it counts (invoices,
+              proposals, POs, tasks). Validation at the door. Your manifest walled at the database, private by
+              architecture.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Same rails mean the studio learns the chart room once. New rooms ship in days. The act changes — the crew stays.
+              Same rails mean the studio learns the chart room once. New rooms ship in days. The act changes — the crew
+              stays.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
@@ -118,9 +186,18 @@ export default function ATLVSPage() {
         <h2 className="text-3xl font-semibold tracking-tight">Who Lives in ATLVS?</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {[
-            { role: "Owner / Admin", body: "Full house pass — billing, org, members, integrations. Runs the business while the show runs itself." },
-            { role: "Controller", body: "Finance + procurement on the board. Invoices, expenses, budgets, POs, payouts, audit." },
-            { role: "Project manager", body: "Daily driver — projects, tasks, crew, proposals, clients. The tour manager's tour manager." },
+            {
+              role: "Owner / Admin",
+              body: "Full house pass — billing, org, members, integrations. Runs the business while the show runs itself.",
+            },
+            {
+              role: "Controller",
+              body: "Finance + procurement on the board. Invoices, expenses, budgets, POs, payouts, audit.",
+            },
+            {
+              role: "Project manager",
+              body: "Daily driver — projects, tasks, crew, proposals, clients. The tour manager's tour manager.",
+            },
           ].map((p) => (
             <div key={p.role} className="surface p-5">
               <div className="text-sm font-semibold">{p.role}</div>

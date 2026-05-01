@@ -202,7 +202,7 @@ export default function ChangelogPage() {
         </ul>
       </section>
 
-      <CTASection title="Try what's new" subtitle="Every change ships to free and trial accounts immediately." />
+      <CTASection title="Try What's New" subtitle="Every change ships to free and trial accounts immediately." />
     </div>
   );
 }

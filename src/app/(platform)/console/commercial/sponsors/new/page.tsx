@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Commercial · Sponsors" title="New Entitlement" />
       <div className="page-content max-w-xl">
-        <FormShell action={createEntitlement} cancelHref="/console/commercial/sponsors" submitLabel="Add entitlement">
+        <FormShell action={createEntitlement} cancelHref="/console/commercial/sponsors" submitLabel="Add Entitlement">
           <Input label="Title" name="title" maxLength={160} placeholder="e.g. Tier-1 hospitality (8 guests)" required />
           <Input label="Quantity" name="quantity" type="number" min={0} max={1000000} defaultValue={1} required />
           <Input label="Due By" name="due_by" type="date" />

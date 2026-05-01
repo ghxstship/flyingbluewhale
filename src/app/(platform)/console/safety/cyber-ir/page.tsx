@@ -89,7 +89,7 @@ export default async function Page() {
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Open" value={open.toLocaleString()} accent />
-          <MetricCard label="In containment" value={containment.toLocaleString()} />
+          <MetricCard label="In Containment" value={containment.toLocaleString()} />
           <MetricCard label="Closed · 90d" value={(rows.length - open).toLocaleString()} />
         </div>
 

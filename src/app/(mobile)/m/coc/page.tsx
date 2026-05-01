@@ -54,7 +54,7 @@ export default async function MobileCocPage() {
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
         Field
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Chain of custody</h1>
+      <h1 className="mt-1 text-2xl font-semibold">Chain of Custody</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         Evidence + sample handover trail. Capture by uploading evidence on an incident, scan, or credential.
       </p>
@@ -77,7 +77,7 @@ export default async function MobileCocPage() {
             <li>
               <EmptyState
                 size="compact"
-                title="Nothing in the last 7 days"
+                title="Nothing in the Last 7 Days"
                 description="Custody events you create are auto-logged into the audit trail and appear here."
               />
             </li>

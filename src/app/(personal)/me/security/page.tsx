@@ -27,7 +27,7 @@ export default function SecurityPage() {
         </div>
         <div className="flex items-center justify-between p-5">
           <div>
-            <div className="text-sm font-semibold">Active sessions</div>
+            <div className="text-sm font-semibold">Active Sessions</div>
             <div className="mt-1 text-xs text-[var(--text-muted)]">Sign out of all other devices</div>
           </div>
           <form action="/auth/signout" method="post">
@@ -40,7 +40,7 @@ export default function SecurityPage() {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">API tokens</span>
-              <Badge variant="muted">On the roadmap</Badge>
+              <Badge variant="muted">On the Roadmap</Badge>
             </div>
             <div className="mt-1 text-xs text-[var(--text-muted)]">
               Personal access tokens for the API. For now, sign in via the web UI; service-to-service calls use Supabase

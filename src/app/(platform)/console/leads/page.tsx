@@ -13,7 +13,14 @@ export const dynamic = "force-dynamic";
 
 export default async function LeadsPage() {
   if (!hasSupabase) {
-    return <><ModuleHeader title="Leads" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+    return (
+      <>
+        <ModuleHeader title="Leads" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   }
   const session = await requireSession();
   const rows = await listOrgScoped("leads", session.orgId, { orderBy: "updated_at" });
@@ -24,7 +31,7 @@ export default async function LeadsPage() {
         eyebrow="Sales"
         title="Leads"
         subtitle={`${rows.length} lead${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/leads/new">+ New lead</Button>}
+        action={<Button href="/console/leads/new">+ New Lead</Button>}
       />
       <div className="page-content">
         <DataTable<Lead>
@@ -33,7 +40,12 @@ export default async function LeadsPage() {
           columns={[
             { key: "name", header: "Name", render: (r) => r.name },
             { key: "stage", header: "Stage", render: (r) => <StatusBadge status={r.stage} /> },
-            { key: "value", header: "Value", render: (r) => formatMoney(r.estimated_value_cents), className: "font-mono text-xs" },
+            {
+              key: "value",
+              header: "Value",
+              render: (r) => formatMoney(r.estimated_value_cents),
+              className: "font-mono text-xs",
+            },
             { key: "source", header: "Source", render: (r) => r.source ?? "—", className: "font-mono text-xs" },
             { key: "email", header: "Email", render: (r) => r.email ?? "—", className: "font-mono text-xs" },
             { key: "updated", header: "Updated", render: (r) => timeAgo(r.updated_at), className: "font-mono text-xs" },

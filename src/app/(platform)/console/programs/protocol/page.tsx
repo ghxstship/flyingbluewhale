@@ -84,7 +84,7 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="VIP categories" value={vipCats.length.toLocaleString()} accent />
           <MetricCard label="T3 runs · 14d" value={runs.length.toLocaleString()} />
-          <MetricCard label="Accommodation blocks" value={(blockCount ?? 0).toLocaleString()} />
+          <MetricCard label="Accommodation Blocks" value={(blockCount ?? 0).toLocaleString()} />
         </div>
 
         <section className="surface p-4">

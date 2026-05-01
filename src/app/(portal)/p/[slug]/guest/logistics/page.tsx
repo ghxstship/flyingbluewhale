@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="guest" title="Logistics" subtitle="Parking, gates, ADA, weather">
       <EmptyState
-        title="Logistics publish day-of"
+        title="Logistics Publish Day-Of"
         description="Parking gates, ADA access points, and weather notes post here the morning of the show. Your ticket + event guide will still have the entry details."
       />
     </PortalSubpage>

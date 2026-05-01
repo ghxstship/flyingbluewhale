@@ -67,7 +67,7 @@ export default async function Page() {
         subtitle={`${rows.length} open · ${submitted} submitted · ${approved} approved`}
         action={
           <Button href="/console/procurement/requisitions/new" size="sm">
-            + New requisition
+            + New RFQ
           </Button>
         }
       />
@@ -75,7 +75,7 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Open RFQs" value={rows.length.toLocaleString()} accent />
           <MetricCard label="Submitted" value={submitted.toLocaleString()} />
-          <MetricCard label="Total estimate" value={formatMoney(totalEstimate)} />
+          <MetricCard label="Total Estimate" value={formatMoney(totalEstimate)} />
         </div>
 
         <DataTable<RfqRow>
@@ -85,7 +85,7 @@ export default async function Page() {
           emptyDescription="RFQs are submitted/approved requisitions awaiting vendor quotes. Author one via Procurement → Requisitions."
           emptyAction={
             <Button href="/console/procurement/requisitions/new" size="sm">
-              + New requisition
+              + New RFQ
             </Button>
           }
           columns={[

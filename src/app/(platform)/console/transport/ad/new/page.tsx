@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Transport" title="New A&D Manifest" />
       <div className="page-content max-w-xl">
-        <FormShell action={createAdManifest} cancelHref="/console/transport/ad" submitLabel="Add manifest">
+        <FormShell action={createAdManifest} cancelHref="/console/transport/ad" submitLabel="Add Manifest">
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Direction</label>
             <select name="kind" defaultValue="arrival" className="input-base mt-1.5 w-full">

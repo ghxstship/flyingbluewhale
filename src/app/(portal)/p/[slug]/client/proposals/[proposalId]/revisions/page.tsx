@@ -20,12 +20,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       <header className="surface-raised flex items-end justify-between gap-4 p-5">
         <div>
           <div className="eyebrow text-xs text-[var(--text-muted)]">Revisions & proofing</div>
-          <h1 className="text-lg font-semibold">Decide on creative deliverables</h1>
+          <h1 className="text-lg font-semibold">Decide on Creative Deliverables</h1>
           <p className="mt-1 max-w-2xl text-sm text-[var(--text-muted)]">
             Each round groups one or more proofs to review together. Approve, request changes, or reject.
           </p>
         </div>
-        <Button href={`${base}/new`}>Open a round</Button>
+        <Button href={`${base}/new`}>Open a Round</Button>
       </header>
 
       {rounds.length === 0 ? (

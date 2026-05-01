@@ -5,6 +5,21 @@ import { createClient } from "./supabase/server";
 import { hasSupabase } from "./env";
 import type { Persona, PlatformRole, Tier } from "./supabase/types";
 
+// AsyncLocalStorage isn't viable across Edge runtimes, so we resolve PAT auth
+// lazily by inspecting the *current* request's Authorization header from the
+// ambient request scope. Next 16 exposes this via the experimental import; we
+// fall back to a no-op when it's unavailable (e.g. unit tests using the
+// helpers without a request context).
+async function readAuthorizationHeader(): Promise<string | null> {
+  try {
+    const { headers } = await import("next/headers");
+    const h = await headers();
+    return h.get("authorization");
+  } catch {
+    return null;
+  }
+}
+
 export type Session = {
   userId: string;
   email: string;
@@ -16,6 +31,20 @@ export type Session = {
 
 export async function getSession(): Promise<Session | null> {
   if (!hasSupabase) return null;
+
+  // Bearer-token auth (personal access tokens) takes priority over the
+  // session cookie when both are present. This mirrors Stripe / GitHub:
+  // a token explicitly attached by the caller is the strongest signal of
+  // intent, and it lets a developer test a token from a logged-in browser
+  // without first signing out.
+  const authHeader = await readAuthorizationHeader();
+  if (authHeader && /^Bearer\s+pat_/i.test(authHeader)) {
+    const { verifyApiKey } = await import("./api-keys");
+    const tokenSession = await verifyApiKey(authHeader);
+    if (tokenSession) return tokenSession;
+    // Fall through to cookie auth so a stale token doesn't lock a logged-in
+    // user out of the same request — the cookie is still trustworthy.
+  }
 
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
@@ -66,14 +95,22 @@ export async function withAuth<T>(handler: (session: Session) => Promise<T>): Pr
 
 export function personaForRole(role: PlatformRole): Persona {
   switch (role) {
-    case "owner": return "owner";
-    case "admin": return "admin";
-    case "controller": return "controller";
-    case "collaborator": return "project_manager";
-    case "contractor": return "vendor";
-    case "crew": return "crew";
-    case "client": return "client";
-    case "developer": return "developer";
+    case "owner":
+      return "owner";
+    case "admin":
+      return "admin";
+    case "controller":
+      return "controller";
+    case "collaborator":
+      return "project_manager";
+    case "contractor":
+      return "vendor";
+    case "crew":
+      return "crew";
+    case "client":
+      return "client";
+    case "developer":
+      return "developer";
     case "viewer":
     case "community":
     default:
@@ -94,15 +131,25 @@ const CAPABILITIES: Partial<Record<PlatformRole, readonly string[]>> = {
   owner: ["*"],
   admin: ["*"],
   controller: [
-    "projects:read", "projects:write",
-    "invoices:*", "expenses:*", "budgets:*", "time:*", "mileage:*", "payouts:*",
+    "projects:read",
+    "projects:write",
+    "invoices:*",
+    "expenses:*",
+    "budgets:*",
+    "time:*",
+    "mileage:*",
+    "payouts:*",
     "procurement:*",
     "billing:*",
   ],
   collaborator: [
-    "projects:read", "projects:write",
-    "tasks:*", "schedule:*", "crew:read",
-    "proposals:*", "clients:read",
+    "projects:read",
+    "projects:write",
+    "tasks:*",
+    "schedule:*",
+    "crew:read",
+    "proposals:*",
+    "clients:read",
   ],
   contractor: ["projects:read", "tasks:read", "time:write", "vendor-portal:*"],
   crew: ["projects:read", "tasks:read", "time:write", "check-in:*"],

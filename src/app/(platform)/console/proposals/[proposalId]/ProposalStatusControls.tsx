@@ -7,9 +7,9 @@ import { setProposalStatusAction } from "../actions";
 import type { ProposalStatus } from "@/lib/supabase/types";
 
 const NEXT: Record<ProposalStatus, { next: ProposalStatus; label: string } | null> = {
-  draft: { next: "sent", label: "Send to client" },
-  sent: { next: "approved", label: "Mark approved" },
-  approved: { next: "signed", label: "Mark signed" },
+  draft: { next: "sent", label: "Send to Client" },
+  sent: { next: "approved", label: "Mark Approved" },
+  approved: { next: "signed", label: "Mark Signed" },
   expired: { next: "draft", label: "Re-draft" },
   rejected: { next: "draft", label: "Re-draft" },
   signed: null,

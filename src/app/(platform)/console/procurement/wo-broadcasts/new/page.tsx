@@ -28,7 +28,7 @@ export default async function Page() {
         subtitle="Post an open work order to the vendor pool. First qualified responder accepts."
       />
       <div className="page-content max-w-xl">
-        <FormShell action={createBroadcast} cancelHref="/console/procurement/wo-broadcasts" submitLabel="Save draft">
+        <FormShell action={createBroadcast} cancelHref="/console/procurement/wo-broadcasts" submitLabel="Save Draft">
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               Title<span className="ms-0.5 text-[var(--color-error)]">*</span>

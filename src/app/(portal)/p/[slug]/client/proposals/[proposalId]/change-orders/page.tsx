@@ -21,13 +21,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       <header className="surface-raised flex items-end justify-between gap-4 p-5">
         <div>
           <div className="eyebrow text-xs text-[var(--text-muted)]">Change orders</div>
-          <h1 className="text-lg font-semibold">Scope changes after May 12 lock</h1>
+          <h1 className="text-lg font-semibold">Scope Changes After May 12 Lock</h1>
           <p className="mt-1 max-w-2xl text-sm text-[var(--text-muted)]">
             Anything that wasn't in the signed SOW. Each change order moves through requested → priced → client
             decision.
           </p>
         </div>
-        <Button href={`${base}/new`}>Request a change</Button>
+        <Button href={`${base}/new`}>Request a Change</Button>
       </header>
 
       {cos.length === 0 ? (

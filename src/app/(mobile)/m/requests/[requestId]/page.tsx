@@ -31,10 +31,10 @@ const NEXT_STATES: Record<
 > = {
   open: [
     { value: "acknowledged", label: "Acknowledge" },
-    { value: "in_progress", label: "Start work" },
+    { value: "in_progress", label: "Start Work" },
   ],
   acknowledged: [
-    { value: "in_progress", label: "Start work" },
+    { value: "in_progress", label: "Start Work" },
     { value: "resolved", label: "Resolve" },
   ],
   in_progress: [{ value: "resolved", label: "Resolve" }],

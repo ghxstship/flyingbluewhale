@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ ceremonyId: s
         <FormShell
           action={action}
           cancelHref={`/console/programs/ceremonies/${p.ceremonyId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Title" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
@@ -46,14 +46,14 @@ export default async function Page({ params }: { params: Promise<{ ceremonyId: s
             />
           </label>
           <Input
-            label="Starts at"
+            label="Starts At"
             name="starts_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.starts_at)}
             required
           />
           <Input
-            label="Ends at"
+            label="Ends At"
             name="ends_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.ends_at)}

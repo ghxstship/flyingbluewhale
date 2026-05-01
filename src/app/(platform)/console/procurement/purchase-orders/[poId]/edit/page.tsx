@@ -18,12 +18,12 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
   const action = updatePurchaseOrder.bind(null, p.poId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Purchase order" title={`Edit ${row.title}`} />
+      <ModuleHeader eyebrow="Purchase Order" title={`Edit ${row.title}`} />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/procurement/purchase-orders/${p.poId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Title" name="title" defaultValue={row.title} required maxLength={200} />
           <Input label="Number" name="number" defaultValue={row.number} required maxLength={80} />

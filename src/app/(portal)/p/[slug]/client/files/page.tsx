@@ -25,17 +25,25 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="client" title="Files" subtitle="Branded deliverables shared with you">
       {files.length === 0 ? (
-        <EmptyState title="No files yet" description="Uploaded project deliverables appear here as they move through review." />
+        <EmptyState
+          title="No Files Yet"
+          description="Uploaded project deliverables appear here as they move through review."
+        />
       ) : (
         <ul className="space-y-2">
           {files.map((f) => (
             <li key={f.id}>
-              <a href={`/api/v1/deliverables/${f.id}/download`} className="surface hover-lift flex items-center justify-between p-4">
+              <a
+                href={`/api/v1/deliverables/${f.id}/download`}
+                className="surface hover-lift flex items-center justify-between p-4"
+              >
                 <div>
                   <div className="text-sm font-medium">{f.title ?? "Untitled"}</div>
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)] font-mono">{f.type}</div>
+                  <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                    {f.type}
+                  </div>
                 </div>
-                <div className="text-xs text-[var(--text-muted)] font-mono">{fmtDate(f.updated_at)}</div>
+                <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(f.updated_at)}</div>
               </a>
             </li>
           ))}

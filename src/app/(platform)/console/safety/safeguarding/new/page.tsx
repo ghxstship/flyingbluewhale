@@ -11,7 +11,7 @@ export default function Page() {
         <FormShell
           action={createSafeguardingReport}
           cancelHref="/console/safety/safeguarding"
-          submitLabel="File report"
+          submitLabel="File Report"
         >
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Narrative</label>

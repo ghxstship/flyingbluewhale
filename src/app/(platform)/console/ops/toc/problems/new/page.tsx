@@ -6,9 +6,9 @@ import { createProblem } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Operations" title="New problem record" />
+      <ModuleHeader eyebrow="Operations" title="New Problem Record" />
       <div className="page-content max-w-xl">
-        <FormShell action={createProblem} cancelHref="/console/ops/toc/problems" submitLabel="Create problem">
+        <FormShell action={createProblem} cancelHref="/console/ops/toc/problems" submitLabel="Create Problem">
           <Input label="Code" name="code" required maxLength={40} placeholder="PRB-001" />
           <Input label="Title" name="title" required maxLength={200} />
           <div>

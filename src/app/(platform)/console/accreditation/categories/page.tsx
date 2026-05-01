@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/accreditation/categories/new" size="sm">
-            + New category
+            + New Category
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyDescription="Categories drive credential design, zone access, and the accreditation matrix."
           emptyAction={
             <Button href="/console/accreditation/categories/new" size="sm">
-              + New category
+              + New Category
             </Button>
           }
           columns={[

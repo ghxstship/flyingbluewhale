@@ -27,7 +27,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/workforce/rosters/new" size="sm">
-            + New roster
+            + New Roster
           </Button>
         }
       />
@@ -39,7 +39,7 @@ export default async function Page() {
           emptyDescription="Daily rosters drive scheduling, sign-in, and call-time delivery for the workforce."
           emptyAction={
             <Button href="/console/workforce/rosters/new" size="sm">
-              + New roster
+              + New Roster
             </Button>
           }
           columns={[

@@ -21,9 +21,9 @@ type ShiftRow = {
 
 const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
   { href: "/console/workforce/rosters", label: "Rosters", description: "Daily check-in source of truth" },
-  { href: "/console/transport/workforce", label: "Workforce shuttles", description: "Shift-linked routes" },
+  { href: "/console/transport/workforce", label: "Workforce Shuttles", description: "Shift-linked routes" },
   { href: "/console/accommodation/blocks", label: "Accommodation", description: "Group blocks for staff" },
-  { href: "/console/services/requests", label: "Service tickets", description: "Cleaning, IT, hospitality" },
+  { href: "/console/services/requests", label: "Service Tickets", description: "Cleaning, IT, hospitality" },
 ];
 
 function fmtDay(iso: string): string {
@@ -85,14 +85,14 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Meal credits · 7d" value={mealCredits.toLocaleString()} accent />
-          <MetricCard label="Break minutes · 7d" value={totalBreakMinutes.toLocaleString()} />
-          <MetricCard label="Checked in now" value={checkedIn.toLocaleString()} />
+          <MetricCard label="Meal Credits · 7d" value={mealCredits.toLocaleString()} accent />
+          <MetricCard label="Break Minutes · 7d" value={totalBreakMinutes.toLocaleString()} />
+          <MetricCard label="Checked In Now" value={checkedIn.toLocaleString()} />
         </div>
 
         {days.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Meal credits by day</h3>
+            <h3 className="text-sm font-semibold">Meal Credits by Day</h3>
             <ul className="mt-3 space-y-1.5">
               {days.map(([day, agg]) => (
                 <li key={day} className="flex items-center justify-between text-sm">
@@ -109,7 +109,7 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill in</h3>
+          <h3 className="text-sm font-semibold">Drill In</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {HUB_TILES.map((t) => (
               <Link key={t.href} href={t.href} className="surface hover-lift p-4">

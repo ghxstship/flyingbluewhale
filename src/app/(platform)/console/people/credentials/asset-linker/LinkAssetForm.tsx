@@ -44,11 +44,11 @@ export function LinkAssetForm({
       <div>
         <Input label="Serial" name="asset_serial" required maxLength={120} placeholder="e.g. 04:A2:B5:C0" />
       </div>
-      {state?.error && (
-        <p className="sm:col-span-3 text-xs text-[var(--color-error)]">{state.error}</p>
-      )}
-      <div className="sm:col-span-3 flex justify-end">
-        <Button type="submit" loading={pending}>Link asset</Button>
+      {state?.error && <p className="text-xs text-[var(--color-error)] sm:col-span-3">{state.error}</p>}
+      <div className="flex justify-end sm:col-span-3">
+        <Button type="submit" loading={pending}>
+          Link Asset
+        </Button>
       </div>
     </form>
   );

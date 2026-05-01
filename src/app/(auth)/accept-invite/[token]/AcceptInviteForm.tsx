@@ -18,7 +18,7 @@ export function AcceptInviteForm({ token }: { token: string }) {
 
   return (
     <AuthShell
-      title="Join your team"
+      title="Join Your Team"
       subtitle="Accept your invitation to L0ST 1SLAND Technologies"
       footer={
         <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">

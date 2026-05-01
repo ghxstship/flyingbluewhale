@@ -24,13 +24,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="artist" title="Catering" subtitle="Hospitality rider + dietary notes">
       {items.length === 0 ? (
-        <EmptyState title="Submit your catering rider" description="The rider you post on the Advancing tab surfaces here so the venue's kitchen can prep ahead." />
+        <EmptyState
+          title="Submit Your Catering Rider"
+          description="The rider you post on the Advancing tab surfaces here so the venue's kitchen can prep ahead."
+        />
       ) : (
         <ul className="space-y-2">
           {items.map((r) => (
             <li key={r.id} className="surface p-4 text-sm">
               <div className="font-medium">{r.title ?? "Hospitality rider"}</div>
-              <pre className="mt-2 overflow-x-auto text-xs text-[var(--text-muted)]">{JSON.stringify(r.data, null, 2)}</pre>
+              <pre className="mt-2 overflow-x-auto text-xs text-[var(--text-muted)]">
+                {JSON.stringify(r.data, null, 2)}
+              </pre>
             </li>
           ))}
         </ul>

@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/commercial/tickets/new" size="sm">
-            + New ticket type
+            + New Ticket Type
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyDescription="Define the products you'll sell — public, comp, hospitality — with allocations and channel splits."
           emptyAction={
             <Button href="/console/commercial/tickets/new" size="sm">
-              + New ticket type
+              + New Ticket Type
             </Button>
           }
           columns={[

@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
         </div>
       )}
       <div className="mt-6">
-        <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Update status</div>
+        <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Update Status</div>
         <div className="mt-3 grid grid-cols-2 gap-2">
           {TRANSITIONS.filter((t) => t.value !== task.status).map((t) => (
             <form key={t.value} action={setTaskStatus.bind(null, taskId)}>

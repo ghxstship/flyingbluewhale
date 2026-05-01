@@ -32,10 +32,10 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
         row
           ? [
               { label: "Category", value: row.category ?? "—" },
-              { label: "Contact email", value: row.contact_email ?? "—" },
-              { label: "Contact phone", value: row.contact_phone ?? "—" },
+              { label: "Contact Email", value: row.contact_email ?? "—" },
+              { label: "Contact Phone", value: row.contact_phone ?? "—" },
               { label: "COI expires", value: fmtDate(row.coi_expires_at) },
-              { label: "Stripe payout", value: row.payout_account_id ? "Connected" : "Not connected" },
+              { label: "Stripe Payout", value: row.payout_account_id ? "Connected" : "Not connected" },
               { label: "Notes", value: row.notes ?? "—" },
             ]
           : undefined

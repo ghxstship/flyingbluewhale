@@ -62,7 +62,7 @@ export function PrivacyControls() {
     <div className="space-y-4">
       <Card
         icon={<Download size={16} />}
-        title="Export my data"
+        title="Export My Data"
         body="Download every row in our database that belongs to you — JSON. Includes profile, memberships, conversations, expenses, time entries, and audit log entries you initiated."
         action={
           <Button onClick={exportData} loading={exporting} variant="secondary">
@@ -73,7 +73,7 @@ export function PrivacyControls() {
 
       <Card
         icon={<Cookie size={16} />}
-        title="Cookie preferences"
+        title="Cookie Preferences"
         body="Re-open the cookie consent panel to update your analytics & marketing choices."
         action={
           <Button onClick={reopenConsent} variant="secondary">
@@ -84,7 +84,7 @@ export function PrivacyControls() {
 
       <Card
         icon={<ShieldAlert size={16} />}
-        title="Delete my account"
+        title="Delete My Account"
         body="Soft-deletes immediately. Permanently purged after 30 days. Sign in within that window to cancel."
         action={
           <Button onClick={() => setOpenDelete(true)} variant="danger">
@@ -97,13 +97,11 @@ export function PrivacyControls() {
       <Dialog open={openDelete} onOpenChange={setOpenDelete}>
         <DialogContent size="md">
           <DialogHeader>
-            <DialogTitle>Delete your account?</DialogTitle>
+            <DialogTitle>Delete Your Account?</DialogTitle>
             <DialogDescription>
-              This soft-deletes your profile and revokes every membership immediately. Your data is
-              permanently purged in 30 days. To proceed, type{" "}
-              <code className="rounded bg-[var(--surface-inset)] px-1 py-0.5 font-mono text-xs">
-                delete my account
-              </code>{" "}
+              This soft-deletes your profile and revokes every membership immediately. Your data is permanently purged
+              in 30 days. To proceed, type{" "}
+              <code className="rounded bg-[var(--surface-inset)] px-1 py-0.5 font-mono text-xs">delete my account</code>{" "}
               below.
             </DialogDescription>
           </DialogHeader>
@@ -112,7 +110,7 @@ export function PrivacyControls() {
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
             placeholder="delete my account"
-            aria-label="Type the confirmation phrase"
+            aria-label="Type the Confirmation Phrase"
             className="input-base mt-4 w-full"
             autoComplete="off"
           />

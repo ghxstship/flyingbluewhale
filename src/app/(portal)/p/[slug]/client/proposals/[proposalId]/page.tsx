@@ -51,18 +51,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
     <div className="space-y-8 p-6">
       {/* Top metrics */}
       <div className="metric-grid">
-        <MetricCard label="Lifecycle progress" value={`${summary.completedPhases} / ${summary.totalPhases}`} accent />
+        <MetricCard label="Lifecycle Progress" value={`${summary.completedPhases} / ${summary.totalPhases}`} accent />
         <MetricCard
-          label="Active phase"
+          label="Active Phase"
           value={
             summary.activePhase
               ? `${String(summary.activePhase.phase_num).padStart(2, "0")} ${summary.activePhase.phase_name}`
               : "—"
           }
         />
-        <MetricCard label="Pending approvals" value={summary.pendingApprovals} />
+        <MetricCard label="Pending Approvals" value={summary.pendingApprovals} />
         <MetricCard
-          label="Total contracted"
+          label="Total Contracted"
           value={formatMoney(summary.totalContractedCents)}
           delta={
             summary.approvedChangeCents > 0
@@ -152,7 +152,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
         {/* Open change orders */}
         <section className="surface-raised p-5">
           <header className="mb-3 flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Change orders</h3>
+            <h3 className="text-sm font-semibold">Change Orders</h3>
             <Link
               href={`${base}/change-orders`}
               className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -224,7 +224,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       {/* Activity */}
       <section className="surface-raised p-6">
         <header className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold">Recent activity</h3>
+          <h3 className="text-sm font-semibold">Recent Activity</h3>
           <Link href={`${base}/activity`} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
             All →
           </Link>

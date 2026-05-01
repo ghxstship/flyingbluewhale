@@ -24,14 +24,14 @@ export default async function Page({ params }: { params: Promise<{ ticketTypeId:
   return (
     <>
       <ModuleHeader
-        eyebrow="Ticket type"
+        eyebrow="Ticket Type"
         title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Ticket type"}`}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/commercial/tickets/${p.ticketTypeId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="Channel" name="channel" defaultValue={row.channel ?? ""} required maxLength={80} />

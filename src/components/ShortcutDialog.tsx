@@ -3,13 +3,7 @@
 import * as React from "react";
 import { Search } from "lucide-react";
 import { useHotkeys, useShortcutRegistry, registerShortcut } from "@/lib/hooks/useHotkeys";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
 
 /**
  * <ShortcutDialog> — opens on `?` key. Lists every registered shortcut
@@ -54,9 +48,7 @@ export function ShortcutDialog() {
   const filtered = React.useMemo(() => {
     if (!query) return shortcuts;
     const q = query.toLowerCase();
-    return shortcuts.filter(
-      (s) => s.description.toLowerCase().includes(q) || s.combo.toLowerCase().includes(q),
-    );
+    return shortcuts.filter((s) => s.description.toLowerCase().includes(q) || s.combo.toLowerCase().includes(q));
   }, [shortcuts, query]);
 
   const grouped = React.useMemo(() => {
@@ -83,8 +75,8 @@ export function ShortcutDialog() {
             </span>
           </DialogTitle>
           <DialogDescription>
-            Press <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">?</kbd> anywhere to
-            open. Press <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">Esc</kbd> to dismiss.
+            Press <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">?</kbd> anywhere to open.
+            Press <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">Esc</kbd> to dismiss.
           </DialogDescription>
         </DialogHeader>
 
@@ -96,7 +88,7 @@ export function ShortcutDialog() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Filter shortcuts…"
-            aria-label="Filter shortcuts"
+            aria-label="Filter Shortcuts"
             className="w-full bg-transparent text-xs outline-none"
           />
         </div>
@@ -104,15 +96,12 @@ export function ShortcutDialog() {
         <div className="mt-4 max-h-[50vh] space-y-5 overflow-y-auto pr-1">
           {grouped.map(([group, items]) => (
             <div key={group}>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+              <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
                 {group}
               </div>
               <ul className="mt-2 space-y-1">
                 {items.map((s) => (
-                  <li
-                    key={`${s.group}::${s.combo}`}
-                    className="flex items-center justify-between gap-3 py-0.5 text-sm"
-                  >
+                  <li key={`${s.group}::${s.combo}`} className="flex items-center justify-between gap-3 py-0.5 text-sm">
                     <span className="text-[var(--text-primary)]">{s.description}</span>
                     <kbd className="rounded border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-0.5 font-mono text-[11px]">
                       {formatCombo(s.combo)}
@@ -124,9 +113,7 @@ export function ShortcutDialog() {
           ))}
           {filtered.length === 0 && (
             <div className="py-8 text-center text-xs text-[var(--text-muted)]">
-              {shortcuts.length === 0
-                ? "No shortcuts registered yet."
-                : `No shortcuts match “${query}”.`}
+              {shortcuts.length === 0 ? "No shortcuts registered yet." : `No shortcuts match “${query}”.`}
             </div>
           )}
         </div>

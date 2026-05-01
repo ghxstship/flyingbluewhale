@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
     <>
       <ModuleHeader
         eyebrow="Procurement"
-        title="Add bid response"
+        title="Add Bid Response"
         subtitle="Record a vendor's quote against this RFQ."
       />
       <div className="page-content max-w-xl">

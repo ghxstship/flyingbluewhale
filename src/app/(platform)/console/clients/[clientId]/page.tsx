@@ -41,7 +41,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
         action={
           <div className="flex items-center gap-2">
             <Button href={`/console/proposals/new?clientId=${client.id}`} size="sm">
-              + New proposal
+              + New Proposal
             </Button>
             <Button href={`/console/clients/${clientId}/edit`} size="sm" variant="secondary">
               Edit
@@ -76,7 +76,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
             </Link>
           </div>
           {proposals.length === 0 ? (
-            <EmptyState size="compact" title="No proposals yet" />
+            <EmptyState size="compact" title="No Proposals Yet" />
           ) : (
             <table className="data-table">
               <thead>
@@ -116,7 +116,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
             </Link>
           </div>
           {invoices.length === 0 ? (
-            <EmptyState size="compact" title="No invoices yet" />
+            <EmptyState size="compact" title="No Invoices Yet" />
           ) : (
             <table className="data-table">
               <thead>

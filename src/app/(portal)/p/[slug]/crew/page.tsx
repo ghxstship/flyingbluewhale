@@ -20,7 +20,7 @@ export default async function CrewHome({ params }: { params: Promise<{ slug: str
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-3">
             {[
-              { href: `/p/${slug}/crew/call-sheet`, label: "Call sheet", desc: "Day-of info, parking, contacts" },
+              { href: `/p/${slug}/crew/call-sheet`, label: "Call Sheet", desc: "Day-of info, parking, contacts" },
               { href: `/p/${slug}/crew/time`, label: "Time", desc: "Submit hours worked" },
               { href: `/p/${slug}/crew/advances`, label: "Advances", desc: "Request per-diem or advance" },
             ].map((t) => (

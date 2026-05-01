@@ -79,12 +79,12 @@ export default async function Page() {
       <div className="page-content">
         {categories.length === 0 || zones.length === 0 ? (
           <EmptyState
-            title="Need categories + zones first"
+            title="Need Categories + Zones First"
             description="The matrix derives from accreditation_categories and venue_zones. Author at least one of each before the policy renders."
             action={
               <div className="flex items-center gap-2">
                 <Link href="/console/accreditation/categories/new" className="btn btn-primary btn-sm">
-                  + New category
+                  + New Policy
                 </Link>
                 <Link href="/console/venues" className="btn btn-secondary btn-sm">
                   Open Venues

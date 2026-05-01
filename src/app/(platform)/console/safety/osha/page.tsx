@@ -85,8 +85,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Recordables" value={rows.length.toLocaleString()} accent />
-          <MetricCard label="Days away" value={totalDaysAway.toLocaleString()} />
-          <MetricCard label="Days restricted" value={totalDaysRestricted.toLocaleString()} />
+          <MetricCard label="Days Away" value={totalDaysAway.toLocaleString()} />
+          <MetricCard label="Days Restricted" value={totalDaysRestricted.toLocaleString()} />
         </div>
         {fatalities > 0 && (
           <div className="surface p-4 ring-2 ring-[var(--color-error)]">
@@ -112,12 +112,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
                 </Badge>
               ),
             },
-            { key: "body", header: "Body part", render: (r) => r.body_part ?? "—" },
-            { key: "type", header: "Injury type", render: (r) => r.injury_type ?? "—" },
-            { key: "away", header: "Days away", render: (r) => r.days_away.toString(), className: "font-mono text-xs" },
+            { key: "body", header: "Body Part", render: (r) => r.body_part ?? "—" },
+            { key: "type", header: "Injury Type", render: (r) => r.injury_type ?? "—" },
+            { key: "away", header: "Days Away", render: (r) => r.days_away.toString(), className: "font-mono text-xs" },
             {
               key: "rest",
-              header: "Days restr.",
+              header: "Days Restr.",
               render: (r) => r.days_restricted.toString(),
               className: "font-mono text-xs",
             },

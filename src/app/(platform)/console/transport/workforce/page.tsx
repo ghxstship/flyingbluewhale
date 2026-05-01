@@ -39,7 +39,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Transport" title="Workforce shuttles" />
+        <ModuleHeader eyebrow="Transport" title="Workforce Shuttles" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -81,7 +81,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Transport"
-        title="Workforce shuttles"
+        title="Workforce Shuttles"
         subtitle={`${runs.length} run${runs.length === 1 ? "" : "s"} across workforce + T3 + spectator fleets, next 3 days`}
         action={
           <Button href="/console/transport/dispatch/new" size="sm">
@@ -92,7 +92,7 @@ export default async function Page() {
       <div className="page-content space-y-5">
         {days.length === 0 ? (
           <EmptyState
-            title="No workforce shuttles scheduled"
+            title="No Workforce Shuttles Scheduled"
             description="Workforce shuttles are dispatch_runs with fleet ∈ {workforce, t3, spectator}. Schedule a run from /console/transport/dispatch."
             action={
               <Button href="/console/transport/dispatch/new" size="sm">

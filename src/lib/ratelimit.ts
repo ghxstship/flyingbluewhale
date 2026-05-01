@@ -1,6 +1,11 @@
-// In-memory sliding-window rate limiter. Good enough for a single Vercel edge region
-// or a single Node server; swap for Upstash Ratelimit when you need distributed state.
-// Usage: const ok = await ratelimit({ key: `ai:${session.userId}`, max: 30, windowMs: 60_000 });
+// Sliding-window rate limiter. Two backends:
+//   1. Upstash REST (preferred) — distributed across Vercel regions, HTTP-only,
+//      Edge-runtime safe. Activated when UPSTASH_REDIS_REST_URL +
+//      UPSTASH_REDIS_REST_TOKEN are set.
+//   2. In-memory Map (fallback) — fine for single-process dev/test or as a
+//      degraded mode if Upstash is unreachable.
+//
+// Usage: const r = await ratelimit({ key: `ai:${session.userId}`, max: 30, windowMs: 60_000 });
 
 type Bucket = { timestamps: number[] };
 const buckets = new Map<string, Bucket>();
@@ -11,10 +16,54 @@ export type RateLimitResult = {
   resetAt: number;
 };
 
-export function ratelimit({ key, max, windowMs }: { key: string; max: number; windowMs: number }): RateLimitResult {
+const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL ?? "";
+const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN ?? "";
+const HAS_UPSTASH = Boolean(UPSTASH_URL && UPSTASH_TOKEN);
+
+// Upstash REST pipeline call. We model the sliding window with a sorted set
+// keyed by timestamp:
+//   1. ZREMRANGEBYSCORE — drop entries older than the window.
+//   2. ZADD — record the new entry.
+//   3. ZCARD — count entries currently in the window.
+//   4. PEXPIRE — keep the key alive for windowMs so cold buckets self-evict.
+// If the count exceeds `max` we deny and tell the caller when the oldest
+// entry will roll off so they can populate Retry-After accurately.
+async function upstashSlidingWindow(key: string, max: number, windowMs: number): Promise<RateLimitResult> {
+  const now = Date.now();
+  const cutoff = now - windowMs;
+  const member = `${now}-${Math.random().toString(36).slice(2, 8)}`;
+  const pipeline = [
+    ["ZREMRANGEBYSCORE", key, "0", String(cutoff)],
+    ["ZADD", key, String(now), member],
+    ["ZCARD", key],
+    ["ZRANGE", key, "0", "0", "WITHSCORES"],
+    ["PEXPIRE", key, String(windowMs)],
+  ];
+  const res = await fetch(`${UPSTASH_URL}/pipeline`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${UPSTASH_TOKEN}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(pipeline),
+    // Don't keep TCP open — the Edge runtime closes the request quickly.
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`upstash ${res.status}`);
+  const out = (await res.json()) as Array<{ result: unknown }>;
+  const count = Number((out[2]?.result as number) ?? 0);
+  const oldest = out[3]?.result as [string, string] | string[] | null;
+  // ZRANGE returns [member, score, ...] flat; the score is the second element.
+  const oldestScore = Array.isArray(oldest) && oldest.length >= 2 ? Number(oldest[1]) : now;
+  if (count > max) {
+    return { ok: false, remaining: 0, resetAt: oldestScore + windowMs };
+  }
+  return { ok: true, remaining: Math.max(0, max - count), resetAt: now + windowMs };
+}
+
+function inMemorySlidingWindow(key: string, max: number, windowMs: number): RateLimitResult {
   const now = Date.now();
   const bucket = buckets.get(key) ?? { timestamps: [] };
-  // prune expired
   bucket.timestamps = bucket.timestamps.filter((t) => now - t < windowMs);
   if (bucket.timestamps.length >= max) {
     buckets.set(key, bucket);
@@ -23,6 +72,33 @@ export function ratelimit({ key, max, windowMs }: { key: string; max: number; wi
   bucket.timestamps.push(now);
   buckets.set(key, bucket);
   return { ok: true, remaining: max - bucket.timestamps.length, resetAt: now + windowMs };
+}
+
+export async function ratelimit({
+  key,
+  max,
+  windowMs,
+}: {
+  key: string;
+  max: number;
+  windowMs: number;
+}): Promise<RateLimitResult> {
+  if (HAS_UPSTASH) {
+    try {
+      return await upstashSlidingWindow(key, max, windowMs);
+    } catch {
+      // Network blip / Upstash outage — degrade to in-memory rather than 500.
+      // The in-memory budget is still better than no enforcement at all.
+      return inMemorySlidingWindow(key, max, windowMs);
+    }
+  }
+  return inMemorySlidingWindow(key, max, windowMs);
+}
+
+// Synchronous variant retained for tests + non-Edge call sites that can't
+// await. Always uses the in-memory backend.
+export function ratelimitSync({ key, max, windowMs }: { key: string; max: number; windowMs: number }): RateLimitResult {
+  return inMemorySlidingWindow(key, max, windowMs);
 }
 
 // Edge-runtime-safe base64 → utf8. atob is available on Edge + Node.
@@ -54,15 +130,14 @@ function principalFromRequest(req: Request): string | null {
     const raw = decodeURIComponent(authCookie.split("=").slice(1).join("="));
     // Supabase stores either a JSON array `[access_token, refresh_token, ...]`
     // or (newer) a base64-encoded version prefixed with `base64-`.
-    const payload = raw.startsWith("base64-")
-      ? b64decode(raw.slice("base64-".length))
-      : raw;
+    const payload = raw.startsWith("base64-") ? b64decode(raw.slice("base64-".length)) : raw;
     const parsed = JSON.parse(payload) as unknown;
-    const accessToken = Array.isArray(parsed) && typeof parsed[0] === "string"
-      ? parsed[0]
-      : typeof (parsed as { access_token?: string } | null)?.access_token === "string"
-        ? (parsed as { access_token: string }).access_token
-        : null;
+    const accessToken =
+      Array.isArray(parsed) && typeof parsed[0] === "string"
+        ? parsed[0]
+        : typeof (parsed as { access_token?: string } | null)?.access_token === "string"
+          ? (parsed as { access_token: string }).access_token
+          : null;
     if (!accessToken) return null;
     const [, body] = accessToken.split(".");
     if (!body) return null;
@@ -87,9 +162,9 @@ export function keyFromRequest(req: Request, prefix: string): string {
 
 // Budgets per endpoint family. Extend as we wire more endpoints.
 export const RATE_BUDGETS = {
-  auth:     { max: 10,  windowMs: 60_000 },   // 10 / min — login/signup/forgot
-  ai:       { max: 30,  windowMs: 60_000 },   // 30 / min — AI chat
-  scan:     { max: 120, windowMs: 60_000 },   // 120 / min — field scanning is fast
-  webhook:  { max: 300, windowMs: 60_000 },   // Stripe delivery rate
-  default:  { max: 60,  windowMs: 60_000 },
+  auth: { max: 10, windowMs: 60_000 }, // 10 / min — login/signup/forgot
+  ai: { max: 30, windowMs: 60_000 }, // 30 / min — AI chat
+  scan: { max: 120, windowMs: 60_000 }, // 120 / min — field scanning is fast
+  webhook: { max: 300, windowMs: 60_000 }, // Stripe delivery rate
+  default: { max: 60, windowMs: 60_000 },
 } as const;

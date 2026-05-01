@@ -69,7 +69,7 @@ export default async function AlertsPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No active alerts"
+              title="No Active Alerts"
               description="Crisis notifications appear here when activated."
             />
           </li>

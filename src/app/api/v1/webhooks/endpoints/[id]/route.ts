@@ -3,6 +3,9 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
+
+type WebhookEndpointUpdate = Database["public"]["Tables"]["webhook_endpoints"]["Update"];
 
 const PatchSchema = z.object({
   url: z.string().url().startsWith("https://").optional(),
@@ -19,7 +22,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     const supabase = await createClient();
-    const patch: Record<string, unknown> = {};
+    const patch: WebhookEndpointUpdate = {};
     if (input.url !== undefined) patch.url = input.url;
     if (input.description !== undefined) patch.description = input.description;
     if (input.events !== undefined) patch.events = input.events;

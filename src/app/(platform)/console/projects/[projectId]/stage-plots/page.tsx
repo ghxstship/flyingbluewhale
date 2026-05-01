@@ -26,12 +26,12 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
     <>
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
-        title="Stage plots"
+        title="Stage Plots"
         subtitle="Interactive 2D layouts — drag to place mics, amps, risers, and truss."
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
-          { label: "Stage plots" },
+          { label: "Stage Plots" },
         ]}
         action={<NewStagePlotButton projectId={projectId} />}
       />

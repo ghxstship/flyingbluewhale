@@ -71,14 +71,14 @@ export default async function Page() {
         subtitle="Production progress billing — % completion against PO line items with retention. G702/G703 analogue."
         action={
           <Button href="/console/finance/pay-apps/new" size="sm">
-            + New pay app
+            + New Pay App
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending review" value={inFlight.length.toLocaleString()} accent />
-          <MetricCard label="Net due" value={formatMoney(totalDue)} />
+          <MetricCard label="Pending Review" value={inFlight.length.toLocaleString()} accent />
+          <MetricCard label="Net Due" value={formatMoney(totalDue)} />
           <MetricCard label="Completed YTD" value={formatMoney(totalCompleted)} />
         </div>
         <DataTable<Row>
@@ -88,7 +88,7 @@ export default async function Page() {
           emptyDescription="Vendors bill by % completion against PO line items. Retention is held back automatically."
           emptyAction={
             <Button href="/console/finance/pay-apps/new" size="sm">
-              + New pay app
+              + New Pay App
             </Button>
           }
           columns={[

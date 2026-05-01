@@ -21,12 +21,12 @@ export default async function Page({ params }: { params: Promise<{ staffId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Staff member"
+        eyebrow="Staff Member"
         title={`Edit ${((row as Record<string, unknown>)["full_name"] as string | undefined) ?? "Staff member"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/workforce/staff/${p.staffId}`} submitLabel="Save changes">
-          <Input label="Full name" name="full_name" defaultValue={row.full_name ?? ""} required maxLength={200} />
+        <FormShell action={action} cancelHref={`/console/workforce/staff/${p.staffId}`} submitLabel="Save Changes">
+          <Input label="Full Name" name="full_name" defaultValue={row.full_name ?? ""} required maxLength={200} />
           <Input label="Email" name="email" type="email" defaultValue={row.email ?? ""} />
           <Input label="Phone" name="phone" defaultValue={row.phone ?? ""} maxLength={40} />
           <Input label="Role" name="role" defaultValue={row.role ?? ""} maxLength={120} />

@@ -71,7 +71,7 @@ export default async function Page() {
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Approved" value={approved.toLocaleString()} accent />
-          <MetricCard label="In flight" value={open.toLocaleString()} />
+          <MetricCard label="In Flight" value={open.toLocaleString()} />
           <MetricCard label="Expiring &lt; 30d" value={expiringSoon.toLocaleString()} />
         </div>
         <DataTable<Row>

@@ -111,7 +111,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <LetterLifecycleActions letterId={raw.id} status={raw.status} />
 
             <section className="surface space-y-3 p-5">
-              <h3 className="text-sm font-semibold tracking-wider uppercase">Resolved sources (SSOT)</h3>
+              <h3 className="text-sm font-semibold tracking-wider uppercase">Resolved Sources (SSOT)</h3>
               <DefRow k="Recipient" v={`crew_members → ${resolved.recipient_name}`} />
               <DefRow k="Role" v={`org_roles → ${resolved.role_title} (${resolved.role_slug})`} />
               <DefRow

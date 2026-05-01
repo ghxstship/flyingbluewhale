@@ -23,18 +23,18 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
   const action = updateRental.bind(null, p.rentalId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Rental" title="Edit rental" />
+      <ModuleHeader eyebrow="Rental" title="Edit Rental" />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/production/rentals/${p.rentalId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/production/rentals/${p.rentalId}`} submitLabel="Save Changes">
           <Input
-            label="Starts at"
+            label="Starts At"
             name="starts_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.starts_at)}
             required
           />
           <Input
-            label="Ends at"
+            label="Ends At"
             name="ends_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.ends_at)}

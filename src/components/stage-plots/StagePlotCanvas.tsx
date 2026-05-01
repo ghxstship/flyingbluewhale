@@ -2,19 +2,7 @@
 
 import * as React from "react";
 import { toast } from "sonner";
-import {
-  Music,
-  Mic,
-  Speaker,
-  Drum,
-  Guitar,
-  Radio,
-  Lightbulb,
-  Square,
-  Trash2,
-  Save,
-  Undo2,
-} from "lucide-react";
+import { Music, Mic, Speaker, Drum, Guitar, Radio, Lightbulb, Square, Trash2, Save, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 /**
@@ -56,22 +44,30 @@ type StageElement = {
   label?: string;
 };
 
-const PALETTE: Array<{ kind: ElementKind; label: string; Icon: React.ComponentType<{ size?: number }>; w: number; h: number; color: string }> = [
+const PALETTE: Array<{
+  kind: ElementKind;
+  label: string;
+  Icon: React.ComponentType<{ size?: number }>;
+  w: number;
+  h: number;
+  color: string;
+}> = [
   { kind: "mic", label: "Mic", Icon: Mic, w: 1, h: 1, color: "#64748b" },
   { kind: "monitor", label: "Monitor", Icon: Square, w: 3, h: 2, color: "#475569" },
   { kind: "amp", label: "Amp", Icon: Music, w: 3, h: 2, color: "#1e293b" },
-  { kind: "drum_kit", label: "Drum kit", Icon: Drum, w: 6, h: 6, color: "#334155" },
+  { kind: "drum_kit", label: "Drum Kit", Icon: Drum, w: 6, h: 6, color: "#334155" },
   { kind: "guitar", label: "Guitar", Icon: Guitar, w: 2, h: 2, color: "#334155" },
   { kind: "keys", label: "Keys", Icon: Music, w: 4, h: 2, color: "#334155" },
   { kind: "speaker", label: "Speaker", Icon: Speaker, w: 3, h: 3, color: "#0f172a" },
   { kind: "di_box", label: "DI", Icon: Radio, w: 1, h: 1, color: "#64748b" },
-  { kind: "light_truss", label: "Light truss", Icon: Lightbulb, w: 20, h: 1, color: "#ca8a04" },
+  { kind: "light_truss", label: "Light Truss", Icon: Lightbulb, w: 20, h: 1, color: "#ca8a04" },
   { kind: "riser", label: "Riser", Icon: Square, w: 8, h: 4, color: "#78350f" },
 ];
 
-const COLOR_BY_KIND: Record<ElementKind, string> = Object.fromEntries(
-  PALETTE.map((p) => [p.kind, p.color]),
-) as Record<ElementKind, string>;
+const COLOR_BY_KIND: Record<ElementKind, string> = Object.fromEntries(PALETTE.map((p) => [p.kind, p.color])) as Record<
+  ElementKind,
+  string
+>;
 
 const SIZE_BY_KIND: Record<ElementKind, { w: number; h: number }> = Object.fromEntries(
   PALETTE.map((p) => [p.kind, { w: p.w, h: p.h }]),
@@ -104,14 +100,19 @@ export function StagePlotCanvas({
   // doesn't read a ref during render (React 19 anti-pattern).
   const [historyLength, setHistoryLength] = React.useState(0);
   const svgRef = React.useRef<SVGSVGElement>(null);
-  const dragRef = React.useRef<{ id: string; startX: number; startY: number; origX: number; origY: number } | null>(null);
+  const dragRef = React.useRef<{ id: string; startX: number; startY: number; origX: number; origY: number } | null>(
+    null,
+  );
 
-  const pushHistory = React.useCallback((next: StageElement[]) => {
-    historyRef.current.push(elements);
-    if (historyRef.current.length > 25) historyRef.current.shift();
-    setHistoryLength(historyRef.current.length);
-    setElements(next);
-  }, [elements]);
+  const pushHistory = React.useCallback(
+    (next: StageElement[]) => {
+      historyRef.current.push(elements);
+      if (historyRef.current.length > 25) historyRef.current.shift();
+      setHistoryLength(historyRef.current.length);
+      setElements(next);
+    },
+    [elements],
+  );
 
   const undo = React.useCallback(() => {
     const prev = historyRef.current.pop();
@@ -249,7 +250,7 @@ export function StagePlotCanvas({
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          aria-label="Plot name"
+          aria-label="Plot Name"
           className="input-base w-48"
         />
         <label className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
@@ -300,9 +301,7 @@ export function StagePlotCanvas({
       <div className="flex gap-4">
         {/* Palette */}
         <div className="w-36 shrink-0 space-y-1 rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] p-2">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
-            Palette
-          </div>
+          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Palette</div>
           {PALETTE.map((p) => (
             <button
               key={p.kind}
@@ -359,11 +358,7 @@ export function StagePlotCanvas({
             {elements.map((el) => {
               const isSelected = el.id === selectedId;
               return (
-                <g
-                  key={el.id}
-                  onPointerDown={(e) => onElementPointerDown(e, el)}
-                  style={{ cursor: "move" }}
-                >
+                <g key={el.id} onPointerDown={(e) => onElementPointerDown(e, el)} style={{ cursor: "move" }}>
                   <rect
                     x={el.x * SCALE}
                     y={el.y * SCALE}
@@ -390,8 +385,7 @@ export function StagePlotCanvas({
             })}
           </svg>
           <div className="mt-2 text-[11px] text-[var(--text-muted)]">
-            {widthFt}′ × {depthFt}′ stage · {elements.length}{" "}
-            {elements.length === 1 ? "element" : "elements"}
+            {widthFt}′ × {depthFt}′ stage · {elements.length} {elements.length === 1 ? "element" : "elements"}
           </div>
         </div>
       </div>

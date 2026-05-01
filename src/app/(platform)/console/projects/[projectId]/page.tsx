@@ -95,7 +95,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
         </div>
 
         <div className="card-elevated mt-6 p-6">
-          <h2 className="text-heading text-sm">External portal</h2>
+          <h2 className="text-heading text-sm">External Portal</h2>
           <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
             Stakeholders access this project via slug-scoped portal.
           </p>

@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
     <>
       <ModuleHeader eyebrow="Expense" title={`Edit ${row.description}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/finance/expenses/${p.expenseId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/finance/expenses/${p.expenseId}`} submitLabel="Save Changes">
           <Input label="Description" name="description" defaultValue={row.description} required maxLength={500} />
           <Input
             label="Amount (cents)"
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
               <option value="reimbursed">reimbursed</option>
             </select>
           </label>
-          <Input label="Spent on" name="spent_at" type="date" defaultValue={dateOnly(row.spent_at)} required />
+          <Input label="Spent On" name="spent_at" type="date" defaultValue={dateOnly(row.spent_at)} required />
         </FormShell>
       </div>
     </>

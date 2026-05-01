@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Logistics" title="New Rate-Card Item" />
       <div className="page-content max-w-xl">
-        <FormShell action={createRateCardItem} cancelHref="/console/logistics/ratecard" submitLabel="Add item">
+        <FormShell action={createRateCardItem} cancelHref="/console/logistics/ratecard" submitLabel="Add Item">
           <Input label="Catalog" name="catalog" required maxLength={60} placeholder="e.g. crew, transport, av" />
           <Input label="SKU" name="sku" required maxLength={80} placeholder="e.g. PA-MAIN-V2" />
           <Input label="Name" name="name" required maxLength={200} />

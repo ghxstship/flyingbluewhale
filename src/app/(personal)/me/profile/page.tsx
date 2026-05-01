@@ -37,10 +37,10 @@ export default async function ProfilePage() {
         </div>
       </div>
       <div className="surface mt-6 p-6">
-        <h2 className="text-sm font-semibold">Edit profile</h2>
+        <h2 className="text-sm font-semibold">Edit Profile</h2>
         <div className="mt-4 max-w-md">
-          <FormShell action={updateProfile} submitLabel="Save profile">
-            <Input label="Display name" name="name" maxLength={120} defaultValue={user?.name ?? ""} required />
+          <FormShell action={updateProfile} submitLabel="Save Profile">
+            <Input label="Display Name" name="name" maxLength={120} defaultValue={user?.name ?? ""} required />
             <Input
               label="Avatar URL"
               name="avatar_url"

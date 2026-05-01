@@ -49,7 +49,7 @@ export default async function WalletPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">My credential</h1>
+      <h1 className="mt-1 text-2xl font-semibold">My Credential</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         Show this screen at the gate. Keep it active until your shift ends.
       </p>
@@ -58,7 +58,7 @@ export default async function WalletPage() {
         <div className="mt-6">
           <EmptyState
             size="compact"
-            title="No issued credential"
+            title="No Issued Credential"
             description={
               cards.length === 0
                 ? "You don't have an accreditation in this workspace yet. Reach out to your delegation contact."
@@ -92,17 +92,17 @@ export default async function WalletPage() {
               </div>
               {c.card_barcode && (
                 <div className="surface-inset mt-4 rounded-md p-4 text-center">
-                  <div className="text-xs tracking-wider text-[var(--text-muted)] uppercase">Card barcode</div>
+                  <div className="text-xs tracking-wider text-[var(--text-muted)] uppercase">Card Barcode</div>
                   <div className="mt-1.5 font-mono text-base tracking-wider">{c.card_barcode}</div>
                 </div>
               )}
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <div className="text-[var(--text-muted)]">Valid from</div>
+                  <div className="text-[var(--text-muted)]">Valid From</div>
                   <div className="mt-0.5 font-mono">{c.valid_from?.slice(0, 10) ?? "—"}</div>
                 </div>
                 <div>
-                  <div className="text-[var(--text-muted)]">Valid to</div>
+                  <div className="text-[var(--text-muted)]">Valid To</div>
                   <div className="mt-0.5 font-mono">{c.valid_to?.slice(0, 10) ?? "—"}</div>
                 </div>
               </div>
@@ -113,7 +113,7 @@ export default async function WalletPage() {
 
       {others.length > 0 && (
         <section className="mt-8">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Other cards</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Other Cards</h2>
           <ul className="mt-3 space-y-2">
             {others.map((c) => (
               <li key={c.id} className="surface flex items-center justify-between p-3">

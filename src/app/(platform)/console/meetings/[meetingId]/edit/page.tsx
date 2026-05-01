@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
         title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Meeting"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/meetings/${p.meetingId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/meetings/${p.meetingId}`} submitLabel="Save Changes">
           <Input label="Title" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
@@ -42,14 +42,14 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
             />
           </label>
           <Input
-            label="Starts at"
+            label="Starts At"
             name="starts_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.starts_at)}
             required
           />
           <Input
-            label="Ends at"
+            label="Ends At"
             name="ends_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.ends_at)}

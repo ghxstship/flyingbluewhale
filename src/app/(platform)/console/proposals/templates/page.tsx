@@ -24,19 +24,29 @@ export default async function TemplatesPage() {
     .is("deleted_at", null)
     .order("updated_at", { ascending: false })
     .limit(100);
-  const rows = (data ?? []) as Array<{ id: string; doc_number: string | null; title: string | null; amount_cents: number | null; updated_at: string }>;
+  const rows = (data ?? []) as Array<{
+    id: string;
+    doc_number: string | null;
+    title: string | null;
+    amount_cents: number | null;
+    updated_at: string;
+  }>;
   return (
     <>
       <ModuleHeader
         eyebrow="Sales"
-        title="Proposal templates"
+        title="Proposal Templates"
         subtitle="Draft proposals that can be duplicated into a new engagement."
-        action={<Button href="/console/proposals/new" size="sm">+ New draft</Button>}
+        action={
+          <Button href="/console/proposals/new" size="sm">
+            + New Proposal
+          </Button>
+        }
       />
       <div className="page-content max-w-5xl">
         {rows.length === 0 ? (
           <EmptyState
-            title="No templates yet"
+            title="No Templates Yet"
             description="Save any proposal in draft state and it becomes a reusable template. Duplicate into a new client engagement from the detail page."
             action={
               <Link className="text-sm text-[var(--org-primary)]" href="/console/proposals/new">

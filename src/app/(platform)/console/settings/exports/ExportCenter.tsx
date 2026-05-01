@@ -37,9 +37,9 @@ const TABLES = [
   { value: "invoices", label: "Invoices" },
   { value: "tasks", label: "Tasks" },
   { value: "tickets", label: "Tickets" },
-  { value: "crew_members", label: "Crew roster" },
+  { value: "crew_members", label: "Crew Roster" },
   { value: "vendors", label: "Vendors" },
-  { value: "audit_log", label: "Audit log" },
+  { value: "audit_log", label: "Audit Log" },
 ];
 
 const KINDS = [
@@ -126,15 +126,11 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
   return (
     <div className="space-y-8">
       <section className="surface p-5">
-        <h2 className="mb-3 text-sm font-semibold">New export</h2>
+        <h2 className="mb-3 text-sm font-semibold">New Export</h2>
         <div className="flex flex-wrap items-end gap-3">
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium uppercase tracking-wider text-[var(--text-muted)]">Format</span>
-            <select
-              value={kind}
-              onChange={(e) => setKind(e.target.value)}
-              className="input-base w-40"
-            >
+            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">Format</span>
+            <select value={kind} onChange={(e) => setKind(e.target.value)} className="input-base w-40">
               {KINDS.map((k) => (
                 <option key={k.value} value={k.value}>
                   {k.label}
@@ -143,12 +139,8 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
             </select>
           </label>
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium uppercase tracking-wider text-[var(--text-muted)]">Table</span>
-            <select
-              value={table}
-              onChange={(e) => setTable(e.target.value)}
-              className="input-base w-52"
-            >
+            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">Table</span>
+            <select value={table} onChange={(e) => setTable(e.target.value)} className="input-base w-52">
               {TABLES.map((t) => (
                 <option key={t.value} value={t.value}>
                   {t.label}
@@ -161,11 +153,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
           </Button>
           {(kind === "csv" || kind === "json") && (
             <label className="ml-2 flex items-center gap-1 text-xs text-[var(--text-muted)]">
-              <input
-                type="checkbox"
-                checked={asyncMode}
-                onChange={(e) => setAsyncMode(e.target.checked)}
-              />
+              <input type="checkbox" checked={asyncMode} onChange={(e) => setAsyncMode(e.target.checked)} />
               Queue in background
             </label>
           )}
@@ -174,7 +162,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
 
       <section className="surface p-5">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold">Recent runs</h2>
+          <h2 className="text-sm font-semibold">Recent Runs</h2>
           {anyBusy && (
             <span className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)]">
               <Loader2 size={12} className="animate-spin" />
@@ -185,7 +173,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
         {runs.length === 0 ? (
           <EmptyState
             size="compact"
-            title="No exports yet"
+            title="No Exports Yet"
             description="Run one above and it will appear here with status, size, and row count."
           />
         ) : (
@@ -221,7 +209,10 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                         {r.status}
                       </StatusChip>
                       {r.status === "failed" && r.last_error && (
-                        <div className="mt-1 max-w-xs truncate text-[10px] text-[var(--color-error)]" title={r.last_error}>
+                        <div
+                          className="mt-1 max-w-xs truncate text-[10px] text-[var(--color-error)]"
+                          title={r.last_error}
+                        >
                           {r.last_error}
                         </div>
                       )}
@@ -231,7 +222,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                         <button
                           type="button"
                           onClick={() => redownload(r)}
-                          aria-label="Download again"
+                          aria-label="Download Again"
                           className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-[10px] hover:bg-[var(--surface-inset)]"
                         >
                           <Download size={10} /> Download

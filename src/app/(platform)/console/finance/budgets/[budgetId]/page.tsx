@@ -172,7 +172,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
 
           <section className="surface">
             <header className="border-b border-[var(--border-color)] px-4 py-2.5">
-              <h3 className="text-sm font-semibold">Paid invoices</h3>
+              <h3 className="text-sm font-semibold">Paid Invoices</h3>
               <p className="mt-0.5 text-xs text-[var(--text-muted)]">{(invoices ?? []).length} matching project</p>
             </header>
             <table className="data-table w-full text-sm">

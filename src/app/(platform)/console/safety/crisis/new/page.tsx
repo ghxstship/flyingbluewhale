@@ -8,21 +8,11 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Crisis" title="New Alert" />
       <div className="page-content max-w-xl">
-        <FormShell
-          action={createCrisisAlertAction}
-          cancelHref="/console/safety/crisis"
-          submitLabel="Send alert"
-        >
+        <FormShell action={createCrisisAlertAction} cancelHref="/console/safety/crisis" submitLabel="Send Alert">
           <Input label="Title" name="title" required maxLength={200} />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Body</label>
-            <textarea
-              name="body"
-              rows={4}
-              required
-              maxLength={4000}
-              className="input-base mt-1.5 w-full"
-            />
+            <textarea name="body" rows={4} required maxLength={4000} className="input-base mt-1.5 w-full" />
           </div>
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Severity</label>

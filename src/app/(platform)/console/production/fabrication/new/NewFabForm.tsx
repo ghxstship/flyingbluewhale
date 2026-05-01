@@ -5,7 +5,7 @@ import { createFabAction } from "../actions";
 
 export function NewFabForm() {
   return (
-    <FormShell action={createFabAction} cancelHref="/console/production/fabrication" submitLabel="Create order">
+    <FormShell action={createFabAction} cancelHref="/console/production/fabrication" submitLabel="Create Order">
       <Input label="Title" name="title" required />
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>

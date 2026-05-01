@@ -56,7 +56,7 @@ export default async function MobileGuardPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No assigned tours"
+              title="No Assigned Tours"
               description="Patrol routes appear here when a supervisor assigns you. See all tours in Safety → Guard tours."
               action={
                 <Link href="/console/safety/guard-tours" className="btn btn-secondary btn-sm">

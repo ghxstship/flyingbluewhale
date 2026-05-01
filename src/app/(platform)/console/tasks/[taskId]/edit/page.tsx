@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
     <>
       <ModuleHeader eyebrow="Task" title={`Edit ${row.title}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/tasks/${p.taskId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/tasks/${p.taskId}`} submitLabel="Save Changes">
           <Input label="Title" name="title" defaultValue={row.title} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
             max={3}
             defaultValue={String(row.priority ?? 0)}
           />
-          <Input label="Due at" name="due_at" type="datetime-local" defaultValue={dateTimeLocal(row.due_at)} />
+          <Input label="Due At" name="due_at" type="datetime-local" defaultValue={dateTimeLocal(row.due_at)} />
         </FormShell>
       </div>
     </>

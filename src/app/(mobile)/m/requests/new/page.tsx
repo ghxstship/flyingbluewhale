@@ -11,7 +11,7 @@ export default function MobileNewRequest() {
       <Link href="/m/requests" className="text-xs text-[var(--text-muted)]">
         ← Requests
       </Link>
-      <h1 className="mt-2 text-2xl font-semibold">Open request</h1>
+      <h1 className="mt-2 text-2xl font-semibold">Open Request</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         Log it from the field. Pick the right severity — P1 wakes the on-call, P3 hits ops in the hour.
       </p>

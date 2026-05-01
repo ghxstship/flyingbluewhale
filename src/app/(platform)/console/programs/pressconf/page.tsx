@@ -70,7 +70,7 @@ export default async function Page() {
         subtitle={`${rows.length} press conference${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/events/new" size="sm">
-            + New event
+            + New Event
           </Button>
         }
       />
@@ -82,7 +82,7 @@ export default async function Page() {
           emptyDescription="Press conferences are Events with 'press' or 'media briefing' in the name. Create one and accredited media will see it on the project portal."
           emptyAction={
             <Button href="/console/events/new" size="sm">
-              + New event
+              + New Event
             </Button>
           }
           columns={[

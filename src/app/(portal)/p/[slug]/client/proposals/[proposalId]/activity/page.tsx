@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
     <div className="space-y-4 p-6">
       <header className="surface-raised p-5">
         <div className="eyebrow text-xs text-[var(--text-muted)]">Activity log</div>
-        <h1 className="text-lg font-semibold">Full audit trail</h1>
+        <h1 className="text-lg font-semibold">Full Audit Trail</h1>
         <p className="mt-1 text-sm text-[var(--text-muted)]">
           Every gate check, change order decision, revision round, approval, and file upload — chronological.
         </p>

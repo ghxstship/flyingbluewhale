@@ -49,7 +49,7 @@ export function LetterEditor({
         )}
       </div>
       <fieldset disabled={isLocked} className="space-y-0">
-        <FormShell action={action} submitLabel="Save changes" className="space-y-6 p-5">
+        <FormShell action={action} submitLabel="Save Changes" className="space-y-6 p-5">
           {/* ── IDENTITY ─────────────────────────────────────────────────── */}
           <fieldset className="space-y-3">
             <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
@@ -74,7 +74,7 @@ export function LetterEditor({
                   ))}
                 </NativeSelect>
               </FormField>
-              <FormField name="reports_to_crew_member_id" label="Reports to (crew_members)">
+              <FormField name="reports_to_crew_member_id" label="Reports To (crew_members)">
                 <NativeSelect name="reports_to_crew_member_id" defaultValue={raw.reports_to_crew_member_id ?? ""}>
                   <option value="">— None —</option>
                   {crew.map((c) => (
@@ -94,7 +94,7 @@ export function LetterEditor({
                   ))}
                 </NativeSelect>
               </FormField>
-              <FormField name="employer" label="Issuing entity">
+              <FormField name="employer" label="Issuing Entity">
                 <NativeSelect name="employer" defaultValue={raw.employer}>
                   <option value="ghxstship">GHXSTSHIP Industries LLC</option>
                   <option value="five_senses">Five Senses Group</option>
@@ -118,7 +118,7 @@ export function LetterEditor({
               Compensation (FK → rate_card_items)
             </legend>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <FormField name="rate_card_item_id" label="Rate card (rate_card_items)">
+              <FormField name="rate_card_item_id" label="Rate Card (rate_card_items)">
                 <NativeSelect name="rate_card_item_id" defaultValue={raw.rate_card_item_id ?? ""}>
                   <option value="">— None —</option>
                   {rates.map((r) => (
@@ -129,7 +129,7 @@ export function LetterEditor({
                   ))}
                 </NativeSelect>
               </FormField>
-              <FormField name="per_diem_rate_card_item_id" label="Per diem rate card (rate_card_items)">
+              <FormField name="per_diem_rate_card_item_id" label="Per Diem Rate Card (rate_card_items)">
                 <NativeSelect name="per_diem_rate_card_item_id" defaultValue={raw.per_diem_rate_card_item_id ?? ""}>
                   <option value="">— None —</option>
                   {rates.map((r) => (
@@ -139,7 +139,7 @@ export function LetterEditor({
                   ))}
                 </NativeSelect>
               </FormField>
-              <FormField name="compensation_basis" label="Compensation basis">
+              <FormField name="compensation_basis" label="Compensation Basis">
                 <NativeSelect name="compensation_basis" defaultValue={raw.compensation_basis}>
                   <option value="per_day">Per day (rate × engagement days)</option>
                   <option value="per_show_day">Per show day</option>
@@ -150,7 +150,7 @@ export function LetterEditor({
               </FormField>
               <FormField
                 name="override_amount_dollars"
-                label="Override total (USD)"
+                label="Override Total (USD)"
                 hint="Leave blank to compute from rate × days"
               >
                 <TextInput
@@ -163,7 +163,7 @@ export function LetterEditor({
               </FormField>
               <FormField
                 name="override_per_diem_dollars"
-                label="Override per diem (USD/day)"
+                label="Override Per Diem (USD/Day)"
                 hint="Leave blank to use the rate-card per diem"
               >
                 <TextInput
@@ -194,14 +194,14 @@ export function LetterEditor({
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FormField
                 name="engagement_start"
-                label="Engagement start"
+                label="Engagement Start"
                 hint={`Project default: ${resolved.project_start_date ?? "—"}`}
               >
                 <TextInput name="engagement_start" type="date" defaultValue={raw.engagement_start ?? ""} />
               </FormField>
               <FormField
                 name="engagement_end"
-                label="Engagement end"
+                label="Engagement End"
                 hint={`Project default: ${resolved.project_end_date ?? "—"}`}
               >
                 <TextInput name="engagement_end" type="date" defaultValue={raw.engagement_end ?? ""} />
@@ -215,21 +215,21 @@ export function LetterEditor({
               Inclusions &amp; per-letter overrides (NULL = inherit from org settings)
             </legend>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <TriStateSelect name="travel_provided" label="Travel provided" value={raw.travel_provided} />
-              <TriStateSelect name="lodging_provided" label="Lodging provided" value={raw.lodging_provided} />
-              <TriStateSelect name="meals_provided" label="Meals provided" value={raw.meals_provided} />
+              <TriStateSelect name="travel_provided" label="Travel Provided" value={raw.travel_provided} />
+              <TriStateSelect name="lodging_provided" label="Lodging Provided" value={raw.lodging_provided} />
+              <TriStateSelect name="meals_provided" label="Meals Provided" value={raw.meals_provided} />
             </div>
-            <FormField name="extra_inclusions" label="Extra inclusions" hint="One per line — appended to org defaults">
+            <FormField name="extra_inclusions" label="Extra Inclusions" hint="One per line — appended to org defaults">
               <TextArea name="extra_inclusions" rows={3} defaultValue={(raw.extra_inclusions ?? []).join("\n")} />
             </FormField>
             <FormField
               name="expectations_override"
-              label="Expectations override"
+              label="Expectations Override"
               hint="Leave blank to use the role's description + responsibilities"
             >
               <TextArea name="expectations_override" rows={4} defaultValue={raw.expectations_override ?? ""} />
             </FormField>
-            <FormField name="terms_override" label="Terms override" hint="Leave blank to use the org default terms">
+            <FormField name="terms_override" label="Terms Override" hint="Leave blank to use the org default terms">
               <TextArea name="terms_override" rows={4} defaultValue={raw.terms_override ?? ""} />
             </FormField>
           </fieldset>

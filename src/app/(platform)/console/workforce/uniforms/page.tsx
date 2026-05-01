@@ -70,7 +70,7 @@ export default async function Page() {
             { key: "description", header: "Description", render: (r) => r.description ?? "—" },
             {
               key: "unit_price_cents",
-              header: "Unit cost",
+              header: "Unit Cost",
               render: (r) => formatMoney(r.unit_price_cents, r.currency),
               className: "font-mono text-xs",
             },

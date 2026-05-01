@@ -58,7 +58,7 @@ export default async function MobilePunchPage() {
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
         Field
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Punch list</h1>
+      <h1 className="mt-1 text-2xl font-semibold">Punch List</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {rows.length === 0
           ? "No open items assigned to you."
@@ -70,7 +70,7 @@ export default async function MobilePunchPage() {
           <li>
             <EmptyState
               size="compact"
-              title="Punch list clear"
+              title="Punch List Clear"
               description="Open items assigned to you appear here. Visit Tasks on desktop to assign new ones."
               action={
                 <Link href="/console/tasks" className="btn btn-secondary btn-sm">

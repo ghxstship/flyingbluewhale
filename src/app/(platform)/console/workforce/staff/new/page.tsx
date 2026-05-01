@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Workforce · Staff" title="New Staff Member" />
       <div className="page-content max-w-xl">
-        <FormShell action={createStaff} cancelHref="/console/workforce/staff" submitLabel="Add staff">
+        <FormShell action={createStaff} cancelHref="/console/workforce/staff" submitLabel="Add Staff">
           <Input label="Full Name" name="full_name" maxLength={200} required />
           <Input label="Email" name="email" type="email" />
           <Input label="Phone" name="phone" maxLength={40} />

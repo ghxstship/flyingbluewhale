@@ -4,9 +4,9 @@ import { Input } from "@/components/ui/Input";
 import { createMileageAction } from "../actions";
 
 export function NewMileageForm() {
-  const today = new Date().toISOString().slice(0,10);
+  const today = new Date().toISOString().slice(0, 10);
   return (
-    <FormShell action={createMileageAction} cancelHref="/console/finance/mileage" submitLabel="Log mileage">
+    <FormShell action={createMileageAction} cancelHref="/console/finance/mileage" submitLabel="Log Mileage">
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Origin" name="origin" required />
         <Input label="Destination" name="destination" required />

@@ -36,7 +36,7 @@ export default async function TimePage() {
         eyebrow="Finance"
         title="Time Tracking"
         subtitle={`${rows.length} entries · ${fmtMinutes(totalMin)} logged`}
-        action={<Button href="/console/finance/time/new">+ New entry</Button>}
+        action={<Button href="/console/finance/time/new">+ New Entry</Button>}
       />
       <div className="page-content">
         <DataTable<TimeEntry>
@@ -46,7 +46,7 @@ export default async function TimePage() {
           emptyDescription="Track billable + non-billable work for invoices and labour cost reporting."
           emptyAction={
             <Button href="/console/finance/time/new" size="sm">
-              + New entry
+              + New Entry
             </Button>
           }
           columns={[

@@ -72,7 +72,7 @@ export default async function MobileMedicPage() {
       </p>
 
       <Link href="/m/medic/new" className="btn btn-primary mt-5 w-full">
-        + New encounter
+        + New Encounter
       </Link>
 
       <ul className="mt-6 space-y-2">
@@ -80,7 +80,7 @@ export default async function MobileMedicPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No encounters yet"
+              title="No Encounters Yet"
               description="Encounters you log here are PHI-encrypted and visible only to medical staff."
             />
           </li>

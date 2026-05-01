@@ -28,9 +28,9 @@ export default async function Page({ params }: { params: Promise<{ volunteerId: 
         <FormShell
           action={action}
           cancelHref={`/console/workforce/volunteers/${p.volunteerId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
-          <Input label="Full name" name="full_name" defaultValue={row.full_name ?? ""} required maxLength={200} />
+          <Input label="Full Name" name="full_name" defaultValue={row.full_name ?? ""} required maxLength={200} />
           <Input label="Email" name="email" type="email" defaultValue={row.email ?? ""} />
           <Input label="Phone" name="phone" defaultValue={row.phone ?? ""} maxLength={40} />
           <Input label="Role" name="role" defaultValue={row.role ?? ""} maxLength={120} />

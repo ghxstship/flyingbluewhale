@@ -24,16 +24,7 @@ type MonthPoint = { month: string; revenue: number; expenses: number; margin: nu
 type AgingRow = { bucket: string; count: number; amount: number };
 type CategoryRow = { name: string; value: number };
 
-const PIE_COLORS = [
-  "var(--org-primary)",
-  "#22c55e",
-  "#a855f7",
-  "#f59e0b",
-  "#06b6d4",
-  "#ef4444",
-  "#84cc16",
-  "#ec4899",
-];
+const PIE_COLORS = ["var(--org-primary)", "#22c55e", "#a855f7", "#f59e0b", "#06b6d4", "#ef4444", "#84cc16", "#ec4899"];
 
 export function ReportsCharts({
   monthly,
@@ -64,14 +55,7 @@ export function ReportsCharts({
             <Legend wrapperStyle={{ fontSize: 10 }} />
             <Bar dataKey="revenue" name="Revenue" fill="var(--org-primary)" />
             <Bar dataKey="expenses" name="Expenses" fill="#ef4444" />
-            <Line
-              dataKey="margin"
-              name="Margin"
-              type="monotone"
-              stroke="#22c55e"
-              strokeWidth={2}
-              dot={{ r: 2 }}
-            />
+            <Line dataKey="margin" name="Margin" type="monotone" stroke="#22c55e" strokeWidth={2} dot={{ r: 2 }} />
           </ComposedChart>
         </ResponsiveContainer>
       </ChartShell>
@@ -108,7 +92,7 @@ export function ReportsCharts({
       </ChartShell>
 
       <ChartShell
-        title="Cumulative revenue"
+        title="Cumulative Revenue"
         description="Trailing 12 months"
         empty={monthly.every((m) => m.revenue === 0)}
       >
@@ -137,7 +121,7 @@ export function ReportsCharts({
       </ChartShell>
 
       <ChartShell
-        title="Top expense categories"
+        title="Top Expense Categories"
         description="Trailing total by category"
         empty={categories.length === 0}
       >
@@ -201,11 +185,7 @@ function DarkTooltip({
       {label && <div className="mb-1 font-medium">{label}</div>}
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-1.5">
-          <span
-            className="inline-block h-2 w-2 rounded-full"
-            style={{ background: p.color }}
-            aria-hidden
-          />
+          <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
           <span className="text-[var(--text-secondary)]">{p.name}:</span>
           <span className="font-mono">{typeof p.value === "number" ? fmtTooltip(p.value) : "—"}</span>
         </div>

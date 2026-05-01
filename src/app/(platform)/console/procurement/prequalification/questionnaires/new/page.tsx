@@ -17,7 +17,7 @@ export default function Page() {
           { label: "Questionnaires", href: "/console/procurement/prequalification/questionnaires" },
           { label: "New" },
         ]}
-        title="New questionnaire"
+        title="New Questionnaire"
         subtitle="Define the questions vendors must answer to be approved. Add questions on the detail page."
       />
       <div className="page-content max-w-xl">

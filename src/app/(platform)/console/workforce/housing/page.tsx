@@ -59,7 +59,7 @@ export default async function Page() {
         subtitle={`${rows.length} block${rows.length === 1 ? "" : "s"} · ${totalConfirmed} of ${totalReserved} room${totalReserved === 1 ? "" : "s"} confirmed`}
         action={
           <Button href="/console/accommodation/blocks/new" size="sm">
-            + New block
+            + New Block
           </Button>
         }
       />
@@ -71,7 +71,7 @@ export default async function Page() {
           emptyDescription="Group blocks with stakeholder_group set to a workforce category surface here. VIP and talent blocks live on their own surfaces."
           emptyAction={
             <Button href="/console/accommodation/blocks/new" size="sm">
-              + New block
+              + New Block
             </Button>
           }
           columns={[

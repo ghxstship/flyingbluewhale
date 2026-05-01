@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Accreditation" title="New Category" />
       <div className="page-content max-w-xl">
-        <FormShell action={createCategory} cancelHref="/console/accreditation/categories" submitLabel="Add category">
+        <FormShell action={createCategory} cancelHref="/console/accreditation/categories" submitLabel="Add Category">
           <Input label="Code" name="code" maxLength={40} placeholder="e.g. ATH, OFF, MED" required />
           <Input label="Name" name="name" maxLength={120} placeholder="e.g. Athletes" required />
           <div>

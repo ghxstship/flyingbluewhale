@@ -70,7 +70,7 @@ export default async function Page() {
         subtitle={`${rows.length} session${rows.length === 1 ? "" : "s"} — heats, rounds, medal sessions`}
         action={
           <Button href="/console/events/new" size="sm">
-            + New event
+            + New Event
           </Button>
         }
       />
@@ -82,7 +82,7 @@ export default async function Page() {
           emptyDescription="Sessions live as Events with names like 'Heat 3 · 100m', 'Semi-final', 'Medal session'. This view filters automatically."
           emptyAction={
             <Button href="/console/events/new" size="sm">
-              + New event
+              + New Event
             </Button>
           }
           columns={[

@@ -29,16 +29,16 @@ export default async function Page({ params }: { params: Promise<{ applicationId
   return (
     <>
       <ModuleHeader
-        eyebrow="Vetting application"
+        eyebrow="Vetting Application"
         title={`Edit ${((row as Record<string, unknown>)["person_name"] as string | undefined) ?? "Vetting application"}`}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/accreditation/vetting/${p.applicationId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
-          <Input label="Person name" name="person_name" defaultValue={row.person_name ?? ""} required maxLength={200} />
+          <Input label="Person Name" name="person_name" defaultValue={row.person_name ?? ""} required maxLength={200} />
           <Input label="Email" name="person_email" type="email" defaultValue={row.person_email ?? ""} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Vetting state</span>
@@ -50,8 +50,8 @@ export default async function Page({ params }: { params: Promise<{ applicationId
               <option value="failed">failed</option>
             </select>
           </label>
-          <Input label="Valid from" name="valid_from" type="date" defaultValue={dateOnly(row.valid_from)} />
-          <Input label="Valid to" name="valid_to" type="date" defaultValue={dateOnly(row.valid_to)} />
+          <Input label="Valid From" name="valid_from" type="date" defaultValue={dateOnly(row.valid_from)} />
+          <Input label="Valid To" name="valid_to" type="date" defaultValue={dateOnly(row.valid_to)} />
         </FormShell>
       </div>
     </>

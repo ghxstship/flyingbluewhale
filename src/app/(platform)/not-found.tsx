@@ -7,7 +7,7 @@ export default function ConsoleNotFound() {
       <ModuleHeader eyebrow="404" title="Not Found" subtitle="That record doesn't exist, or you don't have access." />
       <div className="page-content">
         <div className="surface p-6">
-          <Button href="/console">Back to console</Button>
+          <Button href="/console">Back to Console</Button>
         </div>
       </div>
     </>

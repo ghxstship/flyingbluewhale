@@ -15,7 +15,7 @@ const NEXT: Record<FabricationStatus, { to: FabricationStatus; label: string }[]
     { to: "blocked", label: "Block" },
   ],
   in_progress: [
-    { to: "complete", label: "Mark complete" },
+    { to: "complete", label: "Mark Complete" },
     { to: "blocked", label: "Block" },
   ],
   blocked: [{ to: "in_progress", label: "Unblock" }],

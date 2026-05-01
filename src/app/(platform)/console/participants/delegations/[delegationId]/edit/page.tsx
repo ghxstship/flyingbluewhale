@@ -31,13 +31,13 @@ export default async function Page({ params }: { params: Promise<{ delegationId:
         <FormShell
           action={action}
           cancelHref={`/console/participants/delegations/${p.delegationId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="Code" name="code" defaultValue={row.code ?? ""} required maxLength={40} />
           <Input label="Country" name="country" defaultValue={row.country ?? ""} maxLength={120} />
-          <Input label="Contact email" name="contact_email" type="email" defaultValue={row.contact_email ?? ""} />
-          <Input label="Contact phone" name="contact_phone" defaultValue={row.contact_phone ?? ""} maxLength={40} />
+          <Input label="Contact Email" name="contact_email" type="email" defaultValue={row.contact_email ?? ""} />
+          <Input label="Contact Phone" name="contact_phone" defaultValue={row.contact_phone ?? ""} maxLength={40} />
         </FormShell>
       </div>
     </>

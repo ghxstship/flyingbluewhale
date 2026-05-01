@@ -8,7 +8,7 @@ const STAGES = ["new", "qualified", "contacted", "proposal", "won", "lost"] as c
 
 export function NewLeadForm() {
   return (
-    <FormShell action={createLeadAction} cancelHref="/console/leads" submitLabel="Create lead">
+    <FormShell action={createLeadAction} cancelHref="/console/leads" submitLabel="Create Lead">
       <Input label="Name" name="name" required maxLength={120} />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Email" name="email" type="email" />
@@ -19,7 +19,9 @@ export function NewLeadForm() {
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">Stage</label>
           <select name="stage" defaultValue="new" className="input-base mt-1.5 w-full">
-            {STAGES.map((s) => <option key={s}>{s}</option>)}
+            {STAGES.map((s) => (
+              <option key={s}>{s}</option>
+            ))}
           </select>
         </div>
       </div>

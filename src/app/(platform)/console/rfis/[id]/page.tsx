@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Official answer</h3>
+          <h3 className="text-sm font-semibold">Official Answer</h3>
           {rfi.official_answer ? (
             <div className="mt-2">
               <p className="text-sm whitespace-pre-wrap">{rfi.official_answer}</p>

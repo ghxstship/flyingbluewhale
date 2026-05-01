@@ -26,12 +26,12 @@ export default async function Page({ params }: { params: Promise<{ runId: string
   return (
     <>
       <ModuleHeader
-        eyebrow="Dispatch run"
+        eyebrow="Dispatch Run"
         title={`Edit ${((row as Record<string, unknown>)["vehicle_ref"] as string | undefined) ?? "Dispatch run"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/transport/dispatch/${p.runId}`} submitLabel="Save changes">
-          <Input label="Vehicle reference" name="vehicle_ref" defaultValue={row.vehicle_ref ?? ""} maxLength={80} />
+        <FormShell action={action} cancelHref={`/console/transport/dispatch/${p.runId}`} submitLabel="Save Changes">
+          <Input label="Vehicle Reference" name="vehicle_ref" defaultValue={row.vehicle_ref ?? ""} maxLength={80} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Fleet</span>
             <select name="fleet" defaultValue={row.fleet ?? ""} required className="input-base focus-ring w-full">
@@ -44,26 +44,26 @@ export default async function Page({ params }: { params: Promise<{ runId: string
             </select>
           </label>
           <Input
-            label="Scheduled departure"
+            label="Scheduled Departure"
             name="scheduled_depart"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.scheduled_depart)}
             required
           />
           <Input
-            label="Scheduled arrival"
+            label="Scheduled Arrival"
             name="scheduled_arrive"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.scheduled_arrive)}
           />
           <Input
-            label="Actual departure"
+            label="Actual Departure"
             name="actual_depart"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.actual_depart)}
           />
           <Input
-            label="Actual arrival"
+            label="Actual Arrival"
             name="actual_arrive"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.actual_arrive)}

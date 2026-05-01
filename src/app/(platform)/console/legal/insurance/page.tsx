@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/legal/insurance/new" size="sm">
-            + New policy
+            + New Policy
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyDescription="Track GL, motor, professional indemnity, and event-cancel cover. Renewal alerts attach to expiring policies."
           emptyAction={
             <Button href="/console/legal/insurance/new" size="sm">
-              + New policy
+              + New Policy
             </Button>
           }
           columns={[

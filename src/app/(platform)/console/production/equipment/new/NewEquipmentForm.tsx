@@ -5,7 +5,7 @@ import { createEquipmentAction } from "../actions";
 
 export function NewEquipmentForm() {
   return (
-    <FormShell action={createEquipmentAction} cancelHref="/console/production/equipment" submitLabel="Add equipment">
+    <FormShell action={createEquipmentAction} cancelHref="/console/production/equipment" submitLabel="Add Equipment">
       <Input label="Name" name="name" required />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Category" name="category" placeholder="Lighting, audio, video…" />

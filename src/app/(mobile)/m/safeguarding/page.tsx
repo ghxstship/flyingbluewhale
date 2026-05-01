@@ -66,7 +66,7 @@ export default async function SafeguardingPage() {
             <li>
               <EmptyState
                 size="compact"
-                title="No reports filed"
+                title="No Reports Filed"
                 description="Reports filed under your account appear here. Other reporters' reports are confidential."
               />
             </li>

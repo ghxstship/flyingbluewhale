@@ -94,7 +94,7 @@ export default async function LiveDispatchPage() {
 
         <section className="surface overflow-x-auto">
           <header className="border-b border-[var(--border-color)] px-4 py-2.5">
-            <h3 className="text-sm font-semibold">Active runs</h3>
+            <h3 className="text-sm font-semibold">Active Runs</h3>
           </header>
           {points.length === 0 ? (
             <p className="px-4 py-6 text-center text-xs text-[var(--text-muted)]">

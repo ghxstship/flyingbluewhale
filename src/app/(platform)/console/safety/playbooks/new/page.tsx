@@ -6,9 +6,9 @@ import { createPlaybook } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Safety" title="New playbook" />
+      <ModuleHeader eyebrow="Safety" title="New Playbook" />
       <div className="page-content max-w-xl">
-        <FormShell action={createPlaybook} cancelHref="/console/safety/playbooks" submitLabel="Create playbook">
+        <FormShell action={createPlaybook} cancelHref="/console/safety/playbooks" submitLabel="Create Playbook">
           <div>
             <Input label="Slug" name="slug" maxLength={80} placeholder="evacuation-stadium-a" required />
             <p className="mt-1 text-[10px] text-[var(--text-muted)]">

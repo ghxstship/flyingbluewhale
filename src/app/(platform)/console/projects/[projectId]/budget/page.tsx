@@ -14,7 +14,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const supabase = await createClient();
   const [{ data: project }, { data: budgets }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).eq("id", projectId).maybeSingle(),
-    supabase.from("budgets").select("id, name, category, amount_cents, spent_cents").eq("project_id", projectId).order("category"),
+    supabase
+      .from("budgets")
+      .select("id, name, category, amount_cents, spent_cents")
+      .eq("project_id", projectId)
+      .order("category"),
   ]);
   const total = (budgets ?? []).reduce((s, b) => s + (b.amount_cents ?? 0), 0);
   const spent = (budgets ?? []).reduce((s, b) => s + (b.spent_cents ?? 0), 0);
@@ -32,27 +36,43 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       />
       <div className="page-content max-w-5xl space-y-3">
         {!budgets || budgets.length === 0 ? (
-          <EmptyState title="No budgets yet" description="Create a budget from the Finance module." action={<Link className="text-sm text-[var(--org-primary)]" href="/console/finance/budgets/new">New budget →</Link>} />
-        ) : budgets.map((b) => {
-          const pct = b.amount_cents ? Math.min(100, Math.round((b.spent_cents / b.amount_cents) * 100)) : 0;
-          return (
-            <Link key={b.id} href={`/console/finance/budgets/${b.id}`} className="surface hover-lift block p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-sm font-medium">{b.name}</div>
-                  {b.category && <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">{b.category}</div>}
+          <EmptyState
+            title="No Budgets Yet"
+            description="Create a budget from the Finance module."
+            action={
+              <Link className="text-sm text-[var(--org-primary)]" href="/console/finance/budgets/new">
+                New budget →
+              </Link>
+            }
+          />
+        ) : (
+          budgets.map((b) => {
+            const pct = b.amount_cents ? Math.min(100, Math.round((b.spent_cents / b.amount_cents) * 100)) : 0;
+            return (
+              <Link key={b.id} href={`/console/finance/budgets/${b.id}`} className="surface hover-lift block p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-medium">{b.name}</div>
+                    {b.category && (
+                      <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                        {b.category}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-right text-xs">
+                    <div className="font-mono">
+                      {money(b.spent_cents)} / {money(b.amount_cents)}
+                    </div>
+                    <div className="text-[var(--text-muted)]">{pct}%</div>
+                  </div>
                 </div>
-                <div className="text-right text-xs">
-                  <div className="font-mono">{money(b.spent_cents)} / {money(b.amount_cents)}</div>
-                  <div className="text-[var(--text-muted)]">{pct}%</div>
+                <div className="mt-2">
+                  <ProgressBar value={pct} />
                 </div>
-              </div>
-              <div className="mt-2">
-                <ProgressBar value={pct} />
-              </div>
-            </Link>
-          );
-        })}
+              </Link>
+            );
+          })
+        )}
       </div>
     </>
   );

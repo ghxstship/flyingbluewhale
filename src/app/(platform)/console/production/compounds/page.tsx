@@ -60,14 +60,14 @@ export default async function Page() {
         subtitle={`${rows.length} compound${rows.length === 1 ? "" : "s"} (${COMPOUND_KINDS.map((k) => `${byKind[k] ?? 0} ${k.toUpperCase()}`).join(" · ")})`}
         action={
           <Button href="/console/venues/new" size="sm">
-            + New venue
+            + New Venue
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {Object.keys(byKind).length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By kind</h3>
+            <h3 className="text-sm font-semibold">By Kind</h3>
             <ul className="mt-3 space-y-1.5">
               {COMPOUND_KINDS.map((k) => (
                 <li key={k} className="flex items-center justify-between text-sm">
@@ -86,7 +86,7 @@ export default async function Page() {
           emptyDescription="Broadcast compounds (IBC + MPC) are venues with kind 'ibc' or 'mpc'. Author one through Venues → New, then set its kind."
           emptyAction={
             <Button href="/console/venues/new" size="sm">
-              + New venue
+              + New Venue
             </Button>
           }
           columns={[

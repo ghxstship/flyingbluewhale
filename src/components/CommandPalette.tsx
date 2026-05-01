@@ -50,10 +50,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
   const [search, setSearch] = React.useState("");
   const router = useRouter();
   const { prefs, setPrefs } = useUserPreferences();
-  const recents = React.useMemo(
-    () => (prefs.palette_recents ?? []) as string[],
-    [prefs.palette_recents],
-  );
+  const recents = React.useMemo(() => (prefs.palette_recents ?? []) as string[], [prefs.palette_recents]);
 
   // Register shortcut in the cheatsheet registry
   React.useEffect(() => {
@@ -146,12 +143,12 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         }
       }
       [
-        { label: "New project", href: "/console/projects/new", icon: Briefcase },
-        { label: "New client", href: "/console/clients/new", icon: Users },
-        { label: "New invoice", href: "/console/finance/invoices/new", icon: Receipt },
+        { label: "New Project", href: "/console/projects/new", icon: Briefcase },
+        { label: "New Client", href: "/console/clients/new", icon: Users },
+        { label: "New Invoice", href: "/console/finance/invoices/new", icon: Receipt },
         { label: "New PO", href: "/console/procurement/purchase-orders/new", icon: FileText },
-        { label: "New proposal", href: "/console/proposals/new", icon: FileText },
-        { label: "Add equipment", href: "/console/equipment/new", icon: Package },
+        { label: "New Proposal", href: "/console/proposals/new", icon: FileText },
+        { label: "Add Equipment", href: "/console/equipment/new", icon: Package },
       ].forEach((c) =>
         list.push({
           id: `create-${c.href}`,
@@ -189,7 +186,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       }
       list.push({
         id: "m-scan",
-        label: "Scan ticket",
+        label: "Scan Ticket",
         group: "Navigate",
         icon: Ticket,
         perform: () => goto("/m/check-in"),
@@ -200,14 +197,14 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
     list.push(
       {
         id: "settings-profile",
-        label: "Edit profile",
+        label: "Edit Profile",
         group: "Settings",
         icon: Users,
         perform: () => goto("/me/profile"),
       },
       {
         id: "settings-orgs",
-        label: "Switch organization",
+        label: "Switch Organization",
         group: "Switch",
         icon: Building2,
         perform: () => goto("/me/organizations"),
@@ -221,7 +218,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       },
       {
         id: "settings-theme-light",
-        label: "Switch to light theme",
+        label: "Switch to Light Theme",
         group: "Settings",
         icon: Sun,
         perform: () => {
@@ -235,7 +232,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       },
       {
         id: "settings-theme-dark",
-        label: "Switch to dark theme",
+        label: "Switch to Dark Theme",
         group: "Settings",
         icon: Moon,
         perform: () => {
@@ -249,7 +246,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       },
       {
         id: "logout",
-        label: "Sign out",
+        label: "Sign Out",
         group: "Settings",
         icon: LogOut,
         perform: () => goto("/auth/signout"),
@@ -337,7 +334,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
               <Command.Group
                 key={group}
                 heading={group}
-                className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]"
+                className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase"
               >
                 {items.map((a) => {
                   const Icon = a.icon ?? (group === "Recent" ? Clock : ArrowRight);

@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Commercial · Tickets" title="New Ticket Type" />
       <div className="page-content max-w-xl">
-        <FormShell action={createTicketType} cancelHref="/console/commercial/tickets" submitLabel="Add ticket type">
+        <FormShell action={createTicketType} cancelHref="/console/commercial/tickets" submitLabel="Add Ticket Type">
           <Input label="Name" name="name" maxLength={160} placeholder="e.g. General Admission, VIP, Comp" required />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Channel</label>

@@ -30,16 +30,20 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function SolutionsIndex() {
-  const crumbs = [{ label: "Home", href: "/" }, { label: "Solutions", href: "/solutions" }];
+  const crumbs = [
+    { label: "Home", href: "/" },
+    { label: "Solutions", href: "/solutions" },
+  ];
   return (
     <>
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">The Itinerary</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">The Itinerary</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Rooms. One Manifest.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The bridge, the ports of call, the open deck. One manifest — private by architecture, shared by design. Written for cultural tastemakers charting the next crossing.
+          The bridge, the ports of call, the open deck. One manifest — private by architecture, shared by design.
+          Written for cultural tastemakers charting the next crossing.
         </p>
       </section>
 
@@ -48,10 +52,18 @@ export default function SolutionsIndex() {
         <h2 className="text-3xl font-semibold tracking-tight">The Three Rooms</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {APPS.map((a) => (
-            <Link key={a.slug} href={a.href} data-platform={a.slug} className="surface-raised hover-lift relative overflow-hidden p-7">
+            <Link
+              key={a.slug}
+              href={a.href}
+              data-platform={a.slug}
+              className="surface-raised hover-lift relative overflow-hidden p-7"
+            >
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--org-primary)" }} />
               <div className="flex items-center justify-between">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--org-primary)" }}>
+                <div
+                  className="text-[11px] font-semibold tracking-[0.2em] uppercase"
+                  style={{ color: "var(--org-primary)" }}
+                >
                   {a.name}
                 </div>
                 <span className="font-mono text-[10px] text-[var(--text-muted)]">{a.tier}</span>
@@ -61,7 +73,10 @@ export default function SolutionsIndex() {
               <ul className="mt-4 space-y-1.5 text-xs text-[var(--text-secondary)]">
                 {a.bullets.map((b) => (
                   <li key={b} className="flex items-start gap-2">
-                    <span className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full" style={{ background: "var(--org-primary)" }} />
+                    <span
+                      className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full"
+                      style={{ background: "var(--org-primary)" }}
+                    />
                     {b}
                   </li>
                 ))}
@@ -78,7 +93,8 @@ export default function SolutionsIndex() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight">Crossings We Chart</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each crossing gets a tuned itinerary — starter templates, default role matrix, and private notes from producers who&apos;ve made the journey.
+          Each crossing gets a tuned itinerary — starter templates, default role matrix, and private notes from
+          producers who&apos;ve made the journey.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
@@ -168,7 +184,7 @@ const INDUSTRIES = [
   { slug: "festivals-tours", name: "Festivals + tours", blurb: "Multi-day, multi-stage, multi-port" },
   { slug: "immersive-experiences", name: "Immersive", blurb: "Installations, walk-throughs, pop-ups" },
   { slug: "brand-activations", name: "Activations", blurb: "Launches, pop-ups, experiential" },
-  { slug: "corporate-events", name: "Private programs", blurb: "Summits, closed-room, invite-only" },
+  { slug: "corporate-events", name: "Private Programs", blurb: "Summits, closed-room, invite-only" },
   { slug: "theatrical-performances", name: "Theatrical", blurb: "Residencies, tours, galas" },
   { slug: "broadcast-tv-film", name: "Broadcast / TV / Film", blurb: "Studio, remote, location" },
 ];

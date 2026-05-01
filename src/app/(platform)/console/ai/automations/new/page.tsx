@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Automations" title="New Automation" />
       <div className="page-content max-w-xl">
-        <FormShell action={createAutomationAction} cancelHref="/console/ai/automations" submitLabel="Create automation">
+        <FormShell action={createAutomationAction} cancelHref="/console/ai/automations" submitLabel="Create Automation">
           <Input label="Name" name="name" required maxLength={120} />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>

@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
     <>
       <ModuleHeader eyebrow="Member" title={`Edit ${typed.users?.name ?? typed.users?.email ?? "member"}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/people/${p.personId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/people/${p.personId}`} submitLabel="Save Changes">
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Role</span>
             <select name="role" defaultValue={typed.role} required className="input-base focus-ring w-full">

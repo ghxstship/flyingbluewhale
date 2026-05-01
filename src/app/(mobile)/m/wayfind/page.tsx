@@ -63,7 +63,7 @@ export default async function MobileWayfindPage() {
         <div className="mt-6">
           <EmptyState
             size="compact"
-            title="No venues yet"
+            title="No Venues Yet"
             description="Author venues from Console → Venues. Each venue's zones become the routable points here."
             action={
               <Link href="/console/venues" className="btn btn-secondary btn-sm">

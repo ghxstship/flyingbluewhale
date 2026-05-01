@@ -13,7 +13,14 @@ export const dynamic = "force-dynamic";
 
 export default async function ProposalsPage() {
   if (!hasSupabase) {
-    return <><ModuleHeader title="Proposals" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+    return (
+      <>
+        <ModuleHeader title="Proposals" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   }
   const session = await requireSession();
   const rows = await listOrgScoped("proposals", session.orgId, { orderBy: "updated_at" });
@@ -24,7 +31,7 @@ export default async function ProposalsPage() {
         eyebrow="Sales"
         title="Proposals"
         subtitle={`${rows.length} proposal${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/proposals/new">+ New proposal</Button>}
+        action={<Button href="/console/proposals/new">+ New Proposal</Button>}
       />
       <div className="page-content">
         <DataTable<Proposal>
@@ -32,9 +39,19 @@ export default async function ProposalsPage() {
           rowHref={(r) => `/console/proposals/${r.id}`}
           columns={[
             { key: "title", header: "Title", render: (r) => r.title },
-            { key: "amount", header: "Amount", render: (r) => formatMoney(r.amount_cents ?? 0), className: "font-mono text-xs" },
+            {
+              key: "amount",
+              header: "Amount",
+              render: (r) => formatMoney(r.amount_cents ?? 0),
+              className: "font-mono text-xs",
+            },
             { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
-            { key: "expires", header: "Expires", render: (r) => r.expires_at ? formatDate(r.expires_at) : "—", className: "font-mono text-xs" },
+            {
+              key: "expires",
+              header: "Expires",
+              render: (r) => (r.expires_at ? formatDate(r.expires_at) : "—"),
+              className: "font-mono text-xs",
+            },
             { key: "updated", header: "Updated", render: (r) => timeAgo(r.updated_at), className: "font-mono text-xs" },
           ]}
         />

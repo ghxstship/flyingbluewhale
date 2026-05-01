@@ -74,24 +74,48 @@ type Entry<T> = {
 
 // `any` at the registry boundary — each entry's narrower schema re-types
 // the data on the way in via `renderDeliverable()` below.
- 
+
 export const DELIVERABLE_REGISTRY: Record<DeliverableType, Entry<any>> = {
-  technical_rider:    { label: "Technical rider",      schema: TechnicalRiderSchema,    render: (d) => <TechnicalRiderView data={d} /> },
-  hospitality_rider:  { label: "Hospitality rider",    schema: HospitalityRiderSchema,  render: (d) => <HospitalityRiderView data={d} /> },
-  input_list:         { label: "Input list",           schema: InputListSchema,         render: (d) => <InputListView data={d} /> },
-  stage_plot:         { label: "Stage plot",           schema: StagePlotSchema,         render: (d) => <StagePlotView data={d} /> },
-  crew_list:          { label: "Crew list",            schema: CrewListSchema,          render: (d) => <CrewListView data={d} /> },
-  guest_list:         { label: "Guest list",           schema: GuestListSchema,         render: (d) => <GuestListView data={d} /> },
-  equipment_pull_list:{ label: "Equipment pull list",  schema: EquipmentPullListSchema, render: (d) => <EquipmentPullListView data={d} /> },
-  power_plan:         { label: "Power plan",           schema: PowerPlanSchema,         render: (d) => <PowerPlanView data={d} /> },
-  rigging_plan:       { label: "Rigging plan",         schema: RiggingPlanSchema,       render: (d) => <RiggingPlanView data={d} /> },
-  site_plan:          { label: "Site plan",            schema: SitePlanSchema,          render: (d) => <SitePlanView data={d} /> },
-  build_schedule:     { label: "Build schedule",       schema: BuildScheduleSchema,     render: (d) => <BuildScheduleView data={d} /> },
-  vendor_package:     { label: "Vendor package",       schema: VendorPackageSchema,     render: (d) => <VendorPackageView data={d} /> },
-  safety_compliance:  { label: "Safety + compliance",  schema: SafetyComplianceSchema,  render: (d) => <SafetyComplianceView data={d} /> },
-  comms_plan:         { label: "Comms plan",           schema: CommsPlanSchema,         render: (d) => <CommsPlanView data={d} /> },
-  signage_grid:       { label: "Signage grid",         schema: SignageGridSchema,       render: (d) => <SignageGridView data={d} /> },
-  custom:             { label: "Custom",               schema: CustomSchema,            render: (d) => <CustomView data={d} /> },
+  technical_rider: {
+    label: "Technical Rider",
+    schema: TechnicalRiderSchema,
+    render: (d) => <TechnicalRiderView data={d} />,
+  },
+  hospitality_rider: {
+    label: "Hospitality Rider",
+    schema: HospitalityRiderSchema,
+    render: (d) => <HospitalityRiderView data={d} />,
+  },
+  input_list: { label: "Input List", schema: InputListSchema, render: (d) => <InputListView data={d} /> },
+  stage_plot: { label: "Stage Plot", schema: StagePlotSchema, render: (d) => <StagePlotView data={d} /> },
+  crew_list: { label: "Crew List", schema: CrewListSchema, render: (d) => <CrewListView data={d} /> },
+  guest_list: { label: "Guest List", schema: GuestListSchema, render: (d) => <GuestListView data={d} /> },
+  equipment_pull_list: {
+    label: "Equipment Pull List",
+    schema: EquipmentPullListSchema,
+    render: (d) => <EquipmentPullListView data={d} />,
+  },
+  power_plan: { label: "Power Plan", schema: PowerPlanSchema, render: (d) => <PowerPlanView data={d} /> },
+  rigging_plan: { label: "Rigging Plan", schema: RiggingPlanSchema, render: (d) => <RiggingPlanView data={d} /> },
+  site_plan: { label: "Site Plan", schema: SitePlanSchema, render: (d) => <SitePlanView data={d} /> },
+  build_schedule: {
+    label: "Build Schedule",
+    schema: BuildScheduleSchema,
+    render: (d) => <BuildScheduleView data={d} />,
+  },
+  vendor_package: {
+    label: "Vendor Package",
+    schema: VendorPackageSchema,
+    render: (d) => <VendorPackageView data={d} />,
+  },
+  safety_compliance: {
+    label: "Safety + compliance",
+    schema: SafetyComplianceSchema,
+    render: (d) => <SafetyComplianceView data={d} />,
+  },
+  comms_plan: { label: "Comms Plan", schema: CommsPlanSchema, render: (d) => <CommsPlanView data={d} /> },
+  signage_grid: { label: "Signage Grid", schema: SignageGridSchema, render: (d) => <SignageGridView data={d} /> },
+  custom: { label: "Custom", schema: CustomSchema, render: (d) => <CustomView data={d} /> },
 };
 
 /**

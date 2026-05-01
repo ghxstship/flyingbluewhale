@@ -163,7 +163,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
     <>
       <ModuleHeader
         eyebrow="Operations"
-        title="Dispatch matrix"
+        title="Dispatch Matrix"
         subtitle={`${dateStr} · ${blocks.length} blocks across ${lanes.length} lanes (read-only)`}
       />
       <div className="page-content space-y-4">

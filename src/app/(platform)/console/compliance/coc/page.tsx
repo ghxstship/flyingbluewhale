@@ -97,12 +97,12 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Events · 24h" value={(count24h ?? 0).toLocaleString()} accent />
           <MetricCard label="Events · 30d" value={rows.length.toLocaleString()} />
-          <MetricCard label="Distinct actors" value={distinctActors.size.toLocaleString()} />
+          <MetricCard label="Distinct Actors" value={distinctActors.size.toLocaleString()} />
         </div>
 
         {tableEntries.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By target</h3>
+            <h3 className="text-sm font-semibold">By Target</h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {tableEntries.map(([table, count]) => (
                 <li key={table} className="flex items-center justify-between text-sm">
@@ -115,7 +115,7 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Recent events</h3>
+          <h3 className="text-sm font-semibold">Recent Events</h3>
           {rows.length === 0 ? (
             <EmptyState
               size="compact"

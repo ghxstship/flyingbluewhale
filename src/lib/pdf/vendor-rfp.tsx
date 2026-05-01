@@ -24,7 +24,15 @@ export type VendorRfpInput = {
   deadline?: string | null;
 };
 
-export function VendorRfpPdf({ brand, vendor, project, scope, deliverables, submitInstructions, deadline }: VendorRfpInput) {
+export function VendorRfpPdf({
+  brand,
+  vendor,
+  project,
+  scope,
+  deliverables,
+  submitInstructions,
+  deadline,
+}: VendorRfpInput) {
   return (
     <PdfDocument title={`RFP · ${vendor.name}`} author={brand.producerName} subject={`${project.name} RFP`}>
       <CoverPage
@@ -36,7 +44,7 @@ export function VendorRfpPdf({ brand, vendor, project, scope, deliverables, subm
       <BrandedPage brand={brand} pageLabel="RFP">
         <SectionHeading title="Scope" />
         <Text style={styles.p}>{scope}</Text>
-        <SectionHeading title="Deliverables requested" />
+        <SectionHeading title="Deliverables Requested" />
         <PdfTable
           columns={[
             { key: "title", label: "Deliverable", width: 3 },
@@ -49,7 +57,7 @@ export function VendorRfpPdf({ brand, vendor, project, scope, deliverables, subm
             due: d.due ?? "",
           }))}
         />
-        <SectionHeading title="How to respond" />
+        <SectionHeading title="How to Respond" />
         <Text style={styles.p}>{submitInstructions}</Text>
       </BrandedPage>
     </PdfDocument>

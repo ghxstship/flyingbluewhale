@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
         <FormShell
           action={action}
           cancelHref={`/console/operations/incidents/${incidentId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input
             label="Summary"

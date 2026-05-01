@@ -37,9 +37,7 @@ export default async function Page() {
     for (let l = 0; l < LIKELIHOOD.length; l++) {
       const impact = IMPACT[i];
       const likelihood = LIKELIHOOD[l];
-      const matched = rows.filter(
-        (r) => r.impact === impact && r.likelihood === likelihood,
-      );
+      const matched = rows.filter((r) => r.impact === impact && r.likelihood === likelihood);
       cells.push({
         impact,
         likelihood,
@@ -61,7 +59,11 @@ export default async function Page() {
         eyebrow="Programs"
         title="Risk Register"
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/programs/risk/new" size="sm">+ New risk</Button>}
+        action={
+          <Button href="/console/programs/risk/new" size="sm">
+            + New Risk
+          </Button>
+        }
       />
       <div className="page-content space-y-5">
         <RiskHeatmap cells={cells} likelihood={LIKELIHOOD} impact={IMPACT} />

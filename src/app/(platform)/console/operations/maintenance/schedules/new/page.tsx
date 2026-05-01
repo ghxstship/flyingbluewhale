@@ -8,13 +8,13 @@ export const dynamic = "force-dynamic";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Operations · Maintenance" title="New schedule" />
+      <ModuleHeader eyebrow="Operations · Maintenance" title="New Schedule" />
       <div className="page-content max-w-xl">
         <p className="mb-4 text-sm text-[var(--text-secondary)]">
           Author a recurring inspection / service / compliance check. The first job is materialised immediately; further
           jobs are spawned at each cadence interval.
         </p>
-        <FormShell action={createSchedule} cancelHref="/console/operations/maintenance" submitLabel="Create schedule">
+        <FormShell action={createSchedule} cancelHref="/console/operations/maintenance" submitLabel="Create Schedule">
           <Input label="Name" name="name" maxLength={160} placeholder="e.g. Scaffold load check — Stage A" required />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
@@ -36,7 +36,7 @@ export default function Page() {
             </select>
           </div>
           <Input
-            label="Target id (optional)"
+            label="Target ID (Optional)"
             name="target_id"
             placeholder="Paste a venue/equipment/credential id, or leave blank"
           />

@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-5">
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Revision rounds</h3>
+          <h3 className="text-sm font-semibold">Revision Rounds</h3>
           <table className="data-table mt-3">
             <thead>
               <tr>
@@ -96,7 +96,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {current && current.stamp === "no_stamp" && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Stamp round #{current.round}</h3>
+            <h3 className="text-sm font-semibold">Stamp Round #{current.round}</h3>
             <form action={stampRevision.bind(null, id, current.id)} className="mt-3 space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <label className="flex flex-col gap-1.5">

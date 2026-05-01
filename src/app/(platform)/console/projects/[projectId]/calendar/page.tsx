@@ -14,7 +14,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const supabase = await createClient();
   const [{ data: project }, { data: events }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).eq("id", projectId).maybeSingle(),
-    supabase.from("events").select("id, name, description, status, starts_at, ends_at, location_id").eq("project_id", projectId).order("starts_at", { ascending: true }),
+    supabase
+      .from("events")
+      .select("id, name, description, status, starts_at, ends_at, location_id")
+      .eq("project_id", projectId)
+      .order("starts_at", { ascending: true }),
   ]);
   return (
     <>
@@ -30,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       />
       <div className="page-content max-w-5xl">
         {!events || events.length === 0 ? (
-          <EmptyState title="No events yet" description="Schedule events from the Operations → Events module." />
+          <EmptyState title="No Events Yet" description="Schedule events from the Operations → Events module." />
         ) : (
           <ul className="space-y-2">
             {events.map((e) => (
@@ -43,7 +47,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                     </div>
                     <StatusBadge status={e.status ?? "draft"} />
                   </div>
-                  <div className="mt-2 text-xs text-[var(--text-muted)] font-mono">{fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}</div>
+                  <div className="mt-2 font-mono text-xs text-[var(--text-muted)]">
+                    {fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}
+                  </div>
                 </Link>
               </li>
             ))}

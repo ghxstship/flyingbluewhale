@@ -101,7 +101,7 @@ export default async function Page() {
             { key: "project", header: "Project", render: (r) => r.project?.name ?? "—" },
             {
               key: "ball",
-              header: "Ball in court",
+              header: "Ball in Court",
               render: (r) => r.ball_in_court?.name ?? r.ball_in_court?.email ?? "—",
             },
             { key: "due", header: "Due", render: (r) => fmt(r.due_at), className: "font-mono text-xs" },

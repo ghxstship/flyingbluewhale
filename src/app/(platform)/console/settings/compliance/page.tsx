@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic";
 
 const PLATFORM_CONTROLS = [
   { name: "Row-Level Security", status: "enforced", note: "Every table scoped by org_id via Postgres RLS" },
-  { name: "Audit log", status: "enabled", note: "All mutations recorded in audit_log" },
-  { name: "Encryption in transit", status: "enforced", note: "TLS 1.2+" },
+  { name: "Audit Log", status: "enabled", note: "All mutations recorded in audit_log" },
+  { name: "Encryption in Transit", status: "enforced", note: "TLS 1.2+" },
   { name: "Backups", status: "daily", note: "7-day retention, point-in-time on enterprise" },
 ];
 
@@ -35,26 +35,18 @@ export default async function CompliancePage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
-  const { data: org } = await supabase
-    .from("orgs")
-    .select("compliance_settings")
-    .eq("id", session.orgId)
-    .maybeSingle();
+  const { data: org } = await supabase.from("orgs").select("compliance_settings").eq("id", session.orgId).maybeSingle();
   const settings = (org?.compliance_settings as ComplianceSettings) ?? {};
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle="Compliance"
-      />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Compliance" />
       <div className="page-content max-w-3xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Workspace settings</h3>
+          <h3 className="text-sm font-semibold">Workspace Settings</h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Override defaults for retention, encryption and residency. Most
-            controls require an Enterprise plan to relax.
+            Override defaults for retention, encryption and residency. Most controls require an Enterprise plan to
+            relax.
           </p>
           <div className="mt-4">
             <ComplianceForm initial={settings} />
@@ -62,9 +54,7 @@ export default async function CompliancePage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            Platform controls
-          </h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Platform controls</h3>
           <div className="surface overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
@@ -78,7 +68,9 @@ export default async function CompliancePage() {
                 {PLATFORM_CONTROLS.map((c) => (
                   <tr key={c.name}>
                     <td>{c.name}</td>
-                    <td><Badge variant="success">{c.status}</Badge></td>
+                    <td>
+                      <Badge variant="success">{c.status}</Badge>
+                    </td>
                     <td className="text-[var(--text-secondary)]">{c.note}</td>
                   </tr>
                 ))}

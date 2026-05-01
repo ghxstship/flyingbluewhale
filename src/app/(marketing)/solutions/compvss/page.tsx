@@ -18,7 +18,14 @@ export const metadata: Metadata = buildMetadata({
   description:
     "The night, on the water. Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour. Offline-first. Installs from the browser in one tap.",
   path: "/solutions/compvss",
-  keywords: ["COMPVSS", "event ticket scan PWA", "offline ticket scanning", "production mobile app", "crew mobile app", "event check-in software"],
+  keywords: [
+    "COMPVSS",
+    "event ticket scan PWA",
+    "offline ticket scanning",
+    "production mobile app",
+    "crew mobile app",
+    "event check-in software",
+  ],
   ogImageEyebrow: "COMPVSS",
   ogImageTitle: "The Night, On the Water.",
 });
@@ -33,9 +40,11 @@ export default function CompvssPage() {
   return (
     <div data-platform="compvss">
       <JsonLd
-        data={[productSchema({
+        data={[
+          productSchema({
             name: "COMPVSS — Field App",
-            description: "The mobile field app for production crew. Ticket scan, clock-in, inventory, and incident reports — offline-ready on any phone.",
+            description:
+              "The mobile field app for production crew. Ticket scan, clock-in, inventory, and incident reports — offline-ready on any phone.",
             url: "https://flyingbluewhale.app/solutions/compvss",
           }),
         ]}
@@ -43,14 +52,24 @@ export default function CompvssPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">COMPVSS · The Open Deck</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Night,<br />On the Water.</h1>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          COMPVSS · The Open Deck
+        </div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+          The Night,
+          <br />
+          On the Water.
+        </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Installs from the browser in one tap. Sub-100ms QR gate scans. Geo-verified shift check-ins. Medic triage. Crisis alerts. Driver manifests. Guard tours. Warehouse scans. Offline-first throughout. When the venue Wi-Fi retires, the deck sails on.
+          Installs from the browser in one tap. Sub-100ms QR gate scans. Geo-verified shift check-ins. Medic triage.
+          Crisis alerts. Driver manifests. Guard tours. Warehouse scans. Offline-first throughout. When the venue Wi-Fi
+          retires, the deck sails on.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Book passage</Button>
-          <Button href="/contact" variant="secondary">Captain&apos;s briefing</Button>
+          <Button href="/signup">Book Passage</Button>
+          <Button href="/contact" variant="secondary">
+            Captain&apos;s briefing
+          </Button>
         </div>
       </section>
 
@@ -61,12 +80,36 @@ export default function CompvssPage() {
           <FeatureGrid
             cols={3}
             features={[
-              { icon: Home, title: "Today", body: "Role-routed landing — call sheet, pinned tasks, tonight&apos;s shift." },
-              { icon: QrCode, title: "Gate + ticket scan", body: "QR + barcode. Accreditation zone logic. Sub-100ms. Offline or on." },
-              { icon: BookOpen, title: "Door pass", body: "Same KBYG as the portal — scoped crew-side to radio, PPE, SOPs." },
-              { icon: Clock, title: "Shift", body: "Geo-verified clock-in / break / meal-credit / clock-out. Manual fallback included." },
-              { icon: Camera, title: "Warehouse", body: "Pick / put-away scans. Offline queue replays in order. Nothing goes missing." },
-              { icon: AlertTriangle, title: "Incident + medic + safeguarding", body: "Photos, location, witnesses. Admin + medic + safeguarding lead paged instantly. Encrypted at rest." },
+              {
+                icon: Home,
+                title: "Today",
+                body: "Role-routed landing — call sheet, pinned tasks, tonight&apos;s shift.",
+              },
+              {
+                icon: QrCode,
+                title: "Gate + ticket scan",
+                body: "QR + barcode. Accreditation zone logic. Sub-100ms. Offline or on.",
+              },
+              {
+                icon: BookOpen,
+                title: "Door pass",
+                body: "Same KBYG as the portal — scoped crew-side to radio, PPE, SOPs.",
+              },
+              {
+                icon: Clock,
+                title: "Shift",
+                body: "Geo-verified clock-in / break / meal-credit / clock-out. Manual fallback included.",
+              },
+              {
+                icon: Camera,
+                title: "Warehouse",
+                body: "Pick / put-away scans. Offline queue replays in order. Nothing goes missing.",
+              },
+              {
+                icon: AlertTriangle,
+                title: "Incident + medic + safeguarding",
+                body: "Photos, location, witnesses. Admin + medic + safeguarding lead paged instantly. Encrypted at rest.",
+              },
             ]}
           />
         </div>
@@ -76,15 +119,19 @@ export default function CompvssPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--org-primary)]">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               <Wifi size={14} /> Offline-first
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Venue Wi-Fi Retires at Sunset. The Deck Doesn&apos;t.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+              Venue Wi-Fi Retires at Sunset. The Deck Doesn&apos;t.
+            </h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Gate scan, manual lookup, tonight&apos;s call sheet — cached on device. Scans queue locally and replay in order the second signal returns. Nothing drops. Nobody waits.
+              Gate scan, manual lookup, tonight&apos;s call sheet — cached on device. Scans queue locally and replay in
+              order the second signal returns. Nothing drops. Nobody waits.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Install from the browser — open the link, tap Install, full-screen launcher on the home screen. Done before soundcheck.
+              Install from the browser — open the link, tap Install, full-screen launcher on the home screen. Done
+              before soundcheck.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
@@ -133,7 +180,10 @@ export default function CompvssPage() {
         ]}
       />
 
-      <CTASection title="Board the Deck." subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap." />
+      <CTASection
+        title="Board the Deck."
+        subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap."
+      />
     </div>
   );
 }

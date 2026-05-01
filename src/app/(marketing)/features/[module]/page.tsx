@@ -39,7 +39,7 @@ type ModuleConfig = {
 const MODULES: Record<string, ModuleConfig> = {
   console: {
     slug: "console",
-    name: "Office console",
+    name: "Office Console",
     eyebrow: "ATLVS · Office console",
     title: "The production console your team actually uses.",
     blurb:
@@ -90,7 +90,7 @@ const MODULES: Record<string, ModuleConfig> = {
   },
   portals: {
     slug: "portals",
-    name: "Stakeholder portals",
+    name: "Stakeholder Portals",
     eyebrow: "GVTEWAY · Stakeholder portals",
     title: "Share exactly the right view. Nothing more.",
     blurb:
@@ -137,14 +137,14 @@ const MODULES: Record<string, ModuleConfig> = {
     ],
     related: [
       { slug: "console", label: "ATLVS console" },
-      { slug: "proposals", label: "Interactive proposals" },
-      { slug: "guides", label: "Event guides (KBYG)" },
+      { slug: "proposals", label: "Interactive Proposals" },
+      { slug: "guides", label: "Event Guides (KBYG)" },
     ],
     keywords: ["stakeholder portal", "client portal software", "vendor portal", "event guest portal", "crew portal"],
   },
   mobile: {
     slug: "mobile",
-    name: "Field mobile app",
+    name: "Field Mobile App",
     eyebrow: "COMPVSS · Field kit",
     title: "Install it once. Works when the venue doesn't.",
     blurb:
@@ -188,8 +188,8 @@ const MODULES: Record<string, ModuleConfig> = {
     ],
     related: [
       { slug: "ticketing", label: "Ticketing" },
-      { slug: "guides", label: "Event guides" },
-      { slug: "production", label: "Production operations" },
+      { slug: "guides", label: "Event Guides" },
+      { slug: "production", label: "Production Operations" },
     ],
     keywords: ["event check-in app", "offline ticket scanner", "production mobile app"],
   },
@@ -311,7 +311,7 @@ const MODULES: Record<string, ModuleConfig> = {
     ],
     related: [
       { slug: "finance", label: "Finance" },
-      { slug: "portals", label: "Vendor portal" },
+      { slug: "portals", label: "Vendor Portal" },
       { slug: "compliance", label: "Compliance" },
     ],
     keywords: ["procurement software", "purchase order system", "vendor management", "vendor payouts"],
@@ -390,7 +390,7 @@ const MODULES: Record<string, ModuleConfig> = {
   },
   proposals: {
     slug: "proposals",
-    name: "Interactive proposals",
+    name: "Interactive Proposals",
     eyebrow: "ATLVS · Proposals",
     title: "Proposals that scroll, quantify, and close.",
     blurb:
@@ -420,7 +420,7 @@ const MODULES: Record<string, ModuleConfig> = {
       },
     ],
     related: [
-      { slug: "portals", label: "Client portal" },
+      { slug: "portals", label: "Client Portal" },
       { slug: "ai", label: "AI drafting" },
       { slug: "finance", label: "Finance" },
     ],
@@ -428,7 +428,7 @@ const MODULES: Record<string, ModuleConfig> = {
   },
   guides: {
     slug: "guides",
-    name: "Event guides (KBYG)",
+    name: "Event Guides (KBYG)",
     eyebrow: "ATLVS · Event guides",
     title: "One Know Before You Go. Every role sees their version.",
     blurb: "A role-scoped KBYG shared across portal and mobile. Written once, rendered differently for each audience.",
@@ -504,7 +504,7 @@ const MODULES: Record<string, ModuleConfig> = {
     ],
     related: [
       { slug: "mobile", label: "COMPVSS field app" },
-      { slug: "portals", label: "Guest portal" },
+      { slug: "portals", label: "Guest Portal" },
       { slug: "console", label: "ATLVS" },
     ],
     keywords: ["event ticketing", "QR ticket scanner", "offline check-in"],
@@ -548,7 +548,7 @@ const MODULES: Record<string, ModuleConfig> = {
     ],
     related: [
       { slug: "console", label: "ATLVS console" },
-      { slug: "portals", label: "Stakeholder portals" },
+      { slug: "portals", label: "Stakeholder Portals" },
       { slug: "finance", label: "Finance (advances)" },
     ],
     keywords: ["event advancing software", "show advancing", "artist advancing", "production advancing workflow"],
@@ -612,7 +612,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">{config.heroTitle}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{config.heroBody}</p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Start free</Button>
+          <Button href="/signup">Start Free</Button>
           <Button href="/contact" variant="secondary">
             Book a demo
           </Button>
@@ -653,7 +653,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       </section>
 
       <CTASection
-        title="Ship this module on show day"
+        title="Ship This Module on Show Day"
         subtitle="Start free. No credit card. Migrate when you're ready."
       />
     </div>

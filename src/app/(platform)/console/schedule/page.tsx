@@ -45,8 +45,10 @@ export default async function SchedulePage() {
         subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"}`}
         action={
           <div className="flex gap-2">
-            <Button href="/api/v1/schedule.ics" variant="secondary">Export .ics</Button>
-            <Button href="/console/events/new">+ New event</Button>
+            <Button href="/api/v1/schedule.ics" variant="secondary">
+              Export .ics
+            </Button>
+            <Button href="/console/events/new">+ New Event</Button>
           </div>
         }
       />

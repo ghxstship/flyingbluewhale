@@ -31,7 +31,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Procurement" title="Supplier scorecards" />
+        <ModuleHeader eyebrow="Procurement" title="Supplier Scorecards" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -91,7 +91,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Procurement"
-        title="Supplier scorecards"
+        title="Supplier Scorecards"
         subtitle={`${vendors.length} vendor${vendors.length === 1 ? "" : "s"} · ${formatMoney(totalSpend)} lifetime spend · ${w9Pct}% W-9 on file`}
         action={
           <Button href="/console/procurement/vendors" size="sm">
@@ -108,7 +108,7 @@ export default async function Page() {
 
         {ranked.length === 0 ? (
           <EmptyState
-            title="No vendors yet"
+            title="No Vendors Yet"
             description="Author vendors via Procurement → Vendors. Scorecards rank them by PO volume + compliance."
             action={
               <Link href="/console/procurement/vendors" className="btn btn-secondary btn-sm">

@@ -24,7 +24,7 @@ export function GuideView({
     <article className="space-y-10">
       <header className="border-b border-[var(--border-color)] pb-6">
         {classification && (
-          <div className="inline-flex rounded-full bg-[var(--color-error)]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--color-error)]">
+          <div className="inline-flex rounded-full bg-[var(--color-error)]/10 px-3 py-1 text-[11px] font-semibold tracking-widest text-[var(--color-error)] uppercase">
             {classification}
           </div>
         )}
@@ -37,13 +37,19 @@ export function GuideView({
 
       <nav className="shell-nav sticky top-0 -mx-4 flex gap-1 overflow-x-auto border-b border-[var(--border-color)] bg-[var(--background)]/90 px-4 py-2 backdrop-blur">
         {sections.map((s, i) => (
-          <a key={i} href={`#section-${i}`} className="shrink-0 rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)]">
+          <a
+            key={i}
+            href={`#section-${i}`}
+            className="shrink-0 rounded-full px-3 py-1 font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)]"
+          >
             {(i + 1).toString().padStart(2, "0")} · {s.heading}
           </a>
         ))}
       </nav>
 
-      {sections.map((s, i) => <SectionWrapper key={i} index={i} section={s} />)}
+      {sections.map((s, i) => (
+        <SectionWrapper key={i} index={i} section={s} />
+      ))}
 
       {comments && <div className="border-t border-[var(--border-color)] pt-6">{comments}</div>}
     </article>
@@ -73,7 +79,7 @@ function SectionBody({ section }: { section: GuideSection }) {
     case "overview":
       return (
         <div className="space-y-3">
-          <p className="whitespace-pre-wrap text-sm text-[var(--text-secondary)]">{section.body}</p>
+          <p className="text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{section.body}</p>
           {section.callouts?.map((c, i) => (
             <Alert
               key={i}
@@ -108,7 +114,14 @@ function SectionBody({ section }: { section: GuideSection }) {
     case "set_times":
       return (
         <table className="data-table">
-          <thead><tr><th>Artist</th><th>Stage</th><th>Start</th><th>End</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Artist</th>
+              <th>Stage</th>
+              <th>Start</th>
+              <th>End</th>
+            </tr>
+          </thead>
           <tbody>
             {section.entries.map((e, i) => (
               <tr key={i}>
@@ -129,7 +142,11 @@ function SectionBody({ section }: { section: GuideSection }) {
             <thead>
               <tr>
                 <th>Area</th>
-                {section.columns.map((c) => <th key={c} className="font-mono text-xs">{c}</th>)}
+                {section.columns.map((c) => (
+                  <th key={c} className="font-mono text-xs">
+                    {c}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -141,11 +158,13 @@ function SectionBody({ section }: { section: GuideSection }) {
                     const on = v === true || v === "yes";
                     return (
                       <td key={c} className="text-center">
-                        {typeof v === "string" && v !== "yes" && v !== "no"
-                          ? <span className="font-mono text-xs">{v}</span>
-                          : on
-                            ? <span className="text-[var(--color-success)]">✓</span>
-                            : <span className="text-[var(--text-muted)]">—</span>}
+                        {typeof v === "string" && v !== "yes" && v !== "no" ? (
+                          <span className="font-mono text-xs">{v}</span>
+                        ) : on ? (
+                          <span className="text-[var(--color-success)]">✓</span>
+                        ) : (
+                          <span className="text-[var(--text-muted)]">—</span>
+                        )}
                       </td>
                     );
                   })}
@@ -162,7 +181,11 @@ function SectionBody({ section }: { section: GuideSection }) {
           <tbody>
             {section.entries.map((e, i) =>
               e.header ? (
-                <tr key={i}><td colSpan={3} className="font-semibold">{e.header}</td></tr>
+                <tr key={i}>
+                  <td colSpan={3} className="font-semibold">
+                    {e.header}
+                  </td>
+                </tr>
               ) : (
                 <tr key={i}>
                   <td>{e.name ?? "—"}</td>
@@ -181,7 +204,7 @@ function SectionBody({ section }: { section: GuideSection }) {
           {section.entries.map((e, i) => (
             <details key={i} className="surface p-3">
               <summary className="cursor-pointer text-sm font-medium">{e.q}</summary>
-              <p className="mt-2 whitespace-pre-wrap text-sm text-[var(--text-secondary)]">{e.a}</p>
+              <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{e.a}</p>
             </details>
           ))}
         </div>
@@ -193,11 +216,19 @@ function SectionBody({ section }: { section: GuideSection }) {
           {section.entries.map((e, i) => (
             <div key={i} className="surface p-4">
               <div className="flex items-center gap-2">
-                {e.code && <span className="rounded bg-[var(--color-error)]/10 px-2 py-0.5 font-mono text-xs text-[var(--color-error)]">{e.code}</span>}
+                {e.code && (
+                  <span className="rounded bg-[var(--color-error)]/10 px-2 py-0.5 font-mono text-xs text-[var(--color-error)]">
+                    {e.code}
+                  </span>
+                )}
                 <div className="text-sm font-semibold">{e.title}</div>
               </div>
               <ol className="mt-3 space-y-1 pl-5 text-sm text-[var(--text-secondary)]">
-                {e.steps.map((step, j) => <li key={j} className="list-decimal">{step}</li>)}
+                {e.steps.map((step, j) => (
+                  <li key={j} className="list-decimal">
+                    {step}
+                  </li>
+                ))}
               </ol>
               {e.note && <div className="mt-3 text-xs text-[var(--text-muted)]">{e.note}</div>}
             </div>
@@ -208,10 +239,20 @@ function SectionBody({ section }: { section: GuideSection }) {
     case "ppe":
       return (
         <table className="data-table">
-          <thead><tr><th>Item</th><th>Required</th><th>Note</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Required</th>
+              <th>Note</th>
+            </tr>
+          </thead>
           <tbody>
             {section.entries.map((e, i) => (
-              <tr key={i}><td>{e.item}</td><td>{e.required ? "✓" : "—"}</td><td className="text-[var(--text-muted)]">{e.note ?? ""}</td></tr>
+              <tr key={i}>
+                <td>{e.item}</td>
+                <td>{e.required ? "✓" : "—"}</td>
+                <td className="text-[var(--text-muted)]">{e.note ?? ""}</td>
+              </tr>
             ))}
           </tbody>
         </table>
@@ -221,19 +262,35 @@ function SectionBody({ section }: { section: GuideSection }) {
       return (
         <div className="space-y-3">
           <table className="data-table">
-            <thead><tr><th>Channel</th><th>Purpose</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Channel</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
             <tbody>
               {section.channels.map((c, i) => (
-                <tr key={i}><td className="font-mono text-xs">{c.channel}</td><td>{c.purpose}</td></tr>
+                <tr key={i}>
+                  <td className="font-mono text-xs">{c.channel}</td>
+                  <td>{c.purpose}</td>
+                </tr>
               ))}
             </tbody>
           </table>
           {section.codeWords && (
             <table className="data-table">
-              <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
               <tbody>
                 {section.codeWords.map((c, i) => (
-                  <tr key={i}><td className="font-mono text-xs">{c.code}</td><td>{c.meaning}</td></tr>
+                  <tr key={i}>
+                    <td className="font-mono text-xs">{c.code}</td>
+                    <td>{c.meaning}</td>
+                  </tr>
                 ))}
               </tbody>
             </table>
@@ -258,15 +315,25 @@ function SectionBody({ section }: { section: GuideSection }) {
       return (
         <div className="space-y-3">
           <table className="data-table">
-            <thead><tr><th>From</th><th>To</th><th>Via</th></tr></thead>
+            <thead>
+              <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Via</th>
+              </tr>
+            </thead>
             <tbody>
               {section.routes.map((r, i) => (
-                <tr key={i}><td>{r.from}</td><td>{r.to}</td><td className="font-mono text-xs text-[var(--text-muted)]">{r.via ?? "direct"}</td></tr>
+                <tr key={i}>
+                  <td>{r.from}</td>
+                  <td>{r.to}</td>
+                  <td className="font-mono text-xs text-[var(--text-muted)]">{r.via ?? "direct"}</td>
+                </tr>
               ))}
             </tbody>
           </table>
           {section.assemblyPoint && (
-            <Alert kind="error" title="Assembly point" className="text-sm">
+            <Alert kind="error" title="Assembly Point" className="text-sm">
               {section.assemblyPoint}
             </Alert>
           )}
@@ -282,15 +349,17 @@ function SectionBody({ section }: { section: GuideSection }) {
           {section.entries.map((e, i) => (
             <li key={i} className="surface-inset p-3">
               <div className="text-sm font-medium">{"item" in e ? e.item : ""}</div>
-              {("detail" in e && e.detail) && <div className="mt-1 text-xs text-[var(--text-secondary)]">{e.detail}</div>}
-              {("location" in e && e.location) && <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">{e.location}</div>}
-              {("note" in e && e.note) && <div className="mt-1 text-xs text-[var(--text-muted)]">{e.note}</div>}
+              {"detail" in e && e.detail && <div className="mt-1 text-xs text-[var(--text-secondary)]">{e.detail}</div>}
+              {"location" in e && e.location && (
+                <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">{e.location}</div>
+              )}
+              {"note" in e && e.note && <div className="mt-1 text-xs text-[var(--text-muted)]">{e.note}</div>}
             </li>
           ))}
         </ul>
       );
 
     case "custom":
-      return <p className="whitespace-pre-wrap text-sm text-[var(--text-secondary)]">{section.body}</p>;
+      return <p className="text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{section.body}</p>;
   }
 }

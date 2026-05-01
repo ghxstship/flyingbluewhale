@@ -92,19 +92,19 @@ export default async function Page() {
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Allocation" value={totalAllocation.toLocaleString()} accent />
-          <MetricCard label="Revenue at allocation" value={formatMoney(totalRevenue)} />
+          <MetricCard label="Revenue at Allocation" value={formatMoney(totalRevenue)} />
           <MetricCard
-            label="Entitlements delivered"
+            label="Entitlements Delivered"
             value={`${delivered.toLocaleString()} / ${totalEntitlements.toLocaleString()}`}
           />
         </div>
 
         <section>
-          <h3 className="text-sm font-semibold">Hospitality packages</h3>
+          <h3 className="text-sm font-semibold">Hospitality Packages</h3>
           {tickets.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No hospitality ticket types"
+              title="No Hospitality Ticket Types"
               description="Hospitality maps onto ticket_types with channel = 'hospitality'. Author one in Console → Tickets."
             />
           ) : (
@@ -125,11 +125,11 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">Sponsor hospitality entitlements</h3>
+          <h3 className="text-sm font-semibold">Sponsor Hospitality Entitlements</h3>
           {ents.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No hospitality entitlements"
+              title="No Hospitality Entitlements"
               description="Author sponsor entitlements with 'hospitality' in the title via the Commercial → Sponsors module."
               action={
                 <Link href="/console/commercial/sponsors" className="btn btn-secondary btn-sm">

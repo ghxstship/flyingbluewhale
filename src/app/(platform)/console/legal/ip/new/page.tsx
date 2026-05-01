@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Legal · IP" title="New Trademark" />
       <div className="page-content max-w-xl">
-        <FormShell action={createTrademark} cancelHref="/console/legal/ip" submitLabel="Register mark">
+        <FormShell action={createTrademark} cancelHref="/console/legal/ip" submitLabel="Register Mark">
           <Input label="Mark" name="mark" maxLength={160} placeholder="e.g. EVENTLY" required />
           <Input label="Jurisdiction" name="jurisdiction" maxLength={80} placeholder="e.g. US, EU, UK" />
           <Input label="Registration Number" name="registration_no" maxLength={120} placeholder="e.g. 6,123,456" />

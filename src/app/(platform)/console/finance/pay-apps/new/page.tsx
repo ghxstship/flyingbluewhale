@@ -29,11 +29,11 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Finance"
-        title="New pay application"
+        title="New Pay Application"
         subtitle="Bill against an active PO. Lines are seeded from the PO line items."
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createPayApp} cancelHref="/console/finance/pay-apps" submitLabel="Create draft">
+        <FormShell action={createPayApp} cancelHref="/console/finance/pay-apps" submitLabel="Create Draft">
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               Purchase order<span className="ms-0.5 text-[var(--color-error)]">*</span>

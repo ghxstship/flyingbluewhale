@@ -50,11 +50,16 @@ export function ClockInOut() {
     <div className="surface-raised p-6 text-center">
       {state === "clocked_in" ? (
         <>
-          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--color-success)]">Clocked in</div>
+          <div className="text-xs font-semibold tracking-wider text-[var(--color-success)] uppercase">Clocked In</div>
           <div className="mt-3 font-mono text-4xl tabular-nums">
-            {Math.floor(elapsed / 3600).toString().padStart(2, "0")}:
-            {Math.floor((elapsed % 3600) / 60).toString().padStart(2, "0")}:
-            {(elapsed % 60).toString().padStart(2, "0")}
+            {Math.floor(elapsed / 3600)
+              .toString()
+              .padStart(2, "0")}
+            :
+            {Math.floor((elapsed % 3600) / 60)
+              .toString()
+              .padStart(2, "0")}
+            :{(elapsed % 60).toString().padStart(2, "0")}
           </div>
           <Button size="lg" variant="danger" className="mt-6 w-full" disabled={pending} onClick={clockOut}>
             Clock out
@@ -62,8 +67,8 @@ export function ClockInOut() {
         </>
       ) : (
         <>
-          <div className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">Ready to start</div>
-          <div className="mt-3 font-mono text-4xl tabular-nums text-[var(--text-muted)]">00:00:00</div>
+          <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Ready to Start</div>
+          <div className="mt-3 font-mono text-4xl text-[var(--text-muted)] tabular-nums">00:00:00</div>
           <Button size="lg" className="mt-6 w-full" disabled={pending} onClick={clockIn}>
             Clock in
           </Button>

@@ -27,7 +27,7 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
     <>
       <ModuleHeader
         eyebrow={project.name}
-        title="Event guides"
+        title="Event Guides"
         subtitle="Per-role Know-Before-You-Go — authored here, served in portals + mobile"
       />
       <div className="page-content space-y-4">
@@ -36,16 +36,20 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
             const existing = byPersona.get(p);
             const tierInfo = PERSONA_TIERS[p];
             return (
-              <Link
-                key={p}
-                href={`/console/projects/${projectId}/guides/${p}`}
-                className="surface hover-lift p-5"
-              >
+              <Link key={p} href={`/console/projects/${projectId}/guides/${p}`} className="surface hover-lift p-5">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold capitalize">{p}</div>
-                  {existing?.published ? <Badge variant="success">Live</Badge> : existing ? <Badge variant="muted">Draft</Badge> : <Badge variant="muted">None</Badge>}
+                  {existing?.published ? (
+                    <Badge variant="success">Live</Badge>
+                  ) : existing ? (
+                    <Badge variant="muted">Draft</Badge>
+                  ) : (
+                    <Badge variant="muted">None</Badge>
+                  )}
                 </div>
-                <div className="mt-2 text-xs text-[var(--text-muted)]">Tier {tierInfo.tier} · {tierInfo.classification}</div>
+                <div className="mt-2 text-xs text-[var(--text-muted)]">
+                  Tier {tierInfo.tier} · {tierInfo.classification}
+                </div>
                 {existing?.title && <div className="mt-2 text-sm">{existing.title}</div>}
               </Link>
             );
@@ -55,11 +59,14 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
           <div className="text-sm font-semibold text-[var(--foreground)]">Boarding-Pass integration</div>
           <p className="mt-2">
             Guides follow the Boarding Pass Know-Before-You-Go pattern: same static schema, different data per role.
-            Author the config once per persona, publish, and the same rendering ships to the external portal (<code className="font-mono">/p/[slug]/guide</code>)
-            and the mobile PWA (<code className="font-mono">/m/guide</code>) — automatically scoped to the viewer&apos;s role.
+            Author the config once per persona, publish, and the same rendering ships to the external portal (
+            <code className="font-mono">/p/[slug]/guide</code>) and the mobile PWA (
+            <code className="font-mono">/m/guide</code>) — automatically scoped to the viewer&apos;s role.
           </p>
           <div className="mt-3">
-            <Button href={`/console/projects/${projectId}/guides/custom`} variant="secondary">Start custom guide</Button>
+            <Button href={`/console/projects/${projectId}/guides/custom`} variant="secondary">
+              Start Custom Guide
+            </Button>
           </div>
         </div>
       </div>

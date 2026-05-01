@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/participants/visa/new" size="sm">
-            + New case
+            + New Case
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyDescription="Track invitation letters, ROC submissions, and arrival/exit clearance through the visa workflow."
           emptyAction={
             <Button href="/console/participants/visa/new" size="sm">
-              + New case
+              + New Case
             </Button>
           }
           columns={[

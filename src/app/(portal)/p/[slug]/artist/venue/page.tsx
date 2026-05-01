@@ -22,23 +22,26 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       .not("location_id", "is", null);
     const ids = Array.from(new Set((events ?? []).map((e) => e.location_id).filter((v): v is string => Boolean(v))));
     if (ids.length > 0) {
-      const { data: locs } = await supabase
-        .from("locations")
-        .select("id, name, address, city")
-        .in("id", ids);
-      venues.push(...(locs ?? []) as Row[]);
+      const { data: locs } = await supabase.from("locations").select("id, name, address, city").in("id", ids);
+      venues.push(...((locs ?? []) as Row[]));
     }
   }
   return (
     <PortalSubpage slug={slug} persona="artist" title="Venue" subtitle="Address, room setup, access, parking">
       {venues.length === 0 ? (
-        <EmptyState title="Awaiting venue details" description="Venue info posts as soon as production locks the schedule." />
+        <EmptyState
+          title="Awaiting Venue Details"
+          description="Venue info posts as soon as production locks the schedule."
+        />
       ) : (
         <ul className="space-y-2">
           {venues.map((v) => (
             <li key={v.id} className="surface p-4">
               <div className="text-sm font-semibold">{v.name}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">{v.address ?? "—"}{v.city ? ` · ${v.city}` : ""}</div>
+              <div className="mt-1 text-xs text-[var(--text-muted)]">
+                {v.address ?? "—"}
+                {v.city ? ` · ${v.city}` : ""}
+              </div>
             </li>
           ))}
         </ul>

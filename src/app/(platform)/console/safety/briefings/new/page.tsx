@@ -22,7 +22,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Safety" title="Schedule briefing" />
+      <ModuleHeader eyebrow="Safety" title="Schedule Briefing" />
       <div className="page-content max-w-xl">
         <FormShell action={createBriefing} cancelHref="/console/safety/briefings" submitLabel="Schedule">
           <label className="flex flex-col gap-1.5">

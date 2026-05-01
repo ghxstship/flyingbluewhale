@@ -26,23 +26,16 @@ export function CueForm() {
         </select>
       </div>
       <Input label="Label" name="label" required maxLength={200} placeholder="e.g. House lights down" />
-      <Input
-        label="Duration (sec)"
-        name="duration_seconds"
-        type="number"
-        min={0}
-        max={86400}
-        placeholder="optional"
-      />
+      <Input label="Duration (sec)" name="duration_seconds" type="number" min={0} max={86400} placeholder="optional" />
       <div className="md:col-span-2">
         <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
         <textarea name="description" rows={2} maxLength={2000} className="input-base mt-1.5 w-full" />
       </div>
-      {state?.error && (
-        <p className="md:col-span-2 text-xs text-[var(--color-error)]">{state.error}</p>
-      )}
-      <div className="md:col-span-2 flex justify-end">
-        <Button type="submit" loading={pending}>Add cue</Button>
+      {state?.error && <p className="text-xs text-[var(--color-error)] md:col-span-2">{state.error}</p>}
+      <div className="flex justify-end md:col-span-2">
+        <Button type="submit" loading={pending}>
+          Add Cue
+        </Button>
       </div>
     </form>
   );
@@ -76,9 +69,7 @@ export function CueRow({ cue }: { cue: Cue }) {
       </td>
       <td>
         <div>{cue.label}</div>
-        {cue.description && (
-          <div className="text-xs text-[var(--text-muted)]">{cue.description}</div>
-        )}
+        {cue.description && <div className="text-xs text-[var(--text-muted)]">{cue.description}</div>}
       </td>
       <td>
         <Badge variant={statusVariant(cue.status)}>{cue.status}</Badge>

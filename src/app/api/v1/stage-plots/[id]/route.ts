@@ -3,6 +3,9 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { Database, Json } from "@/lib/supabase/database.types";
+
+type StagePlotUpdate = Database["public"]["Tables"]["stage_plots"]["Update"];
 
 /** /api/v1/stage-plots/[id] — detail + PATCH from the canvas editor. */
 
@@ -39,11 +42,11 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     const supabase = await createClient();
-    const patch: Record<string, unknown> = {};
+    const patch: StagePlotUpdate = {};
     if (input.name !== undefined) patch.name = input.name;
     if (input.widthFt !== undefined) patch.width_ft = input.widthFt;
     if (input.depthFt !== undefined) patch.depth_ft = input.depthFt;
-    if (input.elements !== undefined) patch.elements = input.elements;
+    if (input.elements !== undefined) patch.elements = input.elements as Json;
     if (input.notes !== undefined) patch.notes = input.notes;
     const { data, error } = await supabase
       .from("stage_plots")

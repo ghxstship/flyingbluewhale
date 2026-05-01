@@ -30,12 +30,12 @@ export default async function PersonalSettings() {
         </div>
       </div>
       <div className="surface mt-6 p-6">
-        <h2 className="text-sm font-semibold">Workspace preferences</h2>
+        <h2 className="text-sm font-semibold">Workspace Preferences</h2>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
           Density, locale, and timezone apply across every workspace you belong to.
         </p>
         <div className="mt-4 max-w-md">
-          <FormShell action={updateSettings} submitLabel="Save preferences">
+          <FormShell action={updateSettings} submitLabel="Save Preferences">
             <div>
               <label className="text-xs font-medium text-[var(--text-secondary)]">Density</label>
               <select name="density" defaultValue={prefs.density ?? "comfortable"} className="input-base mt-1.5 w-full">

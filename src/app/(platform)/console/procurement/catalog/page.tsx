@@ -24,7 +24,14 @@ export default async function CatalogPage() {
     .neq("status", "retired")
     .order("category", { ascending: true, nullsFirst: false })
     .order("name", { ascending: true });
-  const rows = (data ?? []) as Array<{ id: string; name: string; category: string | null; asset_tag: string | null; daily_rate_cents: number | null; status: string }>;
+  const rows = (data ?? []) as Array<{
+    id: string;
+    name: string;
+    category: string | null;
+    asset_tag: string | null;
+    daily_rate_cents: number | null;
+    status: string;
+  }>;
   const grouped = new Map<string, typeof rows>();
   for (const r of rows) {
     const key = r.category ?? "Uncategorized";
@@ -36,22 +43,28 @@ export default async function CatalogPage() {
     <>
       <ModuleHeader
         eyebrow="Procurement"
-        title="Approved item catalog"
+        title="Approved Item Catalog"
         subtitle={`${rows.length} item${rows.length === 1 ? "" : "s"} across ${grouped.size} categor${grouped.size === 1 ? "y" : "ies"}`}
       />
       <div className="page-content max-w-5xl space-y-4">
         {rows.length === 0 ? (
           <EmptyState
-            title="No items in the catalog yet"
+            title="No Items in the Catalog Yet"
             description="Add equipment via the Production module or bulk-import through Settings → Imports. Every non-retired item appears here as a SKU."
-            action={<Link className="text-sm text-[var(--org-primary)]" href="/console/production/equipment">Go to Equipment →</Link>}
+            action={
+              <Link className="text-sm text-[var(--org-primary)]" href="/console/production/equipment">
+                Go to Equipment →
+              </Link>
+            }
           />
         ) : (
           Array.from(grouped.entries()).map(([cat, items]) => (
             <section key={cat} className="surface">
               <div className="border-b border-[var(--border-color)] px-5 py-3">
-                <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">{cat}</div>
-                <div className="mt-0.5 text-xs text-[var(--text-muted)]">{items.length} item{items.length === 1 ? "" : "s"}</div>
+                <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">{cat}</div>
+                <div className="mt-0.5 text-xs text-[var(--text-muted)]">
+                  {items.length} item{items.length === 1 ? "" : "s"}
+                </div>
               </div>
               <table className="data-table w-full text-sm">
                 <thead>

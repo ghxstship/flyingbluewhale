@@ -88,7 +88,7 @@ export default async function Page() {
         subtitle={`${rows.length} change record${rows.length === 1 ? "" : "s"} · ${open} open${emergency ? ` · ${emergency} emergency` : ""}${failed ? ` · ${failed} failed` : ""}`}
         action={
           <Button href="/console/ops/toc/changes/new" size="sm">
-            + New change
+            + New Change
           </Button>
         }
       />
@@ -106,7 +106,7 @@ export default async function Page() {
           emptyDescription="ITIL change management — author records for non-trivial changes during live ops (rigging swap, generator hot-swap, software patch on the timing box). Each record carries risk, impact, planned window, and a backout plan."
           emptyAction={
             <Link href="/console/ops/toc/changes/new" className="btn btn-primary btn-sm">
-              + New change
+              + New Change
             </Link>
           }
           columns={[

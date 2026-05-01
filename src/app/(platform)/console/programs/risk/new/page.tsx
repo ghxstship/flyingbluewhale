@@ -6,9 +6,9 @@ import { createRiskAction } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Risk register" title="New Risk" />
+      <ModuleHeader eyebrow="Risk Register" title="New Risk" />
       <div className="page-content max-w-xl">
-        <FormShell action={createRiskAction} cancelHref="/console/programs/risk" submitLabel="Create risk">
+        <FormShell action={createRiskAction} cancelHref="/console/programs/risk" submitLabel="Create Risk">
           <Input label="Title" name="title" required maxLength={200} />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>

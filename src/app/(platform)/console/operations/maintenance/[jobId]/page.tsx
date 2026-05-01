@@ -103,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
               <textarea name="notes" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
             </div>
             <div className="flex justify-end">
-              <Button type="submit">Mark complete</Button>
+              <Button type="submit">Mark Complete</Button>
             </div>
           </form>
         )}

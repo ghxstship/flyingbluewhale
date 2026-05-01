@@ -25,16 +25,24 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="vendor" title="Equipment Pull List" subtitle="Confirmed gear for this job">
       {items.length === 0 ? (
-        <EmptyState title="Pull list not published yet" description="Production posts the confirmed pull list here once the advancing cycle settles." />
+        <EmptyState
+          title="Pull List Not Published Yet"
+          description="Production posts the confirmed pull list here once the advancing cycle settles."
+        />
       ) : (
         <ul className="space-y-2">
           {items.map((i) => (
             <li key={i.id} className="surface p-4">
               <div className="flex items-center justify-between">
                 <div className="text-sm font-medium">{i.title ?? "Pull list"}</div>
-                <div className="text-xs text-[var(--text-muted)] font-mono">{fmtDate(i.updated_at)}</div>
+                <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(i.updated_at)}</div>
               </div>
-              <a href={`/api/v1/deliverables/${i.id}/pdf`} className="mt-2 inline-block text-xs text-[var(--org-primary)]">Download PDF →</a>
+              <a
+                href={`/api/v1/deliverables/${i.id}/pdf`}
+                className="mt-2 inline-block text-xs text-[var(--org-primary)]"
+              >
+                Download PDF →
+              </a>
             </li>
           ))}
         </ul>

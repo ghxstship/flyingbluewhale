@@ -79,9 +79,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open items" value={rows.length.toLocaleString()} accent />
+          <MetricCard label="Open Items" value={rows.length.toLocaleString()} accent />
           <MetricCard label="Overdue" value={overdue.toLocaleString()} />
-          <MetricCard label="Across kinds" value={Object.keys(byKind).length.toString()} />
+          <MetricCard label="Across Kinds" value={Object.keys(byKind).length.toString()} />
         </div>
         <section className="surface p-4">
           {rows.length === 0 ? (

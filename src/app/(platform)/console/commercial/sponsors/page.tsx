@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/commercial/sponsors/new" size="sm">
-            + New entitlement
+            + New Sponsor
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyDescription="Track contracted deliverables — signage, hospitality counts, on-air mentions — and status against fulfilment."
           emptyAction={
             <Button href="/console/commercial/sponsors/new" size="sm">
-              + New entitlement
+              + New Sponsor
             </Button>
           }
           columns={[

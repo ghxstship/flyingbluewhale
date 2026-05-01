@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
     <>
       <ModuleHeader eyebrow="Budget" title={`Edit ${row.name}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/finance/budgets/${p.budgetId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/finance/budgets/${p.budgetId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <Input label="Category" name="category" defaultValue={row.category ?? ""} maxLength={120} />
           <Input

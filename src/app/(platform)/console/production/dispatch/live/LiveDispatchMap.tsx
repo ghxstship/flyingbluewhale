@@ -48,7 +48,7 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
 
   return (
     <MapShell
-      title="Live map"
+      title="Live Map"
       description="Origin → destination per active run"
       markers={markers}
       routes={routes}

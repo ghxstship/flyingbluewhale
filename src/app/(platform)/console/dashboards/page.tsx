@@ -111,7 +111,7 @@ export default async function Page() {
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Open RFIs" value={totals.rfis.toLocaleString()} accent />
-          <MetricCard label="Open punch" value={totals.punch.toLocaleString()} />
+          <MetricCard label="Open Punch" value={totals.punch.toLocaleString()} />
           <MetricCard label="OSHA recordables · 30d" value={totals.recordable.toLocaleString()} />
         </div>
         <section className="surface p-4">

@@ -30,9 +30,9 @@ export default async function Page({ params }: { params: Promise<{ rosterId: str
         title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Roster"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/workforce/rosters/${p.rosterId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/workforce/rosters/${p.rosterId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
-          <Input label="Day of" name="day_of" type="date" defaultValue={dateOnly(row.day_of)} required />
+          <Input label="Day Of" name="day_of" type="date" defaultValue={dateOnly(row.day_of)} required />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">State</span>
             <select name="state" defaultValue={row.state ?? ""} required className="input-base focus-ring w-full">

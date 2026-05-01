@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Transport" title="New Dispatch Run" />
       <div className="page-content max-w-xl">
-        <FormShell action={createDispatchRun} cancelHref="/console/transport/dispatch" submitLabel="Schedule run">
+        <FormShell action={createDispatchRun} cancelHref="/console/transport/dispatch" submitLabel="Schedule Run">
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Fleet</label>
             <select name="fleet" defaultValue="t1" className="input-base mt-1.5 w-full">

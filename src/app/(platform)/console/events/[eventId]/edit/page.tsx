@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
     <>
       <ModuleHeader eyebrow="Event" title={`Edit ${row.name}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/events/${p.eventId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/events/${p.eventId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
@@ -38,14 +38,14 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
             />
           </label>
           <Input
-            label="Starts at"
+            label="Starts At"
             name="starts_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.starts_at)}
             required
           />
           <Input
-            label="Ends at"
+            label="Ends At"
             name="ends_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.ends_at)}

@@ -206,7 +206,7 @@ function Calendar_({
           <ChevronRight size={14} />
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold uppercase text-[var(--text-muted)]">
+      <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-[var(--text-muted)] uppercase">
         {weekdayLabels.map((w, i) => (
           <div key={i}>{w}</div>
         ))}
@@ -256,12 +256,41 @@ function Calendar_({
 export type DateRange = { from: Date | null; to: Date | null };
 
 const RANGE_PRESETS: { label: string; compute: () => DateRange }[] = [
-  { label: "Today", compute: () => { const t = startOfDay(new Date()); return { from: t, to: t }; } },
-  { label: "Yesterday", compute: () => { const y = startOfDay(addDays(new Date(), -1)); return { from: y, to: y }; } },
+  {
+    label: "Today",
+    compute: () => {
+      const t = startOfDay(new Date());
+      return { from: t, to: t };
+    },
+  },
+  {
+    label: "Yesterday",
+    compute: () => {
+      const y = startOfDay(addDays(new Date(), -1));
+      return { from: y, to: y };
+    },
+  },
   { label: "Last 7 days", compute: () => ({ from: startOfDay(addDays(new Date(), -6)), to: startOfDay(new Date()) }) },
-  { label: "Last 30 days", compute: () => ({ from: startOfDay(addDays(new Date(), -29)), to: startOfDay(new Date()) }) },
-  { label: "This month", compute: () => { const n = new Date(); return { from: new Date(n.getFullYear(), n.getMonth(), 1), to: startOfDay(n) }; } },
-  { label: "Last month", compute: () => { const n = new Date(); const start = new Date(n.getFullYear(), n.getMonth() - 1, 1); const end = new Date(n.getFullYear(), n.getMonth(), 0); return { from: start, to: end }; } },
+  {
+    label: "Last 30 days",
+    compute: () => ({ from: startOfDay(addDays(new Date(), -29)), to: startOfDay(new Date()) }),
+  },
+  {
+    label: "This Month",
+    compute: () => {
+      const n = new Date();
+      return { from: new Date(n.getFullYear(), n.getMonth(), 1), to: startOfDay(n) };
+    },
+  },
+  {
+    label: "Last Month",
+    compute: () => {
+      const n = new Date();
+      const start = new Date(n.getFullYear(), n.getMonth() - 1, 1);
+      const end = new Date(n.getFullYear(), n.getMonth(), 0);
+      return { from: start, to: end };
+    },
+  },
 ];
 
 export function RangeDatePicker({
@@ -279,11 +308,12 @@ export function RangeDatePicker({
   const [pickingEnd, setPickingEnd] = React.useState(false);
   const [viewMonth, setViewMonth] = React.useState<Date>(() => value.from ?? new Date());
 
-  const display = value.from && value.to
-    ? `${formatDate(value.from)} – ${formatDate(value.to)}`
-    : value.from
-      ? `${formatDate(value.from)} – …`
-      : placeholder;
+  const display =
+    value.from && value.to
+      ? `${formatDate(value.from)} – ${formatDate(value.to)}`
+      : value.from
+        ? `${formatDate(value.from)} – …`
+        : placeholder;
 
   function onSelect(d: Date) {
     if (!pickingEnd) {
@@ -362,9 +392,7 @@ function startOfDay(d: Date) {
   return x;
 }
 function sameDay(a: Date, b: Date) {
-  return (
-    a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
-  );
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
 function toTimeStr(d: Date): string {
   const hh = String(d.getHours()).padStart(2, "0");

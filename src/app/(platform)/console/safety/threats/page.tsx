@@ -27,7 +27,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Threat register" />
+        <ModuleHeader eyebrow="Safety" title="Threat Register" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -48,11 +48,11 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Safety"
-        title="Threat register"
+        title="Threat Register"
         subtitle={`${rows.length} entr${rows.length === 1 ? "y" : "ies"} · ${active} active · ${critical} critical`}
         action={
           <Button href="/console/safety/threats/new" size="sm">
-            + New threat
+            + New Threat
           </Button>
         }
       />
@@ -63,7 +63,7 @@ export default async function Page() {
           emptyDescription="Intel + threat assessments live here. Each entry carries a severity, likelihood, treatment, and classification level so distribution can be scoped."
           emptyAction={
             <Button href="/console/safety/threats/new" size="sm">
-              + New threat
+              + New Threat
             </Button>
           }
           columns={[

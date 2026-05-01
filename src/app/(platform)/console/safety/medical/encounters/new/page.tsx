@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Medical · Encounter" title="Log Encounter" />
       <div className="page-content max-w-xl">
-        <FormShell action={createEncounter} cancelHref="/console/safety/medical/encounters" submitLabel="Log encounter">
+        <FormShell action={createEncounter} cancelHref="/console/safety/medical/encounters" submitLabel="Log Encounter">
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Triage</label>
             <select name="triage" defaultValue="green" className="input-base mt-1.5 w-full">

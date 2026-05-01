@@ -8,18 +8,32 @@ import { hasSupabase } from "@/lib/env";
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  if (!hasSupabase) return (
-    <><ModuleHeader eyebrow="Console" title="Dispatch" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>
-  );
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader eyebrow="Console" title="Dispatch" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
-  const rows = await listOrgScoped("dispatch_runs", session.orgId, { orderBy: "created_at", ascending: false, limit: 500 });
+  const rows = await listOrgScoped("dispatch_runs", session.orgId, {
+    orderBy: "created_at",
+    ascending: false,
+    limit: 500,
+  });
   return (
     <>
       <ModuleHeader
         eyebrow="Transport"
         title="Dispatch"
         subtitle={`${rows.length} run${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/transport/dispatch/new" size="sm">+ New run</Button>}
+        action={
+          <Button href="/console/transport/dispatch/new" size="sm">
+            + New Run
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable
@@ -27,11 +41,23 @@ export default async function Page() {
           rowHref={(r) => `/console/transport/dispatch/${r.id}`}
           emptyLabel="No dispatch runs yet"
           emptyDescription="Schedule a vehicle from origin to destination — fleet T1/T2/T3, media, workforce, or spectator."
-          emptyAction={<Button href="/console/transport/dispatch/new" size="sm">+ New run</Button>}
+          emptyAction={
+            <Button href="/console/transport/dispatch/new" size="sm">
+              + New Run
+            </Button>
+          }
           columns={[
             { key: "fleet", header: "Fleet", render: (r) => String(r.fleet ?? "—") },
-            { key: "vehicle_ref", header: "Vehicle", render: (r) => <span className="font-mono text-xs">{String(r.vehicle_ref ?? "—")}</span> },
-            { key: "scheduled_depart", header: "Depart", render: (r) => <span className="font-mono text-xs">{String(r.scheduled_depart ?? "—")}</span> },
+            {
+              key: "vehicle_ref",
+              header: "Vehicle",
+              render: (r) => <span className="font-mono text-xs">{String(r.vehicle_ref ?? "—")}</span>,
+            },
+            {
+              key: "scheduled_depart",
+              header: "Depart",
+              render: (r) => <span className="font-mono text-xs">{String(r.scheduled_depart ?? "—")}</span>,
+            },
             { key: "status", header: "Status", render: (r) => String(r.status ?? "—") },
           ]}
         />

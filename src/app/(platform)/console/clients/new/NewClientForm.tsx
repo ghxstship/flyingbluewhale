@@ -6,7 +6,7 @@ import { createClientAction } from "../actions";
 
 export function NewClientForm() {
   return (
-    <FormShell action={createClientAction} cancelHref="/console/clients" submitLabel="Create client">
+    <FormShell action={createClientAction} cancelHref="/console/clients" submitLabel="Create Client">
       <Input label="Name" name="name" required maxLength={120} />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Email" name="contact_email" type="email" />

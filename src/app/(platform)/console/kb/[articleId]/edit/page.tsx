@@ -19,9 +19,9 @@ export default async function Page({ params }: { params: Promise<{ articleId: st
   const tags = Array.isArray(row.tags) ? (row.tags as unknown[]).map(String).join(", ") : "";
   return (
     <>
-      <ModuleHeader eyebrow="Knowledge base" title={`Edit ${row.title}`} />
+      <ModuleHeader eyebrow="Knowledge Base" title={`Edit ${row.title}`} />
       <div className="page-content max-w-3xl">
-        <FormShell action={action} cancelHref={`/console/kb/${p.articleId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/kb/${p.articleId}`} submitLabel="Save Changes">
           <Input label="Title" name="title" defaultValue={row.title} required maxLength={300} />
           <Input label="Slug" name="slug" defaultValue={row.slug} required maxLength={160} />
           <Input label="Tags (comma-separated)" name="tags" defaultValue={tags} />

@@ -19,21 +19,41 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     .is("deleted_at", null)
     .order("updated_at", { ascending: false })
     .limit(100);
-  const rows = (data ?? []) as Array<{ id: string; title: string | null; type: string; status: string; version: number; updated_at: string }>;
+  const rows = (data ?? []) as Array<{
+    id: string;
+    title: string | null;
+    type: string;
+    status: string;
+    version: number;
+    updated_at: string;
+  }>;
   return (
     <PortalSubpage slug={slug} persona="vendor" title="Submissions" subtitle="What you've sent in">
       {rows.length === 0 ? (
-        <EmptyState title="No submissions yet" description="Deliverables you submit via Advancing appear here with their review status." />
+        <EmptyState
+          title="No Submissions Yet"
+          description="Deliverables you submit via Advancing appear here with their review status."
+        />
       ) : (
         <table className="data-table w-full text-sm">
-          <thead><tr><th>Title</th><th>Type</th><th>v</th><th>Status</th><th>Updated</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Type</th>
+              <th>v</th>
+              <th>Status</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
           <tbody>
             {rows.map((r) => (
               <tr key={r.id}>
                 <td>{r.title ?? "Untitled"}</td>
                 <td className="font-mono text-xs">{r.type}</td>
                 <td className="font-mono text-xs">{r.version}</td>
-                <td><StatusBadge status={r.status} /></td>
+                <td>
+                  <StatusBadge status={r.status} />
+                </td>
                 <td className="font-mono text-xs">{fmtDate(r.updated_at)}</td>
               </tr>
             ))}

@@ -26,12 +26,12 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Procurement" title="Invite vendor to prequalify" />
+      <ModuleHeader eyebrow="Procurement" title="Invite Vendor to Prequalify" />
       <div className="page-content max-w-xl">
         <FormShell
           action={invitePrequalification}
           cancelHref="/console/procurement/prequalification"
-          submitLabel="Send invitation"
+          submitLabel="Send Invitation"
         >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>

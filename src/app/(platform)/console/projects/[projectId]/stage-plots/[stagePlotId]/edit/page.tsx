@@ -29,12 +29,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   ) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Stage plot" title={`Edit ${row.name}`} />
+      <ModuleHeader eyebrow="Stage Plot" title={`Edit ${row.name}`} />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/projects/${projectId}/stage-plots/${stagePlotId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <div className="grid grid-cols-2 gap-3">

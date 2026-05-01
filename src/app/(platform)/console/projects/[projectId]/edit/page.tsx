@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     <>
       <ModuleHeader eyebrow="Project" title={`Edit ${row.name}`} subtitle={row.slug} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/projects/${p.projectId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/projects/${p.projectId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
@@ -38,8 +38,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             </select>
           </label>
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Start date" name="start_date" type="date" defaultValue={dateOnly(row.start_date)} />
-            <Input label="End date" name="end_date" type="date" defaultValue={dateOnly(row.end_date)} />
+            <Input label="Start Date" name="start_date" type="date" defaultValue={dateOnly(row.start_date)} />
+            <Input label="End Date" name="end_date" type="date" defaultValue={dateOnly(row.end_date)} />
           </div>
           <Input
             label="Budget (cents)"

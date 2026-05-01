@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ alertId: stri
     <>
       <ModuleHeader eyebrow="Safety · Crisis" title="Edit Alert" />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/safety/crisis/${alertId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/safety/crisis/${alertId}`} submitLabel="Save Changes">
           <Input
             label="Title"
             name="title"

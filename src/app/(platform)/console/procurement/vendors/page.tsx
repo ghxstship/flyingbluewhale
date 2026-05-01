@@ -28,7 +28,7 @@ export default async function VendorsPage() {
         eyebrow="Procurement"
         title="Vendors"
         subtitle={`${rows.length} vendor${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/procurement/vendors/new">+ New vendor</Button>}
+        action={<Button href="/console/procurement/vendors/new">+ New Vendor</Button>}
       />
       <div className="page-content">
         <DataTable<Vendor>
@@ -38,7 +38,7 @@ export default async function VendorsPage() {
           emptyDescription="Onboard suppliers with W-9, COI, and payment terms before issuing POs."
           emptyAction={
             <Button href="/console/procurement/vendors/new" size="sm">
-              + New vendor
+              + New Vendor
             </Button>
           }
           columns={[
@@ -49,7 +49,7 @@ export default async function VendorsPage() {
               key: "w9",
               header: "W-9",
               render: (r) =>
-                r.w9_on_file ? <Badge variant="success">On file</Badge> : <Badge variant="warning">Missing</Badge>,
+                r.w9_on_file ? <Badge variant="success">On File</Badge> : <Badge variant="warning">Missing</Badge>,
             },
             {
               key: "coi",

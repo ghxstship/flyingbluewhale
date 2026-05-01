@@ -26,7 +26,15 @@ export default async function LogisticsPage() {
     .or(`and(starts_at.lte.${in7d},ends_at.gte.${nowIso})`)
     .order("starts_at", { ascending: true })
     .limit(50);
-  const rows = (rentals ?? []) as Array<{ id: string; equipment_id: string; project_id: string | null; starts_at: string; ends_at: string; rate_cents: number | null; notes: string | null }>;
+  const rows = (rentals ?? []) as Array<{
+    id: string;
+    equipment_id: string;
+    project_id: string | null;
+    starts_at: string;
+    ends_at: string;
+    rate_cents: number | null;
+    notes: string | null;
+  }>;
   return (
     <>
       <ModuleHeader
@@ -37,7 +45,7 @@ export default async function LogisticsPage() {
       <div className="page-content max-w-5xl">
         {rows.length === 0 ? (
           <EmptyState
-            title="Nothing moving this week"
+            title="Nothing Moving This Week"
             description="Rentals with overlapping windows surface here as load-out / load-in candidates. Seed a rental against an equipment row to see it appear."
           />
         ) : (
@@ -55,10 +63,7 @@ export default async function LogisticsPage() {
               {rows.map((r) => (
                 <tr key={r.id}>
                   <td>
-                    <Link
-                      href={`/console/production/rentals/${r.id}`}
-                      className="font-mono text-xs hover:underline"
-                    >
+                    <Link href={`/console/production/rentals/${r.id}`} className="font-mono text-xs hover:underline">
                       {r.id.slice(0, 8)}
                     </Link>
                   </td>

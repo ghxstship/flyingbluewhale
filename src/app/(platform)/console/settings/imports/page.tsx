@@ -34,20 +34,14 @@ export default async function ImportsPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle="Imports"
-      />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Imports" />
       <div className="page-content max-w-4xl space-y-6">
         <section className="surface p-5">
           <ImportForm />
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            Recent runs
-          </h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Recent runs</h3>
           <div className="surface overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
@@ -71,27 +65,17 @@ export default async function ImportsPage() {
                   (runs ?? []).map((r) => (
                     <tr key={r.id}>
                       <td className="font-mono text-xs">{r.kind}</td>
-                      <td className="text-xs text-[var(--text-secondary)]">
-                        {r.filename ?? r.source}
-                      </td>
+                      <td className="text-xs text-[var(--text-secondary)]">{r.filename ?? r.source}</td>
                       <td className="font-mono text-xs">{r.rows_imported}</td>
                       <td className="font-mono text-xs">{r.rows_failed}</td>
                       <td>
                         <Badge
-                          variant={
-                            r.status === "succeeded"
-                              ? "success"
-                              : r.status === "failed"
-                                ? "error"
-                                : "muted"
-                          }
+                          variant={r.status === "succeeded" ? "success" : r.status === "failed" ? "error" : "muted"}
                         >
                           {r.status}
                         </Badge>
                       </td>
-                      <td className="font-mono text-xs">
-                        {new Date(r.created_at).toLocaleString()}
-                      </td>
+                      <td className="font-mono text-xs">{new Date(r.created_at).toLocaleString()}</td>
                     </tr>
                   ))
                 )}
@@ -101,10 +85,17 @@ export default async function ImportsPage() {
         </section>
 
         <section className="surface p-5 text-sm text-[var(--text-muted)]">
-          <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Column reference</h3>
-          <p><strong>crew-members:</strong> name (required), role, phone, email, day_rate_cents, notes</p>
-          <p><strong>tasks:</strong> title (required), description, status (todo|in_progress|review|blocked|done), priority (0-5), due_at (ISO)</p>
-          <p><strong>vendors:</strong> name (required), contact_email, contact_phone, category, notes</p>
+          <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Column Reference</h3>
+          <p>
+            <strong>crew-members:</strong> name (required), role, phone, email, day_rate_cents, notes
+          </p>
+          <p>
+            <strong>tasks:</strong> title (required), description, status (todo|in_progress|review|blocked|done),
+            priority (0-5), due_at (ISO)
+          </p>
+          <p>
+            <strong>vendors:</strong> name (required), contact_email, contact_phone, category, notes
+          </p>
         </section>
       </div>
     </>

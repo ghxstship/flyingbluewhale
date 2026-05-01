@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {log.notes && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Site narrative</h3>
+            <h3 className="text-sm font-semibold">Site Narrative</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap">{log.notes}</p>
           </section>
         )}

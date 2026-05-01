@@ -21,8 +21,8 @@ export default async function VendorHome({ params }: { params: Promise<{ slug: s
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { href: `/p/${slug}/vendor/submissions`, label: "Submissions", desc: "Quotes and vendor packages" },
-              { href: `/p/${slug}/vendor/equipment-pull-list`, label: "Equipment pull list", desc: "Gear assignment" },
-              { href: `/p/${slug}/vendor/purchase-orders`, label: "Purchase orders", desc: "POs issued to you" },
+              { href: `/p/${slug}/vendor/equipment-pull-list`, label: "Equipment Pull List", desc: "Gear assignment" },
+              { href: `/p/${slug}/vendor/purchase-orders`, label: "Purchase Orders", desc: "POs issued to you" },
               { href: `/p/${slug}/vendor/invoices`, label: "Invoices", desc: "Submit invoice, track status" },
               { href: `/p/${slug}/vendor/credentials`, label: "Credentials", desc: "Upload COI, W-9, licenses" },
             ].map((t) => (

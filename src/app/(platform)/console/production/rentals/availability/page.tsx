@@ -105,14 +105,14 @@ export default async function Page() {
         subtitle={`${availableNow} available · ${reservedNow} reserved · ${inUseNow} in use`}
         action={
           <Button href="/console/production/rentals/new" size="sm">
-            + New rental
+            + New Rental
           </Button>
         }
       />
       <div className="page-content">
         {eqList.length === 0 ? (
           <EmptyState
-            title="No equipment to show"
+            title="No Equipment to Show"
             description="Author equipment in /console/production/equipment, then bookings + availability surface here."
           />
         ) : (

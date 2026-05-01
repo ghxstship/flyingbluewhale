@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Workforce · Rosters" title="New Roster" />
       <div className="page-content max-w-xl">
-        <FormShell action={createRoster} cancelHref="/console/workforce/rosters" submitLabel="Create roster">
+        <FormShell action={createRoster} cancelHref="/console/workforce/rosters" submitLabel="Create Roster">
           <Input label="Name" name="name" maxLength={160} placeholder="e.g. Day-3 Stadium Crew" required />
           <Input label="Day Of" name="day_of" type="date" required />
           <div>

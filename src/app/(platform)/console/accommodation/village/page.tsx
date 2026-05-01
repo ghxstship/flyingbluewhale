@@ -37,7 +37,7 @@ export default async function Page() {
         subtitle={`${rows.length} village${rows.length === 1 ? "" : "s"} · ${totalCapacity.toLocaleString()} bed${totalCapacity === 1 ? "" : "s"}`}
         action={
           <Button href="/console/venues/new" size="sm">
-            + New venue
+            + New Venue
           </Button>
         }
       />
@@ -49,7 +49,7 @@ export default async function Page() {
           emptyDescription="Residential clusters live under Venues with kind='village'. Create a venue and set its kind to surface it here."
           emptyAction={
             <Button href="/console/venues/new" size="sm">
-              + New venue
+              + New Venue
             </Button>
           }
           columns={[

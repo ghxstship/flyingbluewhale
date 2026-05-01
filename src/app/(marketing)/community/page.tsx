@@ -60,7 +60,7 @@ export default function CommunityPage() {
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight">Member stories</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">Member Stories</h2>
             <p className="mt-1 text-sm text-[var(--text-muted)]">
               What they were running before, what they switched, what measurably improved.
             </p>
@@ -93,7 +93,7 @@ export default function CommunityPage() {
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Join the roster
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Your team, here.</h3>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Your Team, Here.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
               Shipping real shows on L0ST 1SLAND Technologies? We&apos;re always looking to document new member stories.
               A short interview, anonymized numbers, your words.
@@ -110,7 +110,7 @@ export default function CommunityPage() {
         </div>
       </section>
 
-      <CTASection title="Be the next story" subtitle="Start free. Ship a show. We'll talk afterward." />
+      <CTASection title="Be the Next Story" subtitle="Start free. Ship a show. We'll talk afterward." />
     </div>
   );
 }

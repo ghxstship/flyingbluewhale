@@ -14,7 +14,11 @@ export const dynamic = "force-dynamic";
 export default async function ArtistAdvancingPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
-    return <div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div>;
+    return (
+      <div className="page-content">
+        <div className="surface p-6 text-sm">Configure Supabase.</div>
+      </div>
+    );
   }
 
   const project = await projectIdFromSlug(slug);
@@ -42,7 +46,7 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
 
           <section className="surface">
             <div className="border-b border-[var(--border-color)] px-5 py-3">
-              <h2 className="text-sm font-semibold">Talent deliverables</h2>
+              <h2 className="text-sm font-semibold">Talent Deliverables</h2>
             </div>
             <div className="divide-y divide-[var(--border-color)]">
               {TALENT_TYPES.map((t) => {
@@ -52,7 +56,9 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-sm font-medium">{t.label}</div>
-                        <div className="text-xs text-[var(--text-muted)]">{rows.length} submission{rows.length === 1 ? "" : "s"}</div>
+                        <div className="text-xs text-[var(--text-muted)]">
+                          {rows.length} submission{rows.length === 1 ? "" : "s"}
+                        </div>
                       </div>
                     </div>
                     {rows.length > 0 && (
@@ -61,11 +67,21 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
                           <li key={d.id} className="surface-inset flex items-center justify-between p-3">
                             <div>
                               <div className="text-sm">{d.title ?? labelForType(d.type)}</div>
-                              <div className="text-xs text-[var(--text-muted)]">v{d.version} · submitted {timeAgo(d.submitted_at ?? d.created_at)}{d.deadline ? ` · due ${formatDate(d.deadline, "medium")}` : ""}</div>
+                              <div className="text-xs text-[var(--text-muted)]">
+                                v{d.version} · submitted {timeAgo(d.submitted_at ?? d.created_at)}
+                                {d.deadline ? ` · due ${formatDate(d.deadline, "medium")}` : ""}
+                              </div>
                             </div>
                             <div className="flex items-center gap-2">
                               <StatusBadge status={d.status} />
-                              {d.file_path && <Link href={`/api/v1/deliverables/${d.id}/download`} className="font-mono text-xs text-[var(--org-primary)]">Download</Link>}
+                              {d.file_path && (
+                                <Link
+                                  href={`/api/v1/deliverables/${d.id}/download`}
+                                  className="font-mono text-xs text-[var(--org-primary)]"
+                                >
+                                  Download
+                                </Link>
+                              )}
                             </div>
                           </li>
                         ))}

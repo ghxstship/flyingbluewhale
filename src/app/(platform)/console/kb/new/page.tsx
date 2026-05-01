@@ -8,8 +8,15 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Knowledge" title="New Article" />
       <div className="page-content max-w-2xl">
-        <FormShell action={createKbArticleAction} cancelHref="/console/kb" submitLabel="Publish article">
-          <Input label="Slug" name="slug" required maxLength={120} placeholder="event-setup-checklist" hint="Lowercase, dashes ok. Used in the URL." />
+        <FormShell action={createKbArticleAction} cancelHref="/console/kb" submitLabel="Publish Article">
+          <Input
+            label="Slug"
+            name="slug"
+            required
+            maxLength={120}
+            placeholder="event-setup-checklist"
+            hint="Lowercase, dashes ok. Used in the URL."
+          />
           <Input label="Title" name="title" required maxLength={200} />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Body (Markdown)</label>

@@ -6,9 +6,14 @@ export const dynamic = "force-dynamic";
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   return (
-    <PortalSubpage slug={slug} persona="sponsor" title="Activations" subtitle="Track deliverables and on-site placements">
+    <PortalSubpage
+      slug={slug}
+      persona="sponsor"
+      title="Activations"
+      subtitle="Track deliverables and on-site placements"
+    >
       <EmptyState
-        title="Activation tracking"
+        title="Activation Tracking"
         description="Your activation deliverables post here as the production team scopes each placement. Expect the first batch about 3 weeks before load-in."
       />
     </PortalSubpage>

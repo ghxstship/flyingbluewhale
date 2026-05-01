@@ -71,7 +71,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
                 value={accent}
                 onChange={(e) => setAccent(e.target.value)}
                 className="h-10 w-10 cursor-pointer rounded border border-[var(--border-color)]"
-                aria-label="Pick accent color"
+                aria-label="Pick Accent Color"
               />
               <input
                 type="text"
@@ -91,7 +91,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
                 value={foreground}
                 onChange={(e) => setForeground(e.target.value)}
                 className="h-10 w-10 cursor-pointer rounded border border-[var(--border-color)]"
-                aria-label="Pick foreground color"
+                aria-label="Pick Foreground Color"
               />
               <input
                 type="text"

@@ -17,6 +17,7 @@ servers:
 
 security:
   - supabaseSession: []
+  - bearerToken: []
 
 components:
   securitySchemes:
@@ -24,6 +25,19 @@ components:
       type: apiKey
       in: cookie
       name: sb-xrovijzjbyssajhtwvas-auth-token
+    bearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: sk_<prefix>_<secret>
+      description: |
+        Org-scoped programmatic access token issued via
+        `POST /api/v1/me/api-keys` or the console at `/console/settings/api`.
+        The plaintext is returned ONCE at creation. Pass as
+        `Authorization: Bearer sk_<prefix>_<secret>` on any /api/v1 request;
+        the verifier resolves the token to the issuing user's role and the
+        token's org. Revoke with `DELETE /api/v1/me/api-keys/{id}`. Tokens
+        with a null `created_by` (e.g. legacy seeds) cannot be used for
+        request auth.
     idempotencyKey:
       type: apiKey
       in: header
@@ -51,9 +65,144 @@ components:
           properties:
             code:
               type: string
-              enum: [bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, internal]
+              enum: [bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, internal, service_unavailable]
             message: { type: string }
             details: {}
+
+    Project:
+      type: object
+      required: [id, org_id, slug, name, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        org_id: { type: string, format: uuid }
+        slug: { type: string, example: "mmw26-hialeah" }
+        name: { type: string, example: "MMW26 Hialeah" }
+        description: { type: string, nullable: true }
+        start_date: { type: string, format: date, nullable: true }
+        end_date: { type: string, format: date, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    CreateProjectRequest:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 120, example: "Salvage City EDCLV26" }
+        description: { type: string, maxLength: 2000 }
+        startDate: { type: string, format: date }
+        endDate: { type: string, format: date }
+        slug: { type: string, pattern: "^[a-z0-9-]+$", maxLength: 48 }
+
+    PageEnvelope:
+      type: object
+      required: [orgId, projects, nextCursor, pageSize, totalCount]
+      properties:
+        orgId: { type: string, format: uuid }
+        projects:
+          type: array
+          items: { $ref: "#/components/schemas/Project" }
+        nextCursor: { type: string, nullable: true, description: "Opaque cursor; pass back as `?cursor=` to fetch the next page." }
+        pageSize: { type: integer, minimum: 1, maximum: 100 }
+        totalCount: { type: integer, minimum: 0 }
+
+    ApiKey:
+      type: object
+      required: [id, name, prefix, scopes, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, example: "ci-deploy-bot" }
+        prefix: { type: string, example: "sk_a1b2c3d4", description: "Non-secret token handle (sk_ + 8 chars); safe to display." }
+        scopes:
+          type: array
+          items: { type: string }
+          example: ["projects:read"]
+        last_used_at: { type: string, format: date-time, nullable: true }
+        expires_at: { type: string, format: date-time, nullable: true }
+        revoked_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
+        created_by: { type: string, format: uuid, nullable: true }
+
+    CreateApiKeyRequest:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 80, example: "ci-deploy-bot" }
+        scopes:
+          type: array
+          maxItems: 32
+          items: { type: string, maxLength: 64 }
+          example: ["projects:read", "projects:write"]
+        expiresAt: { type: string, format: date-time, description: "ISO-8601 expiry. Omit for non-expiring tokens." }
+
+    CreateApiKeyResponse:
+      type: object
+      required: [key, token]
+      properties:
+        key: { $ref: "#/components/schemas/ApiKey" }
+        token:
+          type: string
+          example: "sk_a1b2c3d4_x9YgQ8s-Q7QwY..."
+          description: "Plaintext token. Returned ONLY once at creation — store it now."
+
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema: { type: string }
+      description: Opaque pagination cursor returned by the previous page's `nextCursor`.
+    PageSize:
+      name: pageSize
+      in: query
+      required: false
+      schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
+    IdempotencyKeyHeader:
+      name: Idempotency-Key
+      in: header
+      required: false
+      schema: { type: string, maxLength: 256 }
+      description: |
+        Stripe-style idempotency. Replaying with the same key + same body
+        returns the original response (with `idempotency-replay: true`).
+        Replaying with the same key but a different body returns 409 conflict.
+
+  headers:
+    XRequestId:
+      schema: { type: string }
+      description: Server-assigned request ID; echo this when filing support tickets.
+    XRateLimitRemaining:
+      schema: { type: integer }
+      description: Requests left in the current window.
+    XRateLimitReset:
+      schema: { type: integer }
+      description: Unix-ms timestamp when the window resets.
+    RetryAfter:
+      schema: { type: integer }
+      description: Seconds to wait before retrying. Sent on 429 responses.
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } }
+    Forbidden:
+      description: Authenticated but the role/capability is insufficient.
+      content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } }
+    NotFound:
+      description: Resource does not exist or is not visible to the caller.
+      content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } }
+    BadRequest:
+      description: Validation failed; `error.details` contains per-field issues.
+      content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } }
+    Conflict:
+      description: Request conflicts with current state (e.g. duplicate slug, idempotency-key reused).
+      content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } }
+    RateLimited:
+      description: Per-bucket budget exceeded.
+      headers:
+        Retry-After: { $ref: "#/components/headers/RetryAfter" }
+        X-RateLimit-Remaining: { $ref: "#/components/headers/XRateLimitRemaining" }
+        X-RateLimit-Reset: { $ref: "#/components/headers/XRateLimitReset" }
+      content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } }
 
 paths:
   /api/v1/health:
@@ -82,11 +231,120 @@ paths:
         "400": { description: invalid event or payload too large, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
 
   /api/v1/projects:
-    get: { summary: List projects visible to the session. }
-    post: { summary: Create a project (idempotent via Idempotency-Key). }
+    get:
+      summary: List projects visible to the caller's org.
+      operationId: listProjects
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/PageSize"
+      responses:
+        "200":
+          description: Page of projects. `X-Total-Count` mirrors `data.totalCount`.
+          headers:
+            X-Total-Count:
+              schema: { type: integer }
+              description: Total projects in the org (not just this page).
+            X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data: { $ref: "#/components/schemas/PageEnvelope" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    post:
+      summary: Create a project. Idempotent when `Idempotency-Key` is provided.
+      operationId: createProject
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKeyHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateProjectRequest" }
+            examples:
+              minimal:
+                value: { name: "MMW26 Hialeah" }
+              fullySpecified:
+                value:
+                  name: "Salvage City EDCLV26"
+                  description: "Day-of-show ops for EDC LV 2026"
+                  startDate: "2026-05-15"
+                  endDate: "2026-05-18"
+                  slug: "salvage-city-edclv26"
+      responses:
+        "201":
+          description: Project created.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data: { $ref: "#/components/schemas/Project" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/projects/{projectId}:
-    get:   { summary: Get a project. }
-    patch: { summary: Update a project. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      summary: Get a project by id.
+      operationId: getProject
+      responses:
+        "200":
+          description: The project.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data: { $ref: "#/components/schemas/Project" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    patch:
+      summary: Update a project (partial).
+      operationId: updateProject
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKeyHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string, minLength: 1, maxLength: 120 }
+                description: { type: string, maxLength: 2000 }
+                startDate: { type: string, format: date }
+                endDate: { type: string, format: date }
+      responses:
+        "200":
+          description: Updated project.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data: { $ref: "#/components/schemas/Project" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /api/v1/tickets/scan:
     post: { summary: Scan a ticket by QR payload. }
@@ -143,6 +401,90 @@ paths:
   /api/v1/guides/comments:
     get:  { summary: List comments for a guide section. }
     post: { summary: Post a comment to a guide section. }
+
+  /api/v1/me/api-keys:
+    get:
+      summary: List the caller's personal access tokens (never includes the secret).
+      operationId: listApiKeys
+      security:
+        - supabaseSession: []
+      responses:
+        "200":
+          description: All non-deleted tokens for the caller in their active org.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        required: [keys]
+                        properties:
+                          keys:
+                            type: array
+                            items: { $ref: "#/components/schemas/ApiKey" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    post:
+      summary: Issue a new personal access token. Plaintext returned ONCE; cookie-auth only.
+      operationId: createApiKey
+      security:
+        - supabaseSession: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateApiKeyRequest" }
+            examples:
+              ciBot:
+                value:
+                  name: "ci-deploy-bot"
+                  scopes: ["projects:read", "projects:write"]
+                  expiresAt: "2027-01-01T00:00:00Z"
+      responses:
+        "201":
+          description: Token issued. Capture `data.token` immediately — it cannot be retrieved later.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data: { $ref: "#/components/schemas/CreateApiKeyResponse" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /api/v1/me/api-keys/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    delete:
+      summary: Revoke a personal access token (soft-revoke; sets `revoked_at`).
+      operationId: revokeApiKey
+      security:
+        - supabaseSession: []
+      responses:
+        "200":
+          description: Token revoked. Subsequent requests using it return 401.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        required: [id, revoked]
+                        properties:
+                          id: { type: string, format: uuid }
+                          revoked: { type: boolean, enum: [true] }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /api/v1/me/preferences:
     get:   { summary: Read the session's UI + locale preferences. }

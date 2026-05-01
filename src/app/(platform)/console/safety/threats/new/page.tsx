@@ -6,9 +6,9 @@ import { createThreat } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Safety" title="New threat" />
+      <ModuleHeader eyebrow="Safety" title="New Threat" />
       <div className="page-content max-w-xl">
-        <FormShell action={createThreat} cancelHref="/console/safety/threats" submitLabel="Add threat">
+        <FormShell action={createThreat} cancelHref="/console/safety/threats" submitLabel="Add Threat">
           <Input label="Code" name="code" maxLength={40} placeholder="THR-001" required />
           <Input label="Title" name="title" maxLength={200} placeholder="Short headline" required />
           <div>

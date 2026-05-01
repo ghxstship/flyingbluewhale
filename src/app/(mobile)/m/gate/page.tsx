@@ -66,11 +66,11 @@ export default async function MobileGatePage() {
       </Link>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Recent scans</h2>
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Recent Scans</h2>
         <ul className="mt-3 space-y-2">
           {rows.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No scans logged today" />
+              <EmptyState size="compact" title="No Scans Logged Today" />
             </li>
           ) : (
             rows.map((r) => (

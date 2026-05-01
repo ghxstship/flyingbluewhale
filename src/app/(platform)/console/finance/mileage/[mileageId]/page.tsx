@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
               { label: "Miles", value: `${row.miles}` },
               { label: "Rate", value: money(row.rate_cents) },
               { label: "Total", value: money(Math.round(row.miles * row.rate_cents)) },
-              { label: "Logged on", value: fmtDate(row.logged_on) },
+              { label: "Logged On", value: fmtDate(row.logged_on) },
               { label: "Notes", value: row.notes ?? "—" },
             ]
           : undefined

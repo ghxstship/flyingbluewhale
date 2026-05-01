@@ -29,10 +29,10 @@ export default async function Page() {
           { label: "Prequalification", href: "/console/procurement/prequalification" },
           { label: "Questionnaires" },
         ]}
-        title="Prequal questionnaires"
+        title="Prequal Questionnaires"
         action={
           <Button href="/console/procurement/prequalification/questionnaires/new" size="sm">
-            + New questionnaire
+            + New Questionnaire
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyLabel="No questionnaires"
           emptyAction={
             <Button href="/console/procurement/prequalification/questionnaires/new" size="sm">
-              + New questionnaire
+              + New Questionnaire
             </Button>
           }
           columns={[

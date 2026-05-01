@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ manifestId: s
         title={`Edit ${((row as Record<string, unknown>)["flight_ref"] as string | undefined) ?? "A/D manifest"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/transport/ad/${p.manifestId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/transport/ad/${p.manifestId}`} submitLabel="Save Changes">
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Kind</span>
             <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
@@ -49,21 +49,21 @@ export default async function Page({ params }: { params: Promise<{ manifestId: s
               <option value="cancelled">cancelled</option>
             </select>
           </label>
-          <Input label="Flight reference" name="flight_ref" defaultValue={row.flight_ref ?? ""} maxLength={80} />
+          <Input label="Flight Reference" name="flight_ref" defaultValue={row.flight_ref ?? ""} maxLength={80} />
           <Input label="Carrier" name="carrier" defaultValue={row.carrier ?? ""} maxLength={120} />
           <Input
-            label="Party size"
+            label="Party Size"
             name="party_size"
             type="number"
             defaultValue={row.party_size != null ? String(row.party_size) : ""}
           />
           <Input
-            label="Scheduled at"
+            label="Scheduled At"
             name="scheduled_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.scheduled_at)}
           />
-          <Input label="Actual at" name="actual_at" type="datetime-local" defaultValue={dateTimeLocal(row.actual_at)} />
+          <Input label="Actual At" name="actual_at" type="datetime-local" defaultValue={dateTimeLocal(row.actual_at)} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Notes</span>
             <textarea name="notes" defaultValue={row.notes ?? ""} rows={5} className="input-base focus-ring w-full" />

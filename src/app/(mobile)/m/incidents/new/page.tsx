@@ -17,8 +17,8 @@ export default async function IncidentNew() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold uppercase tracking-wider text-[var(--color-error)]">Field</div>
-      <h1 className="mt-1 text-2xl font-semibold">Incident report</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">Field</div>
+      <h1 className="mt-1 text-2xl font-semibold">Incident Report</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         Log a safety issue — admin and EHS lead are notified immediately.
       </p>

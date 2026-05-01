@@ -76,7 +76,7 @@ export default async function MobileDriverPage() {
             <li>
               <EmptyState
                 size="compact"
-                title="No runs upcoming today"
+                title="No Runs Upcoming Today"
                 description="Check back when dispatch schedules a run for you."
               />
             </li>

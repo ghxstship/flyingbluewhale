@@ -104,7 +104,7 @@ export default async function Page() {
         </div>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Drill into a domain</h3>
+          <h3 className="text-sm font-semibold">Drill Into a Domain</h3>
           <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
             <li>
               <Link href="/console/operations/incidents" className="surface-raised hover-lift block p-3">

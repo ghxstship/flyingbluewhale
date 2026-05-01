@@ -19,7 +19,7 @@ export function MagicLinkForm() {
 
   return (
     <AuthShell
-      title="Email me a magic link"
+      title="Email Me a Magic Link"
       subtitle="We'll send a sign-in link to your inbox — no password required."
       footer={
         <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
@@ -28,9 +28,7 @@ export function MagicLinkForm() {
       }
     >
       {state?.ok ? (
-        <Alert kind="success">
-          Check your inbox — we sent a sign-in link that expires in 1 hour.
-        </Alert>
+        <Alert kind="success">Check your inbox — we sent a sign-in link that expires in 1 hour.</Alert>
       ) : (
         <form action={formAction} className="space-y-4" noValidate>
           <Input
@@ -41,9 +39,7 @@ export function MagicLinkForm() {
             autoComplete="email"
             error={state?.fieldErrors?.email}
           />
-          {state?.error && !state?.fieldErrors && (
-            <Alert kind="error">{state.error}</Alert>
-          )}
+          {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
           <Button type="submit" size="lg" className="w-full" loading={pending}>
             {pending ? "Sending" : "Send magic link"}
           </Button>

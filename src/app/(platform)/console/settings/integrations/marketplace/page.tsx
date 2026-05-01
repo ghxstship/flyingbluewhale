@@ -50,7 +50,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Integrations marketplace" />
+        <ModuleHeader eyebrow="Settings" title="Integrations Marketplace" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -76,7 +76,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Settings"
-        title="Integrations marketplace"
+        title="Integrations Marketplace"
         subtitle={`${CATALOG.filter((c) => c.available).length} available · ${installedCount} installed · ${CATALOG.filter((c) => !c.available).length} coming soon`}
         action={
           <Button href="/console/settings/integrations" size="sm">
@@ -88,7 +88,7 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Available" value={CATALOG.filter((c) => c.available).length.toLocaleString()} accent />
           <MetricCard label="Installed" value={installedCount.toLocaleString()} />
-          <MetricCard label="Coming soon" value={CATALOG.filter((c) => !c.available).length.toLocaleString()} />
+          <MetricCard label="Coming Soon" value={CATALOG.filter((c) => !c.available).length.toLocaleString()} />
         </div>
 
         {cats.map(([cat, items]) => (

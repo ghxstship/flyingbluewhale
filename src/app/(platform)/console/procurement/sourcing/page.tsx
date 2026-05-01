@@ -87,27 +87,27 @@ export default async function Page() {
         subtitle={`${reqs.length} requisition${reqs.length === 1 ? "" : "s"} · ${pos.length} active PO${pos.length === 1 ? "" : "s"}${conversionRate != null ? ` · ${conversionRate}% converted` : ""}`}
         action={
           <Button href="/console/procurement/requisitions/new" size="sm">
-            + New requisition
+            + New Requisition
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open requisitions" value={open.toLocaleString()} accent />
+          <MetricCard label="Open Requisitions" value={open.toLocaleString()} accent />
           <MetricCard label="Active POs" value={pos.length.toLocaleString()} />
           <MetricCard label="Converted" value={converted.toLocaleString()} />
         </div>
 
         <section>
-          <h3 className="text-sm font-semibold">Requisition pipeline</h3>
+          <h3 className="text-sm font-semibold">Requisition Pipeline</h3>
           {reqs.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No requisitions"
+              title="No Requisitions"
               description="Sourcing pulls from open requisitions. Author one to start the funnel."
               action={
                 <Link href="/console/procurement/requisitions/new" className="btn btn-secondary btn-sm">
-                  + New requisition
+                  + New Requisition
                 </Link>
               }
             />
@@ -134,9 +134,9 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">Recent purchase orders</h3>
+          <h3 className="text-sm font-semibold">Recent Purchase Orders</h3>
           {pos.length === 0 ? (
-            <EmptyState size="compact" title="No POs issued yet" />
+            <EmptyState size="compact" title="No POs Issued Yet" />
           ) : (
             <ul className="mt-3 space-y-2">
               {pos.map((p) => (

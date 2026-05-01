@@ -9,12 +9,12 @@ import { TemplatePicker } from "@/components/deliverable-templates/TemplatePicke
 import { submitDeliverableAction, type SubmitState } from "./actions";
 
 const TALENT = [
-  { type: "technical_rider", label: "Technical rider" },
-  { type: "hospitality_rider", label: "Hospitality rider" },
-  { type: "input_list", label: "Input list" },
-  { type: "stage_plot", label: "Stage plot" },
-  { type: "crew_list", label: "Touring crew list" },
-  { type: "guest_list", label: "Guest list" },
+  { type: "technical_rider", label: "Technical Rider" },
+  { type: "hospitality_rider", label: "Hospitality Rider" },
+  { type: "input_list", label: "Input List" },
+  { type: "stage_plot", label: "Stage Plot" },
+  { type: "crew_list", label: "Touring Crew List" },
+  { type: "guest_list", label: "Guest List" },
   { type: "custom", label: "Other" },
 ];
 
@@ -23,21 +23,18 @@ export function AdvancingForm({ slug }: { slug: string }) {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("technical_rider");
   const [notes, setNotes] = useState("");
-  const [state, formAction, pending] = useActionState<SubmitState, FormData>(
-    async (prev, fd) => {
-      const result = await submitDeliverableAction(prev, fd);
-      if (result?.ok) {
-        toast.success("Deliverable submitted");
-        formRef.current?.reset();
-        setTitle("");
-        setNotes("");
-      } else if (result?.error) {
-        toast.error(result.error);
-      }
-      return result;
-    },
-    null,
-  );
+  const [state, formAction, pending] = useActionState<SubmitState, FormData>(async (prev, fd) => {
+    const result = await submitDeliverableAction(prev, fd);
+    if (result?.ok) {
+      toast.success("Deliverable submitted");
+      formRef.current?.reset();
+      setTitle("");
+      setNotes("");
+    } else if (result?.error) {
+      toast.error(result.error);
+    }
+    return result;
+  }, null);
 
   return (
     <form ref={formRef} action={formAction} className="surface-raised space-y-4 p-6">
@@ -51,7 +48,7 @@ export function AdvancingForm({ slug }: { slug: string }) {
             const prefill =
               typeof (t.data as { notes?: unknown } | null)?.notes === "string"
                 ? String((t.data as { notes: string }).notes)
-                : t.description ?? "";
+                : (t.description ?? "");
             if (prefill) setNotes(prefill);
             toast.success(`Applied ${t.name}`);
           }}
@@ -76,7 +73,11 @@ export function AdvancingForm({ slug }: { slug: string }) {
             className="input-base mt-1.5 w-full"
             required
           >
-            {TALENT.map((t) => <option key={t.type} value={t.type}>{t.label}</option>)}
+            {TALENT.map((t) => (
+              <option key={t.type} value={t.type}>
+                {t.label}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -94,13 +95,20 @@ export function AdvancingForm({ slug }: { slug: string }) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">File (optional, ≤25MB)</label>
-          <input type="file" name="file" className="input-base mt-1.5 w-full" accept=".pdf,.png,.jpg,.jpeg,.svg,.txt,.doc,.docx,.csv" />
+          <input
+            type="file"
+            name="file"
+            className="input-base mt-1.5 w-full"
+            accept=".pdf,.png,.jpg,.jpeg,.svg,.txt,.doc,.docx,.csv"
+          />
         </div>
         <Input label="Deadline" name="deadline" type="date" />
       </div>
       {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
       <div className="flex justify-end">
-        <Button type="submit" disabled={pending}>{pending ? "Uploading…" : "Submit deliverable"}</Button>
+        <Button type="submit" disabled={pending}>
+          {pending ? "Uploading…" : "Submit deliverable"}
+        </Button>
       </div>
     </form>
   );

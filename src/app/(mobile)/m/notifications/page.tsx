@@ -63,7 +63,7 @@ export default async function NotificationsPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No notifications"
+              title="No Notifications"
               description="You're all caught up. New notifications will appear here."
             />
           </li>

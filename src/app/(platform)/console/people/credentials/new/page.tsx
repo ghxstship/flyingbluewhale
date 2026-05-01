@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="People · Credentials" title="New Credential" />
       <div className="page-content max-w-xl">
-        <FormShell action={createCredential} cancelHref="/console/people/credentials" submitLabel="Add credential">
+        <FormShell action={createCredential} cancelHref="/console/people/credentials" submitLabel="Add Credential">
           <Input
             label="Kind"
             name="kind"

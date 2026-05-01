@@ -109,9 +109,9 @@ export default async function Page({ params }: { params: Promise<{ automationId:
 
         <div className="metric-grid-3">
           <MetricCard label="Steps" value={steps.toLocaleString()} />
-          <MetricCard label="Last run" value={automation.last_run_at ? fmt(automation.last_run_at) : "Never"} />
+          <MetricCard label="Last Run" value={automation.last_run_at ? fmt(automation.last_run_at) : "Never"} />
           <MetricCard
-            label="Last status"
+            label="Last Status"
             value={automation.last_run_status ?? "—"}
             accent={automation.last_run_status === "ok" || automation.last_run_status === "success"}
           />
@@ -132,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Trigger config</h3>
+          <h3 className="text-sm font-semibold">Trigger Config</h3>
           <pre className="mt-3 max-h-72 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
             {JSON.stringify(automation.trigger_config, null, 2)}
           </pre>
@@ -153,7 +153,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
 
         {automation.last_run_status && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Last run</h3>
+            <h3 className="text-sm font-semibold">Last Run</h3>
             <div className="mt-2 flex items-center gap-2 text-sm">
               <Badge variant={RUN_TONE[automation.last_run_status] ?? "muted"}>{automation.last_run_status}</Badge>
               <span className="font-mono text-xs text-[var(--text-muted)]">{fmt(automation.last_run_at)}</span>

@@ -25,7 +25,7 @@ export default async function PrintSheetPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Print sheet" />
+        <ModuleHeader title="Print Sheet" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -58,7 +58,7 @@ export default async function PrintSheetPage() {
     <>
       <ModuleHeader
         eyebrow="Accreditation · Print"
-        title="Badge sheet"
+        title="Badge Sheet"
         subtitle={`${cards.length} card${cards.length === 1 ? "" : "s"} · ⌘P to print`}
         action={
           <div className="flex items-center gap-2 print:hidden">

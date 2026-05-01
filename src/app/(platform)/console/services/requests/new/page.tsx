@@ -12,7 +12,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Services" title="Open service request" />
+        <ModuleHeader eyebrow="Services" title="Open Service Request" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -31,9 +31,9 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Services" title="Open service request" />
+      <ModuleHeader eyebrow="Services" title="Open Service Request" />
       <div className="page-content max-w-xl">
-        <FormShell action={createServiceRequest} cancelHref="/console/services/requests" submitLabel="Open request">
+        <FormShell action={createServiceRequest} cancelHref="/console/services/requests" submitLabel="Open Request">
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Category</label>
             <select name="category" defaultValue="AV" className="input-base mt-1.5 w-full" required>

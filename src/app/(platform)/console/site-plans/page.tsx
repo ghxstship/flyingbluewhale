@@ -63,16 +63,16 @@ export default async function Page() {
         subtitle={`${rows.length} sheet${rows.length === 1 ? "" : "s"} across all projects · floorplans, rigging, power, evacuation, hospitality zones`}
         action={
           <Button href="/console/site-plans/new" size="sm">
-            + New plan
+            + New Plan
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total plans" value={rows.length.toLocaleString()} accent />
+          <MetricCard label="Total Plans" value={rows.length.toLocaleString()} accent />
           <MetricCard label="Disciplines" value={String(new Set(rows.map((r) => r.discipline)).size)} />
           <MetricCard
-            label="Venues covered"
+            label="Venues Covered"
             value={String(new Set(rows.map((r) => r.venue?.name).filter(Boolean)).size)}
           />
         </div>
@@ -83,7 +83,7 @@ export default async function Page() {
           emptyDescription="Upload venue floorplans or production drawings. Versioned via revisions, pinnable to issues, RFIs, and punch items."
           emptyAction={
             <Button href="/console/site-plans/new" size="sm">
-              + New plan
+              + New Plan
             </Button>
           }
           columns={[
@@ -97,7 +97,7 @@ export default async function Page() {
             },
             {
               key: "rev",
-              header: "Current rev",
+              header: "Current Rev",
               render: (r) => r.current_revision?.revision_label ?? "—",
               className: "font-mono text-xs",
             },

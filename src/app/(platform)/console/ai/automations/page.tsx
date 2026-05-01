@@ -78,7 +78,7 @@ export default async function Page() {
         subtitle={`${rows.length} automation${rows.length === 1 ? "" : "s"} · ${enabled} enabled${failing ? ` · ${failing} failing` : ""}`}
         action={
           <Button href="/console/ai/automations/new" size="sm">
-            + New automation
+            + New Automation
           </Button>
         }
       />
@@ -86,16 +86,16 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Enabled" value={enabled.toLocaleString()} accent />
           <MetricCard label="Total" value={rows.length.toLocaleString()} />
-          <MetricCard label="Failing last run" value={failing.toLocaleString()} />
+          <MetricCard label="Failing Last Run" value={failing.toLocaleString()} />
         </div>
 
         {rows.length === 0 ? (
           <EmptyState
-            title="No automations yet"
+            title="No Automations Yet"
             description="Author AI-driven automations triggered manually, on a cron schedule, by webhooks, or by domain events."
             action={
               <Link href="/console/ai/automations/new" className="btn btn-primary btn-sm">
-                + New automation
+                + New Automation
               </Link>
             }
           />

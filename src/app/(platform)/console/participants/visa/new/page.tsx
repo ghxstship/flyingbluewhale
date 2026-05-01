@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Participants · Visa" title="New Visa Case" />
       <div className="page-content max-w-xl">
-        <FormShell action={createVisaCase} cancelHref="/console/participants/visa" submitLabel="Open case">
+        <FormShell action={createVisaCase} cancelHref="/console/participants/visa" submitLabel="Open Case">
           <Input label="Person Name" name="person_name" maxLength={160} placeholder="As on passport" required />
           <Input label="Nationality" name="nationality" maxLength={80} placeholder="ISO-3166 name" />
           <Input label="Passport Number" name="passport_no" maxLength={60} />

@@ -113,23 +113,23 @@ export default async function Page() {
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label="Outstanding receivables"
+            label="Outstanding Receivables"
             value={Array.from(byCurrency.values())
               .reduce((s, v) => s + v.outstanding, 0)
               .toLocaleString()}
             accent
           />
           <MetricCard
-            label="Pending payables"
+            label="Pending Payables"
             value={Array.from(expByCurrency.values())
               .reduce((s, v) => s + v, 0)
               .toLocaleString()}
           />
-          <MetricCard label="Stripe events · 30d" value={stripeEvents.length.toLocaleString()} />
+          <MetricCard label="Stripe Events · 30d" value={stripeEvents.length.toLocaleString()} />
         </div>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">By currency</h3>
+          <h3 className="text-sm font-semibold">By Currency</h3>
           {byCurrency.size === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">No invoices issued yet.</p>
           ) : (
@@ -182,7 +182,7 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill in</h3>
+          <h3 className="text-sm font-semibold">Drill In</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {HUB_TILES.map((t) => (
               <Link key={t.href} href={t.href} className="surface hover-lift p-4">

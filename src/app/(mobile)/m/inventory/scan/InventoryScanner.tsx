@@ -36,26 +36,82 @@ export function InventoryScanner() {
         });
         const body = await res.json().catch(() => ({}));
         if (!res.ok || !body.ok) {
-          setLog((l) => [{ at: new Date().toISOString(), tag: trimmed, name: null, previous: null, status: null, result: "error" as const, error: body?.error?.message ?? `HTTP ${res.status}` }, ...l].slice(0, 50));
+          setLog((l) =>
+            [
+              {
+                at: new Date().toISOString(),
+                tag: trimmed,
+                name: null,
+                previous: null,
+                status: null,
+                result: "error" as const,
+                error: body?.error?.message ?? `HTTP ${res.status}`,
+              },
+              ...l,
+            ].slice(0, 50),
+          );
           toast.error(body?.error?.message ?? "Scan failed");
           haptic("error");
           return;
         }
-        const data = body.data as { result: string; name?: string; assetTag?: string; previousStatus?: string; status?: string };
+        const data = body.data as {
+          result: string;
+          name?: string;
+          assetTag?: string;
+          previousStatus?: string;
+          status?: string;
+        };
         if (data.result === "not_found") {
-          setLog((l) => [{ at: new Date().toISOString(), tag: trimmed, name: null, previous: null, status: null, result: "not_found" as const }, ...l].slice(0, 50));
+          setLog((l) =>
+            [
+              {
+                at: new Date().toISOString(),
+                tag: trimmed,
+                name: null,
+                previous: null,
+                status: null,
+                result: "not_found" as const,
+              },
+              ...l,
+            ].slice(0, 50),
+          );
           announce("Asset not found", "assertive");
           toast.error("No equipment with that tag");
           haptic("error");
         } else {
-          setLog((l) => [{ at: new Date().toISOString(), tag: trimmed, name: data.name ?? null, previous: data.previousStatus ?? null, status: data.status ?? null, result: "ok" as const }, ...l].slice(0, 50));
+          setLog((l) =>
+            [
+              {
+                at: new Date().toISOString(),
+                tag: trimmed,
+                name: data.name ?? null,
+                previous: data.previousStatus ?? null,
+                status: data.status ?? null,
+                result: "ok" as const,
+              },
+              ...l,
+            ].slice(0, 50),
+          );
           announce(`${data.name} is now ${data.status}`, "polite");
           toast.success(`${data.name} → ${data.status}`);
           haptic("success");
         }
         setTag("");
       } catch (err) {
-        setLog((l) => [{ at: new Date().toISOString(), tag: trimmed, name: null, previous: null, status: null, result: "error" as const, error: (err as Error).message }, ...l].slice(0, 50));
+        setLog((l) =>
+          [
+            {
+              at: new Date().toISOString(),
+              tag: trimmed,
+              name: null,
+              previous: null,
+              status: null,
+              result: "error" as const,
+              error: (err as Error).message,
+            },
+            ...l,
+          ].slice(0, 50),
+        );
         toast.error((err as Error).message);
       }
     });
@@ -64,7 +120,7 @@ export function InventoryScanner() {
   return (
     <div className="space-y-4">
       <form
-        className="card-elevated p-4 space-y-3"
+        className="card-elevated space-y-3 p-4"
         onSubmit={(e) => {
           e.preventDefault();
           submit(tag);
@@ -108,20 +164,22 @@ export function InventoryScanner() {
       </form>
 
       <div className="card-elevated">
-        <div className="border-b border-[var(--color-border)] px-4 py-3 text-heading text-sm">Recent</div>
+        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
         {log.length === 0 ? (
-          <EmptyState size="compact" title="No scans yet" />
+          <EmptyState size="compact" title="No Scans Yet" />
         ) : (
           <ul>
             {log.map((e, i) => (
               <li
                 key={i}
-                className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-2 text-mono text-xs"
+                className="text-mono flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-2 text-xs"
               >
                 <span className="font-mono text-[var(--color-text-primary)]">{e.tag}</span>
                 <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
                   {e.name && <span className="text-[var(--color-text-secondary)]">{e.name}</span>}
-                  {e.result === "ok" && e.status && <Badge variant={e.status === "available" ? "success" : "brand"}>{e.status}</Badge>}
+                  {e.result === "ok" && e.status && (
+                    <Badge variant={e.status === "available" ? "success" : "brand"}>{e.status}</Badge>
+                  )}
                   {e.result === "not_found" && <Badge variant="muted">not found</Badge>}
                   {e.result === "error" && <Badge variant="error">{e.error ?? "error"}</Badge>}
                 </span>

@@ -24,7 +24,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Procurement"
-        title="New submittal"
+        title="New Submittal"
         subtitle="Create the register entry. Upload the first revision next."
       />
       <div className="page-content max-w-2xl">

@@ -6,9 +6,9 @@ import { createChange } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Operations" title="New change record" />
+      <ModuleHeader eyebrow="Operations" title="New Change Record" />
       <div className="page-content max-w-xl">
-        <FormShell action={createChange} cancelHref="/console/ops/toc/changes" submitLabel="Create change">
+        <FormShell action={createChange} cancelHref="/console/ops/toc/changes" submitLabel="Create Change">
           <Input label="Code" name="code" required maxLength={40} placeholder="CHG-001" />
           <Input label="Title" name="title" required maxLength={200} />
           <div>
@@ -48,8 +48,8 @@ export default function Page() {
               </select>
             </div>
           </div>
-          <Input label="Planned start" name="planned_start" type="datetime-local" />
-          <Input label="Planned end" name="planned_end" type="datetime-local" />
+          <Input label="Planned Start" name="planned_start" type="datetime-local" />
+          <Input label="Planned End" name="planned_end" type="datetime-local" />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Backout plan</label>
             <textarea

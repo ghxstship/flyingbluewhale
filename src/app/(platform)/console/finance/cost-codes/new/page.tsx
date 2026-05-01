@@ -8,7 +8,7 @@ const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="New cost code" />
+      <ModuleHeader eyebrow="Finance" title="New Cost Code" />
       <div className="page-content max-w-md">
         <FormShell action={createCostCode} cancelHref="/console/finance/cost-codes" submitLabel="Create">
           <label className="flex flex-col gap-1.5">

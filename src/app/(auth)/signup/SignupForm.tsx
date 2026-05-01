@@ -21,7 +21,7 @@ export function SignupForm() {
 
   return (
     <AuthShell
-      title="Create your account"
+      title="Create Your Account"
       subtitle="Free for Life on the Access tier. No credit card."
       footer={
         <>
@@ -35,13 +35,7 @@ export function SignupForm() {
       <OAuthButtons />
       <AuthDivider />
       <form action={formAction} className="space-y-4" noValidate>
-        <Input
-          label="Name"
-          name="name"
-          required
-          autoComplete="name"
-          error={state?.fieldErrors?.name}
-        />
+        <Input label="Name" name="name" required autoComplete="name" error={state?.fieldErrors?.name} />
         <Input
           label="Work Email"
           name="email"
@@ -69,13 +63,17 @@ export function SignupForm() {
           hint="You can create this later from settings."
           error={state?.fieldErrors?.orgName}
         />
-        {state?.error && !state?.fieldErrors && (
-          <Alert kind="error">{state.error}</Alert>
-        )}
+        {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
           By creating an account you agree to our{" "}
-          <Link href="/legal/terms" className="underline">Terms</Link> and{" "}
-          <Link href="/legal/privacy" className="underline">Privacy Policy</Link>.
+          <Link href="/legal/terms" className="underline">
+            Terms
+          </Link>{" "}
+          and{" "}
+          <Link href="/legal/privacy" className="underline">
+            Privacy Policy
+          </Link>
+          .
         </p>
         <Button type="submit" size="lg" className="w-full" loading={pending}>
           {pending ? "Creating account" : "Create account"}

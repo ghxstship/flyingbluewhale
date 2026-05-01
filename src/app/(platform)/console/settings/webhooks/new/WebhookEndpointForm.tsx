@@ -8,12 +8,17 @@ import { Input } from "@/components/ui/Input";
 
 const EVENT_OPTIONS = [
   "*",
-  "project.created", "project.status_changed",
-  "invoice.sent", "invoice.paid",
-  "proposal.sent", "proposal.signed",
-  "deliverable.submitted", "deliverable.approved",
+  "project.created",
+  "project.status_changed",
+  "invoice.sent",
+  "invoice.paid",
+  "proposal.sent",
+  "proposal.signed",
+  "deliverable.submitted",
+  "deliverable.approved",
   "ticket.scanned",
-  "po.acknowledged", "po.fulfilled",
+  "po.acknowledged",
+  "po.fulfilled",
   "incident.filed",
   "passkey.registered",
   "account.deletion_requested",
@@ -68,7 +73,7 @@ export function WebhookEndpointForm() {
   if (createdSecret) {
     return (
       <div className="surface p-5">
-        <h3 className="text-sm font-semibold">Signing secret</h3>
+        <h3 className="text-sm font-semibold">Signing Secret</h3>
         <p className="mt-2 text-xs text-[var(--text-muted)]">
           Copy this now. It's shown once and never surfaces again.
         </p>
@@ -87,8 +92,8 @@ export function WebhookEndpointForm() {
           </Button>
         </div>
         <p className="mt-4 text-xs text-[var(--text-muted)]">
-          Every delivery carries <code className="font-mono">x-fbw-signature: t=&lt;ms&gt;,v1=&lt;hex&gt;</code>{" "}
-          where <code className="font-mono">hex = HMAC-SHA256(t + "." + body, secret)</code>. Stripe-style.
+          Every delivery carries <code className="font-mono">x-fbw-signature: t=&lt;ms&gt;,v1=&lt;hex&gt;</code> where{" "}
+          <code className="font-mono">hex = HMAC-SHA256(t + "." + body, secret)</code>. Stripe-style.
         </p>
         <div className="mt-4 flex justify-end">
           <Button onClick={() => router.push("/console/settings/webhooks")}>Done</Button>
@@ -114,9 +119,7 @@ export function WebhookEndpointForm() {
         placeholder="Production — routes to PagerDuty on incidents"
       />
       <div>
-        <label className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
-          Events
-        </label>
+        <label className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">Events</label>
         <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           {EVENT_OPTIONS.map((ev) => (
             <label
@@ -125,11 +128,7 @@ export function WebhookEndpointForm() {
                 events.has(ev) ? "bg-[var(--surface-inset)]" : ""
               }`}
             >
-              <input
-                type="checkbox"
-                checked={events.has(ev)}
-                onChange={() => toggle(ev)}
-              />
+              <input type="checkbox" checked={events.has(ev)} onChange={() => toggle(ev)} />
               <span className="font-mono">{ev}</span>
             </label>
           ))}

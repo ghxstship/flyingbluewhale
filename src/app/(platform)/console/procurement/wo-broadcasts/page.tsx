@@ -63,7 +63,7 @@ export default async function Page() {
         subtitle="Open vendor-pool requests for last-minute needs. First qualified responder accepts."
         action={
           <Button href="/console/procurement/wo-broadcasts/new" size="sm">
-            + New broadcast
+            + New Broadcast
           </Button>
         }
       />
@@ -80,7 +80,7 @@ export default async function Page() {
           emptyDescription="Use this for emergency / last-minute needs (extra security, replacement gear). Posted to vendor pool, accepted by first qualified responder."
           emptyAction={
             <Button href="/console/procurement/wo-broadcasts/new" size="sm">
-              + New broadcast
+              + New Broadcast
             </Button>
           }
           columns={[
@@ -93,8 +93,8 @@ export default async function Page() {
               render: (r) => (r.budget_cents ? formatMoney(r.budget_cents) : "—"),
               className: "font-mono text-xs",
             },
-            { key: "needed", header: "Needed by", render: (r) => fmt(r.needed_by), className: "font-mono text-xs" },
-            { key: "awarded", header: "Awarded to", render: (r) => r.awarded_to?.name ?? "—" },
+            { key: "needed", header: "Needed By", render: (r) => fmt(r.needed_by), className: "font-mono text-xs" },
+            { key: "awarded", header: "Awarded To", render: (r) => r.awarded_to?.name ?? "—" },
             {
               key: "status",
               header: "Status",

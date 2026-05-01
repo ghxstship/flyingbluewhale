@@ -9,7 +9,10 @@ const supabaseHost = (() => {
   return "*.supabase.co";
 })();
 
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+// CORS for /api/* is set per-request in src/proxy.ts so we can match Origin
+// against an allow-list (`ALLOWED_ORIGINS`) instead of pinning a single
+// hard-coded value here. Browsers reject `Access-Control-Allow-Origin: *`
+// on credentialed requests, so static config can't serve a multi-tenant API.
 
 const csp = [
   `default-src 'self'`,
@@ -50,11 +53,7 @@ const config: NextConfig = {
         source: "/api/(.*)",
         headers: [
           { key: "Cache-Control", value: "no-store" },
-          { key: "Access-Control-Allow-Origin", value: ALLOWED_ORIGINS[0] ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000" },
-          { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Methods", value: "GET,POST,PATCH,PUT,DELETE,OPTIONS" },
-          { key: "Access-Control-Allow-Headers", value: "content-type,authorization,x-csrf-token" },
-          { key: "Vary", value: "Origin" },
+          // ACAO/ACAC/ACAM/ACAH are emitted per-request in src/proxy.ts.
         ],
       },
     ];

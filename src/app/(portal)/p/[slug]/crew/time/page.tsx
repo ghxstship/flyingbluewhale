@@ -12,7 +12,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const project = await projectIdFromSlug(slug);
   const supabase = await createClient();
-  let rows: Array<{ id: string; description: string | null; started_at: string; ended_at: string | null; duration_minutes: number | null; billable: boolean }> = [];
+  let rows: Array<{
+    id: string;
+    description: string | null;
+    started_at: string;
+    ended_at: string | null;
+    duration_minutes: number | null;
+    billable: boolean;
+  }> = [];
   if (project) {
     const { data } = await supabase
       .from("time_entries")
@@ -25,16 +32,29 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="crew" title="Time" subtitle="Your time entries for this project">
       {rows.length === 0 ? (
-        <EmptyState title="No time logged yet" description="Clock in and out from the mobile PWA or the console Time module." />
+        <EmptyState
+          title="No Time Logged Yet"
+          description="Clock in and out from the mobile PWA or the console Time module."
+        />
       ) : (
         <table className="data-table w-full text-sm">
-          <thead><tr><th>Started</th><th>Ended</th><th>Hours</th><th>Billable</th><th>Notes</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Started</th>
+              <th>Ended</th>
+              <th>Hours</th>
+              <th>Billable</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
           <tbody>
             {rows.map((r) => (
               <tr key={r.id}>
                 <td className="font-mono text-xs">{fmtDateTime(r.started_at)}</td>
                 <td className="font-mono text-xs">{fmtDateTime(r.ended_at)}</td>
-                <td className="font-mono text-xs">{r.duration_minutes != null ? Math.round(r.duration_minutes / 60 * 10) / 10 : "—"}</td>
+                <td className="font-mono text-xs">
+                  {r.duration_minutes != null ? Math.round((r.duration_minutes / 60) * 10) / 10 : "—"}
+                </td>
                 <td>{r.billable ? "Yes" : "No"}</td>
                 <td className="text-[var(--text-muted)]">{r.description ?? "—"}</td>
               </tr>

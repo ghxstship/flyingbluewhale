@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Sustainability · Carbon" title="New Measurement" />
       <div className="page-content max-w-xl">
-        <FormShell action={createMetric} cancelHref="/console/sustainability/carbon" submitLabel="Record measurement">
+        <FormShell action={createMetric} cancelHref="/console/sustainability/carbon" submitLabel="Record Measurement">
           <Input label="Period Start" name="period_start" type="date" required />
           <Input label="Period End" name="period_end" type="date" required />
           <div>

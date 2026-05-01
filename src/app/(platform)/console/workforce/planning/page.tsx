@@ -76,12 +76,12 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Planned FTE" value={totalPlanned.toLocaleString()} accent />
           <MetricCard label="Actual FTE" value={totalActual.toLocaleString()} />
-          <MetricCard label="Fill rate" value={fillRate != null ? `${fillRate}%` : "—"} />
+          <MetricCard label="Fill Rate" value={fillRate != null ? `${fillRate}%` : "—"} />
         </div>
 
         {faEntries.length === 0 ? (
           <EmptyState
-            title="No deployments planned"
+            title="No Deployments Planned"
             description="Author workforce_deployments rows per venue+zone+window to drive headcount planning."
             action={
               <Link href="/console/workforce/deployment" className="btn btn-secondary btn-sm">
@@ -91,7 +91,7 @@ export default async function Page() {
           />
         ) : (
           <section>
-            <h3 className="text-sm font-semibold">By functional area</h3>
+            <h3 className="text-sm font-semibold">By Functional Area</h3>
             <div className="mt-3 space-y-3">
               {faEntries.map(([fa, agg]) => {
                 const fr = agg.planned > 0 ? Math.round((agg.actual / agg.planned) * 100) : null;

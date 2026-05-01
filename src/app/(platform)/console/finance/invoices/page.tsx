@@ -13,11 +13,20 @@ export const dynamic = "force-dynamic";
 
 export default async function InvoicesPage() {
   if (!hasSupabase) {
-    return <><ModuleHeader title="Invoices" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+    return (
+      <>
+        <ModuleHeader title="Invoices" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   }
   const session = await requireSession();
   const rows = await listOrgScoped("invoices", session.orgId, { orderBy: "created_at" });
-  const outstanding = rows.filter((r) => ["sent", "overdue"].includes(r.status)).reduce((s, r) => s + r.amount_cents, 0);
+  const outstanding = rows
+    .filter((r) => ["sent", "overdue"].includes(r.status))
+    .reduce((s, r) => s + r.amount_cents, 0);
   const paid = rows.filter((r) => r.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
 
   return (
@@ -26,7 +35,7 @@ export default async function InvoicesPage() {
         eyebrow="Finance"
         title="Invoices"
         subtitle={`${rows.length} total · ${formatMoney(outstanding)} outstanding · ${formatMoney(paid)} paid`}
-        action={<Button href="/console/finance/invoices/new">+ New invoice</Button>}
+        action={<Button href="/console/finance/invoices/new">+ New Invoice</Button>}
       />
       <div className="page-content">
         <DataTable<Invoice>
@@ -35,7 +44,12 @@ export default async function InvoicesPage() {
           columns={[
             { key: "number", header: "Number", render: (r) => <span className="font-mono text-xs">{r.number}</span> },
             { key: "title", header: "Title", render: (r) => r.title },
-            { key: "amount", header: "Amount", render: (r) => formatMoney(r.amount_cents, r.currency), className: "font-mono text-xs" },
+            {
+              key: "amount",
+              header: "Amount",
+              render: (r) => formatMoney(r.amount_cents, r.currency),
+              className: "font-mono text-xs",
+            },
             { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
             { key: "due", header: "Due", render: (r) => r.due_at ?? "—", className: "font-mono text-xs" },
             { key: "created", header: "Created", render: (r) => timeAgo(r.created_at), className: "font-mono text-xs" },

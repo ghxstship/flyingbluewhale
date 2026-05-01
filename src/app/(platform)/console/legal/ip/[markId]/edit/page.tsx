@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ markId: strin
     <>
       <ModuleHeader eyebrow="Trademark" title={`Edit ${row.mark}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/legal/ip/${p.markId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/legal/ip/${p.markId}`} submitLabel="Save Changes">
           <Input label="Mark" name="mark" defaultValue={row.mark} required maxLength={200} />
           <Input label="Jurisdiction" name="jurisdiction" defaultValue={row.jurisdiction ?? ""} maxLength={120} />
           <Input
@@ -43,8 +43,8 @@ export default async function Page({ params }: { params: Promise<{ markId: strin
               <option value="expired">expired</option>
             </select>
           </label>
-          <Input label="Registered on" name="registered_on" type="date" defaultValue={dateOnly(row.registered_on)} />
-          <Input label="Expires on" name="expires_on" type="date" defaultValue={dateOnly(row.expires_on)} />
+          <Input label="Registered On" name="registered_on" type="date" defaultValue={dateOnly(row.registered_on)} />
+          <Input label="Expires On" name="expires_on" type="date" defaultValue={dateOnly(row.expires_on)} />
         </FormShell>
       </div>
     </>

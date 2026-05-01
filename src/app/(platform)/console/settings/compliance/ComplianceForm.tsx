@@ -73,7 +73,9 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
         </select>
       </div>
       <div className="flex justify-end">
-        <Button type="submit" loading={pending}>Save compliance settings</Button>
+        <Button type="submit" loading={pending}>
+          Save Compliance Settings
+        </Button>
       </div>
     </form>
   );

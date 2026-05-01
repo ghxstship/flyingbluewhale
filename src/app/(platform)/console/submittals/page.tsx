@@ -74,13 +74,13 @@ export default async function Page() {
         subtitle="Vendor packages with stamps + revision rounds. Spec-section organized."
         action={
           <Button href="/console/submittals/new" size="sm">
-            + New submittal
+            + New Submittal
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="In flight" value={inFlight.toLocaleString()} accent />
+          <MetricCard label="In Flight" value={inFlight.toLocaleString()} accent />
           <MetricCard label="Approved" value={approved.toLocaleString()} />
           <MetricCard label="Rejected" value={rejected.toLocaleString()} />
         </div>
@@ -91,7 +91,7 @@ export default async function Page() {
           emptyDescription="Vendor packages, technical specs, brand approvals — track them with stamps and revision rounds."
           emptyAction={
             <Button href="/console/submittals/new" size="sm">
-              + New submittal
+              + New Submittal
             </Button>
           }
           columns={[

@@ -2,14 +2,14 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 
 const QUICK_LINKS = [
-  { href: "/console/projects/new", label: "+ New project" },
-  { href: "/console/proposals/new", label: "+ New proposal" },
-  { href: "/console/finance/invoices/new", label: "+ New invoice" },
-  { href: "/console/finance/expenses/new", label: "+ Log expense" },
+  { href: "/console/projects/new", label: "+ New Project" },
+  { href: "/console/proposals/new", label: "+ New Proposal" },
+  { href: "/console/finance/invoices/new", label: "+ New Invoice" },
+  { href: "/console/finance/expenses/new", label: "+ Log Expense" },
   { href: "/console/procurement/purchase-orders/new", label: "+ New PO" },
-  { href: "/console/tasks/new", label: "+ New task" },
-  { href: "/console/events/new", label: "+ New event" },
-  { href: "/console/ai/assistant", label: "Open AI assistant" },
+  { href: "/console/tasks/new", label: "+ New Task" },
+  { href: "/console/events/new", label: "+ New Event" },
+  { href: "/console/ai/assistant", label: "Open AI Assistant" },
 ];
 
 export default function CommandPage() {

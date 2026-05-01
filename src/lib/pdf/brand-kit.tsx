@@ -18,7 +18,7 @@ export function BrandKitPdf({ brand }: { brand: PdfBrand }) {
     <PdfDocument title={`${brand.producerName} · Brand kit`} author={brand.producerName} subject="Brand kit">
       <CoverPage
         brand={brand}
-        eyebrow="Brand kit"
+        eyebrow="Brand Kit"
         title={brand.producerName}
         subtitle="Design tokens, logo, and style rules."
       />
@@ -35,11 +35,11 @@ export function BrandKitPdf({ brand }: { brand: PdfBrand }) {
         <Text style={{ fontSize: 24, marginBottom: 4 }}>Display 24pt</Text>
         <Text style={{ fontSize: 14, marginBottom: 4 }}>Title 14pt</Text>
         <Text style={styles.p}>Body 11pt, 1.45 line-height. Use Helvetica for interoperability in field prints.</Text>
-        <SectionHeading title="Usage rules" />
+        <SectionHeading title="Usage Rules" />
         <Text style={styles.p}>
-          • Use the accent color for running header bars + primary CTAs.{"\n"}
-          • Tier 4+ documents carry a crimson classification banner — override the accent only for the banner.{"\n"}
-          • Legal footer appears on every page of every producer-generated document.
+          • Use the accent color for running header bars + primary CTAs.{"\n"}• Tier 4+ documents carry a crimson
+          classification banner — override the accent only for the banner.{"\n"}• Legal footer appears on every page of
+          every producer-generated document.
         </Text>
       </BrandedPage>
     </PdfDocument>

@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="sponsor" title="Assets" subtitle="Brand guidelines, logos, photography">
       <EmptyState
-        title="Asset drop"
+        title="Asset Drop"
         description="Brand assets, logos, and approved photography land here after the production team reviews your brand guidelines."
       />
     </PortalSubpage>

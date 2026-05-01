@@ -133,7 +133,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">More from the community</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">More From the Community</h2>
           <Link href="/community" className="text-sm text-[var(--org-primary)]">
             See all →
           </Link>
@@ -149,7 +149,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       </section>
 
       <CTASection
-        title="Ship your next show on L0ST 1SLAND Technologies"
+        title="Ship Your Next Show on L0ST 1SLAND Technologies"
         subtitle="Free on the Access tier. 14-day trial of Professional."
       />
     </div>

@@ -22,7 +22,7 @@ const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
   { href: "/console/production/equipment", label: "Equipment", description: "Asset register · 5-state lifecycle" },
   { href: "/console/production/rentals", label: "Rentals", description: "Bookings + handover tracking" },
   { href: "/console/production/rentals/availability", label: "Availability", description: "7-day matrix" },
-  { href: "/m/inventory/scan", label: "Mobile scan", description: "Receive / put-away / pick" },
+  { href: "/m/inventory/scan", label: "Mobile Scan", description: "Receive / put-away / pick" },
 ];
 
 export default async function Page() {
@@ -72,12 +72,12 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Assets" value={(assetCount ?? 0).toLocaleString()} accent />
           <MetricCard label="Locations" value={(locationCount ?? 0).toLocaleString()} />
-          <MetricCard label="Active rentals" value={activeRentals.toLocaleString()} />
+          <MetricCard label="Active Rentals" value={activeRentals.toLocaleString()} />
         </div>
 
         {Object.keys(statusBuckets).length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By status</h3>
+            <h3 className="text-sm font-semibold">By Status</h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {Object.entries(statusBuckets)
                 .sort((a, b) => b[1] - a[1])
@@ -92,7 +92,7 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill in</h3>
+          <h3 className="text-sm font-semibold">Drill In</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {HUB_TILES.map((t) => (
               <Link key={t.href} href={t.href} className="surface hover-lift p-4">

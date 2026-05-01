@@ -13,13 +13,15 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
   const session = await requireSession();
   const supabase = await createClient();
   const [{ data: endpoint }, { data: deliveries }] = await Promise.all([
-    supabase.from("webhook_endpoints")
+    supabase
+      .from("webhook_endpoints")
       .select("id, url, description, events, is_active, last_delivery_at, last_error, failure_count, created_at")
       .eq("org_id", session.orgId)
       .eq("id", webhookId)
       .is("deleted_at", null)
       .maybeSingle(),
-    supabase.from("webhook_deliveries")
+    supabase
+      .from("webhook_deliveries")
       .select("id, event_type, state, attempts, last_status, last_error, created_at, delivered_at")
       .eq("endpoint_id", webhookId)
       .eq("org_id", session.orgId)
@@ -28,9 +30,14 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
   ]);
   if (!endpoint) notFound();
   const rows = (deliveries ?? []) as Array<{
-    id: string; event_type: string; state: string; attempts: number;
-    last_status: number | null; last_error: string | null;
-    created_at: string; delivered_at: string | null;
+    id: string;
+    event_type: string;
+    state: string;
+    attempts: number;
+    last_status: number | null;
+    last_error: string | null;
+    created_at: string;
+    delivered_at: string | null;
   }>;
   return (
     <>
@@ -55,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
 
         <section className="surface">
           <div className="border-b border-[var(--border-color)] px-5 py-3">
-            <h3 className="text-sm font-semibold">Recent deliveries</h3>
+            <h3 className="text-sm font-semibold">Recent Deliveries</h3>
             <p className="mt-0.5 text-xs text-[var(--text-muted)]">Last 25 attempts</p>
           </div>
           {rows.length === 0 ? (
@@ -80,10 +87,13 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
                     <td>
                       <StatusChip
                         tone={
-                          d.state === "delivered" ? "success"
-                          : d.state === "pending" ? "info"
-                          : d.state === "failed" ? "warning"
-                          : "danger"
+                          d.state === "delivered"
+                            ? "success"
+                            : d.state === "pending"
+                              ? "info"
+                              : d.state === "failed"
+                                ? "warning"
+                                : "danger"
                         }
                       >
                         {d.state}
@@ -91,7 +101,10 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
                     </td>
                     <td className="font-mono text-xs">{d.last_status ?? "—"}</td>
                     <td className="font-mono text-xs">{d.attempts}</td>
-                    <td className="max-w-xs truncate text-xs text-[var(--color-error)]" title={d.last_error ?? undefined}>
+                    <td
+                      className="max-w-xs truncate text-xs text-[var(--color-error)]"
+                      title={d.last_error ?? undefined}
+                    >
                       {d.last_error ?? ""}
                     </td>
                   </tr>

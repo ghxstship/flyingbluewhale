@@ -6,11 +6,7 @@ export const dynamic = "force-dynamic";
 export default function Page() {
   return (
     <>
-      <ModuleHeader
-        eyebrow="Locations"
-        title="Location picker"
-        subtitle="Async typeahead — paste this into any form"
-      />
+      <ModuleHeader eyebrow="Locations" title="Location Picker" subtitle="Async typeahead — paste this into any form" />
       <div className="page-content max-w-2xl space-y-4">
         <LocationPickerDemo />
         <pre className="surface overflow-x-auto p-4 text-xs">{`<Combobox

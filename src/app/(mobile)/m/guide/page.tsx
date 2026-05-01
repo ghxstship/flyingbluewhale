@@ -14,8 +14,23 @@ export const dynamic = "force-dynamic";
 
 function mapPersona(role: string): GuidePersona {
   const persona = personaForRole(role as Parameters<typeof personaForRole>[0]);
-  if (persona === "artist" || persona === "vendor" || persona === "client" || persona === "sponsor" || persona === "guest" || persona === "crew") return persona;
-  if (persona === "owner" || persona === "admin" || persona === "controller" || persona === "project_manager" || persona === "developer") return "staff";
+  if (
+    persona === "artist" ||
+    persona === "vendor" ||
+    persona === "client" ||
+    persona === "sponsor" ||
+    persona === "guest" ||
+    persona === "crew"
+  )
+    return persona;
+  if (
+    persona === "owner" ||
+    persona === "admin" ||
+    persona === "controller" ||
+    persona === "project_manager" ||
+    persona === "developer"
+  )
+    return "staff";
   return "guest";
 }
 
@@ -37,8 +52,8 @@ export default async function MobileGuide() {
   if (!active) {
     return (
       <div className="px-4 pt-6 pb-24">
-        <div className="text-xs font-semibold uppercase tracking-wider text-[var(--org-primary)]">Field guide</div>
-        <h1 className="mt-1 text-2xl font-semibold">No active project</h1>
+        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field Guide</div>
+        <h1 className="mt-1 text-2xl font-semibold">No Active Project</h1>
         <p className="mt-2 text-sm text-[var(--text-muted)]">Check back when you&apos;re assigned to a show.</p>
       </div>
     );
@@ -50,9 +65,11 @@ export default async function MobileGuide() {
   if (!guide) {
     return (
       <div className="px-4 pt-6 pb-24">
-        <div className="text-xs font-semibold uppercase tracking-wider text-[var(--org-primary)]">{active.name}</div>
-        <h1 className="mt-1 text-2xl font-semibold">Guide pending</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">Production hasn&apos;t published a guide for your role yet.</p>
+        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{active.name}</div>
+        <h1 className="mt-1 text-2xl font-semibold">Guide Pending</h1>
+        <p className="mt-2 text-sm text-[var(--text-muted)]">
+          Production hasn&apos;t published a guide for your role yet.
+        </p>
       </div>
     );
   }

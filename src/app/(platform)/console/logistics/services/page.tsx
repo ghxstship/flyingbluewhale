@@ -66,7 +66,7 @@ export default async function Page() {
         subtitle={`${rows.length} request${rows.length === 1 ? "" : "s"} · ${open} open · waste, cleaning, repairs`}
         action={
           <Button href="/console/services/requests/new" size="sm">
-            + New request
+            + New Service
           </Button>
         }
       />
@@ -84,7 +84,7 @@ export default async function Page() {
           emptyDescription="Cleaning, waste, and repair tickets land here. Author one via /console/services/requests."
           emptyAction={
             <Button href="/console/services/requests/new" size="sm">
-              + New request
+              + New Service
             </Button>
           }
           columns={[

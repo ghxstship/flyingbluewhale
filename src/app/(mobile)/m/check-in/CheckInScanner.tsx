@@ -28,7 +28,9 @@ export function CheckInScanner() {
   const inputRef = useRef<HTMLInputElement>(null);
   const announce = useAnnounce();
 
-  useEffect(() => { inputRef.current?.focus(); }, []);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const submit = (raw: string) => {
     const trimmed = raw.trim();
@@ -41,7 +43,9 @@ export function CheckInScanner() {
           navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 2000, enableHighAccuracy: false });
         });
         location = { lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy };
-      } catch { /* optional */ }
+      } catch {
+        /* optional */
+      }
 
       try {
         const res = await fetch(`/api/v1/tickets/scan`, {
@@ -55,7 +59,9 @@ export function CheckInScanner() {
           haptic("error");
           announce(`Error: ${json.error.message}`, "assertive");
           toast.error(json.error.message);
-          setLog((l) => [{ at: new Date().toISOString(), code: trimmed, result: "not_found" as const }, ...l].slice(0, 50));
+          setLog((l) =>
+            [{ at: new Date().toISOString(), code: trimmed, result: "not_found" as const }, ...l].slice(0, 50),
+          );
         } else {
           const result = json.data.result;
           if (result === "accepted") {
@@ -88,10 +94,12 @@ export function CheckInScanner() {
     });
   };
 
-  const counts = log.reduce(
-    (acc, e) => ((acc[e.result]++), acc),
-    { accepted: 0, duplicate: 0, voided: 0, not_found: 0 } as Record<LogEntry["result"], number>,
-  );
+  const counts = log.reduce((acc, e) => (acc[e.result]++, acc), {
+    accepted: 0,
+    duplicate: 0,
+    voided: 0,
+    not_found: 0,
+  } as Record<LogEntry["result"], number>);
 
   return (
     <div className="space-y-4">
@@ -112,7 +120,10 @@ export function CheckInScanner() {
       </div>
 
       <form
-        onSubmit={(e) => { e.preventDefault(); submit(code); }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit(code);
+        }}
         className="card-elevated p-4"
       >
         <label className="text-label text-[var(--color-text-tertiary)]">Ticket Code</label>
@@ -124,7 +135,7 @@ export function CheckInScanner() {
           autoComplete="off"
           autoCapitalize="characters"
           placeholder="Scan or type"
-          className="input mt-1.5 w-full text-mono text-base"
+          className="input text-mono mt-1.5 w-full text-base"
           disabled={pending}
         />
         <div className="mt-3 flex gap-2">
@@ -135,21 +146,32 @@ export function CheckInScanner() {
       </form>
 
       <div className="card-elevated">
-        <div className="border-b border-[var(--color-border)] px-4 py-3 text-heading text-sm">Recent</div>
+        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
         {log.length === 0 ? (
-          <EmptyState size="compact" title="No scans yet" />
+          <EmptyState size="compact" title="No Scans Yet" />
         ) : (
           <ul>
             {log.map((e, i) => (
-              <li key={i} className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-2 text-mono text-xs">
+              <li
+                key={i}
+                className="text-mono flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-2 text-xs"
+              >
                 <span className="text-[var(--color-text-primary)]">{e.code}</span>
                 <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
-                  {new Date(e.at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+                  {new Date(e.at).toLocaleTimeString(undefined, {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
                   <Badge
                     variant={
-                      e.result === "accepted" ? "success" :
-                      e.result === "duplicate" ? "warning" :
-                      e.result === "voided" ? "error" : "muted"
+                      e.result === "accepted"
+                        ? "success"
+                        : e.result === "duplicate"
+                          ? "warning"
+                          : e.result === "voided"
+                            ? "error"
+                            : "muted"
                     }
                   >
                     {e.result}

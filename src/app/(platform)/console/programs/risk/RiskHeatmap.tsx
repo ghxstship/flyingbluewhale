@@ -8,8 +8,8 @@ import type { RiskLikelihood, RiskImpact, RiskStatus } from "@/lib/supabase/type
 export type RiskCell = {
   impact: RiskImpact;
   likelihood: RiskLikelihood;
-  impactIndex: number;       // 0 (insignificant) → 4 (severe)
-  likelihoodIndex: number;   // 0 (rare) → 4 (almost_certain)
+  impactIndex: number; // 0 (insignificant) → 4 (severe)
+  likelihoodIndex: number; // 0 (rare) → 4 (almost_certain)
   risks: { id: string; title: string; score: number; status: RiskStatus }[];
 };
 
@@ -32,7 +32,7 @@ export function RiskHeatmap({
 
   return (
     <ChartShell
-      title="Risk heatmap"
+      title="Risk Heatmap"
       description="Likelihood × Impact (count = severity bubble; click a cell for the list)"
       empty={total === 0}
       emptyLabel="No risks logged yet."
@@ -53,7 +53,7 @@ export function RiskHeatmap({
           {likelihood.map((l) => (
             <div
               key={l}
-              className="px-1.5 py-1 text-center text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--text-muted)]"
+              className="px-1.5 py-1 text-center text-[10px] font-medium tracking-[0.16em] text-[var(--text-muted)] uppercase"
             >
               {pretty(l)}
             </div>
@@ -62,13 +62,11 @@ export function RiskHeatmap({
           {/* Body — impact rows reversed (severe at top) */}
           {[...impact].reverse().map((impactRow) => (
             <React.Fragment key={impactRow}>
-              <div className="flex items-center justify-end pe-2 text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--text-muted)]">
+              <div className="flex items-center justify-end pe-2 text-[10px] font-medium tracking-[0.16em] text-[var(--text-muted)] uppercase">
                 {pretty(impactRow)}
               </div>
               {likelihood.map((likeCol) => {
-                const cell = cells.find(
-                  (c) => c.impact === impactRow && c.likelihood === likeCol,
-                )!;
+                const cell = cells.find((c) => c.impact === impactRow && c.likelihood === likeCol)!;
                 const tone = riskTone(cell.likelihoodIndex, cell.impactIndex);
                 return (
                   <button
@@ -80,10 +78,7 @@ export function RiskHeatmap({
                     className={`relative m-0.5 flex aspect-square min-h-[56px] items-center justify-center rounded transition-transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)] ${tone}`}
                   >
                     {cell.risks.length > 0 && (
-                      <span
-                        className="text-[11px] font-semibold tabular-nums text-white drop-shadow"
-                        aria-hidden
-                      >
+                      <span className="text-[11px] font-semibold text-white tabular-nums drop-shadow" aria-hidden>
                         {cell.risks.length}
                       </span>
                     )}
@@ -94,7 +89,7 @@ export function RiskHeatmap({
           ))}
         </div>
 
-        <div className="mt-3 flex items-center justify-end gap-3 text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+        <div className="mt-3 flex items-center justify-end gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
           <Legend tone="bg-emerald-500" label="Low" />
           <Legend tone="bg-yellow-500" label="Moderate" />
           <Legend tone="bg-orange-500" label="High" />
@@ -107,8 +102,9 @@ export function RiskHeatmap({
             aria-live="polite"
           >
             <div className="mb-2 flex items-center justify-between">
-              <h4 className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                {pretty(open.likelihood)} × {pretty(open.impact)} — {open.risks.length} risk{open.risks.length === 1 ? "" : "s"}
+              <h4 className="text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+                {pretty(open.likelihood)} × {pretty(open.impact)} — {open.risks.length} risk
+                {open.risks.length === 1 ? "" : "s"}
               </h4>
               <button
                 type="button"

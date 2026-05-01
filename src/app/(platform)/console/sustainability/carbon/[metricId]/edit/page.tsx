@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ metricId: str
     <>
       <ModuleHeader eyebrow="Sustainability · Carbon" title="Edit Measurement" />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/sustainability/carbon/${metricId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/sustainability/carbon/${metricId}`} submitLabel="Save Changes">
           <Input
             label="Period Start"
             name="period_start"

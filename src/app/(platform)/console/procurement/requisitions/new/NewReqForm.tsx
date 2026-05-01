@@ -5,7 +5,7 @@ import { createReqAction } from "../actions";
 
 export function NewReqForm() {
   return (
-    <FormShell action={createReqAction} cancelHref="/console/procurement/requisitions" submitLabel="Create requisition">
+    <FormShell action={createReqAction} cancelHref="/console/procurement/requisitions" submitLabel="Create Requisition">
       <Input label="Title" name="title" required />
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>

@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ deploymentId:
         <FormShell
           action={action}
           cancelHref={`/console/workforce/deployment/${deploymentId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input
             label="Functional Area"

@@ -80,7 +80,7 @@ export default async function Page() {
 
         {rows.length === 0 ? (
           <EmptyState
-            title="No trademarks registered"
+            title="No Trademarks Registered"
             description="Track marks, registration numbers, jurisdictions, and renewal dates here. Royalty + merchandise revenue tracking lives alongside Sponsors."
             action={
               <Link href="/console/legal/ip" className="btn btn-secondary btn-sm">
@@ -115,7 +115,7 @@ export default async function Page() {
                       <td>
                         <div className="flex flex-wrap gap-1.5">
                           <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>
-                          {r.status === "active" && soon && <Badge variant="warning">Renew soon</Badge>}
+                          {r.status === "active" && soon && <Badge variant="warning">Renew Soon</Badge>}
                         </div>
                       </td>
                     </tr>

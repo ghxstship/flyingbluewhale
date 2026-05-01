@@ -20,9 +20,9 @@ export default async function Page() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Safety" title="New guard tour" />
+      <ModuleHeader eyebrow="Safety" title="New Guard Tour" />
       <div className="page-content max-w-xl">
-        <FormShell action={createGuardTour} cancelHref="/console/safety/guard-tours" submitLabel="Schedule tour">
+        <FormShell action={createGuardTour} cancelHref="/console/safety/guard-tours" submitLabel="Schedule Tour">
           <Input label="Name" name="name" maxLength={200} placeholder="Perimeter sweep — Stadium A" required />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>

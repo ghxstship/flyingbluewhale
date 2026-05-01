@@ -23,9 +23,9 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
   const action = updateMileage.bind(null, p.mileageId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Mileage log" title={`Edit ${row.origin} → ${row.destination}`} />
+      <ModuleHeader eyebrow="Mileage Log" title={`Edit ${row.origin} → ${row.destination}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/finance/mileage/${p.mileageId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/finance/mileage/${p.mileageId}`} submitLabel="Save Changes">
           <Input label="Origin" name="origin" defaultValue={row.origin} required maxLength={200} />
           <Input label="Destination" name="destination" defaultValue={row.destination} required maxLength={200} />
           <div className="grid grid-cols-2 gap-3">
@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
               defaultValue={String(row.rate_cents ?? 0)}
             />
           </div>
-          <Input label="Logged on" name="logged_on" type="date" defaultValue={dateOnly(row.logged_on)} required />
+          <Input label="Logged On" name="logged_on" type="date" defaultValue={dateOnly(row.logged_on)} required />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Notes</span>
             <textarea

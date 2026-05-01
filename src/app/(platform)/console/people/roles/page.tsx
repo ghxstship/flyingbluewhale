@@ -42,16 +42,10 @@ export default async function RolesPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="People"
-        title="Role Matrix"
-        subtitle="Platform roles + your custom roles"
-      />
+      <ModuleHeader eyebrow="People" title="Role Matrix" subtitle="Platform roles + your custom roles" />
       <div className="page-content max-w-5xl space-y-6">
         <section>
-          <h3 className="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            Platform roles
-          </h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Platform roles</h3>
           <div className="surface overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
@@ -64,7 +58,9 @@ export default async function RolesPage() {
               <tbody>
                 {PLATFORM_ROLES.map((r) => (
                   <tr key={r.role}>
-                    <td><Badge variant="brand">{r.role}</Badge></td>
+                    <td>
+                      <Badge variant="brand">{r.role}</Badge>
+                    </td>
                     <td className="font-mono text-xs">{r.tier}</td>
                     <td className="text-[var(--text-secondary)]">{r.description}</td>
                   </tr>
@@ -76,13 +72,12 @@ export default async function RolesPage() {
 
         <section className="surface p-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Custom roles</h3>
+            <h3 className="text-sm font-semibold">Custom Roles</h3>
             <CustomRoleForm />
           </div>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Custom roles layer on top of platform roles. Use them to scope a
-            specific permission set per team (e.g. <code>finance-reader</code>,{" "}
-            <code>safety-officer</code>).
+            Custom roles layer on top of platform roles. Use them to scope a specific permission set per team (e.g.{" "}
+            <code>finance-reader</code>, <code>safety-officer</code>).
           </p>
           <table className="data-table mt-4 w-full text-sm">
             <thead>
@@ -107,17 +102,12 @@ export default async function RolesPage() {
                     <td className="font-mono text-xs">{r.slug}</td>
                     <td>{r.label}</td>
                     <td className="text-xs text-[var(--text-secondary)]">{r.description ?? "—"}</td>
-                    <td className="text-xs text-[var(--text-secondary)]">
-                      {(r.permissions ?? []).join(", ") || "—"}
-                    </td>
+                    <td className="text-xs text-[var(--text-secondary)]">{(r.permissions ?? []).join(", ") || "—"}</td>
                     <td>
                       {!r.is_system && (
                         <form action={deleteCustomRole}>
                           <input type="hidden" name="id" value={r.id} />
-                          <button
-                            type="submit"
-                            className="text-xs text-[var(--color-error)] hover:underline"
-                          >
+                          <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
                             Delete
                           </button>
                         </form>

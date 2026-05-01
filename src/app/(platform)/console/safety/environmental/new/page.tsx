@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Safety · Environmental" title="Log Event" />
       <div className="page-content max-w-xl">
-        <FormShell action={createEnvEvent} cancelHref="/console/safety/environmental" submitLabel="Log event">
+        <FormShell action={createEnvEvent} cancelHref="/console/safety/environmental" submitLabel="Log Event">
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
             <select name="kind" defaultValue="heat" className="input-base mt-1.5 w-full" required>

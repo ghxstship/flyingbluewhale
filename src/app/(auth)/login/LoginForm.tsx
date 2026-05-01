@@ -21,7 +21,7 @@ export function LoginForm() {
 
   return (
     <AuthShell
-      title="Sign in"
+      title="Sign In"
       subtitle="Welcome back. Pick up where you left off."
       footer={
         <>
@@ -50,24 +50,16 @@ export function LoginForm() {
           autoComplete="current-password"
           error={state?.fieldErrors?.password}
         />
-        {state?.error && !state?.fieldErrors && (
-          <Alert kind="error">{state.error}</Alert>
-        )}
+        {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <Button type="submit" size="lg" className="w-full" loading={pending}>
           {pending ? "Signing in" : "Sign in"}
         </Button>
       </form>
       <div className="mt-4 flex items-center justify-between text-xs">
-        <Link
-          href="/forgot-password"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-        >
+        <Link href="/forgot-password" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
           Forgot password?
         </Link>
-        <Link
-          href="/magic-link"
-          className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-        >
+        <Link href="/magic-link" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
           Email me a link
         </Link>
       </div>

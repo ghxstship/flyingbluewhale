@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ categoryId: s
         <FormShell
           action={action}
           cancelHref={`/console/accreditation/categories/${categoryId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Code" name="code" maxLength={40} defaultValue={(r.code as string | undefined) ?? ""} required />
           <Input

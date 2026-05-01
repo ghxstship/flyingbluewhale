@@ -21,7 +21,7 @@ export function ThemeToggle() {
 
   const presets = [
     { key: "light" as const, icon: Sun, label: "Light" },
-    { key: "system" as const, icon: Monitor, label: "Match system" },
+    { key: "system" as const, icon: Monitor, label: "Match System" },
     { key: "dark" as const, icon: Moon, label: "Dark" },
   ];
 
@@ -43,7 +43,7 @@ export function ThemeToggle() {
               onClick={() => setMode(key)}
               className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition ${
                 isActive
-                  ? "bg-[var(--background)] text-[var(--foreground)] elevation-1"
+                  ? "elevation-1 bg-[var(--background)] text-[var(--foreground)]"
                   : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
               }`}
             >

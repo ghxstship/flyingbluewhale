@@ -25,33 +25,33 @@ export default async function Page({ params }: { params: Promise<{ blockId: stri
     <>
       <ModuleHeader eyebrow="Accommodation" title={`Edit ${row.name}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/accommodation/blocks/${p.blockId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/accommodation/blocks/${p.blockId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <Input label="Property" name="property" defaultValue={row.property} required maxLength={200} />
           <Input label="City" name="city" defaultValue={row.city ?? ""} maxLength={120} />
           <Input
-            label="Stakeholder group"
+            label="Stakeholder Group"
             name="stakeholder_group"
             defaultValue={row.stakeholder_group ?? ""}
             maxLength={120}
           />
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label="Rooms reserved"
+              label="Rooms Reserved"
               name="rooms_reserved"
               type="number"
               defaultValue={String(row.rooms_reserved ?? 0)}
             />
             <Input
-              label="Rooms confirmed"
+              label="Rooms Confirmed"
               name="rooms_confirmed"
               type="number"
               defaultValue={String(row.rooms_confirmed ?? 0)}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Starts on" name="starts_on" type="date" defaultValue={dateOnly(row.starts_on)} />
-            <Input label="Ends on" name="ends_on" type="date" defaultValue={dateOnly(row.ends_on)} />
+            <Input label="Starts On" name="starts_on" type="date" defaultValue={dateOnly(row.starts_on)} />
+            <Input label="Ends On" name="ends_on" type="date" defaultValue={dateOnly(row.ends_on)} />
           </div>
         </FormShell>
       </div>

@@ -20,17 +20,21 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const session = await requireSession();
   const supabase = await createClient();
   const { data: project } = await supabase
-    .from("projects").select("id, name, slug").eq("org_id", session.orgId).eq("id", projectId).maybeSingle();
+    .from("projects")
+    .select("id, name, slug")
+    .eq("org_id", session.orgId)
+    .eq("id", projectId)
+    .maybeSingle();
   return (
     <>
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
-        title="Portal preview"
+        title="Portal Preview"
         subtitle="Jump into each persona's portal view for this project."
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
-          { label: "Portal preview" },
+          { label: "Portal Preview" },
         ]}
       />
       <div className="page-content max-w-4xl">
@@ -38,10 +42,15 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           <ul className="grid gap-3 sm:grid-cols-2">
             {PERSONAS.map((p) => (
               <li key={p.slug}>
-                <Link href={`/p/${project.slug}/${p.slug}`} className="surface hover-lift flex items-center justify-between p-4">
+                <Link
+                  href={`/p/${project.slug}/${p.slug}`}
+                  className="surface hover-lift flex items-center justify-between p-4"
+                >
                   <div>
                     <div className="text-sm font-semibold">{p.label} portal</div>
-                    <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">/p/{project.slug}/{p.slug}</div>
+                    <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
+                      /p/{project.slug}/{p.slug}
+                    </div>
                   </div>
                   <Badge variant="muted">Preview</Badge>
                 </Link>

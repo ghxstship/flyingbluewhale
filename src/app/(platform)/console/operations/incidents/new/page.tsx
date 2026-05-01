@@ -5,11 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { IncidentForm } from "@/components/incidents/IncidentForm";
 
-export default async function NewIncidentPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ project?: string }>;
-}) {
+export default async function NewIncidentPage({ searchParams }: { searchParams: Promise<{ project?: string }> }) {
   const { project } = await searchParams;
   const session = await requireSession();
   const supabase = await createClient();
@@ -25,7 +21,7 @@ export default async function NewIncidentPage({
     <>
       <ModuleHeader
         eyebrow="Operations"
-        title="Log incident"
+        title="Log Incident"
         subtitle="Safety + near-miss reports. Photos upload directly from the camera or drop in the box."
         breadcrumbs={[
           { label: "Operations", href: "/console/operations" },
@@ -34,11 +30,7 @@ export default async function NewIncidentPage({
         ]}
       />
       <div className="page-content max-w-3xl">
-        <IncidentForm
-          projects={projects ?? []}
-          defaultProjectId={project}
-          returnHref="/console/operations/incidents"
-        />
+        <IncidentForm projects={projects ?? []} defaultProjectId={project} returnHref="/console/operations/incidents" />
       </div>
     </>
   );

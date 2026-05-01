@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ crewId: strin
               { label: "Role", value: row.role ?? "—" },
               { label: "Email", value: row.email ?? "—" },
               { label: "Phone", value: row.phone ?? "—" },
-              { label: "Day rate", value: money(row.day_rate_cents) },
+              { label: "Day Rate", value: money(row.day_rate_cents) },
               { label: "Notes", value: row.notes ?? "—" },
             ]
           : undefined

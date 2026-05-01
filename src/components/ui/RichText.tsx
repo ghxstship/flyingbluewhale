@@ -121,12 +121,12 @@ export function RichText({
         run: (e: NonNullable<typeof editor>) => e.chain().focus().toggleHeading({ level: 3 }).run(),
       },
       {
-        label: "Bulleted list",
+        label: "Bulleted List",
         keywords: "ul bullets",
         run: (e: NonNullable<typeof editor>) => e.chain().focus().toggleBulletList().run(),
       },
       {
-        label: "Numbered list",
+        label: "Numbered List",
         keywords: "ol ordered",
         run: (e: NonNullable<typeof editor>) => e.chain().focus().toggleOrderedList().run(),
       },
@@ -151,9 +151,7 @@ export function RichText({
   const filteredSlash = React.useMemo(() => {
     const q = slashQuery.toLowerCase();
     if (!q) return slashCommands;
-    return slashCommands.filter(
-      (c) => c.label.toLowerCase().includes(q) || c.keywords.includes(q),
-    );
+    return slashCommands.filter((c) => c.label.toLowerCase().includes(q) || c.keywords.includes(q));
   }, [slashCommands, slashQuery]);
 
   function setLink() {
@@ -238,7 +236,7 @@ export function RichText({
 
       {slashOpen && filteredSlash.length > 0 && (
         <div className="absolute left-3 z-20 mt-1 w-60 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-1 shadow-lg">
-          <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+          <div className="px-2 py-1 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
             Insert
           </div>
           {filteredSlash.map((c) => (

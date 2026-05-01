@@ -29,7 +29,7 @@ export default async function Page() {
         subtitle="Master list. Time entries roll labor cost up to the cost code attached to a budget line."
         action={
           <Button href="/console/finance/cost-codes/new" size="sm">
-            + New cost code
+            + New Cost Code
           </Button>
         }
       />
@@ -41,7 +41,7 @@ export default async function Page() {
           emptyDescription="Cost codes group labor and material spend (e.g. 02-100 Site Prep, 16-200 Lighting Install)."
           emptyAction={
             <Button href="/console/finance/cost-codes/new" size="sm">
-              + New cost code
+              + New Cost Code
             </Button>
           }
           columns={[

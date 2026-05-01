@@ -87,11 +87,11 @@ export default async function MobileWmsPage() {
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">In maintenance</h2>
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">In Maintenance</h2>
         <ul className="mt-3 space-y-2">
           {maintenance.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No items in maintenance" />
+              <EmptyState size="compact" title="No Items in Maintenance" />
             </li>
           ) : (
             maintenance.map((r) => (
@@ -111,11 +111,11 @@ export default async function MobileWmsPage() {
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Returns due</h2>
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Returns Due</h2>
         <ul className="mt-3 space-y-2">
           {rentals.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No returns scheduled" />
+              <EmptyState size="compact" title="No Returns Scheduled" />
             </li>
           ) : (
             rentals.map((r) => (

@@ -26,14 +26,14 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Major incident"
+        eyebrow="Major Incident"
         title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Major incident"}`}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/safety/major-incident/${p.eventId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
@@ -46,13 +46,13 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
             </select>
           </label>
           <Input
-            label="Opened at"
+            label="Opened At"
             name="opened_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.opened_at)}
             required
           />
-          <Input label="Closed at" name="closed_at" type="datetime-local" defaultValue={dateTimeLocal(row.closed_at)} />
+          <Input label="Closed At" name="closed_at" type="datetime-local" defaultValue={dateTimeLocal(row.closed_at)} />
         </FormShell>
       </div>
     </>

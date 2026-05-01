@@ -38,13 +38,13 @@ const PRODUCT: NavGroup = {
 const INDUSTRIES: NavGroup = {
   label: "Industries",
   items: [
-    { label: "Live events", href: "/solutions/live-events" },
+    { label: "Live Events", href: "/solutions/live-events" },
     { label: "Concerts", href: "/solutions/concerts" },
     { label: "Festivals & tours", href: "/solutions/festivals-tours" },
-    { label: "Immersive experiences", href: "/solutions/immersive-experiences" },
-    { label: "Brand activations", href: "/solutions/brand-activations" },
-    { label: "Corporate events", href: "/solutions/corporate-events" },
-    { label: "Theatrical performances", href: "/solutions/theatrical-performances" },
+    { label: "Immersive Experiences", href: "/solutions/immersive-experiences" },
+    { label: "Brand Activations", href: "/solutions/brand-activations" },
+    { label: "Corporate Events", href: "/solutions/corporate-events" },
+    { label: "Theatrical Performances", href: "/solutions/theatrical-performances" },
     { label: "Broadcast, TV & film", href: "/solutions/broadcast-tv-film" },
   ],
 };
@@ -120,7 +120,7 @@ export function MarketingHeader() {
         {/* Desktop right cluster — utility icons (palette / locale / mode) +
             Log in (secondary text link) + Start free (primary CTA). */}
         <div className="hidden items-center gap-2 lg:flex">
-          <Hint label="Design themes">
+          <Hint label="Design Themes">
             <button
               type="button"
               onClick={() => setThemePickerOpen(true)}

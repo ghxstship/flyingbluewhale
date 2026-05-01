@@ -13,7 +13,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const supabase = await createClient();
   const [{ data: project }, { data: files }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).eq("id", projectId).maybeSingle(),
-    supabase.from("deliverables").select("id, title, type, file_path, updated_at").eq("project_id", projectId).is("deleted_at", null).not("file_path", "is", null).order("updated_at", { ascending: false }),
+    supabase
+      .from("deliverables")
+      .select("id, title, type, file_path, updated_at")
+      .eq("project_id", projectId)
+      .is("deleted_at", null)
+      .not("file_path", "is", null)
+      .order("updated_at", { ascending: false }),
   ]);
   return (
     <>
@@ -29,17 +35,25 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       />
       <div className="page-content max-w-5xl">
         {!files || files.length === 0 ? (
-          <EmptyState title="No files uploaded" description="Deliverables that have attached file paths appear here. Upload from the relevant portal." />
+          <EmptyState
+            title="No Files Uploaded"
+            description="Deliverables that have attached file paths appear here. Upload from the relevant portal."
+          />
         ) : (
           <ul className="space-y-2">
             {files.map((f) => (
               <li key={f.id}>
-                <Link href={`/api/v1/deliverables/${f.id}/download`} className="surface hover-lift flex items-center justify-between p-4">
+                <Link
+                  href={`/api/v1/deliverables/${f.id}/download`}
+                  className="surface hover-lift flex items-center justify-between p-4"
+                >
                   <div>
                     <div className="text-sm font-medium">{f.title ?? "Untitled"}</div>
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)] font-mono">{f.type}</div>
+                    <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                      {f.type}
+                    </div>
                   </div>
-                  <div className="text-xs text-[var(--text-muted)] font-mono">{fmtDate(f.updated_at)}</div>
+                  <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(f.updated_at)}</div>
                 </Link>
               </li>
             ))}

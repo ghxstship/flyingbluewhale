@@ -29,19 +29,19 @@ export default async function Page({ params }: { params: Promise<{ exerciseId: s
   return (
     <>
       <ModuleHeader
-        eyebrow="Readiness exercise"
+        eyebrow="Readiness Exercise"
         title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Readiness exercise"}`}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/programs/readiness/${p.exerciseId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="Kind" name="kind" defaultValue={row.kind ?? ""} required maxLength={80} />
           <Input
-            label="Scheduled at"
+            label="Scheduled At"
             name="scheduled_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.scheduled_at)}

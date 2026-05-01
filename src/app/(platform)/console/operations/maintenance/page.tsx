@@ -41,8 +41,8 @@ const BUCKETS: Array<{
   tone: "error" | "warning" | "info" | "muted";
 }> = [
   { key: "overdue", label: "Overdue", tone: "error" },
-  { key: "today", label: "Due today", tone: "warning" },
-  { key: "this_week", label: "This week", tone: "info" },
+  { key: "today", label: "Due Today", tone: "warning" },
+  { key: "this_week", label: "This Week", tone: "info" },
   { key: "later", label: "Later", tone: "muted" },
 ];
 
@@ -128,7 +128,7 @@ export default async function Page() {
         subtitle={`${overdueCount} overdue · ${next7} due in 7 days · ${all.length} total upcoming`}
         action={
           <Button href="/console/operations/maintenance/schedules/new" size="sm">
-            + New schedule
+            + New Schedule
           </Button>
         }
       />

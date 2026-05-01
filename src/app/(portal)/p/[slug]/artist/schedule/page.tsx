@@ -23,7 +23,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="artist" title="Show Schedule" subtitle="Set times, load-in, sound-check">
       {events.length === 0 ? (
-        <EmptyState title="Awaiting schedule" description="Your schedule posts as soon as production confirms set times." />
+        <EmptyState
+          title="Awaiting Schedule"
+          description="Your schedule posts as soon as production confirms set times."
+        />
       ) : (
         <ul className="space-y-2">
           {events.map((e) => (
@@ -32,7 +35,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <div className="text-sm font-medium">{e.name}</div>
                 <StatusBadge status={e.status ?? "draft"} />
               </div>
-              <div className="mt-1 text-xs text-[var(--text-muted)] font-mono">{fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}</div>
+              <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                {fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}
+              </div>
             </li>
           ))}
         </ul>

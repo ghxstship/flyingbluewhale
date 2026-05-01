@@ -11,7 +11,7 @@ export default function Page() {
         <FormShell
           action={createDelegation}
           cancelHref="/console/participants/delegations"
-          submitLabel="Add delegation"
+          submitLabel="Add Delegation"
         >
           <Input label="Code" name="code" maxLength={40} placeholder="e.g. USA, GBR" required />
           <Input label="Name" name="name" maxLength={160} placeholder="e.g. United States Olympic Team" required />

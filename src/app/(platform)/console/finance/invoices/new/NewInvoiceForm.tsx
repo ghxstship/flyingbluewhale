@@ -4,23 +4,37 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { createInvoiceAction } from "../actions";
 
-export function NewInvoiceForm({ clients, projects }: { clients: { id: string; name: string }[]; projects: { id: string; name: string }[] }) {
+export function NewInvoiceForm({
+  clients,
+  projects,
+}: {
+  clients: { id: string; name: string }[];
+  projects: { id: string; name: string }[];
+}) {
   return (
-    <FormShell action={createInvoiceAction} cancelHref="/console/finance/invoices" submitLabel="Create invoice">
+    <FormShell action={createInvoiceAction} cancelHref="/console/finance/invoices" submitLabel="Create Invoice">
       <Input label="Title" name="title" required maxLength={200} placeholder="Event production retainer" />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">Client</label>
           <select name="client_id" className="input-base mt-1.5 w-full">
             <option value="">— No client —</option>
-            {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {clients.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">Project</label>
           <select name="project_id" className="input-base mt-1.5 w-full">
             <option value="">— No project —</option>
-            {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            {projects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -29,7 +43,10 @@ export function NewInvoiceForm({ clients, projects }: { clients: { id: string; n
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">Currency</label>
           <select name="currency" defaultValue="USD" className="input-base mt-1.5 w-full">
-            <option>USD</option><option>EUR</option><option>GBP</option><option>CAD</option>
+            <option>USD</option>
+            <option>EUR</option>
+            <option>GBP</option>
+            <option>CAD</option>
           </select>
         </div>
         <Input label="Due" name="due_at" type="date" />

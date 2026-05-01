@@ -25,7 +25,7 @@ export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; 
       <input type="hidden" name="roundId" value={roundId} />
       <input type="hidden" name="decision" value={decision} />
       <div className="eyebrow text-xs text-[var(--text-muted)]">Your decision</div>
-      <h3 className="text-base font-semibold">Decide on this round</h3>
+      <h3 className="text-base font-semibold">Decide on This Round</h3>
 
       <div className="grid gap-2 md:grid-cols-3">
         {OPTIONS.map((opt) => (

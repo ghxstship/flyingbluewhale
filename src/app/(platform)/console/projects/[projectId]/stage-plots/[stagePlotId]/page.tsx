@@ -51,7 +51,7 @@ export default async function StagePlotDetailPage({
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
-          { label: "Stage plots", href: `/console/projects/${projectId}/stage-plots` },
+          { label: "Stage Plots", href: `/console/projects/${projectId}/stage-plots` },
           { label: plot.name },
         ]}
         action={

@@ -40,7 +40,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Master schedule" />
+        <ModuleHeader eyebrow="Programs" title="Master Schedule" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -69,11 +69,11 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Programs"
-        title="Master schedule"
+        title="Master Schedule"
         subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"} · ${upcoming} upcoming · ${live} live`}
         action={
           <Button href="/console/events/new" size="sm">
-            + New event
+            + New Event
           </Button>
         }
       />
@@ -81,7 +81,7 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Total" value={rows.length.toLocaleString()} accent />
           <MetricCard label="Upcoming" value={upcoming.toLocaleString()} />
-          <MetricCard label="Live now" value={live.toLocaleString()} />
+          <MetricCard label="Live Now" value={live.toLocaleString()} />
         </div>
 
         <DataTable<EventRow>
@@ -91,7 +91,7 @@ export default async function Page() {
           emptyDescription="Author events under Console → Events. The master schedule rolls up the next 90 days across all projects."
           emptyAction={
             <Button href="/console/events/new" size="sm">
-              + New event
+              + New Event
             </Button>
           }
           columns={[

@@ -23,11 +23,11 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Venues"
-        title="New site plan"
+        title="New Site Plan"
         subtitle="Create a sheet record. Upload the first revision next."
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createSitePlan} cancelHref="/console/site-plans" submitLabel="Create sheet">
+        <FormShell action={createSitePlan} cancelHref="/console/site-plans" submitLabel="Create Sheet">
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>

@@ -5,7 +5,7 @@ import { createLocationAction } from "../actions";
 
 export function NewLocationForm() {
   return (
-    <FormShell action={createLocationAction} cancelHref="/console/locations" submitLabel="Save location">
+    <FormShell action={createLocationAction} cancelHref="/console/locations" submitLabel="Save Location">
       <Input label="Name" name="name" required />
       <Input label="Address" name="address" />
       <div className="grid gap-4 sm:grid-cols-3">

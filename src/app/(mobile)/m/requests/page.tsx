@@ -38,7 +38,7 @@ export default async function MobileRequests() {
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
       <div className="mt-1 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Service requests</h1>
+        <h1 className="text-2xl font-semibold">Service Requests</h1>
         <Link href="/m/requests/new" className="btn btn-primary btn-sm">
           + Open
         </Link>
@@ -48,7 +48,7 @@ export default async function MobileRequests() {
       <ul className="mt-5 space-y-2">
         {rows.length === 0 ? (
           <li>
-            <EmptyState size="compact" title="Nothing open" description="All quiet right now." />
+            <EmptyState size="compact" title="Nothing Open" description="All quiet right now." />
           </li>
         ) : (
           rows.map((r) => (

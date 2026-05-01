@@ -42,7 +42,7 @@ export default async function NotificationsPrefs() {
       <h1 className="text-2xl font-semibold tracking-tight">Notifications</h1>
       <p className="mt-2 text-sm text-[var(--text-muted)]">Choose how you get updates for each workspace event.</p>
       <div className="mt-6">
-        <FormShell action={saveNotificationPrefs} submitLabel="Save preferences">
+        <FormShell action={saveNotificationPrefs} submitLabel="Save Preferences">
           <div className="surface -m-2 overflow-x-auto">
             <table className="data-table">
               <thead>

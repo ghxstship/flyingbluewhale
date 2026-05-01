@@ -36,7 +36,7 @@ export function CarbonCharts({
   return (
     <div className="grid gap-4 xl:grid-cols-2">
       <ChartShell
-        title="Monthly emissions vs target"
+        title="Monthly Emissions vs Target"
         description="kg CO₂e — actual area + target line"
         empty={byMonth.length === 0}
         emptyLabel="No measurements yet."
@@ -76,7 +76,7 @@ export function CarbonCharts({
       </ChartShell>
 
       <ChartShell
-        title="Emissions by scope"
+        title="Emissions by Scope"
         description="GHG Protocol Scope 1 / 2 / 3"
         empty={byScope.length === 0}
         emptyLabel="No scope data yet."
@@ -94,10 +94,7 @@ export function CarbonCharts({
               strokeWidth={2}
             >
               {byScope.map((s, i) => (
-                <Cell
-                  key={i}
-                  fill={SCOPE_COLORS[s.scope] ?? "var(--org-primary)"}
-                />
+                <Cell key={i} fill={SCOPE_COLORS[s.scope] ?? "var(--org-primary)"} />
               ))}
             </Pie>
             <Tooltip content={<DarkTooltip suffix=" kg" />} />
@@ -132,11 +129,7 @@ function DarkTooltip({
       {label && <div className="mb-1 font-medium">{label}</div>}
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-1.5">
-          <span
-            className="inline-block h-2 w-2 rounded-full"
-            style={{ background: p.color }}
-            aria-hidden
-          />
+          <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
           <span className="text-[var(--text-secondary)]">{p.name}:</span>
           <span className="font-mono">{Number(p.value ?? 0).toLocaleString() + suffix}</span>
         </div>

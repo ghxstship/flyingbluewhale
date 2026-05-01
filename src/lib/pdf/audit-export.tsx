@@ -29,12 +29,14 @@ export type AuditExportInput = {
 
 export function AuditExportPdf({ brand, rangeFrom, rangeTo, actor, rows }: AuditExportInput) {
   return (
-    <PdfDocument title="Audit log export" author={brand.producerName} subject="Audit log">
+    <PdfDocument title="Audit Log Export" author={brand.producerName} subject="Audit Log">
       <CoverPage
         brand={brand}
         eyebrow="Audit"
-        title="Audit log export"
-        subtitle={[`Range ${rangeFrom} → ${rangeTo}`, actor ? `Actor ${actor}` : null, `${rows.length} entries`].filter(Boolean).join(" · ")}
+        title="Audit Log Export"
+        subtitle={[`Range ${rangeFrom} → ${rangeTo}`, actor ? `Actor ${actor}` : null, `${rows.length} entries`]
+          .filter(Boolean)
+          .join(" · ")}
         classification="CONFIDENTIAL — COMPLIANCE"
         classificationTier={4}
       />
@@ -46,7 +48,7 @@ export function AuditExportPdf({ brand, rangeFrom, rangeTo, actor, rows }: Audit
             { key: "action", label: "Action", width: 2 },
             { key: "target", label: "Target", width: 2.5 },
             { key: "op", label: "Op", width: 1 },
-            { key: "req", label: "Req id", width: 1.5 },
+            { key: "req", label: "Req ID", width: 1.5 },
           ]}
           rows={rows.map((r) => ({
             at: new Date(r.at).toISOString(),

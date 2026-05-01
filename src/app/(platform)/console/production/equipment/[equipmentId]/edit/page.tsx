@@ -23,14 +23,14 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
         <FormShell
           action={action}
           cancelHref={`/console/production/equipment/${p.equipmentId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <Input label="Category" name="category" defaultValue={row.category ?? ""} maxLength={120} />
-          <Input label="Asset tag" name="asset_tag" defaultValue={row.asset_tag ?? ""} maxLength={80} />
+          <Input label="Asset Tag" name="asset_tag" defaultValue={row.asset_tag ?? ""} maxLength={80} />
           <Input label="Serial" name="serial" defaultValue={row.serial ?? ""} maxLength={120} />
           <Input
-            label="Daily rate (cents)"
+            label="Daily Rate (Cents)"
             name="daily_rate_cents"
             type="number"
             defaultValue={row.daily_rate_cents != null ? String(row.daily_rate_cents) : ""}

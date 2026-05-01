@@ -42,12 +42,12 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
 
   return (
     <ChartShell
-      title="Portfolio health"
+      title="Portfolio Health"
       description="Tile size = budget · color = computed health (schedule + status)"
       empty={enriched.length === 0}
       height={undefined as unknown as number}
       actions={
-        <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+        <div className="flex items-center gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
           <Legend tone="bg-emerald-500" label={`On track ${counts.green}`} />
           <Legend tone="bg-amber-500" label={`Watch ${counts.amber}`} />
           <Legend tone="bg-red-600" label={`At risk ${counts.red}`} />
@@ -65,7 +65,7 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <div className="truncate text-sm font-semibold text-[var(--text-primary)]">{p.name}</div>
-                <div className="mt-0.5 text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                <div className="mt-0.5 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
                   {p.status}
                 </div>
               </div>

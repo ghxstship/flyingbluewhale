@@ -43,14 +43,17 @@ export function ExpenseReportPdf({
   currency: string;
 }) {
   const money = (c: number) => {
-    try { return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(c / 100); }
-    catch { return `${currency} ${(c / 100).toFixed(2)}`; }
+    try {
+      return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(c / 100);
+    } catch {
+      return `${currency} ${(c / 100).toFixed(2)}`;
+    }
   };
   return (
     <PdfDocument title={`Expense report · ${project.name}`} author={brand.producerName} subject="Expense report">
       <CoverPage
         brand={brand}
-        eyebrow="Expense report"
+        eyebrow="Expense Report"
         title={project.name}
         subtitle={`${rangeFrom} → ${rangeTo} · Total ${money(totalCents)}`}
       />
@@ -70,7 +73,7 @@ export function ExpenseReportPdf({
             amount: money(e.amount_cents),
           }))}
         />
-        <SectionHeading title="Time entries" />
+        <SectionHeading title="Time Entries" />
         <PdfTable
           columns={[
             { key: "date", label: "Date", width: 1.5 },
@@ -104,9 +107,7 @@ export function ExpenseReportPdf({
             amount: m.rate_per_mile_cents != null ? money(Math.round(m.miles * m.rate_per_mile_cents)) : "",
           }))}
         />
-        <Text style={{ ...styles.p, marginTop: 20, fontWeight: 700, fontSize: 14 }}>
-          Total — {money(totalCents)}
-        </Text>
+        <Text style={{ ...styles.p, marginTop: 20, fontWeight: 700, fontSize: 14 }}>Total — {money(totalCents)}</Text>
       </BrandedPage>
     </PdfDocument>
   );
@@ -121,7 +122,13 @@ export function TaskReportPdf({
 }: {
   brand: PdfBrand;
   project: { name: string };
-  tasks: Array<{ title: string; status: string | null; priority: string | null; assignee_name: string | null; due_at: string | null }>;
+  tasks: Array<{
+    title: string;
+    status: string | null;
+    priority: string | null;
+    assignee_name: string | null;
+    due_at: string | null;
+  }>;
 }) {
   return (
     <PdfDocument title={`Tasks · ${project.name}`} author={brand.producerName} subject="Task report">
@@ -165,7 +172,12 @@ export function RentalPullSheetPdf({
         brand={brand}
         eyebrow="Rental · pull sheet"
         title={`#${rental.number}`}
-        subtitle={[rental.vendor_name, rental.starts_on && rental.ends_on ? `${rental.starts_on} → ${rental.ends_on}` : null].filter(Boolean).join(" · ")}
+        subtitle={[
+          rental.vendor_name,
+          rental.starts_on && rental.ends_on ? `${rental.starts_on} → ${rental.ends_on}` : null,
+        ]
+          .filter(Boolean)
+          .join(" · ")}
       />
       <BrandedPage brand={brand} pageLabel={`Rental ${rental.number}`}>
         <PdfTable
@@ -196,11 +208,23 @@ export function SignageGridPdf({
 }: {
   brand: PdfBrand;
   project: { name: string };
-  entries: Array<{ location: string; type: string; size?: string | null; install?: string | null; strike?: string | null; note?: string | null }>;
+  entries: Array<{
+    location: string;
+    type: string;
+    size?: string | null;
+    install?: string | null;
+    strike?: string | null;
+    note?: string | null;
+  }>;
 }) {
   return (
     <PdfDocument title={`Signage · ${project.name}`} author={brand.producerName} subject="Signage grid">
-      <CoverPage brand={brand} eyebrow="Signage grid" title={project.name} subtitle={`${entries.length} signage locations`} />
+      <CoverPage
+        brand={brand}
+        eyebrow="Signage grid"
+        title={project.name}
+        subtitle={`${entries.length} signage locations`}
+      />
       <BrandedPage brand={brand} pageLabel="Signage grid">
         <PdfTable
           columns={[

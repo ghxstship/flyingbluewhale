@@ -85,17 +85,17 @@ export default async function Page() {
         subtitle={`${venues.length} venue${venues.length === 1 ? "" : "s"} · ${covered} have medical capacity recorded${coveragePct != null ? ` · ${coveragePct}% coverage` : ""}`}
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
-            + New playbook
+            + New Plan
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <section>
-          <h3 className="text-sm font-semibold">Venues requiring medical cover</h3>
+          <h3 className="text-sm font-semibold">Venues Requiring Medical Cover</h3>
           {venues.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No competition / training / village venues yet"
+              title="No Competition / Training / Village Venues Yet"
               description="Author venues in Console → Venues. Each venue's medical capacity is captured under metadata.medical."
             />
           ) : (
@@ -147,17 +147,17 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">Medical playbooks</h3>
+          <h3 className="text-sm font-semibold">Medical Playbooks</h3>
           <ul className="mt-3 space-y-2">
             {playbooks.length === 0 ? (
               <li>
                 <EmptyState
                   size="compact"
-                  title="No medical playbooks authored"
+                  title="No Medical Playbooks Authored"
                   description="Author safety playbooks tagged with 'medical' to surface them here."
                   action={
                     <Link href="/console/safety/playbooks/new" className="btn btn-secondary btn-sm">
-                      + New playbook
+                      + New Plan
                     </Link>
                   }
                 />

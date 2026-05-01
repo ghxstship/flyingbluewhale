@@ -145,7 +145,7 @@ export function GateScanner() {
       <div className="card-elevated">
         <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
         {log.length === 0 ? (
-          <EmptyState size="compact" title="No scans yet" />
+          <EmptyState size="compact" title="No Scans Yet" />
         ) : (
           <ul>
             {log.map((e, i) => (

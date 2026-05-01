@@ -82,14 +82,14 @@ export default async function Page() {
         subtitle={`${rows.length} problem record${rows.length === 1 ? "" : "s"} · ${open} open · ${knownErrors} known errors${p1 ? ` · ${p1} P1` : ""}`}
         action={
           <Button href="/console/ops/toc/problems/new" size="sm">
-            + New problem
+            + New Problem
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Open" value={open.toLocaleString()} accent />
-          <MetricCard label="Known errors" value={knownErrors.toLocaleString()} />
+          <MetricCard label="Known Errors" value={knownErrors.toLocaleString()} />
           <MetricCard label="P1" value={p1.toLocaleString()} />
         </div>
 
@@ -100,7 +100,7 @@ export default async function Page() {
           emptyDescription="ITIL problem management — record root-cause investigations triggered by incidents. Link incidents and the change(s) that resolve them."
           emptyAction={
             <Link href="/console/ops/toc/problems/new" className="btn btn-primary btn-sm">
-              + New problem
+              + New Problem
             </Link>
           }
           columns={[

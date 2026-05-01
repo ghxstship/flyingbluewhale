@@ -5,7 +5,7 @@ import { createTaskAction } from "../actions";
 
 export function NewTaskForm({ projects }: { projects: { id: string; name: string }[] }) {
   return (
-    <FormShell action={createTaskAction} cancelHref="/console/tasks" submitLabel="Create task">
+    <FormShell action={createTaskAction} cancelHref="/console/tasks" submitLabel="Create Task">
       <Input label="Title" name="title" required maxLength={200} />
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
@@ -26,7 +26,11 @@ export function NewTaskForm({ projects }: { projects: { id: string; name: string
           <label className="text-xs font-medium text-[var(--text-secondary)]">Project</label>
           <select name="project_id" className="input-base mt-1.5 w-full">
             <option value="">— No project —</option>
-            {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            {projects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>

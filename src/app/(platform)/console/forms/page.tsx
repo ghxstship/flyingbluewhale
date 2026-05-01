@@ -46,7 +46,7 @@ export default async function Page() {
         subtitle={`${rows.length} form${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/forms/new" size="sm">
-            + New form
+            + New Form
           </Button>
         }
       />
@@ -58,7 +58,7 @@ export default async function Page() {
           emptyDescription="Author intake, RSVP, or feedback forms with a JSON schema. Each form gets a public response URL."
           emptyAction={
             <Button href="/console/forms/new" size="sm">
-              + New form
+              + New Form
             </Button>
           }
           columns={[

@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/participants/entries/new" size="sm">
-            + New entry
+            + New Entry
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyDescription="Per-discipline entries from each delegation; status flows through nominate → confirm → on-site."
           emptyAction={
             <Button href="/console/participants/entries/new" size="sm">
-              + New entry
+              + New Entry
             </Button>
           }
           columns={[

@@ -103,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
 
         <section className="surface p-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Public response URL</h3>
+            <h3 className="text-sm font-semibold">Public Response URL</h3>
             <Link
               href={`/forms/${form.slug}`}
               target="_blank"

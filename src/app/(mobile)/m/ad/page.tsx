@@ -73,7 +73,7 @@ export default async function MobileAdPage() {
         <ul className="mt-3 space-y-2">
           {arrivals.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No arrivals today" />
+              <EmptyState size="compact" title="No Arrivals Today" />
             </li>
           ) : (
             arrivals.map((m) => (
@@ -110,7 +110,7 @@ export default async function MobileAdPage() {
         <ul className="mt-3 space-y-2">
           {departures.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No departures today" />
+              <EmptyState size="compact" title="No Departures Today" />
             </li>
           ) : (
             departures.map((m) => (

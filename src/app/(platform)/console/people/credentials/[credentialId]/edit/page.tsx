@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ credentialId:
         <FormShell
           action={action}
           cancelHref={`/console/people/credentials/${credentialId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <Input label="Kind" name="kind" maxLength={80} defaultValue={(r.kind as string | undefined) ?? ""} required />
           <Input label="Number" name="number" maxLength={120} defaultValue={(r.number as string | undefined) ?? ""} />

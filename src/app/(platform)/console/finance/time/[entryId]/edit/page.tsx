@@ -23,18 +23,18 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
   const action = updateTimeEntry.bind(null, p.entryId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Time entry" title={`Edit ${row.description ?? "time entry"}`} />
+      <ModuleHeader eyebrow="Time Entry" title={`Edit ${row.description ?? "time entry"}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/finance/time/${p.entryId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/finance/time/${p.entryId}`} submitLabel="Save Changes">
           <Input label="Description" name="description" defaultValue={row.description ?? ""} maxLength={500} />
           <Input
-            label="Started at"
+            label="Started At"
             name="started_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.started_at)}
             required
           />
-          <Input label="Ended at" name="ended_at" type="datetime-local" defaultValue={dateTimeLocal(row.ended_at)} />
+          <Input label="Ended At" name="ended_at" type="datetime-local" defaultValue={dateTimeLocal(row.ended_at)} />
           <Input
             label="Duration (minutes)"
             name="duration_minutes"

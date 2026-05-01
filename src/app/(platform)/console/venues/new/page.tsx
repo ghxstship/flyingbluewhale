@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <ModuleHeader eyebrow="Venues" title="New Venue" />
       <div className="page-content max-w-xl">
-        <FormShell action={createVenueAction} cancelHref="/console/venues" submitLabel="Create venue">
+        <FormShell action={createVenueAction} cancelHref="/console/venues" submitLabel="Create Venue">
           <Input label="Name" name="name" required maxLength={120} />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>

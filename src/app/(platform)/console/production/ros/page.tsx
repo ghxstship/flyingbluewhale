@@ -46,7 +46,7 @@ export default async function RunOfShowPage() {
       />
       <div className="page-content max-w-5xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Add a cue</h3>
+          <h3 className="text-sm font-semibold">Add a Cue</h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
             Cues live across departments. Status flows pending → standby → live → done.
           </p>

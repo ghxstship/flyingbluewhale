@@ -25,11 +25,11 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
     <>
       <ModuleHeader eyebrow="Vendor" title={`Edit ${row.name}`} />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/procurement/vendors/${p.vendorId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/procurement/vendors/${p.vendorId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <Input label="Category" name="category" defaultValue={row.category ?? ""} maxLength={120} />
-          <Input label="Contact email" name="contact_email" type="email" defaultValue={row.contact_email ?? ""} />
-          <Input label="Contact phone" name="contact_phone" defaultValue={row.contact_phone ?? ""} maxLength={40} />
+          <Input label="Contact Email" name="contact_email" type="email" defaultValue={row.contact_email ?? ""} />
+          <Input label="Contact Phone" name="contact_phone" defaultValue={row.contact_phone ?? ""} maxLength={40} />
           <Input label="COI expires on" name="coi_expires_at" type="date" defaultValue={dateOnly(row.coi_expires_at)} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Notes</span>

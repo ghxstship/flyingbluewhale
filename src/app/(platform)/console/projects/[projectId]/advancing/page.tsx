@@ -14,12 +14,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const session = await requireSession();
   const supabase = await createClient();
   const [{ data: project }, { data: deliverables }] = await Promise.all([
-    supabase
-      .from("projects")
-      .select("id, name, slug")
-      .eq("org_id", session.orgId)
-      .eq("id", projectId)
-      .maybeSingle(),
+    supabase.from("projects").select("id, name, slug").eq("org_id", session.orgId).eq("id", projectId).maybeSingle(),
     supabase
       .from("deliverables")
       .select("id, title, type, status, version, deadline, updated_at, data")
@@ -49,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <div className="page-content max-w-6xl">
         {!deliverables || deliverables.length === 0 ? (
           <EmptyState
-            title="No deliverables yet"
+            title="No Deliverables Yet"
             description="Artists, vendors, crew, and other stakeholders submit advancing materials via their portal pages."
           />
         ) : (

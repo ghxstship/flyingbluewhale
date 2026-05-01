@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="client" title="Messages" subtitle="Production-to-client updates">
       <EmptyState
-        title="Messages appear by email + here"
+        title="Messages Appear by Email + Here"
         description="Your production desk sends project updates to the email on file; a copy lands here so you can scan the thread without searching your inbox. No inbound from this surface — reach your production lead directly for anything urgent."
       />
     </PortalSubpage>

@@ -73,9 +73,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending disposition" value={rows.length.toLocaleString()} accent />
+          <MetricCard label="Pending Disposition" value={rows.length.toLocaleString()} accent />
           <MetricCard label="Retired" value={retired.toLocaleString()} />
-          <MetricCard label="Replacement value (est.)" value={formatMoney(totalReplaceable)} />
+          <MetricCard label="Replacement Value (Est.)" value={formatMoney(totalReplaceable)} />
         </div>
 
         <DataTable<AssetRow>
@@ -89,7 +89,7 @@ export default async function Page() {
             { key: "category", header: "Category", render: (r) => r.category ?? "—" },
             {
               key: "rate",
-              header: "Daily rate",
+              header: "Daily Rate",
               render: (r) => (r.daily_rate_cents != null ? formatMoney(r.daily_rate_cents) : "—"),
               className: "font-mono text-xs",
             },

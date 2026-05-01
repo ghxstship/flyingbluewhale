@@ -18,7 +18,9 @@ export default async function ConsoleDashboard() {
           <div className="card p-6">
             <div className="text-label text-[var(--color-warning)]">Not configured</div>
             <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-              Supabase env vars are missing. Copy <code className="text-mono">.env.example</code> → <code className="text-mono">.env.local</code> and fill in your project credentials, then restart the dev server.
+              Supabase env vars are missing. Copy <code className="text-mono">.env.example</code> →{" "}
+              <code className="text-mono">.env.local</code> and fill in your project credentials, then restart the dev
+              server.
             </p>
           </div>
         </div>
@@ -27,17 +29,14 @@ export default async function ConsoleDashboard() {
   }
 
   const session = await requireSession();
-  const [projects, stats] = await Promise.all([
-    listProjects(session.orgId),
-    projectStats(session.orgId),
-  ]);
+  const [projects, stats] = await Promise.all([listProjects(session.orgId), projectStats(session.orgId)]);
 
   return (
     <>
       <ModuleHeader
         title="Console"
         subtitle={`Logged in as ${session.email} · ${session.role}`}
-        action={<Button href="/console/projects/new">+ New project</Button>}
+        action={<Button href="/console/projects/new">+ New Project</Button>}
       />
       <div className="page-content space-y-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -49,13 +48,15 @@ export default async function ConsoleDashboard() {
 
         <section className="card-elevated">
           <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
-            <h2 className="text-heading text-sm">Recent projects</h2>
-            <Link href="/console/projects" className="text-mono text-xs text-[var(--brand-color)]">View all →</Link>
+            <h2 className="text-heading text-sm">Recent Projects</h2>
+            <Link href="/console/projects" className="text-mono text-xs text-[var(--brand-color)]">
+              View all →
+            </Link>
           </div>
           {projects.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No projects yet"
+              title="No Projects Yet"
               description="Spin up your first project to see it here."
               action={
                 <Link href="/console/projects/new" className="text-xs text-[var(--brand-color)]">
@@ -66,7 +67,12 @@ export default async function ConsoleDashboard() {
           ) : (
             <table className="data-table">
               <thead>
-                <tr><th>Name</th><th>Status</th><th>Start</th><th>End</th></tr>
+                <tr>
+                  <th>Name</th>
+                  <th>Status</th>
+                  <th>Start</th>
+                  <th>End</th>
+                </tr>
               </thead>
               <tbody>
                 {projects.slice(0, 8).map((p) => (
@@ -76,7 +82,9 @@ export default async function ConsoleDashboard() {
                         {p.name}
                       </Link>
                     </td>
-                    <td><StatusBadge status={p.status} /></td>
+                    <td>
+                      <StatusBadge status={p.status} />
+                    </td>
                     <td className="text-mono text-xs">{p.start_date ?? "—"}</td>
                     <td className="text-mono text-xs">{p.end_date ?? "—"}</td>
                   </tr>
@@ -94,7 +102,9 @@ function Stat({ label, value, accent }: { label: string; value: number; accent?:
   return (
     <div className="card-elevated p-4">
       <div className="text-label text-[var(--color-text-tertiary)]">{label}</div>
-      <div className={`mt-2 text-display text-3xl ${accent ? "text-[var(--brand-color)]" : "text-[var(--color-text-primary)]"}`}>
+      <div
+        className={`text-display mt-2 text-3xl ${accent ? "text-[var(--brand-color)]" : "text-[var(--color-text-primary)]"}`}
+      >
         {value}
       </div>
     </div>

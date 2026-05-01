@@ -114,7 +114,7 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard label="Upcoming · 30d" value={upcoming.length.toLocaleString()} accent />
           <MetricCard label="Cleared" value={cleared.toLocaleString()} />
-          <MetricCard label="Order spend" value={formatMoney(totalSpend)} />
+          <MetricCard label="Order Spend" value={formatMoney(totalSpend)} />
         </div>
 
         <section>
@@ -171,7 +171,7 @@ export default async function Page() {
           {orders.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No rate-card orders"
+              title="No Rate-Card Orders"
               description="Authorize freight services off the rate card; line-items book against the catalog."
             />
           ) : (

@@ -25,11 +25,11 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Operations"
-        title="New punch item"
+        title="New Punch Item"
         subtitle="Show-ready gap. Gate doors-open when needed."
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createPunchItem} cancelHref="/console/punch" submitLabel="Create item">
+        <FormShell action={createPunchItem} cancelHref="/console/punch" submitLabel="Create Item">
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               Title<span className="ms-0.5 text-[var(--color-error)]">*</span>

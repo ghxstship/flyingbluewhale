@@ -77,7 +77,7 @@ export default async function CheckInPage() {
       <ul className="mt-6 space-y-3">
         {shifts.length === 0 ? (
           <li>
-            <EmptyState size="compact" title="No shifts today" description="Check back when you're rostered." />
+            <EmptyState size="compact" title="No Shifts Today" description="Check back when you're rostered." />
           </li>
         ) : (
           shifts.map((s) => (

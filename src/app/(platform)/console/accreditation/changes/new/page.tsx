@@ -41,7 +41,7 @@ export default async function Page() {
     <>
       <ModuleHeader eyebrow="Accreditation · Changes" title="New Change Request" />
       <div className="page-content max-w-xl">
-        <FormShell action={createChange} cancelHref="/console/accreditation/changes" submitLabel="Request change">
+        <FormShell action={createChange} cancelHref="/console/accreditation/changes" submitLabel="Request Change">
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Accreditation</label>
             <select name="accreditation_id" className="input-base mt-1.5 w-full" required>

@@ -12,10 +12,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   let tickets = 0;
   if (project) {
     const supabase = await createClient();
-    const { data: ticketRows } = await supabase
-      .from("tickets")
-      .select("id")
-      .eq("project_id", project.id);
+    const { data: ticketRows } = await supabase.from("tickets").select("id").eq("project_id", project.id);
     const ticketIds = (ticketRows ?? []).map((t) => t.id);
     tickets = ticketIds.length;
     if (ticketIds.length > 0) {
@@ -29,15 +26,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="sponsor" title="Reporting" subtitle="Attendance + activation metrics">
       {scans === 0 && tickets === 0 ? (
-        <EmptyState title="Reporting starts after the first scan" description="Real-time counts appear here once doors open." />
+        <EmptyState
+          title="Reporting Starts After the First Scan"
+          description="Real-time counts appear here once doors open."
+        />
       ) : (
         <dl className="grid gap-3 sm:grid-cols-2">
           <div className="surface p-5">
-            <dt className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">Tickets issued</dt>
+            <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Tickets issued</dt>
             <dd className="mt-2 text-3xl font-semibold">{tickets.toLocaleString()}</dd>
           </div>
           <div className="surface p-5">
-            <dt className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">Scans recorded</dt>
+            <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Scans recorded</dt>
             <dd className="mt-2 text-3xl font-semibold">{scans.toLocaleString()}</dd>
           </div>
         </dl>

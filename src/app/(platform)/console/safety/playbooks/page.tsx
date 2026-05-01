@@ -50,14 +50,14 @@ export default async function Page() {
         subtitle={`${rows.length} playbook${rows.length === 1 ? "" : "s"} · ${published} published`}
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
-            + New playbook
+            + New Playbook
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {kindEntries.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By kind</h3>
+            <h3 className="text-sm font-semibold">By Kind</h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {kindEntries.map(([kind, count]) => (
                 <li key={kind} className="flex items-center justify-between text-sm">
@@ -75,7 +75,7 @@ export default async function Page() {
           emptyDescription="ConOps playbooks render in the Guide layout. Author one per scenario — crisis comms, evacuation, weather hold, dignitary visit."
           emptyAction={
             <Button href="/console/safety/playbooks/new" size="sm">
-              + New playbook
+              + New Playbook
             </Button>
           }
           columns={[

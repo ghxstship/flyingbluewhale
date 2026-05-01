@@ -39,7 +39,7 @@ export default async function Page() {
     <>
       <ModuleHeader eyebrow="Workforce · Deployment" title="New Deployment" />
       <div className="page-content max-w-xl">
-        <FormShell action={createDeployment} cancelHref="/console/workforce/deployment" submitLabel="Plan deployment">
+        <FormShell action={createDeployment} cancelHref="/console/workforce/deployment" submitLabel="Plan Deployment">
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Venue</label>
             <select name="venue_id" className="input-base mt-1.5 w-full" required>

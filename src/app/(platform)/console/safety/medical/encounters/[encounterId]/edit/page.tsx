@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ encounterId: 
         <FormShell
           action={action}
           cancelHref={`/console/safety/medical/encounters/${encounterId}`}
-          submitLabel="Save changes"
+          submitLabel="Save Changes"
         >
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Triage</label>

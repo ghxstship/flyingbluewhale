@@ -57,7 +57,7 @@ export default async function MobileShiftSwapPage() {
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
         Field
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Swap shift</h1>
+      <h1 className="mt-1 text-2xl font-semibold">Swap Shift</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         Pick an upcoming shift to flag your scheduler. Roster admins get a notification with your reason.
       </p>
@@ -73,7 +73,7 @@ export default async function MobileShiftSwapPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No upcoming shifts to swap"
+              title="No Upcoming Shifts to Swap"
               description="Only shifts you haven't checked into can be swapped. See your roster on the Shift screen."
               action={
                 <Link href="/m/shift" className="btn btn-secondary btn-sm">

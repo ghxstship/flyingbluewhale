@@ -16,13 +16,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
     <div className="mx-auto max-w-2xl space-y-4 p-6">
       <header className="surface-raised p-5">
         <div className="eyebrow text-xs text-[var(--text-muted)]">Open revision round</div>
-        <h1 className="text-lg font-semibold">Request creative iterations</h1>
+        <h1 className="text-lg font-semibold">Request Creative Iterations</h1>
       </header>
 
-      <FormShell action={createRevisionRoundAction} submitLabel="Open round" cancelHref={base}>
+      <FormShell action={createRevisionRoundAction} submitLabel="Open Round" cancelHref={base}>
         <input type="hidden" name="slug" value={slug} />
         <input type="hidden" name="proposalId" value={proposalId} />
-        <FormField label="Round target">
+        <FormField label="Round Target">
           <select name="targetKind" defaultValue="proposal" className="input-base w-full">
             <option value="proposal">Proposal-wide</option>
             <option value="phase">Phase deliverable</option>

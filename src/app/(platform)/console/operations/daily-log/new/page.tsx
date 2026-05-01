@@ -27,11 +27,11 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Operations"
-        title="New daily log"
+        title="New Daily Log"
         subtitle="One entry per project per day. Captures weather, manpower, equipment, and notes."
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createDailyLog} cancelHref="/console/operations/daily-log" submitLabel="Create log">
+        <FormShell action={createDailyLog} cancelHref="/console/operations/daily-log" submitLabel="Create Log">
           <label className="flex flex-col gap-1.5">
             <span className={LABEL_CLS}>
               Project<span className="ms-0.5 text-[var(--color-error)]">*</span>

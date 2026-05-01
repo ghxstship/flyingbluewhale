@@ -66,14 +66,14 @@ export default async function Page() {
         subtitle={`${rows.length} asset${rows.length === 1 ? "" : "s"} · ${locationEntries.length} location${locationEntries.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/production/equipment/new" size="sm">
-            + New asset
+            + New Item
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <section className="grid gap-3 md:grid-cols-2">
           <div className="surface p-4">
-            <h3 className="text-sm font-semibold">By status</h3>
+            <h3 className="text-sm font-semibold">By Status</h3>
             <ul className="mt-3 space-y-1.5">
               {statusEntries.map(([status, count]) => (
                 <li key={status} className="flex items-center justify-between text-sm">
@@ -84,7 +84,7 @@ export default async function Page() {
             </ul>
           </div>
           <div className="surface p-4">
-            <h3 className="text-sm font-semibold">By location</h3>
+            <h3 className="text-sm font-semibold">By Location</h3>
             <ul className="mt-3 space-y-1.5">
               {locationEntries.slice(0, 8).map(([loc, count]) => (
                 <li key={loc} className="flex items-center justify-between text-sm">
@@ -106,7 +106,7 @@ export default async function Page() {
           emptyDescription="Author each piece of gear with a category, serial, and asset tag. Status flows through available → reserved → in_use → maintenance → retired."
           emptyAction={
             <Button href="/console/production/equipment/new" size="sm">
-              + New asset
+              + New Item
             </Button>
           }
           columns={[

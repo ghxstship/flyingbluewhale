@@ -61,7 +61,7 @@ export default async function Page() {
         subtitle={`${rows.length} location${rows.length === 1 ? "" : "s"} · ${unassigned} asset${unassigned === 1 ? "" : "s"} unassigned`}
         action={
           <Button href="/console/locations/new" size="sm">
-            + New location
+            + New Location
           </Button>
         }
       />
@@ -73,7 +73,7 @@ export default async function Page() {
           emptyDescription="Locations are warehouses, staging bays, depots, and venue back-of-house. Each piece of equipment can be tagged to one."
           emptyAction={
             <Button href="/console/locations/new" size="sm">
-              + New location
+              + New Location
             </Button>
           }
           columns={[

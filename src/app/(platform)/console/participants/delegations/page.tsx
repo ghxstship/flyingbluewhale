@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/participants/delegations/new" size="sm">
-            + New delegation
+            + New Delegation
           </Button>
         }
       />
@@ -43,7 +43,7 @@ export default async function Page() {
           emptyDescription="Country teams, federation rosters, and entourage groupings live here. Each delegation owns its own roster + accreditation matrix."
           emptyAction={
             <Button href="/console/participants/delegations/new" size="sm">
-              + New delegation
+              + New Delegation
             </Button>
           }
           columns={[

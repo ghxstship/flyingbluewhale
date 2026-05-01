@@ -42,7 +42,7 @@ export function MedicForm() {
       </fieldset>
 
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Patient reference</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">Patient Reference</label>
         <input
           name="patient_ref"
           maxLength={120}
@@ -55,7 +55,7 @@ export function MedicForm() {
       </div>
 
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Chief complaint *</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">Chief Complaint *</label>
         <textarea
           name="chief_complaint"
           rows={4}
@@ -77,7 +77,7 @@ export function MedicForm() {
       </div>
 
       <div className="surface-raised p-4">
-        <SignatureField name="signature" label="Clinician signature" />
+        <SignatureField name="signature" label="Clinician Signature" />
         <p className="mt-2 text-[10px] text-[var(--text-muted)]">
           Signature is stored inside the encrypted PHI envelope of this encounter.
         </p>

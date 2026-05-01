@@ -50,7 +50,7 @@ export default async function GuidesIndex() {
       <div className="page-content">
         {rows.length === 0 ? (
           <EmptyState
-            title="No event guides yet"
+            title="No Event Guides Yet"
             description="Per-persona event guides — the Boarding Pass for crew, artists, vendors, sponsors, and guests — are authored from each project's detail page."
             action={
               <Link className="text-sm text-[var(--org-primary)]" href="/console/projects">

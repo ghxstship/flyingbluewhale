@@ -61,7 +61,7 @@ export default async function MobileHandoverPage() {
         <ul className="mt-3 space-y-2">
           {open.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="All venues handed over" description="Nothing pending today." />
+              <EmptyState size="compact" title="All Venues Handed Over" description="Nothing pending today." />
             </li>
           ) : (
             open.map((v) => (

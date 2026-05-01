@@ -24,7 +24,9 @@ export default async function AssetLinkerPage() {
   const [{ data: links }, { data: credentials }] = await Promise.all([
     supabase
       .from("asset_links")
-      .select("id, credential_id, asset_kind, asset_serial, issued_at, revoked_at, credentials(kind, number, crew_members(name))")
+      .select(
+        "id, credential_id, asset_kind, asset_serial, issued_at, revoked_at, credentials(kind, number, crew_members(name))",
+      )
       .eq("org_id", session.orgId)
       .order("issued_at", { ascending: false }),
     supabase
@@ -43,10 +45,10 @@ export default async function AssetLinkerPage() {
       />
       <div className="page-content max-w-4xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Link a new asset</h3>
+          <h3 className="text-sm font-semibold">Link a New Asset</h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Each physical token (NFC tag, RFID card, barcode, QR) attaches to
-            exactly one credential. Revoke before re-issuing.
+            Each physical token (NFC tag, RFID card, barcode, QR) attaches to exactly one credential. Revoke before
+            re-issuing.
           </p>
           <div className="mt-4">
             <LinkAssetForm credentials={credentials ?? []} />
@@ -54,9 +56,7 @@ export default async function AssetLinkerPage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            Active links
-          </h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Active links</h3>
           <div className="surface overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
@@ -79,9 +79,11 @@ export default async function AssetLinkerPage() {
                   </tr>
                 ) : (
                   (links ?? []).map((l) => {
-                    const cred = l.credentials as
-                      | { kind?: string; number?: string; crew_members?: { name?: string } | null }
-                      | null;
+                    const cred = l.credentials as {
+                      kind?: string;
+                      number?: string;
+                      crew_members?: { name?: string } | null;
+                    } | null;
                     return (
                       <tr key={l.id}>
                         <td>{cred?.crew_members?.name ?? "—"}</td>
@@ -91,9 +93,7 @@ export default async function AssetLinkerPage() {
                         </td>
                         <td className="text-xs capitalize">{l.asset_kind.replace("_", " ")}</td>
                         <td className="font-mono text-xs">{l.asset_serial}</td>
-                        <td className="font-mono text-xs">
-                          {new Date(l.issued_at).toLocaleDateString()}
-                        </td>
+                        <td className="font-mono text-xs">{new Date(l.issued_at).toLocaleDateString()}</td>
                         <td>
                           <Badge variant={l.revoked_at ? "muted" : "success"}>
                             {l.revoked_at ? "Revoked" : "Active"}
@@ -103,10 +103,7 @@ export default async function AssetLinkerPage() {
                           {!l.revoked_at && (
                             <form action={revokeLinkAction}>
                               <input type="hidden" name="id" value={l.id} />
-                              <button
-                                type="submit"
-                                className="text-xs text-[var(--color-error)] hover:underline"
-                              >
+                              <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
                                 Revoke
                               </button>
                             </form>

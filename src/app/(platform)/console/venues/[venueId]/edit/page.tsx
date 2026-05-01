@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Venue"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/venues/${p.venueId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/venues/${p.venueId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Kind</span>

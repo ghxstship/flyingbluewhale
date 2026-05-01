@@ -137,7 +137,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </div>
       </article>
 
-      <CTASection title="Run your next show on L0ST 1SLAND Technologies" subtitle="Start free. No credit card." />
+      <CTASection title="Run Your Next Show on L0ST 1SLAND Technologies" subtitle="Start free. No credit card." />
     </div>
   );
 }

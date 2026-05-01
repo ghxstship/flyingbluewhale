@@ -5,7 +5,7 @@ import { createVendorAction } from "../actions";
 
 export function NewVendorForm() {
   return (
-    <FormShell action={createVendorAction} cancelHref="/console/procurement/vendors" submitLabel="Create vendor">
+    <FormShell action={createVendorAction} cancelHref="/console/procurement/vendors" submitLabel="Create Vendor">
       <Input label="Name" name="name" required />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Email" name="contact_email" type="email" />

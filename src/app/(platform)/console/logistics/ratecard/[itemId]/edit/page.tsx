@@ -21,11 +21,11 @@ export default async function Page({ params }: { params: Promise<{ itemId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Rate card item"
+        eyebrow="Rate Card Item"
         title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Rate card item"}`}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/logistics/ratecard/${p.itemId}`} submitLabel="Save changes">
+        <FormShell action={action} cancelHref={`/console/logistics/ratecard/${p.itemId}`} submitLabel="Save Changes">
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="SKU" name="sku" defaultValue={row.sku ?? ""} required maxLength={80} />
           <label className="flex flex-col gap-1.5">
@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: Promise<{ itemId: strin
             />
           </label>
           <Input
-            label="Unit price (cents)"
+            label="Unit Price (Cents)"
             name="unit_price_cents"
             type="number"
             defaultValue={row.unit_price_cents != null ? String(row.unit_price_cents) : ""}

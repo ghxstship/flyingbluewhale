@@ -24,7 +24,7 @@ export function TasksList({ initial }: { initial: Task[] }) {
     <PullToRefresh onRefresh={refresh}>
       <div className="px-4 pt-6 pb-24">
         <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
-        <h1 className="mt-1 text-2xl font-semibold">My tasks</h1>
+        <h1 className="mt-1 text-2xl font-semibold">My Tasks</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
           {open.length} open · {tasks.length - open.length} done
         </p>

@@ -11,12 +11,17 @@ import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
 
 const EVENTS = [
-  "project.created", "project.status_changed",
-  "invoice.sent", "invoice.paid",
-  "proposal.sent", "proposal.signed",
-  "deliverable.submitted", "deliverable.approved",
+  "project.created",
+  "project.status_changed",
+  "invoice.sent",
+  "invoice.paid",
+  "proposal.sent",
+  "proposal.signed",
+  "deliverable.submitted",
+  "deliverable.approved",
   "ticket.scanned",
-  "po.acknowledged", "po.fulfilled",
+  "po.acknowledged",
+  "po.fulfilled",
   "incident.filed",
   "passkey.registered",
   "account.deletion_requested",
@@ -32,9 +37,15 @@ export default async function WebhooksPage() {
     .is("deleted_at", null)
     .order("created_at", { ascending: false });
   const rows = (endpoints ?? []) as Array<{
-    id: string; url: string; description: string | null; events: string[];
-    is_active: boolean; last_delivery_at: string | null; last_error: string | null;
-    failure_count: number; created_at: string;
+    id: string;
+    url: string;
+    description: string | null;
+    events: string[];
+    is_active: boolean;
+    last_delivery_at: string | null;
+    last_error: string | null;
+    failure_count: number;
+    created_at: string;
   }>;
   return (
     <>
@@ -42,11 +53,15 @@ export default async function WebhooksPage() {
         eyebrow="Settings"
         title="Webhooks"
         subtitle="Outgoing event notifications to your endpoints — HMAC-signed, retried up to 5× with exponential backoff."
-        action={<Button href="/console/settings/webhooks/new" size="sm">+ New endpoint</Button>}
+        action={
+          <Button href="/console/settings/webhooks/new" size="sm">
+            + New Endpoint
+          </Button>
+        }
       />
       <div className="page-content space-y-4">
         <div className="surface p-5">
-          <h3 className="text-sm font-semibold">Subscribable events</h3>
+          <h3 className="text-sm font-semibold">Subscribable Events</h3>
           <div className="mt-3 flex flex-wrap gap-2">
             {EVENTS.map((e) => (
               <Badge key={e} variant="muted">
@@ -64,7 +79,7 @@ export default async function WebhooksPage() {
 
         {rows.length === 0 ? (
           <EmptyState
-            title="No endpoints registered"
+            title="No Endpoints Registered"
             description="Register an endpoint to receive real-time events. Payloads are HMAC-signed with a secret shown once at creation."
           />
         ) : (
@@ -84,13 +99,22 @@ export default async function WebhooksPage() {
                 {rows.map((r) => (
                   <tr key={r.id}>
                     <td className="font-mono text-xs">
-                      <div className="max-w-xs truncate" title={r.url}>{r.url}</div>
-                      {r.description && <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">{r.description}</div>}
+                      <div className="max-w-xs truncate" title={r.url}>
+                        {r.url}
+                      </div>
+                      {r.description && (
+                        <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">{r.description}</div>
+                      )}
                     </td>
                     <td>
                       <div className="flex flex-wrap gap-1">
                         {r.events.slice(0, 3).map((e) => (
-                          <span key={e} className="rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[10px]">{e}</span>
+                          <span
+                            key={e}
+                            className="rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[10px]"
+                          >
+                            {e}
+                          </span>
                         ))}
                         {r.events.length > 3 && (
                           <span className="font-mono text-[10px] text-[var(--text-muted)]">+{r.events.length - 3}</span>

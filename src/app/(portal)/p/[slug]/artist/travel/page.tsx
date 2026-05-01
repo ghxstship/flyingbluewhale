@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <PortalSubpage slug={slug} persona="artist" title="Travel" subtitle="Flights, ground, hotel">
       <EmptyState
-        title="Travel details arrive close to show day"
+        title="Travel Details Arrive Close to Show Day"
         description="Production desks post the flight, ground, and hotel handoff here about a week before you travel. You'll also get a confirmation email."
       />
     </PortalSubpage>

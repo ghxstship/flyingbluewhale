@@ -380,7 +380,7 @@ export function DataTableInteractive({
   const allVisibleSelected = flatVisible.length > 0 && flatVisible.every((r) => selected.has(r.id));
 
   if (rows.length === 0) {
-    return <div className="surface px-6 py-10 text-center text-sm text-[var(--text-muted)]">{emptyLabel}</div>;
+    return <div className="px-6 py-10 text-center text-sm text-[var(--text-muted)]">{emptyLabel}</div>;
   }
 
   const rowPad = density === "compact" ? "py-1.5" : "py-2.5";
@@ -388,8 +388,13 @@ export function DataTableInteractive({
 
   return (
     <div className="space-y-3">
-      {/* Toolbar */}
-      <div className="surface flex flex-wrap items-center justify-between gap-2 px-3 py-2">
+      {/* Toolbar — borderless per design audit. Bottom 1px chrome rule
+          visually separates the toolbar strip from the table body without
+          double-enclosing inside .surface (the canonical 3px brutal border
+          was too heavy for a data view). The full functional set lives
+          here: search, row count, group-by, CSV export, density toggle,
+          column visibility / pinning / reorder. */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-color)] px-1 py-2">
         {searchable && (
           <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
             <Search size={14} aria-hidden="true" />
@@ -471,10 +476,16 @@ export function DataTableInteractive({
         onClearAll={() => setFilters({})}
       />
 
-      {/* Table */}
-      <div ref={scrollRef} className="surface overflow-auto" style={{ maxHeight: pageSizeEff ? "auto" : "70vh" }}>
+      {/* Table — borderless container; the table itself carries header
+          bottom-rule + 1px row dividers so the data structure reads
+          without an outer card. Scroll bounds remain (70vh fallback when
+          not paginated) and the header stays sticky. */}
+      <div ref={scrollRef} className="overflow-auto" style={{ maxHeight: pageSizeEff ? "auto" : "70vh" }}>
         <table className="data-table w-full" role="grid" aria-rowcount={sorted.length}>
-          <thead className="sticky top-0 z-10 bg-[var(--surface)]">
+          {/* Sticky header bg switched from --surface to --background so
+              the sticky thead matches the underlying page paint now that
+              there's no surface card behind the table. */}
+          <thead className="sticky top-0 z-10 bg-[var(--background)]">
             <tr>
               {bulkActions && (
                 <th className="w-8 text-center">

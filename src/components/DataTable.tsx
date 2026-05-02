@@ -256,7 +256,7 @@ function DataTableEmpty({
   ghostRows?: number;
 }) {
   return (
-    <div className="surface relative overflow-x-auto" aria-label={title}>
+    <div className="relative overflow-x-auto" aria-label={title}>
       <table className="data-table" role="grid">
         <thead>
           <tr>
@@ -294,7 +294,7 @@ function DataTableEmpty({
 
 function DataTableSkeleton({ columns, rows }: { columns: number; rows: number }) {
   return (
-    <div className="surface overflow-x-auto" aria-busy="true" aria-label="Loading table">
+    <div className="overflow-x-auto" aria-busy="true" aria-label="Loading table">
       <table className="data-table">
         <thead>
           <tr>

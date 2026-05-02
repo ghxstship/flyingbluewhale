@@ -171,13 +171,11 @@ function EyebrowBlock({
 function HeadingBlock({ block }: { block: Extract<ProposalBlock, { type: "heading" }> }) {
   const cls =
     block.level === 3
-      ? "mt-6 font-serif text-2xl tracking-tight"
-      : "mt-4 font-serif text-3xl tracking-tight sm:text-4xl";
+      ? "mt-6 font-subdisplay text-2xl tracking-wide"
+      : "mt-4 font-display text-3xl tracking-tight sm:text-4xl";
   return (
     <div className="mx-auto max-w-4xl px-8">
-      <h2 className={cls} style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>
-        {block.text}
-      </h2>
+      <h2 className={cls}>{block.text}</h2>
     </div>
   );
 }

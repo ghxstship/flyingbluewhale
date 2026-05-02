@@ -43,16 +43,17 @@ src/app/theme/
 
 Measured: `--text` on `--bg`, `--accent-contrast` on `--accent`, `--text-muted` on `--surface-2`.
 
-| Theme | Text on bg | White on accent | Muted on surface-2 |
-|---|---|---|---|
-| glass | 15.8:1 ✓ AAA | 4.6:1 ✓ AA | 6.2:1 ✓ AA (rgba composed) |
-| brutal | 21:1 ✓ AAA | 7.6:1 ✓ AAA (black on pink) | 12.6:1 ✓ AAA |
-| bento | 14.4:1 ✓ AAA | 4.9:1 ✓ AA | 4.7:1 ✓ AA |
-| kinetic | 16.0:1 ✓ AAA | 4.5:1 ✓ AA (was 3.17 on spec, darkened) | 7.5:1 ✓ AAA |
-| copilot | 16.4:1 ✓ AAA | 5.3:1 ✓ AA | 7.6:1 ✓ AAA |
-| cyber | 21:1 ✓ AAA | 4.8:1 ✓ AA (on solid #ff0080) | 8.3:1 ✓ AAA |
-| soft | 10.2:1 ✓ AAA | 4.5:1 ✓ AA | 5.9:1 ✓ AA |
-| earthy | 15.6:1 ✓ AAA | 7.7:1 ✓ AAA (cream on forest) | 6.4:1 ✓ AA |
+| Theme            | Text on bg   | White on accent                         | Muted on surface-2                          |
+| ---------------- | ------------ | --------------------------------------- | ------------------------------------------- |
+| bermuda-triangle | 21:1 (AAA)   | 21:1 (AAA — white on near-black)        | 7.7:1 (AAA, greyscale 600 on greyscale 100) |
+| glass            | 15.8:1 (AAA) | 4.6:1 (AA)                              | 6.2:1 (AA, rgba composed)                   |
+| brutal           | 21:1 (AAA)   | 7.6:1 (AAA, black on pink)              | 12.6:1 (AAA)                                |
+| bento            | 14.4:1 (AAA) | 4.9:1 (AA)                              | 4.7:1 (AA)                                  |
+| kinetic          | 16.0:1 (AAA) | 4.5:1 (AA — was 3.17 on spec, darkened) | 7.5:1 (AAA)                                 |
+| copilot          | 16.4:1 (AAA) | 5.3:1 (AA)                              | 7.6:1 (AAA)                                 |
+| cyber            | 21:1 (AAA)   | 4.8:1 (AA, on solid #ff0080)            | 8.3:1 (AAA)                                 |
+| soft             | 10.2:1 (AAA) | 4.5:1 (AA)                              | 5.9:1 (AA)                                  |
+| earthy           | 15.6:1 (AAA) | 7.7:1 (AAA, cream on forest)            | 6.4:1 (AA)                                  |
 
 Spec deviation: kinetic `--accent` changed from `#ff4d1a` → `#cc3d10`. The original
 failed the same spec's own WCAG AA mandate. Flagged rather than silently applied.
@@ -69,6 +70,7 @@ failed the same spec's own WCAG AA mandate. Flagged rather than silently applied
 ## E2E coverage
 
 See `e2e/chroma-theme.spec.ts`:
+
 - data-theme set before first paint (head script)
 - Invalid cookie falls back to default
 - Gallery renders 8 radio cards

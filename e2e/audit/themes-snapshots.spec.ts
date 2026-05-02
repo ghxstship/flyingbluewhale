@@ -14,7 +14,7 @@
  */
 import { expect, test, type Page } from "playwright/test";
 
-const SNAPSHOT_THEMES = ["kinetic", "cyber", "earthy"] as const;
+const SNAPSHOT_THEMES = ["bermuda-triangle", "kinetic", "cyber", "earthy"] as const;
 const SNAPSHOT_BREAKPOINTS = [
   { name: "mobile-s", width: 375, height: 667 },
   { name: "desktop", width: 1280, height: 800 },
@@ -28,7 +28,14 @@ const SNAPSHOT_ROUTES = [
 
 async function setTheme(page: Page, theme: string) {
   await page.context().addCookies([
-    { name: "fbw_consent", value: encodeURIComponent('{"essential":true,"analytics":false,"marketing":false,"decidedAt":"2026-04-20T00:00:00Z"}'), domain: "localhost", path: "/" },
+    {
+      name: "fbw_consent",
+      value: encodeURIComponent(
+        '{"essential":true,"analytics":false,"marketing":false,"decidedAt":"2026-04-20T00:00:00Z"}',
+      ),
+      domain: "localhost",
+      path: "/",
+    },
     { name: "chroma_theme", value: theme, domain: "localhost", path: "/" },
   ]);
 }

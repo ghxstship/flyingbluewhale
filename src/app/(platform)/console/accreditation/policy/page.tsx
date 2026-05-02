@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Check } from "lucide-react";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -125,9 +126,13 @@ export default async function Page() {
                       {categories.map((c) => (
                         <td key={c.id} className="text-center">
                           {allowed.has(c.code) || allowed.has(c.id) ? (
-                            <Badge variant="success">✓</Badge>
+                            <Badge variant="success" aria-label="Allowed">
+                              <Check size={12} aria-hidden="true" strokeWidth={3} />
+                            </Badge>
                           ) : (
-                            <span className="text-[var(--text-muted)]">·</span>
+                            <span className="text-[var(--text-muted)]" aria-label="Not allowed">
+                              ·
+                            </span>
                           )}
                         </td>
                       ))}

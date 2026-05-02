@@ -1,7 +1,7 @@
 "use client";
 
 import { Sun, Monitor, Moon } from "lucide-react";
-import { useTheme } from "@/app/theme/ThemeProvider";
+import { useThemeIfAvailable } from "@/app/theme/ThemeProvider";
 import { Hint } from "@/components/ui/Tooltip";
 
 /**
@@ -17,7 +17,12 @@ import { Hint } from "@/components/ui/Tooltip";
  * palette renders correctly in both modes.
  */
 export function ThemeToggle() {
-  const { mode, setMode } = useTheme();
+  // Audit B4: render nothing when no ThemeProvider is in the tree
+  // (e.g., error boundaries or test environments). Was crashing the app
+  // via a thrown error; the toggle is chrome — its absence is benign.
+  const ctx = useThemeIfAvailable();
+  if (!ctx) return null;
+  const { mode, setMode } = ctx;
 
   const presets = [
     { key: "light" as const, icon: Sun, label: "Light" },

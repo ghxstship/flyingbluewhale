@@ -24,7 +24,20 @@ type MonthPoint = { month: string; revenue: number; expenses: number; margin: nu
 type AgingRow = { bucket: string; count: number; amount: number };
 type CategoryRow = { name: string; value: number };
 
-const PIE_COLORS = ["var(--org-primary)", "#22c55e", "#a855f7", "#f59e0b", "#06b6d4", "#ef4444", "#84cc16", "#ec4899"];
+// Multi-hue categorical palette for the pie chart — these are data-encoded
+// distinct categories, not status. Tokenized colors (org-primary + status
+// quartet) are interleaved with neutral fallbacks chosen for hue separation
+// so the chart legend stays distinguishable in any theme.
+const PIE_COLORS = [
+  "var(--org-primary)",
+  "var(--color-success)",
+  "#a855f7", // purple — no semantic token; data-encoded distinct hue
+  "var(--color-warning)",
+  "#06b6d4", // teal
+  "var(--color-error)",
+  "#84cc16", // lime
+  "#ec4899", // pink
+];
 
 export function ReportsCharts({
   monthly,
@@ -54,8 +67,15 @@ export function ReportsCharts({
             <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--surface-inset)" }} />
             <Legend wrapperStyle={{ fontSize: 10 }} />
             <Bar dataKey="revenue" name="Revenue" fill="var(--org-primary)" />
-            <Bar dataKey="expenses" name="Expenses" fill="#ef4444" />
-            <Line dataKey="margin" name="Margin" type="monotone" stroke="#22c55e" strokeWidth={2} dot={{ r: 2 }} />
+            <Bar dataKey="expenses" name="Expenses" fill="var(--color-error)" />
+            <Line
+              dataKey="margin"
+              name="Margin"
+              type="monotone"
+              stroke="var(--color-success)"
+              strokeWidth={2}
+              dot={{ r: 2 }}
+            />
           </ComposedChart>
         </ResponsiveContainer>
       </ChartShell>
@@ -77,12 +97,12 @@ export function ReportsCharts({
                   key={a.bucket}
                   fill={
                     a.bucket === "Current"
-                      ? "#22c55e"
+                      ? "var(--color-success)"
                       : a.bucket === "1–30"
                         ? "var(--org-primary)"
                         : a.bucket === "31–60"
-                          ? "#f59e0b"
-                          : "#ef4444"
+                          ? "var(--color-warning)"
+                          : "var(--color-error)"
                   }
                 />
               ))}

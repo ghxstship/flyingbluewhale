@@ -2,14 +2,7 @@ import "server-only";
 
 import React from "react";
 import { Text, View } from "@react-pdf/renderer";
-import {
-  BrandedPage,
-  CoverPage,
-  PdfDocument,
-  PdfTable,
-  SectionHeading,
-  styles,
-} from "./layout";
+import { BrandedPage, CoverPage, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
 import type { GuideConfig, GuideSection } from "@/lib/guides/types";
 
@@ -35,7 +28,16 @@ type GuideRenderInput = {
   personaLabel?: string;
 };
 
-export function GuidePdf({ brand, title, subtitle, classification, tier, config, eventName, personaLabel }: GuideRenderInput) {
+export function GuidePdf({
+  brand,
+  title,
+  subtitle,
+  classification,
+  tier,
+  config,
+  eventName,
+  personaLabel,
+}: GuideRenderInput) {
   return (
     <PdfDocument title={title} author={brand.producerName} subject={`Event guide · ${title}`}>
       <CoverPage
@@ -93,7 +95,7 @@ function SectionRenderer({ section }: { section: GuideSection }) {
             rows={section.entries.map((e) => ({
               time: e.time,
               activity: e.activity + (e.note ? ` — ${e.note}` : ""),
-              location: "location" in e ? e.location ?? "" : "",
+              location: "location" in e ? (e.location ?? "") : "",
             }))}
           />
         </>
@@ -128,7 +130,10 @@ function SectionRenderer({ section }: { section: GuideSection }) {
             rows={section.rows.map((row) => ({
               area: row.area,
               ...Object.fromEntries(
-                section.columns.map((c) => [c, row.access[c] === true ? "✓" : row.access[c] === false ? "—" : String(row.access[c] ?? "")]),
+                section.columns.map((c) => [
+                  c,
+                  row.access[c] === true ? "Yes" : row.access[c] === false ? "—" : String(row.access[c] ?? ""),
+                ]),
               ),
             }))}
           />
@@ -141,15 +146,9 @@ function SectionRenderer({ section }: { section: GuideSection }) {
           {section.entries.map((e, i) => (
             <View key={i} style={{ marginBottom: 6 }}>
               {e.header ? <Text style={{ fontWeight: 700 }}>{e.header}</Text> : null}
-              {e.role || e.name ? (
-                <Text>
-                  {[e.role, e.name].filter(Boolean).join(" · ")}
-                </Text>
-              ) : null}
+              {e.role || e.name ? <Text>{[e.role, e.name].filter(Boolean).join(" · ")}</Text> : null}
               {e.phone || e.email ? (
-                <Text style={{ fontSize: 9, color: "#555" }}>
-                  {[e.phone, e.email].filter(Boolean).join("  ·  ")}
-                </Text>
+                <Text style={{ fontSize: 9, color: "#555" }}>{[e.phone, e.email].filter(Boolean).join("  ·  ")}</Text>
               ) : null}
             </View>
           ))}
@@ -173,9 +172,7 @@ function SectionRenderer({ section }: { section: GuideSection }) {
           <SectionHeading title={section.heading} />
           {section.entries.map((e, i) => (
             <View key={i} style={{ marginBottom: 8 }}>
-              <Text style={{ fontWeight: 700 }}>
-                {[e.code, e.title].filter(Boolean).join(" · ")}
-              </Text>
+              <Text style={{ fontWeight: 700 }}>{[e.code, e.title].filter(Boolean).join(" · ")}</Text>
               {e.steps.map((st, j) => (
                 <Text key={j} style={{ marginLeft: 10 }}>
                   {j + 1}. {st}
@@ -254,9 +251,7 @@ function SectionRenderer({ section }: { section: GuideSection }) {
             rows={section.routes.map((r) => ({ from: r.from, to: r.to, via: r.via ?? "" }))}
           />
           {section.assemblyPoint ? (
-            <Text style={{ marginTop: 6, fontWeight: 700 }}>
-              Assembly point: {section.assemblyPoint}
-            </Text>
+            <Text style={{ marginTop: 6, fontWeight: 700 }}>Assembly point: {section.assemblyPoint}</Text>
           ) : null}
         </>
       );
@@ -269,9 +264,7 @@ function SectionRenderer({ section }: { section: GuideSection }) {
           <SectionHeading title={section.heading} />
           {section.entries.map((e, i) => (
             <View key={i} style={{ marginBottom: 4 }}>
-              <Text style={{ fontWeight: 700 }}>
-                {"item" in e ? e.item : ""}
-              </Text>
+              <Text style={{ fontWeight: 700 }}>{"item" in e ? e.item : ""}</Text>
               {"detail" in e && e.detail ? <Text>{e.detail}</Text> : null}
               {"location" in e && e.location ? <Text style={{ fontSize: 9, color: "#555" }}>{e.location}</Text> : null}
               {"note" in e && e.note ? <Text style={{ fontSize: 9, color: "#555" }}>{e.note}</Text> : null}

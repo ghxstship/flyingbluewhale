@@ -2,12 +2,7 @@
 
 import * as React from "react";
 import { THEMES, isValidThemeSlug, colorSchemeFor, type ThemeSlug, type ThemeFamily } from "./themes.config";
-import {
-  THEME_COOKIE_NAME,
-  THEME_STORAGE_KEY,
-  MODE_COOKIE_NAME,
-  MODE_STORAGE_KEY,
-} from "./theme-script";
+import { THEME_COOKIE_NAME, THEME_STORAGE_KEY, MODE_COOKIE_NAME, MODE_STORAGE_KEY } from "./theme-script";
 
 export type ColorMode = "light" | "dark" | "system";
 export type Density = "compact" | "comfortable" | "spacious";
@@ -57,15 +52,15 @@ async function persistRemote(patch: { theme?: ThemeSlug; density?: Density }) {
 }
 
 function systemDefault(): ThemeSlug {
-  if (typeof window === "undefined") return "kinetic";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "cyber" : "kinetic";
+  if (typeof window === "undefined") return "bermuda-triangle";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "cyber" : "bermuda-triangle";
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Initialize from the DOM attribute set by the head script — this is the
   // "mount" value. Storage (and any remote pref) reconcile in the first
   // effect to avoid hydration mismatch.
-  const [theme, setThemeState] = React.useState<ThemeSlug>("kinetic");
+  const [theme, setThemeState] = React.useState<ThemeSlug>("bermuda-triangle");
   const [isSystemDriven, setSystemDriven] = React.useState(true);
   const [density, setDensityState] = React.useState<Density>("comfortable");
   const [mode, setModeState] = React.useState<ColorMode>("system");
@@ -129,9 +124,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // form controls that match the resolved mode (not the palette family).
   React.useEffect(() => {
     if (!mounted) return;
-    const resolved = mode === "system"
-      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-      : mode;
+    const resolved =
+      mode === "system" ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : mode;
     document.documentElement.setAttribute("data-mode", resolved);
     document.documentElement.style.colorScheme = resolved;
     // Reference used so bundlers don't dead-code the imported helper.
@@ -244,4 +238,19 @@ export function useTheme(): ThemeContextValue {
   const ctx = React.useContext(ThemeContext);
   if (!ctx) throw new Error("useTheme must be used within CHROMA BEACON ThemeProvider");
   return ctx;
+}
+
+/**
+ * Non-throwing variant for chrome that may render in any tree position —
+ * including error boundaries, test environments, and future global-error.tsx
+ * paths that bypass the root layout. Returns `null` when no provider is
+ * present so the consumer can decide whether to render nothing or a stub.
+ *
+ * Audit B4 fix: ThemeToggle / DensityToggle were crashing the entire app
+ * when rendered outside the provider; switching them to this hook makes
+ * them render-safe everywhere. `useTheme()` keeps throwing for code that
+ * legitimately depends on the context value.
+ */
+export function useThemeIfAvailable(): ThemeContextValue | null {
+  return React.useContext(ThemeContext);
 }

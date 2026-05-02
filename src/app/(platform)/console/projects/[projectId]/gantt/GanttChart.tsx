@@ -52,9 +52,7 @@ export function GanttChart({
   };
 
   // Linear list with a small header per lane.
-  type Line =
-    | { kind: "header"; lane: "Tasks" | "Events" }
-    | { kind: "row"; row: GanttRow };
+  type Line = { kind: "header"; lane: "Tasks" | "Events" } | { kind: "row"; row: GanttRow };
   const lines: Line[] = [];
   for (const l of lanes) {
     if (grouped[l].length === 0) continue;
@@ -66,8 +64,7 @@ export function GanttChart({
   const innerWidth = width - LABEL_COL;
   const height = HEADER_HEIGHT + lines.length * ROW_HEIGHT + 8;
 
-  const xFor = (ms: number) =>
-    LABEL_COL + ((ms - windowStart) / totalMs) * innerWidth;
+  const xFor = (ms: number) => LABEL_COL + ((ms - windowStart) / totalMs) * innerWidth;
 
   // Month gridlines at first of each month within window.
   const monthTicks: { x: number; label: string }[] = [];
@@ -133,12 +130,7 @@ export function GanttChart({
                 stroke="var(--org-primary)"
                 strokeWidth={1}
               />
-              <text
-                x={xFor(now.getTime()) + 4}
-                y={HEADER_HEIGHT - 12}
-                fontSize={9}
-                fill="var(--org-primary)"
-              >
+              <text x={xFor(now.getTime()) + 4} y={HEADER_HEIGHT - 12} fontSize={9} fill="var(--org-primary)">
                 Today
               </text>
             </g>
@@ -184,15 +176,7 @@ export function GanttChart({
                 >
                   {trim(r.label, 32)}
                 </text>
-                <rect
-                  x={x}
-                  y={y + 4}
-                  width={w}
-                  height={ROW_HEIGHT - 8}
-                  rx={3}
-                  fill={tone}
-                  fillOpacity={0.85}
-                >
+                <rect x={x} y={y + 4} width={w} height={ROW_HEIGHT - 8} rx={3} fill={tone} fillOpacity={0.85}>
                   <title>
                     {r.label} · {fmtRange(r.start, r.end)} · {r.status}
                   </title>
@@ -207,17 +191,20 @@ export function GanttChart({
 }
 
 function barTone(lane: "Tasks" | "Events", status: string): string {
+  // Status colors consume the canonical semantic tokens so theme switches
+  // (including bermuda-triangle's monochrome accents) flow through to the
+  // Gantt visualization. SVG `fill`/`stroke` accept `var()`.
   if (lane === "Events") {
-    if (status === "live") return "#22c55e";
-    if (status === "completed") return "#94a3b8";
-    if (status === "cancelled") return "#ef4444";
+    if (status === "live") return "var(--color-success)";
+    if (status === "completed") return "var(--text-muted)";
+    if (status === "cancelled") return "var(--color-error)";
     return "var(--org-primary)";
   }
-  if (status === "done") return "#22c55e";
-  if (status === "blocked") return "#ef4444";
+  if (status === "done") return "var(--color-success)";
+  if (status === "blocked") return "var(--color-error)";
   if (status === "in_progress") return "var(--org-primary)";
-  if (status === "review") return "#f59e0b";
-  return "#94a3b8";
+  if (status === "review") return "var(--color-warning)";
+  return "var(--text-muted)";
 }
 
 function fmtRange(start: string, end: string): string {

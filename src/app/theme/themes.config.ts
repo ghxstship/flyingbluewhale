@@ -4,6 +4,7 @@
  */
 
 export type ThemeSlug =
+  | "bermuda-triangle"
   | "glass"
   | "brutal"
   | "bento"
@@ -25,6 +26,13 @@ export interface ThemeRegistryEntry {
 }
 
 export const THEMES: Record<ThemeSlug, ThemeRegistryEntry> = {
+  "bermuda-triangle": {
+    slug: "bermuda-triangle",
+    label: "Bermuda Triangle",
+    family: "light",
+    essence: "Contemporary minimal pop art. Monochrome, structural, deliberate. Where competing aesthetics disappear.",
+    swatchColor: "#0a0a0a",
+  },
   glass: {
     slug: "glass",
     label: "Liquid Glass",
@@ -89,10 +97,14 @@ export function isValidThemeSlug(s: unknown): s is ThemeSlug {
   return typeof s === "string" && (THEME_SLUGS as string[]).includes(s);
 }
 
-/** Color scheme for `color-scheme` CSS property — used by native form controls + scrollbars. */
+/** Color scheme for `color-scheme` CSS property — used by native form controls + scrollbars.
+ *  Defensive against unknown slugs (e.g., a stale cookie from a renamed
+ *  theme like the old iron-atelier → bermuda-triangle migration). Falls
+ *  back to the registry of the default theme. */
 export function colorSchemeFor(slug: ThemeSlug): "light" | "dark" {
-  const family = THEMES[slug].family;
-  if (family === "dark") return "dark";
+  const entry = THEMES[slug];
+  if (!entry) return "light"; // unknown / stale slug — safe default
+  if (entry.family === "dark") return "dark";
   if (slug === "glass") return "dark"; // glass is hybrid but tilts dark
   return "light";
 }

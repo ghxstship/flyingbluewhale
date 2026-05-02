@@ -12,6 +12,14 @@ import {
   Space_Grotesk,
   Geist,
   Geist_Mono,
+  // Bermuda Triangle typography — aligned with HVRBOR.CLUB brand stack:
+  // Anton (display), Bebas Neue (subdisplay), DM Sans (body/UI),
+  // Share Tech Mono (data / labels / eyebrows).
+  Anton,
+  Bebas_Neue,
+  Share_Tech, // retained for legacy CHROMA themes that opt in
+  Share_Tech_Mono,
+  DM_Sans,
 } from "next/font/google";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
@@ -57,6 +65,35 @@ const spaceGrot = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-gr
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
 
+// Bermuda Triangle — HVRBOR-aligned brand stack.
+// Anton (display) + Bebas Neue (subdisplay) + DM Sans (body) + Share Tech Mono (data).
+// Share Tech (regular) is retained as a CSS variable for legacy theme escapes;
+// active body type is DM Sans.
+const anton = Anton({ subsets: ["latin"], weight: "400", variable: "--font-anton", display: "swap" });
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-bebas-neue",
+  display: "swap",
+});
+const shareTech = Share_Tech({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-share-tech",
+  display: "swap",
+});
+const shareTechMono = Share_Tech_Mono({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-share-tech-mono",
+  display: "swap",
+});
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
@@ -94,7 +131,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0A0A0A",
+  // Audit T8 fix: was a single raw `#0A0A0A` that didn't reflect the actual
+  // theme paint. Bermuda Triangle (HVRBOR-aligned) light paint is the cream
+  // paper #F5F2EC; dark paint is near-black ink. Native mobile chrome (status
+  // bar, app switcher) follows the user's OS preference.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f2ec" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
@@ -112,7 +156,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   // Client head script reconciles with localStorage on mount.
   const cs = await cookies();
   const cookieTheme = cs.get(THEME_COOKIE_NAME)?.value;
-  const ssrTheme = isValidThemeSlug(cookieTheme) ? cookieTheme : "kinetic";
+  const ssrTheme = isValidThemeSlug(cookieTheme) ? cookieTheme : "bermuda-triangle";
   const ssrColorScheme = colorSchemeFor(ssrTheme);
 
   return (
@@ -121,7 +165,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       dir={dir}
       data-theme={ssrTheme}
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${inter.variable} ${mono.variable} ${serif.variable} ${fraunces.variable} ${instrument.variable} ${dmSerif.variable} ${bricolage.variable} ${spaceGrot.variable} ${geist.variable} ${geistMono.variable}`}
+      className={`h-full ${inter.variable} ${mono.variable} ${serif.variable} ${fraunces.variable} ${instrument.variable} ${dmSerif.variable} ${bricolage.variable} ${spaceGrot.variable} ${geist.variable} ${geistMono.variable} ${anton.variable} ${bebasNeue.variable} ${shareTech.variable} ${shareTechMono.variable} ${dmSans.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -164,7 +208,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               toast: "group toast",
               title: "font-medium",
               description: "text-[var(--text-secondary)]",
-              actionButton: "bg-[var(--org-primary)] text-white",
+              // Audit T7 fix: text-white was a raw value bypassing tokens.
+              // --org-on-primary is set per-platform overlay (white on
+              // pink/cyan/blue/red, black on yellow under bermuda-triangle).
+              actionButton: "bg-[var(--org-primary)] text-[var(--org-on-primary,white)]",
               cancelButton: "bg-[var(--surface-inset)]",
             },
           }}

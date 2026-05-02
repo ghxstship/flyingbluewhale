@@ -13,7 +13,7 @@ export const MODE_STORAGE_KEY = "chroma.mode";
 export const themeScript = `
 (function() {
   try {
-    var valid = ['glass','brutal','bento','kinetic','copilot','cyber','soft','earthy'];
+    var valid = ['bermuda-triangle','glass','brutal','bento','kinetic','copilot','cyber','soft','earthy'];
     var validModes = ['light','dark','system'];
 
     // Theme slug (palette)
@@ -25,7 +25,7 @@ export const themeScript = `
     var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     var picked = (fromCookie && valid.indexOf(fromCookie) > -1) ? fromCookie
                : (stored && valid.indexOf(stored) > -1) ? stored
-               : (systemPrefersDark ? 'cyber' : 'kinetic');
+               : (systemPrefersDark ? 'cyber' : 'bermuda-triangle');
     document.documentElement.setAttribute('data-theme', picked);
 
     // Color mode (light / dark / system → resolved)
@@ -42,7 +42,7 @@ export const themeScript = `
     document.documentElement.setAttribute('data-mode', resolvedMode);
     document.documentElement.style.colorScheme = resolvedMode;
   } catch (e) {
-    document.documentElement.setAttribute('data-theme', 'kinetic');
+    document.documentElement.setAttribute('data-theme', 'bermuda-triangle');
     document.documentElement.setAttribute('data-mode', 'light');
     document.documentElement.style.colorScheme = 'light';
   }

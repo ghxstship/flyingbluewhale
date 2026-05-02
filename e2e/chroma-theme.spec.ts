@@ -7,7 +7,17 @@ import { expect, test, type Page } from "playwright/test";
  * under /me/settings/appearance (authenticated route).
  */
 
-const SLUGS = ["glass", "brutal", "bento", "kinetic", "copilot", "cyber", "soft", "earthy"] as const;
+const SLUGS = [
+  "bermuda-triangle",
+  "glass",
+  "brutal",
+  "bento",
+  "kinetic",
+  "copilot",
+  "cyber",
+  "soft",
+  "earthy",
+] as const;
 const PASSWORD = "FlyingBlue!Test2026";
 
 async function dismissConsent(page: Page) {
@@ -39,9 +49,7 @@ async function login(page: Page) {
 test.describe("CHROMA BEACON", () => {
   test("data-theme is set on <html> before first paint (head script)", async ({ page }) => {
     await dismissConsent(page);
-    await page.context().addCookies([
-      { name: "chroma_theme", value: "cyber", domain: "localhost", path: "/" },
-    ]);
+    await page.context().addCookies([{ name: "chroma_theme", value: "cyber", domain: "localhost", path: "/" }]);
     await page.goto("/");
     const theme = await page.getAttribute("html", "data-theme");
     expect(theme).toBe("cyber");
@@ -51,25 +59,25 @@ test.describe("CHROMA BEACON", () => {
 
   test("invalid cookie falls back to default", async ({ page }) => {
     await dismissConsent(page);
-    await page.context().addCookies([
-      { name: "chroma_theme", value: "not-a-real-slug", domain: "localhost", path: "/" },
-    ]);
+    await page
+      .context()
+      .addCookies([{ name: "chroma_theme", value: "not-a-real-slug", domain: "localhost", path: "/" }]);
     await page.goto("/");
     const theme = await page.getAttribute("html", "data-theme");
-    expect(["kinetic", "cyber"]).toContain(theme);
+    expect(["bermuda-triangle", "cyber"]).toContain(theme);
   });
 
-  test("AppearanceGallery renders 8 radio cards for authed users", async ({ page }) => {
+  test("AppearanceGallery renders 9 radio cards for authed users", async ({ page }) => {
     await dismissConsent(page);
     await login(page);
     await page.goto("/me/settings/appearance");
     await expect(page.getByRole("heading", { name: "Appearance", level: 1 })).toBeVisible();
     // Scope to the AppearanceGallery's own radiogroup — the /me shell chrome
     // also renders the mode toggle (Light/System/Dark) as a radiogroup, so an
-    // unscoped `getByRole("radio")` now returns 11 (8 + 3) after M1-01 added
-    // proper radio semantics to the mode toggle.
+    // unscoped `getByRole("radio")` now returns 12 (9 + 3) after BERMUDA TRIANGLE
+    // joined the registry as the new default light theme.
     const radios = page.getByRole("radiogroup", { name: "Theme", exact: true }).getByRole("radio");
-    await expect(radios).toHaveCount(8);
+    await expect(radios).toHaveCount(9);
   });
 
   test("selecting a theme updates data-theme + persists across reload", async ({ page }) => {
@@ -89,9 +97,7 @@ test.describe("CHROMA BEACON", () => {
   for (const slug of SLUGS) {
     test(`theme ${slug}: every token resolves (no unset CSS vars)`, async ({ page }) => {
       await dismissConsent(page);
-      await page.context().addCookies([
-        { name: "chroma_theme", value: slug, domain: "localhost", path: "/" },
-      ]);
+      await page.context().addCookies([{ name: "chroma_theme", value: slug, domain: "localhost", path: "/" }]);
       await page.goto("/");
       const unset = await page.evaluate(() => {
         const style = getComputedStyle(document.documentElement);
@@ -133,6 +139,6 @@ test.describe("CHROMA BEACON", () => {
     await page.getByRole("button", { name: /match system/i }).click();
     // data-theme becomes whichever system prefers (likely "kinetic" in headed chromium default)
     const theme = await page.getAttribute("html", "data-theme");
-    expect(["kinetic", "cyber"]).toContain(theme);
+    expect(["bermuda-triangle", "cyber"]).toContain(theme);
   });
 });

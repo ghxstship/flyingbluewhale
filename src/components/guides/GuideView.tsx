@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Check } from "lucide-react";
 import type { GuideConfig, GuideSection } from "@/lib/guides/types";
 import { Alert } from "@/components/ui/Alert";
 
@@ -161,9 +162,16 @@ function SectionBody({ section }: { section: GuideSection }) {
                         {typeof v === "string" && v !== "yes" && v !== "no" ? (
                           <span className="font-mono text-xs">{v}</span>
                         ) : on ? (
-                          <span className="text-[var(--color-success)]">✓</span>
+                          <Check
+                            size={14}
+                            strokeWidth={3}
+                            className="inline-block text-[var(--color-success)]"
+                            aria-label="Allowed"
+                          />
                         ) : (
-                          <span className="text-[var(--text-muted)]">—</span>
+                          <span className="text-[var(--text-muted)]" aria-label="Not allowed">
+                            —
+                          </span>
                         )}
                       </td>
                     );
@@ -250,7 +258,15 @@ function SectionBody({ section }: { section: GuideSection }) {
             {section.entries.map((e, i) => (
               <tr key={i}>
                 <td>{e.item}</td>
-                <td>{e.required ? "✓" : "—"}</td>
+                <td>
+                  {e.required ? (
+                    <Check size={14} strokeWidth={3} className="inline-block" aria-label="Required" />
+                  ) : (
+                    <span className="text-[var(--text-muted)]" aria-label="Not required">
+                      —
+                    </span>
+                  )}
+                </td>
                 <td className="text-[var(--text-muted)]">{e.note ?? ""}</td>
               </tr>
             ))}

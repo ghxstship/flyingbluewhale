@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { AlertTriangle } from "lucide-react";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -91,7 +92,20 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                   <div className="min-w-0">
                     <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDay(l.log_date)}</div>
                     <p className="mt-1 text-sm text-[var(--text-primary)]">{l.summary}</p>
-                    {l.blockers && <p className="mt-1 text-xs text-[var(--color-warning)]">⚠ {l.blockers}</p>}
+                    {l.blockers && (
+                      <p className="mt-1 flex items-start gap-1.5 text-xs text-[var(--color-warning)]">
+                        <AlertTriangle
+                          size={12}
+                          strokeWidth={2.5}
+                          className="mt-0.5 flex-shrink-0"
+                          aria-hidden="true"
+                        />
+                        <span>
+                          <span className="sr-only">Blocker: </span>
+                          {l.blockers}
+                        </span>
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col items-end gap-1 font-mono text-[10px] text-[var(--text-muted)]">
                     {l.trades_onsite != null && <span>{l.trades_onsite} trades</span>}

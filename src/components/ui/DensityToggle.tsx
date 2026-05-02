@@ -1,6 +1,6 @@
 "use client";
 
-import { useTheme } from "@/app/theme/ThemeProvider";
+import { useThemeIfAvailable } from "@/app/theme/ThemeProvider";
 
 /**
  * Shell-wide density radio group — drives `data-density` on <html>. Three
@@ -11,7 +11,10 @@ import { useTheme } from "@/app/theme/ThemeProvider";
  * > Appearance page. Vocabulary matches Stripe Dashboard + Attio.
  */
 export function DensityToggle() {
-  const { density, setDensity } = useTheme();
+  // Audit B4: render nothing when no ThemeProvider is in the tree.
+  const ctx = useThemeIfAvailable();
+  if (!ctx) return null;
+  const { density, setDensity } = ctx;
   const modes = [
     { key: "compact" as const, label: "Compact", aria: "Use compact density" },
     { key: "comfortable" as const, label: "Default", aria: "Use comfortable density" },
@@ -33,7 +36,7 @@ export function DensityToggle() {
           onClick={() => setDensity(m.key)}
           className={`rounded-full px-3 py-1 text-xs font-medium transition ${
             density === m.key
-              ? "bg-[var(--background)] text-[var(--foreground)] elevation-1"
+              ? "elevation-1 bg-[var(--background)] text-[var(--foreground)]"
               : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
           }`}
         >

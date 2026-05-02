@@ -13,35 +13,47 @@
 @import "./themes/cyber.css";
 @import "./themes/soft.css";
 @import "./themes/earthy.css";
+@import "./themes/bermuda-triangle.css";
 
 /* Default theme when no [data-theme] attribute is present.
- * Mirrors the kinetic registry so pre-FOUC paint is sane.
+ * Mirrors bermuda-triangle (HVRBOR-aligned) — the canonical default per
+ * BERMUDA TRIANGLE PROTOCOL.
  *
  * Scoped to :not([data-theme]) so it ONLY applies when no theme is active.
  * Without the :not(), this block — which lives AFTER the theme @imports —
  * ties each theme's `:root` / `[data-theme]` selector on specificity and
- * wins on cascade order, silently overriding every non-kinetic theme's
+ * wins on cascade order, silently overriding every non-default theme's
  * tokens. Caught during auth-flow QA on the cyber theme where white
- * OAuth buttons were unreadable. */
+ * OAuth buttons were unreadable.
+ *
+ * Audit T9 fix: font-display / font-body / font-mono use the next/font
+ * CSS-variable indirection (var(--font-anton), etc.) so the actual loaded
+ * font reaches first paint, not the system fallback. */
 :root:not([data-theme]) {
-  --bg: #fafaf7;
-  --surface: #ffffff;
-  --surface-2: #f3f1ea;
-  --border: #e0ddd4;
-  --text: #1a1a1a;
-  --text-muted: #555555;
-  --text-subtle: #888888;
-  --accent: #cc3d10; /* AA-safe variant of kinetic's #ff4d1a */
-  --accent-contrast: #ffffff;
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 4px;
-  --border-width: 1px;
-  --shadow-elev: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-elev-hover: 0 6px 18px rgba(0, 0, 0, 0.10);
-  --font-display: 'Inter', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --bg: #f5f2ec;
+  --surface: #f5f2ec;
+  --surface-2: #ebe7dd;
+  --surface-inset: #efece4;
+  --border: #0a0a0a;
+  --text: #0a0a0a;
+  --text-muted: #4a4a48;
+  --text-subtle: #8a8a86;
+  --accent: #00e5ff;
+  --accent-solid: #00e5ff;
+  --accent-deep: #00bcd4;
+  --accent-contrast: #0a0a0a;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 3px;
+  --shadow-elev: 8px 8px 0 #0a0a0a;
+  --shadow-elev-hover: 12px 12px 0 #0a0a0a;
+  --shadow-elev-soft: 4px 4px 0 #0a0a0a;
+  --shadow-elev-accent: 8px 8px 0 #00e5ff;
+  --font-display: var(--font-anton), system-ui, sans-serif;
+  --font-subdisplay: var(--font-bebas-neue), system-ui, sans-serif;
+  --font-body: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-share-tech-mono), ui-monospace, monospace;
 }
 
 /* ═════ Brand overlays per shell — MUST load after CHROMA themes ═════
@@ -51,42 +63,91 @@
    data-platform) inherits the CHROMA theme's own accent. Audit M1. */
 
 [data-platform="atlvs"] {
-  --org-primary: #DC2626;
-  --org-secondary: #7F1D1D;
-  --org-accent: #EF4444;
+  --org-primary: #dc2626;
+  --org-secondary: #7f1d1d;
+  --org-accent: #ef4444;
 }
 
 [data-platform="compvss"] {
   /* amber-700 (#B45309) = 5.05:1 on white — passes WCAG AA.
      amber-600 (#D97706) = 3.18:1 — fails. */
-  --org-primary: #B45309;
-  --org-secondary: #78350F;
-  --org-accent: #D97706;
+  --org-primary: #b45309;
+  --org-secondary: #78350f;
+  --org-accent: #d97706;
 }
 
 [data-platform="gvteway"] {
-  --org-primary: #2563EB;
-  --org-secondary: #1E3A8A;
-  --org-accent: #3B82F6;
+  --org-primary: #2563eb;
+  --org-secondary: #1e3a8a;
+  --org-accent: #3b82f6;
 }
 
 /* Dark-family CHROMA themes flip the platform accents to brighter shades
    so contrast holds against the deep theme background. */
 [data-theme="cyber"] [data-platform="atlvs"],
 [data-theme="glass"] [data-platform="atlvs"] {
-  --org-primary: #EF4444;
-  --org-secondary: #FCA5A5;
-  --org-accent: #F87171;
+  --org-primary: #ef4444;
+  --org-secondary: #fca5a5;
+  --org-accent: #f87171;
 }
 [data-theme="cyber"] [data-platform="compvss"],
 [data-theme="glass"] [data-platform="compvss"] {
-  --org-primary: #FACC15;
-  --org-secondary: #FDE68A;
-  --org-accent: #FDE047;
+  --org-primary: #facc15;
+  --org-secondary: #fde68a;
+  --org-accent: #fde047;
 }
 [data-theme="cyber"] [data-platform="gvteway"],
 [data-theme="glass"] [data-platform="gvteway"] {
-  --org-primary: #60A5FA;
-  --org-secondary: #BFDBFE;
-  --org-accent: #93C5FD;
+  --org-primary: #60a5fa;
+  --org-secondary: #bfdbfe;
+  --org-accent: #93c5fd;
+}
+
+/* ═════ Bermuda Triangle per-platform overlays — pop-art accents ═════
+ * Canon: ATLVS pink, COMPVSS yellow, GVTEWAY cyan. AA-safe variants chosen
+ * so `.btn-primary` (white text on --org-primary) still passes WCAG AA on
+ * normal-size copy. Pop accents (`--org-accent`) keep the canonical vivid
+ * tone for badges, callouts, and hover surfaces.
+ *
+ * --org-on-primary is set per-platform so the button text colour matches
+ * what the accent demands (white on pink/cyan, black on yellow). The
+ * .btn-primary rule consumes this via var(--org-on-primary, var(--background)). */
+[data-theme="bermuda-triangle"] [data-platform="atlvs"] {
+  --org-primary: #c2185b; /* deep pink — 6.5:1 white text, AA */
+  --org-secondary: #88003e;
+  --org-accent: #ec407a; /* vivid pop accent for hover / chips */
+  --org-on-primary: #ffffff;
+}
+[data-theme="bermuda-triangle"] [data-platform="compvss"] {
+  --org-primary: #f9a825; /* yellow — paired with black text */
+  --org-secondary: #b45309;
+  --org-accent: #ffd54f;
+  --org-on-primary: #0a0a0a;
+}
+[data-theme="bermuda-triangle"] [data-platform="gvteway"] {
+  --org-primary: #00838f; /* cyan-teal — 5.0:1 white text, AA */
+  --org-secondary: #005662;
+  --org-accent: #00bcd4; /* vivid cyan for hover / chips */
+  --org-on-primary: #ffffff;
+}
+
+/* Bermuda Triangle dark-mode platform overlays — accents brighten so they
+   hold AA against the near-black bg with the same on-primary contrast values. */
+[data-theme="bermuda-triangle"][data-mode="dark"] [data-platform="atlvs"] {
+  --org-primary: #ec407a;
+  --org-secondary: #f48fb1;
+  --org-accent: #f06292;
+  --org-on-primary: #0a0a0a;
+}
+[data-theme="bermuda-triangle"][data-mode="dark"] [data-platform="compvss"] {
+  --org-primary: #ffd54f;
+  --org-secondary: #ffe082;
+  --org-accent: #ffeb3b;
+  --org-on-primary: #0a0a0a;
+}
+[data-theme="bermuda-triangle"][data-mode="dark"] [data-platform="gvteway"] {
+  --org-primary: #4dd0e1;
+  --org-secondary: #80deea;
+  --org-accent: #00e5ff;
+  --org-on-primary: #0a0a0a;
 }

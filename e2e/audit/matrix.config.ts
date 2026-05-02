@@ -7,6 +7,7 @@
  */
 
 export const THEMES = [
+  "bermuda-triangle",
   "glass",
   "brutal",
   "bento",

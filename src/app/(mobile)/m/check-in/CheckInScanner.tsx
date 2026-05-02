@@ -68,7 +68,7 @@ export function CheckInScanner() {
             haptic("success");
             const name = "holderName" in json.data ? (json.data.holderName ?? "Guest") : "Guest";
             announce(`Accepted: ${name}`, "polite");
-            toast.success(`✓ ${name}`);
+            toast.success(name);
           } else if (result === "duplicate") {
             haptic("warning");
             announce("Duplicate ticket — already scanned", "assertive");

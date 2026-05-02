@@ -2,13 +2,11 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Project, ProjectStatus } from "@/lib/supabase/types";
 
-export async function listProjects(orgId: string): Promise<Project[]> {
+export async function listProjects(orgId: string, opts?: { includeArchived?: boolean }): Promise<Project[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("org_id", orgId)
-    .order("updated_at", { ascending: false });
+  let q = supabase.from("projects").select("*").eq("org_id", orgId).order("updated_at", { ascending: false });
+  if (!opts?.includeArchived) q = q.is("deleted_at", null);
+  const { data, error } = await q;
   if (error) throw error;
   return data ?? [];
 }
@@ -20,6 +18,7 @@ export async function getProject(orgId: string, projectId: string): Promise<Proj
     .select("*")
     .eq("org_id", orgId)
     .eq("id", projectId)
+    .is("deleted_at", null)
     .maybeSingle();
   if (error) throw error;
   return data;
@@ -69,13 +68,14 @@ export async function updateProject(orgId: string, projectId: string, patch: Par
 
 export async function projectStats(orgId: string) {
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("projects")
-    .select("status")
-    .eq("org_id", orgId);
+  const { data } = await supabase.from("projects").select("status").eq("org_id", orgId).is("deleted_at", null);
   const rows = data ?? [];
   const by: Record<ProjectStatus, number> = {
-    draft: 0, active: 0, paused: 0, archived: 0, complete: 0,
+    draft: 0,
+    active: 0,
+    paused: 0,
+    archived: 0,
+    complete: 0,
   };
   for (const r of rows) by[r.status as ProjectStatus]++;
   return { total: rows.length, byStatus: by };

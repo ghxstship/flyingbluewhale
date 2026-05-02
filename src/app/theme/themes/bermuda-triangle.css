@@ -1,0 +1,135 @@
+/*
+ * CHROMA BEACON — bermuda-triangle theme
+ * Family: light (with dark-mode override)
+ * Essence: HVRBOR-aligned brand canon. Cream "paper" base, ink line, cyan
+ *          electric accent. Brutalist offset shadows that read as drop-shadow
+ *          structure (NOT soft elevation). Three-pixel borders. Anton display,
+ *          Bebas Neue subdisplay, DM Sans body, Share Tech Mono for data /
+ *          eyebrows / labels.
+ *
+ *          Brand: BERMUDA TRIANGLE — the void between L0ST 1SLAND ports
+ *          where competing aesthetics disappear. Pairs with HVRBOR.CLUB
+ *          (the standalone microsite) — same materials, different posture:
+ *          BT is the chart, HVRBOR is the boat that sails through it.
+ *
+ * Canon: see BERMUDA TRIANGLE PROTOCOL. Hard rules:
+ *   - Cream paper bg (#F5F2EC). Pure-white not used.
+ *   - Three-pixel deliberate borders (--border-width = 3px).
+ *   - Sharp corners (--radius-* = 0).
+ *   - Brutal offset shadows (--shadow-elev: 8px 8px 0 ink). NOT soft elevation.
+ *   - Display = Anton; Subdisplay = Bebas Neue; Body = DM Sans;
+ *     Mono / data = Share Tech Mono.
+ *   - Accent = cyan #00E5FF (HVRBOR brand). Per-platform overlays still
+ *     paint ATLVS pink, COMPVSS yellow, GVTEWAY teal-cyan when shells
+ *     declare data-platform.
+ */
+
+[data-theme="bermuda-triangle"] {
+  /* Core paint — HVRBOR canonical palette */
+  --bg: #f5f2ec; /* paper — warm cream */
+  --surface: #f5f2ec;
+  --surface-2: #ebe7dd; /* deeper cream — recessed */
+  --surface-inset: #efece4; /* inset, half-step from paper */
+  --border: #0a0a0a; /* ink — 3px structural */
+  --text: #0a0a0a;
+  --text-muted: #4a4a48; /* darker than HVRBOR muted #8A8A86 — AAA on cream */
+  --text-subtle: #8a8a86; /* HVRBOR canonical muted */
+  --accent: #00e5ff; /* HVRBOR cyan — site-level accent */
+  --accent-solid: #00e5ff;
+  --accent-deep: #00bcd4; /* HVRBOR cyan-deep — hover / depth */
+  --accent-contrast: #0a0a0a; /* black text on cyan (WCAG-safe pairing) */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 3px; /* HVRBOR border-hard */
+
+  /* Brutalist offset shadows — drop-shadow structure, not soft elevation.
+     Direction (right + down) and weight match HVRBOR.CLUB. */
+  --shadow-elev: 8px 8px 0 #0a0a0a;
+  --shadow-elev-hover: 12px 12px 0 #0a0a0a;
+  --shadow-elev-soft: 4px 4px 0 #0a0a0a;
+  --shadow-elev-accent: 8px 8px 0 #00e5ff;
+  --shadow-elev-accent-hover: 12px 12px 0 #00e5ff;
+  --shadow-press: 2px 2px 0 #0a0a0a;
+
+  /* Focus ring — bumped to 2px so it reads against the 3px border without
+     drowning. Color stays the org-primary so per-platform overlays (which
+     change --org-primary to pink/yellow/teal) flow through. */
+  --ring-width: 2px;
+  --ring-color: var(--org-primary);
+
+  /* Glass / blur muted — bermuda triangle reads through hard edges. */
+  --glass-blur: blur(6px) saturate(1.05);
+
+  /* Named neutrals — mirror HVRBOR's tailwind palette names so anyone
+     porting a component from the HVRBOR microsite finds the same tokens. */
+  --color-ink: #0a0a0a;
+  --color-paper: #f5f2ec;
+  --color-fog: #1a1a1a;
+  --color-dust: #2a2a28;
+  --color-line: #333333;
+  --color-muted: #8a8a86;
+
+  /* Typography — HVRBOR stack. */
+  --font-display: var(--font-anton), system-ui, sans-serif;
+  --font-subdisplay: var(--font-bebas-neue), system-ui, sans-serif;
+  --font-body: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-share-tech-mono), ui-monospace, monospace;
+
+  /* Legacy alias contract — kept in lockstep so unmigrated consumers still
+     resolve. Mirrors the pattern used by every other CHROMA theme. The
+     base --org-primary is cyan so marketing surfaces (no data-platform)
+     paint cyan; per-platform overlay blocks below replace this for the
+     ATLVS / COMPVSS / GVTEWAY shells. */
+  --background: #f5f2ec;
+  --foreground: #0a0a0a;
+  --bg-secondary: #ebe7dd;
+  --bg-tertiary: #dfdacd;
+  --text-color: #0a0a0a;
+  --text-primary: #0a0a0a;
+  --text-secondary: #2a2a28; /* HVRBOR dust — AAA on cream */
+  --border-color: #0a0a0a;
+  --org-primary: #00e5ff;
+  --org-secondary: #00bcd4;
+  --org-accent: #00e5ff;
+  --org-on-primary: #0a0a0a; /* black text on cyan */
+}
+
+/* Dark-mode override — invert paper / ink. The cyan accent stays cyan in
+   both modes (it already passes contrast on near-black). Brutal shadow
+   offset flips white so it reads against the dark canvas. */
+[data-theme="bermuda-triangle"][data-mode="dark"] {
+  --bg: #0a0a0a; /* ink */
+  --surface: #0a0a0a;
+  --surface-2: #1a1a1a; /* fog */
+  --surface-inset: #141414;
+  --border: #f5f2ec; /* paper — 3px structural inverted */
+  --text: #f5f2ec;
+  --text-muted: #b8b5ad;
+  --text-subtle: #8a8a86;
+  --accent: #00e5ff;
+  --accent-solid: #00e5ff;
+  --accent-deep: #00bcd4;
+  --accent-contrast: #0a0a0a;
+
+  --shadow-elev: 8px 8px 0 #f5f2ec;
+  --shadow-elev-hover: 12px 12px 0 #f5f2ec;
+  --shadow-elev-soft: 4px 4px 0 #f5f2ec;
+  --shadow-elev-accent: 8px 8px 0 #00e5ff;
+  --shadow-elev-accent-hover: 12px 12px 0 #00e5ff;
+  --shadow-press: 2px 2px 0 #f5f2ec;
+
+  --background: #0a0a0a;
+  --foreground: #f5f2ec;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a28;
+  --text-color: #f5f2ec;
+  --text-primary: #f5f2ec;
+  --text-secondary: #ebe7dd;
+  --border-color: #f5f2ec;
+  --org-primary: #00e5ff;
+  --org-secondary: #00bcd4;
+  --org-accent: #00e5ff;
+  --org-on-primary: #0a0a0a;
+  color-scheme: dark;
+}

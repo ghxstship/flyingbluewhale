@@ -22,6 +22,8 @@ import {
   GripVertical,
   Filter,
   Layers,
+  Rows3,
+  Rows4,
 } from "lucide-react";
 import {
   DndContext,
@@ -789,18 +791,18 @@ function DensityToggle({
         aria-label="Comfortable density"
         aria-pressed={value === "comfortable"}
         onClick={() => onChange("comfortable")}
-        className={`px-2 py-1 text-xs ${value === "comfortable" ? "bg-[var(--surface-inset)]" : ""}`}
+        className={`flex items-center justify-center px-2 py-1 ${value === "comfortable" ? "bg-[var(--surface-inset)]" : ""}`}
       >
-        ☰
+        <Rows3 size={14} aria-hidden="true" strokeWidth={2.25} />
       </button>
       <button
         type="button"
         aria-label="Compact density"
         aria-pressed={value === "compact"}
         onClick={() => onChange("compact")}
-        className={`px-2 py-1 text-xs ${value === "compact" ? "bg-[var(--surface-inset)]" : ""}`}
+        className={`flex items-center justify-center px-2 py-1 ${value === "compact" ? "bg-[var(--surface-inset)]" : ""}`}
       >
-        ≡
+        <Rows4 size={14} aria-hidden="true" strokeWidth={2.25} />
       </button>
     </div>
   );

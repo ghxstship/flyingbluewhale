@@ -61,15 +61,15 @@ export function GateScanner() {
           if (result === "allow") {
             haptic("success");
             announce("Allow", "polite");
-            toast.success("✓ Allow");
+            toast.success("Allow");
           } else if (result === "warn") {
             haptic("warning");
             announce(`Warn: ${reason ?? "review"}`, "assertive");
-            toast.warning(`⚠ ${reason ?? "review"}`);
+            toast.warning(reason ?? "review");
           } else {
             haptic("error");
             announce(`Deny: ${reason ?? "denied"}`, "assertive");
-            toast.error(`✗ ${reason ?? "denied"}`);
+            toast.error(reason ?? "denied");
           }
           setLog((l) =>
             [

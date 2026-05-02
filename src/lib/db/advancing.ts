@@ -30,7 +30,7 @@ export function labelForType(t: DeliverableType): string {
 
 export async function listDeliverables(projectId: string, types?: DeliverableType[]): Promise<Deliverable[]> {
   const supabase = await createClient();
-  let q = supabase.from("deliverables").select("*").eq("project_id", projectId);
+  let q = supabase.from("deliverables").select("*").eq("project_id", projectId).is("deleted_at", null);
   if (types && types.length > 0) q = q.in("type", types);
   // Cap at 1000 deliverables per project view; the advancing UI paginates
   // beyond that anyway and unbounded scans risk Supabase's 60s timeout
@@ -42,12 +42,17 @@ export async function listDeliverables(projectId: string, types?: DeliverableTyp
 
 export async function projectIdFromSlug(slug: string): Promise<{ id: string; name: string; org_id: string } | null> {
   const supabase = await createClient();
-  const { data } = await supabase.from("projects").select("id,name,org_id").eq("slug", slug).maybeSingle();
+  const { data } = await supabase
+    .from("projects")
+    .select("id,name,org_id")
+    .eq("slug", slug)
+    .is("deleted_at", null)
+    .maybeSingle();
   return data as { id: string; name: string; org_id: string } | null;
 }
 
 export async function getDeliverable(id: string): Promise<Deliverable | null> {
   const supabase = await createClient();
-  const { data } = await supabase.from("deliverables").select("*").eq("id", id).maybeSingle();
+  const { data } = await supabase.from("deliverables").select("*").eq("id", id).is("deleted_at", null).maybeSingle();
   return (data ?? null) as Deliverable | null;
 }

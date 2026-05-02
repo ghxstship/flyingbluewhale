@@ -6,50 +6,93 @@ import { PhaseBlock } from "./PhaseBlock";
 function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
   if (m == null) return "";
   if (typeof m === "string") return m;
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: m.currency ?? currency, maximumFractionDigits: 0 }).format(m.cents / 100);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: m.currency ?? currency,
+    maximumFractionDigits: 0,
+  }).format(m.cents / 100);
 }
 
-export function ProposalBlockRenderer({ blocks, theme, currency = "USD" }: {
+export function ProposalBlockRenderer({
+  blocks,
+  theme,
+  currency = "USD",
+}: {
   blocks: ProposalBlock[];
   theme: { primary: string; secondary: string };
   currency?: string;
 }) {
   return (
     <>
-      {blocks.map((b, i) => <BlockSwitch key={i} block={b} theme={theme} currency={currency} />)}
+      {blocks.map((b, i) => (
+        <BlockSwitch key={i} block={b} theme={theme} currency={currency} />
+      ))}
     </>
   );
 }
 
-function BlockSwitch({ block, theme, currency }: { block: ProposalBlock; theme: { primary: string; secondary: string }; currency: string }) {
+function BlockSwitch({
+  block,
+  theme,
+  currency,
+}: {
+  block: ProposalBlock;
+  theme: { primary: string; secondary: string };
+  currency: string;
+}) {
   switch (block.type) {
-    case "hero": return <HeroBlock block={block} theme={theme} />;
-    case "section_eyebrow": return <EyebrowBlock block={block} theme={theme} />;
-    case "heading": return <HeadingBlock block={block} />;
-    case "prose": return <p className="prose-block mx-auto max-w-2xl text-base leading-relaxed">{block.body}</p>;
-    case "callout": return <CalloutBlock block={block} />;
-    case "overview_cards": return <OverviewCards block={block} theme={theme} />;
-    case "phase": return <PhaseBlock block={block} theme={theme} currency={currency} />;
-    case "journey": return <JourneyBlock block={block} theme={theme} />;
-    case "schedule_table": return <ScheduleTable block={block} />;
-    case "capabilities": return <CapabilitiesBlock block={block} />;
-    case "investment_table": return <InvestmentTable block={block} currency={currency} />;
-    case "total_block": return <TotalBlock block={block} currency={currency} />;
-    case "engagement_split": return <EngagementSplit block={block} theme={theme} />;
-    case "payment_method": return <PaymentMethodCard block={block} />;
-    case "equipment_manifest": return <EquipmentManifest block={block} />;
-    case "change_orders": return <ChangeOrders block={block} currency={currency} />;
-    case "exclusions": return <Exclusions block={block} />;
-    case "terms_grid": return <TermsGrid block={block} />;
-    case "legal_panel": return <LegalPanel block={block} />;
-    case "signature_block": return null; // signature is handled by a dedicated client component in the viewer
-    case "cta": return (
-      <div className="mx-auto my-6 max-w-2xl text-center">
-        <Link href={block.href} className={`btn ${block.variant === "secondary" ? "btn-secondary" : "btn-primary"}`}>{block.label}</Link>
-      </div>
-    );
-    case "spacer": return <div className={block.size === "lg" ? "h-16" : block.size === "sm" ? "h-4" : "h-10"} />;
-    case "custom": return <div className="prose mx-auto max-w-2xl" dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.body) }} />;
+    case "hero":
+      return <HeroBlock block={block} theme={theme} />;
+    case "section_eyebrow":
+      return <EyebrowBlock block={block} theme={theme} />;
+    case "heading":
+      return <HeadingBlock block={block} />;
+    case "prose":
+      return <p className="prose-block mx-auto max-w-2xl text-base leading-relaxed">{block.body}</p>;
+    case "callout":
+      return <CalloutBlock block={block} />;
+    case "overview_cards":
+      return <OverviewCards block={block} theme={theme} />;
+    case "phase":
+      return <PhaseBlock block={block} theme={theme} currency={currency} />;
+    case "journey":
+      return <JourneyBlock block={block} theme={theme} />;
+    case "schedule_table":
+      return <ScheduleTable block={block} />;
+    case "capabilities":
+      return <CapabilitiesBlock block={block} />;
+    case "investment_table":
+      return <InvestmentTable block={block} currency={currency} />;
+    case "total_block":
+      return <TotalBlock block={block} currency={currency} />;
+    case "engagement_split":
+      return <EngagementSplit block={block} theme={theme} />;
+    case "payment_method":
+      return <PaymentMethodCard block={block} />;
+    case "equipment_manifest":
+      return <EquipmentManifest block={block} />;
+    case "change_orders":
+      return <ChangeOrders block={block} currency={currency} />;
+    case "exclusions":
+      return <Exclusions block={block} />;
+    case "terms_grid":
+      return <TermsGrid block={block} />;
+    case "legal_panel":
+      return <LegalPanel block={block} />;
+    case "signature_block":
+      return null; // signature is handled by a dedicated client component in the viewer
+    case "cta":
+      return (
+        <div className="mx-auto my-6 max-w-2xl text-center">
+          <Link href={block.href} className={`btn ${block.variant === "secondary" ? "btn-secondary" : "btn-primary"}`}>
+            {block.label}
+          </Link>
+        </div>
+      );
+    case "spacer":
+      return <div className={block.size === "lg" ? "h-16" : block.size === "sm" ? "h-4" : "h-10"} />;
+    case "custom":
+      return <div className="prose mx-auto max-w-2xl" dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.body) }} />;
   }
 }
 
@@ -57,23 +100,30 @@ function accent(theme: { primary: string; secondary: string }, override?: string
   return override ?? theme.primary;
 }
 
-function HeroBlock({ block, theme }: { block: Extract<ProposalBlock, { type: "hero" }>; theme: { primary: string; secondary: string } }) {
+function HeroBlock({
+  block,
+  theme,
+}: {
+  block: Extract<ProposalBlock, { type: "hero" }>;
+  theme: { primary: string; secondary: string };
+}) {
   const a = accent(theme, block.accent);
   return (
     <section className="proposal-hero relative overflow-hidden border-b border-[var(--border-color)]">
-      <div className="absolute inset-y-0 left-0 w-1" style={{ background: `linear-gradient(180deg, ${theme.primary}, ${theme.secondary})` }} />
+      <div
+        className="absolute inset-y-0 left-0 w-1"
+        style={{ background: `linear-gradient(180deg, ${theme.primary}, ${theme.secondary})` }}
+      />
       <div className="mx-auto max-w-4xl px-8 py-20">
         {block.eyebrow && (
-          <div className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: a }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: a }}>
             {block.eyebrow}
           </div>
         )}
-        <h1 className="mt-4 font-serif text-5xl font-light tracking-tight text-balance sm:text-7xl" style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>
-          {block.title}
-        </h1>
+        <h1 className="font-display mt-4 text-5xl tracking-tight text-balance sm:text-7xl">{block.title}</h1>
         {block.subtitle && <p className="mt-4 text-lg text-[var(--text-secondary)]">{block.subtitle}</p>}
         {block.partners && block.partners.length > 0 && (
-          <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">
+          <div className="mt-6 flex items-center gap-3 text-xs font-semibold tracking-widest text-[var(--text-muted)] uppercase">
             {block.partners.map((p, i) => (
               <span key={i} className="flex items-center gap-3">
                 {i > 0 && <span className="opacity-40">×</span>}
@@ -86,7 +136,9 @@ function HeroBlock({ block, theme }: { block: Extract<ProposalBlock, { type: "he
           <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
             {block.meta.map((m, i) => (
               <div key={i}>
-                <div className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">{m.label}</div>
+                <div className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase">
+                  {m.label}
+                </div>
                 <div className="mt-1 font-mono text-sm">{m.value}</div>
               </div>
             ))}
@@ -98,42 +150,62 @@ function HeroBlock({ block, theme }: { block: Extract<ProposalBlock, { type: "he
   );
 }
 
-function EyebrowBlock({ block, theme }: { block: Extract<ProposalBlock, { type: "section_eyebrow" }>; theme: { primary: string; secondary: string } }) {
+function EyebrowBlock({
+  block,
+  theme,
+}: {
+  block: Extract<ProposalBlock, { type: "section_eyebrow" }>;
+  theme: { primary: string; secondary: string };
+}) {
   const a = accent(theme, block.accent);
   return (
     <div className="mx-auto mt-16 flex max-w-4xl items-center gap-3 px-8">
       <span className="block h-8 w-1" style={{ background: a }} />
-      <span className="text-xs font-semibold uppercase tracking-[0.25em]" style={{ color: a }}>{block.label}</span>
+      <span className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: a }}>
+        {block.label}
+      </span>
     </div>
   );
 }
 
 function HeadingBlock({ block }: { block: Extract<ProposalBlock, { type: "heading" }> }) {
-  const cls = block.level === 3
-    ? "mt-6 font-serif text-2xl tracking-tight"
-    : "mt-4 font-serif text-3xl tracking-tight sm:text-4xl";
+  const cls =
+    block.level === 3
+      ? "mt-6 font-serif text-2xl tracking-tight"
+      : "mt-4 font-serif text-3xl tracking-tight sm:text-4xl";
   return (
     <div className="mx-auto max-w-4xl px-8">
-      <h2 className={cls} style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>{block.text}</h2>
+      <h2 className={cls} style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>
+        {block.text}
+      </h2>
     </div>
   );
 }
 
 function CalloutBlock({ block }: { block: Extract<ProposalBlock, { type: "callout" }> }) {
   const kindClass =
-    block.kind === "red"  ? "border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10" :
-    block.kind === "gold" ? "border-[color:var(--color-warning)]/40 bg-[color:var(--color-warning)]/10" :
-    block.kind === "teal" ? "border-sky-500/30 bg-sky-500/10" :
-                            "border-pink-500/30 bg-pink-500/10";
+    block.kind === "red"
+      ? "border-[color:var(--color-error)]/40 bg-[color:var(--color-error)]/10"
+      : block.kind === "gold"
+        ? "border-[color:var(--color-warning)]/40 bg-[color:var(--color-warning)]/10"
+        : block.kind === "teal"
+          ? "border-sky-500/30 bg-sky-500/10"
+          : "border-pink-500/30 bg-pink-500/10";
   return (
     <div className={`mx-auto my-4 max-w-2xl rounded-lg border p-4 ${kindClass}`}>
-      {block.title && <div className="text-xs font-semibold uppercase tracking-widest">{block.title}</div>}
+      {block.title && <div className="text-xs font-semibold tracking-widest uppercase">{block.title}</div>}
       <div className="mt-1 text-sm whitespace-pre-wrap">{block.body}</div>
     </div>
   );
 }
 
-function OverviewCards({ block, theme }: { block: Extract<ProposalBlock, { type: "overview_cards" }>; theme: { primary: string; secondary: string } }) {
+function OverviewCards({
+  block,
+  theme,
+}: {
+  block: Extract<ProposalBlock, { type: "overview_cards" }>;
+  theme: { primary: string; secondary: string };
+}) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-6">
       <div className="grid gap-3 md:grid-cols-3">
@@ -142,12 +214,19 @@ function OverviewCards({ block, theme }: { block: Extract<ProposalBlock, { type:
           return (
             <div key={i} className="surface relative overflow-hidden p-5 pl-6">
               <span className="absolute inset-y-0 left-0 w-1" style={{ background: a }} />
-              {c.tag && <div className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: a }}>{c.tag}</div>}
-              <h3 className="mt-2 font-serif text-xl" style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>{c.title}</h3>
+              {c.tag && (
+                <div className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: a }}>
+                  {c.tag}
+                </div>
+              )}
+              <h3 className="font-subdisplay mt-2 text-xl tracking-wide">{c.title}</h3>
               <dl className="mt-3 space-y-1 text-xs">
                 {c.details.map((d, j) => (
-                  <div key={j} className="flex justify-between gap-4 border-b border-dashed border-[var(--border-color)] py-1">
-                    <dt className="font-semibold uppercase tracking-wider text-[var(--text-muted)]">{d.label}</dt>
+                  <div
+                    key={j}
+                    className="flex justify-between gap-4 border-b border-dashed border-[var(--border-color)] py-1"
+                  >
+                    <dt className="font-semibold tracking-wider text-[var(--text-muted)] uppercase">{d.label}</dt>
                     <dd className="text-right font-mono">{d.value}</dd>
                   </div>
                 ))}
@@ -160,14 +239,22 @@ function OverviewCards({ block, theme }: { block: Extract<ProposalBlock, { type:
   );
 }
 
-function JourneyBlock({ block, theme }: { block: Extract<ProposalBlock, { type: "journey" }>; theme: { primary: string; secondary: string } }) {
+function JourneyBlock({
+  block,
+  theme,
+}: {
+  block: Extract<ProposalBlock, { type: "journey" }>;
+  theme: { primary: string; secondary: string };
+}) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {block.steps.map((s) => (
           <div key={s.num} className="surface relative p-4">
-            <div className="absolute right-4 top-4 font-mono text-xs text-[var(--text-muted)]">{s.status ?? ""}</div>
-            <div className="font-mono text-4xl font-light tracking-tight" style={{ color: theme.primary }}>{String(s.num).padStart(2, "0")}</div>
+            <div className="absolute top-4 right-4 font-mono text-xs text-[var(--text-muted)]">{s.status ?? ""}</div>
+            <div className="font-mono text-4xl font-light tracking-tight" style={{ color: theme.primary }}>
+              {String(s.num).padStart(2, "0")}
+            </div>
             <div className="mt-2 text-sm font-semibold">{s.title}</div>
             {s.description && <div className="mt-1 text-xs text-[var(--text-muted)]">{s.description}</div>}
             {s.date && <div className="mt-2 font-mono text-xs">{s.date}</div>}
@@ -183,10 +270,20 @@ function ScheduleTable({ block }: { block: Extract<ProposalBlock, { type: "sched
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface overflow-x-auto">
         <table className="data-table">
-          <thead><tr><th>Phase</th><th>Milestone</th><th>Date</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Phase</th>
+              <th>Milestone</th>
+              <th>Date</th>
+            </tr>
+          </thead>
           <tbody>
             {block.rows.map((r, i) => (
-              <tr key={i}><td>{r.phase}</td><td>{r.milestone}</td><td className="font-mono text-xs">{r.date}</td></tr>
+              <tr key={i}>
+                <td>{r.phase}</td>
+                <td>{r.milestone}</td>
+                <td className="font-mono text-xs">{r.date}</td>
+              </tr>
             ))}
           </tbody>
         </table>
@@ -210,7 +307,13 @@ function CapabilitiesBlock({ block }: { block: Extract<ProposalBlock, { type: "c
   );
 }
 
-function InvestmentTable({ block, currency }: { block: Extract<ProposalBlock, { type: "investment_table" }>; currency: string }) {
+function InvestmentTable({
+  block,
+  currency,
+}: {
+  block: Extract<ProposalBlock, { type: "investment_table" }>;
+  currency: string;
+}) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface overflow-x-auto">
@@ -218,14 +321,23 @@ function InvestmentTable({ block, currency }: { block: Extract<ProposalBlock, { 
           <tbody>
             {block.groups.map((g, gi) => (
               <>
-                <tr key={`h-${gi}`}><td colSpan={2} className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">{g.label}</td></tr>
+                <tr key={`h-${gi}`}>
+                  <td
+                    colSpan={2}
+                    className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase"
+                  >
+                    {g.label}
+                  </td>
+                </tr>
                 {g.items.map((it, ii) => (
                   <tr key={`i-${gi}-${ii}`}>
                     <td>
                       <div className="text-sm font-medium">{it.name}</div>
                       {it.desc && <div className="text-xs text-[var(--text-muted)]">{it.desc}</div>}
                     </td>
-                    <td className="w-36 text-right font-serif text-lg" style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>{fmtMoney(it.price, currency)}</td>
+                    <td className="font-display w-36 text-right text-lg tabular-nums">
+                      {fmtMoney(it.price, currency)}
+                    </td>
                   </tr>
                 ))}
               </>
@@ -233,8 +345,8 @@ function InvestmentTable({ block, currency }: { block: Extract<ProposalBlock, { 
           </tbody>
           <tfoot>
             <tr>
-              <td className="text-sm font-semibold uppercase tracking-wider">Total investment</td>
-              <td className="text-right font-serif text-2xl" style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>{fmtMoney(block.total, currency)}</td>
+              <td className="text-sm font-semibold tracking-wider uppercase">Total investment</td>
+              <td className="font-display text-right text-2xl tabular-nums">{fmtMoney(block.total, currency)}</td>
             </tr>
           </tfoot>
         </table>
@@ -248,29 +360,44 @@ function TotalBlock({ block, currency }: { block: Extract<ProposalBlock, { type:
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface-raised rounded-2xl p-8 text-center">
-        <div className="text-xs font-semibold uppercase tracking-widest" style={{ color: block.accent ?? "var(--org-primary)" }}>{block.label}</div>
-        <div className="mt-4 font-serif text-6xl font-light tracking-tight" style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>{fmtMoney(block.amount, currency)}</div>
+        <div
+          className="text-xs font-semibold tracking-widest uppercase"
+          style={{ color: block.accent ?? "var(--org-primary)" }}
+        >
+          {block.label}
+        </div>
+        <div className="font-display mt-4 text-6xl tracking-tight tabular-nums">{fmtMoney(block.amount, currency)}</div>
         {block.note && <div className="mt-3 text-xs text-[var(--text-muted)]">{block.note}</div>}
       </div>
     </section>
   );
 }
 
-function EngagementSplit({ block, theme }: { block: Extract<ProposalBlock, { type: "engagement_split" }>; theme: { primary: string; secondary: string } }) {
+function EngagementSplit({
+  block,
+  theme,
+}: {
+  block: Extract<ProposalBlock, { type: "engagement_split" }>;
+  theme: { primary: string; secondary: string };
+}) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="surface-raised relative overflow-hidden p-6">
           <span className="absolute inset-x-0 top-0 h-1" style={{ background: theme.primary }} />
-          <div className="text-[10px] font-semibold uppercase tracking-widest">Engagement deposit</div>
-          <div className="mt-3 font-serif text-4xl" style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>{block.depositPercent}%</div>
-          <div className="mt-1 text-xs text-[var(--text-muted)]">{block.depositLabel ?? "Due on contract signature"}</div>
+          <div className="text-[10px] font-semibold tracking-widest uppercase">Engagement deposit</div>
+          <div className="font-display mt-3 text-4xl tabular-nums">{block.depositPercent}%</div>
+          <div className="mt-1 text-xs text-[var(--text-muted)]">
+            {block.depositLabel ?? "Due on contract signature"}
+          </div>
         </div>
         <div className="surface-raised relative overflow-hidden p-6">
           <span className="absolute inset-x-0 top-0 h-1" style={{ background: theme.secondary }} />
-          <div className="text-[10px] font-semibold uppercase tracking-widest">Balance</div>
-          <div className="mt-3 font-serif text-4xl" style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>{block.balancePercent}%</div>
-          <div className="mt-1 text-xs text-[var(--text-muted)]">{block.balanceLabel ?? "Due 30 days before event"}</div>
+          <div className="text-[10px] font-semibold tracking-widest uppercase">Balance</div>
+          <div className="font-display mt-3 text-4xl tabular-nums">{block.balancePercent}%</div>
+          <div className="mt-1 text-xs text-[var(--text-muted)]">
+            {block.balanceLabel ?? "Due 30 days before event"}
+          </div>
         </div>
       </div>
     </section>
@@ -281,11 +408,16 @@ function PaymentMethodCard({ block }: { block: Extract<ProposalBlock, { type: "p
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface p-5">
-        <div className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">Payment method · {block.method.toUpperCase()}</div>
-        <dl className="mt-3 grid gap-2 sm:grid-cols-2 text-xs">
+        <div className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase">
+          Payment method · {block.method.toUpperCase()}
+        </div>
+        <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
           {Object.entries(block.details).map(([k, v]) => (
-            <div key={k} className="flex justify-between gap-4 border-b border-dashed border-[var(--border-color)] py-1">
-              <dt className="font-semibold uppercase tracking-wider text-[var(--text-muted)]">{k}</dt>
+            <div
+              key={k}
+              className="flex justify-between gap-4 border-b border-dashed border-[var(--border-color)] py-1"
+            >
+              <dt className="font-semibold tracking-wider text-[var(--text-muted)] uppercase">{k}</dt>
               <dd className="text-right font-mono">{v}</dd>
             </div>
           ))}
@@ -299,14 +431,28 @@ function EquipmentManifest({ block }: { block: Extract<ProposalBlock, { type: "e
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface p-5">
-        <div className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">Technical production package</div>
-        <ul className="mt-3 grid gap-1 sm:grid-cols-2 text-sm">
+        <div className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase">
+          Technical production package
+        </div>
+        <ul className="mt-3 grid gap-1 text-sm sm:grid-cols-2">
           {block.items.map((it, i) => (
-            <li key={i} className="flex items-center justify-between gap-3 border-b border-dashed border-[var(--border-color)] py-1.5">
+            <li
+              key={i}
+              className="flex items-center justify-between gap-3 border-b border-dashed border-[var(--border-color)] py-1.5"
+            >
               <span>
-                {it.url
-                  ? <a href={it.url} target="_blank" rel="noreferrer" className="text-[var(--org-primary)] hover:underline">{it.name}</a>
-                  : <span>{it.name}</span>}
+                {it.url ? (
+                  <a
+                    href={it.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[var(--org-primary)] hover:underline"
+                  >
+                    {it.name}
+                  </a>
+                ) : (
+                  <span>{it.name}</span>
+                )}
                 {it.vendor && <span className="ml-2 font-mono text-[10px] text-[var(--text-muted)]">{it.vendor}</span>}
               </span>
               <span className="font-mono text-xs text-[var(--text-muted)]">×{it.quantity}</span>
@@ -318,7 +464,13 @@ function EquipmentManifest({ block }: { block: Extract<ProposalBlock, { type: "e
   );
 }
 
-function ChangeOrders({ block, currency }: { block: Extract<ProposalBlock, { type: "change_orders" }>; currency: string }) {
+function ChangeOrders({
+  block,
+  currency,
+}: {
+  block: Extract<ProposalBlock, { type: "change_orders" }>;
+  currency: string;
+}) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="grid gap-3 md:grid-cols-2">
@@ -326,7 +478,9 @@ function ChangeOrders({ block, currency }: { block: Extract<ProposalBlock, { typ
           <div key={i} className="rounded-lg border border-dashed border-[var(--border-color)] p-4">
             <div className="flex items-center justify-between">
               <div className="text-sm font-semibold">{it.name}</div>
-              <span className="rounded-full bg-[var(--bg-secondary)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">Available</span>
+              <span className="rounded-full bg-[var(--bg-secondary)] px-2 py-0.5 text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase">
+                Available
+              </span>
             </div>
             <div className="mt-1 text-xs text-[var(--text-secondary)]">{it.description}</div>
             {it.price != null && <div className="mt-2 font-mono text-xs">{fmtMoney(it.price, currency)}</div>}
@@ -358,7 +512,9 @@ function TermsGrid({ block }: { block: Extract<ProposalBlock, { type: "terms_gri
         {block.items.map((it, i) => (
           <div key={i} className="surface p-5">
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[var(--bg-secondary)] px-2 py-0.5 font-mono text-[10px] text-[var(--text-muted)]">{it.section}</span>
+              <span className="rounded-full bg-[var(--bg-secondary)] px-2 py-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                {it.section}
+              </span>
               <span className="text-sm font-semibold">{it.title}</span>
             </div>
             <p className="mt-2 text-xs text-[var(--text-secondary)]">{it.body}</p>
@@ -376,7 +532,7 @@ function LegalPanel({ block }: { block: Extract<ProposalBlock, { type: "legal_pa
         {block.panels.map((p) => (
           <details key={p.slug} className="surface p-4">
             <summary className="cursor-pointer text-sm font-semibold">{p.label}</summary>
-            <div className="mt-3 whitespace-pre-wrap text-xs text-[var(--text-secondary)]">{p.body}</div>
+            <div className="mt-3 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{p.body}</div>
           </details>
         ))}
       </div>

@@ -80,7 +80,7 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
           <TextInput
             name="signature"
             defaultValue={defaultName}
-            className="input-base focus-ring font-serif text-2xl italic"
+            className="input-base focus-ring font-subdisplay text-2xl tracking-wide"
           />
         </FormField>
       </FormShell>

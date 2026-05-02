@@ -44,13 +44,20 @@
   --border-width: 3px; /* HVRBOR border-hard */
 
   /* Brutalist offset shadows — drop-shadow structure, not soft elevation.
-     Direction (right + down) and weight match HVRBOR.CLUB. */
+     Direction (right + down) and weight match HVRBOR.CLUB. The tiered
+     `--shadow-{1..4}` scale lets `.elevation-{1..4}` form a real
+     progression (2px subtle press → 12px floating popover) instead of
+     collapsing to a single brutal 8px on every elevated element. */
   --shadow-elev: 8px 8px 0 #0a0a0a;
   --shadow-elev-hover: 12px 12px 0 #0a0a0a;
   --shadow-elev-soft: 4px 4px 0 #0a0a0a;
   --shadow-elev-accent: 8px 8px 0 #00e5ff;
   --shadow-elev-accent-hover: 12px 12px 0 #00e5ff;
   --shadow-press: 2px 2px 0 #0a0a0a;
+  --shadow-1: 2px 2px 0 #0a0a0a;
+  --shadow-2: 4px 4px 0 #0a0a0a;
+  --shadow-3: 8px 8px 0 #0a0a0a;
+  --shadow-4: 12px 12px 0 #0a0a0a;
 
   /* Focus ring — bumped to 2px so it reads against the 3px border without
      drowning. Color stays the org-primary so per-platform overlays (which
@@ -118,6 +125,10 @@
   --shadow-elev-accent: 8px 8px 0 #00e5ff;
   --shadow-elev-accent-hover: 12px 12px 0 #00e5ff;
   --shadow-press: 2px 2px 0 #f5f2ec;
+  --shadow-1: 2px 2px 0 #f5f2ec;
+  --shadow-2: 4px 4px 0 #f5f2ec;
+  --shadow-3: 8px 8px 0 #f5f2ec;
+  --shadow-4: 12px 12px 0 #f5f2ec;
 
   --background: #0a0a0a;
   --foreground: #f5f2ec;

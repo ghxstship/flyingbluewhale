@@ -110,6 +110,23 @@
      theme's identity. */
   --overlay-backdrop: rgba(0, 0, 0, 0.4);
   --overlay-backdrop-strong: rgba(0, 0, 0, 0.6);
+
+  /* ─── Elevation tier scale ─────────────────────────────────────────
+     Audit DS-S1 fix: `.elevation-{0..4}` previously collapsed to two
+     distinct shadow values (`--shadow-elev` and `--shadow-elev-hover`),
+     making five named tiers a degenerate scale. The HVRBOR canon needs
+     a real progression so small chips don't get the same 8px brutal
+     drop as full cards (which produces the visible black-blob overflow
+     on rounded-full pills).
+
+     Fallback chain: themes that don't override these inherit the legacy
+     `--shadow-elev` / `--shadow-elev-hover` so cyber's neon glow, soft's
+     spring shadow, and earthy's muted lift still render. Bermuda Triangle
+     declares explicit tier values for the brutal progression (2/4/8/12). */
+  --shadow-1: var(--shadow-press, var(--shadow-elev));
+  --shadow-2: var(--shadow-elev-soft, var(--shadow-elev));
+  --shadow-3: var(--shadow-elev);
+  --shadow-4: var(--shadow-elev-hover);
   /* Skip-link tier — sits above every other z-index so the keyboard
      accessibility affordance is never obscured by modals, palettes, or
      toasts. Audit T3 fix: replaces the 9999 magic number. */

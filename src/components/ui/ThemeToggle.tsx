@@ -48,7 +48,7 @@ export function ThemeToggle() {
               onClick={() => setMode(key)}
               className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition ${
                 isActive
-                  ? "elevation-1 bg-[var(--background)] text-[var(--foreground)]"
+                  ? "bg-[var(--background)] text-[var(--foreground)]"
                   : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
               }`}
             >

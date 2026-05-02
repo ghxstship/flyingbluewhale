@@ -99,14 +99,14 @@ export function SignatureField({
           <button
             type="button"
             onClick={() => setMode("typed")}
-            className={`rounded-full px-3 py-1 ${mode === "typed" ? "elevation-1 bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded-full px-3 py-1 ${mode === "typed" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
           >
             Type
           </button>
           <button
             type="button"
             onClick={() => setMode("canvas")}
-            className={`rounded-full px-3 py-1 ${mode === "canvas" ? "elevation-1 bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded-full px-3 py-1 ${mode === "canvas" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
           >
             Draw
           </button>

@@ -92,13 +92,13 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
       <Popover.Trigger asChild>
         <button
           type="button"
-          className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-1"
+          className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-1 focus-visible:outline-none"
           aria-label={unread > 0 ? `Notifications — ${unread} unread` : "Notifications"}
         >
           <Bell size={16} aria-hidden="true" />
           {unread > 0 ? (
             <span
-              className="absolute -right-0.5 -top-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[color:var(--color-error)] px-1 text-[10px] font-semibold text-white"
+              className="absolute -top-0.5 -right-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[color:var(--color-error)] px-1 text-[10px] font-semibold text-white"
               aria-hidden="true"
             >
               {unread > 99 ? "99+" : unread}
@@ -110,10 +110,10 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
         <Popover.Content
           align="end"
           sideOffset={8}
-          className="surface-raised elevation-2 z-50 w-[360px] rounded-lg border border-[var(--border-color)] text-sm"
+          className="surface-raised z-50 w-[360px] rounded-lg border border-[var(--border-color)] text-sm"
         >
-          <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border-color)]">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+          <div className="flex items-center justify-between border-b border-[var(--border-color)] px-3 py-2">
+            <span className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
               Notifications
             </span>
             <button
@@ -129,9 +129,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
           </div>
           <div className="max-h-[420px] overflow-y-auto p-1">
             {items.length === 0 ? (
-              <p className="px-3 py-6 text-center text-xs text-[var(--text-muted)]">
-                You&apos;re all caught up.
-              </p>
+              <p className="px-3 py-6 text-center text-xs text-[var(--text-muted)]">You&apos;re all caught up.</p>
             ) : (
               items.map((n) => {
                 const isUnread = !n.read_at;
@@ -154,10 +152,8 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
                       >
                         {n.title}
                       </p>
-                      {n.body ? (
-                        <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-muted)]">{n.body}</p>
-                      ) : null}
-                      <p className="mt-1 text-[10px] font-mono text-[var(--text-muted)]">
+                      {n.body ? <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-muted)]">{n.body}</p> : null}
+                      <p className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
                         {new Date(n.created_at).toLocaleString()}
                       </p>
                     </div>

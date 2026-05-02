@@ -62,9 +62,7 @@ export function PhaseBlock({
               {block.tag}
             </div>
           )}
-          <div className="text-lg font-semibold" style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}>
-            {block.name}
-          </div>
+          <div className="font-subdisplay text-xl tracking-wide">{block.name}</div>
         </div>
         <span
           className="font-mono text-2xl transition-transform"
@@ -95,12 +93,7 @@ export function PhaseBlock({
                       {c.desc && <div className="text-xs text-[var(--text-muted)]">{c.desc}</div>}
                     </div>
                     {c.price != null && (
-                      <div
-                        className="font-serif text-base"
-                        style={{ fontFamily: "var(--font-serif), Cormorant Garamond, serif" }}
-                      >
-                        {fmtMoney(c.price, currency)}
-                      </div>
+                      <div className="font-display text-base tabular-nums">{fmtMoney(c.price, currency)}</div>
                     )}
                   </li>
                 ))}

@@ -25,8 +25,23 @@
   --color-error: #c62828;
   --color-info: #4a6fa5;
 
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-jetbrains-mono);
+  /* Audit DS-T1: --font-sans previously bound to Inter directly, so Tailwind
+   * `font-sans` resolved to Inter regardless of the active theme. Now points
+   * at --font-body so `font-sans` always tracks the active theme's body font
+   * (each theme overrides --font-body on its own [data-theme] selector;
+   * cascade beats the :root-tier declaration here).
+   *
+   * Audit DS-T2: register --font-display / --font-subdisplay / --font-body
+   * so Tailwind v4 generates `font-display`, `font-subdisplay`, `font-body`
+   * utility classes — replaces the inline-style and legacy `font-serif`
+   * escapes scattered across proposals + offer-letters. Defaults bind to
+   * the bermuda-triangle / HVRBOR brand stack (Anton + Bebas Neue + DM Sans);
+   * other themes override via their CSS files. */
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-share-tech-mono);
+  --font-display: var(--font-anton);
+  --font-subdisplay: var(--font-bebas-neue);
+  --font-body: var(--font-dm-sans);
 
   /* Audit T2 fix: breakpoints registered with Tailwind v4's `@theme` so
      `sm:` / `md:` / `lg:` / `xl:` / `2xl:` utilities resolve from a single
@@ -96,11 +111,11 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  /* Body copy follows the active CHROMA theme's `--font-body`. Falls through
-     to the next/font --font-sans (Inter) so themes that elect sans for body
-     (brutal, bento, cyber, glass, soft) resolve cleanly; serif body themes
-     (kinetic, copilot, earthy) land on their font-stack's Georgia fallback. */
-  font-family: var(--font-body, var(--font-sans, Inter, system-ui, sans-serif));
+  /* Body copy follows the active CHROMA theme's `--font-body`. Audit DS-T3:
+     fallback chain dropped the legacy `Inter` literal and now ends in
+     system-ui — themes that don't declare a body font get the OS sans rather
+     than the prior Inter-as-secret-default behavior. */
+  font-family: var(--font-body, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -113,7 +128,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-display, var(--font-body, var(--font-sans, Inter, system-ui, sans-serif)));
+  font-family: var(--font-display, var(--font-body, system-ui, sans-serif));
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -486,30 +501,34 @@ pre,
     outline-offset: 2px;
   }
 
-  /* ───── Elevation ───── */
-
-  /* Elevation scale — every level uses the active theme's `--shadow-elev` /
- * `--shadow-elev-hover` tokens so brutal's offset 6px 6px 0 #000 reads
- * correctly, cyber's neon glow reads correctly, and soft's spring shadow
- * reads correctly. `data-mode="dark"` overrides removed: each CHROMA
- * theme already owns its dark/light shadow. */
+  /* ───── Elevation ─────
+   * Five-tier progression. Each tier consumes its own token so the scale
+   * stays meaningful — small chips don't get the same brutal offset as
+   * full cards. Audit DS-S1 fix: previously elevation-1 / elevation-2 both
+   * mapped to --shadow-elev and elevation-3 / elevation-4 / elevation-float
+   * all mapped to --shadow-elev-hover, collapsing the scale to two values.
+   *
+   * Bermuda Triangle assigns concrete progressive brutal values
+   * (2/4/8/12px). Other CHROMA themes inherit a sensible fallback chain
+   * defined in primitives.css so cyber's neon glow, soft's spring shadow,
+   * and earthy's muted lift still render coherently. */
   .elevation-0 {
     box-shadow: none;
   }
   .elevation-1 {
-    box-shadow: var(--shadow-elev);
+    box-shadow: var(--shadow-1);
   }
   .elevation-2 {
-    box-shadow: var(--shadow-elev);
+    box-shadow: var(--shadow-2);
   }
   .elevation-3 {
-    box-shadow: var(--shadow-elev-hover);
+    box-shadow: var(--shadow-3);
   }
   .elevation-4 {
-    box-shadow: var(--shadow-elev-hover);
+    box-shadow: var(--shadow-4);
   }
   .elevation-float {
-    box-shadow: var(--shadow-elev-hover);
+    box-shadow: var(--shadow-4);
   }
 
   /* ───── Glass ───── */

@@ -82,9 +82,9 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
         <DropdownMenu.Content
           align="end"
           sideOffset={6}
-          className="surface-raised elevation-2 z-50 min-w-[11rem] rounded-lg border border-[var(--border-color)] p-1 text-sm"
+          className="surface-raised z-50 min-w-[11rem] rounded-lg border border-[var(--border-color)] p-1 text-sm"
         >
-          <DropdownMenu.Label className="px-2 pb-1 pt-0.5 text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
+          <DropdownMenu.Label className="px-2 pt-0.5 pb-1 text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
             Language
           </DropdownMenu.Label>
           <DropdownMenu.RadioGroup value={active} onValueChange={(v) => pick(v as Locale)}>
@@ -101,7 +101,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
                   </DropdownMenu.ItemIndicator>
                 </span>
                 <span>{LOCALE_LABELS[loc]}</span>
-                <span className="ml-auto text-xs uppercase tracking-wider text-[var(--text-muted)]">{loc}</span>
+                <span className="ml-auto text-xs tracking-wider text-[var(--text-muted)] uppercase">{loc}</span>
               </DropdownMenu.RadioItem>
             ))}
           </DropdownMenu.RadioGroup>

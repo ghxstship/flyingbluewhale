@@ -87,9 +87,7 @@ export function Combobox({
           aria-label={placeholder}
           className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
-          <span className={selectedLabel ? "" : "text-[var(--text-muted)]"}>
-            {selectedLabel ?? placeholder}
-          </span>
+          <span className={selectedLabel ? "" : "text-[var(--text-muted)]"}>{selectedLabel ?? placeholder}</span>
           <ChevronsUpDown size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
         </button>
       </PopoverPrimitive.Trigger>
@@ -98,7 +96,7 @@ export function Combobox({
           id={listboxId}
           align="start"
           sideOffset={4}
-          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] shadow-lg"
+          className="elevation-3 z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]"
         >
           {/* shouldFilter=false when async, so cmdk doesn't strip server results */}
           <CommandPrimitive className="flex flex-col" shouldFilter={!optionsLoader}>
@@ -193,7 +191,7 @@ export function MultiCombobox({
           id={listboxId}
           align="start"
           sideOffset={4}
-          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] shadow-lg"
+          className="elevation-3 z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]"
         >
           <CommandPrimitive>
             <div className="border-b border-[var(--border-color)] px-3 py-2">

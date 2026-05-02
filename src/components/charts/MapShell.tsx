@@ -63,8 +63,7 @@ export function MapShell({
 
   // Auto-fit center: prefer first marker, then first route point, then NYC.
   const center: [number, number] =
-    initialCenter ??
-    (markers[0] ? [markers[0].lng, markers[0].lat] : routes[0]?.coords[0] ?? [-74.006, 40.7128]);
+    initialCenter ?? (markers[0] ? [markers[0].lng, markers[0].lat] : (routes[0]?.coords[0] ?? [-74.006, 40.7128]));
 
   // Init once.
   React.useEffect(() => {
@@ -96,7 +95,7 @@ export function MapShell({
       el.setAttribute("aria-label", m.label ?? "Map marker");
       el.style.cssText = `
         width: 14px; height: 14px; border-radius: 50%;
-        border: 2px solid white; box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+        border: 2px solid var(--background); box-shadow: var(--shadow-1);
         background: ${m.color ?? "var(--org-primary)"};
         cursor: pointer;
       `;

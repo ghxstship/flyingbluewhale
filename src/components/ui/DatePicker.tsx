@@ -77,7 +77,7 @@ export function DatePicker({
         <PopoverPrimitive.Content
           align="start"
           sideOffset={4}
-          className="z-50 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-3 shadow-lg"
+          className="elevation-3 z-50 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-3"
         >
           <Calendar_
             month={viewMonth}
@@ -344,7 +344,7 @@ export function RangeDatePicker({
         <PopoverPrimitive.Content
           align="start"
           sideOffset={4}
-          className="z-50 flex gap-3 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-3 shadow-lg"
+          className="elevation-3 z-50 flex gap-3 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-3"
         >
           <div className="flex w-32 flex-col gap-0.5 border-e border-[var(--border-color)] pe-3 text-xs">
             {RANGE_PRESETS.map((p) => (

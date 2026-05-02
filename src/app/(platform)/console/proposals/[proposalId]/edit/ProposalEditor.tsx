@@ -181,7 +181,7 @@ export function ProposalEditor({
               setBlocks(JSON.parse(json));
               setMode("outline");
             }}
-            className={`rounded-full px-3 py-1 text-xs ${mode === "outline" ? "elevation-1 bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded-full px-3 py-1 text-xs ${mode === "outline" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
           >
             Outline
           </button>
@@ -191,7 +191,7 @@ export function ProposalEditor({
               setJson(JSON.stringify(blocks, null, 2));
               setMode("json");
             }}
-            className={`rounded-full px-3 py-1 text-xs ${mode === "json" ? "elevation-1 bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded-full px-3 py-1 text-xs ${mode === "json" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
           >
             JSON
           </button>

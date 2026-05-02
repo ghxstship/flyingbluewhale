@@ -54,12 +54,12 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
     to: parsed.data.email,
     subject: `You're invited to join a L0ST 1SLAND Technologies workspace`,
     html: `
-      <div style="font-family:Inter,system-ui,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
-        <p style="color:#666;font-size:12px;letter-spacing:.15em;text-transform:uppercase">Invitation</p>
-        <h1 style="font-family:'Cormorant Garamond',serif;font-size:32px;margin:12px 0 8px">You've been invited</h1>
+      <div style="font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
+        <p style="color:#666;font-size:12px;letter-spacing:.15em;text-transform:uppercase;font-family:'Share Tech Mono','Courier New',monospace">Invitation</p>
+        <h1 style="font-family:'Anton','Helvetica Neue',Arial,sans-serif;font-size:36px;margin:12px 0 8px;letter-spacing:-0.02em;text-transform:uppercase">You've been invited</h1>
         <p style="color:#444;font-size:14px">${session.email} invited you to join their workspace as ${parsed.data.role}.</p>
-        <p><a href="${acceptUrl}" style="display:inline-block;background:#0a0a0a;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:14px">Accept invitation</a></p>
-        <p style="color:#999;font-size:12px;margin-top:24px">Link expires in 7 days. If the button doesn't work:<br/><code>${acceptUrl}</code></p>
+        <p><a href="${acceptUrl}" style="display:inline-block;background:#0a0a0a;color:#fff;padding:12px 24px;border:0;text-decoration:none;font-size:14px;text-transform:uppercase;letter-spacing:.1em">Accept invitation</a></p>
+        <p style="color:#999;font-size:12px;margin-top:24px;font-family:'Share Tech Mono','Courier New',monospace">Link expires in 7 days. If the button doesn't work:<br/><code>${acceptUrl}</code></p>
       </div>`,
   });
 

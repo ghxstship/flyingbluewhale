@@ -154,7 +154,7 @@ export function LetterDocument({ letter }: { letter: OfferLetterResolved }) {
         {letter.status === "accepted" && letter.accepted_signature ? (
           <div className="space-y-2">
             <div className="text-xs tracking-widest text-[var(--text-muted)] uppercase">Accepted</div>
-            <div className="font-serif text-2xl italic">{letter.accepted_signature}</div>
+            <div className="font-subdisplay text-2xl tracking-wide">{letter.accepted_signature}</div>
             <div className="text-xs text-[var(--text-muted)]">
               Counter-signed {letter.accepted_at ? new Date(letter.accepted_at).toLocaleString() : ""}
             </div>
@@ -168,7 +168,9 @@ export function LetterDocument({ letter }: { letter: OfferLetterResolved }) {
         <div className="mt-6 grid grid-cols-2 gap-6 text-xs text-[var(--text-muted)]">
           <div>
             <div className="font-medium text-[var(--text-secondary)]">For {EMPLOYER_LABEL[letter.employer]}</div>
-            <div className="font-serif text-lg italic">{letter.signing_authority_name ?? "Operations Director"}</div>
+            <div className="font-subdisplay text-lg tracking-wide">
+              {letter.signing_authority_name ?? "Operations Director"}
+            </div>
             <div>{letter.signing_authority_email ?? ""}</div>
           </div>
           <div className="text-end">

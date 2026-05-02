@@ -71,7 +71,7 @@ export default async function WalletPage() {
           {issued.map((c) => (
             <li
               key={c.id}
-              className="surface-raised elevation-2 p-5"
+              className="surface-raised p-5"
               style={c.category?.color ? { ["--brand-color" as string]: c.category.color } : undefined}
             >
               <div className="flex items-start justify-between gap-3">

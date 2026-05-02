@@ -36,7 +36,7 @@ export function DensityToggle() {
           onClick={() => setDensity(m.key)}
           className={`rounded-full px-3 py-1 text-xs font-medium transition ${
             density === m.key
-              ? "elevation-1 bg-[var(--background)] text-[var(--foreground)]"
+              ? "bg-[var(--background)] text-[var(--foreground)]"
               : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
           }`}
         >

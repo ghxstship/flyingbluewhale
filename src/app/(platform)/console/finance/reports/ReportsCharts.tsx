@@ -201,7 +201,7 @@ function DarkTooltip({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px] shadow-lg">
+    <div className="elevation-3 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px]">
       {label && <div className="mb-1 font-medium">{label}</div>}
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-1.5">

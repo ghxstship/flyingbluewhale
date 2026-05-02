@@ -55,7 +55,7 @@ export function RowActions({
         <button
           type="button"
           aria-label={label}
-          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-1"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-1 focus-visible:outline-none"
           onClick={(e) => e.stopPropagation()}
         >
           <MoreHorizontal size={14} aria-hidden="true" />
@@ -65,7 +65,7 @@ export function RowActions({
         <DropdownMenu.Content
           align={align}
           sideOffset={4}
-          className="surface-raised elevation-2 z-50 min-w-[10rem] rounded-lg border border-[var(--border-color)] p-1 text-sm"
+          className="surface-raised z-50 min-w-[10rem] rounded-lg border border-[var(--border-color)] p-1 text-sm"
         >
           {items.map((it, i) => {
             if ("separator" in it && it.separator) {
@@ -84,12 +84,12 @@ export function RowActions({
                   "flex cursor-pointer items-center justify-between gap-4 rounded-md px-2 py-1.5 outline-none",
                   "hover:bg-[var(--bg-secondary)] focus-visible:bg-[var(--bg-secondary)]",
                   it.destructive ? "text-[color:var(--color-error)]" : "",
-                  it.disabled ? "opacity-40 cursor-not-allowed" : "",
+                  it.disabled ? "cursor-not-allowed opacity-40" : "",
                 ].join(" ")}
               >
                 <span>{it.label}</span>
                 {it.shortcut ? (
-                  <span className="text-[10px] text-[var(--text-muted)] font-mono">{it.shortcut}</span>
+                  <span className="font-mono text-[10px] text-[var(--text-muted)]">{it.shortcut}</span>
                 ) : null}
               </DropdownMenu.Item>
             );

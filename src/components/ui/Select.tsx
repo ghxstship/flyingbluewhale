@@ -25,7 +25,7 @@ export const SelectLabel = React.forwardRef<
   return (
     <SelectPrimitive.Label
       ref={ref}
-      className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)] ${className}`}
+      className={`px-2 py-1.5 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase ${className}`}
       {...props}
     />
   );
@@ -59,7 +59,7 @@ export const SelectContent = React.forwardRef<
         ref={ref}
         position={position}
         sideOffset={4}
-        className={`z-50 max-h-[var(--radix-select-content-available-height)] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] shadow-lg data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out ${className}`}
+        className={`elevation-3 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 max-h-[var(--radix-select-content-available-height)] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] ${className}`}
         {...props}
       >
         <SelectPrimitive.ScrollUpButton className="flex h-6 items-center justify-center">
@@ -81,7 +81,7 @@ export const SelectItem = React.forwardRef<
   return (
     <SelectPrimitive.Item
       ref={ref}
-      className={`relative flex cursor-default select-none items-center rounded px-2 py-1.5 pr-8 text-sm outline-none data-[highlighted]:bg-[var(--surface-inset)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${className}`}
+      className={`relative flex cursor-default items-center rounded px-2 py-1.5 pr-8 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--surface-inset)] ${className}`}
       {...props}
     >
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
@@ -97,10 +97,6 @@ export const SelectSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(function SelectSeparator({ className = "", ...props }, ref) {
   return (
-    <SelectPrimitive.Separator
-      ref={ref}
-      className={`my-1 h-px bg-[var(--border-color)] ${className}`}
-      {...props}
-    />
+    <SelectPrimitive.Separator ref={ref} className={`my-1 h-px bg-[var(--border-color)] ${className}`} {...props} />
   );
 });

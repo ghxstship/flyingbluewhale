@@ -98,9 +98,7 @@ export function SignatureBlock({
           <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--color-success)] uppercase">
             Signed
           </div>
-          <div className="mt-3 font-serif text-3xl" style={{ fontFamily: "Cormorant Garamond, serif" }}>
-            Thank you, {signerName ?? "signer"}
-          </div>
+          <div className="font-display mt-3 text-4xl tracking-tight">Thank you, {signerName ?? "signer"}</div>
           <div className="mt-2 font-mono text-xs text-[var(--text-muted)]">Signed {formatDate(signedAt, "long")}</div>
         </div>
       </section>
@@ -111,9 +109,7 @@ export function SignatureBlock({
     <section id="authorize" className="mx-auto my-12 max-w-4xl px-8">
       <div className="surface-raised p-8">
         <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Authorize</div>
-        <h2 className="mt-3 font-serif text-3xl" style={{ fontFamily: "Cormorant Garamond, serif" }}>
-          Accept this proposal
-        </h2>
+        <h2 className="font-display mt-3 text-4xl tracking-tight">Accept this proposal</h2>
         {instructions && <p className="mt-2 text-sm text-[var(--text-secondary)]">{instructions}</p>}
 
         {parties.length > 1 && (
@@ -141,14 +137,14 @@ export function SignatureBlock({
             <button
               type="button"
               onClick={() => setMode("typed")}
-              className={`rounded-full px-3 py-1 text-xs ${mode === "typed" ? "elevation-1 bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+              className={`rounded-full px-3 py-1 text-xs ${mode === "typed" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
             >
               Type
             </button>
             <button
               type="button"
               onClick={() => setMode("canvas")}
-              className={`rounded-full px-3 py-1 text-xs ${mode === "canvas" ? "elevation-1 bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+              className={`rounded-full px-3 py-1 text-xs ${mode === "canvas" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
             >
               Draw
             </button>
@@ -160,8 +156,7 @@ export function SignatureBlock({
                 value={typed}
                 onChange={(e) => setTyped(e.target.value)}
                 placeholder="Type your signature"
-                className="input-base w-full"
-                style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "28px" }}
+                className="input-base font-subdisplay w-full text-3xl tracking-wide"
               />
               <input type="hidden" name="data" value={typed} />
             </>

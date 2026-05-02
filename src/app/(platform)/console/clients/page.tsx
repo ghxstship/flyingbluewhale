@@ -41,28 +41,24 @@ export default async function ClientsPage() {
               key: "email",
               header: "Email",
               render: (r) => r.contact_email ?? "—",
-              className: "font-mono text-xs",
               accessor: (r) => r.contact_email ?? null,
             },
             {
               key: "phone",
               header: "Phone",
               render: (r) => r.contact_phone ?? "—",
-              className: "font-mono text-xs",
               accessor: (r) => r.contact_phone ?? null,
             },
             {
               key: "website",
               header: "Website",
               render: (r) => r.website ?? "—",
-              className: "font-mono text-xs",
               accessor: (r) => r.website ?? null,
             },
             {
               key: "created",
               header: "Added",
               render: (r) => timeAgo(r.created_at),
-              className: "font-mono text-xs",
               accessor: (r) => r.created_at,
             },
           ]}

@@ -43,6 +43,15 @@ export type Column<T> = {
   defaultHidden?: boolean;
   /** Surface this column as a Group-by option. */
   groupable?: boolean;
+  /** When true, render cells in the theme's mono font — for genuinely
+   *  code-like data (hashes, IDs, file paths). Don't enable for emails,
+   *  phones, names, free text — body font reads better. Replaces the
+   *  prior pattern of stringly-typed `className: "font-mono text-xs"`
+   *  that scattered mono everywhere. */
+  mono?: boolean;
+  /** When true, render cells with `tabular-nums` so numeric columns align
+   *  vertically. Use for money / counts / percentages. */
+  tabular?: boolean;
   /** Returns the underlying scalar value for sort / filter / CSV export.
    *  Returning `unknown` is allowed so pages with loosely-typed rows can pass
    *  a field through; the wrapper coerces non-scalars to a stringified value. */
@@ -198,10 +207,20 @@ export async function DataTable<T extends { id: string }>({
   // cell content when accessor is omitted, so even unannotated columns sort.
   // Pages that genuinely don't want sort (decorative / actions columns) opt
   // out with `sortable: false`.
+  //
+  // Compose className from explicit + typed flags (mono / tabular). The
+  // typed flags are the canonical way to express semantics; explicit
+  // className stays as an escape hatch.
+  const composeClassName = (c: Column<T>): string | undefined => {
+    const parts = [c.className].filter(Boolean) as string[];
+    if (c.mono) parts.push("font-mono text-xs");
+    if (c.tabular) parts.push("tabular-nums");
+    return parts.length ? parts.join(" ") : undefined;
+  };
   const interactiveCols: InteractiveColumn[] = columns.map((c) => ({
     key: c.key,
     header: c.header,
-    className: c.className,
+    className: composeClassName(c),
     sortable: c.sortable ?? true,
     filterable: c.filterable,
     defaultHidden: c.defaultHidden,

@@ -29,6 +29,7 @@ import {
   Upload,
   RotateCcw,
   Plus,
+  Bookmark,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -532,7 +533,9 @@ export function DataTableInteractive({
           </span>
         </div>
 
-        {/* ── Section 2 · Shape (filter / sort / group) ── */}
+        {/* ── Section 2 · Shape + Display (filter → sort → density → columns → group) ──
+            Density and column visibility sit RIGHT next to Sort because
+            "how rows look" is paired thinking with "how rows are ordered". */}
         <ToolbarDivider />
         <div className="flex items-center gap-0.5">
           <FilterAddMenu
@@ -551,6 +554,30 @@ export function DataTableInteractive({
               setSortDir(dir);
             }}
             onSetStack={setSortStack}
+          />
+          <DensityToggle value={density} onChange={setDensity} />
+          <ColumnMenu
+            columns={columns}
+            order={colOrder}
+            hidden={hiddenCols}
+            pinned={pinnedCols}
+            onReorder={setColOrder}
+            onToggleHidden={(k) => {
+              setHiddenCols((prev) => {
+                const next = new Set(prev);
+                if (next.has(k)) next.delete(k);
+                else next.add(k);
+                return next;
+              });
+            }}
+            onTogglePinned={(k) => {
+              setPinnedCols((prev) => {
+                const next = new Set(prev);
+                if (next.has(k)) next.delete(k);
+                else next.add(k);
+                return next;
+              });
+            }}
           />
           <GroupByMenu columns={columns} groupBy={groupBy} setGroupBy={setGroupBy} />
         </div>
@@ -600,35 +627,6 @@ export function DataTableInteractive({
             label="Refresh table data"
             onClick={handleRefresh}
             spinning={refreshing}
-          />
-        </div>
-
-        {/* ── Section 4 · Display (density / column visibility) ── */}
-        <ToolbarDivider />
-        <div className="flex items-center gap-1">
-          <DensityToggle value={density} onChange={setDensity} />
-          <ColumnMenu
-            columns={columns}
-            order={colOrder}
-            hidden={hiddenCols}
-            pinned={pinnedCols}
-            onReorder={setColOrder}
-            onToggleHidden={(k) => {
-              setHiddenCols((prev) => {
-                const next = new Set(prev);
-                if (next.has(k)) next.delete(k);
-                else next.add(k);
-                return next;
-              });
-            }}
-            onTogglePinned={(k) => {
-              setPinnedCols((prev) => {
-                const next = new Set(prev);
-                if (next.has(k)) next.delete(k);
-                else next.add(k);
-                return next;
-              });
-            }}
           />
         </div>
       </div>
@@ -981,31 +979,38 @@ function DensityToggle({
   value: "comfortable" | "compact";
   onChange: (v: "comfortable" | "compact") => void;
 }) {
-  // Segmented control — keeps its border (canon: borders on inputs +
-  // segmented controls only). Each segment gets a Hint so the icons
-  // are discoverable without an explicit label.
+  // Segmented pill — visual language matches the top-bar theme toggle
+  // (rounded-full container with bg-bg-secondary, segments are h-7 w-7
+  // squares that fill with bg-background when active). Tooltips on each
+  // segment per the toolbar canon.
   return (
-    <div role="group" aria-label="Row density" className="inline-flex h-7 rounded border border-[var(--border-color)]">
+    <div
+      role="radiogroup"
+      aria-label="Row density"
+      className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5"
+    >
       <Hint label="Comfortable density">
         <button
           type="button"
+          role="radio"
+          aria-checked={value === "comfortable"}
           aria-label="Comfortable density"
-          aria-pressed={value === "comfortable"}
           onClick={() => onChange("comfortable")}
-          className={`flex items-center justify-center px-2 ${value === "comfortable" ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}
+          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition ${value === "comfortable" ? "bg-[var(--background)] text-[var(--foreground)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
         >
-          <Rows3 size={14} aria-hidden="true" strokeWidth={2.25} />
+          <Rows3 size={13} aria-hidden="true" strokeWidth={2.25} />
         </button>
       </Hint>
       <Hint label="Compact density">
         <button
           type="button"
+          role="radio"
+          aria-checked={value === "compact"}
           aria-label="Compact density"
-          aria-pressed={value === "compact"}
           onClick={() => onChange("compact")}
-          className={`flex items-center justify-center px-2 ${value === "compact" ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}
+          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition ${value === "compact" ? "bg-[var(--background)] text-[var(--foreground)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
         >
-          <Rows4 size={14} aria-hidden="true" strokeWidth={2.25} />
+          <Rows4 size={13} aria-hidden="true" strokeWidth={2.25} />
         </button>
       </Hint>
     </div>
@@ -1429,7 +1434,7 @@ function ViewMenu({ customizationActive, onReset }: { customizationActive: boole
             aria-label="View options"
             className={`${TOOLBAR_TRIGGER_BASE} ${customizationActive ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
           >
-            <SlidersHorizontal size={12} aria-hidden="true" />
+            <Bookmark size={12} aria-hidden="true" />
             {customizationActive ? "View · Modified" : "View"}
           </button>
         </DropdownMenuTrigger>

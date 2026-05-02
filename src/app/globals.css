@@ -74,6 +74,7 @@
    * --radius-full stays 9999px — pills are an intentional shape
    * choice (badges, segmented controls, status dots) regardless of
    * theme. */
+  --radius: var(--radius-sm);
   --radius-xs: 0;
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);

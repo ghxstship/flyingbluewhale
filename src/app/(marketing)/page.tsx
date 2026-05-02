@@ -93,7 +93,7 @@ export default function Home() {
             until the iframe enters the viewport, which is below the fold on
             most desktop renders. */}
         <div className="mt-14">
-          <div className="elevation-2 relative overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--surface-inset)]">
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--surface-inset)]">
             <div className="flex items-center gap-1.5 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2">
               <span
                 className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]"

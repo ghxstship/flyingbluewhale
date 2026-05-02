@@ -96,7 +96,7 @@ export function Combobox({
           id={listboxId}
           align="start"
           sideOffset={4}
-          className="elevation-3 z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]"
+          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]"
         >
           {/* shouldFilter=false when async, so cmdk doesn't strip server results */}
           <CommandPrimitive className="flex flex-col" shouldFilter={!optionsLoader}>
@@ -191,7 +191,7 @@ export function MultiCombobox({
           id={listboxId}
           align="start"
           sideOffset={4}
-          className="elevation-3 z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]"
+          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]"
         >
           <CommandPrimitive>
             <div className="border-b border-[var(--border-color)] px-3 py-2">

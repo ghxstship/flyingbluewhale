@@ -875,7 +875,7 @@ export function DataTableInteractive({
         <div
           role="toolbar"
           aria-label="Bulk actions"
-          className="elevation-3 fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--surface-raised)] px-4 py-2"
+          className="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--surface-raised)] px-4 py-2"
         >
           <span className="text-xs text-[var(--text-muted)]">{selected.size} selected</span>
           {bulkActions.map((a) => (

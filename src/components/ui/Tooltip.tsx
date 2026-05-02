@@ -16,7 +16,7 @@ export const TooltipContent = React.forwardRef<
       <TooltipPrimitive.Content
         ref={ref}
         sideOffset={sideOffset}
-        className={`elevation-2 data-[state=delayed-open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 max-w-xs rounded-md bg-[var(--foreground)] px-2.5 py-1.5 text-xs text-[var(--background)] ${className}`}
+        className={`data-[state=delayed-open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 max-w-xs rounded-md bg-[var(--foreground)] px-2.5 py-1.5 text-xs text-[var(--background)] ${className}`}
         {...props}
       />
     </TooltipPrimitive.Portal>

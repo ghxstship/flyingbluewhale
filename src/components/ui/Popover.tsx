@@ -21,7 +21,7 @@ export const PopoverContent = React.forwardRef<
         ref={ref}
         align={align}
         sideOffset={sideOffset}
-        className={`elevation-3 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 w-72 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-4 outline-none ${className}`}
+        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 w-72 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-4 outline-none ${className}`}
         {...props}
       >
         {children}

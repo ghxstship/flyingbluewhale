@@ -252,7 +252,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                       <Link
                         key={`${b.laneId}-${i}`}
                         href={b.href}
-                        className="hover:elevation-1 absolute top-1.5 bottom-1.5 overflow-hidden rounded border border-[var(--border-color)] bg-[var(--surface-raised)] px-2 py-1 text-[11px]"
+                        className="absolute top-1.5 bottom-1.5 overflow-hidden rounded border border-[var(--border-color)] bg-[var(--surface-raised)] px-2 py-1 text-[11px]"
                         style={{ left: startCol * colWidth, width: widthHrs * colWidth }}
                         title={b.label}
                       >

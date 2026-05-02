@@ -356,7 +356,7 @@ function MergeTagField({
         className={`input-base mt-1 w-full ${singleLine ? "" : "font-mono text-xs"}`}
       />
       {open && candidates.length > 0 && (
-        <div className="elevation-3 absolute right-0 left-0 z-20 mt-1 overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]">
+        <div className="absolute right-0 left-0 z-20 mt-1 overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]">
           {candidates.map((m) => (
             <button
               key={m.tag}

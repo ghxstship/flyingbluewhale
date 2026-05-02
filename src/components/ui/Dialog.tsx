@@ -23,7 +23,7 @@ export const DialogOverlay = React.forwardRef<
   return (
     <DialogPrimitive.Overlay
       ref={ref}
-      className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out ${className}`}
+      className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out fixed inset-0 z-50 bg-black/40 backdrop-blur-sm ${className}`}
       {...props}
     />
   );
@@ -48,13 +48,13 @@ export const DialogContent = React.forwardRef<
       <DialogOverlay />
       <DialogPrimitive.Content
         ref={ref}
-        className={`fixed left-1/2 top-1/2 z-50 w-full ${sizes[size]} -translate-x-1/2 -translate-y-1/2 surface-raised p-6 shadow-2xl outline-none data-[state=open]:animate-slide-up data-[state=closed]:animate-fade-out ${className}`}
+        className={`surface-raised fixed top-1/2 left-1/2 z-50 w-full ${sizes[size]} data-[state=open]:animate-slide-up data-[state=closed]:animate-fade-out -translate-x-1/2 -translate-y-1/2 p-6 outline-none ${className}`}
         {...props}
       >
         {children}
         {!hideCloseButton && (
           <DialogPrimitive.Close
-            className="absolute right-4 top-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)]"
+            className="absolute top-4 right-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)]"
             aria-label="Close dialog"
           >
             <X size={16} />

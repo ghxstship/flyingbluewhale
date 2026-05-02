@@ -20,7 +20,7 @@ export function FAB({
   children: ReactNode;
   variant?: "primary" | "danger";
 }) {
-  const cls = `elevation-3 fixed end-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full transition-transform active:scale-95 ${
+  const cls = `fixed end-4 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-[var(--border-color)] transition-transform active:scale-95 ${
     variant === "danger"
       ? "bg-[var(--color-error)] text-[var(--background)]"
       : "bg-[var(--org-primary)] text-[var(--org-on-primary,var(--background))]"

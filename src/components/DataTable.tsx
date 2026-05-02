@@ -315,7 +315,7 @@ function DataTableEmpty({
       </table>
       <div
         role="status"
-        className="elevation-3 absolute inset-x-0 top-1/2 mx-auto flex max-w-sm -translate-y-1/2 flex-col items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--background)] px-5 py-4 text-center backdrop-blur-md"
+        className="absolute inset-x-0 top-1/2 mx-auto flex max-w-sm -translate-y-1/2 flex-col items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--background)] px-5 py-4 text-center backdrop-blur-md"
         style={{ marginTop: 12 }}
       >
         <h3 className="text-sm font-semibold text-[var(--text-primary)]">{title}</h3>

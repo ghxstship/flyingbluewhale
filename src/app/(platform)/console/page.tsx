@@ -29,6 +29,32 @@ export default async function ConsoleDashboard() {
   }
 
   const session = await requireSession();
+
+  // No-org users (community/viewer with no membership, or fresh accounts mid-invite)
+  // would otherwise pass `""` into a UUID column and crash with 22P02. Render a
+  // first-class empty state inviting them to create or join an org instead.
+  if (!session.orgId) {
+    return (
+      <>
+        <ModuleHeader title="Console" subtitle={`Logged in as ${session.email}`} />
+        <div className="page-content">
+          <EmptyState
+            title="No organization yet"
+            description="Operations console is org-scoped. Create your first organization, or accept an invitation from your team."
+            action={
+              <div className="flex flex-wrap items-center gap-3">
+                <Button href="/me/organizations">Create organization</Button>
+                <Link href="/me" className="text-xs text-[var(--brand-color)]">
+                  ← Back to dashboard
+                </Link>
+              </div>
+            }
+          />
+        </div>
+      </>
+    );
+  }
+
   const [projects, stats] = await Promise.all([listProjects(session.orgId), projectStats(session.orgId)]);
 
   return (

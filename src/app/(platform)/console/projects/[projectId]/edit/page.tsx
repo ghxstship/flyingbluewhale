@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { requireSession } from "@/lib/auth";
 import { getProject } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
@@ -41,11 +42,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             <Input label="Start Date" name="start_date" type="date" defaultValue={dateOnly(row.start_date)} />
             <Input label="End Date" name="end_date" type="date" defaultValue={dateOnly(row.end_date)} />
           </div>
-          <Input
-            label="Budget (cents)"
+          <MoneyInput
+            label="Budget"
             name="budget_cents"
-            type="number"
-            defaultValue={row.budget_cents != null ? String(row.budget_cents) : ""}
+            defaultCents={row.budget_cents ?? null}
+            hint="Enter dollars (e.g. 27,500.00). Stored as integer cents."
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>

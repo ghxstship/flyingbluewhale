@@ -1,5 +1,5 @@
 import "server-only";
- 
+
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/types";
 
@@ -11,7 +11,32 @@ export type ListOpts = {
   ascending?: boolean;
   limit?: number;
   filters?: Array<{ column: string; op: "eq" | "in" | "gte" | "lte"; value: unknown }>;
+  /** Include soft-deleted rows. Default false; set true for admin "Trash" views. */
+  includeArchived?: boolean;
 };
+
+/**
+ * Tables that carry a `deleted_at` column for soft-delete. Kept in sync with
+ * `supabase/migrations/20260417_000010_ssot_triggers.sql` §5 — the loop that
+ * adds `deleted_at` to a fixed set of tables. Anything not in this set is
+ * treated as hard-delete only and the soft-delete filter is skipped.
+ */
+export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
+  "projects",
+  "clients",
+  "vendors",
+  "invoices",
+  "purchase_orders",
+  "equipment",
+  "proposals",
+  "event_guides",
+  "deliverables",
+  "notifications",
+  "email_templates",
+  "webhook_endpoints",
+  "stage_plots",
+  "incidents",
+]);
 
 async function anyFrom(t: string) {
   const supabase = await createClient();
@@ -24,6 +49,9 @@ export async function listOrgScoped<T extends TableName>(
   opts: ListOpts = {},
 ): Promise<PublicTables[T]["Row"][]> {
   let q = (await anyFrom(table as string)).select("*").eq("org_id", orgId);
+  if (SOFT_DELETABLE_TABLES.has(table as string) && !opts.includeArchived) {
+    q = q.is("deleted_at", null);
+  }
   for (const f of opts.filters ?? []) {
     if (f.op === "eq") q = q.eq(f.column, f.value);
     else if (f.op === "in") q = q.in(f.column, f.value as unknown[]);
@@ -41,20 +69,27 @@ export async function getOrgScoped<T extends TableName>(
   table: T,
   orgId: string,
   id: string,
+  opts: { includeArchived?: boolean } = {},
 ): Promise<PublicTables[T]["Row"] | null> {
-  const { data, error } = await (await anyFrom(table as string))
-    .select("*")
-    .eq("org_id", orgId)
-    .eq("id", id)
-    .maybeSingle();
+  let q = (await anyFrom(table as string)).select("*").eq("org_id", orgId).eq("id", id);
+  if (SOFT_DELETABLE_TABLES.has(table as string) && !opts.includeArchived) {
+    q = q.is("deleted_at", null);
+  }
+  const { data, error } = await q.maybeSingle();
   if (error) throw error;
   return (data ?? null) as PublicTables[T]["Row"] | null;
 }
 
-export async function countOrgScoped<T extends TableName>(table: T, orgId: string): Promise<number> {
-  const { count } = await (await anyFrom(table as string))
-    .select("*", { count: "exact", head: true })
-    .eq("org_id", orgId);
+export async function countOrgScoped<T extends TableName>(
+  table: T,
+  orgId: string,
+  opts: { includeArchived?: boolean } = {},
+): Promise<number> {
+  let q = (await anyFrom(table as string)).select("*", { count: "exact", head: true }).eq("org_id", orgId);
+  if (SOFT_DELETABLE_TABLES.has(table as string) && !opts.includeArchived) {
+    q = q.is("deleted_at", null);
+  }
+  const { count } = await q;
   return count ?? 0;
 }
 
@@ -103,9 +138,7 @@ export async function listOrgScopedPage<T extends TableName>(
 
   // `count: "exact"` gives us the total population under current filters,
   // not just the page. `range` is inclusive on both ends.
-  let q = (await anyFrom(table as string))
-    .select("*", { count: "exact" })
-    .eq("org_id", orgId);
+  let q = (await anyFrom(table as string)).select("*", { count: "exact" }).eq("org_id", orgId);
   for (const f of opts.filters ?? []) {
     if (f.op === "eq") q = q.eq(f.column, f.value);
     else if (f.op === "in") q = q.in(f.column, f.value as unknown[]);
@@ -121,9 +154,7 @@ export async function listOrgScopedPage<T extends TableName>(
   const rows = (data ?? []) as PublicTables[T]["Row"][];
   const totalCount = count ?? rows.length;
   const nextOffset = offset + rows.length;
-  const nextCursor = nextOffset < totalCount && rows.length === pageSize
-    ? encodeCursor(nextOffset)
-    : null;
+  const nextCursor = nextOffset < totalCount && rows.length === pageSize ? encodeCursor(nextOffset) : null;
 
   return { rows, nextCursor, totalCount, pageSize };
 }

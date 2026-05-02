@@ -3,15 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Search,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Pin,
-  PinOff,
-  ChevronRight,
-  ChevronDown,
-} from "lucide-react";
+import { Search, PanelLeftClose, PanelLeftOpen, Pin, PinOff, ChevronRight, ChevronDown } from "lucide-react";
 import type { NavGroup, NavItem } from "@/lib/nav";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { useHotkeys, registerShortcut } from "@/lib/hooks/useHotkeys";
@@ -38,9 +30,7 @@ export function PlatformSidebar({
   const [collapsed, setCollapsed] = React.useState<boolean>(prefs.sidebar_collapsed ?? false);
   const [width, setWidth] = React.useState<number>(prefs.sidebar_width ?? 240);
   const [pinned, setPinned] = React.useState<string[]>(prefs.sidebar_pinned ?? []);
-  const [collapsedGroups, setCollapsedGroups] = React.useState<string[]>(
-    prefs.sidebar_collapsed_groups ?? [],
-  );
+  const [collapsedGroups, setCollapsedGroups] = React.useState<string[]>(prefs.sidebar_collapsed_groups ?? []);
   const [query, setQuery] = React.useState("");
   const [showSearch, setShowSearch] = React.useState(false);
   const searchRef = React.useRef<HTMLInputElement>(null);
@@ -51,12 +41,7 @@ export function PlatformSidebar({
     if (prefs.sidebar_width != null) setWidth(prefs.sidebar_width);
     if (prefs.sidebar_pinned != null) setPinned(prefs.sidebar_pinned);
     if (prefs.sidebar_collapsed_groups != null) setCollapsedGroups(prefs.sidebar_collapsed_groups);
-  }, [
-    prefs.sidebar_collapsed,
-    prefs.sidebar_width,
-    prefs.sidebar_pinned,
-    prefs.sidebar_collapsed_groups,
-  ]);
+  }, [prefs.sidebar_collapsed, prefs.sidebar_width, prefs.sidebar_pinned, prefs.sidebar_collapsed_groups]);
 
   // Register shortcuts for the cheatsheet
   React.useEffect(() => {
@@ -239,9 +224,7 @@ export function PlatformSidebar({
             // (search query is active OR the active route lives in this group
             //  OR the user hasn't collapsed it). Search + active-route
             //  overrides guarantee nav can never hide where you are.
-            const hasActive = g.items.some(
-              (i) => matchRoute(pathname ?? "", i.href).isActive,
-            );
+            const hasActive = g.items.some((i) => matchRoute(pathname ?? "", i.href).isActive);
             const userCollapsed = collapsedGroups.includes(g.label);
             const isOpen = collapsed ? false : Boolean(query) || hasActive || !userCollapsed;
             return (
@@ -261,9 +244,7 @@ export function PlatformSidebar({
             );
           })}
           {query && filtered.length === 0 && (
-            <div className="px-2 py-4 text-center text-xs text-[var(--text-muted)]">
-              No results
-            </div>
+            <div className="px-2 py-4 text-center text-xs text-[var(--text-muted)]">No results</div>
           )}
         </nav>
 
@@ -271,7 +252,7 @@ export function PlatformSidebar({
             page in the console reminds the operator which app they're in.
             Parent/trademark attribution lives on marketing + /legal only. */}
         {!collapsed && (
-          <div className="border-t border-[var(--border-color)] px-3 py-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--org-primary)]">
+          <div className="border-t border-[var(--border-color)] px-3 py-3 text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)] uppercase">
             ATLVS
           </div>
         )}
@@ -329,7 +310,7 @@ function SidebarGroup({
             onClick={() => onToggleGroup(label)}
             aria-expanded={isOpen}
             aria-controls={`${headerId}-items`}
-            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)]"
+            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)]"
           >
             <span className="truncate">{label}</span>
             <ChevronDown
@@ -341,65 +322,68 @@ function SidebarGroup({
         ) : (
           <div
             id={headerId}
-            className="px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]"
+            className="px-2 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase"
           >
             {label}
           </div>
         ))}
       {(collapsed || isOpen) && (
-        <ul
-          id={`${headerId}-items`}
-          aria-labelledby={headerId}
-          className="mt-0.5 space-y-0.5"
-        >
+        <ul id={`${headerId}-items`} aria-labelledby={headerId} className="mt-0.5 space-y-0.5">
           {items.map((item) => {
-          // Use the unified active-route matcher so portal + mobile + palette
-          // all agree. IA spec §1.B / §7 anti-pattern #2.
-          const { isActive: active } = matchRoute(pathname ?? "", item.href);
-          const isPinned = pinned.includes(item.href);
-          return (
-            <li key={item.href} className="group relative">
-              <Link
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors ${
-                  active
-                    ? "bg-[var(--surface)] font-medium text-[var(--text-primary)]"
-                    : "text-[var(--text-secondary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
-                }`}
-                title={collapsed ? item.label : undefined}
-              >
-                {active && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--org-primary)]"
-                  />
-                )}
-                <span className="flex items-center gap-2 truncate ps-1">
-                  {collapsed ? (
-                    <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
-                  ) : null}
-                  {!collapsed && <span>{item.label}</span>}
-                </span>
-                {!collapsed && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onTogglePin(item.href);
-                    }}
-                    aria-label={isPinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
-                    className={`shrink-0 rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] ${
-                      isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-                    }`}
-                  >
-                    {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
-                  </button>
-                )}
-              </Link>
-            </li>
-          );
-        })}
+            // Use the unified active-route matcher so portal + mobile + palette
+            // all agree. IA spec §1.B / §7 anti-pattern #2.
+            const { isActive: active } = matchRoute(pathname ?? "", item.href);
+            const isPinned = pinned.includes(item.href);
+            return (
+              <li key={item.href} className="group relative">
+                <Link
+                  href={item.href}
+                  // Prefetch off: the sidebar carries ~120 nav links across 11
+                  // groups; default `<Link>` viewport+hover prefetch caused an
+                  // RSC fetch storm (~10–14 dupes per revalidation, ~200 dupes
+                  // accumulated for the most-hovered link) that exhausted the
+                  // browser's per-origin connection pool with
+                  // `ERR_INSUFFICIENT_RESOURCES`. Sidebar links are orientation
+                  // jumps, not perf-critical paths — pay the click latency for
+                  // a sane network panel. Sea Trial FINDING-005.
+                  prefetch={false}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors ${
+                    active
+                      ? "bg-[var(--surface)] font-medium text-[var(--text-primary)]"
+                      : "text-[var(--text-secondary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
+                  }`}
+                  title={collapsed ? item.label : undefined}
+                >
+                  {active && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--org-primary)]"
+                    />
+                  )}
+                  <span className="flex items-center gap-2 truncate ps-1">
+                    {collapsed ? <ChevronRight size={12} className="shrink-0" aria-hidden="true" /> : null}
+                    {!collapsed && <span>{item.label}</span>}
+                  </span>
+                  {!collapsed && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onTogglePin(item.href);
+                      }}
+                      aria-label={isPinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
+                      className={`shrink-0 rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] ${
+                        isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+                      }`}
+                    >
+                      {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
+                    </button>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

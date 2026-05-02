@@ -1,13 +1,16 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { AuditLogViewer } from "./AuditLogViewer";
 import type { AuditLog } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function AuditPage() {
+const PAGE_SIZE = 100;
+
+export default async function AuditPage({ searchParams }: { searchParams: Promise<{ cursor?: string }> }) {
   if (!hasSupabase) {
     return (
       <>
@@ -18,18 +21,56 @@ export default async function AuditPage() {
       </>
     );
   }
+  const sp = await searchParams;
   const session = await requireSession();
-  const rows = (await listOrgScoped("audit_log", session.orgId, {
+  // Sea Trial FINDING-013: pre-fix shipped 500 rows inline → 597 KB HTML.
+  // Cursor-paginate at 100 rows/page; "older" link advances offset.
+  const page = await listOrgScopedPage("audit_log", session.orgId, {
     orderBy: "at",
     ascending: false,
-    limit: 500,
-  })) as AuditLog[];
+    pageSize: PAGE_SIZE,
+    cursor: sp?.cursor ?? null,
+  });
+  const rows = page.rows as AuditLog[];
+  const offset = sp?.cursor ? Number(sp.cursor) : 0;
+  const showingFrom = page.totalCount === 0 ? 0 : offset + 1;
+  const showingTo = offset + rows.length;
 
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle={`Audit log · ${rows.length} events`} />
-      <div className="page-content max-w-6xl">
+      <ModuleHeader
+        eyebrow="Settings"
+        title="Workspace Settings"
+        subtitle={`Audit log · showing ${showingFrom}–${showingTo} of ${page.totalCount}`}
+      />
+      <div className="page-content max-w-6xl space-y-3">
         <AuditLogViewer rows={rows} />
+        <nav className="flex items-center justify-between text-xs">
+          {offset > 0 ? (
+            <Link
+              href={
+                offset - PAGE_SIZE <= 0
+                  ? "/console/settings/audit"
+                  : `/console/settings/audit?cursor=${offset - PAGE_SIZE}`
+              }
+              className="text-[var(--brand-color)] hover:underline"
+            >
+              ← Newer
+            </Link>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          {page.nextCursor ? (
+            <Link
+              href={`/console/settings/audit?cursor=${page.nextCursor}`}
+              className="text-[var(--brand-color)] hover:underline"
+            >
+              Older →
+            </Link>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+        </nav>
       </div>
     </>
   );

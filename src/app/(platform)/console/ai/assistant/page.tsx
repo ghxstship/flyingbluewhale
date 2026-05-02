@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { env } from "@/lib/env";
 import { AssistantChat } from "./AssistantChat";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,31 @@ type Conversation = {
 export default async function AssistantPage({ searchParams }: { searchParams: Promise<{ c?: string }> }) {
   const session = await requireSession();
   const { c: conversationId } = await searchParams;
+
+  // Sea Trial FINDING-006: AI is gated on ANTHROPIC_API_KEY. When unset,
+  // surface a friendly empty state instead of letting the chat box 500 on
+  // every send.
+  if (!env.ANTHROPIC_API_KEY) {
+    return (
+      <>
+        <ModuleHeader title="AI Assistant" subtitle="Not configured" />
+        <div className="page-content max-w-xl">
+          <div className="surface space-y-3 p-6 text-sm">
+            <h2 className="text-base font-semibold">AI Assistant is offline</h2>
+            <p className="text-[var(--text-secondary)]">
+              The Anthropic API key is not configured for this environment. Conversations and history are saved per-org
+              but cannot generate new responses until an admin sets <code className="text-mono">ANTHROPIC_API_KEY</code>{" "}
+              in the deployment environment.
+            </p>
+            <p className="text-xs text-[var(--text-muted)]">
+              See <code className="text-mono">.env.example</code> for the full key list.
+            </p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   const supabase = await createClient();
 
   const { data: conversations } = await supabase

@@ -548,7 +548,11 @@ pre,
     background: color-mix(in oklab, var(--background) 82%, transparent);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border-bottom: var(--border-width) solid var(--border-color);
+    /* Chrome rule, not structural — was --border-width (3px in Bermuda
+       Triangle) which read as a heavy enclosure rather than a separator.
+       Audit DS-B1 normalizes top-bar / sidebar / table-row separators to
+       the chrome tier (1px). */
+    border-bottom: var(--border-width-chrome) solid var(--border-color);
   }
 
   /* ───── Reduced-motion override ─────

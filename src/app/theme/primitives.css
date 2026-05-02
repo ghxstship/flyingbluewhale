@@ -138,6 +138,14 @@
      (e.g., dark themes that need a brighter accent for visibility). */
   --ring-width: 1px;
   --ring-color: var(--org-primary);
+
+  /* Border weight tiers — audit DS-B1. `--border-width` is the STRUCTURAL
+     weight (cards, inputs, surfaces — 3px in Bermuda Triangle). Chrome
+     rules (top bar bottom, sidebar dividers, table row dividers) need a
+     lighter weight so they read as separators, not as structural enclosure.
+     Hairline is the smallest legible rule for inset cells. */
+  --border-width-chrome: 1px;
+  --border-width-hairline: 1px;
   /* Subdisplay font — declared as alias to --font-display so themes that
      don't define their own subdisplay still resolve cleanly. Bermuda
      Triangle overrides this to Bebas Neue. */

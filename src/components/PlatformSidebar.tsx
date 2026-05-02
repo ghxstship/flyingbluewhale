@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, PanelLeftClose, PanelLeftOpen, Pin, PinOff, ChevronRight, ChevronDown } from "lucide-react";
 import type { NavGroup, NavItem } from "@/lib/nav";
+import { NAV_ICONS } from "@/components/nav-icons";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { useHotkeys, registerShortcut } from "@/lib/hooks/useHotkeys";
 import { matchRoute } from "@/lib/hooks/useActiveRoute";
@@ -339,6 +340,11 @@ function SidebarGroup({
             // all agree. IA spec §1.B / §7 anti-pattern #2.
             const { isActive: active } = matchRoute(pathname ?? "", item.href);
             const isPinned = pinned.includes(item.href);
+            // Resolve the string icon key to its Lucide component via the
+            // registry. Keeping the data side string-keyed lets the nav
+            // export cross the RSC boundary as plain props (Lucide
+            // components are functions and can't be serialized).
+            const Icon = item.icon ? NAV_ICONS[item.icon] : null;
             return (
               <li key={item.href} className="group relative">
                 <Link
@@ -366,9 +372,18 @@ function SidebarGroup({
                       className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--org-primary)]"
                     />
                   )}
-                  <span className="flex items-center gap-2 truncate ps-1">
-                    {collapsed ? <ChevronRight size={12} className="shrink-0" aria-hidden="true" /> : null}
-                    {!collapsed && <span>{item.label}</span>}
+                  <span className="flex min-w-0 items-center gap-2 truncate ps-1">
+                    {Icon ? (
+                      <Icon
+                        size={collapsed ? 16 : 14}
+                        strokeWidth={2}
+                        className="shrink-0 text-[var(--text-muted)] group-hover:text-[var(--text-primary)]"
+                        aria-hidden="true"
+                      />
+                    ) : collapsed ? (
+                      <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
+                    ) : null}
+                    {!collapsed && <span className="truncate">{item.label}</span>}
                   </span>
                   {!collapsed && (
                     <button

@@ -87,6 +87,12 @@ export type DataTableProps<T extends { id: string }> = {
     variant?: "default" | "danger";
     perform: (ids: string[]) => void | Promise<void>;
   }>;
+  /** Optional Import handler. Surfaces an "Import" button in the toolbar
+   *  that opens a file picker; selected file is passed to this callback for
+   *  the page to parse / upload. */
+  onImport?: (file: File) => void | Promise<void>;
+  /** Optional Refresh handler. Defaults to `router.refresh()` when omitted. */
+  onRefresh?: () => void | Promise<void>;
 };
 
 // Helpers — defined above the component because Turbopack's server runtime
@@ -159,6 +165,8 @@ export async function DataTable<T extends { id: string }>({
   pageSize,
   rowActions,
   bulkActions,
+  onImport,
+  onRefresh,
 }: DataTableProps<T>) {
   if (loading) {
     return <DataTableSkeleton columns={columns.length} rows={6} />;
@@ -230,6 +238,8 @@ export async function DataTable<T extends { id: string }>({
       density={density}
       bulkActions={interactiveBulk}
       tableId={resolvedTableId}
+      onImport={onImport}
+      onRefresh={onRefresh}
     />
   );
   // `stickyHeader` and `maxHeight` are absorbed: the interactive table

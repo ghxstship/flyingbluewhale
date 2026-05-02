@@ -24,7 +24,14 @@ import {
   Layers,
   Rows3,
   Rows4,
+  RefreshCw,
+  Share2,
+  Upload,
+  RotateCcw,
+  Plus,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   DndContext,
   closestCenter,
@@ -114,6 +121,14 @@ export type InteractiveTableProps = {
   tableId?: string;
   /** Fixed virtualization row height in px. Falls back to density-based if omitted. */
   rowHeight?: number;
+  /** Optional import handler. When provided, an "Import" button surfaces in
+   *  the toolbar; clicking opens a file picker that hands the chosen file
+   *  back to the caller for parsing/upload. */
+  onImport?: (file: File) => void | Promise<void>;
+  /** Optional refresh handler. When provided, a refresh button surfaces in
+   *  the toolbar. Defaults to `router.refresh()` so server-rendered tables
+   *  re-query without callers wiring anything. */
+  onRefresh?: () => void | Promise<void>;
 };
 
 type SavedView = {
@@ -144,7 +159,10 @@ export function DataTableInteractive({
   bulkActions,
   tableId,
   rowHeight,
+  onImport,
+  onRefresh,
 }: InteractiveTableProps) {
+  const router = useRouter();
   const { prefs, setPrefs } = useUserPreferences();
   const savedView = tableId ? (prefs.table_views as Record<string, SavedView> | undefined)?.[tableId] : undefined;
 
@@ -215,6 +233,62 @@ export function DataTableInteractive({
     columns.forEach((c, i) => map.set(c.key, i));
     return map;
   }, [columns]);
+
+  // Toolbar action handlers — wired below to Refresh / Share / Reset / Import.
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [refreshing, setRefreshing] = React.useState(false);
+  const handleRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      if (onRefresh) await onRefresh();
+      else router.refresh();
+    } finally {
+      // Small delay so the spinner is perceivable for sync refreshes.
+      setTimeout(() => setRefreshing(false), 250);
+    }
+  }, [onRefresh, router]);
+  const handleShare = React.useCallback(async () => {
+    try {
+      const url = window.location.href;
+      await navigator.clipboard.writeText(url);
+      toast.success("View Link Copied");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  }, []);
+  const handleResetView = React.useCallback(() => {
+    setQuery("");
+    setSortKey("");
+    setSortDir("");
+    setSortStack([]);
+    setPage(0);
+    setDensity(densityProp);
+    setHiddenCols(new Set(columns.filter((c) => c.defaultHidden).map((c) => c.key)));
+    setPinnedCols(new Set());
+    setColOrder(columns.map((c) => c.key));
+    setFilters({});
+    setGroupBy("");
+    setCollapsed(new Set());
+    toast.success("View Reset");
+  }, [columns, densityProp, setQuery, setSortKey, setSortDir, setPage]);
+  const handleImportClick = React.useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+  const handleImportFile = React.useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file || !onImport) return;
+      try {
+        await onImport(file);
+        toast.success(`Imported ${file.name}`);
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "Import failed");
+      } finally {
+        e.target.value = "";
+      }
+    },
+    [onImport],
+  );
 
   // Filter — first by free-text query, then by per-column include-only filters
   const filtered = React.useMemo(() => {
@@ -386,53 +460,121 @@ export function DataTableInteractive({
   const rowPad = density === "compact" ? "py-1.5" : "py-2.5";
   const hasRowActions = rows.some((r) => r.actions && r.actions.length > 0);
 
+  const customizationActive =
+    Boolean(query) ||
+    Boolean(sortKey) ||
+    sortStack.length > 0 ||
+    Object.keys(filters).length > 0 ||
+    hiddenCols.size > columns.filter((c) => c.defaultHidden).length ||
+    pinnedCols.size > 0 ||
+    Boolean(groupBy);
+
   return (
     <div className="space-y-3">
-      {/* Toolbar — borderless per design audit. Bottom 1px chrome rule
-          visually separates the toolbar strip from the table body without
-          double-enclosing inside .surface (the canonical 3px brutal border
-          was too heavy for a data view). The full functional set lives
-          here: search, row count, group-by, CSV export, density toggle,
-          column visibility / pinning / reorder. */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-color)] px-1 py-2">
-        {searchable && (
-          <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-            <Search size={14} aria-hidden="true" />
-            <input
-              type="search"
-              value={String(query)}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setPage(0);
-              }}
-              placeholder="Search…"
-              className="bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
-              aria-label="Filter Rows"
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                aria-label="Clear search"
-                className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-              >
-                <X size={12} />
-              </button>
-            )}
-          </div>
-        )}
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-[var(--text-muted)]">{sorted.length} rows</span>
+      {/* Toolbar — four-section layout (Discover | Shape | Actions | Display)
+          per design canon. Borderless container; bottom 1px chrome rule
+          separates the strip from the table body. */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-[var(--border-color)] px-1 py-2">
+        {/* ── Section 1 · Discover ── */}
+        <div className="flex flex-1 items-center gap-3">
+          {searchable && (
+            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+              <Search size={14} aria-hidden="true" />
+              <input
+                type="search"
+                value={String(query)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPage(0);
+                }}
+                placeholder="Search…"
+                className="w-40 bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)] sm:w-56"
+                aria-label="Filter Rows"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  aria-label="Clear search"
+                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+          )}
+          <span className="font-mono text-[10px] text-[var(--text-muted)] tabular-nums">
+            {sorted.length} {sorted.length === 1 ? "row" : "rows"}
+          </span>
+        </div>
+
+        {/* ── Section 2 · Shape (filter / sort / group) ── */}
+        <div className="flex items-center gap-1.5">
+          <FilterAddMenu
+            columns={columns}
+            filters={filters}
+            distinctValuesByKey={distinctValuesByKey}
+            onChange={setFilters}
+          />
+          <SortStackMenu
+            columns={columns}
+            sortKey={String(sortKey)}
+            sortDir={(sortDir as "asc" | "desc" | "") ?? ""}
+            sortStack={sortStack}
+            onSetPrimary={(key, dir) => {
+              setSortKey(key);
+              setSortDir(dir);
+            }}
+            onSetStack={setSortStack}
+          />
           <GroupByMenu columns={columns} groupBy={groupBy} setGroupBy={setGroupBy} />
+        </div>
+
+        {/* ── Section 3 · Actions (view / share / export / import / refresh) ── */}
+        <div className="flex items-center gap-1.5">
+          <ViewMenu customizationActive={customizationActive} onReset={handleResetView} />
+          <ToolbarIconButton icon={Share2} label="Share view link" onClick={handleShare} />
           <button
             type="button"
             onClick={() => exportCsv(renderedCols, sorted, tableId)}
             aria-label="Export visible rows to CSV"
-            className="rounded-md border border-[var(--border-color)] px-2 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
           >
-            <Download size={12} className="me-1 inline" aria-hidden="true" />
-            Export CSV
+            <Download size={12} aria-hidden="true" />
+            Export
           </button>
+          {onImport && (
+            <>
+              <button
+                type="button"
+                onClick={handleImportClick}
+                aria-label="Import rows from a file"
+                className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+              >
+                <Upload size={12} aria-hidden="true" />
+                Import
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv,.tsv,.json,.xlsx"
+                onChange={handleImportFile}
+                className="sr-only"
+                aria-hidden="true"
+                tabIndex={-1}
+              />
+            </>
+          )}
+          <ToolbarIconButton
+            icon={RefreshCw}
+            label="Refresh table data"
+            onClick={handleRefresh}
+            spinning={refreshing}
+          />
+        </div>
+
+        {/* ── Section 4 · Display (density / column visibility) ── */}
+        <div className="flex items-center gap-1.5">
           <DensityToggle value={density} onChange={setDensity} />
           <ColumnMenu
             columns={columns}
@@ -609,30 +751,43 @@ export function DataTableInteractive({
                 );
               })
             ) : pageSizeEff ? (
-              visible.map((row) => (
-                <TableRow
-                  key={row.id}
-                  row={row}
-                  cols={renderedCols}
-                  colIndexByKey={colIndexByKey}
-                  rowPad={rowPad}
-                  bulk={!!bulkActions}
-                  showActions={hasRowActions}
-                  selected={selected.has(row.id)}
-                  onSelect={toggleOne}
+              visible.length === 0 ? (
+                <FilteredEmptyRow
+                  query={String(query)}
+                  filterCount={Object.keys(filters).length}
+                  colSpan={renderedCols.length + (bulkActions ? 1 : 0) + (hasRowActions ? 1 : 0)}
+                  onClearFilters={() => {
+                    setQuery("");
+                    setFilters({});
+                  }}
                 />
-              ))
+              ) : (
+                visible.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    row={row}
+                    cols={renderedCols}
+                    colIndexByKey={colIndexByKey}
+                    rowPad={rowPad}
+                    bulk={!!bulkActions}
+                    showActions={hasRowActions}
+                    selected={selected.has(row.id)}
+                    onSelect={toggleOne}
+                  />
+                ))
+              )
             ) : (
               <>
                 {virtualizer.getVirtualItems().length === 0 && visible.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={renderedCols.length + (bulkActions ? 1 : 0) + (hasRowActions ? 1 : 0)}
-                      className="px-6 py-8 text-center text-sm text-[var(--text-muted)]"
-                    >
-                      No rows match &quot;{String(query)}&quot;
-                    </td>
-                  </tr>
+                  <FilteredEmptyRow
+                    query={String(query)}
+                    filterCount={Object.keys(filters).length}
+                    colSpan={renderedCols.length + (bulkActions ? 1 : 0) + (hasRowActions ? 1 : 0)}
+                    onClearFilters={() => {
+                      setQuery("");
+                      setFilters({});
+                    }}
+                  />
                 )}
                 {virtualizer.getVirtualItems().map((virtualRow) => {
                   const row = visible[virtualRow.index];
@@ -853,6 +1008,391 @@ function GroupByMenu({
             {c.header}
           </DropdownMenuItem>
         ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+/**
+ * Inline empty-state row for when the dataset has rows but the active
+ * search query and/or column filters narrow the visible set to zero.
+ * Distinct from the dataset-level empty state — preserves the toolbar +
+ * column headers and offers a one-click escape via "Clear Filters".
+ */
+function FilteredEmptyRow({
+  query,
+  filterCount,
+  colSpan,
+  onClearFilters,
+}: {
+  query: string;
+  filterCount: number;
+  colSpan: number;
+  onClearFilters: () => void;
+}) {
+  const hasQuery = query.trim().length > 0;
+  const message = hasQuery
+    ? `No rows match "${query}"${filterCount > 0 ? ` with the active filter${filterCount === 1 ? "" : "s"}` : ""}`
+    : filterCount > 0
+      ? `No rows match the active filter${filterCount === 1 ? "" : "s"}`
+      : "No rows to display";
+  return (
+    <tr>
+      <td colSpan={colSpan} className="px-6 py-10 text-center text-sm text-[var(--text-muted)]">
+        <div className="flex flex-col items-center gap-2">
+          <span>{message}</span>
+          {(hasQuery || filterCount > 0) && (
+            <button
+              type="button"
+              onClick={onClearFilters}
+              className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+            >
+              <X size={12} aria-hidden="true" />
+              Clear Filters
+            </button>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+/**
+ * Compact icon-only toolbar button with a tooltip-style aria-label and an
+ * optional spinning state for in-flight async actions. Matches the
+ * border-+-padding rhythm of the other toolbar buttons.
+ */
+function ToolbarIconButton({
+  icon: Icon,
+  label,
+  onClick,
+  spinning,
+}: {
+  icon: React.ComponentType<{ size?: number; "aria-hidden"?: boolean | "true" | "false"; className?: string }>;
+  label: string;
+  onClick?: () => void | Promise<void>;
+  spinning?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className="inline-flex h-7 w-7 items-center justify-center rounded border border-[var(--border-color)] text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+    >
+      <Icon size={12} aria-hidden="true" className={spinning ? "motion-safe:animate-spin" : undefined} />
+    </button>
+  );
+}
+
+/**
+ * FilterAddMenu — toolbar entry for the per-column filter system. Lists
+ * filterable columns; selecting one opens a nested distinct-values picker
+ * that writes into the same `filters` state the column-header funnels use,
+ * so the active-filter chips and column-header indicators stay in sync.
+ *
+ * Canonical "+ Filter" pattern (Linear / Notion / Airtable).
+ */
+function FilterAddMenu({
+  columns,
+  filters,
+  distinctValuesByKey,
+  onChange,
+}: {
+  columns: InteractiveColumn[];
+  filters: Record<string, string[]>;
+  distinctValuesByKey: Map<string, Map<string, number>>;
+  onChange: (next: Record<string, string[]>) => void;
+}) {
+  const filterable = columns.filter((c) => c.filterable);
+  const [activeKey, setActiveKey] = React.useState<string>("");
+  const activeColumn = filterable.find((c) => c.key === activeKey);
+  const activeDistincts = activeKey ? distinctValuesByKey.get(activeKey) : undefined;
+  const activeFilterCount = Object.values(filters).reduce((n, vs) => n + vs.length, 0);
+  if (filterable.length === 0) return null;
+
+  function setColumnFilter(key: string, vs: string[]) {
+    const next = { ...filters };
+    if (vs.length === 0) delete next[key];
+    else next[key] = vs;
+    onChange(next);
+  }
+
+  return (
+    <DropdownMenu onOpenChange={(open) => !open && setActiveKey("")}>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label={activeFilterCount ? `Filters (${activeFilterCount} active)` : "Add filter"}
+          className={`inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
+            activeFilterCount ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
+          }`}
+        >
+          {activeFilterCount ? <Filter size={12} aria-hidden="true" /> : <Plus size={12} aria-hidden="true" />}
+          {activeFilterCount ? `Filter · ${activeFilterCount}` : "Filter"}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="max-h-80 w-64 overflow-auto">
+        {!activeColumn ? (
+          <>
+            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Filter By</div>
+            {filterable.map((c) => {
+              const count = filters[c.key]?.length ?? 0;
+              return (
+                <DropdownMenuItem
+                  key={c.key}
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    setActiveKey(c.key);
+                  }}
+                  className="flex items-center justify-between gap-2"
+                >
+                  <span className="truncate">{c.header}</span>
+                  {count > 0 && (
+                    <span className="font-mono text-[10px] text-[var(--org-primary)] tabular-nums">{count}</span>
+                  )}
+                </DropdownMenuItem>
+              );
+            })}
+            {activeFilterCount > 0 && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => onChange({})}>Clear All Filters</DropdownMenuItem>
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="flex items-center gap-1 px-2 py-1">
+              <button
+                type="button"
+                aria-label="Back to filter columns"
+                onClick={() => setActiveKey("")}
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              >
+                <ChevronLeft size={12} aria-hidden="true" />
+              </button>
+              <span className="text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">
+                {activeColumn.header}
+              </span>
+            </div>
+            <DropdownMenuSeparator />
+            {!activeDistincts || activeDistincts.size === 0 ? (
+              <div className="px-2 py-2 text-xs text-[var(--text-muted)]">No values</div>
+            ) : (
+              Array.from(activeDistincts.entries())
+                .sort((a, b) => a[0].localeCompare(b[0]))
+                .map(([val, count]) => {
+                  const selected = filters[activeKey] ?? [];
+                  const checked = selected.includes(val);
+                  return (
+                    <DropdownMenuItem
+                      key={val}
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        if (checked)
+                          setColumnFilter(
+                            activeKey,
+                            selected.filter((v) => v !== val),
+                          );
+                        else setColumnFilter(activeKey, [...selected, val]);
+                      }}
+                      className="flex items-center justify-between gap-2"
+                    >
+                      <span className="flex items-center gap-2 truncate">
+                        <input type="checkbox" checked={checked} readOnly className="pointer-events-none" />
+                        <span className="truncate">{val || "—"}</span>
+                      </span>
+                      <span className="font-mono text-[10px] text-[var(--text-muted)]">{count}</span>
+                    </DropdownMenuItem>
+                  );
+                })
+            )}
+            {(filters[activeKey]?.length ?? 0) > 0 && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => setColumnFilter(activeKey, [])}>Clear This Column</DropdownMenuItem>
+              </>
+            )}
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+/**
+ * SortStackMenu — toolbar entry for the multi-sort system. Surfaces the
+ * current primary + secondary sort keys with add / remove / direction
+ * controls so multi-sort is discoverable (was only reachable via shift-
+ * click on column headers).
+ */
+function SortStackMenu({
+  columns,
+  sortKey,
+  sortDir,
+  sortStack,
+  onSetPrimary,
+  onSetStack,
+}: {
+  columns: InteractiveColumn[];
+  sortKey: string;
+  sortDir: "asc" | "desc" | "";
+  sortStack: Array<{ key: string; dir: "asc" | "desc" }>;
+  onSetPrimary: (key: string, dir: "asc" | "desc") => void;
+  onSetStack: (next: Array<{ key: string; dir: "asc" | "desc" }>) => void;
+}) {
+  const sortable = columns.filter((c) => c.sortable !== false);
+  if (sortable.length === 0) return null;
+  const headerByKey = new Map(columns.map((c) => [c.key, c.header]));
+  const stack: Array<{ key: string; dir: "asc" | "desc" }> = [];
+  if (sortKey) stack.push({ key: sortKey, dir: (sortDir || "asc") as "asc" | "desc" });
+  stack.push(...sortStack);
+  const stackKeys = new Set(stack.map((s) => s.key));
+  const totalSorts = stack.length;
+
+  function flipDir(idx: number) {
+    if (idx === 0) {
+      const next = sortDir === "asc" ? "desc" : "asc";
+      onSetPrimary(sortKey, next);
+    } else {
+      const next = [...sortStack];
+      next[idx - 1] = { ...next[idx - 1], dir: next[idx - 1].dir === "asc" ? "desc" : "asc" };
+      onSetStack(next);
+    }
+  }
+  function removeSort(idx: number) {
+    if (idx === 0) {
+      // Promote the first secondary to primary, drop the rest down.
+      const promoted = sortStack[0];
+      if (promoted) {
+        onSetPrimary(promoted.key, promoted.dir);
+        onSetStack(sortStack.slice(1));
+      } else {
+        onSetPrimary("", "asc");
+      }
+    } else {
+      onSetStack(sortStack.filter((_, i) => i !== idx - 1));
+    }
+  }
+  function addSort(key: string) {
+    if (stackKeys.has(key)) return;
+    if (!sortKey) onSetPrimary(key, "asc");
+    else onSetStack([...sortStack, { key, dir: "asc" }]);
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label={totalSorts > 0 ? `Sorted by ${totalSorts} column${totalSorts === 1 ? "" : "s"}` : "Add sort"}
+          className={`inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
+            totalSorts > 0 ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
+          }`}
+        >
+          <ArrowUpDown size={12} aria-hidden="true" />
+          {totalSorts > 0 ? `Sort · ${totalSorts}` : "Sort"}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-72">
+        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Sort By</div>
+        {stack.length === 0 ? (
+          <div className="px-2 py-1 text-xs text-[var(--text-muted)]">No sort applied</div>
+        ) : (
+          stack.map((s, idx) => (
+            <div key={`${s.key}-${idx}`} className="flex items-center justify-between gap-2 px-2 py-1 text-xs">
+              <span className="flex items-center gap-2 truncate">
+                <span className="font-mono text-[10px] text-[var(--text-muted)] tabular-nums">{idx + 1}</span>
+                <span className="truncate">{headerByKey.get(s.key) ?? s.key}</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => flipDir(idx)}
+                  aria-label={`Toggle ${s.key} direction (${s.dir})`}
+                  className="rounded px-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                >
+                  {s.dir === "asc" ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeSort(idx)}
+                  aria-label={`Remove sort on ${s.key}`}
+                  className="rounded px-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            </div>
+          ))
+        )}
+        {sortable.some((c) => !stackKeys.has(c.key)) && (
+          <>
+            <DropdownMenuSeparator />
+            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Add Sort</div>
+            {sortable
+              .filter((c) => !stackKeys.has(c.key))
+              .map((c) => (
+                <DropdownMenuItem key={c.key} onSelect={() => addSort(c.key)}>
+                  {c.header}
+                </DropdownMenuItem>
+              ))}
+          </>
+        )}
+        {totalSorts > 0 && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onSelect={() => {
+                onSetPrimary("", "asc");
+                onSetStack([]);
+              }}
+            >
+              Clear All Sorts
+            </DropdownMenuItem>
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+/**
+ * ViewMenu — saved-view affordance. Today only surfaces a Reset action
+ * (clears query / sort / filters / density / hidden / pinned / order /
+ * group / collapsed back to defaults). The single-named saved view
+ * persists via `prefs.table_views[tableId]` regardless of this menu.
+ *
+ * Future: swap in a multi-view switcher when the storage shape extends to
+ * `Record<viewName, SavedView>`.
+ */
+function ViewMenu({ customizationActive, onReset }: { customizationActive: boolean; onReset: () => void }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label="View options"
+          className={`inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
+            customizationActive ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
+          }`}
+        >
+          <SlidersHorizontal size={12} aria-hidden="true" />
+          {customizationActive ? "View · Modified" : "View"}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-52">
+        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Saved View</div>
+        <DropdownMenuItem disabled className="opacity-60">
+          Default · Auto-Saved
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={onReset} disabled={!customizationActive}>
+          <RotateCcw size={12} aria-hidden="true" className="me-1.5 inline" />
+          Reset View To Defaults
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

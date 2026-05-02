@@ -122,7 +122,8 @@ function fmtBudget(cents: number): string {
     style: "currency",
     currency: "USD",
     notation: "compact",
-    maximumFractionDigits: 1,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(cents / 100);
 }
 

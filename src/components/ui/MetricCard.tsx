@@ -23,7 +23,7 @@ export function MetricCard({
 }) {
   if (loading) {
     return (
-      <div className="surface-raised p-4" aria-busy="true">
+      <div className="surface p-4" aria-busy="true">
         <div className="flex items-center justify-between">
           <div className="skeleton h-3 w-20 rounded" />
           <div className="skeleton h-4 w-4 rounded" />
@@ -34,9 +34,9 @@ export function MetricCard({
     );
   }
   return (
-    <div className="surface-raised p-4">
+    <div className="surface p-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]">{label}</span>
+        <span className="text-xs font-medium tracking-wide text-[var(--text-muted)] uppercase">{label}</span>
         {icon}
       </div>
       <div
@@ -48,9 +48,7 @@ export function MetricCard({
       </div>
       {delta && (
         <div
-          className={`mt-1 text-xs font-medium ${
-            delta.positive ? "text-emerald-600" : "text-[var(--color-error)]"
-          }`}
+          className={`mt-1 text-xs font-medium ${delta.positive ? "text-emerald-600" : "text-[var(--color-error)]"}`}
         >
           <span aria-hidden="true">{delta.positive ? "↑" : "↓"} </span>
           <span className="sr-only">{delta.positive ? "increased" : "decreased"} by </span>

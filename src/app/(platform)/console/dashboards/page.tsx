@@ -114,34 +114,37 @@ export default async function Page() {
           <MetricCard label="Open Punch" value={totals.punch.toLocaleString()} />
           <MetricCard label="OSHA recordables · 30d" value={totals.recordable.toLocaleString()} />
         </div>
-        <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Per-project KPIs</h3>
-          <table className="data-table mt-3">
+        <section>
+          <h3 className="pb-3 text-base font-semibold">Per-Project KPIs</h3>
+          <table className="data-table">
             <thead>
               <tr>
                 <th>Project</th>
-                <th>Open RFIs</th>
-                <th>Open punch</th>
-                <th>Open inspections</th>
-                <th>Recordables (30d)</th>
-                <th>Budget</th>
-                <th>Spent</th>
+                <th className="text-right">Open RFIs</th>
+                <th className="text-right">Open Punch</th>
+                <th className="text-right">Open Inspections</th>
+                <th className="text-right">Recordables (30d)</th>
+                <th className="text-right">Budget</th>
+                <th className="text-right">Spent</th>
               </tr>
             </thead>
             <tbody>
               {kpis.map((k) => (
                 <tr key={k.id}>
                   <td>
-                    <Link href={`/console/projects/${k.id}`} className="hover:underline">
+                    <Link
+                      href={`/console/projects/${k.id}`}
+                      className="hover:text-[var(--org-primary)] hover:underline"
+                    >
                       {k.name}
                     </Link>
                   </td>
-                  <td className="font-mono text-xs">{k.open_rfis}</td>
-                  <td className="font-mono text-xs">{k.open_punch}</td>
-                  <td className="font-mono text-xs">{k.open_inspections}</td>
-                  <td className="font-mono text-xs">{k.recordable_30d}</td>
-                  <td className="font-mono text-xs">{formatMoney(k.budget_cents)}</td>
-                  <td className="font-mono text-xs">{formatMoney(k.spent_cents)}</td>
+                  <td className="text-right tabular-nums">{k.open_rfis}</td>
+                  <td className="text-right tabular-nums">{k.open_punch}</td>
+                  <td className="text-right tabular-nums">{k.open_inspections}</td>
+                  <td className="text-right tabular-nums">{k.recordable_30d}</td>
+                  <td className="text-right tabular-nums">{formatMoney(k.budget_cents)}</td>
+                  <td className="text-right tabular-nums">{formatMoney(k.spent_cents)}</td>
                 </tr>
               ))}
             </tbody>

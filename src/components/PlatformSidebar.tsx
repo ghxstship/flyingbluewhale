@@ -319,7 +319,7 @@ function SidebarGroup({
             onClick={() => onToggleGroup(label)}
             aria-expanded={isOpen}
             aria-controls={`${headerId}-items`}
-            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--text-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)]"
+            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--text-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
           >
             <span className="truncate">{label}</span>
             <ChevronDown
@@ -345,62 +345,74 @@ function SidebarGroup({
             // export cross the RSC boundary as plain props (Lucide
             // components are functions and can't be serialized).
             const Icon = item.icon ? NAV_ICONS[item.icon] : null;
+            const linkEl = (
+              <Link
+                href={item.href}
+                // Prefetch off: the sidebar carries ~120 nav links across 11
+                // groups; default `<Link>` viewport+hover prefetch caused an
+                // RSC fetch storm (~10–14 dupes per revalidation, ~200 dupes
+                // accumulated for the most-hovered link) that exhausted the
+                // browser's per-origin connection pool with
+                // `ERR_INSUFFICIENT_RESOURCES`. Sidebar links are orientation
+                // jumps, not perf-critical paths — pay the click latency for
+                // a sane network panel. Sea Trial FINDING-005.
+                prefetch={false}
+                aria-current={active ? "page" : undefined}
+                className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
+                  active
+                    ? "bg-[var(--surface)] font-medium text-[var(--text-primary)]"
+                    : "text-[var(--text-secondary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
+                }`}
+              >
+                {active && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--org-primary)]"
+                  />
+                )}
+                <span className="flex min-w-0 items-center gap-2 truncate ps-1">
+                  {Icon ? (
+                    <Icon
+                      size={14}
+                      strokeWidth={2}
+                      className={`shrink-0 ${
+                        active
+                          ? "text-[var(--text-primary)]"
+                          : "text-[var(--text-muted)] group-hover:text-[var(--text-primary)]"
+                      }`}
+                      aria-hidden="true"
+                    />
+                  ) : collapsed ? (
+                    <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
+                  ) : null}
+                  {!collapsed && <span className="truncate">{item.label}</span>}
+                </span>
+                {!collapsed && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onTogglePin(item.href);
+                    }}
+                    aria-label={isPinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
+                    className={`shrink-0 rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
+                      isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                    }`}
+                  >
+                    {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
+                  </button>
+                )}
+              </Link>
+            );
             return (
               <li key={item.href} className="group relative">
-                <Link
-                  href={item.href}
-                  // Prefetch off: the sidebar carries ~120 nav links across 11
-                  // groups; default `<Link>` viewport+hover prefetch caused an
-                  // RSC fetch storm (~10–14 dupes per revalidation, ~200 dupes
-                  // accumulated for the most-hovered link) that exhausted the
-                  // browser's per-origin connection pool with
-                  // `ERR_INSUFFICIENT_RESOURCES`. Sidebar links are orientation
-                  // jumps, not perf-critical paths — pay the click latency for
-                  // a sane network panel. Sea Trial FINDING-005.
-                  prefetch={false}
-                  aria-current={active ? "page" : undefined}
-                  className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors ${
-                    active
-                      ? "bg-[var(--surface)] font-medium text-[var(--text-primary)]"
-                      : "text-[var(--text-secondary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
-                  }`}
-                  title={collapsed ? item.label : undefined}
-                >
-                  {active && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--org-primary)]"
-                    />
-                  )}
-                  <span className="flex min-w-0 items-center gap-2 truncate ps-1">
-                    {Icon ? (
-                      <Icon
-                        size={collapsed ? 16 : 14}
-                        strokeWidth={2}
-                        className="shrink-0 text-[var(--text-muted)] group-hover:text-[var(--text-primary)]"
-                        aria-hidden="true"
-                      />
-                    ) : collapsed ? (
-                      <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
-                    ) : null}
-                    {!collapsed && <span className="truncate">{item.label}</span>}
-                  </span>
-                  {!collapsed && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        onTogglePin(item.href);
-                      }}
-                      aria-label={isPinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
-                      className={`shrink-0 rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] ${
-                        isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-                      }`}
-                    >
-                      {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
-                    </button>
-                  )}
-                </Link>
+                {collapsed ? (
+                  <Hint label={item.label} side="right" delayDuration={300}>
+                    {linkEl}
+                  </Hint>
+                ) : (
+                  linkEl
+                )}
               </li>
             );
           })}

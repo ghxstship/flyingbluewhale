@@ -26,6 +26,11 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
         eyebrow={invoice.number}
         title={invoice.title}
         subtitle={`${formatMoney(invoice.amount_cents, invoice.currency)} · ${invoice.status}`}
+        breadcrumbs={[
+          { label: "Finance", href: "/console/finance/invoices" },
+          { label: "Invoices", href: "/console/finance/invoices" },
+          { label: invoice.number },
+        ]}
         action={
           <div className="flex items-center gap-2">
             <InvoiceStatusControls id={invoice.id} status={invoice.status} />
@@ -44,15 +49,19 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
           <Field label="Status">
             <StatusBadge status={invoice.status} />
           </Field>
-          <Field label="Amount">{formatMoney(invoice.amount_cents, invoice.currency)}</Field>
+          <Field label="Amount" mono>
+            {formatMoney(invoice.amount_cents, invoice.currency)}
+          </Field>
           <Field label="Issued">{invoice.issued_at ?? "—"}</Field>
           <Field label="Due">{invoice.due_at ?? "—"}</Field>
           <Field label="Paid">{invoice.paid_at ? timeAgo(invoice.paid_at) : "—"}</Field>
-          <Field label="Stripe">{invoice.stripe_payment_intent ?? "—"}</Field>
+          <Field label="Stripe" mono>
+            {invoice.stripe_payment_intent ?? "—"}
+          </Field>
         </div>
         {invoice.notes && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Notes</h3>
+            <h3 className="text-base font-semibold">Notes</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{invoice.notes}</p>
           </div>
         )}
@@ -61,11 +70,11 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, children, mono }: { label: string; children: React.ReactNode; mono?: boolean }) {
   return (
-    <div className="surface-raised p-3">
-      <div className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">{label}</div>
-      <div className="mt-1 font-mono text-sm">{children}</div>
+    <div className="surface p-3">
+      <div className="text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">{label}</div>
+      <div className={`mt-1 text-sm ${mono ? "font-mono" : ""}`}>{children}</div>
     </div>
   );
 }

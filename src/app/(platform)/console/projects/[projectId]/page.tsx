@@ -37,8 +37,14 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
   return (
     <>
       <ModuleHeader
+        eyebrow="Project"
         title={project.name}
         subtitle={project.description ?? "No description"}
+        breadcrumbs={[
+          { label: "Projects", href: "/console/projects" },
+          { label: "All Projects", href: "/console/projects" },
+          { label: project.name },
+        ]}
         action={
           <div className="flex items-center gap-2">
             <ProjectStatusToggle projectId={project.id} status={project.status} />
@@ -53,7 +59,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           </div>
         }
       />
-      <div className="border-b border-[var(--color-border)] px-8">
+      <div className="border-b border-[var(--border-color)] px-8">
         <nav className="mx-auto flex max-w-6xl flex-wrap gap-1">
           {subTabs.map((t) => (
             <Link key={t.href} href={t.href} className="nav-item">
@@ -62,46 +68,34 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           ))}
         </nav>
       </div>
-      <div className="page-content">
+      <div className="page-content space-y-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Field label="Status">
             <Badge variant={project.status === "active" ? "success" : "muted"}>{project.status}</Badge>
           </Field>
-          <Field label="Slug" mono>
-            {project.slug}
-          </Field>
-          <Field label="Start" mono>
-            {project.start_date ?? "—"}
-          </Field>
-          <Field label="End" mono>
-            {project.end_date ?? "—"}
-          </Field>
-          <Field label="Budget" mono>
-            {formatMoney(project.budget_cents) || "—"}
-          </Field>
-          <Field label="Created" mono>
-            {formatDate(project.created_at)}
-          </Field>
-          <Field label="Updated" mono>
-            {formatDate(project.updated_at)}
-          </Field>
+          <Field label="Slug">{project.slug}</Field>
+          <Field label="Start">{project.start_date ?? "—"}</Field>
+          <Field label="End">{project.end_date ?? "—"}</Field>
+          <Field label="Budget">{formatMoney(project.budget_cents) || "—"}</Field>
+          <Field label="Created">{formatDate(project.created_at)}</Field>
+          <Field label="Updated">{formatDate(project.updated_at)}</Field>
         </div>
 
-        <div className="card mt-6 p-6">
-          <h2 className="text-heading text-sm">Description</h2>
-          <p className="mt-3 text-sm whitespace-pre-wrap text-[var(--color-text-secondary)]">
+        <div className="surface p-6">
+          <h2 className="text-base font-semibold">Description</h2>
+          <p className="mt-3 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">
             {project.description || "No description provided yet."}
           </p>
         </div>
 
-        <div className="card-elevated mt-6 p-6">
-          <h2 className="text-heading text-sm">External Portal</h2>
-          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+        <div className="surface p-6">
+          <h2 className="text-base font-semibold">External Portal</h2>
+          <p className="mt-2 text-sm text-[var(--text-secondary)]">
             Stakeholders access this project via slug-scoped portal.
           </p>
           <Link
             href={`/p/${project.slug}/overview`}
-            className="text-mono mt-3 inline-block text-xs text-[var(--brand-color)]"
+            className="mt-3 inline-block font-mono text-xs text-[var(--org-primary)] hover:underline"
           >
             /p/{project.slug}/overview →
           </Link>
@@ -111,11 +105,11 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
   );
 }
 
-function Field({ label, children, mono }: { label: string; children: React.ReactNode; mono?: boolean }) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="card-elevated p-3">
-      <div className="text-label text-[var(--color-text-tertiary)]">{label}</div>
-      <div className={`mt-1 text-sm ${mono ? "text-mono" : ""}`}>{children}</div>
+    <div className="surface p-3">
+      <div className="text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">{label}</div>
+      <div className="mt-1 text-sm">{children}</div>
     </div>
   );
 }

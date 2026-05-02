@@ -94,7 +94,7 @@ export default async function MobileCocPage() {
                   )}
                 </div>
                 <div className="flex flex-none items-center gap-2">
-                  <Badge variant="muted">audit</Badge>
+                  <Badge variant="muted">Audit</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">{relativeTime(r.at)}</span>
                 </div>
               </li>

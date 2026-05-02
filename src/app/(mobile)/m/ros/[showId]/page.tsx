@@ -131,7 +131,7 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
               <li key={c.id} className="flex items-start gap-3 py-2 text-xs">
                 <div className="w-12 shrink-0 font-mono tabular-nums">{fmtTime(c.scheduled_at)}</div>
                 <div className="min-w-0 flex-1">{c.label}</div>
-                <Badge variant="success">done</Badge>
+                <Badge variant="success">Done</Badge>
               </li>
             ))}
           </ul>

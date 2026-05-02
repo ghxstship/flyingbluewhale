@@ -10,7 +10,7 @@ export { PlatformSidebar } from "./PlatformSidebar";
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {
   return (
     <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
-      <div className="mb-3 flex items-center gap-2 text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)] uppercase">
+      <div className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-[var(--org-primary)]">
         GVTEWAY
       </div>
       <div className="nav-label">{title}</div>
@@ -65,11 +65,7 @@ export function ModuleHeader({
       <div className="module-header-inner">
         <div className="min-w-0 flex-1">
           {breadcrumbs && breadcrumbs.length > 0 && <UnifiedBreadcrumbs items={breadcrumbs} className="mb-2" />}
-          {eyebrow && (
-            <div className="text-[11px] font-semibold tracking-wider text-[var(--org-primary)] uppercase">
-              {eyebrow}
-            </div>
-          )}
+          {eyebrow && <div className="text-xs font-semibold tracking-wide text-[var(--org-primary)]">{eyebrow}</div>}
           <h1 className="mt-1 text-2xl font-semibold tracking-tight text-[var(--foreground)]">{title}</h1>
           {subtitle ? <p className="mt-1 text-sm text-[var(--text-muted)]">{subtitle}</p> : null}
         </div>

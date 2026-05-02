@@ -732,6 +732,14 @@ pre,
     font-size: 0.6875rem;
     font-weight: 500;
     line-height: 1;
+    /* Audit DS-TC1: Title Case canon — pills auto-capitalize their
+       content so enum values like "draft" / "active" / "in_progress"
+       (after _-replace) render as "Draft" / "Active" / "In Progress"
+       without callers having to wrap each <Badge>{x}</Badge> in a
+       title-case helper. CSS `capitalize` only affects the first
+       letter of each word — already-uppercase text (acronyms) is
+       unaffected. */
+    text-transform: capitalize;
   }
   .badge-success {
     background: color-mix(in srgb, var(--color-success) 12%, transparent);
@@ -798,8 +806,11 @@ pre,
     padding: 0.5rem 0.75rem;
     font-size: 0.6875rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    /* Audit DS-TC1: Title Case canon — group labels render the source
+       string as-typed (callers pass "Dashboard", "Operations", etc.).
+       Was forcing UPPERCASE which violated the Title Case rule for
+       non-body text. Letter-spacing kept for visual hierarchy. */
+    letter-spacing: 0.04em;
     color: var(--text-muted);
   }
 
@@ -818,8 +829,11 @@ pre,
     text-align: left;
     font-size: 0.75rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    /* Audit DS-TC1: Title Case canon — column headers render the source
+       string as-typed (callers pass "Name", "Email", "Status", etc.).
+       Was forcing UPPERCASE which violated the Title Case rule for
+       non-body text. Letter-spacing kept for visual hierarchy. */
+    letter-spacing: 0.02em;
     color: var(--text-muted);
   }
   .data-table td {

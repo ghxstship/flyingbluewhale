@@ -14,12 +14,12 @@ import type { ReactNode } from "react";
  */
 
 export type StatusTone =
-  | "neutral"   // slate
-  | "info"      // sky
-  | "success"   // emerald
-  | "warning"   // amber
-  | "danger"    // rose
-  | "muted";    // even lower contrast than neutral
+  | "neutral" // slate
+  | "info" // sky
+  | "success" // emerald
+  | "warning" // amber
+  | "danger" // rose
+  | "muted"; // even lower contrast than neutral
 
 const TONE_CLASS: Record<StatusTone, string> = {
   neutral: "bg-slate-500/10 text-slate-600 dark:text-slate-300",
@@ -43,7 +43,7 @@ export function StatusChip({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${TONE_CLASS[tone]} ${className}`.trim()}
+      className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-wide capitalize ${TONE_CLASS[tone]} ${className}`.trim()}
     >
       {icon}
       {children}

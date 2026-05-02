@@ -25,7 +25,7 @@ export const SelectLabel = React.forwardRef<
   return (
     <SelectPrimitive.Label
       ref={ref}
-      className={`px-2 py-1.5 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase ${className}`}
+      className={`px-2 py-1.5 text-[10px] font-semibold tracking-wide text-[var(--text-muted)] ${className}`}
       {...props}
     />
   );

@@ -149,7 +149,7 @@ export default async function Page() {
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Inventory is a roll-up of every <Badge variant="muted">equipment</Badge> row in this workspace. Tag movements
+          Inventory is a roll-up of every <Badge variant="muted">Equipment</Badge> row in this workspace. Tag movements
           are recorded against the asset; pre-rig staging and venue bay assignments live in the rentals + dispatch
           surfaces.
         </p>

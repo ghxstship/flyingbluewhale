@@ -310,7 +310,7 @@ function SidebarGroup({
             onClick={() => onToggleGroup(label)}
             aria-expanded={isOpen}
             aria-controls={`${headerId}-items`}
-            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)]"
+            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--text-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)]"
           >
             <span className="truncate">{label}</span>
             <ChevronDown
@@ -320,10 +320,7 @@ function SidebarGroup({
             />
           </button>
         ) : (
-          <div
-            id={headerId}
-            className="px-2 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase"
-          >
+          <div id={headerId} className="px-2 text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">
             {label}
           </div>
         ))}

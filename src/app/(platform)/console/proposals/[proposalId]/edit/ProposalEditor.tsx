@@ -141,7 +141,7 @@ export function ProposalEditor({
   );
 
   return (
-    <form action={formAction} className="surface-raised space-y-4 p-6">
+    <form action={formAction} className="surface space-y-4 p-6">
       <div className="grid gap-4 sm:grid-cols-3">
         <Input label="Title" name="title" required defaultValue={defaults.title} />
         <Input label="Doc #" name="doc_number" defaultValue={defaults.doc_number} placeholder="FBW-001" />

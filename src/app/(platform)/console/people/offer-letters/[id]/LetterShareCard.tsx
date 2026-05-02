@@ -28,7 +28,7 @@ export function LetterShareCard({
   };
 
   return (
-    <section className="surface-raised space-y-4 p-5" id={`share-${letterId}`}>
+    <section className="surface space-y-4 p-5" id={`share-${letterId}`}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="text-sm font-semibold tracking-wider uppercase">Public Share Link</h3>

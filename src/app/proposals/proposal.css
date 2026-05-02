@@ -3,13 +3,16 @@
 
 @media print {
   :root {
-    --background: #FFFFFF;
-    --foreground: #0A0A0A;
-    --bg-secondary: #F7F7F7;
+    --background: #ffffff;
+    --foreground: #0a0a0a;
+    --bg-secondary: #f7f7f7;
     --text-muted: #555;
   }
 
-  .print-hide, .glass-nav, nav.glass-nav, .print-hide-sibling {
+  .print-hide,
+  .glass-nav,
+  nav.glass-nav,
+  .print-hide-sibling {
     display: none !important;
   }
 
@@ -26,10 +29,17 @@
     display: block !important;
   }
 
-  section { page-break-inside: avoid; }
-  .surface, .surface-raised, .surface-inset {
-    box-shadow: none !important;
-    border: 1px solid #D4D4D4 !important;
+  section {
+    page-break-inside: avoid;
   }
-  a { color: #000; text-decoration: underline; }
+  .surface,
+  .surface,
+  .surface-inset {
+    box-shadow: none !important;
+    border: 1px solid #d4d4d4 !important;
+  }
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
 }

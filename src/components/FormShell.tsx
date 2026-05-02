@@ -46,7 +46,7 @@ export function FormShell({
   cancelHref,
   children,
   dirtyGuard,
-  className = "surface-raised space-y-4 p-6",
+  className = "surface space-y-4 p-6",
   ...formProps
 }: FormShellProps) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
@@ -144,9 +144,7 @@ export function FormShell({
         <DialogContent size="sm">
           <DialogHeader>
             <DialogTitle>Leave without saving?</DialogTitle>
-            <DialogDescription>
-              You have unsaved changes. If you leave now, they will be lost.
-            </DialogDescription>
+            <DialogDescription>You have unsaved changes. If you leave now, they will be lost.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setBlockedUrl(null)}>

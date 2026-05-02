@@ -61,7 +61,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         </div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
-        <div className="surface-raised mt-8 p-5">
+        <div className="surface mt-8 p-5">
           <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
             Bottom line
           </div>
@@ -104,7 +104,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Why We Win.</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {c.whyWeWin.map((w) => (
-            <div key={w.title} className="surface-raised p-6">
+            <div key={w.title} className="surface p-6">
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={16} className="text-[var(--org-primary)]" />
                 <div className="text-sm font-semibold">{w.title}</div>
@@ -116,7 +116,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="surface-raised p-8">
+        <div className="surface p-8">
           <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
             When {c.competitor} wins
           </div>
@@ -130,7 +130,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
 
       {c.quote && (
         <section className="mx-auto max-w-4xl px-6 py-12">
-          <div className="surface-raised relative p-10">
+          <div className="surface relative p-10">
             <Quote size={48} className="absolute top-6 left-6 text-[var(--org-primary)] opacity-20" />
             <blockquote className="mt-4 text-xl italic">"{c.quote.text}"</blockquote>
             <cite className="mt-4 block text-sm text-[var(--text-muted)] not-italic">— {c.quote.attribution}</cite>
@@ -140,7 +140,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-2xl font-semibold tracking-tight">Migration Path</h2>
-        <div className="surface-raised mt-6 p-6">
+        <div className="surface mt-6 p-6">
           <ol className="list-decimal space-y-2 pl-5 text-sm text-[var(--text-secondary)]">
             {c.migration.map((m) => (
               <li key={m}>{m}</li>
@@ -155,7 +155,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         <h2 className="text-2xl font-semibold tracking-tight">Other Comparisons</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {COMPARE_LIST.filter((x) => x.slug !== c.slug).map((x) => (
-            <Link key={x.slug} href={`/compare/${x.slug}`} className="surface-raised hover-lift p-5">
+            <Link key={x.slug} href={`/compare/${x.slug}`} className="surface hover-lift p-5">
               <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">vs.</div>
               <div className="mt-2 text-sm font-semibold">{x.competitor}</div>
               <div className="mt-2 text-xs text-[var(--text-muted)]">{x.blurb}</div>

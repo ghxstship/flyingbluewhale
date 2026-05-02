@@ -148,7 +148,7 @@ function Card({
 }) {
   return (
     <div
-      className={`surface-raised flex flex-wrap items-start justify-between gap-4 p-5 ${accent === "danger" ? "border border-[var(--color-error)]/30" : ""}`}
+      className={`surface flex flex-wrap items-start justify-between gap-4 p-5 ${accent === "danger" ? "border border-[var(--color-error)]/30" : ""}`}
     >
       <div className="flex items-start gap-3">
         <div

@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Badge variant="info">{rfi.status}</Badge>
             {rfi.status === "answered" && (
               <form action={closeRfi.bind(null, id)}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Close RFI
                 </button>
               </form>
@@ -78,10 +78,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   className={INPUT}
                 />
                 <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
-                  >
+                  <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
                     Post answer
                   </button>
                 </div>

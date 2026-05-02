@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Badge variant={STATUS_TONE[co.status] ?? "muted"}>{co.status.replace("_", " ")}</Badge>
             {co.status === "proposed" && (
               <form action={transitionPoChangeOrder.bind(null, id, "submitted")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Submit
                 </button>
               </form>
@@ -62,18 +62,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {(co.status === "submitted" || co.status === "in_review") && (
               <>
                 <form action={transitionPoChangeOrder.bind(null, id, "approved")}>
-                  <button
-                    className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
-                    type="submit"
-                  >
+                  <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                     Approve
                   </button>
                 </form>
                 <form action={transitionPoChangeOrder.bind(null, id, "rejected")}>
-                  <button
-                    className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
-                    type="submit"
-                  >
+                  <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                     Reject
                   </button>
                 </form>

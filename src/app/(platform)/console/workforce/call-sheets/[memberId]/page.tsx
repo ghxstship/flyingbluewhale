@@ -123,7 +123,7 @@ export default async function Page({
             ) : (
               <ol className="mt-2 space-y-3">
                 {shifts.map((s) => (
-                  <li key={s.id} className="surface-raised p-4">
+                  <li key={s.id} className="surface p-4">
                     <div className="flex items-baseline justify-between">
                       <div className="font-mono text-base font-semibold">
                         {new Date(s.starts_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}

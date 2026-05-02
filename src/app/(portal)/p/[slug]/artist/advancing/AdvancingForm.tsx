@@ -37,7 +37,7 @@ export function AdvancingForm({ slug }: { slug: string }) {
   }, null);
 
   return (
-    <form ref={formRef} action={formAction} className="surface-raised space-y-4 p-6">
+    <form ref={formRef} action={formAction} className="surface space-y-4 p-6">
       <input type="hidden" name="slug" value={slug} />
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold">New deliverable</div>

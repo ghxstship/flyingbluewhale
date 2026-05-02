@@ -145,7 +145,7 @@ export default function ATLVSPage() {
 
       {/* Architecture */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-start">
+        <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Under the hood

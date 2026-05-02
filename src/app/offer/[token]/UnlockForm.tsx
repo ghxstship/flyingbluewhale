@@ -23,7 +23,7 @@ export function UnlockForm({ token, expired = false }: { token: string; expired?
         </p>
       </div>
 
-      <FormShell action={action} submitLabel="Open Letter" className="surface-raised space-y-4 p-6">
+      <FormShell action={action} submitLabel="Open Letter" className="surface space-y-4 p-6">
         <FormField name="access_code" label="Access Code" required>
           <TextInput
             name="access_code"

@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
   return (
     <div className="space-y-4 p-6">
-      <header className="surface-raised p-5">
+      <header className="surface p-5">
         <div className="eyebrow text-xs text-[var(--text-muted)]">Production lifecycle</div>
         <h1 className="text-lg font-semibold">8-phase progression with milestone gates</h1>
         <p className="mt-1 text-sm text-[var(--text-muted)]">
@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
           const canApprove = p.status === "in_review" || p.status === "active";
 
           return (
-            <li key={p.id} className="surface-raised p-5">
+            <li key={p.id} className="surface p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <div className="font-mono text-2xl text-[var(--text-muted)]">

@@ -11,7 +11,7 @@ export function ChangeOrderDecision({ slug, proposalId, coId }: { slug: string; 
   const [decision, setDecision] = useState<"approved" | "rejected">("approved");
 
   return (
-    <form action={formAction} className="surface-raised space-y-3 p-6">
+    <form action={formAction} className="surface space-y-3 p-6">
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="proposalId" value={proposalId} />
       <input type="hidden" name="coId" value={coId} />

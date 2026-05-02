@@ -19,7 +19,7 @@ export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; 
   const [decision, setDecision] = useState<Decision>("approved");
 
   return (
-    <form action={formAction} className="surface-raised space-y-3 p-6">
+    <form action={formAction} className="surface space-y-3 p-6">
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="proposalId" value={proposalId} />
       <input type="hidden" name="roundId" value={roundId} />

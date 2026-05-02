@@ -17,18 +17,15 @@ export function GuideEditor({
   persona: GuidePersona;
   defaultValues: { title: string; subtitle: string; classification: string; published: boolean; config: string };
 }) {
-  const [state, formAction, pending] = useActionState<State, FormData>(
-    async (prev, fd) => {
-      const res = await upsertGuideAction(projectId, prev, fd);
-      if (res?.error) toast.error(res.error);
-      else toast.success("Guide saved");
-      return res;
-    },
-    null,
-  );
+  const [state, formAction, pending] = useActionState<State, FormData>(async (prev, fd) => {
+    const res = await upsertGuideAction(projectId, prev, fd);
+    if (res?.error) toast.error(res.error);
+    else toast.success("Guide saved");
+    return res;
+  }, null);
 
   return (
-    <form action={formAction} className="surface-raised space-y-4 p-6">
+    <form action={formAction} className="surface space-y-4 p-6">
       <input type="hidden" name="persona" value={persona} />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Title" name="title" required defaultValue={defaultValues.title} />
@@ -49,13 +46,21 @@ export function GuideEditor({
           className="input-base mt-1.5 w-full font-mono text-xs"
         />
         <div className="mt-1 text-xs text-[var(--text-muted)]">
-          Sections: <span className="font-mono">overview · schedule · set_times · timeline · credentials · contacts · faq · sops · ppe · radio · resources · evacuation · fire_safety · accessibility · sustainability · code_of_conduct · custom</span>
+          Sections:{" "}
+          <span className="font-mono">
+            overview · schedule · set_times · timeline · credentials · contacts · faq · sops · ppe · radio · resources ·
+            evacuation · fire_safety · accessibility · sustainability · code_of_conduct · custom
+          </span>
         </div>
       </div>
       {state?.error && <Alert kind="error">{state.error}</Alert>}
       <div className="flex items-center justify-end gap-2">
-        <Button href={`/console/projects/${projectId}/guides`} variant="ghost">Back</Button>
-        <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save guide"}</Button>
+        <Button href={`/console/projects/${projectId}/guides`} variant="ghost">
+          Back
+        </Button>
+        <Button type="submit" disabled={pending}>
+          {pending ? "Saving…" : "Save guide"}
+        </Button>
       </div>
     </form>
   );

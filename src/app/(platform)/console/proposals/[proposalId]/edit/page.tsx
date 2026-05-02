@@ -44,7 +44,9 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
         subtitle={`v${proposal.version} · ${proposal.status}`}
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/proposals/${proposalId}`} className="btn btn-ghost btn-sm">Back to detail</Link>
+            <Link href={`/console/proposals/${proposalId}`} className="btn btn-ghost btn-sm">
+              Back to detail
+            </Link>
           </div>
         }
       />
@@ -56,16 +58,21 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
             doc_number: proposal.doc_number ?? "",
             currency: proposal.currency ?? "USD",
             deposit_percent: proposal.deposit_percent ?? 25,
-            theme: proposal.theme as { primary: string; secondary: string } ?? { primary: "#D4782A", secondary: "#6D4A2A" },
+            theme: (proposal.theme as { primary: string; secondary: string }) ?? {
+              primary: "#D4782A",
+              secondary: "#6D4A2A",
+            },
             blocks,
           }}
         />
 
-        <section className="surface-raised">
+        <section className="surface">
           <div className="flex items-center justify-between border-b border-[var(--border-color)] p-5">
             <div>
               <div className="text-sm font-semibold">Share links</div>
-              <div className="text-xs text-[var(--text-muted)]">Signed URLs clients use to view and sign this proposal.</div>
+              <div className="text-xs text-[var(--text-muted)]">
+                Signed URLs clients use to view and sign this proposal.
+              </div>
             </div>
           </div>
           <div className="p-5">
@@ -82,9 +89,18 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
                           {revoked ? <Badge variant="muted">Revoked</Badge> : <Badge variant="success">Active</Badge>}
                           {l.audience && <Badge variant="brand">{l.audience}</Badge>}
                           <span className="text-xs text-[var(--text-muted)]">· {l.view_count} views</span>
-                          {l.last_viewed_at && <span className="text-xs text-[var(--text-muted)]">· last seen {timeAgo(l.last_viewed_at)}</span>}
+                          {l.last_viewed_at && (
+                            <span className="text-xs text-[var(--text-muted)]">
+                              · last seen {timeAgo(l.last_viewed_at)}
+                            </span>
+                          )}
                         </div>
-                        <a href={url} target="_blank" rel="noreferrer" className="mt-1 block break-all font-mono text-xs text-[var(--org-primary)]">
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-1 block font-mono text-xs break-all text-[var(--org-primary)]"
+                        >
                           {url}
                         </a>
                       </div>
@@ -93,7 +109,9 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
                 })}
               </ul>
             ) : (
-              <p className="mt-3 text-sm text-[var(--text-muted)]">No share links yet — generate one to send the proposal to a client.</p>
+              <p className="mt-3 text-sm text-[var(--text-muted)]">
+                No share links yet — generate one to send the proposal to a client.
+              </p>
             )}
           </div>
         </section>
@@ -107,7 +125,8 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
 function ProposalPreviewLink({ proposal }: { proposal: Proposal }) {
   return (
     <div className="surface p-4 text-xs text-[var(--text-muted)]">
-      Tip · Save, then open a share link to view the fully rendered proposal (including scroll-spy nav, phase accordions, and signature capture).
+      Tip · Save, then open a share link to view the fully rendered proposal (including scroll-spy nav, phase
+      accordions, and signature capture).
       <span className="ml-2 font-mono">{proposal.id.slice(0, 8)}</span>
     </div>
   );

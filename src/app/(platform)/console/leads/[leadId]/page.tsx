@@ -61,7 +61,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="surface-raised p-3">
+    <div className="surface p-3">
       <div className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{children}</div>
     </div>

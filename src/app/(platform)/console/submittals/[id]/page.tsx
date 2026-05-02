@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Badge variant={STATUS_TONE[sub.status] ?? "muted"}>{sub.status.replace(/_/g, " ")}</Badge>
             {sub.status !== "closed" && sub.status !== "void" && (
               <form action={closeSubmittal.bind(null, id)}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Close
                 </button>
               </form>
@@ -111,7 +111,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </div>
               <textarea name="stamp_notes" rows={3} placeholder="Reviewer notes…" className={INPUT} />
               <div className="flex justify-end">
-                <button type="submit" className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+                <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
                   Apply stamp
                 </button>
               </div>
@@ -122,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {current && current.stamp === "revise_resubmit" && (
           <section className="surface p-4">
             <form action={addNextRound.bind(null, id)}>
-              <button type="submit" className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+              <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
                 + Open round #{sub.current_round + 1}
               </button>
             </form>

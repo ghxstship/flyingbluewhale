@@ -117,7 +117,7 @@ export default async function Page() {
             }
           />
         ) : (
-          <div className="surface overflow-x-auto">
+          <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>

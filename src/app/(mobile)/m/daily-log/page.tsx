@@ -56,7 +56,7 @@ export default async function Page() {
             className={INPUT}
           />
           <input type="hidden" name="log_date" value={today} />
-          <button type="submit" className="surface-raised hover-lift w-full rounded-md py-2.5 text-sm font-medium">
+          <button type="submit" className="surface hover-lift w-full rounded-md py-2.5 text-sm font-medium">
             Save log
           </button>
         </form>

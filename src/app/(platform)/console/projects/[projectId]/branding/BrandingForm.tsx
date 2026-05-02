@@ -83,7 +83,7 @@ export function BrandingForm({
 
       <div className="space-y-3">
         <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Live preview</div>
-        <div className="surface-raised overflow-hidden" style={previewStyle} data-platform="gvteway">
+        <div className="surface overflow-hidden" style={previewStyle} data-platform="gvteway">
           {hero && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={hero} alt="" className="h-32 w-full object-cover" />

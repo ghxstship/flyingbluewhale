@@ -104,7 +104,7 @@ export default function AboutPage() {
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Sailing Orders</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {PRINCIPLES.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="surface-raised p-6">
+            <div key={title} className="surface p-6">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--org-primary)]/10 text-[var(--org-primary)]">
                   <Icon size={18} />
@@ -121,7 +121,7 @@ export default function AboutPage() {
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">The Log Book</h2>
         <ul className="mt-8 space-y-6">
           {MILESTONES.map((m) => (
-            <li key={m.date} className="surface-raised grid gap-2 p-6 md:grid-cols-[140px_1fr] md:items-start md:gap-6">
+            <li key={m.date} className="surface grid gap-2 p-6 md:grid-cols-[140px_1fr] md:items-start md:gap-6">
               <div className="font-mono text-xs text-[var(--text-muted)]">{m.date}</div>
               <div>
                 <div className="text-sm font-semibold">{m.title}</div>
@@ -133,7 +133,7 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="surface-raised p-10">
+        <div className="surface p-10">
           <h2 className="text-3xl font-semibold tracking-tight">Who Charts the Voyage</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
             L0ST 1SLAND is a production + technology studio. We&apos;ve staffed residencies, touring runs, private

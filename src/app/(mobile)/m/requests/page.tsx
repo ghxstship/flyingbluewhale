@@ -53,7 +53,7 @@ export default async function MobileRequests() {
         ) : (
           rows.map((r) => (
             <li key={r.id}>
-              <Link href={`/m/requests/${r.id}`} className="surface-raised flex flex-col gap-1 p-4">
+              <Link href={`/m/requests/${r.id}`} className="surface flex flex-col gap-1 p-4">
                 <div className="flex items-center gap-2">
                   <Badge variant={SEV[r.severity]}>{r.severity}</Badge>
                   <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.category}</span>

@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
   return (
     <div className="space-y-4 p-6">
-      <header className="surface-raised flex items-end justify-between gap-4 p-5">
+      <header className="surface flex items-end justify-between gap-4 p-5">
         <div>
           <div className="eyebrow text-xs text-[var(--text-muted)]">Change orders</div>
           <h1 className="text-lg font-semibold">Scope Changes After May 12 Lock</h1>
@@ -31,12 +31,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </header>
 
       {cos.length === 0 ? (
-        <div className="surface-raised p-12 text-center text-[var(--text-muted)]">No change orders yet.</div>
+        <div className="surface p-12 text-center text-[var(--text-muted)]">No change orders yet.</div>
       ) : (
         <ul className="space-y-3">
           {cos.map((co) => (
             <li key={co.id}>
-              <Link href={`${base}/${co.id}`} className="surface-raised hover-lift block p-5">
+              <Link href={`${base}/${co.id}`} className="surface hover-lift block p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">

@@ -107,19 +107,19 @@ export default async function Page() {
           <h3 className="text-sm font-semibold">Drill Into a Domain</h3>
           <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
             <li>
-              <Link href="/console/operations/incidents" className="surface-raised hover-lift block p-3">
+              <Link href="/console/operations/incidents" className="surface hover-lift block p-3">
                 <div className="text-sm font-medium">Operations log</div>
                 <div className="mt-1 text-xs text-[var(--text-muted)]">{totalThirtyDay} ops + safety incidents</div>
               </Link>
             </li>
             <li>
-              <Link href="/console/safety/cyber-ir" className="surface-raised hover-lift block p-3">
+              <Link href="/console/safety/cyber-ir" className="surface hover-lift block p-3">
                 <div className="text-sm font-medium">Cyber IR</div>
                 <div className="mt-1 text-xs text-[var(--text-muted)]">{cyberCount ?? 0} incidents flagged cyber</div>
               </Link>
             </li>
             <li>
-              <Link href="/console/safety/medical/encounters" className="surface-raised hover-lift block p-3">
+              <Link href="/console/safety/medical/encounters" className="surface hover-lift block p-3">
                 <div className="text-sm font-medium">Medical encounters</div>
                 <div className="mt-1 text-xs text-[var(--text-muted)]">{medCount ?? 0} encounters · 30 days</div>
               </Link>

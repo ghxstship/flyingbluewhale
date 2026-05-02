@@ -29,7 +29,7 @@ export default async function Page({
         ← All revision rounds
       </Link>
 
-      <header className="surface-raised p-6">
+      <header className="surface p-6">
         <div className="flex items-center gap-2">
           <span className="font-mono text-sm text-[var(--text-muted)]">Round {round.round_num}</span>
           <Badge variant={REV_STATE_VARIANT[round.state]}>{REV_STATE_LABEL[round.state]}</Badge>
@@ -42,7 +42,7 @@ export default async function Page({
         </div>
       </header>
 
-      <section className="surface-raised p-6">
+      <section className="surface p-6">
         <div className="eyebrow mb-3 text-xs text-[var(--text-muted)]">Proofs in this round</div>
         {revisions.length === 0 ? (
           <p className="text-sm text-[var(--text-muted)]">No proofs uploaded yet.</p>
@@ -67,7 +67,7 @@ export default async function Page({
       </section>
 
       {round.decision_note && (
-        <section className="surface-raised p-6">
+        <section className="surface p-6">
           <div className="eyebrow mb-2 text-xs text-[var(--text-muted)]">Decision note</div>
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{round.decision_note}</p>
         </section>

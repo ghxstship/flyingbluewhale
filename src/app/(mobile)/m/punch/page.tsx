@@ -83,7 +83,7 @@ export default async function MobilePunchPage() {
           rows.map((r) => {
             const overdue = r.due_at && new Date(r.due_at).getTime() < Date.now() - 24 * 60 * 60 * 1000;
             return (
-              <li key={r.id} className="surface-raised p-4">
+              <li key={r.id} className="surface p-4">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <div className="text-sm leading-snug font-semibold">{r.title}</div>

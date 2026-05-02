@@ -70,7 +70,7 @@ export default async function NotificationsPage() {
         ) : (
           rows.map((n) => {
             const inner = (
-              <div className={`surface-raised flex items-start gap-3 p-4 ${n.read_at ? "opacity-70" : ""}`}>
+              <div className={`surface flex items-start gap-3 p-4 ${n.read_at ? "opacity-70" : ""}`}>
                 <div className="mt-1 flex-none">
                   <span
                     className={`block h-2 w-2 rounded-full ${n.read_at ? "bg-[var(--text-muted)]" : "bg-[var(--org-primary)]"}`}

@@ -53,21 +53,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {item.show_ready_gate && <Badge variant="error">Doors Gate</Badge>}
             {item.status === "open" && (
               <form action={transitionPunchItem.bind(null, id, "in_progress")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Start
                 </button>
               </form>
             )}
             {item.status === "in_progress" && (
               <form action={transitionPunchItem.bind(null, id, "ready_for_review")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Mark ready
                 </button>
               </form>
             )}
             {item.status === "ready_for_review" && (
               <form action={transitionPunchItem.bind(null, id, "complete")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Close
                 </button>
               </form>

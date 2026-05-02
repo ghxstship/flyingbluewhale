@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </div>
 
       {/* Lifecycle preview */}
-      <section className="surface-raised p-6">
+      <section className="surface p-6">
         <div className="mb-4 flex items-end justify-between gap-4">
           <div>
             <div className="eyebrow text-xs text-[var(--text-muted)]">Lifecycle</div>
@@ -117,7 +117,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       {/* Three-column open-items grid */}
       <div className="grid gap-4 lg:grid-cols-3">
         {/* Pending approvals */}
-        <section className="surface-raised p-5">
+        <section className="surface p-5">
           <header className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold">Approvals</h3>
             <Link
@@ -150,7 +150,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
         </section>
 
         {/* Open change orders */}
-        <section className="surface-raised p-5">
+        <section className="surface p-5">
           <header className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold">Change Orders</h3>
             <Link
@@ -187,7 +187,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
         </section>
 
         {/* Open revisions */}
-        <section className="surface-raised p-5">
+        <section className="surface p-5">
           <header className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold">Revisions</h3>
             <Link
@@ -222,7 +222,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </div>
 
       {/* Activity */}
-      <section className="surface-raised p-6">
+      <section className="surface p-6">
         <header className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold">Recent Activity</h3>
           <Link href={`${base}/activity`} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">

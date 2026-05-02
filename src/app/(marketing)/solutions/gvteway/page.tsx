@@ -143,7 +143,7 @@ export default function GvtewayPage() {
       {/* Signature features */}
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
-          <div className="surface-raised p-8">
+          <div className="surface p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               <Share2 size={14} /> Proposals · signed live
             </div>
@@ -160,7 +160,7 @@ export default function GvtewayPage() {
               Read the run-sheet →
             </Link>
           </div>
-          <div className="surface-raised p-8">
+          <div className="surface p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               <BookOpen size={14} /> KBYG · boarding passes
             </div>
@@ -182,7 +182,7 @@ export default function GvtewayPage() {
 
       {/* Security callout */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-center">
+        <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Security

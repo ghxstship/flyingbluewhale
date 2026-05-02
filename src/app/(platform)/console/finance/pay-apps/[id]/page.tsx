@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Badge variant={STATUS_TONE[app.status] ?? "muted"}>{app.status.replace("_", " ")}</Badge>
             {app.status === "draft" && (
               <form action={transitionPayApp.bind(null, id, "submitted")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Submit
                 </button>
               </form>
@@ -70,18 +70,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {app.status === "submitted" && (
               <>
                 <form action={transitionPayApp.bind(null, id, "approved")}>
-                  <button
-                    className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
-                    type="submit"
-                  >
+                  <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                     Approve
                   </button>
                 </form>
                 <form action={transitionPayApp.bind(null, id, "rejected")}>
-                  <button
-                    className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
-                    type="submit"
-                  >
+                  <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                     Reject
                   </button>
                 </form>
@@ -89,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             )}
             {app.status === "approved" && (
               <form action={transitionPayApp.bind(null, id, "paid")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Mark paid
                 </button>
               </form>

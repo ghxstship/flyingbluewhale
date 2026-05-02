@@ -43,7 +43,7 @@ export default function GuidesPage() {
         <ul className="space-y-4">
           {MARKETING_GUIDE_LIST.map((g) => (
             <li key={g.slug}>
-              <Link href={`/guides/${g.slug}`} className="surface-raised hover-lift block p-6">
+              <Link href={`/guides/${g.slug}`} className="surface hover-lift block p-6">
                 <div className="font-mono text-xs text-[var(--text-muted)]">{g.readingTime}</div>
                 <div className="mt-2 text-xl font-semibold tracking-tight">{g.title}</div>
                 <div className="mt-2 text-sm text-[var(--text-secondary)]">{g.blurb}</div>

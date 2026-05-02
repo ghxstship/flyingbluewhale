@@ -28,7 +28,7 @@ export default async function Page({
         ← All change orders
       </Link>
 
-      <header className="surface-raised p-6">
+      <header className="surface p-6">
         <div className="flex items-center gap-2">
           <span className="font-mono text-sm text-[var(--text-muted)]">#{co.number}</span>
           <Badge variant={CO_STATE_VARIANT[co.state]}>{CO_STATE_LABEL[co.state]}</Badge>
@@ -53,14 +53,14 @@ export default async function Page({
       </header>
 
       {co.body && (
-        <section className="surface-raised p-6">
+        <section className="surface p-6">
           <div className="eyebrow mb-2 text-xs text-[var(--text-muted)]">Description</div>
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{co.body}</p>
         </section>
       )}
 
       {co.decision_note && (
-        <section className="surface-raised p-6">
+        <section className="surface p-6">
           <div className="eyebrow mb-2 text-xs text-[var(--text-muted)]">Decision note</div>
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{co.decision_note}</p>
         </section>

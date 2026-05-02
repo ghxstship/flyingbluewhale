@@ -116,7 +116,7 @@ export default async function Page() {
             description="Author equipment in /console/production/equipment, then bookings + availability surface here."
           />
         ) : (
-          <div className="surface overflow-x-auto">
+          <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>

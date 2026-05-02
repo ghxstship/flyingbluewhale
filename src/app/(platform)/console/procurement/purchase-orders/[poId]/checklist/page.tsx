@@ -100,7 +100,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
               <input type="checkbox" name="requires_photo" value="1" /> Requires photo proof
             </label>
             <div className="flex justify-end">
-              <button type="submit" className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+              <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
                 Add step
               </button>
             </div>

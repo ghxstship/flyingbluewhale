@@ -81,7 +81,7 @@ export default async function CheckInPage() {
           </li>
         ) : (
           shifts.map((s) => (
-            <li key={s.id} className="surface-raised p-4">
+            <li key={s.id} className="surface p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-sm font-semibold">{s.venue?.name ?? "Unassigned venue"}</div>

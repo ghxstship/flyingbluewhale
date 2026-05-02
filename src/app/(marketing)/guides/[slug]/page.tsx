@@ -63,7 +63,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
         <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{g.readingTime}</div>
         <p className="mt-6 text-lg text-[var(--text-secondary)]">{g.hero}</p>
 
-        <div className="surface-raised mt-8 p-6">
+        <div className="surface mt-8 p-6">
           <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">TL;DR</div>
           <div className="mt-2 text-sm">{g.tldr}</div>
         </div>
@@ -110,7 +110,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
         <h2 className="text-2xl font-semibold tracking-tight">Other Guides</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {MARKETING_GUIDE_LIST.filter((x) => x.slug !== g.slug).map((x) => (
-            <Link key={x.slug} href={`/guides/${x.slug}`} className="surface-raised hover-lift p-5">
+            <Link key={x.slug} href={`/guides/${x.slug}`} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{x.title}</div>
               <div className="mt-1 text-xs text-[var(--text-muted)]">{x.blurb}</div>
             </Link>

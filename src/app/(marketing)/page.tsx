@@ -183,7 +183,7 @@ export default function Home() {
               key={app.slug}
               href={app.href}
               data-platform={app.slug}
-              className="surface-raised hover-lift relative overflow-hidden p-6"
+              className="surface hover-lift relative overflow-hidden p-6"
             >
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--org-primary)" }} />
               <div
@@ -272,7 +272,7 @@ export default function Home() {
               ],
             },
           ].map((a) => (
-            <div key={a.act} className="surface-raised p-6">
+            <div key={a.act} className="surface p-6">
               <div className="font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">{a.act}</div>
               <h3 className="mt-2 text-2xl font-semibold tracking-tight">{a.title}</h3>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">{a.body}</p>
@@ -321,7 +321,7 @@ export default function Home() {
             { code: "8000", name: "Hospitality", accent: "#be185d" },
             { code: "9000", name: "Technology", accent: "#0ea5e9" },
           ].map((c) => (
-            <div key={c.code} className="surface-raised p-3" style={{ borderTop: `3px solid ${c.accent}` }}>
+            <div key={c.code} className="surface p-3" style={{ borderTop: `3px solid ${c.accent}` }}>
               <div className="font-mono text-[10px] tracking-widest text-[var(--text-muted)]">{c.code}</div>
               <div className="mt-1 text-sm font-semibold">{c.name}</div>
             </div>
@@ -329,7 +329,7 @@ export default function Home() {
         </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          <div className="surface-raised p-5">
+          <div className="surface p-5">
             <div className="font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">
               XTC Protocol™
             </div>
@@ -339,7 +339,7 @@ export default function Home() {
               that classifies the work also posts the cost.
             </p>
           </div>
-          <div className="surface-raised p-5">
+          <div className="surface p-5">
             <div className="font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">UAC ↔ TPC</div>
             <h3 className="mt-2 text-xl font-semibold">Dual state, one ledger</h3>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
@@ -347,7 +347,7 @@ export default function Home() {
               reason code — not a reconciliation gap.
             </p>
           </div>
-          <div className="surface-raised p-5">
+          <div className="surface p-5">
             <div className="font-mono text-[10px] tracking-[0.3em] text-[var(--text-muted)] uppercase">Six Tiers</div>
             <h3 className="mt-2 text-xl font-semibold">Composition, not category</h3>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
@@ -451,7 +451,7 @@ export default function Home() {
 
       {/* Why us */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <div className="surface-raised overflow-hidden">
+        <div className="surface overflow-hidden">
           <div className="grid gap-10 p-10 md:grid-cols-2 md:items-center">
             <div>
               <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">

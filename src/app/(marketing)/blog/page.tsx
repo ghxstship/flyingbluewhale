@@ -41,7 +41,7 @@ export default function BlogIndex() {
         <ul className="space-y-4">
           {POST_LIST.map((p) => (
             <li key={p.slug}>
-              <Link href={`/blog/${p.slug}`} className="surface-raised hover-lift block p-6">
+              <Link href={`/blog/${p.slug}`} className="surface hover-lift block p-6">
                 <div className="font-mono text-xs text-[var(--text-muted)]">
                   {p.date} · {p.readingTime}
                 </div>

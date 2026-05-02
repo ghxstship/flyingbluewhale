@@ -86,7 +86,7 @@ export default async function MobileMedicPage() {
           </li>
         ) : (
           rows.map((r) => (
-            <li key={r.id} className="surface-raised p-4">
+            <li key={r.id} className="surface p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold">{r.patient_ref ?? "Anon patient"}</div>

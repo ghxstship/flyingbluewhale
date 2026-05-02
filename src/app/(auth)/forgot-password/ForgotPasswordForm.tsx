@@ -24,15 +24,13 @@ export function ForgotPasswordForm() {
       }
     >
       {sent ? (
-        <div role="status" aria-live="polite" className="surface-raised p-4 text-sm text-[var(--text-secondary)]">
+        <div role="status" aria-live="polite" className="surface p-4 text-sm text-[var(--text-secondary)]">
           If an account exists for that email, the reset link is on its way. The link expires in 60 minutes.
         </div>
       ) : (
         <form action={formAction} className="space-y-4" noValidate>
           <Input label="Email" name="email" type="email" required autoComplete="email" />
-          {state?.error && (
-            <Alert kind="error">{state.error}</Alert>
-          )}
+          {state?.error && <Alert kind="error">{state.error}</Alert>}
           <Button type="submit" size="lg" className="w-full" loading={pending}>
             {pending ? "Sending" : "Send reset link"}
           </Button>

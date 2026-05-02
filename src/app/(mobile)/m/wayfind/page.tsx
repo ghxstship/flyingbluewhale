@@ -82,10 +82,7 @@ export default async function MobileWayfindPage() {
               <ul className="mt-2 space-y-2">
                 {list.map((v) => (
                   <li key={v.id}>
-                    <Link
-                      href={`/console/venues/${v.id}`}
-                      className="surface-raised flex items-center justify-between p-3"
-                    >
+                    <Link href={`/console/venues/${v.id}`} className="surface flex items-center justify-between p-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 text-sm font-medium">
                           <MapPin size={14} className="text-[var(--text-muted)]" />

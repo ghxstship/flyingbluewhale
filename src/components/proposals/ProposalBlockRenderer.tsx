@@ -357,7 +357,7 @@ function InvestmentTable({
 function TotalBlock({ block, currency }: { block: Extract<ProposalBlock, { type: "total_block" }>; currency: string }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
-      <div className="surface-raised rounded-2xl p-8 text-center">
+      <div className="surface rounded-2xl p-8 text-center">
         <div
           className="text-xs font-semibold tracking-widest uppercase"
           style={{ color: block.accent ?? "var(--org-primary)" }}
@@ -381,7 +381,7 @@ function EngagementSplit({
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="grid gap-3 sm:grid-cols-2">
-        <div className="surface-raised relative overflow-hidden p-6">
+        <div className="surface relative overflow-hidden p-6">
           <span className="absolute inset-x-0 top-0 h-1" style={{ background: theme.primary }} />
           <div className="text-[10px] font-semibold tracking-widest uppercase">Engagement deposit</div>
           <div className="font-display mt-3 text-4xl tabular-nums">{block.depositPercent}%</div>
@@ -389,7 +389,7 @@ function EngagementSplit({
             {block.depositLabel ?? "Due on contract signature"}
           </div>
         </div>
-        <div className="surface-raised relative overflow-hidden p-6">
+        <div className="surface relative overflow-hidden p-6">
           <span className="absolute inset-x-0 top-0 h-1" style={{ background: theme.secondary }} />
           <div className="text-[10px] font-semibold tracking-widest uppercase">Balance</div>
           <div className="font-display mt-3 text-4xl tabular-nums">{block.balancePercent}%</div>

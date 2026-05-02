@@ -78,7 +78,7 @@ export default async function MobileAdPage() {
           ) : (
             arrivals.map((m) => (
               <li key={m.id}>
-                <Link href={`/console/transport/ad/${m.id}`} className="surface-raised flex items-start gap-3 p-4">
+                <Link href={`/console/transport/ad/${m.id}`} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">{fmtClock(m.scheduled_at)}</span>
                     <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">ETA</span>
@@ -115,7 +115,7 @@ export default async function MobileAdPage() {
           ) : (
             departures.map((m) => (
               <li key={m.id}>
-                <Link href={`/console/transport/ad/${m.id}`} className="surface-raised flex items-start gap-3 p-4">
+                <Link href={`/console/transport/ad/${m.id}`} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">{fmtClock(m.scheduled_at)}</span>
                     <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">ETD</span>

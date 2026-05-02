@@ -72,7 +72,7 @@ export default async function SafeguardingPage() {
             </li>
           ) : (
             reports.map((r) => (
-              <li key={r.id} className="surface-raised p-4">
+              <li key={r.id} className="surface p-4">
                 <div className="flex items-start justify-between gap-3">
                   <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">

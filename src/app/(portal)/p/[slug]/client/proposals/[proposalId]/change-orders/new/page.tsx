@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
   return (
     <div className="mx-auto max-w-2xl space-y-4 p-6">
-      <header className="surface-raised p-5">
+      <header className="surface p-5">
         <div className="eyebrow text-xs text-[var(--text-muted)]">New change order</div>
         <h1 className="text-lg font-semibold">Request a Scope Change</h1>
         <p className="mt-1 text-sm text-[var(--text-muted)]">

@@ -11,8 +11,16 @@ import { OpenPortalButton } from "./OpenPortalButton";
 const TIERS = [
   { tier: "access", price: "Free", features: ["Basic project + ticketing", "Up to 3 users", "Community support"] },
   { tier: "core", price: "$49/mo", features: ["Invoicing, expenses, tasks", "Up to 10 users", "Email support"] },
-  { tier: "professional", price: "$199/mo", features: ["Full finance, procurement, AI", "Unlimited users", "Priority support"] },
-  { tier: "enterprise", price: "Contact sales", features: ["SSO, SCIM, audit", "Custom integrations", "Dedicated CSM"] },
+  {
+    tier: "professional",
+    price: "$199/mo",
+    features: ["Full finance, procurement, AI", "Unlimited users", "Priority support"],
+  },
+  {
+    tier: "enterprise",
+    price: "Contact sales",
+    features: ["SSO, SCIM, audit", "Custom integrations", "Dedicated CSM"],
+  },
 ];
 
 export const dynamic = "force-dynamic";
@@ -49,24 +57,20 @@ export default async function BillingPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle="Billing"
-      />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Billing" />
       <div className="page-content space-y-5">
         {!stripeConfigured && (
           <Alert kind="warning">
             <span className="font-medium">Stripe is not configured.</span> Set
-            <code className="font-mono">STRIPE_SECRET_KEY</code> in env to enable
-            customer-portal access for plan + payment-method management.
+            <code className="font-mono">STRIPE_SECRET_KEY</code> in env to enable customer-portal access for plan +
+            payment-method management.
           </Alert>
         )}
 
         <section className="surface p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <div className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Plan</div>
+              <div className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Plan</div>
               <div className="mt-1 text-base font-semibold capitalize">{current}</div>
             </div>
             <OpenPortalButton disabled={!stripeConfigured} />
@@ -74,7 +78,7 @@ export default async function BillingPage() {
         </section>
 
         <section>
-          <h2 className="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Plans</h2>
+          <h2 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Plans</h2>
           <div className="grid gap-3 md:grid-cols-4">
             {TIERS.map((t) => (
               <div
@@ -87,7 +91,9 @@ export default async function BillingPage() {
                 </div>
                 <div className="mt-2 text-lg font-semibold tracking-tight">{t.price}</div>
                 <ul className="mt-3 space-y-1 text-xs text-[var(--text-secondary)]">
-                  {t.features.map((f) => <li key={f}>· {f}</li>)}
+                  {t.features.map((f) => (
+                    <li key={f}>· {f}</li>
+                  ))}
                 </ul>
               </div>
             ))}
@@ -96,14 +102,12 @@ export default async function BillingPage() {
 
         <section>
           <div className="mb-2 flex items-center justify-between">
-            <h2 className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-              Recent invoices
-            </h2>
+            <h2 className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Recent invoices</h2>
             <Link href="/console/finance/invoices" className="text-xs text-[var(--org-primary)] hover:underline">
               View all →
             </Link>
           </div>
-          <div className="surface overflow-x-auto">
+          <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
@@ -129,14 +133,14 @@ export default async function BillingPage() {
                           {i.number}
                         </Link>
                       </td>
-                      <td><Badge variant="muted">{i.status}</Badge></td>
+                      <td>
+                        <Badge variant="muted">{i.status}</Badge>
+                      </td>
                       <td className="font-mono text-xs">{money(i.amount_cents)}</td>
                       <td className="font-mono text-xs">
                         {i.issued_at ? new Date(i.issued_at).toLocaleDateString() : "—"}
                       </td>
-                      <td className="font-mono text-xs">
-                        {i.due_at ? new Date(i.due_at).toLocaleDateString() : "—"}
-                      </td>
+                      <td className="font-mono text-xs">{i.due_at ? new Date(i.due_at).toLocaleDateString() : "—"}</td>
                     </tr>
                   ))
                 )}

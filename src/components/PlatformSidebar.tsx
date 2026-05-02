@@ -144,28 +144,32 @@ export function PlatformSidebar({
       style={{ width: `${currentWidth}px` }}
     >
       <div className="flex h-full min-h-0 flex-col">
-        {/* Header: workspace switcher + collapse toggle.
+        {/* Header: workspace switcher + (expanded only) collapse toggle.
             Audit DS-L2: explicit min-h-14 (56px) so this row reads at the
             same vertical height as the glass-nav top bar — the two form a
-            single horizontal band across the shell. */}
+            single horizontal band across the shell. In rail mode the
+            workspace tile is the orientation anchor and gets the full
+            56px-wide header to itself; the collapse toggle relocates to
+            the rail footer (Linear / Notion convention). */}
         <div className="flex min-h-14 items-center gap-1 border-b border-[var(--border-color)] px-2 py-2">
-          <div className="min-w-0 flex-1">
+          <div className={collapsed ? "flex w-full justify-center" : "min-w-0 flex-1"}>
             <WorkspaceSwitcher collapsed={collapsed} initialName={workspaceName} />
           </div>
-          <Hint label={collapsed ? "Expand sidebar (⌘B)" : "Collapse sidebar (⌘B)"} side="right">
-            <button
-              type="button"
-              onClick={() => {
-                const next = !collapsed;
-                setCollapsed(next);
-                void setPrefs({ sidebar_collapsed: next });
-              }}
-              className="shrink-0 rounded p-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            >
-              {collapsed ? <PanelLeftOpen size={14} /> : <PanelLeftClose size={14} />}
-            </button>
-          </Hint>
+          {!collapsed && (
+            <Hint label="Collapse sidebar (⌘B)" side="right">
+              <button
+                type="button"
+                onClick={() => {
+                  setCollapsed(true);
+                  void setPrefs({ sidebar_collapsed: true });
+                }}
+                className="shrink-0 rounded p-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+                aria-label="Collapse sidebar"
+              >
+                <PanelLeftClose size={14} />
+              </button>
+            </Hint>
+          )}
         </div>
 
         {/* Search */}
@@ -257,10 +261,27 @@ export function PlatformSidebar({
           )}
         </nav>
 
-        {/* Sidebar footer — surfaces the shell brand so every authenticated
-            page in the console reminds the operator which app they're in.
-            Parent/trademark attribution lives on marketing + /legal only. */}
-        {!collapsed && (
+        {/* Sidebar footer — in expanded mode surfaces the shell brand so
+            every authenticated page in the console reminds the operator
+            which app they're in (parent/trademark attribution lives on
+            marketing + /legal only). In rail mode hosts the expand
+            toggle, since the rail header is reserved for the workspace
+            tile per Linear/Notion convention. */}
+        {collapsed ? (
+          <Hint label="Expand sidebar (⌘B)" side="right">
+            <button
+              type="button"
+              onClick={() => {
+                setCollapsed(false);
+                void setPrefs({ sidebar_collapsed: false });
+              }}
+              className="flex w-full items-center justify-center border-t border-[var(--border-color)] py-3 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+              aria-label="Expand sidebar"
+            >
+              <PanelLeftOpen size={14} />
+            </button>
+          </Hint>
+        ) : (
           <div className="border-t border-[var(--border-color)] px-3 py-3 text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)]">
             ATLVS
           </div>

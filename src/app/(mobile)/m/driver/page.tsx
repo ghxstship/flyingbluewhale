@@ -83,7 +83,7 @@ export default async function MobileDriverPage() {
           ) : (
             upcoming.map((r) => (
               <li key={r.id}>
-                <Link href={`/m/driver/run/${r.id}`} className="surface-raised flex items-start gap-3 p-4">
+                <Link href={`/m/driver/run/${r.id}`} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">
                       {fmtTime(r.scheduled_depart)}

@@ -59,7 +59,7 @@ export default async function XpmsOverviewPage() {
                 <Link
                   key={c.code}
                   href={`/console/xpms/classes/${c.code}`}
-                  className="surface-raised hover-lift block rounded-md p-4"
+                  className="surface hover-lift block rounded-md p-4"
                   style={{ borderTop: `3px solid ${c.accent}` }}
                 >
                   <div className="font-mono text-[10px] tracking-widest text-[var(--text-muted)]">{c.code}000</div>

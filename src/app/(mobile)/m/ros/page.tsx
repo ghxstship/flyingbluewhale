@@ -87,7 +87,7 @@ export default async function MobileRosPage() {
             return (
               <li
                 key={c.id}
-                className={`surface-raised flex items-start gap-3 p-3 ${isLive ? "ring-2 ring-[var(--color-error)]" : ""}`}
+                className={`surface flex items-start gap-3 p-3 ${isLive ? "ring-2 ring-[var(--color-error)]" : ""}`}
               >
                 <div className="mt-0.5 flex flex-none flex-col items-center">
                   <span className="font-mono text-base font-semibold tabular-nums">{fmtTime(c.scheduled_at)}</span>

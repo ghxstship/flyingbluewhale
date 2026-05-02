@@ -55,7 +55,7 @@ export default function SolutionsIndex() {
               key={a.slug}
               href={a.href}
               data-platform={a.slug}
-              className="surface-raised hover-lift relative overflow-hidden p-7"
+              className="surface hover-lift relative overflow-hidden p-7"
             >
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--org-primary)" }} />
               <div className="flex items-center justify-between">

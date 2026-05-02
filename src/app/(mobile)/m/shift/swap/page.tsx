@@ -84,7 +84,7 @@ export default async function MobileShiftSwapPage() {
           </li>
         ) : (
           shifts.map((s) => (
-            <li key={s.id} className="surface-raised p-4">
+            <li key={s.id} className="surface p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold">{s.venue?.name ?? "Unassigned venue"}</div>

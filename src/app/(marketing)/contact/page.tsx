@@ -94,7 +94,7 @@ export default function ContactPage() {
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="grid gap-4 md:grid-cols-2">
           {ROUTES.map(({ icon: Icon, title, body, cta, href }) => (
-            <a key={title} href={href} className="surface-raised hover-lift flex items-start gap-4 p-6">
+            <a key={title} href={href} className="surface hover-lift flex items-start gap-4 p-6">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--org-primary)]/10 text-[var(--org-primary)]">
                 <Icon size={18} />
               </div>
@@ -110,7 +110,7 @@ export default function ContactPage() {
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leave a Note.</h2>
-        <form className="surface-raised mt-8 space-y-4 p-6" method="post" action="mailto:sales@flyingbluewhale.app">
+        <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@flyingbluewhale.app">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-xs font-medium text-[var(--text-secondary)]">
               Name

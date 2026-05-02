@@ -59,7 +59,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
         }
       />
       <div className="page-content space-y-8">
-        {/* Field cards: switched from .surface-raised (3px border + 8px brutal
+        {/* Field cards: switched from .surface (3px border + 8px brutal
             shadow) to .surface (3px border, no shadow). Metadata reads as
             metadata, not primary content; matches the borderless canon
             applied to data tables. */}

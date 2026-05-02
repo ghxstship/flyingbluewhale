@@ -29,7 +29,7 @@ export function MedicForm() {
           {TRIAGE.map((t) => (
             <label
               key={t.value}
-              className="surface-raised flex cursor-pointer flex-col gap-0.5 p-3 text-sm has-[:checked]:ring-2 has-[:checked]:ring-[var(--org-primary)]"
+              className="surface flex cursor-pointer flex-col gap-0.5 p-3 text-sm has-[:checked]:ring-2 has-[:checked]:ring-[var(--org-primary)]"
             >
               <span className="flex items-center gap-2">
                 <input type="radio" name="triage" value={t.value} required className="accent-[var(--org-primary)]" />
@@ -76,7 +76,7 @@ export function MedicForm() {
         />
       </div>
 
-      <div className="surface-raised p-4">
+      <div className="surface p-4">
         <SignatureField name="signature" label="Clinician Signature" />
         <p className="mt-2 text-[10px] text-[var(--text-muted)]">
           Signature is stored inside the encrypted PHI envelope of this encounter.

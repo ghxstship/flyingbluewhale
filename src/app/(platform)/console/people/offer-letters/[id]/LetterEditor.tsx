@@ -35,7 +35,7 @@ export function LetterEditor({
   const isLocked = raw.status !== "draft";
 
   return (
-    <section className="surface-raised space-y-1 p-1">
+    <section className="surface space-y-1 p-1">
       <div className="px-5 pt-5">
         <h3 className="text-sm font-semibold tracking-wider uppercase">Edit Letter</h3>
         <p className="mt-1 text-xs text-[var(--text-muted)]">

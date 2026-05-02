@@ -35,7 +35,7 @@ export function ResponseForms({
 
   if (mode === "choose") {
     return (
-      <section className="surface-raised space-y-3 p-6">
+      <section className="surface space-y-3 p-6">
         <h3 className="text-sm font-semibold tracking-wider uppercase">Your Response</h3>
         <p className="text-sm text-[var(--text-muted)]">
           Review the letter above. When you&apos;re ready, accept with a typed signature or decline with a brief reason.
@@ -62,7 +62,7 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
     return (await acceptOffer(token, prev as never, fd)) as FormState;
   };
   return (
-    <section className="surface-raised space-y-4 p-6">
+    <section className="surface space-y-4 p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-sm font-semibold tracking-wider uppercase">Accept and Sign</h3>
@@ -93,7 +93,7 @@ function DeclineForm({ token, onCancel }: { token: string; onCancel: () => void 
     return (await declineOffer(token, prev as never, fd)) as FormState;
   };
   return (
-    <section className="surface-raised space-y-4 p-6">
+    <section className="surface space-y-4 p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-sm font-semibold tracking-wider uppercase">Decline This Offer</h3>

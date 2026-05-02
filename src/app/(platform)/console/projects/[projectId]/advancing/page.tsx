@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             description="Artists, vendors, crew, and other stakeholders submit advancing materials via their portal pages."
           />
         ) : (
-          <div className="surface overflow-x-auto">
+          <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>

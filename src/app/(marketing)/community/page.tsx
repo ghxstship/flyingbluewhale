@@ -42,7 +42,7 @@ export default function CommunityPage() {
 
       {/* Community metric strip — lightweight trust signal on top of stories */}
       <section className="mx-auto max-w-6xl px-6 py-6">
-        <div className="surface-raised grid grid-cols-2 gap-4 p-6 sm:grid-cols-4">
+        <div className="surface grid grid-cols-2 gap-4 p-6 sm:grid-cols-4">
           {[
             { value: "200+", label: "production teams" },
             { value: "1.4M+", label: "tickets scanned" },
@@ -68,7 +68,7 @@ export default function CommunityPage() {
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {COMMUNITY_LIST.map((c) => (
-            <Link key={c.slug} href={`/community/${c.slug}`} className="surface-raised hover-lift flex flex-col p-6">
+            <Link key={c.slug} href={`/community/${c.slug}`} className="surface hover-lift flex flex-col p-6">
               <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
                 {c.industry}
               </div>
@@ -88,7 +88,7 @@ export default function CommunityPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="surface-raised grid gap-6 p-8 md:grid-cols-2 md:items-center">
+        <div className="surface grid gap-6 p-8 md:grid-cols-2 md:items-center">
           <div>
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Join the roster

@@ -70,16 +70,13 @@ export default async function MobileWmsPage() {
       <p className="mt-1 text-xs text-[var(--text-muted)]">Pick, put-away, and check-in/out via scan.</p>
 
       <section className="mt-5 grid grid-cols-2 gap-2">
-        <Link
-          href="/m/inventory/scan"
-          className="surface-raised flex flex-col items-center gap-1 p-4 text-sm font-medium"
-        >
+        <Link href="/m/inventory/scan" className="surface flex flex-col items-center gap-1 p-4 text-sm font-medium">
           <ScanLine size={20} />
           Scan asset
         </Link>
         <Link
           href="/console/production/equipment"
-          className="surface-raised flex flex-col items-center gap-1 p-4 text-sm font-medium"
+          className="surface flex flex-col items-center gap-1 p-4 text-sm font-medium"
         >
           <Package size={20} />
           Asset register

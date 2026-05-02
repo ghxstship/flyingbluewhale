@@ -92,7 +92,7 @@ export default async function LiveDispatchPage() {
       <div className="page-content space-y-5">
         <LiveDispatchMap points={points} />
 
-        <section className="surface overflow-x-auto">
+        <section className="overflow-x-auto">
           <header className="border-b border-[var(--border-color)] px-4 py-2.5">
             <h3 className="text-sm font-semibold">Active Runs</h3>
           </header>

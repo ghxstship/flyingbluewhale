@@ -52,21 +52,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Badge variant="info">{insp.status.replace("_", " ")}</Badge>
             {insp.status === "scheduled" && (
               <form action={transitionInspection.bind(null, id, "in_progress")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Start
                 </button>
               </form>
             )}
             {insp.status === "in_progress" && totals.fail === 0 && (
               <form action={transitionInspection.bind(null, id, "passed")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Pass
                 </button>
               </form>
             )}
             {insp.status === "in_progress" && (
               <form action={transitionInspection.bind(null, id, "failed")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Fail
                 </button>
               </form>

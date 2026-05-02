@@ -123,7 +123,7 @@ export default async function Page({ params }: { params: Promise<{ runId: string
         ) : (
           <ul className="mt-3 space-y-2">
             {manifest.map((m, i) => (
-              <li key={i} className="surface-raised p-3">
+              <li key={i} className="surface p-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <div className="text-sm font-semibold">{m.name ?? `Passenger ${i + 1}`}</div>

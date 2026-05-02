@@ -64,7 +64,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
           {c.stats.map((s) => (
-            <div key={s.label} className="surface-raised p-5">
+            <div key={s.label} className="surface p-5">
               <div className="text-3xl font-semibold tracking-tight text-[var(--org-primary)]">{s.value}</div>
               <div className="mt-2 text-[11px] tracking-wider text-[var(--text-muted)] uppercase">{s.label}</div>
             </div>
@@ -74,7 +74,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-8 md:grid-cols-3">
-          <div className="surface-raised p-6">
+          <div className="surface p-6">
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
               Challenge
             </div>
@@ -84,7 +84,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
               ))}
             </ul>
           </div>
-          <div className="surface-raised p-6">
+          <div className="surface p-6">
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
               Solution
             </div>
@@ -94,7 +94,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
               ))}
             </ul>
           </div>
-          <div className="surface-raised p-6">
+          <div className="surface p-6">
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Outcome</div>
             <ul className="mt-4 space-y-3 text-sm">
               {c.outcome.map((x) => (
@@ -109,7 +109,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-12">
-        <div className="surface-raised relative p-10">
+        <div className="surface relative p-10">
           <Quote size={48} className="absolute top-6 left-6 text-[var(--org-primary)] opacity-20" />
           <blockquote className="mt-4 text-xl text-[var(--text-primary)] italic">"{c.quote.text}"</blockquote>
           <cite className="mt-4 block text-sm text-[var(--text-muted)] not-italic">— {c.quote.attribution}</cite>
@@ -117,7 +117,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="surface-raised p-8">
+        <div className="surface p-8">
           <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
             Modules used
           </div>
@@ -140,7 +140,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
         </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {COMMUNITY_LIST.filter((x) => x.slug !== c.slug).map((x) => (
-            <Link key={x.slug} href={`/community/${x.slug}`} className="surface-raised hover-lift p-5">
+            <Link key={x.slug} href={`/community/${x.slug}`} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{x.name}</div>
               <div className="mt-1 text-xs text-[var(--text-muted)]">{x.blurb}</div>
             </Link>

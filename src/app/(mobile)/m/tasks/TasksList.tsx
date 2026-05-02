@@ -34,7 +34,7 @@ export function TasksList({ initial }: { initial: Task[] }) {
           ) : (
             tasks.map((t) => (
               <li key={t.id}>
-                <Link href={`/m/tasks/${t.id}`} className="surface-raised flex items-center justify-between p-4">
+                <Link href={`/m/tasks/${t.id}`} className="surface flex items-center justify-between p-4">
                   <div>
                     <div className="text-sm font-medium">{t.title}</div>
                     <div className="mt-1 text-xs text-[var(--text-muted)]">Due {formatDate(t.due_at)}</div>

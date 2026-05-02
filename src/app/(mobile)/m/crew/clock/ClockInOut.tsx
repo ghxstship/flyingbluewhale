@@ -47,7 +47,7 @@ export function ClockInOut() {
     });
 
   return (
-    <div className="surface-raised p-6 text-center">
+    <div className="surface p-6 text-center">
       {state === "clocked_in" ? (
         <>
           <div className="text-xs font-semibold tracking-wider text-[var(--color-success)] uppercase">Clocked In</div>

@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
       </p>
 
       {live && (
-        <section className="surface-raised mt-6 p-4 ring-2 ring-[var(--color-error)]">
+        <section className="surface mt-6 p-4 ring-2 ring-[var(--color-error)]">
           <div className="text-[10px] font-semibold tracking-wider text-[var(--color-error)] uppercase">Live</div>
           <div className="mt-1 text-base leading-snug font-semibold">{live.label}</div>
           <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">

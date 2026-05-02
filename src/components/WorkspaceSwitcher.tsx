@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { ChevronsUpDown, Check, Plus, Building2 } from "lucide-react";
+import { ChevronsUpDown, Check, Plus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -11,6 +11,72 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
+
+/**
+ * Curated palette for the initials-fallback tile. Picked for legible
+ * white text contrast (WCAG AA on bold weights). The hash assigns a
+ * stable color per workspace name so each org has a consistent identity
+ * across sessions, even before logoUrl loads.
+ */
+const TILE_PALETTE = [
+  "#0EA5E9", // sky
+  "#8B5CF6", // violet
+  "#10B981", // emerald
+  "#F59E0B", // amber
+  "#EF4444", // red
+  "#EC4899", // pink
+  "#6366F1", // indigo
+  "#14B8A6", // teal
+];
+
+function tileColor(seed: string): string {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0;
+  return TILE_PALETTE[Math.abs(h) % TILE_PALETTE.length];
+}
+
+function tileInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+/**
+ * <WorkspaceTile> — square avatar tile for a workspace.
+ * Logo image when present, else initials on a hash-derived color.
+ * Squares (not circles) — circles are reserved for user avatars per
+ * Linear/Vercel/GitHub convention.
+ */
+function WorkspaceTile({ name, logoUrl, size = 28 }: { name: string; logoUrl: string | null; size?: number }) {
+  const radius = Math.max(4, Math.round(size * 0.22));
+  if (logoUrl) {
+    return (
+      <span
+        className="shrink-0 overflow-hidden bg-[var(--surface-inset)]"
+        style={{ width: size, height: size, borderRadius: radius }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logoUrl} alt="" className="h-full w-full object-cover" />
+      </span>
+    );
+  }
+  return (
+    <span
+      className="flex shrink-0 items-center justify-center leading-none font-semibold text-white"
+      style={{
+        width: size,
+        height: size,
+        borderRadius: radius,
+        backgroundColor: tileColor(name),
+        fontSize: Math.round(size * 0.4),
+      }}
+      aria-hidden
+    >
+      {tileInitials(name)}
+    </span>
+  );
+}
 
 /**
  * <WorkspaceSwitcher> — top-of-sidebar dropdown for multi-tenant users.
@@ -25,13 +91,7 @@ import {
 
 type Workspace = { id: string; name: string; role: string; logoUrl: string | null };
 
-export function WorkspaceSwitcher({
-  collapsed,
-  initialName,
-}: {
-  collapsed: boolean;
-  initialName?: string;
-}) {
+export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boolean; initialName?: string }) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
@@ -80,8 +140,9 @@ export function WorkspaceSwitcher({
     }
   }
 
-  const activeName =
-    workspaces.find((w) => w.id === current)?.name ?? initialName ?? "Workspace";
+  const active = workspaces.find((w) => w.id === current);
+  const activeName = active?.name ?? initialName ?? "Workspace";
+  const activeLogoUrl = active?.logoUrl ?? null;
 
   if (collapsed) {
     return (
@@ -89,18 +150,13 @@ export function WorkspaceSwitcher({
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            aria-label="Switch workspace"
-            className="flex w-full items-center justify-center rounded p-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+            aria-label={`Switch workspace (current: ${activeName})`}
+            className="flex w-full items-center justify-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)]"
           >
-            <Building2 size={14} aria-hidden />
+            <WorkspaceTile name={activeName} logoUrl={activeLogoUrl} size={28} />
           </button>
         </DropdownMenuTrigger>
-        <WorkspaceMenu
-          workspaces={workspaces}
-          current={current}
-          switching={switching}
-          onSwitch={switchTo}
-        />
+        <WorkspaceMenu workspaces={workspaces} current={current} switching={switching} onSwitch={switchTo} />
       </DropdownMenu>
     );
   }
@@ -110,20 +166,15 @@ export function WorkspaceSwitcher({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          aria-label="Switch workspace"
-          className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm font-semibold tracking-tight hover:bg-[var(--surface-inset)]"
+          aria-label={`Switch workspace (current: ${activeName})`}
+          className="flex w-full items-center gap-2 rounded px-1 py-1 text-sm font-semibold tracking-tight hover:bg-[var(--surface-inset)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
         >
-          <Building2 size={14} className="shrink-0 text-[var(--text-muted)]" aria-hidden />
+          <WorkspaceTile name={activeName} logoUrl={activeLogoUrl} size={24} />
           <span className="truncate">{activeName}</span>
           <ChevronsUpDown size={12} className="ms-auto shrink-0 text-[var(--text-muted)]" aria-hidden />
         </button>
       </DropdownMenuTrigger>
-      <WorkspaceMenu
-        workspaces={workspaces}
-        current={current}
-        switching={switching}
-        onSwitch={switchTo}
-      />
+      <WorkspaceMenu workspaces={workspaces} current={current} switching={switching} onSwitch={switchTo} />
     </DropdownMenu>
   );
 }
@@ -157,11 +208,10 @@ function WorkspaceMenu({
               disabled={switching === w.id}
               className="flex items-center gap-2"
             >
+              <WorkspaceTile name={w.name} logoUrl={w.logoUrl} size={20} />
               <span className="flex-1 truncate">
                 <span className="text-[var(--text-primary)]">{w.name}</span>
-                <span className="ml-2 text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
-                  {w.role}
-                </span>
+                <span className="ml-2 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{w.role}</span>
               </span>
               {isActive && <Check size={12} className="text-[var(--org-primary)]" aria-hidden />}
             </DropdownMenuItem>

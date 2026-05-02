@@ -27,7 +27,7 @@ export default async function Page({
         ← All approvals
       </Link>
 
-      <header className="surface-raised p-6">
+      <header className="surface p-6">
         <div className="flex items-center gap-2">
           <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
             {approval.kind.replace(/_/g, " ")}

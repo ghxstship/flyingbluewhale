@@ -61,14 +61,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Badge variant={STATUS_TONE[log.status] ?? "muted"}>{log.status}</Badge>
             {log.status === "draft" && (
               <form action={transitionDailyLog.bind(null, id, "submitted")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Submit
                 </button>
               </form>
             )}
             {log.status === "submitted" && (
               <form action={transitionDailyLog.bind(null, id, "approved")}>
-                <button className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   Approve
                 </button>
               </form>

@@ -89,10 +89,7 @@ export default async function MobileIncidentPage() {
         ) : (
           rows.map((r) => (
             <li key={r.id}>
-              <Link
-                href={`/console/operations/incidents/${r.id}`}
-                className="surface-raised flex items-start gap-3 p-4"
-              >
+              <Link href={`/console/operations/incidents/${r.id}`} className="surface flex items-start gap-3 p-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="text-sm leading-snug font-semibold">{r.summary}</div>

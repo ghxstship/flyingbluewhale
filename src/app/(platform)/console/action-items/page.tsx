@@ -71,7 +71,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
         action={
           <a
             href={sp.mine === "1" ? "/console/action-items" : "/console/action-items?mine=1"}
-            className="surface-raised hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
+            className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
           >
             {sp.mine === "1" ? "All" : "Mine only"}
           </a>

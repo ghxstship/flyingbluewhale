@@ -126,7 +126,7 @@ export function AssistantChat({
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-[85%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap ${
-                m.role === "user" ? "bg-[var(--accent-subtle)] text-[var(--text)]" : "surface-raised text-[var(--text)]"
+                m.role === "user" ? "bg-[var(--accent-subtle)] text-[var(--text)]" : "surface text-[var(--text)]"
               }`}
             >
               {m.content || (streaming && i === messages.length - 1 ? "…" : "")}

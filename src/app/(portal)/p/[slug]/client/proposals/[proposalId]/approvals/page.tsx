@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
   return (
     <div className="space-y-4 p-6">
-      <header className="surface-raised p-5">
+      <header className="surface p-5">
         <div className="eyebrow text-xs text-[var(--text-muted)]">Approvals</div>
         <h1 className="text-lg font-semibold">Signatures, sign-offs, and decisions</h1>
         <p className="mt-1 max-w-2xl text-sm text-[var(--text-muted)]">
@@ -25,12 +25,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </header>
 
       {approvals.length === 0 ? (
-        <div className="surface-raised p-12 text-center text-[var(--text-muted)]">No approvals on file.</div>
+        <div className="surface p-12 text-center text-[var(--text-muted)]">No approvals on file.</div>
       ) : (
         <ul className="space-y-3">
           {approvals.map((a) => (
             <li key={a.id}>
-              <Link href={`${base}/${a.id}`} className="surface-raised hover-lift block p-5">
+              <Link href={`${base}/${a.id}`} className="surface hover-lift block p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">

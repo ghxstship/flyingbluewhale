@@ -21,22 +21,134 @@ const REGISTER: Array<{
   retention: string;
   legal_basis: "contract" | "legitimate_interest" | "consent" | "legal_obligation";
 }> = [
-  { domain: "Identity", table: "users", category: "personal", processors: ["Supabase"], retention: "Account lifetime + 30 days", legal_basis: "contract" },
-  { domain: "Identity", table: "memberships", category: "personal", processors: ["Supabase"], retention: "Account lifetime", legal_basis: "contract" },
-  { domain: "Crew", table: "crew_members", category: "personal", processors: ["Supabase"], retention: "Account lifetime + 1 year", legal_basis: "contract" },
-  { domain: "Workforce", table: "workforce_members", category: "personal", processors: ["Supabase"], retention: "7 years (employment record)", legal_basis: "legal_obligation" },
-  { domain: "Accreditation", table: "accreditations", category: "personal", processors: ["Supabase"], retention: "Event close + 90 days", legal_basis: "contract" },
-  { domain: "Visa", table: "visa_cases", category: "personal", processors: ["Supabase"], retention: "Per visa-issuing authority", legal_basis: "legal_obligation" },
-  { domain: "Medical", table: "medical_encounters", category: "personal", processors: ["Supabase"], retention: "Per local clinical record law", legal_basis: "legal_obligation" },
-  { domain: "Safeguarding", table: "safeguarding_reports", category: "personal", processors: ["Supabase"], retention: "10 years (safeguarding statute)", legal_basis: "legal_obligation" },
-  { domain: "Finance", table: "invoices", category: "financial", processors: ["Supabase", "Stripe"], retention: "7 years (tax)", legal_basis: "legal_obligation" },
-  { domain: "Finance", table: "expenses", category: "financial", processors: ["Supabase"], retention: "7 years (tax)", legal_basis: "legal_obligation" },
-  { domain: "Finance", table: "advances", category: "financial", processors: ["Supabase", "Stripe"], retention: "7 years (tax)", legal_basis: "legal_obligation" },
-  { domain: "AI", table: "ai_conversations", category: "operational", processors: ["Supabase", "Anthropic"], retention: "365 days", legal_basis: "legitimate_interest" },
-  { domain: "Audit", table: "audit_log", category: "audit", processors: ["Supabase"], retention: "Configurable; default 365 days", legal_basis: "legitimate_interest" },
-  { domain: "Notifications", table: "notifications", category: "operational", processors: ["Supabase"], retention: "180 days", legal_basis: "legitimate_interest" },
-  { domain: "Privacy", table: "consent_records", category: "audit", processors: ["Supabase"], retention: "5 years", legal_basis: "legal_obligation" },
-  { domain: "Privacy", table: "dsar_requests", category: "audit", processors: ["Supabase"], retention: "5 years", legal_basis: "legal_obligation" },
+  {
+    domain: "Identity",
+    table: "users",
+    category: "personal",
+    processors: ["Supabase"],
+    retention: "Account lifetime + 30 days",
+    legal_basis: "contract",
+  },
+  {
+    domain: "Identity",
+    table: "memberships",
+    category: "personal",
+    processors: ["Supabase"],
+    retention: "Account lifetime",
+    legal_basis: "contract",
+  },
+  {
+    domain: "Crew",
+    table: "crew_members",
+    category: "personal",
+    processors: ["Supabase"],
+    retention: "Account lifetime + 1 year",
+    legal_basis: "contract",
+  },
+  {
+    domain: "Workforce",
+    table: "workforce_members",
+    category: "personal",
+    processors: ["Supabase"],
+    retention: "7 years (employment record)",
+    legal_basis: "legal_obligation",
+  },
+  {
+    domain: "Accreditation",
+    table: "accreditations",
+    category: "personal",
+    processors: ["Supabase"],
+    retention: "Event close + 90 days",
+    legal_basis: "contract",
+  },
+  {
+    domain: "Visa",
+    table: "visa_cases",
+    category: "personal",
+    processors: ["Supabase"],
+    retention: "Per visa-issuing authority",
+    legal_basis: "legal_obligation",
+  },
+  {
+    domain: "Medical",
+    table: "medical_encounters",
+    category: "personal",
+    processors: ["Supabase"],
+    retention: "Per local clinical record law",
+    legal_basis: "legal_obligation",
+  },
+  {
+    domain: "Safeguarding",
+    table: "safeguarding_reports",
+    category: "personal",
+    processors: ["Supabase"],
+    retention: "10 years (safeguarding statute)",
+    legal_basis: "legal_obligation",
+  },
+  {
+    domain: "Finance",
+    table: "invoices",
+    category: "financial",
+    processors: ["Supabase", "Stripe"],
+    retention: "7 years (tax)",
+    legal_basis: "legal_obligation",
+  },
+  {
+    domain: "Finance",
+    table: "expenses",
+    category: "financial",
+    processors: ["Supabase"],
+    retention: "7 years (tax)",
+    legal_basis: "legal_obligation",
+  },
+  {
+    domain: "Finance",
+    table: "advances",
+    category: "financial",
+    processors: ["Supabase", "Stripe"],
+    retention: "7 years (tax)",
+    legal_basis: "legal_obligation",
+  },
+  {
+    domain: "AI",
+    table: "ai_conversations",
+    category: "operational",
+    processors: ["Supabase", "Anthropic"],
+    retention: "365 days",
+    legal_basis: "legitimate_interest",
+  },
+  {
+    domain: "Audit",
+    table: "audit_log",
+    category: "audit",
+    processors: ["Supabase"],
+    retention: "Configurable; default 365 days",
+    legal_basis: "legitimate_interest",
+  },
+  {
+    domain: "Notifications",
+    table: "notifications",
+    category: "operational",
+    processors: ["Supabase"],
+    retention: "180 days",
+    legal_basis: "legitimate_interest",
+  },
+  {
+    domain: "Privacy",
+    table: "consent_records",
+    category: "audit",
+    processors: ["Supabase"],
+    retention: "5 years",
+    legal_basis: "legal_obligation",
+  },
+  {
+    domain: "Privacy",
+    table: "dsar_requests",
+    category: "audit",
+    processors: ["Supabase"],
+    retention: "5 years",
+    legal_basis: "legal_obligation",
+  },
 ];
 
 export default async function DatamapPage() {
@@ -68,13 +180,9 @@ export default async function DatamapPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Privacy"
-        title="Data Map"
-        subtitle="GDPR Article 30 processing register"
-      />
+      <ModuleHeader eyebrow="Privacy" title="Data Map" subtitle="GDPR Article 30 processing register" />
       <div className="page-content max-w-5xl space-y-4">
-        <div className="surface overflow-x-auto">
+        <div className="overflow-x-auto">
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
@@ -117,7 +225,8 @@ export default async function DatamapPage() {
           </table>
         </div>
         <p className="text-xs text-[var(--text-muted)]">
-          This register reflects the canonical schema. Custom data retained outside the platform must be added separately to your DPA appendix.
+          This register reflects the canonical schema. Custom data retained outside the platform must be added
+          separately to your DPA appendix.
         </p>
       </div>
     </>

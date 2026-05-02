@@ -46,7 +46,7 @@ export default async function RolesPage() {
       <div className="page-content max-w-5xl space-y-6">
         <section>
           <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Platform roles</h3>
-          <div className="surface overflow-x-auto">
+          <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>

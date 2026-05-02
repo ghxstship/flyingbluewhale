@@ -66,7 +66,7 @@ export default async function MobileHandoverPage() {
           ) : (
             open.map((v) => (
               <li key={v.id}>
-                <Link href={`/console/venues/${v.id}`} className="surface-raised flex items-center justify-between p-4">
+                <Link href={`/console/venues/${v.id}`} className="surface flex items-center justify-between p-4">
                   <div>
                     <div className="text-sm font-semibold">{v.name}</div>
                     <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">

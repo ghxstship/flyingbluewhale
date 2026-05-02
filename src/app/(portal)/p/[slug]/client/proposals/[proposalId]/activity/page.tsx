@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
   return (
     <div className="space-y-4 p-6">
-      <header className="surface-raised p-5">
+      <header className="surface p-5">
         <div className="eyebrow text-xs text-[var(--text-muted)]">Activity log</div>
         <h1 className="text-lg font-semibold">Full Audit Trail</h1>
         <p className="mt-1 text-sm text-[var(--text-muted)]">
@@ -21,11 +21,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </header>
 
       {activity.length === 0 ? (
-        <div className="surface-raised p-12 text-center text-[var(--text-muted)]">No activity yet.</div>
+        <div className="surface p-12 text-center text-[var(--text-muted)]">No activity yet.</div>
       ) : (
         <ol className="space-y-2">
           {activity.map((e) => (
-            <li key={e.id} className="surface-raised flex items-start gap-3 p-4">
+            <li key={e.id} className="surface flex items-start gap-3 p-4">
               <span
                 className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[var(--org-primary)]"
                 aria-hidden="true"

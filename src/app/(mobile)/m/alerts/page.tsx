@@ -78,7 +78,7 @@ export default async function AlertsPage() {
             const ack = ackMap.get(a.id);
             const tone = SEVERITY_TONE[a.severity.toLowerCase()] ?? "muted";
             return (
-              <li key={a.id} className={`surface-raised p-4 ${ack ? "opacity-60" : ""}`}>
+              <li key={a.id} className={`surface p-4 ${ack ? "opacity-60" : ""}`}>
                 <div className="flex items-start justify-between gap-3">
                   <Badge variant={tone}>{a.severity}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">

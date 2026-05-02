@@ -50,7 +50,7 @@ export function PhaseBlock({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="surface-raised relative flex w-full items-center gap-4 p-5 text-left"
+        className="surface relative flex w-full items-center gap-4 p-5 text-left"
       >
         <span className="absolute inset-y-0 left-0 w-1" style={{ background: accent }} />
         <span className="font-mono text-3xl font-light" style={{ color: accent }}>

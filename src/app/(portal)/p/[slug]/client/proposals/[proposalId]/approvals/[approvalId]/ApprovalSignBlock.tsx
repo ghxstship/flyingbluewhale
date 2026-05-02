@@ -20,7 +20,7 @@ export function ApprovalSignBlock({
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
 
   return (
-    <form action={formAction} className="surface-raised space-y-4 p-6">
+    <form action={formAction} className="surface space-y-4 p-6">
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="proposalId" value={proposalId} />
       <input type="hidden" name="approvalId" value={approvalId} />

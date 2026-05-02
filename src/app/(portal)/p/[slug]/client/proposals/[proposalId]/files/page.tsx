@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
   return (
     <div className="space-y-4 p-6">
-      <header className="surface-raised p-5">
+      <header className="surface p-5">
         <div className="eyebrow text-xs text-[var(--text-muted)]">Files</div>
         <h1 className="text-lg font-semibold">Signed Documents, Proofs, and Reports</h1>
         <p className="mt-1 text-sm text-[var(--text-muted)]">
@@ -40,9 +40,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </header>
 
       {files.length === 0 ? (
-        <div className="surface-raised p-12 text-center text-[var(--text-muted)]">No files yet.</div>
+        <div className="surface p-12 text-center text-[var(--text-muted)]">No files yet.</div>
       ) : (
-        <div className="surface-raised p-0">
+        <div className="surface p-0">
           <table className="data-table w-full">
             <thead>
               <tr>

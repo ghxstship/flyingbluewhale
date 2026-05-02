@@ -15,7 +15,7 @@ export function LetterDocument({ letter }: { letter: OfferLetterResolved }) {
   const venueLine = [letter.venue_name, letter.venue_city, letter.venue_region].filter(Boolean).join(" · ");
 
   return (
-    <article className="surface-raised mx-auto max-w-3xl space-y-8 p-10 print:p-0 print:shadow-none">
+    <article className="surface mx-auto max-w-3xl space-y-8 p-10 print:p-0 print:shadow-none">
       <header className="flex items-start justify-between border-b border-[var(--border-default)] pb-6">
         <div>
           <div className="font-mono text-xs tracking-widest text-[var(--text-muted)] uppercase">

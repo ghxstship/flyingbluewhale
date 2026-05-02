@@ -94,7 +94,7 @@ export function SignatureBlock({
   if (alreadySigned) {
     return (
       <section className="print-hide-sibling mx-auto my-12 max-w-4xl px-8">
-        <div className="surface-raised p-8 text-center">
+        <div className="surface p-8 text-center">
           <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--color-success)] uppercase">
             Signed
           </div>
@@ -107,7 +107,7 @@ export function SignatureBlock({
 
   return (
     <section id="authorize" className="mx-auto my-12 max-w-4xl px-8">
-      <div className="surface-raised p-8">
+      <div className="surface p-8">
         <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Authorize</div>
         <h2 className="font-display mt-3 text-4xl tracking-tight">Accept this proposal</h2>
         {instructions && <p className="mt-2 text-sm text-[var(--text-secondary)]">{instructions}</p>}

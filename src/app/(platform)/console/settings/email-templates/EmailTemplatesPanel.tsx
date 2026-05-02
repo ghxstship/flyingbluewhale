@@ -188,7 +188,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
   }
 
   return (
-    <div className="surface-raised space-y-3 p-5">
+    <div className="surface space-y-3 p-5">
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold">{mode === "new" ? "New template" : "Edit template"}</div>
         <button

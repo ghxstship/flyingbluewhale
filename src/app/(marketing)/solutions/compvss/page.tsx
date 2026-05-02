@@ -116,7 +116,7 @@ export default function CompvssPage() {
 
       {/* Why offline-first matters */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="surface-raised grid gap-10 p-10 md:grid-cols-2 md:items-start">
+        <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               <Wifi size={14} /> Offline-first

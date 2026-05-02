@@ -49,7 +49,7 @@ export default function ComparePage() {
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="grid gap-4 md:grid-cols-3">
           {COMPARE_LIST.map((c) => (
-            <Link key={c.slug} href={`/compare/${c.slug}`} className="surface-raised hover-lift p-6">
+            <Link key={c.slug} href={`/compare/${c.slug}`} className="surface hover-lift p-6">
               <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
                 Landed from {c.competitor}
               </div>

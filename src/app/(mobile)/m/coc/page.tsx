@@ -60,10 +60,10 @@ export default async function MobileCocPage() {
       </p>
 
       <section className="mt-5 grid grid-cols-2 gap-2">
-        <Link href="/m/incidents/new" className="surface-raised p-3 text-center text-sm font-medium">
+        <Link href="/m/incidents/new" className="surface p-3 text-center text-sm font-medium">
           + Log incident
         </Link>
-        <Link href="/m/inventory/scan" className="surface-raised p-3 text-center text-sm font-medium">
+        <Link href="/m/inventory/scan" className="surface p-3 text-center text-sm font-medium">
           Scan asset
         </Link>
       </section>

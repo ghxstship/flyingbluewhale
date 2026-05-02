@@ -32,9 +32,7 @@ export default async function ReportsPage() {
     listOrgScoped("invoices", session.orgId),
     listOrgScoped("expenses", session.orgId),
   ]);
-  const revenue = invoices
-    .filter((i) => i.status === "paid")
-    .reduce((s, r) => s + r.amount_cents, 0);
+  const revenue = invoices.filter((i) => i.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
   const costs = expenses.reduce((s, r) => s + r.amount_cents, 0);
   const gross = revenue - costs;
   const marginPct = revenue > 0 ? Math.round((gross / revenue) * 100) : 0;
@@ -46,19 +44,10 @@ export default async function ReportsPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Finance"
-        title="Reports"
-        subtitle="Live P&L from current books"
-      />
+      <ModuleHeader eyebrow="Finance" title="Reports" subtitle="Live P&L from current books" />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard
-            label="Revenue (paid)"
-            value={formatMoney(revenue)}
-            sparkline={sparklineRevenue}
-            accent
-          />
+          <MetricCard label="Revenue (paid)" value={formatMoney(revenue)} sparkline={sparklineRevenue} accent />
           <MetricCard label="Expenses" value={formatMoney(costs)} />
           <MetricCard
             label="Gross Margin"
@@ -67,18 +56,12 @@ export default async function ReportsPage() {
           />
         </div>
 
-        <ReportsCharts
-          monthly={series}
-          aging={aging}
-          categories={expenseCategories}
-        />
+        <ReportsCharts monthly={series} aging={aging} categories={expenseCategories} />
 
-        <section className="surface overflow-x-auto">
+        <section className="overflow-x-auto">
           <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2.5">
             <h3 className="text-sm font-semibold">AR aging</h3>
-            <span className="text-xs text-[var(--text-muted)]">
-              Outstanding invoices by days overdue
-            </span>
+            <span className="text-xs text-[var(--text-muted)]">Outstanding invoices by days overdue</span>
           </header>
           <table className="data-table w-full text-sm">
             <thead>

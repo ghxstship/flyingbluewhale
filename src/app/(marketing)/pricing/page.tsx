@@ -263,7 +263,7 @@ export default function PricingPage() {
           {TIERS.map((t) => (
             <div
               key={t.tier}
-              className={`surface-raised flex flex-col p-6 ${t.highlight ? "ring-2 ring-[var(--org-primary)]" : ""}`}
+              className={`surface flex flex-col p-6 ${t.highlight ? "ring-2 ring-[var(--org-primary)]" : ""}`}
             >
               <div className="flex items-center justify-between">
                 <div className="text-sm font-semibold">{t.tier}</div>

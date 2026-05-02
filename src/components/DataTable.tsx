@@ -233,7 +233,12 @@ export async function DataTable<T extends { id: string }>({
       rows={interactiveRows}
       columns={interactiveCols}
       emptyLabel={emptyLabel}
-      searchable={searchable ?? rows.length >= 6}
+      // Search is canonical chrome — always visible unless the caller
+      // explicitly opts out with `searchable={false}` (rare; e.g. a
+      // 3-row finance summary that genuinely doesn't grow). Was
+      // auto-hidden when rows.length < 6 which made small tables
+      // feel broken / muscle memory ("⌘F isn't here?") miss.
+      searchable={searchable ?? true}
       pageSize={pageSize}
       density={density}
       bulkActions={interactiveBulk}

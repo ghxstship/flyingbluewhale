@@ -54,6 +54,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
 import { RowActions, type RowActionItem } from "@/components/ui/RowActions";
+import { Hint } from "@/components/ui/Tooltip";
+
+/**
+ * Shared toolbar trigger className — every dropdown trigger and action
+ * button in the toolbar consumes this so the chrome stays consistent.
+ * Borderless by default (matches the top-bar action-button language);
+ * hover bg + active bg communicate state without per-button enclosure.
+ *
+ * Borders in the toolbar are reserved for INPUTS (search) and SEGMENTED
+ * CONTROLS (density toggle) — chrome that needs to read as a contained
+ * input affordance or a group of related options.
+ */
+const TOOLBAR_TRIGGER_BASE =
+  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]";
+const TOOLBAR_TRIGGER_ACTIVE = "bg-[var(--surface-inset)] text-[var(--text-primary)]";
+
+function ToolbarDivider() {
+  return <span aria-hidden="true" className="h-5 w-px shrink-0 bg-[var(--border-color)] opacity-60" />;
+}
 
 /**
  * DataTableInteractive v4 — virtualised client-side table.
@@ -473,13 +492,18 @@ export function DataTableInteractive({
     <div className="space-y-3">
       {/* Toolbar — four-section layout (Discover | Shape | Actions | Display)
           per design canon. Borderless container; bottom 1px chrome rule
-          separates the strip from the table body. */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-[var(--border-color)] px-1 py-2">
+          separates the strip from the table body. Per-button borders
+          stripped to match top-bar visual language: borders only on
+          inputs (search) and segmented controls (density toggle); single
+          dropdown triggers + action buttons read as borderless icons
+          with hover affordance. Thin vertical dividers structure the
+          four functional sections without per-button enclosure. */}
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-2 border-b border-[var(--border-color)] px-1 py-1.5">
         {/* ── Section 1 · Discover ── */}
-        <div className="flex flex-1 items-center gap-3">
+        <div className="flex flex-1 items-center gap-2">
           {searchable && (
-            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-              <Search size={14} aria-hidden="true" />
+            <div className="inline-flex items-center gap-1.5 rounded border border-[var(--border-color)] bg-[var(--background)] px-2 py-1 text-xs text-[var(--text-muted)] focus-within:border-[var(--org-primary)]">
+              <Search size={12} aria-hidden="true" />
               <input
                 type="search"
                 value={String(query)}
@@ -487,8 +511,8 @@ export function DataTableInteractive({
                   setQuery(e.target.value);
                   setPage(0);
                 }}
-                placeholder="Search…"
-                className="w-40 bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)] sm:w-56"
+                placeholder="Search"
+                className="w-32 bg-transparent text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] sm:w-48"
                 aria-label="Filter Rows"
               />
               {query && (
@@ -509,7 +533,8 @@ export function DataTableInteractive({
         </div>
 
         {/* ── Section 2 · Shape (filter / sort / group) ── */}
-        <div className="flex items-center gap-1.5">
+        <ToolbarDivider />
+        <div className="flex items-center gap-0.5">
           <FilterAddMenu
             columns={columns}
             filters={filters}
@@ -531,29 +556,34 @@ export function DataTableInteractive({
         </div>
 
         {/* ── Section 3 · Actions (view / share / export / import / refresh) ── */}
-        <div className="flex items-center gap-1.5">
+        <ToolbarDivider />
+        <div className="flex items-center gap-0.5">
           <ViewMenu customizationActive={customizationActive} onReset={handleResetView} />
           <ToolbarIconButton icon={Share2} label="Share view link" onClick={handleShare} />
-          <button
-            type="button"
-            onClick={() => exportCsv(renderedCols, sorted, tableId)}
-            aria-label="Export visible rows to CSV"
-            className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-          >
-            <Download size={12} aria-hidden="true" />
-            Export
-          </button>
+          <Hint label="Export visible rows to CSV">
+            <button
+              type="button"
+              onClick={() => exportCsv(renderedCols, sorted, tableId)}
+              aria-label="Export visible rows to CSV"
+              className={TOOLBAR_TRIGGER_BASE}
+            >
+              <Download size={12} aria-hidden="true" />
+              Export
+            </button>
+          </Hint>
           {onImport && (
             <>
-              <button
-                type="button"
-                onClick={handleImportClick}
-                aria-label="Import rows from a file"
-                className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-              >
-                <Upload size={12} aria-hidden="true" />
-                Import
-              </button>
+              <Hint label="Import rows from a file (CSV / TSV / JSON / XLSX)">
+                <button
+                  type="button"
+                  onClick={handleImportClick}
+                  aria-label="Import rows from a file"
+                  className={TOOLBAR_TRIGGER_BASE}
+                >
+                  <Upload size={12} aria-hidden="true" />
+                  Import
+                </button>
+              </Hint>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -574,7 +604,8 @@ export function DataTableInteractive({
         </div>
 
         {/* ── Section 4 · Display (density / column visibility) ── */}
-        <div className="flex items-center gap-1.5">
+        <ToolbarDivider />
+        <div className="flex items-center gap-1">
           <DensityToggle value={density} onChange={setDensity} />
           <ColumnMenu
             columns={columns}
@@ -950,26 +981,33 @@ function DensityToggle({
   value: "comfortable" | "compact";
   onChange: (v: "comfortable" | "compact") => void;
 }) {
+  // Segmented control — keeps its border (canon: borders on inputs +
+  // segmented controls only). Each segment gets a Hint so the icons
+  // are discoverable without an explicit label.
   return (
-    <div className="inline-flex rounded border border-[var(--border-color)]">
-      <button
-        type="button"
-        aria-label="Comfortable density"
-        aria-pressed={value === "comfortable"}
-        onClick={() => onChange("comfortable")}
-        className={`flex items-center justify-center px-2 py-1 ${value === "comfortable" ? "bg-[var(--surface-inset)]" : ""}`}
-      >
-        <Rows3 size={14} aria-hidden="true" strokeWidth={2.25} />
-      </button>
-      <button
-        type="button"
-        aria-label="Compact density"
-        aria-pressed={value === "compact"}
-        onClick={() => onChange("compact")}
-        className={`flex items-center justify-center px-2 py-1 ${value === "compact" ? "bg-[var(--surface-inset)]" : ""}`}
-      >
-        <Rows4 size={14} aria-hidden="true" strokeWidth={2.25} />
-      </button>
+    <div role="group" aria-label="Row density" className="inline-flex h-7 rounded border border-[var(--border-color)]">
+      <Hint label="Comfortable density">
+        <button
+          type="button"
+          aria-label="Comfortable density"
+          aria-pressed={value === "comfortable"}
+          onClick={() => onChange("comfortable")}
+          className={`flex items-center justify-center px-2 ${value === "comfortable" ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}
+        >
+          <Rows3 size={14} aria-hidden="true" strokeWidth={2.25} />
+        </button>
+      </Hint>
+      <Hint label="Compact density">
+        <button
+          type="button"
+          aria-label="Compact density"
+          aria-pressed={value === "compact"}
+          onClick={() => onChange("compact")}
+          className={`flex items-center justify-center px-2 ${value === "compact" ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}
+        >
+          <Rows4 size={14} aria-hidden="true" strokeWidth={2.25} />
+        </button>
+      </Hint>
     </div>
   );
 }
@@ -988,18 +1026,18 @@ function GroupByMenu({
   const active = columns.find((c) => c.key === groupBy);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label={active ? `Grouped by ${active.header}` : "Group by column"}
-          className={`inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
-            active ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
-          }`}
-        >
-          <Layers size={12} aria-hidden="true" />
-          {active ? active.header : "Group"}
-        </button>
-      </DropdownMenuTrigger>
+      <Hint label={active ? `Grouped by ${active.header}` : "Group rows by a column"}>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            aria-label={active ? `Grouped by ${active.header}` : "Group by column"}
+            className={`${TOOLBAR_TRIGGER_BASE} ${active ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
+          >
+            <Layers size={12} aria-hidden="true" />
+            {active ? active.header : "Group"}
+          </button>
+        </DropdownMenuTrigger>
+      </Hint>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem onSelect={() => setGroupBy("")}>No grouping</DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -1074,15 +1112,16 @@ function ToolbarIconButton({
   spinning?: boolean;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      title={label}
-      className="inline-flex h-7 w-7 items-center justify-center rounded border border-[var(--border-color)] text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-    >
-      <Icon size={12} aria-hidden="true" className={spinning ? "motion-safe:animate-spin" : undefined} />
-    </button>
+    <Hint label={label}>
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={label}
+        className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+      >
+        <Icon size={12} aria-hidden="true" className={spinning ? "motion-safe:animate-spin" : undefined} />
+      </button>
+    </Hint>
   );
 }
 
@@ -1121,18 +1160,18 @@ function FilterAddMenu({
 
   return (
     <DropdownMenu onOpenChange={(open) => !open && setActiveKey("")}>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label={activeFilterCount ? `Filters (${activeFilterCount} active)` : "Add filter"}
-          className={`inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
-            activeFilterCount ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
-          }`}
-        >
-          {activeFilterCount ? <Filter size={12} aria-hidden="true" /> : <Plus size={12} aria-hidden="true" />}
-          {activeFilterCount ? `Filter · ${activeFilterCount}` : "Filter"}
-        </button>
-      </DropdownMenuTrigger>
+      <Hint label={activeFilterCount ? `Filters · ${activeFilterCount} active` : "Add a filter to narrow rows"}>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            aria-label={activeFilterCount ? `Filters (${activeFilterCount} active)` : "Add filter"}
+            className={`${TOOLBAR_TRIGGER_BASE} ${activeFilterCount ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
+          >
+            {activeFilterCount ? <Filter size={12} aria-hidden="true" /> : <Plus size={12} aria-hidden="true" />}
+            {activeFilterCount ? `Filter · ${activeFilterCount}` : "Filter"}
+          </button>
+        </DropdownMenuTrigger>
+      </Hint>
       <DropdownMenuContent align="end" className="max-h-80 w-64 overflow-auto">
         {!activeColumn ? (
           <>
@@ -1284,18 +1323,24 @@ function SortStackMenu({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label={totalSorts > 0 ? `Sorted by ${totalSorts} column${totalSorts === 1 ? "" : "s"}` : "Add sort"}
-          className={`inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
-            totalSorts > 0 ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
-          }`}
-        >
-          <ArrowUpDown size={12} aria-hidden="true" />
-          {totalSorts > 0 ? `Sort · ${totalSorts}` : "Sort"}
-        </button>
-      </DropdownMenuTrigger>
+      <Hint
+        label={
+          totalSorts > 0
+            ? `Sorted by ${totalSorts} column${totalSorts === 1 ? "" : "s"} · shift-click any column header to add another sort`
+            : "Sort rows · shift-click column headers for multi-sort"
+        }
+      >
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            aria-label={totalSorts > 0 ? `Sorted by ${totalSorts} column${totalSorts === 1 ? "" : "s"}` : "Add sort"}
+            className={`${TOOLBAR_TRIGGER_BASE} ${totalSorts > 0 ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
+          >
+            <ArrowUpDown size={12} aria-hidden="true" />
+            {totalSorts > 0 ? `Sort · ${totalSorts}` : "Sort"}
+          </button>
+        </DropdownMenuTrigger>
+      </Hint>
       <DropdownMenuContent align="end" className="w-72">
         <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Sort By</div>
         {stack.length === 0 ? (
@@ -1371,18 +1416,24 @@ function SortStackMenu({
 function ViewMenu({ customizationActive, onReset }: { customizationActive: boolean; onReset: () => void }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label="View options"
-          className={`inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
-            customizationActive ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
-          }`}
-        >
-          <SlidersHorizontal size={12} aria-hidden="true" />
-          {customizationActive ? "View · Modified" : "View"}
-        </button>
-      </DropdownMenuTrigger>
+      <Hint
+        label={
+          customizationActive
+            ? "View · auto-saved per table; click to reset to defaults"
+            : "Saved view · auto-saved per table"
+        }
+      >
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            aria-label="View options"
+            className={`${TOOLBAR_TRIGGER_BASE} ${customizationActive ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
+          >
+            <SlidersHorizontal size={12} aria-hidden="true" />
+            {customizationActive ? "View · Modified" : "View"}
+          </button>
+        </DropdownMenuTrigger>
+      </Hint>
       <DropdownMenuContent align="end" className="w-52">
         <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Saved View</div>
         <DropdownMenuItem disabled className="opacity-60">
@@ -1543,15 +1594,17 @@ function ColumnMenu({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label="Column settings"
-          className="rounded border border-[var(--border-color)] p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-        >
-          <SlidersHorizontal size={12} aria-hidden="true" />
-        </button>
-      </DropdownMenuTrigger>
+      <Hint label="Show / hide / pin / reorder columns">
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            aria-label="Column settings"
+            className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+          >
+            <SlidersHorizontal size={12} aria-hidden="true" />
+          </button>
+        </DropdownMenuTrigger>
+      </Hint>
       <DropdownMenuContent align="end" className="w-64">
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={orderedKeys} strategy={verticalListSortingStrategy}>

@@ -38,6 +38,12 @@
   --surface: #f5f2ec;
   --surface-2: #ebe7dd; /* deeper cream — recessed */
   --surface-inset: #efece4; /* inset, half-step from paper */
+  /* Override primitives.css default `--surface-raised: var(--surface)` so
+     popovers / dropdowns / sheets float above the cream page bg instead
+     of disappearing into it. Lifted-paper #fafaf6 is one step lighter
+     than paper, providing clear separation from both --bg (#f5f2ec) and
+     --bg-secondary (#ebe7dd) without breaking the warm cream aesthetic. */
+  --surface-raised: #fafaf6;
   --border: #0a0a0a; /* ink — 3px structural */
   --text: #0a0a0a;
   --text-muted: #4a4a48; /* AAA on cream */
@@ -113,6 +119,9 @@
   --surface: #0a0a0a;
   --surface-2: #1a1a1a; /* fog */
   --surface-inset: #141414;
+  /* Same rationale as light-mode: lift popovers off the ink page bg.
+     Fog (#1a1a1a) is the canonical "raised from ink" tier in this theme. */
+  --surface-raised: #1a1a1a;
   --border: #f5f2ec; /* paper — 3px structural inverted */
   --text: #f5f2ec;
   --text-muted: #b8b5ad;
@@ -143,4 +152,16 @@
   --org-accent: #f5f2ec;
   --org-on-primary: #0a0a0a;
   color-scheme: dark;
+}
+
+/* Display-tier headings render in Anton — a typeface designed for caps. Lowercase
+   weakens the brutal block aesthetic; CAPITAL CASE gets the full poster treatment.
+   Scoped to bermuda-triangle so other themes (Fraunces, Geist, etc.) keep their
+   mixed-case canon. Letter-spacing 0.01em gives Anton in caps room to breathe
+   without losing the dense block read. */
+[data-theme="bermuda-triangle"] h1,
+[data-theme="bermuda-triangle"] h2,
+[data-theme="bermuda-triangle"] h3 {
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }

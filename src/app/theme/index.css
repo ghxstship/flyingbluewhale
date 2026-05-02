@@ -38,10 +38,9 @@
   --text: #0a0a0a;
   --text-muted: #4a4a48;
   --text-subtle: #8a8a86;
-  --accent: #00e5ff;
-  --accent-solid: #00e5ff;
-  --accent-deep: #00bcd4;
-  --accent-contrast: #0a0a0a;
+  --accent: #0a0a0a;
+  --accent-solid: #0a0a0a;
+  --accent-contrast: #f5f2ec;
   --radius-sm: 0;
   --radius-md: 0;
   --radius-lg: 0;
@@ -49,7 +48,6 @@
   --shadow-elev: 8px 8px 0 #0a0a0a;
   --shadow-elev-hover: 12px 12px 0 #0a0a0a;
   --shadow-elev-soft: 4px 4px 0 #0a0a0a;
-  --shadow-elev-accent: 8px 8px 0 #00e5ff;
   --font-display: var(--font-anton), system-ui, sans-serif;
   --font-subdisplay: var(--font-bebas-neue), system-ui, sans-serif;
   --font-body: var(--font-dm-sans), system-ui, sans-serif;

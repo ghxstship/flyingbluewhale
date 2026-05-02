@@ -65,7 +65,9 @@ export function ModuleHeader({
       <div className="module-header-inner">
         <div className="min-w-0 flex-1">
           {breadcrumbs && breadcrumbs.length > 0 && <UnifiedBreadcrumbs items={breadcrumbs} className="mb-2" />}
-          {eyebrow && <div className="text-xs font-semibold tracking-wide text-[var(--org-primary)]">{eyebrow}</div>}
+          {eyebrow && (
+            <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+          )}
           <h1 className="mt-1 text-2xl font-semibold tracking-tight text-[var(--foreground)]">{title}</h1>
           {subtitle ? <p className="mt-1 text-sm text-[var(--text-muted)]">{subtitle}</p> : null}
         </div>

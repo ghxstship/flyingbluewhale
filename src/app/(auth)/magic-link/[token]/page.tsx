@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
@@ -31,9 +32,9 @@ export default async function Page({ params }: { params: Promise<{ token: string
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
         Magic links expire after a short window. Request a fresh one and try again.
       </p>
-      <a href="/magic-link" className="btn btn-primary mt-4 w-full">
+      <Link href="/magic-link" className="btn btn-primary mt-4 w-full">
         Send another magic link
-      </a>
+      </Link>
     </AuthShell>
   );
 }

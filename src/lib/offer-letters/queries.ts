@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import type {
   OfferLetter,
   OfferLetterResolved,
@@ -94,9 +94,16 @@ export async function listRateCardItems(orgId: string, catalog = "crew_day_rates
 }
 
 // ── PUBLIC ACCESS (RPCs returning JSONB — snapshot or resolved) ─────────────
+//
+// These RPCs are SECURITY DEFINER token-gated functions. EXECUTE was revoked
+// from anon/authenticated/public to keep the auto-exposed PostgREST surface
+// minimal — only service_role can call them now. The token+code parameters
+// remain the only authorization the functions trust internally; the service
+// client just gives us a callable surface that doesn't leak the function to
+// the public API.
 
 export async function getOfferLetterByToken(token: string, code: string): Promise<OfferLetterResolved | null> {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data, error } = await supabase.rpc("get_offer_letter_by_token", {
     p_token: token,
     p_code: code,
@@ -106,7 +113,7 @@ export async function getOfferLetterByToken(token: string, code: string): Promis
 }
 
 export async function recordOfferLetterView(token: string, code: string): Promise<void> {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   await supabase.rpc("record_offer_letter_view", { p_token: token, p_code: code });
 }
 
@@ -117,7 +124,7 @@ export async function acceptOfferLetterByToken(
   ip: string | null,
   userAgent: string | null,
 ): Promise<OfferLetterResolved> {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data, error } = await supabase.rpc("accept_offer_letter", {
     p_token: token,
     p_code: code,
@@ -134,7 +141,7 @@ export async function declineOfferLetterByToken(
   code: string,
   reason: string,
 ): Promise<OfferLetterResolved> {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data, error } = await supabase.rpc("decline_offer_letter", {
     p_token: token,
     p_code: code,

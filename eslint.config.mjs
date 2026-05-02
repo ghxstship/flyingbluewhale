@@ -142,6 +142,50 @@ const config = [
     },
   },
   {
+    // Explicit-`any` allowlist — files where the escape hatch is intentional
+    // and documented at the call site:
+    // - `db/resource.ts`: dynamic Supabase table-name queries (typed client
+    //   only accepts string-literal table names).
+    // - `export/strategies/**`: pluggable export pipeline operating over
+    //   heterogeneous JSON shapes from any org-scoped table.
+    // - `idempotency.ts`: opaque request-body cache (bytes in, bytes out).
+    // - `pdf/deliverables/registry.tsx`, `pptx/sponsor-deck.ts`: third-party
+    //   renderer call-sites whose types don't expose the relevant fields.
+    // - `usage.ts`: heterogeneous metric payloads.
+    // - `ai/extract-credential.ts`: Anthropic SDK content-block union.
+    // - `api/v1/exports/route.ts`: dynamic select-* result rows.
+    files: [
+      "src/lib/db/resource.ts",
+      "src/lib/export/strategies/**",
+      "src/lib/idempotency.ts",
+      "src/lib/pdf/deliverables/registry.tsx",
+      "src/lib/pptx/sponsor-deck.ts",
+      "src/lib/usage.ts",
+      "src/lib/ai/extract-credential.ts",
+      "src/app/api/v1/exports/route.ts",
+    ],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+  {
+    // E2E tests — Playwright diagnostic logging is intentional and surfaces
+    // a11y / regression detail in the test reporter.
+    files: ["e2e/**/*.{ts,tsx}"],
+    rules: {
+      "no-console": "off",
+    },
+  },
+  {
+    // Edge functions run on Deno — `// deno-lint-ignore-file no-explicit-any`
+    // already silences the equivalent rule in the runtime; ESLint's view
+    // of these files is informational only.
+    files: ["supabase/functions/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+  {
     ignores: [
       ".next/**",
       "node_modules/**",

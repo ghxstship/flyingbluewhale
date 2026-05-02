@@ -14,10 +14,15 @@ export type UserPreferences = {
   sidebar_width?: number;
   sidebar_pinned?: string[];
   sidebar_collapsed?: boolean;
-  /** Nav group labels the user has collapsed. Stored as a block-list (not an
-   *  allow-list) so new groups added to `platformNav` default to open and
-   *  never silently hide themselves from existing users. */
+  /** Nav group labels the user has collapsed. Legacy block-list semantics —
+   *  retained for back-compat with existing rows; superseded by
+   *  `sidebar_expanded_groups` (allow-list) so new groups default to
+   *  collapsed and the user explicitly opens what they want pinned. */
   sidebar_collapsed_groups?: string[];
+  /** Nav group labels the user has explicitly expanded. Allow-list — the
+   *  default sidebar shape is "all groups collapsed; show only pinned items
+   *  and the active-route group's contents". User toggles surface here. */
+  sidebar_expanded_groups?: string[];
 };
 
 let cache: UserPreferences | null = null;

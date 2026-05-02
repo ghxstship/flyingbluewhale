@@ -925,9 +925,20 @@ pre,
 
   /* ───── Shell layouts ───── */
 
+  /* Audit DS-L1: was `min-height: 100vh`, which let the shell grow with
+     content and meant the sidebar's `h-full` resolved against an unbounded
+     parent — sidebar content scrolled with the page instead of inside its
+     own container. Switching to `height: 100vh` (and `overflow: hidden` to
+     clip) bounds the shell to the viewport so:
+       - the sidebar's internal <nav overflow-y-auto> scrolls independently
+       - the main column's .console-content scrolls independently
+       - the glass-nav stays sticky at the top of the main column
+     Two scroll contexts, no shared scroll. Modern shell standard
+     (Linear / Stripe Dashboard / Vercel). */
   .console-shell {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     background: var(--background);
   }
   .console-main {
@@ -935,10 +946,17 @@ pre,
     display: flex;
     flex-direction: column;
     min-width: 0;
+    min-height: 0; /* lets .console-content's flex:1 actually shrink + scroll */
   }
   .console-content {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
+  }
+  /* Top-bar height — paired with the sidebar header so the two read as a
+     single horizontal band across the shell. Audit DS-L2. */
+  .glass-nav {
+    min-height: 3.5rem; /* 56px — matches sidebar header */
   }
 
   .page-shell {

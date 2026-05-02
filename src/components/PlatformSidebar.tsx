@@ -30,7 +30,10 @@ export function PlatformSidebar({
   const [collapsed, setCollapsed] = React.useState<boolean>(prefs.sidebar_collapsed ?? false);
   const [width, setWidth] = React.useState<number>(prefs.sidebar_width ?? 240);
   const [pinned, setPinned] = React.useState<string[]>(prefs.sidebar_pinned ?? []);
-  const [collapsedGroups, setCollapsedGroups] = React.useState<string[]>(prefs.sidebar_collapsed_groups ?? []);
+  // Allow-list of expanded groups. Default: empty → every group collapsed.
+  // The active-route group still force-opens below so the user can never
+  // lose their current page from the nav.
+  const [expandedGroups, setExpandedGroups] = React.useState<string[]>(prefs.sidebar_expanded_groups ?? []);
   const [query, setQuery] = React.useState("");
   const [showSearch, setShowSearch] = React.useState(false);
   const searchRef = React.useRef<HTMLInputElement>(null);
@@ -40,8 +43,8 @@ export function PlatformSidebar({
     if (prefs.sidebar_collapsed != null) setCollapsed(prefs.sidebar_collapsed);
     if (prefs.sidebar_width != null) setWidth(prefs.sidebar_width);
     if (prefs.sidebar_pinned != null) setPinned(prefs.sidebar_pinned);
-    if (prefs.sidebar_collapsed_groups != null) setCollapsedGroups(prefs.sidebar_collapsed_groups);
-  }, [prefs.sidebar_collapsed, prefs.sidebar_width, prefs.sidebar_pinned, prefs.sidebar_collapsed_groups]);
+    if (prefs.sidebar_expanded_groups != null) setExpandedGroups(prefs.sidebar_expanded_groups);
+  }, [prefs.sidebar_collapsed, prefs.sidebar_width, prefs.sidebar_pinned, prefs.sidebar_expanded_groups]);
 
   // Register shortcuts for the cheatsheet
   React.useEffect(() => {
@@ -105,9 +108,9 @@ export function PlatformSidebar({
   }
 
   function toggleGroup(label: string) {
-    setCollapsedGroups((prev) => {
+    setExpandedGroups((prev) => {
       const next = prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label];
-      void setPrefs({ sidebar_collapsed_groups: next });
+      void setPrefs({ sidebar_expanded_groups: next });
       return next;
     });
   }
@@ -139,9 +142,12 @@ export function PlatformSidebar({
       className="relative shrink-0 overflow-hidden border-e border-[var(--border-color)] bg-[var(--bg-secondary)] transition-[width] duration-150"
       style={{ width: `${currentWidth}px` }}
     >
-      <div className="flex h-full flex-col">
-        {/* Header: workspace switcher + collapse toggle */}
-        <div className="flex items-center gap-1 border-b border-[var(--border-color)] px-2 py-2">
+      <div className="flex h-full min-h-0 flex-col">
+        {/* Header: workspace switcher + collapse toggle.
+            Audit DS-L2: explicit min-h-14 (56px) so this row reads at the
+            same vertical height as the glass-nav top bar — the two form a
+            single horizontal band across the shell. */}
+        <div className="flex min-h-14 items-center gap-1 border-b border-[var(--border-color)] px-2 py-2">
           <div className="min-w-0 flex-1">
             <WorkspaceSwitcher collapsed={collapsed} initialName={workspaceName} />
           </div>
@@ -222,11 +228,13 @@ export function PlatformSidebar({
           {filtered.map((g) => {
             // A group is "open" when: sidebar-narrow-mode is off AND
             // (search query is active OR the active route lives in this group
-            //  OR the user hasn't collapsed it). Search + active-route
-            //  overrides guarantee nav can never hide where you are.
+            //  OR the user has explicitly expanded it). Default is collapsed
+            //  so the sidebar reads as a clean list of group headers; the
+            //  active-route group force-opens so the user can never lose
+            //  their current page from the nav.
             const hasActive = g.items.some((i) => matchRoute(pathname ?? "", i.href).isActive);
-            const userCollapsed = collapsedGroups.includes(g.label);
-            const isOpen = collapsed ? false : Boolean(query) || hasActive || !userCollapsed;
+            const userExpanded = expandedGroups.includes(g.label);
+            const isOpen = collapsed ? false : Boolean(query) || hasActive || userExpanded;
             return (
               <SidebarGroup
                 key={g.label}
@@ -252,7 +260,7 @@ export function PlatformSidebar({
             page in the console reminds the operator which app they're in.
             Parent/trademark attribution lives on marketing + /legal only. */}
         {!collapsed && (
-          <div className="border-t border-[var(--border-color)] px-3 py-3 text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)] uppercase">
+          <div className="border-t border-[var(--border-color)] px-3 py-3 text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)]">
             ATLVS
           </div>
         )}

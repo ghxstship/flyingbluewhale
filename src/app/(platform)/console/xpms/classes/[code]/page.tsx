@@ -12,11 +12,10 @@ export const dynamic = "force-dynamic";
 
 type Atom = {
   id: string;
-  atom_code: string | null;
-  name: string | null;
+  identifier: string;
+  name: string;
   state: "uac" | "tpc";
   phase: string | null;
-  tier: string | null;
 };
 
 const STATE_TONE: Record<Atom["state"], "muted" | "success"> = {
@@ -46,10 +45,10 @@ export default async function Page({ params }: { params: Promise<{ code: string 
 
   const { data } = await supabase
     .from("xpms_atoms")
-    .select("id, atom_code, name, state, phase, tier")
+    .select("id, identifier, name, state, phase")
     .eq("org_id", session.orgId)
     .eq("class_code", code)
-    .order("atom_code", { ascending: true })
+    .order("identifier", { ascending: true })
     .limit(500);
 
   const atoms = (data ?? []) as Atom[];
@@ -96,20 +95,18 @@ export default async function Page({ params }: { params: Promise<{ code: string 
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Code</th>
+                  <th>Identifier</th>
                   <th>Name</th>
                   <th>Phase</th>
-                  <th>Tier</th>
                   <th>State</th>
                 </tr>
               </thead>
               <tbody>
                 {atoms.map((a) => (
                   <tr key={a.id}>
-                    <td className="font-mono text-xs">{a.atom_code ?? "—"}</td>
-                    <td>{a.name ?? "—"}</td>
+                    <td className="font-mono text-xs">{a.identifier}</td>
+                    <td>{a.name}</td>
                     <td className="text-[var(--text-secondary)]">{a.phase ?? "—"}</td>
-                    <td className="text-[var(--text-secondary)]">{a.tier ?? "—"}</td>
                     <td>
                       <Badge variant={STATE_TONE[a.state]}>{a.state.toUpperCase()}</Badge>
                     </td>

@@ -49,10 +49,45 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Hover / press personality — themes override these to express their
+     own motion vocabulary. Defaults are the conservative baseline (Material/
+     Bento ergonomics): a 2px lift, no scale change, gentle 0.97 press.
+     - `--motion-hover` is the timing for hover/press transitions; themes
+       can drop or stretch it without touching keyframe-based animations.
+     - `--ease-hover` is the curve for hover/press only — kinetic + soft
+       swap to spring; brutal/bermuda flatten to linear for snap.
+     - `--hover-lift-y` is the translateY amount on hover. Set to `0` for
+       brutal-family themes that move the shadow instead of the element.
+     - `--hover-scale` adds a subtle grow on hover (>1) for soft/kinetic.
+     - `--press-scale` is the active-state shrink. Brutal themes shrink
+       harder so the click registers without any lift to undo. */
+  --motion-hover: var(--motion-normal);
+  --ease-hover: var(--ease-out);
+  --hover-lift-y: -2px;
+  --hover-scale: 1;
+  --press-scale: 0.97;
+
+  /* Tailwind v4 default-transition overrides — all `transition-*`
+     utilities (transition-colors, transition-transform, transition-opacity,
+     etc.) read these as their fallback duration + curve. Bound to
+     --motion-hover / --ease-hover (the per-theme hover personality
+     tokens) so Tailwind utilities pick up the active theme's vocabulary
+     for free: brutal snaps at 120ms linear, soft eases at 360ms spring.
+     Tailwind's per-utility overrides (`duration-100`, `ease-linear`)
+     still win via `--tw-duration` / `--tw-ease` CSS variables. */
+  --default-transition-duration: var(--motion-hover);
+  --default-transition-timing-function: var(--ease-hover);
+
+  /* Global theme-swap transition — fires on every element when the user
+     toggles theme/mode. Reads --motion-normal so reduced-motion zeroes
+     it (combined with the explicit !important override below). Curve is
+     fixed to --ease-standard because per-theme spring would overshoot
+     into the previous theme's color tokens during the swap. */
   --theme-transition:
-    background-color 250ms var(--ease-standard), color 250ms var(--ease-standard),
-    border-color 250ms var(--ease-standard), box-shadow 250ms var(--ease-standard), fill 250ms var(--ease-standard),
-    stroke 250ms var(--ease-standard);
+    background-color var(--motion-normal) var(--ease-standard), color var(--motion-normal) var(--ease-standard),
+    border-color var(--motion-normal) var(--ease-standard), box-shadow var(--motion-normal) var(--ease-standard),
+    fill var(--motion-normal) var(--ease-standard), stroke var(--motion-normal) var(--ease-standard);
 
   /* ─── Z-index tiers ─────────────────────────────────────────────── */
   --z-base: 0;
@@ -169,11 +204,18 @@
   --bg-hero: var(--bg);
 }
 
-/* Theme-swap transition — applied globally, guarded by reduced-motion */
-*,
-*::before,
-*::after {
-  transition: var(--theme-transition);
+/* Theme-swap transition — applied globally, guarded by reduced-motion.
+   Scoped into @layer base so class-level transition declarations
+   (e.g., `.hover-lift` in @layer components, Tailwind `transition-*`
+   utilities in @layer utilities) override per-component motion timing.
+   Without the layer, the unlayered `*` rule outranked everything and
+   pinned every element to the theme-swap timing. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    transition: var(--theme-transition);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *,

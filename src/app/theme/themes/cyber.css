@@ -6,16 +6,16 @@
 
 [data-theme="cyber"] {
   --bg: #050013;
-  --bg-hero: radial-gradient(circle at 10% 20%, rgba(255, 0, 128, 0.35), transparent 40%),
-             radial-gradient(circle at 90% 10%, rgba(0, 217, 255, 0.30), transparent 40%),
-             radial-gradient(circle at 50% 100%, rgba(138, 43, 226, 0.40), transparent 50%),
-             #050013;
+  --bg-hero:
+    radial-gradient(circle at 10% 20%, rgba(255, 0, 128, 0.35), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(0, 217, 255, 0.3), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(138, 43, 226, 0.4), transparent 50%), #050013;
   --surface: rgba(255, 255, 255, 0.03);
   --surface-2: rgba(255, 255, 255, 0.06);
   --border: rgba(255, 255, 255, 0.08);
   --text: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.60);
-  --text-subtle: rgba(255, 255, 255, 0.40);
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-subtle: rgba(255, 255, 255, 0.4);
   --accent: linear-gradient(90deg, #ff0080 0%, #00d9ff 100%);
   --accent-solid: #ff0080;
   --accent-contrast: #ffffff;
@@ -23,8 +23,14 @@
   --radius-md: 10px;
   --radius-lg: 14px;
   --border-width: 1px;
-  --shadow-elev: 0 0 40px rgba(255, 0, 128, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.10);
-  --shadow-elev-hover: 0 0 60px rgba(255, 0, 128, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --shadow-elev: 0 0 40px rgba(255, 0, 128, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-elev-hover: 0 0 60px rgba(255, 0, 128, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+  /* Cyber motion vocabulary — fast and precise so the neon glow change
+     does the heavy lift. Minimal translate (1px) keeps the chrome from
+     wobbling; the hover signal is the bloom on `--shadow-elev-hover`. */
+  --motion-hover: var(--motion-fast);
+  --hover-lift-y: -1px;
   --font-display: var(--font-space-grotesk), system-ui, sans-serif;
   --font-body: var(--font-geist), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -35,7 +41,7 @@
   --bg-tertiary: #12082c;
   --text-color: #ffffff;
   --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.80);
+  --text-secondary: rgba(255, 255, 255, 0.8);
   --text-muted: rgba(255, 255, 255, 0.62);
   --border-color: rgba(255, 255, 255, 0.12);
   --org-primary: #ff0080;
@@ -48,10 +54,10 @@
    so the hot-pink + cyan accent still reads WCAG-AA on white surfaces. */
 [data-theme="cyber"][data-mode="light"] {
   --bg: #f8f7ff;
-  --bg-hero: radial-gradient(circle at 10% 20%, rgba(214, 0, 119, 0.14), transparent 40%),
-             radial-gradient(circle at 90% 10%, rgba(0, 122, 168, 0.14), transparent 40%),
-             radial-gradient(circle at 50% 100%, rgba(138, 43, 226, 0.14), transparent 50%),
-             #f8f7ff;
+  --bg-hero:
+    radial-gradient(circle at 10% 20%, rgba(214, 0, 119, 0.14), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(0, 122, 168, 0.14), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(138, 43, 226, 0.14), transparent 50%), #f8f7ff;
   --surface: #ffffff;
   --surface-2: #ede9ff;
   --border: #d6d0f0;

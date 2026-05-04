@@ -91,11 +91,14 @@
    * + `--ease-*` declared in `theme/primitives.css :root`. Removed to
    * leave one source of truth for motion. */
 
-  --animate-page-enter: page-enter 300ms cubic-bezier(0, 0, 0.2, 1) both;
-  --animate-fade-in: fade-in 200ms cubic-bezier(0, 0, 0.2, 1) both;
-  --animate-slide-up: slide-up 200ms cubic-bezier(0, 0, 0.2, 1) both;
-  --animate-scale-in: scale-in 200ms cubic-bezier(0, 0, 0.2, 1) both;
-  --animate-skeleton: skeleton-pulse 1500ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  /* Animations consume motion tokens so themes can dial timing per
+     personality — brutal stays at 200ms snap, soft stretches via
+     --motion-slow override, reduced-motion zeroes them all. */
+  --animate-page-enter: page-enter var(--motion-slow) var(--ease-out) both;
+  --animate-fade-in: fade-in var(--motion-normal) var(--ease-out) both;
+  --animate-slide-up: slide-up var(--motion-normal) var(--ease-out) both;
+  --animate-scale-in: scale-in var(--motion-normal) var(--ease-out) both;
+  --animate-skeleton: skeleton-pulse var(--motion-skeleton) var(--ease-standard) infinite;
 }
 
 /* ───── Light theme (default) ─────
@@ -335,10 +338,10 @@ pre,
     }
   }
   .animate-accordion-down {
-    animation: accordion-down 200ms cubic-bezier(0, 0, 0.2, 1) both;
+    animation: accordion-down var(--motion-normal) var(--ease-out) both;
   }
   .animate-accordion-up {
-    animation: accordion-up 180ms cubic-bezier(0.4, 0, 1, 1) both;
+    animation: accordion-up var(--motion-normal) var(--ease-in) both;
   }
 
   /* Sheet slide */
@@ -406,29 +409,33 @@ pre,
       transform: translateY(-100%);
     }
   }
+  /* Sheet/drawer slide animations — enter uses --ease-out (decelerate
+     into place), exit uses --ease-in (accelerate away). Timing reads
+     the per-theme --motion-normal so brutal stays at 120ms snap and
+     soft slows to 360ms drift. */
   .animate-slide-in-from-right {
-    animation: slide-in-right 220ms cubic-bezier(0, 0, 0.2, 1) both;
+    animation: slide-in-right var(--motion-normal) var(--ease-out) both;
   }
   .animate-slide-out-to-right {
-    animation: slide-out-right 180ms cubic-bezier(0.4, 0, 1, 1) both;
+    animation: slide-out-right var(--motion-normal) var(--ease-in) both;
   }
   .animate-slide-in-from-left {
-    animation: slide-in-left 220ms cubic-bezier(0, 0, 0.2, 1) both;
+    animation: slide-in-left var(--motion-normal) var(--ease-out) both;
   }
   .animate-slide-out-to-left {
-    animation: slide-out-left 180ms cubic-bezier(0.4, 0, 1, 1) both;
+    animation: slide-out-left var(--motion-normal) var(--ease-in) both;
   }
   .animate-slide-up-from-bottom {
-    animation: slide-up-from-bottom 220ms cubic-bezier(0, 0, 0.2, 1) both;
+    animation: slide-up-from-bottom var(--motion-normal) var(--ease-out) both;
   }
   .animate-slide-down-to-bottom {
-    animation: slide-down-to-bottom 180ms cubic-bezier(0.4, 0, 1, 1) both;
+    animation: slide-down-to-bottom var(--motion-normal) var(--ease-in) both;
   }
   .animate-slide-down-from-top {
-    animation: slide-down-from-top 220ms cubic-bezier(0, 0, 0.2, 1) both;
+    animation: slide-down-from-top var(--motion-normal) var(--ease-out) both;
   }
   .animate-slide-up-to-top {
-    animation: slide-up-to-top 180ms cubic-bezier(0.4, 0, 1, 1) both;
+    animation: slide-up-to-top var(--motion-normal) var(--ease-in) both;
   }
 
   .animate-page-enter {
@@ -438,7 +445,7 @@ pre,
     animation: var(--animate-fade-in);
   }
   .animate-fade-out {
-    animation: fade-out 150ms cubic-bezier(0.4, 0, 1, 1) both;
+    animation: fade-out var(--motion-fast) var(--ease-in) both;
   }
   .animate-slide-up {
     animation: var(--animate-slide-up);
@@ -598,24 +605,31 @@ pre,
 
   /* ───── Interactive states ───── */
 
+  /* `.hover-lift` — the canonical interactive-card motion. 162+ usages.
+     Reads the active theme's hover personality tokens (--motion-hover,
+     --ease-hover, --hover-lift-y, --hover-scale, --press-scale) so each
+     theme expresses its own vocabulary without consumers changing.
+     Brutal themes set --hover-lift-y to 0 so the element holds position
+     and only the shadow shifts; soft/kinetic dial in spring easing and
+     a slight scale to feel pillowy. */
   .hover-lift {
     transition:
-      transform var(--motion-normal) var(--ease-out),
-      box-shadow var(--motion-normal) var(--ease-out);
+      transform var(--motion-hover) var(--ease-hover),
+      box-shadow var(--motion-hover) var(--ease-hover);
   }
   .hover-lift:hover {
-    transform: translateY(-2px);
+    transform: translateY(var(--hover-lift-y)) scale(var(--hover-scale));
     box-shadow: var(--shadow-elev-hover);
   }
   .hover-lift:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(var(--press-scale));
   }
 
   .press-scale {
-    transition: transform 100ms var(--ease-standard);
+    transition: transform var(--motion-fast) var(--ease-hover);
   }
   .press-scale:active {
-    transform: scale(0.97);
+    transform: scale(var(--press-scale));
   }
 
   /* ───── Surfaces ───── */

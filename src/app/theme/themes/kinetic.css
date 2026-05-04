@@ -20,7 +20,16 @@
   --radius-lg: 4px;
   --border-width: 1px;
   --shadow-elev: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-elev-hover: 0 6px 18px rgba(0, 0, 0, 0.10);
+  --shadow-elev-hover: 0 6px 18px rgba(0, 0, 0, 0.1);
+
+  /* Kinetic motion vocabulary — energetic spring with editorial restraint.
+     Smaller overshoot than soft (1.01 vs 1.02) so the type-led layouts
+     don't wobble; stronger lift (3px) so cards punctuate. Standard timing
+     because spring overshoot adds perceptual delay on its own. */
+  --ease-hover: var(--ease-spring);
+  --hover-lift-y: -3px;
+  --hover-scale: 1.01;
+  --press-scale: 0.96;
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-instrument-serif), Georgia, serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;

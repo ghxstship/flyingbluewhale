@@ -140,7 +140,7 @@ export function PlatformSidebar({
   return (
     <aside
       aria-label="Primary"
-      className="relative shrink-0 overflow-hidden border-e border-[var(--border-color)] bg-[var(--bg-secondary)] transition-[width] duration-150"
+      className="relative shrink-0 overflow-hidden border-e border-[var(--border-color)] bg-[var(--bg-secondary)] transition-[width] duration-[var(--motion-fast)] ease-[var(--ease-hover)]"
       style={{ width: `${currentWidth}px` }}
     >
       <div className="flex h-full min-h-0 flex-col">
@@ -346,7 +346,7 @@ function SidebarGroup({
             <ChevronDown
               size={10}
               aria-hidden="true"
-              className={`shrink-0 transition-transform duration-150 ${isOpen ? "" : "-rotate-90"}`}
+              className={`shrink-0 transition-transform duration-[var(--motion-fast)] ease-[var(--ease-hover)] ${isOpen ? "" : "-rotate-90"}`}
             />
           </button>
         ) : (

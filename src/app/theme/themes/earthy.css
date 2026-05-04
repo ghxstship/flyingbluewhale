@@ -6,9 +6,9 @@
 
 [data-theme="earthy"] {
   --bg: #eee3cd;
-  --bg-hero: radial-gradient(ellipse at 20% 10%, rgba(74, 107, 58, 0.12), transparent 50%),
-             radial-gradient(ellipse at 80% 90%, rgba(192, 86, 33, 0.10), transparent 50%),
-             #eee3cd;
+  --bg-hero:
+    radial-gradient(ellipse at 20% 10%, rgba(74, 107, 58, 0.12), transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(192, 86, 33, 0.1), transparent 50%), #eee3cd;
   --surface: #fdf9f1;
   --surface-2: #f6ecd6;
   --border: #d4c4a4;
@@ -25,6 +25,12 @@
   --border-width: 1px;
   --shadow-elev: 0 2px 6px rgba(74, 50, 30, 0.06);
   --shadow-elev-hover: 0 4px 12px rgba(74, 50, 30, 0.09);
+
+  /* Earthy motion vocabulary — slow, organic, paper-like. Longer hover
+     timing matches the muted shadows; default ease-out keeps the curve
+     gentle without spring bounce that would feel synthetic against the
+     hand-printed aesthetic. */
+  --motion-hover: var(--motion-slow);
   --font-display: var(--font-dm-serif-display), Georgia, serif;
   --font-body: var(--font-fraunces), Georgia, serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -47,9 +53,9 @@
    sage + terracotta stay as accents but brightened. */
 [data-theme="earthy"][data-mode="dark"] {
   --bg: #1a1812;
-  --bg-hero: radial-gradient(ellipse at 20% 10%, rgba(143, 163, 126, 0.18), transparent 50%),
-             radial-gradient(ellipse at 80% 90%, rgba(224, 130, 74, 0.14), transparent 50%),
-             #1a1812;
+  --bg-hero:
+    radial-gradient(ellipse at 20% 10%, rgba(143, 163, 126, 0.18), transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(224, 130, 74, 0.14), transparent 50%), #1a1812;
   --surface: #242019;
   --surface-2: #2e2920;
   --border: #443c2d;

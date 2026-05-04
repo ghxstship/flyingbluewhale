@@ -20,6 +20,15 @@
   --border-width: 3px;
   --shadow-elev: 6px 6px 0 #000000;
   --shadow-elev-hover: 8px 8px 0 #000000;
+
+  /* Brutal motion vocabulary — snap, no float. The element holds its
+     position; only the offset shadow grows from 6→8px on hover. Linear
+     curve so the shift is mechanical, not eased. Press shrinks subtly
+     (0.98) without translateY collapse. */
+  --motion-hover: var(--motion-fast);
+  --ease-hover: linear;
+  --hover-lift-y: 0;
+  --press-scale: 0.98;
   --font-display: var(--font-bricolage), system-ui, sans-serif;
   --font-body: var(--font-geist), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;

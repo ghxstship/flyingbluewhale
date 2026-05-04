@@ -69,6 +69,15 @@
   --shadow-3: 8px 8px 0 #0a0a0a;
   --shadow-4: 12px 12px 0 #0a0a0a;
 
+  /* Bermuda Triangle motion — same brutal snap as the brutal theme. The
+     element doesn't translate; the brutal offset shadow grows 8→12px on
+     hover so the lift reads through shadow geometry alone. Linear curve
+     so the motion is mechanical, not eased. */
+  --motion-hover: var(--motion-fast);
+  --ease-hover: linear;
+  --hover-lift-y: 0;
+  --press-scale: 0.98;
+
   /* Focus ring — bumped to 2px so it reads against the 3px border without
      drowning. Color stays the org-primary so per-platform overlays (which
      change --org-primary to pink/yellow/teal) flow through. */

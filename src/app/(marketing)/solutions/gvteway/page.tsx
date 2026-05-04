@@ -1,6 +1,4 @@
-// ISR (H2-08 / IK-030) — regenerate static HTML every 5 min.
-// Shortens to 60s if editorial cadence picks up; `revalidate` alone is enough,
-// no `dynamic = 'force-static'` because some pages read query params.
+// ISR — regenerate static HTML every 5 min.
 export const revalidate = 300;
 
 import Link from "next/link";
@@ -13,10 +11,11 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
+
 export const metadata: Metadata = buildMetadata({
-  title: "GVTEWAY — The Ports of Call",
+  title: "GVTEWAY — The Portal",
   description:
-    "Twelve ports of call. One manifest. Every guest, artist, and vendor — their own way aboard. Signed proposals, live advancing, per-persona boarding passes. Private by design.",
+    "Twelve personas. Each their lane. Artists see riders. Vendors see POs. Clients see proposals. Same project, RLS at the database.",
   path: "/solutions/gvteway",
   keywords: [
     "GVTEWAY",
@@ -27,7 +26,7 @@ export const metadata: Metadata = buildMetadata({
     "event portal software",
   ],
   ogImageEyebrow: "GVTEWAY",
-  ogImageTitle: "Twelve Ports of Call. One Manifest.",
+  ogImageTitle: "Twelve Personas. Each Their Lane.",
 });
 
 export default function GvtewayPage() {
@@ -42,9 +41,9 @@ export default function GvtewayPage() {
       <JsonLd
         data={[
           productSchema({
-            name: "GVTEWAY — Stakeholder Portals",
+            name: "GVTEWAY — The Portal",
             description:
-              "A tailored workspace for every stakeholder outside your org — artist, vendor, client, sponsor, guest, crew.",
+              "External stakeholder portal. Twelve personas, each scoped to their lane via RLS at the database.",
             url: "https://flyingbluewhale.app/solutions/gvteway",
           }),
         ]}
@@ -53,27 +52,27 @@ export default function GvtewayPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          GVTEWAY · The Ports of Call
+          GVTEWAY · The Portal
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Every Guest. Their Own Way Aboard.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Twelve Personas. Each Their Lane.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Twelve ports. One manifest. Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same
-          crossing — a dozen private reads, no crossover by design.
+          Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same project. Twelve scoped
+          reads. RLS at the database.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Book Passage</Button>
+          <Button href="/signup">Open the Console</Button>
           <Button href="/contact" variant="secondary">
-            Captain&apos;s briefing
+            Talk to the Studio
           </Button>
         </div>
       </section>
 
       {/* Personas */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Twelve Ports of Call. One Manifest.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Twelve Personas. Same Database.</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Every persona arrives at its own port — nav, flows, deliverables tuned to the lane. The artist never sees the
-          sponsor&apos;s invoice. The delegation never sees the vendor&apos;s COI. Private by design.
+          Every persona arrives at its own lane — nav, flows, deliverables tuned to the role. The artist never sees the
+          sponsor&apos;s invoice. The delegation never sees the vendor&apos;s COI. Enforced in Postgres.
         </p>
         <div className="mt-8">
           <FeatureGrid
@@ -87,12 +86,12 @@ export default function GvtewayPage() {
               {
                 icon: Truck,
                 title: "Vendor",
-                body: "Submissions, pull list, POs, invoices, COI + W-9 uploads, training.",
+                body: "Submissions, pull list, POs, invoices, COI + W-9 uploads, training records.",
               },
               {
                 icon: Users,
                 title: "Client",
-                body: "Proposals signed in place, deliverables, invoices by card/ACH, messages, files.",
+                body: "Proposals signed in place, deliverables, invoices via card/ACH, messages, files.",
               },
               {
                 icon: Award,
@@ -145,36 +144,36 @@ export default function GvtewayPage() {
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           <div className="surface p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              <Share2 size={14} /> Proposals · signed live
+              <Share2 size={14} /> Proposals
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">Proposals That Close Themselves.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
               Twenty-three block types. Scroll-spy nav. Per-phase contract refs. Add-on pickers with live totals. E-sign
-              in place — typed or drawn. Revocable share links. Version history. Engagement analytics on every scroll. A
-              clean PDF if your legal team still wants paper.
+              in place — typed or drawn. Revocable share links. Version history. Engagement analytics on every scroll.
+              Clean PDF if legal still wants paper.
             </p>
             <Link
               href="/features/proposals"
               className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]"
             >
-              Read the run-sheet →
+              Read the breakdown →
             </Link>
           </div>
           <div className="surface p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              <BookOpen size={14} /> KBYG · boarding passes
+              <BookOpen size={14} /> KBYG
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">Written Once. Read Twelve Ways.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              One Know-Before-You-Go doc in the bridge. Renders per-persona in the ports of call and on the open deck.
-              Artists get riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. Sixteen
-              section types. One source, twelve reads.
+              One Know-Before-You-Go doc in the console. Renders per-persona in the portal and in the field. Artists get
+              riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. Seventeen section
+              types. One source, twelve reads.
             </p>
             <Link
               href="/features/guides"
               className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]"
             >
-              Read the boarding pass →
+              Read the breakdown →
             </Link>
           </div>
         </div>
@@ -187,20 +186,21 @@ export default function GvtewayPage() {
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Security
             </div>
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight">The Link Is the Boarding Pass.</h3>
+            <h3 className="mt-3 text-3xl font-semibold tracking-tight">RLS at the Database.</h3>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Every port maps to one voyage. Share links are signed, expirable, revocable, and logged. Nobody slips from
-              the sponsor lounge into the artist compound — access enforced on the data, not just in the UI.
+              Every record is scoped to its org and project in Postgres. Share links are signed, expirable, revocable,
+              audit-logged. Nobody slips from the sponsor lounge into the artist compound — access enforced on the data,
+              not in the UI.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "Per-voyage ports — one link, one voyage",
-              "Per-persona nav, per-persona manifest",
+              "Per-project portals — one link, one project",
+              "Per-persona nav, per-persona reads",
               "Signed share links with expiry + revocation",
-              "File downloads self-expire — no compound leaks",
+              "File downloads self-expire",
               "Every view logged in engagement analytics",
-              "E-sign in place — typed or drawn",
+              "E-sign in place — typed or drawn, IP + timestamp captured",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -216,30 +216,34 @@ export default function GvtewayPage() {
         faqs={[
           {
             q: "What is GVTEWAY?",
-            a: "The ports of call. Blue-branded. Every guest, artist, vendor, sponsor, and collaborator arrives through their own lane. Twelve personas — each sees only its port.",
+            a: "The portal. Blue-branded. Every guest, artist, vendor, sponsor, and collaborator arrives through their own lane. Twelve personas — each sees only its scope.",
           },
           {
             q: "Do guests need an account?",
-            a: "Read-only? Share the link — they&apos;re aboard. Contributing (riders, COIs, signatures)? A lightweight signup creates a pass holder scoped to that voyage. Fast by design.",
+            a: "Read-only? Share the link — they're in. Contributing (riders, COIs, signatures)? A lightweight signup creates a credential scoped to that project. Fast by design.",
           },
           {
-            q: "Can I white-label the ports?",
-            a: "Private Charter. Your mark, colors, email, custom domain. Clients see your brand. Vendors see your vendors&apos; brand. The house is always yours.",
+            q: "Can I white-label the portal?",
+            a: "Festival. Your mark, colors, email, custom domain. Clients see your brand. Vendors see your vendors' brand.",
           },
           {
-            q: "How is data isolated between voyages?",
-            a: "At the database. Every record is scoped to its org and voyage. The link you share maps to one voyage — nobody slips from the sponsor suite into the artist compound.",
+            q: "How is data isolated between projects?",
+            a: "Postgres RLS. Every record is scoped to its org and project. The link you share maps to one project — nobody slips from one to another.",
           },
           {
-            q: "Can one pass holder dock at two ports?",
-            a: "Yes. A vendor on one voyage and a sponsor on another switches cleanly from their portal entryway. One login, two lanes.",
+            q: "Can one credential access two projects?",
+            a: "Yes. A vendor on one project and a sponsor on another switches cleanly from the portal home. One login, two scoped reads.",
           },
         ]}
       />
 
       <CTASection
-        title="Twelve Ports of Call. One Manifest."
-        subtitle="Twelve personas wired default. Reskin if you want. Board it if you don't."
+        title="Twelve Personas. One Source."
+        subtitle="Wired default. Reskin if you want. Use it if you don't."
+        primaryLabel="Open the console"
+        primaryHref="/signup"
+        secondaryLabel="Talk to the studio"
+        secondaryHref="/contact"
       />
     </div>
   );

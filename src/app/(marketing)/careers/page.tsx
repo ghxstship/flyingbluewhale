@@ -11,7 +11,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Careers — Sail With L0ST 1SLAND",
+  title: "Careers — Build for Production",
   description:
     "We're a small studio shipping the operating system for live events. Open roles ship work that surfaces on real shows — measured in load-ins survived, not story points burned.",
   path: "/careers",
@@ -23,7 +23,7 @@ export const metadata: Metadata = buildMetadata({
     "design jobs production",
   ],
   ogImageEyebrow: "Careers",
-  ogImageTitle: "Sail With Us.",
+  ogImageTitle: "Build for Production.",
 });
 
 const VALUES = [
@@ -45,12 +45,12 @@ const VALUES = [
   {
     icon: Sparkles,
     title: "Brand-first engineering",
-    body: "The Atlas reads like a magazine. Brutal where it should be, breathing where it can. Code follows.",
+    body: "The platform reads like a magazine. Brutal where it should be, breathing where it can. Code follows.",
   },
   {
     icon: Globe2,
     title: "Distributed by default",
-    body: "Studio in Miami, crew across timezones. Async-first. Travel for site visits and crossings, not standups.",
+    body: "Studio in Miami, crew across timezones. Async-first. Travel for site visits and shows, not standups.",
   },
   {
     icon: Rocket,
@@ -122,11 +122,11 @@ export default function CareersPage() {
         <Breadcrumbs items={trail} />
         <div className="mt-6 max-w-3xl">
           <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Careers</div>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">Sail With L0ST 1SLAND.</h1>
+          <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">Build for Production.</h1>
           <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
-            We&apos;re building the Atlas the live-events industry has needed for fifteen years — one operating system
-            that runs the producer&apos;s console, the crew&apos;s phone, and the client&apos;s portal off the same
-            manifest. Small studio, deep ownership, real shows.
+            We&apos;re building the platform the live-events industry has needed for fifteen years — one operating
+            system that runs the producer&apos;s console, the crew&apos;s phone, and the client&apos;s portal off the
+            same database. Small studio, deep ownership, real shows.
           </p>
         </div>
       </section>

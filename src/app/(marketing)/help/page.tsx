@@ -13,7 +13,7 @@ import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Help — Crew Support",
   description:
-    "Self-serve guides, status, and direct support channels. Concierge for current pass holders, triaged by cabin. Private Charter gets an SLA.",
+    "Self-serve guides, status, and direct support channels. Concierge for customers — triaged by tier. Festival gets an SLA.",
   path: "/help",
   keywords: [
     "L0ST 1SLAND help",
@@ -29,7 +29,7 @@ export const metadata: Metadata = buildMetadata({
 const CHANNELS = [
   {
     icon: BookOpen,
-    title: "Atlas Field Guide",
+    title: "Field Guide",
     body: "Long-form guides on every shell — how to run a load-in week, set up advancing, wire Stripe payouts, configure portal access.",
     cta: "Open the field guide",
     href: "/docs",
@@ -44,7 +44,7 @@ const CHANNELS = [
   {
     icon: MessageCircle,
     title: "Concierge",
-    body: "For current pass holders — triaged by cabin (Day Pass, Charter, Private Charter). Private Charter gets a four-hour SLA.",
+    body: "For customers — triaged by tier (Free, Crew, Production, Festival). Festival gets a four-hour SLA.",
     cta: "support@flyingbluewhale.app",
     href: "mailto:support@flyingbluewhale.app",
   },
@@ -86,7 +86,7 @@ const FAQS: FAQ[] = [
   },
   {
     q: "Can I get phone support?",
-    a: "The production hotline is the closest thing — staffed by producers during active event windows. We don't run general phone support; concierge email gets to a human within hours, faster on Private Charter.",
+    a: "The production hotline is the closest thing — staffed by producers during active event windows. We don't run general phone support; concierge email gets to a human within hours, faster on Festival.",
   },
   {
     q: "Where do I find my invoice or change billing details?",
@@ -175,7 +175,7 @@ export default function HelpPage() {
 
       <CTASection
         title="Still Stuck? Talk to a Producer."
-        subtitle="Concierge email is the fastest path. We respond within hours, faster on Private Charter."
+        subtitle="Concierge email is the fastest path. We respond within hours, faster on Festival."
         primaryLabel="Email Concierge"
         primaryHref="mailto:support@flyingbluewhale.app"
         secondaryLabel="Open the field guide"

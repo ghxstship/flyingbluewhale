@@ -10,10 +10,11 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, faqSchema } from "@/lib/seo";
+
 export const metadata: Metadata = buildMetadata({
-  title: "Passage — Four Cabins, One Manifest",
+  title: "Pricing — Per Org. Never Per Seat.",
   description:
-    "Four ways to board. Day Pass is free forever. Festival Pass is $49/mo. Voyager is $199/mo. Private Charter is custom. No per-seat tax. No per-scan tax.",
+    "Free forever for small teams. Per-org pricing the rest of the way up. No per-seat trap. No per-scan tax.",
   path: "/pricing",
   keywords: [
     "production software pricing",
@@ -22,76 +23,75 @@ export const metadata: Metadata = buildMetadata({
     "ATLVS pricing",
     "GVTEWAY pricing",
     "COMPVSS pricing",
-    "stakeholder portal pricing",
   ],
-  ogImageEyebrow: "Passage",
-  ogImageTitle: "Four cabins. One manifest.",
+  ogImageEyebrow: "Pricing",
+  ogImageTitle: "Per Org. Never Per Seat.",
 });
 
 const TIERS = [
   {
-    tier: "Day Pass",
+    tier: "Free",
     price: "$0",
     per: "forever",
-    description: "Freelancers + single-night crossings. The manifest is open.",
+    description: "Solo operators and side projects.",
     features: [
       "Basic projects + tasks",
-      "Guest + artist ports",
-      "Up to 3 pass holders",
-      "Up to 100 boarding passes / voyage",
-      "Community room",
+      "Guest + artist portals",
+      "Up to 3 users",
+      "Up to 100 portal credentials per project",
+      "Community support",
     ],
-    cta: "Book passage",
+    cta: "Open the console",
     href: "/signup",
   },
   {
-    tier: "Festival Pass",
+    tier: "Crew",
     price: "$49",
     per: "month per org",
-    description: "Small studios charting their first season.",
+    description: "Small teams shipping their first season.",
     features: [
-      "Everything on Day Pass",
+      "Everything in Free",
       "Invoicing + expenses + budgets",
-      "Live advancing deliverables",
-      "Up to 10 pass holders",
-      "Up to 2,000 boarding passes / voyage",
+      "Advancing — 16 deliverable types",
+      "Up to 10 users",
+      "Up to 2,000 portal credentials per project",
       "Email support",
     ],
-    cta: "14-night soundcheck",
+    cta: "14-day trial",
     href: "/signup",
   },
   {
-    tier: "Voyager",
+    tier: "Production",
     price: "$199",
     per: "month per org",
-    description: "Studios running multiple crossings a month. Taste-makers start here.",
+    description: "Teams running multiple productions in flight.",
     features: [
-      "Everything on Festival Pass",
-      "Full procurement + live vendor payouts",
-      "AI runner grounded in your manifest",
+      "Everything in Crew",
+      "Full procurement + Stripe Connect payouts",
+      "AI assistant grounded in your workspace",
       "Proposals signed in place",
-      "Boarding-pass (KBYG) CMS",
-      "Unlimited pass holders",
+      "KBYG event guides",
+      "Unlimited users",
       "Priority concierge + onboarding",
     ],
-    cta: "14-night soundcheck",
+    cta: "14-day trial",
     href: "/signup",
     highlight: true,
   },
   {
-    tier: "Private Charter",
+    tier: "Festival",
     price: "Custom",
     per: "",
-    description: "Agencies, touring companies, festivals, OCOG-scale crossings.",
+    description: "Multi-org agencies, touring companies, OCOG-scale work.",
     features: [
-      "Everything on Voyager",
-      "Deep-reasoning AI co-pilot",
-      "Custom roles + access policies",
-      "SOC 2 attestation pack + signed DPA",
+      "Everything in Production",
+      "Multi-org with SSO + custom roles",
+      "SOC-2 attestation pack + signed DPA",
       "Dedicated CSM + 99.9% uptime SLA",
-      "Custom integrations (we build with you)",
+      "Source-available license option",
+      "Custom integrations built with you",
     ],
-    cta: "Call the studio",
+    cta: "Talk to the studio",
     href: "/contact",
   },
 ];
@@ -100,130 +100,158 @@ const COMPARISON: Array<{
   category: string;
   rows: Array<{
     feature: string;
-    access: boolean | string;
-    core: boolean | string;
-    pro: boolean | string;
-    ent: boolean | string;
+    free: boolean | string;
+    crew: boolean | string;
+    production: boolean | string;
+    festival: boolean | string;
   }>;
 }> = [
   {
     category: "Core",
     rows: [
-      { feature: "Data walled off per organization", access: true, core: true, pro: true, ent: true },
-      { feature: "Users per org", access: "3", core: "10", pro: "Unlimited", ent: "Unlimited" },
-      { feature: "Projects per org", access: "1", core: "5", pro: "Unlimited", ent: "Unlimited" },
-      { feature: "Integrations and webhooks", access: true, core: true, pro: true, ent: true },
+      { feature: "Tenant walled at the database (RLS)", free: true, crew: true, production: true, festival: true },
+      { feature: "Users per org", free: "3", crew: "10", production: "Unlimited", festival: "Unlimited" },
+      { feature: "Projects per org", free: "1", crew: "5", production: "Unlimited", festival: "Unlimited" },
+      { feature: "Webhooks + signed delivery", free: true, crew: true, production: true, festival: true },
     ],
   },
   {
-    category: "ATLVS console",
+    category: "ATLVS · The Console",
     rows: [
-      { feature: "Overview and Projects", access: true, core: true, pro: true, ent: true },
-      { feature: "Finance (invoices, budgets, expenses)", access: false, core: true, pro: true, ent: true },
-      { feature: "Procurement (POs, vendors)", access: false, core: false, pro: true, ent: true },
-      { feature: "Production (equipment, rentals)", access: false, core: true, pro: true, ent: true },
-      { feature: "People and credentials", access: false, core: true, pro: true, ent: true },
-      { feature: "Advancing (16 deliverable types)", access: false, core: true, pro: true, ent: true },
-      { feature: "CMS and event guides", access: false, core: false, pro: true, ent: true },
+      { feature: "Projects, tasks, schedule, ROS", free: true, crew: true, production: true, festival: true },
+      { feature: "RFIs · submittals · daily logs · punch", free: false, crew: true, production: true, festival: true },
+      { feature: "Inspections (10 categories)", free: false, crew: true, production: true, festival: true },
+      { feature: "Finance — invoices, budgets, expenses", free: false, crew: true, production: true, festival: true },
+      {
+        feature: "Procurement — RFQs, POs, vendor scorecards",
+        free: false,
+        crew: false,
+        production: true,
+        festival: true,
+      },
+      {
+        feature: "Production — equipment, rentals, fab orders",
+        free: false,
+        crew: true,
+        production: true,
+        festival: true,
+      },
+      { feature: "People + credentials + call sheets", free: false, crew: true, production: true, festival: true },
+      { feature: "Advancing — 16 deliverable types", free: false, crew: true, production: true, festival: true },
+      { feature: "KBYG event guides", free: false, crew: false, production: true, festival: true },
     ],
   },
   {
-    category: "GVTEWAY portals",
+    category: "GVTEWAY · The Portal",
     rows: [
-      { feature: "Guest portal", access: true, core: true, pro: true, ent: true },
-      { feature: "Artist portal", access: true, core: true, pro: true, ent: true },
-      { feature: "Vendor portal", access: false, core: true, pro: true, ent: true },
-      { feature: "Client portal and proposals", access: false, core: false, pro: true, ent: true },
-      { feature: "Sponsor portal", access: false, core: false, pro: true, ent: true },
-      { feature: "Crew portal", access: false, core: true, pro: true, ent: true },
-      { feature: "White-label branding", access: false, core: false, pro: true, ent: true },
+      { feature: "Guest portal", free: true, crew: true, production: true, festival: true },
+      { feature: "Artist portal", free: true, crew: true, production: true, festival: true },
+      { feature: "Vendor portal", free: false, crew: true, production: true, festival: true },
+      { feature: "Client portal + proposals", free: false, crew: false, production: true, festival: true },
+      { feature: "Sponsor portal", free: false, crew: false, production: true, festival: true },
+      { feature: "Crew portal", free: false, crew: true, production: true, festival: true },
+      { feature: "White-label branding", free: false, crew: false, production: true, festival: true },
     ],
   },
   {
-    category: "COMPVSS mobile",
+    category: "COMPVSS · The Field",
     rows: [
-      { feature: "Offline ticket scan", access: true, core: true, pro: true, ent: true },
-      { feature: "Geo-verified clock in/out", access: false, core: true, pro: true, ent: true },
-      { feature: "Inventory scan", access: false, core: true, pro: true, ent: true },
-      { feature: "Incident reporting", access: false, core: true, pro: true, ent: true },
+      { feature: "Offline gate scan", free: true, crew: true, production: true, festival: true },
+      { feature: "Geo-verified shift clock-in", free: false, crew: true, production: true, festival: true },
+      { feature: "Daily log + warehouse + dispatch", free: false, crew: true, production: true, festival: true },
+      {
+        feature: "Field intake — incidents, medical, safeguarding",
+        free: false,
+        crew: true,
+        production: true,
+        festival: true,
+      },
     ],
   },
   {
     category: "AI",
     rows: [
-      { feature: "AI assistant grounded in your data", access: false, core: false, pro: true, ent: true },
-      { feature: "Deep-reasoning model", access: false, core: false, pro: false, ent: true },
-      { feature: "Drafting templates", access: false, core: false, pro: true, ent: true },
-      { feature: "Monthly AI budget", access: "—", core: "—", pro: "Included", ent: "Custom" },
+      { feature: "Assistant grounded in your workspace", free: false, crew: false, production: true, festival: true },
+      { feature: "Deep-reasoning model", free: false, crew: false, production: false, festival: true },
+      {
+        feature: "Drafting templates (riders, RFPs, recaps)",
+        free: false,
+        crew: false,
+        production: true,
+        festival: true,
+      },
+      { feature: "Monthly AI budget", free: "—", crew: "—", production: "Included", festival: "Custom" },
     ],
   },
   {
-    category: "Integrations",
+    category: "Payments",
     rows: [
-      { feature: "Card and ACH invoice payments", access: false, core: true, pro: true, ent: true },
-      { feature: "Direct vendor payouts", access: false, core: false, pro: true, ent: true },
-      { feature: "Signed webhooks", access: true, core: true, pro: true, ent: true },
+      { feature: "Card + ACH invoice payments", free: false, crew: true, production: true, festival: true },
+      { feature: "Stripe Connect vendor payouts", free: false, crew: false, production: true, festival: true },
+      { feature: "International wire", free: false, crew: false, production: true, festival: true },
     ],
   },
   {
-    category: "Security & compliance",
+    category: "Security & Compliance",
     rows: [
-      { feature: "Immutable audit log", access: true, core: true, pro: true, ent: true },
-      { feature: "Auto-expiring file share links", access: true, core: true, pro: true, ent: true },
-      { feature: "Rate-limited endpoints", access: true, core: true, pro: true, ent: true },
-      { feature: "Edge security (strict content and origin rules)", access: true, core: true, pro: true, ent: true },
-      { feature: "SOC 2 attestation package", access: false, core: false, pro: false, ent: true },
-      { feature: "Data residency selection", access: false, core: false, pro: false, ent: true },
+      { feature: "Immutable audit log", free: true, crew: true, production: true, festival: true },
+      { feature: "Self-expiring file shares", free: true, crew: true, production: true, festival: true },
+      { feature: "Rate-limited endpoints", free: true, crew: true, production: true, festival: true },
+      { feature: "Strict edge security headers", free: true, crew: true, production: true, festival: true },
+      { feature: "SSO (SAML / OIDC)", free: false, crew: false, production: false, festival: true },
+      { feature: "SOC-2 attestation pack", free: false, crew: false, production: false, festival: true },
+      { feature: "Custom DPA", free: false, crew: false, production: false, festival: true },
+      { feature: "Data residency", free: false, crew: false, production: false, festival: true },
     ],
   },
   {
     category: "Support",
     rows: [
-      { feature: "Community", access: true, core: true, pro: true, ent: true },
-      { feature: "Email support", access: false, core: true, pro: true, ent: true },
-      { feature: "Priority plus onboarding", access: false, core: false, pro: true, ent: true },
-      { feature: "Dedicated CSM", access: false, core: false, pro: false, ent: true },
-      { feature: "99.9% uptime SLA", access: false, core: false, pro: false, ent: true },
+      { feature: "Community", free: true, crew: true, production: true, festival: true },
+      { feature: "Email support", free: false, crew: true, production: true, festival: true },
+      { feature: "Priority + onboarding", free: false, crew: false, production: true, festival: true },
+      { feature: "Dedicated CSM", free: false, crew: false, production: false, festival: true },
+      { feature: "99.9% uptime SLA", free: false, crew: false, production: false, festival: true },
     ],
   },
 ];
 
 const FAQS = [
   {
-    q: "Is passage priced per seat?",
-    a: "Per org, flat. Voyager is unlimited pass holders for $199/month. The studio getting bigger never becomes a surprise line item.",
+    q: "Is pricing per seat?",
+    a: "Per org. Production is unlimited users for $199/month. Adding the crew never becomes a surprise line item.",
   },
   {
-    q: "Is there really a free passage?",
-    a: "Day Pass is free, forever. Basic projects, guest + artist ports, three pass holders, up to 100 boarding passes per voyage. No card required. The manifest is open.",
+    q: "Is Free really free?",
+    a: "Forever. Basic projects, guest + artist portals, three users, up to 100 portal credentials per project. No card.",
   },
   {
-    q: "How does the 14-night soundcheck work?",
-    a: "Festival Pass and Voyager unlock every feature in the cabin for fourteen nights. No card up front. Don&apos;t upgrade by night 14? You drop back to Day Pass — your manifest stays right where you left it.",
+    q: "How does the trial work?",
+    a: "Crew and Production unlock every feature in the tier for 14 days. No card up front. Don't upgrade by day 14? You drop to Free — your data stays where it is.",
   },
   {
-    q: "Can I change cabins later?",
-    a: "Anytime. Upgrades hit instantly. Downgrades kick in at the end of the billing period. Nothing gets deleted — features above your cabin go read-only until you come back.",
+    q: "Can I change tiers later?",
+    a: "Anytime. Upgrades hit instantly. Downgrades kick in at the end of the billing period. Nothing gets deleted — features above your tier go read-only until you come back.",
   },
   {
     q: "Nonprofits and community programs?",
-    a: "Thirty percent off Festival Pass and Voyager for registered nonprofits and community-arts programs. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent. We like the good crossings.",
+    a: "30% off Crew and Production for registered nonprofits and community arts programs. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent.",
   },
   {
-    q: "Do you tax per scan?",
-    a: "No. Scans are included. Scan till the sun comes up, every weekend of the season.",
+    q: "Is there a per-scan fee?",
+    a: "No. Scan all weekend. Every weekend.",
   },
   {
-    q: "What does Private Charter unlock over Voyager?",
-    a: "Deep-reasoning AI co-pilot, custom roles and access policies, SOC-2 attestation pack, signed DPA, dedicated CSM, 99.9% uptime SLA, custom integrations we build with you. Admiral&apos;s-table standard.",
+    q: "What's in Festival that isn't in Production?",
+    a: "Multi-org with SSO. Custom roles + access policies. SOC-2 attestation pack. Custom DPA. Dedicated CSM. 99.9% uptime SLA. Source-available license. Custom integrations we build with you.",
   },
   {
     q: "Can I self-host?",
-    a: "Self-host ships on the Private Charter with a source-available license. Our managed infrastructure is the recommended route — it handles security, storage, and uptime. Call the studio if you need on-prem.",
+    a: "Source-available license ships with Festival. Managed infrastructure is the recommended route — handles security, storage, and uptime.",
   },
   {
-    q: "What if I cancel? Does my manifest survive?",
-    a: "Export everything — CSV or JSON — anytime, from the chart room. After cancel, your data lives thirty days (re-subscribe and you&apos;re back) and then purges. Signed logs of the purge on request. You own the manifest.",
+    q: "What happens to my data if I cancel?",
+    a: "Export everything — CSV or JSON — anytime. After cancel, your data lives 90 days read-only (re-subscribe and you're back), then purges. Signed logs of the purge on request. You own the data.",
   },
 ];
 
@@ -246,15 +274,13 @@ export default function PricingPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          Passage · the manifest opens
-        </div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Pricing</div>
         <h1 className="mx-auto mt-3 max-w-3xl text-5xl font-semibold tracking-tight sm:text-6xl">
-          Four Cabins. Per Org, Not Per Seat.
+          Per Org. Never Per Seat.
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Every tier: manifest walled off, integrations open, audit log immutable. Upgrade the night the voyage outgrows
-          the cabin. Nothing extra for the studio getting bigger.
+          Tenant walled at the database on every tier. Audit log immutable on every tier. The team gets bigger; the bill
+          doesn&apos;t.
         </p>
       </section>
 
@@ -267,7 +293,7 @@ export default function PricingPage() {
             >
               <div className="flex items-center justify-between">
                 <div className="text-sm font-semibold">{t.tier}</div>
-                {t.highlight && <Badge variant="brand">Most Popular</Badge>}
+                {t.highlight && <Badge variant="brand">Most Common</Badge>}
               </div>
               <div className="mt-4">
                 <span className="text-3xl font-semibold tracking-tight">{t.price}</span>
@@ -293,23 +319,23 @@ export default function PricingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">The Full Itinerary</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Every Module, Every Tier.</h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-          Every port at every cabin. If the port you need is on Private Charter,{" "}
+          The full grid. If a module you need is gated above where you are,{" "}
           <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">
-            call the studio
-          </a>{" "}
-          — we usually make it work on Voyager.
+            talk to the studio
+          </a>
+          .
         </p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full min-w-[720px] text-left">
             <thead>
               <tr className="border-b border-[var(--border)] text-xs tracking-wider text-[var(--text-muted)] uppercase">
-                <th className="py-3 pr-4 font-semibold">Port of call</th>
-                <th className="py-3 pr-4 text-center font-semibold">Day Pass</th>
-                <th className="py-3 pr-4 text-center font-semibold">Festival Pass</th>
-                <th className="py-3 pr-4 text-center font-semibold">Voyager</th>
-                <th className="py-3 pr-4 text-center font-semibold">Private Charter</th>
+                <th className="py-3 pr-4 font-semibold">Module</th>
+                <th className="py-3 pr-4 text-center font-semibold">Free</th>
+                <th className="py-3 pr-4 text-center font-semibold">Crew</th>
+                <th className="py-3 pr-4 text-center font-semibold">Production</th>
+                <th className="py-3 pr-4 text-center font-semibold">Festival</th>
               </tr>
             </thead>
             <tbody>
@@ -327,16 +353,16 @@ export default function PricingPage() {
                     <tr key={cat.category + r.feature} className="border-b border-[var(--border)]">
                       <td className="py-3 pr-4 text-sm">{r.feature}</td>
                       <td className="py-3 pr-4 text-center">
-                        <Cell value={r.access} />
+                        <Cell value={r.free} />
                       </td>
                       <td className="py-3 pr-4 text-center">
-                        <Cell value={r.core} />
+                        <Cell value={r.crew} />
                       </td>
                       <td className="py-3 pr-4 text-center">
-                        <Cell value={r.pro} />
+                        <Cell value={r.production} />
                       </td>
                       <td className="py-3 pr-4 text-center">
-                        <Cell value={r.ent} />
+                        <Cell value={r.festival} />
                       </td>
                     </tr>
                   ))}
@@ -350,8 +376,12 @@ export default function PricingPage() {
       <FAQSection title="Pricing FAQ" faqs={FAQS} />
 
       <CTASection
-        title="The Manifest Is Open."
-        subtitle="Two-minute soundcheck to book passage. No card. No forced call. The Day Pass is yours, forever."
+        title="The Console Is Open."
+        subtitle="Open the console — 30 seconds, no card. Free is free, forever."
+        primaryLabel="Open the console"
+        primaryHref="/signup"
+        secondaryLabel="Talk to the studio"
+        secondaryHref="/contact"
       />
     </div>
   );

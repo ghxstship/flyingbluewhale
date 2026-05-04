@@ -1,6 +1,4 @@
-// ISR (H2-08 / IK-030) — regenerate static HTML every 5 min.
-// Shortens to 60s if editorial cadence picks up; `revalidate` alone is enough,
-// no `dynamic = 'force-static'` because some pages read query params.
+// ISR — regenerate static HTML every 5 min.
 export const revalidate = 300;
 
 import Link from "next/link";
@@ -23,20 +21,15 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
+
 export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — The Bridge",
+  title: "ATLVS — The Console",
   description:
-    "The studio&apos;s chart room. From pitch to homecoming in one sidebar. Nine rooms, sixty-plus modules, role-aware on every act. Written by taste-makers for taste-makers.",
+    "Where the production lives. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. Pitch through wrap. One sidebar.",
   path: "/solutions/atlvs",
-  keywords: [
-    "ATLVS",
-    "production operations console",
-    "event production dashboard",
-    "internal production platform",
-    "operations console software",
-  ],
+  keywords: ["ATLVS", "production operations console", "event production dashboard", "internal production platform"],
   ogImageEyebrow: "ATLVS",
-  ogImageTitle: "The Bridge · Charts the Voyage",
+  ogImageTitle: "Where the Production Lives",
 });
 
 export default function ATLVSPage() {
@@ -51,9 +44,9 @@ export default function ATLVSPage() {
       <JsonLd
         data={[
           productSchema({
-            name: "ATLVS — Office Operations Console",
+            name: "ATLVS — The Console",
             description:
-              "The office console for production teams. Projects, finance, procurement, production, people, and AI — in one connected workspace.",
+              "The office console for production teams. Projects, finance, procurement, advancing, AI — one workspace, one schema.",
             url: "https://flyingbluewhale.app/solutions/atlvs",
             price: "0",
           }),
@@ -63,32 +56,30 @@ export default function ATLVSPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          ATLVS · The Bridge
+          ATLVS · The Console
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Charts the Voyage From the Desk.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Where the Production Lives.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The studio&apos;s chart room. From pitch to homecoming. Nine rooms, sixty-plus modules, one sidebar —
-          proposals to payouts, POs to ceremonies, crew to cash. Role-aware on every act.
+          Pitch to wrap, in one sidebar. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI.
+          Forty-seven modules on one schema.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Book Passage</Button>
+          <Button href="/signup">Open the Console</Button>
           <Button href="/contact" variant="secondary">
-            Captain&apos;s briefing
+            Talk to the Studio
           </Button>
           <Link href="/pricing" className="btn btn-ghost">
-            Passage →
+            Pricing →
           </Link>
         </div>
       </section>
 
-      {/* Nine domain modules */}
+      {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-          Nine rooms · Sixty-plus modules
+          Nine domains · forty-seven modules
         </div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-          Every Act of Every Voyage. Same Chart Room.
-        </h2>
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Pitch Through Wrap. Same Console.</h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
@@ -96,12 +87,12 @@ export default function ATLVSPage() {
               {
                 icon: Command,
                 title: "Work",
-                body: "Projects, tasks, Gantt, schedule, events, canonical locations. The run-sheet.",
+                body: "Projects, tasks, Gantt, schedule, ROS, events, locations. The run-sheet.",
               },
               {
                 icon: FileSignature,
                 title: "Sales",
-                body: "Pipeline, leads, clients, proposals signed in place. Not in the inbox.",
+                body: "Pipeline, leads, clients, proposals signed in place. 23 block types, e-sig in the page.",
               },
               {
                 icon: DollarSign,
@@ -111,32 +102,32 @@ export default function ATLVSPage() {
               {
                 icon: ClipboardList,
                 title: "Procurement",
-                body: "Reqs, POs, vendors, catalog, COI + W-9 tracking, live vendor payouts.",
+                body: "Reqs, RFQs, POs, vendor scorecards, COIs, W-9s, work order broadcasts.",
               },
               {
                 icon: Database,
                 title: "Production",
-                body: "Equipment, rentals with availability, fab orders, dispatch, logistics. The road case.",
+                body: "Equipment, rentals with availability, fab orders, dispatch, logistics, site plans.",
               },
               {
                 icon: Users,
                 title: "People",
-                body: "Directory, crew, credentials with expiry alerts, role matrix, invites.",
+                body: "Directory, crew, credentials with expiry alerts, roles, call sheets, time tracking.",
               },
               {
-                icon: Brain,
-                title: "AI runner",
-                body: "Drafts from your manifest — riders, RFPs, recaps. Templates and automations for the busywork.",
+                icon: ClipboardList,
+                title: "Construction",
+                body: "RFIs, submittals, daily logs, punch list, inspections (10 categories), change orders, payment apps.",
               },
               {
                 icon: ShieldCheck,
-                title: "Settings",
-                body: "Org, billing, integrations, webhooks, audit, compliance, branding.",
+                title: "Safety",
+                body: "Incidents, OSHA, medical, crisis comms, BC/DR, cyber-IR, safeguarding, environmental, playbooks.",
               },
               {
-                icon: CheckCircle2,
-                title: "Collab",
-                body: "Inbox, files, forms, command palette. Quiet as the back bar.",
+                icon: Brain,
+                title: "AI assistant",
+                body: "Drafts riders, RFPs, recaps, call sheets from your workspace. Never the public web.",
               },
             ]}
           />
@@ -150,27 +141,26 @@ export default function ATLVSPage() {
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Under the hood
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built Like a Charter. Not a Template.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Same Rails. Every Module.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Every module rides the same rails — list, detail, create — with status flow where it counts (invoices,
-              proposals, POs, tasks). Validation at the door. Your manifest walled at the database, private by
-              architecture.
+              List, detail, create, edit. Every module rides the same rails — with status flow where it counts
+              (invoices, proposals, POs, tasks, RFIs). Validation at the door. Tenant walled at the database.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Same rails mean the studio learns the chart room once. New rooms ship in days. The act changes — the crew
-              stays.
+              Same rails mean the team learns the console once. New modules ship in days. The work changes — the
+              workflow holds.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "One manifest, three rooms — bridge, ports, deck",
-              "Walled at the database — private by architecture",
-              "Role-aware on every act of every module",
-              "Immutable audit log — who, when, before, after. Forever.",
-              "AI grounded in your manifest — never the public internet",
-              "Live vendor payouts — ACH, card, international wire",
-              "99.9% uptime SLA on the Private Charter",
-              "Signed DPA on the Private Charter",
+              "RLS at the database. Tenant walled in Postgres.",
+              "Role-aware on every action. Enforced server-side, not in the UI.",
+              "Immutable audit log. Actor, IP, before, after. Forever.",
+              "AI grounded in your workspace. Never the public internet.",
+              "Stripe Connect vendor payouts. Money never crosses our books.",
+              "Signed webhooks (HMAC-SHA256) on every state change.",
+              "Self-expiring file shares. No public buckets.",
+              "99.9% uptime SLA on Festival.",
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -183,20 +173,20 @@ export default function ATLVSPage() {
 
       {/* Persona tiles */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Who Lives in ATLVS?</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Who Lives Here.</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {[
             {
               role: "Owner / Admin",
-              body: "Full house pass — billing, org, members, integrations. Runs the business while the show runs itself.",
+              body: "Full access. Billing, org, members, integrations, branding. Runs the business while the show runs.",
             },
             {
               role: "Controller",
-              body: "Finance + procurement on the board. Invoices, expenses, budgets, POs, payouts, audit.",
+              body: "Finance + procurement. Invoices, expenses, budgets, POs, payouts, audit log.",
             },
             {
               role: "Project manager",
-              body: "Daily driver — projects, tasks, crew, proposals, clients. The tour manager's tour manager.",
+              body: "Daily driver. Projects, tasks, schedule, RFIs, submittals, advancing, crew, proposals, clients.",
             },
           ].map((p) => (
             <div key={p.role} className="surface p-5">
@@ -212,24 +202,31 @@ export default function ATLVSPage() {
         faqs={[
           {
             q: "What is ATLVS?",
-            a: "The bridge. Red-branded, desk-bound, always on. Proposals, finance, procurement, production, people, AI. Where the studio charts the voyage.",
+            a: "The console. Red-branded, desk-bound, always on. Forty-seven modules — proposals, RFIs, submittals, daily logs, punch, inspections, advancing, finance, procurement, AI. Where the production lives.",
           },
           {
             q: "How does role-aware access work?",
-            a: "Ten roles across four tiers (owner, admin, controller, collaborator, contractor, crew, client, viewer, and cameos). Every capability is gated by role — enforced in the database, not the UI.",
+            a: "Ten roles (owner, admin, controller, collaborator, contractor, crew, client, viewer, and cameos). Every capability is gated by role — enforced at the database via RLS, not in the UI.",
           },
           {
-            q: "Can I re-skin the bridge?",
-            a: "Consistent today — everyone sails the same rails. Self-serve brand skins under Settings → Branding land on the Private Charter.",
+            q: "Can I brand it?",
+            a: "Self-serve brand skins under Settings → Branding land on Festival. Production gets logo + accent. Every tier respects your org's accent color in the chrome.",
           },
           {
-            q: "What AI is on the bill?",
-            a: "A fast runner model for daily crossings, with a deep-reasoning co-pilot on All-Access and up. Every thread logs to your workspace, scoped tight.",
+            q: "What AI is included?",
+            a: "Anthropic Claude under the hood. A fast model for daily drafting on Production. Deep-reasoning model on Festival. Every thread logs to your workspace, scoped tight.",
           },
         ]}
       />
 
-      <CTASection title="Board the Bridge." subtitle="GA is free, forever. Three seats in the chart room, on us." />
+      <CTASection
+        title="Open the Console."
+        subtitle="Free forever for small teams. Per-org pricing the rest of the way up."
+        primaryLabel="Open the console"
+        primaryHref="/signup"
+        secondaryLabel="Talk to the studio"
+        secondaryHref="/contact"
+      />
     </div>
   );
 }

@@ -1,6 +1,4 @@
-// ISR (H2-08 / IK-030) — regenerate static HTML every 5 min.
-// Shortens to 60s if editorial cadence picks up; `revalidate` alone is enough,
-// no `dynamic = 'force-static'` because some pages read query params.
+// ISR — regenerate static HTML every 5 min.
 export const revalidate = 300;
 
 import Link from "next/link";
@@ -11,24 +9,18 @@ import { buildMetadata } from "@/lib/seo";
 import { COMPARE_LIST } from "@/lib/compare";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Category Notes",
-  description:
-    "Short notes on how the Atlas sits against the general-purpose tools producers still juggle. No point-by-point scorecards — just the posture.",
+  title: "From the General-Purpose Tools",
+  description: "Notes for teams arriving from a general-purpose tool. We don't run scorecards. We define what we are.",
   path: "/compare",
-  keywords: [
-    "L0ST 1SLAND Technologies comparison",
-    "asana alternative events",
-    "monday alternative events",
-    "spreadsheet alternative",
-  ],
+  keywords: ["L0ST 1SLAND Technologies comparison"],
   ogImageEyebrow: "Category Notes",
-  ogImageTitle: "The Atlas, in context.",
+  ogImageTitle: "We Don't Compare. We Define.",
 });
 
 export default function ComparePage() {
   const crumbs = [
     { label: "Home", href: "/" },
-    { label: "Compare", href: "/compare" },
+    { label: "From general-purpose tools", href: "/compare" },
   ];
 
   return (
@@ -39,10 +31,10 @@ export default function ComparePage() {
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
           Category Notes
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">The Atlas, in Context.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">We Don&apos;t Compare. We Define.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Producers land here because a general-purpose tool taught them what they didn&apos;t want. These pages are
-          notes for the search-engine crawl, not scorecards. We don&apos;t compare. We define.
+          notes for the search engine — what we are, said plainly. No scorecards.
         </p>
       </section>
 
@@ -51,7 +43,7 @@ export default function ComparePage() {
           {COMPARE_LIST.map((c) => (
             <Link key={c.slug} href={`/compare/${c.slug}`} className="surface hover-lift p-6">
               <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                Landed from {c.competitor}
+                Coming from {c.competitor}
               </div>
               <div className="mt-3 text-2xl font-semibold tracking-tight">Read the notes</div>
               <div className="mt-3 text-sm text-[var(--text-secondary)]">{c.blurb}</div>
@@ -60,7 +52,14 @@ export default function ComparePage() {
         </div>
       </section>
 
-      <CTASection title="The Room Is Ready." subtitle="GA is free, forever. No card. No rehearsal required." />
+      <CTASection
+        title="The Console Is Open."
+        subtitle="Free forever for small teams."
+        primaryLabel="Open the console"
+        primaryHref="/signup"
+        secondaryLabel="Talk to the studio"
+        secondaryHref="/contact"
+      />
     </div>
   );
 }

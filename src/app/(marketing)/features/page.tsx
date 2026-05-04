@@ -1,6 +1,4 @@
-// ISR (H2-08 / IK-030) — regenerate static HTML every 5 min.
-// Shortens to 60s if editorial cadence picks up; `revalidate` alone is enough,
-// no `dynamic = 'force-static'` because some pages read query params.
+// ISR — regenerate static HTML every 5 min.
 export const revalidate = 300;
 
 import type { Metadata } from "next";
@@ -14,47 +12,91 @@ import {
 } from "@/components/marketing/MarketingPrimitives";
 
 export const metadata: Metadata = buildMetadata({
-  title: "The Itinerary — Every Port of Call",
+  title: "Features — Every Module. Native.",
   description:
-    "Horizon to homecoming. ATLVS — the bridge. GVTEWAY — twelve ports of call. COMPVSS — the open deck. AI, finance, procurement, charter-grade security. One manifest, three rooms.",
+    "Forty-seven modules across three apps that share one database. Console, portal, field. AI, finance, procurement, audit. One source.",
   path: "/features",
   keywords: ["production software features", "event management platform", "stakeholder portals", "mobile field PWA"],
-  ogImageEyebrow: "The Itinerary",
-  ogImageTitle: "Every Port. Every Act.",
+  ogImageEyebrow: "Features",
+  ogImageTitle: "Every Module. Native.",
 });
 
 const CATEGORIES = [
-  { key: "console", title: "The bridge", desc: "Nine rooms, 60+ modules, one sidebar. ATLVS charts the voyage." },
+  { key: "console", title: "The console", desc: "ATLVS — 47 modules, 9 domains, one sidebar." },
   {
     key: "portals",
-    title: "The ports of call",
-    desc: "Twelve personas, twelve lanes. GVTEWAY is every guest&apos;s way aboard.",
+    title: "The portal",
+    desc: "GVTEWAY — twelve personas, each their lane.",
   },
   {
     key: "mobile",
-    title: "The open deck",
-    desc: "Gate scan, shift, medic, alerts, driver, guard. COMPVSS sails the night.",
+    title: "The field",
+    desc: "COMPVSS — offline-first PWA. Gate, shift, incident, medic.",
   },
-  { key: "ai", title: "AI runner", desc: "Drafts riders, RFPs, call sheets, recaps — grounded in your manifest." },
+  {
+    key: "procore-parity",
+    title: "Construction",
+    desc: "RFIs, submittals, daily logs, punch list, inspections, change orders, payment apps.",
+  },
+  {
+    key: "advancing",
+    title: "Advancing",
+    desc: "Riders, hospitality, stage plots, travel — 16 typed deliverables.",
+  },
+  {
+    key: "proposals",
+    title: "Proposals",
+    desc: "23 block types, e-sig in place, revocable share links, version history.",
+  },
   {
     key: "finance",
     title: "Finance",
-    desc: "Invoices, expenses, budgets, time, mileage, advances, live vendor payouts, P&L.",
+    desc: "Invoices, expenses, budgets, time, mileage, advances, Stripe Connect payouts, P&L.",
   },
   {
     key: "procurement",
     title: "Procurement",
-    desc: "Reqs, POs, vendor COIs, W-9s — one chart cabinet, quietly archived.",
+    desc: "RFQs, POs, vendor scorecards, COIs, W-9s, work order broadcasts.",
   },
   {
     key: "production",
     title: "Production",
-    desc: "Equipment, rentals, fabrication, dispatch, logistics. The road case.",
+    desc: "Equipment, rentals, fabrication, dispatch, logistics, site plans.",
+  },
+  {
+    key: "safety",
+    title: "Safety",
+    desc: "Incidents, OSHA, medical, crisis, BC/DR, cyber-IR, safeguarding, environmental.",
+  },
+  {
+    key: "guides",
+    title: "Event guides (KBYG)",
+    desc: "One project, six personas, 17 section types — schedule, SOPs, PPE, radio, evac.",
+  },
+  {
+    key: "ai",
+    title: "AI assistant",
+    desc: "Drafts riders, RFPs, call sheets, recaps. Grounded in your workspace, never the public web.",
+  },
+  {
+    key: "knowledge",
+    title: "Knowledge base",
+    desc: "Tagged articles, public-form intake, vendor training rolls up to compliance.",
+  },
+  {
+    key: "forms",
+    title: "Forms",
+    desc: "Schema-driven. Public submission. Honeypot anti-spam.",
+  },
+  {
+    key: "ticketing",
+    title: "Ticketing + scan",
+    desc: "Sub-100ms QR + barcode. Offline-queued. Replays in order.",
   },
   {
     key: "compliance",
-    title: "Charter-grade security",
-    desc: "Immutable audit log, retention rules, signed DPA on the Private Charter.",
+    title: "Audit + compliance",
+    desc: "Immutable audit log, signed webhooks, self-expiring shares, SOC-2 posture.",
   },
 ];
 
@@ -62,9 +104,9 @@ export default function FeaturesPage() {
   return (
     <MarketingPageShell>
       <MarketingHero
-        eyebrow="The Itinerary"
-        title="Every Port. Every Act."
-        subtitle="From horizon to homecoming. One manifest, three rooms, written for the cultural tastemakers charting the next crossing."
+        eyebrow="Features"
+        title="Every Module. Native."
+        subtitle="Forty-seven modules across three apps. Same database, same auth, same audit log. No integration tax."
       />
       <MarketingSection aria-label="Feature Categories">
         <MarketingGrid cols={4}>

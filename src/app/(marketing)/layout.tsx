@@ -7,9 +7,9 @@ const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: s
     heading: "Product",
     items: [
       { label: "Solutions", href: "/solutions" },
-      { label: "ATLVS Console", href: "/solutions/atlvs" },
-      { label: "GVTEWAY Portals", href: "/solutions/gvteway" },
-      { label: "COMPVSS Mobile", href: "/solutions/compvss" },
+      { label: "ATLVS", href: "/solutions/atlvs" },
+      { label: "GVTEWAY", href: "/solutions/gvteway" },
+      { label: "COMPVSS", href: "/solutions/compvss" },
       { label: "Features", href: "/features" },
       { label: "Pricing", href: "/pricing" },
       { label: "Changelog", href: "/changelog" },
@@ -21,30 +21,31 @@ const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: s
       { label: "Live Events", href: "/solutions/live-events" },
       { label: "Concerts", href: "/solutions/concerts" },
       { label: "Festivals & Tours", href: "/solutions/festivals-tours" },
-      { label: "Immersive Experiences", href: "/solutions/immersive-experiences" },
+      { label: "Immersive", href: "/solutions/immersive-experiences" },
       { label: "Brand Activations", href: "/solutions/brand-activations" },
-      { label: "Corporate Events", href: "/solutions/corporate-events" },
-      { label: "Theatrical Performances", href: "/solutions/theatrical-performances" },
-      { label: "Broadcast, TV & Film", href: "/solutions/broadcast-tv-film" },
+      { label: "Corporate", href: "/solutions/corporate-events" },
+      { label: "Theatrical", href: "/solutions/theatrical-performances" },
+      { label: "Broadcast / TV / Film", href: "/solutions/broadcast-tv-film" },
     ],
   },
   {
     heading: "Resources",
     items: [
-      { label: "Community", href: "/community" },
-      { label: "Compare", href: "/compare" },
-      { label: "Guides", href: "/guides" },
-      { label: "Blog", href: "/blog" },
       { label: "Docs", href: "/docs" },
+      { label: "Guides", href: "/guides" },
+      { label: "Knowledge", href: "/knowledge" },
+      { label: "Blog", href: "/blog" },
+      { label: "Community", href: "/community" },
+      { label: "Help", href: "/help" },
     ],
   },
   {
-    heading: "Company",
+    heading: "Studio",
     items: [
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
       { label: "Careers", href: "/careers" },
-      { label: "Trust", href: "/trust" },
+      { label: "Customers", href: "/customers" },
     ],
   },
   {
@@ -76,7 +77,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 L0ST 1SLAND
               </Link>
               <p className="mt-3 text-xs text-[var(--text-muted)]">
-                ATLVS, GVTEWAY, and COMPVSS — three connected apps for production teams.
+                The platform for production. Three apps, one schema.
               </p>
               <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
                 <a
@@ -117,7 +118,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           <div className="mt-12 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span>© {new Date().getFullYear()} L0ST 1SLAND Technologies</span>
-              <span>Built for production teams who are tired of duct tape.</span>
+              <span>Production runs on it.</span>
             </div>
             <div className="mt-3 text-[11px] leading-relaxed">
               ATLVS, GVTEWAY, and COMPVSS are registered trademarks of L0ST 1SLAND Technologies, a{" "}

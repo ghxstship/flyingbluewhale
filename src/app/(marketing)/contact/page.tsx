@@ -8,27 +8,28 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
+
 export const metadata: Metadata = buildMetadata({
-  title: "Contact — Call the Studio",
+  title: "Contact — Talk to the Studio",
   description:
-    "A direct line to the taste-makers&apos; studio. Captain&apos;s briefings, Private Charter access, partnerships, concierge support. Routed to producers who&apos;ve charted the crossings.",
+    "Direct line. Demos, partnerships, concierge support, Festival access. Routed to producers who&apos;ve run the room.",
   path: "/contact",
   keywords: ["L0ST 1SLAND Technologies contact", "talk to sales", "production software demo", "book demo"],
   ogImageEyebrow: "Contact",
-  ogImageTitle: "Call the Studio.",
+  ogImageTitle: "Talk to the Studio.",
 });
 
 const ROUTES = [
   {
     icon: Calendar,
-    title: "Captain&apos;s briefing",
-    body: "Thirty minutes, tailored to your crossing. We screen-share the Atlas and answer anything.",
+    title: "Walkthrough",
+    body: "Thirty minutes. Screen-share the console wired to a real production. No deck.",
     cta: "Get on the calendar",
     href: "#form",
   },
   {
     icon: Mail,
-    title: "Call the studio",
+    title: "Studio",
     body: "Direct line to a producer. One business day, usually faster.",
     cta: "sales@flyingbluewhale.app",
     href: "mailto:sales@flyingbluewhale.app",
@@ -36,14 +37,14 @@ const ROUTES = [
   {
     icon: MessageCircle,
     title: "Concierge",
-    body: "For current pass holders — triaged by cabin. Private Charter gets an SLA.",
+    body: "For current customers — triaged by tier. Festival gets an SLA.",
     cta: "support@flyingbluewhale.app",
     href: "mailto:support@flyingbluewhale.app",
   },
   {
     icon: Building2,
-    title: "Co-pilots",
-    body: "Integrations, agencies, distribution. Let&apos;s chart the voyage together.",
+    title: "Partners",
+    body: "Integrations, agencies, distribution. Build with us.",
     cta: "partners@flyingbluewhale.app",
     href: "mailto:partners@flyingbluewhale.app",
   },
@@ -51,20 +52,20 @@ const ROUTES = [
 
 const FAQS = [
   {
-    q: "Do I need to call to book passage?",
-    a: "No. /signup and you&apos;re on the Day Pass — free forever. A fourteen-night soundcheck on Festival Pass or Voyager, no card. The studio is for Private Charter, custom crossings, or a captain&apos;s briefing.",
+    q: "Do I need to call to get started?",
+    a: "No. /signup and you're on Free — forever. 14-day trial on Crew or Production, no card. The studio is for Festival access, custom integrations, or a walkthrough.",
   },
   {
-    q: "How fast does the studio ring back?",
-    a: "Studio: one business day. Concierge on Festival Pass: twenty-four business hours. Voyager: four. Private Charter: contractual SLA, usually one hour for P0. Crossings don&apos;t wait.",
+    q: "How fast does the studio respond?",
+    a: "Studio: one business day. Concierge on Crew: 24 business hours. Production: 4. Festival: contractual SLA, usually one hour for P0.",
   },
   {
     q: "Can we talk to a producer, not a salesperson?",
-    a: "Check the box in the form. We&apos;ll schedule a call with someone from the studio who&apos;s charted crossings on the Atlas.",
+    a: "Check the box in the form. We'll schedule a call with someone from the studio who's run productions on the platform.",
   },
   {
     q: "Where are you based?",
-    a: "Distributed across the US — producers in NYC, LA, Miami, Chicago, Austin. Happy to turn up in-person wherever the crossing lands.",
+    a: "Distributed across the US — producers in NYC, LA, Miami, Chicago, Austin. Happy to show up in-person wherever the work is.",
   },
 ];
 
@@ -81,13 +82,13 @@ export default function ContactPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Contact</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Call the Studio.</h1>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Talk to the Studio.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          No dark patterns. No forced calls. Book passage straight from{" "}
+          No dark patterns. No forced calls. Open the console straight from{" "}
           <a className="underline" href="/signup">
             /signup
           </a>
-          . Or request a captain&apos;s briefing below — one business day, usually faster.
+          . Or request a walkthrough below — one business day, usually faster.
         </p>
       </section>
 
@@ -127,7 +128,7 @@ export default function ContactPage() {
               <input name="company" className="input-base mt-1.5 w-full" />
             </label>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Show count / year
+              Productions per year
               <select name="scale" className="input-base mt-1.5 w-full">
                 <option>1–5</option>
                 <option>6–20</option>
@@ -147,7 +148,7 @@ export default function ContactPage() {
             </select>
           </label>
           <label className="block text-xs font-medium text-[var(--text-secondary)]">
-            What are you charting?
+            What are you running?
             <textarea name="message" rows={4} className="input-base mt-1.5 w-full" />
           </label>
           <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
@@ -155,7 +156,7 @@ export default function ContactPage() {
           </label>
           <div className="flex items-center justify-end gap-2">
             <Button href="/signup" variant="secondary">
-              Book passage instead
+              Open the console instead
             </Button>
             <Button type="submit">Send to the Studio</Button>
           </div>

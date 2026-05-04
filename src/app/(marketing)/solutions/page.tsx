@@ -1,6 +1,4 @@
-// ISR (H2-08 / IK-030) — regenerate static HTML every 5 min.
-// Shortens to 60s if editorial cadence picks up; `revalidate` alone is enough,
-// no `dynamic = 'force-static'` because some pages read query params.
+// ISR — regenerate static HTML every 5 min.
 export const revalidate = 300;
 
 import Link from "next/link";
@@ -10,10 +8,11 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
+
 export const metadata: Metadata = buildMetadata({
-  title: "The Itinerary — Three Rooms. One Manifest.",
+  title: "Solutions — Three Apps. One Schema.",
   description:
-    "ATLVS — the bridge. GVTEWAY — twelve ports of call. COMPVSS — the open deck. The itinerary for cultural tastemakers, from horizon to homecoming.",
+    "ATLVS — the console. GVTEWAY — the portal. COMPVSS — the field. Same record from the office, the stakeholder, and the gate.",
   path: "/solutions",
   keywords: [
     "live events software",
@@ -38,17 +37,17 @@ export default function SolutionsIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">The Itinerary</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Rooms. One Manifest.</h1>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Solutions</div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Schema.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The bridge, the ports of call, the open deck. One manifest — private by architecture, shared by design.
-          Written for cultural tastemakers charting the next crossing.
+          The console, the portal, the field. One database underneath. Same record, three optimized surfaces — your
+          office, your stakeholders, your crew, all reading the same truth.
         </p>
       </section>
 
       {/* Apps */}
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h2 className="text-3xl font-semibold tracking-tight">The Three Rooms</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">The Three Apps</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {APPS.map((a) => (
             <Link
@@ -81,7 +80,7 @@ export default function SolutionsIndex() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Chart the room <ArrowRight size={12} />
+                Walk the room <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -90,10 +89,10 @@ export default function SolutionsIndex() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Crossings We Chart</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Live Work, Whatever the Shape</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each crossing gets a tuned itinerary — starter templates, default role matrix, and private notes from
-          producers who&apos;ve made the journey.
+          Each shape gets a tuned setup — starter templates, default role matrix, vernacular notes from operators
+          who&apos;ve done it.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
@@ -106,28 +105,34 @@ export default function SolutionsIndex() {
       </section>
 
       <FAQSection
-        title="The Itinerary · FAQ"
+        title="Solutions · FAQ"
         faqs={[
           {
-            q: "How are the three rooms different?",
-            a: "ATLVS is the bridge — the studio charts here. GVTEWAY is the ports of call — every guest, artist, vendor, and sponsor arrives through their own lane. COMPVSS is the open deck — the night, on the water. One manifest underneath.",
+            q: "How are the three apps different?",
+            a: "ATLVS is the office console — where the production lives. GVTEWAY is the stakeholder portal — twelve personas, each their lane. COMPVSS is the offline-first field PWA. One database underneath.",
           },
           {
-            q: "Do I book all three?",
-            a: "Every passage ships all three. Most studios open with ATLVS + one GVTEWAY port (artist or client), add COMPVSS at load-in, then expand. Cast off at your tempo.",
+            q: "Do I get all three?",
+            a: "Every tier ships all three. Most teams open with ATLVS + one GVTEWAY persona (artist or client), add COMPVSS at load-in, then expand. Your tempo.",
           },
           {
-            q: "Can other orgs see my manifest?",
-            a: "No. Private by architecture — walled at the database layer, not the UI. A pass holder in one org cannot read or touch anything in another. Enforced in the data.",
+            q: "Can other orgs see my data?",
+            a: "No. RLS at the database — walled in Postgres, not in the app layer. A credential in one org cannot read or touch anything in another. Enforced in the data.",
           },
           {
-            q: "White-labeled ports of call?",
-            a: "Private Charter. Your mark, your colors, your email, your custom domain on every port. The house is always yours.",
+            q: "White-labeled portal?",
+            a: "Festival. Your mark, your colors, your email, your custom domain on every persona. The brand is yours.",
           },
         ]}
       />
 
-      <CTASection />
+      <CTASection
+        title="The Console Is Open."
+        primaryLabel="Open the console"
+        primaryHref="/signup"
+        secondaryLabel="Talk to the studio"
+        secondaryHref="/contact"
+      />
     </>
   );
 }
@@ -136,42 +141,42 @@ const APPS = [
   {
     slug: "atlvs",
     name: "ATLVS",
-    tier: "BRIDGE",
-    title: "Charts the voyage from the desk",
-    body: "Nine rooms, one sidebar. From pitch to homecoming. Proposals to payouts, POs to ceremonies. The studio&apos;s chart room.",
+    tier: "CONSOLE",
+    title: "Where the production lives",
+    body: "Forty-seven modules in one sidebar. Pitch through wrap. Proposals to payouts, RFIs to inspections, advancing to AI.",
     bullets: [
-      "60+ modules across 9 rooms",
-      "AI runner grounded in your manifest",
-      "Immutable log — who, when, before, after",
-      "Role matrix on every tier, every module",
+      "47 modules across 9 domains",
+      "AI assistant grounded in your workspace",
+      "Immutable audit log — actor, IP, before, after",
+      "Role-aware on every action, enforced server-side",
     ],
     href: "/solutions/atlvs",
   },
   {
     slug: "gvteway",
     name: "GVTEWAY",
-    tier: "PORTS OF CALL",
-    title: "Every guest, their own way aboard",
-    body: "Twelve ports, one manifest. Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Each lane private by design.",
+    tier: "PORTAL",
+    title: "Twelve personas, each their lane",
+    body: "Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Same project, scoped reads.",
     bullets: [
-      "12 persona ports per voyage",
+      "12 personas per project",
       "Proposals signed in place — 23 block types",
       "Live advancing with deliverable tracking",
-      "Per-persona KBYG boarding passes",
+      "Per-persona KBYG guides, anonymous-shareable",
     ],
     href: "/solutions/gvteway",
   },
   {
     slug: "compvss",
     name: "COMPVSS",
-    tier: "OPEN DECK",
-    title: "The night, on the water",
-    body: "Gate scan, shift check-in, medic triage, crisis alerts, driver manifest, guard tour, warehouse. Offline-first. Installs in one tap.",
+    tier: "FIELD",
+    title: "Offline. Sub-100ms.",
+    body: "Gate scan, shift clock-in, daily log, incident, medic, driver, guard, warehouse. Installs from the browser in one tap.",
     bullets: [
-      "<100ms gate scan — signal or none",
+      "<100ms gate scan, signal or none",
       "Geo-verified shift + meal credits",
       "Offline queue replays in order",
-      "Tonight&apos;s call sheet + KBYG in pocket",
+      "Tonight's call sheet + KBYG in pocket",
     ],
     href: "/solutions/compvss",
   },
@@ -180,10 +185,10 @@ const APPS = [
 const INDUSTRIES = [
   { slug: "live-events", name: "Residencies + nights", blurb: "Sold-out weeks, recurring programming" },
   { slug: "concerts", name: "Concerts", blurb: "Single night, amphitheatre, arena" },
-  { slug: "festivals-tours", name: "Festivals + tours", blurb: "Multi-day, multi-stage, multi-port" },
+  { slug: "festivals-tours", name: "Festivals + tours", blurb: "Multi-day, multi-stage, multi-city" },
   { slug: "immersive-experiences", name: "Immersive", blurb: "Installations, walk-throughs, pop-ups" },
   { slug: "brand-activations", name: "Activations", blurb: "Launches, pop-ups, experiential" },
-  { slug: "corporate-events", name: "Private Programs", blurb: "Summits, closed-room, invite-only" },
+  { slug: "corporate-events", name: "Private programs", blurb: "Summits, closed-room, invite-only" },
   { slug: "theatrical-performances", name: "Theatrical", blurb: "Residencies, tours, galas" },
   { slug: "broadcast-tv-film", name: "Broadcast / TV / Film", blurb: "Studio, remote, location" },
 ];

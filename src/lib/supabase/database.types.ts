@@ -2415,6 +2415,7 @@ export type Database = {
       events: {
         Row: {
           created_at: string
+          created_by: string | null
           description: string | null
           ends_at: string
           id: string
@@ -2428,6 +2429,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
           description?: string | null
           ends_at: string
           id?: string
@@ -2441,6 +2443,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          created_by?: string | null
           description?: string | null
           ends_at?: string
           id?: string
@@ -2453,6 +2456,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "events_org_id_fkey"
             columns: ["org_id"]

@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
 
   const { data } = await supabase
     .from("form_defs")
-    .select("id, title, slug, status, description, schema")
+    .select("id, title, slug, status, description, schema, updated_at")
     .eq("id", formId)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -49,6 +49,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
     status: string;
     description: string | null;
     schema: Json;
+    updated_at: string;
   };
   const schemaText = JSON.stringify(
     form.schema && Object.keys(form.schema as object).length > 0 ? form.schema : STARTER_SCHEMA,
@@ -75,6 +76,8 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
           submitLabel="Save Form"
           dirtyGuard
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={form.updated_at} />
           <input type="hidden" name="formId" value={form.id} />
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

@@ -26,7 +26,12 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
 
   const supabase = await createClient();
   const { data: project } = await supabase
-    .from("projects").select("id, name").eq("id", p.data.projectId).eq("org_id", session.orgId).maybeSingle();
+    .from("projects")
+    .select("id, name")
+    .eq("id", p.data.projectId)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
   if (!project) return apiError("not_found", "Project not found");
 
   // Pull all signage_grid deliverables + flatten entries.
@@ -35,13 +40,24 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
     .select("data")
     .eq("project_id", project.id)
     .eq("type", "signage_grid" as never);
-  const entries: Array<{ location: string; type: string; size?: string | null; install?: string | null; strike?: string | null; note?: string | null }> = [];
+  const entries: Array<{
+    location: string;
+    type: string;
+    size?: string | null;
+    install?: string | null;
+    strike?: string | null;
+    note?: string | null;
+  }> = [];
   for (const d of dels ?? []) {
     const parsed = SignageGridSchema.safeParse(d.data);
     if (parsed.success) entries.push(...parsed.data.entries);
   }
 
-  const { data: org } = await supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle();
+  const { data: org } = await supabase
+    .from("orgs")
+    .select("name, name_override, logo_url, branding")
+    .eq("id", session.orgId)
+    .maybeSingle();
   if (!org) return apiError("internal", "Missing organization row");
 
   const brand = resolvePdfBrand({ org, client: null });
@@ -56,7 +72,10 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
     });
     return NextResponse.redirect(signedUrl, 302);
   } catch (e) {
-    log.error("signage_grid.compile_failed", { project_id: project.id, err: e instanceof Error ? e.message : String(e) });
+    log.error("signage_grid.compile_failed", {
+      project_id: project.id,
+      err: e instanceof Error ? e.message : String(e),
+    });
     return apiError("internal", "Failed to render signage grid");
   }
 }

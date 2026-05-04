@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   vehicle_ref: z.string().max(80).optional().or(z.literal("")),
@@ -21,20 +22,19 @@ export async function updateDispatchRun(id: string, _: State, fd: FormData): Pro
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("dispatch_runs")
-    .update({
-      vehicle_ref: parsed.data.vehicle_ref || null,
-      fleet: parsed.data.fleet as "t1" | "t2" | "t3" | "media" | "workforce" | "spectator",
-      scheduled_depart: parsed.data.scheduled_depart,
-      scheduled_arrive: parsed.data.scheduled_arrive || null,
-      actual_depart: parsed.data.actual_depart || null,
-      actual_arrive: parsed.data.actual_arrive || null,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("dispatch_runs", session.orgId, id, expectedUpdatedAt, {
+    vehicle_ref: parsed.data.vehicle_ref || null,
+    fleet: parsed.data.fleet as "t1" | "t2" | "t3" | "media" | "workforce" | "spectator",
+    scheduled_depart: parsed.data.scheduled_depart,
+    scheduled_arrive: parsed.data.scheduled_arrive || null,
+    actual_depart: parsed.data.actual_depart || null,
+    actual_arrive: parsed.data.actual_arrive || null,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Dispatch Run not found." };
+  }
   revalidatePath(`/console/transport/dispatch/${id}`);
   revalidatePath("/console/transport/dispatch");
   redirect(`/console/transport/dispatch/${id}`);

@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
       <ModuleHeader eyebrow="Time Entry" title={`Edit ${row.description ?? "time entry"}`} />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/finance/time/${p.entryId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Description" name="description" defaultValue={row.description ?? ""} maxLength={500} />
           <Input
             label="Started At"

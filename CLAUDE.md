@@ -6,8 +6,8 @@ Project-specific notes for Claude Code agents working on `flyingbluewhale` (the 
 
 - **Brand name (legal/text)**: `LYTEHAUS Technologies`
 - **Brand mark (visible)**: `L Y T E H A U S` — literal spaces in JSX, matches the spaced `G H X S T S H I P` parent-company treatment. Use `aria-label="LYTEHAUS Technologies — home"` so screen readers don't read it letter-by-letter.
-- **Domain (marketing)**: `lytehaus.tech`
-- **Domain (engineering / app)**: `flyingbluewhale.app` (this repo's deploy target — separate from the brand domain)
+- **Apex domain**: `lytehaus.tech` — marketing, auth, `/me`, public proposals/offers. The whole platform lives under this apex; `flyingbluewhale` is a _repo nickname only_ and must not appear in any URL, email, identifier, or copy.
+- **App subdomains**: `atlvs.lytehaus.tech` (console) · `gvteway.lytehaus.tech` (portal) · `compvss.lytehaus.tech` (field PWA). Host-rewrite middleware in `src/proxy.ts` maps each subdomain to its internal route group (`/console`, `/p`, `/m`).
 - **Sub-products**: ATLVS (red, the console), GVTEWAY (blue, the portal), COMPVSS (yellow, the field PWA) — sub-brand names + colors stay; do not rename or recolor these.
 - **Voice canon**: see `feedback_marketing_voice.md` in memory — definitive, luxury self-confidence with hacker irreverence. Never compare to competitors.
 
@@ -48,7 +48,8 @@ Six route groups, three of them are full shells with distinct layouts:
 - **Server actions:** `"use server"` in `actions.ts` next to the page. Shape: `export type State = { error?: string } | null;` — feeds `useActionState`.
 - **Forms:** Use `<FormShell action={...}>` from `src/components/FormShell.tsx` for the standard layout + error surface.
 - **Data fetching:** Server components use `listOrgScoped(table, orgId)` / `getOrgScoped(table, orgId, id)` from `src/lib/db/resource.ts`.
-- **External portal prefix:** `/p/[slug]/...`. Don't add external features to `/console/*`.
+- **External portal prefix:** `/p/[slug]/...` (internal route). Don't add external features to `/console/*`.
+- **Cross-shell URLs:** Always use `urlFor(shell, path)` from `@/lib/urls` — never hardcode `https://...lytehaus.tech` and never concat `NEXT_PUBLIC_APP_URL` with `/console`/`/p`/`/m`. The helper is the single switch between subdomain mode and path-prefix fallback (preview deploys). Examples: `urlFor("platform", "/projects/abc")`, `urlFor("portal", "/mmw26/guide")`, `urlFor("auth", "/login")`.
 - **API:** All endpoints under `/api/v1/*`. Use `apiOk`, `apiCreated`, `apiError`, `parseJson` from `@/lib/api`. Guard with `withAuth` from `@/lib/auth`. Zod-validate all inputs at the boundary.
 - **Nav:** When adding a platform module, also add it to `src/lib/nav.ts#platformNav`.
 - **Stubs:** New routes are added via `scripts/routes.txt` + `bash scripts/generate-stubs.sh`. The generator is idempotent.
@@ -77,13 +78,25 @@ Per-role Know-Before-You-Go — same Boarding Pass pattern, shared schema, role-
 - `SUPABASE_SERVICE_ROLE_KEY` (for webhooks + admin flows)
 - `ANTHROPIC_API_KEY` (for AI assistant)
 - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (for billing + payouts)
-- `NEXT_PUBLIC_APP_URL` (return URLs + sitemaps)
+- `NEXT_PUBLIC_APP_URL` — apex base URL (e.g. `https://lytehaus.tech` in prod, `http://lvh.me:3000` in dev). Used as the canonical origin for sitemaps + as the host base from which subdomains are derived.
+- `NEXT_PUBLIC_USE_SUBDOMAINS` — set to `"1"` in prod and (with `lvh.me`) in dev to enable subdomain routing. Leave unset on Vercel preview deploys; the helper falls back to single-host path-prefix mode (`/console`, `/p`, `/m`).
+
+### Local dev with subdomains
+
+Use `lvh.me` (resolves to `127.0.0.1`, no `/etc/hosts` edits needed):
+
+- Apex: `http://lvh.me:3000`
+- ATLVS: `http://atlvs.lvh.me:3000`
+- GVTEWAY: `http://gvteway.lvh.me:3000`
+- COMPVSS: `http://compvss.lvh.me:3000`
+
+Set `NEXT_PUBLIC_APP_URL=http://lvh.me:3000` and `NEXT_PUBLIC_USE_SUBDOMAINS=1` in `.env.local`.
 
 ## Deployment
 
-- **Vercel:** `vercel.json` sets security headers + API no-cache.
-- **Service worker:** Registered only in production (`src/app/layout.tsx`). Dev auto-unregisters any prior SW.
-- **Middleware:** `src/middleware.ts` runs `updateSession()` on non-static paths to refresh the Supabase cookie.
+- **Vercel:** `vercel.json` sets security headers + API no-cache. Add `lytehaus.tech`, `www.lytehaus.tech`, `atlvs.lytehaus.tech`, `gvteway.lytehaus.tech`, `compvss.lytehaus.tech` as project domains (all four point to the same deployment; `src/proxy.ts` does the host rewrite).
+- **Service worker:** Registered only on `compvss.*` (the offline-first PWA shell). Other shells unregister any prior SW so they don't compete for scope.
+- **Proxy (Next 16 middleware):** `src/proxy.ts` runs on non-static paths — host-rewrites subdomains to internal route groups, refreshes Supabase session cookies (with `domain=.lytehaus.tech` for SSO across subdomains), enforces rate limits, and applies CORS.
 
 ## Repo siblings
 

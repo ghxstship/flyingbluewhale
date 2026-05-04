@@ -33,6 +33,8 @@ export default async function Page({ params }: { params: Promise<{ packageId: st
           cancelHref={`/console/commercial/hospitality/${p.packageId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="SKU" name="sku" defaultValue={row.sku ?? ""} required maxLength={80} />
           <label className="flex flex-col gap-1.5">

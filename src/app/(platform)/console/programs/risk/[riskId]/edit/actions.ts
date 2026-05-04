@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -23,22 +24,21 @@ export async function updateRisk(id: string, _: State, fd: FormData): Promise<St
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("risks")
-    .update({
-      title: parsed.data.title,
-      description: parsed.data.description || null,
-      kind: parsed.data.kind as "risk" | "assumption" | "issue" | "dependency",
-      likelihood: parsed.data.likelihood as "rare" | "unlikely" | "possible" | "likely" | "almost_certain",
-      impact: parsed.data.impact as "insignificant" | "minor" | "moderate" | "major" | "severe",
-      status: parsed.data.status as "open" | "mitigating" | "accepted" | "closed",
-      due_on: parsed.data.due_on || null,
-      treatment: parsed.data.treatment || null,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("risks", session.orgId, id, expectedUpdatedAt, {
+    title: parsed.data.title,
+    description: parsed.data.description || null,
+    kind: parsed.data.kind as "risk" | "assumption" | "issue" | "dependency",
+    likelihood: parsed.data.likelihood as "rare" | "unlikely" | "possible" | "likely" | "almost_certain",
+    impact: parsed.data.impact as "insignificant" | "minor" | "moderate" | "major" | "severe",
+    status: parsed.data.status as "open" | "mitigating" | "accepted" | "closed",
+    due_on: parsed.data.due_on || null,
+    treatment: parsed.data.treatment || null,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Risk not found." };
+  }
   revalidatePath(`/console/programs/risk/${id}`);
   revalidatePath("/console/programs/risk");
   redirect(`/console/programs/risk/${id}`);

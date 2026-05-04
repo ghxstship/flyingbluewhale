@@ -17,12 +17,14 @@ const BodySchema = z.object({
   sponsorName: z.string().min(1).max(120),
   dateRange: z.string().min(1).max(120),
   activations: z
-    .array(z.object({
-      title: z.string().max(120),
-      summary: z.string().max(500),
-      impressions: z.number().optional(),
-      engagements: z.number().optional(),
-    }))
+    .array(
+      z.object({
+        title: z.string().max(120),
+        summary: z.string().max(500),
+        impressions: z.number().optional(),
+        engagements: z.number().optional(),
+      }),
+    )
     .default([]),
   topMarkets: z.array(z.string().max(120)).max(10).optional(),
 });
@@ -44,7 +46,13 @@ export async function POST(req: Request, ctx: { params: Promise<{ projectId: str
 
   const supabase = await createClient();
   const [{ data: project }, { data: org }, { data: tickets }] = await Promise.all([
-    supabase.from("projects").select("id, name").eq("id", p.data.projectId).eq("org_id", session.orgId).maybeSingle(),
+    supabase
+      .from("projects")
+      .select("id, name")
+      .eq("id", p.data.projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle(),
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
     // Cap at 100k; real events never exceed this ceiling, and the query
     // feeds a count + sponsor-deck summary that doesn't need every row.
@@ -74,17 +82,13 @@ export async function POST(req: Request, ctx: { params: Promise<{ projectId: str
       photos: [],
     });
 
-      if (!isServiceClientAvailable()) {
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
 
-        return apiError(
-
-          "service_unavailable",
-
-          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
-
-        );
-
-      }
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
 
     const svc = createServiceClient();
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -100,7 +104,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ projectId: str
     if (!url) return apiError("internal", "Failed to sign deck URL");
     return NextResponse.redirect(url.signedUrl, 302);
   } catch (e) {
-    log.error("sponsor_deck.compile_failed", { project_id: project.id, err: e instanceof Error ? e.message : String(e) });
+    log.error("sponsor_deck.compile_failed", {
+      project_id: project.id,
+      err: e instanceof Error ? e.message : String(e),
+    });
     return apiError("internal", "Failed to render sponsor deck");
   }
 }

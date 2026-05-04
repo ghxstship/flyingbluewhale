@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   description: z.string().max(500).optional().or(z.literal("")),
@@ -20,19 +21,18 @@ export async function updateTimeEntry(id: string, _: State, fd: FormData): Promi
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("time_entries")
-    .update({
-      description: parsed.data.description || null,
-      started_at: new Date(parsed.data.started_at).toISOString(),
-      ended_at: parsed.data.ended_at ? new Date(parsed.data.ended_at).toISOString() : null,
-      duration_minutes: parsed.data.duration_minutes ? Number(parsed.data.duration_minutes) : null,
-      billable: parsed.data.billable === "on" || parsed.data.billable === "true",
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("time_entries", session.orgId, id, expectedUpdatedAt, {
+    description: parsed.data.description || null,
+    started_at: new Date(parsed.data.started_at).toISOString(),
+    ended_at: parsed.data.ended_at ? new Date(parsed.data.ended_at).toISOString() : null,
+    duration_minutes: parsed.data.duration_minutes ? Number(parsed.data.duration_minutes) : null,
+    billable: parsed.data.billable === "on" || parsed.data.billable === "true",
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Time Entrie not found." };
+  }
   revalidatePath(`/console/finance/time/${id}`);
   revalidatePath("/console/finance/time");
   redirect(`/console/finance/time/${id}`);

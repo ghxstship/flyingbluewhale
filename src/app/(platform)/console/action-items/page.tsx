@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { RouteTabs } from "@/components/ui/RouteTabs";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -6,6 +7,13 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 
 export const dynamic = "force-dynamic";
+
+// Mirrors src/app/(platform)/console/page.tsx — keep in sync.
+const DASHBOARD_TABS = [
+  { label: "Overview", href: "/console" },
+  { label: "Portfolio", href: "/console/dashboards" },
+  { label: "Action Items", href: "/console/action-items" },
+];
 
 type Row = {
   kind: string;
@@ -76,6 +84,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
             {sp.mine === "1" ? "All" : "Mine only"}
           </a>
         }
+        tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

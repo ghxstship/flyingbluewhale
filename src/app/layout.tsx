@@ -95,7 +95,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech"),
   title: {
     default: "LYTEHAUS Technologies — ATLVS, GVTEWAY, COMPVSS",
     template: "%s · LYTEHAUS Technologies",
@@ -143,9 +143,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// COMPVSS is the offline-first PWA shell. ATLVS (console) and GVTEWAY
+// (portal) don't need a service worker — registering one there would steal
+// the SW scope and break offline behavior on compvss when a user visits
+// multiple shells from the same browser. Path-prefix mode (no subdomains)
+// also runs on /m/* — match either the host OR the path so the right shell
+// always gets the SW.
 const swRegister =
   process.env.NODE_ENV === "production"
-    ? `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}`
+    ? `(function(){if(!('serviceWorker' in navigator))return;var h=location.hostname,p=location.pathname;var isMobile=h.indexOf('compvss.')===0||p==='/m'||p.indexOf('/m/')===0;if(!isMobile){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});return;}window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});})();`
     : `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}`;
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

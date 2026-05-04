@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   person_name: z.string().min(1).max(200),
@@ -19,18 +20,17 @@ export async function updateVisaCase(id: string, _: State, fd: FormData): Promis
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("visa_cases")
-    .update({
-      person_name: parsed.data.person_name,
-      nationality: parsed.data.nationality || null,
-      passport_no: parsed.data.passport_no || null,
-      status: parsed.data.status,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("visa_cases", session.orgId, id, expectedUpdatedAt, {
+    person_name: parsed.data.person_name,
+    nationality: parsed.data.nationality || null,
+    passport_no: parsed.data.passport_no || null,
+    status: parsed.data.status,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Visa Case not found." };
+  }
   revalidatePath(`/console/participants/visa/${id}`);
   revalidatePath("/console/participants/visa");
   redirect(`/console/participants/visa/${id}`);

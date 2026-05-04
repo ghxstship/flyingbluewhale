@@ -51,7 +51,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
   const [{ data: project }, { data: invoices }, { data: expenses }, { data: pos }, { data: budgets }] =
     await Promise.all([
-      supabase.from("projects").select("id, name").eq("org_id", session.orgId).eq("id", projectId).maybeSingle(),
+      supabase
+        .from("projects")
+        .select("id, name")
+        .eq("org_id", session.orgId)
+        .is("deleted_at", null)
+        .eq("id", projectId)
+        .maybeSingle(),
       supabase
         .from("invoices")
         .select("id, number, title, amount_cents, status, due_at")

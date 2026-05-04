@@ -31,6 +31,8 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/legal/privacy/dsar/${p.requestId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input
             label="Requester Email"
             name="requester_email"

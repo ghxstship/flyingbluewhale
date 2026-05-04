@@ -43,14 +43,22 @@ export default async function ProcurementHub() {
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { href: "/console/procurement/vendors", label: "Vendors" },
-            { href: "/console/procurement/requisitions", label: "Requisitions" },
-            { href: "/console/procurement/purchase-orders", label: "Purchase Orders" },
-            { href: "/console/procurement/catalog", label: "Catalog" },
+            { href: "/console/procurement/vendors", label: "Vendors", sub: "Directory + COIs" },
+            { href: "/console/procurement/prequalification", label: "Prequalification", sub: "Vetting workflow" },
+            { href: "/console/procurement/sourcing", label: "Sourcing", sub: "Sourcing events" },
+            { href: "/console/procurement/scorecards", label: "Scorecards", sub: "Vendor performance" },
+            { href: "/console/procurement/requisitions", label: "Requisitions", sub: "Demand capture" },
+            { href: "/console/procurement/purchase-orders", label: "Purchase Orders", sub: "Issued POs" },
+            { href: "/console/procurement/po-change-orders", label: "PO Change Orders", sub: "Variations + cuts" },
+            { href: "/console/procurement/rfqs", label: "RFQs", sub: "Quote requests" },
+            { href: "/console/procurement/wo-broadcasts", label: "WO Broadcasts", sub: "Work order sends" },
+            { href: "/console/submittals", label: "Submittals", sub: "Drawings + specs" },
+            { href: "/console/procurement/catalog", label: "Catalog", sub: "Approved items" },
+            { href: "/console/logistics/ratecard", label: "Rate Card", sub: "Standard pricing" },
           ].map((t) => (
             <Link key={t.href} href={t.href} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{t.label}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">Open →</div>
+              <div className="mt-1 text-xs text-[var(--text-muted)]">{t.sub}</div>
             </Link>
           ))}
         </div>

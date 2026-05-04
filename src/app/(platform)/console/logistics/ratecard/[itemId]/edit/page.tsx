@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ itemId: strin
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/logistics/ratecard/${p.itemId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="SKU" name="sku" defaultValue={row.sku ?? ""} required maxLength={80} />
           <label className="flex flex-col gap-1.5">

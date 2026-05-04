@@ -33,6 +33,8 @@ export default async function Page({ params }: { params: Promise<{ contractorId:
           cancelHref={`/console/workforce/contractors/${p.contractorId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Full Name" name="full_name" defaultValue={row.full_name ?? ""} required maxLength={200} />
           <Input label="Email" name="email" type="email" defaultValue={row.email ?? ""} />
           <Input label="Phone" name="phone" defaultValue={row.phone ?? ""} maxLength={40} />

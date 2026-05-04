@@ -2,5 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "next build",
   "framework": "nextjs",
-  "crons": []
+  "crons": [],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "(www\\.)?flyingbluewhale\\.(app|tech|pro|com)" }],
+      "destination": "https://lytehaus.tech/:path*",
+      "permanent": true
+    }
+  ]
 }

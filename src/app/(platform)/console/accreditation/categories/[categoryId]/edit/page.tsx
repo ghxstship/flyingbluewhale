@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ categoryId: s
           cancelHref={`/console/accreditation/categories/${categoryId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Code" name="code" maxLength={40} defaultValue={(r.code as string | undefined) ?? ""} required />
           <Input
             label="Name"

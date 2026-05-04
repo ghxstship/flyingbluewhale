@@ -235,7 +235,7 @@ const FAQS = [
   },
   {
     q: "Nonprofits and community programs?",
-    a: "30% off Crew and Production for registered nonprofits and community arts programs. Email hello@flyingbluewhale.app with your 501(c)(3) or equivalent.",
+    a: "30% off Crew and Production for registered nonprofits and community arts programs. Email hello@lytehaus.tech with your 501(c)(3) or equivalent.",
   },
   {
     q: "Is there a per-scan fee?",

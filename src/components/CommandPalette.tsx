@@ -25,7 +25,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
-import { platformNav, portalNav, mobileTabs, settingsNav } from "@/lib/nav";
+import { platformNav, portalNav, mobileTabs, mobileSurfaces, settingsNav } from "@/lib/nav";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { registerShortcut } from "@/lib/hooks/useHotkeys";
 
@@ -175,21 +175,50 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         }
       }
     } else if (scope === "mobile") {
+      // Tab bar surfaces (5) — the always-visible bottom nav.
       for (const tab of mobileTabs) {
         list.push({
-          id: `m-${tab.href}`,
+          id: `m-tab-${tab.href}`,
           label: tab.label,
+          hint: "Tab",
           group: "Navigate",
           icon: BookOpen,
           perform: () => goto(tab.href),
         });
       }
+      // Tools surfaces (19) — previously dead routes reachable only by
+      // deep link. Phase D of the WAYFINDER remediation indexes them so
+      // cmd-K covers the full mobile surface area.
+      for (const surface of mobileSurfaces) {
+        list.push({
+          id: `m-surface-${surface.href}`,
+          label: surface.label,
+          hint: "Tool",
+          group: "Navigate",
+          icon: BookOpen,
+          perform: () => goto(surface.href),
+        });
+      }
       list.push({
-        id: "m-scan",
-        label: "Scan Ticket",
-        group: "Navigate",
+        id: "m-create-incident",
+        label: "Report Incident",
+        group: "Create",
         icon: Ticket,
-        perform: () => goto("/m/check-in"),
+        perform: () => goto("/m/incidents/new"),
+      });
+      list.push({
+        id: "m-create-medic",
+        label: "Log Medical Event",
+        group: "Create",
+        icon: Ticket,
+        perform: () => goto("/m/medic/new"),
+      });
+      list.push({
+        id: "m-create-request",
+        label: "Open Request",
+        group: "Create",
+        icon: Ticket,
+        perform: () => goto("/m/requests/new"),
       });
     }
 

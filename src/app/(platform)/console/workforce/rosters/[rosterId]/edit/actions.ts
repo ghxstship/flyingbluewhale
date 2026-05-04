@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -18,17 +19,16 @@ export async function updateRoster(id: string, _: State, fd: FormData): Promise<
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("rosters")
-    .update({
-      name: parsed.data.name,
-      day_of: parsed.data.day_of,
-      state: parsed.data.state as "draft" | "published" | "locked",
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("rosters", session.orgId, id, expectedUpdatedAt, {
+    name: parsed.data.name,
+    day_of: parsed.data.day_of,
+    state: parsed.data.state as "draft" | "published" | "locked",
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Roster not found." };
+  }
   revalidatePath(`/console/workforce/rosters/${id}`);
   revalidatePath("/console/workforce/rosters");
   redirect(`/console/workforce/rosters/${id}`);

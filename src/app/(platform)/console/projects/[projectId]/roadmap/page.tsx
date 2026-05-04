@@ -23,7 +23,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const session = await requireSession();
   const supabase = await createClient();
   const [{ data: project }, { data: tasks }, { data: events }] = await Promise.all([
-    supabase.from("projects").select("id, name").eq("org_id", session.orgId).eq("id", projectId).maybeSingle(),
+    supabase
+      .from("projects")
+      .select("id, name")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .eq("id", projectId)
+      .maybeSingle(),
     supabase.from("tasks").select("id, title, due_at, status").eq("project_id", projectId),
     supabase.from("events").select("id, name, starts_at, status").eq("project_id", projectId).eq("status", "scheduled"),
   ]);

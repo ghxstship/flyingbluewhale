@@ -27,6 +27,7 @@ type PunchItem = {
   due_at: string | null;
   site_plan_id: string | null;
   show_ready_gate: boolean;
+  updated_at: string;
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -44,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle(),
-    supabase.from("projects").select("id, name").eq("org_id", session.orgId).order("name"),
+    supabase.from("projects").select("id, name, updated_at").eq("org_id", session.orgId).order("name"),
     supabase.from("vendors").select("id, name").eq("org_id", session.orgId).order("name"),
     supabase.from("users").select("id, name, email").limit(200),
     supabase.from("site_plans").select("id, code, title").eq("org_id", session.orgId).order("code"),
@@ -72,6 +73,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           submitLabel="Save Punch Item"
           dirtyGuard
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={item.updated_at} />
           <input type="hidden" name="id" value={item.id} />
 
           <label className="flex flex-col gap-1.5">

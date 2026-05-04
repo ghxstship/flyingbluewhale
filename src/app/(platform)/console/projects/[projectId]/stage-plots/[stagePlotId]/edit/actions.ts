@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -20,7 +21,12 @@ export async function updateStagePlot(projectId: string, id: string, _: State, f
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
-  const { error } = await supabase
+  // Sea Trial FINDING-022: optimistic concurrency. Inlined here because the
+  // stage_plots row also requires the project_id scope, which the generic
+  // helper doesn't carry. Same pattern as updateOrgScopedWithCheck.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  if (!expectedUpdatedAt) return { error: STALE_ROW_MESSAGE };
+  const { data, error } = await supabase
     .from("stage_plots")
     .update({
       name: parsed.data.name,
@@ -30,8 +36,12 @@ export async function updateStagePlot(projectId: string, id: string, _: State, f
     })
     .eq("id", id)
     .eq("project_id", projectId)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("updated_at", expectedUpdatedAt)
+    .select("id")
+    .maybeSingle();
   if (error) return { error: error.message };
+  if (!data) return { error: STALE_ROW_MESSAGE };
   revalidatePath(`/console/projects/${projectId}/stage-plots/${id}`);
   revalidatePath(`/console/projects/${projectId}/stage-plots`);
   redirect(`/console/projects/${projectId}/stage-plots/${id}`);

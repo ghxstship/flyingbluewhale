@@ -23,6 +23,7 @@ type Rfi = {
   status: "open" | "answered" | "closed";
   due_at: string | null;
   official_answer: string | null;
+  updated_at: string;
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -40,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle(),
-    supabase.from("projects").select("id, name").eq("org_id", session.orgId).order("name"),
+    supabase.from("projects").select("id, name, updated_at").eq("org_id", session.orgId).order("name"),
     supabase.from("users").select("id, name, email").limit(200),
   ]);
 
@@ -61,6 +62,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content max-w-2xl">
         <FormShell action={updateRfi} cancelHref={`/console/rfis/${rfi.id}`} submitLabel="Save RFI" dirtyGuard>
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={rfi.updated_at} />
           <input type="hidden" name="id" value={rfi.id} />
 
           <label className="flex flex-col gap-1.5">

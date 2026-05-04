@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   kind: z.string().min(1).max(80),
@@ -18,17 +19,16 @@ export async function updateAccreditationChange(id: string, _: State, fd: FormDa
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("accreditation_changes")
-    .update({
-      kind: parsed.data.kind,
-      status: parsed.data.status,
-      note: parsed.data.note || null,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("accreditation_changes", session.orgId, id, expectedUpdatedAt, {
+    kind: parsed.data.kind,
+    status: parsed.data.status,
+    note: parsed.data.note || null,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Accreditation Change not found." };
+  }
   revalidatePath(`/console/accreditation/changes/${id}`);
   revalidatePath("/console/accreditation/changes");
   redirect(`/console/accreditation/changes/${id}`);

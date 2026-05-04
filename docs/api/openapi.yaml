@@ -486,6 +486,8 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "404": { $ref: "#/components/responses/NotFound" }
 
+  /api/v1/me:
+    get: { summary: "Canonical session payload — userId, email, orgId, role, persona, tier — or 401 if signed out." }
   /api/v1/me/preferences:
     get:   { summary: Read the session's UI + locale preferences. }
     patch: { summary: Merge-update the session's preferences. }

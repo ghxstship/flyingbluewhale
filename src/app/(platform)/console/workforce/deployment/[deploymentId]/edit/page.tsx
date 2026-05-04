@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ deploymentId:
           cancelHref={`/console/workforce/deployment/${deploymentId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input
             label="Functional Area"
             name="functional_area"

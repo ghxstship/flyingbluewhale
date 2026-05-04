@@ -21,19 +21,6 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
   const project = await getProject(session.orgId, projectId);
   if (!project) notFound();
 
-  const subTabs = [
-    { label: "Overview", href: `/console/projects/${projectId}/overview` },
-    { label: "Tasks", href: `/console/projects/${projectId}/tasks` },
-    { label: "Gantt", href: `/console/projects/${projectId}/gantt` },
-    { label: "Files", href: `/console/projects/${projectId}/files` },
-    { label: "Calendar", href: `/console/projects/${projectId}/calendar` },
-    { label: "Budget", href: `/console/projects/${projectId}/budget` },
-    { label: "P&L", href: `/console/projects/${projectId}/finance` },
-    { label: "Crew", href: `/console/projects/${projectId}/crew` },
-    { label: "Advancing", href: `/console/projects/${projectId}/advancing` },
-    { label: "Guides", href: `/console/projects/${projectId}/guides` },
-  ];
-
   return (
     <>
       <ModuleHeader
@@ -41,8 +28,8 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
         title={project.name}
         subtitle={project.description ?? "No description"}
         breadcrumbs={[
+          { label: "Plan", href: "/console/projects" },
           { label: "Projects", href: "/console/projects" },
-          { label: "All Projects", href: "/console/projects" },
           { label: project.name },
         ]}
         action={
@@ -59,15 +46,6 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           </div>
         }
       />
-      <div className="border-b border-[var(--border-color)] px-8">
-        <nav className="mx-auto flex max-w-6xl flex-wrap gap-1">
-          {subTabs.map((t) => (
-            <Link key={t.href} href={t.href} className="nav-item">
-              {t.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
       <div className="page-content space-y-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Field label="Status">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { RouteTabs } from "@/components/ui/RouteTabs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -8,13 +9,22 @@ import { listProjects, projectStats } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { EmptyState } from "@/components/ui/EmptyState";
 
+// Dashboard hub tabs — folds the previous Dashboard sidebar group
+// (Overview, Portfolio, Action Items, Command Palette) into one record-
+// style hub. Command Palette page deleted — cmd-K is canonical.
+const DASHBOARD_TABS = [
+  { label: "Overview", href: "/console" },
+  { label: "Portfolio", href: "/console/dashboards" },
+  { label: "Action Items", href: "/console/action-items" },
+];
+
 export const dynamic = "force-dynamic";
 
 export default async function ConsoleDashboard() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Console" subtitle="Operations dashboard" />
+        <ModuleHeader title="Console" subtitle="Operations dashboard" tabs={<RouteTabs tabs={DASHBOARD_TABS} />} />
         <div className="page-content">
           <div className="surface p-6">
             <div className="text-xs font-semibold tracking-wider text-[var(--color-warning)] uppercase">
@@ -39,7 +49,11 @@ export default async function ConsoleDashboard() {
   if (!session.orgId) {
     return (
       <>
-        <ModuleHeader title="Console" subtitle={`Logged in as ${session.email}`} />
+        <ModuleHeader
+          title="Console"
+          subtitle={`Logged in as ${session.email}`}
+          tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
+        />
         <div className="page-content">
           <EmptyState
             title="No organization yet"
@@ -66,6 +80,7 @@ export default async function ConsoleDashboard() {
         title="Console"
         subtitle={`Logged in as ${session.email} · ${session.role}`}
         action={<Button href="/console/projects/new">+ New Project</Button>}
+        tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">

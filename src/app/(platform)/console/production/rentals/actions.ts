@@ -5,14 +5,18 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
+import { dateRangeRefine } from "@/lib/zod/dateRange";
 
-const Schema = z.object({
-  equipment_id: z.string().uuid(),
-  starts_at: z.string().min(1),
-  ends_at: z.string().min(1),
-  project_id: z.string().uuid().optional().or(z.literal("")),
-  rate: z.string().optional(),
-});
+const Schema = z
+  .object({
+    equipment_id: z.string().uuid(),
+    starts_at: z.string().min(1),
+    ends_at: z.string().min(1),
+    project_id: z.string().uuid().optional().or(z.literal("")),
+    rate: z.string().optional(),
+  })
+  // Sea Trial R2 FINDING-018: a rental can't end before it starts.
+  .refine(...dateRangeRefine("starts_at", "ends_at"));
 
 export type State = { error?: string } | null;
 
@@ -43,11 +47,7 @@ export async function endRentalNow(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase
-    .from("rentals")
-    .update({ ends_at: new Date().toISOString() })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
+  await supabase.from("rentals").update({ ends_at: new Date().toISOString() }).eq("id", id).eq("org_id", session.orgId);
   revalidatePath("/console/production/rentals");
   revalidatePath(`/console/production/rentals/${id}`);
 }

@@ -1,9 +1,10 @@
-import { env } from "@/lib/env";
+import { urlFor } from "@/lib/urls";
 import type { OfferLetterResolved, CompensationBasis } from "./types";
 
 export function offerPublicUrl(token: string): string {
-  const base = env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "";
-  return `${base}/offer/${token}`;
+  // Public offer-letter URL — unauthenticated, served by the apex (marketing
+  // shell) so signers don't land on an auth-walled subdomain.
+  return urlFor("marketing", `/offer/${token}`);
 }
 
 export function formatDateRange(start: string | null, end: string | null): string {

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email";
+import { urlFor } from "@/lib/urls";
 import type { FormState } from "@/components/FormShell";
 
 const ADMIN_ROLES: ReadonlyArray<"owner" | "admin" | "developer"> = ["owner", "admin", "developer"];
@@ -48,8 +49,8 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
   // Fire-and-forget the invitation email; failure to send doesn't undo the
   // row — admin can copy the link from the list view if email delivery is
   // down. The table is the source of truth.
-  const origin = process.env.NEXT_PUBLIC_APP_URL ?? "";
-  const acceptUrl = `${origin}/accept-invite/${invite.token}`;
+  // /accept-invite lives on the apex (auth shell) — same origin as login.
+  const acceptUrl = urlFor("auth", `/accept-invite/${invite.token}`);
   void sendEmail({
     to: parsed.data.email,
     subject: `You're invited to join a LYTEHAUS Technologies workspace`,

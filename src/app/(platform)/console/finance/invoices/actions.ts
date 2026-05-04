@@ -6,17 +6,25 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents, generateNumber } from "@/lib/format";
+import { moneyDollarsString } from "@/lib/zod/money";
+import { dateRangeRefine } from "@/lib/zod/dateRange";
 
-const Schema = z.object({
-  title: z.string().min(1).max(200),
-  client_id: z.string().uuid().optional().or(z.literal("")),
-  project_id: z.string().uuid().optional().or(z.literal("")),
-  amount: z.string().min(1),
-  currency: z.string().min(3).max(3).default("USD"),
-  issued_at: z.string().date().optional().or(z.literal("")),
-  due_at: z.string().date().optional().or(z.literal("")),
-  notes: z.string().max(2000).optional(),
-});
+const Schema = z
+  .object({
+    title: z.string().min(1).max(200),
+    client_id: z.string().uuid().optional().or(z.literal("")),
+    project_id: z.string().uuid().optional().or(z.literal("")),
+    // Sea Trial R3 FINDING-019: invoices must be a positive dollar amount.
+    amount: moneyDollarsString({ allowZero: false }),
+    currency: z.string().min(3).max(3).default("USD"),
+    issued_at: z.string().date().optional().or(z.literal("")),
+    due_at: z.string().date().optional().or(z.literal("")),
+    notes: z.string().max(2000).optional(),
+  })
+  // Sea Trial R3 FINDING-020: when both supplied, due_at must not
+  // precede issued_at — otherwise an invoice is "overdue" before it's
+  // issued.
+  .refine(...dateRangeRefine("issued_at", "due_at"));
 
 export type State = { error?: string } | null;
 
@@ -41,14 +49,15 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
       notes: parsed.data.notes || null,
       created_by: session.userId,
     })
-    .select().single();
+    .select()
+    .single();
   if (error) return { error: error.message };
   revalidatePath("/console/finance/invoices");
   revalidatePath("/console/finance");
   redirect(`/console/finance/invoices/${data.id}`);
 }
 
-export async function setInvoiceStatusAction(id: string, status: "draft"|"sent"|"paid"|"overdue"|"voided") {
+export async function setInvoiceStatusAction(id: string, status: "draft" | "sent" | "paid" | "overdue" | "voided") {
   const session = await requireSession();
   const supabase = await createClient();
   const patch: { status: typeof status; paid_at?: string } = { status };
@@ -67,9 +76,10 @@ export async function setInvoiceStatusAction(id: string, status: "draft"|"sent"|
       orgId: session.orgId,
       userId: before.created_by ?? session.userId,
       eventType: status === "paid" ? "invoice.paid" : "invoice.sent",
-      title: status === "paid"
-        ? `Invoice ${before.number ?? id.slice(0, 8)} paid`
-        : `Invoice ${before.number ?? id.slice(0, 8)} sent`,
+      title:
+        status === "paid"
+          ? `Invoice ${before.number ?? id.slice(0, 8)} paid`
+          : `Invoice ${before.number ?? id.slice(0, 8)} sent`,
       body: before.title ?? undefined,
       href: `/console/finance/invoices/${id}`,
       data: { invoiceId: id, amountCents: before.amount_cents, number: before.number },

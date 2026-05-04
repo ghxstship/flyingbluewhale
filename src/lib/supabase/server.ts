@@ -1,20 +1,42 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { env, hasSupabase } from "../env";
 import type { Database } from "./database.types";
+
+/**
+ * Compute the cookie `domain` attribute for the current request so a session
+ * minted on `lytehaus.tech` is sent to `atlvs.lytehaus.tech` /
+ * `gvteway.lytehaus.tech` / `compvss.lytehaus.tech`. Returns `undefined` for
+ * localhost / lvh.me / vercel.app — those rely on host-only cookies (cookies
+ * are still shared across `*.lvh.me` because the browser scopes them by
+ * eTLD+1 when no domain is set).
+ */
+async function cookieDomainForRequest(): Promise<string | undefined> {
+  try {
+    const h = await headers();
+    const host = (h.get("host") ?? "").split(":")[0].toLowerCase();
+    if (host.endsWith("lytehaus.tech")) return ".lytehaus.tech";
+  } catch {
+    // outside a request context (e.g. build-time prerender) — no domain.
+  }
+  return undefined;
+}
 
 export async function createClient() {
   if (!hasSupabase) {
     throw new Error("Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
   }
   const cookieStore = await cookies();
+  const domain = await cookieDomainForRequest();
   return createServerClient<Database>(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
     cookies: {
       getAll: () => cookieStore.getAll(),
       setAll: (cookiesToSet) => {
         try {
-          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, { ...options, ...(domain ? { domain } : {}) }),
+          );
         } catch {
           // setAll from a Server Component is a no-op; middleware refreshes sessions.
         }

@@ -42,7 +42,12 @@ export async function POST(req: NextRequest) {
     if (denial) return denial;
     const supabase = await createClient();
     const { data: project } = await supabase
-      .from("projects").select("id").eq("id", input.projectId).eq("org_id", session.orgId).maybeSingle();
+      .from("projects")
+      .select("id")
+      .eq("id", input.projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
     if (!project) return apiError("not_found", "Project not found");
     const { data, error } = await supabase
       .from("stage_plots")

@@ -12,7 +12,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const session = await requireSession();
   const supabase = await createClient();
   const [{ data: project }, { data: crew }] = await Promise.all([
-    supabase.from("projects").select("id, name").eq("org_id", session.orgId).eq("id", projectId).maybeSingle(),
+    supabase
+      .from("projects")
+      .select("id, name")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .eq("id", projectId)
+      .maybeSingle(),
     // Project-scoped crew comes from crew_members where any assignment
     // metadata references this project. In the current schema crew is
     // org-scoped; the project association is via events/tasks/time

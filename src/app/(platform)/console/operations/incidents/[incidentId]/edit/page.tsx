@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
           cancelHref={`/console/operations/incidents/${incidentId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input
             label="Summary"
             name="summary"

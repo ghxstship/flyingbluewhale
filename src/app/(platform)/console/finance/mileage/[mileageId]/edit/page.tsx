@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
       <ModuleHeader eyebrow="Mileage Log" title={`Edit ${row.origin} → ${row.destination}`} />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/finance/mileage/${p.mileageId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Origin" name="origin" defaultValue={row.origin} required maxLength={200} />
           <Input label="Destination" name="destination" defaultValue={row.destination} required maxLength={200} />
           <div className="grid grid-cols-2 gap-3">

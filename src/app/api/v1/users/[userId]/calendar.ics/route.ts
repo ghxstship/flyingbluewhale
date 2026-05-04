@@ -23,7 +23,10 @@ export const dynamic = "force-dynamic";
 
 function fmtIcs(d: string | Date): string {
   const date = typeof d === "string" ? new Date(d) : d;
-  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+  return date
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace(/\.\d{3}Z$/, "Z");
 }
 
 export async function GET(req: Request, ctx: { params: Promise<{ userId: string }> }) {
@@ -44,13 +47,10 @@ export async function GET(req: Request, ctx: { params: Promise<{ userId: string 
   }
 
   // Pull every event across every org the user is a member of.
-  const { data: memberships } = await supabase
-    .from("memberships")
-    .select("org_id")
-    .eq("user_id", p.data.userId);
+  const { data: memberships } = await supabase.from("memberships").select("org_id").eq("user_id", p.data.userId);
   const orgIds = (memberships ?? []).map((m) => m.org_id);
   if (orgIds.length === 0) {
-    return new NextResponse("BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//flyingbluewhale//calendar//EN\r\nEND:VCALENDAR\r\n", {
+    return new NextResponse("BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//lytehaus//calendar//EN\r\nEND:VCALENDAR\r\n", {
       headers: { "content-type": "text/calendar; charset=utf-8" },
     });
   }
@@ -64,14 +64,14 @@ export async function GET(req: Request, ctx: { params: Promise<{ userId: string 
   const lines: string[] = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//flyingbluewhale//calendar//EN",
+    "PRODID:-//lytehaus//calendar//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
   ];
   for (const e of events ?? []) {
     lines.push(
       "BEGIN:VEVENT",
-      `UID:${e.id}@flyingbluewhale.app`,
+      `UID:${e.id}@lytehaus.tech`,
       `DTSTAMP:${fmtIcs(new Date())}`,
       `DTSTART:${fmtIcs(e.starts_at as string)}`,
       `DTEND:${fmtIcs(e.ends_at as string)}`,

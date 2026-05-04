@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { RouteTabs } from "@/components/ui/RouteTabs";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -7,6 +8,13 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
+
+// Mirrors src/app/(platform)/console/page.tsx — keep in sync.
+const DASHBOARD_TABS = [
+  { label: "Overview", href: "/console" },
+  { label: "Portfolio", href: "/console/dashboards" },
+  { label: "Action Items", href: "/console/action-items" },
+];
 
 type ProjectKpi = {
   id: string;
@@ -37,7 +45,7 @@ export default async function Page() {
   if (projectIds.length === 0) {
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Portfolio Dashboard" />
+        <ModuleHeader eyebrow="Workspace" title="Portfolio Dashboard" tabs={<RouteTabs tabs={DASHBOARD_TABS} />} />
         <div className="page-content">
           <div className="surface p-6 text-sm">No active projects.</div>
         </div>
@@ -107,6 +115,7 @@ export default async function Page() {
         eyebrow="Workspace"
         title="Portfolio Dashboard"
         subtitle={`${kpis.length} active project${kpis.length === 1 ? "" : "s"}`}
+        tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

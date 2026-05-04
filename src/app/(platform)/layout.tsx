@@ -39,7 +39,16 @@ export default async function PlatformLayout({ children }: { children: React.Rea
               <AvatarMenu name={session.email || "User"} email={session.email} />
             </div>
           </header>
-          <div className="console-content animate-page-enter">{children}</div>
+          {/*
+           * <main> landmark — Sea Trial FINDING-004. Was a generic <div>
+           * which left screen readers without a "main content" anchor for
+           * skip-to-content / ARIA navigation. Wrapping the page slot in
+           * <main id="main"> lets the layout's "Skip to content" link land
+           * correctly and matches the marketing/portal/mobile shells.
+           */}
+          <main id="main" className="console-content animate-page-enter">
+            {children}
+          </main>
         </div>
         <CommandPalette scope="platform" />
       </div>

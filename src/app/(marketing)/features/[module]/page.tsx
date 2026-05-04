@@ -599,7 +599,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
           softwareApplicationSchema({
             name: `LYTEHAUS Technologies — ${config.name}`,
             description: config.blurb,
-            url: `https://flyingbluewhale.app/features/${config.slug}`,
+            url: `https://lytehaus.tech/features/${config.slug}`,
           }),
         ]}
       />

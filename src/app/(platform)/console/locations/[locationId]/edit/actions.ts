@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   name: z.string().min(1, "Name is required").max(200),
@@ -24,23 +25,22 @@ export async function updateLocation(id: string, _: State, fd: FormData): Promis
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("locations")
-    .update({
-      name: parsed.data.name,
-      address: parsed.data.address || null,
-      city: parsed.data.city || null,
-      region: parsed.data.region || null,
-      postcode: parsed.data.postcode || null,
-      country: parsed.data.country || null,
-      lat: parsed.data.lat ? Number(parsed.data.lat) : null,
-      lng: parsed.data.lng ? Number(parsed.data.lng) : null,
-      notes: parsed.data.notes || null,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("locations", session.orgId, id, expectedUpdatedAt, {
+    name: parsed.data.name,
+    address: parsed.data.address || null,
+    city: parsed.data.city || null,
+    region: parsed.data.region || null,
+    postcode: parsed.data.postcode || null,
+    country: parsed.data.country || null,
+    lat: parsed.data.lat ? Number(parsed.data.lat) : null,
+    lng: parsed.data.lng ? Number(parsed.data.lng) : null,
+    notes: parsed.data.notes || null,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Location not found." };
+  }
   revalidatePath(`/console/locations/${id}`);
   revalidatePath("/console/locations");
   redirect(`/console/locations/${id}`);

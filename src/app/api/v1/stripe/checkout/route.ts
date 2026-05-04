@@ -5,6 +5,7 @@ import { env } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { httpFetch } from "@/lib/http";
 import { withIdempotency } from "@/lib/idempotency";
+import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
   invoiceId: z.string().uuid(),
@@ -31,21 +32,20 @@ async function handler(req: Request) {
       .maybeSingle();
     if (!invoice) return apiError("not_found", "Invoice not found");
 
-    const appUrl = env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
     const form = new URLSearchParams();
     form.set("mode", "payment");
     form.set("line_items[0][quantity]", "1");
     form.set("line_items[0][price_data][currency]", invoice.currency.toLowerCase());
     form.set("line_items[0][price_data][product_data][name]", `Invoice ${invoice.number}`);
     form.set("line_items[0][price_data][unit_amount]", invoice.amount_cents.toString());
-    form.set("success_url", `${appUrl}/console/finance/invoices/${invoice.id}?paid=1`);
-    form.set("cancel_url", `${appUrl}/console/finance/invoices/${invoice.id}?cancelled=1`);
+    form.set("success_url", urlFor("platform", `/finance/invoices/${invoice.id}?paid=1`));
+    form.set("cancel_url", urlFor("platform", `/finance/invoices/${invoice.id}?cancelled=1`));
     form.set("metadata[invoice_id]", invoice.id);
 
     const res = await httpFetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
       headers: {
-        "authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
+        authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
         "content-type": "application/x-www-form-urlencoded",
       },
       body: form.toString(),

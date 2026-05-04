@@ -84,7 +84,7 @@ export async function GET() {
     status: 200,
     headers: {
       "content-type": "application/json",
-      "content-disposition": `attachment; filename="flyingbluewhale-export-${userId}-${Date.now()}.json"`,
+      "content-disposition": `attachment; filename="lytehaus-export-${userId}-${Date.now()}.json"`,
       "cache-control": "no-store",
     },
   });

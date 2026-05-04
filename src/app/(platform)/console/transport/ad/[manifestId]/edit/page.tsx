@@ -31,6 +31,8 @@ export default async function Page({ params }: { params: Promise<{ manifestId: s
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/transport/ad/${p.manifestId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Kind</span>
             <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">

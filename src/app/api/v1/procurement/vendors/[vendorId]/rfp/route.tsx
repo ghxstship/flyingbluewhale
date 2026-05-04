@@ -36,8 +36,20 @@ export async function POST(req: Request, ctx: { params: Promise<{ vendorId: stri
 
   const supabase = await createClient();
   const [{ data: vendor }, { data: project }, { data: org }] = await Promise.all([
-    supabase.from("vendors").select("name, contact_email").eq("id", p.data.vendorId).eq("org_id", session.orgId).maybeSingle(),
-    supabase.from("projects").select("name").eq("id", b.projectId).eq("org_id", session.orgId).maybeSingle(),
+    supabase
+      .from("vendors")
+      .select("name, contact_email")
+      .eq("id", p.data.vendorId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle(),
+    supabase
+      .from("projects")
+      .select("name")
+      .eq("id", b.projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle(),
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
   ]);
   if (!vendor) return apiError("not_found", "Vendor not found");
@@ -66,7 +78,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ vendorId: stri
     });
     return NextResponse.redirect(signedUrl, 302);
   } catch (e) {
-    log.error("vendor_rfp.compile_failed", { vendor_id: p.data.vendorId, err: e instanceof Error ? e.message : String(e) });
+    log.error("vendor_rfp.compile_failed", {
+      vendor_id: p.data.vendorId,
+      err: e instanceof Error ? e.message : String(e),
+    });
     return apiError("internal", "Failed to render RFP");
   }
 }

@@ -47,7 +47,7 @@ export default function ATLVSPage() {
             name: "ATLVS — The Console",
             description:
               "The office console for production teams. Projects, finance, procurement, advancing, AI — one workspace, one schema.",
-            url: "https://flyingbluewhale.app/solutions/atlvs",
+            url: "https://lytehaus.tech/solutions/atlvs",
             price: "0",
           }),
         ]}

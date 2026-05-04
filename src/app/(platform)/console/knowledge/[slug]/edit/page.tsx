@@ -15,6 +15,7 @@ type Article = {
   title: string;
   body_markdown: string;
   tags: string[] | null;
+  updated_at: string;
 };
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
@@ -25,7 +26,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const { data } = await supabase
     .from("kb_articles")
-    .select("id, slug, title, body_markdown, tags")
+    .select("id, slug, title, body_markdown, tags, updated_at")
     .eq("slug", slug)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -54,6 +55,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           submitLabel="Save Article"
           dirtyGuard
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={article.updated_at} />
           <input type="hidden" name="slug_current" value={article.slug} />
           <Input label="Title" name="title" defaultValue={article.title} required maxLength={300} />
           <Input

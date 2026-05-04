@@ -28,7 +28,13 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
 
   const supabase = await createClient();
   const [{ data: project }, { data: org }] = await Promise.all([
-    supabase.from("projects").select("id, name").eq("id", p.data.projectId).eq("org_id", session.orgId).maybeSingle(),
+    supabase
+      .from("projects")
+      .select("id, name")
+      .eq("id", p.data.projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle(),
     supabase.from("orgs").select("name").eq("id", session.orgId).maybeSingle(),
   ]);
   if (!project) return apiError("not_found", "Project not found");
@@ -43,17 +49,13 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
       projectName: project.name,
     });
 
-      if (!isServiceClientAvailable()) {
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
 
-        return apiError(
-
-          "service_unavailable",
-
-          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
-
-        );
-
-      }
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
 
     const svc = createServiceClient();
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");

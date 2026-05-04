@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { getSession, resolveShell } from "@/lib/auth";
 import { emitAudit } from "@/lib/audit";
+import { shellFromResolved, urlFor } from "@/lib/urls";
 
 async function route(req: Request) {
   const url = new URL(req.url);
   const session = await getSession();
-  if (!session) return NextResponse.redirect(new URL("/login", url.origin));
+  if (!session) return NextResponse.redirect(urlFor("auth", "/login"));
 
   // H2-07 — log the login as a first-class audit event. /auth/resolve is
   // the canonical post-login gateway so every successful session passes
@@ -21,13 +22,11 @@ async function route(req: Request) {
     });
   }
 
-  const shell = resolveShell(session.persona);
-  const target =
-    shell === "/p"
-      ? `/p/${url.searchParams.get("slug") ?? "select"}`
-      : shell;
+  const resolved = resolveShell(session.persona);
+  const shell = shellFromResolved(resolved);
+  const target = resolved === "/p" ? urlFor("portal", `/${url.searchParams.get("slug") ?? "select"}`) : urlFor(shell);
 
-  return NextResponse.redirect(new URL(target, url.origin));
+  return NextResponse.redirect(target);
 }
 
 export const GET = route;

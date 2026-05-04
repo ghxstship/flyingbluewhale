@@ -8,7 +8,12 @@ import { VendorRowSchema, type VendorRow, dedupeKey } from "@/lib/import/transfo
 import { logImportRun } from "@/lib/import/log";
 import { log } from "@/lib/log";
 
-const PostSchema = z.object({ csv: z.string().min(1).max(5 * 1024 * 1024) });
+const PostSchema = z.object({
+  csv: z
+    .string()
+    .min(1)
+    .max(5 * 1024 * 1024),
+});
 
 const MAX_SYNC_ROWS = 1000;
 
@@ -23,12 +28,18 @@ export async function POST(req: NextRequest) {
 
     const supabase = await createClient();
     const result = parseAndValidateCsv<VendorRow>(input.csv, VendorRowSchema);
-    if (result.rowCount > MAX_SYNC_ROWS) return apiError("bad_request", `Row count ${result.rowCount} exceeds sync cap ${MAX_SYNC_ROWS}`);
+    if (result.rowCount > MAX_SYNC_ROWS)
+      return apiError("bad_request", `Row count ${result.rowCount} exceeds sync cap ${MAX_SYNC_ROWS}`);
 
     // Cap dedup-lookup at 50k vendors per org — well above any realistic
     // production count; prevents an unbounded scan if a tenant ever
     // approaches that threshold.
-    const { data: existing } = await supabase.from("vendors").select("name, contact_email").eq("org_id", session.orgId).limit(50_000);
+    const { data: existing } = await supabase
+      .from("vendors")
+      .select("name, contact_email")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .limit(50_000);
     const existingKeys = new Set((existing ?? []).map((r) => (r.contact_email ?? r.name).toLowerCase()));
 
     const dedup = new Map<string, VendorRow>();

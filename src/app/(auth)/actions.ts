@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z, type ZodIssue } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { urlFor } from "@/lib/urls";
 import type { FormState } from "@/components/FormShell";
 
 // NOTE: Next.js server-action files (`"use server"`) cannot re-export types —
@@ -60,8 +61,7 @@ export async function signupAction(_: FormState, formData: FormData): Promise<Fo
   }
 
   const supabase = await createClient();
-  const origin = process.env.NEXT_PUBLIC_APP_URL ?? "";
-  const emailRedirectTo = `${origin}/auth/callback?next=${encodeURIComponent("/auth/resolve")}`;
+  const emailRedirectTo = urlFor("auth", `/auth/callback?next=${encodeURIComponent("/auth/resolve")}`);
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
@@ -96,8 +96,7 @@ export async function resendVerificationAction(_: FormState, formData: FormData)
     return { fieldErrors: zodToFieldErrors(parsed.error.issues) };
   }
 
-  const origin = process.env.NEXT_PUBLIC_APP_URL ?? "";
-  const emailRedirectTo = `${origin}/auth/callback?next=${encodeURIComponent("/auth/resolve")}`;
+  const emailRedirectTo = urlFor("auth", `/auth/callback?next=${encodeURIComponent("/auth/resolve")}`);
   const supabase = await createClient();
   const { error } = await supabase.auth.resend({
     type: "signup",
@@ -148,8 +147,7 @@ export async function acceptInviteAction(_: FormState, formData: FormData): Prom
   if (fetchError) return { error: fetchError.message };
   if (!invite) {
     return {
-      error:
-        "This invite is invalid, expired, or addressed to a different email. Ask the org admin to resend.",
+      error: "This invite is invalid, expired, or addressed to a different email. Ask the org admin to resend.",
     };
   }
 
@@ -189,8 +187,7 @@ export async function forgotPasswordAction(_: FormState, formData: FormData): Pr
   // Route the recovery email through /auth/callback so the PKCE code is
   // exchanged for a session cookie (which `updateUser` then reads when the
   // user sets a new password on /reset-password).
-  const origin = process.env.NEXT_PUBLIC_APP_URL ?? "";
-  const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent("/reset-password")}`;
+  const redirectTo = urlFor("auth", `/auth/callback?next=${encodeURIComponent("/reset-password")}`);
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, { redirectTo });
   if (error) return { error: error.message };
@@ -205,8 +202,7 @@ export async function magicLinkAction(_: FormState, formData: FormData): Promise
     return { fieldErrors: zodToFieldErrors(parsed.error.issues) };
   }
 
-  const origin = process.env.NEXT_PUBLIC_APP_URL ?? "";
-  const emailRedirectTo = `${origin}/auth/callback?next=${encodeURIComponent("/auth/resolve")}`;
+  const emailRedirectTo = urlFor("auth", `/auth/callback?next=${encodeURIComponent("/auth/resolve")}`);
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email: parsed.data.email,
@@ -250,8 +246,7 @@ export async function resetPasswordAction(_: FormState, formData: FormData): Pro
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
     return {
-      error:
-        "Your reset link has expired or wasn't recognized. Request a new one from Forgot password.",
+      error: "Your reset link has expired or wasn't recognized. Request a new one from Forgot password.",
     };
   }
 

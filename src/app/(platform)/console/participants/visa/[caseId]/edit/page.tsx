@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ caseId: strin
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/participants/visa/${p.caseId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Person Name" name="person_name" defaultValue={row.person_name ?? ""} required maxLength={200} />
           <Input label="Nationality" name="nationality" defaultValue={row.nationality ?? ""} maxLength={120} />
           <Input label="Passport #" name="passport_no" defaultValue={row.passport_no ?? ""} maxLength={80} />

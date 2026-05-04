@@ -38,6 +38,8 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
           cancelHref={`/console/commercial/sponsors/${p.sponsorId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Title" name="title" defaultValue={row.title ?? ""} required maxLength={200} />
           <Input
             label="Quantity"

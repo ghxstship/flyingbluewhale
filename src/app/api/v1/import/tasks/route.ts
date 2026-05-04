@@ -10,7 +10,10 @@ import { log } from "@/lib/log";
 
 const PostSchema = z.object({
   projectId: z.string().uuid(),
-  csv: z.string().min(1).max(5 * 1024 * 1024),
+  csv: z
+    .string()
+    .min(1)
+    .max(5 * 1024 * 1024),
 });
 
 const MAX_SYNC_ROWS = 1000;
@@ -25,15 +28,26 @@ export async function POST(req: NextRequest) {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
 
     const supabase = await createClient();
-    const { data: project } = await supabase.from("projects").select("id").eq("id", input.projectId).eq("org_id", session.orgId).maybeSingle();
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", input.projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
     if (!project) return apiError("not_found", "Project not found");
 
     const result = parseAndValidateCsv<TaskRow>(input.csv, TaskRowSchema);
-    if (result.rowCount > MAX_SYNC_ROWS) return apiError("bad_request", `Row count ${result.rowCount} exceeds sync cap ${MAX_SYNC_ROWS}`);
+    if (result.rowCount > MAX_SYNC_ROWS)
+      return apiError("bad_request", `Row count ${result.rowCount} exceeds sync cap ${MAX_SYNC_ROWS}`);
 
     // Cap dedup-lookup at 50k tasks per project — keeps the scan bounded
     // even on long-running projects with thousands of tasks.
-    const { data: existing } = await supabase.from("tasks").select("title, due_at").eq("project_id", project.id).limit(50_000);
+    const { data: existing } = await supabase
+      .from("tasks")
+      .select("title, due_at")
+      .eq("project_id", project.id)
+      .limit(50_000);
     const existingKeys = new Set((existing ?? []).map((r) => `${r.title}::${r.due_at ?? ""}`.toLowerCase()));
 
     const dedup = new Map<string, TaskRow>();

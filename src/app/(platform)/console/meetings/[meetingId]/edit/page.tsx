@@ -31,6 +31,8 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/meetings/${p.meetingId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Title" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>

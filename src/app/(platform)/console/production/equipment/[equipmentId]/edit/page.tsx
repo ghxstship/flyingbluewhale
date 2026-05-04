@@ -25,6 +25,8 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
           cancelHref={`/console/production/equipment/${p.equipmentId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <Input label="Category" name="category" defaultValue={row.category ?? ""} maxLength={120} />
           <Input label="Asset Tag" name="asset_tag" defaultValue={row.asset_tag ?? ""} maxLength={80} />

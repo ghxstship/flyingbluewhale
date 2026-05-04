@@ -6,15 +6,33 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
+import { moneyDollarsString } from "@/lib/zod/money";
 
-const Schema = z.object({
-  title: z.string().min(1).max(200),
-  client_id: z.string().uuid().optional().or(z.literal("")),
-  project_id: z.string().uuid().optional().or(z.literal("")),
-  amount: z.string().optional(),
-  expires_at: z.string().date().optional().or(z.literal("")),
-  notes: z.string().max(4000).optional(),
-});
+const Schema = z
+  .object({
+    title: z.string().min(1).max(200),
+    client_id: z.string().uuid().optional().or(z.literal("")),
+    project_id: z.string().uuid().optional().or(z.literal("")),
+    // Sea Trial R3 FINDING-019: amount optional but must be a valid
+    // non-negative dollar amount when supplied.
+    amount: moneyDollarsString({ allowEmpty: true }),
+    expires_at: z.string().date().optional().or(z.literal("")),
+    notes: z.string().max(4000).optional(),
+  })
+  // Sea Trial R3 FINDING-021: expires_at, when supplied, must not be in
+  // the past. A 30-day grace window allows legitimate backdating
+  // (porting historical proposals) without permitting "expired before
+  // it was created" as a fresh-author error.
+  .refine(
+    (data) => {
+      if (!data.expires_at) return true;
+      const exp = Date.parse(data.expires_at);
+      if (!Number.isFinite(exp)) return false;
+      const grace = Date.now() - 30 * 24 * 60 * 60 * 1000;
+      return exp >= grace;
+    },
+    { message: "Expires-at is too far in the past", path: ["expires_at"] },
+  );
 
 export type State = { error?: string } | null;
 
@@ -36,13 +54,17 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
       notes: parsed.data.notes || null,
       created_by: session.userId,
     })
-    .select().single();
+    .select()
+    .single();
   if (error) return { error: error.message };
   revalidatePath("/console/proposals");
   redirect(`/console/proposals/${data.id}`);
 }
 
-export async function setProposalStatusAction(id: string, status: "draft"|"sent"|"approved"|"rejected"|"expired"|"signed") {
+export async function setProposalStatusAction(
+  id: string,
+  status: "draft" | "sent" | "approved" | "rejected" | "expired" | "signed",
+) {
   const session = await requireSession();
   const supabase = await createClient();
   const { data: before } = await supabase
@@ -62,9 +84,10 @@ export async function setProposalStatusAction(id: string, status: "draft"|"sent"
       orgId: session.orgId,
       userId: before.created_by ?? session.userId,
       eventType: status === "signed" ? "proposal.signed" : "proposal.sent",
-      title: status === "signed"
-        ? `Proposal ${before.doc_number ?? id.slice(0, 8)} signed`
-        : `Proposal ${before.doc_number ?? id.slice(0, 8)} sent`,
+      title:
+        status === "signed"
+          ? `Proposal ${before.doc_number ?? id.slice(0, 8)} signed`
+          : `Proposal ${before.doc_number ?? id.slice(0, 8)} sent`,
       body: before.title ?? undefined,
       href: `/console/proposals/${id}`,
       data: { proposalId: id, amountCents: before.amount_cents, number: before.doc_number },

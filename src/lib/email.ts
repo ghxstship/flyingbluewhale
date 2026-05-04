@@ -37,7 +37,7 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      from: env.RESEND_FROM ?? "LYTEHAUS Technologies <no-reply@flyingbluewhale.app>",
+      from: env.RESEND_FROM ?? "LYTEHAUS Technologies <no-reply@lytehaus.tech>",
       to: Array.isArray(payload.to) ? payload.to : [payload.to],
       subject: payload.subject,
       html: payload.html,

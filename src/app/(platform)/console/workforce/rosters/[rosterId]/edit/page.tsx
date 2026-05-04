@@ -31,6 +31,8 @@ export default async function Page({ params }: { params: Promise<{ rosterId: str
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/workforce/rosters/${p.rosterId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="Day Of" name="day_of" type="date" defaultValue={dateOnly(row.day_of)} required />
           <label className="flex flex-col gap-1.5">

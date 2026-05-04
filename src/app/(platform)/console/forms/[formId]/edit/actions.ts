@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 // Field shape stored on form_defs.schema. Kept narrow on purpose — adding
 // new field kinds is a deliberate schema bump, not an open-ended free-for-all.
@@ -64,21 +65,21 @@ export async function updateFormDefAction(_: State, fd: FormData): Promise<State
     return { error: `Schema is not valid JSON (${(e as Error).message})` };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("form_defs")
-    .update({
-      title: parsed.data.title,
-      slug: parsed.data.slug,
-      description: parsed.data.description || null,
-      status: parsed.data.status,
-      schema: parsedSchema,
-    })
-    .eq("id", parsed.data.formId)
-    .eq("org_id", session.orgId);
-
-  if (error) return { error: error.message };
-
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("form_defs", session.orgId, parsed.data.formId, expectedUpdatedAt, {
+    title: parsed.data.title,
+    slug: parsed.data.slug,
+    description: parsed.data.description || null,
+    status: parsed.data.status,
+    // form_defs.schema is `Json` in the schema; the helper narrows to the
+    // table's Update shape which expects an object/array, not the full
+    // Json union — cast through unknown.
+    schema: parsedSchema as unknown as Record<string, unknown>,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Form Def not found." };
+  }
   revalidatePath(`/console/forms/${parsed.data.formId}`);
   revalidatePath("/console/forms");
   redirect(`/console/forms/${parsed.data.formId}`);

@@ -3,6 +3,7 @@ import { assertCapability, withAuth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { createClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { httpFetch } from "@/lib/http";
+import { urlFor } from "@/lib/urls";
 
 /**
  * POST /api/v1/stripe/portal
@@ -57,10 +58,9 @@ export async function POST() {
       await supabase.from("orgs").update({ stripe_customer_id: customerId }).eq("id", session.orgId);
     }
 
-    const appUrl = env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
     const form = new URLSearchParams();
     form.set("customer", customerId);
-    form.set("return_url", `${appUrl}/console/settings/billing`);
+    form.set("return_url", urlFor("platform", "/settings/billing"));
     const res = await httpFetch("https://api.stripe.com/v1/billing_portal/sessions", {
       method: "POST",
       headers: {

@@ -21,6 +21,8 @@ export default async function Page({ params }: { params: Promise<{ crewId: strin
       <ModuleHeader eyebrow="Crew" title={`Edit ${row.name}`} />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/people/crew/${p.crewId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <Input label="Role" name="role" defaultValue={row.role ?? ""} maxLength={120} />
           <Input label="Email" name="email" type="email" defaultValue={row.email ?? ""} />

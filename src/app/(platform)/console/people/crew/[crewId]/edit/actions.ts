@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -21,20 +22,19 @@ export async function updateCrewMember(id: string, _: State, fd: FormData): Prom
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("crew_members")
-    .update({
-      name: parsed.data.name,
-      role: parsed.data.role || null,
-      email: parsed.data.email || null,
-      phone: parsed.data.phone || null,
-      day_rate_cents: parsed.data.day_rate_cents ? Number(parsed.data.day_rate_cents) : null,
-      notes: parsed.data.notes || null,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("crew_members", session.orgId, id, expectedUpdatedAt, {
+    name: parsed.data.name,
+    role: parsed.data.role || null,
+    email: parsed.data.email || null,
+    phone: parsed.data.phone || null,
+    day_rate_cents: parsed.data.day_rate_cents ? Number(parsed.data.day_rate_cents) : null,
+    notes: parsed.data.notes || null,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Crew Member not found." };
+  }
   revalidatePath(`/console/people/crew/${id}`);
   revalidatePath("/console/people/crew");
   redirect(`/console/people/crew/${id}`);

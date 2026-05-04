@@ -15,7 +15,12 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
-  const { data: vendors } = await supabase.from("vendors").select("id, name").eq("org_id", session.orgId).order("name");
+  const { data: vendors } = await supabase
+    .from("vendors")
+    .select("id, name")
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .order("name");
 
   return (
     <>

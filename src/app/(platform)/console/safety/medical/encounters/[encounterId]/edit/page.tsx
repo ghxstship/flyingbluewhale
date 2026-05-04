@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ encounterId: 
           cancelHref={`/console/safety/medical/encounters/${encounterId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Triage</label>
             <select

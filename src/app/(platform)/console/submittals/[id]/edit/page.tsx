@@ -33,6 +33,7 @@ type Submittal = {
   ball_in_court_id: string | null;
   status: (typeof STATUSES)[number];
   due_at: string | null;
+  updated_at: string;
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -44,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const [{ data }, { data: projects }, { data: vendors }, { data: users }] = await Promise.all([
     supabase
       .from("submittals")
-      .select("id, code, title, project_id, spec_section, vendor_id, ball_in_court_id, status, due_at")
+      .select("id, code, title, project_id, spec_section, vendor_id, ball_in_court_id, status, due_at, updated_at")
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle(),
@@ -75,6 +76,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           submitLabel="Save Submittal"
           dirtyGuard
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={sub.updated_at} />
           <input type="hidden" name="id" value={sub.id} />
 
           <label className="flex flex-col gap-1.5">

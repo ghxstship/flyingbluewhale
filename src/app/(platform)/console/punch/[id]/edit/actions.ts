@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   id: z.string().uuid(),
@@ -26,27 +26,26 @@ export async function updatePunchItem(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
   const { id, ...patch } = parsed.data;
-  const { error } = await supabase
-    .from("punch_items")
-    .update({
-      title: patch.title,
-      description: patch.description || null,
-      project_id: patch.project_id,
-      priority: patch.priority,
-      status: patch.status,
-      assignee_id: patch.assignee_id || null,
-      vendor_id: patch.vendor_id || null,
-      due_at: patch.due_at || null,
-      site_plan_id: patch.site_plan_id || null,
-      show_ready_gate: patch.show_ready_gate === "1",
-      closed_at: patch.status === "complete" ? new Date().toISOString() : null,
-      closed_by: patch.status === "complete" ? session.userId : null,
-    } as never)
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("punch_items", session.orgId, id, expectedUpdatedAt, {
+    title: patch.title,
+    description: patch.description || null,
+    project_id: patch.project_id,
+    priority: patch.priority,
+    status: patch.status,
+    assignee_id: patch.assignee_id || null,
+    vendor_id: patch.vendor_id || null,
+    due_at: patch.due_at || null,
+    site_plan_id: patch.site_plan_id || null,
+    show_ready_gate: patch.show_ready_gate === "1",
+    closed_at: patch.status === "complete" ? new Date().toISOString() : null,
+    closed_by: patch.status === "complete" ? session.userId : null,
+  } as never);
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Punch Item not found." };
+  }
   revalidatePath(`/console/punch/${id}`);
   revalidatePath("/console/punch");
   redirect(`/console/punch/${id}`);

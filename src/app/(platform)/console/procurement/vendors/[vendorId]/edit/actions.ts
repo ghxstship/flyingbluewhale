@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -21,20 +22,19 @@ export async function updateVendor(id: string, _: State, fd: FormData): Promise<
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("vendors")
-    .update({
-      name: parsed.data.name,
-      category: parsed.data.category || null,
-      contact_email: parsed.data.contact_email || null,
-      contact_phone: parsed.data.contact_phone || null,
-      coi_expires_at: parsed.data.coi_expires_at || null,
-      notes: parsed.data.notes || null,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("vendors", session.orgId, id, expectedUpdatedAt, {
+    name: parsed.data.name,
+    category: parsed.data.category || null,
+    contact_email: parsed.data.contact_email || null,
+    contact_phone: parsed.data.contact_phone || null,
+    coi_expires_at: parsed.data.coi_expires_at || null,
+    notes: parsed.data.notes || null,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Vendor not found." };
+  }
   revalidatePath(`/console/procurement/vendors/${id}`);
   revalidatePath("/console/procurement/vendors");
   redirect(`/console/procurement/vendors/${id}`);

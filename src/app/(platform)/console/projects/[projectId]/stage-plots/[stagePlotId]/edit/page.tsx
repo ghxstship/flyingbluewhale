@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("stage_plots")
-    .select("id, name, width_ft, depth_ft, notes")
+    .select("id, name, width_ft, depth_ft, notes, updated_at")
     .eq("id", stagePlotId)
     .eq("project_id", projectId)
     .eq("org_id", session.orgId)
@@ -36,6 +36,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           cancelHref={`/console/projects/${projectId}/stage-plots/${stagePlotId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <div className="grid grid-cols-2 gap-3">
             <Input

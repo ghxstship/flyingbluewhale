@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   id: z.string().uuid(),
@@ -25,25 +25,24 @@ export async function updateRfi(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
   const { id, ...patch } = parsed.data;
-  const { error } = await supabase
-    .from("rfis")
-    .update({
-      subject: patch.subject,
-      question: patch.question,
-      project_id: patch.project_id,
-      category: patch.category || null,
-      ball_in_court_id: patch.ball_in_court_id || null,
-      priority: patch.priority,
-      status: patch.status,
-      due_at: patch.due_at || null,
-      official_answer: patch.official_answer || null,
-      answered_at: patch.status === "answered" || patch.status === "closed" ? new Date().toISOString() : null,
-    } as never)
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("rfis", session.orgId, id, expectedUpdatedAt, {
+    subject: patch.subject,
+    question: patch.question,
+    project_id: patch.project_id,
+    category: patch.category || null,
+    ball_in_court_id: patch.ball_in_court_id || null,
+    priority: patch.priority,
+    status: patch.status,
+    due_at: patch.due_at || null,
+    official_answer: patch.official_answer || null,
+    answered_at: patch.status === "answered" || patch.status === "closed" ? new Date().toISOString() : null,
+  } as never);
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Rfi not found." };
+  }
   revalidatePath(`/console/rfis/${id}`);
   revalidatePath("/console/rfis");
   redirect(`/console/rfis/${id}`);

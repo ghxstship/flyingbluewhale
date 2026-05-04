@@ -29,7 +29,13 @@ export default async function StagePlotDetailPage({
   const supabase = await createClient();
 
   const [{ data: project }, { data: plot }] = await Promise.all([
-    supabase.from("projects").select("id, name").eq("id", projectId).eq("org_id", session.orgId).maybeSingle(),
+    supabase
+      .from("projects")
+      .select("id, name")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle(),
     supabase
       .from("stage_plots")
       .select("id, name, width_ft, depth_ft, elements")

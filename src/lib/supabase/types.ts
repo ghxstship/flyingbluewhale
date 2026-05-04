@@ -132,6 +132,7 @@ export type Client = {
   notes: string | null;
   created_by: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type Lead = {
   id: string;
@@ -254,6 +255,7 @@ export type Budget = {
   amount_cents: number;
   spent_cents: number;
   created_at: string;
+  updated_at: string;
 };
 export type TimeEntry = {
   id: string;
@@ -266,6 +268,7 @@ export type TimeEntry = {
   duration_minutes: number | null;
   billable: boolean;
   created_at: string;
+  updated_at: string;
 };
 export type MileageLog = {
   id: string;
@@ -279,6 +282,7 @@ export type MileageLog = {
   logged_on: string;
   notes: string | null;
   created_at: string;
+  updated_at: string;
 };
 
 // Procurement
@@ -294,6 +298,7 @@ export type Vendor = {
   payout_account_id: string | null;
   notes: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type Requisition = {
   id: string;
@@ -305,6 +310,7 @@ export type Requisition = {
   estimated_cents: number | null;
   status: ReqStatus;
   created_at: string;
+  updated_at: string;
 };
 export type PurchaseOrder = {
   id: string;
@@ -356,6 +362,7 @@ export type Rental = {
   rate_cents: number | null;
   notes: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type FabricationOrder = {
   id: string;
@@ -366,6 +373,7 @@ export type FabricationOrder = {
   due_at: string | null;
   status: FabricationStatus;
   created_at: string;
+  updated_at: string;
 };
 
 // Ops
@@ -393,7 +401,9 @@ export type EventRow = {
   location_id: string | null;
   status: EventStatus;
   description: string | null;
+  created_by: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type Location = {
   id: string;
@@ -408,6 +418,7 @@ export type Location = {
   lng: number | null;
   notes: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type CrewMember = {
   id: string;
@@ -420,6 +431,7 @@ export type CrewMember = {
   day_rate_cents: number | null;
   notes: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type Credential = {
   id: string;
@@ -431,6 +443,7 @@ export type Credential = {
   expires_on: string | null;
   file_path: string | null;
   created_at: string;
+  updated_at: string;
 };
 
 // AI + system
@@ -588,6 +601,7 @@ export type AccreditationCategory = {
   description: string | null;
   zone_privileges: unknown;
   created_at: string;
+  updated_at: string;
 };
 export type Accreditation = {
   id: string;
@@ -634,6 +648,7 @@ export type AccreditationChange = {
   decided_at: string | null;
   note: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type WorkforceMember = {
   id: string;
@@ -688,6 +703,7 @@ export type WorkforceDeployment = {
   actual_fte: number;
   functional_area: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type Incident = {
   id: string;
@@ -861,6 +877,7 @@ export type MajorIncident = {
   timeline: unknown;
   status: string;
   created_at: string;
+  updated_at: string;
 };
 export type SafeguardingReport = {
   id: string;
@@ -886,6 +903,7 @@ export type MedicalEncounter = {
   clinician_id: string | null;
   phi_encrypted: unknown;
   created_at: string;
+  updated_at: string;
 };
 export type EnvironmentalEvent = {
   id: string;
@@ -897,6 +915,7 @@ export type EnvironmentalEvent = {
   started_at: string;
   ended_at: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type CrisisAlert = {
   id: string;
@@ -910,6 +929,7 @@ export type CrisisAlert = {
   sent_at: string | null;
   created_by: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type CrisisAlertReceipt = {
   id: string;
@@ -942,6 +962,7 @@ export type DelegationEntry = {
   participant_name: string;
   status: string;
   created_at: string;
+  updated_at: string;
 };
 export type VisaCase = {
   id: string;
@@ -967,6 +988,7 @@ export type RateCardItem = {
   metadata: unknown;
   active: boolean;
   created_at: string;
+  updated_at: string;
 };
 export type RateCardOrder = {
   id: string;
@@ -997,6 +1019,7 @@ export type DispatchRun = {
   manifest: unknown;
   status: string;
   created_at: string;
+  updated_at: string;
 };
 export type AdManifest = {
   id: string;
@@ -1011,6 +1034,7 @@ export type AdManifest = {
   notes: string | null;
   status: string;
   created_at: string;
+  updated_at: string;
 };
 export type AccommodationBlock = {
   id: string;
@@ -1025,6 +1049,7 @@ export type AccommodationBlock = {
   ends_on: string | null;
   contract_path: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type TicketType = {
   id: string;
@@ -1037,6 +1062,7 @@ export type TicketType = {
   allocation: number;
   sold: number;
   created_at: string;
+  updated_at: string;
 };
 export type SponsorEntitlement = {
   id: string;
@@ -1086,6 +1112,7 @@ export type Trademark = {
   expires_on: string | null;
   status: string;
   created_at: string;
+  updated_at: string;
 };
 export type InsurancePolicy = {
   id: string;
@@ -1098,6 +1125,7 @@ export type InsurancePolicy = {
   limits: unknown;
   document_path: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type IntegrationConnector = {
   id: string;
@@ -1121,6 +1149,7 @@ export type SustainabilityMetric = {
   source: string | null;
   method: string | null;
   created_at: string;
+  updated_at: string;
 };
 export type KbArticle = {
   id: string;

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   triage: z.string().max(40).optional(),
@@ -19,18 +20,17 @@ export async function updateEncounter(encounterId: string, _: State, fd: FormDat
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("medical_encounters")
-    .update({
-      triage: parsed.data.triage || null,
-      chief_complaint: parsed.data.chief_complaint || null,
-      disposition: parsed.data.disposition || null,
-      patient_ref: parsed.data.patient_ref || null,
-    })
-    .eq("id", encounterId)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("medical_encounters", session.orgId, encounterId, expectedUpdatedAt, {
+    triage: parsed.data.triage || null,
+    chief_complaint: parsed.data.chief_complaint || null,
+    disposition: parsed.data.disposition || null,
+    patient_ref: parsed.data.patient_ref || null,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Medical Encounter not found." };
+  }
   revalidatePath(`/console/safety/medical/encounters/${encounterId}`);
   revalidatePath("/console/safety/medical/encounters");
   redirect(`/console/safety/medical/encounters/${encounterId}`);

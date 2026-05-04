@@ -38,6 +38,8 @@ export default async function Page({ params }: { params: Promise<{ applicationId
           cancelHref={`/console/accreditation/vetting/${p.applicationId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Person Name" name="person_name" defaultValue={row.person_name ?? ""} required maxLength={200} />
           <Input label="Email" name="person_email" type="email" defaultValue={row.person_email ?? ""} />
           <label className="flex flex-col gap-1.5">

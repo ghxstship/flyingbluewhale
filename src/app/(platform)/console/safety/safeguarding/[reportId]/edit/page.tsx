@@ -29,6 +29,8 @@ export default async function Page({ params }: { params: Promise<{ reportId: str
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/safety/safeguarding/${p.reportId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Narrative</span>
             <textarea

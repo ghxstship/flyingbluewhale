@@ -22,6 +22,7 @@ type Inspection = {
   scheduled_for: string | null;
   inspector_id: string | null;
   notes: string | null;
+  updated_at: string;
 };
 
 function toDateTimeLocal(iso: string | null): string {
@@ -42,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const [{ data }, { data: projects }, { data: users }] = await Promise.all([
     supabase
       .from("inspections")
-      .select("id, code, name, project_id, status, scheduled_for, inspector_id, notes")
+      .select("id, code, name, project_id, status, scheduled_for, inspector_id, notes, updated_at")
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle(),
@@ -72,6 +73,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           submitLabel="Save Inspection"
           dirtyGuard
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={insp.updated_at} />
           <input type="hidden" name="id" value={insp.id} />
 
           <label className="flex flex-col gap-1.5">

@@ -34,6 +34,7 @@ type SitePlan = {
   project_id: string | null;
   venue_id: string | null;
   notes: string | null;
+  updated_at: string;
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const [{ data }, { data: projects }, { data: venues }] = await Promise.all([
     supabase
       .from("site_plans")
-      .select("id, code, title, discipline, project_id, venue_id, notes")
+      .select("id, code, title, discipline, project_id, venue_id, notes, updated_at")
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle(),
@@ -75,6 +76,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           submitLabel="Save Site Plan"
           dirtyGuard
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={sp.updated_at} />
           <input type="hidden" name="id" value={sp.id} />
 
           <div className="grid grid-cols-2 gap-3">

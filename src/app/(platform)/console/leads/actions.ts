@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
+import { moneyDollarsString } from "@/lib/zod/money";
 
 const Schema = z.object({
   name: z.string().min(1).max(120),
@@ -13,7 +14,9 @@ const Schema = z.object({
   phone: z.string().max(40).optional().or(z.literal("")),
   source: z.string().max(80).optional().or(z.literal("")),
   stage: z.enum(["new", "qualified", "contacted", "proposal", "won", "lost"]).default("new"),
-  estimated_value: z.string().optional(),
+  // Sea Trial R3 FINDING-019: estimated_value optional but rejected if
+  // negative or non-numeric.
+  estimated_value: moneyDollarsString({ allowEmpty: true }),
   notes: z.string().max(2000).optional(),
 });
 
@@ -48,11 +51,7 @@ export async function createLeadAction(_: State, fd: FormData): Promise<State> {
 export async function moveLeadStageAction(leadId: string, stage: z.infer<typeof Schema>["stage"]) {
   const session = await requireSession();
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("leads")
-    .update({ stage })
-    .eq("org_id", session.orgId)
-    .eq("id", leadId);
+  const { error } = await supabase.from("leads").update({ stage }).eq("org_id", session.orgId).eq("id", leadId);
   if (error) return { error: error.message };
   revalidatePath("/console/leads");
   return { ok: true as const };

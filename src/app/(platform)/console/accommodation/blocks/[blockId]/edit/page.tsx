@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ blockId: stri
       <ModuleHeader eyebrow="Accommodation" title={`Edit ${row.name}`} />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/accommodation/blocks/${p.blockId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <Input label="Property" name="property" defaultValue={row.property} required maxLength={200} />
           <Input label="City" name="city" defaultValue={row.city ?? ""} maxLength={120} />

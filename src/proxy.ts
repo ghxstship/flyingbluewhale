@@ -2,6 +2,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import { log, serverTiming } from "@/lib/log";
+import { internalPathFor, shellForHost } from "@/lib/urls";
+
+const SUBDOMAINS_ENABLED = process.env.NEXT_PUBLIC_USE_SUBDOMAINS === "1";
 
 // Allow-list of origins permitted to send credentialed cross-origin requests
 // to /api/v1. Parsed once at module load. The static header in next.config.ts
@@ -130,9 +133,29 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  const response = await updateSession(request);
+  // Subdomain → internal route-group rewrite. Public URL stays on the
+  // subdomain; Next sees the prefixed path. In path-prefix mode (preview
+  // deploys without subdomain DNS) shell is "marketing" and no rewrite
+  // happens — the existing /console, /p, /m prefixes already serve the
+  // right shell.
+  const { shell, tenantSlug } = SUBDOMAINS_ENABLED
+    ? shellForHost(request.headers.get("host"))
+    : { shell: "marketing" as const, tenantSlug: null as string | null };
+
+  let rewriteUrl: URL | undefined;
+  if (SUBDOMAINS_ENABLED && shell !== "marketing") {
+    const internal = internalPathFor(shell, request.nextUrl.pathname);
+    if (internal !== request.nextUrl.pathname) {
+      rewriteUrl = request.nextUrl.clone();
+      rewriteUrl.pathname = internal;
+    }
+  }
+
+  const response = await updateSession(request, rewriteUrl);
   const mwDuration = Math.round((performance.now() - startedAt) * 10) / 10;
   response.headers.set("x-request-id", requestId);
+  response.headers.set("x-shell", shell);
+  if (tenantSlug) response.headers.set("x-tenant-slug", tenantSlug);
   // Server-Timing is additive — append if the downstream handler already set it.
   const existingTiming = response.headers.get("server-timing");
   response.headers.set(

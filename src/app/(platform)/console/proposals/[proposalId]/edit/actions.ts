@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { urlFor } from "@/lib/urls";
 
 const UpdateSchema = z.object({
   title: z.string().min(1).max(200),
@@ -23,8 +24,11 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   let blocks: import("@/lib/supabase/database.types").Json;
-  try { blocks = JSON.parse(parsed.data.blocks || "[]") as import("@/lib/supabase/database.types").Json; }
-  catch { return { error: "Blocks JSON is invalid" }; }
+  try {
+    blocks = JSON.parse(parsed.data.blocks || "[]") as import("@/lib/supabase/database.types").Json;
+  } catch {
+    return { error: "Blocks JSON is invalid" };
+  }
 
   const supabase = await createClient();
   const { data: current } = await supabase
@@ -64,10 +68,16 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   return { ok: true };
 }
 
-export async function createShareLinkAction(proposalId: string, audience: string | null, recipientEmail?: string | null) {
+export async function createShareLinkAction(
+  proposalId: string,
+  audience: string | null,
+  recipientEmail?: string | null,
+) {
   const session = await requireSession();
   const supabase = await createClient();
-  const token = Array.from(crypto.getRandomValues(new Uint8Array(24))).map((b) => b.toString(16).padStart(2, "0")).join("");
+  const token = Array.from(crypto.getRandomValues(new Uint8Array(24)))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
   const expires = new Date();
   expires.setDate(expires.getDate() + 30);
 
@@ -87,11 +97,12 @@ export async function createShareLinkAction(proposalId: string, audience: string
   if (recipientEmail) {
     const { sendProposalShareEmail } = await import("@/lib/email");
     const { data: p } = await supabase.from("proposals").select("title").eq("id", proposalId).maybeSingle();
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    // Public proposal-share URL is unauthenticated and lives on the apex
+    // marketing host so the recipient never lands on an auth-walled subdomain.
     await sendProposalShareEmail({
       to: recipientEmail,
       proposalTitle: p?.title ?? "Proposal",
-      url: `${appUrl}/proposals/${data.token}`,
+      url: urlFor("marketing", `/proposals/${data.token}`),
       senderName: session.email,
     });
   }

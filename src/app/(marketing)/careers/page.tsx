@@ -112,7 +112,7 @@ export default function CareersPage() {
               "@type": "ListItem",
               position: i + 1,
               name: t.label,
-              item: `${process.env.NEXT_PUBLIC_APP_URL ?? ""}${t.href}`,
+              item: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech"}${t.href}`,
             })),
           },
         ]}

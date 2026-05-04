@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   summary: z.string().min(1).max(500),
@@ -21,20 +22,19 @@ export async function updateIncident(incidentId: string, _: State, fd: FormData)
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("incidents")
-    .update({
-      summary: parsed.data.summary,
-      description: parsed.data.description || null,
-      severity: parsed.data.severity,
-      status: parsed.data.status,
-      location: parsed.data.location || null,
-      occurred_at: parsed.data.occurred_at || undefined,
-    })
-    .eq("id", incidentId)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("incidents", session.orgId, incidentId, expectedUpdatedAt, {
+    summary: parsed.data.summary,
+    description: parsed.data.description || null,
+    severity: parsed.data.severity,
+    status: parsed.data.status,
+    location: parsed.data.location || null,
+    occurred_at: parsed.data.occurred_at || undefined,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Incident not found." };
+  }
   revalidatePath(`/console/operations/incidents/${incidentId}`);
   revalidatePath("/console/operations/incidents");
   redirect(`/console/operations/incidents/${incidentId}`);

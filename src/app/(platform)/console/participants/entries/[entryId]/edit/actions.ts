@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   participant_name: z.string().min(1).max(200),
@@ -19,18 +20,17 @@ export async function updateEntry(entryId: string, _: State, fd: FormData): Prom
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("delegation_entries")
-    .update({
-      participant_name: parsed.data.participant_name,
-      discipline: parsed.data.discipline || null,
-      event: parsed.data.event || null,
-      status: parsed.data.status || "nominated",
-    })
-    .eq("id", entryId)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("delegation_entries", session.orgId, entryId, expectedUpdatedAt, {
+    participant_name: parsed.data.participant_name,
+    discipline: parsed.data.discipline || null,
+    event: parsed.data.event || null,
+    status: parsed.data.status || "nominated",
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Delegation Entrie not found." };
+  }
   revalidatePath(`/console/participants/entries/${entryId}`);
   revalidatePath("/console/participants/entries");
   redirect(`/console/participants/entries/${entryId}`);

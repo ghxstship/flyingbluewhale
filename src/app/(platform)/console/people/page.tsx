@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
@@ -6,6 +7,17 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { Avatar } from "@/components/ui/Avatar";
+
+// Sub-views moved out of the primary sidebar in the WAYFINDER
+// remediation but kept reachable here as a tile band — they're real
+// list views (Crew table, Credentials register, Offer Letters tracker)
+// and removing them would lose functionality. Future work: convert
+// these into Person record tabs (`/console/people/[personId]/...`).
+const PEOPLE_RELATED = [
+  { href: "/console/people/crew", label: "Crew", sub: "Roster + day rates" },
+  { href: "/console/people/credentials", label: "Credentials", sub: "Certs + expirations" },
+  { href: "/console/people/offer-letters", label: "Offer Letters", sub: "Drafts + sent + signed" },
+];
 
 type MemberRow = {
   id: string;
@@ -80,6 +92,19 @@ export default async function PeoplePage() {
             },
           ]}
         />
+        <section className="mt-8">
+          <h2 className="mb-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            Related Sections
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {PEOPLE_RELATED.map((t) => (
+              <Link key={t.href} href={t.href} className="surface hover-lift p-4">
+                <div className="text-sm font-semibold">{t.label}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.sub}</div>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
     </>
   );

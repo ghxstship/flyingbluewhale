@@ -29,6 +29,8 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/workforce/training/${p.courseId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Title" name="title" defaultValue={row.title ?? ""} required maxLength={200} />
           <Input label="Slug" name="slug" defaultValue={row.slug ?? ""} required maxLength={160} />
           <label className="flex flex-col gap-1.5">

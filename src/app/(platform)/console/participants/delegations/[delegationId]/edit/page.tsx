@@ -33,6 +33,8 @@ export default async function Page({ params }: { params: Promise<{ delegationId:
           cancelHref={`/console/participants/delegations/${p.delegationId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="Code" name="code" defaultValue={row.code ?? ""} required maxLength={40} />
           <Input label="Country" name="country" defaultValue={row.country ?? ""} maxLength={120} />

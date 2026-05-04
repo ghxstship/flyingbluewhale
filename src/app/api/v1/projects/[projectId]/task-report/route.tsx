@@ -25,11 +25,21 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
 
   const supabase = await createClient();
   const { data: project } = await supabase
-    .from("projects").select("id, name").eq("id", p.data.projectId).eq("org_id", session.orgId).maybeSingle();
+    .from("projects")
+    .select("id, name")
+    .eq("id", p.data.projectId)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
   if (!project) return apiError("not_found", "Project not found");
 
   const [{ data: tasks }, { data: org }] = await Promise.all([
-    supabase.from("tasks").select("title, status, priority, assigned_to, due_at").eq("project_id", project.id).order("due_at", { ascending: true }).limit(1000),
+    supabase
+      .from("tasks")
+      .select("title, status, priority, assigned_to, due_at")
+      .eq("project_id", project.id)
+      .order("due_at", { ascending: true })
+      .limit(1000),
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
   ]);
   if (!org) return apiError("internal", "Missing organization row");
@@ -58,7 +68,10 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
     });
     return NextResponse.redirect(signedUrl, 302);
   } catch (e) {
-    log.error("task_report.compile_failed", { project_id: project.id, err: e instanceof Error ? e.message : String(e) });
+    log.error("task_report.compile_failed", {
+      project_id: project.id,
+      err: e instanceof Error ? e.message : String(e),
+    });
     return apiError("internal", "Failed to render task report");
   }
 }

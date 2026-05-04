@@ -37,7 +37,7 @@ export function Breadcrumbs({
 }) {
   if (items.length === 0) return null;
 
-  const resolvedBase = baseUrl ?? process.env.NEXT_PUBLIC_APP_URL ?? "";
+  const resolvedBase = baseUrl ?? process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech";
 
   // Visual truncation: if > 4 crumbs, collapse middle entries into
   // a non-interactive ellipsis (keeps first + last 2 visible).
@@ -87,7 +87,7 @@ export function Breadcrumbs({
               ) : (
                 <span
                   aria-current={isLast ? "page" : undefined}
-                  className={isLast ? "text-[var(--foreground)] font-medium" : ""}
+                  className={isLast ? "font-medium text-[var(--foreground)]" : ""}
                 >
                   {c.label}
                 </span>

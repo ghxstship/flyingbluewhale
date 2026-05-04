@@ -4,6 +4,7 @@ import { assertCapability, withAuth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { httpFetch } from "@/lib/http";
 import { withIdempotency } from "@/lib/idempotency";
+import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
   vendorId: z.string().uuid(),
@@ -22,7 +23,6 @@ async function handler(req: Request) {
     const denial = assertCapability(session, "payouts:write");
     if (denial) return denial;
     if (!env.STRIPE_SECRET_KEY) return apiError("internal", "STRIPE_SECRET_KEY is not configured");
-    const appUrl = env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
     const acctForm = new URLSearchParams();
     acctForm.set("type", "express");
@@ -31,7 +31,7 @@ async function handler(req: Request) {
     const acctRes = await httpFetch("https://api.stripe.com/v1/accounts", {
       method: "POST",
       headers: {
-        "authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
+        authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
         "content-type": "application/x-www-form-urlencoded",
       },
       body: acctForm.toString(),
@@ -42,14 +42,17 @@ async function handler(req: Request) {
 
     const linkForm = new URLSearchParams();
     linkForm.set("account", acct.id);
-    linkForm.set("refresh_url", `${appUrl}/console/procurement/vendors/${input.vendorId}?onboarding=refresh`);
-    linkForm.set("return_url", input.returnUrl ?? `${appUrl}/console/procurement/vendors/${input.vendorId}?onboarding=done`);
+    linkForm.set("refresh_url", urlFor("platform", `/procurement/vendors/${input.vendorId}?onboarding=refresh`));
+    linkForm.set(
+      "return_url",
+      input.returnUrl ?? urlFor("platform", `/procurement/vendors/${input.vendorId}?onboarding=done`),
+    );
     linkForm.set("type", "account_onboarding");
 
     const linkRes = await httpFetch("https://api.stripe.com/v1/account_links", {
       method: "POST",
       headers: {
-        "authorization": `Bearer ${env.STRIPE_SECRET_KEY}`,
+        authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
         "content-type": "application/x-www-form-urlencoded",
       },
       body: linkForm.toString(),

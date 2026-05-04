@@ -127,6 +127,8 @@ describe("Design system — component primitive adoption", () => {
       // Icon backgrounds, not tag pills (h-9 w-9 rounded-full container)
       "src/app/(marketing)/contact/page.tsx",
       "src/app/(marketing)/about/page.tsx",
+      "src/app/(marketing)/careers/page.tsx",
+      "src/app/(marketing)/help/page.tsx",
       // Changelog editorial category palette
       "src/app/(marketing)/changelog/page.tsx",
       // Proposal progress segmented control

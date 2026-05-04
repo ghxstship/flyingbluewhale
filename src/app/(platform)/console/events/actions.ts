@@ -4,15 +4,19 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { dateRangeRefine } from "@/lib/zod/dateRange";
 
-const Schema = z.object({
-  name: z.string().min(1),
-  starts_at: z.string().min(1),
-  ends_at: z.string().min(1),
-  location_id: z.string().uuid().optional().or(z.literal("")),
-  project_id: z.string().uuid().optional().or(z.literal("")),
-  description: z.string().optional(),
-});
+const Schema = z
+  .object({
+    name: z.string().min(1),
+    starts_at: z.string().min(1),
+    ends_at: z.string().min(1),
+    location_id: z.string().uuid().optional().or(z.literal("")),
+    project_id: z.string().uuid().optional().or(z.literal("")),
+    description: z.string().optional(),
+  })
+  // Sea Trial R2 FINDING-018: ends_at must not precede starts_at.
+  .refine(...dateRangeRefine("starts_at", "ends_at"));
 
 export type State = { error?: string } | null;
 
@@ -21,6 +25,9 @@ export async function createEventAction(_: State, fd: FormData): Promise<State> 
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
+  // Sea Trial FINDING-017: stamp `created_by` so the audit panel + ROS
+  // can attribute event creation. Column added in migration
+  // 20260504000001_events_created_by.sql.
   const { error } = await supabase.from("events").insert({
     org_id: session.orgId,
     name: parsed.data.name,
@@ -29,6 +36,7 @@ export async function createEventAction(_: State, fd: FormData): Promise<State> 
     location_id: parsed.data.location_id || null,
     project_id: parsed.data.project_id || null,
     description: parsed.data.description || null,
+    created_by: session.userId,
   });
   if (error) return { error: error.message };
   revalidatePath("/console/events");

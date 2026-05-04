@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { PublicFormSubmit, type PublicFormField } from "./PublicFormSubmit";
 
 export const dynamic = "force-dynamic";
@@ -75,9 +76,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       </header>
 
       {fields.length === 0 ? (
-        <div className="surface p-6 text-sm text-[var(--text-muted)]">
-          This form has no fields yet. Check back soon.
-        </div>
+        <EmptyState title="No fields yet" description="This form is being prepared. Check back soon." />
       ) : (
         <PublicFormSubmit slug={slug} fields={fields} />
       )}

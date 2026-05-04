@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ shipmentId: s
       />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/logistics/freight/${p.shipmentId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Title" name="title" defaultValue={row.title ?? ""} required maxLength={200} />
           <Input label="Number" name="number" defaultValue={row.number ?? ""} required maxLength={80} />
           <label className="flex flex-col gap-1.5">

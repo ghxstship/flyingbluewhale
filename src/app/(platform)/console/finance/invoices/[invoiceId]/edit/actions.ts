@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -22,21 +23,20 @@ export async function updateInvoice(id: string, _: State, fd: FormData): Promise
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("invoices")
-    .update({
-      title: parsed.data.title,
-      number: parsed.data.number,
-      amount_cents: parsed.data.amount_cents ? Number(parsed.data.amount_cents) : 0,
-      currency: parsed.data.currency,
-      due_at: parsed.data.due_at || null,
-      issued_at: parsed.data.issued_at || null,
-      notes: parsed.data.notes || null,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("invoices", session.orgId, id, expectedUpdatedAt, {
+    title: parsed.data.title,
+    number: parsed.data.number,
+    amount_cents: parsed.data.amount_cents ? Number(parsed.data.amount_cents) : 0,
+    currency: parsed.data.currency,
+    due_at: parsed.data.due_at || null,
+    issued_at: parsed.data.issued_at || null,
+    notes: parsed.data.notes || null,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Invoice not found." };
+  }
   revalidatePath(`/console/finance/invoices/${id}`);
   revalidatePath("/console/finance/invoices");
   redirect(`/console/finance/invoices/${id}`);

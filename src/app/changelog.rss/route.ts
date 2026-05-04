@@ -22,7 +22,7 @@ function rfc2822(date: string): string {
 }
 
 export function GET() {
-  const base = env.NEXT_PUBLIC_APP_URL || "https://flyingbluewhale.app";
+  const base = env.NEXT_PUBLIC_APP_URL || "https://lytehaus.tech";
   const feedUrl = `${base}/changelog.rss`;
   const channelUrl = `${base}/changelog`;
   const lastBuild = CHANGELOG_ENTRIES[0]?.date ?? new Date().toISOString().slice(0, 10);

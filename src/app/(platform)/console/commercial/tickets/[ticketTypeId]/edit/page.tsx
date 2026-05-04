@@ -33,6 +33,8 @@ export default async function Page({ params }: { params: Promise<{ ticketTypeId:
           cancelHref={`/console/commercial/tickets/${p.ticketTypeId}`}
           submitLabel="Save Changes"
         >
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
           <Input label="Channel" name="channel" defaultValue={row.channel ?? ""} required maxLength={80} />
           <Input

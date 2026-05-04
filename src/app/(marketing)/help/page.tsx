@@ -3,7 +3,7 @@ export const dynamic = "force-static";
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen, Headset, LifeBuoy, Mail, MessageCircle, ShieldAlert, Sparkles, Wrench } from "lucide-react";
+import { BookOpen, Headset, LifeBuoy, MessageCircle, ShieldAlert, Sparkles, Wrench } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
@@ -39,8 +39,8 @@ const CHANNELS = [
     icon: MessageCircle,
     title: "Concierge",
     body: "For customers — triaged by tier (Free, Crew, Production, Festival). Festival gets a four-hour SLA.",
-    cta: "support@flyingbluewhale.app",
-    href: "mailto:support@flyingbluewhale.app",
+    cta: "support@lytehaus.tech",
+    href: "mailto:support@lytehaus.tech",
   },
   {
     icon: Headset,
@@ -72,11 +72,11 @@ const TROUBLESHOOTING = [
 const FAQS: FAQ[] = [
   {
     q: "Where do I report a bug?",
-    a: "Email support@flyingbluewhale.app with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side.",
+    a: "Email support@lytehaus.tech with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side.",
   },
   {
     q: "Do you have a status page?",
-    a: "Yes — status.flyingbluewhale.app. Production incidents post within ten minutes. Maintenance windows announce 48 hours ahead.",
+    a: "Yes — status.lytehaus.tech. Production incidents post within ten minutes. Maintenance windows announce 48 hours ahead.",
   },
   {
     q: "Can I get phone support?",
@@ -114,7 +114,7 @@ export default function HelpPage() {
               "@type": "ListItem",
               position: i + 1,
               name: t.label,
-              item: `${process.env.NEXT_PUBLIC_APP_URL ?? ""}${t.href}`,
+              item: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech"}${t.href}`,
             })),
           },
         ]}
@@ -171,7 +171,7 @@ export default function HelpPage() {
         title="Still Stuck? Talk to a Producer."
         subtitle="Concierge email is the fastest path. We respond within hours, faster on Festival."
         primaryLabel="Email Concierge"
-        primaryHref="mailto:support@flyingbluewhale.app"
+        primaryHref="mailto:support@lytehaus.tech"
         secondaryLabel="Open the field guide"
         secondaryHref="/docs"
       />

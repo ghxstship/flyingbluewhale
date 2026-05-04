@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   code: z.string().min(1).max(40),
@@ -19,18 +20,23 @@ export async function updateCategory(categoryId: string, _: State, fd: FormData)
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("accreditation_categories")
-    .update({
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck(
+    "accreditation_categories",
+    session.orgId,
+    categoryId,
+    expectedUpdatedAt,
+    {
       code: parsed.data.code,
       name: parsed.data.name,
       description: parsed.data.description || null,
       color: parsed.data.color || null,
-    })
-    .eq("id", categoryId)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+    },
+  );
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Accreditation Categorie not found." };
+  }
   revalidatePath(`/console/accreditation/categories/${categoryId}`);
   revalidatePath("/console/accreditation/categories");
   redirect(`/console/accreditation/categories/${categoryId}`);

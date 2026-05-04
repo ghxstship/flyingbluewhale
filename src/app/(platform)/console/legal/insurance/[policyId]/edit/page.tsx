@@ -22,6 +22,8 @@ export default async function Page({ params }: { params: Promise<{ policyId: str
       <ModuleHeader eyebrow="Legal · Insurance" title={`Edit ${(r.policy_no as string | undefined) ?? "Policy"}`} />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/legal/insurance/${policyId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input
             label="Carrier"
             name="carrier"

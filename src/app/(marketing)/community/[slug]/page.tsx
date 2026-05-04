@@ -46,7 +46,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             headline: c.headline,
             description: c.blurb,
             datePublished: "2026-01-01",
-            url: `https://flyingbluewhale.app/community/${c.slug}`,
+            url: `https://lytehaus.tech/community/${c.slug}`,
           }),
         ]}
       />

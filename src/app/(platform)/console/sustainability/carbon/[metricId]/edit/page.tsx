@@ -22,6 +22,8 @@ export default async function Page({ params }: { params: Promise<{ metricId: str
       <ModuleHeader eyebrow="Sustainability · Carbon" title="Edit Measurement" />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/sustainability/carbon/${metricId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input
             label="Period Start"
             name="period_start"

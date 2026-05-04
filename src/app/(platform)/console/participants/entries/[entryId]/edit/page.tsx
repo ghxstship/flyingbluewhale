@@ -22,6 +22,8 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
       <ModuleHeader eyebrow="Participants · Entry" title="Edit Entry" />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/participants/entries/${entryId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input
             label="Participant Name"
             name="participant_name"

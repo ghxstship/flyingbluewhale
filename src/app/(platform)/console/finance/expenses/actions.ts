@@ -6,10 +6,14 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
+import { moneyDollarsString } from "@/lib/zod/money";
 
 const Schema = z.object({
   description: z.string().min(1).max(500),
-  amount: z.string().min(1),
+  // Sea Trial R3 FINDING-019: validator rejects non-numeric, negative,
+  // and zero-dollar expenses at the schema level so dollarsToCents
+  // never silently coerces to 0.
+  amount: moneyDollarsString({ allowZero: false }),
   category: z.string().max(80).optional().or(z.literal("")),
   spent_at: z.string().date(),
   project_id: z.string().uuid().optional().or(z.literal("")),

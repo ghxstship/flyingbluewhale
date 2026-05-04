@@ -26,6 +26,8 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
       <ModuleHeader eyebrow="Rental" title="Edit Rental" />
       <div className="page-content max-w-xl">
         <FormShell action={action} cancelHref={`/console/production/rentals/${p.rentalId}`} submitLabel="Save Changes">
+          {/* Sea Trial FINDING-022: optimistic concurrency token. */}
+          <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input
             label="Starts At"
             name="starts_at"

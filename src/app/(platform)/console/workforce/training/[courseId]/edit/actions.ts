@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -18,17 +19,16 @@ export async function updateTrainingCourse(id: string, _: State, fd: FormData): 
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("kb_articles")
-    .update({
-      title: parsed.data.title,
-      slug: parsed.data.slug,
-      body_markdown: parsed.data.body_markdown,
-    })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  // Sea Trial FINDING-022: optimistic concurrency.
+  const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  const result = await updateOrgScopedWithCheck("kb_articles", session.orgId, id, expectedUpdatedAt, {
+    title: parsed.data.title,
+    slug: parsed.data.slug,
+    body_markdown: parsed.data.body_markdown,
+  });
+  if (!result.ok) {
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Kb Article not found." };
+  }
   revalidatePath(`/console/workforce/training/${id}`);
   revalidatePath("/console/workforce/training");
   redirect(`/console/workforce/training/${id}`);

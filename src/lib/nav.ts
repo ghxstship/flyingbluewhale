@@ -16,7 +16,7 @@ export type IconName =
   | "Briefcase"
   | "CheckSquare"
   | "Command"
-  // Projects
+  // Plan
   | "FolderOpen"
   | "Layers"
   | "Building2"
@@ -25,23 +25,25 @@ export type IconName =
   | "AlertTriangle"
   | "ShieldCheck"
   | "ClipboardCheck"
-  // Operations
+  | "FileText"
+  // Run
   | "Calendar"
   | "Telescope"
   | "ScrollText"
   | "ListTodo"
   | "CalendarDays"
-  | "ClipboardList"
-  | "MessageCircleQuestion"
-  | "Image"
   | "Play"
-  | "Sparkles"
+  | "MessageCircleQuestion"
+  | "ClipboardList"
+  // Safety
   | "Siren"
   | "Flame"
   | "Stethoscope"
   | "HeartHandshake"
-  | "Radio"
-  | "Headset"
+  | "Search"
+  | "ShieldAlert"
+  | "ClipboardPlus"
+  | "BookOpenCheck"
   // Logistics
   | "Truck"
   | "BedDouble"
@@ -53,44 +55,11 @@ export type IconName =
   // People
   | "Users"
   | "HardHat"
-  | "UserCircle2"
-  | "FileSignature"
-  | "IdCard"
   | "BadgeCheck"
   | "UsersRound"
   | "Stamp"
   | "ClipboardSignature"
-  // Revenue
-  | "UserPlus"
-  | "Handshake"
-  | "FileText"
-  | "Files"
-  | "Award"
-  | "ConciergeBell"
-  | "Ticket"
-  // Finance
-  | "Receipt"
-  | "FileSpreadsheet"
-  | "CreditCard"
-  | "PiggyBank"
-  | "Hash"
-  | "Wallet"
-  | "Clock"
-  | "Car"
-  | "Banknote"
-  | "ChartBar"
-  // Procurement
-  | "Store"
-  | "Compass"
-  | "Trophy"
-  | "ShoppingCart"
-  | "Package"
-  | "PackageCheck"
-  | "RefreshCw"
-  | "Megaphone"
-  | "Inbox"
-  | "Boxes"
-  | "ListOrdered"
+  // Production
   | "Wrench"
   | "Speaker"
   | "ArrowLeftRight"
@@ -98,14 +67,30 @@ export type IconName =
   | "Tent"
   | "Network"
   | "Crosshair"
-  // Compliance & Safety
-  | "Search"
-  | "ClipboardPlus"
-  | "ShieldAlert"
-  | "BookOpenCheck"
-  | "LifeBuoy"
-  | "OctagonAlert"
-  // Knowledge
+  | "Radio"
+  // Procurement
+  | "Store"
+  | "Compass"
+  | "ShoppingCart"
+  | "Package"
+  | "PackageCheck"
+  | "Inbox"
+  | "ListOrdered"
+  // Commerce
+  | "UserPlus"
+  | "Handshake"
+  | "Files"
+  | "Award"
+  | "ConciergeBell"
+  | "Ticket"
+  | "Receipt"
+  | "FileSpreadsheet"
+  | "CreditCard"
+  | "PiggyBank"
+  | "Wallet"
+  | "Clock"
+  | "ChartBar"
+  // Reference
   | "BookOpen"
   | "Atlas"
   | "Bot"
@@ -122,58 +107,68 @@ export type NavItem = {
 export type NavGroup = { label: string; items: NavItem[] };
 
 /**
- * Primary console navigation. Compressed from 24 → 9 groups in 2026-04 per
- * `docs/ia/03-ia-compression-proposal.md`; XPMS demoted from top-level into
- * a Knowledge hub in 2026-05 (the spine pages are reference material, not
- * daily-driver workflows — overview page carries its own secondary nav for
- * the eight sub-pages, and the command palette still resolves
- * `xpms.atoms`, `xpms.codebook`, etc. for power-user direct jumps).
+ * Primary console navigation. Recompressed 2026-05 per the WAYFINDER
+ * remediation: 10 groups (Miller's 7±2 with one scroll-tolerant overflow
+ * in Commerce), every group ≤8 items except Commerce (13 — sales+finance
+ * are one mental cut for event production). Sub-resources that previously
+ * surfaced as sidebar siblings now live as tabs on their parent record:
  *
- * Conventional SaaS labels; admin moves to the avatar menu (see
- * `settingsNav`); AI is ambient via ⌘K, not a destination.
+ *   Crew / Credentials / Offer Letters     → Person detail tabs
+ *   Photos                                  → Project detail tab
+ *   Venue Training                          → Venue detail tab
+ *   Ceremonies / Cases / Sessions / etc.    → Program detail tabs
+ *
+ * Removed entirely (cmd-K only — no sidebar leaf):
+ *   Action Items, Portfolio, Command Palette page (folded into Dashboard hub)
+ *   TOC, Services Desk, Threats, BC/DR, Cost Codes, Mileage, Treasury,
+ *   Catalog (procurement), Scorecards, WO Broadcasts, PO Change Orders
+ *
+ * Production split out from Procurement (own group): "buying" ≠ "making".
+ * Safety lifted out of Operations (own group): one safety officer's day
+ * crossed the Operations/Compliance line every hour.
  */
 export const platformNav: NavGroup[] = [
   {
     label: "Dashboard",
-    items: [
-      { label: "Overview", href: "/console", icon: "LayoutDashboard" },
-      { label: "Portfolio", href: "/console/dashboards", icon: "Briefcase" },
-      { label: "Action Items", href: "/console/action-items", icon: "CheckSquare" },
-      { label: "Command Palette", href: "/console/command", icon: "Command" },
-    ],
+    items: [{ label: "Overview", href: "/console", icon: "LayoutDashboard" }],
   },
   {
-    label: "Projects",
+    label: "Plan",
     items: [
-      { label: "All Projects", href: "/console/projects", icon: "FolderOpen" },
+      { label: "Projects", href: "/console/projects", icon: "FolderOpen" },
       { label: "Programs", href: "/console/programs", icon: "Layers" },
       { label: "Venues", href: "/console/venues", icon: "Building2" },
       { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
-      { label: "Venue Training", href: "/console/venues/training", icon: "GraduationCap" },
       { label: "Risk Register", href: "/console/programs/risk", icon: "AlertTriangle" },
       { label: "Readiness", href: "/console/programs/readiness", icon: "ShieldCheck" },
       { label: "Reviews", href: "/console/programs/reviews", icon: "ClipboardCheck" },
+      { label: "Proposals", href: "/console/proposals", icon: "FileText" },
     ],
   },
   {
-    label: "Operations",
+    label: "Run",
     items: [
       { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
-      { label: "Look-ahead (21d)", href: "/console/operations/look-ahead", icon: "Telescope" },
+      { label: "Look-ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
       { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
       { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
       { label: "Events", href: "/console/events", icon: "CalendarDays" },
-      { label: "Punch List", href: "/console/punch", icon: "ClipboardList" },
-      { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
-      { label: "Photos", href: "/console/photos", icon: "Image" },
       { label: "Run of Show", href: "/console/production/ros", icon: "Play" },
-      { label: "Ceremonies", href: "/console/programs/ceremonies", icon: "Sparkles" },
+      { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
+      { label: "Punch List", href: "/console/punch", icon: "ClipboardList" },
+    ],
+  },
+  {
+    label: "Safety",
+    items: [
       { label: "Incidents", href: "/console/safety/incidents", icon: "Siren" },
       { label: "Crisis", href: "/console/safety/crisis", icon: "Flame" },
       { label: "Medical", href: "/console/safety/medical", icon: "Stethoscope" },
       { label: "Safeguarding", href: "/console/safety/safeguarding", icon: "HeartHandshake" },
-      { label: "TOC", href: "/console/ops/toc", icon: "Radio" },
-      { label: "Services Desk", href: "/console/services/requests", icon: "Headset" },
+      { label: "Inspections", href: "/console/inspections", icon: "Search" },
+      { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
+      { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
+      { label: "Playbooks", href: "/console/safety/playbooks", icon: "BookOpenCheck" },
     ],
   },
   {
@@ -193,98 +188,74 @@ export const platformNav: NavGroup[] = [
     items: [
       { label: "Directory", href: "/console/people", icon: "Users" },
       { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
-      { label: "Crew", href: "/console/people/crew", icon: "UserCircle2" },
-      { label: "Offer Letters", href: "/console/people/offer-letters", icon: "FileSignature" },
-      { label: "Credentials", href: "/console/people/credentials", icon: "IdCard" },
       { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
       { label: "Delegations", href: "/console/participants/delegations", icon: "UsersRound" },
       { label: "Visa", href: "/console/participants/visa", icon: "Stamp" },
       { label: "Rosters", href: "/console/workforce/rosters", icon: "ClipboardSignature" },
-      // Training shares the GraduationCap icon with Venue Training above —
-      // semantically the same affordance (a learning track), so the
-      // duplicate is intentional. Marked here so future audits know.
+      // Training shares the GraduationCap icon — semantically the same
+      // affordance (a learning track), so the duplicate is intentional.
       { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
     ],
   },
   {
-    label: "Revenue",
+    label: "Production",
     items: [
-      { label: "Leads", href: "/console/leads", icon: "UserPlus" },
-      { label: "Clients", href: "/console/clients", icon: "Handshake" },
-      { label: "Proposals", href: "/console/proposals", icon: "FileText" },
-      { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
-      { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
-      { label: "Hospitality", href: "/console/commercial/hospitality", icon: "ConciergeBell" },
-      { label: "Tickets", href: "/console/commercial/tickets", icon: "Ticket" },
-    ],
-  },
-  {
-    label: "Finance",
-    items: [
-      { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
-      { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
-      { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
-      { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
-      { label: "Cost Codes", href: "/console/finance/cost-codes", icon: "Hash" },
-      { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
-      { label: "Time", href: "/console/finance/time", icon: "Clock" },
-      { label: "Mileage", href: "/console/finance/mileage", icon: "Car" },
-      { label: "Treasury", href: "/console/finance/treasury", icon: "Banknote" },
-      { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+      { label: "Equipment", href: "/console/production/equipment", icon: "Wrench" },
+      { label: "AV Inventory", href: "/console/production/av", icon: "Speaker" },
+      { label: "Rentals", href: "/console/production/rentals", icon: "ArrowLeftRight" },
+      { label: "Fabrication", href: "/console/production/fabrication", icon: "Hammer" },
+      { label: "Compounds", href: "/console/production/compounds", icon: "Tent" },
+      { label: "Yard", href: "/console/production/warehouse", icon: "Network" },
+      { label: "Production Logistics", href: "/console/production/logistics", icon: "Crosshair" },
+      // Live Dispatch shares the Radio icon — intentional, both are
+      // real-time radio-room surfaces.
+      { label: "Live Dispatch", href: "/console/production/dispatch/live", icon: "Radio" },
     ],
   },
   {
     label: "Procurement",
     items: [
       { label: "Vendors", href: "/console/procurement/vendors", icon: "Store" },
-      // Prequalification shares BookOpenCheck with Playbooks below —
+      // Prequalification shares BookOpenCheck with Playbooks above —
       // both surface "vetted reference material to act against". OK.
       { label: "Prequalification", href: "/console/procurement/prequalification", icon: "BookOpenCheck" },
       { label: "Sourcing", href: "/console/procurement/sourcing", icon: "Compass" },
-      { label: "Scorecards", href: "/console/procurement/scorecards", icon: "Trophy" },
       { label: "Requisitions", href: "/console/procurement/requisitions", icon: "ShoppingCart" },
       { label: "Purchase Orders", href: "/console/procurement/purchase-orders", icon: "Package" },
-      { label: "PO Change Orders", href: "/console/procurement/po-change-orders", icon: "RefreshCw" },
       { label: "RFQs", href: "/console/procurement/rfqs", icon: "PackageCheck" },
-      { label: "WO Broadcasts", href: "/console/procurement/wo-broadcasts", icon: "Megaphone" },
       { label: "Submittals", href: "/console/submittals", icon: "Inbox" },
-      { label: "Catalog", href: "/console/procurement/catalog", icon: "Boxes" },
       { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
-      { label: "Equipment", href: "/console/production/equipment", icon: "Wrench" },
-      { label: "AV Inventory", href: "/console/production/av", icon: "Speaker" },
-      { label: "Rentals", href: "/console/production/rentals", icon: "ArrowLeftRight" },
-      { label: "Fabrication", href: "/console/production/fabrication", icon: "Hammer" },
-      { label: "Compounds", href: "/console/production/compounds", icon: "Tent" },
-      { label: "Warehouse", href: "/console/production/warehouse", icon: "Network" },
-      { label: "Production Logistics", href: "/console/production/logistics", icon: "Crosshair" },
-      // Live Dispatch shares the Radio icon with TOC — both are real-time
-      // ops radio surfaces. Intentional.
-      { label: "Live Dispatch", href: "/console/production/dispatch/live", icon: "Radio" },
     ],
   },
   {
-    label: "Compliance & Safety",
+    label: "Commerce",
     items: [
-      { label: "Inspections", href: "/console/inspections", icon: "Search" },
-      { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
-      { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
-      { label: "Playbooks", href: "/console/safety/playbooks", icon: "BookOpenCheck" },
-      { label: "BC/DR", href: "/console/safety/bcdr", icon: "LifeBuoy" },
-      { label: "Threats", href: "/console/safety/threats", icon: "OctagonAlert" },
+      { label: "Leads", href: "/console/leads", icon: "UserPlus" },
+      { label: "Clients", href: "/console/clients", icon: "Handshake" },
+      { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
+      { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
+      { label: "Hospitality", href: "/console/commercial/hospitality", icon: "ConciergeBell" },
+      { label: "Tickets", href: "/console/commercial/tickets", icon: "Ticket" },
+      { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
+      { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
+      { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
+      { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
+      { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
+      { label: "Time", href: "/console/finance/time", icon: "Clock" },
+      { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
     ],
   },
   {
-    label: "Knowledge",
+    label: "Reference",
     items: [
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
       { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
-      // XPMS spine — addressable layer beneath every other module. The
-      // overview page exposes its own secondary nav for Atoms / Codebook /
-      // Classes / Tier Composition / Phases / Variance Ledger / Provenance
-      // so this single entry keeps the primary sidebar tidy.
-      { label: "XPMS Spine", href: "/console/xpms", icon: "Spline" },
+      // Renamed from "XPMS Spine" — the codebase taxonomy doesn't surface
+      // to users (CLAUDE.md mandate). Internal cmd-K still resolves
+      // `xpms.atoms`, `xpms.codebook`, etc. for power-user direct jumps.
+      { label: "Catalog", href: "/console/xpms", icon: "Spline" },
     ],
   },
 ];
@@ -481,6 +452,11 @@ export const mobileTabs: NavItem[] = [
   { label: "Me", href: "/m/settings" },
 ];
 
+/**
+ * The 19 secondary mobile surfaces. Reachable from the Tools tab on /m
+ * and from the mobile cmd-K palette. Phase D of the WAYFINDER remediation
+ * unblocks discovery — these were dead routes before.
+ */
 export const mobileSurfaces: NavItem[] = [
   { label: "Gate Scan", href: "/m/gate" },
   { label: "Wallet", href: "/m/wallet" },

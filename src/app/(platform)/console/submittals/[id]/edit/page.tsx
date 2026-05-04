@@ -16,9 +16,10 @@ const STATUSES = [
   "submitted",
   "in_review",
   "approved",
-  "approved_as_noted",
+  "approved_with_comments",
   "revise_resubmit",
   "rejected",
+  "void",
   "closed",
 ] as const;
 

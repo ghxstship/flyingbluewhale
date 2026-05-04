@@ -16,7 +16,7 @@ const Schema = z.object({
   priority: z.enum(["low", "normal", "high", "urgent"]),
   status: z.enum(["open", "answered", "closed"]),
   due_at: z.string().optional(),
-  answer: z.string().max(8000).optional(),
+  official_answer: z.string().max(8000).optional(),
 });
 
 export type State = { error?: string; ok?: true } | null;
@@ -38,7 +38,7 @@ export async function updateRfi(_: State, fd: FormData): Promise<State> {
       priority: patch.priority,
       status: patch.status,
       due_at: patch.due_at || null,
-      answer: patch.answer || null,
+      official_answer: patch.official_answer || null,
       answered_at: patch.status === "answered" || patch.status === "closed" ? new Date().toISOString() : null,
     } as never)
     .eq("id", id)

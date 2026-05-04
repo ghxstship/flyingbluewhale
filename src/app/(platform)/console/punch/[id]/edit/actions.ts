@@ -41,7 +41,8 @@ export async function updatePunchItem(_: State, fd: FormData): Promise<State> {
       due_at: patch.due_at || null,
       site_plan_id: patch.site_plan_id || null,
       show_ready_gate: patch.show_ready_gate === "1",
-      completed_at: patch.status === "complete" ? new Date().toISOString() : null,
+      closed_at: patch.status === "complete" ? new Date().toISOString() : null,
+      closed_by: patch.status === "complete" ? session.userId : null,
     } as never)
     .eq("id", id)
     .eq("org_id", session.orgId);

@@ -22,7 +22,7 @@ type Rfi = {
   priority: "low" | "normal" | "high" | "urgent";
   status: "open" | "answered" | "closed";
   due_at: string | null;
-  answer: string | null;
+  official_answer: string | null;
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -34,7 +34,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const [{ data }, { data: projects }, { data: users }] = await Promise.all([
     supabase
       .from("rfis")
-      .select("id, code, subject, question, project_id, category, ball_in_court_id, priority, status, due_at, answer")
+      .select(
+        "id, code, subject, question, project_id, category, ball_in_court_id, priority, status, due_at, official_answer",
+      )
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle(),
@@ -144,9 +146,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>Official answer</span>
             <textarea
-              name="answer"
+              name="official_answer"
               rows={5}
-              defaultValue={rfi.answer ?? ""}
+              defaultValue={rfi.official_answer ?? ""}
               maxLength={8000}
               placeholder="Set status to Answered or Closed to record the answered_at timestamp."
               className={INPUT}

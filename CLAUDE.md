@@ -1,6 +1,15 @@
 # CLAUDE.md
 
-Project-specific notes for Claude Code agents working on flyingbluewhale.
+Project-specific notes for Claude Code agents working on `flyingbluewhale` (the engineering repo for **LYTEHAUS Technologies** — the brand name visitors see in the marketing site, console chrome, and OG cards).
+
+## Brand
+
+- **Brand name (legal/text)**: `LYTEHAUS Technologies`
+- **Brand mark (visible)**: `L Y T E H A U S` — literal spaces in JSX, matches the spaced `G H X S T S H I P` parent-company treatment. Use `aria-label="LYTEHAUS Technologies — home"` so screen readers don't read it letter-by-letter.
+- **Domain (marketing)**: `lytehaus.tech`
+- **Domain (engineering / app)**: `flyingbluewhale.app` (this repo's deploy target — separate from the brand domain)
+- **Sub-products**: ATLVS (red, the console), GVTEWAY (blue, the portal), COMPVSS (yellow, the field PWA) — sub-brand names + colors stay; do not rename or recolor these.
+- **Voice canon**: see `feedback_marketing_voice.md` in memory — definitive, luxury self-confidence with hacker irreverence. Never compare to competitors.
 
 ## Overview
 
@@ -63,6 +72,7 @@ Per-role Know-Before-You-Go — same Boarding Pass pattern, shared schema, role-
 ## Environment
 
 `.env.local` keys:
+
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (required)
 - `SUPABASE_SERVICE_ROLE_KEY` (for webhooks + admin flows)
 - `ANTHROPIC_API_KEY` (for AI assistant)

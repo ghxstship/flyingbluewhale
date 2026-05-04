@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const SITE = {
-  name: "L0ST 1SLAND Technologies",
-  shortName: "L0ST 1SLAND",
-  domain: "lostisland.tech",
-  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://lostisland.tech",
-  tagline: "The Itinerary for Cultural Tastemakers.",
+  name: "LYTEHAUS Technologies",
+  shortName: "LYTEHAUS",
+  domain: "lytehaus.tech",
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech",
+  tagline: "Production Runs On It.",
   description:
-    "ATLVS · GVTEWAY · COMPVSS — one manifest, three rooms. The bridge, the ports of call, the open deck. From horizon to homecoming — written for cultural tastemakers charting the next crossing. Postgres-backed, RLS-secured, private by architecture.",
-  twitter: "@lostisland.tech",
+    "The platform for production. ATLVS · GVTEWAY · COMPVSS — three apps, one schema, every module. Pitch through wrap. RLS at the database. Built by operators.",
+  twitter: "@lytehaus",
   /** Parent company chain — surfaces in Organization JSON-LD + legal footer. */
   parent: {
     name: "G H X S T S H I P Industries",
@@ -32,9 +32,9 @@ export const SITE = {
     "creative operations platform",
   ],
   apps: {
-    atlvs: { name: "ATLVS", tagline: "The bridge · charts the voyage from the desk", color: "#DC2626" },
-    gvteway: { name: "GVTEWAY", tagline: "The ports of call · every guest, their own way aboard", color: "#2563EB" },
-    compvss: { name: "COMPVSS", tagline: "The open deck · the night, on the water", color: "#D97706" },
+    atlvs: { name: "ATLVS", tagline: "The console · where the production lives", color: "#DC2626" },
+    gvteway: { name: "GVTEWAY", tagline: "The portal · twelve personas, each their lane", color: "#2563EB" },
+    compvss: { name: "COMPVSS", tagline: "The field · offline, sub-100ms", color: "#D97706" },
   },
 } as const;
 
@@ -117,7 +117,7 @@ export function organizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: SITE.name,
-    legalName: "L0ST 1SLAND Technologies, Inc.",
+    legalName: "LYTEHAUS Technologies, Inc.",
     url: SITE.baseUrl,
     logo: `${SITE.baseUrl}/icon-512.png`,
     sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],

@@ -4,9 +4,8 @@ import { env } from "@/lib/env";
 export const dynamic = "force-static";
 export const revalidate = 3600; // 1h — changelog rarely changes mid-day
 
-const SITE_NAME = "L0ST 1SLAND Technologies — Changelog";
-const FEED_DESC =
-  "Release notes for L0ST 1SLAND Technologies — feature launches, reliability, security, and performance.";
+const SITE_NAME = "LYTEHAUS Technologies — Changelog";
+const FEED_DESC = "Release notes for LYTEHAUS Technologies — feature launches, reliability, security, and performance.";
 
 function escapeXml(s: string): string {
   return s

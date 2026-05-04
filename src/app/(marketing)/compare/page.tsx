@@ -12,7 +12,7 @@ export const metadata: Metadata = buildMetadata({
   title: "From the General-Purpose Tools",
   description: "Notes for teams arriving from a general-purpose tool. We don't run scorecards. We define what we are.",
   path: "/compare",
-  keywords: ["L0ST 1SLAND Technologies comparison"],
+  keywords: ["LYTEHAUS Technologies comparison"],
   ogImageEyebrow: "Category Notes",
   ogImageTitle: "We Don't Compare. We Define.",
 });

@@ -65,8 +65,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
         <p className="text-xs text-[var(--text-muted)]">
           Concierge:{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:vip@lostisland.tech">
-            vip@lostisland.tech
+          <a className="text-[var(--org-primary)]" href="mailto:vip@lytehaus.tech">
+            vip@lytehaus.tech
           </a>{" "}
           — 24/7 during event window.
         </p>

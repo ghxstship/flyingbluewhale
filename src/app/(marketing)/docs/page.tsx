@@ -8,10 +8,10 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Docs — Architecture, API, Guides CMS, Auth",
   description:
-    "Technical reference for the L0ST 1SLAND Technologies platform — architecture, integrations, the Guides CMS, and the auth model. The deep details for teams who want them.",
+    "Technical reference for the LYTEHAUS Technologies platform — architecture, integrations, the Guides CMS, and the auth model. The deep details for teams who want them.",
   path: "/docs",
   keywords: [
-    "L0ST 1SLAND Technologies docs",
+    "LYTEHAUS Technologies docs",
     "ATLVS docs",
     "GVTEWAY docs",
     "COMPVSS docs",

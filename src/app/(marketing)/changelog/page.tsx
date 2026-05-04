@@ -7,12 +7,12 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
-  title: "Changelog — what shipped on L0ST 1SLAND Technologies",
+  title: "Changelog — what shipped on LYTEHAUS Technologies",
   description:
-    "Release notes for L0ST 1SLAND Technologies. Every shipping change, with context. Feature launches, reliability, security, and performance.",
+    "Release notes for LYTEHAUS Technologies. Every shipping change, with context. Feature launches, reliability, security, and performance.",
   path: "/changelog",
   keywords: [
-    "L0ST 1SLAND Technologies changelog",
+    "LYTEHAUS Technologies changelog",
     "ATLVS changelog",
     "GVTEWAY changelog",
     "COMPVSS changelog",

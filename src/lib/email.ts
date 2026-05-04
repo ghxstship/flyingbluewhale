@@ -37,7 +37,7 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      from: env.RESEND_FROM ?? "L0ST 1SLAND Technologies <no-reply@flyingbluewhale.app>",
+      from: env.RESEND_FROM ?? "LYTEHAUS Technologies <no-reply@flyingbluewhale.app>",
       to: Array.isArray(payload.to) ? payload.to : [payload.to],
       subject: payload.subject,
       html: payload.html,
@@ -73,7 +73,7 @@ export async function sendProposalShareEmail({
 }) {
   return sendEmail({
     to,
-    subject: `${senderName ?? "L0ST 1SLAND Technologies"} sent you a proposal: ${proposalTitle}`,
+    subject: `${senderName ?? "LYTEHAUS Technologies"} sent you a proposal: ${proposalTitle}`,
     html: `
       <div style="font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
         <p style="color:#666;font-size:12px;letter-spacing:.15em;text-transform:uppercase;font-family:'Share Tech Mono','Courier New',monospace">Proposal</p>

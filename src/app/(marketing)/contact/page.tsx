@@ -14,7 +14,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Direct line. Demos, partnerships, concierge support, Festival access. Routed to producers who&apos;ve run the room.",
   path: "/contact",
-  keywords: ["L0ST 1SLAND Technologies contact", "talk to sales", "production software demo", "book demo"],
+  keywords: ["LYTEHAUS Technologies contact", "talk to sales", "production software demo", "book demo"],
   ogImageEyebrow: "Contact",
   ogImageTitle: "Talk to the Studio.",
 });

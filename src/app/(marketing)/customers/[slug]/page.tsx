@@ -51,13 +51,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!cs) {
     return buildMetadata({
       title: "Customer story",
-      description: "L0ST 1SLAND customer story",
+      description: "LYTEHAUS customer story",
       path: `/customers/${slug}`,
     });
   }
   return buildMetadata({
     title: `${cs.customer_name} — Customer story`,
-    description: cs.challenge?.slice(0, 160) ?? `How ${cs.customer_name} runs production on L0ST 1SLAND.`,
+    description: cs.challenge?.slice(0, 160) ?? `How ${cs.customer_name} runs production on LYTEHAUS.`,
     path: `/customers/${cs.slug}`,
   });
 }

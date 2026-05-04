@@ -58,7 +58,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          L0ST 1SLAND Technologies · Blog
+          LYTEHAUS Technologies · Blog
         </div>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{post.title}</h1>
         <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--text-muted)]">
@@ -137,7 +137,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </div>
       </article>
 
-      <CTASection title="Run Your Next Show on L0ST 1SLAND Technologies" subtitle="Start free. No credit card." />
+      <CTASection title="Run Your Next Show on LYTEHAUS Technologies" subtitle="Start free. No credit card." />
     </div>
   );
 }

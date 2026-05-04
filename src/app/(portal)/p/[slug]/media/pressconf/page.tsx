@@ -112,8 +112,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         <p className="text-xs text-[var(--text-muted)]">
           To RSVP, email{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:press@lostisland.tech">
-            press@lostisland.tech
+          <a className="text-[var(--org-primary)]" href="mailto:press@lytehaus.tech">
+            press@lytehaus.tech
           </a>{" "}
           with your accreditation number and the conference name.
         </p>

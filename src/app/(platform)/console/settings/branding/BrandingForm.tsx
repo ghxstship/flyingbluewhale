@@ -44,7 +44,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
             maxLength={48}
-            placeholder="L0ST 1SLAND Technologies"
+            placeholder="LYTEHAUS Technologies"
           />
           <Input
             label="Logo URL (HTTPS)"
@@ -152,7 +152,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             Ghost
           </button>
           <span className="text-xs" style={{ color: accent }}>
-            Sample brand text · {productName || "L0ST 1SLAND Technologies"}
+            Sample brand text · {productName || "LYTEHAUS Technologies"}
           </span>
         </div>
       </section>

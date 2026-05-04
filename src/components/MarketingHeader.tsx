@@ -96,11 +96,11 @@ export function MarketingHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link
           href="/"
-          className="text-base font-semibold tracking-[0.14em] text-[var(--foreground)] uppercase"
+          className="text-base font-semibold tracking-[0.18em] text-[var(--foreground)] uppercase"
           onClick={() => setMobileOpen(false)}
-          aria-label="L0ST 1SLAND Technologies — home"
+          aria-label="LYTEHAUS Technologies — home"
         >
-          L0ST 1SLAND
+          L Y T E H A U S
         </Link>
 
         {/* Desktop primary nav — 3 dropdowns + 2 direct links = 5 visible items,

@@ -4583,7 +4583,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 #### Marketing · [competitor] — 1 pages
 
-### Try L0ST 1SLAND Technologies `/compare/[competitor]`
+### Try LYTEHAUS Technologies `/compare/[competitor]`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/compare/[competitor]/page.tsx`](<src/app/(marketing)/compare/[competitor]/page.tsx>)
@@ -4619,7 +4619,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 #### Marketing · [slug] — 4 pages
 
-### Run your next show on L0ST 1SLAND Technologies `/blog/[slug]`
+### Run your next show on LYTEHAUS Technologies `/blog/[slug]`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/blog/[slug]/page.tsx`](<src/app/(marketing)/blog/[slug]/page.tsx>)
@@ -4629,7 +4629,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
   - _Section:_ **PageChrome** → Breadcrumbs, ModuleHeader
   - _Section:_ **PageContent** → (page-specific — inspect source)
 
-### Ship your next show on L0ST 1SLAND Technologies `/community/[slug]`
+### Ship your next show on LYTEHAUS Technologies `/community/[slug]`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/community/[slug]/page.tsx`](<src/app/(marketing)/community/[slug]/page.tsx>)
@@ -4649,7 +4649,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
   - _Section:_ **PageChrome** → Breadcrumbs, ModuleHeader
   - _Section:_ **PageContent** → ProseSurface
 
-### Run your ops on L0ST 1SLAND Technologies `/guides/[slug]`
+### Run your ops on LYTEHAUS Technologies `/guides/[slug]`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/guides/[slug]/page.tsx`](<src/app/(marketing)/guides/[slug]/page.tsx>)
@@ -4721,7 +4721,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 #### Marketing · compare — 1 pages
 
-### Try L0ST 1SLAND Technologies `/compare`
+### Try LYTEHAUS Technologies `/compare`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/compare/page.tsx`](<src/app/(marketing)/compare/page.tsx>)

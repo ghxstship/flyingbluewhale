@@ -97,8 +97,8 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   title: {
-    default: "L0ST 1SLAND Technologies — ATLVS, GVTEWAY, COMPVSS",
-    template: "%s · L0ST 1SLAND Technologies",
+    default: "LYTEHAUS Technologies — ATLVS, GVTEWAY, COMPVSS",
+    template: "%s · LYTEHAUS Technologies",
   },
   description:
     "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. The bridge, the ports of call, the open deck. From horizon to homecoming.",
@@ -112,22 +112,22 @@ export const metadata: Metadata = {
     "ATLVS",
     "GVTEWAY",
     "COMPVSS",
-    "L0ST 1SLAND Technologies",
+    "LYTEHAUS Technologies",
   ],
   manifest: "/manifest.json",
   openGraph: {
-    title: "L0ST 1SLAND Technologies",
+    title: "LYTEHAUS Technologies",
     description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
-    siteName: "L0ST 1SLAND Technologies",
+    siteName: "LYTEHAUS Technologies",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "L0ST 1SLAND Technologies",
+    title: "LYTEHAUS Technologies",
     description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
   },
   robots: { index: true, follow: true },
-  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "L0ST 1SLAND" },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "LYTEHAUS" },
 };
 
 export const viewport: Viewport = {
@@ -175,11 +175,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             and inherits across every route. */}
         <StructuredData
           data={organization({
-            name: "L0ST 1SLAND Technologies",
-            url: process.env.NEXT_PUBLIC_APP_URL ?? "https://lostisland.tech",
+            name: "LYTEHAUS Technologies",
+            url: process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech",
             description:
               "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
-            logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://lostisland.tech"}/og/logo.png`,
+            logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech"}/og/logo.png`,
           })}
         />
       </head>

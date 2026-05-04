@@ -10,13 +10,13 @@ import { COMMUNITY_LIST } from "@/lib/community";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Community — the production teams building on L0ST 1SLAND",
+  title: "Community — the production teams building on LYTEHAUS",
   description:
     "The festivals, tours, agencies, and fabrication shops running their production on ATLVS, GVTEWAY, and COMPVSS. Member stories, numbers, and what they actually ship.",
   path: "/community",
-  keywords: ["production community", "event production teams", "L0ST 1SLAND Technologies community"],
+  keywords: ["production community", "event production teams", "LYTEHAUS Technologies community"],
   ogImageEyebrow: "Community",
-  ogImageTitle: "Production teams running on L0ST 1SLAND.",
+  ogImageTitle: "Production teams running on LYTEHAUS.",
 });
 
 export default function CommunityPage() {
@@ -35,7 +35,7 @@ export default function CommunityPage() {
           Production teams, building in public.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The festivals, tours, agencies, and fabrication shops running their shows on L0ST 1SLAND Technologies. Real
+          The festivals, tours, agencies, and fabrication shops running their shows on LYTEHAUS Technologies. Real
           workflows. Real numbers. Real receipts.
         </p>
       </section>
@@ -95,8 +95,8 @@ export default function CommunityPage() {
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">Your Team, Here.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Shipping real shows on L0ST 1SLAND Technologies? We&apos;re always looking to document new member stories.
-              A short interview, anonymized numbers, your words.
+              Shipping real shows on LYTEHAUS Technologies? We&apos;re always looking to document new member stories. A
+              short interview, anonymized numbers, your words.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row md:justify-end">

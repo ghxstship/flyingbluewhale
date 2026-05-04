@@ -22,7 +22,7 @@ export const POSTS: Record<string, BlogPost> = {
     slug: "launch",
     title: "Launching the suite: three shells, one database, zero spreadsheets",
     date: "2026-04-16",
-    author: "L0ST 1SLAND Technologies team",
+    author: "LYTEHAUS Technologies team",
     blurb:
       "Why we consolidated a decade of production duct tape into a single platform — and the architectural decisions that made it possible.",
     keywords: [
@@ -42,7 +42,7 @@ export const POSTS: Record<string, BlogPost> = {
       },
       {
         kind: "p",
-        text: "The L0ST 1SLAND Technologies suite is the consolidation of a decade of that duct tape. Today we're launching the three-shell GA: ATLVS for internal ops, GVTEWAY for external stakeholders, COMPVSS for the field. One database. One identity. One set of RLS rules.",
+        text: "The LYTEHAUS Technologies suite is the consolidation of a decade of that duct tape. Today we're launching the three-shell GA: ATLVS for internal ops, GVTEWAY for external stakeholders, COMPVSS for the field. One database. One identity. One set of RLS rules.",
       },
 
       { kind: "h2", text: "Why three shells, not three apps" },
@@ -104,7 +104,7 @@ export const POSTS: Record<string, BlogPost> = {
     slug: "boarding-pass",
     title: "KBYG, role-scoped: the Boarding Pass pattern, now native",
     date: "2026-04-10",
-    author: "L0ST 1SLAND Technologies team",
+    author: "LYTEHAUS Technologies team",
     blurb:
       "We integrated the Boarding Pass Know-Before-You-Go pattern from Black Coffee's tour into the platform. Here's how it works — and why a PDF can't do this.",
     keywords: [
@@ -185,7 +185,7 @@ export const POSTS: Record<string, BlogPost> = {
     slug: "ai-assistant",
     title: "Streaming Claude in the console: the AI assistant, grounded in your workspace",
     date: "2026-04-01",
-    author: "L0ST 1SLAND Technologies team",
+    author: "LYTEHAUS Technologies team",
     blurb:
       "We wired Claude Sonnet 4.6 and Opus 4.7 directly into ATLVS. Streaming responses, persistent history, RLS-scoped tool use.",
     keywords: [

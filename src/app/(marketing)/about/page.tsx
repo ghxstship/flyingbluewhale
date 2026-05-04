@@ -12,10 +12,10 @@ import { buildMetadata, organizationSchema } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "About — The Studio",
   description:
-    "L0ST 1SLAND Technologies builds the platform for production. ATLVS, GVTEWAY, COMPVSS — three apps, one schema. Shipped by operators who&apos;ve run the room.",
+    "LYTEHAUS Technologies builds the platform for production. ATLVS, GVTEWAY, COMPVSS — three apps, one schema. Shipped by operators who&apos;ve run the room.",
   path: "/about",
   keywords: [
-    "L0ST 1SLAND Technologies about",
+    "LYTEHAUS Technologies about",
     "ATLVS",
     "GVTEWAY",
     "COMPVSS",
@@ -99,8 +99,8 @@ export default function AboutPage() {
           Built by the People Who Run the Show.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          L0ST 1SLAND Technologies builds the platform for production. Every module came out of opening a spreadsheet
-          for the third time and saying &quot;why isn&apos;t this in the platform.&quot;
+          LYTEHAUS Technologies builds the platform for production. Every module came out of opening a spreadsheet for
+          the third time and saying &quot;why isn&apos;t this in the platform.&quot;
         </p>
         <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
           Three apps. One schema. Forty-seven modules. We ship to real productions the weekend before each release. The
@@ -144,7 +144,7 @@ export default function AboutPage() {
         <div className="surface p-10">
           <h2 className="text-3xl font-semibold tracking-tight">Who Builds It.</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-            L0ST 1SLAND is a production + technology studio. We&apos;ve staffed residencies, touring runs, private
+            LYTEHAUS is a production + technology studio. We&apos;ve staffed residencies, touring runs, private
             launches, gallery programs, brand activations. We shipped software for every one of them. The platform is a
             decade of in-the-field instinct, compressed into one console.
           </p>

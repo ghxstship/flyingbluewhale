@@ -1,4 +1,4 @@
-# Brand Voice — L0ST 1SLAND Technologies
+# Brand Voice — LYTEHAUS Technologies
 
 **The blend:** ClickUp × Virgin Voyages × SXSW — delivered as a **journey**, not a dashboard.
 

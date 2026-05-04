@@ -358,7 +358,7 @@ const MODULES: Record<string, ModuleConfig> = {
     blurb: "Data walled off per organization. Immutable audit log. Retention policies. Signed DPA on Enterprise.",
     heroTitle: "Built to pass a security review.",
     heroBody:
-      "The L0ST 1SLAND Technologies platform's security posture is not a checklist — it's enforced on the data. Every organization's data walled off at the deepest layer. Every change written to an immutable audit trail. Files shared through auto-expiring links, not public buckets.",
+      "The LYTEHAUS Technologies platform's security posture is not a checklist — it's enforced on the data. Every organization's data walled off at the deepest layer. Every change written to an immutable audit trail. Files shared through auto-expiring links, not public buckets.",
     highlights: [
       { title: "Data walled off per org", body: "No exceptions. Enforced at the database, not in the app." },
       {
@@ -565,7 +565,7 @@ export async function generateMetadata({ params }: { params: Promise<{ module: s
   if (!config) {
     return buildMetadata({
       title: "Feature",
-      description: "L0ST 1SLAND Technologies — the unified production management platform.",
+      description: "LYTEHAUS Technologies — the unified production management platform.",
       path: `/features/${module}`,
     });
   }
@@ -597,7 +597,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <JsonLd
         data={[
           softwareApplicationSchema({
-            name: `L0ST 1SLAND Technologies — ${config.name}`,
+            name: `LYTEHAUS Technologies — ${config.name}`,
             description: config.blurb,
             url: `https://flyingbluewhale.app/features/${config.slug}`,
           }),

@@ -19,7 +19,7 @@ export const metadata: Metadata = buildMetadata({
   keywords: [
     "production software pricing",
     "event management software cost",
-    "L0ST 1SLAND Technologies pricing",
+    "LYTEHAUS Technologies pricing",
     "ATLVS pricing",
     "GVTEWAY pricing",
     "COMPVSS pricing",

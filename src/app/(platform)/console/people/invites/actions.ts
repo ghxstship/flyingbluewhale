@@ -52,7 +52,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
   const acceptUrl = `${origin}/accept-invite/${invite.token}`;
   void sendEmail({
     to: parsed.data.email,
-    subject: `You're invited to join a L0ST 1SLAND Technologies workspace`,
+    subject: `You're invited to join a LYTEHAUS Technologies workspace`,
     html: `
       <div style="font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
         <p style="color:#666;font-size:12px;letter-spacing:.15em;text-transform:uppercase;font-family:'Share Tech Mono','Courier New',monospace">Invitation</p>

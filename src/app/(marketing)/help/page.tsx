@@ -15,13 +15,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Self-serve guides, status, and direct support channels. Concierge for customers — triaged by tier. Festival gets an SLA.",
   path: "/help",
-  keywords: [
-    "L0ST 1SLAND help",
-    "ATLVS support",
-    "GVTEWAY support",
-    "COMPVSS support",
-    "event production software help",
-  ],
+  keywords: ["LYTEHAUS help", "ATLVS support", "GVTEWAY support", "COMPVSS support", "event production software help"],
   ogImageEyebrow: "Help",
   ogImageTitle: "Crew Support.",
 });

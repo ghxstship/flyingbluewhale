@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMetadata({
     "We're a small studio shipping the operating system for live events. Open roles ship work that surfaces on real shows — measured in load-ins survived, not story points burned.",
   path: "/careers",
   keywords: [
-    "L0ST 1SLAND careers",
+    "LYTEHAUS careers",
     "event production platform jobs",
     "event tech startup careers",
     "remote engineering jobs",

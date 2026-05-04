@@ -10,7 +10,7 @@ export type Branding = {
   faviconUrl?: string;
   heroImageUrl?: string;
   ogImageUrl?: string;
-  productName?: string; // replaces the default "L0ST 1SLAND Technologies" label inside the tenant shell
+  productName?: string; // replaces the default "LYTEHAUS Technologies" label inside the tenant shell
 };
 
 const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;

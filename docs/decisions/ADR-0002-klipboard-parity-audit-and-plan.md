@@ -7,7 +7,7 @@
 
 ## Context
 
-L0ST 1SLAND Technologies is positioning the Atlas (ATLVS · GVTEWAY · COMPVSS)
+LYTEHAUS Technologies is positioning the Atlas (ATLVS · GVTEWAY · COMPVSS)
 as the production OS for the experiential industry — touring runs, residencies,
 private launches, gallery programs, festivals, governing-body events. Klipboard
 ERP is a mature point of comparison: cloud field-service management plus a full
@@ -454,8 +454,8 @@ after each sprint before committing the next.
 
 ## Out-of-band notes
 
-- Domain cutover (`secondstar.tech` → `lostisland.tech`) and Twitter handle
-  cutover (`@secondstartech` → `@lostisland.tech`) landed in commit
+- Domain cutover (`secondstar.tech` → `lytehaus.tech`) and Twitter handle
+  cutover (`@secondstartech` → `@lytehaus.tech`) landed in commit
   `<see commit pushing alongside this ADR>`.
 - This audit explicitly excludes the `proposal_portal` workstream currently
   living in untracked files (`src/lib/proposals/portal/*`,

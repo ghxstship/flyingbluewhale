@@ -152,6 +152,7 @@ export const platformNav: NavGroup[] = [
       { label: "Look-ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
       { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
       { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
+      { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
       { label: "Events", href: "/console/events", icon: "CalendarDays" },
       { label: "Run of Show", href: "/console/production/ros", icon: "Play" },
       { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },

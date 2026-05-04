@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("trademarks")
     .select("id, mark, jurisdiction, registration_no, registered_on, expires_on, status")
@@ -73,9 +75,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active" value={active.toLocaleString()} accent />
-          <MetricCard label="Expiring · 90d" value={expiringSoon.length.toLocaleString()} />
-          <MetricCard label="Expired" value={expired.toLocaleString()} />
+          <MetricCard label="Active" value={fmt.number(active)} accent />
+          <MetricCard label="Expiring · 90d" value={fmt.number(expiringSoon.length)} />
+          <MetricCard label="Expired" value={fmt.number(expired)} />
         </div>
 
         {rows.length === 0 ? (

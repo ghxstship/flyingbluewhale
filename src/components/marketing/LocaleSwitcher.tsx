@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Globe, Check, ChevronDown } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { SUPPORTED_LOCALES, isSupportedLocale, type Locale, DEFAULT_LOCALE } from "@/lib/i18n/config";
+import { setLocalePreferences } from "@/lib/i18n/actions";
 import { track } from "@/lib/marketing-telemetry";
 
 // Native-name labels — the universally-correct way to expose language
@@ -57,11 +58,18 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
   function pick(next: Locale) {
     if (next === active) return;
     setActive(next);
-    // 1-year cookie; `lax` keeps it safe from CSRF while still sending on
-    // top-level navigations so the server picks it up on the next paint.
-    document.cookie = `locale=${encodeURIComponent(next)}; Max-Age=${60 * 60 * 24 * 365}; Path=/; SameSite=Lax`;
+    // Detect the browser timezone and ship it alongside the locale change so
+    // first-time users get sensible date rendering without a separate dialog.
+    const detectedTz =
+      typeof Intl !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone || undefined : undefined;
     track("marketing.locale.switched", { from: active, to: next });
-    startTransition(() => router.refresh());
+    startTransition(async () => {
+      // Server action: writes cookie + persists to `users.preferred_locale`
+      // for authed callers, then revalidates the layout so `<html lang dir>`
+      // updates without a full reload.
+      await setLocalePreferences({ locale: next, timezone: detectedTz });
+      router.refresh();
+    });
   }
 
   return (

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,7 @@ export default async function Page({
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data: m } = await supabase
     .from("workforce_members")
     .select("id, full_name, role, email, phone")
@@ -104,15 +106,11 @@ export default async function Page({
           <section className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <div className="text-[10px] tracking-wide text-[var(--text-muted)] uppercase">Call</div>
-              <div className="mt-1 font-mono text-2xl font-semibold">
-                {callTime ? callTime.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "—"}
-              </div>
+              <div className="mt-1 font-mono text-2xl font-semibold">{callTime ? fmt.time(callTime) : "—"}</div>
             </div>
             <div>
               <div className="text-[10px] tracking-wide text-[var(--text-muted)] uppercase">Wrap</div>
-              <div className="mt-1 font-mono text-2xl font-semibold">
-                {wrapTime ? wrapTime.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "—"}
-              </div>
+              <div className="mt-1 font-mono text-2xl font-semibold">{wrapTime ? fmt.time(wrapTime) : "—"}</div>
             </div>
           </section>
 
@@ -126,9 +124,9 @@ export default async function Page({
                   <li key={s.id} className="surface p-4">
                     <div className="flex items-baseline justify-between">
                       <div className="font-mono text-base font-semibold">
-                        {new Date(s.starts_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                        {fmt.time(s.starts_at)}
                         {" – "}
-                        {new Date(s.ends_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                        {fmt.time(s.ends_at)}
                       </div>
                       {s.meal_credit && <Badge variant="success">Meal</Badge>}
                     </div>
@@ -152,7 +150,7 @@ export default async function Page({
           </section>
 
           <footer className="border-t border-[var(--border-color)] pt-3 text-[10px] text-[var(--text-muted)]">
-            Generated {new Date().toLocaleString()} · Check{" "}
+            Generated {fmt.dateTime(new Date())} · Check{" "}
             <Link href="/m/clock" className="text-[var(--org-primary)] underline">
               /m/clock
             </Link>{" "}

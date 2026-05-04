@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ChartShell } from "@/components/charts/ChartShell";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 export type PortfolioEntry = {
   id: string;
@@ -20,6 +21,7 @@ export type PortfolioEntry = {
  * projects rise to the top — the view an exec wants.
  */
 export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] }) {
+  const { locale, currency } = useLocale();
   if (entries.length === 0) return null;
 
   const max = Math.max(1, ...entries.map((e) => e.budgetCents));
@@ -72,7 +74,7 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
               <span className={`mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full ${tone(p.health).dot}`} aria-hidden />
             </div>
             <div className="mt-3 flex items-baseline justify-between text-[11px] text-[var(--text-secondary)]">
-              <span className="font-mono">{fmtBudget(p.budgetCents)}</span>
+              <span className="font-mono">{fmtBudget(p.budgetCents, locale, currency)}</span>
               <span className="text-[var(--text-muted)]">{scheduleLabel(p)}</span>
             </div>
           </Link>
@@ -116,11 +118,16 @@ function tone(h: Health): { bg: string; dot: string } {
   };
 }
 
-function fmtBudget(cents: number): string {
+function fmtBudget(cents: number, locale: string, currency: string): string {
   if (!cents) return "—";
-  return new Intl.NumberFormat("en-US", {
+  // Compact notation isn't a first-class option in the shared `formatMoney`
+  // helper (it bakes in 2 fraction digits for ledger fidelity); the grid
+  // uses the compact notation deliberately to keep cards dense, so we call
+  // `Intl.NumberFormat` directly but with the resolved request locale +
+  // currency rather than hardcoding `en-US` / `USD`.
+  return new Intl.NumberFormat(locale, {
     style: "currency",
-    currency: "USD",
+    currency,
     notation: "compact",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,

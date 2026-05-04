@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import type { ReactNode } from "react";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/i18n/format";
 
 /**
  * Shared layout for record detail pages. Every console detail page
@@ -27,7 +28,7 @@ export function DetailShell<T>({
   children?: ReactNode;
 }) {
   if (!row) notFound();
-  const resolvedSubtitle = typeof subtitle === "function" ? subtitle(row) ?? undefined : subtitle;
+  const resolvedSubtitle = typeof subtitle === "function" ? (subtitle(row) ?? undefined) : subtitle;
   return (
     <>
       <ModuleHeader
@@ -45,7 +46,7 @@ export function DetailShell<T>({
                 key={`${f.label}-${i}`}
                 className="px-5 py-3 md:border-b md:border-[var(--border-color)] md:[&:nth-last-child(-n+2)]:border-b-0"
               >
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+                <dt className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
                   {f.label}
                 </dt>
                 <dd className="mt-1 text-sm text-[var(--foreground)]">{f.value}</dd>
@@ -64,21 +65,21 @@ export function DetailShell<T>({
  * Minor helper since detail pages render money a lot. Locale-aware; the
  * caller can override currency via the existing `formatMoney` if needed.
  */
+/**
+ * Sync convenience wrappers — delegate to the canonical locale-aware
+ * formatters in `@/lib/i18n/format`. They default to the baseline locale
+ * (`en` / `USD` / `UTC`) since callers are inline JSX with no request
+ * context. For per-user locale fidelity, prefer `getRequestFormatters()`
+ * in Server Components or `useFormatters()` in Client Components.
+ */
 export function money(cents: number | null | undefined): string {
-  if (cents == null) return "—";
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(cents / 100);
+  return formatMoney(cents);
 }
 
 export function fmtDate(raw: string | null | undefined): string {
-  if (!raw) return "—";
-  const d = new Date(raw);
-  if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString();
+  return formatDate(raw, "medium");
 }
 
 export function fmtDateTime(raw: string | null | undefined): string {
-  if (!raw) return "—";
-  const d = new Date(raw);
-  if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleString();
+  return formatDateTime(raw);
 }

@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +53,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ data: venuesData }, { data: playbookData }] = await Promise.all([
     supabase
       .from("venues")
@@ -128,7 +130,7 @@ export default async function Page() {
                           <Badge variant="muted">{v.kind}</Badge>
                         </td>
                         <td>{v.cluster ?? "—"}</td>
-                        <td className="font-mono text-xs">{v.capacity?.toLocaleString() ?? "—"}</td>
+                        <td className="font-mono text-xs">{v.capacity != null ? fmt.number(v.capacity) : "—"}</td>
                         <td>
                           {med?.tier ? (
                             <Badge variant="info">{med.tier}</Badge>

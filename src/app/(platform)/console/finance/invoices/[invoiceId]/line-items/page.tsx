@@ -1,0 +1,93 @@
+import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { formatMoney } from "@/lib/i18n/format";
+
+export const dynamic = "force-dynamic";
+
+type Row = {
+  id: string;
+  description: string;
+  quantity: number;
+  unit_price_cents: number;
+  position: number;
+};
+
+const lineAmount = (r: { quantity: number; unit_price_cents: number }) =>
+  Number(r.quantity) * Number(r.unit_price_cents);
+
+export default async function Page({ params }: { params: Promise<{ invoiceId: string }> }) {
+  const { invoiceId } = await params;
+  if (!hasSupabase) return null;
+  await requireSession();
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("invoice_line_items")
+    .select("id,description,quantity,unit_price_cents,position")
+    .eq("invoice_id", invoiceId)
+    .order("position", { ascending: true });
+  const rows = (data ?? []) as Row[];
+
+  const total = rows.reduce((s, r) => s + lineAmount(r), 0);
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow="Invoice"
+        title="Line Items"
+        subtitle={
+          rows.length > 0
+            ? `${rows.length} line${rows.length === 1 ? "" : "s"} · ${formatMoney(total)} total`
+            : "Itemized breakdown of this invoice."
+        }
+      />
+      <div className="page-content">
+        <DataTable<Row>
+          rows={rows}
+          emptyLabel="No Line Items"
+          emptyDescription="This invoice has no line items. Edit the invoice to add itemized lines."
+          columns={[
+            {
+              key: "description",
+              header: "Description",
+              render: (r) => r.description,
+              accessor: (r) => r.description,
+            },
+            {
+              key: "quantity",
+              header: "Qty",
+              render: (r) => r.quantity,
+              accessor: (r) => r.quantity,
+              tabular: true,
+              sortable: true,
+              className: "text-right",
+              headerClassName: "text-right",
+            },
+            {
+              key: "unit_price_cents",
+              header: "Unit Price",
+              render: (r) => (r.unit_price_cents != null ? formatMoney(r.unit_price_cents) : "—"),
+              accessor: (r) => r.unit_price_cents ?? 0,
+              tabular: true,
+              sortable: true,
+              className: "text-right",
+              headerClassName: "text-right",
+            },
+            {
+              key: "amount",
+              header: "Amount",
+              render: (r) => formatMoney(lineAmount(r)),
+              accessor: (r) => lineAmount(r),
+              tabular: true,
+              sortable: true,
+              className: "text-right",
+              headerClassName: "text-right",
+            },
+          ]}
+        />
+      </div>
+    </>
+  );
+}

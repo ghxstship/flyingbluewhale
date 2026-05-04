@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { MaintenanceJob } from "@/lib/supabase/types";
 import { completeJob } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,7 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data: row } = await supabase
     .from("maintenance_jobs")
     .select(
@@ -58,12 +60,12 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
           <dl className="mt-4 grid grid-cols-2 gap-3 text-xs">
             <div>
               <dt className="tracking-wide text-[var(--text-muted)] uppercase">Due</dt>
-              <dd className="font-mono">{new Date(job.due_at).toLocaleString()}</dd>
+              <dd className="font-mono">{fmt.dateTime(job.due_at)}</dd>
             </div>
             {job.completed_at && (
               <div>
                 <dt className="tracking-wide text-[var(--text-muted)] uppercase">Completed</dt>
-                <dd className="font-mono">{new Date(job.completed_at).toLocaleString()}</dd>
+                <dd className="font-mono">{fmt.dateTime(job.completed_at)}</dd>
               </div>
             )}
             {job.schedule?.cadence_days && (

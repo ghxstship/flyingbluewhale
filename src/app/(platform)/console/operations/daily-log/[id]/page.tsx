@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { transitionDailyLog } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,21 +17,20 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
   approved: "success",
 };
 
-function fmtDate(d: string): string {
-  return new Date(d + "T00:00:00").toLocaleDateString(undefined, {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (d: string): string =>
+    fmt.dateParts(d + "T00:00:00", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
   const { data: log } = await supabase
     .from("daily_logs")
     .select("*, project:project_id(name)")

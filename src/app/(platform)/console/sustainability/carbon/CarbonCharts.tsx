@@ -16,6 +16,7 @@ import {
   YAxis,
 } from "recharts";
 import { ChartShell } from "@/components/charts/ChartShell";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 const SCOPE_COLORS: Record<string, string> = {
   "Scope 1": "#ef4444",
@@ -32,6 +33,7 @@ export function CarbonCharts({
   byScope: { scope: string; value: number }[];
   target: number;
 }) {
+  const fmt = useFormatters();
   const series = byMonth.map((m) => ({ ...m, target }));
   return (
     <div className="grid gap-4 xl:grid-cols-2">
@@ -123,6 +125,7 @@ function DarkTooltip({
   label?: string;
   suffix?: string;
 }) {
+  const fmt = useFormatters();
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px]">
@@ -131,7 +134,7 @@ function DarkTooltip({
         <div key={i} className="flex items-center gap-1.5">
           <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
           <span className="text-[var(--text-secondary)]">{p.name}:</span>
-          <span className="font-mono">{Number(p.value ?? 0).toLocaleString() + suffix}</span>
+          <span className="font-mono">{fmt.number(Number(p.value ?? 0)) + suffix}</span>
         </div>
       ))}
     </div>

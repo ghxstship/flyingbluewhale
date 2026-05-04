@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { ImportForm } from "./ImportForm";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 /**
  * Import Centre — Opportunity #7 UI surface.
@@ -25,6 +26,7 @@ export default async function ImportsPage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data: runs } = await supabase
     .from("import_runs")
     .select("id, kind, source, filename, rows_total, rows_imported, rows_failed, status, error, created_at")
@@ -75,7 +77,7 @@ export default async function ImportsPage() {
                           {r.status}
                         </Badge>
                       </td>
-                      <td className="font-mono text-xs">{new Date(r.created_at).toLocaleString()}</td>
+                      <td className="font-mono text-xs">{fmt.dateTime(r.created_at)}</td>
                     </tr>
                   ))
                 )}

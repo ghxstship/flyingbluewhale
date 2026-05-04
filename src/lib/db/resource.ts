@@ -48,6 +48,9 @@ export async function listOrgScoped<T extends TableName>(
   orgId: string,
   opts: ListOpts = {},
 ): Promise<PublicTables[T]["Row"][]> {
+  // Empty orgId — guest / unscoped session. Return empty rather than letting
+  // PostgREST submit `org_id=eq.` and crash with 22P02 invalid uuid syntax.
+  if (!orgId) return [];
   let q = (await anyFrom(table as string)).select("*").eq("org_id", orgId);
   if (SOFT_DELETABLE_TABLES.has(table as string) && !opts.includeArchived) {
     q = q.is("deleted_at", null);
@@ -71,6 +74,7 @@ export async function getOrgScoped<T extends TableName>(
   id: string,
   opts: { includeArchived?: boolean } = {},
 ): Promise<PublicTables[T]["Row"] | null> {
+  if (!orgId || !id) return null;
   let q = (await anyFrom(table as string)).select("*").eq("org_id", orgId).eq("id", id);
   if (SOFT_DELETABLE_TABLES.has(table as string) && !opts.includeArchived) {
     q = q.is("deleted_at", null);
@@ -85,6 +89,7 @@ export async function countOrgScoped<T extends TableName>(
   orgId: string,
   opts: { includeArchived?: boolean } = {},
 ): Promise<number> {
+  if (!orgId) return 0;
   let q = (await anyFrom(table as string)).select("*", { count: "exact", head: true }).eq("org_id", orgId);
   if (SOFT_DELETABLE_TABLES.has(table as string) && !opts.includeArchived) {
     q = q.is("deleted_at", null);
@@ -135,6 +140,9 @@ export async function listOrgScopedPage<T extends TableName>(
 ): Promise<Page<PublicTables[T]["Row"]>> {
   const pageSize = Math.min(Math.max(1, opts.pageSize ?? DEFAULT_PAGE_SIZE), MAX_PAGE_SIZE);
   const offset = decodeCursor(opts.cursor);
+  if (!orgId) {
+    return { rows: [], nextCursor: null, totalCount: 0, pageSize };
+  }
 
   // `count: "exact"` gives us the total population under current filters,
   // not just the page. `range` is inclusive on both ends.

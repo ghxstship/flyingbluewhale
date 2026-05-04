@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ count: delegationCount }, { data: entriesData }] = await Promise.all([
     supabase.from("delegations").select("*", { count: "exact", head: true }).eq("org_id", session.orgId),
     supabase
@@ -72,9 +74,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Delegations" value={(delegationCount ?? 0).toLocaleString()} accent />
-          <MetricCard label="Entries" value={entries.length.toLocaleString()} />
-          <MetricCard label="Approved" value={approved.toLocaleString()} />
+          <MetricCard label="Delegations" value={fmt.number(delegationCount ?? 0)} accent />
+          <MetricCard label="Entries" value={fmt.number(entries.length)} />
+          <MetricCard label="Approved" value={fmt.number(approved)} />
         </div>
 
         {disciplines.length === 0 ? (

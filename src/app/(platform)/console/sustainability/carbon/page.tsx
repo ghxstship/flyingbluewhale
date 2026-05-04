@@ -8,6 +8,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { CarbonCharts } from "./CarbonCharts";
 import type { SustainabilityMetric } from "@/lib/supabase/types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const rows = (await listOrgScoped("sustainability_metrics", session.orgId, {
     orderBy: "period_start",
     ascending: true,
@@ -52,7 +54,7 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard
             label="Total Kg CO₂e"
-            value={Number(totalKg).toLocaleString()}
+            value={fmt.number(Number(totalKg))}
             sparkline={byMonth.map((m) => m.actual)}
             accent
           />
@@ -94,7 +96,7 @@ export default async function Page() {
             {
               key: "kg_co2e",
               header: "kg CO₂e",
-              render: (r) => <span className="font-mono text-xs">{r.kg_co2e.toLocaleString()}</span>,
+              render: (r) => <span className="font-mono text-xs">{fmt.number(r.kg_co2e)}</span>,
               accessor: (r) => r.kg_co2e.toLocaleString ?? null,
             },
             {

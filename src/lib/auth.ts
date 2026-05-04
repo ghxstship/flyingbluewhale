@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { apiError } from "./api";
 import { createClient } from "./supabase/server";
 import { hasSupabase } from "./env";
-import type { Persona, PlatformRole, Tier } from "./supabase/types";
+import type { Persona, PlatformRole, ProjectRole, Tier } from "./supabase/types";
+
+const DEMO_ORG_SLUG = "demo";
 
 // AsyncLocalStorage isn't viable across Edge runtimes, so we resolve PAT auth
 // lazily by inspecting the *current* request's Authorization header from the
@@ -24,7 +26,9 @@ export type Session = {
   userId: string;
   email: string;
   orgId: string;
+  orgSlug: string;
   role: PlatformRole;
+  isDeveloper: boolean;
   tier: Tier;
   persona: Persona;
 };
@@ -51,33 +55,54 @@ export async function getSession(): Promise<Session | null> {
   const user = auth.user;
   if (!user) return null;
 
-  const { data: membership } = await supabase
+  // Prefer a real-org membership. The demo-org membership is the fallback
+  // every signed-up user has via the auto-add trigger; we only surface it
+  // when there's nothing else.
+  const { data: memberships } = await supabase
     .from("memberships")
-    .select("org_id,role,orgs(tier)")
-    .eq("user_id", user.id)
-    .limit(1)
-    .maybeSingle();
+    .select("org_id, role, is_developer, orgs(slug, tier)")
+    .eq("user_id", user.id);
 
-  if (!membership) {
-    return {
-      userId: user.id,
-      email: user.email ?? "",
-      orgId: "",
-      role: "community",
-      tier: "access",
-      persona: "visitor",
-    };
+  type Row = {
+    org_id: string;
+    role: PlatformRole;
+    is_developer: boolean;
+    orgs: { slug: string; tier: Tier } | null;
+  };
+  const rows = (memberships ?? []) as unknown as Row[];
+
+  if (rows.length === 0) {
+    // No membership at all — should not happen post-trigger, but treat as a
+    // bare guest session pointing at /me.
+    return guestSession(user.id, user.email ?? "");
   }
 
-  const role = membership.role as PlatformRole;
-  const tier = (membership.orgs as unknown as { tier: Tier } | null)?.tier ?? "access";
+  const real = rows.find((r) => r.orgs?.slug !== DEMO_ORG_SLUG);
+  const chosen = real ?? rows[0];
+  const isGuest = chosen.orgs?.slug === DEMO_ORG_SLUG && !real;
+
   return {
     userId: user.id,
     email: user.email ?? "",
-    orgId: membership.org_id,
-    role,
-    tier,
-    persona: personaForRole(role),
+    orgId: chosen.org_id,
+    orgSlug: chosen.orgs?.slug ?? "",
+    role: chosen.role,
+    isDeveloper: chosen.is_developer,
+    tier: chosen.orgs?.tier ?? "access",
+    persona: isGuest ? "guest" : personaForRole(chosen.role),
+  };
+}
+
+function guestSession(userId: string, email: string): Session {
+  return {
+    userId,
+    email,
+    orgId: "",
+    orgSlug: "",
+    role: "member",
+    isDeveloper: false,
+    tier: "access",
+    persona: "guest",
   };
 }
 
@@ -94,69 +119,78 @@ export async function withAuth<T>(handler: (session: Session) => Promise<T>): Pr
 }
 
 export function personaForRole(role: PlatformRole): Persona {
-  switch (role) {
-    case "owner":
-      return "owner";
-    case "admin":
-      return "admin";
-    case "controller":
-      return "controller";
-    case "collaborator":
-      return "project_manager";
-    case "contractor":
-      return "vendor";
-    case "crew":
-      return "crew";
-    case "client":
-      return "client";
-    case "developer":
-      return "developer";
-    case "viewer":
-    case "community":
-    default:
-      return "guest";
-  }
+  return role;
 }
 
 export function resolveShell(persona: Persona): "/console" | "/p" | "/m" | "/me" {
-  if (["owner", "admin", "controller", "project_manager", "developer"].includes(persona)) return "/console";
-  // Portal personas need a project slug; guest-by-role (viewer/community) arrives
-  // with no slug context, so they go to /me instead of dead-ending on /p/select.
-  if (["client", "vendor", "artist", "sponsor"].includes(persona)) return "/p";
-  if (persona === "crew") return "/m";
-  return "/me";
+  // Real-org members land in the console; guests land at /me. Portal/mobile
+  // shells are entered explicitly via /p/<slug> or /m, not auto-routed.
+  if (persona === "guest" || persona === "visitor") return "/me";
+  return "/console";
 }
 
-const CAPABILITIES: Partial<Record<PlatformRole, readonly string[]>> = {
+// Platform-role band checks — the canonical helpers callers should use
+// instead of inlining `["owner","admin",...].includes(...)`.
+export function isOwner(session: Session | null): boolean {
+  return session?.role === "owner";
+}
+
+export function isAdmin(session: Session | null): boolean {
+  return session?.role === "owner" || session?.role === "admin";
+}
+
+export function isManagerPlus(session: Session | null): boolean {
+  if (!session) return false;
+  return session.role === "owner" || session.role === "admin" || session.role === "manager";
+}
+
+export function isDeveloper(session: Session | null): boolean {
+  return !!session?.isDeveloper;
+}
+
+// Project-role check — caller has one of `roles` on `projectId`, OR is
+// platform manager+ in the project's org (auto-bypass mirrors the SQL helper).
+// Intentionally async: we read project_members live so role grants take
+// effect without requiring a session refresh.
+export async function hasProjectRole(
+  session: Session | null,
+  projectId: string,
+  roles: readonly ProjectRole[],
+): Promise<boolean> {
+  if (!session) return false;
+  if (isManagerPlus(session)) return true;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("project_members")
+    .select("role")
+    .eq("project_id", projectId)
+    .eq("user_id", session.userId)
+    .maybeSingle();
+  if (!data) return false;
+  return (roles as readonly string[]).includes((data as { role: ProjectRole }).role);
+}
+
+// Capability matrix — keep narrow. Most authorization should be RLS at the
+// data layer; this is for UI gating + 403 responses on mutating routes.
+const CAPABILITIES: Record<PlatformRole, readonly string[]> = {
   owner: ["*"],
   admin: ["*"],
-  controller: [
-    "projects:read",
-    "projects:write",
-    "invoices:*",
-    "expenses:*",
-    "budgets:*",
-    "time:*",
-    "mileage:*",
-    "payouts:*",
-    "procurement:*",
-    "billing:*",
-  ],
-  collaborator: [
-    "projects:read",
-    "projects:write",
+  manager: [
+    "projects:*",
     "tasks:*",
     "schedule:*",
-    "crew:read",
+    "crew:*",
     "proposals:*",
-    "clients:read",
+    "clients:*",
+    "invoices:read",
+    "invoices:write",
+    "expenses:*",
+    "budgets:read",
+    "time:*",
+    "mileage:*",
+    "procurement:*",
   ],
-  contractor: ["projects:read", "tasks:read", "time:write", "vendor-portal:*"],
-  crew: ["projects:read", "tasks:read", "time:write", "check-in:*"],
-  client: ["client-portal:*"],
-  viewer: ["projects:read"],
-  developer: ["*"],
-  community: [],
+  member: ["projects:read", "tasks:read", "tasks:write", "time:write", "check-in:*"],
 };
 
 export function can(session: Session | null, capability: string): boolean {

@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { XPMS_CLASS_BY_CODE } from "@/lib/xpms";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +45,7 @@ export default async function Page({ params }: { params: Promise<{ code: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("xpms_atoms")
     .select("id, identifier, name, state, phase")
@@ -73,9 +76,9 @@ export default async function Page({ params }: { params: Promise<{ code: string 
         <p className="text-sm text-[var(--text-secondary)]">{klass.domain}</p>
 
         <div className="metric-grid-3">
-          <MetricCard label="Total Atoms" value={atoms.length.toLocaleString()} accent />
-          <MetricCard label="UAC" value={uac.toLocaleString()} />
-          <MetricCard label="TPC" value={tpc.toLocaleString()} />
+          <MetricCard label="Total Atoms" value={fmt.number(atoms.length)} accent />
+          <MetricCard label="UAC" value={fmt.number(uac)} />
+          <MetricCard label="TPC" value={fmt.number(tpc)} />
         </div>
 
         <section>
@@ -89,32 +92,37 @@ export default async function Page({ params }: { params: Promise<{ code: string 
             </Link>
           </div>
 
-          {atoms.length === 0 ? (
-            <div className="surface p-6 text-sm text-[var(--text-muted)]">No atoms recorded in this class yet.</div>
-          ) : (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Identifier</th>
-                  <th>Name</th>
-                  <th>Phase</th>
-                  <th>State</th>
-                </tr>
-              </thead>
-              <tbody>
-                {atoms.map((a) => (
-                  <tr key={a.id}>
-                    <td className="font-mono text-xs">{a.identifier}</td>
-                    <td>{a.name}</td>
-                    <td className="text-[var(--text-secondary)]">{a.phase ?? "—"}</td>
-                    <td>
-                      <Badge variant={STATE_TONE[a.state]}>{a.state.toUpperCase()}</Badge>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <DataTable<Atom>
+            rows={atoms}
+            emptyLabel="No Atoms In This Class"
+            emptyDescription="No atoms have been recorded in this XPMS class yet."
+            columns={[
+              {
+                key: "identifier",
+                header: "Identifier",
+                render: (a) => a.identifier,
+                accessor: (a) => a.identifier,
+                mono: true,
+                sortable: true,
+              },
+              { key: "name", header: "Name", render: (a) => a.name, accessor: (a) => a.name, sortable: true },
+              {
+                key: "phase",
+                header: "Phase",
+                render: (a) => a.phase ?? "—",
+                accessor: (a) => a.phase ?? "",
+                filterable: true,
+              },
+              {
+                key: "state",
+                header: "State",
+                render: (a) => <Badge variant={STATE_TONE[a.state]}>{a.state.toUpperCase()}</Badge>,
+                accessor: (a) => a.state,
+                filterable: true,
+                groupable: true,
+              },
+            ]}
+          />
         </section>
       </div>
     </>

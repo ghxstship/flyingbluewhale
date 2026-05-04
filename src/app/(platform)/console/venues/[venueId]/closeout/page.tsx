@@ -7,6 +7,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,11 +30,6 @@ const ITEM_TONE: Record<string, "muted" | "info" | "warning" | "success"> = {
   waived: "muted",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
   if (!hasSupabase) {
@@ -49,6 +45,12 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(iso: string | null): string {
+    if (!iso) return "—";
+    return fmt.dateParts(iso, { month: "short", day: "numeric" });
+  }
   const [{ data: venueData }, { data: itemData }] = await Promise.all([
     supabase.from("venues").select("id, name").eq("id", venueId).eq("org_id", session.orgId).maybeSingle(),
     supabase
@@ -91,9 +93,9 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Complete" value={complete.toLocaleString()} accent />
-          <MetricCard label="Open" value={open.toLocaleString()} />
-          <MetricCard label="Total" value={items.length.toLocaleString()} />
+          <MetricCard label="Complete" value={fmt.number(complete)} accent />
+          <MetricCard label="Open" value={fmt.number(open)} />
+          <MetricCard label="Total" value={fmt.number(items.length)} />
         </div>
 
         {items.length > 0 && (
@@ -136,13 +138,13 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "due",
               header: "Due",
-              render: (r) => <span className="font-mono text-xs">{fmt(r.due_at)}</span>,
+              render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_at)}</span>,
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "completed",
               header: "Completed",
-              render: (r) => <span className="font-mono text-xs">{fmt(r.completed_at)}</span>,
+              render: (r) => <span className="font-mono text-xs">{fmtDate(r.completed_at)}</span>,
               accessor: (r) => r.completed_at ?? null,
             },
             {

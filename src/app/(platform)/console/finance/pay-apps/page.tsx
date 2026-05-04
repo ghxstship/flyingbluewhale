@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,10 +33,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   paid: "success",
 };
 
-function fmt(d: string): string {
-  return new Date(d + "T00:00:00").toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -49,6 +46,9 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+
+  const fmt = await getRequestFormatters();
+  const fmtDate = (d: string): string => fmt.dateParts(d + "T00:00:00", { month: "short", day: "numeric" });
   const { data } = await supabase
     .from("payment_applications")
     .select(
@@ -77,7 +77,7 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending Review" value={inFlight.length.toLocaleString()} accent />
+          <MetricCard label="Pending Review" value={fmt.number(inFlight.length)} accent />
           <MetricCard label="Net Due" value={formatMoney(totalDue)} />
           <MetricCard label="Completed YTD" value={formatMoney(totalCompleted)} />
         </div>
@@ -117,7 +117,7 @@ export default async function Page() {
             {
               key: "period",
               header: "Period",
-              render: (r) => `${fmt(r.period_start)} — ${fmt(r.period_end)}`,
+              render: (r) => `${fmtDate(r.period_start)} — ${fmtDate(r.period_end)}`,
               className: "font-mono text-xs",
               accessor: (r) => r.period_start ?? null,
             },

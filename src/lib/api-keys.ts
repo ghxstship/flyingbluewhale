@@ -91,13 +91,19 @@ export async function verifyApiKey(authorizationHeader: string | null | undefine
 
   const { data: membership } = await svc
     .from("memberships")
-    .select("role, orgs(tier)")
+    .select("role, is_developer, orgs(slug, tier)")
     .eq("user_id", k.created_by)
     .eq("org_id", k.org_id)
     .maybeSingle();
   if (!membership) return null;
-  const role = (membership as { role: PlatformRole }).role;
-  const tier = ((membership as { orgs: { tier: Tier } | null }).orgs?.tier ?? "access") as Tier;
+  const mem = membership as {
+    role: PlatformRole;
+    is_developer: boolean;
+    orgs: { slug: string; tier: Tier } | null;
+  };
+  const role = mem.role;
+  const tier = (mem.orgs?.tier ?? "access") as Tier;
+  const orgSlug = mem.orgs?.slug ?? "";
 
   // Best-effort write-behind. Failures don't fail the auth.
   void svc
@@ -118,7 +124,9 @@ export async function verifyApiKey(authorizationHeader: string | null | undefine
     userId: k.created_by,
     email,
     orgId: k.org_id,
+    orgSlug,
     role,
+    isDeveloper: mem.is_developer,
     tier,
     persona: personaForRole(role),
   };

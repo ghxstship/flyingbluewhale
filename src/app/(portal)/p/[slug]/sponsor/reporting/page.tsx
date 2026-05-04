@@ -4,10 +4,12 @@ import { PortalSubpage } from "@/components/PortalSubpage";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = await projectIdFromSlug(slug);
+  const fmt = await getRequestFormatters();
   let scans = 0;
   let tickets = 0;
   if (project) {
@@ -34,11 +36,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <dl className="grid gap-3 sm:grid-cols-2">
           <div className="surface p-5">
             <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Tickets issued</dt>
-            <dd className="mt-2 text-3xl font-semibold">{tickets.toLocaleString()}</dd>
+            <dd className="mt-2 text-3xl font-semibold">{fmt.number(tickets)}</dd>
           </div>
           <div className="surface p-5">
             <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Scans recorded</dt>
-            <dd className="mt-2 text-3xl font-semibold">{scans.toLocaleString()}</dd>
+            <dd className="mt-2 text-3xl font-semibold">{fmt.number(scans)}</dd>
           </div>
         </dl>
       )}

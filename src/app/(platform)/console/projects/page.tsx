@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
@@ -52,36 +52,47 @@ export default async function ProjectsPage() {
                 budgetCents: p.budget_cents ?? 0,
               }))}
             />
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Slug</th>
-                  <th>Status</th>
-                  <th>Start</th>
-                  <th>End</th>
-                  <th>Updated</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((p) => (
-                  <tr key={p.id}>
-                    <td>
-                      <Link href={`/console/projects/${p.id}`} className="hover:text-[var(--org-primary)]">
-                        {p.name}
-                      </Link>
-                    </td>
-                    <td className="font-mono text-xs text-[var(--text-muted)]">{p.slug}</td>
-                    <td>
-                      <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>
-                    </td>
-                    <td className="font-mono text-xs">{p.start_date ?? "—"}</td>
-                    <td className="font-mono text-xs">{p.end_date ?? "—"}</td>
-                    <td className="font-mono text-xs text-[var(--text-muted)]">{formatDate(p.updated_at)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <DataTable
+              rows={projects}
+              rowHref={(p) => `/console/projects/${p.id}`}
+              emptyLabel="No Projects"
+              columns={[
+                { key: "name", header: "Name", render: (p) => p.name, accessor: (p) => p.name, sortable: true },
+                { key: "slug", header: "Slug", render: (p) => p.slug, accessor: (p) => p.slug, mono: true },
+                {
+                  key: "status",
+                  header: "Status",
+                  render: (p) => <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>,
+                  accessor: (p) => p.status,
+                  filterable: true,
+                  groupable: true,
+                },
+                {
+                  key: "start_date",
+                  header: "Start",
+                  render: (p) => p.start_date ?? "—",
+                  accessor: (p) => p.start_date ?? "",
+                  mono: true,
+                  sortable: true,
+                },
+                {
+                  key: "end_date",
+                  header: "End",
+                  render: (p) => p.end_date ?? "—",
+                  accessor: (p) => p.end_date ?? "",
+                  mono: true,
+                  sortable: true,
+                },
+                {
+                  key: "updated_at",
+                  header: "Updated",
+                  render: (p) => formatDate(p.updated_at),
+                  accessor: (p) => p.updated_at,
+                  mono: true,
+                  sortable: true,
+                },
+              ]}
+            />
           </>
         )}
       </div>

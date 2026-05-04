@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("inspections")
     .select(
@@ -84,9 +86,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={open.toLocaleString()} accent />
-          <MetricCard label="Passed" value={passed30.toLocaleString()} />
-          <MetricCard label="Failed" value={failed30.toLocaleString()} />
+          <MetricCard label="Open" value={fmtIntl.number(open)} accent />
+          <MetricCard label="Passed" value={fmtIntl.number(passed30)} />
+          <MetricCard label="Failed" value={fmtIntl.number(failed30)} />
         </div>
         <DataTable<Row>
           rows={rows}

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ChartShell } from "@/components/charts/ChartShell";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 export type GanttRow = {
   id: string;
@@ -31,6 +32,7 @@ export function GanttChart({
   projectStart: string | null;
   projectEnd: string | null;
 }) {
+  const fmt = useFormatters();
   const [now] = React.useState(() => new Date());
 
   // Compute window: extend project bounds (or row bounds) by ±7 days.
@@ -75,7 +77,7 @@ export function GanttChart({
     while (cursor.getTime() <= windowEnd) {
       monthTicks.push({
         x: xFor(cursor.getTime()),
-        label: cursor.toLocaleDateString(undefined, { month: "short", year: "2-digit" }),
+        label: fmt.dateParts(cursor, { month: "short", year: "2-digit" }),
       });
       cursor.setMonth(cursor.getMonth() + 1);
     }

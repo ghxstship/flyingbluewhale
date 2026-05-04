@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export default async function MobileRequests() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("service_requests")
     .select("id, severity, category, summary, status, opened_at")
@@ -58,7 +60,7 @@ export default async function MobileRequests() {
                   <Badge variant={SEV[r.severity]}>{r.severity}</Badge>
                   <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.category}</span>
                   <span className="ml-auto font-mono text-[10px] text-[var(--text-muted)]">
-                    {new Date(r.opened_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                    {fmt.time(r.opened_at)}
                   </span>
                 </div>
                 <div className="text-sm font-medium">{r.summary}</div>

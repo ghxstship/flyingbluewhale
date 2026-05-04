@@ -1,10 +1,12 @@
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
+import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +57,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   let q = supabase
     .from("v_action_items")
     .select("*")
@@ -88,48 +91,53 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open Items" value={rows.length.toLocaleString()} accent />
-          <MetricCard label="Overdue" value={overdue.toLocaleString()} />
+          <MetricCard label="Open Items" value={fmtIntl.number(rows.length)} accent />
+          <MetricCard label="Overdue" value={fmtIntl.number(overdue)} />
           <MetricCard label="Across Kinds" value={Object.keys(byKind).length.toString()} />
         </div>
-        <section className="surface p-4">
-          {rows.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">Nothing open. Inbox zero.</p>
-          ) : (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Kind</th>
-                  <th>Title</th>
-                  <th>Status</th>
-                  <th>Due</th>
-                  <th>Priority</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((r) => (
-                  <tr key={`${r.kind}-${r.record_id}`}>
-                    <td>
-                      <Badge variant={KIND_TONE[r.kind] ?? "muted"}>{r.kind}</Badge>
-                    </td>
-                    <td>
-                      <a href={(KIND_HREF[r.kind] ?? ((id) => `#${id}`))(r.record_id)} className="hover:underline">
-                        {r.title}
-                      </a>
-                    </td>
-                    <td>{r.status.replace(/_/g, " ")}</td>
-                    <td
-                      className={`font-mono text-xs ${r.due_at && new Date(r.due_at) < new Date() ? "text-[var(--color-error)]" : ""}`}
-                    >
-                      {fmt(r.due_at)}
-                    </td>
-                    <td>{r.priority}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </section>
+        <DataTable<Row & { id: string }>
+          rows={rows.map((r) => ({ ...r, id: `${r.kind}-${r.record_id}` }))}
+          rowHref={(r) => (KIND_HREF[r.kind] ?? ((id) => `#${id}`))(r.record_id)}
+          emptyLabel="Inbox Zero"
+          emptyDescription="Nothing open. Every RFI, submittal, punch item, inspection, and task is closed or assigned."
+          columns={[
+            {
+              key: "kind",
+              header: "Kind",
+              render: (r) => <Badge variant={KIND_TONE[r.kind] ?? "muted"}>{r.kind}</Badge>,
+              accessor: (r) => r.kind,
+              filterable: true,
+              groupable: true,
+            },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title, sortable: true },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => r.status.replace(/_/g, " "),
+              accessor: (r) => r.status,
+              filterable: true,
+            },
+            {
+              key: "due_at",
+              header: "Due",
+              render: (r) => (
+                <span className={r.due_at && new Date(r.due_at) < new Date() ? "text-[var(--color-error)]" : ""}>
+                  {fmt(r.due_at)}
+                </span>
+              ),
+              accessor: (r) => r.due_at ?? "",
+              mono: true,
+              sortable: true,
+            },
+            {
+              key: "priority",
+              header: "Priority",
+              render: (r) => r.priority,
+              accessor: (r) => r.priority,
+              filterable: true,
+            },
+          ]}
+        />
       </div>
     </>
   );

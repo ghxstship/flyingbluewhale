@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,16 +19,16 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   overdue: "error",
 };
 
-function fmtTime(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
 export default async function MobileGuardPage() {
   if (!hasSupabase) {
     return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
+  const fmtTime = (iso: string | null): string => {
+    if (!iso) return "—";
+    return fmt.time(iso);
+  };
   const all = (await listOrgScoped("guard_tours", session.orgId, {
     orderBy: "next_run_at",
     ascending: true,

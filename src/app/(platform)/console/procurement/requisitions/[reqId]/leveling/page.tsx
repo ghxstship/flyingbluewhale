@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -7,6 +8,14 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { awardResponse } from "./actions";
+
+type ResponseRow = {
+  id: string;
+  vendor: { name: string | null } | null;
+  status: string;
+  total_cents: number | null;
+  submitted_at: string | null;
+};
 
 export const dynamic = "force-dynamic";
 
@@ -65,58 +74,79 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
           </Button>
         }
       />
-      <div className="page-content space-y-4">
-        <section className="surface p-4">
-          {all.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">No bid responses yet. Invite vendors to bid.</p>
-          ) : (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Vendor</th>
-                  <th>Status</th>
-                  <th>Total</th>
-                  <th>Δ vs lowest</th>
-                  <th>Submitted</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {all.map((r) => {
-                  const total = r.total_cents == null ? null : Number(r.total_cents);
-                  const delta = total != null && lowest != null ? total - lowest : null;
-                  return (
-                    <tr key={r.id} className={r.status === "awarded" ? "bg-[var(--surface-raised)]" : ""}>
-                      <td>{(r.vendor as unknown as { name: string | null } | null)?.name ?? "—"}</td>
-                      <td>
-                        <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>
-                      </td>
-                      <td className="font-mono text-xs">{total != null ? formatMoney(total) : "—"}</td>
-                      <td className="font-mono text-xs">
-                        {delta != null && delta > 0 ? `+${formatMoney(delta)}` : delta === 0 ? "—" : "—"}
-                      </td>
-                      <td className="font-mono text-xs">
-                        {r.submitted_at ? new Date(r.submitted_at).toLocaleDateString() : "—"}
-                      </td>
-                      <td>
-                        {!awardedRow && r.status === "responded" && (
-                          <form action={awardResponse.bind(null, reqId, r.id)}>
-                            <button
-                              type="submit"
-                              className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
-                            >
-                              Award
-                            </button>
-                          </form>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-        </section>
+      <div className="page-content">
+        <DataTable<ResponseRow>
+          rows={all as unknown as ResponseRow[]}
+          emptyLabel="No Bid Responses"
+          emptyDescription="No bid responses yet. Invite vendors to bid from the requisition detail."
+          columns={[
+            {
+              key: "vendor",
+              header: "Vendor",
+              render: (r) => r.vendor?.name ?? "—",
+              accessor: (r) => r.vendor?.name ?? "",
+              sortable: true,
+            },
+            {
+              key: "status",
+              header: "Status",
+              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
+              accessor: (r) => r.status,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "total_cents",
+              header: "Total",
+              render: (r) => (r.total_cents != null ? formatMoney(Number(r.total_cents)) : "—"),
+              accessor: (r) => (r.total_cents != null ? Number(r.total_cents) : 0),
+              tabular: true,
+              sortable: true,
+              className: "text-right",
+              headerClassName: "text-right",
+            },
+            {
+              key: "delta",
+              header: "Δ vs lowest",
+              render: (r) => {
+                const total = r.total_cents == null ? null : Number(r.total_cents);
+                const delta = total != null && lowest != null ? total - lowest : null;
+                return delta != null && delta > 0 ? `+${formatMoney(delta)}` : "—";
+              },
+              accessor: (r) => {
+                const total = r.total_cents == null ? null : Number(r.total_cents);
+                return total != null && lowest != null ? total - lowest : 0;
+              },
+              tabular: true,
+              sortable: true,
+              className: "text-right",
+              headerClassName: "text-right",
+            },
+            {
+              key: "submitted_at",
+              header: "Submitted",
+              render: (r) => (r.submitted_at ? new Date(r.submitted_at).toLocaleDateString() : "—"),
+              accessor: (r) => r.submitted_at ?? "",
+              mono: true,
+              sortable: true,
+            },
+            {
+              key: "actions",
+              header: "",
+              render: (r) =>
+                !awardedRow && r.status === "responded" ? (
+                  <form action={awardResponse.bind(null, reqId, r.id)}>
+                    <button
+                      type="submit"
+                      className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
+                    >
+                      Award
+                    </button>
+                  </form>
+                ) : null,
+            },
+          ]}
+        />
       </div>
     </>
   );

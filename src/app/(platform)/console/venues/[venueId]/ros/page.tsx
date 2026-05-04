@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,22 +29,6 @@ const STATUS_TONE: Record<string, "muted" | "warning" | "info" | "success" | "er
   cancelled: "muted",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
-function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-}
-
-function fmtDuration(s: number | null): string {
-  if (s == null) return "";
-  if (s < 60) return `${s}s`;
-  const m = Math.floor(s / 60);
-  const r = s % 60;
-  return r === 0 ? `${m}m` : `${m}m ${r}s`;
-}
-
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
   if (!hasSupabase) {
@@ -59,6 +44,17 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+
+  function fmtDuration(s: number | null): string {
+    if (s == null) return "";
+    if (s < 60) return `${s}s`;
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return r === 0 ? `${m}m` : `${m}m ${r}s`;
+  }
+  const fmtTime = (iso: string): string => fmt.time(iso);
+  const fmtDay = (iso: string): string => fmt.dateParts(iso, { weekday: "short", month: "short", day: "numeric" });
   const { data: venueData } = await supabase
     .from("venues")
     .select("id, name, location_id")
@@ -112,12 +108,12 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {days.map((day) => (
               <section key={day}>
                 <h3 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  {fmtDate(day)}
+                  {fmtDay(day)}
                 </h3>
                 <ul className="mt-3 divide-y divide-[var(--border-color)]">
                   {(byDay.get(day) ?? []).map((c) => (
                     <li key={c.id} className="flex items-start gap-3 py-2">
-                      <div className="w-14 shrink-0 font-mono text-xs tabular-nums">{fmt(c.scheduled_at)}</div>
+                      <div className="w-14 shrink-0 font-mono text-xs tabular-nums">{fmtTime(c.scheduled_at)}</div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
                           <div>

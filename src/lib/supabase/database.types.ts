@@ -404,6 +404,148 @@ export type Database = {
           },
         ]
       }
+      annotation_watchers: {
+        Row: {
+          annotation_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          annotation_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          annotation_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "annotation_watchers_annotation_id_fkey"
+            columns: ["annotation_id"]
+            isOneToOne: false
+            referencedRelation: "annotations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "annotation_watchers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      annotations: {
+        Row: {
+          assigned_to: string | null
+          body: string
+          confirmation_required: boolean
+          confirmed_at: string | null
+          confirmed_by: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          due_at: string | null
+          id: string
+          kind: Database["public"]["Enums"]["annotation_kind"]
+          linked_task_id: string | null
+          metadata: Json
+          org_id: string
+          parent_id: string | null
+          project_id: string | null
+          resolution_note: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: Database["public"]["Enums"]["annotation_severity"]
+          status: Database["public"]["Enums"]["annotation_status"]
+          tags: string[]
+          target_id: string
+          target_table: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          body: string
+          confirmation_required?: boolean
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          due_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["annotation_kind"]
+          linked_task_id?: string | null
+          metadata?: Json
+          org_id: string
+          parent_id?: string | null
+          project_id?: string | null
+          resolution_note?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: Database["public"]["Enums"]["annotation_severity"]
+          status?: Database["public"]["Enums"]["annotation_status"]
+          tags?: string[]
+          target_id: string
+          target_table: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          body?: string
+          confirmation_required?: boolean
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          due_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["annotation_kind"]
+          linked_task_id?: string | null
+          metadata?: Json
+          org_id?: string
+          parent_id?: string | null
+          project_id?: string | null
+          resolution_note?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: Database["public"]["Enums"]["annotation_severity"]
+          status?: Database["public"]["Enums"]["annotation_status"]
+          tags?: string[]
+          target_id?: string
+          target_table?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "annotations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "annotations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "annotations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "annotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_keys: {
         Row: {
           created_at: string
@@ -4424,6 +4566,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           id: string
+          is_developer: boolean
           org_id: string
           role: Database["public"]["Enums"]["platform_role"]
           updated_at: string
@@ -4433,6 +4576,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           id?: string
+          is_developer?: boolean
           org_id: string
           role?: Database["public"]["Enums"]["platform_role"]
           updated_at?: string
@@ -4442,6 +4586,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           id?: string
+          is_developer?: boolean
           org_id?: string
           role?: Database["public"]["Enums"]["platform_role"]
           updated_at?: string
@@ -4457,6 +4602,48 @@ export type Database = {
           },
           {
             foreignKeyName: "memberships_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_members: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          role: Database["public"]["Enums"]["project_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          role?: Database["public"]["Enums"]["project_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          role?: Database["public"]["Enums"]["project_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_members_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_members_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -5056,6 +5243,9 @@ export type Database = {
           compliance_settings: Json
           created_at: string
           datamap: Json
+          default_currency: string
+          default_locale: string
+          default_timezone: string
           id: string
           logo_url: string | null
           name: string
@@ -5071,6 +5261,9 @@ export type Database = {
           compliance_settings?: Json
           created_at?: string
           datamap?: Json
+          default_currency?: string
+          default_locale?: string
+          default_timezone?: string
           id?: string
           logo_url?: string | null
           name: string
@@ -5086,6 +5279,9 @@ export type Database = {
           compliance_settings?: Json
           created_at?: string
           datamap?: Json
+          default_currency?: string
+          default_locale?: string
+          default_timezone?: string
           id?: string
           logo_url?: string | null
           name?: string
@@ -9415,6 +9611,7 @@ export type Database = {
       user_preferences: {
         Row: {
           consent: Json
+          currency: string | null
           density: string | null
           last_org_id: string | null
           locale: string | null
@@ -9427,6 +9624,7 @@ export type Database = {
         }
         Insert: {
           consent?: Json
+          currency?: string | null
           density?: string | null
           last_org_id?: string | null
           locale?: string | null
@@ -9439,6 +9637,7 @@ export type Database = {
         }
         Update: {
           consent?: Json
+          currency?: string | null
           density?: string | null
           last_org_id?: string | null
           locale?: string | null
@@ -11936,6 +12135,9 @@ export type Database = {
         | "suspended"
         | "revoked"
         | "expired"
+      annotation_kind: "flag" | "note" | "comment" | "tag"
+      annotation_severity: "info" | "warning" | "critical"
+      annotation_status: "open" | "acknowledged" | "resolved" | "dismissed"
       approval_state: "pending" | "signed" | "declined" | "expired"
       change_order_state:
         | "draft"
@@ -12035,19 +12237,9 @@ export type Database = {
         | "declined"
         | "withdrawn"
         | "expired"
-      platform_role:
-        | "developer"
-        | "owner"
-        | "admin"
-        | "controller"
-        | "collaborator"
-        | "contractor"
-        | "crew"
-        | "client"
-        | "viewer"
-        | "community"
+      platform_role: "owner" | "admin" | "manager" | "member"
       po_status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled"
-      project_role: "creator" | "collaborator" | "viewer" | "vendor"
+      project_role: "lead" | "editor" | "contributor" | "viewer" | "vendor"
       project_status: "draft" | "active" | "paused" | "archived" | "complete"
       proposal_phase_status:
         | "locked"
@@ -12387,20 +12579,9 @@ export const Constants = {
         "withdrawn",
         "expired",
       ],
-      platform_role: [
-        "developer",
-        "owner",
-        "admin",
-        "controller",
-        "collaborator",
-        "contractor",
-        "crew",
-        "client",
-        "viewer",
-        "community",
-      ],
+      platform_role: ["owner", "admin", "manager", "member"],
       po_status: ["draft", "sent", "acknowledged", "fulfilled", "cancelled"],
-      project_role: ["creator", "collaborator", "viewer", "vendor"],
+      project_role: ["lead", "editor", "contributor", "viewer", "vendor"],
       project_status: ["draft", "active", "paused", "archived", "complete"],
       proposal_phase_status: [
         "locked",

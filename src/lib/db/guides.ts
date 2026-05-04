@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { EventGuide, GuidePersona } from "@/lib/supabase/types";
 
 export async function listGuides(orgId: string, projectId: string): Promise<EventGuide[]> {
+  if (!orgId || !projectId) return [];
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("event_guides")
@@ -16,6 +17,7 @@ export async function listGuides(orgId: string, projectId: string): Promise<Even
 }
 
 export async function getGuideByPersona(projectId: string, persona: GuidePersona): Promise<EventGuide | null> {
+  if (!projectId) return null;
   const supabase = await createClient();
   const { data } = await supabase
     .from("event_guides")

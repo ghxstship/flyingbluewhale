@@ -98,6 +98,7 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     // 1-line "No X yet" inside their own surface). Migrating to <EmptyState
     // size="compact"> would be a visual change inside dense detail layouts;
     // the canonical zero-state primitive is reserved for page-level voids.
+    "src/app/(platform)/console/annotations/[id]/page.tsx",
     "src/app/(platform)/console/people/offer-letters/[id]/page.tsx",
     "src/app/(platform)/console/procurement/rfqs/[rfqId]/page.tsx",
     "src/app/(platform)/console/production/ros/page.tsx",

@@ -10,6 +10,7 @@ import type {
   VenueOption,
   RateCardOption,
 } from "@/lib/offer-letters/types";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import { saveLetter } from "./actions";
 
 export function LetterEditor({
@@ -32,6 +33,7 @@ export function LetterEditor({
     return r as FormState;
   };
 
+  const { money } = useFormatters();
   const isLocked = raw.status !== "draft";
 
   return (
@@ -124,7 +126,7 @@ export function LetterEditor({
                   {rates.map((r) => (
                     <option key={r.id} value={r.id}>
                       {r.sku} · {r.name}{" "}
-                      {r.unit_price_cents > 0 ? `· $${(r.unit_price_cents / 100).toLocaleString()}` : "· $0 (TBD)"}
+                      {r.unit_price_cents > 0 ? `· ${money(r.unit_price_cents)}` : `· ${money(0)} (TBD)`}
                     </option>
                   ))}
                 </NativeSelect>
@@ -177,9 +179,7 @@ export function LetterEditor({
               <div className="self-end rounded border border-[var(--border-default)] bg-[var(--surface-inset)] px-3 py-2 text-xs">
                 <div className="text-[var(--text-muted)]">Effective compensation</div>
                 <div className="font-mono">
-                  {resolved.effective_compensation_cents > 0
-                    ? `$${(resolved.effective_compensation_cents / 100).toLocaleString()}`
-                    : "TBD"}
+                  {resolved.effective_compensation_cents > 0 ? money(resolved.effective_compensation_cents) : "TBD"}
                 </div>
                 <div className="text-[var(--text-muted)]">{resolved.engagement_days} day(s)</div>
               </div>

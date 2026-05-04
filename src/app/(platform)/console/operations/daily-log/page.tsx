@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,14 +25,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
   approved: "success",
 };
 
-function fmt(d: string): string {
-  return new Date(d + "T00:00:00").toLocaleDateString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -46,6 +39,13 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (d: string): string =>
+    fmt.dateParts(d + "T00:00:00", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    });
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   const { data } = await supabase
     .from("daily_logs")
@@ -74,9 +74,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Logs · 30d" value={rows.length.toLocaleString()} accent />
-          <MetricCard label="Pending Review" value={submitted.toLocaleString()} />
-          <MetricCard label="Approved" value={approved.toLocaleString()} />
+          <MetricCard label="Logs · 30d" value={fmt.number(rows.length)} accent />
+          <MetricCard label="Pending Review" value={fmt.number(submitted)} />
+          <MetricCard label="Approved" value={fmt.number(approved)} />
         </div>
 
         <DataTable<LogRow>
@@ -93,7 +93,7 @@ export default async function Page() {
             {
               key: "date",
               header: "Date",
-              render: (r) => fmt(r.log_date),
+              render: (r) => fmtDate(r.log_date),
               className: "font-mono text-xs",
               accessor: (r) => r.log_date ?? null,
             },

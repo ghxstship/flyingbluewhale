@@ -3,7 +3,9 @@ import Link from "next/link";
 import type { NavItem } from "@/lib/nav";
 import { MobileTabBarClient } from "./MobileTabBarClient";
 import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
+import { RecordTabsSlot } from "@/components/ui/RecordTabsContext";
 import { matchRoute } from "@/lib/match-route";
+import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 
 export { PlatformSidebar } from "./PlatformSidebar";
 
@@ -32,6 +34,11 @@ export function PortalRail({ items, title, currentPath }: { items: NavItem[]; ti
           );
         })}
       </ul>
+      {/* Language switch parity with the platform sidebar — every authed
+          surface needs a way out of English without leaving the page. */}
+      <div className="mt-auto flex justify-end pt-3">
+        <LocaleSwitcher />
+      </div>
     </aside>
   );
 }
@@ -73,7 +80,7 @@ export function ModuleHeader({
         </div>
         {action && <div className="flex items-center gap-2">{action}</div>}
       </div>
-      {tabs && <div className="module-header-tabs px-6">{tabs}</div>}
+      <div className="module-header-tabs px-6">{tabs ?? <RecordTabsSlot />}</div>
     </div>
   );
 }

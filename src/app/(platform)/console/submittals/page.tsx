@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +53,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("submittals")
     .select(
@@ -80,9 +82,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="In Flight" value={inFlight.toLocaleString()} accent />
-          <MetricCard label="Approved" value={approved.toLocaleString()} />
-          <MetricCard label="Rejected" value={rejected.toLocaleString()} />
+          <MetricCard label="In Flight" value={fmtIntl.number(inFlight)} accent />
+          <MetricCard label="Approved" value={fmtIntl.number(approved)} />
+          <MetricCard label="Rejected" value={fmtIntl.number(rejected)} />
         </div>
         <DataTable<Row>
           rows={rows}

@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { requireSession } from "@/lib/auth";
+import { isAdmin as sessionIsAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { InviteForm } from "./InviteForm";
 
@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 
 export default async function InvitesPage() {
   const session = await requireSession();
-  const isAdmin = ["owner", "admin", "developer"].includes(session.role);
+  const isAdmin = sessionIsAdmin(session);
 
   const supabase = await createClient();
   const { data: invites } = await supabase

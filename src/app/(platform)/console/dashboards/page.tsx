@@ -1,11 +1,12 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
+import { DataTable } from "@/components/DataTable";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   // Load active projects, then run targeted aggregate queries per dimension.
   const { data: projects } = await supabase
     .from("projects")
@@ -119,45 +121,80 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open RFIs" value={totals.rfis.toLocaleString()} accent />
-          <MetricCard label="Open Punch" value={totals.punch.toLocaleString()} />
-          <MetricCard label="OSHA recordables · 30d" value={totals.recordable.toLocaleString()} />
+          <MetricCard label="Open RFIs" value={fmt.number(totals.rfis)} accent />
+          <MetricCard label="Open Punch" value={fmt.number(totals.punch)} />
+          <MetricCard label="OSHA recordables · 30d" value={fmt.number(totals.recordable)} />
         </div>
         <section>
           <h3 className="pb-3 text-base font-semibold">Per-Project KPIs</h3>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Project</th>
-                <th className="text-right">Open RFIs</th>
-                <th className="text-right">Open Punch</th>
-                <th className="text-right">Open Inspections</th>
-                <th className="text-right">Recordables (30d)</th>
-                <th className="text-right">Budget</th>
-                <th className="text-right">Spent</th>
-              </tr>
-            </thead>
-            <tbody>
-              {kpis.map((k) => (
-                <tr key={k.id}>
-                  <td>
-                    <Link
-                      href={`/console/projects/${k.id}`}
-                      className="hover:text-[var(--org-primary)] hover:underline"
-                    >
-                      {k.name}
-                    </Link>
-                  </td>
-                  <td className="text-right tabular-nums">{k.open_rfis}</td>
-                  <td className="text-right tabular-nums">{k.open_punch}</td>
-                  <td className="text-right tabular-nums">{k.open_inspections}</td>
-                  <td className="text-right tabular-nums">{k.recordable_30d}</td>
-                  <td className="text-right tabular-nums">{formatMoney(k.budget_cents)}</td>
-                  <td className="text-right tabular-nums">{formatMoney(k.spent_cents)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <DataTable<ProjectKpi>
+            rows={kpis}
+            rowHref={(k) => `/console/projects/${k.id}`}
+            emptyLabel="No Active Projects"
+            columns={[
+              { key: "name", header: "Project", render: (k) => k.name, accessor: (k) => k.name, sortable: true },
+              {
+                key: "open_rfis",
+                header: "Open RFIs",
+                render: (k) => k.open_rfis,
+                accessor: (k) => k.open_rfis,
+                tabular: true,
+                sortable: true,
+                className: "text-right",
+                headerClassName: "text-right",
+              },
+              {
+                key: "open_punch",
+                header: "Open Punch",
+                render: (k) => k.open_punch,
+                accessor: (k) => k.open_punch,
+                tabular: true,
+                sortable: true,
+                className: "text-right",
+                headerClassName: "text-right",
+              },
+              {
+                key: "open_inspections",
+                header: "Open Inspections",
+                render: (k) => k.open_inspections,
+                accessor: (k) => k.open_inspections,
+                tabular: true,
+                sortable: true,
+                className: "text-right",
+                headerClassName: "text-right",
+              },
+              {
+                key: "recordable_30d",
+                header: "Recordables (30d)",
+                render: (k) => k.recordable_30d,
+                accessor: (k) => k.recordable_30d,
+                tabular: true,
+                sortable: true,
+                className: "text-right",
+                headerClassName: "text-right",
+              },
+              {
+                key: "budget_cents",
+                header: "Budget",
+                render: (k) => formatMoney(k.budget_cents),
+                accessor: (k) => k.budget_cents,
+                tabular: true,
+                sortable: true,
+                className: "text-right",
+                headerClassName: "text-right",
+              },
+              {
+                key: "spent_cents",
+                header: "Spent",
+                render: (k) => formatMoney(k.spent_cents),
+                accessor: (k) => k.spent_cents,
+                tabular: true,
+                sortable: true,
+                className: "text-right",
+                headerClassName: "text-right",
+              },
+            ]}
+          />
         </section>
       </div>
     </>

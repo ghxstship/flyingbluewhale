@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("form_defs")
     .select("id, title, slug, status, description, schema, created_at, updated_at")
@@ -96,7 +98,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
         {form.description && <p className="text-sm text-[var(--text-secondary)]">{form.description}</p>}
 
         <div className="metric-grid-3">
-          <MetricCard label="Fields" value={fields.toLocaleString()} />
+          <MetricCard label="Fields" value={fmtIntl.number(fields)} />
           <MetricCard label="Status" value={form.status} />
           <MetricCard label="Created" value={form.created_at.slice(0, 10)} />
         </div>

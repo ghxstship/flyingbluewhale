@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -49,24 +50,12 @@ const RESPONSE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "
   declined: "error",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function fmtMoney(cents: number | null): string {
-  if (cents == null) return "—";
-  return `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
-
 export default async function Page({ params }: { params: Promise<{ rfqId: string }> }) {
   const { rfqId } = await params;
+  const formatters = await getRequestFormatters();
+  const fmtIntl = formatters;
+  const fmt = (iso: string | null): string => (iso ? formatters.dateTime(iso) : "—");
+  const fmtMoney = (cents: number | null): string => formatters.money(cents);
   if (!hasSupabase) {
     return (
       <>
@@ -127,8 +116,8 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
         {rfq.description && <p className="text-sm text-[var(--text-secondary)]">{rfq.description}</p>}
 
         <div className="metric-grid-3">
-          <MetricCard label="Responses" value={responses.length.toLocaleString()} />
-          <MetricCard label="Submitted" value={responded.toLocaleString()} />
+          <MetricCard label="Responses" value={fmtIntl.number(responses.length)} />
+          <MetricCard label="Submitted" value={fmtIntl.number(responded)} />
           <MetricCard
             label="Awarded Vendor"
             value={rfq.awarded_vendor?.name ?? "—"}

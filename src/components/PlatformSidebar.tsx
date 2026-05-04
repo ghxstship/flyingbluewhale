@@ -11,6 +11,7 @@ import { useHotkeys, registerShortcut } from "@/lib/hooks/useHotkeys";
 import { matchRoute } from "@/lib/hooks/useActiveRoute";
 import { Hint } from "@/components/ui/Tooltip";
 import { WorkspaceSwitcher } from "@/components/WorkspaceSwitcher";
+import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 400;
@@ -282,8 +283,13 @@ export function PlatformSidebar({
             </button>
           </Hint>
         ) : (
-          <div className="border-t border-[var(--border-color)] px-3 py-3 text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)]">
-            ATLVS
+          <div className="flex items-center justify-between gap-2 border-t border-[var(--border-color)] px-3 py-2.5">
+            <span className="text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)]">ATLVS</span>
+            {/* Language switcher mirrors the marketing header so authed
+                operators can flip the entire console — internal labels,
+                date formats, currency — without leaving the page. Persists
+                to user_preferences via setLocalePreferences. */}
+            <LocaleSwitcher />
           </div>
         )}
       </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 
 export default function MobileSettings() {
   return (
@@ -7,6 +8,17 @@ export default function MobileSettings() {
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
       <h1 className="mt-1 text-2xl font-semibold">Settings</h1>
       <div className="mt-6 space-y-3">
+        <div className="surface p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-semibold">Language</div>
+              <div className="mt-1 text-xs text-[var(--text-muted)]">
+                Affects every label, date, and number in the app.
+              </div>
+            </div>
+            <LocaleSwitcher />
+          </div>
+        </div>
         <div className="surface p-4">
           <div className="text-sm font-semibold">Offline Mode</div>
           <div className="mt-1 flex items-center justify-between text-xs">

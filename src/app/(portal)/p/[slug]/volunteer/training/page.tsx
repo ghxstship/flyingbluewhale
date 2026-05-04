@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("kb_articles")
     .select("id, slug, title, tags, updated_at")
@@ -62,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Required" value={required.length.toLocaleString()} />
+          <MetricCard label="Required" value={fmt.number(required.length)} />
           <MetricCard label="Status" value="Open" accent={required.length > 0} />
           <MetricCard label="Last Updated" value={required[0]?.updated_at.slice(0, 10) ?? "—"} />
         </div>

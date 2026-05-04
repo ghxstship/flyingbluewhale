@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,7 @@ export default async function MobileWayfindPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("venues")
     .select("id, name, kind, cluster, capacity")
@@ -90,7 +92,7 @@ export default async function MobileWayfindPage() {
                         </div>
                         {v.capacity != null && (
                           <div className="mt-0.5 ml-5 font-mono text-xs text-[var(--text-muted)]">
-                            cap {v.capacity.toLocaleString()}
+                            cap {fmt.number(v.capacity)}
                           </div>
                         )}
                       </div>

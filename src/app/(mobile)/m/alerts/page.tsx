@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { acknowledgeAlert } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,7 @@ export default async function AlertsPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const cutoff = new Date(Date.now() - 14 * 86_400_000).toISOString();
   const [{ data: alerts }, { data: receipts }] = await Promise.all([
     supabase
@@ -82,18 +84,14 @@ export default async function AlertsPage() {
                 <div className="flex items-start justify-between gap-3">
                   <Badge variant={tone}>{a.severity}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">
-                    {a.sent_at
-                      ? new Date(a.sent_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })
-                      : "scheduled"}
+                    {a.sent_at ? fmt.time(a.sent_at) : "scheduled"}
                   </span>
                 </div>
                 <h2 className="mt-2 text-sm font-semibold">{a.title}</h2>
                 <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{a.body}</p>
                 <div className="mt-3 flex items-center justify-end gap-2">
                   {ack ? (
-                    <span className="text-xs text-[var(--text-muted)]">
-                      Acknowledged {new Date(ack).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
-                    </span>
+                    <span className="text-xs text-[var(--text-muted)]">Acknowledged {fmt.time(ack)}</span>
                   ) : (
                     <form action={acknowledgeAlert}>
                       <input type="hidden" name="alertId" value={a.id} />

@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("delegation_entries")
     .select("id, participant_name, discipline, event, status, delegation:delegation_id(name, code)")
@@ -64,9 +66,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={approved.toLocaleString()} accent />
-          <MetricCard label="Submitted" value={submitted.toLocaleString()} />
-          <MetricCard label="Total" value={rows.length.toLocaleString()} />
+          <MetricCard label="Approved" value={fmt.number(approved)} accent />
+          <MetricCard label="Submitted" value={fmt.number(submitted)} />
+          <MetricCard label="Total" value={fmt.number(rows.length)} />
         </div>
 
         <DataTable<Entry>

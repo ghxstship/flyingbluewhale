@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CheckInControls } from "./CheckInControls";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,7 @@ export default async function CheckInPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   // Look up the workforce_member row tied to the current user.
   const { data: wfm } = await supabase
     .from("workforce_members")
@@ -86,9 +88,9 @@ export default async function CheckInPage() {
                 <div>
                   <div className="text-sm font-semibold">{s.venue?.name ?? "Unassigned venue"}</div>
                   <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
-                    {new Date(s.starts_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                    {fmt.time(s.starts_at)}
                     {" – "}
-                    {new Date(s.ends_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                    {fmt.time(s.ends_at)}
                     {s.role ? ` · ${s.role}` : ""}
                   </div>
                   {(s.checked_in_at || s.checked_out_at) && (
@@ -96,7 +98,7 @@ export default async function CheckInPage() {
                       {s.checked_in_at && (
                         <>
                           In{" "}
-                          {new Date(s.checked_in_at).toLocaleTimeString(undefined, {
+                          {fmt.dateParts(s.checked_in_at, {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
@@ -106,7 +108,7 @@ export default async function CheckInPage() {
                       {s.checked_out_at && (
                         <>
                           Out{" "}
-                          {new Date(s.checked_out_at).toLocaleTimeString(undefined, {
+                          {fmt.dateParts(s.checked_out_at, {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}

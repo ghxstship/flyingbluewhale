@@ -7,6 +7,7 @@ import {
   type BulkAction as InteractiveBulkAction,
 } from "./DataTableInteractive";
 import type { RowActionItem } from "./ui/RowActions";
+import { EmptyState } from "./ui/EmptyState";
 
 /**
  * DataTable — server-side wrapper around DataTableInteractive.
@@ -274,7 +275,9 @@ export async function DataTable<T extends { id: string }>({
 /**
  * DataTableEmpty — structure-preserving empty state. Headers stay live so
  * operators can read the data model at a glance; ghost rows show field
- * shape; centered overlay carries the title / description / CTA.
+ * shape; centered overlay delegates to the canonical `<EmptyState>`
+ * primitive so blank slates look identical across every shell (Linear /
+ * Stripe / Attio pattern: structure visible behind, message centered).
  */
 function DataTableEmpty({
   columns,
@@ -290,8 +293,8 @@ function DataTableEmpty({
   ghostRows?: number;
 }) {
   return (
-    <div className="relative overflow-x-auto" aria-label={title}>
-      <table className="data-table" role="grid">
+    <div className="relative overflow-x-auto" aria-label={title} role="status">
+      <table className="data-table" role="grid" aria-hidden="true">
         <thead>
           <tr>
             {columns.map((c) => (
@@ -301,7 +304,7 @@ function DataTableEmpty({
             ))}
           </tr>
         </thead>
-        <tbody aria-hidden="true">
+        <tbody>
           {Array.from({ length: ghostRows }).map((_, r) => (
             <tr key={r} className="opacity-30" style={{ borderBottomStyle: "dashed" }}>
               {columns.map((c) => (
@@ -313,14 +316,10 @@ function DataTableEmpty({
           ))}
         </tbody>
       </table>
-      <div
-        role="status"
-        className="absolute inset-x-0 top-1/2 mx-auto flex max-w-sm -translate-y-1/2 flex-col items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--background)] px-5 py-4 text-center backdrop-blur-md"
-        style={{ marginTop: 12 }}
-      >
-        <h3 className="text-sm font-semibold text-[var(--text-primary)]">{title}</h3>
-        {description && <p className="text-xs text-[var(--text-muted)]">{description}</p>}
-        {action && <div className="mt-1">{action}</div>}
+      <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 px-4">
+        <div className="pointer-events-auto mx-auto max-w-sm rounded-md border border-[var(--border-color)] bg-[var(--background)]/95 backdrop-blur-md">
+          <EmptyState size="compact" title={title} description={description} action={action} />
+        </div>
       </div>
     </div>
   );

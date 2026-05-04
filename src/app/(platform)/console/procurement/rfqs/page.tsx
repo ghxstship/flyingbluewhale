@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,10 +29,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   converted: "success",
 };
 
-function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -46,6 +43,8 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   const { data } = await supabase
     .from("requisitions")
     .select("id, title, description, estimated_cents, status, created_at, project:project_id(name)")
@@ -73,8 +72,8 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open RFQs" value={rows.length.toLocaleString()} accent />
-          <MetricCard label="Submitted" value={submitted.toLocaleString()} />
+          <MetricCard label="Open RFQs" value={fmt.number(rows.length)} accent />
+          <MetricCard label="Submitted" value={fmt.number(submitted)} />
           <MetricCard label="Total Estimate" value={formatMoney(totalEstimate)} />
         </div>
 

@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("visa_cases")
     .select(
@@ -75,9 +77,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={approved.toLocaleString()} accent={approved > 0} />
-          <MetricCard label="Letters Issued" value={lettersIssued.toLocaleString()} />
-          <MetricCard label="Total" value={cases.length.toLocaleString()} />
+          <MetricCard label="Approved" value={fmt.number(approved)} accent={approved > 0} />
+          <MetricCard label="Letters Issued" value={fmt.number(lettersIssued)} />
+          <MetricCard label="Total" value={fmt.number(cases.length)} />
         </div>
 
         <DataTable<Visa>

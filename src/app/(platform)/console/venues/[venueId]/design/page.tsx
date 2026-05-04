@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +49,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ data: venueData }, { data: specData }] = await Promise.all([
     supabase.from("venues").select("id, name").eq("id", venueId).eq("org_id", session.orgId).maybeSingle(),
     supabase
@@ -83,9 +85,9 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={approved.toLocaleString()} accent />
-          <MetricCard label="In Review" value={inReview.toLocaleString()} />
-          <MetricCard label="Total" value={specs.length.toLocaleString()} />
+          <MetricCard label="Approved" value={fmt.number(approved)} accent />
+          <MetricCard label="In Review" value={fmt.number(inReview)} />
+          <MetricCard label="Total" value={fmt.number(specs.length)} />
         </div>
 
         {Object.keys(byDiscipline).length > 0 && (

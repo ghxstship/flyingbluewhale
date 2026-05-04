@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +61,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("service_requests")
     .select(
@@ -92,9 +94,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={open.toLocaleString()} />
-          <MetricCard label="Resolved" value={(rows.length - open).toLocaleString()} />
-          <MetricCard label="SLA Breached" value={breached.toLocaleString()} />
+          <MetricCard label="Open" value={fmtIntl.number(open)} />
+          <MetricCard label="Resolved" value={fmtIntl.number(rows.length - open)} />
+          <MetricCard label="SLA Breached" value={fmtIntl.number(breached)} />
         </div>
 
         <section className="surface p-5">

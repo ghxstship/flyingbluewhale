@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -25,10 +26,6 @@ const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
   { href: "/console/services/requests", label: "Service Tickets", description: "Cleaning, IT, hospitality" },
 ];
 
-function fmtDay(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -43,6 +40,8 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDay = (iso: string): string => fmt.dateParts(iso, { weekday: "short", month: "short", day: "numeric" });
   const today = new Date();
   const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
   const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7).toISOString();
@@ -80,13 +79,13 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Services"
-        subtitle={`${totalShifts.toLocaleString()} shift${totalShifts === 1 ? "" : "s"} · ${mealCredits.toLocaleString()} meal credit${mealCredits === 1 ? "" : "s"} · 7-day window`}
+        subtitle={`${fmt.number(totalShifts)} shift${totalShifts === 1 ? "" : "s"} · ${fmt.number(mealCredits)} meal credit${mealCredits === 1 ? "" : "s"} · 7-day window`}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Meal Credits · 7d" value={mealCredits.toLocaleString()} accent />
-          <MetricCard label="Break Minutes · 7d" value={totalBreakMinutes.toLocaleString()} />
-          <MetricCard label="Checked In Now" value={checkedIn.toLocaleString()} />
+          <MetricCard label="Meal Credits · 7d" value={fmt.number(mealCredits)} accent />
+          <MetricCard label="Break Minutes · 7d" value={fmt.number(totalBreakMinutes)} />
+          <MetricCard label="Checked In Now" value={fmt.number(checkedIn)} />
         </div>
 
         {days.length > 0 && (

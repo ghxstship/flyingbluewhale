@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("automations")
     .select("id, name, description, trigger_kind, enabled, last_run_at, last_run_status, updated_at")
@@ -84,9 +86,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Enabled" value={enabled.toLocaleString()} accent />
-          <MetricCard label="Total" value={rows.length.toLocaleString()} />
-          <MetricCard label="Failing Last Run" value={failing.toLocaleString()} />
+          <MetricCard label="Enabled" value={fmt.number(enabled)} accent />
+          <MetricCard label="Total" value={fmt.number(rows.length)} />
+          <MetricCard label="Failing Last Run" value={fmt.number(failing)} />
         </div>
 
         {rows.length === 0 ? (

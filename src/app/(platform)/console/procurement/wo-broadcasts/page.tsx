@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("work_order_broadcasts")
     .select(
@@ -69,9 +71,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={open.toLocaleString()} accent />
-          <MetricCard label="Awarded" value={awarded.toLocaleString()} />
-          <MetricCard label="Total" value={rows.length.toLocaleString()} />
+          <MetricCard label="Open" value={fmtIntl.number(open)} accent />
+          <MetricCard label="Awarded" value={fmtIntl.number(awarded)} />
+          <MetricCard label="Total" value={fmtIntl.number(rows.length)} />
         </div>
         <DataTable<Row>
           rows={rows}

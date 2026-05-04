@@ -1,0 +1,367 @@
+{
+  "common": {
+    "appName": "LYTEHAUS Technologies",
+    "appNameStylized": "L Y T E H A U S",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "submit": "إرسال",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "loading": "جارٍ التحميل…",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "export": "تصدير",
+    "import": "استيراد",
+    "settings": "الإعدادات",
+    "help": "مساعدة",
+    "signOut": "تسجيل الخروج",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "startFree": "ابدأ مجانًا",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "done": "تم",
+    "skip": "تخطي",
+    "retry": "إعادة المحاولة",
+    "copy": "نسخ",
+    "copied": "تم النسخ",
+    "copyLink": "نسخ الرابط",
+    "all": "الكل",
+    "none": "لا شيء",
+    "yes": "نعم",
+    "no": "لا",
+    "optional": "اختياري",
+    "required": "مطلوب",
+    "required_field": "{field} مطلوب",
+    "pending": "قيد الانتظار",
+    "accepted": "مقبول",
+    "revoked": "ملغى",
+    "expired": "منتهي الصلاحية"
+  },
+  "nav": {
+    "product": "المنتج",
+    "industries": "القطاعات",
+    "pricing": "الأسعار",
+    "community": "المجتمع",
+    "resources": "الموارد",
+    "features": "الميزات",
+    "solutions": "الحلول",
+    "compare": "مقارنة",
+    "blog": "المدونة",
+    "guides": "الأدلة",
+    "docs": "التوثيق",
+    "changelog": "سجل التحديثات",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة",
+    "home": "الرئيسية",
+    "about": "عن الشركة",
+    "contact": "اتصل بنا",
+    "careers": "الوظائف",
+    "trust": "الثقة",
+    "legal": {
+      "terms": "الشروط",
+      "privacy": "الخصوصية",
+      "dpa": "DPA",
+      "sla": "SLA"
+    }
+  },
+  "marketing": {
+    "header": {
+      "login": "تسجيل الدخول",
+      "signup": "إنشاء حساب",
+      "themes": "الأنماط",
+      "language": "اللغة",
+      "theme": "النمط",
+      "openMenu": "فتح القائمة",
+      "closeMenu": "إغلاق القائمة"
+    },
+    "home": {
+      "cta": {
+        "primary": "ابدأ مجانًا",
+        "secondary": "احجز عرضًا توضيحيًا"
+      }
+    },
+    "industries": {
+      "live-events": "فعاليات مباشرة",
+      "concerts": "حفلات موسيقية",
+      "festivals-tours": "مهرجانات وجولات",
+      "immersive-experiences": "تجارب غامرة",
+      "brand-activations": "تفعيلات العلامات التجارية",
+      "corporate-events": "فعاليات الشركات",
+      "theatrical-performances": "عروض مسرحية",
+      "broadcast-tv-film": "البث والتلفزيون والسينما"
+    },
+    "footer": {
+      "copyright": "© {year} LYTEHAUS Technologies",
+      "trademark": "ATLVS وGVTEWAY وCOMPVSS علامات تجارية مسجلة لشركة LYTEHAUS Technologies، إحدى شركات G H X S T S H I P Industries.",
+      "tagline": "ATLVS · GVTEWAY · COMPVSS — ثلاثة تطبيقات متصلة لفِرَق الإنتاج.",
+      "ctaTired": "مصمَّم لفِرَق الإنتاج التي سئمت الحلول المرتجلة."
+    },
+    "cta": {
+      "startFree": "ابدأ مجانًا",
+      "bookDemo": "احجز عرضًا توضيحيًا",
+      "viewDocs": "عرض التوثيق",
+      "startFreeForLife": "مجاني مدى الحياة",
+      "contactSales": "التواصل مع المبيعات",
+      "pitchStory": "اقترح قصة"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "subtitle": "أهلًا بعودتك. تابع من حيث توقفت.",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "rememberMe": "تذكّرني",
+      "forgotPassword": "هل نسيت كلمة المرور؟",
+      "emailMeALink": "أرسل لي رابطًا بالبريد",
+      "noAccount": "ليس لديك حساب؟",
+      "createOne": "أنشئ واحدًا",
+      "orContinueWith": "أو تابع بـ",
+      "orContinueWithEmail": "أو تابع بالبريد",
+      "submit": "تسجيل الدخول",
+      "submitting": "جارٍ تسجيل الدخول…"
+    },
+    "signup": {
+      "title": "أنشئ حسابك",
+      "subtitle": "ابدأ مجانًا في أقل من دقيقتين",
+      "name": "الاسم",
+      "email": "البريد المهني",
+      "password": "كلمة المرور",
+      "passwordHelp": "8 أحرف على الأقل",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول",
+      "submit": "إنشاء حساب",
+      "submitting": "جارٍ إنشاء الحساب…",
+      "passwordStrength": {
+        "veryWeak": "ضعيفة جدًا",
+        "weak": "ضعيفة",
+        "fair": "مقبولة",
+        "strong": "قوية",
+        "veryStrong": "قوية جدًا"
+      }
+    },
+    "oauth": {
+      "continueWith": "المتابعة بـ {provider}",
+      "google": "Google",
+      "github": "GitHub",
+      "microsoft": "Microsoft",
+      "couldntStart": "تعذّر بدء تسجيل الدخول بـ {provider}",
+      "notConfigured": "موفّر OAuth غير مُعدّ",
+      "invalidProvider": "موفّر غير صالح",
+      "missingCode": "لم يكتمل تسجيل الدخول — يرجى المحاولة مجددًا"
+    },
+    "magicLink": {
+      "title": "أرسل لي رابطًا سحريًا",
+      "subtitle": "سنرسل رابط تسجيل دخول إلى بريدك — دون كلمة مرور.",
+      "submit": "إرسال الرابط السحري",
+      "submitting": "جارٍ الإرسال",
+      "success": "تحقّق من بريدك — أرسلنا رابط دخول تنتهي صلاحيته خلال ساعة.",
+      "backToLogin": "العودة إلى تسجيل الدخول"
+    },
+    "verifyEmail": {
+      "title": "تحقّق من بريدك",
+      "subtitleWithEmail": "أرسلنا رابط تحقق إلى {email}.",
+      "subtitleGeneric": "أرسلنا رابط تحقق إلى بريدك.",
+      "info": "اضغط الرابط في البريد لتفعيل حسابك. ينتهي الرابط بعد 24 ساعة.",
+      "didntGetIt": "لم يصلك؟ تحقّق من مجلد البريد المزعج ثم اطلب رابطًا جديدًا أدناه.",
+      "resend": "إعادة إرسال بريد التحقق",
+      "resendCooldown": "إعادة الإرسال خلال {seconds} ثانية",
+      "resendSending": "جارٍ الإرسال…",
+      "resendSuccess": "تم إعادة إرسال بريد التحقق.",
+      "backToLogin": "العودة إلى تسجيل الدخول"
+    },
+    "forgotPassword": {
+      "title": "نسيت كلمة المرور",
+      "subtitle": "سنرسل لك رابط إعادة تعيين",
+      "submit": "إرسال رابط إعادة التعيين",
+      "sentSubtitle": "تحقّق من بريدك للحصول على رابط إعادة التعيين",
+      "backToLogin": "العودة إلى تسجيل الدخول"
+    },
+    "resetPassword": {
+      "title": "تعيين كلمة مرور جديدة",
+      "subtitle": "اختر كلمة مرور لم تستخدمها من قبل.",
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "hint": "8 أحرف على الأقل",
+      "submit": "تحديث كلمة المرور",
+      "submitting": "جارٍ التحديث",
+      "mismatch": "كلمتا المرور غير متطابقتين",
+      "expired": "انتهت صلاحية رابط إعادة التعيين أو لم يتم التعرّف عليه. اطلب رابطًا جديدًا من «نسيت كلمة المرور».",
+      "backToLogin": "العودة إلى تسجيل الدخول"
+    },
+    "acceptInvite": {
+      "title": "انضم إلى فريقك",
+      "subtitle": "اقبل دعوتك إلى LYTEHAUS Technologies",
+      "body": "تمت دعوتك إلى مساحة عمل LYTEHAUS Technologies. اقبل أدناه وسننقلك مباشرة.",
+      "submit": "قبول الدعوة",
+      "submitting": "جارٍ الانضمام…",
+      "signInInstead": "تسجيل الدخول بدلًا من ذلك",
+      "invalidOrExpired": "هذه الدعوة غير صالحة أو منتهية الصلاحية أو موجّهة إلى بريد آخر. اطلب من مسؤول المؤسسة إعادة الإرسال.",
+      "joinFailed": "تعذّر الانضمام إلى المؤسسة: {message}",
+      "updateFailed": "تم إنشاء العضوية لكن فشل تحديث الدعوة: {message}"
+    },
+    "errors": {
+      "invalidCredentials": "البريد أو كلمة المرور غير صحيحة",
+      "accountExists": "حساب بهذا البريد موجود بالفعل — جرّب تسجيل الدخول",
+      "duplicateEmail": "هذا البريد مسجّل بالفعل",
+      "weakPassword": "يجب ألا تقل كلمة المرور عن 8 أحرف",
+      "notConfigured": "Supabase غير مُعدّ. عيّن NEXT_PUBLIC_SUPABASE_URL و NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+      "signupNoUser": "فشل التسجيل — لم يتم إرجاع مستخدم.",
+      "unknown": "حدث خطأ ما — يرجى المحاولة مجددًا"
+    }
+  },
+  "invites": {
+    "moduleHeader": {
+      "eyebrow": "الأشخاص",
+      "title": "الدعوات",
+      "subtitle": "دعوات المؤسسة المعلقة"
+    },
+    "form": {
+      "heading": "دعوة شخص ما",
+      "description": "سيصلهم بريد برابط القبول. تنتهي صلاحيته خلال 7 أيام.",
+      "email": "البريد الإلكتروني",
+      "role": "الدور",
+      "submit": "إرسال الدعوة",
+      "submitting": "جارٍ الإرسال…"
+    },
+    "roles": {
+      "admin": "مسؤول — تحكم كامل بالمؤسسة",
+      "controller": "مراقب — مالية وعمليات",
+      "collaborator": "متعاون — قراءة/كتابة العمليات",
+      "contractor": "مقاول — وصول محدود",
+      "crew": "طاقم — ميداني / محمول",
+      "client": "عميل — بوابة خارجية",
+      "viewer": "مشاهد — قراءة فقط",
+      "community": "مجتمع — صلاحيات أدنى"
+    },
+    "pending": {
+      "heading": "معلّق ({count})",
+      "emptyAdmin": "أرسل واحدة أعلاه للبدء.",
+      "emptyMember": "اطلب من المسؤول دعوة أعضاء جدد.",
+      "columns": {
+        "email": "البريد",
+        "role": "الدور",
+        "expires": "ينتهي",
+        "link": "الرابط"
+      }
+    },
+    "history": {
+      "heading": "السجل",
+      "columns": {
+        "email": "البريد",
+        "role": "الدور",
+        "status": "الحالة",
+        "when": "متى"
+      }
+    },
+    "emailSubject": "أنت مدعو للانضمام إلى مساحة عمل LYTEHAUS Technologies",
+    "emailHeading": "تمت دعوتك",
+    "emailBody": "{inviter} دعاك للانضمام إلى مساحة العمل بصفة {role}.",
+    "emailCta": "قبول الدعوة",
+    "emailExpiry": "تنتهي صلاحية الرابط خلال 7 أيام. إذا لم يعمل الزر:",
+    "errors": {
+      "onlyAdmins": "يمكن للملاك والمسؤولين والمطورين فقط إرسال الدعوات.",
+      "pendingExists": "توجد دعوة معلّقة بالفعل لهذا البريد.",
+      "invalidToken": "رمز دعوة غير صالح",
+      "validationGeneric": "إدخال غير صالح"
+    }
+  },
+  "theme": {
+    "sheet": {
+      "title": "اختر نمط التصميم",
+      "description": "ثمانية أنماط متكاملة. اختيارك يُطبَّق فورًا على كل صفحة — دون إعادة تحميل أو تسجيل. سنحفظه على هذا الجهاز.",
+      "appearanceHeading": "المظهر",
+      "appearanceSubtitle": "اختر مظهر مساحة عملك. يُطبَّق فورًا في كل مكان.",
+      "matchSystem": "مطابقة النظام",
+      "matchingSystem": "جارٍ مطابقة النظام",
+      "currentlyLabel": "حاليًا:",
+      "upsell": "هل أعجبك ما تراه؟ أنشئ حسابًا لمزامنة الأنماط عبر جميع أجهزتك.",
+      "upsellCta": "إنشاء حساب"
+    },
+    "toggle": {
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "مطابقة النظام",
+      "themes": "الأنماط",
+      "colorTheme": "نمط الألوان"
+    }
+  },
+  "footerUtility": {
+    "designThemes": "أنماط التصميم",
+    "changeLanguage": "تغيير اللغة"
+  },
+  "shell": {
+    "platform": {
+      "brand": "ATLVS",
+      "consoleEyebrow": "وحدة تحكم العمليات"
+    },
+    "portal": {
+      "brand": "GVTEWAY"
+    },
+    "mobile": {
+      "brand": "COMPVSS",
+      "aboutSuffix": "· v{version}"
+    }
+  },
+  "a11y": {
+    "skipToContent": "تخطي إلى المحتوى",
+    "closeDialog": "إغلاق الحوار",
+    "toggleTheme": "تبديل النمط",
+    "toggleMenu": "تبديل القائمة",
+    "openMenu": "فتح القائمة",
+    "homeAriaLabel": "LYTEHAUS Technologies — الرئيسية",
+    "loading": "جارٍ التحميل",
+    "saving": "جارٍ الحفظ",
+    "saved": "تم الحفظ",
+    "error": "خطأ",
+    "expandSidebar": "توسيع الشريط الجانبي",
+    "collapseSidebar": "طي الشريط الجانبي"
+  },
+  "community": {
+    "meta": {
+      "title": "المجتمع — فِرَق الإنتاج التي تبني على LYTEHAUS",
+      "description": "المهرجانات والجولات والوكالات والورش التي تدير إنتاجها على ATLVS وGVTEWAY وCOMPVSS. قصص الأعضاء والأرقام وما يقدمونه فعلًا."
+    },
+    "hero": {
+      "eyebrow": "المجتمع",
+      "title": "فِرَق الإنتاج، تبني على الملأ.",
+      "subtitle": "المهرجانات والجولات والوكالات والورش التي تدير عروضها على LYTEHAUS Technologies. تدفقات حقيقية. أرقام حقيقية. أدلة حقيقية."
+    },
+    "metrics": {
+      "productionTeams": "فِرَق إنتاج",
+      "ticketsScanned": "تذاكر تم مسحها",
+      "showsAdvanced": "عروض مُحضّرة",
+      "countries": "دول"
+    },
+    "stories": {
+      "heading": "قصص الأعضاء",
+      "subtitle": "ما كانوا يستخدمون من قبل، وما الذي بدّلوه، وما الذي تحسّن بشكل قابل للقياس."
+    },
+    "join": {
+      "eyebrow": "انضم إلى القائمة",
+      "title": "فريقك، هنا.",
+      "body": "تنفذ عروضًا حقيقية على LYTEHAUS Technologies؟ نبحث دائمًا عن قصص أعضاء جديدة. مقابلة قصيرة، أرقام مُجهَّلة، كلامك."
+    },
+    "finalCta": {
+      "title": "كن القصة التالية",
+      "subtitle": "ابدأ مجانًا. نفّذ عرضًا. سنتحدث بعدها."
+    }
+  },
+  "rate": {
+    "tooMany": "طلبات كثيرة جدًا — يُرجى المحاولة مجددًا قريبًا",
+    "retryIn": "إعادة المحاولة خلال {seconds} ثانية"
+  },
+  "errors": {
+    "generic": "حدث خطأ ما",
+    "notFound": "غير موجود",
+    "forbidden": "ليس لديك حق الوصول إلى هذا",
+    "unauthorized": "يُرجى تسجيل الدخول للمتابعة",
+    "offline": "أنت غير متصل — ستتم مزامنة الإجراءات المعلقة عند إعادة الاتصال"
+  }
+}

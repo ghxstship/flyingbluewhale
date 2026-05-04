@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 type DsarRow = {
   id: string;
@@ -32,11 +33,6 @@ const DSAR_TONE: Record<string, "muted" | "info" | "warning" | "success" | "erro
   rejected: "error",
   closed: "muted",
 };
-
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
 
 /**
  * Persona-scoped DSAR + consent panel for portal /privacy routes.
@@ -77,6 +73,9 @@ export async function PortalPrivacyPanel({
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtter = await getRequestFormatters();
+  const fmt = (iso: string | null): string =>
+    iso ? fmtter.dateParts(iso, { month: "short", day: "numeric", year: "numeric" }) : "—";
 
   const [{ data: dsarData }, { data: consentData }] = await Promise.all([
     supabase
@@ -113,9 +112,9 @@ export async function PortalPrivacyPanel({
       />
       <div className="page-content space-y-6">
         <div className="metric-grid-3">
-          <MetricCard label="Open Requests" value={open.toLocaleString()} />
-          <MetricCard label="Total Requests" value={dsars.length.toLocaleString()} />
-          <MetricCard label="Active Consents" value={grantedConsents.toLocaleString()} />
+          <MetricCard label="Open Requests" value={fmtter.number(open)} />
+          <MetricCard label="Total Requests" value={fmtter.number(dsars.length)} />
+          <MetricCard label="Active Consents" value={fmtter.number(grantedConsents)} />
         </div>
 
         <section className="surface p-5">

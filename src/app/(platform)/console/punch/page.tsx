@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,11 +36,6 @@ const PRIORITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
   urgent: "error",
 };
 
-function fmt(d: string | null): string {
-  if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -53,6 +49,12 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(d: string | null): string {
+    if (!d) return "—";
+    return fmt.dateParts(d + "T00:00:00", { month: "short", day: "numeric" });
+  }
   const { data } = await supabase
     .from("punch_items")
     .select(
@@ -81,9 +83,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={open.toLocaleString()} accent />
-          <MetricCard label="Show-ready gates" value={showReady.toLocaleString()} />
-          <MetricCard label="Urgent" value={urgent.toLocaleString()} />
+          <MetricCard label="Open" value={fmt.number(open)} accent />
+          <MetricCard label="Show-ready gates" value={fmt.number(showReady)} />
+          <MetricCard label="Urgent" value={fmt.number(urgent)} />
         </div>
         <DataTable<Row>
           rows={rows}
@@ -136,7 +138,7 @@ export default async function Page() {
             {
               key: "due",
               header: "Due",
-              render: (r) => fmt(r.due_at),
+              render: (r) => fmtDate(r.due_at),
               className: "font-mono text-xs",
               accessor: (r) => r.due_at ?? null,
             },

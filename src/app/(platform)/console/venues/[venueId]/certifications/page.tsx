@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +56,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ data: venueData }, { data: certData }] = await Promise.all([
     supabase.from("venues").select("id, name").eq("id", venueId).eq("org_id", session.orgId).maybeSingle(),
     supabase
@@ -90,9 +92,9 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active" value={(certs.length - expired).toLocaleString()} accent />
-          <MetricCard label="Expiring (≤30d)" value={expiring30.toLocaleString()} />
-          <MetricCard label="Expired" value={expired.toLocaleString()} />
+          <MetricCard label="Active" value={fmt.number(certs.length - expired)} accent />
+          <MetricCard label="Expiring (≤30d)" value={fmt.number(expiring30)} />
+          <MetricCard label="Expired" value={fmt.number(expired)} />
         </div>
 
         <DataTable<CertRow>

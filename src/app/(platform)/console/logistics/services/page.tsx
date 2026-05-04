@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +49,7 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const all = (await listOrgScoped("service_requests", session.orgId, {
     orderBy: "opened_at",
     ascending: false,
@@ -72,9 +74,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={open.toLocaleString()} accent />
-          <MetricCard label="SLA breached" value={breached.toLocaleString()} />
-          <MetricCard label="Total · 30d" value={rows.length.toLocaleString()} />
+          <MetricCard label="Open" value={fmt.number(open)} accent />
+          <MetricCard label="SLA breached" value={fmt.number(breached)} />
+          <MetricCard label="Total · 30d" value={fmt.number(rows.length)} />
         </div>
 
         <DataTable<ServiceRequest>

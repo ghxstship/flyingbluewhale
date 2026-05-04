@@ -5,6 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +38,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("venues")
     .select("id, name, kind, cluster, capacity, handover_state")
@@ -104,8 +106,10 @@ export default async function Page() {
             {
               key: "capacity",
               header: "Capacity",
-              render: (r) => <span className="font-mono text-xs">{r.capacity?.toLocaleString() ?? "—"}</span>,
-              accessor: (r) => r.capacity?.toLocaleString ?? null,
+              render: (r) => (
+                <span className="font-mono text-xs">{r.capacity != null ? fmt.number(r.capacity) : "—"}</span>
+              ),
+              accessor: (r) => r.capacity ?? null,
             },
             {
               key: "handover",

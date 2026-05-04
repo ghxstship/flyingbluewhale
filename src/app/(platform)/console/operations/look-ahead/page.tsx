@@ -3,20 +3,12 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 type Item = { kind: string; id: string; title: string; when: string; project: string | null };
 
-function fmt(d: string): string {
-  return new Date(d).toLocaleString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
 function dayKey(d: string): string {
   return new Date(d).toISOString().slice(0, 10);
 }
@@ -25,6 +17,17 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(d: string): string {
+    return new Date(d).toLocaleString(undefined, {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
   const now = new Date();
   const end = new Date(Date.now() + 21 * 24 * 60 * 60 * 1000);
 
@@ -142,7 +145,7 @@ export default async function Page() {
           Object.entries(buckets).map(([day, dayItems]) => (
             <section key={day} className="surface p-3">
               <h3 className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
-                {new Date(day + "T00:00:00").toLocaleDateString(undefined, {
+                {fmt.dateParts(day + "T00:00:00", {
                   weekday: "long",
                   month: "long",
                   day: "numeric",
@@ -159,7 +162,7 @@ export default async function Page() {
                       <span>{it.title}</span>
                       {it.project && <span className="text-xs text-[var(--text-muted)]">· {it.project}</span>}
                     </div>
-                    <span className="font-mono text-[10px] text-[var(--text-muted)]">{fmt(it.when)}</span>
+                    <span className="font-mono text-[10px] text-[var(--text-muted)]">{fmtDate(it.when)}</span>
                   </li>
                 ))}
               </ul>

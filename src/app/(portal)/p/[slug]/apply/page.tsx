@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -36,11 +37,6 @@ const VETTING_TONE: Record<string, "muted" | "info" | "warning" | "success" | "e
   failed: "error",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -56,6 +52,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(iso: string | null): string {
+    if (!iso) return "—";
+    return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
+  }
   const { data } = await supabase
     .from("accreditations")
     .select("id, person_name, state, vetting, issued_at, valid_from, valid_to, category:category_id(code, name)")
@@ -77,9 +79,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Issued" value={issued.toLocaleString()} accent={issued > 0} />
-          <MetricCard label="In Review" value={inFlight.toLocaleString()} />
-          <MetricCard label="Total" value={apps.length.toLocaleString()} />
+          <MetricCard label="Issued" value={fmt.number(issued)} accent={issued > 0} />
+          <MetricCard label="In Review" value={fmt.number(inFlight)} />
+          <MetricCard label="Total" value={fmt.number(apps.length)} />
         </div>
 
         <section className="surface p-5">
@@ -115,7 +117,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     <div className="font-medium">{a.person_name}</div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
                       {a.category?.code ?? "—"} · {a.category?.name ?? ""}
-                      {a.valid_from && a.valid_to ? ` · ${fmt(a.valid_from)} – ${fmt(a.valid_to)}` : ""}
+                      {a.valid_from && a.valid_to ? ` · ${fmtDate(a.valid_from)} – ${fmtDate(a.valid_to)}` : ""}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">

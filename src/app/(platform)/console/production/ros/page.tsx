@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CueForm, CueRow } from "./CueForm";
 import type { Cue } from "@/lib/supabase/types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export default async function RunOfShowPage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("cues")
     .select("id, scheduled_at, lane, label, description, status, duration_seconds, owner_id")
@@ -64,7 +66,7 @@ export default async function RunOfShowPage() {
             <section key={day} className="surface">
               <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2.5">
                 <h3 className="text-sm font-semibold">
-                  {new Date(day).toLocaleDateString(undefined, {
+                  {fmt.dateParts(day, {
                     weekday: "short",
                     month: "short",
                     day: "numeric",

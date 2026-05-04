@@ -19,7 +19,6 @@ export function AnnotationActions({
 }) {
   const [pending, start] = useTransition();
   const isOpen = status === "open";
-  const isAck = status === "acknowledged";
   const isClosed = status === "resolved" || status === "dismissed";
   const needsConfirmation = confirmationRequired && !confirmedAt;
 

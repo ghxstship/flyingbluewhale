@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +53,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ data: ttData }, { data: entData }] = await Promise.all([
     supabase
       .from("ticket_types")
@@ -82,7 +84,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Commercial"
         title="Hospitality"
-        subtitle={`${tickets.length} package${tickets.length === 1 ? "" : "s"} · ${totalAllocation.toLocaleString()} seats · ${ents.length} entitlement${ents.length === 1 ? "" : "s"}`}
+        subtitle={`${tickets.length} package${tickets.length === 1 ? "" : "s"} · ${fmt.number(totalAllocation)} seats · ${ents.length} entitlement${ents.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/commercial/sponsors" size="sm">
             Sponsors
@@ -91,11 +93,11 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Allocation" value={totalAllocation.toLocaleString()} accent />
+          <MetricCard label="Allocation" value={fmt.number(totalAllocation)} accent />
           <MetricCard label="Revenue at Allocation" value={formatMoney(totalRevenue)} />
           <MetricCard
             label="Entitlements Delivered"
-            value={`${delivered.toLocaleString()} / ${totalEntitlements.toLocaleString()}`}
+            value={`${fmt.number(delivered)} / ${fmt.number(totalEntitlements)}`}
           />
         </div>
 
@@ -114,7 +116,7 @@ export default async function Page() {
                   <div>
                     <div className="text-sm font-medium">{t.name}</div>
                     <div className="font-mono text-xs text-[var(--text-muted)]">
-                      {t.allocation.toLocaleString()} seats · {formatMoney(t.price_cents, t.currency)} ea
+                      {fmt.number(t.allocation)} seats · {formatMoney(t.price_cents, t.currency)} ea
                     </div>
                   </div>
                   <Badge variant="muted">{t.channel}</Badge>

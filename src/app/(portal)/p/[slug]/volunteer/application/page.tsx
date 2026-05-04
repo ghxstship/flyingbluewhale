@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,10 +28,6 @@ const STATUS_LABEL: Record<string, string> = {
   declined: "Declined",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -46,6 +43,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   const { data } = await supabase
     .from("workforce_members")
     .select("id, full_name, email, phone, role, kind, venue_id, created_at")
@@ -74,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <div className="metric-grid-3">
           <MetricCard label="Status" value={STATUS_LABEL[status]} accent={Boolean(member)} />
           <MetricCard label="Role" value={member?.role ?? "TBD"} />
-          <MetricCard label="Joined" value={member ? fmt(member.created_at) : "—"} />
+          <MetricCard label="Joined" value={member ? fmtDate(member.created_at) : "—"} />
         </div>
 
         {member ? (

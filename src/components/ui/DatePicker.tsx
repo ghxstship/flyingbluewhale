@@ -4,6 +4,7 @@ import * as React from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { formatDate } from "@/lib/i18n/format";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /**
  * DatePicker — keyboard-first calendar, inline or in a popover.
@@ -48,6 +49,7 @@ export function DatePicker({
   const selected = controlled ? (value ?? null) : internal;
   const [open, setOpen] = React.useState(false);
   const [viewMonth, setViewMonth] = React.useState<Date>(() => selected ?? new Date());
+  const fmt = useFormatters();
 
   function commit(d: Date | null) {
     if (!controlled) setInternal(d);
@@ -56,8 +58,8 @@ export function DatePicker({
 
   const display = selected
     ? withTime
-      ? `${formatDate(selected)} ${selected.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`
-      : formatDate(selected)
+      ? `${fmt.date(selected)} ${fmt.time(selected)}`
+      : fmt.date(selected)
     : placeholder;
 
   return (

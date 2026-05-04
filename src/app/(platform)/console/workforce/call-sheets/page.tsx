@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +43,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { start, end } = dayBounds(focusDate);
 
   const { data: shifts } = await supabase
@@ -119,16 +121,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                   <div className="font-mono text-xs text-[var(--text-muted)]">{m.role ?? "—"}</div>
                   <div className="mt-3 flex items-baseline justify-between text-xs">
                     <span className="text-[var(--text-secondary)]">Call</span>
-                    <span className="font-mono text-base font-semibold">
-                      {callTime ? callTime.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }) : "—"}
-                    </span>
+                    <span className="font-mono text-base font-semibold">{callTime ? fmt.time(callTime) : "—"}</span>
                   </div>
                   {first && last && first !== last && (
                     <div className="mt-1 flex items-baseline justify-between text-[10px]">
                       <span className="text-[var(--text-muted)]">Wrap</span>
-                      <span className="font-mono">
-                        {new Date(last.ends_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
-                      </span>
+                      <span className="font-mono">{fmt.time(last.ends_at)}</span>
                     </div>
                   )}
                   <div className="mt-2 font-mono text-[10px] text-[var(--text-muted)]">

@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { KNOWN_CONNECTORS } from "../connectors";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase.from("org_integrations").select("connector, status").eq("org_id", session.orgId);
   const installed = new Map((data ?? []).map((r) => [r.connector, r.status]));
   const installedCount = Array.from(installed.values()).filter((s) => s === "installed").length;
@@ -86,9 +88,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Available" value={CATALOG.filter((c) => c.available).length.toLocaleString()} accent />
-          <MetricCard label="Installed" value={installedCount.toLocaleString()} />
-          <MetricCard label="Coming Soon" value={CATALOG.filter((c) => !c.available).length.toLocaleString()} />
+          <MetricCard label="Available" value={fmt.number(CATALOG.filter((c) => c.available).length)} accent />
+          <MetricCard label="Installed" value={fmt.number(installedCount)} />
+          <MetricCard label="Coming Soon" value={fmt.number(CATALOG.filter((c) => !c.available).length)} />
         </div>
 
         {cats.map(([cat, items]) => (

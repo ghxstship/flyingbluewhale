@@ -1,0 +1,367 @@
+{
+  "common": {
+    "appName": "LYTEHAUS Technologies",
+    "appNameStylized": "L Y T E H A U S",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "create": "作成",
+    "submit": "送信",
+    "close": "閉じる",
+    "confirm": "確認",
+    "loading": "読み込み中…",
+    "search": "検索",
+    "filter": "絞り込み",
+    "sort": "並び替え",
+    "export": "エクスポート",
+    "import": "インポート",
+    "settings": "設定",
+    "help": "ヘルプ",
+    "signOut": "ログアウト",
+    "signIn": "ログイン",
+    "signUp": "登録",
+    "startFree": "無料で始める",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ",
+    "done": "完了",
+    "skip": "スキップ",
+    "retry": "再試行",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "copyLink": "リンクをコピー",
+    "all": "すべて",
+    "none": "なし",
+    "yes": "はい",
+    "no": "いいえ",
+    "optional": "任意",
+    "required": "必須",
+    "required_field": "{field}は必須です",
+    "pending": "保留中",
+    "accepted": "承諾済み",
+    "revoked": "取り消し済み",
+    "expired": "期限切れ"
+  },
+  "nav": {
+    "product": "プロダクト",
+    "industries": "業界",
+    "pricing": "料金",
+    "community": "コミュニティ",
+    "resources": "リソース",
+    "features": "機能",
+    "solutions": "ソリューション",
+    "compare": "比較",
+    "blog": "ブログ",
+    "guides": "ガイド",
+    "docs": "ドキュメント",
+    "changelog": "更新履歴",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる",
+    "home": "ホーム",
+    "about": "会社概要",
+    "contact": "お問い合わせ",
+    "careers": "採用情報",
+    "trust": "信頼性",
+    "legal": {
+      "terms": "利用規約",
+      "privacy": "プライバシー",
+      "dpa": "DPA",
+      "sla": "SLA"
+    }
+  },
+  "marketing": {
+    "header": {
+      "login": "ログイン",
+      "signup": "登録",
+      "themes": "テーマ",
+      "language": "言語",
+      "theme": "テーマ",
+      "openMenu": "メニューを開く",
+      "closeMenu": "メニューを閉じる"
+    },
+    "home": {
+      "cta": {
+        "primary": "無料で始める",
+        "secondary": "デモを予約"
+      }
+    },
+    "industries": {
+      "live-events": "ライブイベント",
+      "concerts": "コンサート",
+      "festivals-tours": "フェスティバル・ツアー",
+      "immersive-experiences": "イマーシブ体験",
+      "brand-activations": "ブランドアクティベーション",
+      "corporate-events": "企業イベント",
+      "theatrical-performances": "舞台公演",
+      "broadcast-tv-film": "放送・TV・映画"
+    },
+    "footer": {
+      "copyright": "© {year} LYTEHAUS Technologies",
+      "trademark": "ATLVS、GVTEWAY、COMPVSS は、G H X S T S H I P Industries 傘下の LYTEHAUS Technologies の登録商標です。",
+      "tagline": "ATLVS・GVTEWAY・COMPVSS — プロダクションチームのための3つの連携アプリ。",
+      "ctaTired": "場当たり対応に疲れたプロダクションチームのために。"
+    },
+    "cta": {
+      "startFree": "無料で始める",
+      "bookDemo": "デモを予約",
+      "viewDocs": "ドキュメントを見る",
+      "startFreeForLife": "永久無料で始める",
+      "contactSales": "営業に問い合わせる",
+      "pitchStory": "ストーリーを提案"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "ログイン",
+      "subtitle": "おかえりなさい。続きから始めましょう。",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "rememberMe": "ログイン状態を保持",
+      "forgotPassword": "パスワードをお忘れですか？",
+      "emailMeALink": "リンクをメールで送る",
+      "noAccount": "アカウントをお持ちでないですか？",
+      "createOne": "作成する",
+      "orContinueWith": "または以下で続行",
+      "orContinueWithEmail": "またはメールで続行",
+      "submit": "ログイン",
+      "submitting": "ログイン中…"
+    },
+    "signup": {
+      "title": "アカウントを作成",
+      "subtitle": "2分以内に無料で開始",
+      "name": "名前",
+      "email": "仕事用メール",
+      "password": "パスワード",
+      "passwordHelp": "8文字以上",
+      "haveAccount": "すでにアカウントをお持ちですか？",
+      "signIn": "ログイン",
+      "submit": "アカウントを作成",
+      "submitting": "アカウント作成中…",
+      "passwordStrength": {
+        "veryWeak": "非常に弱い",
+        "weak": "弱い",
+        "fair": "普通",
+        "strong": "強い",
+        "veryStrong": "非常に強い"
+      }
+    },
+    "oauth": {
+      "continueWith": "{provider}で続行",
+      "google": "Google",
+      "github": "GitHub",
+      "microsoft": "Microsoft",
+      "couldntStart": "{provider}サインインを開始できませんでした",
+      "notConfigured": "OAuthプロバイダーが設定されていません",
+      "invalidProvider": "無効なプロバイダー",
+      "missingCode": "サインインが完了しませんでした — もう一度お試しください"
+    },
+    "magicLink": {
+      "title": "マジックリンクを送る",
+      "subtitle": "受信トレイにサインインリンクを送ります — パスワード不要。",
+      "submit": "マジックリンクを送信",
+      "submitting": "送信中",
+      "success": "受信トレイをご確認ください — 1時間で期限切れになるサインインリンクを送りました。",
+      "backToLogin": "ログインに戻る"
+    },
+    "verifyEmail": {
+      "title": "受信トレイをご確認ください",
+      "subtitleWithEmail": "{email} に確認リンクを送りました。",
+      "subtitleGeneric": "メールに確認リンクを送りました。",
+      "info": "メール内のリンクをクリックしてアカウントを有効化してください。リンクは24時間で期限切れになります。",
+      "didntGetIt": "届いていませんか？迷惑メールフォルダを確認し、下から再送をリクエストしてください。",
+      "resend": "確認メールを再送",
+      "resendCooldown": "{seconds}秒後に再送",
+      "resendSending": "送信中…",
+      "resendSuccess": "確認メールを再送しました。",
+      "backToLogin": "ログインに戻る"
+    },
+    "forgotPassword": {
+      "title": "パスワードをお忘れですか",
+      "subtitle": "リセットリンクをメールで送ります",
+      "submit": "リセットリンクを送信",
+      "sentSubtitle": "受信トレイでリセットリンクをご確認ください",
+      "backToLogin": "ログインに戻る"
+    },
+    "resetPassword": {
+      "title": "新しいパスワードを設定",
+      "subtitle": "以前に使ったことのないパスワードを選んでください。",
+      "newPassword": "新しいパスワード",
+      "confirmPassword": "パスワードの確認",
+      "hint": "8文字以上",
+      "submit": "パスワードを更新",
+      "submitting": "更新中",
+      "mismatch": "パスワードが一致しません",
+      "expired": "リセットリンクの期限が切れたか認識されません。「パスワードをお忘れですか」から新規にリクエストしてください。",
+      "backToLogin": "ログインに戻る"
+    },
+    "acceptInvite": {
+      "title": "チームに参加",
+      "subtitle": "LYTEHAUS Technologies への招待を承諾",
+      "body": "LYTEHAUS Technologies のワークスペースに招待されました。下で承諾するとそのままアクセスできます。",
+      "submit": "招待を承諾",
+      "submitting": "参加中…",
+      "signInInstead": "代わりにログイン",
+      "invalidOrExpired": "この招待は無効、期限切れ、または別のメール宛です。組織の管理者に再送を依頼してください。",
+      "joinFailed": "組織への参加に失敗しました：{message}",
+      "updateFailed": "メンバーシップは作成されましたが招待の更新に失敗しました：{message}"
+    },
+    "errors": {
+      "invalidCredentials": "メールまたはパスワードが無効です",
+      "accountExists": "このメールのアカウントが既に存在します — ログインをお試しください",
+      "duplicateEmail": "このメールは既に登録されています",
+      "weakPassword": "パスワードは8文字以上である必要があります",
+      "notConfigured": "Supabase が未設定です。NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY を設定してください。",
+      "signupNoUser": "登録に失敗しました — ユーザーが返されませんでした。",
+      "unknown": "問題が発生しました — もう一度お試しください"
+    }
+  },
+  "invites": {
+    "moduleHeader": {
+      "eyebrow": "メンバー",
+      "title": "招待",
+      "subtitle": "保留中の組織招待"
+    },
+    "form": {
+      "heading": "メンバーを招待",
+      "description": "承諾用リンクのメールが届きます。7日で期限切れ。",
+      "email": "メールアドレス",
+      "role": "役割",
+      "submit": "招待を送信",
+      "submitting": "送信中…"
+    },
+    "roles": {
+      "admin": "管理者 — 組織の完全制御",
+      "controller": "コントローラー — 財務と運営",
+      "collaborator": "コラボレーター — 読み書き運営",
+      "contractor": "請負業者 — 限定アクセス",
+      "crew": "クルー — 現場 / モバイル",
+      "client": "クライアント — 外部ポータル",
+      "viewer": "閲覧者 — 読み取り専用",
+      "community": "コミュニティ — 最小権限"
+    },
+    "pending": {
+      "heading": "保留中（{count}）",
+      "emptyAdmin": "上から1件送って始めましょう。",
+      "emptyMember": "管理者に新メンバーの招待を依頼してください。",
+      "columns": {
+        "email": "メール",
+        "role": "役割",
+        "expires": "期限",
+        "link": "リンク"
+      }
+    },
+    "history": {
+      "heading": "履歴",
+      "columns": {
+        "email": "メール",
+        "role": "役割",
+        "status": "ステータス",
+        "when": "日時"
+      }
+    },
+    "emailSubject": "LYTEHAUS Technologies のワークスペースに招待されました",
+    "emailHeading": "招待が届いています",
+    "emailBody": "{inviter} があなたを {role} としてワークスペースに招待しました。",
+    "emailCta": "招待を承諾",
+    "emailExpiry": "リンクは7日で期限切れになります。ボタンが動作しない場合：",
+    "errors": {
+      "onlyAdmins": "招待できるのはオーナー、管理者、開発者のみです。",
+      "pendingExists": "このメールには保留中の招待が既に存在します。",
+      "invalidToken": "無効な招待トークン",
+      "validationGeneric": "無効な入力"
+    }
+  },
+  "theme": {
+    "sheet": {
+      "title": "デザインテーマを選択",
+      "description": "8つの完成されたテーマ。選択は全ページに即時反映 — 再読み込みも登録も不要。このデバイスで記憶されます。",
+      "appearanceHeading": "外観",
+      "appearanceSubtitle": "ワークスペースの見た目を選んでください。すべての場所に即時反映されます。",
+      "matchSystem": "システムに合わせる",
+      "matchingSystem": "システムに合わせ中",
+      "currentlyLabel": "現在：",
+      "upsell": "気に入りましたか？アカウントを作成して全デバイスでテーマを同期しましょう。",
+      "upsellCta": "アカウントを作成"
+    },
+    "toggle": {
+      "light": "ライト",
+      "dark": "ダーク",
+      "system": "システムに合わせる",
+      "themes": "テーマ",
+      "colorTheme": "カラーテーマ"
+    }
+  },
+  "footerUtility": {
+    "designThemes": "デザインテーマ",
+    "changeLanguage": "言語を変更"
+  },
+  "shell": {
+    "platform": {
+      "brand": "ATLVS",
+      "consoleEyebrow": "オペレーションコンソール"
+    },
+    "portal": {
+      "brand": "GVTEWAY"
+    },
+    "mobile": {
+      "brand": "COMPVSS",
+      "aboutSuffix": "· v{version}"
+    }
+  },
+  "a11y": {
+    "skipToContent": "本文へスキップ",
+    "closeDialog": "ダイアログを閉じる",
+    "toggleTheme": "テーマを切り替え",
+    "toggleMenu": "メニューを切り替え",
+    "openMenu": "メニューを開く",
+    "homeAriaLabel": "LYTEHAUS Technologies — ホーム",
+    "loading": "読み込み中",
+    "saving": "保存中",
+    "saved": "保存しました",
+    "error": "エラー",
+    "expandSidebar": "サイドバーを展開",
+    "collapseSidebar": "サイドバーを折りたたむ"
+  },
+  "community": {
+    "meta": {
+      "title": "コミュニティ — LYTEHAUS で構築するプロダクションチーム",
+      "description": "ATLVS、GVTEWAY、COMPVSS でプロダクションを動かすフェスティバル、ツアー、エージェンシー、製作会社。メンバーの事例、数字、実際にデリバリーするもの。"
+    },
+    "hero": {
+      "eyebrow": "コミュニティ",
+      "title": "プロダクションチーム、公開の場で構築。",
+      "subtitle": "LYTEHAUS Technologies でショーを動かすフェスティバル、ツアー、エージェンシー、製作会社。実ワークフロー。実数字。実証拠。"
+    },
+    "metrics": {
+      "productionTeams": "プロダクションチーム",
+      "ticketsScanned": "スキャンしたチケット",
+      "showsAdvanced": "進めたショー",
+      "countries": "カ国"
+    },
+    "stories": {
+      "heading": "メンバーの事例",
+      "subtitle": "以前何を使っていたか、何を変えたか、何が定量的に改善したか。"
+    },
+    "join": {
+      "eyebrow": "リスターに参加",
+      "title": "あなたのチームを、ここに。",
+      "body": "LYTEHAUS Technologies で実ショーをデリバリーしていますか？常に新しいメンバー事例を募集中。短いインタビュー、匿名化された数字、あなたの言葉。"
+    },
+    "finalCta": {
+      "title": "次の事例になる",
+      "subtitle": "無料で開始。ショーを届ける。あとで話しましょう。"
+    }
+  },
+  "rate": {
+    "tooMany": "リクエストが多すぎます。しばらくしてから再試行してください",
+    "retryIn": "{seconds}秒後に再試行"
+  },
+  "errors": {
+    "generic": "問題が発生しました",
+    "notFound": "見つかりません",
+    "forbidden": "アクセス権限がありません",
+    "unauthorized": "続行するにはログインしてください",
+    "offline": "オフラインです — キューに入った操作は再接続時に同期されます"
+  }
+}

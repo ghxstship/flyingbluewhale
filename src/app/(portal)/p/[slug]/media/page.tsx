@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ count: kbCount }] = await Promise.all([
     supabase.from("kb_articles").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
   ]);
@@ -44,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Info Articles" value={(kbCount ?? 0).toLocaleString()} />
+          <MetricCard label="Info Articles" value={fmt.number(kbCount ?? 0)} />
           <MetricCard label="Status" value="Live" accent />
           <MetricCard label="Last Updated" value="today" />
         </div>

@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const horizon = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: catData }, { data: runsData }, { count: blockCount }] = await Promise.all([
     supabase
@@ -82,9 +84,9 @@ export default async function Page() {
       <ModuleHeader eyebrow="Programs" title="Protocol" subtitle="VIP itineraries · dignitary management · T3 fleet" />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="VIP categories" value={vipCats.length.toLocaleString()} accent />
-          <MetricCard label="T3 runs · 14d" value={runs.length.toLocaleString()} />
-          <MetricCard label="Accommodation Blocks" value={(blockCount ?? 0).toLocaleString()} />
+          <MetricCard label="VIP categories" value={fmtIntl.number(vipCats.length)} accent />
+          <MetricCard label="T3 runs · 14d" value={fmtIntl.number(runs.length)} />
+          <MetricCard label="Accommodation Blocks" value={fmtIntl.number(blockCount ?? 0)} />
         </div>
 
         <section className="surface p-4">

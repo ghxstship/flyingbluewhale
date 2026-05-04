@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ count: blocks }, { count: runs }] = await Promise.all([
     supabase
       .from("accommodation_blocks")
@@ -51,8 +53,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Suites" value={(blocks ?? 0).toLocaleString()} />
-          <MetricCard label="T1 Runs" value={(runs ?? 0).toLocaleString()} />
+          <MetricCard label="Suites" value={fmt.number(blocks ?? 0)} />
+          <MetricCard label="T1 Runs" value={fmt.number(runs ?? 0)} />
           <MetricCard label="Status" value="Live" accent />
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

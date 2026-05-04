@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +37,7 @@ export default async function MobileHandoverPage() {
     return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const venues = (await listOrgScoped("venues", session.orgId, {
     orderBy: "name",
     ascending: true,
@@ -70,7 +72,7 @@ export default async function MobileHandoverPage() {
                   <div>
                     <div className="text-sm font-semibold">{v.name}</div>
                     <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
-                      {v.cluster ?? "—"} · cap {v.capacity?.toLocaleString() ?? "—"}
+                      {v.cluster ?? "—"} · cap {v.capacity != null ? fmt.number(v.capacity) : "—"}
                     </div>
                   </div>
                   <Badge variant={HANDOVER_TONE[v.handover_state] ?? "muted"}>

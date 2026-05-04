@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,10 +24,6 @@ function tagsOf(raw: unknown): string[] {
   return raw.filter((x): x is string => typeof x === "string");
 }
 
-function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -42,6 +39,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   const { data } = await supabase
     .from("kb_articles")
     .select("id, slug, title, tags, updated_at")
@@ -69,8 +68,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Required Courses" value={courses.length.toLocaleString()} />
-          <MetricCard label="Total KB Articles" value={articles.length.toLocaleString()} />
+          <MetricCard label="Required Courses" value={fmt.number(courses.length)} />
+          <MetricCard label="Total KB Articles" value={fmt.number(articles.length)} />
           <MetricCard label="Last Updated" value={courses[0]?.updated_at.slice(0, 10) ?? "—"} />
         </div>
 

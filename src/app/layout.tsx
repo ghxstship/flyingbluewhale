@@ -30,8 +30,12 @@ import { TooltipProvider } from "@/components/ui/Tooltip";
 import { LiveRegionProvider } from "@/components/ui/LiveRegion";
 import { CookieConsent } from "@/components/compliance/CookieConsent";
 import { ShortcutDialog } from "@/components/ShortcutDialog";
-import { getRequestLocale } from "@/lib/i18n/server";
 import { isRtl } from "@/lib/i18n/config";
+import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
+import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters } from "@/lib/i18n/request";
+import { loadMessages } from "@/lib/i18n/server";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 import { StructuredData, organization } from "@/lib/seo/structured-data";
 import "./globals.css";
 import "./theme/index.css";
@@ -155,8 +159,12 @@ const swRegister =
     : `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}`;
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const locale = await getRequestLocale();
+  const [{ t, messages }, formatters] = await Promise.all([getRequestT(), getRequestFormatters()]);
+  const { locale, bcp47, timezone, currency } = formatters.settings;
   const dir = isRtl(locale) ? "rtl" : "ltr";
+  // Load English fallback once for the client `useT()` hook so partial
+  // locale catalogs degrade gracefully on the client too.
+  const fallbackMessages = locale === DEFAULT_LOCALE ? {} : await loadMessages(DEFAULT_LOCALE);
 
   // SSR theme from cookie (survives first paint with the right tokens).
   // Client head script reconciles with localStorage on mount.
@@ -191,19 +199,30 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       </head>
       <body className="flex min-h-full flex-col antialiased">
         <a href="#main" className="skip-link">
-          Skip to content
+          {t("a11y.skipToContent")}
         </a>
-        <ThemeProvider>
-          <TooltipProvider delayDuration={350}>
-            <LiveRegionProvider>
-              <div id="main" className="flex min-w-0 flex-1 flex-col">
-                {children}
-              </div>
-              <CookieConsent />
-              <ShortcutDialog />
-            </LiveRegionProvider>
-          </TooltipProvider>
-        </ThemeProvider>
+        <LocaleProvider
+          value={{
+            locale,
+            bcp47,
+            timezone,
+            currency,
+            messages,
+            fallbackMessages,
+          }}
+        >
+          <ThemeProvider>
+            <TooltipProvider delayDuration={350}>
+              <LiveRegionProvider>
+                <div id="main" className="flex min-w-0 flex-1 flex-col">
+                  {children}
+                </div>
+                <CookieConsent />
+                <ShortcutDialog />
+              </LiveRegionProvider>
+            </TooltipProvider>
+          </ThemeProvider>
+        </LocaleProvider>
         <Toaster
           position="bottom-right"
           richColors

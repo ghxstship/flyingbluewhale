@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,10 +28,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
   denied: "error",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 function maskPassport(pass: string | null): string {
   if (!pass) return "—";
   if (pass.length <= 4) return "••" + pass;
@@ -52,6 +49,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   // Visa cases are typically filed by the delegation; we surface every row visible
   // to the viewer via RLS so they can see status of their travel docs.
   const { data } = await supabase
@@ -80,9 +79,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={approved.toLocaleString()} accent={approved > 0} />
-          <MetricCard label="In Progress" value={pending.toLocaleString()} />
-          <MetricCard label="Total" value={cases.length.toLocaleString()} />
+          <MetricCard label="Approved" value={fmt.number(approved)} accent={approved > 0} />
+          <MetricCard label="In Progress" value={fmt.number(pending)} />
+          <MetricCard label="Total" value={fmt.number(cases.length)} />
         </div>
 
         <section className="surface p-5">
@@ -105,7 +104,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     {c.letter_path && (
                       <div className="mt-1 font-mono text-[10px] text-[var(--org-primary)]">letter on file</div>
                     )}
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">updated {fmt(c.updated_at)}</div>
+                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                      updated {fmtDate(c.updated_at)}
+                    </div>
                   </div>
                   <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{c.status.replace(/_/g, " ")}</Badge>
                 </li>

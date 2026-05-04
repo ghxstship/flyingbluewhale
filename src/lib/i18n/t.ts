@@ -23,16 +23,32 @@ export function getByPath(obj: Messages, path: string): string | undefined {
 
 export function interpolate(template: string, vars?: Record<string, string | number>): string {
   if (!vars) return template;
-  return template.replace(/\{(\w+)\}/g, (_, k: string) =>
-    k in vars ? String(vars[k]) : `{${k}}`,
-  );
+  return template.replace(/\{(\w+)\}/g, (_, k: string) => (k in vars ? String(vars[k]) : `{${k}}`));
 }
 
-export function makeT(messages: Messages) {
+/**
+ * Build a `t(key, vars?)` translator over a primary catalog with optional
+ * fallback catalogs. Lookup walks the chain in order — the primary locale
+ * wins, missing keys fall back to (typically) the English catalog, and only
+ * if every catalog misses do we surface the key path.
+ *
+ * Pattern:
+ *   const t = makeT(spanish, [english]);
+ *   t("common.save")          // "Guardar" if present, else "Save"
+ *
+ * Locale catalog stubs can therefore be partial — translators add keys
+ * incrementally without UIs flashing dot-paths during the rollout.
+ */
+export function makeT(messages: Messages, fallbacks: Messages[] = []) {
   return function t(key: string, vars?: Record<string, string | number>): string {
-    const raw = getByPath(messages, key);
+    let raw = getByPath(messages, key);
     if (raw === undefined) {
-      // In dev, surface missing key; in prod, return the key for visibility.
+      for (const fb of fallbacks) {
+        raw = getByPath(fb, key);
+        if (raw !== undefined) break;
+      }
+    }
+    if (raw === undefined) {
       if (process.env.NODE_ENV === "development") {
         console.warn(`[i18n] missing key: ${key}`);
       }

@@ -4,6 +4,8 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatMoney } from "@/lib/i18n/format";
+import { getRequestLocaleSettings, getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,10 +18,6 @@ type Item = {
   currency: string;
   catalog: string;
 };
-
-function money(cents: number, currency: string): string {
-  return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(cents / 100);
-}
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -35,6 +33,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
+  const { locale } = await getRequestLocaleSettings();
 
   // Media services live in rate_card_items keyed by 'media' or 'mpc' catalog.
   const { data } = await supabase
@@ -64,8 +64,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Items" value={items.length.toLocaleString()} />
-          <MetricCard label="Catalogs" value={Object.keys(byCatalog).length.toLocaleString()} />
+          <MetricCard label="Items" value={fmt.number(items.length)} />
+          <MetricCard label="Catalogs" value={fmt.number(Object.keys(byCatalog).length)} />
           <MetricCard label="Status" value="Open" accent />
         </div>
 
@@ -88,7 +88,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                       <code>{i.sku}</code>
                     </div>
                   </div>
-                  <div className="font-mono text-sm">{money(i.unit_price_cents, i.currency)}</div>
+                  <div className="font-mono text-sm">
+                    {formatMoney(i.unit_price_cents, { locale, currency: i.currency })}
+                  </div>
                 </li>
               ))}
             </ul>

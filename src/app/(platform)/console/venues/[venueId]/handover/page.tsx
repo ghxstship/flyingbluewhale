@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Database } from "@/lib/supabase/database.types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -51,11 +52,6 @@ const ITEM_TONE: Record<string, "muted" | "info" | "warning" | "success" | "erro
   waived: "muted",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
   if (!hasSupabase) {
@@ -71,6 +67,12 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(iso: string | null): string {
+    if (!iso) return "—";
+    return fmt.dateParts(iso, { month: "short", day: "numeric" });
+  }
   const [{ data: venueData }, { data: itemData }] = await Promise.all([
     supabase
       .from("venues")
@@ -112,9 +114,9 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Passed" value={passed.toLocaleString()} accent />
-          <MetricCard label="Open" value={open.toLocaleString()} />
-          <MetricCard label="Failed" value={failed.toLocaleString()} />
+          <MetricCard label="Passed" value={fmt.number(passed)} accent />
+          <MetricCard label="Open" value={fmt.number(open)} />
+          <MetricCard label="Failed" value={fmt.number(failed)} />
         </div>
 
         {items.length > 0 && (
@@ -147,13 +149,13 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "due",
               header: "Due",
-              render: (r) => <span className="font-mono text-xs">{fmt(r.due_at)}</span>,
+              render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_at)}</span>,
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "resolved",
               header: "Resolved",
-              render: (r) => <span className="font-mono text-xs">{fmt(r.resolved_at)}</span>,
+              render: (r) => <span className="font-mono text-xs">{fmtDate(r.resolved_at)}</span>,
               accessor: (r) => r.resolved_at ?? null,
             },
             {

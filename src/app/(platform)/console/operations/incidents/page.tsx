@@ -6,6 +6,7 @@ import { DataTable } from "@/components/DataTable";
 import { StatusChip, type StatusTone } from "@/components/ui/StatusChip";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 const SEVERITY_TONE: Record<string, StatusTone> = {
   near_miss: "warning",
@@ -26,6 +27,7 @@ type IncidentRow = {
 export default async function IncidentsPage() {
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("incidents")
     .select("id, summary, severity, status, occurred_at, location")
@@ -61,7 +63,7 @@ export default async function IncidentsPage() {
             {
               key: "when",
               header: "When",
-              render: (r) => new Date(r.occurred_at).toLocaleString(),
+              render: (r) => fmt.dateTime(r.occurred_at),
               className: "font-mono text-xs",
               accessor: (r) => r.occurred_at ?? null,
             },

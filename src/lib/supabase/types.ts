@@ -1,31 +1,18 @@
-export type PlatformRole =
-  | "developer"
-  | "owner"
-  | "admin"
-  | "controller"
-  | "collaborator"
-  | "contractor"
-  | "crew"
-  | "client"
-  | "viewer"
-  | "community";
+// Org-level role (billing/governance). One per (org, user).
+export type PlatformRole = "owner" | "admin" | "manager" | "member";
+export const PLATFORM_ROLES = ["owner", "admin", "manager", "member"] as const;
 
-export type ProjectRole = "creator" | "collaborator" | "viewer" | "vendor";
+// Project-level role (operations). One per (project, user).
+export type ProjectRole = "lead" | "editor" | "contributor" | "viewer" | "vendor";
+export const PROJECT_ROLES = ["lead", "editor", "contributor", "viewer", "vendor"] as const;
+
 export type Tier = "access" | "core" | "professional" | "enterprise";
 
-export type Persona =
-  | "visitor"
-  | "owner"
-  | "admin"
-  | "controller"
-  | "project_manager"
-  | "crew"
-  | "client"
-  | "vendor"
-  | "artist"
-  | "sponsor"
-  | "guest"
-  | "developer";
+// Session-derived persona — drives shell + nav routing. Not stored.
+//   visitor — unauthenticated
+//   guest   — authenticated, demo-org member only (no real org yet)
+//   plus    — derived from PlatformRole + active context
+export type Persona = "visitor" | "guest" | "owner" | "admin" | "manager" | "member";
 
 export type ProjectStatus = "draft" | "active" | "paused" | "archived" | "complete";
 export type TicketStatus = "issued" | "transferred" | "scanned" | "voided";
@@ -57,13 +44,76 @@ export type EquipmentStatus = "available" | "reserved" | "in_use" | "maintenance
 export type TaskStatus = "todo" | "in_progress" | "blocked" | "review" | "done";
 export type EventStatus = "draft" | "scheduled" | "live" | "complete" | "cancelled";
 export type FabricationStatus = "open" | "in_progress" | "blocked" | "complete";
+export type AnnotationKind = "flag" | "note" | "comment" | "tag";
+export type AnnotationSeverity = "info" | "warning" | "critical";
+export type AnnotationStatus = "open" | "acknowledged" | "resolved" | "dismissed";
+
+export type Annotation = {
+  id: string;
+  org_id: string;
+  project_id: string | null;
+  target_table: string;
+  target_id: string;
+  parent_id: string | null;
+  kind: AnnotationKind;
+  severity: AnnotationSeverity;
+  status: AnnotationStatus;
+  title: string | null;
+  body: string;
+  tags: string[];
+  confirmation_required: boolean;
+  confirmed_by: string | null;
+  confirmed_at: string | null;
+  due_at: string | null;
+  assigned_to: string | null;
+  linked_task_id: string | null;
+  metadata: Record<string, unknown>;
+  created_by: string | null;
+  resolved_by: string | null;
+  resolved_at: string | null;
+  resolution_note: string | null;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AnnotationWatcher = {
+  annotation_id: string;
+  user_id: string;
+  created_at: string;
+};
 
 type TableDef<R, I, U> = { Row: R; Insert: I; Update: U; Relationships: [] };
 
 // Core entities
-export type Org = { id: string; slug: string; name: string; tier: Tier; created_at: string };
+export type Org = {
+  id: string;
+  slug: string;
+  name: string;
+  tier: Tier;
+  default_locale: string;
+  default_timezone: string;
+  default_currency: string;
+  created_at: string;
+};
 export type User = { id: string; email: string; name: string | null; avatar_url: string | null; created_at: string };
-export type Membership = { id: string; org_id: string; user_id: string; role: PlatformRole; created_at: string };
+export type Membership = {
+  id: string;
+  org_id: string;
+  user_id: string;
+  role: PlatformRole;
+  is_developer: boolean;
+  created_at: string;
+};
+
+export type ProjectMember = {
+  id: string;
+  project_id: string;
+  user_id: string;
+  role: ProjectRole;
+  created_at: string;
+  updated_at: string;
+};
 
 export type Project = {
   id: string;
@@ -1869,8 +1919,21 @@ export type Database = {
       users: TableDef<User, Omit<User, "created_at"> & { created_at?: string }, Partial<User>>;
       memberships: TableDef<
         Membership,
-        Omit<Membership, "id" | "created_at"> & { id?: string; created_at?: string },
+        Omit<Membership, "id" | "created_at" | "is_developer"> & {
+          id?: string;
+          created_at?: string;
+          is_developer?: boolean;
+        },
         Partial<Membership>
+      >;
+      project_members: TableDef<
+        ProjectMember,
+        Omit<ProjectMember, "id" | "created_at" | "updated_at"> & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        },
+        Partial<ProjectMember>
       >;
 
       projects: TableDef<
@@ -2908,6 +2971,43 @@ export type Database = {
         Partial<PoChecklistItem> & { org_id: string; purchase_order_id: string; prompt: string },
         Partial<PoChecklistItem>
       >;
+      annotations: TableDef<
+        Annotation,
+        {
+          id?: string;
+          org_id: string;
+          project_id?: string | null;
+          target_table: string;
+          target_id: string;
+          parent_id?: string | null;
+          kind?: AnnotationKind;
+          severity?: AnnotationSeverity;
+          status?: AnnotationStatus;
+          title?: string | null;
+          body: string;
+          tags?: string[];
+          confirmation_required?: boolean;
+          confirmed_by?: string | null;
+          confirmed_at?: string | null;
+          due_at?: string | null;
+          assigned_to?: string | null;
+          linked_task_id?: string | null;
+          metadata?: Record<string, unknown>;
+          created_by?: string | null;
+          resolved_by?: string | null;
+          resolved_at?: string | null;
+          resolution_note?: string | null;
+          deleted_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        },
+        Partial<Annotation>
+      >;
+      annotation_watchers: TableDef<
+        AnnotationWatcher,
+        { annotation_id: string; user_id: string; created_at?: string },
+        Partial<AnnotationWatcher>
+      >;
     };
     Views: { [_ in never]: never };
     Functions: { [_ in never]: never };
@@ -2928,6 +3028,9 @@ export type Database = {
       equipment_status: EquipmentStatus;
       task_status: TaskStatus;
       event_status: EventStatus;
+      annotation_kind: AnnotationKind;
+      annotation_severity: AnnotationSeverity;
+      annotation_status: AnnotationStatus;
     };
     CompositeTypes: { [_ in never]: never };
   };

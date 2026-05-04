@@ -33,10 +33,18 @@ export function RouteTabs({
 }) {
   const pathname = usePathname();
   const scroll = scrollable ? "overflow-x-auto whitespace-nowrap scrollbar-thin" : "";
+  // Identify "parent" tabs whose href is a prefix of another tab's href.
+  // The Overview tab on a record is the canonical case: its href is the
+  // record root (`/console/clients/[id]`) and every other tab nests
+  // under it. Without this distinction matchRoute would mark Overview
+  // active on every sub-route via prefix match. Linear and Stripe both
+  // apply the same exact-only rule for parent tabs.
+  const isParentHref = (href: string) => tabs.some((other) => other.href !== href && other.href.startsWith(`${href}/`));
   return (
     <nav role="tablist" aria-label="Section" className={`-mb-px flex items-center gap-1 ${scroll} ${className}`}>
       {tabs.map((t) => {
-        const { isActive } = matchRoute(pathname ?? "", t.href);
+        const m = matchRoute(pathname ?? "", t.href);
+        const isActive = isParentHref(t.href) ? m.isExact : m.isActive;
         return (
           <Link
             key={t.href}

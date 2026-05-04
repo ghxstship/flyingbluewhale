@@ -4,6 +4,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { PLATFORM_ROLES } from "@/lib/supabase/types";
 import { updatePerson, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -15,13 +16,14 @@ export default async function Page({ params }: { params: Promise<{ personId: str
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("memberships")
-    .select("id, role, updated_at, users:users(id, name, email)")
+    .select("id, role, is_developer, updated_at, users:users(id, name, email)")
     .eq("org_id", session.orgId)
     .eq("user_id", p.personId)
     .maybeSingle();
   type Row = {
     id: string;
     role: string;
+    is_developer: boolean;
     updated_at: string;
     users: { id: string; name: string | null; email: string } | null;
   };
@@ -36,21 +38,27 @@ export default async function Page({ params }: { params: Promise<{ personId: str
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={typed.updated_at} />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Role</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">Platform role</span>
             <select name="role" defaultValue={typed.role} required className="input-base focus-ring w-full">
-              <option value="developer">developer</option>
-              <option value="owner">owner</option>
-              <option value="admin">admin</option>
-              <option value="controller">controller</option>
-              <option value="collaborator">collaborator</option>
-              <option value="contractor">contractor</option>
-              <option value="crew">crew</option>
-              <option value="client">client</option>
-              <option value="viewer">viewer</option>
-              <option value="community">community</option>
+              {PLATFORM_ROLES.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
             </select>
           </label>
-          <p className="text-xs text-[var(--text-muted)]">Profile fields (name, email) are managed by the user.</p>
+          <label className="flex items-start gap-2 text-sm">
+            <input type="checkbox" name="is_developer" defaultChecked={typed.is_developer} className="mt-1 h-4 w-4" />
+            <span>
+              <span className="font-medium">Developer</span>
+              <span className="block text-xs text-[var(--text-muted)]">
+                Grants API keys, webhooks, and audit access. Orthogonal to platform role.
+              </span>
+            </span>
+          </label>
+          <p className="text-xs text-[var(--text-muted)]">
+            Profile fields (name, email) are managed by the user. Project-level access is managed on each project.
+          </p>
         </FormShell>
       </div>
     </>

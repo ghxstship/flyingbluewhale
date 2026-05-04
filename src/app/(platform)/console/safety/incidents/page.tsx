@@ -7,6 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -57,6 +58,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: incidents }, { count: medCount }, { count: cyberCount }] = await Promise.all([
     supabase
@@ -98,9 +100,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total · 30d" value={totalThirtyDay.toLocaleString()} accent />
-          <MetricCard label="Open" value={open.toLocaleString()} />
-          <MetricCard label="Critical" value={critical.toLocaleString()} />
+          <MetricCard label="Total · 30d" value={fmtIntl.number(totalThirtyDay)} accent />
+          <MetricCard label="Open" value={fmtIntl.number(open)} />
+          <MetricCard label="Critical" value={fmtIntl.number(critical)} />
         </div>
 
         <section className="surface p-4">

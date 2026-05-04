@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ export default async function SafeguardingPage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("safeguarding_reports")
     .select("id, status, narrative, subject_ref, created_at")
@@ -76,7 +78,7 @@ export default async function SafeguardingPage() {
                 <div className="flex items-start justify-between gap-3">
                   <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">
-                    {new Date(r.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                    {fmt.dateParts(r.created_at, { month: "short", day: "numeric" })}
                   </span>
                 </div>
                 <p className="mt-2 line-clamp-3 text-xs text-[var(--text-secondary)]">{r.narrative}</p>

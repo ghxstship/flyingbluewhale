@@ -6,6 +6,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("accommodation_blocks")
     .select("id, name, property, city, rooms_reserved, rooms_confirmed, starts_on, ends_on, stakeholder_group")
@@ -66,9 +68,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Confirmed" value={confirmed.toLocaleString()} accent />
-          <MetricCard label="Reserved" value={reserved.toLocaleString()} />
-          <MetricCard label="Blocks" value={blocks.length.toLocaleString()} />
+          <MetricCard label="Confirmed" value={fmtIntl.number(confirmed)} accent />
+          <MetricCard label="Reserved" value={fmtIntl.number(reserved)} />
+          <MetricCard label="Blocks" value={fmtIntl.number(blocks.length)} />
         </div>
 
         {reserved > 0 && (

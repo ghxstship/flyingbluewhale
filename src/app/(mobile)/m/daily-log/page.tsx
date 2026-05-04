@@ -4,19 +4,20 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { quickCreateDailyLog } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
 
-function fmt(d: string): string {
-  return new Date(d + "T00:00:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-}
-
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+
+  const fmt = await getRequestFormatters();
+  const fmtDate = (d: string): string =>
+    fmt.dateParts(d + "T00:00:00", { weekday: "short", month: "short", day: "numeric" });
   const today = new Date().toISOString().slice(0, 10);
 
   const [{ data: projects }, { data: recent }] = await Promise.all([
@@ -39,7 +40,7 @@ export default async function Page() {
       <ModuleHeader eyebrow="Field" title="Daily Log" subtitle="Quick capture from the floor" />
       <div className="page-content space-y-4">
         <form action={quickCreateDailyLog} className="surface space-y-3 p-4">
-          <h3 className="text-sm font-semibold">Today&apos;s log — {fmt(today)}</h3>
+          <h3 className="text-sm font-semibold">Today&apos;s log — {fmtDate(today)}</h3>
           <select name="project_id" required className={INPUT}>
             <option value="">Select a project…</option>
             {(projects ?? []).map((p) => (
@@ -78,7 +79,7 @@ export default async function Page() {
                   className="surface-inset flex items-center justify-between p-2 text-sm"
                 >
                   <span>
-                    {fmt(r.log_date)} · {r.project?.name ?? "—"}
+                    {fmtDate(r.log_date)} · {r.project?.name ?? "—"}
                   </span>
                   <span className="text-xs text-[var(--text-muted)]">{r.status}</span>
                 </Link>

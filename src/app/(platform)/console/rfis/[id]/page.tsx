@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { answerRfi, closeRfi } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data: rfi } = await supabase
     .from("rfis")
     .select(
@@ -70,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <p className="mt-2 text-xs text-[var(--text-muted)]">
                 Answered by{" "}
                 {(rfi.answerer as unknown as { name: string | null; email: string | null } | null)?.name ?? "—"}
-                {rfi.answered_at ? ` · ${new Date(rfi.answered_at).toLocaleString()}` : ""}
+                {rfi.answered_at ? ` · ${fmt.dateTime(rfi.answered_at)}` : ""}
               </p>
             </div>
           ) : (

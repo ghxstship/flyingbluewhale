@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,10 +25,6 @@ const RESULT_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
   unknown: "muted",
 };
 
-function fmtTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
 export default async function MobileGatePage() {
   if (!hasSupabase) {
     return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
@@ -35,6 +32,8 @@ export default async function MobileGatePage() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtTime = (iso: string): string => fmt.time(iso);
   const dayStart = new Date();
   dayStart.setHours(0, 0, 0, 0);
   const { data } = await supabase

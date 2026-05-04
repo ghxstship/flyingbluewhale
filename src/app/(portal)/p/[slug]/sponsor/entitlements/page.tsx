@@ -6,6 +6,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,11 +27,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success"> = {
   delivered: "success",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -46,6 +42,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(iso: string | null): string {
+    if (!iso) return "—";
+    return fmt.dateParts(iso, { month: "short", day: "numeric" });
+  }
   // RLS already narrows to the sponsor client linked to this user; we order
   // by due_by so things at risk surface first.
   const { data } = await supabase
@@ -74,13 +76,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard
-            label="Delivered"
-            value={`${totalDelivered.toLocaleString()} / ${totalQty.toLocaleString()}`}
-            accent
-          />
-          <MetricCard label="Items at Risk" value={atRisk.toLocaleString()} />
-          <MetricCard label="Total Items" value={rows.length.toLocaleString()} />
+          <MetricCard label="Delivered" value={`${fmt.number(totalDelivered)} / ${fmt.number(totalQty)}`} accent />
+          <MetricCard label="Items at Risk" value={fmt.number(atRisk)} />
+          <MetricCard label="Total Items" value={fmt.number(rows.length)} />
         </div>
 
         {rows.length > 0 && (
@@ -112,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "due",
               header: "Due",
-              render: (r) => <span className="font-mono text-xs">{fmt(r.due_by)}</span>,
+              render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_by)}</span>,
               accessor: (r) => r.due_by ?? null,
             },
             {

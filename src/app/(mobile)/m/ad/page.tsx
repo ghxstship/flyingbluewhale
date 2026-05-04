@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,22 +28,21 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   cancelled: "error",
 };
 
-function fmtClock(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
-function fmtDay(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-}
-
 export default async function MobileAdPage() {
   if (!hasSupabase) {
     return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
   }
   const session = await requireSession();
 
+  const fmt = await getRequestFormatters();
+  const fmtClock = (iso: string | null): string => {
+    if (!iso) return "—";
+    return fmt.time(iso);
+  };
+  const fmtDay = (iso: string | null): string => {
+    if (!iso) return "—";
+    return fmt.dateParts(iso, { weekday: "short", month: "short", day: "numeric" });
+  };
   const today = new Date();
   const startOfWindow = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
   const endOfWindow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();

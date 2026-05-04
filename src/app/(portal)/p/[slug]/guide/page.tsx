@@ -4,37 +4,24 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { hasSupabase } from "@/lib/env";
 import { getSession } from "@/lib/auth";
-import { personaForRole } from "@/lib/auth";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { getGuideByPersona, PERSONA_TIERS } from "@/lib/db/guides";
 import { GuideView } from "@/components/guides/GuideView";
 import { GuideComments } from "@/components/guides/GuideComments";
 import { createClient } from "@/lib/supabase/server";
 import type { GuideConfig } from "@/lib/guides/types";
-import type { GuidePersona } from "@/lib/supabase/types";
+import type { GuidePersona, PlatformRole } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-function mapSessionToGuidePersona(role: string): GuidePersona {
-  const persona = personaForRole(role as Parameters<typeof personaForRole>[0]);
-  if (
-    persona === "artist" ||
-    persona === "vendor" ||
-    persona === "client" ||
-    persona === "sponsor" ||
-    persona === "guest" ||
-    persona === "crew"
-  )
-    return persona;
-  if (
-    persona === "owner" ||
-    persona === "admin" ||
-    persona === "controller" ||
-    persona === "project_manager" ||
-    persona === "developer"
-  )
-    return "staff";
-  return "guest";
+// Map platform role to a guide persona for the portal viewer. Portal-only
+// personas (artist/vendor/client/sponsor) come from the URL/route, not
+// from the session role — anyone hitting /p/<slug>/guide is in some
+// portal context. Org owner/admin/manager see the staff guide; org
+// member sees the crew guide; unauthenticated viewers see guest.
+function mapSessionToGuidePersona(role: PlatformRole): GuidePersona {
+  if (role === "owner" || role === "admin" || role === "manager") return "staff";
+  return "crew";
 }
 
 const VALID_PERSONAS = new Set<GuidePersona>([

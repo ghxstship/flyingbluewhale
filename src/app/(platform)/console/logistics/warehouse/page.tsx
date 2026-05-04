@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ count: assetCount }, { data: statusData }, { count: locationCount }, { count: maintenanceCount }] =
     await Promise.all([
       supabase.from("equipment").select("*", { count: "exact", head: true }).eq("org_id", session.orgId),
@@ -63,9 +65,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Assets" value={(assetCount ?? 0).toLocaleString()} accent />
-          <MetricCard label="Locations" value={(locationCount ?? 0).toLocaleString()} />
-          <MetricCard label="In Maintenance" value={(maintenanceCount ?? 0).toLocaleString()} />
+          <MetricCard label="Assets" value={fmt.number(assetCount ?? 0)} accent />
+          <MetricCard label="Locations" value={fmt.number(locationCount ?? 0)} />
+          <MetricCard label="In Maintenance" value={fmt.number(maintenanceCount ?? 0)} />
         </div>
 
         {Object.keys(buckets).length > 0 && (
@@ -77,7 +79,7 @@ export default async function Page() {
                 .map(([status, count]) => (
                   <li key={status} className="flex items-center justify-between text-sm">
                     <Badge variant="muted">{status}</Badge>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">{count.toLocaleString()}</span>
+                    <span className="font-mono text-xs text-[var(--text-muted)]">{fmt.number(count)}</span>
                   </li>
                 ))}
             </ul>

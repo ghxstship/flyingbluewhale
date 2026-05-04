@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   // VIP = T1 fleet (Olympic Family / Heads of State / Honoured Guests).
   const { data } = await supabase
     .from("dispatch_runs")
@@ -79,8 +81,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active Runs" value={upcoming.toLocaleString()} accent={upcoming > 0} />
-          <MetricCard label="Total" value={runs.length.toLocaleString()} />
+          <MetricCard label="Active Runs" value={fmtIntl.number(upcoming)} accent={upcoming > 0} />
+          <MetricCard label="Total" value={fmtIntl.number(runs.length)} />
           <MetricCard label="Fleet" value="T1" />
         </div>
 

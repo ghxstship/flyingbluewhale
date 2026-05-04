@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -39,11 +40,6 @@ const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
   { href: "/console/finance/payouts", label: "Payouts", description: "Stripe Connect supplier payments" },
 ];
 
-function fmtDate(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -58,6 +54,11 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (iso: string | null): string => {
+    if (!iso) return "—";
+    return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
+  };
   const since30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: invData }, { data: expData }, { data: stripeData }] = await Promise.all([
     supabase
@@ -114,18 +115,14 @@ export default async function Page() {
         <div className="metric-grid-3">
           <MetricCard
             label="Outstanding Receivables"
-            value={Array.from(byCurrency.values())
-              .reduce((s, v) => s + v.outstanding, 0)
-              .toLocaleString()}
+            value={fmt.number(Array.from(byCurrency.values()).reduce((s, v) => s + v.outstanding, 0))}
             accent
           />
           <MetricCard
             label="Pending Payables"
-            value={Array.from(expByCurrency.values())
-              .reduce((s, v) => s + v, 0)
-              .toLocaleString()}
+            value={fmt.number(Array.from(expByCurrency.values()).reduce((s, v) => s + v, 0))}
           />
-          <MetricCard label="Stripe Events · 30d" value={stripeEvents.length.toLocaleString()} />
+          <MetricCard label="Stripe Events · 30d" value={fmt.number(stripeEvents.length)} />
         </div>
 
         <section className="surface p-4">

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest, ServiceRequestEvent } from "@/lib/supabase/types";
 import { transitionRequest } from "../actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -65,6 +66,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data: row } = await supabase
     .from("service_requests")
     .select("*")
@@ -108,12 +110,12 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
           <dl className="mt-5 grid grid-cols-2 gap-3 text-xs">
             <div>
               <dt className="tracking-wide text-[var(--text-muted)] uppercase">Opened</dt>
-              <dd className="font-mono">{new Date(r.opened_at).toLocaleString()}</dd>
+              <dd className="font-mono">{fmt.dateTime(r.opened_at)}</dd>
             </div>
             <div>
               <dt className="tracking-wide text-[var(--text-muted)] uppercase">Response SLA</dt>
               <dd className="font-mono">
-                {r.sla_response_due ? new Date(r.sla_response_due).toLocaleString() : "—"}
+                {r.sla_response_due ? fmt.dateTime(r.sla_response_due) : "—"}
                 {r.sla_response_breached && (
                   <Badge variant="error" className="ml-2">
                     breached
@@ -124,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
             <div>
               <dt className="tracking-wide text-[var(--text-muted)] uppercase">Resolution SLA</dt>
               <dd className="font-mono">
-                {r.sla_resolution_due ? new Date(r.sla_resolution_due).toLocaleString() : "—"}
+                {r.sla_resolution_due ? fmt.dateTime(r.sla_resolution_due) : "—"}
                 {r.sla_resolution_breached && (
                   <Badge variant="error" className="ml-2">
                     breached
@@ -134,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
             </div>
             <div>
               <dt className="tracking-wide text-[var(--text-muted)] uppercase">Acknowledged</dt>
-              <dd className="font-mono">{r.acknowledged_at ? new Date(r.acknowledged_at).toLocaleString() : "—"}</dd>
+              <dd className="font-mono">{r.acknowledged_at ? fmt.dateTime(r.acknowledged_at) : "—"}</dd>
             </div>
           </dl>
         </div>

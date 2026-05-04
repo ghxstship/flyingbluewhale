@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -56,10 +57,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
   published: "success",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
   if (!hasSupabase) {
@@ -75,6 +72,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   const [{ data: venueData }, { data: sectionData }] = await Promise.all([
     supabase.from("venues").select("id, name").eq("id", venueId).eq("org_id", session.orgId).maybeSingle(),
     supabase
@@ -106,9 +105,9 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={approved.toLocaleString()} accent />
-          <MetricCard label="Drafted" value={sections.length.toLocaleString()} />
-          <MetricCard label="Outstanding" value={(total - sections.length).toLocaleString()} />
+          <MetricCard label="Approved" value={fmt.number(approved)} accent />
+          <MetricCard label="Drafted" value={fmt.number(sections.length)} />
+          <MetricCard label="Outstanding" value={fmt.number(total - sections.length)} />
         </div>
 
         <div className="surface overflow-hidden">
@@ -122,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                     {s?.body && <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-secondary)]">{s.body}</p>}
                     {s?.approved_at && (
                       <p className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
-                        approved {fmt(s.approved_at)}
+                        approved {fmtDate(s.approved_at)}
                       </p>
                     )}
                   </div>

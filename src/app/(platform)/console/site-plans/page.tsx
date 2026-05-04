@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("site_plans")
     .select(
@@ -69,7 +71,7 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total Plans" value={rows.length.toLocaleString()} accent />
+          <MetricCard label="Total Plans" value={fmt.number(rows.length)} accent />
           <MetricCard label="Disciplines" value={String(new Set(rows.map((r) => r.discipline)).size)} />
           <MetricCard
             label="Venues Covered"

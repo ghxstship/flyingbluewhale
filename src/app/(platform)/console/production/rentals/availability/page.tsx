@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +43,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   // Window: today + next 7 days
   const now = new Date();
@@ -124,7 +126,7 @@ export default async function Page() {
                   <th>Status</th>
                   {days.map((d) => (
                     <th key={d.toISOString()} className="text-center text-xs">
-                      {d.toLocaleDateString(undefined, { weekday: "short", month: "numeric", day: "numeric" })}
+                      {fmt.dateParts(d, { weekday: "short", month: "numeric", day: "numeric" })}
                     </th>
                   ))}
                 </tr>

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,7 @@ export default async function ProvenancePage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("xpms_provenance_edges")
     .select("id, kind, from_atom_id, to_atom_id, created_at")
@@ -79,7 +81,7 @@ export default async function ProvenancePage() {
             {
               key: "created",
               header: "Created",
-              render: (e) => new Date(e.created_at).toLocaleString(),
+              render: (e) => fmt.dateTime(e.created_at),
               accessor: (e) => e.created_at,
               className: "text-xs text-[var(--text-muted)]",
               sortable: true,

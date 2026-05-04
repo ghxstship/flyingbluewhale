@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +53,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const since30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: events }, { count: count24h }] = await Promise.all([
     supabase
@@ -95,9 +97,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Events · 24h" value={(count24h ?? 0).toLocaleString()} accent />
-          <MetricCard label="Events · 30d" value={rows.length.toLocaleString()} />
-          <MetricCard label="Distinct Actors" value={distinctActors.size.toLocaleString()} />
+          <MetricCard label="Events · 24h" value={fmt.number(count24h ?? 0)} accent />
+          <MetricCard label="Events · 30d" value={fmt.number(rows.length)} />
+          <MetricCard label="Distinct Actors" value={fmt.number(distinctActors.size)} />
         </div>
 
         {tableEntries.length > 0 && (
@@ -107,7 +109,7 @@ export default async function Page() {
               {tableEntries.map(([table, count]) => (
                 <li key={table} className="flex items-center justify-between text-sm">
                   <span className="font-mono text-xs">{table}</span>
-                  <span className="text-xs text-[var(--text-muted)]">{count.toLocaleString()}</span>
+                  <span className="text-xs text-[var(--text-muted)]">{fmt.number(count)}</span>
                 </li>
               ))}
             </ul>

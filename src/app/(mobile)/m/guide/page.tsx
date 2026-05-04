@@ -2,36 +2,22 @@ import Link from "next/link";
 import { FileDown } from "lucide-react";
 import { notFound } from "next/navigation";
 import { hasSupabase } from "@/lib/env";
-import { requireSession, personaForRole } from "@/lib/auth";
+import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getGuideByPersona } from "@/lib/db/guides";
 import { GuideView } from "@/components/guides/GuideView";
 import { GuideComments } from "@/components/guides/GuideComments";
 import type { GuideConfig } from "@/lib/guides/types";
-import type { GuidePersona } from "@/lib/supabase/types";
+import type { GuidePersona, PlatformRole } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-function mapPersona(role: string): GuidePersona {
-  const persona = personaForRole(role as Parameters<typeof personaForRole>[0]);
-  if (
-    persona === "artist" ||
-    persona === "vendor" ||
-    persona === "client" ||
-    persona === "sponsor" ||
-    persona === "guest" ||
-    persona === "crew"
-  )
-    return persona;
-  if (
-    persona === "owner" ||
-    persona === "admin" ||
-    persona === "controller" ||
-    persona === "project_manager" ||
-    persona === "developer"
-  )
-    return "staff";
-  return "guest";
+// Mobile guide is the field-crew view. Org owner/admin/manager see the
+// "staff" guide; everyone else (member) sees the "crew" guide. Project-
+// scoped persona overrides happen via project_members in a separate flow.
+function mapPersona(role: PlatformRole): GuidePersona {
+  if (role === "owner" || role === "admin" || role === "manager") return "staff";
+  return "crew";
 }
 
 export default async function MobileGuide() {

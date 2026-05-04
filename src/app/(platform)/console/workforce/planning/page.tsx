@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("workforce_deployments")
     .select(
@@ -65,7 +67,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Planning"
-        subtitle={`${rows.length} deployment${rows.length === 1 ? "" : "s"} · ${totalActual.toLocaleString()} / ${totalPlanned.toLocaleString()} FTE${fillRate != null ? ` · ${fillRate}% filled` : ""}`}
+        subtitle={`${rows.length} deployment${rows.length === 1 ? "" : "s"} · ${fmt.number(totalActual)} / ${fmt.number(totalPlanned)} FTE${fillRate != null ? ` · ${fillRate}% filled` : ""}`}
         action={
           <Button href="/console/workforce/deployment" size="sm">
             Open deployment
@@ -74,8 +76,8 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Planned FTE" value={totalPlanned.toLocaleString()} accent />
-          <MetricCard label="Actual FTE" value={totalActual.toLocaleString()} />
+          <MetricCard label="Planned FTE" value={fmt.number(totalPlanned)} accent />
+          <MetricCard label="Actual FTE" value={fmt.number(totalActual)} />
           <MetricCard label="Fill Rate" value={fillRate != null ? `${fillRate}%` : "—"} />
         </div>
 

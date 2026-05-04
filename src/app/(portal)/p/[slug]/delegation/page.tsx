@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ count: entries }, { count: visas }, { count: orders }, { count: blocks }] = await Promise.all([
     supabase.from("delegation_entries").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
     supabase.from("visa_cases").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
@@ -72,9 +74,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Entries" value={(entries ?? 0).toLocaleString()} />
-          <MetricCard label="Visa Cases" value={(visas ?? 0).toLocaleString()} />
-          <MetricCard label="Orders" value={(orders ?? 0).toLocaleString()} />
+          <MetricCard label="Entries" value={fmt.number(entries ?? 0)} />
+          <MetricCard label="Visa Cases" value={fmt.number(visas ?? 0)} />
+          <MetricCard label="Orders" value={fmt.number(orders ?? 0)} />
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {tiles.map((t) => (

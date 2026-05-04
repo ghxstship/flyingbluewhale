@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -36,11 +37,6 @@ const KIND_LABEL: Record<string, string> = {
   photo_update: "Photo update",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -56,6 +52,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(iso: string | null): string {
+    if (!iso) return "—";
+    return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
+  }
   // Filter to changes the requester filed themselves.
   const { data } = await supabase
     .from("accreditation_changes")
@@ -81,9 +83,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={open.toLocaleString()} />
-          <MetricCard label="Approved" value={changes.filter((c) => c.status === "approved").length.toLocaleString()} />
-          <MetricCard label="Rejected" value={changes.filter((c) => c.status === "rejected").length.toLocaleString()} />
+          <MetricCard label="Open" value={fmt.number(open)} />
+          <MetricCard label="Approved" value={fmt.number(changes.filter((c) => c.status === "approved").length)} />
+          <MetricCard label="Rejected" value={fmt.number(changes.filter((c) => c.status === "rejected").length)} />
         </div>
 
         <section className="surface p-5">
@@ -105,8 +107,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="min-w-0">
                     <div className="font-medium">{KIND_LABEL[c.kind] ?? c.kind}</div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                      {c.accreditation?.person_name ?? "—"} · filed {fmt(c.created_at)}
-                      {c.decided_at ? ` · decided ${fmt(c.decided_at)}` : ""}
+                      {c.accreditation?.person_name ?? "—"} · filed {fmtDate(c.created_at)}
+                      {c.decided_at ? ` · decided ${fmtDate(c.decided_at)}` : ""}
                     </div>
                     {c.note && <p className="mt-1 text-xs text-[var(--text-secondary)]">{c.note}</p>}
                   </div>

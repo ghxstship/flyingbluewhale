@@ -6,9 +6,13 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
+import { PLATFORM_ROLES } from "@/lib/supabase/types";
 
 const Schema = z.object({
-  role: z.string(),
+  role: z.enum(PLATFORM_ROLES),
+  is_developer: z
+    .union([z.literal("on"), z.literal("true"), z.literal("false"), z.undefined()])
+    .transform((v) => v === "on" || v === "true"),
 });
 
 export type State = { error?: string } | null;
@@ -25,17 +29,8 @@ export async function updatePerson(userId: string, _: State, fd: FormData): Prom
   const { data, error } = await supabase
     .from("memberships")
     .update({
-      role: parsed.data.role as
-        | "developer"
-        | "owner"
-        | "admin"
-        | "controller"
-        | "collaborator"
-        | "contractor"
-        | "crew"
-        | "client"
-        | "viewer"
-        | "community",
+      role: parsed.data.role,
+      is_developer: parsed.data.is_developer,
     })
     .eq("user_id", userId)
     .eq("org_id", session.orgId)

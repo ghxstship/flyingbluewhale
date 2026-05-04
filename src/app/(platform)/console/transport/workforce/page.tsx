@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,14 +28,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   cancelled: "error",
 };
 
-function fmtTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
-function fmtDay(d: Date): string {
-  return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -48,7 +41,9 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
-
+  const fmt = await getRequestFormatters();
+  const fmtDay = (d: Date): string => fmt.dateParts(d, { weekday: "short", month: "short", day: "numeric" });
+  const fmtTime = (iso: string): string => fmt.time(iso);
   // Window: today + next 3 days. Filter by workforce + spectator fleets
   // (the fleets that move crew + workforce, not VIPs/athletes).
   const today = new Date();

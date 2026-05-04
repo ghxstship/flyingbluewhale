@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +20,6 @@ type Article = {
 function tagsOf(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
   return raw.filter((x): x is string => typeof x === "string");
-}
-
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
@@ -40,6 +37,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   const { data } = await supabase
     .from("kb_articles")
     .select("id, slug, title, tags, updated_at")
@@ -65,8 +64,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Documents" value={items.length.toLocaleString()} />
-          <MetricCard label="Total KB" value={articles.length.toLocaleString()} />
+          <MetricCard label="Documents" value={fmt.number(items.length)} />
+          <MetricCard label="Total KB" value={fmt.number(articles.length)} />
           <MetricCard label="Last Updated" value={items[0]?.updated_at.slice(0, 10) ?? "—"} />
         </div>
 
@@ -92,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                           {t}
                         </Badge>
                       ))}
-                    <span className="ml-1">{fmt(a.updated_at)}</span>
+                    <span className="ml-1">{fmtDate(a.updated_at)}</span>
                   </div>
                 </li>
               ))}

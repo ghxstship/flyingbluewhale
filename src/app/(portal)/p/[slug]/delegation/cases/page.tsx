@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -25,11 +26,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
   cancelled: "muted",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -45,6 +41,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(iso: string | null): string {
+    if (!iso) return "—";
+    return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
+  }
   // Cases = service requests filed by anyone in this delegation, severity high or urgent
   const { data } = await supabase
     .from("service_requests")
@@ -71,9 +73,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={open.toLocaleString()} />
-          <MetricCard label="Resolved" value={(cases.length - open).toLocaleString()} />
-          <MetricCard label="Total" value={cases.length.toLocaleString()} />
+          <MetricCard label="Open" value={fmt.number(open)} />
+          <MetricCard label="Resolved" value={fmt.number(cases.length - open)} />
+          <MetricCard label="Total" value={fmt.number(cases.length)} />
         </div>
 
         <section className="surface p-5">
@@ -92,8 +94,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     <div className="font-medium">{c.category}</div>
                     {c.description && <p className="mt-0.5 text-xs text-[var(--text-secondary)]">{c.description}</p>}
                     <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-                      opened {fmt(c.opened_at)}
-                      {c.resolved_at ? ` · resolved ${fmt(c.resolved_at)}` : ""}
+                      opened {fmtDate(c.opened_at)}
+                      {c.resolved_at ? ` · resolved ${fmtDate(c.resolved_at)}` : ""}
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">

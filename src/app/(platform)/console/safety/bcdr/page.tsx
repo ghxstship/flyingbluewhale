@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,11 +34,6 @@ const KIND_TONE: Record<string, "muted" | "info" | "warning"> = {
   walkthrough: "muted",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "TBD";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -52,6 +48,12 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+
+  function fmtDate(iso: string | null): string {
+    if (!iso) return "TBD";
+    return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
+  }
   const [{ data: exData }, { data: pbData }] = await Promise.all([
     supabase
       .from("readiness_exercises")
@@ -87,9 +89,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Crisis Runbooks" value={playbooks.length.toLocaleString()} accent />
-          <MetricCard label="Published" value={published.toLocaleString()} />
-          <MetricCard label="Exercises Scheduled" value={upcoming.length.toLocaleString()} />
+          <MetricCard label="Crisis Runbooks" value={fmt.number(playbooks.length)} accent />
+          <MetricCard label="Published" value={fmt.number(published)} />
+          <MetricCard label="Exercises Scheduled" value={fmt.number(upcoming.length)} />
         </div>
 
         <section>
@@ -148,7 +150,7 @@ export default async function Page() {
                 <li key={e.id} className="surface flex items-center justify-between p-3">
                   <div>
                     <div className="text-sm font-medium">{e.name}</div>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">{fmt(e.scheduled_at)}</div>
+                    <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(e.scheduled_at)}</div>
                   </div>
                   <Badge variant={KIND_TONE[e.kind] ?? "muted"}>{e.kind.replace(/_/g, " ")}</Badge>
                 </li>

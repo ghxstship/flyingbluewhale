@@ -8,17 +8,19 @@ import { hasSupabase } from "@/lib/env";
 
 export const dynamic = "force-dynamic";
 
-const PLATFORM_ROLES: { role: string; description: string; tier: "all" | "professional" | "enterprise" }[] = [
-  { role: "owner", description: "Full access · billing · delete organization", tier: "all" },
-  { role: "admin", description: "Full access except billing + org delete", tier: "all" },
-  { role: "controller", description: "Finance, procurement, approvals", tier: "all" },
-  { role: "collaborator", description: "Projects, tasks, crew, clients, proposals", tier: "all" },
-  { role: "contractor", description: "Project-scoped vendor view + time logging", tier: "professional" },
-  { role: "crew", description: "Day-of tasks, check-in, clock-in", tier: "all" },
-  { role: "client", description: "Client portal — proposals, deliverables, invoices", tier: "all" },
-  { role: "viewer", description: "Read-only on assigned projects", tier: "all" },
-  { role: "community", description: "No org access", tier: "all" },
-  { role: "developer", description: "API keys + webhooks + audit", tier: "enterprise" },
+const PLATFORM_ROLES_INFO: { role: string; description: string; tier: "all" | "professional" | "enterprise" }[] = [
+  { role: "owner", description: "Billing · delete org · everything else", tier: "all" },
+  { role: "admin", description: "Full org control except billing + org delete", tier: "all" },
+  { role: "manager", description: "Manage projects + people, no billing or org settings", tier: "all" },
+  { role: "member", description: "Default — access governed by per-project membership", tier: "all" },
+];
+
+const PROJECT_ROLES_INFO: { role: string; description: string }[] = [
+  { role: "lead", description: "Producer/PM — full project control, approve, close" },
+  { role: "editor", description: "Read/write team work — tasks, deliverables, schedule" },
+  { role: "contributor", description: "Write own work, read project (crew, contractors)" },
+  { role: "viewer", description: "Read-only — clients, sponsors, observers" },
+  { role: "vendor", description: "Scoped to their own POs, deliverables, invoices" },
 ];
 
 export default async function RolesPage() {
@@ -42,10 +44,16 @@ export default async function RolesPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="People" title="Role Matrix" subtitle="Platform roles + your custom roles" />
+      <ModuleHeader
+        eyebrow="People"
+        title="Role Matrix"
+        subtitle="Platform roles (billing) · project roles (operations) · custom overlays"
+      />
       <div className="page-content max-w-5xl space-y-6">
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Platform roles</h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+            Platform roles — org-level, govern billing & access
+          </h3>
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
@@ -56,7 +64,7 @@ export default async function RolesPage() {
                 </tr>
               </thead>
               <tbody>
-                {PLATFORM_ROLES.map((r) => (
+                {PLATFORM_ROLES_INFO.map((r) => (
                   <tr key={r.role}>
                     <td>
                       <Badge variant="brand">{r.role}</Badge>
@@ -68,6 +76,36 @@ export default async function RolesPage() {
               </tbody>
             </table>
           </div>
+        </section>
+
+        <section>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+            Project roles — per-project, govern operational access
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="data-table w-full text-sm">
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Capabilities</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PROJECT_ROLES_INFO.map((r) => (
+                  <tr key={r.role}>
+                    <td>
+                      <Badge variant="info">{r.role}</Badge>
+                    </td>
+                    <td className="text-[var(--text-secondary)]">{r.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 text-xs text-[var(--text-muted)]">
+            Platform <code>owner</code>, <code>admin</code>, and <code>manager</code> auto-bypass project_members and
+            act as project <code>lead</code> on every project in the org.
+          </p>
         </section>
 
         <section className="surface p-5">

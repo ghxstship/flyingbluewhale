@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
+import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -8,6 +9,7 @@ import { requireSession } from "@/lib/auth";
 import { listProjects, projectStats } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 // Dashboard hub tabs — folds the previous Dashboard sidebar group
 // (Overview, Portfolio, Action Items, Command Palette) into one record-
@@ -43,6 +45,7 @@ export default async function ConsoleDashboard() {
 
   const session = await requireSession();
 
+  const fmt = await getRequestFormatters();
   // No-org users (community/viewer with no membership, or fresh accounts mid-invite)
   // would otherwise pass `""` into a UUID column and crash with 22P02. Render a
   // first-class empty state inviting them to create or join an org instead.
@@ -84,10 +87,10 @@ export default async function ConsoleDashboard() {
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <MetricCard label="Projects" value={stats.total.toLocaleString()} />
-          <MetricCard label="Active" value={stats.byStatus.active.toLocaleString()} accent />
-          <MetricCard label="Draft" value={stats.byStatus.draft.toLocaleString()} />
-          <MetricCard label="Archived" value={(stats.byStatus.archived + stats.byStatus.complete).toLocaleString()} />
+          <MetricCard label="Projects" value={fmt.number(stats.total)} />
+          <MetricCard label="Active" value={fmt.number(stats.byStatus.active)} accent />
+          <MetricCard label="Draft" value={fmt.number(stats.byStatus.draft)} />
+          <MetricCard label="Archived" value={fmt.number(stats.byStatus.archived + stats.byStatus.complete)} />
         </div>
 
         <section>
@@ -111,32 +114,39 @@ export default async function ConsoleDashboard() {
               />
             </div>
           ) : (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Start</th>
-                  <th>End</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.slice(0, 8).map((p) => (
-                  <tr key={p.id}>
-                    <td>
-                      <Link href={`/console/projects/${p.id}`} className="hover:text-[var(--org-primary)]">
-                        {p.name}
-                      </Link>
-                    </td>
-                    <td>
-                      <StatusBadge status={p.status} />
-                    </td>
-                    <td className="font-mono text-xs">{p.start_date ?? "—"}</td>
-                    <td className="font-mono text-xs">{p.end_date ?? "—"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <DataTable
+              rows={projects.slice(0, 8)}
+              rowHref={(p) => `/console/projects/${p.id}`}
+              tableId="t:/console:recent-projects"
+              searchable={false}
+              emptyLabel="No Recent Projects"
+              columns={[
+                { key: "name", header: "Name", render: (p) => p.name, accessor: (p) => p.name, sortable: true },
+                {
+                  key: "status",
+                  header: "Status",
+                  render: (p) => <StatusBadge status={p.status} />,
+                  accessor: (p) => p.status,
+                  filterable: true,
+                },
+                {
+                  key: "start_date",
+                  header: "Start",
+                  render: (p) => p.start_date ?? "—",
+                  accessor: (p) => p.start_date ?? "",
+                  mono: true,
+                  sortable: true,
+                },
+                {
+                  key: "end_date",
+                  header: "End",
+                  render: (p) => p.end_date ?? "—",
+                  accessor: (p) => p.end_date ?? "",
+                  mono: true,
+                  sortable: true,
+                },
+              ]}
+            />
           )}
         </section>
       </div>

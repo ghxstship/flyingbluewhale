@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -68,6 +69,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const horizon = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: manifestData }, { data: orderData }] = await Promise.all([
     supabase
@@ -112,8 +114,8 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming · 30d" value={upcoming.length.toLocaleString()} accent />
-          <MetricCard label="Cleared" value={cleared.toLocaleString()} />
+          <MetricCard label="Upcoming · 30d" value={fmtIntl.number(upcoming.length)} accent />
+          <MetricCard label="Cleared" value={fmtIntl.number(cleared)} />
           <MetricCard label="Order Spend" value={formatMoney(totalSpend)} />
         </div>
 
@@ -154,7 +156,7 @@ export default async function Page() {
                       <td>{m.carrier ?? "—"}</td>
                       <td className="font-mono text-xs">{fmt(m.scheduled_at)}</td>
                       <td className="font-mono text-xs">{fmt(m.actual_at)}</td>
-                      <td className="text-end font-mono text-xs">{m.party_size.toLocaleString()}</td>
+                      <td className="text-end font-mono text-xs">{fmtIntl.number(m.party_size)}</td>
                       <td>
                         <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{m.status.replace(/_/g, " ")}</Badge>
                       </td>

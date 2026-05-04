@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
 import { AutomationControls } from "./AutomationControls";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +70,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("automations")
     .select(
@@ -108,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         {automation.description && <p className="text-sm text-[var(--text-secondary)]">{automation.description}</p>}
 
         <div className="metric-grid-3">
-          <MetricCard label="Steps" value={steps.toLocaleString()} />
+          <MetricCard label="Steps" value={fmtIntl.number(steps)} />
           <MetricCard label="Last Run" value={automation.last_run_at ? fmt(automation.last_run_at) : "Never"} />
           <MetricCard
             label="Last Status"

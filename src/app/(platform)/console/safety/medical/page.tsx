@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +55,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const since24 = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const since7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const [{ count: enc24 }, { count: enc7 }, { data: envData }] = await Promise.all([
@@ -92,9 +94,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Encounters · 24h" value={(enc24 ?? 0).toLocaleString()} accent />
-          <MetricCard label="Encounters · 7d" value={(enc7 ?? 0).toLocaleString()} />
-          <MetricCard label="Active Env. Events" value={env.length.toLocaleString()} />
+          <MetricCard label="Encounters · 24h" value={fmtIntl.number(enc24 ?? 0)} accent />
+          <MetricCard label="Encounters · 7d" value={fmtIntl.number(enc7 ?? 0)} />
+          <MetricCard label="Active Env. Events" value={fmtIntl.number(env.length)} />
         </div>
 
         {env.length > 0 && (

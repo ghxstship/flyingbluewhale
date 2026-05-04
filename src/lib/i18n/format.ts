@@ -19,9 +19,7 @@ export function formatMoney(
 ): string {
   if (cents == null || Number.isNaN(cents)) return EMPTY;
   const opts: FormatterOpts & { currency?: string; fractionDigits?: number } =
-    typeof optsOrCurrency === "string"
-      ? { currency: optsOrCurrency }
-      : optsOrCurrency ?? {};
+    typeof optsOrCurrency === "string" ? { currency: optsOrCurrency } : (optsOrCurrency ?? {});
   const locale = opts.locale ?? DEFAULT_LOCALE;
   const currency = (opts.currency ?? DEFAULT_CURRENCY).toUpperCase();
   return new Intl.NumberFormat(locale, {
@@ -55,18 +53,20 @@ type DateStyle = "full" | "long" | "medium" | "short";
  */
 export function formatDate(
   date: Date | string | number | null | undefined,
-  optsOrStyle: (FormatterOpts & {
-    dateStyle?: DateStyle;
-    timeStyle?: DateStyle;
-  }) | DateStyle | null | undefined = {},
+  optsOrStyle:
+    | (FormatterOpts & {
+        dateStyle?: DateStyle;
+        timeStyle?: DateStyle;
+      })
+    | DateStyle
+    | null
+    | undefined = {},
 ): string {
   if (date == null) return EMPTY;
   const d = typeof date === "string" || typeof date === "number" ? new Date(date) : date;
   if (Number.isNaN(d.getTime())) return EMPTY;
   const opts: FormatterOpts & { dateStyle?: DateStyle; timeStyle?: DateStyle } =
-    typeof optsOrStyle === "string"
-      ? { dateStyle: optsOrStyle }
-      : optsOrStyle ?? {};
+    typeof optsOrStyle === "string" ? { dateStyle: optsOrStyle } : (optsOrStyle ?? {});
   const locale = opts.locale ?? DEFAULT_LOCALE;
   const timezone = opts.timezone ?? DEFAULT_TIMEZONE;
   return new Intl.DateTimeFormat(locale, {
@@ -76,11 +76,44 @@ export function formatDate(
   }).format(d);
 }
 
-export function formatDateTime(
+export function formatDateTime(date: Date | string | number | null | undefined, opts: FormatterOpts = {}): string {
+  return formatDate(date, { ...opts, dateStyle: "medium", timeStyle: "short" });
+}
+
+/**
+ * Free-form date/time formatter with raw `Intl.DateTimeFormatOptions`. Use
+ * when `formatDate` / `formatDateTime` don't fit (e.g. time-only output, or
+ * "weekday + month + day" without a year). Always thread the resolved
+ * `locale` + `timezone` from `getRequestFormatters()` so the output reflects
+ * the reader's preferences.
+ */
+export function formatDateParts(
   date: Date | string | number | null | undefined,
+  options: Intl.DateTimeFormatOptions,
   opts: FormatterOpts = {},
 ): string {
-  return formatDate(date, { ...opts, dateStyle: "medium", timeStyle: "short" });
+  if (date == null) return EMPTY;
+  const d = typeof date === "string" || typeof date === "number" ? new Date(date) : date;
+  if (Number.isNaN(d.getTime())) return EMPTY;
+  const locale = opts.locale ?? DEFAULT_LOCALE;
+  const timezone = opts.timezone ?? DEFAULT_TIMEZONE;
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone: timezone }).format(d);
+}
+
+/** Time-only convenience — `{ hour: "2-digit", minute: "2-digit" }` is the most common shape. */
+export function formatTime(
+  date: Date | string | number | null | undefined,
+  opts: FormatterOpts & { seconds?: boolean } = {},
+): string {
+  return formatDateParts(
+    date,
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+      ...(opts.seconds ? { second: "2-digit" as const } : {}),
+    },
+    opts,
+  );
 }
 
 /**
@@ -101,11 +134,15 @@ export function formatRelative(
     const past = diffSeconds < 0;
     if (abs < 60) return "just now";
     const [value, suffix] =
-      abs < 3600 ? [Math.round(abs / 60), "m"]
-      : abs < 86400 ? [Math.round(abs / 3600), "h"]
-      : abs < 2592000 ? [Math.round(abs / 86400), "d"]
-      : abs < 31536000 ? [Math.round(abs / 2592000), "mo"]
-      : [Math.round(abs / 31536000), "y"];
+      abs < 3600
+        ? [Math.round(abs / 60), "m"]
+        : abs < 86400
+          ? [Math.round(abs / 3600), "h"]
+          : abs < 2592000
+            ? [Math.round(abs / 86400), "d"]
+            : abs < 31536000
+              ? [Math.round(abs / 2592000), "mo"]
+              : [Math.round(abs / 31536000), "y"];
     return past ? `${value}${suffix} ago` : `in ${value}${suffix}`;
   }
 

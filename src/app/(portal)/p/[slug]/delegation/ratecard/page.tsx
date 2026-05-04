@@ -4,6 +4,8 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,17 +30,13 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
   cancelled: "muted",
 };
 
-function money(cents: number, currency: string): string {
-  const amt = cents / 100;
-  return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(amt);
-}
-
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const formatters = await getRequestFormatters();
+  const fmtIntl = formatters;
+  const { locale } = formatters.settings;
+  const money = (cents: number, currency: string): string => formatMoney(cents, { locale, currency });
+  const fmt = (iso: string): string => formatters.date(iso, "medium");
   if (!hasSupabase) {
     return (
       <>
@@ -78,8 +76,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Total Spend" value={money(total, currency)} accent />
-          <MetricCard label="Orders" value={orders.length.toLocaleString()} />
-          <MetricCard label="In Review" value={inReview.toLocaleString()} />
+          <MetricCard label="Orders" value={fmtIntl.number(orders.length)} />
+          <MetricCard label="In Review" value={fmtIntl.number(inReview)} />
         </div>
 
         <section className="surface p-5">

@@ -5,10 +5,16 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 
+// BCP-47 shape: 2–3 char primary tag, optional 4-char script, optional region
+// (2-char alpha or 3-digit). Mirrors the DB check constraint added in
+// 20260504000005_locale_preferences.sql so a save can't pass the form yet
+// fail at the row write.
+const BCP47 = /^[a-z]{2,3}(-[A-Z][a-z]{3})?(-[A-Z]{2}|-[0-9]{3})?$/;
+
 const Schema = z.object({
   theme: z.enum(["light", "dark", "system"]),
   density: z.enum(["compact", "comfortable", "spacious"]),
-  locale: z.string().min(2).max(8),
+  locale: z.string().regex(BCP47, "Use a BCP-47 tag like 'en' or 'fr-CA'"),
   timezone: z.string().min(1).max(64),
   analytics: z.string().optional(), // "on" if checkbox checked
   marketing: z.string().optional(),
@@ -50,6 +56,9 @@ export async function savePreferencesAction(_: State, fd: FormData): Promise<Sta
   );
 
   if (error) return { error: error.message };
-  revalidatePath("/me/preferences");
+  // Revalidate the whole layout so `<html lang dir>` and every locale-aware
+  // formatter pick up the new preference on the next paint without a full
+  // browser reload.
+  revalidatePath("/", "layout");
   return { ok: true };
 }

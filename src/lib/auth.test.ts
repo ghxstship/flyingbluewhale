@@ -1,68 +1,82 @@
 import { describe, expect, it } from "vitest";
-import { can, personaForRole, resolveShell } from "./auth";
+import { can, isAdmin, isManagerPlus, personaForRole, resolveShell } from "./auth";
+import type { Session } from "./auth";
+
+const baseSession = (overrides: Partial<Session> = {}): Session => ({
+  userId: "u",
+  email: "x@y.z",
+  orgId: "o",
+  orgSlug: "acme",
+  role: "admin",
+  isDeveloper: false,
+  tier: "access",
+  persona: "admin",
+  ...overrides,
+});
 
 describe("personaForRole", () => {
-  it("owner → owner", () => { expect(personaForRole("owner")).toBe("owner"); });
-  it("admin → admin", () => { expect(personaForRole("admin")).toBe("admin"); });
-  it("controller → controller", () => { expect(personaForRole("controller")).toBe("controller"); });
-  it("collaborator → project_manager", () => { expect(personaForRole("collaborator")).toBe("project_manager"); });
-  it("contractor → vendor", () => { expect(personaForRole("contractor")).toBe("vendor"); });
-  it("crew → crew", () => { expect(personaForRole("crew")).toBe("crew"); });
-  it("client → client", () => { expect(personaForRole("client")).toBe("client"); });
-  it("developer → developer", () => { expect(personaForRole("developer")).toBe("developer"); });
-  it("viewer/community → guest", () => {
-    expect(personaForRole("viewer")).toBe("guest");
-    expect(personaForRole("community")).toBe("guest");
+  it("identity-maps platform role → persona", () => {
+    expect(personaForRole("owner")).toBe("owner");
+    expect(personaForRole("admin")).toBe("admin");
+    expect(personaForRole("manager")).toBe("manager");
+    expect(personaForRole("member")).toBe("member");
   });
 });
 
 describe("resolveShell", () => {
-  it("internal personas route to /console", () => {
+  it("real-org personas route to /console", () => {
     expect(resolveShell("owner")).toBe("/console");
     expect(resolveShell("admin")).toBe("/console");
-    expect(resolveShell("controller")).toBe("/console");
-    expect(resolveShell("project_manager")).toBe("/console");
-    expect(resolveShell("developer")).toBe("/console");
+    expect(resolveShell("manager")).toBe("/console");
+    expect(resolveShell("member")).toBe("/console");
   });
-  it("external personas with a project context route to /p", () => {
-    expect(resolveShell("client")).toBe("/p");
-    expect(resolveShell("vendor")).toBe("/p");
-    expect(resolveShell("artist")).toBe("/p");
-    expect(resolveShell("sponsor")).toBe("/p");
-  });
-  it("guest persona (viewer/community roles) routes to /me — they have no slug context", () => {
-    // Regression guard for the /p/select 404 dead end: guest arrives without
-    // a project slug, so /p/select would hit notFound(). /me is the correct
-    // destination (profile + organizations + security).
+  it("guest routes to /me — demo-org-only viewer with no real org context", () => {
     expect(resolveShell("guest")).toBe("/me");
   });
-  it("crew routes to /m", () => { expect(resolveShell("crew")).toBe("/m"); });
-  it("visitor routes to /me", () => { expect(resolveShell("visitor")).toBe("/me"); });
+  it("visitor routes to /me", () => {
+    expect(resolveShell("visitor")).toBe("/me");
+  });
+});
+
+describe("isAdmin / isManagerPlus", () => {
+  it("isAdmin = owner | admin", () => {
+    expect(isAdmin(baseSession({ role: "owner" }))).toBe(true);
+    expect(isAdmin(baseSession({ role: "admin" }))).toBe(true);
+    expect(isAdmin(baseSession({ role: "manager" }))).toBe(false);
+    expect(isAdmin(baseSession({ role: "member" }))).toBe(false);
+    expect(isAdmin(null)).toBe(false);
+  });
+  it("isManagerPlus = owner | admin | manager", () => {
+    expect(isManagerPlus(baseSession({ role: "owner" }))).toBe(true);
+    expect(isManagerPlus(baseSession({ role: "admin" }))).toBe(true);
+    expect(isManagerPlus(baseSession({ role: "manager" }))).toBe(true);
+    expect(isManagerPlus(baseSession({ role: "member" }))).toBe(false);
+    expect(isManagerPlus(null)).toBe(false);
+  });
 });
 
 describe("can (capability gating)", () => {
-  const session = () =>
-    ({ userId: "u", email: "x@y.z", orgId: "o", role: "admin", tier: "access", persona: "admin" }) as unknown as NonNullable<Parameters<typeof can>[0]>;
-
   it("denies null session", () => {
     expect(can(null, "projects:read")).toBe(false);
   });
   it("owner/admin have wildcard", () => {
-    expect(can({ ...session(), role: "owner" }, "projects:delete")).toBe(true);
-    expect(can({ ...session(), role: "admin" }, "anything:goes")).toBe(true);
+    expect(can(baseSession({ role: "owner" }), "projects:delete")).toBe(true);
+    expect(can(baseSession({ role: "admin" }), "anything:goes")).toBe(true);
   });
-  it("controller has finance/procurement", () => {
-    const s = { ...session(), role: "controller" as const };
-    expect(can(s, "invoices:create")).toBe(true);
+  it("manager has projects + finance read/write but not billing", () => {
+    const s = baseSession({ role: "manager" });
+    expect(can(s, "projects:write")).toBe(true);
+    expect(can(s, "invoices:write")).toBe(true);
     expect(can(s, "procurement:read")).toBe(true);
+    expect(can(s, "billing:read")).toBe(false);
   });
-  it("controller lacks AI", () => {
-    expect(can({ ...session(), role: "controller" as const }, "ai:chat")).toBe(false);
+  it("member can read projects + write tasks/time", () => {
+    const s = baseSession({ role: "member" });
+    expect(can(s, "projects:read")).toBe(true);
+    expect(can(s, "tasks:write")).toBe(true);
+    expect(can(s, "time:write")).toBe(true);
   });
-  it("crew can write time", () => {
-    expect(can({ ...session(), role: "crew" as const }, "time:write")).toBe(true);
-  });
-  it("community role has no capabilities", () => {
-    expect(can({ ...session(), role: "community" as const }, "projects:read")).toBe(false);
+  it("member cannot manage other people", () => {
+    expect(can(baseSession({ role: "member" }), "people:write")).toBe(false);
   });
 });

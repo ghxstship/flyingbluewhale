@@ -1,17 +1,19 @@
 import type { OfferLetterResolved } from "@/lib/offer-letters/types";
 import { EMPLOYER_LABEL, CLASSIFICATION_LABEL, BASIS_LABEL } from "@/lib/offer-letters/types";
 import { formatCompensation, formatDateRange, formatDollars } from "@/lib/offer-letters/format";
+import { formatDate, formatDateTime } from "@/lib/i18n/format";
 
 /**
  * Branded, print-friendly engagement letter. Reads exclusively from the
  * resolved view shape (or the frozen snapshot) — every value is SSOT-resolved.
+ *
+ * The doc renders with the baseline locale because letters are part of an
+ * audit-grade artifact: switching the rendered date format per viewer would
+ * break the contract record. For viewer-aware previews, callers should
+ * format dates upstream and pass strings in.
  */
 export function LetterDocument({ letter }: { letter: OfferLetterResolved }) {
-  const issuedOn = new Date(letter.created_at).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
+  const issuedOn = formatDate(letter.created_at, "long");
   const venueLine = [letter.venue_name, letter.venue_city, letter.venue_region].filter(Boolean).join(" · ");
 
   return (
@@ -156,7 +158,7 @@ export function LetterDocument({ letter }: { letter: OfferLetterResolved }) {
             <div className="text-xs tracking-widest text-[var(--text-muted)] uppercase">Accepted</div>
             <div className="font-subdisplay text-2xl tracking-wide">{letter.accepted_signature}</div>
             <div className="text-xs text-[var(--text-muted)]">
-              Counter-signed {letter.accepted_at ? new Date(letter.accepted_at).toLocaleString() : ""}
+              Counter-signed {letter.accepted_at ? formatDateTime(letter.accepted_at) : ""}
             </div>
           </div>
         ) : (

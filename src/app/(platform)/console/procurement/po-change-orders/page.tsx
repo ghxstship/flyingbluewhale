@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("po_change_orders")
     .select(
@@ -72,7 +74,7 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending" value={pending.length.toLocaleString()} accent />
+          <MetricCard label="Pending" value={fmt.number(pending.length)} accent />
           <MetricCard label="Pending Value" value={formatMoney(totalPending)} />
           <MetricCard label="Approved Value" value={formatMoney(totalApproved)} />
         </div>

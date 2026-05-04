@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,10 +27,6 @@ const STATUS_TONE: Record<string, "muted" | "warning" | "info" | "success" | "er
   cancelled: "muted",
 };
 
-function fmtTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
 function fmtDuration(s: number | null): string {
   if (s == null) return "";
   if (s < 60) return `${s}s`;
@@ -45,6 +42,8 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
+  const fmtTime = (iso: string) => fmt.time(iso);
 
   const [{ data: showData }, { data: cueData }] = await Promise.all([
     supabase

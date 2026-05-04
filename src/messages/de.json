@@ -1,0 +1,367 @@
+{
+  "common": {
+    "appName": "LYTEHAUS Technologies",
+    "appNameStylized": "L Y T E H A U S",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "submit": "Senden",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "loading": "Wird geladen…",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "settings": "Einstellungen",
+    "help": "Hilfe",
+    "signOut": "Abmelden",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "startFree": "Kostenlos starten",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Vorherige",
+    "done": "Fertig",
+    "skip": "Überspringen",
+    "retry": "Erneut versuchen",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "copyLink": "Link kopieren",
+    "all": "Alle",
+    "none": "Keine",
+    "yes": "Ja",
+    "no": "Nein",
+    "optional": "Optional",
+    "required": "Erforderlich",
+    "required_field": "{field} ist erforderlich",
+    "pending": "Ausstehend",
+    "accepted": "Akzeptiert",
+    "revoked": "Widerrufen",
+    "expired": "Abgelaufen"
+  },
+  "nav": {
+    "product": "Produkt",
+    "industries": "Branchen",
+    "pricing": "Preise",
+    "community": "Community",
+    "resources": "Ressourcen",
+    "features": "Funktionen",
+    "solutions": "Lösungen",
+    "compare": "Vergleichen",
+    "blog": "Blog",
+    "guides": "Anleitungen",
+    "docs": "Dokumentation",
+    "changelog": "Änderungen",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "home": "Startseite",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "careers": "Karriere",
+    "trust": "Vertrauen",
+    "legal": {
+      "terms": "AGB",
+      "privacy": "Datenschutz",
+      "dpa": "DPA",
+      "sla": "SLA"
+    }
+  },
+  "marketing": {
+    "header": {
+      "login": "Anmelden",
+      "signup": "Registrieren",
+      "themes": "Designs",
+      "language": "Sprache",
+      "theme": "Design",
+      "openMenu": "Menü öffnen",
+      "closeMenu": "Menü schließen"
+    },
+    "home": {
+      "cta": {
+        "primary": "Kostenlos starten",
+        "secondary": "Demo buchen"
+      }
+    },
+    "industries": {
+      "live-events": "Live-Events",
+      "concerts": "Konzerte",
+      "festivals-tours": "Festivals und Tourneen",
+      "immersive-experiences": "Immersive Erlebnisse",
+      "brand-activations": "Markenaktivierungen",
+      "corporate-events": "Firmenveranstaltungen",
+      "theatrical-performances": "Theateraufführungen",
+      "broadcast-tv-film": "Rundfunk, TV und Film"
+    },
+    "footer": {
+      "copyright": "© {year} LYTEHAUS Technologies",
+      "trademark": "ATLVS, GVTEWAY und COMPVSS sind eingetragene Marken von LYTEHAUS Technologies, einem Unternehmen der G H X S T S H I P Industries.",
+      "tagline": "ATLVS, GVTEWAY und COMPVSS — drei vernetzte Apps für Produktionsteams.",
+      "ctaTired": "Gemacht für Produktionsteams, die genug von Notlösungen haben."
+    },
+    "cta": {
+      "startFree": "Kostenlos starten",
+      "bookDemo": "Demo buchen",
+      "viewDocs": "Dokumentation ansehen",
+      "startFreeForLife": "Lebenslang kostenlos",
+      "contactSales": "Vertrieb kontaktieren",
+      "pitchStory": "Story einreichen"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Anmelden",
+      "subtitle": "Willkommen zurück. Mach da weiter, wo du aufgehört hast.",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "rememberMe": "Angemeldet bleiben",
+      "forgotPassword": "Passwort vergessen?",
+      "emailMeALink": "Link per E-Mail senden",
+      "noAccount": "Noch kein Konto?",
+      "createOne": "Eines erstellen",
+      "orContinueWith": "Oder weiter mit",
+      "orContinueWithEmail": "Oder weiter per E-Mail",
+      "submit": "Anmelden",
+      "submitting": "Wird angemeldet…"
+    },
+    "signup": {
+      "title": "Konto erstellen",
+      "subtitle": "Starte kostenlos in unter zwei Minuten",
+      "name": "Name",
+      "email": "Geschäftliche E-Mail",
+      "password": "Passwort",
+      "passwordHelp": "Mindestens 8 Zeichen",
+      "haveAccount": "Schon ein Konto?",
+      "signIn": "Anmelden",
+      "submit": "Konto erstellen",
+      "submitting": "Konto wird erstellt…",
+      "passwordStrength": {
+        "veryWeak": "Sehr schwach",
+        "weak": "Schwach",
+        "fair": "Mittel",
+        "strong": "Stark",
+        "veryStrong": "Sehr stark"
+      }
+    },
+    "oauth": {
+      "continueWith": "Weiter mit {provider}",
+      "google": "Google",
+      "github": "GitHub",
+      "microsoft": "Microsoft",
+      "couldntStart": "{provider}-Anmeldung konnte nicht gestartet werden",
+      "notConfigured": "OAuth-Anbieter nicht konfiguriert",
+      "invalidProvider": "Ungültiger Anbieter",
+      "missingCode": "Anmeldung nicht abgeschlossen — bitte erneut versuchen"
+    },
+    "magicLink": {
+      "title": "Magic Link senden",
+      "subtitle": "Wir senden einen Anmeldelink an dein Postfach — kein Passwort nötig.",
+      "submit": "Magic Link senden",
+      "submitting": "Wird gesendet",
+      "success": "Sieh in dein Postfach — wir haben einen Anmeldelink gesendet, der in 1 Stunde abläuft.",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "verifyEmail": {
+      "title": "Postfach prüfen",
+      "subtitleWithEmail": "Wir haben einen Bestätigungslink an {email} gesendet.",
+      "subtitleGeneric": "Wir haben einen Bestätigungslink an deine E-Mail gesendet.",
+      "info": "Klicke auf den Link in der E-Mail, um dein Konto zu aktivieren. Der Link läuft in 24 Stunden ab.",
+      "didntGetIt": "Nicht erhalten? Prüfe den Spam-Ordner und fordere unten einen neuen an.",
+      "resend": "Bestätigungs-E-Mail erneut senden",
+      "resendCooldown": "Erneut senden in {seconds}s",
+      "resendSending": "Wird gesendet…",
+      "resendSuccess": "Bestätigungs-E-Mail erneut gesendet.",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "forgotPassword": {
+      "title": "Passwort vergessen",
+      "subtitle": "Wir senden dir einen Reset-Link",
+      "submit": "Reset-Link senden",
+      "sentSubtitle": "Sieh in dein Postfach für den Reset-Link",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "resetPassword": {
+      "title": "Neues Passwort festlegen",
+      "subtitle": "Wähle ein Passwort, das du noch nie verwendet hast.",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "hint": "Mindestens 8 Zeichen",
+      "submit": "Passwort aktualisieren",
+      "submitting": "Wird aktualisiert",
+      "mismatch": "Passwörter stimmen nicht überein",
+      "expired": "Dein Reset-Link ist abgelaufen oder unbekannt. Fordere über Passwort vergessen einen neuen an.",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "acceptInvite": {
+      "title": "Tritt deinem Team bei",
+      "subtitle": "Akzeptiere deine Einladung zu LYTEHAUS Technologies",
+      "body": "Du wurdest in einen LYTEHAUS-Technologies-Workspace eingeladen. Akzeptiere unten und wir bringen dich direkt hinein.",
+      "submit": "Einladung annehmen",
+      "submitting": "Beitritt…",
+      "signInInstead": "Stattdessen anmelden",
+      "invalidOrExpired": "Diese Einladung ist ungültig, abgelaufen oder an eine andere E-Mail adressiert. Bitte den Org-Admin um erneutes Senden.",
+      "joinFailed": "Beitritt zur Organisation fehlgeschlagen: {message}",
+      "updateFailed": "Mitgliedschaft erstellt, aber Einladungsupdate fehlgeschlagen: {message}"
+    },
+    "errors": {
+      "invalidCredentials": "Ungültige E-Mail oder Passwort",
+      "accountExists": "Ein Konto mit dieser E-Mail existiert — versuche dich anzumelden",
+      "duplicateEmail": "Diese E-Mail ist bereits registriert",
+      "weakPassword": "Passwort muss mindestens 8 Zeichen haben",
+      "notConfigured": "Supabase nicht konfiguriert. Setze NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+      "signupNoUser": "Registrierung fehlgeschlagen — kein Benutzer zurückgegeben.",
+      "unknown": "Etwas ist schiefgelaufen — bitte erneut versuchen"
+    }
+  },
+  "invites": {
+    "moduleHeader": {
+      "eyebrow": "Personen",
+      "title": "Einladungen",
+      "subtitle": "Ausstehende Organisationseinladungen"
+    },
+    "form": {
+      "heading": "Jemanden einladen",
+      "description": "Sie erhalten eine E-Mail mit einem Annahmelink. Läuft in 7 Tagen ab.",
+      "email": "E-Mail",
+      "role": "Rolle",
+      "submit": "Einladung senden",
+      "submitting": "Wird gesendet…"
+    },
+    "roles": {
+      "admin": "Admin — vollständige Org-Kontrolle",
+      "controller": "Controller — Finanzen und Betrieb",
+      "collaborator": "Mitarbeiter — Lese-/Schreibbetrieb",
+      "contractor": "Auftragnehmer — eingeschränkter Zugriff",
+      "crew": "Crew — Außendienst / Mobile",
+      "client": "Kunde — externes Portal",
+      "viewer": "Betrachter — nur lesen",
+      "community": "Community — minimal"
+    },
+    "pending": {
+      "heading": "Ausstehend ({count})",
+      "emptyAdmin": "Sende oben eine, um zu beginnen.",
+      "emptyMember": "Bitte einen Admin, neue Mitglieder einzuladen.",
+      "columns": {
+        "email": "E-Mail",
+        "role": "Rolle",
+        "expires": "Läuft ab",
+        "link": "Link"
+      }
+    },
+    "history": {
+      "heading": "Verlauf",
+      "columns": {
+        "email": "E-Mail",
+        "role": "Rolle",
+        "status": "Status",
+        "when": "Wann"
+      }
+    },
+    "emailSubject": "Du bist eingeladen, einem LYTEHAUS-Technologies-Workspace beizutreten",
+    "emailHeading": "Du wurdest eingeladen",
+    "emailBody": "{inviter} hat dich eingeladen, dem Workspace als {role} beizutreten.",
+    "emailCta": "Einladung annehmen",
+    "emailExpiry": "Link läuft in 7 Tagen ab. Falls die Schaltfläche nicht funktioniert:",
+    "errors": {
+      "onlyAdmins": "Nur Inhaber, Admins und Entwickler können einladen.",
+      "pendingExists": "Eine ausstehende Einladung existiert bereits für diese E-Mail.",
+      "invalidToken": "Ungültiges Einladungstoken",
+      "validationGeneric": "Ungültige Eingabe"
+    }
+  },
+  "theme": {
+    "sheet": {
+      "title": "Design-Thema wählen",
+      "description": "Acht voll ausgearbeitete Themen. Deine Wahl wird sofort auf jeder Seite angewendet — kein Neuladen, keine Anmeldung. Wir merken sie auf diesem Gerät.",
+      "appearanceHeading": "Erscheinungsbild",
+      "appearanceSubtitle": "Wähle den Look für deinen Workspace. Wird sofort überall angewendet.",
+      "matchSystem": "An System anpassen",
+      "matchingSystem": "Passt sich dem System an",
+      "currentlyLabel": "Aktuell:",
+      "upsell": "Gefällt dir, was du siehst? Erstelle ein Konto, um Themen auf allen Geräten zu synchronisieren.",
+      "upsellCta": "Konto erstellen"
+    },
+    "toggle": {
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "An System anpassen",
+      "themes": "Designs",
+      "colorTheme": "Farbthema"
+    }
+  },
+  "footerUtility": {
+    "designThemes": "Design-Themen",
+    "changeLanguage": "Sprache ändern"
+  },
+  "shell": {
+    "platform": {
+      "brand": "ATLVS",
+      "consoleEyebrow": "Operations-Konsole"
+    },
+    "portal": {
+      "brand": "GVTEWAY"
+    },
+    "mobile": {
+      "brand": "COMPVSS",
+      "aboutSuffix": "· v{version}"
+    }
+  },
+  "a11y": {
+    "skipToContent": "Zum Inhalt springen",
+    "closeDialog": "Dialog schließen",
+    "toggleTheme": "Design wechseln",
+    "toggleMenu": "Menü umschalten",
+    "openMenu": "Menü öffnen",
+    "homeAriaLabel": "LYTEHAUS Technologies — Startseite",
+    "loading": "Wird geladen",
+    "saving": "Wird gespeichert",
+    "saved": "Gespeichert",
+    "error": "Fehler",
+    "expandSidebar": "Seitenleiste erweitern",
+    "collapseSidebar": "Seitenleiste einklappen"
+  },
+  "community": {
+    "meta": {
+      "title": "Community — die Produktionsteams, die auf LYTEHAUS aufbauen",
+      "description": "Die Festivals, Tourneen, Agenturen und Werkstätten, die ihre Produktion auf ATLVS, GVTEWAY und COMPVSS betreiben. Mitgliedergeschichten, Zahlen und was sie tatsächlich liefern."
+    },
+    "hero": {
+      "eyebrow": "Community",
+      "title": "Produktionsteams, die öffentlich aufbauen.",
+      "subtitle": "Die Festivals, Tourneen, Agenturen und Werkstätten, die ihre Shows auf LYTEHAUS Technologies betreiben. Echte Workflows. Echte Zahlen. Echte Belege."
+    },
+    "metrics": {
+      "productionTeams": "Produktionsteams",
+      "ticketsScanned": "Tickets gescannt",
+      "showsAdvanced": "Shows vorbereitet",
+      "countries": "Länder"
+    },
+    "stories": {
+      "heading": "Mitgliedergeschichten",
+      "subtitle": "Was sie vorher genutzt haben, was sie gewechselt haben, was sich messbar verbessert hat."
+    },
+    "join": {
+      "eyebrow": "Auf die Liste",
+      "title": "Dein Team, hier.",
+      "body": "Du lieferst echte Shows auf LYTEHAUS Technologies? Wir dokumentieren immer neue Mitgliedergeschichten. Ein kurzes Interview, anonymisierte Zahlen, deine Worte."
+    },
+    "finalCta": {
+      "title": "Sei die nächste Geschichte",
+      "subtitle": "Starte kostenlos. Liefere eine Show. Wir reden danach."
+    }
+  },
+  "rate": {
+    "tooMany": "Zu viele Anfragen — bitte versuchen Sie es kurz erneut",
+    "retryIn": "Erneut versuchen in {seconds}s"
+  },
+  "errors": {
+    "generic": "Etwas ist schiefgelaufen",
+    "notFound": "Nicht gefunden",
+    "forbidden": "Sie haben keinen Zugriff darauf",
+    "unauthorized": "Bitte melden Sie sich an, um fortzufahren",
+    "offline": "Sie sind offline — Aktionen werden bei erneuter Verbindung synchronisiert"
+  }
+}

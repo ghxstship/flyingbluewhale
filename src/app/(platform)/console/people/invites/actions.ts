@@ -3,26 +3,21 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email";
 import { urlFor } from "@/lib/urls";
+import { PLATFORM_ROLES } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
-
-const ADMIN_ROLES: ReadonlyArray<"owner" | "admin" | "developer"> = ["owner", "admin", "developer"];
-
-function isAdmin(role: string): boolean {
-  return (ADMIN_ROLES as readonly string[]).includes(role);
-}
 
 const CreateSchema = z.object({
   email: z.string().email("Enter a valid email"),
-  role: z.enum(["owner", "admin", "controller", "collaborator", "contractor", "crew", "client", "viewer", "community"]),
+  role: z.enum(PLATFORM_ROLES),
 });
 
 export async function createInviteAction(_: FormState, fd: FormData): Promise<FormState> {
   const session = await requireSession();
-  if (!isAdmin(session.role)) return { error: "Only owners, admins, and developers can invite." };
+  if (!isAdmin(session)) return { error: "Only owners and admins can invite." };
 
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
@@ -70,7 +65,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
 
 export async function revokeInviteAction(id: string): Promise<FormState> {
   const session = await requireSession();
-  if (!isAdmin(session.role)) return { error: "Only owners, admins, and developers can revoke." };
+  if (!isAdmin(session)) return { error: "Only owners and admins can revoke." };
 
   const supabase = await createClient();
   const { error } = await supabase

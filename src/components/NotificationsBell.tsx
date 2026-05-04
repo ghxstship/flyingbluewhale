@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Bell, Check } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /**
  * <NotificationsBell> — closes the dead-zone flagged in IA audit §7 #4.
@@ -28,6 +29,7 @@ type Notification = {
 };
 
 export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
+  const fmt = useFormatters();
   const [items, setItems] = useState<Notification[]>([]);
   const [unread, setUnread] = useState(0);
   const [open, setOpen] = useState(false);
@@ -154,7 +156,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
                       </p>
                       {n.body ? <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-muted)]">{n.body}</p> : null}
                       <p className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-                        {new Date(n.created_at).toLocaleString()}
+                        {fmt.dateTime(n.created_at)}
                       </p>
                     </div>
                   </div>

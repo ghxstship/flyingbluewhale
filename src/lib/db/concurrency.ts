@@ -6,6 +6,24 @@ import type { Database } from "@/lib/supabase/types";
 type PublicTables = Database["public"]["Tables"];
 type TableName = keyof PublicTables;
 
+// Generic-table dispatch helper. The public Supabase typing dispatches `from`
+// per-table-name overloads, so a generic `T extends TableName` collapses to
+// `never` in the resulting builder. We model a narrow surface of the methods
+// we actually call here, parameterised on the row type — no `any`, no
+// per-call type assertions in the body.
+type Filterable<R> = {
+  eq: (column: string, value: unknown) => Filterable<R>;
+  select: (cols?: string) => Filterable<R>;
+  maybeSingle: () => Promise<{ data: R | null; error: { message: string } | null }>;
+};
+type GenericFromBuilder<R, U> = {
+  update: (patch: U) => Filterable<R>;
+  select: (cols?: string) => Filterable<R>;
+};
+type GenericClient = {
+  from: <T extends TableName>(t: T) => GenericFromBuilder<PublicTables[T]["Row"], PublicTables[T]["Update"]>;
+};
+
 /**
  * Sea Trial FINDING-022 — optimistic concurrency control.
  *
@@ -44,30 +62,24 @@ export async function updateOrgScopedWithCheck<T extends TableName>(
     // forces edit pages to render the hidden field.
     return { ok: false, reason: "stale" };
   }
-  const supabase = await createClient();
-  const q = (supabase as unknown as { from: (t: string) => any })
-    .from(table as string)
+  const supabase = (await createClient()) as unknown as GenericClient;
+  const { data, error } = await supabase
+    .from(table)
     .update(patch)
     .eq("org_id", orgId)
     .eq("id", id)
     .eq("updated_at", expectedUpdatedAt)
     .select()
     .maybeSingle();
-  const { data, error } = await q;
   if (error) throw error;
   if (!data) {
     // The row didn't match — either the id is wrong, the org doesn't own
     // it, or the updated_at token diverged. We can't tell which from one
     // query, so probe lightly to give the right message.
-    const probe = await (supabase as unknown as { from: (t: string) => any })
-      .from(table as string)
-      .select("id")
-      .eq("org_id", orgId)
-      .eq("id", id)
-      .maybeSingle();
+    const probe = await supabase.from(table).select("id").eq("org_id", orgId).eq("id", id).maybeSingle();
     return probe.data ? { ok: false, reason: "stale" } : { ok: false, reason: "not_found" };
   }
-  return { ok: true, row: data as PublicTables[T]["Row"] };
+  return { ok: true, row: data };
 }
 
 /** Standardized message surfaced to the form's error alert. */

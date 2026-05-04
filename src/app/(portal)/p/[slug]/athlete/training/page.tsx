@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const since = new Date(Date.now() - 7 * 86_400_000).toISOString();
   const { data } = await supabase
     .from("events")
@@ -79,17 +81,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming" value={upcoming.length.toLocaleString()} accent={upcoming.length > 0} />
+          <MetricCard label="Upcoming" value={fmtIntl.number(upcoming.length)} accent={upcoming.length > 0} />
           <MetricCard
             label="This Week"
-            value={sessions
-              .filter((s) => {
+            value={fmtIntl.number(
+              sessions.filter((s) => {
                 const t = new Date(s.starts_at).getTime();
                 return t >= Date.now() && t < Date.now() + 7 * 86_400_000;
-              })
-              .length.toLocaleString()}
+              }).length,
+            )}
           />
-          <MetricCard label="Completed" value={past.length.toLocaleString()} />
+          <MetricCard label="Completed" value={fmtIntl.number(past.length)} />
         </div>
 
         <section className="surface p-5">

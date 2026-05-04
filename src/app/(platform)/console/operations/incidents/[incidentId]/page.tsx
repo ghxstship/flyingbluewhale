@@ -7,6 +7,7 @@ import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteIncident } from "./edit/actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
     );
   const session = await requireSession();
   const row = await getOrgScoped("incidents", session.orgId, p.incidentId);
+  const fmt = await getRequestFormatters();
   if (!row) notFound();
   const fields = row as Record<string, unknown>;
   const summary = (fields["summary"] as string | undefined) ?? p.incidentId;
@@ -59,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
           <div className="flex items-center gap-3">
             <StatusChip tone={SEVERITY_TONE[severity] ?? "neutral"}>{severity}</StatusChip>
             <span className="text-xs text-[var(--text-muted)]">
-              {fields["occurred_at"] ? new Date(String(fields["occurred_at"])).toLocaleString() : "—"}
+              {fields["occurred_at"] ? fmt.dateTime(String(fields["occurred_at"])) : "—"}
             </span>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export default async function Page() {
     filters: [{ column: "kind", op: "eq", value: "village" }],
   });
 
+  const fmt = await getRequestFormatters();
   const totalCapacity = rows.reduce((s, r) => s + (r.capacity ?? 0), 0);
 
   return (
@@ -34,7 +36,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Accommodation"
         title="Village"
-        subtitle={`${rows.length} village${rows.length === 1 ? "" : "s"} · ${totalCapacity.toLocaleString()} bed${totalCapacity === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} village${rows.length === 1 ? "" : "s"} · ${fmt.number(totalCapacity)} bed${totalCapacity === 1 ? "" : "s"}`}
         action={
           <Button href="/console/venues/new" size="sm">
             + New Venue
@@ -64,7 +66,7 @@ export default async function Page() {
               key: "capacity",
               header: "Beds",
               render: (r) => (
-                <span className="font-mono text-xs">{(r.capacity as number | null)?.toLocaleString() ?? "—"}</span>
+                <span className="font-mono text-xs">{r.capacity != null ? fmt.number(r.capacity as number) : "—"}</span>
               ),
               accessor: (r) => r.capacity ?? null,
             },

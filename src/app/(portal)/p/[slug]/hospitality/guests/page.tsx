@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   // Hospitality tier tickets only — common tier names: hospitality, vip, suite.
   const { data } = await supabase
     .from("tickets")
@@ -77,9 +79,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active" value={active.toLocaleString()} />
-          <MetricCard label="Checked In" value={checkedIn.toLocaleString()} accent={checkedIn > 0} />
-          <MetricCard label="Total" value={guests.length.toLocaleString()} />
+          <MetricCard label="Active" value={fmtIntl.number(active)} />
+          <MetricCard label="Checked In" value={fmtIntl.number(checkedIn)} accent={checkedIn > 0} />
+          <MetricCard label="Total" value={fmtIntl.number(guests.length)} />
         </div>
 
         <DataTable<Ticket>

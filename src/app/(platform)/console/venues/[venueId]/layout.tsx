@@ -1,10 +1,10 @@
-import { RouteTabs } from "@/components/ui/RouteTabs";
+import { RecordTabsProvider } from "@/components/ui/RecordTabsContext";
 
 /**
- * Venue detail layout — persistent record-tabs strip across the eight
- * existing venue sub-routes (build, certifications, closeout, design,
- * handover, run of show, vop, zones). Mirrors the project layout
- * pattern shipped in Phase B of the WAYFINDER remediation.
+ * Venue detail layout — record-tabs across the eight existing venue
+ * sub-routes (build, certifications, closeout, design, handover, run
+ * of show, vop, zones). Tabs render inside each page's ModuleHeader
+ * via context.
  */
 export default async function VenueLayout({
   children,
@@ -25,12 +25,5 @@ export default async function VenueLayout({
     { label: "Handover", href: `/console/venues/${venueId}/handover` },
     { label: "Closeout", href: `/console/venues/${venueId}/closeout` },
   ];
-  return (
-    <>
-      <div className="sticky top-14 z-20 border-b border-[var(--border-color)] bg-[var(--background)]/85 px-6 backdrop-blur supports-[backdrop-filter]:bg-[var(--background)]/65">
-        <RouteTabs tabs={tabs} />
-      </div>
-      {children}
-    </>
-  );
+  return <RecordTabsProvider tabs={tabs}>{children}</RecordTabsProvider>;
 }

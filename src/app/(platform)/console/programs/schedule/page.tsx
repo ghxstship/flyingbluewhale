@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const horizon = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await supabase
@@ -79,9 +81,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total" value={rows.length.toLocaleString()} accent />
-          <MetricCard label="Upcoming" value={upcoming.toLocaleString()} />
-          <MetricCard label="Live Now" value={live.toLocaleString()} />
+          <MetricCard label="Total" value={fmtIntl.number(rows.length)} accent />
+          <MetricCard label="Upcoming" value={fmtIntl.number(upcoming)} />
+          <MetricCard label="Live Now" value={fmtIntl.number(live)} />
         </div>
 
         <DataTable<EventRow>

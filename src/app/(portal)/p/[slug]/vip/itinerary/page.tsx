@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,14 +17,6 @@ type EventRow = {
   description: string | null;
   location: { name: string | null } | null;
 };
-
-function fmtDay(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
-}
-
-function fmtTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -40,6 +33,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtTime = (iso: string): string => fmt.time(iso);
+  const fmtDay = (iso: string): string => fmt.dateParts(iso, { weekday: "long", month: "short", day: "numeric" });
   const since = new Date().toISOString();
   const { data } = await supabase
     .from("events")
@@ -73,8 +69,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Events" value={events.length.toLocaleString()} accent={events.length > 0} />
-          <MetricCard label="Days" value={days.length.toLocaleString()} />
+          <MetricCard label="Events" value={fmt.number(events.length)} accent={events.length > 0} />
+          <MetricCard label="Days" value={fmt.number(days.length)} />
           <MetricCard label="Status" value="Confirmed" />
         </div>
 

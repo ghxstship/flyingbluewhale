@@ -5,12 +5,9 @@ import { ConversationPanel } from "@/components/ConversationPanel";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
-
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -18,6 +15,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   const { data: plan } = await supabase
     .from("site_plans")
     .select("*, project:project_id(name), venue:venue_id(name)")
@@ -77,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 {(revisions ?? []).map((r) => (
                   <tr key={r.id}>
                     <td className="font-mono text-xs">{r.revision_label}</td>
-                    <td className="font-mono text-xs">{fmt(r.uploaded_at)}</td>
+                    <td className="font-mono text-xs">{fmtDate(r.uploaded_at)}</td>
                     <td>{r.notes ?? "—"}</td>
                   </tr>
                 ))}

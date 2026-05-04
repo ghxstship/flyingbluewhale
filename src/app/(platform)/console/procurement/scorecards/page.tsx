@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ data: vendorData }, { data: poData }] = await Promise.all([
     supabase
       .from("vendors")
@@ -101,9 +103,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Vendors" value={vendors.length.toLocaleString()} accent />
+          <MetricCard label="Vendors" value={fmt.number(vendors.length)} accent />
           <MetricCard label="W-9 on file" value={`${w9Pct}%`} />
-          <MetricCard label="COI expiring · 30d" value={expiringSoon.toLocaleString()} />
+          <MetricCard label="COI expiring · 30d" value={fmt.number(expiringSoon)} />
         </div>
 
         {ranked.length === 0 ? (

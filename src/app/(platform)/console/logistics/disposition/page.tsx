@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ data: assetData }, { count: totalAssets }] = await Promise.all([
     supabase
       .from("equipment")
@@ -73,8 +75,8 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending Disposition" value={rows.length.toLocaleString()} accent />
-          <MetricCard label="Retired" value={retired.toLocaleString()} />
+          <MetricCard label="Pending Disposition" value={fmt.number(rows.length)} accent />
+          <MetricCard label="Retired" value={fmt.number(retired)} />
           <MetricCard label="Replacement Value (Est.)" value={formatMoney(totalReplaceable)} />
         </div>
 

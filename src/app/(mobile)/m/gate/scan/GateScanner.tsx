@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { useAnnounce } from "@/components/ui/LiveRegion";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { haptic } from "@/lib/haptics";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 type ScanRecord = {
   id: string;
@@ -35,6 +36,7 @@ export function GateScanner() {
   const [pending, start] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
   const announce = useAnnounce();
+  const fmt = useFormatters();
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -158,11 +160,7 @@ export function GateScanner() {
                   <span className="text-[var(--color-text-tertiary)]">{e.detail}</span>
                 </span>
                 <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
-                  {new Date(e.at).toLocaleTimeString(undefined, {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
+                  {fmt.time(e.at, { seconds: true })}
                   <Badge variant={e.result === "allow" ? "success" : e.result === "warn" ? "warning" : "error"}>
                     {e.result}
                   </Badge>

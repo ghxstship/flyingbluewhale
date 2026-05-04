@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusChip } from "@/components/ui/StatusChip";
 import { Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Export Centre — async-aware client shell.
@@ -58,6 +59,7 @@ const STATUS_TONES: Record<Run["status"], { tone: "neutral" | "info" | "success"
 };
 
 export function ExportCenter({ initial }: { initial: Run[] }) {
+  const fmt = useFormatters();
   const [runs, setRuns] = useState<Run[]>(initial);
   const [kind, setKind] = useState("csv");
   const [table, setTable] = useState("projects");
@@ -196,7 +198,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                 const spinning = r.status === "pending" || r.status === "running";
                 return (
                   <tr key={r.id}>
-                    <td className="font-mono text-xs">{new Date(r.created_at).toLocaleString()}</td>
+                    <td className="font-mono text-xs">{fmt.dateTime(r.created_at)}</td>
                     <td className="uppercase">{r.kind}</td>
                     <td>{params.table ?? "—"}</td>
                     <td className="font-mono text-xs">{r.row_count ?? "—"}</td>

@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,14 +31,6 @@ const ATTEND_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   swapped: "muted",
 };
 
-function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-}
-
-function fmtTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -53,6 +46,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtTime = (iso: string): string => fmt.time(iso);
+  const fmtDate = (iso: string): string => fmt.dateParts(iso, { weekday: "short", month: "short", day: "numeric" });
   // Resolve workforce member from auth user, then list their shifts.
   const { data: meRows } = await supabase
     .from("workforce_members")
@@ -99,9 +95,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming" value={upcoming.length.toLocaleString()} accent={upcoming.length > 0} />
-          <MetricCard label="Total Hours" value={Math.round(totalHours).toLocaleString()} />
-          <MetricCard label="Completed" value={past.length.toLocaleString()} />
+          <MetricCard label="Upcoming" value={fmt.number(upcoming.length)} accent={upcoming.length > 0} />
+          <MetricCard label="Total Hours" value={fmt.number(Math.round(totalHours))} />
+          <MetricCard label="Completed" value={fmt.number(past.length)} />
         </div>
 
         {!me && (

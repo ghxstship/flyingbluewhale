@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ count: assetCount }, { count: locationCount }, { data: rentalsData }, { data: equipmentByStatus }] =
     await Promise.all([
       supabase
@@ -70,9 +72,9 @@ export default async function Page() {
       <ModuleHeader eyebrow="Production" title="Warehouse" subtitle="Central + venue warehousing hub" />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Assets" value={(assetCount ?? 0).toLocaleString()} accent />
-          <MetricCard label="Locations" value={(locationCount ?? 0).toLocaleString()} />
-          <MetricCard label="Active Rentals" value={activeRentals.toLocaleString()} />
+          <MetricCard label="Assets" value={fmt.number(assetCount ?? 0)} accent />
+          <MetricCard label="Locations" value={fmt.number(locationCount ?? 0)} />
+          <MetricCard label="Active Rentals" value={fmt.number(activeRentals)} />
         </div>
 
         {Object.keys(statusBuckets).length > 0 && (

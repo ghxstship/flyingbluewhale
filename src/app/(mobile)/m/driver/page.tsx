@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,10 +29,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   cancelled: "error",
 };
 
-function fmtTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
 export default async function MobileDriverPage() {
   if (!hasSupabase) {
     return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
@@ -39,6 +36,8 @@ export default async function MobileDriverPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtTime = (iso: string): string => fmt.time(iso);
   const today = new Date();
   const startOfWindow = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
   const endOfWindow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();

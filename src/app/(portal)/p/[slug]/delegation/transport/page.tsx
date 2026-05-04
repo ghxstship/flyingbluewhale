@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   // Delegations get T1 (Olympic Family) and T2 (IF + media) runs.
   const { data } = await supabase
     .from("dispatch_runs")
@@ -81,9 +83,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="T1 Runs" value={t1.toLocaleString()} />
-          <MetricCard label="T2 Runs" value={t2.toLocaleString()} />
-          <MetricCard label="Active" value={upcoming.toLocaleString()} accent={upcoming > 0} />
+          <MetricCard label="T1 Runs" value={fmtIntl.number(t1)} />
+          <MetricCard label="T2 Runs" value={fmtIntl.number(t2)} />
+          <MetricCard label="Active" value={fmtIntl.number(upcoming)} accent={upcoming > 0} />
         </div>
 
         <section className="surface p-5">

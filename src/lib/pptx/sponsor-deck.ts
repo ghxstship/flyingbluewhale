@@ -1,6 +1,7 @@
 import "server-only";
 
 import PptxGenJS from "pptxgenjs";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 /**
  * Sponsor activation deck — Opportunity #23.
@@ -37,6 +38,7 @@ export type SponsorDeckInput = {
 };
 
 export async function buildSponsorDeck(input: SponsorDeckInput): Promise<Buffer> {
+  const fmt = await getRequestFormatters();
   const pptx = new PptxGenJS();
   pptx.company = input.producerName;
   pptx.subject = `Sponsor activation · ${input.sponsorName} · ${input.projectName}`;
@@ -68,9 +70,9 @@ export async function buildSponsorDeck(input: SponsorDeckInput): Promise<Buffer>
   s2.addText("Reach + scan velocity", { x: 0.5, y: 0.9, w: 9, h: 0.3, fontSize: 14, color: "666666" });
   const m = input.metrics;
   const metricsRows: Array<{ label: string; value: string }> = [
-    { label: "Total Attendees", value: m.totalAttendees?.toLocaleString() ?? "—" },
-    { label: "Unique Attendees", value: m.uniqueAttendees?.toLocaleString() ?? "—" },
-    { label: "Scans", value: m.scans?.toLocaleString() ?? "—" },
+    { label: "Total Attendees", value: m.totalAttendees != null ? fmt.number(m.totalAttendees) : "—" },
+    { label: "Unique Attendees", value: m.uniqueAttendees != null ? fmt.number(m.uniqueAttendees) : "—" },
+    { label: "Scans", value: m.scans != null ? fmt.number(m.scans) : "—" },
     { label: "Avg Spend", value: m.avgSpendCents != null ? `$${(m.avgSpendCents / 100).toFixed(2)}` : "—" },
   ];
   metricsRows.forEach((row, i) => {
@@ -91,8 +93,8 @@ export async function buildSponsorDeck(input: SponsorDeckInput): Promise<Buffer>
     s3.addText(a.title, { x: x + 0.2, y: y + 0.1, w: 4, h: 0.4, fontSize: 14, bold: true });
     s3.addText(a.summary, { x: x + 0.2, y: y + 0.5, w: 4, h: 1.0, fontSize: 11, color: "333333" });
     const stats = [
-      a.impressions ? `${a.impressions.toLocaleString()} impressions` : null,
-      a.engagements ? `${a.engagements.toLocaleString()} engagements` : null,
+      a.impressions ? `${fmt.number(a.impressions)} impressions` : null,
+      a.engagements ? `${fmt.number(a.engagements)} engagements` : null,
     ]
       .filter(Boolean)
       .join(" · ");

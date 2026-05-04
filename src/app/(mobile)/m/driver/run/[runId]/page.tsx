@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { RunActions } from "./RunActions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -39,11 +40,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   cancelled: "error",
 };
 
-function fmtTime(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-}
-
 function parseManifest(raw: unknown): ManifestEntry[] {
   if (!Array.isArray(raw)) return [];
   return raw.filter((x): x is ManifestEntry => typeof x === "object" && x !== null);
@@ -57,6 +53,11 @@ export default async function Page({ params }: { params: Promise<{ runId: string
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtTime = (iso: string | null): string => {
+    if (!iso) return "—";
+    return fmt.time(iso);
+  };
   const { data } = await supabase
     .from("dispatch_runs")
     .select(

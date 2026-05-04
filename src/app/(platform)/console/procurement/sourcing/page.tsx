@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +59,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const [{ data: reqData }, { data: poData }] = await Promise.all([
     supabase
       .from("requisitions")
@@ -93,9 +95,9 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open Requisitions" value={open.toLocaleString()} accent />
-          <MetricCard label="Active POs" value={pos.length.toLocaleString()} />
-          <MetricCard label="Converted" value={converted.toLocaleString()} />
+          <MetricCard label="Open Requisitions" value={fmt.number(open)} accent />
+          <MetricCard label="Active POs" value={fmt.number(pos.length)} />
+          <MetricCard label="Converted" value={fmt.number(converted)} />
         </div>
 
         <section>

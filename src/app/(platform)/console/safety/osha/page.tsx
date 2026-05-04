@@ -6,6 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +43,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   const year = sp.year ? Number(sp.year) : new Date().getFullYear();
   const start = new Date(`${year}-01-01T00:00:00Z`).toISOString();
   const end = new Date(`${year + 1}-01-01T00:00:00Z`).toISOString();
@@ -84,9 +86,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Recordables" value={rows.length.toLocaleString()} accent />
-          <MetricCard label="Days Away" value={totalDaysAway.toLocaleString()} />
-          <MetricCard label="Days Restricted" value={totalDaysRestricted.toLocaleString()} />
+          <MetricCard label="Recordables" value={fmtIntl.number(rows.length)} accent />
+          <MetricCard label="Days Away" value={fmtIntl.number(totalDaysAway)} />
+          <MetricCard label="Days Restricted" value={fmtIntl.number(totalDaysRestricted)} />
         </div>
         {fatalities > 0 && (
           <div className="surface p-4 ring-2 ring-[var(--color-error)]">

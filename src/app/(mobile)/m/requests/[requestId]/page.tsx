@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
 import { transitionRequest } from "@/app/(platform)/console/services/requests/actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +48,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data: row } = await supabase
     .from("service_requests")
     .select("*")
@@ -71,12 +73,12 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
       <div className="surface mt-4 grid grid-cols-2 gap-3 p-4 text-xs">
         <div>
           <div className="tracking-wide text-[var(--text-muted)] uppercase">Opened</div>
-          <div className="font-mono">{new Date(r.opened_at).toLocaleString()}</div>
+          <div className="font-mono">{fmt.dateTime(r.opened_at)}</div>
         </div>
         <div>
           <div className="tracking-wide text-[var(--text-muted)] uppercase">Response SLA</div>
           <div className="font-mono">
-            {r.sla_response_due ? new Date(r.sla_response_due).toLocaleString() : "—"}
+            {r.sla_response_due ? fmt.dateTime(r.sla_response_due) : "—"}
             {r.sla_response_breached && (
               <Badge variant="error" className="ml-1">
                 !

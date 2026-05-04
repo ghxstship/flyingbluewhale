@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +59,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("service_requests")
     .select(
@@ -156,9 +158,7 @@ export default async function Page() {
             {
               key: "opened",
               header: "Opened",
-              render: (r) => (
-                <span className="font-mono text-xs">{new Date(String(r.opened_at)).toLocaleString()}</span>
-              ),
+              render: (r) => <span className="font-mono text-xs">{fmt.dateTime(String(r.opened_at))}</span>,
               accessor: (r) => r.opened_at ?? null,
             },
           ]}

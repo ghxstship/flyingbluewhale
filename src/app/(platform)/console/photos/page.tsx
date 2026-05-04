@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmtIntl = await getRequestFormatters();
   let q = supabase
     .from("project_photos")
     .select("id, album, file_path, caption, taken_at, project:project_id(name)")
@@ -54,8 +56,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
       />
       <div className="page-content space-y-4">
         <div className="metric-grid-3">
-          <MetricCard label="Photos" value={photos.length.toLocaleString()} accent />
-          <MetricCard label="Albums" value={albums.length.toLocaleString()} />
+          <MetricCard label="Photos" value={fmtIntl.number(photos.length)} accent />
+          <MetricCard label="Albums" value={fmtIntl.number(albums.length)} />
           <MetricCard
             label="Projects Covered"
             value={String(new Set(photos.map((p) => p.project?.name).filter(Boolean)).size)}

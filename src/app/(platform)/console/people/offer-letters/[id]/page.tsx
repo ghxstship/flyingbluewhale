@@ -24,6 +24,7 @@ import { LetterDocument } from "@/components/offer-letters/LetterDocument";
 import { LetterEditor } from "./LetterEditor";
 import { LetterShareCard } from "./LetterShareCard";
 import { LetterLifecycleActions } from "./LetterLifecycleActions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
 
   const data = await getOfferLetter(session.orgId, id);
+  const fmt = await getRequestFormatters();
   if (!data) notFound();
   const { raw, resolved } = data;
 
@@ -96,9 +98,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {raw.snapshot && (
           <div className="surface px-4 py-3 text-xs text-[var(--text-muted)]">
             <span className="font-mono tracking-wider uppercase">Snapshot frozen</span>
-            {raw.snapshot_at && <> at {new Date(raw.snapshot_at).toLocaleString()}.</>} The letter below renders from
-            the frozen snapshot — even if rate cards, roles, or settings change later, the signed document stays the
-            same.
+            {raw.snapshot_at && <> at {fmt.dateTime(raw.snapshot_at)}.</>} The letter below renders from the frozen
+            snapshot — even if rate cards, roles, or settings change later, the signed document stays the same.
           </div>
         )}
 
@@ -143,7 +144,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       <div className="text-[var(--text-primary)]">{a.summary}</div>
                       <div className="text-[var(--text-muted)]">
                         {a.actor_label ? `${a.actor_label} · ` : ""}
-                        {new Date(a.occurred_at).toLocaleString()}
+                        {fmt.dateTime(a.occurred_at)}
                       </div>
                     </li>
                   ))}

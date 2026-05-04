@@ -5,6 +5,7 @@ import { CreateApiKeyForm } from "./CreateApiKeyForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export default async function ApiSettingsPage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("api_keys")
     .select("id, name, prefix, scopes, last_used_at, expires_at, revoked_at, created_at")
@@ -44,11 +46,7 @@ export default async function ApiSettingsPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle="API & keys"
-      />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="API & keys" />
       <div className="page-content max-w-3xl space-y-5">
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">Base URL</h3>
@@ -56,8 +54,7 @@ export default async function ApiSettingsPage() {
             https://your-domain.tld/api/v1
           </pre>
           <p className="mt-2 text-xs text-[var(--text-muted)]">
-            Every endpoint validates bodies with Zod and returns{" "}
-            <code className="font-mono">{`{ ok, data }`}</code> or{" "}
+            Every endpoint validates bodies with Zod and returns <code className="font-mono">{`{ ok, data }`}</code> or{" "}
             <code className="font-mono">{`{ ok: false, error }`}</code>.
           </p>
         </section>
@@ -92,25 +89,16 @@ export default async function ApiSettingsPage() {
                     <tr key={k.id}>
                       <td>{k.name}</td>
                       <td className="font-mono text-xs">{k.prefix}…</td>
-                      <td className="text-xs text-[var(--text-secondary)]">
-                        {(k.scopes ?? []).join(", ") || "—"}
-                      </td>
-                      <td className="font-mono text-xs">
-                        {k.last_used_at ? new Date(k.last_used_at).toLocaleString() : "Never"}
-                      </td>
+                      <td className="text-xs text-[var(--text-secondary)]">{(k.scopes ?? []).join(", ") || "—"}</td>
+                      <td className="font-mono text-xs">{k.last_used_at ? fmt.dateTime(k.last_used_at) : "Never"}</td>
                       <td>
-                        <Badge variant={revoked ? "muted" : "success"}>
-                          {revoked ? "Revoked" : "Active"}
-                        </Badge>
+                        <Badge variant={revoked ? "muted" : "success"}>{revoked ? "Revoked" : "Active"}</Badge>
                       </td>
                       <td>
                         {!revoked && (
                           <form action={revokeApiKeyAction}>
                             <input type="hidden" name="id" value={k.id} />
-                            <button
-                              type="submit"
-                              className="text-xs text-[var(--color-error)] hover:underline"
-                            >
+                            <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
                               Revoke
                             </button>
                           </form>
@@ -137,7 +125,9 @@ export default async function ApiSettingsPage() {
             <tbody>
               {ENDPOINT_DOCS.map(([m, p, d]) => (
                 <tr key={p}>
-                  <td><Badge variant="brand">{m}</Badge></td>
+                  <td>
+                    <Badge variant="brand">{m}</Badge>
+                  </td>
                   <td className="font-mono text-xs">{p}</td>
                   <td className="text-[var(--text-secondary)]">{d}</td>
                 </tr>

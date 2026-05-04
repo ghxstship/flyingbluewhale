@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,10 +31,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   retired: "muted",
 };
 
-function fmtDay(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
 export default async function MobileWmsPage() {
   if (!hasSupabase) {
     return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
@@ -41,6 +38,8 @@ export default async function MobileWmsPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
+  const fmtDay = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric" });
   const [{ data: maintData }, { data: rentalsData }] = await Promise.all([
     supabase
       .from("equipment")

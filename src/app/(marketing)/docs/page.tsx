@@ -41,7 +41,7 @@ const SECTIONS = [
   },
   {
     title: "Auth model",
-    desc: "Ten platform roles and four project roles — enforced at the data layer.",
+    desc: "Four platform roles for billing, five project roles for ops — enforced at the data layer.",
     href: "/features",
   },
 ];

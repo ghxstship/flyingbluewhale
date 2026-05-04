@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { listProjects, projectStats } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
@@ -15,12 +16,14 @@ export default async function ConsoleDashboard() {
       <>
         <ModuleHeader title="Console" subtitle="Operations dashboard" />
         <div className="page-content">
-          <div className="card p-6">
-            <div className="text-label text-[var(--color-warning)]">Not configured</div>
-            <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-              Supabase env vars are missing. Copy <code className="text-mono">.env.example</code> →{" "}
-              <code className="text-mono">.env.local</code> and fill in your project credentials, then restart the dev
-              server.
+          <div className="surface p-6">
+            <div className="text-xs font-semibold tracking-wider text-[var(--color-warning)] uppercase">
+              Not configured
+            </div>
+            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+              Supabase env vars are missing. Copy <code className="font-mono text-xs">.env.example</code> →{" "}
+              <code className="font-mono text-xs">.env.local</code> and fill in your project credentials, then restart
+              the dev server.
             </p>
           </div>
         </div>
@@ -44,7 +47,7 @@ export default async function ConsoleDashboard() {
             action={
               <div className="flex flex-wrap items-center gap-3">
                 <Button href="/me/organizations">Create organization</Button>
-                <Link href="/me" className="text-xs text-[var(--brand-color)]">
+                <Link href="/me" className="text-xs text-[var(--org-primary)]">
                   ← Back to dashboard
                 </Link>
               </div>
@@ -65,31 +68,33 @@ export default async function ConsoleDashboard() {
         action={<Button href="/console/projects/new">+ New Project</Button>}
       />
       <div className="page-content space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Stat label="Projects" value={stats.total} />
-          <Stat label="Active" value={stats.byStatus.active} accent />
-          <Stat label="Draft" value={stats.byStatus.draft} />
-          <Stat label="Archived" value={stats.byStatus.archived + stats.byStatus.complete} />
+        <div className="metric-grid">
+          <MetricCard label="Projects" value={stats.total.toLocaleString()} />
+          <MetricCard label="Active" value={stats.byStatus.active.toLocaleString()} accent />
+          <MetricCard label="Draft" value={stats.byStatus.draft.toLocaleString()} />
+          <MetricCard label="Archived" value={(stats.byStatus.archived + stats.byStatus.complete).toLocaleString()} />
         </div>
 
-        <section className="card-elevated">
-          <div className="flex items-center justify-between border-b border-[var(--color-border)] px-4 py-3">
-            <h2 className="text-heading text-sm">Recent Projects</h2>
-            <Link href="/console/projects" className="text-mono text-xs text-[var(--brand-color)]">
+        <section>
+          <div className="flex items-center justify-between pb-3">
+            <h2 className="text-base font-semibold">Recent Projects</h2>
+            <Link href="/console/projects" className="text-xs font-medium text-[var(--org-primary)] hover:underline">
               View all →
             </Link>
           </div>
           {projects.length === 0 ? (
-            <EmptyState
-              size="compact"
-              title="No Projects Yet"
-              description="Spin up your first project to see it here."
-              action={
-                <Link href="/console/projects/new" className="text-xs text-[var(--brand-color)]">
-                  Create your first →
-                </Link>
-              }
-            />
+            <div className="surface">
+              <EmptyState
+                size="compact"
+                title="No Projects Yet"
+                description="Spin up your first project to see it here."
+                action={
+                  <Button href="/console/projects/new" size="sm">
+                    + New Project
+                  </Button>
+                }
+              />
+            </div>
           ) : (
             <table className="data-table">
               <thead>
@@ -104,15 +109,15 @@ export default async function ConsoleDashboard() {
                 {projects.slice(0, 8).map((p) => (
                   <tr key={p.id}>
                     <td>
-                      <Link href={`/console/projects/${p.id}`} className="text-[var(--color-text-primary)]">
+                      <Link href={`/console/projects/${p.id}`} className="hover:text-[var(--org-primary)]">
                         {p.name}
                       </Link>
                     </td>
                     <td>
                       <StatusBadge status={p.status} />
                     </td>
-                    <td className="text-mono text-xs">{p.start_date ?? "—"}</td>
-                    <td className="text-mono text-xs">{p.end_date ?? "—"}</td>
+                    <td className="font-mono text-xs">{p.start_date ?? "—"}</td>
+                    <td className="font-mono text-xs">{p.end_date ?? "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -121,19 +126,6 @@ export default async function ConsoleDashboard() {
         </section>
       </div>
     </>
-  );
-}
-
-function Stat({ label, value, accent }: { label: string; value: number; accent?: boolean }) {
-  return (
-    <div className="card-elevated p-4">
-      <div className="text-label text-[var(--color-text-tertiary)]">{label}</div>
-      <div
-        className={`text-display mt-2 text-3xl ${accent ? "text-[var(--brand-color)]" : "text-[var(--color-text-primary)]"}`}
-      >
-        {value}
-      </div>
-    </div>
   );
 }
 

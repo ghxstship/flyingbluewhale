@@ -19,7 +19,7 @@ const Schema = z.object({
 
 export type State = { error?: string } | null;
 
-export async function createKbArticleAction(_: State, fd: FormData): Promise<State> {
+export async function createKnowledgeArticleAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
@@ -28,20 +28,17 @@ export async function createKbArticleAction(_: State, fd: FormData): Promise<Sta
     .split(",")
     .map((t) => t.trim())
     .filter(Boolean);
-  const { data, error } = await supabase
-    .from("kb_articles")
-    .insert({
-      org_id: session.orgId,
-      slug: parsed.data.slug.toLowerCase(),
-      title: parsed.data.title,
-      body_markdown: parsed.data.body_markdown,
-      tags: tags as never,
-      author_id: session.userId,
-      version: 1,
-    })
-    .select("id")
-    .single();
+  const slug = parsed.data.slug.toLowerCase();
+  const { error } = await supabase.from("kb_articles").insert({
+    org_id: session.orgId,
+    slug,
+    title: parsed.data.title,
+    body_markdown: parsed.data.body_markdown,
+    tags: tags as never,
+    author_id: session.userId,
+    version: 1,
+  });
   if (error) return { error: error.message };
-  revalidatePath("/console/kb");
-  redirect(`/console/kb/${data.id}`);
+  revalidatePath("/console/knowledge");
+  redirect(`/console/knowledge/${slug}`);
 }

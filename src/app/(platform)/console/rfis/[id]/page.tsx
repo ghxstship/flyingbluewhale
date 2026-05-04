@@ -39,6 +39,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Badge variant="info">{rfi.status}</Badge>
+            <a
+              href={`/console/rfis/${rfi.id}/edit`}
+              className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
+            >
+              Edit
+            </a>
             {rfi.status === "answered" && (
               <form action={closeRfi.bind(null, id)}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">

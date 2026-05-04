@@ -79,7 +79,7 @@ export default async function MobileShiftPage() {
       <h1 className="mt-1 text-2xl font-semibold">My Shift</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {wfm ? `Hello, ${wfm.full_name}.` : "Welcome."} Use{" "}
-        <Link href="/m/checkin" className="text-[var(--org-primary)]">
+        <Link href="/m/clock" className="text-[var(--org-primary)]">
           check-in
         </Link>{" "}
         to clock in / out and take breaks.
@@ -143,7 +143,7 @@ export default async function MobileShiftPage() {
       )}
 
       <div className="mt-8 grid grid-cols-2 gap-2">
-        <Link href="/m/checkin" className="btn btn-primary">
+        <Link href="/m/clock" className="btn btn-primary">
           Check in
         </Link>
         <Link href="/m/shift/swap" className="btn btn-secondary">

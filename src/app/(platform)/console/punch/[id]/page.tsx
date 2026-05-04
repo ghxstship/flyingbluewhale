@@ -51,6 +51,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[item.status] ?? "muted"}>{item.status.replace("_", " ")}</Badge>
             {item.show_ready_gate && <Badge variant="error">Doors Gate</Badge>}
+            <a
+              href={`/console/punch/${item.id}/edit`}
+              className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
+            >
+              Edit
+            </a>
             {item.status === "open" && (
               <form action={transitionPunchItem.bind(null, id, "in_progress")}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { transitionPayApp, updatePayAppLine } from "./actions";
+import { StatusForm } from "@/components/StatusForm";
 
 export const dynamic = "force-dynamic";
 
@@ -61,32 +62,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[app.status] ?? "muted"}>{app.status.replace("_", " ")}</Badge>
             {app.status === "draft" && (
-              <form action={transitionPayApp.bind(null, id, "submitted")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Submit
-                </button>
-              </form>
+              <StatusForm action={transitionPayApp.bind(null, id, "submitted")} label="Submit" />
             )}
             {app.status === "submitted" && (
               <>
-                <form action={transitionPayApp.bind(null, id, "approved")}>
-                  <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                    Approve
-                  </button>
-                </form>
-                <form action={transitionPayApp.bind(null, id, "rejected")}>
-                  <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                    Reject
-                  </button>
-                </form>
+                <StatusForm action={transitionPayApp.bind(null, id, "approved")} label="Approve" />
+                <StatusForm action={transitionPayApp.bind(null, id, "rejected")} label="Reject" />
               </>
             )}
             {app.status === "approved" && (
-              <form action={transitionPayApp.bind(null, id, "paid")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Mark paid
-                </button>
-              </form>
+              <StatusForm action={transitionPayApp.bind(null, id, "paid")} label="Mark paid" />
             )}
           </div>
         }

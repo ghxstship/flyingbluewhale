@@ -153,8 +153,8 @@ export default async function Page({
 
           <footer className="border-t border-[var(--border-color)] pt-3 text-[10px] text-[var(--text-muted)]">
             Generated {new Date().toLocaleString()} · Check{" "}
-            <Link href="/m/checkin" className="text-[var(--org-primary)] underline">
-              /m/checkin
+            <Link href="/m/clock" className="text-[var(--org-primary)] underline">
+              /m/clock
             </Link>{" "}
             on arrival to clock in.
           </footer>

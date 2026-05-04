@@ -276,7 +276,7 @@ export const platformNav: NavGroup[] = [
   {
     label: "Knowledge",
     items: [
-      { label: "Articles", href: "/console/kb", icon: "BookOpen" },
+      { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
       { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
@@ -485,8 +485,8 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Gate Scan", href: "/m/gate" },
   { label: "Wallet", href: "/m/wallet" },
   { label: "Shift", href: "/m/shift" },
-  { label: "Check-in", href: "/m/checkin" },
-  { label: "Incident", href: "/m/incident" },
+  { label: "Check-in", href: "/m/clock" },
+  { label: "Incident", href: "/m/incidents" },
   { label: "Medic", href: "/m/medic" },
   { label: "Safeguarding", href: "/m/safeguarding" },
   { label: "Alerts", href: "/m/alerts" },

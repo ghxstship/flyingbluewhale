@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         }
         breadcrumbs={[{ label: "Knowledge", href: "/console/knowledge" }, { label: article.title }]}
         action={
-          <Button href={`/console/kb/${article.id}/edit`} size="sm" variant="secondary">
+          <Button href={`/console/knowledge/${article.slug}/edit`} size="sm" variant="secondary">
             Edit
           </Button>
         }

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { transitionDailyLog } from "./actions";
+import { StatusForm } from "@/components/StatusForm";
 
 export const dynamic = "force-dynamic";
 
@@ -60,18 +61,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[log.status] ?? "muted"}>{log.status}</Badge>
             {log.status === "draft" && (
-              <form action={transitionDailyLog.bind(null, id, "submitted")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Submit
-                </button>
-              </form>
+              <StatusForm action={transitionDailyLog.bind(null, id, "submitted")} label="Submit" />
             )}
             {log.status === "submitted" && (
-              <form action={transitionDailyLog.bind(null, id, "approved")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Approve
-                </button>
-              </form>
+              <StatusForm action={transitionDailyLog.bind(null, id, "approved")} label="Approve" />
             )}
           </div>
         }

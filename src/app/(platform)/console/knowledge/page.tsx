@@ -81,7 +81,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
             : `${rows.length} article${rows.length === 1 ? "" : "s"}`
         }
         action={
-          <Button href="/console/kb/new" size="sm">
+          <Button href="/console/knowledge/new" size="sm">
             + New Article
           </Button>
         }
@@ -118,7 +118,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
               title={sp.tag ? `No articles tagged "${sp.tag}"` : "No articles yet"}
               description="Knowledge articles render markdown bodies and can be filtered by tag. Create one to get started."
               action={
-                <Button href="/console/kb/new" size="sm">
+                <Button href="/console/knowledge/new" size="sm">
                   + Create first article
                 </Button>
               }

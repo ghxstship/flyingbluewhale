@@ -42,7 +42,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           (plan.project as unknown as { name: string | null } | null)?.name ??
           "—"
         }
-        action={<Badge variant="info">{plan.discipline}</Badge>}
+        action={
+          <div className="flex items-center gap-2">
+            <Badge variant="info">{plan.discipline}</Badge>
+            <a
+              href={`/console/site-plans/${plan.id}/edit`}
+              className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
+            >
+              Edit
+            </a>
+          </div>
+        }
       />
       <div className="page-content space-y-5">
         <section className="surface p-4">

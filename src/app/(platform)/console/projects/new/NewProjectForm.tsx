@@ -10,22 +10,24 @@ export function NewProjectForm() {
   const [state, formAction, pending] = useActionState<CreateProjectState, FormData>(createProjectAction, null);
 
   return (
-    <form action={formAction} className="card-elevated space-y-4 p-6">
+    <form action={formAction} className="surface space-y-4 p-6">
       <Input label="Project Name" name="name" required maxLength={120} />
       <div>
-        <label className="text-label text-[var(--color-text-tertiary)]">Description</label>
-        <textarea name="description" rows={4} maxLength={2000} className="input mt-1.5 w-full" />
+        <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+        <textarea name="description" rows={4} maxLength={2000} className="input-base mt-1.5 w-full" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Start Date" name="startDate" type="date" />
         <Input label="End Date" name="endDate" type="date" />
       </div>
-      {state?.error ? (
-        <Alert kind="error">{state.error}</Alert>
-      ) : null}
+      {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
       <div className="flex justify-end gap-2">
-        <Button href="/console/projects" variant="ghost">Cancel</Button>
-        <Button type="submit" disabled={pending}>{pending ? "Creating…" : "Create project"}</Button>
+        <Button href="/console/projects" variant="ghost">
+          Cancel
+        </Button>
+        <Button type="submit" disabled={pending}>
+          {pending ? "Creating…" : "Create project"}
+        </Button>
       </div>
     </form>
   );

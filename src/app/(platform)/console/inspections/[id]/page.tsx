@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { transitionInspection, setInspectionItemResult } from "./actions";
+import { StatusForm } from "@/components/StatusForm";
 
 export const dynamic = "force-dynamic";
 
@@ -50,26 +51,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Badge variant="info">{insp.status.replace("_", " ")}</Badge>
+            <a
+              href={`/console/inspections/${insp.id}/edit`}
+              className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
+            >
+              Edit
+            </a>
             {insp.status === "scheduled" && (
-              <form action={transitionInspection.bind(null, id, "in_progress")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Start
-                </button>
-              </form>
+              <StatusForm action={transitionInspection.bind(null, id, "in_progress")} label="Start" />
             )}
             {insp.status === "in_progress" && totals.fail === 0 && (
-              <form action={transitionInspection.bind(null, id, "passed")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Pass
-                </button>
-              </form>
+              <StatusForm action={transitionInspection.bind(null, id, "passed")} label="Pass" />
             )}
             {insp.status === "in_progress" && (
-              <form action={transitionInspection.bind(null, id, "failed")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Fail
-                </button>
-              </form>
+              <StatusForm action={transitionInspection.bind(null, id, "failed")} label="Fail" />
             )}
           </div>
         }

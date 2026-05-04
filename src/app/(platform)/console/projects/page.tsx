@@ -17,9 +17,7 @@ export default async function ProjectsPage() {
       <>
         <ModuleHeader title="Projects" />
         <div className="page-content">
-          <div className="card p-6 text-sm text-[var(--color-text-secondary)]">
-            Configure Supabase to load projects.
-          </div>
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">Configure Supabase to load projects.</div>
         </div>
       </>
     );
@@ -54,40 +52,36 @@ export default async function ProjectsPage() {
                 budgetCents: p.budget_cents ?? 0,
               }))}
             />
-            <div className="card-elevated">
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Slug</th>
-                    <th>Status</th>
-                    <th>Start</th>
-                    <th>End</th>
-                    <th>Updated</th>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Slug</th>
+                  <th>Status</th>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projects.map((p) => (
+                  <tr key={p.id}>
+                    <td>
+                      <Link href={`/console/projects/${p.id}`} className="hover:text-[var(--org-primary)]">
+                        {p.name}
+                      </Link>
+                    </td>
+                    <td className="font-mono text-xs text-[var(--text-muted)]">{p.slug}</td>
+                    <td>
+                      <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>
+                    </td>
+                    <td className="font-mono text-xs">{p.start_date ?? "—"}</td>
+                    <td className="font-mono text-xs">{p.end_date ?? "—"}</td>
+                    <td className="font-mono text-xs text-[var(--text-muted)]">{formatDate(p.updated_at)}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {projects.map((p) => (
-                    <tr key={p.id}>
-                      <td>
-                        <Link href={`/console/projects/${p.id}`} className="text-[var(--color-text-primary)]">
-                          {p.name}
-                        </Link>
-                      </td>
-                      <td className="text-mono text-xs text-[var(--color-text-tertiary)]">{p.slug}</td>
-                      <td>
-                        <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>
-                      </td>
-                      <td className="text-mono text-xs">{p.start_date ?? "—"}</td>
-                      <td className="text-mono text-xs">{p.end_date ?? "—"}</td>
-                      <td className="text-mono text-xs text-[var(--color-text-tertiary)]">
-                        {formatDate(p.updated_at)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </>
         )}
       </div>

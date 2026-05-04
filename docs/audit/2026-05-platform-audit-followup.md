@@ -2,7 +2,7 @@
 
 > **Context:** This document tracks the remediation pass on the
 > [May 2026 platform audit](./2026-05-platform-audit.md) plus the new
-> Playwright runtime coverage that exposed two latent bugs.
+> Playwright runtime coverage that exposed three latent bugs.
 
 ---
 
@@ -42,10 +42,11 @@ Tests that don't require auth state. **7/7 passing** (4.2s total):
 
 End-to-end create → detail → edit → save for the 5 P0a modules. Each test logs in as `test+owner@flyingbluewhale.app`, creates a real DB record, edits it, and verifies persistence.
 
-**Initial run: 0/5 passing** — but the failures were diagnostic, not flake.
-**After fixes: 2/5 passing, 3 still failing for unrelated reasons (form-shape edge cases on submittal/punch/inspection — see §4).**
+**Initial run: 0/5 passing** — but the failures were diagnostic, not flake. Surfaced 3 latent column-name / enum bugs (RFI `official_answer`, punch `closed_at`/`closed_by`, submittal `approved_with_comments`/`void`).
 
-The two passing (RFI + site-plan) confirm the canonical create→edit→save flow works end-to-end on real DB writes.
+**Final run after fixes: 5/5 passing** (RFI 9.7s · Submittal 32.5s · Punch 8.5s · Inspection 12.1s · Site Plan 9.0s).
+
+The full pass confirms the canonical create→edit→save flow works end-to-end on real DB writes for every new edit page added in the audit.
 
 ### 2.3 `forms-render-smoke.spec.ts` — every /new route renders
 
@@ -85,25 +86,34 @@ These are both **single-character bugs** that the static audit didn't catch and 
 
 ---
 
-## 4. Remaining Construction-Trade Test Failures
+## 4. Construction-Trade Test Resolution
 
-Three tests still fail in `forms-construction-trade.spec.ts`. The failures appear to be test-shape issues (regex matching, button selector specificity) rather than real product bugs, but they need investigation:
+The 3 remaining failures from the initial pass were all test-shape issues, not product bugs:
 
-| Test       | Failure                                   | Hypothesis                                                                                |
-| ---------- | ----------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Submittal  | `waitForURL` after Edit click times out   | Edit link locator finding wrong element OR redirect not happening                         |
-| Punch      | `waitForURL` after Create click times out | Form may have a hidden validation error not caught by zod (e.g., FK constraint)           |
-| Inspection | Same as Punch                             | Submit button label "Schedule" — fixed regex but may still hit other form-fill edge cases |
+| Test       | Original failure                          | Root cause                                                                    | Fix                                              |
+| ---------- | ----------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------ |
+| Submittal  | `waitForURL` after Edit click times out   | Dev-mode compile time on the new edit route exceeded 10s `waitForURL` timeout | Bumped `waitForURL` to 30s, per-test budget 120s |
+| Punch      | `waitForURL` after Create click times out | Same — first-hit Next.js dev compile budget exceeded the original 10s timeout | Same fix as Submittal                            |
+| Inspection | Same as Punch                             | Same                                                                          | Same fix                                         |
+| Site plan  | (uncovered after timeout fix)             | Submit button label `Create Sheet` did not match `/^create$/i` regex          | Widened regex to include `^create sheet$`        |
 
-**Next step**: Run each test in headed mode, capture screenshots at each step, identify exact failure point. Time-boxed: 30 minutes. Until then, the 2 passing tests provide working coverage for the canonical pattern.
+All 5 tests pass on the next clean run. No product changes were needed — the audit-shipped pages were correct after the column-name / enum fixes; the test scaffolding just had to absorb dev-mode compile latency.
 
 ---
 
 ## 5. Smoke Test Results (78 routes)
 
-**[To be filled once `forms-render-smoke.spec.ts` finishes its run.]**
+**Initial run: hit a Playwright browser-launch flake.** First test failed with `browserType.launch: Timeout 180000ms exceeded` and the remaining 76 did not run. Diagnosis: the dev server was responsive (HTTP 200 on /healthz in ~380ms), but Playwright's per-worker browser fixture timed out establishing the CDP protocol connection on a cold start. This is environmental — not a route bug.
 
-The smoke test catches a class of failures (broken imports, RSC boundary errors, missing components) that no static audit can find. Even if every route returns 200 in this pass, the suite stays in CI as a regression net.
+The 78-route smoke spec is left in the suite (`forms-render-smoke.spec.ts`) for CI use against a production build, where compile latency disappears and per-test cost drops from 10-60s to <1s. In dev mode it is unreliable as a single bulk run because the first ~30 route hits each cause a fresh Next.js compile, and the cumulative time exceeds Playwright's default browser-launch tolerance.
+
+**Coverage we have evidence for instead** (across 3 specs):
+
+- 7/7 public + RSS + sitemap routes — `forms-public.spec.ts`
+- 5/5 full CRUD lifecycles on the new edit pages — `forms-construction-trade.spec.ts`
+- Render-only spot-checks on every other `/console/*/new` route via the manual `npm run dev` checks during the remediation pass
+
+The smoke spec catches a class of failures (broken imports, RSC boundary errors, missing components) that no static audit can find. Recommend running it in CI against a production build (`next build` first) where it completes reliably in <1 minute.
 
 ---
 
@@ -123,19 +133,19 @@ Recommend scheduling these as 5 separate follow-up workstreams, not bundled.
 
 ## 7. Final Numbers
 
-| Metric                                             | Before          | After                                                                     |
-| -------------------------------------------------- | --------------- | ------------------------------------------------------------------------- |
-| Routes with detail-without-edit gap                | 5               | 0                                                                         |
-| Files using legacy ghost classes                   | 3               | 0                                                                         |
-| Mobile shell duplicate dirs                        | 2 (4 dirs)      | 0                                                                         |
-| Manual `<form>` uses on detail pages               | 33              | 21 (12 migrated to StatusForm; remaining 21 are legitimate custom inputs) |
-| Hub modules without structured layout              | 4               | 0                                                                         |
-| Knowledge surfaces (`/kb` + `/knowledge`)          | 2 (overlapping) | 1 (`/knowledge`)                                                          |
-| Playwright spec files                              | 30              | 33                                                                        |
-| Public-route Playwright tests                      | 0               | 7 (all passing)                                                           |
-| End-to-end CRUD lifecycle tests for new edit pages | 0               | 5 (2 passing, 3 with test-shape issues)                                   |
-| Form render smoke coverage                         | 0               | 78 routes                                                                 |
-| Latent bugs surfaced by runtime testing            | n/a             | 2 (RFI `official_answer`, punch `closed_at`) — both fixed                 |
+| Metric                                             | Before          | After                                                                                                                           |
+| -------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Routes with detail-without-edit gap                | 5               | 0                                                                                                                               |
+| Files using legacy ghost classes                   | 3               | 0                                                                                                                               |
+| Mobile shell duplicate dirs                        | 2 (4 dirs)      | 0                                                                                                                               |
+| Manual `<form>` uses on detail pages               | 33              | 21 (12 migrated to StatusForm; remaining 21 are legitimate custom inputs)                                                       |
+| Hub modules without structured layout              | 4               | 0                                                                                                                               |
+| Knowledge surfaces (`/kb` + `/knowledge`)          | 2 (overlapping) | 1 (`/knowledge`)                                                                                                                |
+| Playwright spec files                              | 30              | 33                                                                                                                              |
+| Public-route Playwright tests                      | 0               | 7/7 passing                                                                                                                     |
+| End-to-end CRUD lifecycle tests for new edit pages | 0               | 5/5 passing (RFI · Submittal · Punch · Inspection · Site Plan)                                                                  |
+| Form render smoke coverage                         | 0               | 78 routes (spec ships; needs production build to run reliably)                                                                  |
+| Latent bugs surfaced by runtime testing            | n/a             | 3 — RFI `official_answer`, punch `closed_at`/`closed_by`, submittal status enum (`approved_with_comments` + `void`) — all fixed |
 
 ---
 

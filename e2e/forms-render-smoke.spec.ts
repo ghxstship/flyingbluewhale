@@ -1,28 +1,37 @@
-import { expect, test, type Page } from "playwright/test";
+import { expect, test } from "playwright/test";
 
 /**
  * forms-render-smoke
  *
- * Visits every /new route in the platform console and asserts the form page
- * renders without error, with the expected canonical elements (a `<form>`,
- * a submit button, and either a Cancel link or breadcrumb back-link).
+ * Visits every /new route in the platform console and asserts the form
+ * renders with a `<form>` + submit button.
  *
- * This is render-level smoke, not mutation testing — see
- * forms-construction-trade.spec.ts for full create→read→edit lifecycle on
- * the canonical resources.
+ * Performance:
+ * - Login happens ONCE in beforeAll via storageState — saves ~3s per test.
+ * - 90s per-test timeout because Next.js dev mode compiles each route on
+ *   first hit (often 30-60s for routes with many imports). Production
+ *   builds are sub-second; this is purely dev-time.
+ * - Single worker (workers: 1 in playwright.config) — tests run serially.
  *
- * Why smoke first: 78 /new routes is too many to deep-test exhaustively in
- * one suite. A render smoke catches the most common regressions (broken
- * imports, missing dependencies, RSC boundary errors, server action import
- * failures) for ~5 minutes of test time vs hours for full CRUD lifecycle
- * on every module.
+ * What this catches:
+ * - RSC boundary errors (function passed to client component)
+ * - Broken imports / missing dependencies
+ * - Server action import failures
+ * - Auth / RLS issues that 500 the page
+ *
+ * What this does NOT catch:
+ * - Form submission bugs → see forms-construction-trade.spec.ts
+ * - Edit-page lookup bugs (column-name typos) → also need lifecycle tests
  */
 
 const PASSWORD = "FlyingBlue!Test2026";
 const OWNER_EMAIL = "test+owner@flyingbluewhale.app";
+const STORAGE_STATE = "e2e/.auth/owner.json";
 
-async function dismissConsent(page: Page) {
-  await page.context().addCookies([
+test.beforeAll(async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await context.addCookies([
     {
       name: "fbw_consent",
       value: encodeURIComponent(
@@ -37,19 +46,15 @@ async function dismissConsent(page: Page) {
       path: "/",
     },
   ]);
-}
-
-async function login(page: Page) {
   await page.goto("/login");
   await page.getByRole("textbox", { name: "Email" }).fill(OWNER_EMAIL);
   await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
   await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 10000 });
-}
+  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 30000 });
+  await context.storageState({ path: STORAGE_STATE });
+  await context.close();
+});
 
-// Every /new route in src/app/(platform)/console at audit time. Update when
-// adding new modules — `find src/app/\(platform\) -name 'page.tsx' -path '*/new/*'`
-// regenerates the list.
 const NEW_ROUTES: string[] = [
   "/console/accommodation/blocks/new",
   "/console/accreditation/categories/new",
@@ -131,25 +136,23 @@ const NEW_ROUTES: string[] = [
 ];
 
 test.describe("forms render smoke", () => {
-  test.beforeEach(async ({ page }) => {
-    await dismissConsent(page);
-    await login(page);
-  });
+  test.use({ storageState: STORAGE_STATE });
+  test.setTimeout(90000);
 
   for (const route of NEW_ROUTES) {
     test(`${route} renders without error`, async ({ page }) => {
-      const response = await page.goto(route, { waitUntil: "domcontentloaded" });
-      // Page should resolve — 200, or 302 (redirect for non-permitted role, also fine)
+      const response = await page.goto(route, { waitUntil: "domcontentloaded", timeout: 60000 });
       expect(response?.status()).toBeLessThan(400);
 
-      // If we did land on the route (no redirect), require a form + submit button
+      // If we landed on the route (no redirect for permission), require a
+      // form + submit button.
       if (page.url().includes(route)) {
-        await expect(page.locator("form").first()).toBeVisible({ timeout: 5000 });
+        await expect(page.locator("form").first()).toBeVisible({ timeout: 10000 });
         await expect(
           page
-            .getByRole("button", { name: /create|save|submit|publish|add|open|new|set up|generate|publish/i })
+            .getByRole("button", { name: /create|save|submit|publish|add|open|new|set up|generate|schedule/i })
             .first(),
-        ).toBeVisible({ timeout: 5000 });
+        ).toBeVisible({ timeout: 10000 });
       }
     });
   }

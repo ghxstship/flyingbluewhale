@@ -662,7 +662,10 @@ pre,
 
   .surface-inset {
     background: var(--surface-inset);
-    border: var(--border-width) solid var(--border-color);
+    /* Chrome-tier (1px) — surface-inset is a callout WITHIN flat content; the
+       boundary marks the inset, not a lift, so it tracks chrome rules instead
+       of the heavy 3px floating-lift weight reserved for .surface-raised. */
+    border: var(--border-width-chrome) solid var(--border-color);
     border-radius: var(--radius-sm);
   }
 
@@ -671,7 +674,11 @@ pre,
   .input-base {
     width: 100%;
     border-radius: var(--radius-md);
-    border: var(--border-width) solid var(--border-color);
+    /* Chrome-tier (1px) per unified weight canon — inputs are tactile but
+       not "lifted off the page", so they track the same 1px rule the
+       DataTable, segmented controls, and chrome separators use. The 3px
+       weight is reserved for .surface-raised floating overlays only. */
+    border: var(--border-width-chrome) solid var(--border-color);
     background-color: var(--background);
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
@@ -716,7 +723,10 @@ pre,
       transform 100ms,
       box-shadow 150ms;
     cursor: pointer;
-    border: var(--border-width) solid transparent;
+    /* Chrome-tier (1px) — buttons share the input weight so a Submit row
+       reads as one weight system. .btn-primary's filled background already
+       carries enough emphasis without a heavier border. */
+    border: var(--border-width-chrome) solid transparent;
     white-space: nowrap;
   }
   .btn:disabled {

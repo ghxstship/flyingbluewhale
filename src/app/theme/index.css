@@ -80,6 +80,71 @@
   --org-accent: #3b82f6;
 }
 
+/* GHXSTSHIP — the agency parent. Material green family chosen to sit in
+ * the same row as ATLVS pink-700, COMPVSS amber-700, GVTEWAY cyan-800.
+ *   primary   = green-800 (#2e7d32) — 5.05:1 white text, AA
+ *   secondary = green-900 (#1b5e20) — hover-deepen
+ *   accent    = green-500 (#4caf50) — vivid pop for chips / selection
+ * Both the --org-* and --accent token groups flip green so the surface
+ * paints uniformly green-on-cream the way LYTEHAUS BT paints ink-on-cream. */
+[data-platform="ghxstship"] {
+  --org-primary: #2e7d32;
+  --org-secondary: #1b5e20;
+  --org-accent: #4caf50;
+  --org-on-primary: #ffffff;
+  --accent: #4caf50;
+  --accent-solid: #2e7d32;
+  --accent-contrast: #ffffff;
+}
+
+[data-theme="cyber"] [data-platform="ghxstship"],
+[data-theme="glass"] [data-platform="ghxstship"] {
+  --org-primary: #66bb6a; /* green-400 */
+  --org-secondary: #a5d6a7; /* green-200 */
+  --org-accent: #00e676; /* green-A400 — electric mint pop */
+  --org-on-primary: #0a0a0a;
+  --accent: #00e676;
+  --accent-solid: #66bb6a;
+  --accent-contrast: #0a0a0a;
+}
+
+[data-theme="bermuda-triangle"] [data-platform="ghxstship"] {
+  --org-primary: #2e7d32;
+  --org-secondary: #1b5e20;
+  --org-accent: #4caf50;
+  --org-on-primary: #ffffff;
+  --accent: #4caf50;
+  --accent-solid: #2e7d32;
+  --accent-contrast: #ffffff;
+}
+
+[data-theme="bermuda-triangle"][data-mode="dark"] [data-platform="ghxstship"] {
+  --org-primary: #66bb6a;
+  --org-secondary: #a5d6a7;
+  --org-accent: #00e676;
+  --org-on-primary: #0a0a0a;
+  --accent: #00e676;
+  --accent-solid: #66bb6a;
+  --accent-contrast: #0a0a0a;
+}
+
+/* THEME LOCK — wrapper carrying all three attrs is the GHXSTSHIP marketing
+ * surface, theme-pinned to bermuda-triangle and mode-pinned to light. The
+ * parent <html data-mode="dark"> would otherwise cascade dark green via the
+ * descendant rule above; this rule (specificity 0,3,0, source-ordered after
+ * the dark descendant) wins and forces the light-green palette. Only the
+ * accent / org tokens are declared — the bermuda-triangle theme rule on the
+ * same element provides cream paper, ink line, brutal shadow, font stack. */
+[data-platform="ghxstship"][data-theme="bermuda-triangle"][data-mode="light"] {
+  --org-primary: #2e7d32;
+  --org-secondary: #1b5e20;
+  --org-accent: #4caf50;
+  --org-on-primary: #ffffff;
+  --accent: #4caf50;
+  --accent-solid: #2e7d32;
+  --accent-contrast: #ffffff;
+}
+
 /* Dark-family CHROMA themes flip the platform accents to brighter shades
    so contrast holds against the deep theme background. */
 [data-theme="cyber"] [data-platform="atlvs"],

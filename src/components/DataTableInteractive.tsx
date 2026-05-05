@@ -1003,7 +1003,7 @@ export function DataTableInteractive({
       </div>
 
       {/* Pagination */}
-      {pageSizeEff && pageCount > 1 && (
+      {pageSizeEff > 0 && pageCount > 1 && (
         <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
           <span>
             Page {Number(page) + 1} of {pageCount} · {sorted.length} total

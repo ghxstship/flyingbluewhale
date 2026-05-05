@@ -639,12 +639,20 @@ pre,
  * static rgba shadow, which meant brutal's sharp corners, brutal's 3px
  * border, and cyber's neon glow NEVER rendered on any surface primitive.
  * `data-mode="dark"` override removed: themes own their shadows. */
+  /* Surfaces are CONTENT BLOCKS — bg + spacing + heading carry hierarchy,
+     not an ink frame. Bordered enclosure is reserved for Dialog (via
+     .surface-raised below). The previous 3px ink frame on every section
+     fought continuous-data primitives like DataTable, which deliberately
+     have no outer frame; stripping the surface border resolves that
+     dual-system tension in favor of "data-fabric over enclosure." */
   .surface {
     background: var(--background);
-    border: var(--border-width) solid var(--border-color);
     border-radius: var(--radius-md);
   }
 
+  /* Raised — for Dialog and any element that genuinely needs to feel
+     LIFTED off the page (modal, popover, fixed action bar). Keeps the
+     full 3px ink + shadow enclosure. */
   .surface-raised {
     background: var(--background);
     border: var(--border-width) solid var(--border-color);

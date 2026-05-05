@@ -36,6 +36,7 @@ export default function MobileHome() {
     { href: "/m/coc", label: "Chain of Custody", sub: "Asset trail" },
     { href: "/m/handover", label: "Handover", sub: "Shift transfer" },
     { href: "/m/wayfind", label: "Wayfind", sub: "Site map" },
+    { href: "/m/gigs", label: "Open Gigs", sub: "Find next work" },
   ];
 
   const reports = [

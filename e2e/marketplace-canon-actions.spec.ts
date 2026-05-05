@@ -298,11 +298,24 @@ test.describe("Marketplace canon · form actions", () => {
     await expect(page.getByText("private").first()).toBeVisible({ timeout: 5_000 });
   });
 
-  test("offer state machine: send → accept", async ({ page }) => {
-    // Use the seeded `sent` offer — accept it.
-    await page.goto(`/console/marketplace/offers/${FX.offer}`);
-    await expect(page.locator("h1")).toContainText("Fixture Band Alpha");
-    // Already sent — accept it.
+  test("offer state machine: draft → sent → accepted", async ({ page }) => {
+    // Build a fresh offer instead of mutating the seeded one; the seeded
+    // offer is shared across runs and prior runs may have already accepted
+    // it. State-machine assertions need a known starting state.
+    const today = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10);
+
+    await page.goto("/console/marketplace/offers/new");
+    await page.locator('select[name="talent_profile_id"]').selectOption({ index: 1 });
+    await page.locator('input[name="performance_date"]').fill(today);
+    await page.getByLabel("Fee").fill("4500");
+    await page.getByRole("button", { name: /^Save Draft$/i }).click();
+    await page.waitForURL(/\/console\/marketplace\/offers\/[0-9a-f-]+$/, { timeout: 15_000 });
+    await expect(page.getByText("draft").first()).toBeVisible();
+
+    await page.getByRole("button", { name: /Send Offer/i }).click();
+    await page.waitForLoadState("networkidle");
+    await expect(page.getByText("sent").first()).toBeVisible({ timeout: 5_000 });
+
     await page.getByRole("button", { name: /Mark Accepted/i }).click();
     await page.waitForLoadState("networkidle");
     await expect(page.getByText("accepted").first()).toBeVisible({ timeout: 5_000 });
@@ -310,16 +323,20 @@ test.describe("Marketplace canon · form actions", () => {
 
   test("publishRfqAction toggles visibility", async ({ page }) => {
     await page.goto(`/console/procurement/rfqs/${FX.rfq}/publish`);
-    // Already public from fixture — flip to private and back.
-    await page.locator('select[name="visibility"]').selectOption("private");
+
+    // Read the current visibility, flip it, verify the flip, then restore.
+    // This makes the test idempotent across runs even if a previous run
+    // left the fixture in a non-canonical state.
+    const before = await page.locator('select[name="visibility"]').inputValue();
+    const flip = before === "public" ? "private" : "public";
+
+    await page.locator('select[name="visibility"]').selectOption(flip);
     await page.getByRole("button", { name: /Update Visibility/i }).click();
     await page.waitForLoadState("networkidle");
-
-    // Verify by re-loading the publish page — the select should reflect private.
     await page.goto(`/console/procurement/rfqs/${FX.rfq}/publish`);
-    await expect(page.locator('select[name="visibility"]')).toHaveValue("private");
+    await expect(page.locator('select[name="visibility"]')).toHaveValue(flip);
 
-    // Restore for downstream tests
+    // Restore to public so downstream tests + seeded marketplace surfaces work.
     await page.locator('select[name="visibility"]').selectOption("public");
     await page.getByRole("button", { name: /Update Visibility/i }).click();
     await page.waitForLoadState("networkidle");
@@ -436,5 +453,73 @@ test.describe("Marketplace canon · navigation", () => {
     ]) {
       await expect(page.locator(`a[href="${path}"]`).first()).toBeVisible();
     }
+  });
+});
+
+// ────────────────────────────────────────────────────────────────────
+// 7. IA HOLD-THE-LINE — wayfinder remediation: 10 console groups; the
+//    marketplace items live INSIDE Commerce, Reviews + Settings live in
+//    settingsNav. Marketing header surfaces /marketplace as a top-level.
+//    /me + /m/gigs add applicant-side discoverability.
+// ────────────────────────────────────────────────────────────────────
+
+test.describe("Marketplace canon · IA discoverability", () => {
+  test("console nav: marketplace items live inside Commerce, not as a sibling group", async ({ page }) => {
+    await dismissConsent(page);
+    await loginAsOwner(page);
+    // Land on a Commerce-resident route so the group force-opens (the
+    // sidebar collapses idle groups by default — see PlatformSidebar §241).
+    await page.goto("/console/marketplace");
+    // Marketplace overview link present in the primary sidebar.
+    await expect(page.locator('aside a[href="/console/marketplace"]').first()).toBeVisible();
+    // Sub-items live in the same sidebar (under Commerce).
+    await expect(page.locator('aside a[href="/console/marketplace/postings"]').first()).toBeVisible();
+    await expect(page.locator('aside a[href="/console/marketplace/offers"]').first()).toBeVisible();
+    // Reviews moved to Settings sidebar; not in primary platformNav anymore.
+    const reviewsInPrimary = page.locator('aside a[href="/console/marketplace/reviews"]');
+    expect(await reviewsInPrimary.count()).toBe(0);
+  });
+
+  test("settings sidebar surfaces marketplace reviews + marketplace settings", async ({ page }) => {
+    await dismissConsent(page);
+    await loginAsOwner(page);
+    await page.goto("/console/settings/organization");
+    await expect(page.locator('a[href="/console/marketplace/reviews"]').first()).toBeVisible();
+    await expect(page.locator('a[href="/console/marketplace/settings"]').first()).toBeVisible();
+  });
+
+  test("marketing header: /marketplace is a top-level link", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: "Marketplace", exact: true }).first()).toHaveAttribute(
+      "href",
+      "/marketplace",
+    );
+  });
+
+  test("/me dashboard exposes 6 marketplace cards", async ({ page }) => {
+    await dismissConsent(page);
+    await loginAsOwner(page);
+    await page.goto("/me");
+    for (const href of [
+      "/me/applications",
+      "/me/submissions",
+      "/me/availability",
+      "/me/talent",
+      "/me/offers",
+      "/me/reviews",
+    ]) {
+      await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
+    }
+  });
+
+  test("/m/gigs renders the public_job_board with seeded data", async ({ page }) => {
+    // Mobile shell requires an authenticated session.
+    await dismissConsent(page);
+    await loginAsOwner(page);
+    const r = await page.goto("/m/gigs");
+    expect(r?.status()).toBe(200);
+    await expect(page.locator("h1")).toContainText("Open Gigs");
+    // Fixture posting (or any cross-org fixture) must appear.
+    await expect(page.getByText(/Fixture Lighting Programmer/i).first()).toBeVisible();
   });
 });

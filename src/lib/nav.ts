@@ -240,6 +240,12 @@ export const platformNav: NavGroup[] = [
     ],
   },
   {
+    // Commerce groups all sales+finance flows in one mental cut. The 0002
+    // marketplace items (public-facing reach) are appended here rather than
+    // surfaced as a sibling group, holding the WAYFINDER 10-group ceiling
+    // and the "sales+finance one mental cut" exception. Reviews + take-rate
+    // settings live in the Settings sidebar — they're moderation / org-config,
+    // not commercial action surfaces.
     label: "Commerce",
     items: [
       { label: "Leads", href: "/console/leads", icon: "UserPlus" },
@@ -255,20 +261,12 @@ export const platformNav: NavGroup[] = [
       { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
       { label: "Time", href: "/console/finance/time", icon: "Clock" },
       { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
-    ],
-  },
-  {
-    // 0002 Marketplace — public surfaces. Reuses existing console surfaces
-    // for vendors / crew (Procurement / People) and adds the public-facing
-    // ATS, talent booking, and review moderation that the audit identified.
-    label: "Marketplace",
-    items: [
-      { label: "Overview", href: "/console/marketplace", icon: "Globe" },
+      // Marketplace tail — public surfaces extending Commerce outward.
+      { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
       { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },
       { label: "Open Calls", href: "/console/marketplace/calls", icon: "Mic2" },
       { label: "Talent", href: "/console/marketplace/talent", icon: "Music" },
       { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
-      { label: "Reviews", href: "/console/marketplace/reviews", icon: "Star" },
     ],
   },
   {
@@ -300,6 +298,7 @@ export const settingsNav: NavGroup[] = [
       { label: "Domains", href: "/console/settings/domains" },
       { label: "Email Templates", href: "/console/settings/email-templates" },
       { label: "Locations", href: "/console/locations" },
+      { label: "Marketplace", href: "/console/marketplace/settings" },
     ],
   },
   {
@@ -332,6 +331,7 @@ export const settingsNav: NavGroup[] = [
     items: [
       { label: "Audit Log", href: "/console/settings/audit" },
       { label: "Compliance", href: "/console/settings/compliance" },
+      { label: "Marketplace Reviews", href: "/console/marketplace/reviews" },
       { label: "Privacy", href: "/console/legal/privacy" },
       { label: "DSAR", href: "/console/legal/privacy/dsar" },
       { label: "Consent", href: "/console/legal/privacy/consent" },
@@ -503,4 +503,5 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Requests", href: "/m/requests" },
   { label: "Chain of Custody", href: "/m/coc" },
   { label: "Wayfind", href: "/m/wayfind" },
+  { label: "Open Gigs", href: "/m/gigs" },
 ];

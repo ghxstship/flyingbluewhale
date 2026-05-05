@@ -108,6 +108,9 @@ export function MarketingHeader() {
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           <NavDropdown group={PRODUCT} />
           <NavDropdown group={INDUSTRIES} />
+          <Link href="/marketplace" className="nav-item">
+            Marketplace
+          </Link>
           <Link href="/pricing" className="nav-item">
             Pricing
           </Link>
@@ -164,6 +167,9 @@ export function MarketingHeader() {
             <MobileNavSection group={PRODUCT} onClick={() => setMobileOpen(false)} />
             <MobileNavSection group={INDUSTRIES} onClick={() => setMobileOpen(false)} />
             <nav className="flex flex-col gap-1" aria-label="Mobile primary">
+              <Link href="/marketplace" className="nav-item text-base" onClick={() => setMobileOpen(false)}>
+                Marketplace
+              </Link>
               <Link href="/pricing" className="nav-item text-base" onClick={() => setMobileOpen(false)}>
                 Pricing
               </Link>

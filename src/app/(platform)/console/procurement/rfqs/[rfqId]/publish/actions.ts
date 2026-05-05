@@ -51,13 +51,15 @@ export async function publishRfqAction(_: State, fd: FormData): Promise<State> {
     status: string;
   };
 
+  // Slug is sticky once minted — flipping visibility back and forth must
+  // not regenerate it, or every previously-shared permalink dies.
   const publicSlug = rfq.public_slug ?? `${slugify(rfq.title)}-${Math.random().toString(36).slice(2, 7)}`;
 
   const { error } = await supabase
     .from("rfqs")
     .update({
       visibility: parsed.data.visibility,
-      public_slug: parsed.data.visibility === "private" ? null : publicSlug,
+      public_slug: publicSlug,
       trade_categories: toArray(parsed.data.trade_categories),
       region: parsed.data.region || null,
       budget_band: parsed.data.budget_band || null,

@@ -147,9 +147,12 @@ export function personaForRole(role: PlatformRole): Persona {
 }
 
 export function resolveShell(persona: Persona): "/console" | "/p" | "/m" | "/me" {
-  // Real-org members land in the console; guests land at /me. Portal/mobile
-  // shells are entered explicitly via /p/<slug> or /m, not auto-routed.
-  if (persona === "guest" || persona === "visitor") return "/me";
+  // Guests + member-only personas land at /me — they're applicants /
+  // contributors (talent, crew, vendor candidates), not operators. Manager+
+  // (owner, admin, manager) personas land in the console where org-running
+  // surfaces live. Portal/mobile shells are entered explicitly via
+  // /p/<slug> or /m, not auto-routed.
+  if (persona === "guest" || persona === "visitor" || persona === "member") return "/me";
   return "/console";
 }
 

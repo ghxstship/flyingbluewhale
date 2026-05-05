@@ -20,7 +20,11 @@ export default async function SponsorHome({ params }: { params: Promise<{ slug: 
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-3">
             {[
-              { href: `/p/${slug}/sponsor/activations`, label: "Activations", desc: "Track deliverables and site placements" },
+              {
+                href: `/p/${slug}/sponsor/activations`,
+                label: "Activations",
+                desc: "Track deliverables and site placements",
+              },
               { href: `/p/${slug}/sponsor/assets`, label: "Assets", desc: "Upload brand assets" },
               { href: `/p/${slug}/sponsor/reporting`, label: "Reporting", desc: "Impressions and engagement" },
             ].map((t) => (

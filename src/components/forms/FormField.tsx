@@ -1,6 +1,12 @@
 "use client";
 
-import { useId, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes, type SelectHTMLAttributes } from "react";
+import {
+  useId,
+  type InputHTMLAttributes,
+  type ReactNode,
+  type TextareaHTMLAttributes,
+  type SelectHTMLAttributes,
+} from "react";
 import { useFieldError } from "@/components/FormShell";
 
 type CommonProps = {
@@ -32,22 +38,18 @@ export function FormField({
   const error = useFieldError(name);
   const errorId = `${id}-error`;
   const hintId = `${id}-hint`;
-  const describedBy =
-    [error ? errorId : null, !error && hint ? hintId : null].filter(Boolean).join(" ") || undefined;
+  const describedBy = [error ? errorId : null, !error && hint ? hintId : null].filter(Boolean).join(" ") || undefined;
   return (
     <div className="flex flex-col gap-1.5">
-      <label
-        htmlFor={id}
-        className={`text-xs font-medium text-[var(--text-secondary)] ${hideLabel ? "sr-only" : ""}`}
-      >
+      <label htmlFor={id} className={`text-xs font-medium text-[var(--text-secondary)] ${hideLabel ? "sr-only" : ""}`}>
         {label}
         {required && (
-          <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">*</span>
+          <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+            *
+          </span>
         )}
       </label>
-      {description && (
-        <div className="text-xs text-[var(--text-muted)]">{description}</div>
-      )}
+      {description && <div className="text-xs text-[var(--text-muted)]">{description}</div>}
       <FormFieldContext.Provider value={{ id, errorId, hintId, describedBy, hasError: !!error, required }}>
         {children}
       </FormFieldContext.Provider>
@@ -57,7 +59,9 @@ export function FormField({
         </span>
       )}
       {!error && hint && (
-        <span id={hintId} className="text-xs text-[var(--text-muted)]">{hint}</span>
+        <span id={hintId} className="text-xs text-[var(--text-muted)]">
+          {hint}
+        </span>
       )}
     </div>
   );
@@ -83,7 +87,9 @@ function useFieldCtx(): FieldCtx {
   return ctx;
 }
 
-export function TextInput(props: Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "aria-invalid" | "aria-describedby">) {
+export function TextInput(
+  props: Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "aria-invalid" | "aria-describedby">,
+) {
   const ctx = useFieldCtx();
   return (
     <input
@@ -98,7 +104,9 @@ export function TextInput(props: Omit<InputHTMLAttributes<HTMLInputElement>, "id
   );
 }
 
-export function TextArea(props: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "id" | "aria-invalid" | "aria-describedby">) {
+export function TextArea(
+  props: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "id" | "aria-invalid" | "aria-describedby">,
+) {
   const ctx = useFieldCtx();
   return (
     <textarea
@@ -113,7 +121,9 @@ export function TextArea(props: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
   );
 }
 
-export function NativeSelect(props: Omit<SelectHTMLAttributes<HTMLSelectElement>, "id" | "aria-invalid" | "aria-describedby">) {
+export function NativeSelect(
+  props: Omit<SelectHTMLAttributes<HTMLSelectElement>, "id" | "aria-invalid" | "aria-describedby">,
+) {
   const ctx = useFieldCtx();
   return (
     <select

@@ -6,7 +6,11 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
-  slug: z.string().min(1).max(60).regex(/^[a-z0-9_-]+$/, "Lowercase letters, digits, dashes only"),
+  slug: z
+    .string()
+    .min(1)
+    .max(60)
+    .regex(/^[a-z0-9_-]+$/, "Lowercase letters, digits, dashes only"),
   label: z.string().min(1).max(120),
   description: z.string().max(400).optional(),
   permissions: z.string().optional(),
@@ -41,11 +45,6 @@ export async function deleteCustomRole(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase
-    .from("org_roles")
-    .delete()
-    .eq("id", id)
-    .eq("org_id", session.orgId)
-    .eq("is_system", false);
+  await supabase.from("org_roles").delete().eq("id", id).eq("org_id", session.orgId).eq("is_system", false);
   revalidatePath("/console/people/roles");
 }

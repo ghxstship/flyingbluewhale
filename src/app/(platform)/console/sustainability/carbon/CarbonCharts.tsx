@@ -33,7 +33,6 @@ export function CarbonCharts({
   byScope: { scope: string; value: number }[];
   target: number;
 }) {
-  const fmt = useFormatters();
   const series = byMonth.map((m) => ({ ...m, target }));
   return (
     <div className="grid gap-4 xl:grid-cols-2">

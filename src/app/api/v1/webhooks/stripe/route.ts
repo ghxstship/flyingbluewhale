@@ -18,8 +18,11 @@ export async function POST(req: Request) {
     event = v as StripeEvent;
   } else {
     // Dev mode: allow unsigned posts so manual testing still works.
-    try { event = JSON.parse(rawBody) as StripeEvent; }
-    catch { return apiError("bad_request", "Invalid JSON body"); }
+    try {
+      event = JSON.parse(rawBody) as StripeEvent;
+    } catch {
+      return apiError("bad_request", "Invalid JSON body");
+    }
   }
 
   // Replay protection (H2-05 / IK-028). Stripe redelivers until it gets a 2xx,
@@ -27,12 +30,12 @@ export async function POST(req: Request) {
   // Insert the event id first; ON CONFLICT DO NOTHING means the second call
   // returns zero rows and we acknowledge without re-running side effects.
   try {
-      if (!isServiceClientAvailable()) {
-        return apiError(
-          "service_unavailable",
-          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
-        );
-      }
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
     const svc = createServiceClient();
     const { data: inserted, error: insErr } = await svc
       .from("stripe_events")
@@ -60,7 +63,11 @@ export async function POST(req: Request) {
 
   try {
     let supabase: ReturnType<typeof createServiceClient> | null = null;
-    try { supabase = createServiceClient(); } catch { supabase = null; }
+    try {
+      supabase = createServiceClient();
+    } catch {
+      supabase = null;
+    }
     switch (event.type) {
       case "payment_intent.succeeded": {
         const pi = event.data.object;

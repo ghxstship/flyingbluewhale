@@ -263,6 +263,74 @@ const HANDLERS: Record<string, Handler> = {
         .neq("status", "paid");
     }
   },
+  // Phase 4.1 placeholder. The automation runner lives in `src/lib/automations/run.ts`
+  // and depends on Node-side packages (notify(), sendEmail(), Supabase typed
+  // client) that don't transpile cleanly to Deno. To keep the runner in one
+  // place we delegate to a Next.js API route inside the app — Phase 4.3 will
+  // wire that route alongside the schedule trigger. Until then, manual runs
+  // call `runAutomation` directly from the server action; this handler exists
+  // only so that pre-Phase-4.3 enqueues don't land in the dead-letter queue.
+  "automation.run": async (job) => {
+    const automationId = job.payload.automationId as string | undefined;
+    const runId = job.payload.runId as string | undefined;
+    if (!automationId) throw new Error("automation.run: missing automationId");
+    const appUrl = Deno.env.get("APP_INTERNAL_URL");
+    const workerToken = Deno.env.get("JOB_WORKER_TOKEN");
+    if (!appUrl || !workerToken) {
+      // No call-back URL configured — mark the run row failed so the UI
+      // doesn't show it stuck pending forever.
+      if (runId) {
+        await svc
+          .from("automation_runs")
+          .update({
+            status: "failed",
+            finished_at: new Date().toISOString(),
+            error_summary: "automation.run handler not wired (APP_INTERNAL_URL/JOB_WORKER_TOKEN unset)",
+          })
+          .eq("id", runId);
+      }
+      return;
+    }
+    const res = await fetch(`${appUrl}/api/v1/automations/${automationId}/run`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-worker-token": workerToken,
+      },
+      body: JSON.stringify({
+        triggerKind: (job.payload.triggerKind as string | undefined) ?? "schedule",
+        triggerPayload: job.payload.triggerPayload ?? {},
+        existingRunId: runId,
+      }),
+    });
+    if (!res.ok) throw new Error(`automation.run callback ${res.status}: ${await res.text()}`);
+  },
+  // Phase 4.3 — drain `domain_events` and fan out to subscribed automations.
+  // The Edge runtime can't import from src/lib (Node-side `server-only`), so
+  // we proxy through an internal Next.js route gated by the same worker
+  // token. Idempotent: the route uses partial-unique-index dedup_key on
+  // (automation_id, event_id) to avoid double-fire across racing ticks.
+  "automation.dispatch": async () => {
+    const appUrl = Deno.env.get("APP_INTERNAL_URL");
+    const workerToken = Deno.env.get("JOB_WORKER_TOKEN");
+    if (!appUrl || !workerToken) return;
+    const res = await fetch(`${appUrl}/api/v1/internal/automations/dispatch`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-worker-token": workerToken },
+    });
+    if (!res.ok) throw new Error(`automation.dispatch callback ${res.status}: ${await res.text()}`);
+  },
+  // Phase 4.3 — evaluate due `automation_schedules` rows and enqueue runs.
+  "automation.schedule": async () => {
+    const appUrl = Deno.env.get("APP_INTERNAL_URL");
+    const workerToken = Deno.env.get("JOB_WORKER_TOKEN");
+    if (!appUrl || !workerToken) return;
+    const res = await fetch(`${appUrl}/api/v1/internal/automations/schedule`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-worker-token": workerToken },
+    });
+    if (!res.ok) throw new Error(`automation.schedule callback ${res.status}: ${await res.text()}`);
+  },
   "webhook.deliver": async (job) => {
     const deliveryId = job.payload.deliveryId as string | undefined;
     if (!deliveryId) throw new Error("webhook.deliver: missing deliveryId");
@@ -396,6 +464,7 @@ async function run(): Promise<{
   failed: number;
   reclaimed: number;
   webhooks: number;
+  automationTicksEnqueued: number;
 }> {
   const workerId = `edge-${crypto.randomUUID().slice(0, 8)}`;
   let reclaimed = 0;
@@ -413,6 +482,28 @@ async function run(): Promise<{
     webhooks = await drainWebhookDeliveries(20);
   } catch (_e) {
     /* best-effort */
+  }
+
+  // Phase 4.3 — enqueue per-tick automation dispatch + schedule jobs.
+  // Both are idempotent on a per-tick basis via dedup_key on the minute
+  // boundary, so even if Supabase cron double-invokes us, the queue holds
+  // exactly one of each. The handlers themselves proxy through the Next.js
+  // app where the actual logic lives (Edge runtime cannot import from src/lib).
+  let automationTicksEnqueued = 0;
+  const tickStamp = new Date(Math.floor(Date.now() / 60_000) * 60_000).toISOString();
+  for (const tickType of ["automation.dispatch", "automation.schedule"] as const) {
+    try {
+      const { error } = await svc.from("job_queue").insert({
+        type: tickType,
+        org_id: "00000000-0000-0000-0000-000000000000",
+        payload: {},
+        dedup_key: `${tickType}:${tickStamp}`,
+      });
+      if (!error) automationTicksEnqueued += 1;
+      // Duplicate-key collisions are expected on cron retries — swallow.
+    } catch (_e) {
+      /* best-effort */
+    }
   }
 
   const { data: batch, error } = await svc.rpc("claim_jobs", {
@@ -445,7 +536,7 @@ async function run(): Promise<{
     }
   }
 
-  return { claimed: jobs.length, completed, failed, reclaimed, webhooks };
+  return { claimed: jobs.length, completed, failed, reclaimed, webhooks, automationTicksEnqueued };
 }
 
 // The function is deployed with verify_jwt=false because Supabase cron and

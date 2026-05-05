@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -8,6 +8,7 @@ import { useAnnounce } from "@/components/ui/LiveRegion";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { haptic } from "@/lib/haptics";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { CameraScanner, type ScannedCode } from "@/components/scanners";
 
 type ScanRecord = {
   id: string;
@@ -25,74 +26,112 @@ type LogEntry = {
   detail: string;
 };
 
+type ScannerMode = "wedge" | "camera";
+const MODE_STORAGE_KEY = "lytehaus.scanner.mode";
+
 /**
  * Mobile gate scanner — keyboard-wedge friendly. Reads a barcode and POSTs
  * to /api/v1/accreditation/scan. Shows allow/deny with a reason and keeps a
  * recent-scans list. The endpoint records each decision server-side.
+ *
+ * Camera mode (BarcodeDetector / @zxing fallback) is an additive opt-in via
+ * the segmented control at the top of the form. The keyboard-wedge flow is
+ * preserved exactly — both inputs feed the same `submit()`.
  */
 export function GateScanner() {
   const [barcode, setBarcode] = useState("");
   const [log, setLog] = useState<LogEntry[]>([]);
   const [pending, start] = useTransition();
+  const [mode, setMode] = useState<ScannerMode>("wedge");
   const inputRef = useRef<HTMLInputElement>(null);
   const announce = useAnnounce();
   const fmt = useFormatters();
 
+  // Hydrate mode from localStorage after mount (avoids SSR drift).
   useEffect(() => {
-    inputRef.current?.focus();
+    if (typeof window === "undefined") return;
+    try {
+      const stored = window.localStorage.getItem(MODE_STORAGE_KEY);
+      if (stored === "camera" || stored === "wedge") setMode(stored);
+    } catch {
+      /* ignore */
+    }
   }, []);
 
-  const submit = (raw: string) => {
-    const trimmed = raw.trim();
-    if (!trimmed) return;
-    start(async () => {
-      try {
-        const res = await fetch("/api/v1/accreditation/scan", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ barcode: trimmed }),
-        });
-        const json = (await res.json()) as ScanResp;
+  useEffect(() => {
+    if (mode === "wedge") inputRef.current?.focus();
+  }, [mode]);
 
-        if (!json.ok) {
-          haptic("error");
-          announce(`Error: ${json.error.message}`, "assertive");
-          toast.error(json.error.message);
-        } else {
-          const { result, reason } = json.data.scan;
-          if (result === "allow") {
-            haptic("success");
-            announce("Allow", "polite");
-            toast.success("Allow");
-          } else if (result === "warn") {
-            haptic("warning");
-            announce(`Warn: ${reason ?? "review"}`, "assertive");
-            toast.warning(reason ?? "review");
-          } else {
+  const setModePersisted = useCallback((next: ScannerMode) => {
+    setMode(next);
+    try {
+      if (typeof window !== "undefined") window.localStorage.setItem(MODE_STORAGE_KEY, next);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const submit = useCallback(
+    (raw: string) => {
+      const trimmed = raw.trim();
+      if (!trimmed) return;
+      start(async () => {
+        try {
+          const res = await fetch("/api/v1/accreditation/scan", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ barcode: trimmed }),
+          });
+          const json = (await res.json()) as ScanResp;
+
+          if (!json.ok) {
             haptic("error");
-            announce(`Deny: ${reason ?? "denied"}`, "assertive");
-            toast.error(reason ?? "denied");
+            announce(`Error: ${json.error.message}`, "assertive");
+            toast.error(json.error.message);
+          } else {
+            const { result, reason } = json.data.scan;
+            if (result === "allow") {
+              haptic("success");
+              announce("Allow", "polite");
+              toast.success("Allow");
+            } else if (result === "warn") {
+              haptic("warning");
+              announce(`Warn: ${reason ?? "review"}`, "assertive");
+              toast.warning(reason ?? "review");
+            } else {
+              haptic("error");
+              announce(`Deny: ${reason ?? "denied"}`, "assertive");
+              toast.error(reason ?? "denied");
+            }
+            setLog((l) =>
+              [
+                {
+                  at: new Date().toISOString(),
+                  barcode: trimmed,
+                  result,
+                  detail: reason ?? (result === "allow" ? "ok" : "denied"),
+                },
+                ...l,
+              ].slice(0, 50),
+            );
           }
-          setLog((l) =>
-            [
-              {
-                at: new Date().toISOString(),
-                barcode: trimmed,
-                result,
-                detail: reason ?? (result === "allow" ? "ok" : "denied"),
-              },
-              ...l,
-            ].slice(0, 50),
-          );
+        } catch (e) {
+          toast.error(e instanceof Error ? e.message : "Network error");
+        } finally {
+          setBarcode("");
+          if (mode === "wedge") inputRef.current?.focus();
         }
-      } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Network error");
-      } finally {
-        setBarcode("");
-        inputRef.current?.focus();
-      }
-    });
-  };
+      });
+    },
+    [announce, mode],
+  );
+
+  const handleCameraScan = useCallback(
+    (scanned: ScannedCode) => {
+      submit(scanned.value);
+    },
+    [submit],
+  );
 
   const counts = log.reduce((acc, e) => (acc[e.result]++, acc), { allow: 0, deny: 0, warn: 0 } as Record<
     LogEntry["result"],
@@ -118,31 +157,72 @@ export function GateScanner() {
         </div>
       </div>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit(barcode);
-        }}
-        className="card-elevated p-4"
-      >
-        <label className="text-label text-[var(--color-text-tertiary)]">Card Barcode</label>
-        <input
-          ref={inputRef}
-          value={barcode}
-          onChange={(e) => setBarcode(e.target.value)}
-          inputMode="text"
-          autoComplete="off"
-          autoCapitalize="characters"
-          placeholder="Scan or type"
-          className="input text-mono mt-1.5 w-full text-base"
-          disabled={pending}
-        />
-        <div className="mt-3 flex gap-2">
-          <Button type="submit" size="lg" className="flex-1" disabled={pending || !barcode}>
-            {pending ? "Validating…" : "Validate"}
-          </Button>
+      <div role="tablist" aria-label="Scanner Input Mode" className="card-elevated grid grid-cols-2 gap-1 p-1">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "wedge"}
+          onClick={() => setModePersisted("wedge")}
+          className={`text-label rounded px-3 py-2 text-xs ${
+            mode === "wedge"
+              ? "bg-[var(--color-bg-inset)] text-[var(--color-text-primary)]"
+              : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+          }`}
+        >
+          Keyboard Wedge
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "camera"}
+          onClick={() => setModePersisted("camera")}
+          className={`text-label rounded px-3 py-2 text-xs ${
+            mode === "camera"
+              ? "bg-[var(--color-bg-inset)] text-[var(--color-text-primary)]"
+              : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+          }`}
+        >
+          Camera
+        </button>
+      </div>
+
+      {mode === "wedge" ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit(barcode);
+          }}
+          className="card-elevated p-4"
+        >
+          <label className="text-label text-[var(--color-text-tertiary)]">Card Barcode</label>
+          <input
+            ref={inputRef}
+            value={barcode}
+            onChange={(e) => setBarcode(e.target.value)}
+            inputMode="text"
+            autoComplete="off"
+            autoCapitalize="characters"
+            placeholder="Scan or type"
+            className="input text-mono mt-1.5 w-full text-base"
+            disabled={pending}
+          />
+          <div className="mt-3 flex gap-2">
+            <Button type="submit" size="lg" className="flex-1" disabled={pending || !barcode}>
+              {pending ? "Validating…" : "Validate"}
+            </Button>
+          </div>
+        </form>
+      ) : (
+        <div className="card-elevated p-4">
+          <label className="text-label text-[var(--color-text-tertiary)]">Card Barcode</label>
+          <div className="mt-1.5">
+            <CameraScanner onScan={handleCameraScan} formats={["qr_code", "code_128"]} />
+          </div>
+          <p className="text-mono mt-2 text-[11px] text-[var(--color-text-tertiary)]">
+            Point at a credential barcode. Validates automatically on detect.
+          </p>
         </div>
-      </form>
+      )}
 
       <div className="card-elevated">
         <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>

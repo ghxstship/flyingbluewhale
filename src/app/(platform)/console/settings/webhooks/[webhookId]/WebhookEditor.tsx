@@ -16,12 +16,17 @@ import {
 
 const EVENT_OPTIONS = [
   "*",
-  "project.created", "project.status_changed",
-  "invoice.sent", "invoice.paid",
-  "proposal.sent", "proposal.signed",
-  "deliverable.submitted", "deliverable.approved",
+  "project.created",
+  "project.status_changed",
+  "invoice.sent",
+  "invoice.paid",
+  "proposal.sent",
+  "proposal.signed",
+  "deliverable.submitted",
+  "deliverable.approved",
   "ticket.scanned",
-  "po.acknowledged", "po.fulfilled",
+  "po.acknowledged",
+  "po.fulfilled",
   "incident.filed",
   "passkey.registered",
   "account.deletion_requested",
@@ -103,31 +108,16 @@ export function WebhookEditor({
 
   return (
     <div className="surface space-y-4 p-5">
-      <Input
-        label="Endpoint URL"
-        type="url"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-      />
-      <Input
-        label="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+      <Input label="Endpoint URL" type="url" value={url} onChange={(e) => setUrl(e.target.value)} />
+      <Input label="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
 
       <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={isActive}
-          onChange={(e) => setActive(e.target.checked)}
-        />
+        <input type="checkbox" checked={isActive} onChange={(e) => setActive(e.target.checked)} />
         <span>Active — deliver events to this endpoint</span>
       </label>
 
       <div>
-        <label className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
-          Events
-        </label>
+        <label className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">Events</label>
         <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           {EVENT_OPTIONS.map((ev) => (
             <label
@@ -157,7 +147,8 @@ export function WebhookEditor({
           <DialogHeader>
             <DialogTitle>Delete webhook endpoint?</DialogTitle>
             <DialogDescription>
-              Deliveries stop immediately. The signing secret cannot be recovered — a replacement endpoint gets a new one.
+              Deliveries stop immediately. The signing secret cannot be recovered — a replacement endpoint gets a new
+              one.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

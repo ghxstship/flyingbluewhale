@@ -5,7 +5,9 @@ export default function NewLeadPage() {
   return (
     <>
       <ModuleHeader eyebrow="Sales" title="New Lead" />
-      <div className="page-content max-w-2xl"><NewLeadForm /></div>
+      <div className="page-content max-w-2xl">
+        <NewLeadForm />
+      </div>
     </>
   );
 }

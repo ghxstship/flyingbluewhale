@@ -50,7 +50,7 @@
   --text-subtle: #737373;
   --accent: #2cd46a;
   --accent-contrast: #0a0a0a;
-  --shadow-elev: 0 4px 20px rgba(0, 0, 0, 0.50);
+  --shadow-elev: 0 4px 20px rgba(0, 0, 0, 0.5);
   --shadow-elev-hover: 0 10px 30px rgba(0, 0, 0, 0.65);
 
   --background: #0a0a0a;

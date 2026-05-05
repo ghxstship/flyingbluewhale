@@ -2,7 +2,13 @@
 
 import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 import type { ReactNode } from "react";
@@ -35,7 +41,9 @@ export function SortableList<T extends { id: string }>({
       <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
         <ul className="space-y-2">
           {items.map((item, i) => (
-            <SortableRow key={item.id} id={item.id}>{renderItem(item, i)}</SortableRow>
+            <SortableRow key={item.id} id={item.id}>
+              {renderItem(item, i)}
+            </SortableRow>
           ))}
         </ul>
       </SortableContext>

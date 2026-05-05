@@ -18,7 +18,7 @@ export const RadioGroupItem = React.forwardRef<
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
-      className={`inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-[var(--border-color)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] data-[state=checked]:border-[var(--org-primary)] data-[state=checked]:text-[var(--org-primary)] disabled:opacity-50 ${className}`}
+      className={`inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-[var(--border-color)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:opacity-50 data-[state=checked]:border-[var(--org-primary)] data-[state=checked]:text-[var(--org-primary)] ${className}`}
       {...props}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">

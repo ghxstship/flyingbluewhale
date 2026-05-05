@@ -28,12 +28,7 @@ const BEARER_RE = /Bearer\s+[A-Za-z0-9._-]{8,}/gi;
 // Headers whose value we blanket-redact. `cookie` is NOT in this set — it's
 // handled separately so we can preserve cookie names (`theme=dark`) while
 // scrubbing only the sensitive ones (`sb-*-auth-token`).
-const SENSITIVE_HEADER_NAMES = new Set([
-  "authorization",
-  "x-api-key",
-  "x-stripe-signature",
-  "proxy-authorization",
-]);
+const SENSITIVE_HEADER_NAMES = new Set(["authorization", "x-api-key", "x-stripe-signature", "proxy-authorization"]);
 
 const SENSITIVE_COOKIE_NAMES = [
   /^sb-[^=]+-auth-token(?:\.0|\.1)?$/i,

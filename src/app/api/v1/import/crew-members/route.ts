@@ -22,7 +22,10 @@ import { log } from "@/lib/log";
  */
 
 const PostSchema = z.object({
-  csv: z.string().min(1).max(5 * 1024 * 1024), // 5 MiB cap on raw text
+  csv: z
+    .string()
+    .min(1)
+    .max(5 * 1024 * 1024), // 5 MiB cap on raw text
 });
 
 const MAX_SYNC_ROWS = 1000;
@@ -53,9 +56,7 @@ export async function POST(req: NextRequest) {
       .select("email, name, phone")
       .eq("org_id", session.orgId);
     const existingKeys = new Set(
-      (existing ?? []).map((r) =>
-        r.email ? r.email : `${r.name}::${r.phone ?? ""}`.toLowerCase(),
-      ),
+      (existing ?? []).map((r) => (r.email ? r.email : `${r.name}::${r.phone ?? ""}`.toLowerCase())),
     );
 
     const dedup = new Map<string, CrewRow>();
@@ -77,10 +78,7 @@ export async function POST(req: NextRequest) {
         day_rate_cents: r.day_rate_cents ?? null,
         notes: r.notes ?? null,
       }));
-      const { error: upErr, data: inserted } = await supabase
-        .from("crew_members")
-        .insert(rowsForDb)
-        .select("id");
+      const { error: upErr, data: inserted } = await supabase.from("crew_members").insert(rowsForDb).select("id");
       if (upErr) {
         log.warn("import.crew_members.insert_failed", { err: upErr.message, org_id: session.orgId });
         await logImportRun({

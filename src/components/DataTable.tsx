@@ -57,6 +57,38 @@ export type Column<T> = {
    *  Returning `unknown` is allowed so pages with loosely-typed rows can pass
    *  a field through; the wrapper coerces non-scalars to a stringified value. */
   accessor?: (row: T) => string | number | null | undefined | unknown;
+  /** When set, renders a `<tfoot>` cell aggregating the column's accessor
+   *  values across the (filtered) rows. Per SmartSuite Column Totals.
+   *  - `count`  — number of rows where the value is non-null
+   *  - `sum`    — sum of numeric coercions; nulls / NaN ignored
+   *  - `avg`    — mean of numeric coercions; nulls / NaN ignored
+   *  - `min`    — min of numeric coercions
+   *  - `max`    — max of numeric coercions
+   *  Renders `—` when there are no eligible values. */
+  total?: "sum" | "avg" | "min" | "max" | "count";
+  /** Optional formatter for the footer cell. Defaults to plain
+   *  `toLocaleString()` for numeric aggregates and the integer string for
+   *  `count`. */
+  totalFormat?: (n: number) => string;
+};
+
+/**
+ * Spotlight rule — applied per-row. When `when(row)` is true the row (or a
+ * specific cell, if `scope: 'cell'`) picks up the tone class. Per
+ * [SmartSuite Spotlight](https://help.smartsuite.com/en/articles/4766225-spotlight).
+ *
+ * Multiple matching rules layer in array order; later rules win for the
+ * scope they target (row tone vs cell tone).
+ */
+export type SpotlightRule<T> = {
+  /** Predicate run per row. */
+  when: (row: T) => boolean;
+  /** Tone token. Maps to CSS class `data-spotlight-{tone}`. */
+  tone: "info" | "warn" | "error" | "success" | "neutral";
+  /** What to color. Default 'row'. 'cell' requires `cell` (column key). */
+  scope?: "row" | "cell";
+  /** Required when scope==='cell'. */
+  cell?: string;
 };
 
 export type BulkAction<T> = {
@@ -103,6 +135,18 @@ export type DataTableProps<T extends { id: string }> = {
   onImport?: (file: File) => void | Promise<void>;
   /** Optional Refresh handler. Defaults to `router.refresh()` when omitted. */
   onRefresh?: () => void | Promise<void>;
+  /** Per-row className resolver. Return CSS class string or undefined. Used
+   *  for ad-hoc conditional row formatting; for the structured rule API see
+   *  `spotlight`. */
+  rowClassName?: (row: T) => string | undefined;
+  /** Spotlight rules — applied row-by-row. Multiple matching rules layer in
+   *  array order; the last matching rule wins for its scope. */
+  spotlight?: SpotlightRule<T>[];
+  /** Which kind of view the host page is rendering. P3.1 only ships
+   *  `'grid'`; alt renderers (kanban, calendar, timeline, chart, map)
+   *  land in P3.2-3.6 and read this off the saved-view row's `type`.
+   *  Defaults to `'grid'`. */
+  viewType?: "grid" | "kanban" | "calendar" | "timeline" | "chart" | "map";
 };
 
 // Helpers — defined above the component because Turbopack's server runtime
@@ -177,6 +221,9 @@ export async function DataTable<T extends { id: string }>({
   bulkActions,
   onImport,
   onRefresh,
+  rowClassName,
+  spotlight,
+  viewType = "grid",
 }: DataTableProps<T>) {
   if (loading) {
     return <DataTableSkeleton columns={columns.length} rows={6} />;
@@ -226,18 +273,42 @@ export async function DataTable<T extends { id: string }>({
     filterable: c.filterable,
     defaultHidden: c.defaultHidden,
     groupable: c.groupable,
+    total: c.total,
+    totalFormat: c.totalFormat,
   }));
 
   const interactiveRows: InteractiveRow[] = rows.map((row) => {
     const cells = columns.map((c) => c.render(row));
     const values = columns.map((c, i) => (c.accessor ? coerceScalar(c.accessor(row)) : extractText(cells[i])));
     const actions = rowActions?.(row) ?? undefined;
+
+    // Spotlight — collapse matching rules into a row-level className and
+    // an optional per-cell className map. Later rules win.
+    let rowSpotClass: string | undefined;
+    let cellClassNames: Record<string, string> | undefined;
+    if (spotlight && spotlight.length) {
+      for (const rule of spotlight) {
+        if (!rule.when(row)) continue;
+        const toneClass = `data-spotlight-${rule.tone}`;
+        if (rule.scope === "cell" && rule.cell) {
+          cellClassNames = { ...(cellClassNames ?? {}), [rule.cell]: toneClass };
+        } else {
+          rowSpotClass = toneClass;
+        }
+      }
+    }
+
+    const explicit = rowClassName?.(row);
+    const className = [explicit, rowSpotClass].filter(Boolean).join(" ") || undefined;
+
     return {
       id: row.id,
       href: rowHref?.(row),
       cells,
       values,
       actions: actions && actions.length ? actions : undefined,
+      className,
+      cellClassNames,
     };
   });
 
@@ -265,6 +336,7 @@ export async function DataTable<T extends { id: string }>({
       tableId={resolvedTableId}
       onImport={onImport}
       onRefresh={onRefresh}
+      viewType={viewType}
     />
   );
   // `stickyHeader` and `maxHeight` are absorbed: the interactive table

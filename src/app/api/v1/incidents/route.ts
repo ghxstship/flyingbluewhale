@@ -13,9 +13,7 @@ const PostSchema = z.object({
   severity: z.enum(["near_miss", "minor", "major", "critical"]).default("minor"),
   location: z.string().max(200).optional(),
   occurredAt: z.string().optional(),
-  photos: z
-    .array(z.object({ path: z.string().max(500), caption: z.string().max(200).optional() }))
-    .default([]),
+  photos: z.array(z.object({ path: z.string().max(500), caption: z.string().max(200).optional() })).default([]),
 });
 
 export async function GET(req: NextRequest) {

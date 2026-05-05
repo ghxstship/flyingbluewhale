@@ -9,18 +9,16 @@ export async function installConnector(formData: FormData) {
   const connector = String(formData.get("connector") ?? "");
   if (!connector) return;
   const supabase = await createClient();
-  await supabase
-    .from("org_integrations")
-    .upsert(
-      {
-        org_id: session.orgId,
-        connector,
-        status: "installed",
-        installed_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "org_id,connector" },
-    );
+  await supabase.from("org_integrations").upsert(
+    {
+      org_id: session.orgId,
+      connector,
+      status: "installed",
+      installed_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "org_id,connector" },
+  );
   revalidatePath("/console/settings/integrations");
 }
 

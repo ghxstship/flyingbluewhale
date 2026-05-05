@@ -23,9 +23,7 @@ export async function POST(req: NextRequest) {
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
   return withAuth(async () => {
-    const result = input.kind === "coi"
-      ? await extractCoi(input.text)
-      : await extractW9(input.text);
+    const result = input.kind === "coi" ? await extractCoi(input.text) : await extractW9(input.text);
     if ("error" in result) return apiError("internal", result.error);
     return apiOk({
       kind: input.kind,

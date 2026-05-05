@@ -29,11 +29,7 @@ export async function DELETE(req: NextRequest) {
   const { data: u } = await supabase.auth.getUser();
   if (!u.user) return apiError("unauthorized", "Sign in required");
 
-  const { error } = await supabase
-    .from("user_passkeys")
-    .delete()
-    .eq("id", parsed.data)
-    .eq("user_id", u.user.id);
+  const { error } = await supabase.from("user_passkeys").delete().eq("id", parsed.data).eq("user_id", u.user.id);
 
   if (error) return apiError("internal", error.message);
 

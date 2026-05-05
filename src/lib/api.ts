@@ -31,16 +31,10 @@ export function apiCreated<T>(data: T) {
 }
 
 export function apiError(code: ApiErrorCode, message: string, details?: unknown) {
-  return NextResponse.json(
-    { ok: false, error: { code, message, details } },
-    { status: STATUS[code] },
-  );
+  return NextResponse.json({ ok: false, error: { code, message, details } }, { status: STATUS[code] });
 }
 
-export async function parseJson<S extends z.ZodTypeAny>(
-  req: Request,
-  schema: S,
-): Promise<z.infer<S> | NextResponse> {
+export async function parseJson<S extends z.ZodTypeAny>(req: Request, schema: S): Promise<z.infer<S> | NextResponse> {
   let body: unknown;
   try {
     body = await req.json();

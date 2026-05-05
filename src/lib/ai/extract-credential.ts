@@ -16,10 +16,12 @@ import { W9Schema, type W9Data } from "./schemas/w9";
  * Returns `{ fields, confidence }` for downstream routing into the
  * credentials table. `confidence < 0.9` flags a human-review queue.
  *
- * This is intentionally a plain text prompt + JSON parse rather than
- * Anthropic's native tool-use — keeps the surface small + avoids a
- * dependency on a specific tool-use format. Upgrade to tool-use when
- * we need structured multi-turn behavior.
+ * NOTE: As of Phase 4.4 the canonical pattern for new AI calls is
+ * `runAI({ prompt, outputSchema })` in `src/lib/ai/run.ts`. This module
+ * predates that and stays as a specialized COI/W-9 wrapper because of
+ * the `_confidence` post-processing. New AI surfaces should call
+ * `runAI()` directly so they share token accounting + provider
+ * abstraction with the rest of the platform.
  */
 
 const SYSTEM_COI = `You extract fields from a US Certificate of Insurance (ACORD 25 or similar).
@@ -52,7 +54,10 @@ Respond with ONLY a JSON object matching this shape, no prose:
 
 type ExtractResult<T> = { fields: T; confidence: number } | { error: string };
 
-async function callAnthropic(systemPrompt: string, userText: string): Promise<{ json: Record<string, unknown>; confidence: number } | { error: string }> {
+async function callAnthropic(
+  systemPrompt: string,
+  userText: string,
+): Promise<{ json: Record<string, unknown>; confidence: number } | { error: string }> {
   if (!env.ANTHROPIC_API_KEY) return { error: "ANTHROPIC_API_KEY not configured" };
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
   try {
@@ -64,7 +69,7 @@ async function callAnthropic(systemPrompt: string, userText: string): Promise<{ 
     });
     const text = res.content
       .filter((c) => c.type === "text")
-       
+
       .map((c) => (c as any).text as string)
       .join("");
     const match = text.match(/\{[\s\S]*\}/);

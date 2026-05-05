@@ -57,14 +57,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const controlled = typeof rest.value === "string";
   const currentValue = controlled ? (rest.value as string) : localValue;
 
-  const describedBy = [
-    error ? errorId : null,
-    !error && hint ? hintId : null,
-    showCount && maxLength ? countId : null,
-    rest["aria-describedby"],
-  ]
-    .filter(Boolean)
-    .join(" ") || undefined;
+  const describedBy =
+    [
+      error ? errorId : null,
+      !error && hint ? hintId : null,
+      showCount && maxLength ? countId : null,
+      rest["aria-describedby"],
+    ]
+      .filter(Boolean)
+      .join(" ") || undefined;
 
   const hasPrefix = !!prefix;
   const trailing = asyncValidating ? (
@@ -93,9 +94,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <div className="flex flex-col gap-1.5">
         <div className="group relative flex items-center">
           {hasPrefix && (
-            <span className="pointer-events-none absolute start-2.5 z-10 text-[var(--text-muted)]">
-              {prefix}
-            </span>
+            <span className="pointer-events-none absolute start-2.5 z-10 text-[var(--text-muted)]">{prefix}</span>
           )}
           <input
             ref={ref}
@@ -119,7 +118,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           >
             {label}
             {required && (
-              <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">*</span>
+              <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+                *
+              </span>
             )}
           </label>
           {trailing && <span className="absolute end-2.5 inline-flex items-center">{trailing}</span>}
@@ -132,7 +133,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
               </span>
             )}
             {!error && hint && (
-              <span id={hintId} className="text-xs text-[var(--text-muted)]">{hint}</span>
+              <span id={hintId} className="text-xs text-[var(--text-muted)]">
+                {hint}
+              </span>
             )}
           </div>
           {showCount && maxLength && (
@@ -159,16 +162,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         >
           {label}
           {required && (
-            <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">*</span>
+            <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+              *
+            </span>
           )}
         </label>
       )}
       <div className="relative flex items-center">
-        {hasPrefix && (
-          <span className="pointer-events-none absolute start-2.5 text-[var(--text-muted)]">
-            {prefix}
-          </span>
-        )}
+        {hasPrefix && <span className="pointer-events-none absolute start-2.5 text-[var(--text-muted)]">{prefix}</span>}
         <input
           ref={ref}
           id={id}
@@ -194,7 +195,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             </span>
           )}
           {!error && hint && (
-            <span id={hintId} className="text-xs text-[var(--text-muted)]">{hint}</span>
+            <span id={hintId} className="text-xs text-[var(--text-muted)]">
+              {hint}
+            </span>
           )}
         </div>
         {showCount && maxLength && (

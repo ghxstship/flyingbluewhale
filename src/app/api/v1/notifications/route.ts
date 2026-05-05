@@ -48,11 +48,7 @@ export async function PATCH(req: NextRequest) {
   return withAuth(async (session) => {
     const supabase = await createClient();
     const now = new Date().toISOString();
-    let q = supabase
-      .from("notifications")
-      .update({ read_at: now })
-      .eq("user_id", session.userId)
-      .is("read_at", null);
+    let q = supabase.from("notifications").update({ read_at: now }).eq("user_id", session.userId).is("read_at", null);
     if (input.ids && input.ids.length > 0) {
       q = q.in("id", input.ids);
     } else if (!input.readAll) {

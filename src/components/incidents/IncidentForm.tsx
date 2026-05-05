@@ -157,11 +157,7 @@ export function IncidentForm({
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="block text-xs font-medium text-[var(--text-muted)]">Project</label>
-          <select
-            value={projectId}
-            onChange={(e) => setProjectId(e.target.value)}
-            className="input-base mt-1 w-full"
-          >
+          <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className="input-base mt-1 w-full">
             <option value="">— None —</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -235,10 +231,7 @@ export function IncidentForm({
           {photos.length > 0 && (
             <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {photos.map((p, idx) => (
-                <li
-                  key={p.path}
-                  className="group relative overflow-hidden rounded border border-[var(--border-color)]"
-                >
+                <li key={p.path} className="group relative overflow-hidden rounded border border-[var(--border-color)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={p.localPreview}
@@ -249,7 +242,7 @@ export function IncidentForm({
                     type="button"
                     onClick={() => removePhoto(idx)}
                     aria-label="Remove photo"
-                    className="absolute right-1 top-1 rounded bg-black/50 p-0.5 text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    className="absolute top-1 right-1 rounded bg-black/50 p-0.5 text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
                   >
                     <X size={10} />
                   </button>

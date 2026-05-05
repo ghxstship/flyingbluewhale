@@ -5,7 +5,9 @@ export default function NewBudgetPage() {
   return (
     <>
       <ModuleHeader eyebrow="Finance" title="New Budget" />
-      <div className="page-content max-w-xl"><NewBudgetForm /></div>
+      <div className="page-content max-w-xl">
+        <NewBudgetForm />
+      </div>
     </>
   );
 }

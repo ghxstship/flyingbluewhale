@@ -60,10 +60,19 @@ describe("slugify", () => {
 });
 
 describe("dollarsToCents", () => {
-  it("converts a string", () => { expect(dollarsToCents("12.34")).toBe(1234); });
-  it("converts a number", () => { expect(dollarsToCents(12.5)).toBe(1250); });
-  it("handles empty", () => { expect(dollarsToCents("")).toBe(0); expect(dollarsToCents(null)).toBe(0); });
-  it("rejects NaN", () => { expect(dollarsToCents("banana")).toBe(0); });
+  it("converts a string", () => {
+    expect(dollarsToCents("12.34")).toBe(1234);
+  });
+  it("converts a number", () => {
+    expect(dollarsToCents(12.5)).toBe(1250);
+  });
+  it("handles empty", () => {
+    expect(dollarsToCents("")).toBe(0);
+    expect(dollarsToCents(null)).toBe(0);
+  });
+  it("rejects NaN", () => {
+    expect(dollarsToCents("banana")).toBe(0);
+  });
 });
 
 describe("generateNumber", () => {

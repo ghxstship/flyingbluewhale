@@ -38,10 +38,7 @@ const ALLOWED: Record<string, string[]> = {
 // migration can split it out properly.
 type DeliverableData = { fulfilled_at?: string; [key: string]: unknown };
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const input = await parseJson(req, Body);
   if (input instanceof Response) return input;

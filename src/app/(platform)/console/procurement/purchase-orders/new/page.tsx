@@ -21,7 +21,9 @@ export default async function NewPOPage() {
   return (
     <>
       <ModuleHeader eyebrow="Procurement" title="New Purchase Order" />
-      <div className="page-content max-w-xl"><NewPoForm vendors={vendors} projects={projects} /></div>
+      <div className="page-content max-w-xl">
+        <NewPoForm vendors={vendors} projects={projects} />
+      </div>
     </>
   );
 }

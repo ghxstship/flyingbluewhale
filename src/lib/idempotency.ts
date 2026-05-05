@@ -46,22 +46,20 @@ export function withIdempotency(handler: Handler): Handler {
     const supabase = await createClient();
     const { data: existing } = await supabase
       .from("idempotency_keys" as never)
-       
+
       .select("*" as any)
       .eq("key" as never, key)
       .maybeSingle();
 
-    const row = existing as
-      | {
-          key: string;
-          method: string;
-          path: string;
-          request_hash: string;
-          status_code: number;
-          response: unknown;
-          expires_at: string;
-        }
-      | null;
+    const row = existing as {
+      key: string;
+      method: string;
+      path: string;
+      request_hash: string;
+      status_code: number;
+      response: unknown;
+      expires_at: string;
+    } | null;
 
     if (row && new Date(row.expires_at) > new Date()) {
       if (row.request_hash !== requestHash || row.method !== method || row.path !== req.nextUrl.pathname) {
@@ -89,11 +87,13 @@ export function withIdempotency(handler: Handler): Handler {
         const body = (await respClone.json()) as unknown;
         // Grab user context if available (we don't throw if anon).
         const { data: u } = await supabase.auth.getUser();
-        await (supabase as unknown as {
-          from: (t: string) => {
-            insert: (row: Record<string, unknown>) => Promise<unknown>;
-          };
-        })
+        await (
+          supabase as unknown as {
+            from: (t: string) => {
+              insert: (row: Record<string, unknown>) => Promise<unknown>;
+            };
+          }
+        )
           .from("idempotency_keys")
           .insert({
             key,

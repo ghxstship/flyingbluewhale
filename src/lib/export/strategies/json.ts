@@ -9,11 +9,7 @@ import "server-only";
  * time without inspecting data shape.
  */
 
-export function rowsToJson(args: {
-  orgId: string;
-  kind: string;
-  rows: unknown[];
-}): string {
+export function rowsToJson(args: { orgId: string; kind: string; rows: unknown[] }): string {
   return JSON.stringify(
     {
       exported_at: new Date().toISOString(),

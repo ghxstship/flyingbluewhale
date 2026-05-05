@@ -11,9 +11,7 @@ export const metadata: Metadata = {
 export default function AppearancePage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-      <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--org-primary)]">
-        Settings
-      </div>
+      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Settings</div>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">Appearance</h1>
       <p className="mt-3 text-sm text-[var(--text-secondary)]">
         Eight curated looks. Applies instantly across every page.
@@ -25,21 +23,17 @@ export default function AppearancePage() {
 
       <section className="mt-10 grid gap-6 sm:grid-cols-2">
         <div className="surface p-5">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
             Color mode
           </div>
           <div className="mt-3">
             <ThemeToggle />
           </div>
-          <p className="mt-3 text-xs text-[var(--text-muted)]">
-            Light, dark, or follow your OS setting.
-          </p>
+          <p className="mt-3 text-xs text-[var(--text-muted)]">Light, dark, or follow your OS setting.</p>
         </div>
 
         <div className="surface p-5">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
-            Density
-          </div>
+          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Density</div>
           <div className="mt-3">
             <DensityToggle />
           </div>

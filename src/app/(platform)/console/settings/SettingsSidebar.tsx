@@ -17,7 +17,7 @@ export function SettingsSidebar() {
         <div className="border-b border-[var(--border-color)] px-3 py-3">
           <Link
             href="/console"
-            className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            className="inline-flex items-center gap-1 text-[10px] font-semibold tracking-[0.28em] text-[var(--text-muted)] uppercase hover:text-[var(--text-primary)]"
           >
             <ChevronLeft size={12} aria-hidden="true" />
             Back to Console
@@ -27,7 +27,7 @@ export function SettingsSidebar() {
         <nav className="flex-1 overflow-y-auto p-2">
           {settingsNav.map((g) => (
             <div key={g.label} className="mb-3">
-              <div className="px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+              <div className="px-2 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
                 {g.label}
               </div>
               <ul className="mt-0.5 space-y-0.5">

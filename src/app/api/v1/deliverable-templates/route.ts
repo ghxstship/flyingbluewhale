@@ -11,9 +11,22 @@ import { createClient } from "@/lib/supabase/server";
  */
 
 const DELIVERABLE_TYPES = [
-  "technical_rider","hospitality_rider","input_list","stage_plot","crew_list","guest_list",
-  "equipment_pull_list","power_plan","rigging_plan","site_plan","build_schedule","vendor_package",
-  "safety_compliance","comms_plan","signage_grid","custom",
+  "technical_rider",
+  "hospitality_rider",
+  "input_list",
+  "stage_plot",
+  "crew_list",
+  "guest_list",
+  "equipment_pull_list",
+  "power_plan",
+  "rigging_plan",
+  "site_plan",
+  "build_schedule",
+  "vendor_package",
+  "safety_compliance",
+  "comms_plan",
+  "signage_grid",
+  "custom",
 ] as const;
 
 const PostSchema = z.object({

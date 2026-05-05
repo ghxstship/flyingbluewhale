@@ -95,12 +95,7 @@ export async function TenantShell({
   const locale = cs.get("locale")?.value;
 
   return (
-    <div
-      data-tenant={resolved.orgId}
-      data-tenant-locale={locale}
-      style={style}
-      className={className}
-    >
+    <div data-tenant={resolved.orgId} data-tenant-locale={locale} style={style} className={className}>
       {children}
     </div>
   );

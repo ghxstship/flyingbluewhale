@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import {
-  Area,
-  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
@@ -19,10 +17,25 @@ import {
   ComposedChart,
 } from "recharts";
 import { ChartShell } from "@/components/charts/ChartShell";
+import { ChartView } from "@/components/views/ChartView";
+import type { ChartViewConfig } from "@/lib/views/chart-config";
 
 type MonthPoint = { month: string; revenue: number; expenses: number; margin: number };
 type AgingRow = { bucket: string; count: number; amount: number };
 type CategoryRow = { name: string; value: number };
+
+// Phase 3.4 — config-driven cumulative revenue chart. Replaces the
+// hand-rolled AreaChart that used a custom linearGradient + DarkTooltip.
+// Tone "accent" binds to --org-primary so the brand overlay drives color.
+const CUMULATIVE_REVENUE_CHART: ChartViewConfig = {
+  type: "area",
+  title: "Cumulative Revenue",
+  description: "Trailing 12 months",
+  x: { field: "month" },
+  y: { field: "cumulative", format: "currency", currency: "USD" },
+  series: [{ field: "cumulative", label: "Cumulative", tone: "accent" }],
+  legend: false,
+};
 
 // Multi-hue categorical palette for the pie chart — these are data-encoded
 // distinct categories, not status. Tokenized colors (org-primary + status
@@ -111,34 +124,14 @@ export function ReportsCharts({
         </ResponsiveContainer>
       </ChartShell>
 
-      <ChartShell
-        title="Cumulative Revenue"
-        description="Trailing 12 months"
-        empty={monthly.every((m) => m.revenue === 0)}
-      >
-        <ResponsiveContainer width="100%" height={220}>
-          <AreaChart data={accumulate(monthly)}>
-            <defs>
-              <linearGradient id="rev-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--org-primary)" stopOpacity={0.4} />
-                <stop offset="100%" stopColor="var(--org-primary)" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-            <XAxis dataKey="month" tick={{ fontSize: 10, fill: "var(--text-muted)" }} />
-            <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} tickFormatter={fmtAxis} />
-            <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--surface-inset)" }} />
-            <Area
-              type="monotone"
-              dataKey="cumulative"
-              stroke="var(--org-primary)"
-              fill="url(#rev-fill)"
-              strokeWidth={2}
-              name="Cumulative"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </ChartShell>
+      {/* Phase 3.4 demo — replaced bespoke AreaChart with <ChartView>.
+          Same visual output (org-primary gradient, monotone area), but
+          driven by ChartViewConfig + the shared currency tooltip. */}
+      <ChartView<{ month: string; cumulative: number }>
+        config={CUMULATIVE_REVENUE_CHART}
+        rows={accumulate(monthly)}
+        height={220}
+      />
 
       <ChartShell
         title="Top Expense Categories"

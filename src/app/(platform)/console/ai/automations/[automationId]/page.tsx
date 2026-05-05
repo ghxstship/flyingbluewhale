@@ -7,7 +7,16 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
 import { AutomationControls } from "./AutomationControls";
+import { WebhookSection } from "./WebhookSection";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
+import { StepBuilder, type AutomationStep } from "@/components/automations/StepBuilder";
+// Side-effect import — registers all built-in actions with the in-memory
+// `actionRegistry` so `listActions()` returns the full inventory before this
+// server component renders the client builder.
+import "@/lib/automations/actions";
+import { listActions } from "@/lib/automations/registry";
+import { saveStepsAction, saveTriggerAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +64,37 @@ function stepCount(steps: Json): number {
   return Array.isArray(steps) ? steps.length : 0;
 }
 
+/**
+ * Coerce the JSONB `steps` column to the AutomationStep[] shape the builder
+ * expects. Defensive: any malformed entry is dropped rather than crashing the
+ * page. The runner already tolerates unknown shapes so this is a UX-only filter.
+ */
+function coerceSteps(raw: Json): AutomationStep[] {
+  if (!Array.isArray(raw)) return [];
+  const out: AutomationStep[] = [];
+  for (let i = 0; i < raw.length; i++) {
+    const s = raw[i];
+    if (!s || typeof s !== "object" || Array.isArray(s)) continue;
+    const obj = s as Record<string, unknown>;
+    const type = typeof obj.type === "string" ? obj.type : "";
+    if (!type) continue;
+    const id = typeof obj.id === "string" ? obj.id : `step_${i}`;
+    const config =
+      obj.config && typeof obj.config === "object" && !Array.isArray(obj.config)
+        ? (obj.config as Record<string, unknown>)
+        : obj.input && typeof obj.input === "object" && !Array.isArray(obj.input)
+          ? (obj.input as Record<string, unknown>)
+          : {};
+    out.push({ id, type, config, condition: obj.condition });
+  }
+  return out;
+}
+
+function coerceTriggerConfig(raw: Json): Record<string, unknown> {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+  return raw as Record<string, unknown>;
+}
+
 export default async function Page({ params }: { params: Promise<{ automationId: string }> }) {
   const { automationId } = await params;
   if (!hasSupabase) {
@@ -74,17 +114,30 @@ export default async function Page({ params }: { params: Promise<{ automationId:
   const { data } = await supabase
     .from("automations")
     .select(
-      "id, name, description, trigger_kind, trigger_config, steps, enabled, last_run_at, last_run_status, created_at, updated_at",
+      "id, name, description, trigger_kind, trigger_config, steps, enabled, last_run_at, last_run_status, created_at, updated_at, webhook_secret",
     )
     .eq("id", automationId)
     .eq("org_id", session.orgId)
     .maybeSingle();
 
-  const automation = data as unknown as AutomationRow | null;
+  const automation = data as unknown as (AutomationRow & { webhook_secret: string | null }) | null;
   if (!automation) notFound();
 
   const steps = stepCount(automation.steps);
   const triggerTone = TRIGGER_TONE[automation.trigger_kind] ?? "muted";
+
+  // Snapshot of the action inventory after the side-effect import has
+  // registered every built-in. Server-side, so the registry state is
+  // deterministic per request.
+  const registeredActions = listActions();
+  const initialSteps = coerceSteps(automation.steps);
+  const initialTriggerConfig = coerceTriggerConfig(automation.trigger_config);
+
+  // Bind the server actions to the current automation id so the client builder
+  // can call them with just (prev, formData). The .bind() returns a fresh
+  // server-action reference Next can serialize over the wire.
+  const boundSaveSteps = saveStepsAction.bind(null, automation.id);
+  const boundSaveTrigger = saveTriggerAction.bind(null, automation.id);
 
   return (
     <>
@@ -134,24 +187,30 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Trigger Config</h3>
-          <pre className="mt-3 max-h-72 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
-            {JSON.stringify(automation.trigger_config, null, 2)}
-          </pre>
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="text-sm font-semibold">Builder</h3>
+            <span className="text-[11px] text-[var(--text-muted)]">Auto-saves on change</span>
+          </div>
+          <StepBuilder
+            automationId={automation.id}
+            initialSteps={initialSteps}
+            initialTrigger={{ kind: automation.trigger_kind, config: initialTriggerConfig }}
+            registeredActions={registeredActions}
+            saveStepsAction={boundSaveSteps}
+            saveTriggerAction={boundSaveTrigger}
+            webhookUrl={
+              automation.trigger_kind === "webhook" ? `/api/v1/automations/${automation.id}/webhook` : undefined
+            }
+          />
         </section>
 
-        <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Steps</h3>
-          {steps === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No steps defined. Add steps via the editor (coming via the new-automation flow).
-            </p>
-          ) : (
-            <pre className="mt-3 max-h-96 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
-              {JSON.stringify(automation.steps, null, 2)}
-            </pre>
-          )}
-        </section>
+        {automation.trigger_kind === "webhook" && (
+          <WebhookSection
+            automationId={automation.id}
+            webhookUrl={urlFor("platform", `/api/v1/automations/${automation.id}/webhook`)}
+            hasSecret={Boolean(automation.webhook_secret)}
+          />
+        )}
 
         {automation.last_run_status && (
           <section className="surface p-4">

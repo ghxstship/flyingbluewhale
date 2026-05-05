@@ -21,9 +21,12 @@ export async function createMileageAction(_: State, fd: FormData): Promise<State
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
   const { error } = await supabase.from("mileage_logs").insert({
-    org_id: session.orgId, user_id: session.userId,
-    origin: parsed.data.origin, destination: parsed.data.destination,
-    miles: Number(parsed.data.miles), logged_on: parsed.data.logged_on,
+    org_id: session.orgId,
+    user_id: session.userId,
+    origin: parsed.data.origin,
+    destination: parsed.data.destination,
+    miles: Number(parsed.data.miles),
+    logged_on: parsed.data.logged_on,
     notes: parsed.data.notes || null,
   });
   if (error) return { error: error.message };

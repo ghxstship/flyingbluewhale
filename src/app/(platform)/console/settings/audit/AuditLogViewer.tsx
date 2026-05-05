@@ -19,13 +19,9 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
   const [tableFilter, setTableFilter] = React.useState("");
   const [open, setOpen] = React.useState<string | null>(null);
 
-  const actions = React.useMemo(
-    () => Array.from(new Set(rows.map((r) => r.action))).sort(),
-    [rows],
-  );
+  const actions = React.useMemo(() => Array.from(new Set(rows.map((r) => r.action))).sort(), [rows]);
   const tables = React.useMemo(
-    () =>
-      Array.from(new Set(rows.map((r) => r.target_table).filter(Boolean) as string[])).sort(),
+    () => Array.from(new Set(rows.map((r) => r.target_table).filter(Boolean) as string[])).sort(),
     [rows],
   );
 
@@ -115,9 +111,7 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
                       className={`cursor-pointer ${isOpen ? "bg-[var(--surface-inset)]" : ""}`}
                       onClick={() => setOpen(isOpen ? null : r.id)}
                     >
-                      <td className="text-center text-[var(--text-muted)]">
-                        {diffable ? (isOpen ? "▾" : "▸") : ""}
-                      </td>
+                      <td className="text-center text-[var(--text-muted)]">{diffable ? (isOpen ? "▾" : "▸") : ""}</td>
                       <td className="font-mono text-xs">{timeAgo(r.at)}</td>
                       <td>
                         <Badge variant="muted">
@@ -128,9 +122,7 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
                         {r.target_table ?? "—"}
                         {r.target_id ? `:${r.target_id.slice(0, 8)}` : ""}
                       </td>
-                      <td className="font-mono text-xs">
-                        {r.actor_id ? r.actor_id.slice(0, 8) : "system"}
-                      </td>
+                      <td className="font-mono text-xs">{r.actor_id ? r.actor_id.slice(0, 8) : "system"}</td>
                     </tr>
                     {isOpen && (
                       <tr>

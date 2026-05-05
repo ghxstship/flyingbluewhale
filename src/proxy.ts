@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 import { updateSession } from "@/lib/supabase/middleware";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import { log, serverTiming } from "@/lib/log";
 import { internalPathFor, shellForHost } from "@/lib/urls";
+import { env, hasSupabase } from "@/lib/env";
 
 const SUBDOMAINS_ENABLED = process.env.NEXT_PUBLIC_USE_SUBDOMAINS === "1";
 
@@ -49,6 +51,14 @@ const PROTECTED: Array<{ match: RegExp; bucket: keyof typeof RATE_BUDGETS }> = [
   // and must not consume the budget — that breaks e2e + real users hitting refresh.
   { match: /^\/api\/v1\/auth\//, bucket: "auth" },
 ];
+
+// Public unauthenticated paths — the route handlers verify their own tokens
+// (HMAC-signed for /share/[token] from the Phase 3.5 share_links primitive,
+// DB-backed for /proposals/[token]). The middleware does NOT require a
+// Supabase session for these; do not add any auth-bearing rules that would
+// reach them.
+//   /^\/share\/[^/]+/        — share_links public landing
+//   /^\/proposals\/[^/]+/    — proposal share-token landing
 
 // Methods that are subject to rate limiting per bucket. GET to /login etc. is
 // exempt because rendering a form is not an attack surface.
@@ -152,6 +162,37 @@ export async function proxy(request: NextRequest) {
   }
 
   const response = await updateSession(request, rewriteUrl);
+
+  // ────────────────────────────────────────────────────────────────────
+  // MFA gate (Phase 2.5).
+  //
+  // If the org requires 2FA for the user's role and the current session is
+  // single-factor (aal1), bounce them through /mfa/challenge before they can
+  // touch protected resources. Skip on:
+  //   - public marketing/auth routes (so /login, /signup, the challenge page
+  //     itself, etc. all stay reachable)
+  //   - /me/security/* (lets users self-rescue + enroll a factor)
+  //   - /api/v1/auth/* (auth endpoints must function pre-aal2)
+  //   - /api/v1/health (probes)
+  //
+  // We only run it for authenticated users; unauthenticated requests are
+  // rejected by the routes themselves.
+  // ────────────────────────────────────────────────────────────────────
+  if (await shouldRunMfaGate(pathname)) {
+    const redirectUrl = await checkMfaForRequest(request, pathname);
+    if (redirectUrl) {
+      const res = NextResponse.redirect(redirectUrl);
+      // Preserve the request id + shell headers so observability matches.
+      res.headers.set("x-request-id", requestId);
+      res.headers.set("x-shell", shell);
+      if (tenantSlug) res.headers.set("x-tenant-slug", tenantSlug);
+      // Carry over Supabase session cookies set by updateSession so the user
+      // doesn't get logged out by the redirect.
+      response.cookies.getAll().forEach((c) => res.cookies.set(c.name, c.value));
+      return res;
+    }
+  }
+
   const mwDuration = Math.round((performance.now() - startedAt) * 10) / 10;
   response.headers.set("x-request-id", requestId);
   response.headers.set("x-shell", shell);
@@ -164,6 +205,93 @@ export async function proxy(request: NextRequest) {
   );
   applyCors(request, response as NextResponse);
   return response;
+}
+
+// ────────────────────────────────────────────────────────────────────
+// MFA-gate helpers (run inside proxy.ts so they share the Edge runtime
+// context — no `server-only` imports, no node:crypto).
+// ────────────────────────────────────────────────────────────────────
+
+const MFA_GATE_EXEMPT = [
+  /^\/login(?:\/|$)/,
+  /^\/signup(?:\/|$)/,
+  /^\/forgot-password/,
+  /^\/reset-password/,
+  /^\/magic-link/,
+  /^\/verify-email/,
+  /^\/accept-invite/,
+  /^\/mfa\/challenge/,
+  /^\/auth\//,
+  /^\/me\/security(?:\/|$)/,
+  /^\/api\/v1\/auth\//,
+  /^\/api\/v1\/health/,
+  /^\/api\/v1\/webhooks\//,
+  // Public share-link landing — token verification + RPC consume run inside
+  // the route handler. No Supabase session is expected. (Phase 3.5)
+  /^\/share\/[^/]+/,
+  // Marketing + portal proposals/offers and other unauthenticated surfaces
+  // are gated by their own auth checks; the MFA gate only runs for routes
+  // that imply an authenticated session.
+];
+
+const MFA_GATE_PROTECTED = [
+  /^\/console(?:\/|$)/,
+  /^\/me(?!\/security)(?:\/|$)/,
+  /^\/p\/[^/]+\/(?!guide$|guide\/)/,
+  /^\/m(?:\/|$)/,
+];
+
+async function shouldRunMfaGate(pathname: string): Promise<boolean> {
+  if (!hasSupabase) return false;
+  if (MFA_GATE_EXEMPT.some((rx) => rx.test(pathname))) return false;
+  return MFA_GATE_PROTECTED.some((rx) => rx.test(pathname));
+}
+
+/**
+ * Returns a redirect URL when the request should be intercepted by the MFA
+ * gate, or null when the request may proceed.
+ */
+async function checkMfaForRequest(request: NextRequest, pathname: string): Promise<URL | null> {
+  // Build a read-only Supabase client (cookies are already set on the response
+  // by updateSession; we only need to *read* them here for getUser).
+  const supabase = createServerClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+    cookies: {
+      getAll: () => request.cookies.getAll(),
+      setAll: () => {},
+    },
+  });
+
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return null; // unauthenticated — let route handlers decide
+
+  // Resolve role + org for this user. We look up the first non-demo membership
+  // (mirrors getSession()'s preference) without pulling the full helper in —
+  // server-only imports aren't available here.
+  const { data: rawMemberships } = await supabase
+    .from("memberships")
+    .select("org_id, role, orgs(slug)")
+    .eq("user_id", userData.user.id);
+  type MembershipRow = { org_id: string; role: string; orgs: { slug: string } | null };
+  const memberships = (rawMemberships ?? []) as unknown as MembershipRow[];
+  if (memberships.length === 0) return null;
+  const real = memberships.find((m) => m.orgs?.slug !== "demo") ?? memberships[0];
+
+  // Lookup the org's MFA-required map.
+  const { data: orgRow } = await supabase.from("orgs").select("require_2fa_for").eq("id", real.org_id).maybeSingle();
+  const requireMap =
+    ((orgRow as { require_2fa_for?: Record<string, boolean> } | null)?.require_2fa_for as
+      | Record<string, boolean>
+      | undefined) ?? {};
+  if (!requireMap[real.role]) return null;
+
+  // Check the current AAL.
+  const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (aalData?.currentLevel === "aal2") return null;
+
+  // Below aal2 → redirect.
+  const redirect = new URL("/mfa/challenge", request.url);
+  redirect.searchParams.set("next", pathname + (request.nextUrl.search ?? ""));
+  return redirect;
 }
 
 export const config = {

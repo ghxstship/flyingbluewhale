@@ -4,7 +4,6 @@ import { apiCreated, apiError, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-
 /** /api/v1/accreditation/scan — COMPVSS gate decisioning (WF-053). */
 
 const PostSchema = z.object({
@@ -55,7 +54,8 @@ export async function POST(req: NextRequest) {
         .select("id, code, allowed_categories")
         .eq("id", input.zoneId)
         .maybeSingle()) as { data: ZoneRow | null };
-      const categoryCode = (accred as unknown as { accreditation_categories: { code: string } }).accreditation_categories?.code;
+      const categoryCode = (accred as unknown as { accreditation_categories: { code: string } })
+        .accreditation_categories?.code;
       if (zone && Array.isArray(zone.allowed_categories) && zone.allowed_categories.length > 0) {
         zoneAllowed = Boolean(categoryCode && zone.allowed_categories.includes(categoryCode));
       }

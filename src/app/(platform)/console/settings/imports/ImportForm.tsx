@@ -63,7 +63,7 @@ export function ImportForm() {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-3">
         <label className="flex flex-col gap-1 text-xs">
-          <span className="font-medium uppercase tracking-wider text-[var(--text-muted)]">Target</span>
+          <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">Target</span>
           <select value={target} onChange={(e) => setTarget(e.target.value as Target)} className="input-base w-52">
             <option value="crew-members">Crew roster</option>
             <option value="tasks">Project tasks</option>
@@ -72,13 +72,18 @@ export function ImportForm() {
         </label>
         {target === "tasks" ? (
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium uppercase tracking-wider text-[var(--text-muted)]">Project id</span>
-            <input value={projectId} onChange={(e) => setProjectId(e.target.value)} className="input-base w-80 font-mono text-xs" placeholder="uuid" />
+            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">Project id</span>
+            <input
+              value={projectId}
+              onChange={(e) => setProjectId(e.target.value)}
+              className="input-base w-80 font-mono text-xs"
+              placeholder="uuid"
+            />
           </label>
         ) : null}
       </div>
       <label className="block">
-        <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">CSV file</span>
+        <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">CSV file</span>
         <input type="file" accept=".csv,text/csv" onChange={onFile} className="mt-1 block" />
       </label>
       <Button type="button" onClick={submit} disabled={isPending}>
@@ -86,13 +91,18 @@ export function ImportForm() {
       </Button>
       {result ? (
         <div className="rounded-md border border-[var(--border-color)] p-4 text-sm">
-          <p><strong>{result.insertedCount}</strong> inserted · {result.skippedCount} skipped · {result.invalidCount} invalid of {result.rowCount} rows</p>
+          <p>
+            <strong>{result.insertedCount}</strong> inserted · {result.skippedCount} skipped · {result.invalidCount}{" "}
+            invalid of {result.rowCount} rows
+          </p>
           {result.invalid.length > 0 ? (
             <details className="mt-2">
               <summary className="cursor-pointer">First {result.invalid.length} invalid rows</summary>
               <ul className="mt-2 space-y-1 text-xs">
                 {result.invalid.map((r, i) => (
-                  <li key={i}>Row {r.rowIdx}: {r.errors.join(" · ")}</li>
+                  <li key={i}>
+                    Row {r.rowIdx}: {r.errors.join(" · ")}
+                  </li>
                 ))}
               </ul>
             </details>

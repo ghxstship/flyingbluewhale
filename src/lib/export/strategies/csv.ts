@@ -15,9 +15,7 @@ export type CsvColumn = {
 
 export function rowsToCsv(rows: Array<Record<string, unknown>>, columns: CsvColumn[]): string {
   const headerLine = columns.map((c) => escapeCell(c.header)).join(",");
-  const lines = rows.map((r) =>
-    columns.map((c) => escapeCell(r[c.key])).join(","),
-  );
+  const lines = rows.map((r) => columns.map((c) => escapeCell(r[c.key])).join(","));
   // Trailing CRLF per RFC 4180. Excel prefers it, and it's what `csvOk.test`
   // encoders emit.
   return [headerLine, ...lines].join("\r\n") + "\r\n";

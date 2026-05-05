@@ -38,25 +38,17 @@ export function ChartShell({
 }) {
   const errorMsg = error instanceof Error ? error.message : error || null;
   return (
-    <section
-      className={`surface flex flex-col ${className}`}
-      aria-busy={loading || undefined}
-    >
+    <section className={`surface flex flex-col ${className}`} aria-busy={loading || undefined}>
       {(title || actions) && (
         <header className="flex items-start justify-between gap-3 border-b border-[var(--border-color)] px-4 py-2.5">
           <div className="min-w-0">
             {title && <h3 className="text-sm font-semibold text-[var(--text-primary)]">{title}</h3>}
-            {description && (
-              <p className="mt-0.5 text-xs text-[var(--text-muted)]">{description}</p>
-            )}
+            {description && <p className="mt-0.5 text-xs text-[var(--text-muted)]">{description}</p>}
           </div>
           {actions && <div className="shrink-0">{actions}</div>}
         </header>
       )}
-      <div
-        className="relative w-full p-3"
-        style={{ minHeight: height }}
-      >
+      <div className="relative w-full p-3" style={{ minHeight: height }}>
         {loading ? (
           <div
             className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs text-[var(--text-muted)]"

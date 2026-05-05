@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { StatusChip } from "@/components/ui/StatusChip";
+import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { fmtDate } from "@/components/detail/DetailShell";
+import { ActivityDrawer } from "@/components/collab/activity";
+import { getActivityForRecord } from "@/lib/db/activity";
 import { AdvancingTransitionRow } from "./AdvancingTransitionRow";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
@@ -29,6 +32,18 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       .is("deleted_at", null)
       .order("updated_at", { ascending: false }),
   ]);
+  // The advancing page is the closest "deliverable detail" surface in the
+  // current IA — there is no per-deliverable page yet. Scope the activity
+  // feed to the most recently touched deliverable so the drawer shows the
+  // record activity from the row a user just edited; fall back to the
+  // project itself when there are no deliverables yet.
+  const recentDeliverableId = deliverables?.[0]?.id ?? null;
+  const activity = await getActivityForRecord({
+    orgId: session.orgId,
+    targetTable: recentDeliverableId ? "deliverables" : "projects",
+    targetId: recentDeliverableId ?? projectId,
+    limit: 50,
+  });
   return (
     <>
       <ModuleHeader
@@ -48,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           ) : undefined
         }
       />
-      <div className="page-content max-w-6xl">
+      <div className="page-content max-w-6xl space-y-5">
         {!deliverables || deliverables.length === 0 ? (
           <EmptyState
             title="No Deliverables Yet"
@@ -78,6 +93,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                       <td>
                         <div className="flex items-center gap-2">
                           <StatusBadge status={d.status} />
+                          <DueDateBadge dueAt={d.deadline} status={d.status} iconOnly size="sm" />
                           {data?.fulfilled_at && <StatusChip tone="success">Fulfilled</StatusChip>}
                         </div>
                       </td>
@@ -98,6 +114,16 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             </table>
           </div>
         )}
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div aria-label="Comments">{/* CommentThread (P2.1) lands here */}</div>
+          <ActivityDrawer
+            targetTable={recentDeliverableId ? "deliverables" : "projects"}
+            targetId={recentDeliverableId ?? projectId}
+            initial={activity}
+            title={recentDeliverableId ? "Latest Deliverable Activity" : "Project Activity"}
+          />
+        </div>
       </div>
     </>
   );

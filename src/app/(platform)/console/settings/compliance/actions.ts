@@ -26,10 +26,7 @@ export async function saveComplianceSettings(_: State, fd: FormData): Promise<St
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("orgs")
-    .update({ compliance_settings: parsed.data })
-    .eq("id", session.orgId);
+  const { error } = await supabase.from("orgs").update({ compliance_settings: parsed.data }).eq("id", session.orgId);
   if (error) return { error: error.message };
   revalidatePath("/console/settings/compliance");
   return { saved: true };

@@ -6,8 +6,18 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 
-const TALENT = ["technical_rider","hospitality_rider","input_list","stage_plot","crew_list","guest_list"] as const;
-const PRODUCTION = ["equipment_pull_list","power_plan","rigging_plan","site_plan","build_schedule","vendor_package","safety_compliance","comms_plan","signage_grid"] as const;
+const TALENT = ["technical_rider", "hospitality_rider", "input_list", "stage_plot", "crew_list", "guest_list"] as const;
+const PRODUCTION = [
+  "equipment_pull_list",
+  "power_plan",
+  "rigging_plan",
+  "site_plan",
+  "build_schedule",
+  "vendor_package",
+  "safety_compliance",
+  "comms_plan",
+  "signage_grid",
+] as const;
 const ALL = [...TALENT, ...PRODUCTION, "custom"] as const;
 
 const Schema = z.object({
@@ -23,8 +33,10 @@ export type SubmitState = { error?: string; ok?: true } | null;
 export async function submitDeliverableAction(_: SubmitState, fd: FormData): Promise<SubmitState> {
   const session = await requireSession();
   const parsed = Schema.safeParse({
-    slug: fd.get("slug"), type: fd.get("type"),
-    title: fd.get("title"), notes: fd.get("notes") ?? undefined,
+    slug: fd.get("slug"),
+    type: fd.get("type"),
+    title: fd.get("title"),
+    notes: fd.get("notes") ?? undefined,
     deadline: fd.get("deadline") ?? undefined,
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
@@ -37,10 +49,16 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
   if (file instanceof File && file.size > 0) {
     if (file.size > 25 * 1024 * 1024) return { error: "File exceeds 25MB" };
     const supabase = await createClient();
-    const ext = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") ?? "bin";
+    const ext =
+      file.name
+        .split(".")
+        .pop()
+        ?.toLowerCase()
+        .replace(/[^a-z0-9]/g, "") ?? "bin";
     const path = `advancing/${project.id}/${session.userId}/${Date.now()}-${parsed.data.type}.${ext}`;
     const { error } = await supabase.storage.from("advancing").upload(path, file, {
-      contentType: file.type || "application/octet-stream", upsert: false,
+      contentType: file.type || "application/octet-stream",
+      upsert: false,
     });
     if (error) return { error: `Upload failed: ${error.message}` };
     filePath = path;
@@ -73,7 +91,13 @@ export async function setDeliverableStatusAction(
 ) {
   const session = await requireSession();
   const supabase = await createClient();
-  const patch: { status: typeof status; reviewed_by?: string; reviewed_at?: string; submitted_by?: string; submitted_at?: string } = { status };
+  const patch: {
+    status: typeof status;
+    reviewed_by?: string;
+    reviewed_at?: string;
+    submitted_by?: string;
+    submitted_at?: string;
+  } = { status };
   if (["approved", "rejected", "revision_requested", "in_review"].includes(status)) {
     patch.reviewed_by = session.userId;
     patch.reviewed_at = new Date().toISOString();
@@ -95,9 +119,8 @@ export async function setDeliverableStatusAction(
       orgId: before.org_id,
       userId: before.submitted_by ?? session.userId,
       eventType: status === "submitted" ? "deliverable.submitted" : "deliverable.approved",
-      title: status === "submitted"
-        ? `Deliverable submitted: ${before.title}`
-        : `Deliverable approved: ${before.title}`,
+      title:
+        status === "submitted" ? `Deliverable submitted: ${before.title}` : `Deliverable approved: ${before.title}`,
       body: `Type: ${before.type}`,
       href: `/console/projects/${before.project_id}/advancing`,
       data: { deliverableId, projectId: before.project_id, type: before.type },

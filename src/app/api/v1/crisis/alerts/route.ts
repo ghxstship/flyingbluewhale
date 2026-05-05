@@ -4,7 +4,6 @@ import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-
 /** /api/v1/crisis/alerts — mass-notify (WF-252). */
 
 const PostSchema = z.object({

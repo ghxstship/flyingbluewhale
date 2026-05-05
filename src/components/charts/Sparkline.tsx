@@ -29,9 +29,7 @@ export function Sparkline({
     x: i * step,
     y: height - ((v - min) / span) * height,
   }));
-  const path = points
-    .map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`)
-    .join(" ");
+  const path = points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
   const fill = `${path} L${width},${height} L0,${height} Z`;
 
   return (
@@ -43,14 +41,7 @@ export function Sparkline({
       className={`overflow-visible ${className}`}
     >
       <path d={fill} fill={color} fillOpacity={fillOpacity} />
-      <path
-        d={path}
-        stroke={color}
-        strokeWidth="1.5"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d={path} stroke={color} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

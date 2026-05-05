@@ -36,13 +36,15 @@ export function DeliverablePdf({
         brand={brand}
         eyebrow={projectName ?? "Deliverable"}
         title={label}
-        subtitle={[
-          deliverable.status ? `Status: ${deliverable.status}` : null,
-          deliverable.version != null ? `Version ${deliverable.version}` : null,
-          deliverable.deadline ? `Due ${deliverable.deadline}` : null,
-        ]
-          .filter(Boolean)
-          .join(" · ") || undefined}
+        subtitle={
+          [
+            deliverable.status ? `Status: ${deliverable.status}` : null,
+            deliverable.version != null ? `Version ${deliverable.version}` : null,
+            deliverable.deadline ? `Due ${deliverable.deadline}` : null,
+          ]
+            .filter(Boolean)
+            .join(" · ") || undefined
+        }
       />
       <BrandedPage brand={brand} pageLabel={label}>
         {renderDeliverable(deliverable.type, deliverable.data)}

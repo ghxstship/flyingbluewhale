@@ -18,16 +18,33 @@ export function TaskStatusControls({ id, status }: { id: string; status: TaskSta
   return (
     <div className="flex gap-2">
       {next && (
-        <Button disabled={pending} onClick={() => start(async () => {
-          const r = await setTaskStatusAction(id, next);
-          if (r?.error) toast.error(r.error); else toast.success(`Moved to ${next}`);
-        })}>{pending ? "…" : `→ ${next.replace("_", " ")}`}</Button>
+        <Button
+          disabled={pending}
+          onClick={() =>
+            start(async () => {
+              const r = await setTaskStatusAction(id, next);
+              if (r?.error) toast.error(r.error);
+              else toast.success(`Moved to ${next}`);
+            })
+          }
+        >
+          {pending ? "…" : `→ ${next.replace("_", " ")}`}
+        </Button>
       )}
       {status !== "blocked" && status !== "done" && (
-        <Button variant="secondary" disabled={pending} onClick={() => start(async () => {
-          const r = await setTaskStatusAction(id, "blocked");
-          if (r?.error) toast.error(r.error); else toast.success("Blocked");
-        })}>Block</Button>
+        <Button
+          variant="secondary"
+          disabled={pending}
+          onClick={() =>
+            start(async () => {
+              const r = await setTaskStatusAction(id, "blocked");
+              if (r?.error) toast.error(r.error);
+              else toast.success("Blocked");
+            })
+          }
+        >
+          Block
+        </Button>
       )}
     </div>
   );

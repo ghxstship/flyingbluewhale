@@ -21,7 +21,8 @@ export async function createBudgetAction(_: State, fd: FormData): Promise<State>
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
   const { error } = await supabase.from("budgets").insert({
-    org_id: session.orgId, name: parsed.data.name,
+    org_id: session.orgId,
+    name: parsed.data.name,
     amount_cents: dollarsToCents(parsed.data.amount),
     category: parsed.data.category || null,
     project_id: parsed.data.project_id || null,

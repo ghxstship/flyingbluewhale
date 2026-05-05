@@ -33,7 +33,9 @@ export function FormField({
         <label className="text-xs font-medium text-[var(--text-secondary)]">
           {label}
           {required && (
-            <span aria-hidden className="ms-0.5 text-[var(--color-error)]">*</span>
+            <span aria-hidden className="ms-0.5 text-[var(--color-error)]">
+              *
+            </span>
           )}
         </label>
       )}
@@ -62,11 +64,6 @@ export function FormGrid({
   className?: string;
   children: React.ReactNode;
 }) {
-  const colClass =
-    cols === 3
-      ? "md:grid-cols-3"
-      : cols === 2
-        ? "md:grid-cols-2"
-        : "md:grid-cols-1";
+  const colClass = cols === 3 ? "md:grid-cols-3" : cols === 2 ? "md:grid-cols-2" : "md:grid-cols-1";
   return <div className={`grid grid-cols-1 gap-4 ${colClass} ${className}`}>{children}</div>;
 }

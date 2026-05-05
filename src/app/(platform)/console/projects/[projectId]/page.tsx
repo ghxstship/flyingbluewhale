@@ -4,7 +4,11 @@ import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { Presence } from "@/components/collab/Presence";
+import { getPresenceUser } from "@/components/collab/getPresenceUser";
+import { ActivityDrawer } from "@/components/collab/activity";
 import { requireSession } from "@/lib/auth";
+import { getActivityForRecord } from "@/lib/db/activity";
 import { getProject } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
@@ -20,6 +24,13 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
   const session = await requireSession();
   const project = await getProject(session.orgId, projectId);
   if (!project) notFound();
+  const presenceUser = await getPresenceUser(session);
+  const activity = await getActivityForRecord({
+    orgId: session.orgId,
+    targetTable: "projects",
+    targetId: project.id,
+    limit: 50,
+  });
 
   return (
     <>
@@ -34,6 +45,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
         ]}
         action={
           <div className="flex items-center gap-2">
+            <Presence targetTable="projects" targetId={project.id} currentUser={presenceUser} />
             <ProjectStatusToggle projectId={project.id} status={project.status} />
             <Button href={`/console/projects/${projectId}/edit`} size="sm" variant="secondary">
               Edit
@@ -77,6 +89,12 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           >
             /p/{project.slug}/overview →
           </Link>
+        </div>
+
+        {/* Collab rail — Phase 2.1 (CommentThread) drops in alongside activity. */}
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div aria-label="Comments">{/* CommentThread (P2.1) lands here */}</div>
+          <ActivityDrawer targetTable="projects" targetId={project.id} initial={activity} />
         </div>
       </div>
     </>

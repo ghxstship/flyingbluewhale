@@ -21,7 +21,9 @@ export function AddDomainForm() {
           <option value="email">Email</option>
         </select>
       </div>
-      <Button type="submit" loading={pending}>Add</Button>
+      <Button type="submit" loading={pending}>
+        Add
+      </Button>
       {state && "error" in state && state.error && (
         <p className="basis-full text-xs text-[var(--color-error)]">{state.error}</p>
       )}

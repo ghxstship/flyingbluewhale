@@ -11,11 +11,7 @@ export default async function BrandingPage({ params }: { params: Promise<{ proje
   if (!hasSupabase) notFound();
   const { projectId } = await params;
   const supabase = await createClient();
-  const { data: project } = await supabase
-    .from("projects")
-    .select("id, name, branding")
-    .eq("id", projectId)
-    .single();
+  const { data: project } = await supabase.from("projects").select("id, name, branding").eq("id", projectId).single();
 
   if (!project) notFound();
   const branding = safeBranding(project.branding);

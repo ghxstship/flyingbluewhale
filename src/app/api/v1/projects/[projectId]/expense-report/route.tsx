@@ -10,8 +10,14 @@ import { log } from "@/lib/log";
 
 const ParamsSchema = z.object({ projectId: z.string().uuid() });
 const QuerySchema = z.object({
-  from: z.string().regex(/^\d{4}-\d{2}-\d{2}/).optional(),
-  to: z.string().regex(/^\d{4}-\d{2}-\d{2}/).optional(),
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}/)
+    .optional(),
+  to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}/)
+    .optional(),
 });
 
 export const dynamic = "force-dynamic";
@@ -21,7 +27,10 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   const p = ParamsSchema.safeParse({ projectId });
   if (!p.success) return apiError("bad_request", "Invalid project id");
   const url = new URL(req.url);
-  const q = QuerySchema.safeParse({ from: url.searchParams.get("from") ?? undefined, to: url.searchParams.get("to") ?? undefined });
+  const q = QuerySchema.safeParse({
+    from: url.searchParams.get("from") ?? undefined,
+    to: url.searchParams.get("to") ?? undefined,
+  });
   if (!q.success) return apiError("bad_request", "Invalid query parameters");
 
   const guard = await withAuth(async (session) => ({ session }));
@@ -43,9 +52,24 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   const rangeTo = q.data.to ?? new Date().toISOString().slice(0, 10);
 
   const [{ data: expenses }, { data: times }, { data: miles }, { data: org }] = await Promise.all([
-    supabase.from("expenses").select("description, category, spent_at, amount_cents, currency").eq("project_id", project.id).gte("spent_at", rangeFrom).lte("spent_at", rangeTo),
-    supabase.from("time_entries").select("duration_minutes, started_at, user_id").eq("project_id", project.id).gte("started_at", rangeFrom).lte("started_at", rangeTo),
-    supabase.from("mileage_logs").select("miles, rate_cents, logged_on, user_id").eq("project_id", project.id).gte("logged_on", rangeFrom).lte("logged_on", rangeTo),
+    supabase
+      .from("expenses")
+      .select("description, category, spent_at, amount_cents, currency")
+      .eq("project_id", project.id)
+      .gte("spent_at", rangeFrom)
+      .lte("spent_at", rangeTo),
+    supabase
+      .from("time_entries")
+      .select("duration_minutes, started_at, user_id")
+      .eq("project_id", project.id)
+      .gte("started_at", rangeFrom)
+      .lte("started_at", rangeTo),
+    supabase
+      .from("mileage_logs")
+      .select("miles, rate_cents, logged_on, user_id")
+      .eq("project_id", project.id)
+      .gte("logged_on", rangeFrom)
+      .lte("logged_on", rangeTo),
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
   ]);
   if (!org) return apiError("internal", "Missing organization row");
@@ -101,7 +125,10 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
     });
     return NextResponse.redirect(signedUrl, 302);
   } catch (e) {
-    log.error("expense_report.compile_failed", { project_id: project.id, err: e instanceof Error ? e.message : String(e) });
+    log.error("expense_report.compile_failed", {
+      project_id: project.id,
+      err: e instanceof Error ? e.message : String(e),
+    });
     return apiError("internal", "Failed to render expense report");
   }
 }

@@ -24,7 +24,8 @@ export async function createTimeEntryAction(_: State, fd: FormData): Promise<Sta
   const ended = parsed.data.ended_at ? new Date(parsed.data.ended_at) : null;
   const duration = ended ? Math.max(0, Math.round((ended.getTime() - started.getTime()) / 60000)) : null;
   const { error } = await supabase.from("time_entries").insert({
-    org_id: session.orgId, user_id: session.userId,
+    org_id: session.orgId,
+    user_id: session.userId,
     started_at: started.toISOString(),
     ended_at: ended?.toISOString() ?? null,
     duration_minutes: duration,

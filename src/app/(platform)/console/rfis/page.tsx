@@ -2,6 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -18,6 +19,7 @@ type Row = {
   status: string;
   priority: string;
   due_at: string | null;
+  closed_at: string | null;
   asked_at: string;
   project: { name: string | null } | null;
   ball_in_court: { name: string | null; email: string | null } | null;
@@ -58,7 +60,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("rfis")
     .select(
-      "id, code, subject, category, status, priority, due_at, asked_at, project:project_id(name), ball_in_court:ball_in_court_id(name, email)",
+      "id, code, subject, category, status, priority, due_at, closed_at, asked_at, project:project_id(name), ball_in_court:ball_in_court_id(name, email)",
     )
     .eq("org_id", session.orgId)
     .order("asked_at", { ascending: false })
@@ -136,7 +138,12 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              render: (r) => (
+                <span className="inline-flex items-center gap-2">
+                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>
+                  <DueDateBadge dueAt={r.due_at} closedAt={r.closed_at} status={r.status} iconOnly size="sm" />
+                </span>
+              ),
               accessor: (r) => r.status ?? null,
               filterable: true,
               groupable: true,

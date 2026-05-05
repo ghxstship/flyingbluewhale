@@ -42,7 +42,10 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
   const parsed = ParamsSchema.safeParse({ id });
   if (!parsed.success) return apiError("bad_request", "Invalid deliverable id");
   const url = new URL(req.url);
-  const q = QuerySchema.safeParse({ from: url.searchParams.get("from") ?? undefined, to: url.searchParams.get("to") ?? undefined });
+  const q = QuerySchema.safeParse({
+    from: url.searchParams.get("from") ?? undefined,
+    to: url.searchParams.get("to") ?? undefined,
+  });
   if (!q.success) return apiError("bad_request", "Invalid query parameters");
 
   return withAuth(async (session) => {
@@ -60,17 +63,19 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
 
     // Pick the first + last by default; accept explicit ISO timestamps via
     // ?from= and ?to= for point-in-time comparison.
-    const first = q.data.from ? entries.find((e) => e.at >= q.data.from!) ?? entries[0] : entries[0];
-    const last = q.data.to ? entries.slice().reverse().find((e) => e.at <= q.data.to!) ?? entries[entries.length - 1] : entries[entries.length - 1];
+    const first = q.data.from ? (entries.find((e) => e.at >= q.data.from!) ?? entries[0]) : entries[0];
+    const last = q.data.to
+      ? (entries
+          .slice()
+          .reverse()
+          .find((e) => e.at <= q.data.to!) ?? entries[entries.length - 1])
+      : entries[entries.length - 1];
 
     return apiOk({
       versions: entries.map((e) => ({ at: e.at })),
       from: first.at,
       to: last.at,
-      diff: diff(
-        (first.before ?? first.after) as Jsonish | null,
-        (last.after ?? last.before) as Jsonish | null,
-      ),
+      diff: diff((first.before ?? first.after) as Jsonish | null, (last.after ?? last.before) as Jsonish | null),
     });
   });
 }

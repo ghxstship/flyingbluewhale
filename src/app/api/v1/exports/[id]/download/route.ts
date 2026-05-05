@@ -25,16 +25,14 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
       return apiError("bad_request", "Run is not complete");
     }
     // Signed URLs for storage require service role on private buckets
-      if (!isServiceClientAvailable()) {
-        return apiError(
-          "service_unavailable",
-          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
-        );
-      }
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
     const svc = createServiceClient();
-    const { data: signed, error: signErr } = await svc.storage
-      .from("exports")
-      .createSignedUrl(run.file_path, 600);
+    const { data: signed, error: signErr } = await svc.storage.from("exports").createSignedUrl(run.file_path, 600);
     if (signErr) return apiError("internal", signErr.message);
     return apiOk({ signedUrl: signed?.signedUrl ?? null });
   });

@@ -188,6 +188,10 @@ export const platformNav: NavGroup[] = [
     label: "People",
     items: [
       { label: "Directory", href: "/console/people", icon: "Users" },
+      // Teams added 2026-05 (SmartSuite parity Phase 5.1) — UsersRound
+      // intentionally shared with Delegations: both are "named groups of
+      // people you can address as one".
+      { label: "Teams", href: "/console/people/teams", icon: "UsersRound" },
       { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
       { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
       { label: "Delegations", href: "/console/participants/delegations", icon: "UsersRound" },

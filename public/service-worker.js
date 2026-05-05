@@ -61,3 +61,36 @@ self.addEventListener("fetch", (event) => {
     }),
   );
 });
+
+// Web Push (Phase 2.3) — display a notification on incoming push.
+self.addEventListener("push", (event) => {
+  if (!event.data) return;
+  let payload;
+  try {
+    payload = event.data.json();
+  } catch {
+    payload = { title: "LYTEHAUS", body: event.data.text() };
+  }
+  const title = payload.title || "LYTEHAUS";
+  const options = {
+    body: payload.body || "",
+    icon: payload.icon || "/icon-192.png",
+    badge: payload.badge || "/icon-192.png",
+    tag: payload.tag,
+    data: payload.data || {},
+  };
+  if (payload.url) options.data.url = payload.url;
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || "/";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((tabs) => {
+      const tab = tabs.find((t) => t.url.includes(url));
+      if (tab) return tab.focus();
+      return self.clients.openWindow(url);
+    }),
+  );
+});

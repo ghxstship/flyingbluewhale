@@ -18,13 +18,7 @@ import { useTheme } from "@/app/theme/ThemeProvider";
  * Signup upsell copy at the bottom is intentionally soft; the marketing
  * bet is that showing product personality earns the click later.
  */
-export function ThemeGallerySheet({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: (v: boolean) => void;
-}) {
+export function ThemeGallerySheet({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   // Telemetry — fire when the user lands on a new theme via this sheet.
   // We watch `theme` from the provider (not the sheet's own state) so we
   // catch clicks inside AppearanceGallery without plumbing a callback.
@@ -44,8 +38,8 @@ export function ThemeGallerySheet({
         <SheetHeader>
           <SheetTitle>Pick a design theme</SheetTitle>
           <SheetDescription>
-            Eight fully-realized themes. Your choice applies instantly across every page —
-            no reload, no signup. We&apos;ll remember it on this device.
+            Eight fully-realized themes. Your choice applies instantly across every page — no reload, no signup.
+            We&apos;ll remember it on this device.
           </SheetDescription>
         </SheetHeader>
 
@@ -55,8 +49,11 @@ export function ThemeGallerySheet({
 
         <div className="mt-6 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 text-sm">
           <p className="text-[var(--foreground)]">
-            Like what you see? <Link href="/signup" className="font-medium underline">Create an account</Link> to
-            sync themes across all your devices.
+            Like what you see?{" "}
+            <Link href="/signup" className="font-medium underline">
+              Create an account
+            </Link>{" "}
+            to sync themes across all your devices.
           </p>
         </div>
       </SheetContent>

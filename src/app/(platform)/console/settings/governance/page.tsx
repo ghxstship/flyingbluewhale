@@ -35,11 +35,7 @@ export default async function GovernancePage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle="Governance"
-      />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Governance" />
       <div className="page-content max-w-4xl space-y-6">
         <section className="surface p-5">
           <div className="flex items-center justify-between">
@@ -65,9 +61,7 @@ export default async function GovernancePage() {
                 (committees ?? []).map((c) => (
                   <tr key={c.id}>
                     <td>{c.name}</td>
-                    <td className="text-xs text-[var(--text-secondary)]">
-                      {c.cadence?.replace("_", " ") ?? "—"}
-                    </td>
+                    <td className="text-xs text-[var(--text-secondary)]">{c.cadence?.replace("_", " ") ?? "—"}</td>
                     <td className="text-xs text-[var(--text-muted)]">{c.charter ?? "—"}</td>
                   </tr>
                 ))
@@ -101,11 +95,9 @@ export default async function GovernancePage() {
                 (policies ?? []).map((p) => (
                   <tr key={p.id}>
                     <td>{p.name}</td>
-                    <td className="text-xs capitalize text-[var(--text-secondary)]">{p.category}</td>
+                    <td className="text-xs text-[var(--text-secondary)] capitalize">{p.category}</td>
                     <td>
-                      <Badge variant={p.status === "active" ? "success" : "muted"}>
-                        {p.status}
-                      </Badge>
+                      <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>
                     </td>
                     <td className="font-mono text-xs">
                       {p.next_review_at ? new Date(p.next_review_at).toLocaleDateString() : "—"}

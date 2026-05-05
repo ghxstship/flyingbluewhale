@@ -51,9 +51,7 @@ export async function compileAndStore(args: {
   }
 
   const downloadFilename =
-    args.contentDisposition === "attachment" && args.filenameForAttachment
-      ? args.filenameForAttachment
-      : undefined;
+    args.contentDisposition === "attachment" && args.filenameForAttachment ? args.filenameForAttachment : undefined;
 
   const { data, error: urlErr } = await svc.storage
     .from(args.bucket)

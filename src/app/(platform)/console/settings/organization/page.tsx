@@ -8,19 +8,38 @@ import { formatDate } from "@/lib/i18n/format";
 export const dynamic = "force-dynamic";
 
 export default async function OrgSettingsPage() {
-  if (!hasSupabase) return <><ModuleHeader title="Organization" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader title="Organization" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
   const supabase = await createClient();
   const { data: org } = await supabase.from("orgs").select("*").eq("id", session.orgId).maybeSingle();
-  if (!org) return <><ModuleHeader title="Organization" /><div className="page-content"><div className="surface p-6 text-sm">Organization not found.</div></div></>;
+  if (!org)
+    return (
+      <>
+        <ModuleHeader title="Organization" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Organization not found.</div>
+        </div>
+      </>
+    );
 
-  const { count: members } = await supabase.from("memberships").select("*", { count: "exact", head: true }).eq("org_id", session.orgId);
+  const { count: members } = await supabase
+    .from("memberships")
+    .select("*", { count: "exact", head: true })
+    .eq("org_id", session.orgId);
 
   return (
     <>
       <ModuleHeader eyebrow="Settings" title={org.name} subtitle={`${members ?? 0} members · ${org.tier}`} />
-      <div className="page-content space-y-6 max-w-3xl">
-        <div className="surface p-5 space-y-3">
+      <div className="page-content max-w-3xl space-y-6">
+        <div className="surface space-y-3 p-5">
           <Field label="Name" value={org.name} />
           <Field label="Slug" value={org.slug} mono />
           <Field label="Tier" value={<Badge variant="brand">{org.tier}</Badge>} />
@@ -34,7 +53,7 @@ export default async function OrgSettingsPage() {
 function Field({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
     <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 last:border-none last:pb-0">
-      <div className="text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]">{label}</div>
+      <div className="text-xs font-medium tracking-wide text-[var(--text-muted)] uppercase">{label}</div>
       <div className={`text-sm ${mono ? "font-mono" : ""}`}>{value}</div>
     </div>
   );

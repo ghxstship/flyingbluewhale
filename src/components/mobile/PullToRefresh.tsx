@@ -60,12 +60,7 @@ export function PullToRefresh({
   const ratio = Math.min(1, pull / TRIGGER_PX);
 
   return (
-    <div
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      className="relative"
-    >
+    <div onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} className="relative">
       <div
         aria-live="polite"
         className="pointer-events-none absolute start-1/2 top-2 z-10 -translate-x-1/2 transition-opacity"

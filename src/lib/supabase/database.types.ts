@@ -5080,6 +5080,50 @@ export type Database = {
           },
         ]
       }
+      org_event_log_destinations: {
+        Row: {
+          config: Json
+          created_at: string
+          destination: string
+          enabled: boolean
+          id: string
+          last_published_at: string | null
+          last_published_id: string | null
+          org_id: string
+          secret_hash: string | null
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          destination: string
+          enabled?: boolean
+          id?: string
+          last_published_at?: string | null
+          last_published_id?: string | null
+          org_id: string
+          secret_hash?: string | null
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          destination?: string
+          enabled?: boolean
+          id?: string
+          last_published_at?: string | null
+          last_published_id?: string | null
+          org_id?: string
+          secret_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_event_log_destinations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       org_integrations: {
         Row: {
           config: Json
@@ -5117,6 +5161,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "org_integrations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      org_ip_allowlist: {
+        Row: {
+          cidr: string
+          created_at: string
+          enabled: boolean
+          id: string
+          label: string | null
+          org_id: string
+        }
+        Insert: {
+          cidr: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          label?: string | null
+          org_id: string
+        }
+        Update: {
+          cidr?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          label?: string | null
+          org_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_ip_allowlist_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -5230,6 +5309,54 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "org_roles_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      org_scim_tokens: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          enabled: boolean
+          id: string
+          last_used_at: string | null
+          name: string
+          org_id: string
+          token_hash: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          id?: string
+          last_used_at?: string | null
+          name: string
+          org_id: string
+          token_hash: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          id?: string
+          last_used_at?: string | null
+          name?: string
+          org_id?: string
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_scim_tokens_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "org_scim_tokens_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -9140,6 +9267,93 @@ export type Database = {
             columns: ["xpms_atom_id"]
             isOneToOne: false
             referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_members: {
+        Row: {
+          added_at: string
+          role: string
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string
+          role?: string
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string
+          role?: string
+          team_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          org_id: string
+          owner_id: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          org_id: string
+          owner_id?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          owner_id?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teams_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]

@@ -5,7 +5,9 @@ export default function NewExpensePage() {
   return (
     <>
       <ModuleHeader eyebrow="Finance" title="Log Expense" />
-      <div className="page-content max-w-xl"><NewExpenseForm /></div>
+      <div className="page-content max-w-xl">
+        <NewExpenseForm />
+      </div>
     </>
   );
 }

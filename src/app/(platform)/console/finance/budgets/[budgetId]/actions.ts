@@ -29,11 +29,7 @@ export async function reconcileBudget(formData: FormData) {
     projectId: budget.project_id,
     category: budget.category,
   });
-  await supabase
-    .from("budgets")
-    .update({ spent_cents: computed })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
+  await supabase.from("budgets").update({ spent_cents: computed }).eq("id", id).eq("org_id", session.orgId);
   revalidatePath("/console/finance/budgets");
   revalidatePath(`/console/finance/budgets/${id}`);
 }
@@ -43,21 +39,14 @@ export async function computeBudgetSpend(
   args: { orgId: string; projectId: string | null; category: string | null },
 ): Promise<number> {
   // Expenses (any status — operators reconcile on actuals, not approvals).
-  let q = supabase
-    .from("expenses")
-    .select("amount_cents")
-    .eq("org_id", args.orgId);
+  let q = supabase.from("expenses").select("amount_cents").eq("org_id", args.orgId);
   if (args.projectId) q = q.eq("project_id", args.projectId);
   if (args.category) q = q.eq("category", args.category);
   const { data: expenses } = await q;
   const expensesTotal = (expenses ?? []).reduce((s, r) => s + (r.amount_cents ?? 0), 0);
 
   // Paid invoices count as spend too when categorized.
-  let iq = supabase
-    .from("invoices")
-    .select("amount_cents")
-    .eq("org_id", args.orgId)
-    .eq("status", "paid");
+  let iq = supabase.from("invoices").select("amount_cents").eq("org_id", args.orgId).eq("status", "paid");
   if (args.projectId) iq = iq.eq("project_id", args.projectId);
   const { data: invoices } = await iq;
   const invoicesTotal = (invoices ?? []).reduce((s, r) => s + (r.amount_cents ?? 0), 0);

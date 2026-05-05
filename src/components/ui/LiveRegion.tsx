@@ -48,13 +48,7 @@ export function useAnnounce(): AnnouncementCtx {
 }
 
 /** Standalone live region — useful where the provider isn't mounted. */
-export function LiveRegion({
-  message,
-  priority = "polite",
-}: {
-  message: string;
-  priority?: Priority;
-}) {
+export function LiveRegion({ message, priority = "polite" }: { message: string; priority?: Priority }) {
   return (
     <div
       role={priority === "assertive" ? "alert" : "status"}

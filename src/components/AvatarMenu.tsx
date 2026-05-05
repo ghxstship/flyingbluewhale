@@ -21,22 +21,14 @@ import {
  * actions, the Settings entry-point, help/shortcuts, and Sign out. Settings
  * has its own 2-col layout under `/console/settings`.
  */
-export function AvatarMenu({
-  name,
-  email,
-  src,
-}: {
-  name: string;
-  email?: string | null;
-  src?: string | null;
-}) {
+export function AvatarMenu({ name, email, src }: { name: string; email?: string | null; src?: string | null }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
           type="button"
           aria-label="Open account menu"
-          className="rounded-full outline-none ring-offset-2 ring-offset-[var(--background)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)]"
+          className="rounded-full ring-offset-2 ring-offset-[var(--background)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)]"
         >
           <Avatar name={name} src={src} size="sm" />
         </button>
@@ -44,9 +36,7 @@ export function AvatarMenu({
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuLabel className="px-2 py-1.5">
           <div className="text-sm font-medium text-[var(--text-primary)]">{name}</div>
-          {email ? (
-            <div className="truncate text-xs text-[var(--text-muted)]">{email}</div>
-          ) : null}
+          {email ? <div className="truncate text-xs text-[var(--text-muted)]">{email}</div> : null}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>

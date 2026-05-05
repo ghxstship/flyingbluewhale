@@ -19,11 +19,7 @@ type ToastOpts = {
   dismissible?: boolean;
 };
 
-function fire(
-  kind: "default" | "success" | "error" | "warning" | "info",
-  message: string,
-  opts?: ToastOpts,
-) {
+function fire(kind: "default" | "success" | "error" | "warning" | "info", message: string, opts?: ToastOpts) {
   const fn =
     kind === "success"
       ? sonnerToast.success
@@ -50,7 +46,7 @@ export function useToast() {
     info: (message: string, opts?: ToastOpts) => fire("info", message, opts),
     message: (message: string, opts?: ToastOpts) => fire("default", message, opts),
     dismiss: (id?: string | number) => sonnerToast.dismiss(id),
-    promise: <T,>(p: Promise<T>, msgs: { loading: string; success: string; error: string }) =>
+    promise: <T>(p: Promise<T>, msgs: { loading: string; success: string; error: string }) =>
       sonnerToast.promise(p, msgs),
   };
 }

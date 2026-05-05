@@ -57,7 +57,9 @@ export function CardBody({ children, className = "" }: { children: ReactNode; cl
 
 export function CardFooter({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`flex items-center justify-between gap-2 border-t border-[var(--border-color)] px-5 py-3 ${className}`.trim()}>
+    <div
+      className={`flex items-center justify-between gap-2 border-t border-[var(--border-color)] px-5 py-3 ${className}`.trim()}
+    >
       {children}
     </div>
   );

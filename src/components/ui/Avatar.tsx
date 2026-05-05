@@ -34,12 +34,14 @@ function hashName(name: string): number {
 }
 
 function initialsOf(name: string): string {
-  return name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((p) => p[0]?.toUpperCase() ?? "")
-    .join("") || "?";
+  return (
+    name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase() ?? "")
+      .join("") || "?"
+  );
 }
 
 export function Avatar({
@@ -67,13 +69,7 @@ export function Avatar({
       aria-label={displayName}
     >
       <span className="inline-flex h-full w-full overflow-hidden rounded-full">
-        {src && (
-          <AvatarPrimitive.Image
-            src={src}
-            alt={displayName}
-            className="h-full w-full object-cover"
-          />
-        )}
+        {src && <AvatarPrimitive.Image src={src} alt={displayName} className="h-full w-full object-cover" />}
         <AvatarPrimitive.Fallback
           className="flex h-full w-full items-center justify-center font-medium"
           style={{ background: color.bg, color: color.fg }}
@@ -84,7 +80,7 @@ export function Avatar({
       {presence && (
         <span
           aria-label={`presence: ${presence}`}
-          className={`absolute bottom-0 end-0 rounded-full ring-2 ring-[var(--background)] ${presenceSize} ${PRESENCE[presence]}`}
+          className={`absolute end-0 bottom-0 rounded-full ring-2 ring-[var(--background)] ${presenceSize} ${PRESENCE[presence]}`}
         />
       )}
     </AvatarPrimitive.Root>

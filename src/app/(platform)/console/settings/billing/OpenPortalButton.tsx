@@ -26,13 +26,7 @@ export function OpenPortalButton({ disabled }: { disabled?: boolean }) {
   }
 
   return (
-    <Button
-      type="button"
-      variant="primary"
-      onClick={open}
-      disabled={disabled || loading}
-      loading={loading}
-    >
+    <Button type="button" variant="primary" onClick={open} disabled={disabled || loading} loading={loading}>
       Open billing portal
     </Button>
   );

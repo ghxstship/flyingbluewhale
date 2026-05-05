@@ -4,7 +4,6 @@ import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-
 /** /api/v1/risks — RAID register (WF-006). */
 
 const LIKELIHOOD = ["rare", "unlikely", "possible", "likely", "almost_certain"] as const;
@@ -28,7 +27,9 @@ export async function GET() {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("risks")
-      .select("id, kind, title, category, likelihood, impact, inherent_score, residual_score, status, owner_id, due_on, created_at")
+      .select(
+        "id, kind, title, category, likelihood, impact, inherent_score, residual_score, status, owner_id, due_on, created_at",
+      )
       .eq("org_id", session.orgId)
       .order("inherent_score", { ascending: false })
       .limit(500);

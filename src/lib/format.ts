@@ -6,7 +6,11 @@ export function timeAgo(date: Date | string | number | null | undefined): string
 }
 
 export function slugify(s: string, max = 48) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, max);
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, max);
 }
 
 export function dollarsToCents(v: string | number | undefined | null): number {
@@ -18,6 +22,8 @@ export function dollarsToCents(v: string | number | undefined | null): number {
 
 export function generateNumber(prefix: string) {
   const y = new Date().getFullYear().toString().slice(-2);
-  const m = Math.floor(Math.random() * 99999).toString().padStart(5, "0");
+  const m = Math.floor(Math.random() * 99999)
+    .toString()
+    .padStart(5, "0");
   return `${prefix}-${y}${m}`;
 }

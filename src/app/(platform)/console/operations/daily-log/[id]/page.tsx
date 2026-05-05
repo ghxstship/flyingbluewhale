@@ -2,6 +2,10 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { ConversationPanel } from "@/components/ConversationPanel";
+import { Presence } from "@/components/collab/Presence";
+import { getPresenceUser } from "@/components/collab/getPresenceUser";
+import { ActivityDrawer } from "@/components/collab/activity";
+import { getActivityForRecord } from "@/lib/db/activity";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -38,6 +42,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .eq("id", id)
     .maybeSingle();
   if (!log) notFound();
+  const presenceUser = await getPresenceUser(session);
+  const activity = await getActivityForRecord({
+    orgId: session.orgId,
+    targetTable: "daily_logs",
+    targetId: id,
+    limit: 50,
+  });
 
   const [{ data: manpower }, { data: equipment }, { data: deliveries }, { data: visitors }] = await Promise.all([
     supabase.from("daily_log_manpower").select("*").eq("daily_log_id", id).order("trade"),
@@ -59,6 +70,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={projectName}
         action={
           <div className="flex items-center gap-2">
+            <Presence targetTable="daily_logs" targetId={id} currentUser={presenceUser} />
             <Badge variant={STATUS_TONE[log.status] ?? "muted"}>{log.status}</Badge>
             {log.status === "draft" && (
               <StatusForm action={transitionDailyLog.bind(null, id, "submitted")} label="Submit" />
@@ -131,7 +143,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           )}
         </section>
 
-        <ConversationPanel orgId={session.orgId} recordType="daily_log" recordId={id} />
+        <div className="grid gap-4 lg:grid-cols-2">
+          <ConversationPanel orgId={session.orgId} recordType="daily_log" recordId={id} />
+          <ActivityDrawer targetTable="daily_logs" targetId={id} initial={activity} />
+        </div>
       </div>
     </>
   );

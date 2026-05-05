@@ -36,11 +36,7 @@ export default async function IntegrationsPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle="Integrations"
-      />
+      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Integrations" />
       <div className="page-content">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {KNOWN_CONNECTORS.map((c) => {
@@ -50,31 +46,21 @@ export default async function IntegrationsPage() {
               <div key={c.id} className="surface flex flex-col p-5">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">{c.name}</div>
-                  {isInstalled ? (
-                    <Badge variant="success">Connected</Badge>
-                  ) : (
-                    <Badge variant="muted">Available</Badge>
-                  )}
+                  {isInstalled ? <Badge variant="success">Connected</Badge> : <Badge variant="muted">Available</Badge>}
                 </div>
                 <p className="mt-2 text-xs text-[var(--text-muted)]">{c.desc}</p>
                 <div className="mt-4 flex gap-2">
                   {isInstalled && dbStatus ? (
                     <form action={uninstallConnector}>
                       <input type="hidden" name="connector" value={c.id} />
-                      <button
-                        type="submit"
-                        className="text-xs text-[var(--color-error)] hover:underline"
-                      >
+                      <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
                         Disconnect
                       </button>
                     </form>
                   ) : !envProof[c.id] ? (
                     <form action={installConnector}>
                       <input type="hidden" name="connector" value={c.id} />
-                      <button
-                        type="submit"
-                        className="text-xs font-medium text-[var(--org-primary)] hover:underline"
-                      >
+                      <button type="submit" className="text-xs font-medium text-[var(--org-primary)] hover:underline">
                         Connect
                       </button>
                     </form>

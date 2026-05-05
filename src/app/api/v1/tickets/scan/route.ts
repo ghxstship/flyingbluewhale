@@ -5,9 +5,7 @@ import { scanTicket } from "@/lib/db/tickets";
 
 const ScanInput = z.object({
   code: z.string().min(1),
-  location: z
-    .object({ lat: z.number(), lng: z.number(), accuracy: z.number().optional() })
-    .optional(),
+  location: z.object({ lat: z.number(), lng: z.number(), accuracy: z.number().optional() }).optional(),
 });
 
 export async function POST(req: Request) {

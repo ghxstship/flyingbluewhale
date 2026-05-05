@@ -5,14 +5,23 @@ import { createProject } from "@/lib/db/projects";
 import { listOrgScopedPage } from "@/lib/db/resource";
 
 const slugify = (s: string) =>
-  s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48);
 
 const CreateProject = z.object({
   name: z.string().min(1).max(120),
   description: z.string().max(2000).optional(),
   startDate: z.string().date().optional(),
   endDate: z.string().date().optional(),
-  slug: z.string().min(1).max(48).regex(/^[a-z0-9-]+$/).optional(),
+  slug: z
+    .string()
+    .min(1)
+    .max(48)
+    .regex(/^[a-z0-9-]+$/)
+    .optional(),
 });
 
 export async function GET(req: Request) {

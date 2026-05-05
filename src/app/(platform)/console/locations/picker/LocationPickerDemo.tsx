@@ -22,9 +22,7 @@ export function LocationPickerDemo() {
 
   return (
     <div className="surface space-y-2 p-5">
-      <div className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--text-muted)]">
-        Try it
-      </div>
+      <div className="text-xs font-medium tracking-[0.18em] text-[var(--text-muted)] uppercase">Try it</div>
       <Combobox
         optionsLoader={loader}
         value={value}

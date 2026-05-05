@@ -4,7 +4,6 @@ import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-
 /** /api/v1/shifts/checkin — COMPVSS shift T&A (WF-197). */
 
 const PostSchema = z.object({

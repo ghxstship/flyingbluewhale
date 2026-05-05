@@ -11,6 +11,8 @@ export { Card, CardHeader, CardBody, CardFooter } from "./Card";
 export { MetricCard } from "./MetricCard";
 export { EmptyState } from "./EmptyState";
 export { StatusBadge } from "./StatusBadge";
+export { DueDateBadge } from "./DueDateBadge";
+export type { DueDateBadgeProps, DueDateStatus } from "./DueDateBadge";
 export {
   Dialog,
   DialogTrigger,
@@ -24,8 +26,14 @@ export {
 export { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent, Hint } from "./Tooltip";
 export { LiveRegion, LiveRegionProvider, useAnnounce } from "./LiveRegion";
 export {
-  Select, SelectValue, SelectGroup, SelectLabel,
-  SelectTrigger, SelectContent, SelectItem, SelectSeparator,
+  Select,
+  SelectValue,
+  SelectGroup,
+  SelectLabel,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectSeparator,
 } from "./Select";
 export { Checkbox, LabeledCheckbox } from "./Checkbox";
 export { Switch, LabeledSwitch } from "./Switch";
@@ -33,15 +41,36 @@ export { RadioGroup, RadioGroupItem, LabeledRadioItem } from "./RadioGroup";
 export { Tabs, TabsList, TabsTrigger, TabsContent, SegmentedControl, SegmentedControlItem } from "./Tabs";
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./Accordion";
 export {
-  Sheet, SheetTrigger, SheetClose, SheetContent,
-  SheetHeader, SheetTitle, SheetDescription, SheetFooter,
+  Sheet,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
 } from "./Sheet";
 export { Combobox, MultiCombobox, type ComboboxOption } from "./Combobox";
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from "./Popover";
 export { DatePicker } from "./DatePicker";
 export {
-  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioItem,
-  DropdownMenuRadioGroup, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut,
-  DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuGroup, DropdownMenuPortal,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
 } from "./DropdownMenu";
+export { PhoneField, toE164 } from "./PhoneField";
+export type { PhoneType, PhoneValue, PhoneFieldProps } from "./PhoneField";
+export { AddressField, coerceAddress } from "./AddressField";
+export type { AddressValue, AddressFieldProps } from "./AddressField";

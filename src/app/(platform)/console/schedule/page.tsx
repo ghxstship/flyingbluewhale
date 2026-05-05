@@ -6,7 +6,8 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
-import { ScheduleCalendar } from "./ScheduleCalendar";
+import type { CalendarEvent } from "@/components/views/CalendarView";
+import { ScheduleCalendarView } from "./ScheduleCalendarView";
 import type { EventRow } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -28,13 +29,16 @@ export default async function SchedulePage() {
     ascending: true,
   })) as EventRow[];
 
-  // Hand the calendar a serializable shape (drop createdBy etc.).
-  const calendarEvents = rows.map((e) => ({
+  // Hand the generic <CalendarView> a serializable, library-agnostic shape.
+  // Status maps to the abstract `tone` palette so the component stays
+  // domain-free.
+  const calendarEvents: CalendarEvent[] = rows.map((e) => ({
     id: e.id,
-    name: e.name,
-    startsAt: e.starts_at,
-    endsAt: e.ends_at,
-    status: e.status,
+    title: e.name,
+    start: e.starts_at,
+    end: e.ends_at,
+    tone: toneForStatus(e.status),
+    href: `/console/events/${e.id}`,
   }));
 
   return (
@@ -53,7 +57,7 @@ export default async function SchedulePage() {
         }
       />
       <div className="page-content space-y-5">
-        <ScheduleCalendar events={calendarEvents} />
+        <ScheduleCalendarView events={calendarEvents} />
 
         <DataTable<EventRow>
           rows={rows}
@@ -87,4 +91,21 @@ export default async function SchedulePage() {
       </div>
     </>
   );
+}
+
+/** Map domain event status -> abstract calendar tone. */
+function toneForStatus(status: string): CalendarEvent["tone"] {
+  switch (status) {
+    case "confirmed":
+    case "complete":
+      return "success";
+    case "live":
+      return "info";
+    case "cancelled":
+      return "error";
+    case "draft":
+    case "scheduled":
+    default:
+      return "warn";
+  }
 }

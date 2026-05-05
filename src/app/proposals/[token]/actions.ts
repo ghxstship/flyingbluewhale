@@ -18,7 +18,9 @@ export type SignState = { error?: string; ok?: { hash: string; signedAt: string 
 function randomRef() {
   const ts = Date.now().toString(36).toUpperCase();
   const rand = Array.from(crypto.getRandomValues(new Uint8Array(6)))
-    .map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+    .toUpperCase();
   return `SIG-${ts}-${rand}`;
 }
 
@@ -50,14 +52,17 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
     signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
   });
 
-  await supabase.from("proposals").update({
-    signed_at: signedAt,
-    signer_name: parsed.data.name,
-    signer_email: parsed.data.email || null,
-    signature_hash: hash,
-    signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
-    status: "signed",
-  }).eq("id", link.proposal_id);
+  await supabase
+    .from("proposals")
+    .update({
+      signed_at: signedAt,
+      signer_name: parsed.data.name,
+      signer_email: parsed.data.email || null,
+      signature_hash: hash,
+      signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
+      status: "signed",
+    })
+    .eq("id", link.proposal_id);
 
   await supabase.from("proposal_events").insert({
     proposal_id: link.proposal_id,

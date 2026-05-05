@@ -9,14 +9,24 @@ import { formatMoney } from "@/lib/i18n/format";
 export const dynamic = "force-dynamic";
 
 export default async function FinanceHub() {
-  if (!hasSupabase) return <><ModuleHeader title="Finance" /><div className="page-content"><div className="surface p-6 text-sm">Configure Supabase.</div></div></>;
+  if (!hasSupabase)
+    return (
+      <>
+        <ModuleHeader title="Finance" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
   const session = await requireSession();
   const [invoices, expenses, budgets] = await Promise.all([
     listOrgScoped("invoices", session.orgId),
     listOrgScoped("expenses", session.orgId),
     listOrgScoped("budgets", session.orgId),
   ]);
-  const outstanding = invoices.filter((i) => ["sent", "overdue"].includes(i.status)).reduce((s, r) => s + r.amount_cents, 0);
+  const outstanding = invoices
+    .filter((i) => ["sent", "overdue"].includes(i.status))
+    .reduce((s, r) => s + r.amount_cents, 0);
   const paid = invoices.filter((i) => i.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
   const spent = expenses.reduce((s, r) => s + r.amount_cents, 0);
   const budgetTotal = budgets.reduce((s, r) => s + r.amount_cents, 0);

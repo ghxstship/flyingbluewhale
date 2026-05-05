@@ -46,9 +46,7 @@ export function ResetPasswordForm() {
           autoComplete="new-password"
           error={state?.fieldErrors?.password_confirm}
         />
-        {state?.error && !state?.fieldErrors && (
-          <Alert kind="error">{state.error}</Alert>
-        )}
+        {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <Button type="submit" size="lg" className="w-full" loading={pending}>
           {pending ? "Updating" : "Update password"}
         </Button>

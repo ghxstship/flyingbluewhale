@@ -7,7 +7,11 @@ import { createClient } from "@/lib/supabase/server";
 /** /api/v1/email-templates — Opportunity #21. */
 
 const PostSchema = z.object({
-  slug: z.string().min(1).max(120).regex(/^[a-z0-9._-]+$/),
+  slug: z
+    .string()
+    .min(1)
+    .max(120)
+    .regex(/^[a-z0-9._-]+$/),
   name: z.string().min(1).max(120),
   subject: z.string().min(1).max(200),
   bodyHtml: z.string().min(1).max(100_000),

@@ -30,9 +30,15 @@ export async function GET() {
     type Row = {
       org_id: string;
       role: string;
-      orgs: { id: string; name: string; name_override: string | null; logo_url: string | null; branding: unknown } | null;
+      orgs: {
+        id: string;
+        name: string;
+        name_override: string | null;
+        logo_url: string | null;
+        branding: unknown;
+      } | null;
     };
-    const rows = ((data as unknown) as Row[]) ?? [];
+    const rows = (data as unknown as Row[]) ?? [];
     const workspaces = rows
       .filter((r) => r.orgs)
       .map((r) => ({
@@ -61,10 +67,11 @@ export async function PATCH(req: NextRequest) {
       .maybeSingle();
     if (!member) return apiError("forbidden", "You are not a member of that workspace");
 
-    const { error } = await (supabase.from("user_preferences") as unknown as {
-      upsert: (p: Record<string, unknown>, opts?: Record<string, unknown>) => Promise<{ error: unknown }>;
-    })
-      .upsert({ user_id: session.userId, last_org_id: input.orgId }, { onConflict: "user_id" });
+    const { error } = await (
+      supabase.from("user_preferences") as unknown as {
+        upsert: (p: Record<string, unknown>, opts?: Record<string, unknown>) => Promise<{ error: unknown }>;
+      }
+    ).upsert({ user_id: session.userId, last_org_id: input.orgId }, { onConflict: "user_id" });
     if (error) return apiError("internal", (error as { message?: string }).message ?? "write failed");
 
     return apiOk({ ok: true, orgId: input.orgId });

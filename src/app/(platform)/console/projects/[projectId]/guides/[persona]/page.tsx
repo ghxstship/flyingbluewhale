@@ -9,27 +9,39 @@ import { GuideEditor } from "./GuideEditor";
 
 export const dynamic = "force-dynamic";
 
-const VALID: GuidePersona[] = ["artist","vendor","client","sponsor","guest","crew","staff","custom"];
+const VALID: GuidePersona[] = ["artist", "vendor", "client", "sponsor", "guest", "crew", "staff", "custom"];
 
-const SEED_CONFIG = JSON.stringify({
-  pageTitles: ["The Event","Schedule","Contacts","Safety"],
-  sections: [
-    { type: "overview", heading: "The event", body: "Welcome to the show. This guide covers everything you need to know.", callouts: [{ kind: "pink", title: "Heads up", body: "Read to the end before show day." }] },
-    { type: "schedule", heading: "Day-of schedule", entries: [
-      { time: "06:00", activity: "Load-in begins", location: "Dock 3" },
-      { time: "16:00", activity: "Doors", location: "Front of house" },
-      { time: "21:30", activity: "Headliner" },
-      { time: "23:30", activity: "Curfew" },
-    ]},
-    { type: "contacts", heading: "Key contacts", entries: [
-      { header: "Production" },
-      { role: "Stage manager", name: "TBD", phone: "555-0100" },
-    ]},
-    { type: "faq", heading: "FAQ", entries: [
-      { q: "Where do I park?", a: "Lot B — marked with pink cones." },
-    ]},
-  ],
-}, null, 2);
+const SEED_CONFIG = JSON.stringify(
+  {
+    pageTitles: ["The Event", "Schedule", "Contacts", "Safety"],
+    sections: [
+      {
+        type: "overview",
+        heading: "The event",
+        body: "Welcome to the show. This guide covers everything you need to know.",
+        callouts: [{ kind: "pink", title: "Heads up", body: "Read to the end before show day." }],
+      },
+      {
+        type: "schedule",
+        heading: "Day-of schedule",
+        entries: [
+          { time: "06:00", activity: "Load-in begins", location: "Dock 3" },
+          { time: "16:00", activity: "Doors", location: "Front of house" },
+          { time: "21:30", activity: "Headliner" },
+          { time: "23:30", activity: "Curfew" },
+        ],
+      },
+      {
+        type: "contacts",
+        heading: "Key contacts",
+        entries: [{ header: "Production" }, { role: "Stage manager", name: "TBD", phone: "555-0100" }],
+      },
+      { type: "faq", heading: "FAQ", entries: [{ q: "Where do I park?", a: "Lot B — marked with pink cones." }] },
+    ],
+  },
+  null,
+  2,
+);
 
 export default async function GuideEditorPage({ params }: { params: Promise<{ projectId: string; persona: string }> }) {
   const { projectId, persona: rawPersona } = await params;

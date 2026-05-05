@@ -13,13 +13,13 @@ export const CoiSchema = z.object({
   }),
   carrier: z.string(),
   policy_number: z.string(),
-  effective_date: z.string(),  // ISO yyyy-mm-dd
-  expiry_date: z.string(),     // ISO yyyy-mm-dd
+  effective_date: z.string(), // ISO yyyy-mm-dd
+  expiry_date: z.string(), // ISO yyyy-mm-dd
   coverages: z
     .array(
       z.object({
-        kind: z.string(),        // "general_liability", "auto", "umbrella", "workers_comp"
-        limit: z.string(),       // human-readable, e.g. "$1,000,000 per occurrence"
+        kind: z.string(), // "general_liability", "auto", "umbrella", "workers_comp"
+        limit: z.string(), // human-readable, e.g. "$1,000,000 per occurrence"
       }),
     )
     .default([]),

@@ -52,23 +52,34 @@ export type ProposalPdfInput = {
 };
 
 function money(cents: number, currency: string): string {
-  try { return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(cents / 100); }
-  catch { return `${currency} ${(cents / 100).toFixed(2)}`; }
+  try {
+    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(cents / 100);
+  } catch {
+    return `${currency} ${(cents / 100).toFixed(2)}`;
+  }
 }
 
 export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdfInput) {
   const statusLabel = proposal.signed_at ? "SIGNED" : (proposal.status ?? "draft").toUpperCase();
   return (
-    <PdfDocument title={`Proposal ${proposal.doc_number ?? ""} · ${proposal.title}`} author={brand.producerName} subject={proposal.title}>
+    <PdfDocument
+      title={`Proposal ${proposal.doc_number ?? ""} · ${proposal.title}`}
+      author={brand.producerName}
+      subject={proposal.title}
+    >
       <CoverPage
         brand={brand}
         eyebrow={`Proposal · ${statusLabel}`}
         title={proposal.title}
-        subtitle={[
-          proposal.doc_number ? `# ${proposal.doc_number}` : null,
-          proposal.version != null ? `v${proposal.version}` : null,
-          money(proposal.amount_cents, proposal.currency),
-        ].filter(Boolean).join(" · ") || undefined}
+        subtitle={
+          [
+            proposal.doc_number ? `# ${proposal.doc_number}` : null,
+            proposal.version != null ? `v${proposal.version}` : null,
+            money(proposal.amount_cents, proposal.currency),
+          ]
+            .filter(Boolean)
+            .join(" · ") || undefined
+        }
         classification={proposal.signed_at ? "EXECUTED" : undefined}
       />
 
@@ -77,9 +88,7 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
         <KeyValue label="Proposal #" value={proposal.doc_number ?? "—"} />
         <KeyValue label="Status" value={statusLabel} />
         <KeyValue label="Total" value={money(proposal.amount_cents, proposal.currency)} />
-        {proposal.deposit_percent != null ? (
-          <KeyValue label="Deposit" value={`${proposal.deposit_percent}%`} />
-        ) : null}
+        {proposal.deposit_percent != null ? <KeyValue label="Deposit" value={`${proposal.deposit_percent}%`} /> : null}
         {proposal.sent_at ? <KeyValue label="Sent" value={proposal.sent_at} /> : null}
         {proposal.expires_at ? <KeyValue label="Expires" value={proposal.expires_at} /> : null}
 
@@ -98,7 +107,10 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
           <>
             <SectionHeading title="Signatures" />
             {signatures.map((s, i) => (
-              <View key={i} style={{ marginBottom: 8, paddingVertical: 4, borderBottomWidth: 0.5, borderBottomColor: "#ddd" }}>
+              <View
+                key={i}
+                style={{ marginBottom: 8, paddingVertical: 4, borderBottomWidth: 0.5, borderBottomColor: "#ddd" }}
+              >
                 <Text style={{ fontWeight: 700 }}>{s.signer_name ?? "—"}</Text>
                 <Text>{[s.signer_role, s.signer_email].filter(Boolean).join(" · ")}</Text>
                 <Text style={{ fontSize: 9, color: "#666" }}>
@@ -113,9 +125,7 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
         ) : (
           <>
             <SectionHeading title="Signature" />
-            <Text style={{ color: "#777" }}>
-              Pending — sign the proposal at the shared link to execute.
-            </Text>
+            <Text style={{ color: "#777" }}>Pending — sign the proposal at the shared link to execute.</Text>
           </>
         )}
       </BrandedPage>

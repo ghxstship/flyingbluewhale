@@ -77,7 +77,10 @@ type Parsed = HotkeyBinding & {
 };
 
 function parseBinding(b: HotkeyBinding): Parsed {
-  const parts = b.combo.toLowerCase().split("+").map((s) => s.trim());
+  const parts = b.combo
+    .toLowerCase()
+    .split("+")
+    .map((s) => s.trim());
   const mod = parts.includes("mod") || parts.includes("cmd") || parts.includes("ctrl") || parts.includes("meta");
   const shift = parts.includes("shift");
   const alt = parts.includes("alt") || parts.includes("option");

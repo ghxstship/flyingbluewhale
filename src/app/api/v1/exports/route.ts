@@ -24,7 +24,7 @@ import { log } from "@/lib/log";
 const PostSchema = z.object({
   kind: z.enum(["csv", "json", "xlsx", "zip"]),
   table: z.string().min(1).max(64),
-  async: z.boolean().optional(),           // reserved for job-queue follow-up
+  async: z.boolean().optional(), // reserved for job-queue follow-up
   projectId: z.string().uuid().optional(), // optional scope narrower than org
 });
 
@@ -57,12 +57,12 @@ export async function POST(req: NextRequest) {
     // the worker today (see supabase/functions/job-worker/index.ts);
     // XLSX + ZIP still go through the sync branch below.
     if (input.async && (input.kind === "csv" || input.kind === "json")) {
-        if (!isServiceClientAvailable()) {
-          return apiError(
-            "service_unavailable",
-            "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
-          );
-        }
+      if (!isServiceClientAvailable()) {
+        return apiError(
+          "service_unavailable",
+          "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+        );
+      }
       const svc = createServiceClient();
       const { data: run, error: runErr } = await supabase
         .from("export_runs")
@@ -76,9 +76,11 @@ export async function POST(req: NextRequest) {
         .select("id, status, kind, created_at")
         .single();
       if (runErr) return apiError("internal", runErr.message);
-      const { error: qErr } = await (svc.from("job_queue") as unknown as {
-        insert: (p: Record<string, unknown>) => Promise<{ error: unknown }>;
-      }).insert({
+      const { error: qErr } = await (
+        svc.from("job_queue") as unknown as {
+          insert: (p: Record<string, unknown>) => Promise<{ error: unknown }>;
+        }
+      ).insert({
         type: "export.package",
         org_id: session.orgId,
         payload: { exportRunId: run.id },
@@ -95,7 +97,7 @@ export async function POST(req: NextRequest) {
     // `never` across the 9-table union here, so we drop to `any` for
     // the chain and reassert at the consume site. Same escape hatch
     // that lib/db/resource.ts uses.
-     
+
     let q = (supabase.from(table) as any).select("*").eq("org_id", session.orgId);
     if (input.projectId) q = q.eq("project_id", input.projectId);
 

@@ -56,17 +56,9 @@ export async function GET(_req: Request, ctx: { params: Promise<{ invoiceId: str
       .select("description, quantity, unit_price_cents, position")
       .eq("invoice_id", parsed.data.invoiceId)
       .order("position", { ascending: true }),
-    supabase
-      .from("orgs")
-      .select("name, name_override, logo_url, branding")
-      .eq("id", session.orgId)
-      .maybeSingle(),
+    supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
     invoice.client_id
-      ? supabase
-          .from("clients")
-          .select("name")
-          .eq("id", invoice.client_id)
-          .maybeSingle()
+      ? supabase.from("clients").select("name").eq("id", invoice.client_id).maybeSingle()
       : Promise.resolve({ data: null }),
   ]);
 
@@ -105,7 +97,10 @@ export async function GET(_req: Request, ctx: { params: Promise<{ invoiceId: str
     });
     return NextResponse.redirect(signedUrl, 302);
   } catch (e) {
-    log.error("invoice.pdf.compile_failed", { invoice_id: invoice.id, err: e instanceof Error ? e.message : String(e) });
+    log.error("invoice.pdf.compile_failed", {
+      invoice_id: invoice.id,
+      err: e instanceof Error ? e.message : String(e),
+    });
     return apiError("internal", "Failed to render invoice PDF");
   }
 }

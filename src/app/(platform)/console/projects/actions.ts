@@ -7,7 +7,11 @@ import { requireSession } from "@/lib/auth";
 import { createProject, updateProject } from "@/lib/db/projects";
 
 const slugify = (s: string) =>
-  s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48);
 
 const CreateSchema = z.object({
   name: z.string().min(1).max(120),

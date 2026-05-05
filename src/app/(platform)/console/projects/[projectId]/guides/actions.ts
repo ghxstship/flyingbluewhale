@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PERSONA_TIERS } from "@/lib/db/guides";
 import type { GuidePersona } from "@/lib/supabase/types";
 
-const PERSONAS: GuidePersona[] = ["artist","vendor","client","sponsor","guest","crew","staff","custom"];
+const PERSONAS: GuidePersona[] = ["artist", "vendor", "client", "sponsor", "guest", "crew", "staff", "custom"];
 
 const Schema = z.object({
   persona: z.enum(PERSONAS as unknown as [GuidePersona, ...GuidePersona[]]),
@@ -26,29 +26,30 @@ export async function upsertGuideAction(projectId: string, _: State, fd: FormDat
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
 
   let config: import("@/lib/supabase/database.types").Json;
-  try { config = JSON.parse(parsed.data.config || "{}"); }
-  catch { return { error: "Config is not valid JSON" }; }
+  try {
+    config = JSON.parse(parsed.data.config || "{}");
+  } catch {
+    return { error: "Config is not valid JSON" };
+  }
 
   const tierInfo = PERSONA_TIERS[parsed.data.persona];
 
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("event_guides")
-    .upsert(
-      {
-        org_id: session.orgId,
-        project_id: projectId,
-        persona: parsed.data.persona,
-        title: parsed.data.title,
-        subtitle: parsed.data.subtitle ?? null,
-        classification: parsed.data.classification ?? tierInfo.classification,
-        tier: tierInfo.tier,
-        published: parsed.data.published === "on",
-        config,
-        created_by: session.userId,
-      },
-      { onConflict: "project_id,persona" },
-    );
+  const { error } = await supabase.from("event_guides").upsert(
+    {
+      org_id: session.orgId,
+      project_id: projectId,
+      persona: parsed.data.persona,
+      title: parsed.data.title,
+      subtitle: parsed.data.subtitle ?? null,
+      classification: parsed.data.classification ?? tierInfo.classification,
+      tier: tierInfo.tier,
+      published: parsed.data.published === "on",
+      config,
+      created_by: session.userId,
+    },
+    { onConflict: "project_id,persona" },
+  );
   if (error) return { error: error.message };
   revalidatePath(`/console/projects/${projectId}/guides`);
   revalidatePath(`/p`);

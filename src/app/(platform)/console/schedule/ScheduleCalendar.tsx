@@ -28,15 +28,9 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
   const [view, setView] = React.useState<View>("month");
   const [cursor, setCursor] = React.useState<Date>(() => startOfMonth(new Date()));
 
-  const range = React.useMemo(
-    () => (view === "month" ? monthRange(cursor) : weekRange(cursor)),
-    [view, cursor],
-  );
+  const range = React.useMemo(() => (view === "month" ? monthRange(cursor) : weekRange(cursor)), [view, cursor]);
   const days = React.useMemo(() => buildDays(range.start, range.end), [range]);
-  const eventsByDay = React.useMemo(
-    () => bucketEvents(events, range.start, range.end),
-    [events, range],
-  );
+  const eventsByDay = React.useMemo(() => bucketEvents(events, range.start, range.end), [events, range]);
 
   function shift(direction: -1 | 1) {
     if (view === "month") {
@@ -111,17 +105,13 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
           {WEEKDAYS.map((d) => (
             <div
               key={d}
-              className="px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]"
+              className="px-2 py-1 text-[10px] font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase"
             >
               {d}
             </div>
           ))}
         </div>
-        <div
-          className={`grid ${
-            view === "month" ? "grid-cols-7 grid-rows-6" : "grid-cols-7 grid-rows-1"
-          }`}
-        >
+        <div className={`grid ${view === "month" ? "grid-cols-7 grid-rows-6" : "grid-cols-7 grid-rows-1"}`}>
           {days.map((day, idx) => {
             const inMonth = view === "week" || day.getMonth() === cursor.getMonth();
             const today = isSameDay(day, new Date());
@@ -130,7 +120,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
             return (
               <div
                 key={idx}
-                className={`min-h-[80px] border-b border-e border-[var(--border-color)] p-1.5 ${
+                className={`min-h-[80px] border-e border-b border-[var(--border-color)] p-1.5 ${
                   inMonth ? "" : "bg-[var(--surface-inset)]/40"
                 }`}
               >
@@ -147,9 +137,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
                     {day.getDate()}
                   </span>
                   {dayEvents.length > 0 && (
-                    <span className="font-mono text-[9px] text-[var(--text-muted)]">
-                      {dayEvents.length}
-                    </span>
+                    <span className="font-mono text-[9px] text-[var(--text-muted)]">{dayEvents.length}</span>
                   )}
                 </div>
                 <div className="flex flex-col gap-0.5">
@@ -164,9 +152,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
                     </Link>
                   ))}
                   {dayEvents.length > 3 && (
-                    <span className="px-1 text-[9px] text-[var(--text-muted)]">
-                      +{dayEvents.length - 3} more
-                    </span>
+                    <span className="px-1 text-[9px] text-[var(--text-muted)]">+{dayEvents.length - 3} more</span>
                   )}
                 </div>
               </div>
@@ -210,11 +196,7 @@ function buildDays(start: Date, end: Date): Date[] {
   }
   return out;
 }
-function bucketEvents(
-  events: CalendarEvent[],
-  start: Date,
-  end: Date,
-): Map<string, CalendarEvent[]> {
+function bucketEvents(events: CalendarEvent[], start: Date, end: Date): Map<string, CalendarEvent[]> {
   const map = new Map<string, CalendarEvent[]>();
   for (const e of events) {
     const startsAt = new Date(e.startsAt);
@@ -228,11 +210,7 @@ function bucketEvents(
   return map;
 }
 function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
 function weekLabel(start: Date, end: Date): string {
   const fmt = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" });

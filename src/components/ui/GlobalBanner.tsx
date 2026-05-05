@@ -22,7 +22,10 @@ import { WifiOff, Wifi, AlertTriangle, Info, CheckCircle2, X } from "lucide-reac
 
 type BannerKind = "offline" | "online" | "warning" | "info" | "success";
 
-const KIND_STYLES: Record<BannerKind, { bg: string; fg: string; Icon: React.ComponentType<{ size?: number; "aria-hidden"?: boolean }> }> = {
+const KIND_STYLES: Record<
+  BannerKind,
+  { bg: string; fg: string; Icon: React.ComponentType<{ size?: number; "aria-hidden"?: boolean }> }
+> = {
   offline: { bg: "bg-amber-500", fg: "text-amber-950", Icon: WifiOff },
   online: { bg: "bg-emerald-500", fg: "text-emerald-950", Icon: Wifi },
   warning: { bg: "bg-amber-500", fg: "text-amber-950", Icon: AlertTriangle },

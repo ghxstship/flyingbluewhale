@@ -15,13 +15,7 @@ const ICONS: Record<string, typeof Home> = {
   "/m/settings": User,
 };
 
-export function MobileTabBarClient({
-  items,
-  badges,
-}: {
-  items: NavItem[];
-  badges?: Record<string, number>;
-}) {
+export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {
   const pathname = usePathname();
 
   return (
@@ -41,7 +35,7 @@ export function MobileTabBarClient({
               <Link
                 href={i.href}
                 aria-current={active ? "page" : undefined}
-                className="relative flex flex-col items-center justify-center gap-1 py-2.5 text-[0.62rem] font-medium uppercase tracking-wide transition-colors"
+                className="relative flex flex-col items-center justify-center gap-1 py-2.5 text-[0.62rem] font-medium tracking-wide uppercase transition-colors"
               >
                 {active && (
                   <span
@@ -56,16 +50,14 @@ export function MobileTabBarClient({
                     aria-hidden="true"
                   />
                   {badgeCount > 0 && (
-                    <span className="absolute -right-2 -top-1.5">
+                    <span className="absolute -top-1.5 -right-2">
                       <Badge variant="error" shape="count" aria-label={`${badgeCount} unread`}>
                         {badgeCount > 99 ? "99+" : badgeCount}
                       </Badge>
                     </span>
                   )}
                 </span>
-                <span className={active ? "text-[var(--org-primary)]" : "text-[var(--text-muted)]"}>
-                  {i.label}
-                </span>
+                <span className={active ? "text-[var(--org-primary)]" : "text-[var(--text-muted)]"}>{i.label}</span>
               </Link>
             </li>
           );

@@ -889,6 +889,28 @@ pre,
     background: var(--bg-secondary);
   }
 
+  /* ───── Spotlight (conditional row formatting) ─────
+     Per SmartSuite Spotlight — soft tinted background by tone token.
+     Applied on either a `<tr>` (row scope) or a `<td>` (cell scope) via
+     `className="data-spotlight-{tone}"`. The 14% tint keeps text legible
+     against the underlying surface without washing the row out, and falls
+     within the WCAG contrast envelope used by the badge tones. */
+  .data-spotlight-info {
+    background: color-mix(in srgb, var(--color-info) 14%, transparent);
+  }
+  .data-spotlight-warn {
+    background: color-mix(in srgb, var(--color-warning) 14%, transparent);
+  }
+  .data-spotlight-error {
+    background: color-mix(in srgb, var(--color-error) 14%, transparent);
+  }
+  .data-spotlight-success {
+    background: color-mix(in srgb, var(--color-success) 14%, transparent);
+  }
+  .data-spotlight-neutral {
+    background: var(--surface-inset);
+  }
+
   /* ───── Status dots ───── */
 
   .status-dot {

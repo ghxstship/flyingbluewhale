@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { ConversationPanel } from "@/components/ConversationPanel";
+import { Presence } from "@/components/collab/Presence";
+import { getPresenceUser } from "@/components/collab/getPresenceUser";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -28,6 +30,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .eq("id", id)
     .maybeSingle();
   if (!rfi) notFound();
+  const presenceUser = await getPresenceUser(session);
 
   const project = (rfi.project as unknown as { name: string | null } | null)?.name ?? "—";
 
@@ -40,6 +43,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={project}
         action={
           <div className="flex items-center gap-2">
+            <Presence targetTable="rfis" targetId={id} currentUser={presenceUser} />
             <Badge variant="info">{rfi.status}</Badge>
             <a
               href={`/console/rfis/${rfi.id}/edit`}

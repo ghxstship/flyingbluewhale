@@ -34,9 +34,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ guideId: strin
   // needed here.
   const { data: guide, error } = await supabase
     .from("event_guides")
-    .select(
-      "id, org_id, project_id, persona, config, title, subtitle, classification, tier, published",
-    )
+    .select("id, org_id, project_id, persona, config, title, subtitle, classification, tier, published")
     .eq("id", parsed.data.guideId)
     .maybeSingle();
   if (error) return apiError("internal", error.message);
@@ -44,11 +42,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ guideId: strin
 
   const [{ data: project }, { data: org }] = await Promise.all([
     supabase.from("projects").select("name").eq("id", guide.project_id).maybeSingle(),
-    supabase
-      .from("orgs")
-      .select("name, name_override, logo_url, branding")
-      .eq("id", guide.org_id)
-      .maybeSingle(),
+    supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", guide.org_id).maybeSingle(),
   ]);
 
   if (!org) return apiError("internal", "Missing organization row");

@@ -164,6 +164,8 @@ describe("Design system — component primitive adoption", () => {
     const ALLOW = new Set<string>([
       // In-flow editor prompts where a modal is excessive UX.
       "src/components/stage-plots/NewStagePlotButton.tsx",
+      // Same pattern — trash button on a step card inside an automation editor.
+      "src/components/automations/StepCard.tsx",
     ]);
     const offenders: string[] = [];
     for (const file of ALL_FILES) {

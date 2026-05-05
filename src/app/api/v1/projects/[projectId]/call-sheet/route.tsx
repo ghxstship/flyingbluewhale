@@ -16,7 +16,10 @@ import { log } from "@/lib/log";
 
 const ParamsSchema = z.object({ projectId: z.string().uuid() });
 const QuerySchema = z.object({
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   variant: z.enum(["full", "labor"]).default("full"),
 });
 
@@ -62,11 +65,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
       .gte("starts_at", day0)
       .lt("starts_at", day1)
       .order("starts_at", { ascending: true }),
-    supabase
-      .from("crew_members")
-      .select("id, name, role, phone, email")
-      .eq("org_id", session.orgId)
-      .limit(200),
+    supabase.from("crew_members").select("id, name, role, phone, email").eq("org_id", session.orgId).limit(200),
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
   ]);
 

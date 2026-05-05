@@ -7,7 +7,11 @@ import { parseAndValidateCsv } from "./csv";
 
 const Schema = z.object({
   name: z.string().min(1),
-  email: z.string().email().optional().or(z.literal("").transform(() => undefined)),
+  email: z
+    .string()
+    .email()
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   role: z.string().max(120).optional(),
 });
 

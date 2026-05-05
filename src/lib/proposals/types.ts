@@ -5,12 +5,24 @@ export type Money = { cents: number; currency?: string };
 export type AccentColor = string;
 
 export type ProposalBlock =
-  | { type: "hero"; eyebrow?: string; title: string; subtitle?: string; partners?: string[]; narrative?: string; meta?: { label: string; value: string }[]; accent?: AccentColor }
+  | {
+      type: "hero";
+      eyebrow?: string;
+      title: string;
+      subtitle?: string;
+      partners?: string[];
+      narrative?: string;
+      meta?: { label: string; value: string }[];
+      accent?: AccentColor;
+    }
   | { type: "section_eyebrow"; label: string; accent?: AccentColor }
   | { type: "heading"; level?: 2 | 3; text: string }
   | { type: "prose"; body: string }
   | { type: "callout"; kind: "pink" | "gold" | "teal" | "red"; title?: string; body: string }
-  | { type: "overview_cards"; cards: { tag?: string; title: string; details: { label: string; value: string }[]; accent?: AccentColor }[] }
+  | {
+      type: "overview_cards";
+      cards: { tag?: string; title: string; details: { label: string; value: string }[]; accent?: AccentColor }[];
+    }
   | {
       type: "phase";
       id?: string;
@@ -35,7 +47,13 @@ export type ProposalBlock =
       taxNote?: string;
     }
   | { type: "total_block"; label: string; amount: Money; note?: string; accent?: AccentColor }
-  | { type: "engagement_split"; depositPercent: number; balancePercent: number; depositLabel?: string; balanceLabel?: string }
+  | {
+      type: "engagement_split";
+      depositPercent: number;
+      balancePercent: number;
+      depositLabel?: string;
+      balanceLabel?: string;
+    }
   | { type: "payment_method"; method: "ach" | "wire" | "check" | "quickbooks"; details: Record<string, string> }
   | {
       type: "equipment_manifest";
@@ -64,11 +82,29 @@ export type ProposalDoc = {
 export type ProposalBlockType = ProposalBlock["type"];
 
 export const BLOCK_TYPES: ProposalBlockType[] = [
-  "hero", "section_eyebrow", "heading", "prose", "callout",
-  "overview_cards", "phase", "journey", "schedule_table", "capabilities",
-  "investment_table", "total_block", "engagement_split", "payment_method",
-  "equipment_manifest", "change_orders", "exclusions", "terms_grid",
-  "legal_panel", "signature_block", "cta", "spacer", "custom",
+  "hero",
+  "section_eyebrow",
+  "heading",
+  "prose",
+  "callout",
+  "overview_cards",
+  "phase",
+  "journey",
+  "schedule_table",
+  "capabilities",
+  "investment_table",
+  "total_block",
+  "engagement_split",
+  "payment_method",
+  "equipment_manifest",
+  "change_orders",
+  "exclusions",
+  "terms_grid",
+  "legal_panel",
+  "signature_block",
+  "cta",
+  "spacer",
+  "custom",
 ];
 
 export const BLOCK_LABELS: Record<ProposalBlockType, string> = {

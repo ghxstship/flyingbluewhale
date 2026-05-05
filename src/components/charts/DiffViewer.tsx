@@ -51,7 +51,7 @@ export function DiffViewer({
   return (
     <div className={`overflow-hidden rounded-md border border-[var(--border-color)] ${className}`}>
       <table className="w-full text-xs">
-        <thead className="bg-[var(--surface-inset)] text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+        <thead className="bg-[var(--surface-inset)] text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
           <tr>
             <th className="px-3 py-1.5 text-start">Field</th>
             <th className="px-3 py-1.5 text-start">Before</th>
@@ -61,13 +61,11 @@ export function DiffViewer({
         <tbody>
           {rows.map((r, i) => (
             <tr key={i} className="border-t border-[var(--border-color)]">
-              <td className="px-3 py-1.5 align-top font-mono text-[10px] text-[var(--text-secondary)]">
-                {r.path}
-              </td>
+              <td className="px-3 py-1.5 align-top font-mono text-[10px] text-[var(--text-secondary)]">{r.path}</td>
               <td className="px-3 py-1.5 align-top">
                 {r.kind !== "added" ? (
                   <code
-                    className={`break-all rounded px-1 py-0.5 ${
+                    className={`rounded px-1 py-0.5 break-all ${
                       r.kind === "removed"
                         ? "bg-[color:var(--color-error)]/10 text-[color:var(--color-error)]"
                         : "bg-[color:var(--color-warning)]/10 text-[var(--text-secondary)]"
@@ -82,7 +80,7 @@ export function DiffViewer({
               <td className="px-3 py-1.5 align-top">
                 {r.kind !== "removed" ? (
                   <code
-                    className={`break-all rounded px-1 py-0.5 ${
+                    className={`rounded px-1 py-0.5 break-all ${
                       r.kind === "added"
                         ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
                         : "bg-[color:var(--color-warning)]/10 text-[var(--text-primary)]"

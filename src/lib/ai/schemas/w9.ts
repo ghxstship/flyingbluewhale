@@ -14,7 +14,7 @@ export const W9Schema = z.object({
     "llc",
     "other",
   ]),
-  tin: z.string(),                          // SSN or EIN as typed
+  tin: z.string(), // SSN or EIN as typed
   tin_type: z.enum(["ssn", "ein"]),
   address: z.object({
     line1: z.string(),

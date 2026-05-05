@@ -9,8 +9,14 @@ import { AuditExportPdf } from "@/lib/pdf/audit-export";
 import { log } from "@/lib/log";
 
 const QuerySchema = z.object({
-  from: z.string().regex(/^\d{4}-\d{2}-\d{2}/).optional(),
-  to: z.string().regex(/^\d{4}-\d{2}-\d{2}/).optional(),
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}/)
+    .optional(),
+  to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}/)
+    .optional(),
   actor: z.string().email().optional(),
 });
 

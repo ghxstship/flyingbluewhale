@@ -123,12 +123,13 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
       if (ALLOWLIST.has(rel)) continue;
       const txt = readFileSync(file, "utf8");
       // Strip lines where the copy appears as a JSX prop value
-      // (`emptyLabel="No scans yet"`) — those hand off empty-state
-      // rendering to the receiving component, which already enforces
-      // the primitive internally (DataTable, VirtualList, etc.).
+      // (`emptyLabel="No scans yet"`, `emptyTitle="No tasks yet"`) — those
+      // hand off empty-state rendering to the receiving component, which
+      // already enforces the primitive internally (DataTable, VirtualList,
+      // KanbanBoard, etc.).
       const stripped = txt
         .split("\n")
-        .filter((l) => !/\b(emptyLabel|emptyText|emptyMessage)\s*=/.test(l))
+        .filter((l) => !/\b(emptyLabel|emptyText|emptyMessage|emptyTitle|emptyDescription)\s*=/.test(l))
         .join("\n");
       if (!EMPTY_COPY_RE.test(stripped)) continue;
       if (!/from\s+["']@\/components\/ui\/EmptyState["']/.test(stripped)) {

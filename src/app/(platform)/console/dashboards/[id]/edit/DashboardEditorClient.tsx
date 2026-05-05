@@ -1,0 +1,96 @@
+"use client";
+
+import * as React from "react";
+import { DashboardCanvas, type DashboardWidgetData } from "@/components/dashboards/DashboardCanvas";
+import type { DashboardLayout } from "@/lib/dashboards/types";
+import { saveLayoutAction } from "../actions";
+
+const DEBOUNCE_MS = 500;
+
+/**
+ * Client wrapper for the dashboard editor — owns the debounced save loop
+ * + the latest-known layout. Server data resolution (chart rows, saved
+ * view embeds) doesn't run here; the editor renders widgets in their
+ * "skeleton" shape since the canvas is the focus, not the live data.
+ */
+export function DashboardEditorClient({
+  dashboardId,
+  initialLayout,
+}: {
+  dashboardId: string;
+  initialLayout: DashboardLayout;
+}): React.ReactElement {
+  const [layout, setLayout] = React.useState<DashboardLayout>(initialLayout);
+  const [status, setStatus] = React.useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [error, setError] = React.useState<string | null>(null);
+  const debounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const persist = React.useCallback(
+    async (next: DashboardLayout) => {
+      setStatus("saving");
+      setError(null);
+      const result = await saveLayoutAction(dashboardId, next);
+      if (result?.error) {
+        setStatus("error");
+        setError(result.error);
+      } else {
+        setStatus("saved");
+      }
+    },
+    [dashboardId],
+  );
+
+  const handleLayoutChange = React.useCallback(
+    (next: DashboardLayout) => {
+      setLayout(next);
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
+        void persist(next);
+      }, DEBOUNCE_MS);
+    },
+    [persist],
+  );
+
+  React.useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
+  // No server-resolved data in editor — chart rows + saved-view rows are
+  // best-effort empty so the layout renders without round-tripping to the
+  // DB on every drag.
+  const data: DashboardWidgetData = React.useMemo(() => ({ charts: {}, savedViews: {} }), []);
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-end gap-2 text-xs">
+        <SaveIndicator status={status} error={error} />
+      </div>
+      <DashboardCanvas layout={layout} data={data} editable onLayoutChange={handleLayoutChange} />
+    </div>
+  );
+}
+
+function SaveIndicator({
+  status,
+  error,
+}: {
+  status: "idle" | "saving" | "saved" | "error";
+  error: string | null;
+}): React.ReactElement {
+  if (status === "saving") {
+    return <span className="text-[var(--text-muted)]">Saving…</span>;
+  }
+  if (status === "saved") {
+    return <span className="text-[var(--color-success)]">Saved</span>;
+  }
+  if (status === "error") {
+    return (
+      <span className="text-[var(--color-error)]" role="alert">
+        {error ?? "Save failed"}
+      </span>
+    );
+  }
+  return <span className="text-[var(--text-muted)]">Idle</span>;
+}

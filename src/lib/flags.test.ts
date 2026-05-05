@@ -44,10 +44,7 @@ describe("flag registry hygiene", () => {
       if (t < now) expired.push(`${key} (${meta.expiresAt})`);
     }
     expect(invalid, `Invalid expiresAt on: ${invalid.join(", ")}`).toEqual([]);
-    expect(
-      expired,
-      `Past-due flags — remove or extend: ${expired.join(", ")}`,
-    ).toEqual([]);
+    expect(expired, `Past-due flags — remove or extend: ${expired.join(", ")}`).toEqual([]);
   });
 
   it("registry has no orphans (entry without a corresponding default)", () => {

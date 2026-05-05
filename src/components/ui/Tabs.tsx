@@ -13,9 +13,7 @@ export const TabsList = React.forwardRef<
     scrollable?: boolean;
   }
 >(function TabsList({ className = "", scrollable, ...props }, ref) {
-  const scroll = scrollable
-    ? "overflow-x-auto whitespace-nowrap scrollbar-thin"
-    : "";
+  const scroll = scrollable ? "overflow-x-auto whitespace-nowrap scrollbar-thin" : "";
   return (
     <TabsPrimitive.List
       ref={ref}
@@ -32,7 +30,7 @@ export const TabsTrigger = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={`relative -mb-px inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2 text-sm text-[var(--text-muted)] outline-none transition-colors hover:text-[var(--text-primary)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] data-[state=active]:border-[var(--org-primary)] data-[state=active]:text-[var(--text-primary)] ${className}`}
+      className={`relative -mb-px inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2 text-sm text-[var(--text-muted)] transition-colors outline-none hover:text-[var(--text-primary)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] data-[state=active]:border-[var(--org-primary)] data-[state=active]:text-[var(--text-primary)] ${className}`}
       {...props}
     />
   );
@@ -75,7 +73,7 @@ export const SegmentedControlItem = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={`rounded px-3 py-1 text-xs font-medium text-[var(--text-muted)] outline-none transition-colors hover:text-[var(--text-primary)] data-[state=active]:bg-[var(--surface-raised)] data-[state=active]:text-[var(--text-primary)] data-[state=active]:shadow-sm ${className}`}
+      className={`rounded px-3 py-1 text-xs font-medium text-[var(--text-muted)] transition-colors outline-none hover:text-[var(--text-primary)] data-[state=active]:bg-[var(--surface-raised)] data-[state=active]:text-[var(--text-primary)] data-[state=active]:shadow-sm ${className}`}
       {...props}
     />
   );

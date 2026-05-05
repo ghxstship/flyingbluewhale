@@ -62,8 +62,8 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
   ]);
   if (!org) return apiError("internal", "Missing organization row");
 
-  const classificationTier = tiers && tiers[0] ? (tiers[0].tier as number | null) ?? undefined : undefined;
-  const classification = tiers && tiers[0] ? (tiers[0].classification as string | null) ?? undefined : undefined;
+  const classificationTier = tiers && tiers[0] ? ((tiers[0].tier as number | null) ?? undefined) : undefined;
+  const classification = tiers && tiers[0] ? ((tiers[0].classification as string | null) ?? undefined) : undefined;
 
   const deliverables: DeliverableRow[] = (rows ?? []).map((r) => ({
     id: r.id as string,
@@ -94,7 +94,10 @@ export async function GET(_req: Request, ctx: { params: Promise<{ projectId: str
     });
     return NextResponse.redirect(signedUrl, 302);
   } catch (e) {
-    log.error("advance_book.compile_failed", { project_id: project.id, err: e instanceof Error ? e.message : String(e) });
+    log.error("advance_book.compile_failed", {
+      project_id: project.id,
+      err: e instanceof Error ? e.message : String(e),
+    });
     return apiError("internal", "Failed to render advance book");
   }
 }

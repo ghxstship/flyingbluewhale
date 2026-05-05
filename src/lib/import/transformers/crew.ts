@@ -18,9 +18,24 @@ import { z } from "zod";
 
 export const CrewRowSchema = z.object({
   name: z.string().trim().min(1, "name is required"),
-  role: z.string().trim().max(120).optional().or(z.literal("").transform(() => undefined)),
-  phone: z.string().trim().max(64).optional().or(z.literal("").transform(() => undefined)),
-  email: z.string().trim().email().optional().or(z.literal("").transform(() => undefined)),
+  role: z
+    .string()
+    .trim()
+    .max(120)
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  phone: z
+    .string()
+    .trim()
+    .max(64)
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  email: z
+    .string()
+    .trim()
+    .email()
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   day_rate_cents: z
     .string()
     .trim()
@@ -29,7 +44,12 @@ export const CrewRowSchema = z.object({
     .refine((v) => v === undefined || (Number.isFinite(v) && v >= 0), {
       message: "day_rate_cents must be a non-negative integer",
     }),
-  notes: z.string().trim().max(2000).optional().or(z.literal("").transform(() => undefined)),
+  notes: z
+    .string()
+    .trim()
+    .max(2000)
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
 });
 
 export type CrewRow = z.infer<typeof CrewRowSchema>;

@@ -12,12 +12,17 @@ import { createClient } from "@/lib/supabase/server";
  */
 
 const EVENTS = [
-  "project.created", "project.status_changed",
-  "invoice.sent", "invoice.paid",
-  "proposal.sent", "proposal.signed",
-  "deliverable.submitted", "deliverable.approved",
+  "project.created",
+  "project.status_changed",
+  "invoice.sent",
+  "invoice.paid",
+  "proposal.sent",
+  "proposal.signed",
+  "deliverable.submitted",
+  "deliverable.approved",
   "ticket.scanned",
-  "po.acknowledged", "po.fulfilled",
+  "po.acknowledged",
+  "po.fulfilled",
   "incident.filed",
   "job.failed",
   "passkey.registered",

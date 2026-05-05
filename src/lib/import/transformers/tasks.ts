@@ -9,7 +9,12 @@ import { z } from "zod";
 
 export const TaskRowSchema = z.object({
   title: z.string().trim().min(1),
-  description: z.string().trim().max(4000).optional().or(z.literal("").transform(() => undefined)),
+  description: z
+    .string()
+    .trim()
+    .max(4000)
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   status: z.enum(["todo", "in_progress", "review", "blocked", "done"]).default("todo"),
   priority: z
     .string()
@@ -19,7 +24,11 @@ export const TaskRowSchema = z.object({
     .refine((v) => v === undefined || (Number.isFinite(v) && v >= 0 && v <= 5), {
       message: "priority must be 0-5",
     }),
-  due_at: z.string().trim().optional().or(z.literal("").transform(() => undefined)),
+  due_at: z
+    .string()
+    .trim()
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
 });
 export type TaskRow = z.infer<typeof TaskRowSchema>;
 

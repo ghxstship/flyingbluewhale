@@ -41,7 +41,15 @@ const grid = StyleSheet.create({
   who: { flex: 1 },
 });
 
-export function WristbandSheetPdf({ brand, eventName, tickets }: { brand: PdfBrand; eventName: string; tickets: WristbandTicket[] }) {
+export function WristbandSheetPdf({
+  brand,
+  eventName,
+  tickets,
+}: {
+  brand: PdfBrand;
+  eventName: string;
+  tickets: WristbandTicket[];
+}) {
   const perPage = 10;
   const pages: WristbandTicket[][] = [];
   for (let i = 0; i < tickets.length; i += perPage) pages.push(tickets.slice(i, i + perPage));

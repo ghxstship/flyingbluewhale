@@ -4,23 +4,21 @@ import * as React from "react";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/Dialog";
 import { createCommittee, createPolicy, type CommitteeState, type PolicyState } from "./actions";
 
 export function CommitteeForm() {
   const [state, action, pending] = useActionState<CommitteeState, FormData>(createCommittee, null);
   const [open, setOpen] = React.useState(false);
-  React.useEffect(() => { if (state === null) setOpen(false); }, [state]);
+  React.useEffect(() => {
+    if (state === null) setOpen(false);
+  }, [state]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button type="button" size="sm">+ Committee</Button>
+        <Button type="button" size="sm">
+          + Committee
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -39,16 +37,13 @@ export function CommitteeForm() {
           </div>
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Charter</label>
-            <textarea
-              name="charter"
-              rows={3}
-              maxLength={2000}
-              className="input-base mt-1.5 w-full"
-            />
+            <textarea name="charter" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
           </div>
           {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
           <div className="flex justify-end">
-            <Button type="submit" loading={pending}>Create</Button>
+            <Button type="submit" loading={pending}>
+              Create
+            </Button>
           </div>
         </form>
       </DialogContent>
@@ -59,11 +54,15 @@ export function CommitteeForm() {
 export function PolicyForm() {
   const [state, action, pending] = useActionState<PolicyState, FormData>(createPolicy, null);
   const [open, setOpen] = React.useState(false);
-  React.useEffect(() => { if (state === null) setOpen(false); }, [state]);
+  React.useEffect(() => {
+    if (state === null) setOpen(false);
+  }, [state]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button type="button" size="sm">+ Policy</Button>
+        <Button type="button" size="sm">
+          + Policy
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -83,7 +82,9 @@ export function PolicyForm() {
           </div>
           {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
           <div className="flex justify-end">
-            <Button type="submit" loading={pending}>Create</Button>
+            <Button type="submit" loading={pending}>
+              Create
+            </Button>
           </div>
         </form>
       </DialogContent>

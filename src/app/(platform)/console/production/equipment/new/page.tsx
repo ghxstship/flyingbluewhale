@@ -5,7 +5,9 @@ export default function NewEquipmentPage() {
   return (
     <>
       <ModuleHeader eyebrow="Production" title="Add Equipment" />
-      <div className="page-content max-w-xl"><NewEquipmentForm /></div>
+      <div className="page-content max-w-xl">
+        <NewEquipmentForm />
+      </div>
     </>
   );
 }

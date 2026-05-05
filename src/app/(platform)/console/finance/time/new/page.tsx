@@ -5,7 +5,9 @@ export default function NewTimeEntryPage() {
   return (
     <>
       <ModuleHeader eyebrow="Finance" title="Log Time" />
-      <div className="page-content max-w-xl"><NewTimeEntryForm /></div>
+      <div className="page-content max-w-xl">
+        <NewTimeEntryForm />
+      </div>
     </>
   );
 }

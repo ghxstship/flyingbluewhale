@@ -51,8 +51,8 @@
   --text-subtle: #85809a;
   --accent: #c79eff;
   --accent-contrast: #0d0b12;
-  --shadow-elev: 0 1px 3px rgba(0, 0, 0, 0.40), 0 4px 12px rgba(0, 0, 0, 0.35);
-  --shadow-elev-hover: 0 2px 6px rgba(0, 0, 0, 0.50), 0 8px 20px rgba(0, 0, 0, 0.45);
+  --shadow-elev: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-elev-hover: 0 2px 6px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.45);
 
   --background: #0d0b12;
   --foreground: #f3f0ff;

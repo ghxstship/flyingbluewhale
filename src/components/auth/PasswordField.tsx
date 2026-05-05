@@ -41,7 +41,9 @@ export function PasswordField({
         <label htmlFor={id} className="text-xs font-medium text-[var(--text-secondary)]">
           {label}
           {required && (
-            <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">*</span>
+            <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+              *
+            </span>
           )}
         </label>
       )}
@@ -101,7 +103,9 @@ export function PasswordField({
         </span>
       )}
       {!error && hint && (
-        <span id={hintId} className="text-xs text-[var(--text-muted)]">{hint}</span>
+        <span id={hintId} className="text-xs text-[var(--text-muted)]">
+          {hint}
+        </span>
       )}
     </div>
   );
@@ -125,12 +129,19 @@ function scorePassword(pw: string): number {
 
 function labelForScore(s: number): string {
   switch (s) {
-    case 0: return "";
-    case 1: return "Very weak";
-    case 2: return "Weak";
-    case 3: return "Fair";
-    case 4: return "Strong";
-    case 5: return "Very strong";
-    default: return "";
+    case 0:
+      return "";
+    case 1:
+      return "Very weak";
+    case 2:
+      return "Weak";
+    case 3:
+      return "Fair";
+    case 4:
+      return "Strong";
+    case 5:
+      return "Very strong";
+    default:
+      return "";
   }
 }

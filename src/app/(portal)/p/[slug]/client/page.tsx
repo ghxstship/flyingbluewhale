@@ -16,7 +16,11 @@ export default async function ClientHome({ params }: { params: Promise<{ slug: s
     <div className="flex min-h-screen">
       <PortalRail items={portalNav(slug, "client")} title="Client" />
       <div className="flex-1">
-        <ModuleHeader eyebrow={project.name} title="Client Portal" subtitle="Proposals, deliverables, invoices, and files" />
+        <ModuleHeader
+          eyebrow={project.name}
+          title="Client Portal"
+          subtitle="Proposals, deliverables, invoices, and files"
+        />
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[

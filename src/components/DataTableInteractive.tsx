@@ -56,6 +56,9 @@ import {
 } from "@/components/ui/DropdownMenu";
 import { RowActions, type RowActionItem } from "@/components/ui/RowActions";
 import { Hint } from "@/components/ui/Tooltip";
+import type { SavedView, ViewConfigRow, ViewScope, ViewType } from "@/lib/views/types";
+import { SavedViewSelector } from "@/components/views/SavedViewSelector";
+import type { SaveViewSubmit } from "@/components/views/SaveViewDialog";
 
 /**
  * Shared toolbar trigger className — every dropdown trigger and action
@@ -110,6 +113,11 @@ export type InteractiveColumn = {
   defaultHidden?: boolean;
   /** Default fold a group when this column is the active groupBy. */
   groupable?: boolean;
+  /** When set, render an aggregate footer cell over the (filtered) rows.
+   *  Per SmartSuite Column Totals. */
+  total?: "sum" | "avg" | "min" | "max" | "count";
+  /** Optional formatter for the footer cell. */
+  totalFormat?: (n: number) => string;
 };
 
 export type InteractiveRow = {
@@ -120,6 +128,11 @@ export type InteractiveRow = {
   /** Optional per-row action menu items. Renders a kebab in a trailing
    *  actions column. */
   actions?: RowActionItem[];
+  /** Optional className applied to the `<tr>` (e.g. spotlight tone). */
+  className?: string;
+  /** Per-cell className overrides keyed by column key. For spotlight rules
+   *  scoped to a single cell. */
+  cellClassNames?: Record<string, string>;
 };
 
 export type BulkAction = {
@@ -149,25 +162,41 @@ export type InteractiveTableProps = {
    *  the toolbar. Defaults to `router.refresh()` so server-rendered tables
    *  re-query without callers wiring anything. */
   onRefresh?: () => void | Promise<void>;
+  /** Which kind of view the host page is rendering. P3.1 only ships
+   *  `'grid'`; P3.2-3.6 alt renderers (kanban, calendar, timeline, chart,
+   *  map) read this off the saved-view row's `type`. Default `'grid'`. */
+  viewType?: ViewType;
+  /** Named saved views the caller can pick from for this `tableId`. The
+   *  parent loads these server-side (via `listViewConfigs`) and threads
+   *  them through the chrome. When empty / undefined the SavedViewSelector
+   *  is hidden. Note: this is the EXPLICIT named-view layer; the existing
+   *  per-user `user_preferences.table_views` write path stays as the
+   *  IMPLICIT working-copy persistence and is unaffected. */
+  viewConfigsForTable?: ViewConfigRow[];
+  /** Currently-active saved view id (or null = unsaved working copy). */
+  activeViewId?: string | null;
+  /** Scopes the caller is allowed to publish saved views to. Manager+
+   *  roles unlock `'org'` / `'public'`. Default private only. */
+  allowedSaveScopes?: ViewScope[];
+  /** Server callback — write a saved view to `view_configs` and refetch.
+   *  Called by SavedViewSelector + SaveViewDialog. */
+  onSaveView?: (input: SaveViewSubmit) => Promise<void>;
+  /** Server callback — delete a saved view. */
+  onDeleteView?: (id: string) => Promise<void>;
+  /** Server callback — set a saved view as the default for its scope. */
+  onSetDefaultView?: (id: string) => Promise<void>;
+  /** Notified when the user picks a saved view (or null for Default). */
+  onLoadView?: (view: ViewConfigRow | null) => void;
 };
 
-type SavedView = {
-  query?: string;
-  sort?: Array<{ key: string; dir: "asc" | "desc" }>;
-  density?: "comfortable" | "compact";
-  hidden?: string[];
-  pinned?: string[];
-  /** Explicit column order (column keys). Items not present fall back to
-   *  the column-array order, then pinned go to the front. */
-  order?: string[];
-  /** Per-column include-only filters: column key → array of allowed scalar
-   *  values stringified. */
-  filters?: Record<string, string[]>;
-  /** When set, rows are grouped by this column key. */
-  groupBy?: string;
-  /** Group keys (stringified scalar values) the user has collapsed. */
-  collapsed?: string[];
-};
+// `SavedView` is now defined canonically in `@/lib/views/types` so the
+// `view_configs` row + the runtime client share a single contract. The
+// imported type is a superset of the legacy inline shape (adds optional
+// `spotlight` + `viewConfig`); existing callers compile unchanged.
+//
+// The implicit per-user persistence path (`user_preferences.table_views`)
+// continues to write/read this same shape — only the *named* saved views
+// landed in `view_configs` get the explicit-layer treatment below.
 
 export function DataTableInteractive({
   rows,
@@ -181,7 +210,19 @@ export function DataTableInteractive({
   rowHeight,
   onImport,
   onRefresh,
+  viewType = "grid",
+  viewConfigsForTable = [],
+  activeViewId = null,
+  allowedSaveScopes = ["private"],
+  onSaveView,
+  onDeleteView,
+  onSetDefaultView,
+  onLoadView,
 }: InteractiveTableProps) {
+  // Phase 3.1: only Grid renders today. Reserve the prop now so P3.2-3.6
+  // alt renderers (Kanban, Calendar, Timeline, Map, Chart) can switch off
+  // it without another props change.
+  void viewType;
   const router = useRouter();
   const { prefs, setPrefs } = useUserPreferences();
   const savedView = tableId ? (prefs.table_views as Record<string, SavedView> | undefined)?.[tableId] : undefined;
@@ -209,6 +250,67 @@ export function DataTableInteractive({
   const [filters, setFilters] = React.useState<Record<string, string[]>>(savedView?.filters ?? {});
   const [groupBy, setGroupBy] = React.useState<string>(savedView?.groupBy ?? "");
   const [collapsed, setCollapsed] = React.useState<Set<string>>(new Set(savedView?.collapsed ?? []));
+
+  // ── Named-saved-view layer (P3.1) ─────────────────────────────────────
+  // Tracks the currently-loaded `view_configs.id`. The parent can drive
+  // this externally (controlled mode); when uncontrolled, we own it
+  // locally. Working-copy state above is unaffected — picking a saved
+  // view *seeds* it; subsequent edits drift away (shown as "modified").
+  const [activeViewIdLocal, setActiveViewIdLocal] = React.useState<string | null>(activeViewId);
+  React.useEffect(() => setActiveViewIdLocal(activeViewId), [activeViewId]);
+  const activeView = React.useMemo(
+    () => viewConfigsForTable.find((v) => v.id === activeViewIdLocal) ?? null,
+    [viewConfigsForTable, activeViewIdLocal],
+  );
+
+  /** Hydrate local working-copy state from a saved-view row's config. */
+  const loadFromView = React.useCallback(
+    (view: ViewConfigRow | null) => {
+      setActiveViewIdLocal(view?.id ?? null);
+      onLoadView?.(view);
+      const cfg = view?.config ?? {};
+      setQuery(String(cfg.query ?? ""));
+      const primary = cfg.sort?.[0];
+      setSortKey(primary?.key ?? "");
+      setSortDir((primary?.dir as "asc" | "desc" | "") ?? "");
+      setSortStack(cfg.sort?.slice(1) ?? []);
+      setDensity(cfg.density ?? densityProp);
+      setHiddenCols(new Set(cfg.hidden ?? columns.filter((c) => c.defaultHidden).map((c) => c.key)));
+      setPinnedCols(new Set(cfg.pinned ?? []));
+      setColOrder(cfg.order ?? columns.map((c) => c.key));
+      setFilters(cfg.filters ?? {});
+      setGroupBy(cfg.groupBy ?? "");
+      setCollapsed(new Set(cfg.collapsed ?? []));
+      setPage(0);
+    },
+    [columns, densityProp, onLoadView, setQuery, setSortKey, setSortDir, setPage],
+  );
+
+  /** Snapshot of the current working copy — fed to SaveViewDialog. */
+  const buildCurrentSavedView = React.useCallback((): SavedView => {
+    const stack: Array<{ key: string; dir: "asc" | "desc" }> = [];
+    if (sortKey) stack.push({ key: sortKey as string, dir: (sortDir || "asc") as "asc" | "desc" });
+    stack.push(...sortStack);
+    return {
+      query: String(query),
+      sort: stack.length ? stack : undefined,
+      density,
+      hidden: Array.from(hiddenCols),
+      pinned: Array.from(pinnedCols),
+      order: colOrder,
+      filters: Object.keys(filters).length ? filters : undefined,
+      groupBy: groupBy || undefined,
+      collapsed: Array.from(collapsed),
+    };
+  }, [query, sortKey, sortDir, sortStack, density, hiddenCols, pinnedCols, colOrder, filters, groupBy, collapsed]);
+
+  // Has the working copy drifted from the active saved view's config?
+  const viewModified = React.useMemo(() => {
+    if (!activeView) return false;
+    const a = JSON.stringify(buildCurrentSavedView());
+    const b = JSON.stringify({ ...(activeView.config ?? {}) } as SavedView);
+    return a !== b;
+  }, [activeView, buildCurrentSavedView]);
 
   // Persist view changes (debounced)
   React.useEffect(() => {
@@ -289,6 +391,8 @@ export function DataTableInteractive({
     setFilters({});
     setGroupBy("");
     setCollapsed(new Set());
+    // Reset also drops back to the unsaved working-copy (Default View)
+    setActiveViewIdLocal(null);
     toast.success("View Reset");
   }, [columns, densityProp, setQuery, setSortKey, setSortDir, setPage]);
   const handleImportClick = React.useCallback(() => {
@@ -395,6 +499,23 @@ export function DataTableInteractive({
       return ap - bp;
     });
   }, [columns, hiddenCols, pinnedCols, colOrder]);
+
+  // Compute per-column aggregates over the filtered+sorted set (and per-group
+  // when groupBy is active). Driven by each column's `total` flag —
+  // returns `null` when no column has `total` set so the `<tfoot>` is omitted.
+  const hasAnyTotals = React.useMemo(() => columns.some((c) => c.total), [columns]);
+  const columnTotals = React.useMemo(() => {
+    if (!hasAnyTotals) return null;
+    return computeTotals(columns, sorted, colIndexByKey);
+  }, [hasAnyTotals, columns, sorted, colIndexByKey]);
+  const groupTotals = React.useMemo(() => {
+    if (!hasAnyTotals || !grouped) return null;
+    const out: Record<string, Record<string, FormattedTotal>> = {};
+    for (const g of grouped) {
+      out[g.key] = computeTotals(columns, g.rows, colIndexByKey);
+    }
+    return out;
+  }, [hasAnyTotals, grouped, columns, colIndexByKey]);
 
   const distinctValuesByKey = React.useMemo(() => {
     const map = new Map<string, Map<string, number>>();
@@ -585,6 +706,24 @@ export function DataTableInteractive({
         {/* ── Section 3 · Actions (view / share / export / import / refresh) ── */}
         <ToolbarDivider />
         <div className="flex items-center gap-0.5">
+          {/* Named-saved-view selector — only surfaces when the host page
+              wires named views in. The implicit per-user persistence
+              (user_preferences.table_views) keeps working regardless. */}
+          {onSaveView && (
+            <SavedViewSelector
+              views={viewConfigsForTable}
+              activeId={activeViewIdLocal}
+              currentConfig={buildCurrentSavedView()}
+              allowedScopes={allowedSaveScopes}
+              modified={viewModified}
+              onLoad={loadFromView}
+              onSave={async (input) => {
+                await onSaveView(input);
+              }}
+              onDelete={onDeleteView}
+              onSetDefault={onSetDefaultView}
+            />
+          )}
           <ViewMenu customizationActive={customizationActive} onReset={handleResetView} />
           <ToolbarIconButton icon={Share2} label="Share view link" onClick={handleShare} />
           <Hint label="Export visible rows to CSV">
@@ -776,6 +915,16 @@ export function DataTableInteractive({
                           onSelect={toggleOne}
                         />
                       ))}
+                    {!isCollapsed && groupTotals && hasAnyTotals && (
+                      <TotalsRow
+                        cols={renderedCols}
+                        totals={groupTotals[g.key] ?? {}}
+                        bulk={!!bulkActions}
+                        showActions={hasRowActions}
+                        label={`${g.label} subtotal`}
+                        variant="group"
+                      />
+                    )}
                   </React.Fragment>
                 );
               })
@@ -838,6 +987,18 @@ export function DataTableInteractive({
               </>
             )}
           </tbody>
+          {hasAnyTotals && columnTotals && (
+            <tfoot>
+              <TotalsRow
+                cols={renderedCols}
+                totals={columnTotals}
+                bulk={!!bulkActions}
+                showActions={hasRowActions}
+                label="Total"
+                variant="footer"
+              />
+            </tfoot>
+          )}
         </table>
       </div>
 
@@ -930,12 +1091,9 @@ function TableRow({
   onSelect: (id: string) => void;
   style?: React.CSSProperties;
 }) {
+  const trClass = [rowPad, selected ? "bg-[var(--surface-inset)]" : "", row.className].filter(Boolean).join(" ");
   return (
-    <tr
-      className={`${rowPad} ${selected ? "bg-[var(--surface-inset)]" : ""}`}
-      aria-selected={selected || undefined}
-      style={style}
-    >
+    <tr className={trClass} aria-selected={selected || undefined} style={style}>
       {bulk && (
         <td className="w-8 text-center">
           <input
@@ -949,8 +1107,10 @@ function TableRow({
       {cols.map((c, i) => {
         const originalIdx = colIndexByKey.get(c.key) ?? i;
         const cell = row.cells[originalIdx];
+        const cellOverride = row.cellClassNames?.[c.key];
+        const tdClass = [c.className, cellOverride].filter(Boolean).join(" ") || undefined;
         return (
-          <td key={c.key} className={c.className}>
+          <td key={c.key} className={tdClass}>
             {row.href && i === 0 ? (
               <Link href={row.href} className="text-[var(--foreground)] hover:underline">
                 {cell}
@@ -968,6 +1128,135 @@ function TableRow({
           ) : null}
         </td>
       )}
+    </tr>
+  );
+}
+
+/**
+ * Numeric aggregate result for a single column. `value` is the formatted
+ * string ready for rendering; `raw` is the underlying number (or `null`
+ * when no eligible values).
+ */
+type FormattedTotal = { value: string; raw: number | null };
+
+/**
+ * Coerce a row's scalar value to a number for sum/avg/min/max. Strings
+ * that aren't number-shaped resolve to `null` so the aggregate ignores
+ * them rather than poisoning the result with `NaN`. Numbers pass through
+ * (finite only).
+ */
+function toNumberOrNull(v: string | number | null | undefined): number | null {
+  if (v == null) return null;
+  if (typeof v === "number") return Number.isFinite(v) ? v : null;
+  // Strip common formatting (commas, currency symbols, whitespace) so a
+  // pre-formatted accessor like "$1,234.56" still aggregates. The caller
+  // can always pass a stricter accessor for finer control.
+  const stripped = String(v).replace(/[\s,$€£¥]/g, "");
+  if (stripped === "" || stripped === "-") return null;
+  const n = Number(stripped);
+  return Number.isFinite(n) ? n : null;
+}
+
+function defaultFormat(n: number, agg: "sum" | "avg" | "min" | "max" | "count"): string {
+  if (agg === "count") return String(n);
+  return n.toLocaleString();
+}
+
+/**
+ * Compute aggregate values for every column with a `total` flag set.
+ * Returns a map keyed by column key; columns without `total` are absent.
+ *
+ * Exported for unit-testing — production callers reach this through the
+ * component's `<tfoot>` rendering.
+ */
+export function computeTotals(
+  columns: InteractiveColumn[],
+  rows: InteractiveRow[],
+  colIndexByKey: Map<string, number>,
+): Record<string, FormattedTotal> {
+  const out: Record<string, FormattedTotal> = {};
+  for (const c of columns) {
+    if (!c.total) continue;
+    const idx = colIndexByKey.get(c.key);
+    if (idx == null) continue;
+    const agg = c.total;
+
+    if (agg === "count") {
+      let count = 0;
+      for (const row of rows) {
+        const v = row.values?.[idx];
+        if (v != null && String(v).length > 0) count++;
+      }
+      const formatted = c.totalFormat ? c.totalFormat(count) : defaultFormat(count, "count");
+      out[c.key] = { value: formatted, raw: count };
+      continue;
+    }
+
+    let sum = 0;
+    let count = 0;
+    let min = Number.POSITIVE_INFINITY;
+    let max = Number.NEGATIVE_INFINITY;
+    for (const row of rows) {
+      const n = toNumberOrNull(row.values?.[idx]);
+      if (n == null) continue;
+      sum += n;
+      count++;
+      if (n < min) min = n;
+      if (n > max) max = n;
+    }
+    if (count === 0) {
+      out[c.key] = { value: "—", raw: null };
+      continue;
+    }
+    let raw: number;
+    if (agg === "sum") raw = sum;
+    else if (agg === "avg") raw = sum / count;
+    else if (agg === "min") raw = min;
+    else raw = max;
+    const formatted = c.totalFormat ? c.totalFormat(raw) : defaultFormat(raw, agg);
+    out[c.key] = { value: formatted, raw };
+  }
+  return out;
+}
+
+/**
+ * Renders a totals row inside `<tfoot>` (table-level) or `<tbody>` (per-group
+ * subtotal). The first visible column carries the label so footers always
+ * read clearly; columns without a configured `total` render an empty cell.
+ */
+function TotalsRow({
+  cols,
+  totals,
+  bulk,
+  showActions,
+  label,
+  variant,
+}: {
+  cols: InteractiveColumn[];
+  totals: Record<string, FormattedTotal>;
+  bulk: boolean;
+  showActions: boolean;
+  label: string;
+  variant: "footer" | "group";
+}) {
+  const trClass =
+    variant === "footer"
+      ? "border-t border-[var(--border-color)] bg-[var(--background)] font-semibold"
+      : "bg-[var(--surface-inset)] text-xs font-semibold text-[var(--text-secondary)]";
+  return (
+    <tr className={trClass} data-totals-variant={variant}>
+      {bulk && <td className="w-8" aria-hidden="true" />}
+      {cols.map((c, i) => {
+        const t = totals[c.key];
+        const showLabel = i === 0 && !t;
+        const className = [c.className, "tabular-nums"].filter(Boolean).join(" ");
+        return (
+          <td key={c.key} className={className}>
+            {t ? t.value : showLabel ? <span className="text-[var(--text-muted)]">{label}</span> : null}
+          </td>
+        );
+      })}
+      {showActions && <td className="w-8" aria-hidden="true" />}
     </tr>
   );
 }

@@ -600,3 +600,51 @@ paths:
 
   /api/v1/shifts/checkin:
     post: { summary: Record a shift check-in / check-out / break-start / break-end on COMPVSS. WF-197. }
+
+  /api/v1/openapi.json:
+    get: { summary: Public OpenAPI 3.1 spec (this document) — cacheable for 5 min on browsers, 10 min on the edge. }
+
+  /api/v1/automations/{automationId}/webhook:
+    post: { summary: Inbound webhook trigger that fires the named automation (HMAC-signed; payload becomes the run input). }
+
+  /api/v1/internal/automations/dispatch:
+    post: { summary: Internal cron entrypoint — drains the automation run queue. Authenticated via cron token, not user session. }
+  /api/v1/internal/automations/schedule:
+    post: { summary: Internal cron entrypoint — fires scheduled-trigger automations whose next-run time is due. }
+
+  /api/v1/share-links:
+    get:  { summary: List active share links scoped to the caller's org. WF-share-1. }
+    post: { summary: Mint a new share link (resource_table + resource_id + scopes + optional expiry/password). }
+  /api/v1/share-links/{id}:
+    delete: { summary: Revoke a share link. Subsequent lookups return 410 Gone. }
+
+  /api/v1/push/subscriptions:
+    get:    { summary: List the caller's web-push endpoints (one per browser/device). }
+    post:   { summary: Register a new web-push endpoint (subscribed via the in-page push prompt). }
+    delete: { summary: Unsubscribe a single endpoint by id, or `?all=1` to clear every endpoint for the caller. }
+  /api/v1/push/test:
+    post: { summary: Send a test push to every active endpoint for the caller — verifies VAPID + subscription health. }
+
+  /api/v1/integrations/slack/install:
+    get: { summary: Begin the Slack OAuth install flow — redirects the user to slack.com with the workspace's state token. }
+  /api/v1/integrations/slack/callback:
+    get: { summary: Slack OAuth callback. Exchanges code → bot token, persists workspace, redirects to /console/integrations. }
+  /api/v1/integrations/slack/uninstall:
+    post: { summary: Disconnect the calling org from its Slack workspace and revoke the stored bot token. }
+  /api/v1/integrations/slack/events:
+    post: { summary: Slack Events API receiver. Verifies HMAC signature; handles url_verification, app_uninstalled, message events. }
+
+  /api/v1/zapier/auth/test:
+    get: { summary: Zapier auth-test endpoint — validates the Bearer PAT and returns the resolved org name + user email. }
+  /api/v1/zapier/actions/create-project:
+    post: { summary: Zapier action — create a project in the caller's org. }
+  /api/v1/zapier/actions/create-task:
+    post: { summary: Zapier action — create a task (optionally scoped to a project). }
+  /api/v1/zapier/triggers/projects:
+    get: { summary: Zapier polling trigger — recent projects for the caller's org. }
+  /api/v1/zapier/triggers/deliverables:
+    get: { summary: Zapier polling trigger — recent deliverables for the caller's org. }
+  /api/v1/zapier/triggers/invoices:
+    get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
+  /api/v1/zapier/triggers/ticket-scans:
+    get: { summary: Zapier polling trigger — recent ticket scans for the caller's org. }

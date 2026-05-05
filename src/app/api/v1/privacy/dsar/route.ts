@@ -4,7 +4,6 @@ import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-
 /** /api/v1/privacy/dsar — DSAR intake (WF-232). */
 
 const PostSchema = z.object({

@@ -12,14 +12,14 @@ import {
 import { Button } from "@/components/ui/Button";
 
 type Consent = {
-  essential: true;        // always on
+  essential: true; // always on
   analytics: boolean;
   marketing: boolean;
   decidedAt: string;
 };
 
 const COOKIE_NAME = "fbw_consent";
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;   // 1 year
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 function readConsent(): Consent | null {
   try {
@@ -69,8 +69,8 @@ export function CookieConsent() {
         <DialogHeader>
           <DialogTitle>Cookies & privacy</DialogTitle>
           <DialogDescription>
-            We use essential cookies to keep you signed in and protect your account. With your
-            permission, we'd also use analytics and marketing cookies to improve the product.
+            We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use
+            analytics and marketing cookies to improve the product.
           </DialogDescription>
         </DialogHeader>
 
@@ -101,18 +101,13 @@ export function CookieConsent() {
             {showDetails ? "Hide details" : "Customize"}
           </button>
           <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              onClick={() => decide({ analytics: false, marketing: false })}
-            >
+            <Button variant="ghost" onClick={() => decide({ analytics: false, marketing: false })}>
               Reject all
             </Button>
             {showDetails ? (
               <Button onClick={() => decide({ analytics, marketing })}>Save preferences</Button>
             ) : (
-              <Button onClick={() => decide({ analytics: true, marketing: true })}>
-                Accept all
-              </Button>
+              <Button onClick={() => decide({ analytics: true, marketing: true })}>Accept all</Button>
             )}
           </div>
         </DialogFooter>
@@ -125,7 +120,10 @@ function Row({ label, required, description }: { label: string; required?: boole
   return (
     <div className="flex items-start justify-between gap-3">
       <div>
-        <div className="font-medium">{label}{required && " · always on"}</div>
+        <div className="font-medium">
+          {label}
+          {required && " · always on"}
+        </div>
         <div className="text-[var(--text-muted)]">{description}</div>
       </div>
     </div>

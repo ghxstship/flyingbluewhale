@@ -55,10 +55,7 @@ async function checkDatabase(): Promise<Check> {
     const ac = new AbortController();
     const timer = setTimeout(() => ac.abort(), DB_TIMEOUT_MS);
     try {
-      const { error } = await supabase
-        .from("orgs")
-        .select("id", { count: "exact", head: true })
-        .abortSignal(ac.signal);
+      const { error } = await supabase.from("orgs").select("id", { count: "exact", head: true }).abortSignal(ac.signal);
       // "permission denied" / "JWT expired" are fine — they prove the DB replied.
       // Only network-level / abort errors fail readiness.
       if (error && /abort|network|connection|timeout/i.test(error.message)) {

@@ -16,11 +16,19 @@ export default async function ArtistHome({ params }: { params: Promise<{ slug: s
     <div className="flex min-h-screen">
       <PortalRail items={portalNav(slug, "artist")} title="Artist" />
       <div className="flex-1">
-        <ModuleHeader eyebrow={project.name} title="Artist Portal" subtitle="Submit riders, input lists, catering, travel, and schedule" />
+        <ModuleHeader
+          eyebrow={project.name}
+          title="Artist Portal"
+          subtitle="Submit riders, input lists, catering, travel, and schedule"
+        />
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { href: `/p/${slug}/artist/advancing`, label: "Advancing", desc: "Technical rider · hospitality · stage plot · guest list" },
+              {
+                href: `/p/${slug}/artist/advancing`,
+                label: "Advancing",
+                desc: "Technical rider · hospitality · stage plot · guest list",
+              },
               { href: `/p/${slug}/artist/catering`, label: "Catering", desc: "Meals, dietary preferences, green room" },
               { href: `/p/${slug}/artist/venue`, label: "Venue", desc: "Load-in, power, dimensions" },
               { href: `/p/${slug}/artist/schedule`, label: "Schedule", desc: "Show day timing" },

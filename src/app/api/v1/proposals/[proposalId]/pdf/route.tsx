@@ -35,7 +35,9 @@ export async function GET(_req: Request, ctx: { params: Promise<{ proposalId: st
 
   const [{ data: org }, { data: client }, { data: sigs }] = await Promise.all([
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
-    p.client_id ? supabase.from("clients").select("name").eq("id", p.client_id).maybeSingle() : Promise.resolve({ data: null }),
+    p.client_id
+      ? supabase.from("clients").select("name").eq("id", p.client_id).maybeSingle()
+      : Promise.resolve({ data: null }),
     supabase
       .from("proposal_signatures")
       .select("signer_name, signer_email, signer_role, signature_hash, signed_at, signer_ip")

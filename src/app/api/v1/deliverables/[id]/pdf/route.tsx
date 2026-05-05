@@ -67,7 +67,11 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
       path: `pdf/${session.orgId}/${d.project_id}/${d.id}.pdf`,
       signedUrlTtlSeconds: 60,
       contentDisposition: "attachment",
-      filenameForAttachment: `${(project?.name ?? "project").toLowerCase().replace(/\s+/g, "-")}-${labelFor(d.type as string).toLowerCase().replace(/\s+/g, "-")}.pdf`,
+      filenameForAttachment: `${(project?.name ?? "project").toLowerCase().replace(/\s+/g, "-")}-${labelFor(
+        d.type as string,
+      )
+        .toLowerCase()
+        .replace(/\s+/g, "-")}.pdf`,
     });
     return NextResponse.redirect(signedUrl, 302);
   } catch (e) {

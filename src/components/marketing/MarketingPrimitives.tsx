@@ -43,23 +43,17 @@ export function MarketingHero({
   return (
     <section className={`mx-auto max-w-6xl px-6 py-16 md:py-24 ${className}`}>
       {eyebrow && (
-        <div className="text-xs font-semibold uppercase tracking-wider text-[var(--accent-solid,var(--org-primary))]">
+        <div className="text-xs font-semibold tracking-wider text-[var(--accent-solid,var(--org-primary))] uppercase">
           {eyebrow}
         </div>
       )}
       <h1
-        className={`${eyebrow ? "mt-3" : ""} max-w-4xl text-balance text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl`}
+        className={`${eyebrow ? "mt-3" : ""} max-w-4xl text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl`}
       >
         {title}
       </h1>
-      {subtitle && (
-        <p className="mt-5 max-w-2xl text-pretty text-lg text-[var(--text-secondary)]">
-          {subtitle}
-        </p>
-      )}
-      {actions && (
-        <div className="mt-8 flex flex-wrap items-center gap-3">{actions}</div>
-      )}
+      {subtitle && <p className="mt-5 max-w-2xl text-lg text-pretty text-[var(--text-secondary)]">{subtitle}</p>}
+      {actions && <div className="mt-8 flex flex-wrap items-center gap-3">{actions}</div>}
     </section>
   );
 }
@@ -88,20 +82,18 @@ export function MarketingSection({
 }) {
   const alignClass = align === "center" ? "text-center" : "";
   return (
-    <section
-      id={id}
-      aria-label={ariaLabel}
-      className={`mx-auto max-w-6xl px-6 py-16 md:py-20 ${className}`}
-    >
+    <section id={id} aria-label={ariaLabel} className={`mx-auto max-w-6xl px-6 py-16 md:py-20 ${className}`}>
       {(eyebrow || title || subtitle) && (
         <header className={`mb-10 ${alignClass}`}>
           {eyebrow && (
-            <div className="text-xs font-semibold uppercase tracking-wider text-[var(--accent-solid,var(--org-primary))]">
+            <div className="text-xs font-semibold tracking-wider text-[var(--accent-solid,var(--org-primary))] uppercase">
               {eyebrow}
             </div>
           )}
           {title && (
-            <h2 className={`${eyebrow ? "mt-3" : ""} max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl ${align === "center" ? "mx-auto" : ""}`}>
+            <h2
+              className={`${eyebrow ? "mt-3" : ""} max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl ${align === "center" ? "mx-auto" : ""}`}
+            >
               {title}
             </h2>
           )}
@@ -131,11 +123,7 @@ export function MarketingGrid({
   className?: string;
 }) {
   const gridCols =
-    cols === 4
-      ? "sm:grid-cols-2 lg:grid-cols-4"
-      : cols === 2
-        ? "sm:grid-cols-2"
-        : "sm:grid-cols-2 lg:grid-cols-3";
+    cols === 4 ? "sm:grid-cols-2 lg:grid-cols-4" : cols === 2 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3";
   return <div className={`grid gap-5 ${gridCols} ${className}`}>{children}</div>;
 }
 
@@ -144,7 +132,5 @@ export function MarketingGrid({
 // Purely a layout convenience; the h1 / h2 styling lives on the primitives.
 // ---------------------------------------------------------------------------
 export function MarketingPageShell({ children }: { children: React.ReactNode }) {
-  return (
-    <main className="space-y-6 md:space-y-10 lg:space-y-14 pb-24">{children}</main>
-  );
+  return <main className="space-y-6 pb-24 md:space-y-10 lg:space-y-14">{children}</main>;
 }

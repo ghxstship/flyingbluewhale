@@ -38,7 +38,10 @@ export async function GET(_req: Request, ctx: { params: Promise<{ rentalId: stri
     ? await supabase.from("equipment").select("name, serial").eq("id", r.equipment_id).maybeSingle()
     : { data: null };
   const { data: org } = await supabase
-    .from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle();
+    .from("orgs")
+    .select("name, name_override, logo_url, branding")
+    .eq("id", session.orgId)
+    .maybeSingle();
   if (!org) return apiError("internal", "Missing organization row");
 
   const brand = resolvePdfBrand({ org, client: null });
@@ -54,9 +57,18 @@ export async function GET(_req: Request, ctx: { params: Promise<{ rentalId: stri
             starts_on: typeof r.starts_at === "string" ? r.starts_at.slice(0, 10) : null,
             ends_on: typeof r.ends_at === "string" ? r.ends_at.slice(0, 10) : null,
           }}
-          lineItems={equipment
-            ? [{ qty: 1, item: equipment.name ?? "Rental item", serial: equipment.serial ?? null, note: r.notes ?? null }]
-            : [{ qty: 1, item: "Rental (equipment TBD)", serial: null, note: r.notes ?? null }]}
+          lineItems={
+            equipment
+              ? [
+                  {
+                    qty: 1,
+                    item: equipment.name ?? "Rental item",
+                    serial: equipment.serial ?? null,
+                    note: r.notes ?? null,
+                  },
+                ]
+              : [{ qty: 1, item: "Rental (equipment TBD)", serial: null, note: r.notes ?? null }]
+          }
         />
       ),
       bucket: "advancing",

@@ -19,11 +19,7 @@ export default async function PortalSlugLayout({
 }) {
   const { slug } = await params;
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("projects")
-    .select("name, branding")
-    .eq("slug", slug)
-    .maybeSingle();
+  const { data } = await supabase.from("projects").select("name, branding").eq("slug", slug).maybeSingle();
 
   const branding = safeBranding(data?.branding);
   const style = brandingToCssVars(branding) as React.CSSProperties;

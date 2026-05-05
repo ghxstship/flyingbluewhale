@@ -148,19 +148,12 @@ export async function fail(jobId: string, err: unknown): Promise<void> {
   const message = err instanceof Error ? err.message : String(err);
 
   // Read current attempt count so we can decide retry vs dead.
-  const { data: current } = await svc
-    .from("job_queue")
-    .select("attempts, max_attempts")
-    .eq("id", jobId)
-    .maybeSingle();
+  const { data: current } = await svc.from("job_queue").select("attempts, max_attempts").eq("id", jobId).maybeSingle();
   const attempts = (current?.attempts as number | undefined) ?? 0;
   const maxAttempts = (current?.max_attempts as number | undefined) ?? 5;
 
   if (attempts >= maxAttempts) {
-    await svc
-      .from("job_queue")
-      .update({ state: "dead", last_error: message })
-      .eq("id", jobId);
+    await svc.from("job_queue").update({ state: "dead", last_error: message }).eq("id", jobId);
     log.error("jobs.dead_letter", { job_id: jobId, err: message, attempts });
     return;
   }

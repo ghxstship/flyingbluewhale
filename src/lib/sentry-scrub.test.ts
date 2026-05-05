@@ -6,23 +6,17 @@ import { scrubString, scrubCookieHeader, scrubSentryEvent } from "./sentry-scrub
 
 describe("scrubString", () => {
   it("redacts UUIDs", () => {
-    expect(scrubString("/api/v1/projects/498a047e-bd2a-401e-9efb-f7fb796290d4")).toBe(
-      "/api/v1/projects/:uuid",
-    );
+    expect(scrubString("/api/v1/projects/498a047e-bd2a-401e-9efb-f7fb796290d4")).toBe("/api/v1/projects/:uuid");
   });
   it("redacts emails", () => {
-    expect(scrubString("failed login for julian.clarkson@ghxstship.pro")).toBe(
-      "failed login for :email",
-    );
+    expect(scrubString("failed login for julian.clarkson@ghxstship.pro")).toBe("failed login for :email");
   });
   it("redacts JWT-shaped tokens", () => {
     const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.XXXXXXXXXXXX";
     expect(scrubString(`token=${jwt}`)).toBe("token=:jwt");
   });
   it("redacts Bearer tokens", () => {
-    expect(scrubString("Authorization: Bearer sb_secret_abc12345")).toBe(
-      "Authorization: Bearer [REDACTED]",
-    );
+    expect(scrubString("Authorization: Bearer sb_secret_abc12345")).toBe("Authorization: Bearer [REDACTED]");
   });
   it("redacts Stripe identifiers", () => {
     expect(scrubString("charging cus_NXbRioAJhXqkMn and pi_3OabcdefghIJklmnopqr")).toBe(
@@ -67,7 +61,9 @@ describe("scrubSentryEvent", () => {
         },
       },
       message: "fetch failed for julian@ghxstship.pro",
-      exception: { values: [{ value: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.XXXXXXXXXXXX" }] },
+      exception: {
+        values: [{ value: "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.XXXXXXXXXXXX" }],
+      },
     };
 
     scrubSentryEvent(event);

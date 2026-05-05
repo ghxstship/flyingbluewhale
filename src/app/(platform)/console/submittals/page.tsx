@@ -2,6 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -18,6 +19,7 @@ type Row = {
   status: string;
   current_round: number;
   due_at: string | null;
+  closed_at: string | null;
   project: { name: string | null } | null;
   vendor: { name: string | null } | null;
   ball: { name: string | null; email: string | null } | null;
@@ -57,7 +59,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("submittals")
     .select(
-      "id, code, title, spec_section, status, current_round, due_at, project:project_id(name), vendor:vendor_id(name), ball:ball_in_court_id(name, email)",
+      "id, code, title, spec_section, status, current_round, due_at, closed_at, project:project_id(name), vendor:vendor_id(name), ball:ball_in_court_id(name, email)",
     )
     .eq("org_id", session.orgId)
     .order("created_at", { ascending: false })
@@ -136,7 +138,12 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
+              render: (r) => (
+                <span className="inline-flex items-center gap-2">
+                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                  <DueDateBadge dueAt={r.due_at} closedAt={r.closed_at} status={r.status} iconOnly size="sm" />
+                </span>
+              ),
               filterable: true,
               groupable: true,
               accessor: (r) => r.status.replace ?? null,

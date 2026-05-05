@@ -77,7 +77,9 @@ export async function httpFetch(input: string | URL, init: HttpOptions = {}): Pr
   let lastErr: unknown;
   for (let attempt = 0; attempt <= retries; attempt++) {
     const { timeoutMs: _t, retries: _r, retryOn: _ro, signal: userSignal, ...rest } = init;
-    void _t; void _r; void _ro;
+    void _t;
+    void _r;
+    void _ro;
     const timeoutSignal = AbortSignal.timeout(timeoutMs);
     const signal = userSignal ? combineSignals(userSignal, timeoutSignal) : timeoutSignal;
 

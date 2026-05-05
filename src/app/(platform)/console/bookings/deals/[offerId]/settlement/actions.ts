@@ -5,6 +5,8 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { env } from "@/lib/env";
+import { httpFetch } from "@/lib/http";
 
 const NumStr = z.string().optional().or(z.literal(""));
 const toCents = (v: string | undefined): number => {
@@ -95,9 +97,62 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
   const offerId = String(fd.get("offer_id") ?? "");
   if (!offerId) return { error: "Missing deal" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
+
+  // Read settlement to inspect payout destination + balance + currency.
+  const settlementResp = await supabase
+    .from("settlements")
+    .select("id, balance_due_cents, payout_destination, currency, stripe_transfer_id")
+    .eq("talent_offer_id", offerId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!settlementResp.data) return { error: "Settlement not found" };
+  const s = settlementResp.data as {
+    id: string;
+    balance_due_cents: number;
+    payout_destination: string | null;
+    currency: string;
+    stripe_transfer_id: string | null;
+  };
+
+  // Stripe Connect transfer — only fire when:
+  //   1. STRIPE_SECRET_KEY is configured (graceful no-op locally)
+  //   2. settlement has payout_destination (Connect account id)
+  //   3. balance_due_cents > 0
+  //   4. no transfer already exists (idempotency at the action level)
+  let stripeTransferId: string | null = s.stripe_transfer_id;
+  if (env.STRIPE_SECRET_KEY && s.payout_destination && s.balance_due_cents > 0 && !s.stripe_transfer_id) {
+    const form = new URLSearchParams();
+    form.set("amount", String(s.balance_due_cents));
+    form.set("currency", s.currency.toLowerCase());
+    form.set("destination", s.payout_destination);
+    form.set("transfer_group", `settlement:${s.id}`);
+    const res = await httpFetch("https://api.stripe.com/v1/transfers", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+        "content-type": "application/x-www-form-urlencoded",
+        // Idempotency-Key prevents double-pay on retried clicks.
+        "Idempotency-Key": `settlement:${s.id}:transfer`,
+      },
+      body: form.toString(),
+      timeoutMs: 15000,
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      return { error: `Stripe transfer failed: ${text.slice(0, 200)}` };
+    }
+    const transfer = (await res.json()) as { id: string };
+    stripeTransferId = transfer.id;
+  }
+
   const { error } = await supabase
     .from("settlements")
-    .update({ status: "final", finalized_at: new Date().toISOString(), finalized_by: session.userId })
+    .update({
+      status: "final",
+      finalized_at: new Date().toISOString(),
+      finalized_by: session.userId,
+      stripe_transfer_id: stripeTransferId,
+    })
     .eq("talent_offer_id", offerId)
     .eq("org_id", session.orgId);
   if (error) return { error: error.message };

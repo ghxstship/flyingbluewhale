@@ -1,6 +1,8 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { FormShell } from "@/components/FormShell";
+import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -8,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE, computeBreakEven } from "@/lib/marketplace";
+import { addCoProPartnerAction, removeCoProPartnerAction } from "./co-pro/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -151,19 +154,100 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
           )}
         </section>
 
-        {d.co_pro_partners.length > 0 && (
-          <section className="surface p-5">
-            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Co-Pro Partners</h2>
-            <ul className="space-y-1 text-sm">
-              {d.co_pro_partners.map((p, i) => (
-                <li key={i} className="font-mono">
-                  {p.org_name} — {p.split_pct}%
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+        <CoProSection offerId={d.id} />
       </div>
     </>
+  );
+}
+
+async function CoProSection({ offerId }: { offerId: string }) {
+  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const session = await requireSession();
+  const { data } = await supabase
+    .from("co_pro_partnerships")
+    .select("id, partner_name, partner_org_id, split_pct, bonus_terms, contact_email, settled_at, settled_amount_cents")
+    .eq("talent_offer_id", offerId)
+    .eq("org_id", session.orgId)
+    .order("created_at");
+  const rows = (data ?? []) as Array<{
+    id: string;
+    partner_name: string;
+    partner_org_id: string | null;
+    split_pct: number;
+    bonus_terms: string | null;
+    contact_email: string | null;
+    settled_at: string | null;
+    settled_amount_cents: number | null;
+  }>;
+  const totalSplit = rows.reduce((s, r) => s + Number(r.split_pct ?? 0), 0);
+
+  return (
+    <section className="surface p-5">
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="text-sm font-semibold tracking-wide uppercase">Co-Pro Partners</h2>
+        <Badge variant={totalSplit > 100 ? "error" : totalSplit === 100 ? "success" : "muted"}>
+          {totalSplit}% allocated
+        </Badge>
+      </div>
+      {rows.length === 0 ? (
+        <p className="text-sm text-[var(--text-secondary)]">
+          No partners attached. Add a co-pro partner with a split percentage.
+        </p>
+      ) : (
+        <ul className="mb-4 divide-y divide-[var(--border-subtle)]">
+          {rows.map((r) => (
+            <li key={r.id} className="flex items-center justify-between py-2 text-sm">
+              <div>
+                <span className="font-semibold">{r.partner_name}</span>
+                <span className="ml-2 font-mono text-xs">{r.split_pct}%</span>
+                {r.contact_email && (
+                  <span className="ml-2 text-xs text-[var(--text-secondary)]">{r.contact_email}</span>
+                )}
+                {r.settled_at && (
+                  <Badge variant="success" className="ml-2">
+                    settled
+                  </Badge>
+                )}
+              </div>
+              <form
+                action={async (fd) => {
+                  "use server";
+                  await removeCoProPartnerAction(null, fd);
+                }}
+              >
+                <input type="hidden" name="partnership_id" value={r.id} />
+                <input type="hidden" name="offer_id" value={offerId} />
+                <button type="submit" className="btn btn-ghost text-xs">
+                  Remove
+                </button>
+              </form>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <FormShell
+        action={addCoProPartnerAction}
+        submitLabel="Add Partner"
+        className="border-t border-[var(--border-subtle)] pt-4"
+      >
+        <input type="hidden" name="offer_id" value={offerId} />
+        <div className="grid grid-cols-2 gap-3">
+          <Input label="Partner Name" name="partner_name" required maxLength={200} placeholder="Goldenvoice" />
+          <Input label="Split %" name="split_pct" type="number" min={0} max={100} required />
+        </div>
+        <Input label="Contact Email" name="contact_email" type="email" />
+        <div>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">Bonus Terms</label>
+          <textarea
+            name="bonus_terms"
+            rows={3}
+            maxLength={2000}
+            className="input-base mt-1.5 w-full"
+            placeholder="80/20 over $X NBOR threshold"
+          />
+        </div>
+      </FormShell>
+    </section>
   );
 }

@@ -154,8 +154,9 @@ test.describe("Booking canon · form actions", () => {
     await page.locator('select[name="provider"]').selectOption("dice");
     await page.getByLabel("Label").fill(label);
     await page.getByRole("button", { name: /^Connect$/i }).click();
-    await page.waitForURL("**/console/settings/integrations/ticketing", { timeout: 15_000 });
-    await expect(page.getByText(label)).toBeVisible({ timeout: 5_000 });
+    // Action now redirects to the new connection's detail page.
+    await page.waitForURL(/\/ticketing\/[0-9a-f-]+$/, { timeout: 15_000 });
+    await expect(page.locator("h1").first()).toContainText(label);
   });
 
   test("create tour → land on detail with empty leg list", async ({ page }) => {

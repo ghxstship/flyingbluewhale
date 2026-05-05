@@ -366,10 +366,20 @@ test.describe("Marketplace canon · form actions", () => {
 
   test("/me/talent upsert", async ({ page }) => {
     await page.goto("/me/talent");
+    // Pre-fill act_name when missing (the EPK is shared with the marketplace
+    // talent_profiles table; if no row exists yet for this user × org, the
+    // submit must include the required act_name).
+    const actInput = page.getByLabel("Act Name");
+    if (!(await actInput.inputValue())) {
+      await actInput.fill(`E2E Act Self ${Date.now()}`);
+    }
     const tagline = `E2E tagline ${Date.now()}`;
     await page.getByLabel("Tagline").fill(tagline);
     await page.getByRole("button", { name: /^Save EPK$/i }).click();
+    // Server action redirects via revalidate; wait for the form's pending
+    // state to clear before re-loading.
     await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(500);
     // Re-load and assert persistence
     await page.goto("/me/talent");
     await expect(page.getByLabel("Tagline")).toHaveValue(tagline);

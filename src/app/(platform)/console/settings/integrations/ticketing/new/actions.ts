@@ -22,17 +22,23 @@ export async function createTicketingConnectionAction(_: State, fd: FormData): P
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { error } = await supabase.from("ticketing_connections").insert({
-    org_id: session.orgId,
-    provider: parsed.data.provider,
-    external_event_id: parsed.data.external_event_id || null,
-    label: parsed.data.label || null,
-    api_credentials: parsed.data.api_key ? { token: parsed.data.api_key } : {},
-    is_active: true,
-  });
+  const { data, error } = await supabase
+    .from("ticketing_connections")
+    .insert({
+      org_id: session.orgId,
+      provider: parsed.data.provider,
+      external_event_id: parsed.data.external_event_id || null,
+      label: parsed.data.label || null,
+      api_credentials: parsed.data.api_key ? { token: parsed.data.api_key } : {},
+      is_active: true,
+    })
+    .select("id")
+    .single();
   if (error) return { error: error.message };
   revalidatePath("/console/settings/integrations/ticketing");
-  redirect("/console/settings/integrations/ticketing");
+  // Land on the new connection's detail page so the operator can record
+  // a sales snapshot immediately.
+  redirect(`/console/settings/integrations/ticketing/${(data as { id: string }).id}`);
 }
 
 export async function deactivateTicketingConnectionAction(_: State, fd: FormData): Promise<State> {

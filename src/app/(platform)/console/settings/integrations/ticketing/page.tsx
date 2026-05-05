@@ -54,6 +54,7 @@ export default async function Page() {
       <div className="page-content space-y-5">
         <DataTable<Row>
           rows={rows}
+          rowHref={(r) => `/console/settings/integrations/ticketing/${r.id}`}
           emptyLabel="No ticketing connections"
           emptyDescription="Connect a provider to feed live sales velocity into your deals + settlements."
           emptyAction={

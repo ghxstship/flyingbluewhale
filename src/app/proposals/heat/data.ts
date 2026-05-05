@@ -113,16 +113,17 @@ export const HEAT_RETAINER_TIERS: RetainerTier[] = [
         detail: "One design-intent revision included before lock; further rounds billable.",
       },
       {
-        name: "Priority Queue · Tier 3",
-        detail: "Retained accounts jump ahead of non-retained work in the shop schedule.",
+        name: "Priority Scheduling",
+        detail: "Your work moves ahead of any non-retained briefs in the shop schedule.",
       },
       {
-        name: "Asset Storage · 1 Pallet",
-        detail: "Climate-controlled hold for one pallet of reusable structural / signage elements.",
+        name: "Standard Asset Storage",
+        detail:
+          "Climate-controlled hold between activations — your reusable structural and signage elements stay shop-side, ready for the next call.",
       },
       {
-        name: "Activation Buildout Discount · 5%",
-        detail: "Five percent off list pricing on every per-activation buildout.",
+        name: "Build Pricing · 5% Off List",
+        detail: "Five percent off list on every activation build.",
       },
     ],
   },
@@ -134,7 +135,7 @@ export const HEAT_RETAINER_TIERS: RetainerTier[] = [
     pitch: "Operating Tempo.",
     fitFor: "5–10 activations per year · multi-partner cadence · homestand rhythm",
     features: [
-      { name: "Everything In Base, Plus →", detail: "Cumulative — Elevated inherits the full Base tier." },
+      { name: "Everything In Base, Plus →", detail: "Includes every line in the Base tier." },
       {
         name: "Response SLA · 8 Business Hours",
         detail: "Inbound brief or ad-hoc request acknowledged within one working day window.",
@@ -151,14 +152,17 @@ export const HEAT_RETAINER_TIERS: RetainerTier[] = [
         name: "1 Concept Board / Quarter",
         detail: "Off-cycle ideation board on a HEAT-chosen brief — fully unbilled.",
       },
-      { name: "Priority Queue · Tier 2", detail: "Elevated jumps ahead of Base-retained and non-retained work alike." },
       {
-        name: "Asset Storage · 4 Pallets",
-        detail: "Climate-controlled hold for four pallets; reuse credits stack per deployment.",
+        name: "Express Scheduling",
+        detail: "Your work clears the queue ahead of Base — faster shop slot, faster turnaround.",
       },
       {
-        name: "Activation Buildout Discount · 8%",
-        detail: "Eight percent off list pricing on every per-activation buildout.",
+        name: "Expanded Asset Storage",
+        detail: "More room, more reuse. Your kit stays shop-side and credits compound across the season.",
+      },
+      {
+        name: "Build Pricing · 8% Off List",
+        detail: "Eight percent off list on every activation build.",
       },
       {
         name: "Quarterly Business Review",
@@ -174,7 +178,7 @@ export const HEAT_RETAINER_TIERS: RetainerTier[] = [
     pitch: "Strategic Partner.",
     fitFor: "11+ activations per year · season-defining program · embedded creative cadence",
     features: [
-      { name: "Everything In Elevated, Plus →", detail: "Cumulative — Premium inherits the full Elevated tier." },
+      { name: "Everything In Elevated, Plus →", detail: "Includes every line in the Elevated tier." },
       {
         name: "Response SLA · 4 Business Hours",
         detail: "Inbound brief acknowledged within four hours; 24 / 7 on-call during activation windows.",
@@ -189,16 +193,16 @@ export const HEAT_RETAINER_TIERS: RetainerTier[] = [
         detail: "Off-cycle ideation boards on HEAT-chosen briefs — fully unbilled.",
       },
       {
-        name: "Priority Queue · Tier 1",
-        detail: "VIP queue — Premium accounts hold first call on shop slots and crew.",
+        name: "First-Call Scheduling",
+        detail: "First call on shop slots and crew. Your work runs first, every time.",
       },
       {
-        name: "Asset Storage · 12 Pallets + Dedicated Rack",
-        detail: "Climate-controlled hold for twelve pallets plus a labeled HEAT-only rack.",
+        name: "Dedicated Asset Storage",
+        detail: "Climate-controlled hold on a dedicated rack reserved for HEAT — your assets, your space, year-round.",
       },
       {
-        name: "Activation Buildout Discount · 12%",
-        detail: "Twelve percent off list pricing on every per-activation buildout.",
+        name: "Build Pricing · 12% Off List",
+        detail: "Twelve percent off list on every activation build.",
       },
       {
         name: "Monthly Executive Review",
@@ -1018,25 +1022,25 @@ export const HEAT_CHANGE_ORDERS = [
 ];
 
 export const HEAT_PHASE_DEADLINES = {
-  discovery: "T − 10 weeks",
-  concept: "T − 8 weeks",
-  engineering: "T − 6 weeks",
-  preprod: "T − 4 weeks",
-  fabrication: "T − 2 weeks",
-  logistics: "T − 5 days",
-  install: "T − 1 day (overnight)",
-  strike: "T + close (post-window)",
+  discovery: "10 Weeks Out",
+  concept: "8 Weeks Out",
+  engineering: "6 Weeks Out",
+  preprod: "4 Weeks Out",
+  fabrication: "2 Weeks Out",
+  logistics: "5 Days Out",
+  install: "Night Before",
+  strike: "After Close",
 } as const;
 
 export const HEAT_PHASE_DEADLINES_SMALL = {
-  discovery: "T − 4 weeks",
-  concept: "T − 3 weeks",
-  engineering: "T − 2 weeks",
-  preprod: "T − 10 days",
-  fabrication: "T − 1 week",
-  logistics: "T − 2 days",
-  install: "T − 1 day (overnight)",
-  strike: "T + close",
+  discovery: "4 Weeks Out",
+  concept: "3 Weeks Out",
+  engineering: "2 Weeks Out",
+  preprod: "10 Days Out",
+  fabrication: "1 Week Out",
+  logistics: "2 Days Out",
+  install: "Night Before",
+  strike: "After Close",
 } as const;
 
 export function fmtMoney(n: number): string {

@@ -943,6 +943,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+.heat-retainer-card .heat-retainer-features {
+  margin-bottom: 20px;
 }
 .heat-retainer-card::before {
   content: "";
@@ -1105,6 +1109,141 @@
   text-transform: uppercase;
   font-weight: 800;
   color: var(--heat-yellow);
+}
+
+/* Per-tier CTA + upsell hint at the bottom of each retainer card.
+   Pinned to the bottom of the flex column so cards balance regardless
+   of feature-count differences. */
+.heat-retainer-cta {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--heat-line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.heat-retainer-card.flagship .heat-retainer-cta {
+  border-top-color: rgba(250, 247, 242, 0.18);
+}
+.heat-retainer-cta .heat-btn {
+  width: 100%;
+  justify-content: center;
+}
+.heat-retainer-card.flagship .heat-retainer-cta .heat-btn {
+  background: var(--heat-yellow);
+  color: var(--heat-black);
+  border-color: var(--heat-yellow);
+}
+.heat-retainer-card.flagship .heat-retainer-cta .heat-btn:hover {
+  box-shadow: 4px 4px 0 var(--heat-red);
+}
+.heat-retainer-upsell {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--heat-red);
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color 0.15s ease;
+}
+.heat-retainer-upsell:hover {
+  border-bottom-color: var(--heat-red);
+}
+
+/* Premium Exclusives banner — pulled out of the flagship card so the
+   three tier cards balance, and the exclusives get a stronger reveal. */
+.heat-premium-banner {
+  margin-top: 36px;
+  background: var(--heat-black);
+  color: var(--heat-paper);
+  padding: 36px 28px 32px;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--heat-red);
+  box-shadow: 0 0 0 1px var(--heat-red);
+}
+.heat-premium-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 6px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--heat-red) 0 12px,
+    var(--heat-yellow) 12px 24px,
+    var(--heat-black) 24px 36px
+  );
+}
+.heat-premium-banner-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.heat-premium-banner-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--heat-yellow);
+}
+.heat-premium-banner-title {
+  font-family: var(--font-display, "Anton", system-ui);
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  font-style: italic;
+  color: var(--heat-paper);
+  margin: 0 0 6px;
+  display: inline-block;
+  transform: skewX(-4deg);
+  transform-origin: 0 100%;
+}
+.heat-premium-banner-sub {
+  font-size: 14.5px;
+  color: rgba(250, 247, 242, 0.72);
+  max-width: 720px;
+  line-height: 1.55;
+  margin: 8px 0 0;
+}
+.heat-premium-banner-grid {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+  .heat-premium-banner-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1100px) {
+  .heat-premium-banner-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.heat-premium-banner-grid li {
+  border-left: 3px solid var(--heat-yellow);
+  padding-left: 14px;
+}
+.heat-premium-banner-grid .heat-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--heat-paper);
+  letter-spacing: 0.01em;
+}
+.heat-premium-banner-grid .heat-desc {
+  font-size: 12.5px;
+  color: rgba(250, 247, 242, 0.72);
+  margin-top: 4px;
+  line-height: 1.55;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────

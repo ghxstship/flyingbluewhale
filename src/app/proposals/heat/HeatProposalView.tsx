@@ -190,20 +190,20 @@ function ProjectOverview() {
             <Detail label="Small" value={fmtRange(HEAT_TIERS[0].base, HEAT_TIERS[0].ceiling)} />
             <Detail label="Medium" value={fmtRange(HEAT_TIERS[1].base, HEAT_TIERS[1].ceiling)} />
             <Detail label="Large" value={fmtRange(HEAT_TIERS[2].base, HEAT_TIERS[2].ceiling)} />
-            <Detail label="Spread" value="$10K base → spec at every tier" />
+            <Detail label="Includes" value="Production · Fab · Install · Strike" />
           </dl>
         </div>
         <div className="heat-card">
           <span className="heat-card-accent" style={{ background: "var(--heat-black)" }} />
           <div className="heat-eyebrow" style={{ color: "var(--heat-black)" }}>
-            Overlay
+            Upgrades
           </div>
-          <h3 style={{ fontSize: 22, marginTop: 8 }}>Add-Ons & Mechanics</h3>
+          <h3 style={{ fontSize: 22, marginTop: 8 }}>Optional Upgrades</h3>
           <dl style={{ marginTop: 12 }}>
-            <Detail label="Add-On Catalog" value={`${HEAT_ADDONS.length} items · 5 categories`} />
-            <Detail label="Stacks On" value="Retainer · Activation · Both" />
-            <Detail label="Discount" value="Up to 12% buildout via tier" />
-            <Detail label="Asset Reuse" value="30–50% credit on re-deployment" />
+            <Detail label="Add-On Menu" value={`${HEAT_ADDONS.length} Items · 5 Categories`} />
+            <Detail label="Adds To" value="Retainer · Activation · Both" />
+            <Detail label="Build Discount" value="Up To 12% Off List" />
+            <Detail label="Asset Reuse" value="30–50% Credit On Re-Deployment" />
           </dl>
         </div>
       </div>
@@ -215,12 +215,18 @@ function ProjectOverview() {
 // Retainer Tiers — Base / Elevated / Premium comparison cards
 // ─────────────────────────────────────────────────────────────────────────
 function RetainerTiers() {
+  const upsellLabel: Record<string, string> = {
+    base: "Need More? See Elevated →",
+    elevated: "Need More? See Premium →",
+  };
+  const premium = HEAT_RETAINER_TIERS.find((t) => t.id === "premium");
+
   return (
     <section id="retainer" className="heat-section">
       <SectionHeader
         eyebrow="Retainer Tiers"
         title="Base. Elevated. Premium."
-        sub="Three retainer tiers benchmarked against the fabrication-, production-, and print-house markets. Each tier is cumulative — Elevated includes Base; Premium includes Elevated plus exclusive lines that are not available à la carte."
+        sub="Three retainer tiers, scaled to your activation cadence. Each tier builds on the last — Elevated includes everything in Base, and Premium includes everything in Elevated plus exclusive lines reserved for the top tier."
       />
       <div className="heat-retainer-grid" style={{ marginTop: 28 }}>
         {HEAT_RETAINER_TIERS.map((tier) => {
@@ -254,29 +260,48 @@ function RetainerTiers() {
                   </li>
                 ))}
               </ul>
-              {tier.exclusive && tier.exclusive.length > 0 && (
-                <>
-                  <div className="heat-retainer-exclusive-head">
-                    <span className="heat-flame" aria-hidden="true" />
-                    Premium-Only · Not Available À La Carte
-                  </div>
-                  <ul className="heat-retainer-features exclusive">
-                    {tier.exclusive.map((f) => (
-                      <li key={f.name} data-exclusive="true">
-                        <span />
-                        <div>
-                          <div className="heat-name">{f.name}</div>
-                          <div className="heat-desc">{f.detail}</div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
+              <div className="heat-retainer-cta">
+                <a href="#sign" className={flagship ? "heat-btn danger" : "heat-btn"} data-tier-cta={tier.id}>
+                  Choose {tier.name}
+                </a>
+                {upsellLabel[tier.id] && (
+                  <a
+                    href={tier.id === "base" ? "#retainer" : "#retainer"}
+                    className="heat-retainer-upsell"
+                    data-upsell-from={tier.id}
+                  >
+                    {upsellLabel[tier.id]}
+                  </a>
+                )}
+              </div>
             </article>
           );
         })}
       </div>
+
+      {premium?.exclusive && premium.exclusive.length > 0 && (
+        <div className="heat-premium-banner" aria-labelledby="premium-banner-title">
+          <div className="heat-premium-banner-head">
+            <span className="heat-flame" aria-hidden="true" />
+            <span id="premium-banner-title" className="heat-premium-banner-eyebrow">
+              Premium Exclusives · Reserved For The Top Tier
+            </span>
+          </div>
+          <h3 className="heat-premium-banner-title">Lines You Won't Find Anywhere Else.</h3>
+          <p className="heat-premium-banner-sub">
+            Four lines available only at the Premium tier — not à la carte, not on Elevated, not as a one-off buy.
+            Reserved for partners running a season-defining program with us.
+          </p>
+          <ul className="heat-premium-banner-grid">
+            {premium.exclusive.map((f) => (
+              <li key={f.name}>
+                <div className="heat-name">{f.name}</div>
+                <div className="heat-desc">{f.detail}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
   );
 }
@@ -324,7 +349,7 @@ function ActivationTiers() {
       <SectionHeader
         eyebrow="Activation Builds"
         title="Small. Medium. Large."
-        sub="Three calibrated build tiers — each with a $10K spread between base spec and top spec. The spread covers in-tier upgrades only. Major architectural, retail, and capability upgrades stack via the Add-Ons catalog without inflating the build range."
+        sub="Three build tiers, calibrated for the moment. Each tier holds a tight range from base spec to top spec, with larger architectural and retail moves quoted separately from the Add-Ons menu."
       />
       <div style={{ marginTop: 28 }}>
         {HEAT_TIERS.map((tier) => {
@@ -345,7 +370,7 @@ function ActivationTiers() {
                   </span>
                 </span>
                 <span className="heat-tier-price">
-                  Buildout
+                  Build Range
                   <strong>{fmtRange(tier.base, tier.ceiling)}</strong>
                 </span>
                 <span className="heat-tier-toggle" aria-hidden="true">
@@ -376,7 +401,7 @@ function ActivationTiers() {
                   ))}
                 </ul>
                 <div className="heat-tier-section-title" style={{ color: "var(--heat-yellow)" }}>
-                  In-Tier Upgrades · Up To {fmtMoney(tier.ceiling)}
+                  Upgrades In This Tier · Up To {fmtMoney(tier.ceiling)}
                 </div>
                 <ul className="heat-tier-list">
                   {tier.customization.map((it) => (
@@ -390,8 +415,9 @@ function ActivationTiers() {
                   ))}
                 </ul>
                 <p className="heat-tier-footnote">
-                  Bigger architectural moves — chemetal cladding, container architecture, full POS retail, hospitality
-                  builds — overlay any tier via the <a href="#addons">Add-Ons catalog</a>.
+                  Larger architectural moves — chemetal cladding, container architecture, full POS retail, hospitality
+                  builds — are quoted separately from the <a href="#addons">Add-Ons menu</a> and layered onto whichever
+                  tier suits the moment.
                 </p>
               </div>
             </article>
@@ -659,7 +685,7 @@ function InvestmentSummary() {
       <SectionHeader
         eyebrow="Investment Summary"
         title="Retainer Plus Build."
-        sub="Total program investment scales with retainer tier and activation cadence. Pick a retainer; pull builds off the menu; layer Add-Ons as needed. All numbers are buildout-only."
+        sub="Total program investment scales with your retainer tier and activation cadence. Choose a retainer, pick builds off the menu, and layer in the upgrades that fit the moment. Every figure covers production, fabrication, install, and strike."
       />
       <div className="heat-investment" style={{ marginTop: 20 }}>
         <table>
@@ -685,8 +711,8 @@ function InvestmentSummary() {
             ))}
 
             <tr className="heat-row-section">
-              <td>Per-Activation Build (Quoted at SOW)</td>
-              <td className="right">$10K Spread · Base → Top Spec</td>
+              <td>Per-Activation Build</td>
+              <td className="right">Range · Base To Top Spec</td>
             </tr>
             {HEAT_TIERS.map((t) => (
               <tr key={t.id}>
@@ -700,33 +726,31 @@ function InvestmentSummary() {
 
             <tr className="heat-row-section">
               <td>Add-Ons & Upgrades</td>
-              <td className="right">Overlay Any Tier · See Catalog</td>
+              <td className="right">Add To Any Tier</td>
             </tr>
             <tr>
               <td>
-                <div style={{ fontWeight: 600, fontSize: 14 }}>
-                  {HEAT_ADDONS.length} catalog items across 5 categories
-                </div>
+                <div style={{ fontWeight: 600, fontSize: 14 }}>{HEAT_ADDONS.length} menu items across 5 categories</div>
                 <div style={{ fontSize: 12, color: "var(--heat-muted)", marginTop: 2 }}>
-                  Material & Finish · Functional Upgrades · Service Overlays · Logistics · Documentation. Stack any
-                  number on any retainer or activation.
+                  Material & Finish · Functional Upgrades · Service Overlays · Logistics · Documentation. Add any number
+                  to any retainer or activation.
                 </div>
               </td>
-              <td className="right">Quoted on selection</td>
+              <td className="right">Priced By Request</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td>Engagement Mechanic</td>
+              <td>Program Investment</td>
               <td className="right">Retainer + Build + Add-Ons</td>
             </tr>
           </tfoot>
         </table>
       </div>
       <p style={{ fontSize: 11.5, color: "var(--heat-muted)", marginTop: 12 }}>
-        Per-activation totals issue under individual Statements of Work executed against this master agreement.
-        Build-tier ranges hold to a $10K spread; in-tier upgrades fill that range. Bigger architectural moves stack via
-        Add-Ons rather than expanding the build range.
+        Every activation runs under its own signed sign-off, layered into this master agreement. Each build tier holds a
+        tight range from base spec to top spec, and upgrades inside that range stay inside the tier. Larger
+        architectural moves are quoted separately from the Add-Ons menu.
       </p>
     </section>
   );
@@ -749,7 +773,7 @@ function Addons() {
       <SectionHeader
         eyebrow="Add-Ons & Upgrades"
         title="Stack Anything. On Anything."
-        sub="The full overlay catalog — material upgrades, functional capabilities, service overlays, logistics, and documentation. Each item stacks on any retainer tier and / or any activation build. Quoted at point of selection."
+        sub="The full menu of optional upgrades — material, functional, service, logistics, and documentation. Pick any item, add it to any retainer or any build. Priced by request."
       />
       <div style={{ marginTop: 24, display: "grid", gap: 28 }}>
         {grouped.map(({ cat, items }) => (

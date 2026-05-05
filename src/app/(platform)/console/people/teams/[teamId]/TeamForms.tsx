@@ -100,21 +100,6 @@ function UpdateMemberRole({
 
 function RemoveMember({ teamId, userId }: { teamId: string; userId: string }) {
   return (
-    <form
-      action={async () => {
-        "use server";
-        // Server-action proxy isn't what we want — this client component
-        // dispatches the boundary action via a normal form submit.
-      }}
-    >
-      {/* Using a plain button-form to call the server action directly. */}
-      <ClientRemoveButton teamId={teamId} userId={userId} />
-    </form>
-  );
-}
-
-function ClientRemoveButton({ teamId, userId }: { teamId: string; userId: string }) {
-  return (
     <Button
       type="button"
       variant="ghost"

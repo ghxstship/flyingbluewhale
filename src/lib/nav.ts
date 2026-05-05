@@ -95,7 +95,14 @@ export type IconName =
   | "Atlas"
   | "Bot"
   | "Leaf"
-  | "Spline";
+  | "Spline"
+  // Marketplace
+  | "Globe"
+  | "Megaphone"
+  | "Mic2"
+  | "Music"
+  | "Star"
+  | "Gavel";
 
 export type NavItem = {
   label: string;
@@ -248,6 +255,20 @@ export const platformNav: NavGroup[] = [
       { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
       { label: "Time", href: "/console/finance/time", icon: "Clock" },
       { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+    ],
+  },
+  {
+    // 0002 Marketplace — public surfaces. Reuses existing console surfaces
+    // for vendors / crew (Procurement / People) and adds the public-facing
+    // ATS, talent booking, and review moderation that the audit identified.
+    label: "Marketplace",
+    items: [
+      { label: "Overview", href: "/console/marketplace", icon: "Globe" },
+      { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },
+      { label: "Open Calls", href: "/console/marketplace/calls", icon: "Mic2" },
+      { label: "Talent", href: "/console/marketplace/talent", icon: "Music" },
+      { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
+      { label: "Reviews", href: "/console/marketplace/reviews", icon: "Star" },
     ],
   },
   {

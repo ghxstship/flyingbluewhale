@@ -528,3 +528,76 @@
 # Privacy self-service for remaining portal personas
 (portal)/p/[slug]/artist/privacy/page.tsx|Privacy|DSAR self-service
 (portal)/p/[slug]/crew/privacy/page.tsx|Privacy|DSAR self-service
+
+# ════════════════════════════════════════════════════════════════════════
+# 0002 MARKETPLACE — public RFQ marketplace, crew job board, talent EPK,
+#                    open calls, offers, reviews, profiles
+# ════════════════════════════════════════════════════════════════════════
+
+# CONSOLE — marketplace hub
+(platform)/console/marketplace/page.tsx|Marketplace|Public RFQs, gigs, talent calls, offers
+(platform)/console/marketplace/settings/page.tsx|Marketplace settings|Take rate, public org profile, verification
+
+# CONSOLE — job board (employer ATS)
+(platform)/console/marketplace/postings/page.tsx|Job postings|Public crew job board listings
+(platform)/console/marketplace/postings/new/page.tsx|New posting|
+(platform)/console/marketplace/postings/[postingId]/page.tsx|Posting|Detail + ATS pipeline
+(platform)/console/marketplace/postings/[postingId]/edit/page.tsx|Edit posting|
+(platform)/console/marketplace/postings/[postingId]/applicants/page.tsx|Applicants|ATS pipeline
+(platform)/console/marketplace/postings/[postingId]/applicants/[applicationId]/page.tsx|Application|
+
+# CONSOLE — open calls (talent + RFP-public)
+(platform)/console/marketplace/calls/page.tsx|Open calls|Casting calls and open RFPs
+(platform)/console/marketplace/calls/new/page.tsx|New call|
+(platform)/console/marketplace/calls/[callId]/page.tsx|Call|Detail + submissions
+(platform)/console/marketplace/calls/[callId]/edit/page.tsx|Edit call|
+(platform)/console/marketplace/calls/[callId]/submissions/page.tsx|Submissions|
+(platform)/console/marketplace/calls/[callId]/submissions/[submissionId]/page.tsx|Submission|
+
+# CONSOLE — talent roster + EPK + riders (org-managed)
+(platform)/console/marketplace/talent/page.tsx|Talent|Org-managed talent roster
+(platform)/console/marketplace/talent/new/page.tsx|New talent|
+(platform)/console/marketplace/talent/[talentId]/page.tsx|Talent profile|EPK detail
+(platform)/console/marketplace/talent/[talentId]/edit/page.tsx|Edit talent|
+(platform)/console/marketplace/talent/[talentId]/riders/page.tsx|Riders|Tech, hospitality, input list
+(platform)/console/marketplace/talent/[talentId]/riders/new/page.tsx|New rider|
+(platform)/console/marketplace/talent/[talentId]/riders/[riderId]/page.tsx|Rider|
+
+# CONSOLE — offers (talent booking)
+(platform)/console/marketplace/offers/page.tsx|Offers|Talent offers and counter-offers
+(platform)/console/marketplace/offers/new/page.tsx|New offer|
+(platform)/console/marketplace/offers/[offerId]/page.tsx|Offer|
+
+# CONSOLE — reviews moderation
+(platform)/console/marketplace/reviews/page.tsx|Reviews|Bidirectional review log + moderation
+
+# CONSOLE — RFQ marketplace publish workflow
+(platform)/console/procurement/rfqs/[rfqId]/publish/page.tsx|Publish RFQ|Set visibility, gating, deadline
+(platform)/console/procurement/rfqs/[rfqId]/responses/page.tsx|Responses|Bid responses (incl. external)
+
+# MARKETING — public marketplace discovery
+(marketing)/marketplace/page.tsx|Marketplace|Public RFQs, gigs, talent calls, talent, crew, vendors
+(marketing)/marketplace/rfqs/page.tsx|Open RFQs|Public RFQ marketplace
+(marketing)/marketplace/rfqs/[slug]/page.tsx|RFQ|Public RFQ detail
+(marketing)/marketplace/gigs/page.tsx|Gigs|Public crew job board
+(marketing)/marketplace/gigs/[slug]/page.tsx|Gig|Public job posting detail
+(marketing)/marketplace/calls/page.tsx|Open calls|Casting and open RFP
+(marketing)/marketplace/calls/[slug]/page.tsx|Open call|Public call detail
+(marketing)/marketplace/talent/page.tsx|Talent directory|Public artist EPKs
+(marketing)/marketplace/talent/[handle]/page.tsx|Talent profile|Public EPK
+(marketing)/marketplace/crew/page.tsx|Crew directory|Public crew profiles
+(marketing)/marketplace/crew/[handle]/page.tsx|Crew profile|Public crew profile
+(marketing)/marketplace/vendors/page.tsx|Vendor directory|Public vendor profiles
+(marketing)/marketplace/vendors/[handle]/page.tsx|Vendor profile|Public vendor profile
+
+# PERSONAL — applicant self-service
+(personal)/me/applications/page.tsx|My applications|Job applications I've submitted
+(personal)/me/applications/[applicationId]/page.tsx|Application|
+(personal)/me/submissions/page.tsx|My submissions|Open call submissions
+(personal)/me/submissions/[submissionId]/page.tsx|Submission|
+(personal)/me/availability/page.tsx|Availability|My booking calendar (holds, confirms, blocks)
+(personal)/me/reviews/page.tsx|My reviews|Reviews about me + reviews I've written
+(personal)/me/saved-searches/page.tsx|Saved searches|Alerts and watch lists
+(personal)/me/talent/page.tsx|My talent profile|Public EPK editor
+(personal)/me/crew/page.tsx|My crew profile|Public crew profile editor
+(personal)/me/offers/page.tsx|My offers|Talent offers addressed to me

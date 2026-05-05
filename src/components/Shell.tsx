@@ -85,6 +85,23 @@ export function ModuleHeader({
   );
 }
 
+/**
+ * PageStub — render-time placeholder for routes scaffolded via
+ * `scripts/generate-stubs.sh` that haven't been wired up yet.
+ */
+export function PageStub({ title, description }: { title: string; description?: string }) {
+  return (
+    <>
+      <ModuleHeader title={title} subtitle={description} />
+      <div className="page-content">
+        <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+          This surface is scaffolded but not yet wired.
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function PageSkeleton({
   rows = 5,
   variant = "list",

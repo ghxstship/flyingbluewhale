@@ -38,6 +38,7 @@ Six route groups, three of them are full shells with distinct layouts:
 
 - **Project:** `flyingbluewhale` (`xrovijzjbyssajhtwvas`). URL + anon key in `.env.local`.
 - **Schema:** 33+ tables — identity (`orgs`, `users`, `memberships`), core (`projects`, `tickets`, `ticket_scans`), advancing (`deliverables`, `deliverable_comments`, `deliverable_history`), sales (`clients`, `leads`, `proposals`), finance (`invoices`, `invoice_line_items`, `expenses`, `budgets`, `time_entries`, `mileage_logs`, `advances`), procurement (`vendors`, `requisitions`, `purchase_orders`, `po_line_items`), production (`equipment`, `rentals`, `fabrication_orders`), ops (`tasks`, `events`, `locations`, `crew_members`, `credentials`), AI/system (`ai_conversations`, `ai_messages`, `audit_log`, `notifications`), event guides (`event_guides`).
+- **Marketplace canon (migration 0002):** `talent_profiles`, `talent_riders`, `open_calls`, `open_call_submissions`, `talent_offers`, `job_postings`, `job_applications`, `availability_slots`, `reviews`, `saved_searches`, `user_profiles`. Public discovery views: `public_talent_directory`, `public_crew_directory`, `public_vendor_directory`, `public_job_board`, `public_open_calls`, `public_rfq_marketplace` (granted to anon + authenticated). Existing tables extended with public-profile columns: `vendors.is_public_profile/public_handle/...`, `crew_members.is_public_profile/...`, `rfqs.visibility/public_slug/...`, `orgs.marketplace_enabled/marketplace_take_rate_bps`. RLS pattern unchanged: `private.is_org_member` for org-scoped writes; public select policies gated on `status='published'` or `is_public=true`.
 - **RLS:** Enforced on every table. `is_org_member(org_id)` and `has_org_role(org_id, roles[])` are the canonical helpers.
 - **Seed:** `demo` org with existing auth users as owners. MMW26 Hialeah project with a guest-facing event guide.
 - **Migrations:** In `supabase/migrations/`. Apply via the Supabase MCP `apply_migration` — do not hand-edit the remote DB.
@@ -59,6 +60,18 @@ Six route groups, three of them are full shells with distinct layouts:
 - **Anthropic (AI):** `src/app/api/v1/ai/chat/route.ts` — streaming chat via `@anthropic-ai/sdk` with `claude-sonnet-4-6` / `claude-opus-4-7`. Conversation + messages persisted in `ai_conversations` / `ai_messages`.
 - **Stripe:** Webhook receiver at `/api/v1/webhooks/stripe` — HMAC-SHA256 signature verification (no SDK dep). Checkout at `/api/v1/stripe/checkout`. Connect Express onboarding at `/api/v1/stripe/connect/onboarding`.
 - **Supabase Storage:** Buckets `advancing`, `receipts`, `proposals`, `credentials`, `branding`. Deliverable downloads via signed URLs at `/api/v1/deliverables/[id]/download`.
+
+## Marketplace (0002)
+
+Public surfaces exposing your org's RFQs, gigs, talent calls, talent EPKs, crew profiles, and vendor profiles to logged-out visitors.
+
+- **Operator console:** `/console/marketplace` — hub with metric cards. Sub-routes: `postings` (job board ATS), `calls` (open calls / casting), `talent` (EPK roster + riders), `offers` (booking workflow with state machine), `reviews` (bidirectional moderation), `settings` (take rate, visibility). RFQ publishing extends existing procurement at `/console/procurement/rfqs/[rfqId]/publish`.
+- **Public discovery:** `/marketplace` (marketing shell, anon-readable). Sub-routes: `rfqs`, `gigs`, `calls`, `talent`, `crew`, `vendors`. Each has a list page (driven by the `public_*` views) and a detail page keyed by `public_slug` or `public_handle`.
+- **Personal (/me):** `applications`, `submissions`, `availability` (booking calendar), `reviews` (received + written), `talent` (self-managed EPK editor), `crew`, `offers`. Auth required.
+- **Default booking terms:** 60% deposit / 40% balance on load-in (per `feedback_payment_terms_default.md`). `talent_profiles.deposit_pct=60` and `talent_offers.balance_terms='load_in'` enforce this default.
+- **Reviews trigger:** insert a counterpart review on the same `(transaction_type, transaction_id)` and both rows auto-flip `released_at=now()` (BeatGig pattern). Subject `rating_avg` / `rating_count` roll up via `tg_reviews_aggregate`.
+- **Compliance gating on public RFQs:** `requires_prequalification`, `requires_insurance`, `requires_w9`, `nda_required` columns on `rfqs`. Vendor portal is the bid-submission surface; gates evaluated app-side before allowing a response.
+- **Code anchor:** schema in `supabase/migrations/0002_marketplace_canon.sql`; shared types + helpers in `src/lib/marketplace.ts`; new-table queries use `as unknown as LooseSupabase` from `src/lib/supabase/loose.ts` until `npm run gen:types` regenerates the typed client.
 
 ## Boarding Pass (event guides)
 

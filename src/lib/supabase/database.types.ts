@@ -330,6 +330,125 @@ export type Database = {
           },
         ]
       }
+      agencies: {
+        Row: {
+          bio: string | null
+          created_at: string
+          default_commission_bps: number
+          deleted_at: string | null
+          display_name: string
+          id: string
+          is_public: boolean
+          logo_url: string | null
+          org_id: string
+          public_handle: string | null
+          updated_at: string
+          verified_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          default_commission_bps?: number
+          deleted_at?: string | null
+          display_name: string
+          id?: string
+          is_public?: boolean
+          logo_url?: string | null
+          org_id: string
+          public_handle?: string | null
+          updated_at?: string
+          verified_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          default_commission_bps?: number
+          deleted_at?: string | null
+          display_name?: string
+          id?: string
+          is_public?: boolean
+          logo_url?: string | null
+          org_id?: string
+          public_handle?: string | null
+          updated_at?: string
+          verified_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      agency_artists: {
+        Row: {
+          agency_id: string
+          agent_user_id: string | null
+          commission_bps: number | null
+          created_at: string
+          ended_at: string | null
+          exclusive: boolean
+          id: string
+          org_id: string
+          signed_at: string | null
+          talent_profile_id: string
+          updated_at: string
+        }
+        Insert: {
+          agency_id: string
+          agent_user_id?: string | null
+          commission_bps?: number | null
+          created_at?: string
+          ended_at?: string | null
+          exclusive?: boolean
+          id?: string
+          org_id: string
+          signed_at?: string | null
+          talent_profile_id: string
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string
+          agent_user_id?: string | null
+          commission_bps?: number | null
+          created_at?: string
+          ended_at?: string | null
+          exclusive?: boolean
+          id?: string
+          org_id?: string
+          signed_at?: string | null
+          talent_profile_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_artists_agency_fk"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agency_artists_agency_fk"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "public_agency_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agency_artists_talent_fk"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_talent_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agency_artists_talent_fk"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_agents: {
         Row: {
           auto_refresh: boolean
@@ -1076,6 +1195,69 @@ export type Database = {
           },
         ]
       }
+      availability_slots: {
+        Row: {
+          all_day: boolean
+          auto_release_on: string | null
+          created_at: string
+          ends_at: string
+          granted_to_org_id: string | null
+          id: string
+          kind: Database["public"]["Enums"]["availability_kind"]
+          label: string | null
+          org_id: string | null
+          source_id: string | null
+          source_type: string | null
+          starts_at: string
+          talent_profile_id: string | null
+          tier: number
+          ttl_at: string | null
+          updated_at: string
+          user_id: string
+          venue_id: string | null
+        }
+        Insert: {
+          all_day?: boolean
+          auto_release_on?: string | null
+          created_at?: string
+          ends_at: string
+          granted_to_org_id?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["availability_kind"]
+          label?: string | null
+          org_id?: string | null
+          source_id?: string | null
+          source_type?: string | null
+          starts_at: string
+          talent_profile_id?: string | null
+          tier?: number
+          ttl_at?: string | null
+          updated_at?: string
+          user_id: string
+          venue_id?: string | null
+        }
+        Update: {
+          all_day?: boolean
+          auto_release_on?: string | null
+          created_at?: string
+          ends_at?: string
+          granted_to_org_id?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["availability_kind"]
+          label?: string | null
+          org_id?: string | null
+          source_id?: string | null
+          source_type?: string | null
+          starts_at?: string
+          talent_profile_id?: string | null
+          tier?: number
+          ttl_at?: string | null
+          updated_at?: string
+          user_id?: string
+          venue_id?: string | null
+        }
+        Relationships: []
+      }
       budgets: {
         Row: {
           amount_cents: number
@@ -1156,6 +1338,76 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "xtc_codes"
             referencedColumns: ["code"]
+          },
+        ]
+      }
+      call_sheets: {
+        Row: {
+          ai_model: string | null
+          call_time: string | null
+          content: Json
+          created_at: string
+          created_by: string | null
+          event_date: string | null
+          generated_by: string
+          id: string
+          org_id: string
+          project_id: string | null
+          title: string
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          ai_model?: string | null
+          call_time?: string | null
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          event_date?: string | null
+          generated_by?: string
+          id?: string
+          org_id: string
+          project_id?: string | null
+          title: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          ai_model?: string | null
+          call_time?: string | null
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          event_date?: string | null
+          generated_by?: string
+          id?: string
+          org_id?: string
+          project_id?: string | null
+          title?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_sheets_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_sheets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_sheets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1356,6 +1608,62 @@ export type Database = {
           },
         ]
       }
+      co_pro_partnerships: {
+        Row: {
+          bonus_terms: string | null
+          contact_email: string | null
+          created_at: string
+          id: string
+          org_id: string
+          partner_name: string
+          partner_org_id: string | null
+          responsibility_split: Json
+          settled_amount_cents: number | null
+          settled_at: string | null
+          split_pct: number
+          talent_offer_id: string
+          updated_at: string
+        }
+        Insert: {
+          bonus_terms?: string | null
+          contact_email?: string | null
+          created_at?: string
+          id?: string
+          org_id: string
+          partner_name: string
+          partner_org_id?: string | null
+          responsibility_split?: Json
+          settled_amount_cents?: number | null
+          settled_at?: string | null
+          split_pct: number
+          talent_offer_id: string
+          updated_at?: string
+        }
+        Update: {
+          bonus_terms?: string | null
+          contact_email?: string | null
+          created_at?: string
+          id?: string
+          org_id?: string
+          partner_name?: string
+          partner_org_id?: string | null
+          responsibility_split?: Json
+          settled_amount_cents?: number | null
+          settled_at?: string | null
+          split_pct?: number
+          talent_offer_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "co_pro_partnerships_offer_fk"
+            columns: ["talent_offer_id"]
+            isOneToOne: false
+            referencedRelation: "talent_offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consent_records: {
         Row: {
           granted: boolean
@@ -1447,24 +1755,33 @@ export type Database = {
       conversations: {
         Row: {
           created_at: string
+          cross_org: boolean
           id: string
           org_id: string
+          recipient_org_id: string | null
+          recipient_user_id: string | null
           record_id: string
           record_type: string
           updated_at: string
         }
         Insert: {
           created_at?: string
+          cross_org?: boolean
           id?: string
           org_id: string
+          recipient_org_id?: string | null
+          recipient_user_id?: string | null
           record_id: string
           record_type: string
           updated_at?: string
         }
         Update: {
           created_at?: string
+          cross_org?: boolean
           id?: string
           org_id?: string
+          recipient_org_id?: string | null
+          recipient_user_id?: string | null
           record_id?: string
           record_type?: string
           updated_at?: string
@@ -1583,6 +1900,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "credentials_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "credentials_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -1593,47 +1917,98 @@ export type Database = {
       }
       crew_members: {
         Row: {
+          availability_open: boolean
+          bio: string | null
+          certifications: string[]
           created_at: string
           day_rate_cents: number | null
+          day_rate_max_cents: number | null
+          day_rate_min_cents: number | null
           email: string | null
+          gear_owned: Json
           id: string
+          is_public_profile: boolean
           name: string
           notes: string | null
           org_id: string
           phone: string | null
+          photo_url: string | null
+          public_handle: string | null
+          rating_avg: number | null
+          rating_count: number
+          reel_url: string | null
           role: string | null
+          roles: string[]
+          tagline: string | null
+          travel_radius_km: number | null
+          unions: string[]
           updated_at: string
           user_id: string | null
+          verified_at: string | null
           xpms_atom_id: string | null
           xtc_code: number | null
         }
         Insert: {
+          availability_open?: boolean
+          bio?: string | null
+          certifications?: string[]
           created_at?: string
           day_rate_cents?: number | null
+          day_rate_max_cents?: number | null
+          day_rate_min_cents?: number | null
           email?: string | null
+          gear_owned?: Json
           id?: string
+          is_public_profile?: boolean
           name: string
           notes?: string | null
           org_id: string
           phone?: string | null
+          photo_url?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number
+          reel_url?: string | null
           role?: string | null
+          roles?: string[]
+          tagline?: string | null
+          travel_radius_km?: number | null
+          unions?: string[]
           updated_at?: string
           user_id?: string | null
+          verified_at?: string | null
           xpms_atom_id?: string | null
           xtc_code?: number | null
         }
         Update: {
+          availability_open?: boolean
+          bio?: string | null
+          certifications?: string[]
           created_at?: string
           day_rate_cents?: number | null
+          day_rate_max_cents?: number | null
+          day_rate_min_cents?: number | null
           email?: string | null
+          gear_owned?: Json
           id?: string
+          is_public_profile?: boolean
           name?: string
           notes?: string | null
           org_id?: string
           phone?: string | null
+          photo_url?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number
+          reel_url?: string | null
           role?: string | null
+          roles?: string[]
+          tagline?: string | null
+          travel_radius_km?: number | null
+          unions?: string[]
           updated_at?: string
           user_id?: string | null
+          verified_at?: string | null
           xpms_atom_id?: string | null
           xtc_code?: number | null
         }
@@ -1878,6 +2253,13 @@ export type Database = {
             foreignKeyName: "daily_log_deliveries_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_log_deliveries_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
@@ -1988,6 +2370,13 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_log_manpower_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
             referencedColumns: ["id"]
           },
           {
@@ -2987,6 +3376,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      event_milestones: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: Database["public"]["Enums"]["event_milestone_kind"]
+          label: string | null
+          metadata: Json
+          occurs_at: string
+          org_id: string
+          project_id: string | null
+          talent_offer_id: string | null
+          updated_at: string
+          visibility: Database["public"]["Enums"]["milestone_visibility"]
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["event_milestone_kind"]
+          label?: string | null
+          metadata?: Json
+          occurs_at: string
+          org_id: string
+          project_id?: string | null
+          talent_offer_id?: string | null
+          updated_at?: string
+          visibility?: Database["public"]["Enums"]["milestone_visibility"]
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["event_milestone_kind"]
+          label?: string | null
+          metadata?: Json
+          occurs_at?: string
+          org_id?: string
+          project_id?: string | null
+          talent_offer_id?: string | null
+          updated_at?: string
+          visibility?: Database["public"]["Enums"]["milestone_visibility"]
+        }
+        Relationships: []
       }
       events: {
         Row: {
@@ -4356,6 +4790,70 @@ export type Database = {
           },
         ]
       }
+      invoice_reminders: {
+        Row: {
+          channel: string
+          created_at: string
+          created_by: string | null
+          id: string
+          invoice_id: string
+          message: string | null
+          org_id: string
+          send_at: string
+          sent_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          invoice_id: string
+          message?: string | null
+          org_id: string
+          send_at: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          invoice_id?: string
+          message?: string | null
+          org_id?: string
+          send_at?: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_reminders_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_reminders_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_reminders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoices: {
         Row: {
           amount_cents: number
@@ -4638,6 +5136,189 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      job_applications: {
+        Row: {
+          answers: Json
+          applicant_user_id: string
+          applied_at: string
+          available_dates: unknown
+          cover_note: string | null
+          crew_member_id: string | null
+          day_rate_proposed_cents: number | null
+          id: string
+          job_posting_id: string
+          org_id: string
+          reel_url: string | null
+          resume_url: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          score: number | null
+          status: Database["public"]["Enums"]["job_application_status"]
+          updated_at: string
+        }
+        Insert: {
+          answers?: Json
+          applicant_user_id: string
+          applied_at?: string
+          available_dates?: unknown
+          cover_note?: string | null
+          crew_member_id?: string | null
+          day_rate_proposed_cents?: number | null
+          id?: string
+          job_posting_id: string
+          org_id: string
+          reel_url?: string | null
+          resume_url?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          score?: number | null
+          status?: Database["public"]["Enums"]["job_application_status"]
+          updated_at?: string
+        }
+        Update: {
+          answers?: Json
+          applicant_user_id?: string
+          applied_at?: string
+          available_dates?: unknown
+          cover_note?: string | null
+          crew_member_id?: string | null
+          day_rate_proposed_cents?: number | null
+          id?: string
+          job_posting_id?: string
+          org_id?: string
+          reel_url?: string | null
+          resume_url?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          score?: number | null
+          status?: Database["public"]["Enums"]["job_application_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_posting_fk"
+            columns: ["job_posting_id"]
+            isOneToOne: false
+            referencedRelation: "job_postings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_applications_posting_fk"
+            columns: ["job_posting_id"]
+            isOneToOne: false
+            referencedRelation: "public_job_board"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_postings: {
+        Row: {
+          applicant_count: number
+          certs_required: string[]
+          city: string | null
+          country: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          dates: unknown
+          day_rate_max_cents: number | null
+          day_rate_min_cents: number | null
+          deleted_at: string | null
+          description: string | null
+          employment_type: string
+          expires_at: string | null
+          gear_required: Json
+          id: string
+          lodging_provided: boolean
+          org_id: string
+          posting_type: Database["public"]["Enums"]["job_posting_type"]
+          project_id: string | null
+          public_slug: string
+          published_at: string | null
+          region: string | null
+          role_taxonomy: string[]
+          screening_questions: Json
+          status: Database["public"]["Enums"]["job_posting_status"]
+          title: string
+          tour_legs: Json
+          travel_paid: boolean
+          union_required: string[]
+          updated_at: string
+          vetted_only: boolean
+        }
+        Insert: {
+          applicant_count?: number
+          certs_required?: string[]
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          dates?: unknown
+          day_rate_max_cents?: number | null
+          day_rate_min_cents?: number | null
+          deleted_at?: string | null
+          description?: string | null
+          employment_type?: string
+          expires_at?: string | null
+          gear_required?: Json
+          id?: string
+          lodging_provided?: boolean
+          org_id: string
+          posting_type?: Database["public"]["Enums"]["job_posting_type"]
+          project_id?: string | null
+          public_slug: string
+          published_at?: string | null
+          region?: string | null
+          role_taxonomy?: string[]
+          screening_questions?: Json
+          status?: Database["public"]["Enums"]["job_posting_status"]
+          title: string
+          tour_legs?: Json
+          travel_paid?: boolean
+          union_required?: string[]
+          updated_at?: string
+          vetted_only?: boolean
+        }
+        Update: {
+          applicant_count?: number
+          certs_required?: string[]
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          dates?: unknown
+          day_rate_max_cents?: number | null
+          day_rate_min_cents?: number | null
+          deleted_at?: string | null
+          description?: string | null
+          employment_type?: string
+          expires_at?: string | null
+          gear_required?: Json
+          id?: string
+          lodging_provided?: boolean
+          org_id?: string
+          posting_type?: Database["public"]["Enums"]["job_posting_type"]
+          project_id?: string | null
+          public_slug?: string
+          published_at?: string | null
+          region?: string | null
+          role_taxonomy?: string[]
+          screening_questions?: Json
+          status?: Database["public"]["Enums"]["job_posting_status"]
+          title?: string
+          tour_legs?: Json
+          travel_paid?: boolean
+          union_required?: string[]
+          updated_at?: string
+          vetted_only?: boolean
+        }
+        Relationships: []
       }
       job_queue: {
         Row: {
@@ -5505,6 +6186,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "offer_letters_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "offer_letters_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -5540,6 +6228,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "offer_letters_reports_to_crew_member_id_fkey"
+            columns: ["reports_to_crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "offer_letters_role_id_fkey"
             columns: ["role_id"]
             isOneToOne: false
@@ -5554,6 +6249,183 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      open_call_submissions: {
+        Row: {
+          answers: Json
+          attachments: Json
+          available_dates: unknown
+          cover_note: string | null
+          crew_member_id: string | null
+          fee_proposed_cents: number | null
+          id: string
+          internal_notes: string | null
+          open_call_id: string
+          org_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          score: number | null
+          status: Database["public"]["Enums"]["submission_status"]
+          submitted_at: string
+          submitter_user_id: string
+          talent_profile_id: string | null
+          updated_at: string
+          vendor_id: string | null
+        }
+        Insert: {
+          answers?: Json
+          attachments?: Json
+          available_dates?: unknown
+          cover_note?: string | null
+          crew_member_id?: string | null
+          fee_proposed_cents?: number | null
+          id?: string
+          internal_notes?: string | null
+          open_call_id: string
+          org_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          score?: number | null
+          status?: Database["public"]["Enums"]["submission_status"]
+          submitted_at?: string
+          submitter_user_id: string
+          talent_profile_id?: string | null
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Update: {
+          answers?: Json
+          attachments?: Json
+          available_dates?: unknown
+          cover_note?: string | null
+          crew_member_id?: string | null
+          fee_proposed_cents?: number | null
+          id?: string
+          internal_notes?: string | null
+          open_call_id?: string
+          org_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          score?: number | null
+          status?: Database["public"]["Enums"]["submission_status"]
+          submitted_at?: string
+          submitter_user_id?: string
+          talent_profile_id?: string | null
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "open_call_submissions_call_fk"
+            columns: ["open_call_id"]
+            isOneToOne: false
+            referencedRelation: "open_calls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "open_call_submissions_call_fk"
+            columns: ["open_call_id"]
+            isOneToOne: false
+            referencedRelation: "public_open_calls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      open_calls: {
+        Row: {
+          awarded_submission_id: string | null
+          budget_band: string | null
+          closed_at: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deadline_at: string | null
+          deleted_at: string | null
+          description: string | null
+          eligibility: Json
+          fee_max_cents: number | null
+          fee_min_cents: number | null
+          genre_tags: string[]
+          id: string
+          kind: Database["public"]["Enums"]["marketplace_kind"]
+          org_id: string
+          performance_date: string | null
+          project_id: string | null
+          public_slug: string
+          published_at: string | null
+          region: string | null
+          scope_url: string | null
+          slot_length_min: number | null
+          status: Database["public"]["Enums"]["open_call_status"]
+          submission_count: number
+          title: string
+          trade_categories: string[]
+          updated_at: string
+          venue_type: string | null
+        }
+        Insert: {
+          awarded_submission_id?: string | null
+          budget_band?: string | null
+          closed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deadline_at?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          eligibility?: Json
+          fee_max_cents?: number | null
+          fee_min_cents?: number | null
+          genre_tags?: string[]
+          id?: string
+          kind: Database["public"]["Enums"]["marketplace_kind"]
+          org_id: string
+          performance_date?: string | null
+          project_id?: string | null
+          public_slug: string
+          published_at?: string | null
+          region?: string | null
+          scope_url?: string | null
+          slot_length_min?: number | null
+          status?: Database["public"]["Enums"]["open_call_status"]
+          submission_count?: number
+          title: string
+          trade_categories?: string[]
+          updated_at?: string
+          venue_type?: string | null
+        }
+        Update: {
+          awarded_submission_id?: string | null
+          budget_band?: string | null
+          closed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deadline_at?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          eligibility?: Json
+          fee_max_cents?: number | null
+          fee_min_cents?: number | null
+          genre_tags?: string[]
+          id?: string
+          kind?: Database["public"]["Enums"]["marketplace_kind"]
+          org_id?: string
+          performance_date?: string | null
+          project_id?: string | null
+          public_slug?: string
+          published_at?: string | null
+          region?: string | null
+          scope_url?: string | null
+          slot_length_min?: number | null
+          status?: Database["public"]["Enums"]["open_call_status"]
+          submission_count?: number
+          title?: string
+          trade_categories?: string[]
+          updated_at?: string
+          venue_type?: string | null
+        }
+        Relationships: []
       }
       org_domains: {
         Row: {
@@ -5783,6 +6655,13 @@ export type Database = {
             referencedRelation: "crew_members"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "org_offer_letter_settings_signing_authority_fkey"
+            columns: ["signing_authority_crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
         ]
       }
       org_roles: {
@@ -5972,7 +6851,11 @@ export type Database = {
           default_locale: string
           default_timezone: string
           id: string
+          insights_opt_in: boolean
           logo_url: string | null
+          marketplace_enabled: boolean
+          marketplace_settings: Json
+          marketplace_take_rate_bps: number
           name: string
           name_override: string | null
           require_2fa_for: Json
@@ -5991,7 +6874,11 @@ export type Database = {
           default_locale?: string
           default_timezone?: string
           id?: string
+          insights_opt_in?: boolean
           logo_url?: string | null
+          marketplace_enabled?: boolean
+          marketplace_settings?: Json
+          marketplace_take_rate_bps?: number
           name: string
           name_override?: string | null
           require_2fa_for?: Json
@@ -6010,7 +6897,11 @@ export type Database = {
           default_locale?: string
           default_timezone?: string
           id?: string
+          insights_opt_in?: boolean
           logo_url?: string | null
+          marketplace_enabled?: boolean
+          marketplace_settings?: Json
+          marketplace_take_rate_bps?: number
           name?: string
           name_override?: string | null
           require_2fa_for?: Json
@@ -6196,6 +7087,13 @@ export type Database = {
             columns: ["purchase_order_id"]
             isOneToOne: false
             referencedRelation: "purchase_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_applications_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
             referencedColumns: ["id"]
           },
           {
@@ -8009,6 +8907,13 @@ export type Database = {
             foreignKeyName: "punch_items_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "punch_items_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
@@ -8148,6 +9053,13 @@ export type Database = {
             columns: ["requisition_id"]
             isOneToOne: false
             referencedRelation: "requisitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_orders_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
             referencedColumns: ["id"]
           },
           {
@@ -8581,6 +9493,78 @@ export type Database = {
           },
         ]
       }
+      reviews: {
+        Row: {
+          body: string | null
+          created_at: string
+          edited_at: string | null
+          flagged_at: string | null
+          hidden_until_counterpart: boolean
+          id: string
+          org_id: string
+          rating: number
+          released_at: string | null
+          reviewer_org_id: string | null
+          reviewer_user_id: string
+          subject_crew_member_id: string | null
+          subject_kind: Database["public"]["Enums"]["review_subject"]
+          subject_org_id: string | null
+          subject_talent_profile_id: string | null
+          subject_user_id: string | null
+          subject_vendor_id: string | null
+          tags: string[]
+          transaction_id: string
+          transaction_type: Database["public"]["Enums"]["review_transaction"]
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          edited_at?: string | null
+          flagged_at?: string | null
+          hidden_until_counterpart?: boolean
+          id?: string
+          org_id: string
+          rating: number
+          released_at?: string | null
+          reviewer_org_id?: string | null
+          reviewer_user_id: string
+          subject_crew_member_id?: string | null
+          subject_kind: Database["public"]["Enums"]["review_subject"]
+          subject_org_id?: string | null
+          subject_talent_profile_id?: string | null
+          subject_user_id?: string | null
+          subject_vendor_id?: string | null
+          tags?: string[]
+          transaction_id: string
+          transaction_type: Database["public"]["Enums"]["review_transaction"]
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          edited_at?: string | null
+          flagged_at?: string | null
+          hidden_until_counterpart?: boolean
+          id?: string
+          org_id?: string
+          rating?: number
+          released_at?: string | null
+          reviewer_org_id?: string | null
+          reviewer_user_id?: string
+          subject_crew_member_id?: string | null
+          subject_kind?: Database["public"]["Enums"]["review_subject"]
+          subject_org_id?: string | null
+          subject_talent_profile_id?: string | null
+          subject_user_id?: string | null
+          subject_vendor_id?: string | null
+          tags?: string[]
+          transaction_id?: string
+          transaction_type?: Database["public"]["Enums"]["review_transaction"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rfis: {
         Row: {
           answered_at: string | null
@@ -8843,6 +9827,13 @@ export type Database = {
             foreignKeyName: "rfq_responses_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rfq_responses_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
@@ -8851,44 +9842,87 @@ export type Database = {
       rfqs: {
         Row: {
           awarded_to_vendor_id: string | null
+          budget_band: string | null
+          closed_at: string | null
           created_at: string
           created_by: string | null
           description: string | null
           due_at: string | null
           id: string
+          nda_required: boolean
           org_id: string
           project_id: string | null
+          public_slug: string | null
+          published_at: string | null
+          region: string | null
+          requires_insurance: boolean
+          requires_prequalification: boolean
+          requires_w9: boolean
+          scope_url: string | null
           status: string
           title: string
+          trade_categories: string[]
           updated_at: string
+          visibility: Database["public"]["Enums"]["rfq_visibility"]
         }
         Insert: {
           awarded_to_vendor_id?: string | null
+          budget_band?: string | null
+          closed_at?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
           due_at?: string | null
           id?: string
+          nda_required?: boolean
           org_id: string
           project_id?: string | null
+          public_slug?: string | null
+          published_at?: string | null
+          region?: string | null
+          requires_insurance?: boolean
+          requires_prequalification?: boolean
+          requires_w9?: boolean
+          scope_url?: string | null
           status?: string
           title: string
+          trade_categories?: string[]
           updated_at?: string
+          visibility?: Database["public"]["Enums"]["rfq_visibility"]
         }
         Update: {
           awarded_to_vendor_id?: string | null
+          budget_band?: string | null
+          closed_at?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
           due_at?: string | null
           id?: string
+          nda_required?: boolean
           org_id?: string
           project_id?: string | null
+          public_slug?: string | null
+          published_at?: string | null
+          region?: string | null
+          requires_insurance?: boolean
+          requires_prequalification?: boolean
+          requires_w9?: boolean
+          scope_url?: string | null
           status?: string
           title?: string
+          trade_categories?: string[]
           updated_at?: string
+          visibility?: Database["public"]["Enums"]["rfq_visibility"]
         }
         Relationships: [
+          {
+            foreignKeyName: "rfqs_awarded_to_vendor_id_fkey"
+            columns: ["awarded_to_vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "rfqs_awarded_to_vendor_id_fkey"
             columns: ["awarded_to_vendor_id"]
@@ -9108,6 +10142,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "safety_briefing_attendees_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "safety_briefing_attendees_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -9209,6 +10250,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      saved_searches: {
+        Row: {
+          alert_email: boolean
+          alert_push: boolean
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["saved_search_kind"]
+          last_checked_at: string | null
+          match_count: number
+          name: string
+          org_id: string | null
+          query: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alert_email?: boolean
+          alert_push?: boolean
+          created_at?: string
+          id?: string
+          kind: Database["public"]["Enums"]["saved_search_kind"]
+          last_checked_at?: string | null
+          match_count?: number
+          name: string
+          org_id?: string | null
+          query?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alert_email?: boolean
+          alert_push?: boolean
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["saved_search_kind"]
+          last_checked_at?: string | null
+          match_count?: number
+          name?: string
+          org_id?: string | null
+          query?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       service_request_events: {
         Row: {
@@ -9417,6 +10503,155 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      settlement_lines: {
+        Row: {
+          amount_cents: number
+          category: string | null
+          created_at: string
+          description: string | null
+          evidence_url: string | null
+          id: string
+          kind: string
+          org_id: string
+          settlement_id: string
+          sort_order: number
+        }
+        Insert: {
+          amount_cents: number
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_url?: string | null
+          id?: string
+          kind: string
+          org_id: string
+          settlement_id: string
+          sort_order?: number
+        }
+        Update: {
+          amount_cents?: number
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_url?: string | null
+          id?: string
+          kind?: string
+          org_id?: string
+          settlement_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "settlement_lines_settlement_fk"
+            columns: ["settlement_id"]
+            isOneToOne: false
+            referencedRelation: "settlements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      settlements: {
+        Row: {
+          agent_commission_cents: number
+          amusement_tax_cents: number
+          artist_payout_cents: number
+          balance_due_cents: number
+          bar_revenue_cents: number
+          cc_fee_cents: number
+          co_pro_splits: Json
+          comp_count: number
+          created_at: string
+          currency: string
+          deposit_received_cents: number
+          finalized_at: string | null
+          finalized_by: string | null
+          gross_box_office_cents: number
+          id: string
+          merch_revenue_cents: number
+          nbor_cents: number | null
+          org_id: string
+          other_revenue_cents: number
+          paid_attendance: number
+          payout_destination: string | null
+          project_id: string | null
+          sales_tax_cents: number
+          show_date: string
+          status: Database["public"]["Enums"]["settlement_status"]
+          stripe_transfer_id: string | null
+          support_act_payout_cents: number
+          talent_offer_id: string | null
+          updated_at: string
+          venue_id: string | null
+          walkout_count: number
+        }
+        Insert: {
+          agent_commission_cents?: number
+          amusement_tax_cents?: number
+          artist_payout_cents?: number
+          balance_due_cents?: number
+          bar_revenue_cents?: number
+          cc_fee_cents?: number
+          co_pro_splits?: Json
+          comp_count?: number
+          created_at?: string
+          currency?: string
+          deposit_received_cents?: number
+          finalized_at?: string | null
+          finalized_by?: string | null
+          gross_box_office_cents?: number
+          id?: string
+          merch_revenue_cents?: number
+          nbor_cents?: number | null
+          org_id: string
+          other_revenue_cents?: number
+          paid_attendance?: number
+          payout_destination?: string | null
+          project_id?: string | null
+          sales_tax_cents?: number
+          show_date: string
+          status?: Database["public"]["Enums"]["settlement_status"]
+          stripe_transfer_id?: string | null
+          support_act_payout_cents?: number
+          talent_offer_id?: string | null
+          updated_at?: string
+          venue_id?: string | null
+          walkout_count?: number
+        }
+        Update: {
+          agent_commission_cents?: number
+          amusement_tax_cents?: number
+          artist_payout_cents?: number
+          balance_due_cents?: number
+          bar_revenue_cents?: number
+          cc_fee_cents?: number
+          co_pro_splits?: Json
+          comp_count?: number
+          created_at?: string
+          currency?: string
+          deposit_received_cents?: number
+          finalized_at?: string | null
+          finalized_by?: string | null
+          gross_box_office_cents?: number
+          id?: string
+          merch_revenue_cents?: number
+          nbor_cents?: number | null
+          org_id?: string
+          other_revenue_cents?: number
+          paid_attendance?: number
+          payout_destination?: string | null
+          project_id?: string | null
+          sales_tax_cents?: number
+          show_date?: string
+          status?: Database["public"]["Enums"]["settlement_status"]
+          stripe_transfer_id?: string | null
+          support_act_payout_cents?: number
+          talent_offer_id?: string | null
+          updated_at?: string
+          venue_id?: string | null
+          walkout_count?: number
+        }
+        Relationships: []
       }
       share_links: {
         Row: {
@@ -9980,12 +11215,15 @@ export type Database = {
           depth_ft: number | null
           elements: Json
           id: string
+          is_current: boolean
           name: string
           notes: string | null
           org_id: string
-          project_id: string
+          project_id: string | null
           svg_url: string | null
+          talent_profile_id: string | null
           updated_at: string
+          version: number
           width_ft: number | null
         }
         Insert: {
@@ -9995,12 +11233,15 @@ export type Database = {
           depth_ft?: number | null
           elements?: Json
           id?: string
+          is_current?: boolean
           name: string
           notes?: string | null
           org_id: string
-          project_id: string
+          project_id?: string | null
           svg_url?: string | null
+          talent_profile_id?: string | null
           updated_at?: string
+          version?: number
           width_ft?: number | null
         }
         Update: {
@@ -10010,12 +11251,15 @@ export type Database = {
           depth_ft?: number | null
           elements?: Json
           id?: string
+          is_current?: boolean
           name?: string
           notes?: string | null
           org_id?: string
-          project_id?: string
+          project_id?: string | null
           svg_url?: string | null
+          talent_profile_id?: string | null
           updated_at?: string
+          version?: number
           width_ft?: number | null
         }
         Relationships: []
@@ -10213,6 +11457,13 @@ export type Database = {
             foreignKeyName: "submittals_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submittals_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
@@ -10253,6 +11504,324 @@ export type Database = {
           source?: string | null
         }
         Relationships: []
+      }
+      talent_offers: {
+        Row: {
+          accepted_at: string | null
+          agency_id: string | null
+          agent_commission_bps: number | null
+          attached_rider_ids: string[]
+          balance_terms: string
+          break_even_attendance: number | null
+          cancelled_at: string | null
+          co_pro_partners: Json
+          contracted_at: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deal_type: Database["public"]["Enums"]["deal_type"]
+          deposit_pct: number
+          door_pct: number | null
+          expense_estimate: Json
+          fee_cents: number
+          guarantee_cents: number | null
+          id: string
+          open_call_submission_id: string | null
+          org_id: string
+          performance_agreement_proposal_id: string | null
+          performance_date: string
+          platform_take_rate_bps: number
+          previous_offer_id: string | null
+          project_id: string | null
+          sent_at: string | null
+          slot_end: string | null
+          slot_start: string | null
+          stage_plot_id: string | null
+          status: Database["public"]["Enums"]["talent_offer_status"]
+          stripe_deposit_intent_id: string | null
+          stripe_payout_destination: string | null
+          talent_profile_id: string
+          terms: Json
+          ticket_scaling: Json
+          tour_id: string | null
+          tour_leg_index: number | null
+          updated_at: string
+          venue_id: string | null
+          version: number
+          walkout_threshold_cents: number | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          agency_id?: string | null
+          agent_commission_bps?: number | null
+          attached_rider_ids?: string[]
+          balance_terms?: string
+          break_even_attendance?: number | null
+          cancelled_at?: string | null
+          co_pro_partners?: Json
+          contracted_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deal_type?: Database["public"]["Enums"]["deal_type"]
+          deposit_pct?: number
+          door_pct?: number | null
+          expense_estimate?: Json
+          fee_cents: number
+          guarantee_cents?: number | null
+          id?: string
+          open_call_submission_id?: string | null
+          org_id: string
+          performance_agreement_proposal_id?: string | null
+          performance_date: string
+          platform_take_rate_bps?: number
+          previous_offer_id?: string | null
+          project_id?: string | null
+          sent_at?: string | null
+          slot_end?: string | null
+          slot_start?: string | null
+          stage_plot_id?: string | null
+          status?: Database["public"]["Enums"]["talent_offer_status"]
+          stripe_deposit_intent_id?: string | null
+          stripe_payout_destination?: string | null
+          talent_profile_id: string
+          terms?: Json
+          ticket_scaling?: Json
+          tour_id?: string | null
+          tour_leg_index?: number | null
+          updated_at?: string
+          venue_id?: string | null
+          version?: number
+          walkout_threshold_cents?: number | null
+        }
+        Update: {
+          accepted_at?: string | null
+          agency_id?: string | null
+          agent_commission_bps?: number | null
+          attached_rider_ids?: string[]
+          balance_terms?: string
+          break_even_attendance?: number | null
+          cancelled_at?: string | null
+          co_pro_partners?: Json
+          contracted_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deal_type?: Database["public"]["Enums"]["deal_type"]
+          deposit_pct?: number
+          door_pct?: number | null
+          expense_estimate?: Json
+          fee_cents?: number
+          guarantee_cents?: number | null
+          id?: string
+          open_call_submission_id?: string | null
+          org_id?: string
+          performance_agreement_proposal_id?: string | null
+          performance_date?: string
+          platform_take_rate_bps?: number
+          previous_offer_id?: string | null
+          project_id?: string | null
+          sent_at?: string | null
+          slot_end?: string | null
+          slot_start?: string | null
+          stage_plot_id?: string | null
+          status?: Database["public"]["Enums"]["talent_offer_status"]
+          stripe_deposit_intent_id?: string | null
+          stripe_payout_destination?: string | null
+          talent_profile_id?: string
+          terms?: Json
+          ticket_scaling?: Json
+          tour_id?: string | null
+          tour_leg_index?: number | null
+          updated_at?: string
+          venue_id?: string | null
+          version?: number
+          walkout_threshold_cents?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_offers_talent_fk"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_talent_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "talent_offers_talent_fk"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      talent_profiles: {
+        Row: {
+          act_name: string
+          agent_email: string | null
+          agent_name: string | null
+          audio_links: Json
+          balance_terms: string
+          bio: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deleted_at: string | null
+          deposit_pct: number
+          fee_max_cents: number | null
+          fee_min_cents: number | null
+          follower_count: number | null
+          genre_tags: string[]
+          hero_url: string | null
+          id: string
+          is_public: boolean
+          members: Json
+          monthly_listeners: number | null
+          org_id: string
+          past_venues: Json
+          photo_url: string | null
+          public_handle: string | null
+          rating_avg: number | null
+          rating_count: number
+          social_links: Json
+          tagline: string | null
+          travel_radius_km: number | null
+          updated_at: string
+          user_id: string | null
+          verified_at: string | null
+          video_reel_url: string | null
+        }
+        Insert: {
+          act_name: string
+          agent_email?: string | null
+          agent_name?: string | null
+          audio_links?: Json
+          balance_terms?: string
+          bio?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          deposit_pct?: number
+          fee_max_cents?: number | null
+          fee_min_cents?: number | null
+          follower_count?: number | null
+          genre_tags?: string[]
+          hero_url?: string | null
+          id?: string
+          is_public?: boolean
+          members?: Json
+          monthly_listeners?: number | null
+          org_id: string
+          past_venues?: Json
+          photo_url?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number
+          social_links?: Json
+          tagline?: string | null
+          travel_radius_km?: number | null
+          updated_at?: string
+          user_id?: string | null
+          verified_at?: string | null
+          video_reel_url?: string | null
+        }
+        Update: {
+          act_name?: string
+          agent_email?: string | null
+          agent_name?: string | null
+          audio_links?: Json
+          balance_terms?: string
+          bio?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          deposit_pct?: number
+          fee_max_cents?: number | null
+          fee_min_cents?: number | null
+          follower_count?: number | null
+          genre_tags?: string[]
+          hero_url?: string | null
+          id?: string
+          is_public?: boolean
+          members?: Json
+          monthly_listeners?: number | null
+          org_id?: string
+          past_venues?: Json
+          photo_url?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number
+          social_links?: Json
+          tagline?: string | null
+          travel_radius_km?: number | null
+          updated_at?: string
+          user_id?: string | null
+          verified_at?: string | null
+          video_reel_url?: string | null
+        }
+        Relationships: []
+      }
+      talent_riders: {
+        Row: {
+          content: Json
+          created_at: string
+          created_by: string | null
+          file_url: string | null
+          id: string
+          is_current: boolean
+          kind: Database["public"]["Enums"]["talent_rider_kind"]
+          org_id: string
+          talent_profile_id: string
+          title: string | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          file_url?: string | null
+          id?: string
+          is_current?: boolean
+          kind: Database["public"]["Enums"]["talent_rider_kind"]
+          org_id: string
+          talent_profile_id: string
+          title?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          file_url?: string | null
+          id?: string
+          is_current?: boolean
+          kind?: Database["public"]["Enums"]["talent_rider_kind"]
+          org_id?: string
+          talent_profile_id?: string
+          title?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_riders_profile_fk"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_talent_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "talent_riders_profile_fk"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tasks: {
         Row: {
@@ -10572,6 +12141,95 @@ export type Database = {
         }
         Relationships: []
       }
+      ticketing_connections: {
+        Row: {
+          api_credentials: Json
+          created_at: string
+          external_event_id: string | null
+          id: string
+          is_active: boolean
+          label: string | null
+          last_synced_at: string | null
+          org_id: string
+          project_id: string | null
+          provider: Database["public"]["Enums"]["ticketing_provider"]
+          talent_offer_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          api_credentials?: Json
+          created_at?: string
+          external_event_id?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string | null
+          last_synced_at?: string | null
+          org_id: string
+          project_id?: string | null
+          provider: Database["public"]["Enums"]["ticketing_provider"]
+          talent_offer_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          api_credentials?: Json
+          created_at?: string
+          external_event_id?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string | null
+          last_synced_at?: string | null
+          org_id?: string
+          project_id?: string | null
+          provider?: Database["public"]["Enums"]["ticketing_provider"]
+          talent_offer_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ticketing_sales_snapshots: {
+        Row: {
+          currency: string
+          id: string
+          org_id: string
+          snapshot_at: string
+          ticketing_connection_id: string
+          tier_data: Json
+          total_capacity: number | null
+          total_gross_cents: number
+          total_sold: number
+        }
+        Insert: {
+          currency?: string
+          id?: string
+          org_id: string
+          snapshot_at?: string
+          ticketing_connection_id: string
+          tier_data?: Json
+          total_capacity?: number | null
+          total_gross_cents?: number
+          total_sold?: number
+        }
+        Update: {
+          currency?: string
+          id?: string
+          org_id?: string
+          snapshot_at?: string
+          ticketing_connection_id?: string
+          tier_data?: Json
+          total_capacity?: number | null
+          total_gross_cents?: number
+          total_sold?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticketing_sales_snapshots_conn_fk"
+            columns: ["ticketing_connection_id"]
+            isOneToOne: false
+            referencedRelation: "ticketing_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tickets: {
         Row: {
           code: string
@@ -10740,6 +12398,69 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "xtc_codes"
             referencedColumns: ["code"]
+          },
+        ]
+      }
+      tours: {
+        Row: {
+          agency_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          ends_on: string | null
+          id: string
+          name: string
+          org_id: string
+          starts_on: string | null
+          status: Database["public"]["Enums"]["tour_status"]
+          talent_profile_id: string
+          updated_at: string
+        }
+        Insert: {
+          agency_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          ends_on?: string | null
+          id?: string
+          name: string
+          org_id: string
+          starts_on?: string | null
+          status?: Database["public"]["Enums"]["tour_status"]
+          talent_profile_id: string
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          ends_on?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          starts_on?: string | null
+          status?: Database["public"]["Enums"]["tour_status"]
+          talent_profile_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tours_talent_fk"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_talent_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tours_talent_fk"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -10946,6 +12667,66 @@ export type Database = {
           },
         ]
       }
+      user_profiles: {
+        Row: {
+          available_for_work: boolean
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          hero_url: string | null
+          is_public: boolean
+          links: Json
+          public_handle: string | null
+          rating_avg: number | null
+          rating_count: number
+          tagline: string | null
+          updated_at: string
+          user_id: string
+          verified_email_at: string | null
+          verified_id_at: string | null
+          verified_payout_at: string | null
+        }
+        Insert: {
+          available_for_work?: boolean
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          hero_url?: string | null
+          is_public?: boolean
+          links?: Json
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number
+          tagline?: string | null
+          updated_at?: string
+          user_id: string
+          verified_email_at?: string | null
+          verified_id_at?: string | null
+          verified_payout_at?: string | null
+        }
+        Update: {
+          available_for_work?: boolean
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          hero_url?: string | null
+          is_public?: boolean
+          links?: Json
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number
+          tagline?: string | null
+          updated_at?: string
+          user_id?: string
+          verified_email_at?: string | null
+          verified_id_at?: string | null
+          verified_payout_at?: string | null
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           avatar_url: string | null
@@ -11103,6 +12884,94 @@ export type Database = {
             foreignKeyName: "vendor_prequalifications_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_prequalifications_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendor_scorecards: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          org_id: string
+          project_id: string | null
+          rated_by: string | null
+          score_communication: number
+          score_delivery: number
+          score_quality: number
+          score_value: number
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          org_id: string
+          project_id?: string | null
+          rated_by?: string | null
+          score_communication: number
+          score_delivery: number
+          score_quality: number
+          score_value: number
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          org_id?: string
+          project_id?: string | null
+          rated_by?: string | null
+          score_communication?: number
+          score_delivery?: number
+          score_quality?: number
+          score_value?: number
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_scorecards_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_scorecards_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_scorecards_rated_by_fkey"
+            columns: ["rated_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_scorecards_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_scorecards_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
@@ -11110,49 +12979,88 @@ export type Database = {
       }
       vendors: {
         Row: {
+          bio: string | null
           category: string | null
           coi_expires_at: string | null
           contact_email: string | null
           contact_phone: string | null
           created_at: string
           deleted_at: string | null
+          hero_url: string | null
           id: string
+          is_public_profile: boolean
+          logo_url: string | null
           name: string
           notes: string | null
           org_id: string
           payout_account_id: string | null
+          public_handle: string | null
+          rating_avg: number | null
+          rating_count: number
+          regions: string[]
+          tagline: string | null
+          trade_categories: string[]
           updated_at: string
+          verified_at: string | null
           w9_on_file: boolean
+          website_url: string | null
+          year_founded: number | null
         }
         Insert: {
+          bio?: string | null
           category?: string | null
           coi_expires_at?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
           deleted_at?: string | null
+          hero_url?: string | null
           id?: string
+          is_public_profile?: boolean
+          logo_url?: string | null
           name: string
           notes?: string | null
           org_id: string
           payout_account_id?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number
+          regions?: string[]
+          tagline?: string | null
+          trade_categories?: string[]
           updated_at?: string
+          verified_at?: string | null
           w9_on_file?: boolean
+          website_url?: string | null
+          year_founded?: number | null
         }
         Update: {
+          bio?: string | null
           category?: string | null
           coi_expires_at?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
           deleted_at?: string | null
+          hero_url?: string | null
           id?: string
+          is_public_profile?: boolean
+          logo_url?: string | null
           name?: string
           notes?: string | null
           org_id?: string
           payout_account_id?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number
+          regions?: string[]
+          tagline?: string | null
+          trade_categories?: string[]
           updated_at?: string
+          verified_at?: string | null
           w9_on_file?: boolean
+          website_url?: string | null
+          year_founded?: number | null
         }
         Relationships: [
           {
@@ -12000,6 +13908,13 @@ export type Database = {
             foreignKeyName: "work_order_broadcast_invites_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_broadcast_invites_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
             referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
@@ -12069,6 +13984,13 @@ export type Database = {
             columns: ["awarded_by"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_broadcasts_awarded_to_vendor_id_fkey"
+            columns: ["awarded_to_vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
             referencedColumns: ["id"]
           },
           {
@@ -13156,6 +15078,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "offer_letters_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "offer_letters_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -13191,6 +15120,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "offer_letters_reports_to_crew_member_id_fkey"
+            columns: ["reports_to_crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "offer_letters_role_id_fkey"
             columns: ["role_id"]
             isOneToOne: false
@@ -13205,6 +15141,344 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      public_agency_directory: {
+        Row: {
+          artist_count: number | null
+          bio: string | null
+          created_at: string | null
+          default_commission_bps: number | null
+          display_name: string | null
+          id: string | null
+          is_verified: boolean | null
+          logo_url: string | null
+          public_handle: string | null
+          website_url: string | null
+        }
+        Insert: {
+          artist_count?: never
+          bio?: string | null
+          created_at?: string | null
+          default_commission_bps?: number | null
+          display_name?: string | null
+          id?: string | null
+          is_verified?: never
+          logo_url?: string | null
+          public_handle?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          artist_count?: never
+          bio?: string | null
+          created_at?: string | null
+          default_commission_bps?: number | null
+          display_name?: string | null
+          id?: string | null
+          is_verified?: never
+          logo_url?: string | null
+          public_handle?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      public_crew_directory: {
+        Row: {
+          availability_open: boolean | null
+          bio: string | null
+          certifications: string[] | null
+          created_at: string | null
+          day_rate_max_cents: number | null
+          day_rate_min_cents: number | null
+          id: string | null
+          is_verified: boolean | null
+          name: string | null
+          photo_url: string | null
+          public_handle: string | null
+          rating_avg: number | null
+          rating_count: number | null
+          reel_url: string | null
+          roles: string[] | null
+          tagline: string | null
+          travel_radius_km: number | null
+          unions: string[] | null
+        }
+        Insert: {
+          availability_open?: boolean | null
+          bio?: string | null
+          certifications?: string[] | null
+          created_at?: string | null
+          day_rate_max_cents?: number | null
+          day_rate_min_cents?: number | null
+          id?: string | null
+          is_verified?: never
+          name?: string | null
+          photo_url?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number | null
+          reel_url?: string | null
+          roles?: string[] | null
+          tagline?: string | null
+          travel_radius_km?: number | null
+          unions?: string[] | null
+        }
+        Update: {
+          availability_open?: boolean | null
+          bio?: string | null
+          certifications?: string[] | null
+          created_at?: string | null
+          day_rate_max_cents?: number | null
+          day_rate_min_cents?: number | null
+          id?: string | null
+          is_verified?: never
+          name?: string | null
+          photo_url?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number | null
+          reel_url?: string | null
+          roles?: string[] | null
+          tagline?: string | null
+          travel_radius_km?: number | null
+          unions?: string[] | null
+        }
+        Relationships: []
+      }
+      public_event_calendar: {
+        Row: {
+          id: string | null
+          kind: Database["public"]["Enums"]["event_milestone_kind"] | null
+          label: string | null
+          metadata: Json | null
+          occurs_at: string | null
+          org_name: string | null
+          org_slug: string | null
+        }
+        Relationships: []
+      }
+      public_insights_pool: {
+        Row: {
+          avg_artist_payout_cents: number | null
+          avg_attendance: number | null
+          avg_gross_cents: number | null
+          genre: string | null
+          month: string | null
+          show_count: number | null
+        }
+        Relationships: []
+      }
+      public_job_board: {
+        Row: {
+          applicant_count: number | null
+          certs_required: string[] | null
+          city: string | null
+          country: string | null
+          currency: string | null
+          dates: unknown
+          day_rate_max_cents: number | null
+          day_rate_min_cents: number | null
+          description: string | null
+          employment_type: string | null
+          expires_at: string | null
+          id: string | null
+          lodging_provided: boolean | null
+          org_logo_url: string | null
+          org_name: string | null
+          org_slug: string | null
+          posting_type: Database["public"]["Enums"]["job_posting_type"] | null
+          public_slug: string | null
+          published_at: string | null
+          region: string | null
+          role_taxonomy: string[] | null
+          title: string | null
+          travel_paid: boolean | null
+          union_required: string[] | null
+        }
+        Relationships: []
+      }
+      public_open_calls: {
+        Row: {
+          currency: string | null
+          deadline_at: string | null
+          description: string | null
+          eligibility: Json | null
+          fee_max_cents: number | null
+          fee_min_cents: number | null
+          genre_tags: string[] | null
+          id: string | null
+          kind: Database["public"]["Enums"]["marketplace_kind"] | null
+          org_logo_url: string | null
+          org_name: string | null
+          org_slug: string | null
+          performance_date: string | null
+          public_slug: string | null
+          published_at: string | null
+          region: string | null
+          submission_count: number | null
+          title: string | null
+          trade_categories: string[] | null
+          venue_type: string | null
+        }
+        Relationships: []
+      }
+      public_rfq_marketplace: {
+        Row: {
+          budget_band: string | null
+          description: string | null
+          due_at: string | null
+          id: string | null
+          nda_required: boolean | null
+          org_logo_url: string | null
+          org_name: string | null
+          org_slug: string | null
+          public_slug: string | null
+          published_at: string | null
+          region: string | null
+          requires_insurance: boolean | null
+          requires_prequalification: boolean | null
+          requires_w9: boolean | null
+          title: string | null
+          trade_categories: string[] | null
+        }
+        Relationships: []
+      }
+      public_talent_directory: {
+        Row: {
+          act_name: string | null
+          bio: string | null
+          created_at: string | null
+          currency: string | null
+          fee_max_cents: number | null
+          fee_min_cents: number | null
+          follower_count: number | null
+          genre_tags: string[] | null
+          hero_url: string | null
+          id: string | null
+          is_verified: boolean | null
+          monthly_listeners: number | null
+          photo_url: string | null
+          public_handle: string | null
+          rating_avg: number | null
+          rating_count: number | null
+          tagline: string | null
+          travel_radius_km: number | null
+          video_reel_url: string | null
+        }
+        Insert: {
+          act_name?: string | null
+          bio?: string | null
+          created_at?: string | null
+          currency?: string | null
+          fee_max_cents?: number | null
+          fee_min_cents?: number | null
+          follower_count?: number | null
+          genre_tags?: string[] | null
+          hero_url?: string | null
+          id?: string | null
+          is_verified?: never
+          monthly_listeners?: number | null
+          photo_url?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number | null
+          tagline?: string | null
+          travel_radius_km?: number | null
+          video_reel_url?: string | null
+        }
+        Update: {
+          act_name?: string | null
+          bio?: string | null
+          created_at?: string | null
+          currency?: string | null
+          fee_max_cents?: number | null
+          fee_min_cents?: number | null
+          follower_count?: number | null
+          genre_tags?: string[] | null
+          hero_url?: string | null
+          id?: string | null
+          is_verified?: never
+          monthly_listeners?: number | null
+          photo_url?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number | null
+          tagline?: string | null
+          travel_radius_km?: number | null
+          video_reel_url?: string | null
+        }
+        Relationships: []
+      }
+      public_vendor_directory: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          hero_url: string | null
+          id: string | null
+          is_verified: boolean | null
+          logo_url: string | null
+          name: string | null
+          public_handle: string | null
+          rating_avg: number | null
+          rating_count: number | null
+          regions: string[] | null
+          tagline: string | null
+          trade_categories: string[] | null
+          website_url: string | null
+          year_founded: number | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          hero_url?: string | null
+          id?: string | null
+          is_verified?: never
+          logo_url?: string | null
+          name?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number | null
+          regions?: string[] | null
+          tagline?: string | null
+          trade_categories?: string[] | null
+          website_url?: string | null
+          year_founded?: number | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          hero_url?: string | null
+          id?: string | null
+          is_verified?: never
+          logo_url?: string | null
+          name?: string | null
+          public_handle?: string | null
+          rating_avg?: number | null
+          rating_count?: number | null
+          regions?: string[] | null
+          tagline?: string | null
+          trade_categories?: string[] | null
+          website_url?: string | null
+          year_founded?: number | null
+        }
+        Relationships: []
+      }
+      tour_p_and_l: {
+        Row: {
+          agent_commission_cents: number | null
+          ancillary_revenue_cents: number | null
+          artist_payout_cents: number | null
+          ends_on: string | null
+          gross_box_office_cents: number | null
+          leg_count: number | null
+          name: string | null
+          nbor_cents: number | null
+          org_id: string | null
+          settled_legs: number | null
+          starts_on: string | null
+          status: Database["public"]["Enums"]["tour_status"] | null
+          tour_id: string | null
+        }
+        Relationships: []
       }
       v_action_items: {
         Row: {
@@ -13562,6 +15836,7 @@ export type Database = {
         | "success"
         | "failed"
         | "cancelled"
+      availability_kind: "hold" | "confirm" | "block"
       change_order_state:
         | "draft"
         | "requested"
@@ -13576,6 +15851,13 @@ export type Database = {
         | "flat_fee"
         | "hourly"
         | "tbd"
+      deal_type:
+        | "flat"
+        | "door"
+        | "versus"
+        | "tiered"
+        | "flat_plus"
+        | "vs_plus_walk"
       deliverable_status:
         | "draft"
         | "submitted"
@@ -13619,6 +15901,13 @@ export type Database = {
         | "in_use"
         | "maintenance"
         | "retired"
+      event_milestone_kind:
+        | "announce"
+        | "presale_start"
+        | "presale_end"
+        | "onsale"
+        | "sold_out"
+        | "press_embargo"
       event_status: "draft" | "scheduled" | "live" | "complete" | "cancelled"
       expense_status: "pending" | "approved" | "rejected" | "reimbursed"
       export_kind: "csv" | "json" | "xlsx" | "zip" | "project_archive"
@@ -13649,6 +15938,16 @@ export type Database = {
       incident_severity: "near_miss" | "minor" | "major" | "critical"
       incident_status: "open" | "investigating" | "resolved" | "closed"
       invoice_status: "draft" | "sent" | "paid" | "overdue" | "voided"
+      job_application_status:
+        | "new"
+        | "reviewed"
+        | "phone"
+        | "booked"
+        | "hold"
+        | "pass"
+        | "withdrawn"
+      job_posting_status: "draft" | "published" | "closed" | "archived"
+      job_posting_type: "single" | "tour" | "recurring"
       job_state: "pending" | "running" | "done" | "failed" | "dead"
       lead_stage:
         | "new"
@@ -13657,6 +15956,8 @@ export type Database = {
         | "proposal"
         | "won"
         | "lost"
+      marketplace_kind: "rfq" | "gig" | "talent_call" | "audition"
+      milestone_visibility: "public" | "partners" | "internal"
       offer_letter_classification: "w2" | "1099" | "agency" | "intern"
       offer_letter_employer: "ghxstship" | "five_senses" | "joint"
       offer_letter_status:
@@ -13667,6 +15968,12 @@ export type Database = {
         | "declined"
         | "withdrawn"
         | "expired"
+      open_call_status:
+        | "draft"
+        | "published"
+        | "closed"
+        | "awarded"
+        | "cancelled"
       platform_role: "owner" | "admin" | "manager" | "member"
       po_status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled"
       project_role: "lead" | "editor" | "contributor" | "viewer" | "vendor"
@@ -13693,6 +16000,14 @@ export type Database = {
         | "editor"
         | "full"
       req_status: "draft" | "submitted" | "approved" | "rejected" | "converted"
+      review_subject: "vendor" | "talent" | "crew" | "org" | "user"
+      review_transaction:
+        | "rfq"
+        | "purchase_order"
+        | "job_application"
+        | "talent_offer"
+        | "open_call_submission"
+        | "project"
       revision_state:
         | "open"
         | "client_review"
@@ -13700,6 +16015,7 @@ export type Database = {
         | "changes_requested"
         | "rejected"
         | "withdrawn"
+      rfq_visibility: "private" | "network" | "public"
       risk_impact: "insignificant" | "minor" | "moderate" | "major" | "severe"
       risk_likelihood:
         | "rare"
@@ -13709,6 +16025,14 @@ export type Database = {
         | "almost_certain"
       risk_status: "open" | "mitigating" | "accepted" | "closed"
       roster_state: "draft" | "published" | "locked"
+      saved_search_kind:
+        | "rfq"
+        | "gig"
+        | "talent_call"
+        | "talent"
+        | "crew"
+        | "vendor"
+      settlement_status: "draft" | "reconciling" | "final" | "disputed"
       share_link_role: "viewer" | "commenter"
       shift_attendance:
         | "scheduled"
@@ -13716,9 +16040,38 @@ export type Database = {
         | "on_break"
         | "checked_out"
         | "no_show"
+      submission_status:
+        | "submitted"
+        | "shortlisted"
+        | "rejected"
+        | "awarded"
+        | "withdrawn"
+      talent_offer_status:
+        | "draft"
+        | "sent"
+        | "countered"
+        | "accepted"
+        | "contracted"
+        | "declined"
+        | "cancelled"
+      talent_rider_kind: "tech" | "hospitality" | "input_list"
       task_status: "todo" | "in_progress" | "blocked" | "review" | "done"
       ticket_status: "issued" | "transferred" | "scanned" | "voided"
+      ticketing_provider:
+        | "etix"
+        | "dice"
+        | "tixr"
+        | "eventbrite"
+        | "seetickets"
+        | "axs"
+        | "manual"
       tier: "access" | "core" | "professional" | "enterprise"
+      tour_status:
+        | "planning"
+        | "routing"
+        | "confirmed"
+        | "complete"
+        | "cancelled"
       venue_kind:
         | "competition"
         | "training"
@@ -13936,6 +16289,7 @@ export const Constants = {
         "failed",
         "cancelled",
       ],
+      availability_kind: ["hold", "confirm", "block"],
       change_order_state: [
         "draft",
         "requested",
@@ -13951,6 +16305,14 @@ export const Constants = {
         "flat_fee",
         "hourly",
         "tbd",
+      ],
+      deal_type: [
+        "flat",
+        "door",
+        "versus",
+        "tiered",
+        "flat_plus",
+        "vs_plus_walk",
       ],
       deliverable_status: [
         "draft",
@@ -14000,6 +16362,14 @@ export const Constants = {
         "maintenance",
         "retired",
       ],
+      event_milestone_kind: [
+        "announce",
+        "presale_start",
+        "presale_end",
+        "onsale",
+        "sold_out",
+        "press_embargo",
+      ],
       event_status: ["draft", "scheduled", "live", "complete", "cancelled"],
       expense_status: ["pending", "approved", "rejected", "reimbursed"],
       export_kind: ["csv", "json", "xlsx", "zip", "project_archive"],
@@ -14033,8 +16403,21 @@ export const Constants = {
       incident_severity: ["near_miss", "minor", "major", "critical"],
       incident_status: ["open", "investigating", "resolved", "closed"],
       invoice_status: ["draft", "sent", "paid", "overdue", "voided"],
+      job_application_status: [
+        "new",
+        "reviewed",
+        "phone",
+        "booked",
+        "hold",
+        "pass",
+        "withdrawn",
+      ],
+      job_posting_status: ["draft", "published", "closed", "archived"],
+      job_posting_type: ["single", "tour", "recurring"],
       job_state: ["pending", "running", "done", "failed", "dead"],
       lead_stage: ["new", "qualified", "contacted", "proposal", "won", "lost"],
+      marketplace_kind: ["rfq", "gig", "talent_call", "audition"],
+      milestone_visibility: ["public", "partners", "internal"],
       offer_letter_classification: ["w2", "1099", "agency", "intern"],
       offer_letter_employer: ["ghxstship", "five_senses", "joint"],
       offer_letter_status: [
@@ -14045,6 +16428,13 @@ export const Constants = {
         "declined",
         "withdrawn",
         "expired",
+      ],
+      open_call_status: [
+        "draft",
+        "published",
+        "closed",
+        "awarded",
+        "cancelled",
       ],
       platform_role: ["owner", "admin", "manager", "member"],
       po_status: ["draft", "sent", "acknowledged", "fulfilled", "cancelled"],
@@ -14075,6 +16465,15 @@ export const Constants = {
         "full",
       ],
       req_status: ["draft", "submitted", "approved", "rejected", "converted"],
+      review_subject: ["vendor", "talent", "crew", "org", "user"],
+      review_transaction: [
+        "rfq",
+        "purchase_order",
+        "job_application",
+        "talent_offer",
+        "open_call_submission",
+        "project",
+      ],
       revision_state: [
         "open",
         "client_review",
@@ -14083,6 +16482,7 @@ export const Constants = {
         "rejected",
         "withdrawn",
       ],
+      rfq_visibility: ["private", "network", "public"],
       risk_impact: ["insignificant", "minor", "moderate", "major", "severe"],
       risk_likelihood: [
         "rare",
@@ -14093,6 +16493,15 @@ export const Constants = {
       ],
       risk_status: ["open", "mitigating", "accepted", "closed"],
       roster_state: ["draft", "published", "locked"],
+      saved_search_kind: [
+        "rfq",
+        "gig",
+        "talent_call",
+        "talent",
+        "crew",
+        "vendor",
+      ],
+      settlement_status: ["draft", "reconciling", "final", "disputed"],
       share_link_role: ["viewer", "commenter"],
       shift_attendance: [
         "scheduled",
@@ -14101,9 +16510,42 @@ export const Constants = {
         "checked_out",
         "no_show",
       ],
+      submission_status: [
+        "submitted",
+        "shortlisted",
+        "rejected",
+        "awarded",
+        "withdrawn",
+      ],
+      talent_offer_status: [
+        "draft",
+        "sent",
+        "countered",
+        "accepted",
+        "contracted",
+        "declined",
+        "cancelled",
+      ],
+      talent_rider_kind: ["tech", "hospitality", "input_list"],
       task_status: ["todo", "in_progress", "blocked", "review", "done"],
       ticket_status: ["issued", "transferred", "scanned", "voided"],
+      ticketing_provider: [
+        "etix",
+        "dice",
+        "tixr",
+        "eventbrite",
+        "seetickets",
+        "axs",
+        "manual",
+      ],
       tier: ["access", "core", "professional", "enterprise"],
+      tour_status: [
+        "planning",
+        "routing",
+        "confirmed",
+        "complete",
+        "cancelled",
+      ],
       venue_kind: [
         "competition",
         "training",

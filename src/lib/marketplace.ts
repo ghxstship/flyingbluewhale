@@ -92,6 +92,54 @@ export function formatFeeRange(
   return "—";
 }
 
+// 0003 BOOKING CANON — Prism.fm parity helpers.
+
+export const DEAL_TYPES = ["flat", "door", "versus", "tiered", "flat_plus", "vs_plus_walk"] as const;
+export type DealType = (typeof DEAL_TYPES)[number];
+
+export const SETTLEMENT_STATUSES = ["draft", "reconciling", "final", "disputed"] as const;
+export type SettlementStatus = (typeof SETTLEMENT_STATUSES)[number];
+
+export const TICKETING_PROVIDERS = ["etix", "dice", "tixr", "eventbrite", "seetickets", "axs", "manual"] as const;
+export type TicketingProvider = (typeof TICKETING_PROVIDERS)[number];
+
+export const TOUR_STATUSES = ["planning", "routing", "confirmed", "complete", "cancelled"] as const;
+export type TourStatus = (typeof TOUR_STATUSES)[number];
+
+export const EVENT_MILESTONE_KINDS = [
+  "announce",
+  "presale_start",
+  "presale_end",
+  "onsale",
+  "sold_out",
+  "press_embargo",
+] as const;
+export type EventMilestoneKind = (typeof EVENT_MILESTONE_KINDS)[number];
+
+/**
+ * Compute break-even attendance for an offer:
+ *   guarantee + estimated expenses, divided by avg ticket price (NBOR).
+ * Returns null if the inputs are insufficient.
+ */
+export function computeBreakEven(args: {
+  guaranteeCents?: number | null;
+  expenseCents?: number | null;
+  avgTicketCents?: number | null;
+  taxRateBps?: number;
+  ccFeeRateBps?: number;
+}): number | null {
+  const { guaranteeCents, expenseCents, avgTicketCents } = args;
+  const taxRateBps = args.taxRateBps ?? 0;
+  const ccFeeRateBps = args.ccFeeRateBps ?? 0;
+  if (!avgTicketCents || avgTicketCents <= 0) return null;
+  const fixed = (guaranteeCents ?? 0) + (expenseCents ?? 0);
+  if (fixed <= 0) return 0;
+  // Each ticket nets price × (1 - tax - ccFee) toward NBOR.
+  const netPerTicket = avgTicketCents * (1 - (taxRateBps + ccFeeRateBps) / 10_000);
+  if (netPerTicket <= 0) return null;
+  return Math.ceil(fixed / netPerTicket);
+}
+
 /** Tone mapping for status badges across marketplace surfaces. */
 export const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
   // shared
@@ -120,4 +168,19 @@ export const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning
   countered: "warning",
   accepted: "success",
   contracted: "success",
+  // 0003 booking canon
+  reconciling: "warning",
+  final: "success",
+  disputed: "error",
+  planning: "muted",
+  routing: "info",
+  confirmed: "success",
+  complete: "success",
+  // milestone kinds (light-touch labeling)
+  announce: "muted",
+  presale_start: "info",
+  presale_end: "info",
+  onsale: "success",
+  sold_out: "success",
+  press_embargo: "warning",
 };

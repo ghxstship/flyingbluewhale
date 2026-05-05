@@ -102,7 +102,13 @@ export type IconName =
   | "Mic2"
   | "Music"
   | "Star"
-  | "Gavel";
+  | "Gavel"
+  // Bookings (0003)
+  | "TrendingUp"
+  | "BarChart3"
+  | "Lock"
+  | "Coins"
+  | "Route";
 
 export type NavItem = {
   label: string;
@@ -270,6 +276,22 @@ export const platformNav: NavGroup[] = [
     ],
   },
   {
+    // Bookings (0003) — show economy: deals, holds, settlement, tour P&L,
+    // marketing milestones, insights pool. Distinct mental cut from Commerce
+    // (which is sales/finance-of-services). 8 items — within 7±2 budget.
+    label: "Bookings",
+    items: [
+      { label: "Overview", href: "/console/bookings", icon: "TrendingUp" },
+      { label: "Deal Tracker", href: "/console/bookings/deals", icon: "Gavel" },
+      { label: "Holds", href: "/console/bookings/holds", icon: "Lock" },
+      { label: "Calendar", href: "/console/bookings/calendar", icon: "CalendarDays" },
+      { label: "Settlements", href: "/console/bookings/settlements", icon: "Coins" },
+      { label: "Tours", href: "/console/agency/tours", icon: "Route" },
+      { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
+      { label: "Insights", href: "/console/insights", icon: "BarChart3" },
+    ],
+  },
+  {
     label: "Reference",
     items: [
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
@@ -322,6 +344,7 @@ export const settingsNav: NavGroup[] = [
     items: [
       { label: "Apps", href: "/console/settings/integrations" },
       { label: "Marketplace", href: "/console/settings/integrations/marketplace" },
+      { label: "Ticketing", href: "/console/settings/integrations/ticketing" },
       { label: "API", href: "/console/settings/api" },
       { label: "Webhooks", href: "/console/settings/webhooks" },
     ],

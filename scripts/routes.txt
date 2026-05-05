@@ -601,3 +601,44 @@
 (personal)/me/talent/page.tsx|My talent profile|Public EPK editor
 (personal)/me/crew/page.tsx|My crew profile|Public crew profile editor
 (personal)/me/offers/page.tsx|My offers|Talent offers addressed to me
+
+# ════════════════════════════════════════════════════════════════════════
+# 0003 BOOKING CANON — Prism.fm parity: deals, settlements, holds, tours,
+#                      agencies, marketing milestones, insights pool
+# ════════════════════════════════════════════════════════════════════════
+
+# CONSOLE — Bookings
+(platform)/console/bookings/page.tsx|Bookings|Pipeline + holds + settlement
+(platform)/console/bookings/deals/page.tsx|Deal Tracker|All deals across the pipeline
+(platform)/console/bookings/deals/[offerId]/page.tsx|Deal|Detail with break-even, co-pro, expenses
+(platform)/console/bookings/deals/[offerId]/settlement/page.tsx|Settlement|Post-show reconciliation
+(platform)/console/bookings/holds/page.tsx|Holds|Multi-tier hold calendar
+(platform)/console/bookings/holds/new/page.tsx|New hold|
+(platform)/console/bookings/calendar/page.tsx|Calendar|Holds + confirms + milestones unified
+(platform)/console/bookings/settlements/page.tsx|Settlements|All settlements
+
+# CONSOLE — Agency
+(platform)/console/agency/page.tsx|Agency|Roster + tours + commissions
+(platform)/console/agency/roster/page.tsx|Roster|Active artist roster
+(platform)/console/agency/roster/[agencyArtistId]/page.tsx|Roster entry|
+(platform)/console/agency/tours/page.tsx|Tours|Multi-date tour P&L
+(platform)/console/agency/tours/new/page.tsx|New tour|
+(platform)/console/agency/tours/[tourId]/page.tsx|Tour|P&L roll-up + leg list
+(platform)/console/agency/commissions/page.tsx|Commissions|Per-period commission report
+
+# CONSOLE — Marketing milestones
+(platform)/console/marketing/page.tsx|Marketing|Milestones + on-sales
+(platform)/console/marketing/onsales/page.tsx|On-sales|Upcoming on-sale dates
+(platform)/console/marketing/calendar/page.tsx|Marketing calendar|Announce, presale, on-sale
+
+# CONSOLE — Insights
+(platform)/console/insights/page.tsx|Insights|Booking pool aggregates (opt-in)
+
+# CONSOLE — Settings: ticketing
+(platform)/console/settings/integrations/ticketing/page.tsx|Ticketing|Etix, DICE, Tixr, Eventbrite, AXS connections
+(platform)/console/settings/integrations/ticketing/new/page.tsx|New connection|
+
+# MARKETING — agencies directory + event calendar
+(marketing)/marketplace/agencies/page.tsx|Agency directory|Public booking agencies
+(marketing)/marketplace/agencies/[handle]/page.tsx|Agency|Public agency profile
+(marketing)/marketplace/calendar/page.tsx|Event calendar|Upcoming on-sales + announces

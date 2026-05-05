@@ -1,0 +1,92 @@
+import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/components/ui/Badge";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
+import { hasSupabase } from "@/lib/env";
+
+export const dynamic = "force-dynamic";
+
+type Row = {
+  id: string;
+  agency_id: string;
+  talent_profile_id: string;
+  commission_bps: number | null;
+  exclusive: boolean;
+  signed_at: string | null;
+  ended_at: string | null;
+  talent: { act_name: string } | null;
+};
+
+export default async function Page() {
+  if (!hasSupabase) {
+    return (
+      <>
+        <ModuleHeader eyebrow="Agency" title="Roster" />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">Configure Supabase.</div>
+        </div>
+      </>
+    );
+  }
+  const session = await requireSession();
+  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const { data } = await supabase
+    .from("agency_artists")
+    .select(
+      "id, agency_id, talent_profile_id, commission_bps, exclusive, signed_at, ended_at, talent:talent_profile_id(act_name)",
+    )
+    .eq("org_id", session.orgId)
+    .is("ended_at", null)
+    .order("signed_at", { ascending: false, nullsFirst: false })
+    .limit(500);
+  const rows = (data ?? []) as Row[];
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow="Agency"
+        title="Roster"
+        subtitle={`${rows.length} active artist${rows.length === 1 ? "" : "s"}`}
+      />
+      <div className="page-content space-y-5">
+        <DataTable<Row>
+          rows={rows}
+          rowHref={(r) => `/console/agency/roster/${r.id}`}
+          emptyLabel="No roster yet"
+          emptyDescription="Add an active agency_artist row to put a talent_profile on this agency's roster."
+          columns={[
+            {
+              key: "act",
+              header: "Act",
+              render: (r) => r.talent?.act_name ?? "—",
+              accessor: (r) => r.talent?.act_name ?? null,
+            },
+            {
+              key: "comm",
+              header: "Commission",
+              render: (r) => (r.commission_bps != null ? `${(r.commission_bps / 100).toFixed(2)}%` : "default"),
+              accessor: (r) => Number(r.commission_bps ?? 0),
+              className: "font-mono text-xs",
+            },
+            {
+              key: "exclusive",
+              header: "Exclusive",
+              render: (r) => <Badge variant={r.exclusive ? "success" : "muted"}>{r.exclusive ? "yes" : "no"}</Badge>,
+              accessor: (r) => (r.exclusive ? 1 : 0),
+              filterable: true,
+            },
+            {
+              key: "signed",
+              header: "Signed",
+              render: (r) => r.signed_at ?? "—",
+              accessor: (r) => r.signed_at,
+              className: "font-mono text-xs",
+            },
+          ]}
+        />
+      </div>
+    </>
+  );
+}

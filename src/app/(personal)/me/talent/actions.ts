@@ -42,7 +42,10 @@ export async function upsertMyTalentAction(_: State, fd: FormData): Promise<Stat
     .from("talent_profiles")
     .select("id, public_handle")
     .eq("user_id", session.userId)
+    .eq("org_id", session.orgId)
     .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(1)
     .maybeSingle();
   const existing = existingResp.data as { id: string; public_handle: string | null } | null;
 

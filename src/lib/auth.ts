@@ -57,7 +57,9 @@ export async function getSession(): Promise<Session | null> {
 
   // Prefer a real-org membership. The demo-org membership is the fallback
   // every signed-up user has via the auto-add trigger; we only surface it
-  // when there's nothing else.
+  // when there's nothing else. Among real orgs, prefer the user's
+  // `last_org_id` preference (set by /api/v1/me/workspaces PATCH) so the
+  // workspace switcher actually sticks across requests.
   const { data: memberships } = await supabase
     .from("memberships")
     .select("org_id, role, is_developer, orgs(slug, tier)")
@@ -77,7 +79,29 @@ export async function getSession(): Promise<Session | null> {
     return guestSession(user.id, user.email ?? "");
   }
 
-  const real = rows.find((r) => r.orgs?.slug !== DEMO_ORG_SLUG);
+  let lastOrgId: string | null = null;
+  try {
+    const { data: pref } = await (
+      supabase.from("user_preferences") as unknown as {
+        select: (cols: string) => {
+          eq: (
+            col: string,
+            val: string,
+          ) => { maybeSingle: () => Promise<{ data: { last_org_id: string | null } | null }> };
+        };
+      }
+    )
+      .select("last_org_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    lastOrgId = pref?.last_org_id ?? null;
+  } catch {
+    // user_preferences may be missing in legacy environments — fall through.
+  }
+
+  const realRows = rows.filter((r) => r.orgs?.slug !== DEMO_ORG_SLUG);
+  const preferred = lastOrgId ? realRows.find((r) => r.org_id === lastOrgId) : null;
+  const real = preferred ?? realRows[0] ?? null;
   const chosen = real ?? rows[0];
   const isGuest = chosen.orgs?.slug === DEMO_ORG_SLUG && !real;
 

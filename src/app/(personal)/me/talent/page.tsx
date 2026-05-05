@@ -27,13 +27,18 @@ export default async function Page() {
   if (!hasSupabase) return <div>Configure Supabase.</div>;
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
+  // Scope to the active org. A user may belong to multiple orgs and have
+  // a talent_profile per org — `maybeSingle()` would error otherwise.
   const { data } = await supabase
     .from("talent_profiles")
     .select(
       "id, public_handle, act_name, tagline, bio, genre_tags, fee_min_cents, fee_max_cents, is_public, video_reel_url",
     )
     .eq("user_id", session.userId)
+    .eq("org_id", session.orgId)
     .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(1)
     .maybeSingle();
   const t = (data ?? null) as Talent | null;
 

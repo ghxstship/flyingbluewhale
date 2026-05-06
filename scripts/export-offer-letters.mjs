@@ -295,20 +295,17 @@ function renderHTML(ctx) {
 
   ${project?.welcome_message ? `
   <section>
-    <div class="welcome">"${esc(project.welcome_message)}"<br><span style="font-style:normal;font-size:8pt;color:#6b6b6b;">— ${esc(employerLabel)}</span></div>
+    <div class="welcome">${esc(project.welcome_message)}<br><span style="font-style:normal;font-size:8pt;color:#6b6b6b;">— ${esc(employerLabel)}</span></div>
   </section>` : ""}
 
   <section>
-    <p>Dear <strong>${esc(firstName)}</strong>,</p>
-    <p>On behalf of ${esc(employerLabel)}, we are pleased to offer you the role of
-      <strong>${esc(l.role_title)}</strong> for <strong>${esc(l.project_name)}</strong>.
-      This document is your engagement letter, job description, and pre-arrival
-      checklist in one. Please read end-to-end, complete your onboarding steps
-      at the link below, and counter-sign to accept.</p>
+    <p style="font-size:10.5pt;">${esc(firstName)} —</p>
+    <p style="font-size:10.5pt;">It is our pleasure to formally invite you to join the ${esc(l.project_name)} crew as <strong>${esc(l.role_title)}</strong> on behalf of ${esc(employerLabel)}. This document is your full expedition brief — engagement letter, job description, working schedule, compliance frame, and pre-arrival checklist held in one place. Read it end-to-end at your own pace, complete your onboarding steps at the live tracker linked at the foot of the letter, and counter-sign to accept. The crew is small and the timeline is precise; we'll meet you on the other side of "yes" with everything else you need to arrive ready.</p>
   </section>
 
   <section>
     <h2>1. Engagement Summary</h2>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:10pt;">Here's the shape of your engagement at a glance — the role, the dates, the venue, and how to find the people you'll answer to.</p>
     <dl class="kv">
       <div><dt>Role</dt><dd>${esc(l.role_title)}</dd></div>
       <div><dt>Department</dt><dd>${esc(l.role_department || "Production")}</dd></div>
@@ -324,6 +321,7 @@ function renderHTML(ctx) {
   ${role && (role.qualifications?.length || role.decision_rights_owns?.length) ? `
   <section>
     <h2>2. Job Description — ${esc(l.role_title)}</h2>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:10pt;">What we're hiring you to do, what you're expected to bring with you, what you own outright versus where you escalate, and how we'll know — together — that this engagement was a success.</p>
     ${role.description ? `<p style="font-size:10pt;">${esc(role.description)}</p>` : ""}
 
     ${role.qualifications?.length ? `
@@ -367,20 +365,21 @@ function renderHTML(ctx) {
 
   <section>
     <h2>3. Compensation</h2>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:10pt;">Your terms in plain numbers. We pay weekly on Net 15 from invoice receipt — submit each week's invoice to Alvaro at Five Senses, and the clock starts when he confirms it.</p>
     <dl class="kv">
       <div><dt>Rate</dt><dd>${esc(comp.rate)}</dd></div>
       <div><dt>Per Diem</dt><dd>${perDiemLine ? esc(perDiemLine) : "Not provided (local hire)"}</dd></div>
       <div><dt>Payment Terms</dt><dd>${esc(paymentSchedule)}</dd></div>
-      <div><dt>Invoicing</dt><dd>Weekly invoices to Alvaro Hernandez, Five Senses Group</dd></div>
+      <div><dt>Invoicing</dt><dd>Weekly to Alvaro Hernandez · alvaro@five-senses.co</dd></div>
     </dl>
     ${comp.caveat ? `<p class="caveat">${esc(comp.caveat)}</p>` : ""}
-    <p class="caveat">All compensation figures are gross. Recipient is solely responsible for federal and state tax obligations. ${esc(employerLabel)} will issue an IRS Form 1099-NEC for amounts exceeding $600 in a calendar year.</p>
+    <p class="caveat">All compensation figures are gross. You are solely responsible for federal and state tax obligations on these payments. ${esc(employerLabel)} will issue an IRS Form 1099-NEC at year-end for amounts exceeding $600.</p>
   </section>
 
   ${sched.length > 0 ? `
   <section>
     <h2>4. Working Schedule</h2>
-    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">Per the EDCLV26 Salvage City Production Playbook (Labor tab). Daily rate covers up to 10 hours per work day; additional hours may be assigned at the discretion of production leadership. The .ics file accompanying this letter populates these dates directly into your calendar with a 4-hour pre-call alarm.</p>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">Your scheduled work days, drawn directly from the EDCLV26 Salvage City Production Playbook (Labor tab). The daily rate covers up to ten hours per work day; additional hours may be assigned at the discretion of production leadership and do not change the rate. We've packaged these same dates into the <strong>.ics calendar file alongside this PDF</strong> — drag it into your calendar and the four-hour pre-call alarms set themselves.</p>
     <table class="sched">
       <thead><tr><th>Date</th><th>Activity</th><th>Start</th><th>End</th><th class="hours">Hours</th></tr></thead>
       <tbody>
@@ -399,7 +398,7 @@ function renderHTML(ctx) {
   ${certifications && certifications.length ? `
   <section>
     <h2>5. Required Certifications</h2>
-    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">All required certifications must be uploaded via the onboarding portal before credentials issue. Expired certifications block credential pickup.</p>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">These certifications must be on file before credentials issue at the gate. Upload current copies through the onboarding portal and we'll handle verification on our side. If anything is expired, near expiration, or missing, flag it now — we have a window to make it right; we don't have a window to fix it on day one.</p>
     <table class="certs">
       <thead><tr><th>Certification</th><th>Issuing body</th><th>Validity</th><th>Status</th></tr></thead>
       <tbody>
@@ -415,8 +414,9 @@ function renderHTML(ctx) {
 
   <section>
     <h2>6. Inclusions</h2>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">Beyond your day rate, here's what we cover on your behalf for the duration of the engagement:</p>
     ${allInclusions.length === 0
-      ? `<p style="color:#6b6b6b">No additional inclusions specified.</p>`
+      ? `<p style="color:#6b6b6b">No additional inclusions specified for this engagement.</p>`
       : `<ul class="dot">${allInclusions.map((x) => `<li>${x}</li>`).join("")}</ul>`}
   </section>
 
@@ -429,6 +429,7 @@ function renderHTML(ctx) {
   ${addenda && addenda.length ? `
   <section>
     <h2>8. Terms &amp; Compliance — Florida + Nevada</h2>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">The clauses below cover the legal frame for your engagement under both Florida (governing law) and Nevada (work location). Read them carefully — countersigning this letter constitutes your acknowledgment of each.</p>
     <div class="compliance">
       ${addenda.map((a) => `<p><strong>${esc(a.title)}.</strong> ${esc(a.body)}</p>`).join("")}
     </div>
@@ -438,7 +439,7 @@ function renderHTML(ctx) {
   <section>
     <h2>9. Onboarding &amp; Know-Before-You-Go Checklist</h2>
     <p style="font-size:10pt; margin-bottom:6pt;">
-      Complete each item before your first call. Items marked <span class="star">★</span> are critical-path; missing them will delay credentialing or payment. Track and update progress at your live onboarding portal:
+      What follows is the work to do between today and your first call — paperwork, safety, credentials, calendar, transport. Each item lives in your <strong>live onboarding portal</strong>, so as you check items off there, we see your progress in real time and the credentials team can prep ahead. Items marked <span class="star">★</span> are critical-path: missing them will delay your credentials at the gate or your first invoice. The full list, with descriptions, due dates, and direct links, is at:
     </p>
     <p style="font-family:'SFMono-Regular',Menlo,monospace; font-size:9pt; padding:6pt 10pt; background:#fafaf7; border:1px solid #d8d4cc; word-break:break-all;">${esc(onboardingURL)}</p>
     <ul class="checkbox">
@@ -448,6 +449,7 @@ function renderHTML(ctx) {
 
   <section>
     <h2>10. Resources &amp; References</h2>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">Everything else you'll want close to hand — the production guide auto-scoped to your role, the live onboarding tracker, the day-1 venue check-in, and the people to call when you need a fast answer.</p>
     <div class="resources">
       <p style="margin:0 0 4pt;"><strong>Salvage City Production Guide</strong> (auto-scoped to your role):</p>
       <p style="margin:0 0 8pt;"><span class="url">${esc(PRODUCTION_GUIDE_URL)}</span></p>
@@ -460,6 +462,11 @@ function renderHTML(ctx) {
       <p style="margin:0 0 4pt;"><strong>Production Director (escalation):</strong> Sarah Fry · <em>FrySarah8@gmail.com</em> · (615) 708-3676</p>
       <p style="margin:0;"><strong>Project Producer:</strong> Julian Clarkson · <em>julian.clarkson@ghxstship.pro</em> · (407) 885-6011</p>
     </div>
+  </section>
+
+  <section>
+    <p style="font-size:10.5pt;">If everything above reads right, countersign below and we'll see you in Las Vegas. If anything reads wrong — a date, a rate, a role, anything — flag it now. We'd rather rebuild the brief once than carry a misalignment into load-in.</p>
+    <p style="font-size:10.5pt; margin-top:8pt;">Welcome to the crew, ${esc(firstName)}.</p>
   </section>
 
   <div class="signoff">

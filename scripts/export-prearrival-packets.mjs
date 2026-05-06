@@ -138,7 +138,7 @@ function renderHTML(ctx) {
   <header>
     <div>
       <div class="eyebrow">Pre-Arrival Packet</div>
-      <h1>You're 7 days out.</h1>
+      <h1>Seven days out.</h1>
       <div class="project">${esc(l.project_name)} · ${esc(l.recipient_name)} <span class="badge ${isTraveler ? "traveler" : "local"}">${isTraveler ? "Traveler" : "Local Hire"}</span></div>
     </div>
     <div class="meta">
@@ -147,35 +147,40 @@ function renderHTML(ctx) {
   </header>
 
   <section>
+    <p style="font-size:10.5pt;">${esc((l.recipient_name ?? "").split(" ")[0])} —</p>
+    <p style="font-size:10.5pt;">Your engagement letter is signed and your onboarding is in motion. This packet is the last thing you'll need before you walk through the gate at the Speedway. Read it on the plane, on the couch, or on the drive in — whenever feels right. The goal is simple: when we meet at first call, you've already arrived ready, and we can move straight to the work.</p>
+  </section>
+
+  <section>
     <div class="first-call">
       <div class="label">Your first call</div>
       <div class="when">${esc(firstCallDate)} · ${esc(firstCallTime)}</div>
       <div class="where">Nomads Land — Salvage City · Las Vegas Motor Speedway · 7000 N Las Vegas Blvd, Las Vegas NV 89115</div>
-      ${role?.day_one_brief ? `<p style="margin-top:10pt; font-size:10pt;"><strong>Day-one brief:</strong> ${esc(role.day_one_brief)}</p>` : ""}
+      ${role?.day_one_brief ? `<p style="margin-top:10pt; font-size:10pt;"><strong>Day-one brief.</strong> ${esc(role.day_one_brief)}</p>` : ""}
     </div>
   </section>
 
   ${isTraveler ? `
   <section>
     <h2>1. Travel + Lodging</h2>
-    <p>Five Senses logistics arranges all travel and lodging. Your itinerary will arrive by email at least 7 days before your first call. Confirm receipt and flag any conflicts <strong>immediately</strong> — last-minute changes cost everyone time.</p>
+    <p>Travel and lodging are arranged on your behalf by Five Senses logistics. Your itinerary will land in your inbox at least seven days before your first call. When it arrives, confirm receipt the same day and flag any conflicts before you leave for the airport — once you're inside the gate at the Speedway, the schedule is unforgiving and last-minute changes cost everyone time.</p>
     <ul class="dot">
-      <li class="critical">Watch for the email subject line "Salvage City — travel + lodging"</li>
-      <li>Outbound flight: confirm seat assignment + carry-on policy 24h before departure</li>
-      <li>Hotel: check-in opens 3 PM local; rooms held under your last name</li>
-      <li>Ground transport (LAS → hotel): rideshare reimbursable up to $40 each way; submit receipt with first invoice</li>
-      <li>Per diem (M&IE only): $79/day per federal GSA Las Vegas rate, paid with first invoice</li>
+      <li class="critical">Watch for the email with subject "Salvage City — travel + lodging" and respond to confirm.</li>
+      <li>Outbound flight: confirm your seat assignment and carry-on allowance 24 hours before departure.</li>
+      <li>Hotel: check-in opens at 3 PM local; rooms are held under your last name.</li>
+      <li>Ground transport (LAS → hotel): rideshare is reimbursable up to $40 each way — submit your receipt with the first weekly invoice.</li>
+      <li>Per diem (M&IE only): $79 per day at the federal GSA Las Vegas rate, paid alongside the first invoice.</li>
     </ul>
   </section>
   ` : `
   <section>
     <h2>1. Getting to the Venue</h2>
-    <p>You're a local hire — no travel + lodging arranged on your behalf. Plan your transport to the Las Vegas Motor Speedway directly.</p>
+    <p>You're hiring on locally, so travel and lodging are on you. The venue is the Las Vegas Motor Speedway, which is remote enough that your transport plan matters — please don't leave it to the morning of first call.</p>
     <ul class="dot">
-      <li class="critical">Parking pass arrives with your credentials packet 48h before load-in. Without the pass you'll be turned away at the perimeter.</li>
-      <li>Drive: I-15 north to exit 54 (Speedway Blvd). Allow 30 min from the Strip in light traffic, 90 min on race weekends.</li>
-      <li>Rideshare: drop-off at the Production Trailer (coordinates will be in the credentials packet).</li>
-      <li>Carpool list: posted in the production text thread once issued. Save gas + parking — coordinate.</li>
+      <li class="critical">Your parking pass arrives with the credentials packet 48 hours before load-in. Without it you'll be turned away at the perimeter — keep an eye on your inbox.</li>
+      <li>If you're driving: I-15 north to exit 54 (Speedway Blvd). Allow 30 minutes from the Strip in light traffic, up to 90 on race weekends.</li>
+      <li>If you're rideshare-ing: drop-off coordinates for the Production Trailer ship with your credentials packet.</li>
+      <li>Carpool list will be posted in the production text thread once issued — save gas, save parking, coordinate.</li>
     </ul>
   </section>
   `}
@@ -183,7 +188,7 @@ function renderHTML(ctx) {
   ${sched.length > 0 ? `
   <section>
     <h2>2. Your Schedule</h2>
-    <p style="font-size:9.5pt; color:#444;">From the EDCLV26 Salvage City Production Playbook (Labor tab). The .ics calendar attached to your engagement letter populates these dates with a 4-hour pre-call alarm.</p>
+    <p style="font-size:9.5pt; color:#444;">Drawn directly from the EDCLV26 Salvage City Production Playbook (Labor tab). The .ics calendar that came with your engagement letter populates these same dates into your calendar with a four-hour pre-call alarm — drag it in if you haven't yet.</p>
     <table class="sched">
       <thead><tr><th>Date</th><th>Activity</th><th>Start</th><th>End</th></tr></thead>
       <tbody>
@@ -194,25 +199,27 @@ function renderHTML(ctx) {
 
   <section>
     <h2>${sched.length > 0 ? "3" : "2"}. What to Bring</h2>
-    <p style="font-size:9.5pt; color:#444;">Items marked <span style="color:#c00;font-weight:700;">★</span> are critical. The venue is remote — once you're at the Speedway gate, leaving to grab something will cost an hour.</p>
+    <p style="font-size:9.5pt; color:#444;">Pack with intention. Items marked <span style="color:#c00;font-weight:700;">★</span> are critical-path — without them you can't get past the credentials trailer. The venue sits well outside the Strip; once you're at the Speedway gate, doubling back for anything you forgot will cost you the better part of an hour.</p>
     <ul class="dot">${items.map((i) => `<li class="${i.critical ? "critical" : ""}">${esc(i.text)}</li>`).join("")}</ul>
   </section>
 
   <section>
     <h2>${sched.length > 0 ? "4" : "3"}. Las Vegas Weather (mid-May)</h2>
+    <p style="font-size:9.5pt; color:#444;">Mid-May at the Speedway is hot, dry, and at times genuinely windy. Below is what to expect so you can pack and pace yourself accordingly.</p>
     <div class="weather-card">
-      <p><strong>Daytime:</strong> 92–99 °F (33–37 °C), low humidity, intense sun. Heat-stress risk during noon-to-3pm load-in windows.</p>
-      <p><strong>Overnight:</strong> 60–66 °F (16–19 °C), often windy after sunset.</p>
-      <p><strong>Wind:</strong> May is the windy season at the Speedway — sustained 15–25 mph + gusts is normal. Insomniac's 25 mph aerial-shutdown rule may trigger; the production playbook covers Wind-25 fallback.</p>
-      <p><strong>Recommendations:</strong> SPF 30+, electrolyte tabs in your bottle, an extra layer for night strikes.</p>
+      <p><strong>Daytime:</strong> 92–99 °F (33–37 °C), low humidity, intense sun. Heat-stress risk during the noon-to-3pm load-in windows — pace yourself and drink consistently.</p>
+      <p><strong>Overnight:</strong> 60–66 °F (16–19 °C), often windy after sunset. Strike days finish in jacket weather.</p>
+      <p><strong>Wind:</strong> May is the windy season at the Speedway. Sustained 15–25 mph with gusts is normal; Insomniac's 25 mph aerial-shutdown rule may trigger. The production playbook covers the Wind-25 fallback choreography end-to-end.</p>
+      <p><strong>Recommendations:</strong> SPF 30+, electrolyte tabs in your bottle, an extra layer for night strikes, and sunglasses for the drive in.</p>
     </div>
   </section>
 
   <section>
     <h2>${sched.length > 0 ? "5" : "4"}. Day-1 Check-In</h2>
+    <p style="font-size:9.5pt; color:#444;">When you arrive at credentials, scan the QR code below to mark yourself "arrived." Production sees the ping in real time and the day-1 safety briefing handoff lines up automatically.</p>
     <div class="checkin">
       <div>
-        <p style="margin-top:0;">Scan the QR code at credential pickup to mark yourself "arrived" and trigger the day-1 safety briefing handoff. The production team sees your check-in in real time.</p>
+        <p style="margin-top:0; font-size:10pt;">One scan and you're on the books. Pick up your credentials, sign the safety briefing attestation, collect your radio if your role requires one, and head to your station.</p>
         <p style="font-size:9pt;"><strong>Where:</strong> Production Trailer (location pinned in the credentials packet)</p>
         <p style="font-size:9pt;"><strong>Hours:</strong> 8:00 AM – 6:00 PM on load-in days</p>
         <p style="font-size:9pt; word-break:break-all;"><strong>Direct link:</strong> <span style="font-family:'SFMono-Regular',Menlo,monospace;">${esc(APP_BASE)}/offer/${esc(l.public_token)}/checkin</span></p>
@@ -226,6 +233,7 @@ function renderHTML(ctx) {
 
   <section>
     <h2>${sched.length > 0 ? "6" : "5"}. Resources + Key Contacts</h2>
+    <p style="font-size:9.5pt; color:#444;">Save these. The first three are who you'll reach when something goes sideways; the production guide is where most answers already live.</p>
     <div class="resources">
       <p style="margin:0 0 4pt;"><strong>Salvage City Production Guide:</strong></p>
       <p style="margin:0 0 8pt;"><span class="url">${esc(PRODUCTION_GUIDE_URL)}</span></p>
@@ -238,8 +246,10 @@ function renderHTML(ctx) {
     </div>
   </section>
 
-  <p style="font-size:9pt; color:#6b6b6b; margin-top:24pt; text-align:center;">
-    See you in Las Vegas.<br>
+  <p style="font-size:10pt; margin-top:24pt; text-align:center; color:#2a2a2a;">
+    Travel safely. Arrive rested. We'll see you at the gate.
+  </p>
+  <p style="font-size:8pt; color:#6b6b6b; margin-top:8pt; text-align:center;">
     <span style="font-family:'SFMono-Regular',Menlo,monospace;">REF · OL-${esc(String(l.id).slice(0, 8).toUpperCase())}</span>
   </p>
 

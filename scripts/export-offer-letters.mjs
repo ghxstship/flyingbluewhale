@@ -1,38 +1,48 @@
-// EDCLV26 Salvage City — engagement-letter PDF exporter.
+// EDCLV26 Salvage City — engagement-letter PDF exporter (Onboarding v2).
 //
-// Renders each retained offer letter from /tmp/sc_letters.json (resolved
-// view rows pulled via Supabase MCP) into a Letter-format PDF using
-// Playwright/Chromium. Output mode is selected by env:
+// Reads /tmp/sc_onboarding_bundle.json (project + letters + onboarding_steps +
+// roles + certifications + role_certifications + compliance_addenda — pulled
+// from the live DB via Supabase MCP) and renders each retained offer letter
+// to a Letter-format PDF, plus a sibling .ics calendar file.
 //
-//   PREVIEW=1  →  write to /tmp/sc_offer_letters_preview/, also generate
-//                 PNG thumbnails via qlmanage. No Desktop write.
-//   (default)  →  write directly to ~/Desktop/EDCLV26_Salvage_City_Offer_Letters/
+// Letter spec (industry-leading onboarding, 2026-05-06):
+//   * Job Description as first-class section: qualifications, decision-rights
+//     matrix (owns vs escalates), success criteria, failure modes, day-one
+//     brief — all sourced from org_roles columns.
+//   * Required certifications block from role_certifications, mapped per-role.
+//   * Compensation: daily rate as "$X per day for up to 10 hr max — overtime
+//     exempt"; per-diem only for travelers; Net 15 for all 1099 letters.
+//   * Working schedule pulled from playbook (still keyed by /tmp/sc_schedules.json).
+//   * Live onboarding tracker referenced by URL (rendered against the live
+//     onboarding_steps table); steps listed in the letter as a checklist with
+//     direct deep-links into the recipient's portal dashboard.
+//   * Compliance addenda selected by venue.region × classification from
+//     compliance_addenda (FL + NV today; the venue lookup makes this scale).
+//   * QR code linking to /offer/<token>/checkin (day-1 venue check-in).
+//   * Welcome message from the project (leadership tone-setter).
+//   * Sidecar .ics calendar attachment with all scheduled work days, venue
+//     address, call times, and a recipient ALERT 4 hr pre-call.
 //
-// Letter spec (2026-05-05):
-//   * Daily rate is "$X per day for up to 10 hours per day max — overtime exempt"
-//   * Per diem only shown for travelers (Sarah Fry, Vida Sotakoun)
-//   * "Local Hire" indicator on everyone except Sarah + Vida
-//   * Net 15 from invoice receipt for ALL 1099 letters
-//   * Per-person working schedule pulled from playbook Labor tab
-//   * NV/LV + FL compliance language
-//   * Production guide link + onboarding & Know-Before-You-Go checklist
+// Output mode:
+//   PREVIEW=1  →  /tmp/sc_offer_letters_preview/ + qlmanage thumbnails.
+//   default    →  ~/Desktop/EDCLV26_Salvage_City_Offer_Letters/ (replaces).
 import { chromium } from "playwright";
+import QRCode from "qrcode";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { execSync } from "node:child_process";
 
 const PREVIEW = process.env.PREVIEW === "1";
-const LETTERS_BUNDLE = "/tmp/sc_letters.json";
+const BUNDLE = "/tmp/sc_onboarding_bundle.json";
 const SCHEDULES_BUNDLE = "/tmp/sc_schedules.json";
 
 const OUT_DESKTOP = path.join(os.homedir(), "Desktop", "EDCLV26_Salvage_City_Offer_Letters");
 const OUT_PREVIEW = "/tmp/sc_offer_letters_preview";
 const OUT = PREVIEW ? OUT_PREVIEW : OUT_DESKTOP;
 
-// Travelers (per Julian, 2026-05-05) — NOT local hires; receive per diem.
 const TRAVELERS = new Set(["Sarah Fry", "Vida Sotakoun"]);
-
+const APP_BASE = "https://lytehaus.tech";
 const PRODUCTION_GUIDE_URL = "https://gvteway.lytehaus.tech/edclv26-salvage-city/guide";
 
 const EMPLOYER_LABEL = {
@@ -63,33 +73,21 @@ const fmtRange = (a, b) => {
 };
 const fmtUSD = (cents) =>
   (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-const fmtTimeShort = (s) => {
-  // "8:00:00 AM" → "8:00 AM"
-  if (!s) return "—";
-  return s.replace(/:00 (AM|PM)$/i, " $1").replace(/^0/, "");
-};
+const fmtTimeShort = (s) => (!s ? "—" : s.replace(/:00 (AM|PM)$/i, " $1").replace(/^0/, ""));
 
-// "$X per day for up to 10 hours per day max — overtime exempt"
-// scheduledDays: actual count from the playbook Labor tab when present;
-// otherwise falls back to the offer-letter's engagement_days span.
 function fmtCompensation(l, scheduledDays) {
   if (l.compensation_basis === "tbd" || (l.effective_compensation_cents ?? 0) === 0) {
     return { rate: "To be confirmed prior to signature", caveat: "" };
   }
   if (l.compensation_basis === "flat_fee" && l.override_amount_cents) {
-    return {
-      rate: `${fmtUSD(l.override_amount_cents)} flat fee for the project`,
-      caveat: "",
-    };
+    return { rate: `${fmtUSD(l.override_amount_cents)} flat fee for the project`, caveat: "" };
   }
   if ((l.compensation_basis === "per_day" || l.compensation_basis === "per_show_day") && l.rate_unit_price_cents) {
     const days = scheduledDays && scheduledDays > 0 ? scheduledDays : l.engagement_days;
     const estTotal = l.rate_unit_price_cents * days;
     return {
       rate: `${fmtUSD(l.rate_unit_price_cents)} per day for up to 10 hours per day maximum — overtime exempt`,
-      caveat: `Estimated total over ${days} scheduled work day${days === 1 ? "" : "s"}: ${fmtUSD(
-        estTotal,
-      )} (subject to actual days worked).`,
+      caveat: `Estimated total over ${days} scheduled work day${days === 1 ? "" : "s"}: ${fmtUSD(estTotal)} (subject to actual days worked).`,
     };
   }
   if (l.compensation_basis === "hourly" && l.rate_unit_price_cents) {
@@ -101,7 +99,66 @@ function fmtCompensation(l, scheduledDays) {
   return { rate: fmtUSD(l.effective_compensation_cents), caveat: "" };
 }
 
-function renderHTML(l, schedule) {
+function parseSchedDate(s) {
+  const m = String(s).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (m) return new Date(Number(m[3]), Number(m[1]) - 1, Number(m[2]));
+  return new Date(s);
+}
+const fmtSchedDate = (s) => {
+  const d = parseSchedDate(s);
+  if (isNaN(d.getTime())) return s;
+  return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+};
+
+// .ics generation — RFC 5545 minimal valid calendar.
+function buildICS(letter, schedule) {
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//LYTEHAUS//Salvage City//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH"];
+  const venueAddr = "Las Vegas Motor Speedway, 7000 N Las Vegas Blvd, Las Vegas, NV 89115";
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const fmtICSDateTime = (date, time) => {
+    // date "5/12/2026", time "8:00:00 AM"
+    const d = parseSchedDate(date);
+    const m = (time || "8:00:00 AM").match(/(\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM)/i);
+    let hr = Number(m?.[1] ?? 8);
+    const min = Number(m?.[2] ?? 0);
+    if (m && m[4].toUpperCase() === "PM" && hr < 12) hr += 12;
+    if (m && m[4].toUpperCase() === "AM" && hr === 12) hr = 0;
+    d.setHours(hr, min, 0);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mi = String(d.getMinutes()).padStart(2, "0");
+    return `${yyyy}${mm}${dd}T${hh}${mi}00`;
+  };
+  for (const day of schedule || []) {
+    const startUTC = fmtICSDateTime(day.date, day.start);
+    const endUTC = fmtICSDateTime(day.date, day.end || day.start);
+    lines.push("BEGIN:VEVENT");
+    lines.push(`UID:salvage-city-${letter.id}-${day.date.replace(/\//g, "")}@lytehaus.tech`);
+    lines.push(`DTSTAMP:${stamp}`);
+    lines.push(`DTSTART;TZID=America/Los_Angeles:${startUTC}`);
+    lines.push(`DTEND;TZID=America/Los_Angeles:${endUTC}`);
+    lines.push(`SUMMARY:Salvage City — ${(day.role || "Call")} (${letter.recipient_name})`);
+    lines.push(`LOCATION:${venueAddr}`);
+    lines.push(`DESCRIPTION:Production guide: ${PRODUCTION_GUIDE_URL}\\nCheck-in: ${APP_BASE}/offer/${letter.public_token}/checkin`);
+    lines.push("BEGIN:VALARM");
+    lines.push("TRIGGER:-PT4H");
+    lines.push("ACTION:DISPLAY");
+    lines.push("DESCRIPTION:Salvage City call in 4 hours");
+    lines.push("END:VALARM");
+    lines.push("END:VEVENT");
+  }
+  lines.push("END:VCALENDAR");
+  return lines.join("\r\n");
+}
+
+async function qrDataURL(url) {
+  return await QRCode.toDataURL(url, { errorCorrectionLevel: "M", margin: 1, scale: 5, color: { dark: "#0a0a0a", light: "#ffffff" } });
+}
+
+function renderHTML(ctx) {
+  const { letter: l, schedule, role, certifications, addenda, project, onboardingSteps, qrDataURI } = ctx;
   const employerLabel = EMPLOYER_LABEL[l.employer] ?? l.employer;
   const venueLine = [l.venue_name, l.venue_city, l.venue_region].filter(Boolean).join(" · ") || "Las Vegas Motor Speedway · Las Vegas · NV";
   const ref = `OL-${String(l.id).slice(0, 8).toUpperCase()}`;
@@ -112,18 +169,7 @@ function renderHTML(l, schedule) {
   const reportsTo = l.reports_to_name
     ? `${esc(l.reports_to_name)}${l.reports_to_email ? ` · ${esc(l.reports_to_email)}` : ""}`
     : "—";
-  const parseSchedDate = (s) => {
-    // Playbook dates come as "M/D/YYYY". new Date() handles this in Chromium,
-    // but our ISO append breaks it — parse explicitly.
-    const m = String(s).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    if (m) return new Date(Number(m[3]), Number(m[1]) - 1, Number(m[2]));
-    return new Date(s);
-  };
-  const fmtSchedDate = (s) => {
-    const d = parseSchedDate(s);
-    if (isNaN(d.getTime())) return s;
-    return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-  };
+
   const sched = (schedule || []).slice().sort((a, b) => parseSchedDate(a.date) - parseSchedDate(b.date));
   const totalHours = sched.reduce((sum, d) => sum + Number(d.hours || 0), 0);
   const scheduledDays = sched.length;
@@ -133,25 +179,13 @@ function renderHTML(l, schedule) {
   else if (l.compensation_basis === "tbd") totalEngagementDays = "TBD";
   else totalEngagementDays = l.engagement_days || "—";
   const comp = fmtCompensation(l, scheduledDays);
-
-  // Net 15 from invoice receipt for ALL 1099 letters (per Julian, 2026-05-05).
-  // Includes TBD-rate letters (Paul, Alvaro) — payment terms apply once a rate
-  // is confirmed and an invoice is submitted, regardless of basis.
-  const paymentSchedule =
-    l.classification === "1099"
-      ? "Net 15 from receipt of properly submitted invoice"
-      : l.effective_payment_schedule || "Net 15 from receipt of properly submitted invoice";
-
-  // Per diem only for travelers. Federal GSA rate for Las Vegas (high season
-  // May): $172 lodging + $79 M&IE — we render the rate as "$X/day" plus a
-  // brief explainer.
+  const paymentSchedule = l.classification === "1099"
+    ? "Net 15 from receipt of properly submitted invoice"
+    : l.effective_payment_schedule || "Net 15 from receipt of properly submitted invoice";
   const perDiemLine = isTraveler && (l.effective_per_diem_cents ?? 0) > 0
     ? `${fmtUSD(l.effective_per_diem_cents)} per day (M&IE only; federal GSA Las Vegas rate)`
-    : isTraveler
-      ? "Per diem provided for travel days (rate TBD)"
-      : null;
+    : isTraveler ? "Per diem provided for travel days (rate TBD)" : null;
 
-  // Pull inclusions and add traveler-specific items
   const inclusions = (l.effective_inclusions ?? []).slice();
   const allInclusions = [
     ...inclusions.map((s) => esc(s)),
@@ -160,28 +194,25 @@ function renderHTML(l, schedule) {
     l.effective_meals_provided ? "Crew meals on call days at the venue" : null,
   ].filter(Boolean);
 
+  const onboardingURL = `${APP_BASE}/offer/${l.public_token}/onboarding`;
+
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Engagement Letter — ${esc(l.recipient_name)}</title>
 <style>
   @page { size: Letter; margin: 0.6in; }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 10.5pt; line-height: 1.5; color: #0a0a0a; background: #fff;
-  }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10.5pt; line-height: 1.5; color: #0a0a0a; background: #fff; }
   .doc { max-width: 7.4in; margin: 0 auto; padding: 0 0 0.4in 0; }
-  header { display: flex; justify-content: space-between; align-items: flex-start;
-    border-bottom: 1px solid #d8d4cc; padding-bottom: 16pt; margin-bottom: 18pt; }
-  .eyebrow { font-family: "SFMono-Regular", Menlo, monospace; font-size: 8pt;
-    letter-spacing: 0.18em; text-transform: uppercase; color: #6b6b6b; }
+  header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #d8d4cc; padding-bottom: 16pt; margin-bottom: 18pt; }
+  .eyebrow { font-family: "SFMono-Regular", Menlo, monospace; font-size: 8pt; letter-spacing: 0.18em; text-transform: uppercase; color: #6b6b6b; }
   h1 { font-size: 19pt; font-weight: 600; margin: 6pt 0 2pt; line-height: 1.15; }
   .project { color: #6b6b6b; font-size: 10pt; }
   .meta { text-align: right; font-size: 8pt; color: #6b6b6b; line-height: 1.6; }
   .meta .ref { font-family: "SFMono-Regular", Menlo, monospace; }
   section { margin: 14pt 0; page-break-inside: avoid; }
-  section h2 { font-size: 9.5pt; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: #444; margin: 0 0 8pt; }
+  section h2 { font-size: 9.5pt; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #444; margin: 0 0 8pt; }
+  section h3 { font-size: 9pt; font-weight: 600; margin: 8pt 0 4pt; color: #2a2a2a; }
   section p { margin: 4pt 0; }
   .recipient { font-weight: 600; font-size: 11pt; }
   .recipient-meta { font-family: "SFMono-Regular", Menlo, monospace; font-size: 9pt; color: #6b6b6b; }
@@ -189,37 +220,30 @@ function renderHTML(l, schedule) {
   dl.kv > div { display: flex; flex-direction: column; gap: 1pt; }
   dl.kv dt { font-size: 8pt; letter-spacing: 0.1em; text-transform: uppercase; color: #6b6b6b; }
   dl.kv dd { margin: 0; font-size: 10pt; }
-  .badge { display: inline-block; padding: 1pt 6pt; border-radius: 2pt; font-size: 8pt;
-    font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .badge { display: inline-block; padding: 1pt 6pt; border-radius: 2pt; font-size: 8pt; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
   .badge.local { background: #d4ff00; color: #1a1a00; }
   .badge.traveler { background: #1a1a1a; color: #d4ff00; }
   .caveat { font-size: 9pt; color: #6b6b6b; margin-top: 3pt; }
-  ul.dot { margin: 0; padding: 0; list-style: none; }
-  ul.dot li { padding-left: 14pt; position: relative; margin: 2pt 0; font-size: 10pt; }
-  ul.dot li::before { content: "·"; color: #888; position: absolute; left: 4pt; }
+  ul.dot, ul.dot-tight { margin: 0; padding: 0; list-style: none; }
+  ul.dot li, ul.dot-tight li { padding-left: 14pt; position: relative; font-size: 10pt; }
+  ul.dot li { margin: 2pt 0; }
+  ul.dot-tight li { margin: 2pt 0 2pt; }
+  ul.dot li::before, ul.dot-tight li::before { content: "·"; color: #888; position: absolute; left: 4pt; }
   ul.checkbox { margin: 0; padding: 0; list-style: none; }
   ul.checkbox li { padding-left: 22pt; position: relative; margin: 4pt 0; font-size: 10pt; }
-  ul.checkbox li::before {
-    content: ""; position: absolute; left: 0; top: 3pt;
-    width: 10pt; height: 10pt; border: 1px solid #555; border-radius: 1pt;
-  }
-  table.sched { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
-  table.sched th { text-align: left; font-weight: 600; padding: 4pt 6pt;
-    border-bottom: 1px solid #d8d4cc; color: #6b6b6b; font-size: 8pt;
-    letter-spacing: 0.1em; text-transform: uppercase; }
-  table.sched td { padding: 3pt 6pt; border-bottom: 1px solid #f0ede5; }
-  table.sched tr:last-child td { border-bottom: none; }
+  ul.checkbox li::before { content: ""; position: absolute; left: 0; top: 3pt; width: 10pt; height: 10pt; border: 1px solid #555; border-radius: 1pt; }
+  table.sched, table.certs { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  table.sched th, table.certs th { text-align: left; font-weight: 600; padding: 4pt 6pt; border-bottom: 1px solid #d8d4cc; color: #6b6b6b; font-size: 8pt; letter-spacing: 0.1em; text-transform: uppercase; }
+  table.sched td, table.certs td { padding: 3pt 6pt; border-bottom: 1px solid #f0ede5; }
+  table.sched tr:last-child td, table.certs tr:last-child td { border-bottom: none; }
   table.sched .hours { text-align: right; font-family: "SFMono-Regular", Menlo, monospace; }
   table.sched tfoot td { font-weight: 600; padding-top: 6pt; border-top: 1px solid #d8d4cc; }
   .compliance { font-size: 9pt; color: #2a2a2a; line-height: 1.55; }
   .compliance p { margin: 4pt 0; }
   .compliance strong { color: #0a0a0a; }
-  .signoff { border-top: 1px solid #d8d4cc; padding-top: 16pt; margin-top: 22pt;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 24pt; align-items: end;
-    page-break-inside: avoid; }
+  .signoff { border-top: 1px solid #d8d4cc; padding-top: 16pt; margin-top: 22pt; display: grid; grid-template-columns: 1fr 1fr; gap: 24pt; align-items: end; page-break-inside: avoid; }
   .signoff .left .label { font-size: 8pt; letter-spacing: 0.12em; text-transform: uppercase; color: #6b6b6b; }
-  .signoff .left .name { font-size: 16pt; font-style: italic; margin: 6pt 0 2pt;
-    border-bottom: 1px solid #999; padding-bottom: 6pt; min-height: 24pt; }
+  .signoff .left .name { font-size: 16pt; font-style: italic; margin: 6pt 0 2pt; border-bottom: 1px solid #999; padding-bottom: 6pt; min-height: 24pt; }
   .signoff .left .role { font-size: 9pt; color: #6b6b6b; }
   .signoff .right { text-align: right; font-size: 8pt; color: #6b6b6b; }
   .signoff .right .ref { font-family: "SFMono-Regular", Menlo, monospace; font-size: 9pt; color: #0a0a0a; }
@@ -228,13 +252,21 @@ function renderHTML(l, schedule) {
   .signature-line { border-bottom: 1px solid #999; height: 22pt; margin-bottom: 4pt; }
   .signature-row { display: grid; grid-template-columns: 2fr 1fr; gap: 18pt; }
   .signature-row .label { font-size: 8pt; letter-spacing: 0.12em; text-transform: uppercase; color: #6b6b6b; margin-bottom: 14pt; }
-  .access { margin-top: 18pt; padding: 10pt 14pt; border: 1px solid #d8d4cc; background: #fafaf7;
-    font-size: 9pt; page-break-inside: avoid; }
+  .access { margin-top: 18pt; padding: 12pt 14pt; border: 1px solid #d8d4cc; background: #fafaf7; font-size: 9pt; page-break-inside: avoid; display: grid; grid-template-columns: 1fr 110px; gap: 16pt; align-items: center; }
   .access .h { font-size: 8pt; letter-spacing: 0.12em; text-transform: uppercase; color: #6b6b6b; }
   .access .code { font-family: "SFMono-Regular", Menlo, monospace; font-size: 11pt; margin-top: 4pt; }
   .access .url { font-family: "SFMono-Regular", Menlo, monospace; font-size: 9pt; color: #2c2c2c; word-break: break-all; }
+  .access .qr { width: 110px; height: 110px; }
+  .access .qr-caption { font-size: 8pt; color: #6b6b6b; text-align: center; margin-top: 4pt; }
   .resources { padding: 10pt 14pt; background: #fafaf7; border: 1px solid #d8d4cc; font-size: 9.5pt; }
   .resources a, .resources .url { font-family: "SFMono-Regular", Menlo, monospace; font-size: 9pt; word-break: break-all; }
+  .welcome { padding: 12pt 14pt; background: #fffcec; border-left: 4pt solid #d4ff00; font-size: 10pt; line-height: 1.55; font-style: italic; color: #2a2a2a; }
+  .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18pt; }
+  .col-2 h3 { margin-top: 0; }
+  .pill { display: inline-block; padding: 1pt 5pt; border-radius: 2pt; font-size: 8pt; font-weight: 600; }
+  .pill.required { background: #fce8e8; color: #8b1414; }
+  .pill.preferred { background: #e8eefc; color: #14488b; }
+  .star { color: #c00; font-weight: 700; }
 </style></head>
 <body>
 <div class="accent"></div>
@@ -261,13 +293,18 @@ function renderHTML(l, schedule) {
     <div class="recipient-meta">${esc(l.recipient_email ?? "—")}${l.recipient_phone ? ` · ${esc(l.recipient_phone)}` : ""}</div>
   </section>
 
+  ${project?.welcome_message ? `
+  <section>
+    <div class="welcome">"${esc(project.welcome_message)}"<br><span style="font-style:normal;font-size:8pt;color:#6b6b6b;">— ${esc(employerLabel)}</span></div>
+  </section>` : ""}
+
   <section>
     <p>Dear <strong>${esc(firstName)}</strong>,</p>
     <p>On behalf of ${esc(employerLabel)}, we are pleased to offer you the role of
       <strong>${esc(l.role_title)}</strong> for <strong>${esc(l.project_name)}</strong>.
-      This letter outlines the engagement, compensation, working schedule, and terms under which
-      we propose to work together. Please review the full document, complete the onboarding
-      checklist below, and counter-sign to accept.</p>
+      This document is your engagement letter, job description, and pre-arrival
+      checklist in one. Please read end-to-end, complete your onboarding steps
+      at the link below, and counter-sign to accept.</p>
   </section>
 
   <section>
@@ -284,32 +321,68 @@ function renderHTML(l, schedule) {
     </dl>
   </section>
 
+  ${role && (role.qualifications?.length || role.decision_rights_owns?.length) ? `
   <section>
-    <h2>2. Compensation</h2>
+    <h2>2. Job Description — ${esc(l.role_title)}</h2>
+    ${role.description ? `<p style="font-size:10pt;">${esc(role.description)}</p>` : ""}
+
+    ${role.qualifications?.length ? `
+    <h3>Qualifications</h3>
+    <ul class="dot-tight">${role.qualifications.map((q) => `<li>${esc(q)}</li>`).join("")}</ul>` : ""}
+
+    ${role.responsibilities && Array.isArray(role.responsibilities) && role.responsibilities.length ? `
+    <h3>Day-to-day responsibilities</h3>
+    <ul class="dot-tight">${role.responsibilities.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}
+
+    <div class="col-2">
+      ${role.decision_rights_owns?.length ? `
+      <div>
+        <h3>Decisions you own</h3>
+        <ul class="dot-tight">${role.decision_rights_owns.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>
+      </div>` : ""}
+      ${role.decision_rights_escalates?.length ? `
+      <div>
+        <h3>Decisions to escalate</h3>
+        <ul class="dot-tight">${role.decision_rights_escalates.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>
+      </div>` : ""}
+    </div>
+
+    <div class="col-2" style="margin-top:8pt;">
+      ${role.success_criteria?.length ? `
+      <div>
+        <h3>What great looks like</h3>
+        <ul class="dot-tight">${role.success_criteria.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>
+      </div>` : ""}
+      ${role.failure_modes?.length ? `
+      <div>
+        <h3>Failure modes to avoid</h3>
+        <ul class="dot-tight">${role.failure_modes.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>
+      </div>` : ""}
+    </div>
+
+    ${role.day_one_brief ? `
+    <h3 style="margin-top:10pt;">Day-one brief</h3>
+    <p style="font-size:10pt; padding: 6pt 10pt; border-left: 2pt solid #d4ff00; background:#fffcec;">${esc(role.day_one_brief)}</p>` : ""}
+  </section>` : ""}
+
+  <section>
+    <h2>3. Compensation</h2>
     <dl class="kv">
       <div><dt>Rate</dt><dd>${esc(comp.rate)}</dd></div>
       <div><dt>Per Diem</dt><dd>${perDiemLine ? esc(perDiemLine) : "Not provided (local hire)"}</dd></div>
       <div><dt>Payment Terms</dt><dd>${esc(paymentSchedule)}</dd></div>
-      <div><dt>Invoicing</dt><dd>Submit weekly invoices to Alvaro Hernandez, Five Senses Group</dd></div>
+      <div><dt>Invoicing</dt><dd>Weekly invoices to Alvaro Hernandez, Five Senses Group</dd></div>
     </dl>
     ${comp.caveat ? `<p class="caveat">${esc(comp.caveat)}</p>` : ""}
-    <p class="caveat">All compensation figures are gross. Recipient is solely responsible for
-      federal and state tax obligations. ${employerLabel} will issue an IRS Form 1099-NEC
-      for amounts exceeding $600 in a calendar year.</p>
+    <p class="caveat">All compensation figures are gross. Recipient is solely responsible for federal and state tax obligations. ${esc(employerLabel)} will issue an IRS Form 1099-NEC for amounts exceeding $600 in a calendar year.</p>
   </section>
 
   ${sched.length > 0 ? `
   <section>
-    <h2>3. Working Schedule</h2>
-    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">
-      Per the EDCLV26 Salvage City Production Playbook (Labor tab). Daily rate covers up to
-      10 hours per work day; additional hours may be assigned at the discretion of production
-      leadership and do not entitle Recipient to additional compensation.
-    </p>
+    <h2>4. Working Schedule</h2>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">Per the EDCLV26 Salvage City Production Playbook (Labor tab). Daily rate covers up to 10 hours per work day; additional hours may be assigned at the discretion of production leadership. The .ics file accompanying this letter populates these dates directly into your calendar with a 4-hour pre-call alarm.</p>
     <table class="sched">
-      <thead>
-        <tr><th>Date</th><th>Activity</th><th>Start</th><th>End</th><th class="hours">Hours</th></tr>
-      </thead>
+      <thead><tr><th>Date</th><th>Activity</th><th>Start</th><th>End</th><th class="hours">Hours</th></tr></thead>
       <tbody>
         ${sched.map((d) => `<tr>
           <td>${esc(fmtSchedDate(d.date))}</td>
@@ -323,8 +396,25 @@ function renderHTML(l, schedule) {
     </table>
   </section>` : ""}
 
+  ${certifications && certifications.length ? `
   <section>
-    <h2>4. Inclusions</h2>
+    <h2>5. Required Certifications</h2>
+    <p style="font-size:9.5pt; color:#444; margin-bottom:8pt;">All required certifications must be uploaded via the onboarding portal before credentials issue. Expired certifications block credential pickup.</p>
+    <table class="certs">
+      <thead><tr><th>Certification</th><th>Issuing body</th><th>Validity</th><th>Status</th></tr></thead>
+      <tbody>
+        ${certifications.map((c) => `<tr>
+          <td><strong>${esc(c.name)}</strong>${c.description ? `<br><span style="font-size:8.5pt;color:#6b6b6b;">${esc(c.description)}</span>` : ""}</td>
+          <td>${esc(c.issuing_body || "—")}</td>
+          <td>${c.validity_months ? `${c.validity_months} mo` : "Lifetime"}</td>
+          <td><span class="pill ${c.required ? "required" : "preferred"}">${c.required ? "Required" : "Preferred"}</span></td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+  </section>` : ""}
+
+  <section>
+    <h2>6. Inclusions</h2>
     ${allInclusions.length === 0
       ? `<p style="color:#6b6b6b">No additional inclusions specified.</p>`
       : `<ul class="dot">${allInclusions.map((x) => `<li>${x}</li>`).join("")}</ul>`}
@@ -332,106 +422,43 @@ function renderHTML(l, schedule) {
 
   ${l.effective_expectations ? `
   <section>
-    <h2>5. Expectations</h2>
+    <h2>7. Expectations</h2>
     <p style="font-size:10pt; white-space: pre-line;">${esc(l.effective_expectations)}</p>
   </section>` : ""}
 
+  ${addenda && addenda.length ? `
   <section>
-    <h2>6. Terms &amp; Compliance — Florida + Nevada</h2>
+    <h2>8. Terms &amp; Compliance — Florida + Nevada</h2>
     <div class="compliance">
-      <p><strong>Independent Contractor Status.</strong> Recipient is engaged as a 1099 independent
-        contractor, not an employee. Recipient retains control over the means and manner of
-        performing the engaged services, may engage other clients during the engagement window,
-        is not entitled to employee benefits (paid time off, health insurance, retirement
-        contributions, unemployment insurance), and is solely responsible for federal income
-        tax, self-employment tax (Social Security and Medicare), and any applicable Nevada
-        State Business License (Nevada Revised Statutes Chapter 76) or other local registrations
-        required to conduct business in Las Vegas, Nevada.</p>
-
-      <p><strong>No Overtime — Compensation Cap.</strong> The agreed daily rate compensates Recipient
-        for up to ten (10) hours per work day. As a 1099 independent contractor, Recipient is
-        not subject to overtime regulations under the federal Fair Labor Standards Act
-        (FLSA, 29 U.S.C. § 207) or Nevada Revised Statutes Chapter 608. Hours worked beyond ten
-        in a single day, if any, do not entitle Recipient to additional compensation absent
-        prior written approval from a Production Director.</p>
-
-      <p><strong>Workers' Compensation.</strong> Recipient acknowledges that as a 1099 independent
-        contractor performing services in Nevada, Recipient is not covered by ${esc(employerLabel)}'s
-        workers' compensation policy under Nevada Revised Statutes Chapter 616A. Recipient is
-        responsible for securing their own coverage and assumes all risk associated with
-        performance of the engaged services.</p>
-
-      <p><strong>Equal Opportunity &amp; Non-Discrimination.</strong> ${esc(employerLabel)} engages
-        contractors without regard to race, color, religion, sex, national origin, age, disability,
-        sexual orientation, gender identity, or veteran status, in compliance with Title VII of
-        the Civil Rights Act of 1964 (42 U.S.C. § 2000e), the Florida Civil Rights Act of 1992
-        (Florida Statutes Chapter 760), and the Nevada Equal Rights of Citizens Act
-        (Nevada Revised Statutes Chapter 613).</p>
-
-      <p><strong>Right to Work.</strong> Both Florida (Article I, § 6 of the Florida Constitution)
-        and Nevada (Nevada Revised Statutes Chapter 613) are right-to-work jurisdictions.
-        Recipient is not required to join any union or pay union dues as a condition of this
-        engagement.</p>
-
-      <p><strong>Confidentiality.</strong> The contents of this letter and any non-public information
-        about ${esc(l.project_name)}, ${esc(employerLabel)}, Five Senses Group, Insomniac, or any
-        named vendor encountered during the engagement are confidential. Recipient may not share
-        outside their direct counsel without the prior written consent of ${esc(employerLabel)}.</p>
-
-      <p><strong>Governing Law.</strong> This agreement is governed by and construed under the laws
-        of the State of Florida, without regard to its conflict-of-laws principles. Any dispute
-        arising out of or relating to this engagement shall be resolved in the state or federal
-        courts located in Hillsborough County, Florida, except where Nevada law mandates local
-        venue for venue-specific work-injury or licensing matters.</p>
+      ${addenda.map((a) => `<p><strong>${esc(a.title)}.</strong> ${esc(a.body)}</p>`).join("")}
     </div>
-  </section>
+  </section>` : ""}
 
+  ${onboardingSteps && onboardingSteps.length ? `
   <section>
-    <h2>7. Onboarding &amp; Know-Before-You-Go Checklist</h2>
+    <h2>9. Onboarding &amp; Know-Before-You-Go Checklist</h2>
     <p style="font-size:10pt; margin-bottom:6pt;">
-      Complete each item before your first call (${esc(fmtDate(l.effective_start))}). Items marked
-      with ★ are critical-path; missing them will delay credentialing or payment.
+      Complete each item before your first call. Items marked <span class="star">★</span> are critical-path; missing them will delay credentialing or payment. Track and update progress at your live onboarding portal:
     </p>
+    <p style="font-family:'SFMono-Regular',Menlo,monospace; font-size:9pt; padding:6pt 10pt; background:#fafaf7; border:1px solid #d8d4cc; word-break:break-all;">${esc(onboardingURL)}</p>
     <ul class="checkbox">
-      <li>★ Counter-sign this engagement letter (online at the link below, or sign + return PDF).</li>
-      <li>★ Submit a completed IRS Form W-9 to <em>alvaro@five-senses.co</em> for 1099 reporting.</li>
-      <li>★ Complete the <strong>INSOMNIAC 2026 Safety &amp; Social Media Policy</strong> form
-        (link in the production playbook). Use "Salvage City — No Ceilings" as the Department
-        / Vendor field.</li>
-      <li>★ Submit a recent headshot (1024×1024 minimum) to <em>sos@ghxstship.pro</em> for
-        credential printing.</li>
-      ${isTraveler ? `
-      <li>★ Confirm travel itinerary with Five Senses logistics — flights and lodging will be
-        booked on your behalf and confirmation will arrive at least 7 days before your first
-        call.</li>` : `
-      <li>Confirm transport plan to the Las Vegas Motor Speedway — parking pass arrives with
-        your credentials packet 48 hours before load-in.</li>`}
-      <li>Read the EDCLV26 Salvage City Supper Club Production Playbook end-to-end (link below);
-        bookmark the schedule, contacts, and radio plan.</li>
-      <li>Save the show schedule (May 15–17, 2026, five seatings nightly) to your calendar with
-        a reminder set for 4 hours pre-call.</li>
-      <li>Bring: photo ID for credential pickup; closed-toe shoes for load-in days;
-        weather-appropriate layers (Las Vegas overnight lows ~60 °F mid-May); reusable water
-        bottle (venue heat).</li>
-      <li>Join the Salvage City production text thread (number sent with credentials packet)
-        for day-of dispatch.</li>
-      <li>Submit your first weekly invoice on Friday ${esc(l.effective_end ? fmtDate(l.effective_end) : "of the engagement window")}
-        to <em>alvaro@five-senses.co</em> for Net 15 processing.</li>
+      ${onboardingSteps.sort((a, b) => a.sort_order - b.sort_order).map((s) => `<li>${s.critical_path ? `<span class="star">★</span> ` : ""}<strong>${esc(s.title)}</strong>${s.due_at ? ` <span style="color:#6b6b6b;font-size:8.5pt;">(due ${esc(fmtDate(s.due_at))})</span>` : ""}${s.description ? `<br><span style="font-size:9pt; color:#444;">${esc(s.description)}</span>` : ""}</li>`).join("")}
     </ul>
-  </section>
+  </section>` : ""}
 
   <section>
-    <h2>8. Resources &amp; References</h2>
+    <h2>10. Resources &amp; References</h2>
     <div class="resources">
       <p style="margin:0 0 4pt;"><strong>Salvage City Production Guide</strong> (auto-scoped to your role):</p>
       <p style="margin:0 0 8pt;"><span class="url">${esc(PRODUCTION_GUIDE_URL)}</span></p>
+      <p style="margin:0 0 4pt;"><strong>Live onboarding tracker:</strong></p>
+      <p style="margin:0 0 8pt;"><span class="url">${esc(onboardingURL)}</span></p>
+      <p style="margin:0 0 4pt;"><strong>Day-1 venue check-in:</strong> scan the QR code below or visit:</p>
+      <p style="margin:0 0 8pt;"><span class="url">${esc(APP_BASE)}/offer/${esc(l.public_token)}/checkin</span></p>
       <p style="margin:0 0 4pt;"><strong>Venue:</strong> ${esc(venueLine)}</p>
-      <p style="margin:0 0 4pt;"><strong>Producer of Record:</strong> Five Senses Group · Paul Seigenthaler ·
-        <em>paul.seigenthaler@insomniac.com</em></p>
-      <p style="margin:0 0 4pt;"><strong>Production Director (escalation):</strong> Sarah Fry ·
-        <em>FrySarah8@gmail.com</em> · (615) 708-3676</p>
-      <p style="margin:0;"><strong>Project Producer:</strong> Julian Clarkson ·
-        <em>julian.clarkson@ghxstship.pro</em> · (407) 885-6011</p>
+      <p style="margin:0 0 4pt;"><strong>Producer of Record:</strong> Five Senses Group · Paul Seigenthaler · <em>paul.seigenthaler@insomniac.com</em></p>
+      <p style="margin:0 0 4pt;"><strong>Production Director (escalation):</strong> Sarah Fry · <em>FrySarah8@gmail.com</em> · (615) 708-3676</p>
+      <p style="margin:0;"><strong>Project Producer:</strong> Julian Clarkson · <em>julian.clarkson@ghxstship.pro</em> · (407) 885-6011</p>
     </div>
   </section>
 
@@ -462,11 +489,18 @@ function renderHTML(l, schedule) {
   </div>
 
   <div class="access">
-    <div class="h">Online Acceptance</div>
-    <div style="margin-top:6pt;">To accept this offer online, visit:</div>
-    <div class="url">https://lytehaus.tech/offer/${esc(l.public_token)}</div>
-    <div style="margin-top:6pt;">Access code:</div>
-    <div class="code">${esc(l.access_code)}</div>
+    <div>
+      <div class="h">Online Acceptance + Day-1 Check-in</div>
+      <div style="margin-top:6pt;">Sign + complete onboarding at:</div>
+      <div class="url">${esc(APP_BASE)}/offer/${esc(l.public_token)}</div>
+      <div style="margin-top:6pt;">Access code:</div>
+      <div class="code">${esc(l.access_code)}</div>
+      <div style="margin-top:6pt; font-size:8.5pt; color:#6b6b6b;">Scan the QR at credential pickup to mark yourself "arrived."</div>
+    </div>
+    <div>
+      <img class="qr" src="${qrDataURI}" alt="QR check-in code">
+      <div class="qr-caption">Day-1 check-in</div>
+    </div>
   </div>
 
 </div>
@@ -474,11 +508,8 @@ function renderHTML(l, schedule) {
 }
 
 async function generateThumbnail(pdfPath, outDir) {
-  // qlmanage produces <basename>.png next to itself when -o <dir> is passed
   try {
-    execSync(`qlmanage -t -s 1100 -o ${JSON.stringify(outDir)} ${JSON.stringify(pdfPath)} 2>/dev/null`, {
-      stdio: "ignore",
-    });
+    execSync(`qlmanage -t -s 1100 -o ${JSON.stringify(outDir)} ${JSON.stringify(pdfPath)} 2>/dev/null`, { stdio: "ignore" });
     return path.join(outDir, path.basename(pdfPath) + ".png");
   } catch {
     return null;
@@ -486,10 +517,10 @@ async function generateThumbnail(pdfPath, outDir) {
 }
 
 async function main() {
-  const letters = JSON.parse(await fs.readFile(LETTERS_BUNDLE, "utf8"));
+  const bundle = JSON.parse(await fs.readFile(BUNDLE, "utf8"));
   const schedules = JSON.parse(await fs.readFile(SCHEDULES_BUNDLE, "utf8"));
+  const { letters, steps, roles, certs, role_certs, addenda, project } = bundle;
 
-  // Reset output dir
   await fs.rm(OUT, { recursive: true, force: true }).catch(() => {});
   await fs.mkdir(OUT, { recursive: true });
 
@@ -497,35 +528,65 @@ async function main() {
   const ctx = await browser.newContext();
   const results = [];
 
+  // Index helpers
+  const roleBySlug = Object.fromEntries(roles.map((r) => [r.slug, r]));
+  const certBySlug = Object.fromEntries(certs.map((c) => [c.slug, c]));
+  const stepsByLetter = {};
+  for (const s of steps) {
+    (stepsByLetter[s.offer_letter_id] ||= []).push(s);
+  }
+  // Region selector — venue is in NV; jurisdictional addenda cover NV + FL.
+  const addendaForLetter = addenda.filter(
+    (a) => (a.region === "NV" || a.region === "FL") && a.classification === "1099",
+  );
+
   for (const letter of letters) {
-    const page = await ctx.newPage();
+    const role = roleBySlug[letter.role_slug] ?? null;
+    const reqCertSlugs = role_certs.filter((rc) => rc.role_slug === letter.role_slug).map((rc) => ({ ...certBySlug[rc.cert_slug], required: rc.required }));
     const sched = schedules[letter.recipient_name] || [];
-    const html = renderHTML(letter, sched);
-    await page.setContent(html, { waitUntil: "load" });
-    const filename = `EDCLV26_Salvage_City_Offer_Letter_${safe(letter.recipient_name)}.pdf`;
-    const outPath = path.join(OUT, filename);
-    await page.pdf({
-      path: outPath,
-      format: "Letter",
-      printBackground: true,
-      margin: { top: "0in", right: "0in", bottom: "0.4in", left: "0in" },
+    const onboardingSteps = stepsByLetter[letter.id] || [];
+    const qrDataURI = await qrDataURL(`${APP_BASE}/offer/${letter.public_token}/checkin`);
+
+    const page = await ctx.newPage();
+    const html = renderHTML({
+      letter,
+      schedule: sched,
+      role,
+      certifications: reqCertSlugs,
+      addenda: letter.classification === "1099" ? addendaForLetter : [],
+      project,
+      onboardingSteps,
+      qrDataURI,
     });
-    const stat = await fs.stat(outPath);
+    await page.setContent(html, { waitUntil: "load" });
+    const filenameBase = `EDCLV26_Salvage_City_Offer_Letter_${safe(letter.recipient_name)}`;
+    const pdfPath = path.join(OUT, `${filenameBase}.pdf`);
+    const icsPath = path.join(OUT, `${filenameBase}.ics`);
+    await page.pdf({ path: pdfPath, format: "Letter", printBackground: true, margin: { top: "0in", right: "0in", bottom: "0.4in", left: "0in" } });
+    if (sched.length > 0) {
+      await fs.writeFile(icsPath, buildICS(letter, sched), "utf8");
+    }
+    const stat = await fs.stat(pdfPath);
     let thumb = null;
-    if (PREVIEW) thumb = await generateThumbnail(outPath, OUT);
-    results.push({ name: letter.recipient_name, file: filename, kb: (stat.size / 1024).toFixed(1), thumb });
+    if (PREVIEW) thumb = await generateThumbnail(pdfPath, OUT);
+    results.push({
+      name: letter.recipient_name,
+      pdf: `${filenameBase}.pdf`,
+      ics: sched.length > 0 ? `${filenameBase}.ics` : null,
+      kb: (stat.size / 1024).toFixed(1),
+      thumb,
+    });
     await page.close();
   }
+
   await browser.close();
 
   console.log(`\n=== Offer-letter export — ${PREVIEW ? "PREVIEW" : "FINAL"} ===`);
   for (const r of results) {
-    console.log(`  ✓ ${r.name.padEnd(28)}  ${r.file}  (${r.kb} KB)${r.thumb ? "  + thumb" : ""}`);
+    console.log(`  ✓ ${r.name.padEnd(28)}  ${r.pdf}  (${r.kb} KB)${r.ics ? `  + ${r.ics}` : ""}${r.thumb ? "  + thumb" : ""}`);
   }
   console.log(`\nWrote ${results.length} PDFs to: ${OUT}`);
-  if (PREVIEW) {
-    console.log("\nThumbnails generated. Re-run without PREVIEW=1 to publish to Desktop.");
-  }
+  if (PREVIEW) console.log("\nThumbnails generated. Re-run without PREVIEW=1 to publish to Desktop.");
 }
 
 main().catch((e) => {

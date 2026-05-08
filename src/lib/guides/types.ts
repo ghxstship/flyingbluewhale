@@ -1,7 +1,19 @@
 // Boarding-Pass style event guide schema.
 // Each guide is a per-role KBYG rendered from JSON stored in event_guides.config.
 
-export type GuidePersona = "artist" | "vendor" | "client" | "sponsor" | "guest" | "crew" | "staff" | "custom";
+// 8 counted personas + 1 uncounted (`custom` = Temporary Access).
+// `client` is reserved for future use; not currently surfaced as a chip-bar option.
+export type GuidePersona =
+  | "staff"
+  | "crew"
+  | "vendor"
+  | "brand_ambassador"
+  | "sponsor"
+  | "artist"
+  | "media_press"
+  | "client"
+  | "guest"
+  | "custom";
 
 export type GuideSection =
   | {

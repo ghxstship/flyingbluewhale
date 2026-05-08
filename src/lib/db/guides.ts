@@ -33,9 +33,11 @@ export const PERSONA_TIERS: Record<GuidePersona, { tier: number; classification:
   staff: { tier: 1, classification: "INTERNAL — STAFF ONLY" },
   crew: { tier: 2, classification: "INTERNAL — PRODUCTION CREW ONLY" },
   vendor: { tier: 3, classification: "VENDOR USE" },
-  artist: { tier: 4, classification: "CONFIDENTIAL — ARTIST & INDUSTRY ACCESS" },
-  client: { tier: 4, classification: "CLIENT USE" },
+  brand_ambassador: { tier: 3, classification: "BRAND AMBASSADOR USE" },
   sponsor: { tier: 4, classification: "SPONSOR USE" },
+  artist: { tier: 4, classification: "CONFIDENTIAL — ARTIST & INDUSTRY ACCESS" },
+  media_press: { tier: 4, classification: "MEDIA & PRESS USE" },
+  client: { tier: 4, classification: "CLIENT USE" },
   guest: { tier: 5, classification: "PUBLIC — GUEST COPY" },
   custom: { tier: 5, classification: "CUSTOM" },
 };

@@ -25,13 +25,15 @@ function mapSessionToGuidePersona(role: PlatformRole): GuidePersona {
 }
 
 const VALID_PERSONAS = new Set<GuidePersona>([
-  "artist",
-  "vendor",
-  "client",
-  "sponsor",
-  "guest",
-  "crew",
   "staff",
+  "crew",
+  "vendor",
+  "brand_ambassador",
+  "sponsor",
+  "artist",
+  "media_press",
+  "client",
+  "guest",
   "custom",
 ]);
 
@@ -130,14 +132,18 @@ export default async function GuidePage({
   );
 }
 
+// 8 counted personas (1–8) followed by Temporary Access (uncounted, parallel).
+// Ordered by tier (1 → 5) and within tier by floor-presence.
 const PREVIEW_PERSONAS: { value: GuidePersona; label: string }[] = [
-  { value: "staff", label: "Production" },
-  { value: "crew", label: "Operations" },
-  { value: "vendor", label: "Food & Beverage" },
-  { value: "sponsor", label: "Sponsors" },
-  { value: "artist", label: "Talent" },
-  { value: "guest", label: "Guests" },
-  { value: "custom", label: "Temporary Access" },
+  { value: "staff", label: "Production" }, // 1
+  { value: "crew", label: "Operations" }, // 2
+  { value: "vendor", label: "Food & Beverage" }, // 3
+  { value: "brand_ambassador", label: "Brand Ambassador" }, // 4
+  { value: "sponsor", label: "Sponsors" }, // 5
+  { value: "artist", label: "Talent" }, // 6
+  { value: "media_press", label: "Media & Press" }, // 7
+  { value: "guest", label: "Guests" }, // 8
+  { value: "custom", label: "Temporary Access" }, // (parallel, uncounted)
 ];
 
 function PreviewSwitcher({

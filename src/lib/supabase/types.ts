@@ -526,7 +526,19 @@ export type Notification = {
   created_at: string;
 };
 
-export type GuidePersona = "artist" | "vendor" | "client" | "sponsor" | "guest" | "crew" | "staff" | "custom";
+// 8 counted personas + 1 uncounted (`custom` = Temporary Access).
+// `client` is reserved; not currently surfaced as a chip-bar option.
+export type GuidePersona =
+  | "staff"
+  | "crew"
+  | "vendor"
+  | "brand_ambassador"
+  | "sponsor"
+  | "artist"
+  | "media_press"
+  | "client"
+  | "guest"
+  | "custom";
 export type EventGuide = {
   id: string;
   org_id: string;

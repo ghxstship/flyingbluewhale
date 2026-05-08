@@ -1111,6 +1111,38 @@
   color: var(--heat-yellow);
 }
 
+/* Cadence toggle — 3-button pill that drives both the lifecycle and
+   workback schedule. Active tab fills with heat-black. */
+.heat-cadence-toggle {
+  display: inline-flex;
+  border: 1px solid var(--heat-line-strong);
+  border-radius: 999px;
+  margin-top: 16px;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+.heat-cadence-toggle button {
+  padding: 8px 16px;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--heat-muted);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.heat-cadence-toggle button:hover {
+  color: var(--heat-ink);
+}
+.heat-cadence-toggle button[data-active="true"] {
+  background: var(--heat-ink);
+  color: var(--heat-paper);
+}
+
 /* Per-tier CTA + upsell hint at the bottom of each retainer card.
    Pinned to the bottom of the flex column so cards balance regardless
    of feature-count differences. */
@@ -1334,6 +1366,204 @@
   color: var(--heat-red);
   font-weight: 700;
   text-decoration: underline;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Responsive — mobile + tablet refinements.
+   Targets ≤ 639px viewports where multi-column rows would otherwise
+   overflow or truncate. Above 640px the desktop layout takes over.
+   ───────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 639px) {
+  /* Section spacing — pull cards closer to viewport edges */
+  .heat-section {
+    padding: 0 16px;
+  }
+
+  /* Sticky nav — keep brand visible, links scroll horizontally */
+  .heat-nav-inner {
+    padding: 10px 16px;
+  }
+  .heat-nav-brand {
+    font-size: 16px;
+  }
+  .heat-nav-links {
+    font-size: 10px;
+    gap: 14px;
+    letter-spacing: 0.18em;
+  }
+
+  /* Hero — tighten the wordmark drop-shadow so it stays in-frame */
+  .heat-hero {
+    padding: 56px 16px 64px;
+  }
+  .heat-hero h1 .heat-red {
+    text-shadow:
+      4px 4px 0 var(--heat-black),
+      5px 5px 0 var(--heat-yellow);
+  }
+
+  /* Activation tier accordion — restack the header so the Build Range
+     and price drop below the tier name instead of competing for a
+     four-column row. */
+  .heat-tier-head {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "num name toggle"
+      "num price price";
+    gap: 12px 14px;
+    padding: 18px 18px 18px 24px;
+  }
+  .heat-tier-head > .heat-tier-num {
+    grid-area: num;
+    font-size: 36px;
+  }
+  .heat-tier-head > span:nth-child(2) {
+    grid-area: name;
+    min-width: 0;
+  }
+  .heat-tier-head > .heat-tier-price {
+    grid-area: price;
+    text-align: left;
+    border-top: 1px dashed var(--heat-line);
+    padding-top: 10px;
+    margin-top: 2px;
+  }
+  .heat-tier-head > .heat-tier-toggle {
+    grid-area: toggle;
+    align-self: start;
+  }
+  .heat-tier-name {
+    font-size: 26px;
+  }
+  .heat-tier-price strong {
+    font-size: 22px;
+    transform: skewX(-6deg);
+    transform-origin: 0 0;
+  }
+
+  /* Investment table — compress padding + cell typography so the
+     2-column layout fits a 320–414px viewport without horizontal scroll. */
+  .heat-investment th,
+  .heat-investment td {
+    padding: 10px 12px;
+  }
+  .heat-investment .heat-row-section td {
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    padding: 8px 12px;
+  }
+  .heat-investment tfoot td {
+    font-size: 18px;
+    padding: 14px 12px;
+  }
+
+  /* Phase head — let the deadline drop below the name rather than
+     competing for the same row */
+  .heat-phase {
+    padding: 16px 16px 16px 22px;
+  }
+  .heat-phase-head {
+    flex-wrap: wrap;
+    column-gap: 12px;
+  }
+  .heat-phase-deadline {
+    margin-left: 0;
+    flex-basis: 100%;
+    margin-top: 4px;
+  }
+
+  /* Retainer card — tighten internal padding */
+  .heat-retainer-card {
+    padding: 20px 18px;
+  }
+  .heat-retainer-card .heat-tier-num {
+    font-size: 30px;
+  }
+  .heat-retainer-card .heat-tier-name {
+    font-size: 24px;
+  }
+  .heat-retainer-price strong {
+    font-size: 44px;
+  }
+
+  /* Premium banner — tighten internal padding on mobile */
+  .heat-premium-banner {
+    padding: 28px 20px 24px;
+  }
+
+  /* Add-on cards — compress padding */
+  .heat-addon-card {
+    padding: 16px;
+  }
+  .heat-addon-card-head {
+    flex-wrap: wrap;
+  }
+  .heat-addon-applies {
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  /* Engagement bar % numerals — keep the drop-shadow within the card */
+  .heat-engagement-pct {
+    font-size: 56px;
+  }
+
+  /* CTA buttons — full width, comfortable tap target */
+  .heat-cta-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .heat-cta-row .heat-btn {
+    width: 100%;
+  }
+
+  /* Section eyebrow — slight scale-down */
+  .heat-section-eyebrow span:last-child {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+  }
+}
+
+/* Tablet refinement — at 640–767px, give the activation tier head a
+   roomier two-row layout that uses the available width without
+   forcing the price into a single line. Also lift the retainer-grid
+   transition earlier so 768–879px doesn't sit awkwardly stacked. */
+@media (min-width: 640px) and (max-width: 767px) {
+  .heat-tier-head {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "num name toggle"
+      "num price toggle";
+    align-items: center;
+  }
+  .heat-tier-head > .heat-tier-num {
+    grid-area: num;
+  }
+  .heat-tier-head > span:nth-child(2) {
+    grid-area: name;
+  }
+  .heat-tier-head > .heat-tier-price {
+    grid-area: price;
+    text-align: left;
+  }
+  .heat-tier-head > .heat-tier-toggle {
+    grid-area: toggle;
+  }
+}
+
+/* Retainer grid — drop to 3-col earlier (>= 1024px) so 880–1023px
+   tablets get a clean two-card-on-top + one-below layout that
+   doesn't strand the third card alone. */
+@media (min-width: 880px) and (max-width: 1023px) {
+  .heat-retainer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .heat-retainer-grid > .flagship {
+    grid-column: span 2;
+  }
 }
 
 /* Print */

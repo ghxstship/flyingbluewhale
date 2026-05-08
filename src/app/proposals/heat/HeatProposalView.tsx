@@ -5,7 +5,7 @@ import {
   HEAT_DOC,
   HEAT_LIFECYCLE,
   HEAT_PHASE_DEADLINES,
-  HEAT_PHASE_DEADLINES_SMALL,
+  HEAT_CADENCE_RUNWAY,
   HEAT_SITES,
   HEAT_TAXONOMY,
   HEAT_TIERS,
@@ -16,14 +16,15 @@ import {
   HEAT_ADDONS,
   ADDON_CATEGORY_LABELS,
   type AddonCategory,
+  type TierId,
   fmtMoney,
   fmtRange,
 } from "./data";
 
 const SECTIONS = [
   { id: "overview", label: "Overview" },
-  { id: "retainer", label: "Retainer" },
   { id: "builds", label: "Builds" },
+  { id: "retainer", label: "Retainer" },
   { id: "scope", label: "Scope" },
   { id: "lifecycle", label: "Lifecycle" },
   { id: "investment", label: "Investment" },
@@ -37,12 +38,11 @@ export function HeatProposalView() {
       <HeatNav />
       <Hero />
       <ProjectOverview />
-      <RetainerTiers />
       <ActivationTiers />
+      <RetainerTiers />
       <ScopeOfWork />
       <ActivationSites />
-      <ProductionLifecycle />
-      <WorkbackSchedule />
+      <LifecycleAndWorkback />
       <InvestmentSummary />
       <PaymentMethod />
       <Addons />
@@ -83,8 +83,8 @@ function HeatNav() {
   return (
     <nav className="heat-nav print-hide">
       <div className="heat-nav-inner">
-        <span className="heat-nav-brand" aria-label="Agora x Miami HEAT">
-          Agora <span className="heat-x">×</span> <span className="heat-wordmark">HEAT</span>
+        <span className="heat-nav-brand" aria-label="AGV Miami x Miami HEAT">
+          AGV Miami <span className="heat-x">×</span> <span className="heat-wordmark">HEAT</span>
         </span>
         <div className="heat-nav-links" aria-label="Section navigation">
           {SECTIONS.map((s) => (
@@ -165,32 +165,32 @@ function ProjectOverview() {
     <section className="heat-section">
       <SectionHeader
         eyebrow="Project Overview"
-        title="Retained Capacity. Tiered Builds."
-        sub="Three engagement vectors, designed to compound. A monthly retainer holds dedicated studio capacity (pick one of three tiers). Each activation pulls from a tiered menu of buildouts. Add-Ons overlay either, on demand."
+        title="Tiered Builds. Retained Capacity."
+        sub="Three engagement vectors, designed to compound. Each activation pulls from a tiered build menu. A monthly retainer (pick one of three tiers) holds dedicated studio capacity behind the program. Add-Ons stack onto either, on demand."
       />
       <div className="heat-grid-3" style={{ marginTop: 24 }}>
         <div className="heat-card">
           <span className="heat-card-accent" />
-          <div className="heat-eyebrow">Retainer</div>
-          <h3 style={{ fontSize: 22, marginTop: 8 }}>Three Tiers</h3>
-          <dl style={{ marginTop: 12 }}>
-            <Detail label="Base" value={`${fmtMoney(HEAT_RETAINER_TIERS[0].price)} / mo`} />
-            <Detail label="Elevated" value={`${fmtMoney(HEAT_RETAINER_TIERS[1].price)} / mo`} />
-            <Detail label="Premium" value={`${fmtMoney(HEAT_RETAINER_TIERS[2].price)} / mo`} />
-            <Detail label="Commitment" value={HEAT_DOC.retainerCommitment} />
-          </dl>
-        </div>
-        <div className="heat-card">
-          <span className="heat-card-accent" style={{ background: "var(--heat-yellow)" }} />
-          <div className="heat-eyebrow" style={{ color: "var(--heat-yellow)" }}>
-            Per Activation
-          </div>
+          <div className="heat-eyebrow">Per Activation</div>
           <h3 style={{ fontSize: 22, marginTop: 8 }}>Build Menu</h3>
           <dl style={{ marginTop: 12 }}>
             <Detail label="Small" value={fmtRange(HEAT_TIERS[0].base, HEAT_TIERS[0].ceiling)} />
             <Detail label="Medium" value={fmtRange(HEAT_TIERS[1].base, HEAT_TIERS[1].ceiling)} />
             <Detail label="Large" value={fmtRange(HEAT_TIERS[2].base, HEAT_TIERS[2].ceiling)} />
             <Detail label="Includes" value="Production · Fab · Install · Strike" />
+          </dl>
+        </div>
+        <div className="heat-card">
+          <span className="heat-card-accent" style={{ background: "var(--heat-yellow)" }} />
+          <div className="heat-eyebrow" style={{ color: "var(--heat-yellow)" }}>
+            Retainer
+          </div>
+          <h3 style={{ fontSize: 22, marginTop: 8 }}>Three Tiers</h3>
+          <dl style={{ marginTop: 12 }}>
+            <Detail label="Base" value={`${fmtMoney(HEAT_RETAINER_TIERS[0].price)} / mo`} />
+            <Detail label="Elevated" value={`${fmtMoney(HEAT_RETAINER_TIERS[1].price)} / mo`} />
+            <Detail label="Premium" value={`${fmtMoney(HEAT_RETAINER_TIERS[2].price)} / mo`} />
+            <Detail label="Commitment" value={HEAT_DOC.retainerCommitment} />
           </dl>
         </div>
         <div className="heat-card">
@@ -536,63 +536,59 @@ function ActivationSites() {
 // ─────────────────────────────────────────────────────────────────────────
 // 8-Phase Production Lifecycle
 // ─────────────────────────────────────────────────────────────────────────
-function ProductionLifecycle() {
-  const [showSmall, setShowSmall] = useState(false);
-  const deadlines = showSmall ? HEAT_PHASE_DEADLINES_SMALL : HEAT_PHASE_DEADLINES;
+// ─────────────────────────────────────────────────────────────────────────
+// Production Lifecycle + Workback Schedule — single parent owns the
+// cadence selection so the toggle drives both the phase cards and the
+// workback table in lockstep.
+// ─────────────────────────────────────────────────────────────────────────
+const CADENCE_OPTIONS: { id: TierId; label: string }[] = [
+  { id: "small", label: "Small Cadence" },
+  { id: "medium", label: "Medium Cadence" },
+  { id: "large", label: "Large Cadence" },
+];
 
+function LifecycleAndWorkback() {
+  const [cadence, setCadence] = useState<TierId>("medium");
+  const deadlines = HEAT_PHASE_DEADLINES[cadence];
+
+  return (
+    <>
+      <ProductionLifecycle cadence={cadence} setCadence={setCadence} deadlines={deadlines} />
+      <WorkbackSchedule cadence={cadence} deadlines={deadlines} />
+    </>
+  );
+}
+
+function ProductionLifecycle({
+  cadence,
+  setCadence,
+  deadlines,
+}: {
+  cadence: TierId;
+  setCadence: (c: TierId) => void;
+  deadlines: Record<string, string>;
+}) {
   return (
     <section id="lifecycle" className="heat-section">
       <SectionHeader
         eyebrow="Production Lifecycle"
         title="From Brief To Strike."
-        sub="Eight phases, identical structure across every activation. Deadlines telescope to fit the tier — Medium/Large run a 10-week clock from kickoff to strike; Small condenses to four weeks."
+        sub="Eight phases, identical structure across every activation. The runway scales with build tier — Small condenses to five weeks, Medium runs nine, Large stretches to thirteen."
       />
-      <div
-        style={{
-          display: "inline-flex",
-          border: "1px solid var(--heat-line-strong)",
-          borderRadius: 999,
-          marginTop: 16,
-          overflow: "hidden",
-        }}
-        className="print-hide"
-      >
-        <button
-          type="button"
-          onClick={() => setShowSmall(false)}
-          className="heat-mono"
-          style={{
-            padding: "8px 16px",
-            border: 0,
-            cursor: "pointer",
-            background: !showSmall ? "var(--heat-ink)" : "transparent",
-            color: !showSmall ? "var(--heat-paper)" : "var(--heat-muted)",
-            fontSize: 11,
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            fontWeight: 700,
-          }}
-        >
-          Medium / Large Cadence
-        </button>
-        <button
-          type="button"
-          onClick={() => setShowSmall(true)}
-          className="heat-mono"
-          style={{
-            padding: "8px 16px",
-            border: 0,
-            cursor: "pointer",
-            background: showSmall ? "var(--heat-ink)" : "transparent",
-            color: showSmall ? "var(--heat-paper)" : "var(--heat-muted)",
-            fontSize: 11,
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            fontWeight: 700,
-          }}
-        >
-          Small Cadence
-        </button>
+      <div className="heat-cadence-toggle print-hide" role="tablist" aria-label="Cadence">
+        {CADENCE_OPTIONS.map((opt) => (
+          <button
+            key={opt.id}
+            type="button"
+            role="tab"
+            aria-selected={cadence === opt.id}
+            onClick={() => setCadence(opt.id)}
+            className="heat-mono"
+            data-active={cadence === opt.id}
+          >
+            {opt.label}
+          </button>
+        ))}
       </div>
       <div style={{ marginTop: 20 }}>
         {HEAT_LIFECYCLE.map((p) => (
@@ -600,7 +596,7 @@ function ProductionLifecycle() {
             <div className="heat-phase-head">
               <span className="heat-phase-num">{p.num}</span>
               <span className="heat-phase-name">{p.name}</span>
-              <span className="heat-phase-deadline">{deadlines[p.id as keyof typeof deadlines]}</span>
+              <span className="heat-phase-deadline">{deadlines[p.id]}</span>
             </div>
             <p className="heat-phase-intent">{p.intent}</p>
             <div className="heat-phase-grid">
@@ -632,23 +628,21 @@ function ProductionLifecycle() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────
-// Workback Schedule
-// ─────────────────────────────────────────────────────────────────────────
-function WorkbackSchedule() {
+function WorkbackSchedule({ cadence, deadlines }: { cadence: TierId; deadlines: Record<string, string> }) {
   const rows = HEAT_LIFECYCLE.flatMap((p) =>
     p.milestones.slice(0, 2).map((m) => ({
       phase: p.name,
       milestone: m,
-      deadline: HEAT_PHASE_DEADLINES[p.id as keyof typeof HEAT_PHASE_DEADLINES],
+      deadline: deadlines[p.id],
     })),
   );
+  const tierLabel = cadence.charAt(0).toUpperCase() + cadence.slice(1);
   return (
     <section className="heat-section">
       <SectionHeader
-        eyebrow="Workback Schedule"
+        eyebrow={`Workback Schedule · ${HEAT_CADENCE_RUNWAY[cadence]}`}
         title="Calibrated Against Activation Date."
-        sub="All deadlines anchor against T = activation open. Each per-activation SOW pins T to a calendar date."
+        sub={`Every deadline counts back from the activation date for a ${tierLabel} build. Toggle the cadence above to see how Small, Medium, and Large compare.`}
       />
       <div className="heat-investment" style={{ marginTop: 20 }}>
         <table>
@@ -684,12 +678,26 @@ function InvestmentSummary() {
     <section id="investment" className="heat-section">
       <SectionHeader
         eyebrow="Investment Summary"
-        title="Retainer Plus Build."
-        sub="Total program investment scales with your retainer tier and activation cadence. Choose a retainer, pick builds off the menu, and layer in the upgrades that fit the moment. Every figure covers production, fabrication, install, and strike."
+        title="Build Plus Retainer."
+        sub="Total program investment scales with your activation cadence and retainer tier. Pick builds off the menu, choose a retainer to hold studio capacity behind the program, and layer in the upgrades that fit the moment. Every figure covers production, fabrication, install, and strike."
       />
       <div className="heat-investment" style={{ marginTop: 20 }}>
         <table>
           <tbody>
+            <tr className="heat-row-section">
+              <td>Per-Activation Build</td>
+              <td className="right">Range · Base To Top Spec</td>
+            </tr>
+            {HEAT_TIERS.map((t) => (
+              <tr key={t.id}>
+                <td>
+                  <div style={{ fontWeight: 600, fontSize: 14 }}>{t.name} Build</div>
+                  <div style={{ fontSize: 12, color: "var(--heat-muted)", marginTop: 2 }}>{t.size}</div>
+                </td>
+                <td className="right">{fmtRange(t.base, t.ceiling)}</td>
+              </tr>
+            ))}
+
             <tr className="heat-row-section">
               <td>Retainer Tier (Pick One)</td>
               <td className="right">Monthly · Annual</td>
@@ -707,20 +715,6 @@ function InvestmentSummary() {
                   <span style={{ color: "var(--heat-muted)" }}> / mo</span>
                   <div style={{ fontSize: 11, color: "var(--heat-muted)" }}>{fmtMoney(rt.price * 12)} / yr</div>
                 </td>
-              </tr>
-            ))}
-
-            <tr className="heat-row-section">
-              <td>Per-Activation Build</td>
-              <td className="right">Range · Base To Top Spec</td>
-            </tr>
-            {HEAT_TIERS.map((t) => (
-              <tr key={t.id}>
-                <td>
-                  <div style={{ fontWeight: 600, fontSize: 14 }}>{t.name} Build</div>
-                  <div style={{ fontSize: 12, color: "var(--heat-muted)", marginTop: 2 }}>{t.size}</div>
-                </td>
-                <td className="right">{fmtRange(t.base, t.ceiling)}</td>
               </tr>
             ))}
 
@@ -850,7 +844,7 @@ function PaymentMethod() {
             fontSize: 13,
           }}
         >
-          <Detail label="Payable To" value="Agora Visuals" />
+          <Detail label="Payable To" value="AGV Miami" />
           <Detail label="Reference" value={HEAT_DOC.docNumber} />
           <Detail label="ACH / Wire" value="Banking detail issued with executed contract" />
           <Detail label="Currency" value="USD" />

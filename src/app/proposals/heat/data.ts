@@ -1,4 +1,4 @@
-// Miami HEAT × Agora — Pop-Up Activation Program
+// Miami HEAT × AGV Miami — Pop-Up Activation Program
 // Standardized proposal template, hydrated for the HEAT pop-up program at the
 // East Plaza inside Kaseya Center. Investment model: monthly baseline retainer
 // + per-activation tier menu (Small / Medium / Large), each with a base
@@ -53,8 +53,8 @@ export const HEAT_THEME = {
 export const HEAT_DOC = {
   client: "Miami HEAT",
   clientLong: "Miami HEAT Basketball Club, LLC",
-  producer: "Agora",
-  producerLong: "Agora Visuals",
+  producer: "AGV Miami",
+  producerLong: "AGV Miami",
   contactClient: "Michael",
   contactProducer: "mike@agoravisuals.com",
   venue: "East Plaza · Kaseya Center",
@@ -220,11 +220,12 @@ export const HEAT_RETAINER_TIERS: RetainerTier[] = [
       },
       {
         name: "First-Look On New Capabilities",
-        detail: "Early access to Agora's signature techniques + R&D builds before they're offered to other accounts.",
+        detail:
+          "Early access to AGV Miami's signature techniques + R&D builds before they're offered to other accounts.",
       },
       {
         name: "Annual Brand Workshop",
-        detail: "Day-long off-site planning workshop at Agora's facility — invited stakeholders only.",
+        detail: "Day-long off-site planning workshop at AGV Miami's facility — invited stakeholders only.",
       },
     ],
   },
@@ -393,7 +394,7 @@ export const HEAT_ADDONS: Addon[] = [
     name: "Dedicated Standby Crew",
     category: "service",
     appliesTo: "activation",
-    body: "On-site Agora crew on standby through the activation window for refresh, repair, or partner asks.",
+    body: "On-site AGV Miami crew on standby through the activation window for refresh, repair, or partner asks.",
     price: "$4,800 / day",
   },
   {
@@ -401,7 +402,7 @@ export const HEAT_ADDONS: Addon[] = [
     name: "Creative Concept Lead-Out",
     category: "service",
     appliesTo: "activation",
-    body: "When partner-brand support is light, Agora leads creative concept and design development end-to-end.",
+    body: "When partner-brand support is light, AGV Miami leads creative concept and design development end-to-end.",
     price: "$12,000 – $28,000",
   },
   {
@@ -488,7 +489,7 @@ export const HEAT_LIFECYCLE: LifecyclePhase[] = [
       "Activation brief intake from HEAT marketing partnerships",
       "Sponsor / partner brand asset request issued",
       "East Plaza walkthrough with HEAT operations + venue ops",
-      "Stakeholder roster locked (HEAT, partner brand, venue, Agora)",
+      "Stakeholder roster locked (HEAT, partner brand, venue, AGV Miami)",
     ],
     deliverables: ["Signed Activation Brief", "Working Production Timeline", "Approval Routing"],
     gate: "Brief Approved → advance to Concept & Design",
@@ -629,7 +630,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Large-Format Print & Graphics",
     sub: "SEG · Vinyl · Banners · Window Wraps · Floor Graphics",
     narrative:
-      "All large-format print — silicone-edge graphics, applied vinyl, banners, window wraps, floor graphics. HEAT-supplied creative; Agora handles file prep, palette match, proofing, and production.",
+      "All large-format print — silicone-edge graphics, applied vinyl, banners, window wraps, floor graphics. HEAT-supplied creative; AGV Miami handles file prep, palette match, proofing, and production.",
     appliesTo: ["small", "medium", "large"],
   },
   {
@@ -680,7 +681,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Logistics & Transport",
     sub: "Round-Trip Trucking · Rigging Hardware · Climate-Controlled Hold",
     narrative:
-      "Dedicated trucking from the Agora fabrication facility to the East Plaza loading dock and back, with climate-controlled hold during the activation window and post-strike asset hold pending re-deployment.",
+      "Dedicated trucking from the AGV Miami fabrication facility to the East Plaza loading dock and back, with climate-controlled hold during the activation window and post-strike asset hold pending re-deployment.",
     appliesTo: ["small", "medium", "large"],
   },
   {
@@ -948,7 +949,7 @@ export const HEAT_EXCLUSIONS = [
   },
   {
     term: "Content Production",
-    body: "Creative concept, video / motion content, photography, and social media production are not included. Agora produces against approved partner / HEAT creative supplied to spec.",
+    body: "Creative concept, video / motion content, photography, and social media production are not included. AGV Miami produces against approved partner / HEAT creative supplied to spec.",
   },
   {
     term: "Venue Costs & Permits",
@@ -968,7 +969,7 @@ export const HEAT_TERMS = [
   {
     section: "1",
     title: "Acceptance & Execution",
-    body: "Execution of this proposal authorizes Agora to commence engineering, material procurement, and shop fabrication for the active activation cycle. Execution may be effected via wet signature or the embedded digital signature interface; each is legally equivalent. This proposal is valid for thirty (30) calendar days from the version date.",
+    body: "Execution of this proposal authorizes AGV Miami to commence engineering, material procurement, and shop fabrication for the active activation cycle. Execution may be effected via wet signature or the embedded digital signature interface; each is legally equivalent. This proposal is valid for thirty (30) calendar days from the version date.",
   },
   {
     section: "2",
@@ -983,17 +984,17 @@ export const HEAT_TERMS = [
   {
     section: "4",
     title: "Creative Approvals & Brand Assets",
-    body: "HEAT and partner brand assets, creative direction, and approved palettes are supplied by HEAT marketing partnerships. Agora fabricates and prints to supplied creative. Final creative must be delivered by the Print Proof Approval milestone in each activation's Workback Schedule. Late asset delivery may shift downstream milestones without relief of payment obligations.",
+    body: "HEAT and partner brand assets, creative direction, and approved palettes are supplied by HEAT marketing partnerships. AGV Miami fabricates and prints to supplied creative. Final creative must be delivered by the Print Proof Approval milestone in each activation's Workback Schedule. Late asset delivery may shift downstream milestones without relief of payment obligations.",
   },
   {
     section: "5",
     title: "Venue, Permits & Insurance",
-    body: "Agora provides general liability and workers' compensation coverage. Certificates of Insurance issued naming Miami HEAT, Kaseya Center, partner brand, and any required additional insureds on request. Venue fees, permits, fire-marshal charges, and any venue-required deposits are passed through at cost.",
+    body: "AGV Miami provides general liability and workers' compensation coverage. Certificates of Insurance issued naming Miami HEAT, Kaseya Center, partner brand, and any required additional insureds on request. Venue fees, permits, fire-marshal charges, and any venue-required deposits are passed through at cost.",
   },
   {
     section: "6",
     title: "Cancellation & Force Majeure",
-    body: "Cancellation for convenience: HEAT reimburses Agora for all work performed, materials procured, and non-cancellable commitments through the date of cancellation. Retainer covers monthly capacity already allocated and is not refundable on a partial-month basis. Force majeure events suspend the retainer with mutual written acknowledgment.",
+    body: "Cancellation for convenience: HEAT reimburses AGV Miami for all work performed, materials procured, and non-cancellable commitments through the date of cancellation. Retainer covers monthly capacity already allocated and is not refundable on a partial-month basis. Force majeure events suspend the retainer with mutual written acknowledgment.",
   },
 ];
 
@@ -1021,27 +1022,47 @@ export const HEAT_CHANGE_ORDERS = [
   },
 ];
 
-export const HEAT_PHASE_DEADLINES = {
-  discovery: "10 Weeks Out",
-  concept: "8 Weeks Out",
-  engineering: "6 Weeks Out",
-  preprod: "4 Weeks Out",
-  fabrication: "2 Weeks Out",
-  logistics: "5 Days Out",
-  install: "Night Before",
-  strike: "After Close",
-} as const;
+// Phase deadlines per build tier — Small / Medium / Large.
+// Total runway from kickoff to activation date scales with tier:
+// Small = 5 weeks · Medium = 9 weeks · Large = 13 weeks.
+export const HEAT_PHASE_DEADLINES: Record<TierId, Record<string, string>> = {
+  small: {
+    discovery: "5 Weeks Out",
+    concept: "4 Weeks Out",
+    engineering: "3 Weeks Out",
+    preprod: "2 Weeks Out",
+    fabrication: "1 Week Out",
+    logistics: "2 Days Out",
+    install: "Night Before",
+    strike: "After Close",
+  },
+  medium: {
+    discovery: "9 Weeks Out",
+    concept: "7 Weeks Out",
+    engineering: "5 Weeks Out",
+    preprod: "3 Weeks Out",
+    fabrication: "1 Week Out",
+    logistics: "4 Days Out",
+    install: "Night Before",
+    strike: "After Close",
+  },
+  large: {
+    discovery: "13 Weeks Out",
+    concept: "11 Weeks Out",
+    engineering: "9 Weeks Out",
+    preprod: "6 Weeks Out",
+    fabrication: "3 Weeks Out",
+    logistics: "5 Days Out",
+    install: "Night Before",
+    strike: "After Close",
+  },
+};
 
-export const HEAT_PHASE_DEADLINES_SMALL = {
-  discovery: "4 Weeks Out",
-  concept: "3 Weeks Out",
-  engineering: "2 Weeks Out",
-  preprod: "10 Days Out",
-  fabrication: "1 Week Out",
-  logistics: "2 Days Out",
-  install: "Night Before",
-  strike: "After Close",
-} as const;
+export const HEAT_CADENCE_RUNWAY: Record<TierId, string> = {
+  small: "5-Week Runway",
+  medium: "9-Week Runway",
+  large: "13-Week Runway",
+};
 
 export function fmtMoney(n: number): string {
   return "$" + n.toLocaleString("en-US");

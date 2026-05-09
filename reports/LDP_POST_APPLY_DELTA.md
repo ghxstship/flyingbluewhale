@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded 2026-05-09 by reports/LDP_V2_BACKLOG_EXECUTION.md (Wave 2).**
+> Wave 1 landed the initial reconciled migration; Wave 2 landed 5 transition logs + xpms_atom_phase decouple + deliverable_status extension.
+
 # LDP Post-Apply Delta
 
 **Run:** 2026-05-09 · operator: Claude Opus 4.7 · target: `xrovijzjbyssajhtwvas` (LYTEHAUS production)

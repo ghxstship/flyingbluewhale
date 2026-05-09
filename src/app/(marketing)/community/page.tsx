@@ -7,7 +7,6 @@ import { COMMUNITY_LIST } from "@/lib/community";
 
 // Static page — no dynamic data, no request-time reads. Pre-render at build
 // and skip the streaming loading.tsx on client-side navigation.
-export const dynamic = "force-static";
 
 export const metadata: Metadata = buildMetadata({
   title: "Community — the production teams building on LYTEHAUS",

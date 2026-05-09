@@ -1,5 +1,4 @@
 // Static page — pre-render at build, no streaming Suspense on client nav.
-export const dynamic = "force-static";
 
 import type { Metadata } from "next";
 import { Check, X, Minus } from "lucide-react";

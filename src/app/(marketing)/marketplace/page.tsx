@@ -4,8 +4,6 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata } from "@/lib/seo";
 
-export const dynamic = "force-static";
-
 export const metadata: Metadata = buildMetadata({
   title: "Marketplace — Live Production Crew, Talent, RFQs",
   description:

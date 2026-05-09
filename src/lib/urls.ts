@@ -7,10 +7,10 @@
  *
  * Modes:
  *   - Subdomain mode (NEXT_PUBLIC_USE_SUBDOMAINS=1):
- *       lytehaus.tech            → marketing / auth / personal
- *       atlvs.lytehaus.tech      → platform (rewrites to /console/*)
- *       gvteway.lytehaus.tech    → portal   (rewrites to /p/*)
- *       compvss.lytehaus.tech    → mobile   (rewrites to /m/*)
+ *       lytehaus.live            → marketing / auth / personal
+ *       atlvs.lytehaus.live      → platform (rewrites to /console/*)
+ *       gvteway.lytehaus.live    → portal   (rewrites to /p/*)
+ *       compvss.lytehaus.live    → mobile   (rewrites to /m/*)
  *
  *   - Path-prefix fallback (Vercel previews, plain localhost):
  *       single base URL with /console, /p, /m path prefixes (legacy layout).
@@ -68,9 +68,9 @@ export function baseUrlFor(shell: Shell): string {
 
 /**
  * Build an absolute URL for a path inside `shell`. Examples:
- *   urlFor("platform", "/projects/abc")   // https://atlvs.lytehaus.tech/projects/abc
+ *   urlFor("platform", "/projects/abc")   // https://atlvs.lytehaus.live/projects/abc
  *   urlFor("portal", "/mmw26-hialeah/guide")
- *   urlFor("auth", "/login")              // https://lytehaus.tech/login
+ *   urlFor("auth", "/login")              // https://lytehaus.live/login
  */
 export function urlFor(shell: Shell, path: string = ""): string {
   const base = baseUrlFor(shell);
@@ -124,7 +124,7 @@ export function shellForHost(host: string | null | undefined): {
 
   const sub = bareHost.slice(0, bareHost.length - bareApex.length - 1);
 
-  // Future hook: peel `[slug].gvteway.lytehaus.tech` so the portal can offer
+  // Future hook: peel `[slug].gvteway.lytehaus.live` so the portal can offer
   // per-tenant subdomains without touching call sites. The middleware will
   // forward `tenantSlug` via a request header so portal routes can inject
   // it into params alongside the existing `[slug]` segment.

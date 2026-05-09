@@ -50,7 +50,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
             headline: g.title,
             description: g.blurb,
             datePublished: "2026-04-01",
-            url: `https://lytehaus.tech/guides/${g.slug}`,
+            url: `https://lytehaus.live/guides/${g.slug}`,
           }),
           faqSchema(g.faqs),
         ]}

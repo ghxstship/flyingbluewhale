@@ -44,7 +44,7 @@ export default function GvtewayPage() {
             name: "GVTEWAY — The Portal",
             description:
               "External stakeholder portal. Twelve personas, each scoped to their lane via RLS at the database.",
-            url: "https://lytehaus.tech/solutions/gvteway",
+            url: "https://lytehaus.live/solutions/gvteway",
           }),
         ]}
       />

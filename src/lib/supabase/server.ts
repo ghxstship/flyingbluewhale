@@ -6,8 +6,8 @@ import type { Database } from "./database.types";
 
 /**
  * Compute the cookie `domain` attribute for the current request so a session
- * minted on `lytehaus.tech` is sent to `atlvs.lytehaus.tech` /
- * `gvteway.lytehaus.tech` / `compvss.lytehaus.tech`. Returns `undefined` for
+ * minted on `lytehaus.live` is sent to `atlvs.lytehaus.live` /
+ * `gvteway.lytehaus.live` / `compvss.lytehaus.live`. Returns `undefined` for
  * localhost / lvh.me / vercel.app — those rely on host-only cookies (cookies
  * are still shared across `*.lvh.me` because the browser scopes them by
  * eTLD+1 when no domain is set).
@@ -16,7 +16,7 @@ async function cookieDomainForRequest(): Promise<string | undefined> {
   try {
     const h = await headers();
     const host = (h.get("host") ?? "").split(":")[0].toLowerCase();
-    if (host.endsWith("lytehaus.tech")) return ".lytehaus.tech";
+    if (host.endsWith("lytehaus.live")) return ".lytehaus.live";
   } catch {
     // outside a request context (e.g. build-time prerender) — no domain.
   }

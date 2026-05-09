@@ -71,7 +71,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ userId: string 
   for (const e of events ?? []) {
     lines.push(
       "BEGIN:VEVENT",
-      `UID:${e.id}@lytehaus.tech`,
+      `UID:${e.id}@lytehaus.live`,
       `DTSTAMP:${fmtIcs(new Date())}`,
       `DTSTART:${fmtIcs(e.starts_at as string)}`,
       `DTEND:${fmtIcs(e.ends_at as string)}`,

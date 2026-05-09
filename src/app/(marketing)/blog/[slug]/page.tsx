@@ -50,7 +50,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             description: post.blurb,
             datePublished: post.date,
             author: post.author,
-            url: `https://lytehaus.tech/blog/${post.slug}`,
+            url: `https://lytehaus.live/blog/${post.slug}`,
           }),
         ]}
       />

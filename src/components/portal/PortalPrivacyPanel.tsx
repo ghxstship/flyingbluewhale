@@ -128,7 +128,7 @@ export async function PortalPrivacyPanel({
               Download my data (JSON)
             </Link>
             <Link
-              href={`mailto:privacy@lytehaus.tech?subject=DSAR%20—%20${persona}%20${slug}`}
+              href={`mailto:privacy@lytehaus.live?subject=DSAR%20—%20${persona}%20${slug}`}
               className="btn btn-secondary btn-sm w-full justify-center"
             >
               Email a DSAR

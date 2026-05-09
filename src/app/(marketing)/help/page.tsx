@@ -38,8 +38,8 @@ const CHANNELS = [
     icon: MessageCircle,
     title: "Concierge",
     body: "For customers — triaged by tier (Free, Crew, Production, Festival). Festival gets a four-hour SLA.",
-    cta: "support@lytehaus.tech",
-    href: "mailto:support@lytehaus.tech",
+    cta: "support@lytehaus.live",
+    href: "mailto:support@lytehaus.live",
   },
   {
     icon: Headset,
@@ -71,11 +71,11 @@ const TROUBLESHOOTING = [
 const FAQS: FAQ[] = [
   {
     q: "Where do I report a bug?",
-    a: "Email support@lytehaus.tech with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side.",
+    a: "Email support@lytehaus.live with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side.",
   },
   {
     q: "Do you have a status page?",
-    a: "Yes — status.lytehaus.tech. Production incidents post within ten minutes. Maintenance windows announce 48 hours ahead.",
+    a: "Yes — status.lytehaus.live. Production incidents post within ten minutes. Maintenance windows announce 48 hours ahead.",
   },
   {
     q: "Can I get phone support?",
@@ -170,7 +170,7 @@ export default function HelpPage() {
         title="Still Stuck? Talk to a Producer."
         subtitle="Concierge email is the fastest path. We respond within hours, faster on Festival."
         primaryLabel="Email Concierge"
-        primaryHref="mailto:support@lytehaus.tech"
+        primaryHref="mailto:support@lytehaus.live"
         secondaryLabel="Open the field guide"
         secondaryHref="/docs"
       />

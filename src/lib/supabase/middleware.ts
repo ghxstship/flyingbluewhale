@@ -4,13 +4,13 @@ import { env, hasSupabase } from "../env";
 import type { Database } from "./database.types";
 
 /**
- * Sets the cookie `domain` to `.lytehaus.tech` so a session minted on the
+ * Sets the cookie `domain` to `.lytehaus.live` so a session minted on the
  * apex (login) is sent to the atlvs/gvteway/compvss subdomains. Returns
  * `undefined` for localhost/lvh.me/vercel.app — host-only cookies there.
  */
 function cookieDomainForHost(host: string): string | undefined {
   const bare = host.split(":")[0].toLowerCase();
-  if (bare.endsWith("lytehaus.tech")) return ".lytehaus.tech";
+  if (bare.endsWith("lytehaus.live")) return ".lytehaus.live";
   return undefined;
 }
 

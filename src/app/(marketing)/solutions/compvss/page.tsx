@@ -43,7 +43,7 @@ export default function CompvssPage() {
             name: "COMPVSS — The Field",
             description:
               "Offline-first PWA for production crew. Gate scan, clock-in, incident, medic, driver, guard, warehouse.",
-            url: "https://lytehaus.tech/solutions/compvss",
+            url: "https://lytehaus.live/solutions/compvss",
           }),
         ]}
       />

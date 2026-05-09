@@ -109,7 +109,7 @@ export default function Home() {
                 aria-hidden="true"
               />
               <span className="ml-3 font-mono text-xs text-[var(--text-muted)]">
-                lytehaus.tech/p/mmw26-hialeah/guide
+                lytehaus.live/p/mmw26-hialeah/guide
               </span>
             </div>
             <iframe

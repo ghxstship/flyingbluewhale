@@ -60,12 +60,12 @@ There are **three** competing 8-phase models in the project ecosystem. The imple
 
 | Conceptual (USNP)                           | LYTEHAUS shell           | Route prefix                                | Subdomain               | Brand                     |
 | ------------------------------------------- | ------------------------ | ------------------------------------------- | ----------------------- | ------------------------- |
-| Marketing / SEO surface                     | `(marketing)`            | `/`                                         | `lytehaus.tech`         | LYTEHAUS apex             |
+| Marketing / SEO surface                     | `(marketing)`            | `/`                                         | `lytehaus.live`         | LYTEHAUS apex             |
 | Auth / pre-session                          | `(auth)`                 | `/login`, `/signup`, `/accept-invite/*` etc | apex                    | LYTEHAUS apex             |
 | Personal (any authed user)                  | `(personal)`             | `/me/*`                                     | apex                    | LYTEHAUS apex             |
-| Internal Ops Console                        | `(platform)` / **ATLVS** | `/console/*`                                | `atlvs.lytehaus.tech`   | red                       |
-| External Stakeholder Portal                 | `(portal)` / **GVTEWAY** | `/p/[slug]/*`                               | `gvteway.lytehaus.tech` | blue                      |
-| Field Ops PWA                               | `(mobile)` / **COMPVSS** | `/m/*`                                      | `compvss.lytehaus.tech` | yellow/amber              |
+| Internal Ops Console                        | `(platform)` / **ATLVS** | `/console/*`                                | `atlvs.lytehaus.live`   | red                       |
+| External Stakeholder Portal                 | `(portal)` / **GVTEWAY** | `/p/[slug]/*`                               | `gvteway.lytehaus.live` | blue                      |
+| Field Ops PWA                               | `(mobile)` / **COMPVSS** | `/m/*`                                      | `compvss.lytehaus.live` | yellow/amber              |
 | Parent-co marketing (out of LYTEHAUS scope) | `(ghxstship)`            | `/ghxstship/*`                              | apex                    | bermuda-triangle (locked) |
 
 ---

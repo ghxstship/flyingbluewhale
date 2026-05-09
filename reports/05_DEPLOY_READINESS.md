@@ -81,7 +81,7 @@ Mandatory before running in production:
 | `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL                           | Supabase dashboard                            |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key                              | Supabase dashboard                            |
 | `SUPABASE_SERVICE_ROLE_KEY`     | Webhooks + admin flows (invite email sender)   | Supabase dashboard                            |
-| `NEXT_PUBLIC_APP_URL`           | Canonical URL for OAuth redirects, sitemap, OG | Deploy domain (e.g., `https://lytehaus.tech`) |
+| `NEXT_PUBLIC_APP_URL`           | Canonical URL for OAuth redirects, sitemap, OG | Deploy domain (e.g., `https://lytehaus.live`) |
 
 Optional (features degrade gracefully if absent):
 

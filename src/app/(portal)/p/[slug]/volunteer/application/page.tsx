@@ -91,8 +91,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             </dl>
             <p className="mt-4 text-xs text-[var(--text-muted)]">
               Need to update your details? Email{" "}
-              <a className="text-[var(--org-primary)]" href="mailto:volunteers@lytehaus.tech">
-                volunteers@lytehaus.tech
+              <a className="text-[var(--org-primary)]" href="mailto:volunteers@lytehaus.live">
+                volunteers@lytehaus.live
               </a>
               .
             </p>
@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
-                href={`mailto:volunteers@lytehaus.tech?subject=Volunteer%20application%20—%20${slug}`}
+                href={`mailto:volunteers@lytehaus.live?subject=Volunteer%20application%20—%20${slug}`}
                 className="btn btn-primary btn-sm"
               >
                 Email volunteer team

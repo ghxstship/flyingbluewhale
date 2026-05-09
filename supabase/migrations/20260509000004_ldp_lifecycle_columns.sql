@@ -1,3 +1,13 @@
+-- SUPERSEDED 2026-05-09 by 20260509060000_ldp_lifecycle_remediations_reconciled.sql.
+-- Pre-flight against the live remote schema (xrovijzjbyssajhtwvas) showed
+-- USNP canon (shipped 2026-05-08) already implements most of LDP §3/§5/§7:
+--   - LDP §5 Engagement → uis_roles.lifecycle_state uis_lifecycle_state
+--   - LDP §3 Asset → asset_movements (ual_state-typed)
+--   - LDP §7 Financial Period → accounting_periods
+-- The reconciled migration ships only the genuinely net-new bits and
+-- skips work USNP canon already covers. THIS FILE IS NOT APPLIED.
+-- Kept in repo as an audit artifact of the original LDP-naive proposal.
+
 -- LDP Phase 5 remediation, batch 4: add lifecycle state columns to existing tables.
 --
 -- Adds:

@@ -98,7 +98,11 @@ export async function POST(req: NextRequest) {
     // the chain and reassert at the consume site. Same escape hatch
     // that lib/db/resource.ts uses.
 
-    let q = (supabase.from(table) as any).select("*").eq("org_id", session.orgId);
+    // ExportTable union includes views (audit_log) and tables that don't all
+    // appear in the same supabase.from() overload — cast through `never` so
+    // the dynamic dispatch compiles cleanly. The `as any` on the result then
+    // unblocks the .select().eq() chain (we reassert types at the consume site).
+    let q = (supabase.from(table as never) as any).select("*").eq("org_id", session.orgId);
     if (input.projectId) q = q.eq("project_id", input.projectId);
 
     const { data, error } = await q.limit(10_000);

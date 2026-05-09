@@ -74,7 +74,8 @@ export async function GET(req: Request) {
       rows={(data ?? []).map((r) => ({
         at: r.at as string,
         actor_email: r.actor_email ?? null,
-        action: r.action,
+        // audit_log view types `action` as nullable now; default for the PDF render.
+        action: r.action ?? "",
         target_table: r.target_table ?? null,
         target_id: (r.target_id as string | null) ?? null,
         operation: r.operation ?? null,

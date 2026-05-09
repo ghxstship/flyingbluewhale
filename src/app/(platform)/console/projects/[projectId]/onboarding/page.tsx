@@ -10,7 +10,10 @@ import type { Project } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
+// DataTable<T> requires `T extends { id: string }`; map letter_id→id at the
+// row level so DataTable can use the offer-letter id as the row identity.
 type Row = {
+  id: string;
   letter_id: string;
   recipient_name: string;
   total: number;
@@ -25,7 +28,8 @@ export default async function ProjectOnboardingPage({ params }: { params: Promis
   const project = await getOrgScoped("projects", session.orgId, projectId);
   if (!project) notFound();
 
-  const rows = await listOnboardingByProject(session.orgId, projectId);
+  const rawRows = await listOnboardingByProject(session.orgId, projectId);
+  const rows: Row[] = rawRows.map((r) => ({ ...r, id: r.letter_id }));
   const totalCp = rows.reduce((s, r) => s + r.critical_path_open, 0);
   const fullyDone = rows.filter((r) => r.total > 0 && r.done === r.total).length;
   const subtitle = `${rows.length} crew · ${fullyDone}/${rows.length} fully onboarded · ${totalCp} critical-path items open`;

@@ -35,7 +35,8 @@ export type ActivityItem = {
   occurredAt: string;
 };
 
-type AuditRow = Database["public"]["Tables"]["audit_log"]["Row"];
+// audit_log is exposed as a View in the regenerated Supabase types, not a Table.
+type AuditRow = Database["public"]["Views"]["audit_log"]["Row"];
 
 type AuditRowWithUser = AuditRow & {
   actor?: { id: string; name: string | null; avatar_url: string | null; email: string | null } | null;
@@ -71,20 +72,22 @@ function deriveDiff(before: unknown, after: unknown): ActivityDiff | undefined {
 
 function rowToActivity(row: AuditRowWithUser): ActivityItem {
   const diff = row.operation === "update" ? deriveDiff(row.before, row.after) : undefined;
+  // audit_log is exposed as a View now — every column is nullable in the
+  // PostgREST type. Fall back where the ActivityItem contract expects strings.
   return {
-    id: row.id,
-    orgId: row.org_id,
+    id: row.id ?? "",
+    orgId: row.org_id ?? "",
     actorId: row.actor_id,
     actorName: row.actor?.name ?? undefined,
     actorEmail: row.actor?.email ?? row.actor_email ?? undefined,
     actorAvatarUrl: row.actor?.avatar_url ?? undefined,
-    action: row.action,
+    action: row.action ?? "",
     operation: row.operation,
     targetTable: row.target_table ?? "",
     targetId: row.target_id ?? "",
     diff,
     metadata: jsonObject(row.metadata) ?? undefined,
-    occurredAt: row.at,
+    occurredAt: row.at ?? "",
   };
 }
 

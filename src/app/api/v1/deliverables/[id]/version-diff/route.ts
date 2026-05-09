@@ -62,13 +62,15 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
     if (entries.length === 0) return apiOk({ versions: [] as unknown[], diff: null });
 
     // Pick the first + last by default; accept explicit ISO timestamps via
-    // ?from= and ?to= for point-in-time comparison.
-    const first = q.data.from ? (entries.find((e) => e.at >= q.data.from!) ?? entries[0]) : entries[0];
+    // ?from= and ?to= for point-in-time comparison. audit_log.at is now
+    // typed as nullable in the Supabase view; entries with no `at` get
+    // skipped during the boundary lookup.
+    const first = q.data.from ? (entries.find((e) => e.at != null && e.at >= q.data.from!) ?? entries[0]) : entries[0];
     const last = q.data.to
       ? (entries
           .slice()
           .reverse()
-          .find((e) => e.at <= q.data.to!) ?? entries[entries.length - 1])
+          .find((e) => e.at != null && e.at <= q.data.to!) ?? entries[entries.length - 1])
       : entries[entries.length - 1];
 
     return apiOk({

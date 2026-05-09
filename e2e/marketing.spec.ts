@@ -22,13 +22,14 @@ test.describe("marketing", () => {
   test("home renders hero + CTAs", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("h1").first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /^start free/i }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /open the console/i }).first()).toBeVisible();
   });
 
   test("pricing shows 4 tiers + comparison table", async ({ page }) => {
     await page.goto("/pricing");
-    // Tier rename (fbw_022 / 2026-04-19): Portal → Access, Starter → Core.
-    for (const tier of ["Access", "Core", "Professional", "Enterprise"]) {
+    // Canonical tier set per memory feedback_marketing_voice.md and
+    // src/app/(marketing)/pricing/page.tsx (tier keys: free/crew/production/festival).
+    for (const tier of ["Free", "Crew", "Production", "Festival"]) {
       await expect(page.getByText(tier, { exact: false }).first()).toBeVisible();
     }
     await expect(page.getByRole("table")).toBeVisible();
@@ -59,7 +60,8 @@ test.describe("marketing", () => {
     await page.goto("/");
     const footer = page.locator("footer");
     await expect(footer).toBeVisible();
-    for (const heading of ["Product", "Industries", "Resources", "Company", "Legal"]) {
+    // Headings declared in src/app/(marketing)/layout.tsx FOOTER_NAV.
+    for (const heading of ["Product", "Industries", "Resources", "Studio", "Legal"]) {
       await expect(footer.getByText(heading, { exact: true })).toBeVisible();
     }
   });

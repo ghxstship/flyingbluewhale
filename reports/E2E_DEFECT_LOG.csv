@@ -1,0 +1,16 @@
+defect_id,case_id,severity,subsystem,layer,regression_risk,scope_of_fix,title,remediation_decision,remediation_status,code_reference
+E2E-D-001,C-meta,S3,marketing,test,low,local,Stale test: home CTA assertion does not match current voice,auto_fix_in_loop,open,e2e/marketing.spec.ts:22
+E2E-D-002,C-meta,S3,marketing,test,low,local,Pricing tier-name test references retired Access/Core schema,auto_fix_in_loop,open,e2e/marketing.spec.ts:32
+E2E-D-003,C-meta,S3,marketing,test+component,low,local,Footer 5-column assertion mismatched against current footer,requires_inspection,open,e2e/marketing.spec.ts:58
+E2E-D-004,C-meta,S2,i18n,runtime,medium,shared,locale cookie does not flip html lang,requires_approval,open,src/lib/i18n/request.ts:113
+E2E-D-005,C-meta,S2,i18n,runtime,medium,shared,Arabic locale cookie does not switch html dir to rtl,requires_approval,open,src/lib/i18n/request.ts
+E2E-D-006,static-grep,S2,marketing,content,low,local,SSO/SAML/OIDC marketing claims re-introduced after UJV R-2 removed them,requires_approval,open,src/app/(marketing)/pricing/page.tsx:88
+E2E-D-100,LDP-R-1,S3,production,schema,low,architectural,production_phase column absent — added in committed migration files,fixed_files_only,deferred_apply,supabase/migrations/20260509000001_ldp_lifecycle_enums.sql
+E2E-D-101,LDP-R-2,S3,naming,schema,medium,shared,~50 status columns need rename to state/phase — deferred,defer_to_backlog,deferred,LDP_REMEDIATION_PLAN.md
+E2E-D-102,LDP-R-3,S3,engagement,schema,low,local,engagement_state on project_members — added in committed migration files,fixed_files_only,deferred_apply,supabase/migrations/20260509000004_ldp_lifecycle_columns.sql
+E2E-D-103,LDP-R-4,S3,asset,schema,low,local,asset_movements ledger — added in committed migration files,fixed_files_only,deferred_apply,supabase/migrations/20260509000003_ldp_lifecycle_tables.sql
+E2E-D-104,LDP-R-5,S3,asset+document,schema,low,local,expand asset_state + document_state enums — added in committed migration files,fixed_files_only,deferred_apply,supabase/migrations/20260509000002_ldp_enum_extensions.sql
+E2E-D-105,LDP-R-7,S4,proposals,schema,low,local,proposal_phase_status cosmetic rename — added in committed migration files,fixed_files_only,deferred_apply,supabase/migrations/20260509000005_ldp_proposal_phase_status_rename.sql
+E2E-D-106,LDP-R-8,S2,finance,schema,medium,architectural,Financial Period Lifecycle — added in committed migration files,fixed_files_only,deferred_apply,supabase/migrations/20260509000003_ldp_lifecycle_tables.sql
+E2E-D-107,LDP-R-9,S2,subscription,schema,medium,architectural,Subscription Lifecycle — added in committed migration files,fixed_files_only,deferred_apply,supabase/migrations/20260509000003_ldp_lifecycle_tables.sql
+E2E-D-108,LDP-R-10,S3,process,docs,low,local,schema-review CI gate — to be appended to CLAUDE.md,auto_fix_in_loop,in_progress,CLAUDE.md

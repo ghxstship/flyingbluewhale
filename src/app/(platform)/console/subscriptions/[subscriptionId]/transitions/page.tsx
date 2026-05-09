@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { getSubscription, listSubscriptionTransitions } from "@/lib/subscriptions";
 import { hasSupabase } from "@/lib/env";
@@ -54,8 +55,8 @@ export default async function SubscriptionTransitionsPage({ params }: { params: 
               ))}
               {transitions.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="py-6 text-center text-[var(--text-secondary)]">
-                    No transitions yet.
+                  <td colSpan={6} className="py-6 text-center">
+                    <EmptyState size="compact" title="No transitions yet" />
                   </td>
                 </tr>
               )}

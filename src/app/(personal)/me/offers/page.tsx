@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 
@@ -46,7 +47,12 @@ export default async function Page() {
       </p>
 
       {offers.length === 0 ? (
-        <div className="card-elevated mt-6 p-6 text-sm text-[var(--color-text-secondary)]">No offers yet.</div>
+        <div className="mt-6">
+          <EmptyState
+            title="No offers yet"
+            description="Booking offers sent to your acts will appear here. Default terms: 60% deposit on signature, 40% balance on load-in."
+          />
+        </div>
       ) : (
         <ul className="mt-6 space-y-2">
           {offers.map((o) => (

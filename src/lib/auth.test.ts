@@ -24,16 +24,16 @@ describe("personaForRole", () => {
 });
 
 describe("resolveShell", () => {
-  it("real-org personas route to /console", () => {
+  it("operator personas route to /console (owner/admin/manager)", () => {
     expect(resolveShell("owner")).toBe("/console");
     expect(resolveShell("admin")).toBe("/console");
     expect(resolveShell("manager")).toBe("/console");
-    expect(resolveShell("member")).toBe("/console");
   });
-  it("guest routes to /me — demo-org-only viewer with no real org context", () => {
+  it("contributor personas route to /me (member/guest/visitor)", () => {
+    // member is an applicant/contributor (talent, crew, vendor candidate),
+    // not an org operator — see resolveShell() comment in auth.ts.
+    expect(resolveShell("member")).toBe("/me");
     expect(resolveShell("guest")).toBe("/me");
-  });
-  it("visitor routes to /me", () => {
     expect(resolveShell("visitor")).toBe("/me");
   });
 });

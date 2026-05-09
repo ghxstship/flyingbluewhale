@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import {
-  CLASSES,
   CLASS_BY_CODE,
   CLASS_BY_SLUG,
   PHASE_BY_NUMBER,

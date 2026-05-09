@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
 
 export const dynamic = "force-dynamic";
@@ -34,11 +36,12 @@ export default async function Page() {
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Open-call submissions you've made.</p>
 
       {rows.length === 0 ? (
-        <div className="card-elevated mt-6 p-6 text-sm text-[var(--color-text-secondary)]">
-          No submissions yet.{" "}
-          <Link href="/marketplace/calls" className="text-[var(--brand-color)]">
-            Browse open calls →
-          </Link>
+        <div className="mt-6">
+          <EmptyState
+            title="No submissions yet"
+            description="Open calls you've responded to will appear here."
+            action={<Button href="/marketplace/calls">Browse open calls</Button>}
+          />
         </div>
       ) : (
         <ul className="mt-6 space-y-2">

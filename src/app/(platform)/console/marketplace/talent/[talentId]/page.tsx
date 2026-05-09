@@ -1,6 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -131,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             </Button>
           </div>
           {riders.length === 0 ? (
-            <p className="text-sm text-[var(--text-secondary)]">No riders attached yet.</p>
+            <EmptyState size="compact" title="No riders attached yet" />
           ) : (
             <ul className="divide-y divide-[var(--border-subtle)] text-sm">
               {riders.map((r) => (

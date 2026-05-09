@@ -112,6 +112,13 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/files/page.tsx",
     "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/page.tsx",
     "src/app/(portal)/p/[slug]/delegation/ratecard/page.tsx",
+    // Public marketplace handle pages render "no reviews yet" as a single
+    // inline value inside a `<dl>` row (Rating: no reviews yet). It's a
+    // value-fallback, not a section-level zero state — wrapping in
+    // <EmptyState> would break the dl grid layout.
+    "src/app/(marketing)/marketplace/crew/[handle]/page.tsx",
+    "src/app/(marketing)/marketplace/talent/[handle]/page.tsx",
+    "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

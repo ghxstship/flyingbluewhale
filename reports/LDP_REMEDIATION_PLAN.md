@@ -1,3 +1,9 @@
+> **HISTORICAL — superseded 2026-05-09 by reports/LDP_REMEDIATION_PLAN_v2.md.**
+> v1 audit was built against the stale 18.8k-line worktree snapshot which
+> reflected only ~228 of the live database's 412 tables. v2 audit was built
+> against direct SQL queries to the live remote DB and corrects multiple
+> false-negative findings (notably USNP canon already implemented LDP §3, §5).
+
 # LDP Remediation Plan
 
 **Protocol:** Lifecycle Decomposition Protocol (LDP)

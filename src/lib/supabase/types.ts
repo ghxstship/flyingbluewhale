@@ -16,7 +16,17 @@ export type Persona = "visitor" | "guest" | "owner" | "admin" | "manager" | "mem
 
 export type ProjectStatus = "draft" | "active" | "paused" | "archived" | "complete";
 export type TicketStatus = "issued" | "transferred" | "scanned" | "voided";
-export type DeliverableStatus = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "revision_requested";
+export type DeliverableStatus =
+  | "briefed"
+  | "draft"
+  | "submitted"
+  | "in_review"
+  | "approved"
+  | "rejected"
+  | "revision_requested"
+  | "delivered";
+/** Alias matching the renamed enum in the database (deliverable_status -> deliverable_state, 2026-05-09). */
+export type DeliverableState = DeliverableStatus;
 export type DeliverableType =
   | "technical_rider"
   | "hospitality_rider"
@@ -3029,7 +3039,11 @@ export type Database = {
       tier: Tier;
       project_status: ProjectStatus;
       ticket_status: TicketStatus;
+      // DB-side enum was renamed to `deliverable_state` per LDP naming discipline (2026-05-09).
+      // Keeping `deliverable_status` key here under an alias for the loose-typed
+      // legacy client; canonical name now exposed alongside.
       deliverable_status: DeliverableStatus;
+      deliverable_state: DeliverableState;
       deliverable_type: DeliverableType;
       lead_stage: LeadStage;
       proposal_status: ProposalStatus;

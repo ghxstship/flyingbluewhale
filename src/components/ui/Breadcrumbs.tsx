@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { SITE } from "@/lib/seo";
 
 /**
  * Unified breadcrumb primitive — used by every shell (platform console,
@@ -30,14 +31,14 @@ export function Breadcrumbs({
   emitJsonLd = true,
 }: {
   items: Crumb[];
-  /** Absolute base for JSON-LD URLs; falls back to NEXT_PUBLIC_APP_URL. */
+  /** Absolute base for JSON-LD URLs; defaults to `SITE.baseUrl` from `@/lib/seo`. */
   baseUrl?: string;
   className?: string;
   emitJsonLd?: boolean;
 }) {
   if (items.length === 0) return null;
 
-  const resolvedBase = baseUrl ?? process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech";
+  const resolvedBase = baseUrl ?? SITE.baseUrl;
 
   // Visual truncation: if > 4 crumbs, collapse middle entries into
   // a non-interactive ellipsis (keeps first + last 2 visible).

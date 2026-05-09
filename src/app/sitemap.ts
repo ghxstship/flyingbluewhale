@@ -3,6 +3,7 @@ import { POST_LIST } from "@/lib/blog";
 import { COMMUNITY_LIST } from "@/lib/community";
 import { COMPARE_LIST } from "@/lib/compare";
 import { MARKETING_GUIDE_LIST } from "@/lib/marketing-guides";
+import { SITE } from "@/lib/seo";
 
 const FEATURE_SLUGS = [
   "console",
@@ -24,7 +25,7 @@ const INDUSTRY_SLUGS = ["live-events", "fabrication", "touring", "corporate"];
 const SOLUTION_APPS = ["atlvs", "gvteway", "compvss"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech";
+  const base = SITE.baseUrl;
   const now = new Date();
 
   const staticRoutes: Array<{

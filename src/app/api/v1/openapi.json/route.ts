@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { buildOpenAPI } from "@/lib/openapi/build";
+import { SITE } from "@/lib/seo";
 // Side-effect import — populates the registry before we read it.
 import "@/lib/openapi/all-endpoints";
 
@@ -18,7 +19,7 @@ export async function GET() {
     version: "1.0.0",
     description:
       "Public REST surface for LYTEHAUS Technologies (ATLVS / GVTEWAY / COMPVSS). Auth via session cookie or Bearer PAT (`/me/api-keys`). Rate limits scale with your org plan tier.",
-    serverUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech",
+    serverUrl: SITE.baseUrl,
   });
   return new NextResponse(JSON.stringify(doc), {
     headers: {

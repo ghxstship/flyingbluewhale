@@ -1,5 +1,5 @@
 import { CHANGELOG_ENTRIES } from "@/lib/changelog";
-import { env } from "@/lib/env";
+import { SITE } from "@/lib/seo";
 
 export const dynamic = "force-static";
 export const revalidate = 3600; // 1h — changelog rarely changes mid-day
@@ -22,7 +22,7 @@ function rfc2822(date: string): string {
 }
 
 export function GET() {
-  const base = env.NEXT_PUBLIC_APP_URL || "https://lytehaus.tech";
+  const base = SITE.baseUrl;
   const feedUrl = `${base}/changelog.rss`;
   const channelUrl = `${base}/changelog`;
   const lastBuild = CHANGELOG_ENTRIES[0]?.date ?? new Date().toISOString().slice(0, 10);

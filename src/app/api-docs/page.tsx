@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { buildOpenAPI } from "@/lib/openapi/build";
+import { SITE } from "@/lib/seo";
 // Side-effect import — populates the registry before we render.
 import "@/lib/openapi/all-endpoints";
 
@@ -73,7 +74,7 @@ export default function ApiDocsPage() {
     title: "LYTEHAUS API",
     version: "1.0.0",
     description: "Public REST surface for LYTEHAUS Technologies.",
-    serverUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech",
+    serverUrl: SITE.baseUrl,
   });
 
   // Group by tag for navigation.

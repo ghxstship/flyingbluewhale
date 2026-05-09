@@ -1,4 +1,4 @@
-import { jsonLd } from "@/lib/seo";
+import { jsonLd, SITE } from "@/lib/seo";
 
 /**
  * Inline JSON-LD emitter for the GHXSTSHIP marketing surface. Wraps the
@@ -26,7 +26,7 @@ export function organizationSchema() {
     url: BASE,
     description:
       "GHXSTSHIP is an experiential production company building festivals, immersive experiences, theme parks, theatrical performances, brand activations, and premium hospitality at scale.",
-    sameAs: ["https://lytehaus.tech"],
+    sameAs: [SITE.baseUrl],
     areaServed: [
       "Miami",
       "New York City",

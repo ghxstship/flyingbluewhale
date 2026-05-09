@@ -3,6 +3,7 @@ import { CLASSES } from "@/lib/ghxstship/classes";
 import { SOLUTIONS } from "@/lib/ghxstship/solutions";
 import { ANCHOR_MARKETS } from "@/lib/ghxstship/markets";
 import { paths } from "@/lib/ghxstship";
+import { SITE } from "@/lib/seo";
 
 const COLUMNS: Array<{ heading: string; items: Array<{ label: string; href: string }> }> = [
   {
@@ -59,7 +60,7 @@ export function GhxstshipFooter() {
               Built once, run anywhere.
             </p>
             <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
-              <a href="https://lytehaus.tech" className="hover:text-[var(--text-primary)]">
+              <a href={SITE.baseUrl} className="hover:text-[var(--text-primary)]">
                 LYTEHAUS Technologies →
               </a>
             </div>

@@ -37,6 +37,7 @@ import { getRequestFormatters } from "@/lib/i18n/request";
 import { loadMessages } from "@/lib/i18n/server";
 import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 import { StructuredData, organization } from "@/lib/seo/structured-data";
+import { SITE } from "@/lib/seo";
 import "./globals.css";
 import "./theme/index.css";
 
@@ -99,7 +100,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech"),
+  metadataBase: new URL(SITE.baseUrl),
   title: {
     default: "LYTEHAUS Technologies — ATLVS, GVTEWAY, COMPVSS",
     template: "%s · LYTEHAUS Technologies",
@@ -190,10 +191,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <StructuredData
           data={organization({
             name: "LYTEHAUS Technologies",
-            url: process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech",
+            url: SITE.baseUrl,
             description:
               "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
-            logo: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech"}/og/logo.png`,
+            logo: `${SITE.baseUrl}/og/logo.png`,
           })}
         />
       </head>

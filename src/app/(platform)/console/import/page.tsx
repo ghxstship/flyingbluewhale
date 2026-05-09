@@ -10,11 +10,11 @@ import { IMPORT_RESOURCE_LABEL, type ImportJob } from "@/lib/import/types";
 /**
  * Import Center — Phase 6.4 of the SmartSuite parity roadmap.
  *
- * Lists recent import jobs + state. Polling auto-refresh on in-flight jobs is
- * a polish pass; for now this is server-rendered and the user manually refreshes.
- * The actual upload + run flow lives at /console/import/new (TODO) and the
- * existing per-resource importers at /api/v1/import/* — this page is the
- * unified observability surface.
+ * Unified observability surface that lists recent import jobs + state. The
+ * upload + run flow lives at /console/settings/imports (the canonical CSV
+ * importer wired to /api/v1/import/*). Polling auto-refresh on in-flight
+ * jobs is a polish pass; for now this is server-rendered and the user
+ * manually refreshes.
  */
 
 export const dynamic = "force-dynamic";
@@ -58,22 +58,10 @@ export default async function ImportPage() {
           </div>
           <div className="flex gap-2">
             <Link
-              href="/console/import/new?resource=crew_members"
+              href="/console/settings/imports"
               className="hover-lift surface inline-flex items-center gap-2 px-4 py-2 text-sm font-medium"
             >
-              + Import Crew
-            </Link>
-            <Link
-              href="/console/import/new?resource=tasks"
-              className="hover-lift surface inline-flex items-center gap-2 px-4 py-2 text-sm font-medium"
-            >
-              + Import Tasks
-            </Link>
-            <Link
-              href="/console/import/new?resource=vendors"
-              className="hover-lift surface inline-flex items-center gap-2 px-4 py-2 text-sm font-medium"
-            >
-              + Import Vendors
+              New Import
             </Link>
           </div>
         </div>

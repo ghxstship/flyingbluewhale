@@ -1,8 +1,9 @@
 import { headers } from "next/headers";
 import type { MetadataRoute } from "next";
+import { SITE } from "@/lib/seo";
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech";
+  const base = SITE.baseUrl;
 
   // App subdomains (atlvs/gvteway/compvss) are auth-walled — disallow all
   // crawling on those hosts, allow only the apex marketing site.

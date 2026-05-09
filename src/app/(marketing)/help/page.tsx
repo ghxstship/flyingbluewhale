@@ -7,7 +7,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { FAQSection, type FAQ } from "@/components/marketing/FAQ";
-import { buildMetadata, organizationSchema } from "@/lib/seo";
+import { buildMetadata, organizationSchema, SITE } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Help — Crew Support",
@@ -113,7 +113,7 @@ export default function HelpPage() {
               "@type": "ListItem",
               position: i + 1,
               name: t.label,
-              item: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.tech"}${t.href}`,
+              item: `${SITE.baseUrl}${t.href}`,
             })),
           },
         ]}

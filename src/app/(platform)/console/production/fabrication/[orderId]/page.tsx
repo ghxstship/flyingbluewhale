@@ -8,6 +8,13 @@ import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
 import { setFabStatus, deleteFab } from "../actions";
 import type { FabricationStatus } from "@/lib/supabase/types";
+import {
+  getFabricationOrder,
+  listProductionPhaseTransitions,
+  PRODUCTION_PHASE_GRAPH,
+  type ProductionPhase,
+} from "@/lib/production-phase";
+import { ProductionPhaseControls } from "./ProductionPhaseControls";
 
 const NEXT: Record<FabricationStatus, { to: FabricationStatus; label: string }[]> = {
   open: [
@@ -106,8 +113,52 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             </form>
           </div>
         </section>
+
+        <ProductionPhaseSection orderId={row.id} orgId={session.orgId} />
       </div>
     </>
+  );
+}
+
+async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; orgId: string }) {
+  // LDP §2 Production Lifecycle — distinct from the workflow-execution `status`
+  // shown above. Phase tracks design→install arc; status tracks workflow gate.
+  const fab = await getFabricationOrder(orgId, orderId);
+  if (!fab) return null;
+  const transitions = await listProductionPhaseTransitions(orgId, orderId);
+  const allowedNext = PRODUCTION_PHASE_GRAPH[fab.production_phase as ProductionPhase];
+
+  return (
+    <section className="surface space-y-4 p-5">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold tracking-wide uppercase">Production Phase (LDP §2)</h2>
+        <Badge variant="default">{fab.production_phase}</Badge>
+      </div>
+      <p className="text-xs text-[var(--text-secondary)]">
+        Sequential macro-arc: discovery → concept → engineering → pre-pro → fab → logistics → install → strike. Phase
+        regression is permitted with a logged reason. Distinct from the operational <code>status</code> column above
+        (workflow-execution: open / in_progress / blocked / complete).
+      </p>
+      <ProductionPhaseControls
+        orderId={fab.id}
+        currentPhase={fab.production_phase as ProductionPhase}
+        allowedNext={allowedNext}
+      />
+      {transitions.length > 0 && (
+        <div className="border-t border-[var(--border-color)] pt-3">
+          <div className="mb-2 text-xs font-semibold tracking-wide uppercase">Recent transitions</div>
+          <ul className="space-y-1 text-xs">
+            {transitions.slice(0, 5).map((t) => (
+              <li key={t.id} className="font-mono">
+                {t.from_phase ?? "(initial)"} → <strong>{t.to_phase}</strong> ·{" "}
+                {new Date(t.transitioned_at).toLocaleDateString()}
+                {t.reason ? <span className="ml-2 font-sans">{t.reason}</span> : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
   );
 }
 

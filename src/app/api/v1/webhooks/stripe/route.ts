@@ -98,6 +98,45 @@ export async function POST(req: Request) {
       case "account.updated":
       case "payout.paid":
         break;
+      // LDP §8 Subscription Lifecycle — Stripe-driven transitions.
+      // Each branch advances the subscription state and writes a
+      // subscription_state_transitions row keyed off the Stripe event id.
+      case "customer.subscription.created":
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted":
+      case "invoice.paid":
+      case "invoice.payment_failed": {
+        const obj = event.data.object as { id?: string; subscription?: string; status?: string };
+        const stripeSubId = obj?.subscription ?? obj?.id;
+        if (stripeSubId && supabase) {
+          const { data: sub } = await supabase
+            .from("subscriptions")
+            .select("id, org_id, state")
+            .eq("stripe_subscription_id", stripeSubId)
+            .maybeSingle();
+          if (sub) {
+            const targetState = mapStripeEventToSubscriptionState(event.type, obj?.status, sub.state);
+            if (targetState && targetState !== sub.state) {
+              const { transitionSubscription } = await import("@/lib/subscriptions");
+              const result = await transitionSubscription({
+                orgId: sub.org_id,
+                subscriptionId: sub.id,
+                to: targetState,
+                reason: `Stripe ${event.type}`,
+                stripeEventId: event.id,
+              });
+              if (!result.ok) {
+                log.warn("stripe.webhook.subscription_transition_failed", {
+                  event_id: event.id,
+                  type: event.type,
+                  err: result.error,
+                });
+              }
+            }
+          }
+        }
+        break;
+      }
       default:
         break;
     }
@@ -106,4 +145,39 @@ export async function POST(req: Request) {
     const msg = e instanceof Error ? e.message : "Webhook handler failed";
     return apiError("internal", msg);
   }
+}
+
+/**
+ * Map a Stripe event + payload status to an LDP §8 subscription_state.
+ * Returns null if the event doesn't imply a transition.
+ *
+ * Mapping per LDP §8 graph:
+ *   customer.subscription.created → TRIAL or ACTIVE (depending on payload status)
+ *   customer.subscription.updated → ACTIVE/RENEWED/LAPSED based on Stripe sub status
+ *   customer.subscription.deleted → CHURNED
+ *   invoice.paid                   → RENEWED (recurring renewal succeeded)
+ *   invoice.payment_failed         → LAPSED
+ */
+function mapStripeEventToSubscriptionState(
+  type: string,
+  stripeStatus: string | undefined,
+  current: string,
+): "PROSPECT" | "TRIAL" | "ACTIVE" | "RENEWED" | "LAPSED" | "REACTIVATED" | "CHURNED" | "ARCHIVED" | null {
+  if (type === "customer.subscription.deleted") return "CHURNED";
+  if (type === "invoice.payment_failed") return "LAPSED";
+  if (type === "invoice.paid") {
+    if (current === "ACTIVE" || current === "RENEWED") return "RENEWED";
+    if (current === "LAPSED") return "REACTIVATED";
+    return "ACTIVE";
+  }
+  if (type === "customer.subscription.created") {
+    return stripeStatus === "trialing" ? "TRIAL" : "ACTIVE";
+  }
+  if (type === "customer.subscription.updated") {
+    if (stripeStatus === "active") return current === "LAPSED" ? "REACTIVATED" : "ACTIVE";
+    if (stripeStatus === "trialing") return "TRIAL";
+    if (stripeStatus === "past_due" || stripeStatus === "unpaid") return "LAPSED";
+    if (stripeStatus === "canceled" || stripeStatus === "incomplete_expired") return "CHURNED";
+  }
+  return null;
 }

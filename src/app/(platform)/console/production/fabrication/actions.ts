@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { FabricationStatus } from "@/lib/supabase/types";
+import { PRODUCTION_PHASES, transitionProductionPhase, type ProductionPhase } from "@/lib/production-phase";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -52,6 +53,27 @@ export async function setFabStatus(formData: FormData) {
     .eq("org_id", session.orgId);
   revalidatePath("/console/production/fabrication");
   revalidatePath(`/console/production/fabrication/${id}`);
+}
+
+/**
+ * Drive the LDP §2 Production Lifecycle phase. Distinct from setFabStatus —
+ * status is workflow-execution (open/in_progress/blocked/complete) while
+ * phase is the design→install macro-arc.
+ */
+export async function transitionProductionPhaseAction(orderId: string, to: ProductionPhase, reason?: string) {
+  const session = await requireSession();
+  if (!PRODUCTION_PHASES.includes(to)) return { error: "Invalid target phase" };
+  const result = await transitionProductionPhase({
+    orgId: session.orgId,
+    fabricationOrderId: orderId,
+    to,
+    reason,
+    transitionedBy: session.userId,
+  });
+  if (!result.ok) return { error: result.error };
+  revalidatePath(`/console/production/fabrication/${orderId}`);
+  revalidatePath("/console/production/fabrication");
+  return { ok: true as const };
 }
 
 export async function deleteFab(formData: FormData) {

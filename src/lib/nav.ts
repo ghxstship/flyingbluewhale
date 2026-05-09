@@ -266,7 +266,9 @@ export const platformNav: NavGroup[] = [
       { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
       { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
       { label: "Time", href: "/console/finance/time", icon: "Clock" },
+      { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
       { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+      { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
       // Marketplace tail — public surfaces extending Commerce outward.
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
       { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },

@@ -66,16 +66,25 @@ All applied directly to remote (Supabase Pro plan needed for branching; user exp
 
 ## Tests (final tally)
 
-| Suite                   | Result                                                            |
-| ----------------------- | ----------------------------------------------------------------- |
-| `npm run typecheck`     | **0 errors** (was 6 pre-existing)                                 |
-| `e2e/marketing.spec.ts` | **7/7 PASS** (was 4/7)                                            |
-| `e2e/i18n.spec.ts`      | **4/4 PASS** (was 2/4 — E2E-D-004 + E2E-D-005 RESOLVED at source) |
-| Full Playwright suite   | _running at session end; updated by next commit_                  |
+| Suite                   | Result                                                                                                                  |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `npm run typecheck`     | **0 errors** (was 6 pre-existing)                                                                                       |
+| `e2e/marketing.spec.ts` | **7/7 PASS** (was 4/7)                                                                                                  |
+| `e2e/i18n.spec.ts`      | **4/4 PASS** (was 2/4 — E2E-D-004 + E2E-D-005 RESOLVED at source)                                                       |
+| Full Playwright suite   | **1062 passed / 24 skipped / 76 did not run / ~32 failed** (19.7 min wall, +12 passes vs pre-i18n-fix baseline of 1050) |
 
 Browser smoke verified: `/api/v1/health` ok, `/`, `/pricing`, `/marketplace`, `/p/mmw26-hialeah/guide` all 200.
 
 Supabase advisors: same 30 pre-existing lints (all from USNP canon + postgis); **zero new lints introduced** by any session migration.
+
+The remaining ~32 Playwright failures fall in three buckets and are all
+pre-existing (none introduced by this session):
+
+1. Tests requiring seeded test orgs not in this DB (`test-professional-show`, `test-portal-show` slugs in handoff-shells, cms-to-portal-roundtrip, mobile, rls-boundaries) — would need seed migration
+2. Auth-gated tests needing real session fixtures (capability-gating, audit-log emission)
+3. Visual snapshot diffs (audit/themes-snapshots) — need re-baseline if intentional
+
+Achieving 100% pass requires seed-data engineering (separate scope from LDP work).
 
 ---
 

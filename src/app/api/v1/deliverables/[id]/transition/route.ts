@@ -85,6 +85,22 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     const after = { status: nextStatus, fulfilled_at: nextData.fulfilled_at ?? null };
 
+    // LDP §4 Deliverable Lifecycle — append a typed row to the
+    // deliverable_state_transitions log alongside the generic audit_log
+    // entry. Best-effort; a log failure does not block the transition.
+    const { error: logErr } = await supabase.from("deliverable_state_transitions").insert({
+      org_id: session.orgId,
+      deliverable_id: id,
+      from_state: row.status as never,
+      to_state: nextStatus as never,
+      transitioned_by: session.userId,
+      reason: input.note ?? null,
+    });
+    if (logErr) {
+      // Non-fatal — audit_log still captures the transition via emitAudit below.
+      console.warn(`deliverable_state_transitions insert failed: ${logErr.message}`);
+    }
+
     await emitAudit({
       actorId: session.userId,
       orgId: session.orgId,

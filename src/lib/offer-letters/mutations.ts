@@ -53,11 +53,19 @@ export async function markOfferLetterSent(orgId: string, id: string, actorLabel:
   if (error) throw new Error(error.message);
   if (!data) throw new Error("Letter not found or not in draft state");
   await logActivity(orgId, id, "sent", "Letter marked as sent — public link active. Snapshot frozen.", actorLabel);
+  await logDocumentTransition(orgId, id, "draft", "sent", actorLabel);
   return data as unknown as OfferLetter;
 }
 
 export async function withdrawOfferLetter(orgId: string, id: string, actorLabel: string): Promise<void> {
   const supabase = await createClient();
+  // Read prior status so the transition log captures from_state correctly.
+  const { data: prior } = await supabase
+    .from("offer_letters")
+    .select("status")
+    .eq("org_id", orgId)
+    .eq("id", id)
+    .maybeSingle();
   const { error } = await supabase
     .from("offer_letters")
     .update({ status: "withdrawn" satisfies OfferLetterStatus, withdrawn_at: new Date().toISOString() })
@@ -65,6 +73,7 @@ export async function withdrawOfferLetter(orgId: string, id: string, actorLabel:
     .eq("id", id);
   if (error) throw new Error(error.message);
   await logActivity(orgId, id, "withdrawn", "Letter withdrawn — public link disabled.", actorLabel);
+  await logDocumentTransition(orgId, id, prior?.status ?? null, "withdrawn", actorLabel);
 }
 
 export async function rotateAccessCode(orgId: string, id: string, actorLabel: string): Promise<string> {
@@ -91,4 +100,32 @@ async function logActivity(orgId: string, letterId: string, kind: string, summar
     actor_label: actorLabel ?? null,
     summary,
   });
+}
+
+/**
+ * LDP §6 Engagement-Document Lifecycle — append a typed row to the
+ * polymorphic document_state_transitions log. Best-effort; a log failure
+ * does NOT block the underlying state change (which is captured by the
+ * legacy offer_letter_activity table above).
+ */
+async function logDocumentTransition(
+  orgId: string,
+  letterId: string,
+  fromStatus: string | null,
+  toStatus: string,
+  actorLabel?: string,
+): Promise<void> {
+  const supabase = await createClient();
+  const { error } = await supabase.from("document_state_transitions").insert({
+    org_id: orgId,
+    document_kind: "offer_letter",
+    document_id: letterId,
+    from_status: fromStatus,
+    to_status: toStatus,
+    reason: actorLabel ? `By ${actorLabel}` : null,
+  });
+  if (error) {
+    // Non-fatal — offer_letter_activity remains the legacy log of record.
+    console.warn(`document_state_transitions insert failed: ${error.message}`);
+  }
 }

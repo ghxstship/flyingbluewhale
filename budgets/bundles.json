@@ -1,0 +1,20 @@
+{
+  "_doc": [
+    "Per-route initial-JS budgets in gzipped kilobytes. Used by",
+    "scripts/ci/bundle-size-gate.mjs (F4). Bumping a budget is intentional;",
+    "the diff is the audit trail in git blame.",
+    "",
+    "Default 400 kb is generous for App Router routes that pull in their",
+    "own chart/map deps; tighter caps below for marketing pages where",
+    "first-paint actually matters."
+  ],
+  "default": { "maxFirstLoadKb": 400 },
+  "routes": {
+    "/": { "maxFirstLoadKb": 250 },
+    "/pricing": { "maxFirstLoadKb": 280 },
+    "/features": { "maxFirstLoadKb": 280 },
+    "/marketplace": { "maxFirstLoadKb": 320 },
+    "/login": { "maxFirstLoadKb": 280 },
+    "/signup": { "maxFirstLoadKb": 280 }
+  }
+}

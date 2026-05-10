@@ -1,0 +1,25 @@
+{
+  "_doc": [
+    "Allow-listed Supabase advisor WARN-level lint cache_keys. Used by",
+    "scripts/ci/supabase-advisor-gate.mjs (F3). The gate fails on any",
+    "ERROR-level lint and on any new WARN whose cache_key isn't in this",
+    "list — pre-existing WARNs catalogued here don't block ship.",
+    "",
+    "To refresh after fixing or accepting more lints:",
+    "  SUPABASE_PROJECT_REF=<ref> SUPABASE_ACCESS_TOKEN=<token> \\",
+    "    node scripts/ci/supabase-advisor-gate.mjs --update",
+    "",
+    "Then commit the diff."
+  ],
+  "allowedWarnKeys": [
+    "anon_security_definer_function_executable_public_st_estimatedextent_text, text",
+    "anon_security_definer_function_executable_public_st_estimatedextent_text, text, text",
+    "anon_security_definer_function_executable_public_st_estimatedextent_text, text, text, boolean",
+    "auth_leaked_password_protection",
+    "authenticated_security_definer_function_executable_public_mark_closed_p_table text, p_id uuid",
+    "authenticated_security_definer_function_executable_public_st_estimatedextent_text, text",
+    "authenticated_security_definer_function_executable_public_st_estimatedextent_text, text, text",
+    "authenticated_security_definer_function_executable_public_st_estimatedextent_text, text, text, boolean",
+    "extension_in_public_postgis"
+  ]
+}

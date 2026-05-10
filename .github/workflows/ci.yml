@@ -146,6 +146,68 @@ jobs:
           path: dist/
           retention-days: 14
 
+  # F3 — Supabase advisor gate. Pulls security + performance lints from the
+  # production project. Lints are partitioned by severity:
+  #   ERROR   → fail the PR (cross-tenant leaks, unenforced RLS)
+  #   WARN    → annotate (catalogued for follow-up; never blocks)
+  # Hard-fails only on regressions vs the baseline file checked into the
+  # repo, so a backlog of pre-existing warns doesn't block urgent ships.
+  supabase-advisor:
+    name: Supabase advisor (security + perf)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - name: Run advisor against prod project
+        if: env.SUPABASE_PROJECT_REF != ''
+        env:
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          node scripts/ci/supabase-advisor-gate.mjs
+      - name: Note skip when secrets unset
+        if: env.SUPABASE_PROJECT_REF == ''
+        env:
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
+          echo "::notice::Supabase advisor skipped — set SUPABASE_PROJECT_REF + SUPABASE_ACCESS_TOKEN secrets to enable."
+
+  # F4 — Bundle-size budget. Compares the gzipped size of every route's
+  # initial JS payload against budgets/bundles.json. Regressions block
+  # the PR; budget bumps require an explicit edit to that file (audit
+  # trail in git blame).
+  bundle-size:
+    name: Bundle-size budget
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+      - name: Check bundle budgets
+        run: node scripts/ci/bundle-size-gate.mjs
+
   # H3-06 / IK-052 — Lighthouse CI against the PR preview.
   # Only runs on pull requests, so we measure the Vercel preview that was
   # posted for the PR. Skipped on pushes to main (production Lighthouse

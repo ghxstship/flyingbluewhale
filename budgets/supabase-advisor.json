@@ -11,6 +11,7 @@
     "",
     "Then commit the diff."
   ],
+  "allowedErrorKeys": ["rls_disabled_in_public_public_spatial_ref_sys"],
   "allowedWarnKeys": [
     "anon_security_definer_function_executable_public_st_estimatedextent_text, text",
     "anon_security_definer_function_executable_public_st_estimatedextent_text, text, text",

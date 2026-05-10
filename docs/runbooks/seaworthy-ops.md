@@ -90,6 +90,27 @@ Project-level toggle, not in code.
 After enabling, the Supabase security advisor's
 `auth_leaked_password_protection` finding clears.
 
+## 4 · Enable RLS on `spatial_ref_sys` (PostGIS)
+
+The PostGIS `spatial_ref_sys` table is owned by `postgres` so we can't
+flip RLS via the MCP migration runner. Companion file:
+`supabase/migrations/20260509100014_enable_rls_on_spatial_ref_sys.sql`.
+
+**Run via Supabase Dashboard → SQL Editor (logged in as service_role):**
+
+```sql
+alter table public.spatial_ref_sys enable row level security;
+
+drop policy if exists spatial_ref_sys_public_read on public.spatial_ref_sys;
+create policy spatial_ref_sys_public_read on public.spatial_ref_sys
+  for select to public
+  using (true);
+```
+
+After running, the `rls_disabled_in_public` advisor ERROR for
+`public.spatial_ref_sys` clears. Behavior is unchanged — PostGIS reads
+remain world-readable, which is the contract the extension expects.
+
 ## 3 · `job-worker` edge function — redeploy + token + schedule
 
 The local source was hardened to require `JOB_WORKER_TOKEN`. Redeploy and

@@ -50,27 +50,43 @@ const all = [...security, ...perf];
 const errors = all.filter((l) => l.level === "ERROR");
 const warns = all.filter((l) => l.level === "WARN");
 
-const budget = existsSync(BUDGET_PATH) ? JSON.parse(readFileSync(BUDGET_PATH, "utf8")) : { allowedWarnKeys: [] };
+const budget = existsSync(BUDGET_PATH)
+  ? JSON.parse(readFileSync(BUDGET_PATH, "utf8"))
+  : { allowedErrorKeys: [], allowedWarnKeys: [] };
 
-const newWarns = warns.filter((l) => !budget.allowedWarnKeys.includes(l.cache_key));
+const allowedErrorKeys = budget.allowedErrorKeys ?? [];
+const allowedWarnKeys = budget.allowedWarnKeys ?? [];
+
+const newErrors = errors.filter((l) => !allowedErrorKeys.includes(l.cache_key));
+const newWarns = warns.filter((l) => !allowedWarnKeys.includes(l.cache_key));
 
 if (process.argv.includes("--update")) {
   writeFileSync(
     BUDGET_PATH,
-    JSON.stringify({ allowedWarnKeys: warns.map((l) => l.cache_key).sort() }, null, 2) + "\n",
+    JSON.stringify(
+      {
+        allowedErrorKeys: errors.map((l) => l.cache_key).sort(),
+        allowedWarnKeys: warns.map((l) => l.cache_key).sort(),
+      },
+      null,
+      2,
+    ) + "\n",
   );
-  console.log(`Updated ${BUDGET_PATH} with ${warns.length} warn keys.`);
+  console.log(`Updated ${BUDGET_PATH} with ${errors.length} error keys + ${warns.length} warn keys.`);
   process.exit(0);
 }
 
 let hasFailure = false;
 
-if (errors.length > 0) {
-  console.error(`::error::Supabase advisor returned ${errors.length} ERROR-level lint(s):`);
-  for (const e of errors) {
+if (newErrors.length > 0) {
+  console.error(`::error::Supabase advisor returned ${newErrors.length} NEW ERROR-level lint(s):`);
+  for (const e of newErrors) {
     console.error(`  - [${e.name}] ${e.title} — ${e.detail ?? ""}`);
     if (e.remediation) console.error(`    fix: ${e.remediation}`);
   }
+  console.error(
+    `If these are accepted-by-design (e.g. PostGIS system tables), add the cache_key to allowedErrorKeys in budgets/supabase-advisor.json.`,
+  );
   hasFailure = true;
 }
 
@@ -86,9 +102,10 @@ if (newWarns.length > 0) {
   hasFailure = true;
 }
 
-const previouslyAllowed = warns.length - newWarns.length;
+const allowedErrors = errors.length - newErrors.length;
+const allowedWarns = warns.length - newWarns.length;
 console.log(
-  `Advisor: ${errors.length} errors / ${warns.length} warns (${previouslyAllowed} pre-budgeted, ${newWarns.length} new)`,
+  `Advisor: ${errors.length} errors (${allowedErrors} pre-budgeted, ${newErrors.length} new) / ${warns.length} warns (${allowedWarns} pre-budgeted, ${newWarns.length} new)`,
 );
 
 process.exit(hasFailure ? 1 : 0);

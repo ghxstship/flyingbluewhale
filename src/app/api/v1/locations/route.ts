@@ -10,16 +10,7 @@ import { createClient } from "@/lib/supabase/server";
  * the picker page (and any combobox that wants to surface saved
  * locations). Returns up to 25 matches.
  */
-// PostgREST `.or()` filter expressions are parsed at the URL layer:
-// `,` separates clauses, `.` separates field/operator/value, `()` wraps
-// nested groups. Raw user input interpolated into one of these strings
-// can inject extra OR clauses or break out of the value position. We
-// sanitize `q` to alphanumerics + spaces + a handful of obvious-typeable
-// punctuation; anything else is dropped. With 25 chars of safe input
-// the typeahead remains useful and the filter contract is preserved.
-function sanitizeSearch(raw: string): string {
-  return raw.replace(/[^a-zA-Z0-9 \-_'&]/g, "").slice(0, 60);
-}
+import { sanitizeSearch } from "@/lib/sanitize";
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);

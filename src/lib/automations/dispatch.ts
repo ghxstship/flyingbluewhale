@@ -1,6 +1,7 @@
 import "server-only";
 import { createServiceClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
+import type { Json } from "@/lib/supabase/database.types";
 
 /**
  * Domain event bus — Phase 4.3 of the SmartSuite parity roadmap.
@@ -24,12 +25,6 @@ import { log } from "@/lib/log";
  * SmartSuite-style "Record matches a condition" triggers will land later.
  */
 
-// `domain_events` / `automation_subscriptions` / `automation_schedules` aren't
-// in `database.types.ts` until type-gen runs against the migrated DB. Untype
-// the client at the boundary to avoid an editor-only error blocking the
-// dispatcher from compiling. Every write is org-scoped and validated.
-type AnySvc = { from: (t: string) => unknown };
-
 export async function emitDomainEvent(opts: {
   orgId: string;
   eventType: string; // 'invoice.paid', 'ticket.scanned', etc.
@@ -38,12 +33,11 @@ export async function emitDomainEvent(opts: {
   sourceId?: string;
 }): Promise<void> {
   try {
-    const svc = createServiceClient() as unknown as AnySvc;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (svc.from("domain_events") as any).insert({
+    const svc = createServiceClient();
+    const { error } = await svc.from("domain_events").insert({
       org_id: opts.orgId,
       event_type: opts.eventType,
-      payload: opts.payload,
+      payload: opts.payload as Json,
       source_table: opts.sourceTable ?? null,
       source_id: opts.sourceId ?? null,
     });
@@ -69,9 +63,8 @@ export async function subscribeAutomationToEvent(opts: {
   sourceTable?: string | null;
   sourceId?: string | null;
 }): Promise<void> {
-  const svc = createServiceClient() as unknown as AnySvc;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (svc.from("automation_subscriptions") as any).upsert(
+  const svc = createServiceClient();
+  const { error } = await svc.from("automation_subscriptions").upsert(
     {
       org_id: opts.orgId,
       automation_id: opts.automationId,
@@ -120,28 +113,28 @@ export async function drainPending(opts: { batchSize?: number } = {}): Promise<{
   enqueued: number;
 }> {
   const batchSize = opts.batchSize ?? 50;
-  const svc = createServiceClient() as unknown as AnySvc;
+  const svc = createServiceClient();
 
   // 1. Pull pending events (oldest first).
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: rawEvents, error: readErr } = await (svc.from("domain_events") as any)
+  const { data: rawEvents, error: readErr } = await svc
+    .from("domain_events")
     .select("id, org_id, event_type, payload, source_table, source_id, emitted_at")
     .is("dispatched_at", null)
     .order("emitted_at", { ascending: true })
     .limit(batchSize);
   if (readErr) throw new Error(`domain_events read failed: ${readErr.message}`);
-  const events = (rawEvents ?? []) as DomainEventRow[];
+  const events = (rawEvents ?? []) as unknown as DomainEventRow[];
   if (events.length === 0) return { drained: 0, enqueued: 0 };
 
   // 2. Look up subscriptions for the unique set of event types we just read.
   const eventTypes = Array.from(new Set(events.map((e) => e.event_type)));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: rawSubs, error: subsErr } = await (svc.from("automation_subscriptions") as any)
+  const { data: rawSubs, error: subsErr } = await svc
+    .from("automation_subscriptions")
     .select("id, org_id, automation_id, event_type, source_table, source_id, enabled")
     .in("event_type", eventTypes)
     .eq("enabled", true);
   if (subsErr) throw new Error(`subscriptions read failed: ${subsErr.message}`);
-  const subs = (rawSubs ?? []) as SubscriptionRow[];
+  const subs = (rawSubs ?? []) as unknown as SubscriptionRow[];
 
   // 3. For each event, fan out to every matching subscription (org + filters).
   let enqueued = 0;
@@ -155,21 +148,21 @@ export async function drainPending(opts: { batchSize?: number } = {}): Promise<{
     );
 
     for (const sub of matchingSubs) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: jobErr } = await (svc.from("job_queue") as any).insert({
+      const payload: Json = {
+        automationId: sub.automation_id,
+        triggerKind: "event",
+        triggerPayload: {
+          eventId: ev.id,
+          eventType: ev.event_type,
+          sourceTable: ev.source_table,
+          sourceId: ev.source_id,
+          data: ev.payload as Json,
+        },
+      };
+      const { error: jobErr } = await svc.from("job_queue").insert({
         type: "automation.run",
         org_id: sub.org_id,
-        payload: {
-          automationId: sub.automation_id,
-          triggerKind: "event",
-          triggerPayload: {
-            eventId: ev.id,
-            eventType: ev.event_type,
-            sourceTable: ev.source_table,
-            sourceId: ev.source_id,
-            data: ev.payload,
-          },
-        },
+        payload,
         dedup_key: `${sub.automation_id}:event:${ev.id}`,
       });
       if (jobErr) {
@@ -189,8 +182,8 @@ export async function drainPending(opts: { batchSize?: number } = {}): Promise<{
     }
 
     // 4. Stamp the event as dispatched.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: stampErr } = await (svc.from("domain_events") as any)
+    const { error: stampErr } = await svc
+      .from("domain_events")
       .update({ dispatched_at: new Date().toISOString() })
       .eq("id", ev.id);
     if (stampErr) {

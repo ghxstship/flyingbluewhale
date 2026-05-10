@@ -25,11 +25,13 @@ export type OnboardingStep = {
 
 export async function listOnboardingSteps(letterId: string): Promise<OnboardingStep[]> {
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const q: any = (supabase as unknown as { from: (t: string) => any }).from("onboarding_steps");
-  const { data, error } = await q.select("*").eq("offer_letter_id", letterId).order("sort_order", { ascending: true });
+  const { data, error } = await supabase
+    .from("onboarding_steps")
+    .select("*")
+    .eq("offer_letter_id", letterId)
+    .order("sort_order", { ascending: true });
   if (error) throw error;
-  return (data ?? []) as OnboardingStep[];
+  return (data ?? []) as unknown as OnboardingStep[];
 }
 
 export async function listOnboardingByProject(
@@ -77,9 +79,8 @@ export async function listOnboardingByProject(
 
 export async function setStepStatus(stepId: string, status: OnboardingStepStatus, userId?: string): Promise<void> {
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const q: any = (supabase as unknown as { from: (t: string) => any }).from("onboarding_steps");
-  const { error } = await q
+  const { error } = await supabase
+    .from("onboarding_steps")
     .update({
       status,
       completed_at: status === "done" || status === "waived" ? new Date().toISOString() : null,
@@ -91,11 +92,9 @@ export async function setStepStatus(stepId: string, status: OnboardingStepStatus
 
 export async function recordCheckIn(letterId: string, ip: string | null, userAgent: string | null): Promise<void> {
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const sb: any = supabase as unknown as { from: (t: string) => any };
 
   // Find the venue_checkin step and mark done.
-  const { data: steps, error } = await sb
+  const { data: steps, error } = await supabase
     .from("onboarding_steps")
     .select("id")
     .eq("offer_letter_id", letterId)
@@ -103,7 +102,7 @@ export async function recordCheckIn(letterId: string, ip: string | null, userAge
     .limit(1);
   if (error) throw error;
   if (steps && steps.length) {
-    await sb
+    await supabase
       .from("onboarding_steps")
       .update({
         status: "done",
@@ -112,7 +111,4 @@ export async function recordCheckIn(letterId: string, ip: string | null, userAge
       })
       .eq("id", steps[0].id);
   }
-
-  // Append to signature_audit jsonb
-  await sb.rpc("noop"); // not strictly needed; placeholder if a function exists.
 }

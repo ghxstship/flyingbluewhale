@@ -1,0 +1,66 @@
+import { describe, expect, it } from "vitest";
+import { extractPortalSlug, escapeHtml } from "./portal-slug";
+
+describe("extractPortalSlug", () => {
+  it("returns the slug for a real /p/<slug>/<page> path", () => {
+    expect(extractPortalSlug("/p/mmw26-hialeah/guide")).toBe("mmw26-hialeah");
+    expect(extractPortalSlug("/p/edclv26/client/proposals")).toBe("edclv26");
+  });
+
+  it("returns the slug when the slug is the whole path", () => {
+    expect(extractPortalSlug("/p/mmw26-hialeah")).toBe("mmw26-hialeah");
+    expect(extractPortalSlug("/p/foo/")).toBe("foo");
+  });
+
+  it("returns null for non-/p paths", () => {
+    expect(extractPortalSlug("/console/projects")).toBeNull();
+    expect(extractPortalSlug("/m/check-in")).toBeNull();
+    expect(extractPortalSlug("/login")).toBeNull();
+    expect(extractPortalSlug("/")).toBeNull();
+  });
+
+  it("returns null for the reserved sentinel slugs", () => {
+    expect(extractPortalSlug("/p/select")).toBeNull();
+    expect(extractPortalSlug("/p/select/foo")).toBeNull();
+    expect(extractPortalSlug("/p/undefined")).toBeNull();
+    expect(extractPortalSlug("/p/null/anything")).toBeNull();
+  });
+
+  it("preserves slug casing + numerics + hyphens", () => {
+    expect(extractPortalSlug("/p/MyOrg-2026/guide")).toBe("MyOrg-2026");
+  });
+
+  it("returns null when there's no slug segment", () => {
+    expect(extractPortalSlug("/p/")).toBeNull();
+    expect(extractPortalSlug("/p")).toBeNull();
+  });
+});
+
+describe("escapeHtml", () => {
+  it("entity-encodes the five HTML metacharacters", () => {
+    const out = escapeHtml(`<script>alert("xss")</script>&'`);
+    // Literal `<`, `>`, `"`, `'` must not survive — they break out of
+    // HTML attribute / tag context. `&` IS present in the output but
+    // only as the leading char of the numeric entities themselves.
+    expect(out).not.toMatch(/[<>"']/);
+    // Bare `&` (one not followed by `#NN;`) would be a leak.
+    expect(out).not.toMatch(/&(?!#\d+;)/);
+    // Spot-check the entity for `<` so we know we're entity-encoding
+    // and not just stripping.
+    expect(out).toContain("&#60;");
+  });
+
+  it("leaves alphanumerics + safe punctuation untouched", () => {
+    expect(escapeHtml("mmw26-hialeah")).toBe("mmw26-hialeah");
+    expect(escapeHtml("foo_bar.baz")).toBe("foo_bar.baz");
+  });
+
+  it("handles empty input", () => {
+    expect(escapeHtml("")).toBe("");
+  });
+
+  it("escapes every occurrence in a long string", () => {
+    const out = escapeHtml(`${"<".repeat(5)}`);
+    expect(out).toBe("&#60;&#60;&#60;&#60;&#60;");
+  });
+});

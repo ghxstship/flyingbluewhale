@@ -5,6 +5,7 @@ import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import { log, serverTiming } from "@/lib/log";
 import { internalPathFor, shellForHost } from "@/lib/urls";
 import { env, hasSupabase } from "@/lib/env";
+import { extractPortalSlug, escapeHtml } from "@/lib/portal-slug";
 
 const SUBDOMAINS_ENABLED = process.env.NEXT_PUBLIC_USE_SUBDOMAINS === "1";
 
@@ -346,18 +347,9 @@ async function checkMfaForRequest(request: NextRequest, pathname: string): Promi
 
 // ────────────────────────────────────────────────────────────────────
 // Portal slug pre-check helpers (Bug #18).
+// extractPortalSlug + escapeHtml moved to lib/portal-slug.ts so they're
+// covered by unit tests independent of the Edge runtime.
 // ────────────────────────────────────────────────────────────────────
-
-const PORTAL_SLUG_RX = /^\/p\/([^/]+)(?:\/|$)/;
-
-function extractPortalSlug(pathname: string): string | null {
-  const m = PORTAL_SLUG_RX.exec(pathname);
-  if (!m) return null;
-  const slug = m[1];
-  // Reserved/sentinel slug paths that aren't backed by a project row.
-  if (slug === "select" || slug === "undefined" || slug === "null") return null;
-  return slug;
-}
 
 // Per-edge-instance cache. Positive entries get a longer TTL because slugs
 // don't get reused; negative entries expire faster so a freshly published
@@ -392,10 +384,6 @@ async function portalSlugExists(request: NextRequest, slug: string): Promise<boo
     expiresAt: now + (exists ? SLUG_CACHE_POS_TTL_MS : SLUG_CACHE_NEG_TTL_MS),
   });
   return exists;
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
 export const config = {

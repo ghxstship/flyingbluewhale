@@ -61,6 +61,8 @@ function generateRecoveryCodes(count: number): string[] {
   });
 }
 
+import { sanitizeSvg } from "@/lib/sanitize";
+
 /**
  * Render a TOTP otpauth URI as a sanitized SVG, returned as a `data:` URI
  * the client embeds via `<img src=...>`.
@@ -70,8 +72,8 @@ function generateRecoveryCodes(count: number): string[] {
  *   otpauth:// URI we built — but defense in depth says don't inline
  *   third-party HTML when a safer container exists. SVG-in-`<img>` runs
  *   in passive image mode: any `<script>` or event handler the SVG
- *   carries is ignored by the browser. We also strip script/handler
- *   patterns before encoding as a second layer.
+ *   carries is ignored by the browser. sanitizeSvg() strips
+ *   script/handler patterns as a second layer.
  */
 async function renderQrSvg(uri: string): Promise<string> {
   const QRCode = await import("qrcode");
@@ -81,20 +83,6 @@ async function renderQrSvg(uri: string): Promise<string> {
   // is server-only so this is safe in a "use server" file.
   const b64 = Buffer.from(sanitized, "utf8").toString("base64");
   return `data:image/svg+xml;base64,${b64}`;
-}
-
-/**
- * Strip script tags + on* attributes + javascript: URIs from an SVG string.
- * The QR generator emits a deterministic `<svg><path/></svg>` shape, so any
- * match here would be either a regression in the qrcode package or a
- * future code path that smuggled untrusted markup in. Belt + suspenders.
- */
-function sanitizeSvg(svg: string): string {
-  return svg
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/\son[a-z]+\s*=\s*"[^"]*"/gi, "")
-    .replace(/\son[a-z]+\s*=\s*'[^']*'/gi, "")
-    .replace(/javascript:/gi, "");
 }
 
 // ────────────────────────────────────────────────────────────────────

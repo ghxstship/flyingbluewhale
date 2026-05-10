@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import Link from "next/link";
@@ -22,7 +21,7 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
   const [agencies, roster, tours] = await Promise.all([

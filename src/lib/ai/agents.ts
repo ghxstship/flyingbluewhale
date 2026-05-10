@@ -46,19 +46,16 @@ export type RunFieldAgentResult = {
   costCents?: number;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type LooseSupabaseClient = any;
+// AI agents address tables by name at runtime (a.target_table is a row
+// value, not a literal). The typed Supabase client can't infer columns
+// from a runtime string, so this helper returns the loose `any`-shaped
+// client for these dynamic-table calls only. The whitelist + RLS still
+// gate the actual write.
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
-async function pickClient(): Promise<LooseSupabaseClient> {
-  // Prefer the service-role client so the agent can run from the worker
-  // without a user session. Fall back to the user-scoped client (RLS
-  // applies) when no service role is configured — useful in dev.
-  // Cast through `unknown` because `ai_agents` was added in this phase
-  // and the generated Database types haven't been regenerated yet.
-  if (isServiceClientAvailable()) {
-    return createServiceClient() as unknown as LooseSupabaseClient;
-  }
-  return (await createClient()) as unknown as LooseSupabaseClient;
+async function pickClient(): Promise<LooseSupabase> {
+  if (isServiceClientAvailable()) return createServiceClient() as unknown as LooseSupabase;
+  return (await createClient()) as unknown as LooseSupabase;
 }
 
 /**

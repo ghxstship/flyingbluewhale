@@ -43,25 +43,15 @@ type DbShareLinkLite = {
 async function fetchLinkLite(id: string): Promise<DbShareLinkLite | null> {
   if (!isServiceClientAvailable()) return null;
   const supabase = createServiceClient();
-  const { data, error } = await (
-    supabase.from("share_links" as never) as never as {
-      select: (cols: string) => {
-        eq: (
-          col: string,
-          val: string,
-        ) => {
-          maybeSingle: () => Promise<{ data: DbShareLinkLite | null; error: unknown }>;
-        };
-      };
-    }
-  )
+  const { data, error } = await supabase
+    .from("share_links")
     .select(
       "id, org_id, resource_table, resource_id, role, passcode_hash, expires_at, max_uses, uses, label, revoked_at",
     )
     .eq("id", id)
     .maybeSingle();
   if (error || !data) return null;
-  return data;
+  return data as DbShareLinkLite;
 }
 
 function NotValid({ message }: { message: string }) {

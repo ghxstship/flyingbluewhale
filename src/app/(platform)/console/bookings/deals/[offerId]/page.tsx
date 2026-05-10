@@ -5,7 +5,6 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
@@ -36,7 +35,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
   const { offerId } = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("talent_offers")
     .select("*")
@@ -44,7 +43,9 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!data) return notFound();
-  const d = data as Deal;
+  // Cast through unknown — the typed row's narrow type doesn't overlap
+  // with the local Deal alias because Deal is a hand-written subset.
+  const d = data as unknown as Deal;
 
   const settlementResp = await supabase
     .from("settlements")
@@ -161,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
 }
 
 async function CoProSection({ offerId }: { offerId: string }) {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const session = await requireSession();
   const { data } = await supabase
     .from("co_pro_partnerships")

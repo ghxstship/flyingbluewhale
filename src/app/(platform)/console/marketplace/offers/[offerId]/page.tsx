@@ -2,7 +2,6 @@ import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
@@ -32,7 +31,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
   const { offerId } = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("talent_offers")
     .select("*")

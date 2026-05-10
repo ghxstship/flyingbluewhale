@@ -3,7 +3,6 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { updatePostingAction } from "./actions";
@@ -34,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
   const { postingId } = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("job_postings")
     .select("*")

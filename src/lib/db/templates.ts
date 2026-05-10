@@ -32,7 +32,7 @@ function rowToTemplate(r: Record<string, unknown>): ProjectTemplate {
 export async function listProjectTemplates(
   opts: { orgId?: string | null; category?: TemplateCategory } = {},
 ): Promise<ProjectTemplate[]> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   let q = supabase
     .from("project_templates")
     .select("*")
@@ -46,7 +46,7 @@ export async function listProjectTemplates(
 }
 
 export async function getProjectTemplate(opts: { id: string }): Promise<ProjectTemplate | null> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase.from("project_templates").select("*").eq("id", opts.id).maybeSingle();
   return data ? rowToTemplate(data as Record<string, unknown>) : null;
 }

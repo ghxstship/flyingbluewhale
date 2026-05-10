@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
@@ -32,7 +31,7 @@ const dollars = (cents: number | null) => (cents == null ? "" : (cents / 100).to
 export default async function Page() {
   if (!hasSupabase) return <div>Configure Supabase.</div>;
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("crew_members")
     .select("*")

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { MarketplaceCard } from "@/components/marketplace/MarketplaceCard";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
@@ -35,7 +34,7 @@ type Row = {
 export default async function Page() {
   let rows: Row[] = [];
   if (hasSupabase) {
-    const supabase = (await createClient()) as unknown as LooseSupabase;
+    const supabase = await createClient();
     const { data } = await supabase
       .from("public_crew_directory")
       .select("*")

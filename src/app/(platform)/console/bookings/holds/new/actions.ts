@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const Schema = z.object({
   tier: z.string().regex(/^[1-5]$/),
@@ -23,7 +22,7 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("availability_slots").insert({
     user_id: session.userId,
     org_id: session.orgId,
@@ -45,7 +44,7 @@ export async function releaseHoldAction(_: State, fd: FormData): Promise<State> 
   const session = await requireSession();
   const id = String(fd.get("hold_id") ?? "");
   if (!id) return { error: "Missing hold" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("availability_slots").delete().eq("id", id).eq("org_id", session.orgId);
   if (error) return { error: error.message };
   revalidatePath("/console/bookings/holds");

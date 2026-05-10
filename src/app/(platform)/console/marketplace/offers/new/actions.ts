@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const Schema = z.object({
   talent_profile_id: z.string().uuid(),
@@ -28,7 +27,7 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const feeCents = Math.round(Number(parsed.data.fee.replace(/[$,]/g, "")) * 100);
   if (!Number.isFinite(feeCents) || feeCents <= 0) return { error: "Invalid fee" };
 
@@ -62,7 +61,7 @@ export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Missing offer" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("talent_offers")
     .update({ status: "sent", sent_at: new Date().toISOString() })
@@ -77,7 +76,7 @@ export async function acceptOfferAction(_: State, fd: FormData): Promise<State> 
   const session = await requireSession();
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Missing offer" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("talent_offers")
     .update({ status: "accepted", accepted_at: new Date().toISOString() })
@@ -92,7 +91,7 @@ export async function declineOfferAction(_: State, fd: FormData): Promise<State>
   const session = await requireSession();
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Missing offer" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("talent_offers")
     .update({ status: "declined" })

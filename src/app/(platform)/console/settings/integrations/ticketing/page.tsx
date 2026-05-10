@@ -4,7 +4,6 @@ import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 
 export const dynamic = "force-dynamic";
@@ -30,7 +29,7 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("ticketing_connections")
     .select("id, provider, external_event_id, label, is_active, last_synced_at")

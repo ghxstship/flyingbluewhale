@@ -2,6 +2,7 @@ import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
 import type { SavedView, ViewConfigRow, ViewScope, ViewType } from "@/lib/views/types";
+import type { Json } from "@/lib/supabase/database.types";
 
 /**
  * `view_configs` is a brand-new table not yet in the generated Supabase
@@ -75,7 +76,7 @@ function rowFrom(record: ViewConfigRecord): ViewConfigRow {
  */
 export async function listViewConfigs(opts: { orgId: string; tableId: string }): Promise<ViewConfigRow[]> {
   if (!opts.orgId || !opts.tableId) return [];
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("view_configs")
     .select("*")
@@ -93,7 +94,7 @@ export async function listViewConfigs(opts: { orgId: string; tableId: string }):
  */
 export async function getViewConfig(opts: { id: string }): Promise<ViewConfigRow | null> {
   if (!opts.id) return null;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase.from("view_configs").select("*").eq("id", opts.id).maybeSingle();
   if (error) throw error;
   return data ? rowFrom(data as ViewConfigRecord) : null;
@@ -117,7 +118,7 @@ export async function saveViewConfig(opts: {
   isDefault?: boolean;
   isLocked?: boolean;
 }): Promise<ViewConfigRow> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
 
   // Pull the caller's user id so we can stamp `created_by` / `updated_by`.
   // RLS still does the actual gating; this is just provenance.
@@ -133,7 +134,7 @@ export async function saveViewConfig(opts: {
     scope: opts.scope,
     name: opts.name,
     description: opts.description ?? null,
-    config: opts.config as unknown as Record<string, unknown>,
+    config: opts.config as unknown as Json,
     is_default: opts.isDefault ?? false,
     is_locked: opts.isLocked ?? false,
     updated_by: userId,
@@ -165,7 +166,7 @@ export async function saveViewConfig(opts: {
  */
 export async function deleteViewConfig(opts: { id: string }): Promise<void> {
   if (!opts.id) return;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("view_configs").delete().eq("id", opts.id);
   if (error) throw error;
 }
@@ -177,7 +178,7 @@ export async function deleteViewConfig(opts: { id: string }): Promise<void> {
  */
 export async function setDefaultView(opts: { id: string }): Promise<void> {
   if (!opts.id) return;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
 
   // Look up the row first so we know its org/table/scope.
   const target = await getViewConfig({ id: opts.id });

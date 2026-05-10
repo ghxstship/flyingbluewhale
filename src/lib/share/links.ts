@@ -55,39 +55,27 @@ function verifyPasscode(passcode: string, stored: string): boolean {
 // DB row → public DTO
 // ───────────────────────────────────────────────────────────────────────────
 
-type DbShareLink = {
-  id: string;
-  org_id: string;
-  resource_table: string;
-  resource_id: string;
-  role: ShareLinkRole;
-  passcode_hash: string | null;
-  expires_at: string | null;
-  max_uses: number | null;
-  uses: number;
-  label: string | null;
-  meta: Record<string, unknown> | null;
-  revoked_at: string | null;
-  revoked_by: string | null;
-  created_by: string | null;
-  created_at: string;
-  updated_at: string;
-  last_used_at: string | null;
-};
+import type { Database } from "@/lib/supabase/database.types";
+
+type DbShareLink = Database["public"]["Tables"]["share_links"]["Row"];
 
 function rowToShareLink(row: DbShareLink): ShareLink {
+  // meta is typed as Json (string | number | bool | null | object); narrow to
+  // an object for the public DTO and fall back to {} for any non-object value.
+  const meta =
+    row.meta && typeof row.meta === "object" && !Array.isArray(row.meta) ? (row.meta as Record<string, unknown>) : {};
   return {
     id: row.id,
     org_id: row.org_id,
     resource_table: row.resource_table,
     resource_id: row.resource_id,
-    role: row.role,
+    role: row.role as ShareLinkRole,
     has_passcode: !!row.passcode_hash,
     expires_at: row.expires_at,
     max_uses: row.max_uses,
     uses: row.uses,
     label: row.label,
-    meta: row.meta ?? {},
+    meta,
     revoked_at: row.revoked_at,
     revoked_by: row.revoked_by,
     created_by: row.created_by,
@@ -127,18 +115,9 @@ export async function createShareLink(opts: {
     created_by: session.userId,
   };
 
-  // Use any-cast for the table since share_links may not be in regenerated
-  // database.types yet. RLS still gates the write.
-  const { data, error } = await (
-    supabase.from("share_links" as never) as never as {
-      insert: (row: typeof insertRow) => {
-        select: () => { single: () => Promise<{ data: DbShareLink | null; error: { message: string } | null }> };
-      };
-    }
-  )
-    .insert(insertRow)
-    .select()
-    .single();
+  // share_links is now in the regenerated database.types — use the typed
+  // client directly. RLS gates the write per usual.
+  const { data, error } = await supabase.from("share_links").insert(insertRow).select().single();
 
   if (error || !data) {
     return { ok: false, error: error?.message ?? "Failed to create share link" };
@@ -162,18 +141,8 @@ export async function revokeShareLink(opts: {
   id: string;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const supabase = await createClient();
-  const { error } = await (
-    supabase.from("share_links" as never) as never as {
-      update: (patch: { revoked_at: string; revoked_by: string }) => {
-        eq: (
-          col: string,
-          val: string,
-        ) => {
-          eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
-        };
-      };
-    }
-  )
+  const { error } = await supabase
+    .from("share_links")
     .update({ revoked_at: new Date().toISOString(), revoked_by: opts.session.userId })
     .eq("id", opts.id)
     .eq("org_id", opts.session.orgId);
@@ -188,31 +157,8 @@ export async function listShareLinksForResource(opts: {
   resourceId: string;
 }): Promise<ShareLink[]> {
   const supabase = await createClient();
-  const { data, error } = await (
-    supabase.from("share_links" as never) as never as {
-      select: (cols: string) => {
-        eq: (
-          col: string,
-          val: string,
-        ) => {
-          eq: (
-            col: string,
-            val: string,
-          ) => {
-            eq: (
-              col: string,
-              val: string,
-            ) => {
-              order: (
-                col: string,
-                opts: { ascending: boolean },
-              ) => Promise<{ data: DbShareLink[] | null; error: { message: string } | null }>;
-            };
-          };
-        };
-      };
-    }
-  )
+  const { data, error } = await supabase
+    .from("share_links")
     .select("*")
     .eq("org_id", opts.session.orgId)
     .eq("resource_table", opts.resourceTable)
@@ -250,21 +196,7 @@ export async function consumeShareLink(opts: { token: string; passcode?: string 
   const supabase = createServiceClient();
 
   // Step 2 — fetch the row (service-role bypasses RLS).
-  const { data: row, error } = await (
-    supabase.from("share_links" as never) as never as {
-      select: (cols: string) => {
-        eq: (
-          col: string,
-          val: string,
-        ) => {
-          maybeSingle: () => Promise<{ data: DbShareLink | null; error: { message: string } | null }>;
-        };
-      };
-    }
-  )
-    .select("*")
-    .eq("id", verified.id)
-    .maybeSingle();
+  const { data: row, error } = await supabase.from("share_links").select("*").eq("id", verified.id).maybeSingle();
 
   if (error || !row) return { ok: false, reason: "invalid" };
 
@@ -289,12 +221,7 @@ export async function consumeShareLink(opts: { token: string; passcode?: string 
 
   // Step 5 — atomic consume. If two requests race, exactly one wins; the
   // loser sees `share_link_invalid` and we report it as exhausted.
-  const { data: claimed, error: rpcErr } = await (
-    supabase.rpc as unknown as (
-      name: string,
-      args: Record<string, unknown>,
-    ) => Promise<{ data: DbShareLink | null; error: { message: string; code?: string } | null }>
-  )("consume_share_link", { p_id: row.id });
+  const { data: claimed, error: rpcErr } = await supabase.rpc("consume_share_link", { p_id: row.id });
 
   if (rpcErr || !claimed) {
     // The atomic claim lost the race or hit a constraint — treat as exhausted

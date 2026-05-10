@@ -36,13 +36,19 @@ describe("resolveShell", () => {
     expect(resolveShell("guest")).toBe("/me");
     expect(resolveShell("visitor")).toBe("/me");
   });
-  it("marketplace personas all route to /me", () => {
-    // Bug #13 / Workstream A1 — crew/client/etc. are member-tier and land
-    // at /me, not the operator console.
-    expect(resolveShell("collaborator")).toBe("/me");
-    expect(resolveShell("contractor")).toBe("/me");
-    expect(resolveShell("crew")).toBe("/me");
-    expect(resolveShell("client")).toBe("/me");
+  it("operator-adjacent personas route to /console (collaborator)", () => {
+    // collaborator is the co-producer persona — has project-write authority
+    // even though they're not an admin. Their workflow is in /console.
+    expect(resolveShell("collaborator")).toBe("/console");
+  });
+  it("portal personas route to /p (client receives proposals; contractor vendor-side)", () => {
+    expect(resolveShell("client")).toBe("/p");
+    expect(resolveShell("contractor")).toBe("/p");
+  });
+  it("field persona routes to /m (crew runs gates, scans, shifts)", () => {
+    expect(resolveShell("crew")).toBe("/m");
+  });
+  it("pure-consumer personas route to /me (viewer/community)", () => {
     expect(resolveShell("viewer")).toBe("/me");
     expect(resolveShell("community")).toBe("/me");
   });

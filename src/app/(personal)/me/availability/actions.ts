@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const CreateSchema = z.object({
   kind: z.enum(["hold", "confirm", "block"]),
@@ -20,7 +19,7 @@ export async function addAvailabilityAction(_: State, fd: FormData): Promise<Sta
   const session = await requireSession();
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("availability_slots").insert({
     user_id: session.userId,
     kind: parsed.data.kind,
@@ -38,7 +37,7 @@ export async function deleteAvailabilityAction(_: State, fd: FormData): Promise<
   const session = await requireSession();
   const id = String(fd.get("slot_id") ?? "");
   if (!id) return { error: "Missing slot" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("availability_slots").delete().eq("id", id).eq("user_id", session.userId);
   if (error) return { error: error.message };
   revalidatePath("/me/availability");

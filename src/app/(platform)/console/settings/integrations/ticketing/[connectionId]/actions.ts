@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const Schema = z.object({
   connection_id: z.string().uuid(),
@@ -29,7 +28,7 @@ export async function recordSalesSnapshotAction(_: State, fd: FormData): Promise
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const totalSold = Math.max(0, Math.round(Number(parsed.data.total_sold)));
   const totalCapacity = parsed.data.total_capacity ? Math.max(0, Math.round(Number(parsed.data.total_capacity))) : null;
 

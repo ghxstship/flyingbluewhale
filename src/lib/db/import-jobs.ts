@@ -28,7 +28,7 @@ function rowToImportJob(r: Record<string, unknown>): ImportJob {
 }
 
 export async function listImportJobs(opts: { orgId: string; limit?: number } = { orgId: "" }): Promise<ImportJob[]> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("import_jobs")
     .select("*")
@@ -40,7 +40,7 @@ export async function listImportJobs(opts: { orgId: string; limit?: number } = {
 }
 
 export async function getImportJob(opts: { id: string }): Promise<ImportJob | null> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase.from("import_jobs").select("*").eq("id", opts.id).maybeSingle();
   return data ? rowToImportJob(data as Record<string, unknown>) : null;
 }

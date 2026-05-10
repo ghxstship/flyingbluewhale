@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { SUBMISSION_STATUSES } from "@/lib/marketplace";
 
 const Transition = z.object({
@@ -20,7 +19,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
   const session = await requireSession();
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const score = parsed.data.score ? Math.min(100, Math.max(0, Math.round(Number(parsed.data.score)))) : null;
   const { error } = await supabase
     .from("open_call_submissions")

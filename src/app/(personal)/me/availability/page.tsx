@@ -1,6 +1,5 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
@@ -23,7 +22,7 @@ export default async function Page() {
     return <div>Configure Supabase.</div>;
   }
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("availability_slots")
     .select("id, kind, starts_at, ends_at, all_day, label")

@@ -3,7 +3,6 @@ import { DataTable } from "@/components/DataTable";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 
@@ -30,7 +29,7 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("settlements")
     .select("id, show_date, agent_commission_cents, artist_payout_cents, status, talent_offer_id")

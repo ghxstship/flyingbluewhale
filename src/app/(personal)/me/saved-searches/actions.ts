@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
+import type { Json } from "@/lib/supabase/database.types";
 
 const Create = z.object({
   kind: z.enum(["rfq", "gig", "talent_call", "talent", "crew", "vendor"]),
@@ -20,11 +20,11 @@ export async function createSavedSearchAction(_: State, fd: FormData): Promise<S
   const session = await requireSession();
   const parsed = Create.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
-  let query: Record<string, unknown> = {};
+  const supabase = await createClient();
+  let query: Json = {};
   if (parsed.data.query) {
     try {
-      query = JSON.parse(parsed.data.query) as Record<string, unknown>;
+      query = JSON.parse(parsed.data.query) as Json;
     } catch {
       return { error: "Query must be valid JSON" };
     }
@@ -47,7 +47,7 @@ export async function deleteSavedSearchAction(_: State, fd: FormData): Promise<S
   const session = await requireSession();
   const id = String(fd.get("search_id") ?? "");
   if (!id) return { error: "Missing search" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("saved_searches").delete().eq("id", id).eq("user_id", session.userId);
   if (error) return { error: error.message };
   revalidatePath("/me/saved-searches");

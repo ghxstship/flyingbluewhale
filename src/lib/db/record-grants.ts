@@ -126,7 +126,7 @@ function rowFrom(record: GrantRecord): RecordGrantRow {
 /** List grants on a specific record. Hydrates principal name on the caller side. */
 export async function listRecordGrants(opts: { resourceTable: string; resourceId: string }): Promise<RecordGrantRow[]> {
   if (!opts.resourceTable || !opts.resourceId) return [];
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("record_grants")
     .select("*")
@@ -168,7 +168,7 @@ export async function grantRecord(opts: {
     granted_by: opts.grantedBy ?? null,
   };
 
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase.from("record_grants").insert(payload).select("*").single();
   if (error) throw error;
   return rowFrom(data as GrantRecord);
@@ -177,7 +177,7 @@ export async function grantRecord(opts: {
 /** Revoke a single grant by id. */
 export async function revokeRecord(opts: { id: string }): Promise<void> {
   if (!opts.id) return;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("record_grants").delete().eq("id", opts.id);
   if (error) throw error;
 }
@@ -196,7 +196,7 @@ export async function getRecordRole(opts: {
 }): Promise<RecordRole | null> {
   if (!opts.resourceTable || !opts.resourceId || !opts.userId) return null;
 
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
 
   // Pull the user's team_ids first so we can OR them into the grant query.
   const { data: tmData, error: tmErr } = await supabase

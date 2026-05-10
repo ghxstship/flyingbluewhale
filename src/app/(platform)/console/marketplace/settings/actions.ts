@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const Schema = z.object({
   marketplace_enabled: z.string().optional(),
@@ -17,7 +16,7 @@ export async function updateMarketplaceSettingsAction(_: State, fd: FormData): P
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const bps = Math.min(5000, Math.max(0, Math.round(Number(parsed.data.marketplace_take_rate_bps))));
 
   const { error } = await supabase

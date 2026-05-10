@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { TALENT_RIDER_KINDS, slugify } from "@/lib/marketplace";
 
 const Schema = z.object({
@@ -44,7 +43,7 @@ export async function createTalentAction(_: State, fd: FormData): Promise<State>
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const baseHandle = slugify(parsed.data.act_name);
   const handleSuffix = Math.random().toString(36).slice(2, 6);
   const publicHandle = `${baseHandle}-${handleSuffix}`;
@@ -83,7 +82,7 @@ export async function publishTalentAction(_: State, fd: FormData): Promise<State
   const session = await requireSession();
   const id = String(fd.get("talent_id") ?? "");
   if (!id) return { error: "Missing talent" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("talent_profiles")
     .update({ is_public: true })
@@ -99,7 +98,7 @@ export async function unpublishTalentAction(_: State, fd: FormData): Promise<Sta
   const session = await requireSession();
   const id = String(fd.get("talent_id") ?? "");
   if (!id) return { error: "Missing talent" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("talent_profiles")
     .update({ is_public: false })
@@ -123,7 +122,7 @@ export async function createRiderAction(_: State, fd: FormData): Promise<State> 
   const session = await requireSession();
   const parsed = RiderSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
 
   // Demote the previous current rider of this kind.
   await supabase

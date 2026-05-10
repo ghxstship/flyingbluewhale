@@ -1,6 +1,5 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
@@ -23,7 +22,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
   const { submissionId } = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("open_call_submissions")
     .select("*")

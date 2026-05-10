@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
@@ -26,7 +25,7 @@ type Talent = {
 export default async function Page() {
   if (!hasSupabase) return <div>Configure Supabase.</div>;
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   // Scope to the active org. A user may belong to multiple orgs and have
   // a talent_profile per org — `maybeSingle()` would error otherwise.
   const { data } = await supabase

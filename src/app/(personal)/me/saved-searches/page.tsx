@@ -1,6 +1,5 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
@@ -23,7 +22,7 @@ type Row = {
 export default async function Page() {
   if (!hasSupabase) return <div>Configure Supabase.</div>;
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("saved_searches")
     .select("id, kind, name, query, alert_email, alert_push, match_count, last_checked_at")

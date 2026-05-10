@@ -1,6 +1,5 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
 
@@ -21,7 +20,7 @@ type Row = {
 export default async function Page() {
   if (!hasSupabase) return <div>Configure Supabase.</div>;
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
 
   const [outResp, inResp] = await Promise.all([
     supabase

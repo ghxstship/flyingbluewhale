@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { STATUS_TONE } from "@/lib/marketplace";
@@ -20,7 +19,7 @@ type Row = { id: string; kind: string; label: string | null; occurs_at: string; 
 export default async function Page() {
   let rows: Row[] = [];
   if (hasSupabase) {
-    const supabase = (await createClient()) as unknown as LooseSupabase;
+    const supabase = await createClient();
     const { data } = await supabase
       .from("public_event_calendar")
       .select("*")

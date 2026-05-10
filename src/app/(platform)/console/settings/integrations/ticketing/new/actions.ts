@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { TICKETING_PROVIDERS } from "@/lib/marketplace";
 
 const Schema = z.object({
@@ -21,7 +20,7 @@ export async function createTicketingConnectionAction(_: State, fd: FormData): P
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("ticketing_connections")
     .insert({
@@ -45,7 +44,7 @@ export async function deactivateTicketingConnectionAction(_: State, fd: FormData
   const session = await requireSession();
   const id = String(fd.get("connection_id") ?? "");
   if (!id) return { error: "Missing connection" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("ticketing_connections")
     .update({ is_active: false })

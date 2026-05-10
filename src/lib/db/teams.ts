@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
 
 /**
  * Server helpers for `teams` + `team_members` — Phase 5.1 of the SmartSuite
@@ -91,7 +92,7 @@ function memberFrom(record: TeamMemberRecord): TeamMemberRow {
 /** List all teams visible to the caller in the given org. */
 export async function listTeams(opts: { orgId: string }): Promise<TeamRow[]> {
   if (!opts.orgId) return [];
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("teams")
     .select("*")
@@ -104,7 +105,7 @@ export async function listTeams(opts: { orgId: string }): Promise<TeamRow[]> {
 /** Fetch a single team. Returns null when not visible to caller. */
 export async function getTeam(opts: { id: string }): Promise<TeamRow | null> {
   if (!opts.id) return null;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase.from("teams").select("*").eq("id", opts.id).maybeSingle();
   if (error) throw error;
   return data ? rowFrom(data as TeamRecord) : null;
@@ -113,7 +114,7 @@ export async function getTeam(opts: { id: string }): Promise<TeamRow | null> {
 /** Resolve a team by slug within an org — used by the @team-<slug> mention path. */
 export async function getTeamBySlug(opts: { orgId: string; slug: string }): Promise<TeamRow | null> {
   if (!opts.orgId || !opts.slug) return null;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("teams")
     .select("*")
@@ -136,7 +137,7 @@ export async function createTeam(opts: {
   description?: string | null;
   avatarUrl?: string | null;
 }): Promise<TeamRow> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -175,8 +176,8 @@ export async function updateTeam(opts: {
   avatarUrl?: string | null;
   ownerId?: string | null;
 }): Promise<TeamRow> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
-  const patch: Record<string, unknown> = {};
+  const supabase = await createClient();
+  const patch: Database["public"]["Tables"]["teams"]["Update"] = {};
   if (opts.name !== undefined) patch.name = opts.name;
   if (opts.description !== undefined) patch.description = opts.description;
   if (opts.avatarUrl !== undefined) patch.avatar_url = opts.avatarUrl;
@@ -190,7 +191,7 @@ export async function updateTeam(opts: {
 /** Delete a team. RLS gates by org role. team_members rows cascade. */
 export async function deleteTeam(opts: { id: string }): Promise<void> {
   if (!opts.id) return;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("teams").delete().eq("id", opts.id);
   if (error) throw error;
 }
@@ -202,7 +203,7 @@ export type TeamMemberWithUser = TeamMemberRow & {
 
 export async function listTeamMembers(opts: { teamId: string }): Promise<TeamMemberWithUser[]> {
   if (!opts.teamId) return [];
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("team_members")
     .select("team_id,user_id,role,added_at,users(id,name,email)")
@@ -218,7 +219,7 @@ export async function listTeamMembers(opts: { teamId: string }): Promise<TeamMem
 
 /** Add a member to a team. Idempotent on (team_id, user_id). */
 export async function addTeamMember(opts: { teamId: string; userId: string; role?: TeamRole }): Promise<TeamMemberRow> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("team_members")
     .insert({ team_id: opts.teamId, user_id: opts.userId, role: opts.role ?? "member" })
@@ -234,7 +235,7 @@ export async function updateTeamMember(opts: {
   userId: string;
   role: TeamRole;
 }): Promise<TeamMemberRow> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("team_members")
     .update({ role: opts.role })
@@ -248,7 +249,7 @@ export async function updateTeamMember(opts: {
 
 /** Remove a member from a team. */
 export async function removeTeamMember(opts: { teamId: string; userId: string }): Promise<void> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("team_members").delete().eq("team_id", opts.teamId).eq("user_id", opts.userId);
   if (error) throw error;
 }
@@ -256,7 +257,7 @@ export async function removeTeamMember(opts: { teamId: string; userId: string })
 /** Resolve user_ids for a list of team_ids — used by @team-<slug> fan-out. */
 export async function expandTeamMemberIds(opts: { teamIds: string[] }): Promise<string[]> {
   if (opts.teamIds.length === 0) return [];
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase.from("team_members").select("user_id").in("team_id", opts.teamIds);
   if (error) throw error;
   const ids = ((data ?? []) as { user_id: string }[]).map((r) => r.user_id);

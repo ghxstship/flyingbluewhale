@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { updateAgencyArtistAction, endAgencyArtistAction } from "./actions";
@@ -24,7 +23,7 @@ export default async function Page({ params }: { params: Promise<{ agencyArtistI
   const { agencyArtistId } = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("agency_artists")
     .select("*, talent:talent_profile_id(act_name)")

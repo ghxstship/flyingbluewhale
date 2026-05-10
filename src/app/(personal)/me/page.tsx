@@ -3,7 +3,6 @@ import { requireSession } from "@/lib/auth";
 import { Badge } from "@/components/ui/Badge";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +32,7 @@ export default async function MePage() {
   // Live counts: applications + offers + my talent profile presence. Each is
   // an inexpensive single-org query — RLS limits to the session's user_id /
   // talent_profile recipients automatically.
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const [appsResp, talentResp, offersResp, slotsResp] = await Promise.all([
     supabase.from("job_applications").select("id, status").eq("applicant_user_id", session.userId),
     supabase

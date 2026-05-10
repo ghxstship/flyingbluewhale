@@ -10173,6 +10173,7 @@ export type Database = {
           id: string
           is_developer: boolean
           org_id: string
+          persona: string
           role: Database["public"]["Enums"]["platform_role"]
           updated_at: string
           user_id: string
@@ -10183,6 +10184,7 @@ export type Database = {
           id?: string
           is_developer?: boolean
           org_id: string
+          persona?: string
           role?: Database["public"]["Enums"]["platform_role"]
           updated_at?: string
           user_id: string
@@ -10193,6 +10195,7 @@ export type Database = {
           id?: string
           is_developer?: boolean
           org_id?: string
+          persona?: string
           role?: Database["public"]["Enums"]["platform_role"]
           updated_at?: string
           user_id?: string

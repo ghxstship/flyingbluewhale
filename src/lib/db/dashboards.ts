@@ -8,6 +8,7 @@ import {
   type DashboardWidget,
 } from "@/lib/dashboards/types";
 import type { ViewScope } from "@/lib/views/types";
+import type { Database, Json } from "@/lib/supabase/database.types";
 
 /**
  * Server helpers for the `dashboards` table — Phase 3.6c keystone of the
@@ -73,7 +74,7 @@ function rowFrom(record: DashboardRecord): DashboardRow {
  */
 export async function listDashboards(opts: { orgId: string }): Promise<DashboardRow[]> {
   if (!opts.orgId) return [];
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("dashboards")
     .select("*")
@@ -87,7 +88,7 @@ export async function listDashboards(opts: { orgId: string }): Promise<Dashboard
 /** Fetch a single dashboard row. Returns null when not visible to caller. */
 export async function getDashboard(opts: { id: string }): Promise<DashboardRow | null> {
   if (!opts.id) return null;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase.from("dashboards").select("*").eq("id", opts.id).maybeSingle();
   if (error) throw error;
   return data ? rowFrom(data as DashboardRecord) : null;
@@ -104,7 +105,7 @@ export async function createDashboard(opts: {
   scope?: ViewScope;
   layout?: DashboardLayout;
 }): Promise<DashboardRow> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -115,7 +116,7 @@ export async function createDashboard(opts: {
     name: opts.name,
     description: opts.description ?? null,
     scope: opts.scope ?? "private",
-    layout: (opts.layout ?? EMPTY_LAYOUT) as unknown as Record<string, unknown>,
+    layout: (opts.layout ?? EMPTY_LAYOUT) as unknown as Json,
     created_by: userId,
     updated_by: userId,
   };
@@ -131,7 +132,7 @@ export async function createDashboard(opts: {
  * on this table — admins can always update, owners can update their own).
  */
 export async function updateDashboardLayout(opts: { id: string; layout: DashboardLayout }): Promise<DashboardRow> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -140,7 +141,7 @@ export async function updateDashboardLayout(opts: { id: string; layout: Dashboar
   const { data, error } = await supabase
     .from("dashboards")
     .update({
-      layout: opts.layout as unknown as Record<string, unknown>,
+      layout: opts.layout as unknown as Json,
       updated_by: userId,
     })
     .eq("id", opts.id)
@@ -158,13 +159,13 @@ export async function updateDashboardMeta(opts: {
   description?: string | null;
   scope?: ViewScope;
 }): Promise<DashboardRow> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   const userId = user?.id ?? null;
 
-  const patch: Record<string, unknown> = { updated_by: userId };
+  const patch: Database["public"]["Tables"]["dashboards"]["Update"] = { updated_by: userId };
   if (opts.name !== undefined) patch.name = opts.name;
   if (opts.description !== undefined) patch.description = opts.description;
   if (opts.scope !== undefined) patch.scope = opts.scope;
@@ -177,7 +178,7 @@ export async function updateDashboardMeta(opts: {
 /** Delete a dashboard. RLS gates by created_by + role. */
 export async function deleteDashboard(opts: { id: string }): Promise<void> {
   if (!opts.id) return;
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("dashboards").delete().eq("id", opts.id);
   if (error) throw error;
 }

@@ -1,17 +1,22 @@
 import "server-only";
 
 /**
- * Loosely-typed Supabase client wrapper for tables that haven't yet made it
- * into the generated `database.types.ts` snapshot. Used by phases of the
- * SmartSuite parity roadmap that ship new tables before types are regenerated
- * (Teams, record_grants, SCIM tokens, IP allowlist, Slack workspaces, etc.).
+ * Loosely-typed Supabase client wrapper for the narrow set of call sites
+ * that genuinely can't use the typed client:
+ *   - Dynamic table access (table name is a row value, not a literal) —
+ *     e.g. AI field agents (`src/lib/ai/agents.ts`).
+ *   - SCIM endpoints whose request bodies and table column shapes are
+ *     SCIM-protocol-defined, not Supabase-defined.
  *
- * RLS remains the actual authorization boundary — the type loosening here
- * just lets new-table code compile without coercing each call site.
+ * RLS remains the actual authorization boundary — this type just lets
+ * the dynamic call sites compile without per-call coercion.
  *
- * Once `npm run gen:types` pulls the new tables into the typed client, the
- * `as unknown as LooseSupabase` casts at call sites become redundant and can
- * be deleted.
+ * NOTE: as of 2026-05 the regenerated `database.types.ts` covers every
+ * table in the schema. New code should use the typed client directly;
+ * reach for LooseSupabase only when the typed client provably can't
+ * express the call (dynamic table names, SCIM, etc.). If you find
+ * yourself adding a new `as unknown as LooseSupabase` cast, double-check
+ * that the table you're touching isn't already in the typed Database.
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type LooseSupabase = {

@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { MARKETPLACE_KINDS, slugify } from "@/lib/marketplace";
 
 const Schema = z.object({
@@ -45,7 +44,7 @@ export async function createCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const baseSlug = slugify(parsed.data.title);
   const slugSuffix = Math.random().toString(36).slice(2, 7);
   const publicSlug = `${baseSlug}-${slugSuffix}`;
@@ -85,7 +84,7 @@ export async function publishCallAction(_: State, fd: FormData): Promise<State> 
   const session = await requireSession();
   const id = String(fd.get("call_id") ?? "");
   if (!id) return { error: "Missing call" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("open_calls")
     .update({ status: "published", published_at: new Date().toISOString() })
@@ -101,7 +100,7 @@ export async function closeCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const id = String(fd.get("call_id") ?? "");
   if (!id) return { error: "Missing call" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("open_calls")
     .update({ status: "closed", closed_at: new Date().toISOString() })

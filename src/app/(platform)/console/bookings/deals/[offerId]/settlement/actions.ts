@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { env } from "@/lib/env";
 import { httpFetch } from "@/lib/http";
 
@@ -45,7 +44,7 @@ export async function upsertSettlementAction(_: State, fd: FormData): Promise<St
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
 
   const payload = {
     org_id: session.orgId,
@@ -96,7 +95,7 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
   const session = await requireSession();
   const offerId = String(fd.get("offer_id") ?? "");
   if (!offerId) return { error: "Missing deal" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
 
   // Read settlement to inspect payout destination + balance + currency.
   const settlementResp = await supabase

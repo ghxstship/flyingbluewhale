@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const Schema = z.object({
   offer_id: z.string().uuid(),
@@ -21,7 +20,7 @@ export async function addCoProPartnerAction(_: State, fd: FormData): Promise<Sta
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const split = Math.min(100, Math.max(0, Number(parsed.data.split_pct)));
   if (!Number.isFinite(split)) return { error: "Invalid split %" };
 
@@ -58,7 +57,7 @@ export async function removeCoProPartnerAction(_: State, fd: FormData): Promise<
   const id = String(fd.get("partnership_id") ?? "");
   const offerId = String(fd.get("offer_id") ?? "");
   if (!id) return { error: "Missing partnership" };
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("co_pro_partnerships").delete().eq("id", id).eq("org_id", session.orgId);
   if (error) return { error: error.message };
   if (offerId) revalidatePath(`/console/bookings/deals/${offerId}`);

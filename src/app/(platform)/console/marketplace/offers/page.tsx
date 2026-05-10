@@ -4,7 +4,6 @@ import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
@@ -35,7 +34,7 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("talent_offers")
     .select("id, performance_date, fee_cents, currency, status, deposit_pct, talent_profile_id, sent_at, accepted_at")

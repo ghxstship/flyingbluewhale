@@ -5,14 +5,11 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-// Dynamic-import + ssr:false so recharts (~100KB gzipped) stays out of
-// the initial bundle. Aliased to nextDynamic so it doesn't shadow the
-// route-segment `export const dynamic = "force-dynamic"`.
-import nextDynamic from "next/dynamic";
-const ReportsCharts = nextDynamic(() => import("./ReportsCharts").then((m) => m.ReportsCharts), {
-  ssr: false,
-  loading: () => <div className="surface skeleton h-64" aria-busy="true" />,
-});
+// recharts (~100KB gzipped) stays out of the initial bundle via the
+// ReportsChartsClient wrapper, which holds the next/dynamic({ssr:false})
+// call. Next 16 disallows that option in server components, so the
+// wrapper carries it instead.
+import { ReportsChartsClient as ReportsCharts } from "./ReportsChartsClient";
 import type { Invoice, Expense } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";

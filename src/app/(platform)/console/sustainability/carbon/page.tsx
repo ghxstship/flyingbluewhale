@@ -6,15 +6,11 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-// Dynamic-import + ssr:false so recharts (~100KB gzipped) stays out of
-// the initial bundle and only loads when this page renders client-side.
-// Aliased to nextDynamic so it doesn't shadow the route-segment
-// `export const dynamic = "force-dynamic"` below.
-import nextDynamic from "next/dynamic";
-const CarbonCharts = nextDynamic(() => import("./CarbonCharts").then((m) => m.CarbonCharts), {
-  ssr: false,
-  loading: () => <div className="surface skeleton h-64" aria-busy="true" />,
-});
+// recharts (~100KB gzipped) stays out of the initial bundle via the
+// CarbonChartsClient wrapper, which holds the next/dynamic({ssr:false})
+// call. Next 16 disallows that option in server components, so the
+// wrapper carries it instead.
+import { CarbonChartsClient as CarbonCharts } from "./CarbonChartsClient";
 import type { SustainabilityMetric } from "@/lib/supabase/types";
 import { getRequestFormatters } from "@/lib/i18n/request";
 

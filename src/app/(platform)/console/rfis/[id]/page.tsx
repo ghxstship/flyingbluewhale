@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { ConversationPanel } from "@/components/ConversationPanel";
 import { Presence } from "@/components/collab/Presence";
 import { getPresenceUser } from "@/components/collab/getPresenceUser";
@@ -12,7 +13,7 @@ import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "input-base focus-ring";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -53,9 +54,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </a>
             {rfi.status === "answered" && (
               <form action={closeRfi.bind(null, id)}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <Button type="submit" variant="secondary" size="sm">
                   Close RFI
-                </button>
+                </Button>
               </form>
             )}
           </div>
@@ -90,9 +91,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   className={INPUT}
                 />
                 <div className="flex justify-end">
-                  <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+                  <Button type="submit" variant="secondary" size="sm">
                     Post answer
-                  </button>
+                  </Button>
                 </div>
               </form>
             )

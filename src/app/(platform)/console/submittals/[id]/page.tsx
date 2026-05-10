@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { ConversationPanel } from "@/components/ConversationPanel";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -9,7 +10,7 @@ import { stampRevision, addNextRound, closeSubmittal } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "input-base focus-ring";
 
 const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
   draft: "muted",
@@ -65,9 +66,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </a>
             {sub.status !== "closed" && sub.status !== "void" && (
               <form action={closeSubmittal.bind(null, id)}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <Button type="submit" variant="secondary" size="sm">
                   Close
-                </button>
+                </Button>
               </form>
             )}
           </div>
@@ -117,9 +118,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </div>
               <textarea name="stamp_notes" rows={3} placeholder="Reviewer notes…" className={INPUT} />
               <div className="flex justify-end">
-                <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+                <Button type="submit" variant="secondary" size="sm">
                   Apply stamp
-                </button>
+                </Button>
               </div>
             </form>
           </section>
@@ -128,9 +129,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {current && current.stamp === "revise_resubmit" && (
           <section className="surface p-4">
             <form action={addNextRound.bind(null, id)}>
-              <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+              <Button type="submit" variant="secondary" size="sm">
                 + Open round #{sub.current_round + 1}
-              </button>
+              </Button>
             </form>
           </section>
         )}

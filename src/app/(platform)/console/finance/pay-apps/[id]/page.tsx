@@ -11,7 +11,7 @@ import { StatusForm } from "@/components/StatusForm";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-24 rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1 text-xs";
+const INPUT = "input-base focus-ring w-24 py-1 text-xs";
 
 const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
   draft: "muted",

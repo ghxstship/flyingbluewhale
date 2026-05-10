@@ -206,7 +206,7 @@ const HANDLERS: Record<string, Handler> = {
         org_id: orgId ?? null,
         payload: {
           to: email,
-          subject: `Your flyingbluewhale digest (${list.length} new)`,
+          subject: `Your LYTEHAUS digest (${list.length} new)`,
           html:
             `<h2>${list.length} new notifications</h2>` +
             list
@@ -233,7 +233,7 @@ const HANDLERS: Record<string, Handler> = {
       method: "POST",
       headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json" },
       body: JSON.stringify({
-        from: Deno.env.get("RESEND_FROM") ?? "flyingbluewhale <no-reply@flyingbluewhale.app>",
+        from: Deno.env.get("RESEND_FROM") ?? "LYTEHAUS Technologies <noreply@lytehaus.live>",
         to: Array.isArray(to) ? to : [to],
         subject,
         html,

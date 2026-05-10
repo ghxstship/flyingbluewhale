@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { verifyDomainAction, deleteDomainAction } from "./actions";
 import { AddDomainForm } from "./AddDomainForm";
 import { requireSession } from "@/lib/auth";
@@ -80,16 +81,16 @@ export default async function DomainsPage() {
                         {!d.verified_at && (
                           <form action={verifyDomainAction} className="inline">
                             <input type="hidden" name="id" value={d.id} />
-                            <button type="submit" className="text-xs text-[var(--org-primary)] hover:underline">
+                            <Button type="submit" variant="ghost" size="sm">
                               Verify
-                            </button>
+                            </Button>
                           </form>
                         )}
                         <form action={deleteDomainAction} className="inline">
                           <input type="hidden" name="id" value={d.id} />
-                          <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                          <Button type="submit" variant="ghost" size="sm" className="text-[var(--color-error)]">
                             Remove
-                          </button>
+                          </Button>
                         </form>
                       </td>
                     </tr>

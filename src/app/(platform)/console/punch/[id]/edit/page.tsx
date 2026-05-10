@@ -8,7 +8,7 @@ import { updatePunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm";
+const INPUT = "input-base focus-ring";
 const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 
 const STATUSES = ["open", "in_progress", "ready_for_review", "complete", "void"] as const;

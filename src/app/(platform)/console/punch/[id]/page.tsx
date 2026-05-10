@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { ConversationPanel } from "@/components/ConversationPanel";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -59,23 +60,23 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </a>
             {item.status === "open" && (
               <form action={transitionPunchItem.bind(null, id, "in_progress")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <Button type="submit" variant="secondary" size="sm">
                   Start
-                </button>
+                </Button>
               </form>
             )}
             {item.status === "in_progress" && (
               <form action={transitionPunchItem.bind(null, id, "ready_for_review")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <Button type="submit" variant="secondary" size="sm">
                   Mark ready
-                </button>
+                </Button>
               </form>
             )}
             {item.status === "ready_for_review" && (
               <form action={transitionPunchItem.bind(null, id, "complete")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <Button type="submit" variant="secondary" size="sm">
                   Close
-                </button>
+                </Button>
               </form>
             )}
           </div>

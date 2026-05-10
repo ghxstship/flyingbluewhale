@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { createCostCode } from "./actions";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "input-base focus-ring";
 const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 
 export default function Page() {

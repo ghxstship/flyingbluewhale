@@ -7,7 +7,7 @@ import { createDailyLog } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT_CLS = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT_CLS = "input-base focus-ring";
 const LABEL_CLS = "text-xs font-medium text-[var(--text-secondary)]";
 
 export default async function Page() {

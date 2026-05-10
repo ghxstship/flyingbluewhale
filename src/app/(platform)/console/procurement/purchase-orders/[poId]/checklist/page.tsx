@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -8,7 +9,7 @@ import { addChecklistItem, completeChecklistItem, skipChecklistItem } from "./ac
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "input-base focus-ring";
 
 const STATUS_TONE: Record<string, "muted" | "success"> = {
   pending: "muted",
@@ -69,20 +70,14 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
                   {it.status === "pending" && (
                     <div className="mt-2 flex gap-1.5">
                       <form action={completeChecklistItem.bind(null, poId, it.id)}>
-                        <button
-                          type="submit"
-                          className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
-                        >
+                        <Button type="submit" variant="secondary" size="sm">
                           Mark complete
-                        </button>
+                        </Button>
                       </form>
                       <form action={skipChecklistItem.bind(null, poId, it.id)}>
-                        <button
-                          type="submit"
-                          className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
-                        >
+                        <Button type="submit" variant="secondary" size="sm">
                           Skip
-                        </button>
+                        </Button>
                       </form>
                     </div>
                   )}
@@ -100,9 +95,9 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
               <input type="checkbox" name="requires_photo" value="1" /> Requires photo proof
             </label>
             <div className="flex justify-end">
-              <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+              <Button type="submit" variant="secondary" size="sm">
                 Add step
-              </button>
+              </Button>
             </div>
           </form>
         </section>

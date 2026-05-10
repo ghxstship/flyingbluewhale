@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, env } from "@/lib/env";
@@ -53,16 +54,16 @@ export default async function IntegrationsPage() {
                   {isInstalled && dbStatus ? (
                     <form action={uninstallConnector}>
                       <input type="hidden" name="connector" value={c.id} />
-                      <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                      <Button type="submit" variant="ghost" size="sm" className="text-[var(--color-error)]">
                         Disconnect
-                      </button>
+                      </Button>
                     </form>
                   ) : !envProof[c.id] ? (
                     <form action={installConnector}>
                       <input type="hidden" name="connector" value={c.id} />
-                      <button type="submit" className="text-xs font-medium text-[var(--org-primary)] hover:underline">
+                      <Button type="submit" variant="ghost" size="sm">
                         Connect
-                      </button>
+                      </Button>
                     </form>
                   ) : (
                     <span className="text-xs text-[var(--text-muted)]">via env</span>

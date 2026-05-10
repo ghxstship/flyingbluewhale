@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -70,16 +71,14 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
               <form key={b.to} action={setFabStatus} className="inline">
                 <input type="hidden" name="id" value={row.id} />
                 <input type="hidden" name="status" value={b.to} />
-                <button
+                <Button
                   type="submit"
-                  className={`rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium transition-colors ${
-                    b.to === "blocked"
-                      ? "text-[var(--color-warning)] hover:bg-[color:var(--color-warning)]/10"
-                      : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-                  }`}
+                  variant="secondary"
+                  size="sm"
+                  className={b.to === "blocked" ? "text-[var(--color-warning)]" : undefined}
                 >
                   {b.label}
-                </button>
+                </Button>
               </form>
             ))}
             <a href={`/console/production/fabrication/${row.id}/edit`} className="btn btn-secondary btn-sm">
@@ -107,9 +106,9 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             <Badge variant="muted">Lifecycle</Badge>
             <form action={deleteFab}>
               <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
+              <Button type="submit" variant="ghost" size="sm" className="text-[var(--color-error)]">
                 Delete order
-              </button>
+              </Button>
             </form>
           </div>
         </section>

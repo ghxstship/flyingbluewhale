@@ -49,10 +49,14 @@ export async function toggleGateItem(
   actor: ActorContext,
 ): Promise<{ proposalId: string }> {
   const supabase = await createClient();
+  // Pin org_id on both select and update — RLS already gates by org,
+  // but explicit scoping protects against a future RLS regression and
+  // turns silent zero-row writes into clear "not found" errors.
   const { data: row } = await supabase
     .from("proposal_gate_items")
     .select("id,proposal_id,phase_state_id,label")
     .eq("id", gateItemId)
+    .eq("org_id", actor.orgId)
     .maybeSingle();
   if (!row) throw new Error("Gate item not found");
 
@@ -63,7 +67,8 @@ export async function toggleGateItem(
       done_at: isDone ? new Date().toISOString() : null,
       done_by: isDone ? actor.userId : null,
     })
-    .eq("id", gateItemId);
+    .eq("id", gateItemId)
+    .eq("org_id", actor.orgId);
 
   await logActivity(
     row.proposal_id,
@@ -82,6 +87,7 @@ export async function approvePhase(phaseStateId: string, actor: ActorContext): P
     .from("proposal_phase_states")
     .select("id,proposal_id,phase_num,phase_name")
     .eq("id", phaseStateId)
+    .eq("org_id", actor.orgId)
     .maybeSingle();
   if (!phase) throw new Error("Phase not found");
 
@@ -92,7 +98,8 @@ export async function approvePhase(phaseStateId: string, actor: ActorContext): P
       approved_at: new Date().toISOString(),
       approved_by: actor.userId,
     })
-    .eq("id", phaseStateId);
+    .eq("id", phaseStateId)
+    .eq("org_id", actor.orgId);
 
   await logActivity(
     phase.proposal_id,
@@ -106,6 +113,7 @@ export async function approvePhase(phaseStateId: string, actor: ActorContext): P
   const { data: nextPhase } = await supabase
     .from("proposal_phase_states")
     .select("id,phase_num,phase_name,status")
+    .eq("org_id", actor.orgId)
     .eq("proposal_id", phase.proposal_id)
     .eq("phase_num", phase.phase_num + 1)
     .maybeSingle();
@@ -114,7 +122,8 @@ export async function approvePhase(phaseStateId: string, actor: ActorContext): P
     await supabase
       .from("proposal_phase_states")
       .update({ status: "active", started_at: new Date().toISOString() })
-      .eq("id", nextPhase.id);
+      .eq("id", nextPhase.id)
+      .eq("org_id", actor.orgId);
     await logActivity(
       phase.proposal_id,
       actor,
@@ -135,6 +144,15 @@ export async function createChangeOrder(
   actor: ActorContext,
 ): Promise<{ id: string; number: number }> {
   const supabase = await createClient();
+  // Cross-tenant FK guard on proposalId.
+  const { data: proposalRow } = await supabase
+    .from("proposals")
+    .select("id")
+    .eq("id", proposalId)
+    .eq("org_id", actor.orgId)
+    .maybeSingle();
+  if (!proposalRow) throw new Error("Proposal not found");
+
   const { data, error } = await supabase
     .from("proposal_change_orders")
     .insert({
@@ -170,6 +188,7 @@ export async function decideChangeOrder(
     .from("proposal_change_orders")
     .select("id,proposal_id,number,title,delta_cents")
     .eq("id", coId)
+    .eq("org_id", actor.orgId)
     .maybeSingle();
   if (!row) throw new Error("Change order not found");
 
@@ -181,7 +200,8 @@ export async function decideChangeOrder(
       decided_by: actor.userId,
       decision_note: note,
     })
-    .eq("id", coId);
+    .eq("id", coId)
+    .eq("org_id", actor.orgId);
 
   await logActivity(row.proposal_id, actor, `co.${decision}`, `Change order #${row.number} ${decision}.`, {
     targetKind: "change_order",
@@ -203,9 +223,19 @@ export async function createRevisionRound(
   actor: ActorContext,
 ): Promise<{ id: string }> {
   const supabase = await createClient();
+  // Cross-tenant FK guard on proposalId.
+  const { data: proposalRow } = await supabase
+    .from("proposals")
+    .select("id")
+    .eq("id", proposalId)
+    .eq("org_id", actor.orgId)
+    .maybeSingle();
+  if (!proposalRow) throw new Error("Proposal not found");
+
   const { count } = await supabase
     .from("proposal_revision_rounds")
     .select("id", { count: "exact", head: true })
+    .eq("org_id", actor.orgId)
     .eq("proposal_id", proposalId)
     .eq("target_kind", input.targetKind);
   const nextRoundNum = (count ?? 0) + 1;
@@ -246,6 +276,7 @@ export async function decideRevisionRound(
     .from("proposal_revision_rounds")
     .select("id,proposal_id,title,round_num")
     .eq("id", roundId)
+    .eq("org_id", actor.orgId)
     .maybeSingle();
   if (!row) throw new Error("Revision round not found");
 
@@ -257,7 +288,8 @@ export async function decideRevisionRound(
       decided_by: actor.userId,
       decision_note: note,
     })
-    .eq("id", roundId);
+    .eq("id", roundId)
+    .eq("org_id", actor.orgId);
 
   await logActivity(
     row.proposal_id,
@@ -276,6 +308,7 @@ export async function signApproval(approvalId: string, signedLabel: string, acto
     .from("proposal_approvals")
     .select("id,proposal_id,title,kind,target_id")
     .eq("id", approvalId)
+    .eq("org_id", actor.orgId)
     .maybeSingle();
   if (!row) throw new Error("Approval not found");
 
@@ -287,7 +320,8 @@ export async function signApproval(approvalId: string, signedLabel: string, acto
       signed_by: actor.userId,
       signed_label: signedLabel,
     })
-    .eq("id", approvalId);
+    .eq("id", approvalId)
+    .eq("org_id", actor.orgId);
 
   await logActivity(row.proposal_id, actor, "approval.signed", `Approval signed: ${row.title}`, {
     targetKind: "approval",
@@ -307,10 +341,15 @@ export async function declineApproval(approvalId: string, reason: string, actor:
     .from("proposal_approvals")
     .select("id,proposal_id,title")
     .eq("id", approvalId)
+    .eq("org_id", actor.orgId)
     .maybeSingle();
   if (!row) throw new Error("Approval not found");
 
-  await supabase.from("proposal_approvals").update({ state: "declined", decline_reason: reason }).eq("id", approvalId);
+  await supabase
+    .from("proposal_approvals")
+    .update({ state: "declined", decline_reason: reason })
+    .eq("id", approvalId)
+    .eq("org_id", actor.orgId);
 
   await logActivity(row.proposal_id, actor, "approval.declined", `Approval declined: ${row.title}`, {
     targetKind: "approval",

@@ -215,14 +215,27 @@ export function isDeveloper(session: Session | null): boolean {
 // platform manager+ in the project's org (auto-bypass mirrors the SQL helper).
 // Intentionally async: we read project_members live so role grants take
 // effect without requiring a session refresh.
+//
+// Manager+ auto-bypass MUST verify the project belongs to the session's
+// org first — otherwise an org-A admin would be granted authority on
+// org-B projects whenever this helper is hit with a foreign projectId.
 export async function hasProjectRole(
   session: Session | null,
   projectId: string,
   roles: readonly ProjectRole[],
 ): Promise<boolean> {
   if (!session) return false;
-  if (isManagerPlus(session)) return true;
   const supabase = await createClient();
+  if (isManagerPlus(session)) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    return !!project;
+  }
   const { data } = await supabase
     .from("project_members")
     .select("role")

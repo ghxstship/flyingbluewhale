@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createHmac } from "node:crypto";
 import { registerAction } from "../registry";
 import { httpFetch } from "@/lib/http";
+import { validateOutboundUrl } from "@/lib/http-ssrf";
 
 const Schema = z.object({
   url: z.string().url(),
@@ -23,6 +24,16 @@ registerAction({
   label: "Send Webhook Request",
   description: "Posts JSON to an external URL with optional HMAC-SHA256 signing.",
   async run(input, _ctx) {
+    // SSRF guard — webhook URLs are operator-supplied at automation
+    // authoring time, so a malicious / compromised account could craft
+    // an automation that POSTs to internal addresses (AWS metadata,
+    // localhost, RFC1918). Reject before opening a socket. Resolves
+    // DNS and rejects when any A/AAAA record is in a blocked range.
+    const ssrf = await validateOutboundUrl(input.url);
+    if (!ssrf.ok) {
+      throw new Error(`webhook.send: blocked outbound URL — ${ssrf.reason}`);
+    }
+
     const body = input.method === "GET" ? undefined : JSON.stringify(input.payload);
     const headers: Record<string, string> = {
       "user-agent": "lytehaus-automation/1",

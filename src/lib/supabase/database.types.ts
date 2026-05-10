@@ -25685,13 +25685,13 @@ export type Database = {
         | "sent"
         | "viewed"
         | "accepted"
-        | "COUNTERSIGNED"
-        | "ACTIVE"
+        | "countersigned"
+        | "active"
         | "declined"
         | "withdrawn"
         | "expired"
-        | "SUPERSEDED"
-        | "VOIDED"
+        | "superseded"
+        | "voided"
       open_call_status:
         | "draft"
         | "published"
@@ -26335,13 +26335,13 @@ export const Constants = {
         "sent",
         "viewed",
         "accepted",
-        "COUNTERSIGNED",
-        "ACTIVE",
+        "countersigned",
+        "active",
         "declined",
         "withdrawn",
         "expired",
-        "SUPERSEDED",
-        "VOIDED",
+        "superseded",
+        "voided",
       ],
       open_call_status: [
         "draft",

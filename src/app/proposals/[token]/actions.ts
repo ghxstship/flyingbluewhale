@@ -41,6 +41,31 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
   const hash = randomRef();
   const signedAt = new Date().toISOString();
 
+  // Conditional proposal update FIRST. The .neq("status","signed") guard
+  // refuses to overwrite an existing signature — without it a second
+  // signer (or a stale tab) would clobber the legally-binding signer
+  // metadata + hash on a proposal that's already executed.
+  const { data: signed, error: updateErr } = await supabase
+    .from("proposals")
+    .update({
+      signed_at: signedAt,
+      signer_name: parsed.data.name,
+      signer_email: parsed.data.email || null,
+      signature_hash: hash,
+      signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
+      status: "signed",
+    })
+    .eq("id", link.proposal_id)
+    .neq("status", "signed")
+    .select("id");
+  if (updateErr) return { error: updateErr.message };
+  if (!signed || signed.length === 0) {
+    return { error: "Proposal is already signed" };
+  }
+
+  // Insert the signature audit row + event ONLY after the proposal
+  // claims the signature. This way a re-attempt doesn't leave orphan
+  // signature rows or duplicate signature_completed events.
   await supabase.from("proposal_signatures").insert({
     proposal_id: link.proposal_id,
     share_token: parsed.data.token,
@@ -51,18 +76,6 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
     signature_hash: hash,
     signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
   });
-
-  await supabase
-    .from("proposals")
-    .update({
-      signed_at: signedAt,
-      signer_name: parsed.data.name,
-      signer_email: parsed.data.email || null,
-      signature_hash: hash,
-      signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
-      status: "signed",
-    })
-    .eq("id", link.proposal_id);
 
   await supabase.from("proposal_events").insert({
     proposal_id: link.proposal_id,

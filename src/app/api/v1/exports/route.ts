@@ -9,6 +9,7 @@ import { rowsToJson } from "@/lib/export/strategies/json";
 import { rowsToXlsxBuffer } from "@/lib/export/strategies/xlsx";
 import { rowsToZipBuffer } from "@/lib/export/strategies/zip";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import { log } from "@/lib/log";
 
 /**
@@ -30,6 +31,15 @@ const PostSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Heavy-generator bucket: 5/min per user. CSV is cheap but xlsx +
+  // zip can pull 10k rows + render large buffers; without the gate a
+  // misbehaved client could pin the runtime on export work.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "export:run"),
+    ...RATE_BUDGETS.export,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Too many export requests");
+
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
   if (!isExportTable(input.table)) {

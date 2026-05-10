@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { extractCoi, extractW9 } from "@/lib/ai/extract-credential";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * POST /api/v1/credentials/extract — Opportunity #10.
@@ -20,6 +21,15 @@ const PostSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Rate-limit on the AI bucket (30/min/user). This endpoint hits the
+  // Anthropic API for every call (real $ per request), so a misbehaved
+  // client could rack up cost quickly without the gate.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "ai:credentials-extract"),
+    ...RATE_BUDGETS.ai,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Too many extraction requests");
+
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
   return withAuth(async () => {

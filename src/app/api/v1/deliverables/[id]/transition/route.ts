@@ -4,6 +4,7 @@ import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit, type AuditAction } from "@/lib/audit";
+import { log } from "@/lib/log";
 import type { DeliverableStatus } from "@/lib/supabase/types";
 
 /**
@@ -108,7 +109,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     });
     if (logErr) {
       // Non-fatal — audit_log still captures the transition via emitAudit below.
-      console.warn(`deliverable_state_transitions insert failed: ${logErr.message}`);
+      log.warn("deliverable_state_transitions.insert_failed", {
+        deliverable_id: id,
+        err: logErr.message,
+      });
     }
 
     await emitAudit({

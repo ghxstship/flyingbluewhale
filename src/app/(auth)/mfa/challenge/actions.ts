@@ -26,7 +26,25 @@ type RecoveryCodesClient = {
       };
     };
     update: (patch: { used_at: string }) => {
-      eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
+      eq: (
+        col: string,
+        val: string,
+      ) => {
+        eq: (
+          col: string,
+          val: string,
+        ) => {
+          is: (
+            col: string,
+            val: null,
+          ) => {
+            select: (cols: string) => Promise<{
+              data: Array<{ id: string }> | null;
+              error: { message: string } | null;
+            }>;
+          };
+        };
+      };
     };
   };
 };
@@ -123,7 +141,24 @@ export async function verifyChallengeAction(_: FormState, fd: FormData): Promise
     const hit = data.find((row) => candidates.some((c) => sha256(c) === row.code_hash));
     if (!hit) return { error: "That recovery code is invalid or already used." };
 
-    await admin.from("mfa_recovery_codes").update({ used_at: new Date().toISOString() }).eq("id", hit.id);
+    // Conditional consume — only land the used_at stamp if the row is
+    // still owned by THIS user AND still unused. Service-role bypasses
+    // RLS so we have to belt-and-suspenders both filters here. Without
+    // them, a race between two recovery-code attempts (or a stale form
+    // re-submitted after the user already burned the code) could
+    // re-stamp the row with a newer timestamp, hiding the original
+    // consumption from the audit trail.
+    const { data: claimed, error: claimErr } = await admin
+      .from("mfa_recovery_codes")
+      .update({ used_at: new Date().toISOString() })
+      .eq("id", hit.id)
+      .eq("user_id", userData.user.id)
+      .is("used_at", null)
+      .select("id");
+    if (claimErr) return { error: "Couldn't verify recovery code." };
+    if (!claimed || claimed.length === 0) {
+      return { error: "That recovery code is invalid or already used." };
+    }
 
     // Limitation: we cannot elevate the session to aal2 from server-side
     // without minting a custom JWT. Instead we land the user on the security

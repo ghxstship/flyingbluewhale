@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { log } from "@/lib/log";
 import type { OfferLetter, OfferLetterStatus } from "./types";
 
 /** Editable FK columns + per-letter overrides (NOT the joined display fields). */
@@ -143,6 +144,6 @@ async function logDocumentTransition(
   });
   if (error) {
     // Non-fatal — offer_letter_activity remains the legacy log of record.
-    console.warn(`document_state_transitions insert failed: ${error.message}`);
+    log.warn("offer_letter.state_transitions_insert_failed", { err: error.message });
   }
 }

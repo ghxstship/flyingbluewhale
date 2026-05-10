@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { log } from "@/lib/log";
 
 const BUCKET = "procore-parity";
 const MAX_BYTES = 25 * 1024 * 1024; // 25 MB per file
@@ -77,7 +78,7 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
     if (rmErr) {
       // Don't surface the cleanup failure — the original error already
       // carries the user-facing message. Just log it.
-      console.warn("photos.upload.cleanup_failed", { reason, paths: uploadedPaths.length, err: rmErr.message });
+      log.warn("photos.upload.cleanup_failed", { reason, paths: uploadedPaths.length, err: rmErr.message });
     }
   };
 

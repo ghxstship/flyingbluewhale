@@ -38,17 +38,13 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
     .eq("id", proposalId)
     .maybeSingle();
   if (!current) return { error: "Not found" };
+  const currentVersion = current.version ?? 1;
 
-  // Snapshot the previous version before overwriting.
-  await supabase.from("proposal_versions").insert({
-    proposal_id: proposalId,
-    version: current.version ?? 1,
-    blocks: current.blocks,
-    theme: current.theme,
-    changed_by: session.userId,
-  });
-
-  const { error } = await supabase
+  // Conditional update on observed version — without it two concurrent
+  // saves both read v5, both write v6, and one operator's blocks
+  // silently clobber the other. With it, only the racer that observed
+  // v5 lands; the loser sees a stale-row error and reloads.
+  const { data: updated, error } = await supabase
     .from("proposals")
     .update({
       title: parsed.data.title,
@@ -57,11 +53,30 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
       deposit_percent: parsed.data.deposit_percent ? parseInt(parsed.data.deposit_percent, 10) : 25,
       theme: { primary: parsed.data.theme_primary || "#D4782A", secondary: parsed.data.theme_secondary || "#6D4A2A" },
       blocks,
-      version: (current.version ?? 1) + 1,
+      version: currentVersion + 1,
     })
     .eq("org_id", session.orgId)
-    .eq("id", proposalId);
+    .eq("id", proposalId)
+    .eq("version", currentVersion)
+    .select("id");
   if (error) return { error: error.message };
+  if (!updated || updated.length === 0) {
+    return {
+      error:
+        "Someone else saved this proposal while you were editing. Reload to see their changes, then re-apply yours.",
+    };
+  }
+
+  // Snapshot the previous version AFTER the conditional update lands.
+  // If we'd snapshotted first and the update was rejected as stale,
+  // we'd leave a duplicate version row pointing at the same blocks.
+  await supabase.from("proposal_versions").insert({
+    proposal_id: proposalId,
+    version: currentVersion,
+    blocks: current.blocks,
+    theme: current.theme,
+    changed_by: session.userId,
+  });
 
   revalidatePath(`/console/proposals/${proposalId}/edit`);
   revalidatePath(`/console/proposals/${proposalId}`);
@@ -112,11 +127,26 @@ export async function createShareLinkAction(
 }
 
 export async function revokeShareLinkAction(linkId: string, proposalId: string) {
+  // Authorization: scope to the caller's org via the proposal_id linkage,
+  // not just the linkId. Without the org check, anyone with a valid
+  // share-link uuid (which leaks via the public /proposals/[token] page
+  // events) could revoke any other tenant's share link.
+  const session = await requireSession();
   const supabase = await createClient();
+  const { data: link } = await supabase
+    .from("proposal_share_links")
+    .select("id, proposal_id, proposals!inner(org_id)")
+    .eq("id", linkId)
+    .eq("proposal_id", proposalId)
+    .maybeSingle();
+  const ownerOrgId = (link as unknown as { proposals?: { org_id?: string } } | null)?.proposals?.org_id;
+  if (!link || ownerOrgId !== session.orgId) return { error: "Share link not found" };
+
   const { error } = await supabase
     .from("proposal_share_links")
     .update({ revoked_at: new Date().toISOString() })
-    .eq("id", linkId);
+    .eq("id", linkId)
+    .is("revoked_at", null);
   if (error) return { error: error.message };
   revalidatePath(`/console/proposals/${proposalId}/edit`);
   return { ok: true as const };

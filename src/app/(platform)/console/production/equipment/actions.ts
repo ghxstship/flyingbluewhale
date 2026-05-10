@@ -37,22 +37,56 @@ export async function createEquipmentAction(_: State, fd: FormData): Promise<Sta
 
 const StatusEnum = z.enum(["available", "reserved", "in_use", "maintenance", "retired"]);
 
+// Equipment FSM: available ↔ reserved ↔ in_use ↔ maintenance →
+// retired (terminal). Retired is final — for re-use, create a new
+// asset. Direct skips (e.g. available → retired without maintenance)
+// are blocked because they hide depreciation/audit trail history.
+const EQUIPMENT_TRANSITIONS: Record<z.infer<typeof StatusEnum>, readonly z.infer<typeof StatusEnum>[]> = {
+  available: ["reserved", "in_use", "maintenance", "retired"],
+  reserved: ["available", "in_use"],
+  in_use: ["available", "reserved", "maintenance"],
+  maintenance: ["available", "retired"],
+  retired: [], // terminal
+};
+
 /**
- * Drive the equipment lifecycle: available ↔ reserved ↔ in_use ↔
- * maintenance → retired (terminal). Retired is final — for re-use,
- * create a new asset. Owner/admin/controller only.
+ * Drive the equipment lifecycle. Owner/admin/controller only. Errors
+ * throw so Next's error boundary surfaces them rather than silently
+ * no-op'ing as before.
  */
-export async function setEquipmentStatus(formData: FormData) {
+export async function setEquipmentStatus(formData: FormData): Promise<void> {
   const session = await requireSession();
   const id = String(formData.get("id") ?? "");
   const next = StatusEnum.safeParse(formData.get("status"));
-  if (!id || !next.success) return;
+  if (!id) throw new Error("Missing equipment id");
+  if (!next.success) throw new Error("Invalid target status");
+
   const supabase = await createClient();
-  await supabase
+  const { data: row } = await supabase
+    .from("equipment")
+    .select("status")
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!row) throw new Error("Equipment not found");
+  const current = row.status as z.infer<typeof StatusEnum>;
+  const allowed = EQUIPMENT_TRANSITIONS[current] ?? [];
+  if (!allowed.includes(next.data)) {
+    throw new Error(`Cannot move ${current} → ${next.data}. Allowed: ${allowed.join(", ") || "(terminal — retired)"}`);
+  }
+
+  // Conditional update closes the TOCTOU between SELECT and write.
+  const { data: updated, error } = await supabase
     .from("equipment")
     .update({ status: next.data as EquipmentStatus })
     .eq("id", id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", current)
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!updated || updated.length === 0) {
+    throw new Error("Equipment status changed concurrently — refresh and retry");
+  }
   revalidatePath("/console/production/equipment");
   revalidatePath(`/console/production/equipment/${id}`);
 }

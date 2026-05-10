@@ -7,11 +7,16 @@ import { createClient } from "@/lib/supabase/server";
 
 const AnswerSchema = z.object({ official_answer: z.string().min(1).max(10_000) });
 
+// RFI FSM: open → answered → closed (or open → void). Answer/close
+// guarded against invalid source states so a stale UI can't reopen
+// closed RFIs or "answer" a void one. Errors throw so Next's error
+// boundary surfaces them rather than silently no-op'ing.
+
 export async function answerRfi(id: string, fd: FormData): Promise<void> {
   const session = await requireSession();
   const parsed = AnswerSchema.parse(Object.fromEntries(fd));
   const supabase = await createClient();
-  await supabase
+  const { data, error } = await supabase
     .from("rfis")
     .update({
       official_answer: parsed.official_answer,
@@ -20,7 +25,11 @@ export async function answerRfi(id: string, fd: FormData): Promise<void> {
       status: "answered",
     } as never)
     .eq("org_id", session.orgId)
-    .eq("id", id);
+    .eq("id", id)
+    .eq("status", "open")
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error("Only an open RFI can be answered");
   revalidatePath(`/console/rfis/${id}`);
   revalidatePath("/console/rfis");
 }
@@ -28,11 +37,15 @@ export async function answerRfi(id: string, fd: FormData): Promise<void> {
 export async function closeRfi(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase
+  const { data, error } = await supabase
     .from("rfis")
     .update({ status: "closed", closed_at: new Date().toISOString() } as never)
     .eq("org_id", session.orgId)
-    .eq("id", id);
+    .eq("id", id)
+    .in("status", ["answered", "open"])
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error("RFI is already closed or voided");
   revalidatePath(`/console/rfis/${id}`);
   revalidatePath("/console/rfis");
 }

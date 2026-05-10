@@ -80,17 +80,26 @@ export async function createCallAction(_: State, fd: FormData): Promise<State> {
   redirect(`/console/marketplace/calls/${(data as { id: string }).id}`);
 }
 
+// Open-call FSM: draft → published → closed. publish/close are guarded
+// against invalid source states so a stale UI or direct API call can't
+// jump the rails. .select("id") confirms the conditional update landed
+// — without it, an out-of-state transition silently succeeds with no
+// rows affected and the caller thinks the call moved.
+
 export async function publishCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const id = String(fd.get("call_id") ?? "");
   if (!id) return { error: "Missing call" };
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("open_calls")
     .update({ status: "published", published_at: new Date().toISOString() })
     .eq("id", id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", "draft")
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Only a draft call can be published" };
   revalidatePath("/console/marketplace/calls");
   revalidatePath(`/console/marketplace/calls/${id}`);
   return { error: undefined };
@@ -101,12 +110,15 @@ export async function closeCallAction(_: State, fd: FormData): Promise<State> {
   const id = String(fd.get("call_id") ?? "");
   if (!id) return { error: "Missing call" };
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("open_calls")
     .update({ status: "closed", closed_at: new Date().toISOString() })
     .eq("id", id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", "published")
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Only a published call can be closed" };
   revalidatePath("/console/marketplace/calls");
   revalidatePath(`/console/marketplace/calls/${id}`);
   return { error: undefined };

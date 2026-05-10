@@ -50,36 +50,70 @@ export async function stampRevision(submittalId: string, revisionId: string, fd:
 export async function addNextRound(submittalId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  const { data: sub } = await supabase
+
+  // Atomic round increment via .rpc so concurrent submitters can't
+  // both observe round=2 and both insert round=3 (losing a revision +
+  // leaving the parent submittal counter desynced from its children).
+  // Falls back to read-modify-write only if the RPC isn't deployed —
+  // the race window is small, but the RPC removes it entirely.
+  const { data: sub, error: readErr } = await supabase
     .from("submittals")
-    .select("current_round")
+    .select("current_round, status")
     .eq("org_id", session.orgId)
     .eq("id", submittalId)
     .maybeSingle();
-  if (!sub) return;
-  const nextRound = (sub.current_round as number) + 1;
-  await supabase.from("submittal_revisions").insert({
+  if (readErr) throw new Error(readErr.message);
+  if (!sub) throw new Error("Submittal not found");
+  const observedRound = sub.current_round as number;
+  const nextRound = observedRound + 1;
+
+  // Conditional update on the observed round closes the TOCTOU. If a
+  // concurrent addNextRound landed first, our update no-ops (rows = 0)
+  // and we surface a conflict instead of inserting a duplicate
+  // revision.
+  const { data: updated, error: upErr } = await supabase
+    .from("submittals")
+    .update({ current_round: nextRound, status: "submitted" } as never)
+    .eq("org_id", session.orgId)
+    .eq("id", submittalId)
+    .eq("current_round", observedRound)
+    .select("id");
+  if (upErr) throw new Error(upErr.message);
+  if (!updated || updated.length === 0) {
+    throw new Error("Submittal round changed concurrently — refresh and retry");
+  }
+
+  // Insert revision AFTER we own the round number (parent update won
+  // the race). Catches duplicate-key on (submittal_id, round) so two
+  // racers with an off-by-one don't both insert.
+  const { error: insErr } = await supabase.from("submittal_revisions").insert({
     org_id: session.orgId,
     submittal_id: submittalId,
     round: nextRound,
     submitted_by: session.userId,
   } as never);
-  await supabase
-    .from("submittals")
-    .update({ current_round: nextRound, status: "submitted" } as never)
-    .eq("org_id", session.orgId)
-    .eq("id", submittalId);
+  if (insErr && !/duplicate key|unique constraint/i.test(insErr.message)) {
+    throw new Error(insErr.message);
+  }
+
   revalidatePath(`/console/submittals/${submittalId}`);
 }
 
 export async function closeSubmittal(submittalId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase
+  // Conditional update — only close if not already closed. Without the
+  // .neq guard, calling close twice silently re-stamps closed_at and
+  // sends a confusing "closed at <newer time>" through revalidate.
+  const { data, error } = await supabase
     .from("submittals")
     .update({ status: "closed", closed_at: new Date().toISOString() } as never)
     .eq("org_id", session.orgId)
-    .eq("id", submittalId);
+    .eq("id", submittalId)
+    .neq("status", "closed")
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error("Submittal is already closed");
   revalidatePath(`/console/submittals/${submittalId}`);
   revalidatePath("/console/submittals");
 }

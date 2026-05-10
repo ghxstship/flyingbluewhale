@@ -91,13 +91,19 @@ const PublishSchema = z.object({
   expires_at: z.string().optional().or(z.literal("")),
 });
 
+// Job-posting FSM: draft → published → closed. publish/close are
+// guarded against invalid source states so a stale UI or direct API
+// call can't jump the rails. .select("id") confirms the conditional
+// update landed — without it, an out-of-state transition silently
+// succeeds with no rows affected and the caller thinks it moved.
+
 export async function publishPostingAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = PublishSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("job_postings")
     .update({
       status: "published",
@@ -105,9 +111,12 @@ export async function publishPostingAction(_: State, fd: FormData): Promise<Stat
       expires_at: parsed.data.expires_at || null,
     })
     .eq("id", parsed.data.posting_id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", "draft")
+    .select("id");
 
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Only a draft posting can be published" };
   revalidatePath("/console/marketplace/postings");
   revalidatePath(`/console/marketplace/postings/${parsed.data.posting_id}`);
   return { error: undefined };
@@ -118,12 +127,15 @@ export async function closePostingAction(_: State, fd: FormData): Promise<State>
   const id = String(fd.get("posting_id") ?? "");
   if (!id) return { error: "Missing posting" };
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("job_postings")
     .update({ status: "closed" })
     .eq("id", id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", "published")
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Only a published posting can be closed" };
   revalidatePath("/console/marketplace/postings");
   revalidatePath(`/console/marketplace/postings/${id}`);
   return { error: undefined };

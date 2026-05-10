@@ -68,12 +68,19 @@ export async function revokeInviteAction(id: string): Promise<FormState> {
   if (!isAdmin(session)) return { error: "Only owners and admins can revoke." };
 
   const supabase = await createClient();
-  const { error } = await supabase
+  // Only pending invites can be revoked. Without the .eq("status",
+  // "pending") guard, the action would also flip already-accepted or
+  // expired invites to "revoked", producing a misleading audit trail
+  // (the user is in the org; their invite isn't really revokable).
+  const { data, error } = await supabase
     .from("invites")
     .update({ status: "revoked" })
     .eq("id", id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", "pending")
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Only a pending invite can be revoked" };
 
   revalidatePath("/console/people/invites");
   return { ok: true };

@@ -45,17 +45,25 @@ export async function createCueAction(_: State, fd: FormData): Promise<State> {
 
 const Status = z.enum(["pending", "standby", "live", "done", "skipped"]);
 
-export async function setCueStatus(formData: FormData) {
+// ROS (Run Of Show) is performance-time — operators legitimately need
+// to override / re-fire / skip cues based on what's happening on
+// stage, so we deliberately do NOT enforce FSM transition guards
+// here. We DO surface validation + DB errors instead of silently
+// no-op'ing as before, so a stuck cue badge in the UI matches an
+// actual server-side reason rather than vanishing.
+export async function setCueStatus(formData: FormData): Promise<void> {
   const session = await requireSession();
   const id = String(formData.get("id") ?? "");
   const status = Status.safeParse(formData.get("status"));
-  if (!id || !status.success) return;
+  if (!id) throw new Error("Missing cue id");
+  if (!status.success) throw new Error("Invalid cue status");
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("cues")
     .update({ status: status.data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(error.message);
   revalidatePath("/console/production/ros");
   revalidatePath("/m/ros");
 }

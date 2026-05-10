@@ -60,6 +60,16 @@ const TransitionSchema = z.object({
   note: z.string().max(2000).optional(),
 });
 
+// Service request FSM: open → acknowledged → in_progress → resolved
+// (with cancel allowed from any non-terminal state).
+const REQUEST_TRANSITIONS: Record<string, readonly string[]> = {
+  open: ["acknowledged", "cancelled"],
+  acknowledged: ["in_progress", "resolved", "cancelled"],
+  in_progress: ["resolved", "cancelled"],
+  resolved: [],
+  cancelled: [],
+};
+
 export async function transitionRequest(requestId: string, fd: FormData): Promise<void> {
   const session = await requireSession();
   const parsed = TransitionSchema.parse(Object.fromEntries(fd));
@@ -71,26 +81,42 @@ export async function transitionRequest(requestId: string, fd: FormData): Promis
     .eq("id", requestId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!existing) return;
+  if (!existing) throw new Error("Service request not found");
+
+  const current = existing.status as string;
+  const allowed = REQUEST_TRANSITIONS[current] ?? [];
+  if (!allowed.includes(parsed.to)) {
+    throw new Error(`Cannot move ${current} → ${parsed.to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
+  }
 
   const patch: Record<string, unknown> = { status: parsed.to, updated_at: new Date().toISOString() };
   const now = new Date().toISOString();
-  if (parsed.to === "acknowledged" && existing.status === "open") patch.acknowledged_at = now;
+  if (parsed.to === "acknowledged" && current === "open") patch.acknowledged_at = now;
   if (parsed.to === "resolved") patch.resolved_at = now;
   if (parsed.to === "cancelled") patch.cancelled_at = now;
   if (parsed.note && parsed.to === "resolved") patch.resolution_note = parsed.note;
 
-  await supabase
+  // Conditional update closes the TOCTOU between the SELECT above and
+  // this write. Without it, two operators clicking acknowledge at the
+  // same time would both fire the event log + double-stamp acknowledged_at.
+  const { data: updated, error } = await supabase
     .from("service_requests")
     .update(patch as never)
     .eq("id", requestId)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", current)
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!updated || updated.length === 0) {
+    throw new Error("Service request status changed concurrently — refresh and retry");
+  }
+
   await supabase.from("service_request_events").insert({
     request_id: requestId,
     org_id: session.orgId,
     actor_id: session.userId,
     kind: parsed.to === "resolved" ? "resolved" : parsed.to === "cancelled" ? "cancelled" : "status_changed",
-    payload: { from: existing.status, to: parsed.to, note: parsed.note ?? null },
+    payload: { from: current, to: parsed.to, note: parsed.note ?? null },
   });
   revalidatePath(`/console/services/requests/${requestId}`);
   revalidatePath("/console/services/requests");

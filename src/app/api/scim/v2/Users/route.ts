@@ -131,7 +131,9 @@ export async function POST(req: Request) {
     row = existing as { id: string; email: string; name: string | null; created_at: string };
     userId = row.id;
     if (!row.name && display) {
-      await admin.from("users").update({ name: display }).eq("id", userId);
+      // .is("deleted_at", null) — don't un-scrub a soft-deleted
+      // user via IdP backfill.
+      await admin.from("users").update({ name: display }).eq("id", userId).is("deleted_at", null);
       row.name = display;
     }
   } else {

@@ -100,7 +100,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   if (Object.keys(updates).length > 0) {
-    await (admin as unknown as import("@/lib/supabase/loose").LooseSupabase).from("users").update(updates).eq("id", id);
+    // .is("deleted_at", null) — refuse to update a soft-deleted
+    // user's display name. /api/v1/me/delete scrubs name/email to
+    // "Deleted user" / "deleted-*@*"; without this filter a SCIM
+    // sync from the IdP would silently un-scrub the row.
+    await (admin as unknown as import("@/lib/supabase/loose").LooseSupabase)
+      .from("users")
+      .update(updates)
+      .eq("id", id)
+      .is("deleted_at", null);
   }
   if (deactivate) {
     // Deprovision = soft-revoke this org's membership. Soft delete

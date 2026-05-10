@@ -35,11 +35,16 @@ export async function saveBrandingAction(_: FormState, formData: FormData): Prom
   const sanitized = safeBranding(rawBranding);
 
   const supabase = await createClient();
+  // .is("deleted_at", null) — refuse to mutate branding on a soft-
+  // deleted project. The detail page hides them, so a stale tab is
+  // the only way to land here, and silently writing would just
+  // orphan a brand on a tombstoned record.
   const { error, count } = await supabase
     .from("projects")
     .update({ branding: sanitized as unknown as Json }, { count: "exact" })
     .eq("id", projectId)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
 
   if (error) return { error: error.message };
   if (!count || count === 0) {

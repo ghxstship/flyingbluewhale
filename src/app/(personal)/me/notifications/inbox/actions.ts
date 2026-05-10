@@ -15,12 +15,15 @@ export async function markReadAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const supabase = await createClient();
   const now = new Date().toISOString();
+  // .is("deleted_at", null) — don't re-stamp read_at on an archived
+  // (soft-deleted) notification.
   const { error } = await supabase
     .from("notifications")
     .update({ read_at: now })
     .eq("id", id)
     .eq("user_id", session.userId)
-    .is("read_at", null);
+    .is("read_at", null)
+    .is("deleted_at", null);
   if (error) return { error: error.message };
   revalidatePath(INBOX_PATH);
   return { ok: true };
@@ -31,11 +34,14 @@ export async function markAllReadAction(_: State, _fd: FormData): Promise<State>
   const session = await requireSession();
   const supabase = await createClient();
   const now = new Date().toISOString();
+  // .is("deleted_at", null) — don't pull archived notifications back
+  // into the visible-but-read state via this bulk action.
   const { error } = await supabase
     .from("notifications")
     .update({ read_at: now })
     .eq("user_id", session.userId)
-    .is("read_at", null);
+    .is("read_at", null)
+    .is("deleted_at", null);
   if (error) return { error: error.message };
   revalidatePath(INBOX_PATH);
   return { ok: true };

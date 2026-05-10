@@ -48,12 +48,16 @@ export async function updateProject(id: string, _: State, fd: FormData): Promise
 export async function deleteProject(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  // Soft-delete projects.
+  // Soft-delete. .is("deleted_at", null) so a re-click doesn't
+  // re-stamp deleted_at on an already-tombstoned project (which
+  // would extend the purge clock and confuse the audit trail of
+  // when it was first deleted).
   await supabase
     .from("projects")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
   revalidatePath("/console/projects");
   redirect("/console/projects");
 }

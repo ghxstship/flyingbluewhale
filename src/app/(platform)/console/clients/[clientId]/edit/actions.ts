@@ -41,7 +41,17 @@ export async function updateClient(id: string, _: State, fd: FormData): Promise<
 export async function deleteClient(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("clients").delete().eq("id", id).eq("org_id", session.orgId);
+  // SOFT delete to match projects/memberships pattern. Hard delete
+  // cascaded onto clients FK references (proposals, invoices, etc),
+  // breaking historical reporting; soft delete preserves the record
+  // and the .is("deleted_at", null) below makes the action
+  // idempotent.
+  await supabase
+    .from("clients")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
   revalidatePath("/console/clients");
   redirect("/console/clients");
 }

@@ -47,12 +47,16 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
 
   const supabase = await createClient();
 
-  // Verify the project belongs to the caller's org before mounting any storage path.
+  // Verify the project belongs to the caller's org AND is not
+  // soft-deleted before mounting any storage path. Without the
+  // deleted_at filter, photos would upload successfully against a
+  // deleted project, orphaning bytes that no console view surfaces.
   const { data: project, error: projErr } = await supabase
     .from("projects")
     .select("id")
     .eq("id", parsed.data.projectId)
     .eq("org_id", session.orgId)
+    .is("deleted_at", null)
     .maybeSingle();
   if (projErr) return { error: projErr.message };
   if (!project) return { error: "Project not found" };

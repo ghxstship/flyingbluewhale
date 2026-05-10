@@ -38,14 +38,46 @@ export async function createPoAction(_: State, fd: FormData): Promise<State> {
   redirect(`/console/procurement/purchase-orders/${data.id}`);
 }
 
+// PO FSM: draft → sent → acknowledged → fulfilled. Cancel allowed
+// from any non-terminal state. Fulfilled + cancelled are terminal.
+const PO_TRANSITIONS: Record<string, readonly string[]> = {
+  draft: ["sent", "cancelled"],
+  sent: ["acknowledged", "cancelled"],
+  acknowledged: ["fulfilled", "cancelled"],
+  fulfilled: [], // terminal
+  cancelled: [], // terminal
+};
+
 export async function setPoStatusAction(
   id: string,
   status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled",
 ) {
   const session = await requireSession();
   const supabase = await createClient();
-  const { error } = await supabase.from("purchase_orders").update({ status }).eq("org_id", session.orgId).eq("id", id);
+  // Read current status so we can validate the transition + scope the
+  // conditional update — without it a stale UI could move fulfilled
+  // → draft and overwrite the historical record.
+  const { data: row } = await supabase
+    .from("purchase_orders")
+    .select("status")
+    .eq("org_id", session.orgId)
+    .eq("id", id)
+    .maybeSingle();
+  if (!row) return { error: "Purchase order not found" };
+  const current = row.status as string;
+  const allowed = PO_TRANSITIONS[current] ?? [];
+  if (!allowed.includes(status)) {
+    return { error: `Cannot move ${current} → ${status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
+  }
+  const { data: updated, error } = await supabase
+    .from("purchase_orders")
+    .update({ status })
+    .eq("org_id", session.orgId)
+    .eq("id", id)
+    .eq("status", current as "draft")
+    .select("id");
   if (error) return { error: error.message };
+  if (!updated || updated.length === 0) return { error: "PO status changed concurrently — refresh and retry" };
   revalidatePath(`/console/procurement/purchase-orders/${id}`);
   revalidatePath("/console/procurement/purchase-orders");
   return { ok: true as const };

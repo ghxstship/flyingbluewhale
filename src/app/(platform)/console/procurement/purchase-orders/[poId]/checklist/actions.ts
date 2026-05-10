@@ -15,36 +15,37 @@ export async function addChecklistItem(poId: string, fd: FormData): Promise<void
   const parsed = AddSchema.parse(Object.fromEntries(fd));
   const supabase = await createClient();
 
-  const { count } = await (
-    supabase as unknown as {
-      from: (t: string) => {
-        select: (
-          cols: string,
-          opts: { count: "exact"; head: true },
-        ) => {
-          eq: (col: string, val: string) => Promise<{ count: number | null }>;
-        };
-      };
-    }
-  )
+  // Read the current max position so concurrent adders don't both
+  // insert at the same index. The .order().limit(1).maybeSingle() is
+  // smaller than a count(*) and avoids the loose-cast wrapper.
+  const { data: last } = await supabase
     .from("po_checklist_items")
-    .select("*", { count: "exact", head: true })
-    .eq("purchase_order_id", poId);
+    .select("position")
+    .eq("org_id", session.orgId)
+    .eq("purchase_order_id", poId)
+    .order("position", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const nextPosition = ((last?.position as number | null | undefined) ?? -1) + 1;
 
-  await supabase.from("po_checklist_items").insert({
+  const { error } = await supabase.from("po_checklist_items").insert({
     org_id: session.orgId,
     purchase_order_id: poId,
-    position: count ?? 0,
+    position: nextPosition,
     prompt: parsed.prompt,
     requires_photo: parsed.requires_photo === "1",
   } as never);
+  if (error) throw new Error(error.message);
   revalidatePath(`/console/procurement/purchase-orders/${poId}/checklist`);
 }
 
 export async function completeChecklistItem(poId: string, itemId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase
+  // Only mark complete if currently pending. Without the .neq guard,
+  // calling complete twice re-stamps completed_at + completed_by,
+  // corrupting the audit trail.
+  const { data, error } = await supabase
     .from("po_checklist_items")
     .update({
       status: "complete",
@@ -52,17 +53,27 @@ export async function completeChecklistItem(poId: string, itemId: string): Promi
       completed_by: session.userId,
     } as never)
     .eq("org_id", session.orgId)
-    .eq("id", itemId);
+    .eq("id", itemId)
+    .neq("status", "complete")
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error("Checklist item is already complete");
   revalidatePath(`/console/procurement/purchase-orders/${poId}/checklist`);
 }
 
 export async function skipChecklistItem(poId: string, itemId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase
+  // Only skip if currently pending — skipping a completed item
+  // would lose the completion record.
+  const { data, error } = await supabase
     .from("po_checklist_items")
     .update({ status: "skipped" } as never)
     .eq("org_id", session.orgId)
-    .eq("id", itemId);
+    .eq("id", itemId)
+    .eq("status", "pending")
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error("Only a pending checklist item can be skipped");
   revalidatePath(`/console/procurement/purchase-orders/${poId}/checklist`);
 }

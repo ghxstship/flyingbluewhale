@@ -61,6 +61,19 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
   redirect(`/console/proposals/${data.id}`);
 }
 
+// Proposal FSM: draft → sent → signed (or → approved/rejected/expired
+// at any non-terminal state). Without state guards, calling
+// setProposalStatusAction(id, "sent") twice would re-stamp sent_at +
+// double-fire the "Proposal sent" notification. Same for signed.
+const PROPOSAL_TRANSITIONS: Record<string, readonly string[]> = {
+  draft: ["sent", "expired"],
+  sent: ["signed", "approved", "rejected", "expired"],
+  approved: ["signed", "expired"],
+  rejected: [],
+  expired: [],
+  signed: [], // terminal
+};
+
 export async function setProposalStatusAction(
   id: string,
   status: "draft" | "sent" | "approved" | "rejected" | "expired" | "signed",
@@ -69,16 +82,33 @@ export async function setProposalStatusAction(
   const supabase = await createClient();
   const { data: before } = await supabase
     .from("proposals")
-    .select("doc_number, title, amount_cents, created_by")
+    .select("doc_number, title, amount_cents, created_by, status")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
+  if (!before) return { error: "Proposal not found" };
+  const current = before.status as string;
+  const allowed = PROPOSAL_TRANSITIONS[current] ?? [];
+  if (!allowed.includes(status)) {
+    return { error: `Cannot move ${current} → ${status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
+  }
   const patch: { status: typeof status; sent_at?: string; signed_at?: string } = { status };
   if (status === "sent") patch.sent_at = new Date().toISOString();
   if (status === "signed") patch.signed_at = new Date().toISOString();
-  const { error } = await supabase.from("proposals").update(patch).eq("org_id", session.orgId).eq("id", id);
+  // Conditional update on the observed status closes the TOCTOU
+  // between the SELECT above and the write — without it concurrent
+  // setProposalStatusAction calls would silently re-stamp + double-
+  // fire the notify() below.
+  const { data: updated, error } = await supabase
+    .from("proposals")
+    .update(patch)
+    .eq("org_id", session.orgId)
+    .eq("id", id)
+    .eq("status", current as "draft")
+    .select("id");
   if (error) return { error: error.message };
-  if (before && (status === "sent" || status === "signed")) {
+  if (!updated || updated.length === 0) return { error: "Proposal status changed concurrently — refresh and retry" };
+  if (status === "sent" || status === "signed") {
     const { notify } = await import("@/lib/notify");
     await notify({
       orgId: session.orgId,

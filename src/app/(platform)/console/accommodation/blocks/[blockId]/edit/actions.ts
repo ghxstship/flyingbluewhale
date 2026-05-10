@@ -35,8 +35,8 @@ export async function updateBlock(id: string, _: State, fd: FormData): Promise<S
     property: parsed.data.property,
     city: parsed.data.city || null,
     stakeholder_group: parsed.data.stakeholder_group || null,
-    rooms_reserved: parsed.data.rooms_reserved ? Math.max(0, parseInt(parsed.data.rooms_reserved)) : 0,
-    rooms_confirmed: parsed.data.rooms_confirmed ? Math.max(0, parseInt(parsed.data.rooms_confirmed)) : 0,
+    rooms_reserved: parsed.data.rooms_reserved ? Math.max(0, parseInt(parsed.data.rooms_reserved, 10)) : 0,
+    rooms_confirmed: parsed.data.rooms_confirmed ? Math.max(0, parseInt(parsed.data.rooms_confirmed, 10)) : 0,
     starts_on: parsed.data.starts_on || null,
     ends_on: parsed.data.ends_on || null,
   });

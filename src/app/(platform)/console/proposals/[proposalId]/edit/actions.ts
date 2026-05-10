@@ -54,7 +54,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
       title: parsed.data.title,
       doc_number: parsed.data.doc_number || null,
       currency: parsed.data.currency?.toUpperCase() || "USD",
-      deposit_percent: parsed.data.deposit_percent ? parseInt(parsed.data.deposit_percent) : 25,
+      deposit_percent: parsed.data.deposit_percent ? parseInt(parsed.data.deposit_percent, 10) : 25,
       theme: { primary: parsed.data.theme_primary || "#D4782A", secondary: parsed.data.theme_secondary || "#6D4A2A" },
       blocks,
       version: (current.version ?? 1) + 1,

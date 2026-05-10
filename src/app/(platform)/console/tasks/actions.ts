@@ -26,7 +26,7 @@ export async function createTaskAction(_: State, fd: FormData): Promise<State> {
     description: parsed.data.description || null,
     due_at: parsed.data.due_at || null,
     project_id: parsed.data.project_id || null,
-    priority: parsed.data.priority ? parseInt(parsed.data.priority) : 2,
+    priority: parsed.data.priority ? parseInt(parsed.data.priority, 10) : 2,
     created_by: session.userId,
   });
   if (error) return { error: error.message };

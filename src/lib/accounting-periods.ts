@@ -24,7 +24,6 @@ export type AccountingPeriod = {
   starts_on: string;
   ends_on: string;
   state: AccountingPeriodState;
-  status: string; // legacy text column kept for back-compat during migration window
   closed_at: string | null;
   closed_by: string | null;
   created_at: string;

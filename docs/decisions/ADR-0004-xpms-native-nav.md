@@ -111,7 +111,7 @@ Slug routing is preserved (`/p/[slug]/<sub-persona>` keeps working); the nav lab
 ## Migration sequence
 
 1. **ADR + cell map** (this doc).
-2. **Re-cluster `platformNav`** into 10 classes — one PR, URLs unchanged. Adds two helper exports: `xpmsNav` (10 classes) keeping `platformNav` as a deprecated alias for one release.
+2. **Re-cluster `platformNav`** into 10 classes — one PR, URLs unchanged. The export name is preserved (`platformNav`); only the body changes. No alias, no deprecation cycle — the consumers (`PlatformSidebar`, layout) pass the array through unchanged, so a clean cut works.
 3. **Phase stepper component** (`<PhaseStepper />`) reading `projects.xpms_phase`, mounted at the platform layout.
 4. **Programa imports** — schemas first (`pinboards`, `vendor_products`, deliverable render columns), then surfaces.
 5. **Portal super-persona collapse** — `portalNav` rewrite + 4 dashboard templates.

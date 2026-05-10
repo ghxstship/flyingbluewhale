@@ -36,7 +36,6 @@ export async function createAccountingPeriodAction(_: State, fd: FormData): Prom
       starts_on: parsed.data.starts_on,
       ends_on: parsed.data.ends_on,
       state: "OPEN",
-      status: "open",
     })
     .select("id")
     .single();

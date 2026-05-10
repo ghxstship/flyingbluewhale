@@ -141,7 +141,14 @@ export function shellForHost(host: string | null | undefined): {
   return { shell: "marketing", tenantSlug: null };
 }
 
-/** Map the internal `resolveShell` value (kept for back-compat) → Shell. */
+/**
+ * Map the internal `resolveShell()` route-prefix return value to the
+ * `Shell` discriminator used by `urlFor()`. The two encodings exist
+ * because `resolveShell()` is consumed by middleware (path-based) and
+ * `Shell` is consumed by URL-building (subdomain-aware); this helper
+ * is the single bridge. Used by /auth/resolve to dispatch the
+ * post-login redirect.
+ */
 export function shellFromResolved(resolved: "/console" | "/p" | "/m" | "/me"): Shell {
   switch (resolved) {
     case "/console":

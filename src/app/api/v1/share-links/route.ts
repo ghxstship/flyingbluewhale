@@ -4,6 +4,7 @@ import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createShareLink, listShareLinksForResource } from "@/lib/share/links";
 import { emitAudit, type AuditAction } from "@/lib/audit";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * POST /api/v1/share-links — mint a new HMAC-signed public link.
@@ -32,6 +33,15 @@ const CreateBody = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Mints public access tokens; gate on the write bucket (60/min).
+  // Without it a compromised admin token could spew thousands of
+  // public links in seconds, blowing through dedup + audit budgets.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "share-links:mint"),
+    ...RATE_BUDGETS.write,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Too many share-link requests");
+
   const input = await parseJson(req, CreateBody);
   if (input instanceof Response) return input;
   return withAuth(async (session) => {

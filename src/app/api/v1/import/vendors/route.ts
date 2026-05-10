@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { parseAndValidateCsv } from "@/lib/import/csv";
 import { VendorRowSchema, type VendorRow, dedupeKey } from "@/lib/import/transformers/vendors";
 import { logImportRun } from "@/lib/import/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import { log } from "@/lib/log";
 
 const PostSchema = z.object({
@@ -18,6 +19,15 @@ const PostSchema = z.object({
 const MAX_SYNC_ROWS = 1000;
 
 export async function POST(req: NextRequest) {
+  // Bulk-import bucket — write (60/min). Each request can parse up to
+  // 5MB of CSV + 1000 rows; without the gate a misbehaved client
+  // could pin the runtime on parse work.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "import:vendors"),
+    ...RATE_BUDGETS.write,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Too many import requests");
+
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
 

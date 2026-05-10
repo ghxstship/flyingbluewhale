@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * Signed upload URL issuer for incident photos. Mirrors the pattern used
@@ -31,6 +32,14 @@ const Schema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Signed-URL minting bucket — write (60/min). Each call generates
+  // a token and uses storage-API quota; the gate prevents spam.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "incidents:photo-upload"),
+    ...RATE_BUDGETS.write,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Too many upload requests");
+
   const input = await parseJson(req, Schema);
   if (input instanceof NextResponse) return input;
 

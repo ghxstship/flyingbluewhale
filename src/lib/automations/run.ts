@@ -105,7 +105,21 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
   let runId = opts.existingRunId ?? "";
   const startIso = nowIso();
   if (runId) {
-    await svc.from("automation_runs").update({ status: "running", started_at: startIso }).eq("id", runId);
+    // Conditional claim — only the racer that flips pending→running gets
+    // to execute. A second runner (cron retry + manual button, or two
+    // workers picking up the same run) would otherwise both proceed and
+    // double-fire every step's outbound side effects.
+    const { data: claimed, error: claimErr } = await svc
+      .from("automation_runs")
+      .update({ status: "running", started_at: startIso })
+      .eq("id", runId)
+      .eq("status", "pending")
+      .select("id");
+    if (claimErr) throw new Error(`run claim failed: ${claimErr.message}`);
+    if (!claimed || (claimed as unknown as Array<{ id: string }>).length === 0) {
+      log.warn("automation.run_already_claimed", { runId });
+      return { runId, status: "failed", actionCount: 0, error: "run already claimed" };
+    }
   } else {
     const { data: runRow, error: insertErr } = await svc
       .from("automation_runs")

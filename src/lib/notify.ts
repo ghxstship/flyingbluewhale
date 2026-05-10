@@ -142,6 +142,15 @@ export async function notify(args: {
 /**
  * Broadcast to every org owner/admin. Convenience wrapper for events
  * that need to reach leadership (incident.filed, job.failed, etc.).
+ *
+ * Insert per-user notification rows DIRECTLY rather than calling
+ * `notify()` once per admin: `emit_notification` fans out a
+ * webhook_deliveries row on every invocation regardless of
+ * p_user_id, so calling it N times for N admins multiplies webhook
+ * fan-out by N. We bulk-insert the notifications table in one shot,
+ * then call notify({ userId: null }) ONCE for the webhook + push +
+ * domain_events fan-out. Per-user push respects each user's
+ * preference matrix in a small parallel pass below.
  */
 export async function notifyOrgAdmins(args: {
   orgId: string;
@@ -157,11 +166,54 @@ export async function notifyOrgAdmins(args: {
     .select("user_id, role")
     .eq("org_id", args.orgId)
     .in("role", ["owner", "admin"]);
-  const userIds = (members ?? []).map((m) => m.user_id);
-  await Promise.all(userIds.map((uid) => notify({ ...args, userId: uid })));
-  // Also emit one webhook-only broadcast (no userId) so the webhook is
-  // fired once per event rather than once per admin.
-  if (userIds.length > 0) {
-    await notify({ ...args, userId: null });
+  const userIds = (members ?? []).map((m) => m.user_id as string);
+  if (userIds.length === 0) return;
+
+  // 1. Bulk-insert notification rows respecting each user's in-app
+  //    preference. shouldNotify() is in-process; one batched filter is
+  //    cheaper than N round-trips.
+  const allowed = await Promise.all(userIds.map((uid) => shouldNotify(uid, args.eventType, "in_app")));
+  const eligibleUserIds = userIds.filter((_, i) => allowed[i]);
+  if (eligibleUserIds.length > 0) {
+    const rows = eligibleUserIds.map((uid) => ({
+      org_id: args.orgId,
+      user_id: uid,
+      kind: args.eventType,
+      title: args.title,
+      body: args.body ?? null,
+      href: args.href ?? null,
+    }));
+    const { error } = await svc.from("notifications").insert(rows);
+    if (error) {
+      log.warn("notify.bulk_insert_failed", { event: args.eventType, err: error.message });
+    }
   }
+
+  // 2. Per-user push fan-out — same preference gate as the single-user
+  //    notify() path. Fire-and-forget.
+  for (const uid of userIds) {
+    void shouldNotify(uid, args.eventType, "push")
+      .then((allowPush) => {
+        if (!allowPush) return;
+        return sendPushTo(uid, {
+          title: args.title,
+          body: args.body ?? "",
+          url: args.href ?? undefined,
+          tag: args.eventType,
+          data: { event: args.eventType, ...(args.data ?? {}) },
+        });
+      })
+      .catch((err: unknown) => {
+        log.warn("notify.admins_push_send_failed", {
+          event: args.eventType,
+          uid,
+          err: (err as Error).message,
+        });
+      });
+  }
+
+  // 3. ONE webhook + domain_event fan-out for the org as a whole. Calls
+  //    notify() with userId=null so emit_notification creates a single
+  //    webhook delivery per active endpoint rather than one per admin.
+  await notify({ ...args, userId: null });
 }

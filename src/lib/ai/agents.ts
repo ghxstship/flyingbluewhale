@@ -133,12 +133,16 @@ export async function runFieldAgent(opts: { agentId: string; recordId: string })
       'You are an AI field agent populating a single column on a database record. Return ONLY a JSON object of the form {"value": ...}. The value type must match the schema.',
   });
 
-  // 5. Write the output back to the target column.
+  // 5. Write the output back to the target column. Pin org_id explicitly
+  // — even though step 2 verified the row belongs to the agent's org,
+  // an empty `org_id` column would skip that check above; here we make
+  // the write contract belt-and-suspenders.
   const writeValue = a.output_type === "number" ? Number(result.output.value) : String(result.output.value);
   const updateRes = await supabase
     .from(a.target_table)
     .update({ [a.target_column]: writeValue, updated_at: new Date().toISOString() })
-    .eq("id", opts.recordId);
+    .eq("id", opts.recordId)
+    .eq("org_id", a.org_id);
   if (updateRes.error) {
     log.warn("ai.agent.write_failed", { err: updateRes.error.message, agent_id: a.id });
     throw new Error(updateRes.error.message);

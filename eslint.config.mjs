@@ -71,7 +71,7 @@ const config = [
       // isolated print stylesheets. Everything else must consume tokens.
       "no-restricted-syntax": ["warn",
         {
-          selector: "JSXAttribute Literal[value=/#[0-9a-fA-F]{3,8}/]",
+          selector: "JSXAttribute Literal[value=/^#[0-9a-fA-F]{3,8}$/]",
           message: "Use a CSS variable (--text, --surface, --accent...) instead of a hex literal. If this is a brand SVG or user-input default, add the file to the eslint ignores list.",
         },
         // MOTION CANON — bare `transition` class (no specifier) animates

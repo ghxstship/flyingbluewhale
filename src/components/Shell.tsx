@@ -8,6 +8,8 @@ import { matchRoute } from "@/lib/match-route";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 
 export { PlatformSidebar } from "./PlatformSidebar";
+export { MarketingHeader } from "./MarketingHeader";
+export { AuthShell as AuthCard } from "./auth/AuthShell";
 
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {
   return (

@@ -56,7 +56,7 @@ export function PhaseStepper({ currentPhase, projectId, compact = false, hrefBas
                 : "text-[var(--text-muted)]";
 
           const dotClass = isCurrent
-            ? "bg-[var(--org-primary)] text-white"
+            ? "bg-[var(--org-primary)] text-[var(--org-on-primary,white)]"
             : isPast
               ? "bg-[var(--text-secondary)] text-[var(--bg-secondary)]"
               : "bg-[var(--surface-inset)] text-[var(--text-muted)]";

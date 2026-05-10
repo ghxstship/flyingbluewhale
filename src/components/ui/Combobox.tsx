@@ -215,7 +215,7 @@ export function MultiCombobox({
                     <span
                       className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded border ${
                         checked
-                          ? "border-[var(--org-primary)] bg-[var(--org-primary)] text-white"
+                          ? "border-[var(--org-primary)] bg-[var(--org-primary)] text-[var(--org-on-primary,white)]"
                           : "border-[var(--border-color)]"
                       }`}
                       aria-hidden="true"

@@ -128,7 +128,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
                   <span
                     className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-medium ${
                       today
-                        ? "bg-[var(--org-primary)] text-white"
+                        ? "bg-[var(--org-primary)] text-[var(--org-on-primary,white)]"
                         : inMonth
                           ? "text-[var(--text-primary)]"
                           : "text-[var(--text-muted)]"

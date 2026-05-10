@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS "public"."settlements" (
   "project_id" "uuid",
   "venue_id" "uuid",
   "show_date" "date" NOT NULL,
-  "status" "public"."settlement_status" DEFAULT 'draft' NOT NULL,
+  "settlement_state" "public"."settlement_status" DEFAULT 'draft' NOT NULL,
   -- Revenue
   "gross_box_office_cents" bigint DEFAULT 0 NOT NULL,
   "sales_tax_cents" bigint DEFAULT 0 NOT NULL,
@@ -155,8 +155,8 @@ CREATE INDEX IF NOT EXISTS "settlements_offer_idx"
   ON "public"."settlements" ("talent_offer_id") WHERE "talent_offer_id" IS NOT NULL;
 CREATE INDEX IF NOT EXISTS "settlements_org_show_idx"
   ON "public"."settlements" ("org_id", "show_date" DESC);
-CREATE INDEX IF NOT EXISTS "settlements_status_idx"
-  ON "public"."settlements" ("org_id", "status");
+CREATE INDEX IF NOT EXISTS "settlements_state_idx"
+  ON "public"."settlements" ("org_id", "settlement_state");
 
 CREATE TABLE IF NOT EXISTS "public"."settlement_lines" (
   "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
@@ -289,7 +289,7 @@ CREATE TABLE IF NOT EXISTS "public"."tours" (
   "description" "text",
   "starts_on" "date",
   "ends_on" "date",
-  "status" "public"."tour_status" DEFAULT 'planning' NOT NULL,
+  "tour_phase" "public"."tour_status" DEFAULT 'planning' NOT NULL,
   "created_by" "uuid",
   "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
   "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,

@@ -1002,7 +1002,7 @@ SELECT
     o.logo_url AS org_logo_url
 FROM public.job_postings jp
 INNER JOIN public.orgs o ON o.id = jp.org_id
-WHERE jp.status = 'published' AND jp.deleted_at IS NULL
+WHERE jp.job_posting_phase = 'published' AND jp.deleted_at IS NULL
     AND (jp.expires_at IS NULL OR jp.expires_at > now());
 
 GRANT SELECT ON "public"."public_job_board" TO "anon", "authenticated";
@@ -1031,7 +1031,7 @@ SELECT
     o.logo_url AS org_logo_url
 FROM public.open_calls oc
 INNER JOIN public.orgs o ON o.id = oc.org_id
-WHERE oc.status = 'published' AND oc.deleted_at IS NULL
+WHERE oc.open_call_state = 'published' AND oc.deleted_at IS NULL
     AND (oc.deadline_at IS NULL OR oc.deadline_at > now());
 
 GRANT SELECT ON "public"."public_open_calls" TO "anon", "authenticated";

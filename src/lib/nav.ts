@@ -168,6 +168,7 @@ export const platformNav: NavGroup[] = [
       { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
       { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
       { label: "Events", href: "/console/events", icon: "CalendarDays" },
+      { label: "Meetings", href: "/console/meetings", icon: "CalendarDays" },
       { label: "Run of Show", href: "/console/production/ros", icon: "Play" },
       { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
       { label: "Punch List", href: "/console/punch", icon: "ClipboardList" },

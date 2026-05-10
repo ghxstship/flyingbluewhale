@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, apiCreated, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { validateOutboundUrl } from "@/lib/http-ssrf";
 
 /**
  * Web Push subscription registration (Phase 2.3).
@@ -93,6 +94,14 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
+  // SSRF guard at the registration boundary. Browser-issued push
+  // endpoints always resolve to public push services (Google FCM,
+  // Mozilla autopush, Microsoft WNS); a request for an endpoint that
+  // resolves to RFC1918 / loopback / link-local is either a fake
+  // subscription or a probe to make the server fetch internal hosts
+  // when notify() fans out. Reject upstream so webpush never reaches it.
+  const ssrf = await validateOutboundUrl(input.endpoint);
+  if (!ssrf.ok) return apiError("bad_request", `endpoint rejected: ${ssrf.reason}`);
   return withAuth(async (session) => {
     const supabase = (await createClient()) as unknown as SubsClient;
     const now = new Date().toISOString();

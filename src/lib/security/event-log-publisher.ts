@@ -2,6 +2,7 @@ import "server-only";
 import { createHmac } from "node:crypto";
 import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
+import { validateOutboundUrl } from "@/lib/http-ssrf";
 
 // ────────────────────────────────────────────────────────────────────
 // Event log publisher.
@@ -113,6 +114,17 @@ export async function publishEventLogs(): Promise<{ published: number; orgs: num
 async function sendHttp(dest: DestinationRow, events: AuditRow[]): Promise<boolean> {
   const url = String(dest.config.url ?? "");
   if (!url) return false;
+  // SSRF guard: an admin-configured destination URL is still untrusted from
+  // the server's perspective — if it points at metadata services (AWS
+  // 169.254.169.254), localhost, or RFC1918 ranges we'd happily exfiltrate
+  // audit events into the internal network. Reject at the publisher
+  // boundary; downstream HTTP destinations must live on the public
+  // internet.
+  const ssrf = await validateOutboundUrl(url);
+  if (!ssrf.ok) {
+    log.warn("event-log.ssrf_blocked", { destination_id: dest.id, reason: ssrf.reason });
+    return false;
+  }
   const body = JSON.stringify({
     schema: "lytehaus.audit.v1",
     org_id: dest.org_id,
@@ -151,6 +163,22 @@ async function sendDatadog(dest: DestinationRow, events: AuditRow[]): Promise<bo
   const apiKey = String(dest.config.api_key ?? "");
   const site = String(dest.config.site ?? "datadoghq.com");
   if (!apiKey) return false;
+  // Pin to known-good Datadog hostnames. Admin-supplied `site` strings
+  // could otherwise be set to `evil.com/?#datadoghq.com` and reach
+  // arbitrary destinations. We only accept the documented Datadog
+  // tenant suffixes.
+  const ALLOWED_SITES = new Set([
+    "datadoghq.com",
+    "us3.datadoghq.com",
+    "us5.datadoghq.com",
+    "datadoghq.eu",
+    "ddog-gov.com",
+    "ap1.datadoghq.com",
+  ]);
+  if (!ALLOWED_SITES.has(site)) {
+    log.warn("event-log.dd_invalid_site", { destination_id: dest.id, site });
+    return false;
+  }
   const url = `https://http-intake.logs.${site}/api/v2/logs`;
   const body = JSON.stringify(
     events.map((e) => ({

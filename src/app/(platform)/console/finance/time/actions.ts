@@ -20,6 +20,19 @@ export async function createTimeEntryAction(_: State, fd: FormData): Promise<Sta
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on project_id.
+  if (parsed.data.project_id) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", parsed.data.project_id)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const started = new Date(parsed.data.started_at);
   const ended = parsed.data.ended_at ? new Date(parsed.data.ended_at) : null;
   const duration = ended ? Math.max(0, Math.round((ended.getTime() - started.getTime()) / 60000)) : null;

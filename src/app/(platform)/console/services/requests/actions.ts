@@ -25,6 +25,28 @@ export async function createServiceRequest(_: CreateState, fd: FormData): Promis
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guards on project_id + venue_id.
+  if (parsed.data.project_id) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", parsed.data.project_id)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+  if (parsed.data.venue_id) {
+    const { data: venue } = await supabase
+      .from("venues")
+      .select("id")
+      .eq("id", parsed.data.venue_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!venue) return { error: "Venue not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("service_requests")
     .insert({

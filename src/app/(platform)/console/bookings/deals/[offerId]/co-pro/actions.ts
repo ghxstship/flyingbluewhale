@@ -24,6 +24,17 @@ export async function addCoProPartnerAction(_: State, fd: FormData): Promise<Sta
   const split = Math.min(100, Math.max(0, Number(parsed.data.split_pct)));
   if (!Number.isFinite(split)) return { error: "Invalid split %" };
 
+  // Cross-tenant FK guard on offer_id (talent_offers is org-scoped).
+  // partner_org_id is intentionally a different org (cross-org partnership)
+  // — do NOT scope it to session.orgId.
+  const { data: offer } = await supabase
+    .from("talent_offers")
+    .select("id")
+    .eq("id", parsed.data.offer_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!offer) return { error: "Deal not found in your organization" };
+
   // Total split sanity — reject if cumulative > 100%.
   const existingResp = await supabase
     .from("co_pro_partnerships")

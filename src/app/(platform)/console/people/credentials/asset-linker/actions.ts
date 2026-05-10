@@ -18,6 +18,16 @@ export async function linkAssetAction(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on credential_id.
+  const { data: credential } = await supabase
+    .from("credentials")
+    .select("id")
+    .eq("id", parsed.data.credential_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!credential) return { error: "Credential not found in your organization" };
+
   const { error } = await supabase.from("asset_links").insert({
     org_id: session.orgId,
     credential_id: parsed.data.credential_id,

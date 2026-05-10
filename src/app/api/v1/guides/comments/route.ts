@@ -24,6 +24,20 @@ async function postHandler(req: NextRequest) {
   const { data: userData } = await supabase.auth.getUser();
   const authorUserId = userData.user?.id ?? null;
 
+  // Cross-tenant FK guard: the (orgId, guideId) pair must reference
+  // the same row. Without this, any visitor could submit guideId from
+  // org A together with orgId of org B and pollute B's comment thread
+  // / audit attribution. event_guides has SELECT-RLS; for public guides
+  // we verify via service-role (out of scope here) — for the auth'd
+  // path we just confirm the row exists with the expected org_id.
+  const { data: guide } = await supabase
+    .from("event_guides")
+    .select("id, org_id")
+    .eq("id", guideId)
+    .eq("org_id", orgId)
+    .maybeSingle();
+  if (!guide) return apiError("not_found", "Guide not found");
+
   const { data, error } = await supabase
     .from("guide_comments")
     .insert({

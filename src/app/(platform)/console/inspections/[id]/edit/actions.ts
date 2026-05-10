@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
 const Schema = z.object({
@@ -23,6 +24,20 @@ export async function updateInspection(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const { id, ...patch } = parsed.data;
+
+  // Cross-tenant FK guard on project_id when reassigning the inspection.
+  if (patch.project_id) {
+    const supabase = await createClient();
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", patch.project_id)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   // Sea Trial FINDING-022: optimistic concurrency.
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("inspections", session.orgId, id, expectedUpdatedAt, {

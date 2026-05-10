@@ -26,6 +26,38 @@ export async function createPunchItem(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guards on project_id, vendor_id, site_plan_id.
+  // assignee_id references users (org-membership-gated by RLS, no
+  // org_id column to filter on).
+  const { data: project } = await supabase
+    .from("projects")
+    .select("id")
+    .eq("id", parsed.data.project_id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!project) return { error: "Project not found in your organization" };
+  if (parsed.data.vendor_id) {
+    const { data: vendor } = await supabase
+      .from("vendors")
+      .select("id")
+      .eq("id", parsed.data.vendor_id)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!vendor) return { error: "Vendor not found in your organization" };
+  }
+  if (parsed.data.site_plan_id) {
+    const { data: sitePlan } = await supabase
+      .from("site_plans")
+      .select("id")
+      .eq("id", parsed.data.site_plan_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!sitePlan) return { error: "Site plan not found in your organization" };
+  }
+
   const code = await nextOrgCode("punch_items", session.orgId, "PUNCH");
 
   const { data, error } = await supabase

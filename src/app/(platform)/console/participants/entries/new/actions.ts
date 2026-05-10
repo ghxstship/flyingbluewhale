@@ -21,6 +21,16 @@ export async function createEntry(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on delegation_id.
+  const { data: delegation } = await supabase
+    .from("delegations")
+    .select("id")
+    .eq("id", parsed.data.delegation_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!delegation) return { error: "Delegation not found in your organization" };
+
   const { data, error } = await supabase
     .from("delegation_entries")
     .insert({

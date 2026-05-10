@@ -19,6 +19,24 @@ export async function addResponse(reqId: string, _: State, fd: FormData): Promis
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guards on both reqId (path param) and vendor_id.
+  const { data: req } = await supabase
+    .from("requisitions")
+    .select("id")
+    .eq("id", reqId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!req) return { error: "Requisition not found in your organization" };
+  const { data: vendor } = await supabase
+    .from("vendors")
+    .select("id")
+    .eq("id", parsed.data.vendor_id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!vendor) return { error: "Vendor not found in your organization" };
+
   const totalCents = parsed.data.total ? Math.round(Number(parsed.data.total) * 100) : null;
   const { error } = await supabase.from("rfq_responses").insert({
     org_id: session.orgId,

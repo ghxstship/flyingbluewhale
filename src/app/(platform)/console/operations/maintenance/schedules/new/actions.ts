@@ -24,6 +24,31 @@ export async function createSchedule(_: State, fd: FormData): Promise<State> {
   const supabase = await createClient();
   const next = new Date(Date.now() + parsed.data.cadence_days * 86400_000).toISOString();
 
+  // Cross-tenant FK guard on target_id. Polymorphic by target_kind —
+  // dispatch to the correct table per kind. `custom` has no FK target.
+  if (parsed.data.target_id) {
+    const id = parsed.data.target_id;
+    const orgId = session.orgId;
+    let exists = false;
+    if (parsed.data.target_kind === "venue") {
+      const { data } = await supabase.from("venues").select("id").eq("id", id).eq("org_id", orgId).maybeSingle();
+      exists = !!data;
+    } else if (parsed.data.target_kind === "equipment") {
+      const { data } = await supabase.from("equipment").select("id").eq("id", id).eq("org_id", orgId).maybeSingle();
+      exists = !!data;
+    } else if (parsed.data.target_kind === "credential") {
+      const { data } = await supabase.from("credentials").select("id").eq("id", id).eq("org_id", orgId).maybeSingle();
+      exists = !!data;
+    } else if (parsed.data.target_kind === "workforce") {
+      const { data } = await supabase.from("crew_members").select("id").eq("id", id).eq("org_id", orgId).maybeSingle();
+      exists = !!data;
+    } else {
+      // `custom` — no FK target to validate.
+      exists = true;
+    }
+    if (!exists) return { error: `${parsed.data.target_kind} not found in your organization` };
+  }
+
   const { data: schedule, error: scheduleError } = await supabase
     .from("maintenance_schedules")
     .insert({

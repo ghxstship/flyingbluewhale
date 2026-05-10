@@ -20,6 +20,19 @@ export async function createBudgetAction(_: State, fd: FormData): Promise<State>
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on project_id.
+  if (parsed.data.project_id) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", parsed.data.project_id)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const { error } = await supabase.from("budgets").insert({
     org_id: session.orgId,
     name: parsed.data.name,

@@ -96,6 +96,56 @@ export async function createShareLink(opts: {
   const { session, input } = opts;
   const supabase = await createClient();
 
+  // Cross-tenant FK guard on (resourceTable, resourceId). Without it, an
+  // admin in org A could mint a public link to a resource in org B by
+  // submitting its UUID — RLS only protects DB writes, not the act of
+  // signing a token over a resource_id we never validated. Each share
+  // resource lives in an org-scoped table, so we check membership.
+  const resourceCheck: Record<string, "id"> = {
+    proposals: "id",
+    view_configs: "id",
+    guides: "id",
+    event_guides: "id",
+    dashboards: "id",
+  };
+  if (resourceCheck[input.resourceTable]) {
+    let exists = false;
+    if (input.resourceTable === "proposals") {
+      const { data } = await supabase
+        .from("proposals")
+        .select("id")
+        .eq("id", input.resourceId)
+        .eq("org_id", session.orgId)
+        .maybeSingle();
+      exists = !!data;
+    } else if (input.resourceTable === "view_configs") {
+      const { data } = await supabase
+        .from("view_configs")
+        .select("id")
+        .eq("id", input.resourceId)
+        .eq("org_id", session.orgId)
+        .maybeSingle();
+      exists = !!data;
+    } else if (input.resourceTable === "guides" || input.resourceTable === "event_guides") {
+      const { data } = await supabase
+        .from("event_guides")
+        .select("id")
+        .eq("id", input.resourceId)
+        .eq("org_id", session.orgId)
+        .maybeSingle();
+      exists = !!data;
+    } else if (input.resourceTable === "dashboards") {
+      const { data } = await supabase
+        .from("dashboards")
+        .select("id")
+        .eq("id", input.resourceId)
+        .eq("org_id", session.orgId)
+        .maybeSingle();
+      exists = !!data;
+    }
+    if (!exists) return { ok: false, error: "Resource not found in your organization" };
+  }
+
   const expiresAt =
     input.expiresInDays && input.expiresInDays > 0
       ? new Date(Date.now() + input.expiresInDays * 24 * 60 * 60 * 1000)

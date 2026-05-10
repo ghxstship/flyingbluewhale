@@ -46,6 +46,15 @@ export async function upsertSettlementAction(_: State, fd: FormData): Promise<St
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
+  // Cross-tenant FK guard on offer_id (talent_offers is the FK target).
+  const { data: offer } = await supabase
+    .from("talent_offers")
+    .select("id")
+    .eq("id", parsed.data.offer_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!offer) return { error: "Deal not found in your organization" };
+
   const payload = {
     org_id: session.orgId,
     talent_offer_id: parsed.data.offer_id,

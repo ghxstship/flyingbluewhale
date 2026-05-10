@@ -28,6 +28,19 @@ export async function createSubscriptionAction(_: State, fd: FormData): Promise<
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on party_id. Parties live on the global
+  // catalog (clients/vendors/talent) but each row is org-scoped.
+  if (parsed.data.party_id) {
+    const { data: party } = await supabase
+      .from("parties")
+      .select("id")
+      .eq("id", parsed.data.party_id)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!party) return { error: "Party not found in your organization" };
+  }
   const initialState: SubscriptionState = parsed.data.trial_days && parsed.data.trial_days > 0 ? "TRIAL" : "PROSPECT";
   const trialEndsAt = parsed.data.trial_days
     ? new Date(Date.now() + parsed.data.trial_days * 86400 * 1000).toISOString()

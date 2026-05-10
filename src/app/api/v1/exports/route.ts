@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
 
     const { data, error } = await q.limit(10_000);
     if (error) return apiError("internal", error.message);
-    const rows = data ?? [];
+    const rows = (Array.isArray(data) ? data : []) as Array<Record<string, unknown>>;
 
     let bytes: Buffer;
     let contentType: string;

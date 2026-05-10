@@ -22,12 +22,17 @@ export async function createPoChangeOrder(_: State, fd: FormData): Promise<State
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
+  // Cross-tenant FK guard on purchase_order_id. Without bailing out on
+  // a miss, an org-A user could attach a CO to an org-B PO since the
+  // insert below doesn't re-validate the FK target.
   const { data: po } = await supabase
     .from("purchase_orders")
     .select("project_id")
     .eq("org_id", session.orgId)
     .eq("id", parsed.data.purchase_order_id)
+    .is("deleted_at", null)
     .maybeSingle();
+  if (!po) return { error: "Purchase order not found in your organization" };
 
   // Next CO number for this PO.
   const { count } = await (

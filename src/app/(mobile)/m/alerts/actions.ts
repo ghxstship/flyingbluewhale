@@ -11,6 +11,18 @@ export async function acknowledgeAlert(fd: FormData): Promise<void> {
   const session = await requireSession();
   const parsed = Schema.parse(Object.fromEntries(fd));
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on alert_id. Without this, a member of org A
+  // could acknowledge an alert from org B by passing its UUID, polluting
+  // org B's acknowledgement audit trail.
+  const { data: alert } = await supabase
+    .from("crisis_alerts")
+    .select("id")
+    .eq("id", parsed.alertId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!alert) return;
+
   // Upsert receipt for (alert_id, user_id) and stamp acknowledged_at.
   await (
     supabase.from("crisis_alert_receipts") as unknown as {

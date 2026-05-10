@@ -25,6 +25,28 @@ export async function createEventAction(_: State, fd: FormData): Promise<State> 
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guards on location_id + project_id.
+  if (parsed.data.location_id) {
+    const { data: location } = await supabase
+      .from("locations")
+      .select("id")
+      .eq("id", parsed.data.location_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!location) return { error: "Location not found in your organization" };
+  }
+  if (parsed.data.project_id) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", parsed.data.project_id)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   // Sea Trial FINDING-017: stamp `created_by` so the audit panel + ROS
   // can attribute event creation. Column added in migration
   // 20260504000001_events_created_by.sql.

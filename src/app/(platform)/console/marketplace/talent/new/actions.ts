@@ -124,10 +124,23 @@ export async function createRiderAction(_: State, fd: FormData): Promise<State> 
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
+  // Cross-tenant FK guard on talent_id. Without it, the demote+insert
+  // pair below could land on another org's talent profile (RLS would
+  // refuse the insert, but the demote would silently hit zero rows
+  // and the caller would see a confusing error).
+  const { data: talent } = await supabase
+    .from("talent_profiles")
+    .select("id")
+    .eq("id", parsed.data.talent_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!talent) return { error: "Talent profile not found in your organization" };
+
   // Demote the previous current rider of this kind.
   await supabase
     .from("talent_riders")
     .update({ is_current: false })
+    .eq("org_id", session.orgId)
     .eq("talent_profile_id", parsed.data.talent_id)
     .eq("kind", parsed.data.kind)
     .eq("is_current", true);

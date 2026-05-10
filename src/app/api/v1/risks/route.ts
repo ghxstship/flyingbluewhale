@@ -44,6 +44,19 @@ export async function POST(req: NextRequest) {
   return withAuth(async (session) => {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
     const supabase = await createClient();
+
+    // Cross-tenant FK guard on projectId.
+    if (input.projectId) {
+      const { data: project } = await supabase
+        .from("projects")
+        .select("id")
+        .eq("id", input.projectId)
+        .eq("org_id", session.orgId)
+        .is("deleted_at", null)
+        .maybeSingle();
+      if (!project) return apiError("not_found", "Project not found in your organization");
+    }
+
     const { data, error } = await supabase
       .from("risks")
       .insert({

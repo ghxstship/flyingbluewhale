@@ -1,25 +1,26 @@
 # XPMS Migration Validation Report
 
 **Date:** 2026-05-10
-**Scope:** ADR-0004 XPMS-native nav + Programa imports + portal foundation
-**Commits validated:** `44cb95b5` → `685ac477` (8 commits)
+**Scope:** ADR-0004 XPMS-native nav + Programa imports + portal foundation + clean-cuts purge + `as any` ban
+**Commits validated:** `44cb95b5` → `d6728d6c` (10 commits)
 
 ## Summary
 
-All six validation scopes pass. The XPMS migration is operational on `origin/main`:
+All seven validation scopes pass. The XPMS migration is operational on `origin/main`, with permanent ban-test coverage on the type-hygiene rule:
 
-| Scope                                              | Status | Evidence                                                                        |
-| -------------------------------------------------- | ------ | ------------------------------------------------------------------------------- |
-| 1. Sidebar nav (10 XPMS classes)                   | ✅     | 116 console leaves preserved across re-cluster, zero dropped                    |
-| 2. Phase stepper (8 phases)                        | ✅     | Mounted at project layout, bound to `projects.xpms_phase`                       |
-| 3. Programa schema (5 surfaces)                    | ✅     | Live DB confirms 4 new tables + deliverables extension cols, full RLS, FK chain |
-| 4. Portal personas (15 sub-personas)               | ✅     | Type union covers all 15; new EXECUTIVE pages mounted                           |
-| 5. Dashboard templates (10 per class)              | ✅     | BaseDashboard + 10 per-class wrappers compile + render                          |
-| 6. Helpers (`classOfPersona`, `dashboardForClass`) | ✅     | 9 unit-test invariants pass                                                     |
+| Scope                                              | Status | Evidence                                                                          |
+| -------------------------------------------------- | ------ | --------------------------------------------------------------------------------- |
+| 1. Sidebar nav (10 XPMS classes)                   | ✅     | 116 console leaves preserved across re-cluster, zero dropped                      |
+| 2. Phase stepper (8 phases)                        | ✅     | Mounted at project layout, bound to `projects.xpms_phase`                         |
+| 3. Programa schema (5 surfaces)                    | ✅     | Live DB confirms 4 new tables + deliverables extension cols, full RLS, FK chain   |
+| 4. Portal personas (15 sub-personas)               | ✅     | Type union covers all 15; new EXECUTIVE pages mounted                             |
+| 5. Dashboard templates (10 per class)              | ✅     | BaseDashboard + 10 per-class wrappers compile + render                            |
+| 6. Helpers (`classOfPersona`, `dashboardForClass`) | ✅     | 9 unit-test invariants pass                                                       |
+| 7. **`as any` ban — clean cut**                    | ✅     | 12 sites repaired; new ban test (`src/app/no-as-any.test.ts`) fails on regression |
 
-**Test signal:** 548/548 unit tests green · TypeScript clean · `next build` exit 0
-**Commits:** 8 pushed to main this session
-**Schema migrations:** 1 applied to live Supabase (`xpms_programa_imports`)
+**Test signal:** 549/549 unit tests green · TypeScript clean · `next build` exit 0
+**Commits:** 10 pushed to main this session
+**Schema migrations:** 2 applied to live Supabase (`xpms_programa_imports`, `drop_accounting_periods_legacy_status`)
 
 ## Scope 1 — Sidebar nav (10 XPMS classes)
 
@@ -179,6 +180,28 @@ Each renders BaseDashboard with class-specific accent (from `XPMS_CLASSES[n].acc
 2. **Sub-routes under new EXECUTIVE personas** — landing pages mount but `co-pro`, `settlements`, `portfolio`, `pnl`, `risk`, `readiness`, `governance`, `audit`, `sustainability` deep routes are tile placeholders without their own `page.tsx` files. Implementing those is a follow-up commit.
 3. **Pinboard, Product Library, Schedule render, Client Dashboard surfaces** — schema landed; UI surfaces are the remaining workstreams in the ADR-0004 sequence.
 
+## Scope 7 — `as any` ban (clean cut + permanent CI gate)
+
+User directive: "as any instances are FORBIDDEN! Resolve them all and BLOCK THEM from future."
+
+12 sites repaired and re-typed using the codebase's centralized typed-loose escape hatch (`@/lib/supabase/loose#LooseSupabase`) or proper SDK type guards:
+
+| File                                                  | Pattern fixed                                                              |
+| ----------------------------------------------------- | -------------------------------------------------------------------------- |
+| `src/app/(platform)/console/dashboards/[id]/page.tsx` | Dynamic widget query → LooseSupabase + Filterable interface                |
+| `src/app/api/v1/exports/route.ts`                     | 9-element ExportTable union → LooseSupabase + Filterable                   |
+| `src/lib/usage.ts`                                    | usage_rollups loose-cast → LooseSupabase + narrow result cast              |
+| `src/lib/idempotency.ts`                              | idempotency_keys lookup + insert → LooseSupabase                           |
+| `src/lib/ai/extract-credential.ts`                    | Anthropic content union → `Extract<typeof c, { type: "text" }>` type guard |
+| `src/lib/ai/providers/anthropic.ts` (3 sites)         | Same SDK content union + `Anthropic.MessageParam["content"]` cast          |
+| `src/lib/automations/schedule.ts` (4 sites)           | Removed AnySvc stub, consolidated on LooseSupabase                         |
+| `src/lib/export/strategies/project_archive.ts`        | EXPORT_REGISTRY dispatch → LooseSupabase + Filterable                      |
+| `src/lib/pptx/sponsor-deck.ts`                        | pptxgenjs return → `Buffer \| string \| Uint8Array` discriminated union    |
+
+**Permanent ban**: `src/app/no-as-any.test.ts` scans every `.ts` and `.tsx` under `src/` for the regex `/\bas\s+any\b/`, ignores comments and string literals, and asserts zero violations outside an explicit allowlist. Allowlist is `database.types.ts` (Supabase-generated) + the test file itself (which mentions the rule in prose). Test passes on this commit; will fail CI on any future regression.
+
+**Centralized escape hatch reminder** (in test failure message): "Use `@/lib/supabase/loose#LooseSupabase` for dynamic-table dispatch, type guards for SDK content unions, or proper type assertions like `as unknown as { specific: shape }`. Do not use `as any`."
+
 ## Commits this validation cycle
 
 | Commit     | Title                                                                                                 |
@@ -188,5 +211,8 @@ Each renders BaseDashboard with class-specific accent (from `XPMS_CLASSES[n].acc
 | `d0749fa0` | feat(schema): Programa imports — pinboards + vendor_products + deliverable render + client_dashboards |
 | `1ed8dd32` | feat(portal): XPMS-class-aligned dashboard templates + 3 new EXECUTIVE personas                       |
 | `685ac477` | fix(safety) + feat(portal): revert wrong soft-delete + 3 new persona landing pages                    |
+| `a9bc0f5a` | test(xpms): 9 portal-mapping invariants + design-system allowlist + validation report                 |
+| `76be4acc` | refactor(cleanup): remove all back-compat shims — clean cuts only                                     |
+| `d6728d6c` | ban(types): eliminate every `as any` from src/ + permanent CI ban                                     |
 
-**Status:** ✅ All scopes validated. Ready to resume the broader unguarded-mutation / RLS / TOCTOU / soft-delete / authz sweep.
+**Status:** ✅ All seven scopes validated. Ready to resume the broader unguarded-mutation / RLS / TOCTOU / soft-delete / authz sweep.

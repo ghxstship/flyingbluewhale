@@ -11,7 +11,7 @@ export { PlatformSidebar } from "./PlatformSidebar";
 
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {
   return (
-    <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
+    <aside className="flex w-56 shrink-0 flex-col border-r border-border bg-bg-secondary p-3">
       <div className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-[var(--org-primary)]">
         GVTEWAY
       </div>

@@ -1,3 +1,4 @@
+import type React from "react";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Card, CardBody, CardHeader } from "@/components/ui";

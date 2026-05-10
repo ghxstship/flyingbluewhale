@@ -1,3 +1,4 @@
+import type React from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { Card, CardBody, CardHeader } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
@@ -62,7 +63,7 @@ export default async function PhasesPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-1 text-xs text-[var(--text-muted)]">
                   {XPMS_CLASSES.filter((c) => stat.byClass[c.code]).map((c) => (
-                    <span key={c.code} style={{ color: c.accent }}>
+                    <span key={c.code} style={{ "--xpms-accent": c.accent, color: "var(--xpms-accent)" } as React.CSSProperties}>
                       {c.name} <span className="font-mono">{stat.byClass[c.code]}</span>
                     </span>
                   ))}

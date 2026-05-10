@@ -4,10 +4,10 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
-import { createProjectAction, type CreateProjectState } from "../actions";
+import { createProjectAction, type State } from "../actions";
 
 export function NewProjectForm() {
-  const [state, formAction, pending] = useActionState<CreateProjectState, FormData>(createProjectAction, null);
+  const [state, formAction, pending] = useActionState<State, FormData>(createProjectAction, null);
 
   return (
     <form action={formAction} className="surface space-y-4 p-6">

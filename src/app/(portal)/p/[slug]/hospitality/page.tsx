@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ModuleHeader } from "@/components/Shell";
+import { ModuleHeader, PortalRail } from "@/components/Shell";
+import { portalNav } from "@/lib/nav";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -35,35 +36,38 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   ];
 
   return (
-    <>
-      <ModuleHeader
-        eyebrow="Portal"
-        title="Hospitality"
-        subtitle="Premium guest experience — itinerary, transfers, dining, accommodation"
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Hospitality" }]}
-      />
-      <div className="page-content space-y-5">
-        <div className="metric-grid-3">
-          <MetricCard label="Tickets" value={fmt.number(tickets ?? 0)} />
-          <MetricCard label="Room Blocks" value={fmt.number(blocks ?? 0)} />
-          <MetricCard label="Status" value="Live" accent />
+    <div className="flex min-h-screen">
+      <PortalRail items={portalNav(slug, "hospitality")} title="Hospitality" />
+      <div className="flex-1">
+        <ModuleHeader
+          eyebrow="Portal"
+          title="Hospitality"
+          subtitle="Premium guest experience — itinerary, transfers, dining, accommodation"
+          breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Hospitality" }]}
+        />
+        <div className="page-content space-y-5">
+          <div className="metric-grid-3">
+            <MetricCard label="Tickets" value={fmt.number(tickets ?? 0)} />
+            <MetricCard label="Room Blocks" value={fmt.number(blocks ?? 0)} />
+            <MetricCard label="Status" value="Live" accent />
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {tiles.map((t) => (
+              <Link key={t.href} href={t.href} className="surface hover-lift p-5">
+                <div className="text-sm font-semibold">{t.label}</div>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
+              </Link>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--text-muted)]">
+            Need a change to your booking? Email{" "}
+            <a className="text-[var(--org-primary)]" href="mailto:hospitality@lytehaus.live">
+              hospitality@lytehaus.live
+            </a>{" "}
+            and reference your booking ID.
+          </p>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-              <div className="text-sm font-semibold">{t.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
-            </Link>
-          ))}
-        </div>
-        <p className="text-xs text-[var(--text-muted)]">
-          Need a change to your booking? Email{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:hospitality@lytehaus.live">
-            hospitality@lytehaus.live
-          </a>{" "}
-          and reference your booking ID.
-        </p>
       </div>
-    </>
+    </div>
   );
 }

@@ -11,13 +11,21 @@ export async function POST(req: Request) {
   const sig = req.headers.get("stripe-signature");
   const rawBody = await req.text();
 
+  // In production STRIPE_WEBHOOK_SECRET is mandatory — reject the request
+  // early rather than processing unsigned events. In non-production
+  // environments (local dev, preview deploys) the secret is optional so
+  // engineers can test with `stripe trigger` without a real signing secret.
+  if (process.env.NODE_ENV === "production" && !env.STRIPE_WEBHOOK_SECRET) {
+    return apiError("service_unavailable", "Webhook signature verification is not configured");
+  }
+
   let event: StripeEvent | null = null;
   if (env.STRIPE_WEBHOOK_SECRET) {
     const v = await verifyStripeWebhook(rawBody, sig, env.STRIPE_WEBHOOK_SECRET);
     if (!v) return apiError("unauthorized", "Invalid Stripe signature");
     event = v as StripeEvent;
   } else {
-    // Dev mode: allow unsigned posts so manual testing still works.
+    // Non-production only: allow unsigned posts for local manual testing.
     try {
       event = JSON.parse(rawBody) as StripeEvent;
     } catch {

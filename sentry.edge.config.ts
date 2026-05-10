@@ -8,6 +8,8 @@ if (dsn) {
     dsn,
     environment: process.env.VERCEL_ENV ?? process.env.NODE_ENV,
     tracesSampleRate: 0.1,
+    // Capture all errors (no sampling) so edge incidents are never silently dropped.
+    sampleRate: 1.0,
     sendDefaultPii: false,
     beforeSend(event) {
       return scrubSentryEvent(event);

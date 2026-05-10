@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS "public"."open_calls" (
     "deadline_at" timestamp with time zone,
     "eligibility" "jsonb" DEFAULT '{}'::"jsonb" NOT NULL,
     "submission_count" integer DEFAULT 0 NOT NULL,
-    "status" "public"."open_call_status" DEFAULT 'draft' NOT NULL,
+    "open_call_state" "public"."open_call_status" DEFAULT 'draft' NOT NULL,
     "published_at" timestamp with time zone,
     "closed_at" timestamp with time zone,
     "awarded_submission_id" "uuid",
@@ -284,11 +284,11 @@ ALTER TABLE "public"."open_calls" OWNER TO "postgres";
 CREATE UNIQUE INDEX IF NOT EXISTS "open_calls_public_slug_unique"
     ON "public"."open_calls" ("public_slug") WHERE "deleted_at" IS NULL;
 
-CREATE INDEX IF NOT EXISTS "open_calls_status_published_idx"
-    ON "public"."open_calls" ("status", "published_at" DESC) WHERE "status" = 'published';
+CREATE INDEX IF NOT EXISTS "open_calls_state_published_idx"
+    ON "public"."open_calls" ("open_call_state", "published_at" DESC) WHERE "open_call_state" = 'published';
 
 CREATE INDEX IF NOT EXISTS "open_calls_kind_idx"
-    ON "public"."open_calls" ("kind", "status");
+    ON "public"."open_calls" ("kind", "open_call_state");
 
 CREATE INDEX IF NOT EXISTS "open_calls_genre_gin"
     ON "public"."open_calls" USING GIN ("genre_tags");
@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS "public"."open_call_submissions" (
     "available_dates" "daterange",
     "answers" "jsonb" DEFAULT '{}'::"jsonb" NOT NULL,
     "attachments" "jsonb" DEFAULT '[]'::"jsonb" NOT NULL,
-    "status" "public"."submission_status" DEFAULT 'submitted' NOT NULL,
+    "submission_phase" "public"."submission_status" DEFAULT 'submitted' NOT NULL,
     "score" smallint,
     "reviewed_by" "uuid",
     "reviewed_at" timestamp with time zone,
@@ -333,15 +333,15 @@ ALTER TABLE "public"."open_call_submissions" OWNER TO "postgres";
 CREATE INDEX IF NOT EXISTS "open_call_submissions_call_idx"
     ON "public"."open_call_submissions" ("open_call_id", "submitted_at" DESC);
 
-CREATE INDEX IF NOT EXISTS "open_call_submissions_status_idx"
-    ON "public"."open_call_submissions" ("open_call_id", "status");
+CREATE INDEX IF NOT EXISTS "open_call_submissions_phase_idx"
+    ON "public"."open_call_submissions" ("open_call_id", "submission_phase");
 
 CREATE INDEX IF NOT EXISTS "open_call_submissions_submitter_idx"
     ON "public"."open_call_submissions" ("submitter_user_id", "submitted_at" DESC);
 
 CREATE UNIQUE INDEX IF NOT EXISTS "open_call_submissions_one_per_user"
     ON "public"."open_call_submissions" ("open_call_id", "submitter_user_id")
-    WHERE "status" <> 'withdrawn';
+    WHERE "submission_phase" <> 'withdrawn';
 
 -- 3e. talent_offers — offer / counter / accept / contract flow
 CREATE TABLE IF NOT EXISTS "public"."talent_offers" (
@@ -361,7 +361,7 @@ CREATE TABLE IF NOT EXISTS "public"."talent_offers" (
     "terms" "jsonb" DEFAULT '{}'::"jsonb" NOT NULL,
     "attached_rider_ids" "uuid"[] DEFAULT ARRAY[]::"uuid"[] NOT NULL,
     "stage_plot_id" "uuid",
-    "status" "public"."talent_offer_status" DEFAULT 'draft' NOT NULL,
+    "talent_offer_state" "public"."talent_offer_status" DEFAULT 'draft' NOT NULL,
     "version" integer DEFAULT 1 NOT NULL,
     "previous_offer_id" "uuid",
     "sent_at" timestamp with time zone,
@@ -384,11 +384,11 @@ CREATE TABLE IF NOT EXISTS "public"."talent_offers" (
 
 ALTER TABLE "public"."talent_offers" OWNER TO "postgres";
 
-CREATE INDEX IF NOT EXISTS "talent_offers_status_idx"
-    ON "public"."talent_offers" ("org_id", "status", "performance_date");
+CREATE INDEX IF NOT EXISTS "talent_offers_state_idx"
+    ON "public"."talent_offers" ("org_id", "talent_offer_state", "performance_date");
 
 CREATE INDEX IF NOT EXISTS "talent_offers_talent_idx"
-    ON "public"."talent_offers" ("talent_profile_id", "status");
+    ON "public"."talent_offers" ("talent_profile_id", "talent_offer_state");
 
 -- 3f. job_postings — public crew job board
 CREATE TABLE IF NOT EXISTS "public"."job_postings" (
@@ -416,7 +416,7 @@ CREATE TABLE IF NOT EXISTS "public"."job_postings" (
     "lodging_provided" boolean DEFAULT false NOT NULL,
     "screening_questions" "jsonb" DEFAULT '[]'::"jsonb" NOT NULL,
     "vetted_only" boolean DEFAULT false NOT NULL,
-    "status" "public"."job_posting_status" DEFAULT 'draft' NOT NULL,
+    "job_posting_phase" "public"."job_posting_status" DEFAULT 'draft' NOT NULL,
     "applicant_count" integer DEFAULT 0 NOT NULL,
     "published_at" timestamp with time zone,
     "expires_at" timestamp with time zone,
@@ -435,15 +435,15 @@ ALTER TABLE "public"."job_postings" OWNER TO "postgres";
 CREATE UNIQUE INDEX IF NOT EXISTS "job_postings_public_slug_unique"
     ON "public"."job_postings" ("public_slug") WHERE "deleted_at" IS NULL;
 
-CREATE INDEX IF NOT EXISTS "job_postings_status_published_idx"
-    ON "public"."job_postings" ("status", "published_at" DESC)
-    WHERE "status" = 'published' AND "deleted_at" IS NULL;
+CREATE INDEX IF NOT EXISTS "job_postings_phase_published_idx"
+    ON "public"."job_postings" ("job_posting_phase", "published_at" DESC)
+    WHERE "job_posting_phase" = 'published' AND "deleted_at" IS NULL;
 
 CREATE INDEX IF NOT EXISTS "job_postings_role_gin"
     ON "public"."job_postings" USING GIN ("role_taxonomy");
 
 CREATE INDEX IF NOT EXISTS "job_postings_region_idx"
-    ON "public"."job_postings" ("region", "status");
+    ON "public"."job_postings" ("region", "job_posting_phase");
 
 CREATE INDEX IF NOT EXISTS "job_postings_dates_gist"
     ON "public"."job_postings" USING GIST ("dates");
@@ -461,7 +461,7 @@ CREATE TABLE IF NOT EXISTS "public"."job_applications" (
     "day_rate_proposed_cents" bigint,
     "available_dates" "daterange",
     "answers" "jsonb" DEFAULT '{}'::"jsonb" NOT NULL,
-    "status" "public"."job_application_status" DEFAULT 'new' NOT NULL,
+    "job_application_phase" "public"."job_application_status" DEFAULT 'new' NOT NULL,
     "score" smallint,
     "reviewer_notes" "text",
     "reviewed_by" "uuid",
@@ -478,10 +478,10 @@ ALTER TABLE "public"."job_applications" OWNER TO "postgres";
 
 CREATE UNIQUE INDEX IF NOT EXISTS "job_applications_one_per_user"
     ON "public"."job_applications" ("job_posting_id", "applicant_user_id")
-    WHERE "status" <> 'withdrawn';
+    WHERE "job_application_phase" <> 'withdrawn';
 
-CREATE INDEX IF NOT EXISTS "job_applications_posting_status_idx"
-    ON "public"."job_applications" ("job_posting_id", "status", "applied_at" DESC);
+CREATE INDEX IF NOT EXISTS "job_applications_posting_phase_idx"
+    ON "public"."job_applications" ("job_posting_id", "job_application_phase", "applied_at" DESC);
 
 CREATE INDEX IF NOT EXISTS "job_applications_applicant_idx"
     ON "public"."job_applications" ("applicant_user_id", "applied_at" DESC);
@@ -808,7 +808,7 @@ CREATE POLICY "open_calls_org_rw" ON "public"."open_calls" TO "authenticated"
 
 DROP POLICY IF EXISTS "open_calls_public_select" ON "public"."open_calls";
 CREATE POLICY "open_calls_public_select" ON "public"."open_calls" FOR SELECT TO "anon", "authenticated"
-    USING ("status" = 'published' AND "deleted_at" IS NULL);
+    USING ("open_call_state" = 'published' AND "deleted_at" IS NULL);
 
 -- open_call_submissions: submitter sees own; org members see all in their org
 DROP POLICY IF EXISTS "open_call_submissions_org_rw" ON "public"."open_call_submissions";
@@ -843,7 +843,7 @@ CREATE POLICY "job_postings_org_rw" ON "public"."job_postings" TO "authenticated
 
 DROP POLICY IF EXISTS "job_postings_public_select" ON "public"."job_postings";
 CREATE POLICY "job_postings_public_select" ON "public"."job_postings" FOR SELECT TO "anon", "authenticated"
-    USING ("status" = 'published' AND "deleted_at" IS NULL);
+    USING ("job_posting_phase" = 'published' AND "deleted_at" IS NULL);
 
 -- job_applications
 DROP POLICY IF EXISTS "job_applications_org_rw" ON "public"."job_applications";

@@ -94,7 +94,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ aut
     .select("id, org_id, trigger_kind, enabled, webhook_secret")
     .eq("id", automationId)
     .maybeSingle();
-  if (loadErr) return apiError("internal", `automation lookup failed: ${loadErr.message}`);
+  if (loadErr) {
+    log.warn("automation.webhook.lookup_failed", { automationId, err: loadErr.message });
+    return apiError("internal", "Automation lookup failed");
+  }
   type AutoRow = {
     id: string;
     org_id: string;
@@ -150,7 +153,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ aut
     })
     .select("id")
     .single();
-  if (insertErr) return apiError("internal", `run insert failed: ${insertErr.message}`);
+  if (insertErr) {
+    log.warn("automation.webhook.run_insert_failed", { automationId, err: insertErr.message });
+    return apiError("internal", "Failed to queue automation run");
+  }
   const runId = (runRow as { id: string }).id;
 
   // Fire-and-forget — runAutomation updates the same row, sets status to

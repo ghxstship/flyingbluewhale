@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ModuleHeader } from "@/components/Shell";
+import { ModuleHeader, PortalRail } from "@/components/Shell";
+import { portalNav } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -57,34 +58,37 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   ];
 
   return (
-    <>
-      <ModuleHeader
-        eyebrow="Portal"
-        title="Volunteer"
-        subtitle={me ? `Welcome, ${me.full_name}${me.role ? ` · ${me.role}` : ""}` : "Volunteer dashboard"}
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Volunteer" }]}
-      />
-      <div className="page-content space-y-5">
-        <div className="metric-grid-3">
-          <MetricCard label="Upcoming Shifts" value={fmt.number(upcomingShifts)} accent={upcomingShifts > 0} />
-          <MetricCard label="Status" value={me ? "Active" : "Pending"} />
-          <MetricCard label="Role" value={me?.role ?? "—"} />
-        </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-              <div className="text-sm font-semibold">{t.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
-            </Link>
-          ))}
-        </div>
-        {!me && (
-          <div className="surface p-4 text-xs text-[var(--text-muted)]">
-            <Badge variant="warning">Not yet onboarded</Badge> Submit your application via the Application tile to get
-            scheduled.
+    <div className="flex min-h-screen">
+      <PortalRail items={portalNav(slug, "volunteer")} title="Volunteer" />
+      <div className="flex-1">
+        <ModuleHeader
+          eyebrow="Portal"
+          title="Volunteer"
+          subtitle={me ? `Welcome, ${me.full_name}${me.role ? ` · ${me.role}` : ""}` : "Volunteer dashboard"}
+          breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Volunteer" }]}
+        />
+        <div className="page-content space-y-5">
+          <div className="metric-grid-3">
+            <MetricCard label="Upcoming Shifts" value={fmt.number(upcomingShifts)} accent={upcomingShifts > 0} />
+            <MetricCard label="Status" value={me ? "Active" : "Pending"} />
+            <MetricCard label="Role" value={me?.role ?? "—"} />
           </div>
-        )}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {tiles.map((t) => (
+              <Link key={t.href} href={t.href} className="surface hover-lift p-5">
+                <div className="text-sm font-semibold">{t.label}</div>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
+              </Link>
+            ))}
+          </div>
+          {!me && (
+            <div className="surface p-4 text-xs text-[var(--text-muted)]">
+              <Badge variant="warning">Not yet onboarded</Badge> Submit your application via the Application tile to get
+              scheduled.
+            </div>
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 }

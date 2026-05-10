@@ -84,7 +84,7 @@ export function AppearanceGallery() {
                 color: "var(--text)",
                 boxShadow: "var(--shadow-elev)",
                 fontFamily: "var(--font-body)",
-                transition: "transform 180ms cubic-bezier(0,0,0.2,1), box-shadow 180ms",
+                transition: "transform var(--motion-normal, 200ms) var(--ease-hover, cubic-bezier(0,0,0.2,1)), box-shadow var(--motion-normal, 200ms) var(--ease-standard, ease)",
               }}
             >
               <ThemePreview slug={slug} />

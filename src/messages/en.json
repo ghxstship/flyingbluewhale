@@ -482,5 +482,37 @@
     "lastSync": "Last Sync",
     "active": "Active",
     "off": "Off"
+  },
+  "form": {
+    "save": "Save",
+    "saving": "Saving",
+    "saved": "Saved",
+    "cancel": "Cancel",
+    "leaveTitle": "Leave without saving?",
+    "leaveBody": "You have unsaved changes. If you leave now, they will be lost.",
+    "stayOnPage": "Stay on this page",
+    "leaveAnyway": "Leave anyway",
+    "nSelected": "{count} selected",
+    "loading": "Loading…",
+    "noResults": "No results",
+    "select": "Select…",
+    "search": "Search…"
+  },
+  "cookies": {
+    "title": "Cookies & privacy",
+    "description": "We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use analytics and marketing cookies to improve the product.",
+    "essential": "Essential",
+    "alwaysOn": "always on",
+    "essentialDescription": "Auth, security, rate limiting.",
+    "analytics": "Analytics",
+    "analyticsDescription": "Aggregate usage stats. We never sell or correlate to identity.",
+    "marketing": "Marketing",
+    "marketingDescription": "Conversion tracking for the marketing site. None inside the product.",
+    "customize": "Customize",
+    "hideDetails": "Hide details",
+    "rejectAll": "Reject all",
+    "acceptAll": "Accept all",
+    "savePreferences": "Save preferences",
+    "toggleLabel": "Toggle {category}"
   }
 }

@@ -24,6 +24,7 @@ import {
   DialogDescription,
 } from "@/components/ui/Dialog";
 import { useAnnounce } from "@/components/ui/LiveRegion";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type FormState = {
   error?: string;
@@ -42,7 +43,7 @@ type FormShellProps = {
 
 export function FormShell({
   action,
-  submitLabel = "Save",
+  submitLabel,
   cancelHref,
   children,
   dirtyGuard,
@@ -54,6 +55,8 @@ export function FormShell({
   const errorId = useId();
   const announce = useAnnounce();
   const router = useRouter();
+  const t = useT();
+  const resolvedSubmitLabel = submitLabel ?? t("form.save");
 
   const [dirty, setDirty] = useState(false);
   const dirtyRef = useRef(false);
@@ -99,7 +102,7 @@ export function FormShell({
   // Announce error/success
   useEffect(() => {
     if (state?.error) announce(state.error, "assertive");
-    if (state?.ok) announce("Saved", "polite");
+    if (state?.ok) announce(t("form.saved"), "polite");
   }, [state, announce]);
 
   const handleChange = useCallback(() => {
@@ -130,11 +133,11 @@ export function FormShell({
         <div className="flex items-center justify-end gap-2">
           {cancelHref && (
             <Button href={cancelHref} variant="ghost">
-              Cancel
+              {t("form.cancel")}
             </Button>
           )}
           <Button type="submit" loading={pending}>
-            {pending ? "Saving" : submitLabel}
+            {pending ? t("form.saving") : resolvedSubmitLabel}
           </Button>
         </div>
       </form>
@@ -143,12 +146,12 @@ export function FormShell({
       <Dialog open={blockedUrl !== null} onOpenChange={(v) => !v && setBlockedUrl(null)}>
         <DialogContent size="sm">
           <DialogHeader>
-            <DialogTitle>Leave without saving?</DialogTitle>
-            <DialogDescription>You have unsaved changes. If you leave now, they will be lost.</DialogDescription>
+            <DialogTitle>{t("form.leaveTitle")}</DialogTitle>
+            <DialogDescription>{t("form.leaveBody")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setBlockedUrl(null)}>
-              Stay on this page
+              {t("form.stayOnPage")}
             </Button>
             <Button
               variant="danger"
@@ -163,7 +166,7 @@ export function FormShell({
                 }
               }}
             >
-              Leave anyway
+              {t("form.leaveAnyway")}
             </Button>
           </DialogFooter>
         </DialogContent>

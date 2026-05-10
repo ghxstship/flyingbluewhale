@@ -482,5 +482,37 @@
     "lastSync": "最終同期",
     "active": "有効",
     "off": "無効"
+  },
+  "form": {
+    "save": "保存",
+    "saving": "保存中",
+    "saved": "保存済み",
+    "cancel": "キャンセル",
+    "leaveTitle": "保存せずに離れますか？",
+    "leaveBody": "未保存の変更があります。今離れると変更は失われます。",
+    "stayOnPage": "このページに留まる",
+    "leaveAnyway": "それでも離れる",
+    "nSelected": "{count}件選択中",
+    "loading": "読み込み中…",
+    "noResults": "結果なし",
+    "select": "選択…",
+    "search": "検索…"
+  },
+  "cookies": {
+    "title": "クッキーとプライバシー",
+    "description": "ログイン状態の維持とアカウント保護のために必須クッキーを使用しています。同意いただければ、製品改善のためにアナリティクスおよびマーケティングクッキーも使用します。",
+    "essential": "必須",
+    "alwaysOn": "常時有効",
+    "essentialDescription": "認証、セキュリティ、レート制限。",
+    "analytics": "アナリティクス",
+    "analyticsDescription": "集計された利用統計。データを販売したり個人と紐付けることはありません。",
+    "marketing": "マーケティング",
+    "marketingDescription": "マーケティングサイトのコンバージョントラッキング。製品内では使用しません。",
+    "customize": "カスタマイズ",
+    "hideDetails": "詳細を非表示",
+    "rejectAll": "すべて拒否",
+    "acceptAll": "すべて受け入れる",
+    "savePreferences": "設定を保存",
+    "toggleLabel": "{category}を切り替え"
   }
 }

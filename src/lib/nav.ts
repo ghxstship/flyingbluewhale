@@ -156,6 +156,7 @@ export const platformNav: NavGroup[] = [
       { label: "Readiness", href: "/console/programs/readiness", icon: "ShieldCheck" },
       { label: "Reviews", href: "/console/programs/reviews", icon: "ClipboardCheck" },
       { label: "Proposals", href: "/console/proposals", icon: "FileText" },
+      { label: "Templates", href: "/console/templates", icon: "Files" },
     ],
   },
   {
@@ -290,6 +291,7 @@ export const platformNav: NavGroup[] = [
       { label: "Settlements", href: "/console/bookings/settlements", icon: "Coins" },
       { label: "Tours", href: "/console/agency/tours", icon: "Route" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
+      { label: "Campaigns", href: "/console/campaigns", icon: "Megaphone" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
     ],
   },
@@ -298,6 +300,7 @@ export const platformNav: NavGroup[] = [
     items: [
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
+      { label: "Forms", href: "/console/forms", icon: "ClipboardList" },
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
       { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
       // Renamed from "XPMS Spine" — the codebase taxonomy doesn't surface

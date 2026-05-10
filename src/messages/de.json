@@ -482,5 +482,37 @@
     "lastSync": "Letzte Sync",
     "active": "Aktiv",
     "off": "Inaktiv"
+  },
+  "form": {
+    "save": "Speichern",
+    "saving": "Wird gespeichert",
+    "saved": "Gespeichert",
+    "cancel": "Abbrechen",
+    "leaveTitle": "Ohne Speichern verlassen?",
+    "leaveBody": "Du hast ungespeicherte Änderungen. Wenn du jetzt gehst, gehen sie verloren.",
+    "stayOnPage": "Auf dieser Seite bleiben",
+    "leaveAnyway": "Trotzdem verlassen",
+    "nSelected": "{count} ausgewählt",
+    "loading": "Wird geladen…",
+    "noResults": "Keine Ergebnisse",
+    "select": "Auswählen…",
+    "search": "Suchen…"
+  },
+  "cookies": {
+    "title": "Cookies & Datenschutz",
+    "description": "Wir verwenden notwendige Cookies, um dich angemeldet zu halten und dein Konto zu schützen. Mit deiner Erlaubnis nutzen wir auch Analyse- und Marketing-Cookies zur Produktverbesserung.",
+    "essential": "Notwendig",
+    "alwaysOn": "immer aktiv",
+    "essentialDescription": "Auth, Sicherheit, Rate-Limiting.",
+    "analytics": "Analyse",
+    "analyticsDescription": "Aggregierte Nutzungsstatistiken. Wir verkaufen keine Daten.",
+    "marketing": "Marketing",
+    "marketingDescription": "Conversion-Tracking für die Marketing-Site. Nicht im Produkt.",
+    "customize": "Anpassen",
+    "hideDetails": "Details ausblenden",
+    "rejectAll": "Alle ablehnen",
+    "acceptAll": "Alle akzeptieren",
+    "savePreferences": "Einstellungen speichern",
+    "toggleLabel": "{category} umschalten"
   }
 }

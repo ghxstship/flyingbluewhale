@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ModuleHeader } from "@/components/Shell";
+import { ModuleHeader, PortalRail } from "@/components/Shell";
+import { portalNav } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -65,31 +66,34 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   ];
 
   return (
-    <>
-      <ModuleHeader
-        eyebrow="Portal"
-        title="Delegation"
-        subtitle="Operations dashboard for delegation attachés"
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Delegation" }]}
-      />
-      <div className="page-content space-y-5">
-        <div className="metric-grid-3">
-          <MetricCard label="Entries" value={fmt.number(entries ?? 0)} />
-          <MetricCard label="Visa Cases" value={fmt.number(visas ?? 0)} />
-          <MetricCard label="Orders" value={fmt.number(orders ?? 0)} />
-        </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-              <div className="flex items-start justify-between gap-2">
-                <div className="text-sm font-semibold">{t.label}</div>
-                {t.count != null && <Badge variant="muted">{t.count}</Badge>}
-              </div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
-            </Link>
-          ))}
+    <div className="flex min-h-screen">
+      <PortalRail items={portalNav(slug, "delegation")} title="Delegation" />
+      <div className="flex-1">
+        <ModuleHeader
+          eyebrow="Portal"
+          title="Delegation"
+          subtitle="Operations dashboard for delegation attachés"
+          breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Delegation" }]}
+        />
+        <div className="page-content space-y-5">
+          <div className="metric-grid-3">
+            <MetricCard label="Entries" value={fmt.number(entries ?? 0)} />
+            <MetricCard label="Visa Cases" value={fmt.number(visas ?? 0)} />
+            <MetricCard label="Orders" value={fmt.number(orders ?? 0)} />
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {tiles.map((t) => (
+              <Link key={t.href} href={t.href} className="surface hover-lift p-5">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="text-sm font-semibold">{t.label}</div>
+                  {t.count != null && <Badge variant="muted">{t.count}</Badge>}
+                </div>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

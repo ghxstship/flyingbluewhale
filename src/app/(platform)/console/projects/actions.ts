@@ -20,9 +20,11 @@ const CreateSchema = z.object({
   endDate: z.string().date().optional().or(z.literal("")),
 });
 
-export type CreateProjectState = { error?: string } | null;
+export type State = { error?: string } | null;
+/** @deprecated Use State */
+export type CreateProjectState = State;
 
-export async function createProjectAction(_: CreateProjectState, formData: FormData): Promise<CreateProjectState> {
+export async function createProjectAction(_: State, formData: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = CreateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };

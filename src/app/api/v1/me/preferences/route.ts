@@ -36,7 +36,7 @@ export async function GET() {
 
   const { data, error } = await supabase.from("user_preferences").select("*").eq("user_id", u.user.id).maybeSingle();
 
-  if (error) return apiError("internal", error.message);
+  if (error) return apiError("internal", "Failed to load preferences");
 
   // Flatten ui_state into the top-level response shape
   const uiState = (data?.ui_state as Record<string, unknown> | null) ?? {};
@@ -81,7 +81,7 @@ export async function PATCH(req: NextRequest) {
     .select()
     .single();
 
-  if (error) return apiError("internal", error.message);
+  if (error) return apiError("internal", "Failed to save preferences");
   const uiState = (data.ui_state as Record<string, unknown> | null) ?? {};
   return apiOk({ ...data, ...uiState });
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ModuleHeader } from "@/components/Shell";
+import { ModuleHeader, PortalRail } from "@/components/Shell";
+import { portalNav } from "@/lib/nav";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -37,28 +38,31 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   ];
 
   return (
-    <>
-      <ModuleHeader
-        eyebrow="Portal"
-        title="Media"
-        subtitle="Working areas, services, and editorial info for accredited media"
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Media" }]}
-      />
-      <div className="page-content space-y-5">
-        <div className="metric-grid-3">
-          <MetricCard label="Info Articles" value={fmt.number(kbCount ?? 0)} />
-          <MetricCard label="Status" value="Live" accent />
-          <MetricCard label="Last Updated" value="today" />
-        </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-              <div className="text-sm font-semibold">{t.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
-            </Link>
-          ))}
+    <div className="flex min-h-screen">
+      <PortalRail items={portalNav(slug, "media")} title="Media" />
+      <div className="flex-1">
+        <ModuleHeader
+          eyebrow="Portal"
+          title="Media"
+          subtitle="Working areas, services, and editorial info for accredited media"
+          breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Media" }]}
+        />
+        <div className="page-content space-y-5">
+          <div className="metric-grid-3">
+            <MetricCard label="Info Articles" value={fmt.number(kbCount ?? 0)} />
+            <MetricCard label="Status" value="Live" accent />
+            <MetricCard label="Last Updated" value="today" />
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {tiles.map((t) => (
+              <Link key={t.href} href={t.href} className="surface hover-lift p-5">
+                <div className="text-sm font-semibold">{t.label}</div>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

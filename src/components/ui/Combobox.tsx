@@ -5,6 +5,7 @@ import { Command as CommandPrimitive } from "cmdk";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Spinner } from "./Spinner";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Combobox — searchable single-select.
@@ -27,9 +28,9 @@ export function Combobox({
   loaderDebounceMs = 200,
   value,
   onChange,
-  placeholder = "Select…",
-  searchPlaceholder = "Search…",
-  emptyLabel = "No results",
+  placeholder,
+  searchPlaceholder,
+  emptyLabel,
   className = "",
 }: {
   options?: ComboboxOption[];
@@ -45,6 +46,10 @@ export function Combobox({
   emptyLabel?: string;
   className?: string;
 }) {
+  const t = useT();
+  const resolvedPlaceholder = placeholder ?? t("form.select");
+  const resolvedSearchPlaceholder = searchPlaceholder ?? t("form.search");
+  const resolvedEmptyLabel = emptyLabel ?? t("form.noResults");
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [asyncOptions, setAsyncOptions] = React.useState<ComboboxOption[]>([]);
@@ -85,10 +90,10 @@ export function Combobox({
           role="combobox"
           aria-expanded={open}
           aria-controls={listboxId}
-          aria-label={placeholder}
+          aria-label={resolvedPlaceholder}
           className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
-          <span className={selectedLabel ? "" : "text-[var(--text-muted)]"}>{selectedLabel ?? placeholder}</span>
+          <span className={selectedLabel ? "" : "text-[var(--text-muted)]"}>{selectedLabel ?? resolvedPlaceholder}</span>
           <ChevronsUpDown size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
         </button>
       </PopoverPrimitive.Trigger>
@@ -103,7 +108,7 @@ export function Combobox({
           <CommandPrimitive className="flex flex-col" shouldFilter={!optionsLoader}>
             <div className="flex items-center gap-2 border-b border-[var(--border-color)] px-3 py-2">
               <CommandPrimitive.Input
-                placeholder={searchPlaceholder}
+                placeholder={resolvedSearchPlaceholder}
                 value={query}
                 onValueChange={setQuery}
                 className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
@@ -112,7 +117,7 @@ export function Combobox({
             </div>
             <CommandPrimitive.List className="max-h-60 overflow-y-auto p-1">
               <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--text-muted)]">
-                {loading ? "Loading…" : emptyLabel}
+                {loading ? t("form.loading") : resolvedEmptyLabel}
               </CommandPrimitive.Empty>
               {options.map((o) => (
                 <CommandPrimitive.Item
@@ -146,9 +151,9 @@ export function MultiCombobox({
   options,
   value,
   onChange,
-  placeholder = "Select…",
-  searchPlaceholder = "Search…",
-  emptyLabel = "No results",
+  placeholder,
+  searchPlaceholder,
+  emptyLabel,
   className = "",
 }: {
   options: ComboboxOption[];
@@ -159,6 +164,10 @@ export function MultiCombobox({
   emptyLabel?: string;
   className?: string;
 }) {
+  const t = useT();
+  const resolvedPlaceholder = placeholder ?? t("form.select");
+  const resolvedSearchPlaceholder = searchPlaceholder ?? t("form.search");
+  const resolvedEmptyLabel = emptyLabel ?? t("form.noResults");
   const [open, setOpen] = React.useState(false);
   const listboxId = React.useId();
   const selectedSet = new Set(value);
@@ -172,11 +181,11 @@ export function MultiCombobox({
           role="combobox"
           aria-expanded={open}
           aria-controls={listboxId}
-          aria-label={placeholder}
+          aria-label={resolvedPlaceholder}
           className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
           <span className={selectedLabels.length ? "" : "text-[var(--text-muted)]"}>
-            {selectedLabels.length ? `${selectedLabels.length} selected` : placeholder}
+            {selectedLabels.length ? t("form.nSelected", { count: selectedLabels.length }) : resolvedPlaceholder}
           </span>
           <ChevronsUpDown size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
         </button>
@@ -191,13 +200,13 @@ export function MultiCombobox({
           <CommandPrimitive>
             <div className="border-b border-[var(--border-color)] px-3 py-2">
               <CommandPrimitive.Input
-                placeholder={searchPlaceholder}
+                placeholder={resolvedSearchPlaceholder}
                 className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
               />
             </div>
             <CommandPrimitive.List className="max-h-60 overflow-y-auto p-1">
               <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--text-muted)]">
-                {emptyLabel}
+                {resolvedEmptyLabel}
               </CommandPrimitive.Empty>
               {options.map((o) => {
                 const checked = selectedSet.has(o.value);

@@ -5,11 +5,14 @@ import * as React from "react";
 /**
  * FormField — wraps any form control with consistent label + hint + error
  * + count layout. Use over hand-rolling each `<div className="flex flex-col
- * gap-1.5">` block. Auto-wires `aria-describedby` to the field via
- * `useFormFieldIds` if the child accepts an `id` prop.
+ * gap-1.5">` block.
  *
- *   <FormField label="Domain" hint="example.com" required>
- *     <input name="domain" className="input-base" />
+ * Pass `inputId` to wire `htmlFor` on the label and to derive an
+ * `errorId` (`{inputId}-error`) that callers can reference via
+ * `aria-describedby` on their control.
+ *
+ *   <FormField label="Domain" hint="example.com" required inputId="domain-field">
+ *     <input id="domain-field" aria-describedby="domain-field-error" ... />
  *   </FormField>
  */
 export function FormField({
@@ -27,9 +30,12 @@ export function FormField({
   required?: boolean;
   children: React.ReactNode;
   className?: string;
-  /** ID of the associated form control — wires `htmlFor` on the label. */
+  /** ID of the associated form control — wires `htmlFor` on the label and
+   *  derives `{inputId}-error` / `{inputId}-hint` IDs for `aria-describedby`. */
   inputId?: string;
 }) {
+  const errorId = inputId ? `${inputId}-error` : undefined;
+  const hintId = inputId ? `${inputId}-hint` : undefined;
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {label && (
@@ -44,11 +50,15 @@ export function FormField({
       )}
       {children}
       {error && (
-        <span role="alert" className="text-xs text-[var(--color-error)]">
+        <span id={errorId} role="alert" className="text-xs text-[var(--color-error)]">
           {error}
         </span>
       )}
-      {!error && hint && <span className="text-xs text-[var(--text-muted)]">{hint}</span>}
+      {!error && hint && (
+        <span id={hintId} className="text-xs text-[var(--text-muted)]">
+          {hint}
+        </span>
+      )}
     </div>
   );
 }

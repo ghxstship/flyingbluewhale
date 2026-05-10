@@ -10,6 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Consent = {
   essential: true; // always on
@@ -44,12 +45,13 @@ export function CookieConsent() {
   const [analytics, setAnalytics] = React.useState(false);
   const [marketing, setMarketing] = React.useState(false);
   const [showDetails, setShowDetails] = React.useState(false);
+  const t = useT();
 
   React.useEffect(() => {
     if (!readConsent()) {
       // Defer slightly so it doesn't block first paint
-      const t = setTimeout(() => setOpen(true), 600);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setOpen(true), 600);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -67,27 +69,31 @@ export function CookieConsent() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent size="md" hideCloseButton>
         <DialogHeader>
-          <DialogTitle>Cookies & privacy</DialogTitle>
-          <DialogDescription>
-            We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use
-            analytics and marketing cookies to improve the product.
-          </DialogDescription>
+          <DialogTitle>{t("cookies.title")}</DialogTitle>
+          <DialogDescription>{t("cookies.description")}</DialogDescription>
         </DialogHeader>
 
         {showDetails && (
           <div className="mt-4 space-y-3 text-xs">
-            <Row label="Essential" required description="Auth, security, rate limiting." />
-            <ToggleRow
-              label="Analytics"
-              description="Aggregate usage stats. We never sell or correlate to identity."
-              checked={analytics}
-              onChange={setAnalytics}
+            <Row
+              label={t("cookies.essential")}
+              required
+              alwaysOnLabel={t("cookies.alwaysOn")}
+              description={t("cookies.essentialDescription")}
             />
             <ToggleRow
-              label="Marketing"
-              description="Conversion tracking for the marketing site. None inside the product."
+              label={t("cookies.analytics")}
+              description={t("cookies.analyticsDescription")}
+              checked={analytics}
+              onChange={setAnalytics}
+              toggleAriaLabel={t("cookies.toggleLabel", { category: t("cookies.analytics") })}
+            />
+            <ToggleRow
+              label={t("cookies.marketing")}
+              description={t("cookies.marketingDescription")}
               checked={marketing}
               onChange={setMarketing}
+              toggleAriaLabel={t("cookies.toggleLabel", { category: t("cookies.marketing") })}
             />
           </div>
         )}
@@ -98,16 +104,16 @@ export function CookieConsent() {
             onClick={() => setShowDetails((v) => !v)}
             className="text-xs text-[var(--text-muted)] underline-offset-4 hover:underline"
           >
-            {showDetails ? "Hide details" : "Customize"}
+            {showDetails ? t("cookies.hideDetails") : t("cookies.customize")}
           </button>
           <div className="flex gap-2">
             <Button variant="ghost" onClick={() => decide({ analytics: false, marketing: false })}>
-              Reject all
+              {t("cookies.rejectAll")}
             </Button>
             {showDetails ? (
-              <Button onClick={() => decide({ analytics, marketing })}>Save preferences</Button>
+              <Button onClick={() => decide({ analytics, marketing })}>{t("cookies.savePreferences")}</Button>
             ) : (
-              <Button onClick={() => decide({ analytics: true, marketing: true })}>Accept all</Button>
+              <Button onClick={() => decide({ analytics: true, marketing: true })}>{t("cookies.acceptAll")}</Button>
             )}
           </div>
         </DialogFooter>
@@ -116,13 +122,23 @@ export function CookieConsent() {
   );
 }
 
-function Row({ label, required, description }: { label: string; required?: boolean; description: string }) {
+function Row({
+  label,
+  required,
+  alwaysOnLabel,
+  description,
+}: {
+  label: string;
+  required?: boolean;
+  alwaysOnLabel?: string;
+  description: string;
+}) {
   return (
     <div className="flex items-start justify-between gap-3">
       <div>
         <div className="font-medium">
           {label}
-          {required && " · always on"}
+          {required && alwaysOnLabel && ` · ${alwaysOnLabel}`}
         </div>
         <div className="text-[var(--text-muted)]">{description}</div>
       </div>
@@ -135,11 +151,13 @@ function ToggleRow({
   description,
   checked,
   onChange,
+  toggleAriaLabel,
 }: {
   label: string;
   description: string;
   checked: boolean;
   onChange: (v: boolean) => void;
+  toggleAriaLabel?: string;
 }) {
   return (
     <div className="flex items-start justify-between gap-3">
@@ -152,7 +170,7 @@ function ToggleRow({
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange(e.currentTarget.checked)}
-          aria-label={`Toggle ${label}`}
+          aria-label={toggleAriaLabel ?? label}
           className="h-4 w-4"
         />
       </label>

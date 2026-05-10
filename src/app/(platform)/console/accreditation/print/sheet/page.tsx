@@ -94,7 +94,9 @@ export default async function PrintSheetPage() {
                     </div>
                     {c.qrDataUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={c.qrDataUrl} alt="" className="h-16 w-16" />
+                      /* The barcode value is already rendered as visible text below;
+                         the QR is a machine-readable duplicate — mark decorative. */
+                      <img src={c.qrDataUrl} alt="" aria-hidden="true" className="h-16 w-16" />
                     )}
                   </div>
                   <div className="mt-auto flex items-end justify-between text-[8px] text-black/60">

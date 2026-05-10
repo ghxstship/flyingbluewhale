@@ -117,8 +117,24 @@ export function formatTime(
 }
 
 /**
+ * Compact relative-time labels for dense UI cells (e.g. table timestamps).
+ * Rendered with Intl.RelativeTimeFormat so they respect the active locale.
+ * Unit suffixes use the "narrow" style ("1 min. ago", "in 3 h." in en).
+ */
+function formatRelativeCompact(diffSeconds: number, locale: string): string {
+  const abs = Math.abs(diffSeconds);
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "narrow" });
+  if (abs < 60) return rtf.format(Math.round(diffSeconds), "second");
+  if (abs < 3600) return rtf.format(Math.round(diffSeconds / 60), "minute");
+  if (abs < 86400) return rtf.format(Math.round(diffSeconds / 3600), "hour");
+  if (abs < 2592000) return rtf.format(Math.round(diffSeconds / 86400), "day");
+  if (abs < 31536000) return rtf.format(Math.round(diffSeconds / 2592000), "month");
+  return rtf.format(Math.round(diffSeconds / 31536000), "year");
+}
+
+/**
  * "3 hours ago", "in 2 days", etc. With `compact: true`, emits terse
- * English-only forms ("3h ago", "in 2d", "just now") for dense table cells.
+ * locale-aware forms using Intl.RelativeTimeFormat "narrow" style.
  */
 export function formatRelative(
   date: Date | string | number | null | undefined,
@@ -130,20 +146,8 @@ export function formatRelative(
   const diffSeconds = (d.getTime() - Date.now()) / 1000;
 
   if (opts.compact) {
-    const abs = Math.abs(diffSeconds);
-    const past = diffSeconds < 0;
-    if (abs < 60) return "just now";
-    const [value, suffix] =
-      abs < 3600
-        ? [Math.round(abs / 60), "m"]
-        : abs < 86400
-          ? [Math.round(abs / 3600), "h"]
-          : abs < 2592000
-            ? [Math.round(abs / 86400), "d"]
-            : abs < 31536000
-              ? [Math.round(abs / 2592000), "mo"]
-              : [Math.round(abs / 31536000), "y"];
-    return past ? `${value}${suffix} ago` : `in ${value}${suffix}`;
+    const locale = opts.locale ?? DEFAULT_LOCALE;
+    return formatRelativeCompact(diffSeconds, locale);
   }
 
   const locale = opts.locale ?? DEFAULT_LOCALE;

@@ -59,7 +59,7 @@ export async function GET(req: Request) {
         <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" }}>
           L Y T E H A U S
         </div>
-        <div style={{ fontSize: 16, color: "#555", fontFamily: "ui-monospace, SFMono-Regular, monospace" }}>
+        <div style={{ fontSize: 16, color: "#595959", fontFamily: "ui-monospace, SFMono-Regular, monospace" }}>
           ATLVS · GVTEWAY · COMPVSS
         </div>
       </div>

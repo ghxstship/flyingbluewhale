@@ -482,5 +482,37 @@
     "lastSync": "Dernière Synchro",
     "active": "Actif",
     "off": "Inactif"
+  },
+  "form": {
+    "save": "Enregistrer",
+    "saving": "Enregistrement",
+    "saved": "Enregistré",
+    "cancel": "Annuler",
+    "leaveTitle": "Quitter sans enregistrer ?",
+    "leaveBody": "Vous avez des modifications non enregistrées. Si vous partez maintenant, elles seront perdues.",
+    "stayOnPage": "Rester sur cette page",
+    "leaveAnyway": "Quitter quand même",
+    "nSelected": "{count} sélectionné(s)",
+    "loading": "Chargement…",
+    "noResults": "Aucun résultat",
+    "select": "Sélectionner…",
+    "search": "Rechercher…"
+  },
+  "cookies": {
+    "title": "Cookies et confidentialité",
+    "description": "Nous utilisons des cookies essentiels pour vous maintenir connecté et protéger votre compte. Avec votre permission, nous utilisons aussi des cookies d'analyse et de marketing pour améliorer le produit.",
+    "essential": "Essentiels",
+    "alwaysOn": "toujours actifs",
+    "essentialDescription": "Auth, sécurité, limitation du débit.",
+    "analytics": "Analytique",
+    "analyticsDescription": "Statistiques d'utilisation agrégées. Nous ne vendons pas les données.",
+    "marketing": "Marketing",
+    "marketingDescription": "Suivi des conversions pour le site marketing. Rien à l'intérieur du produit.",
+    "customize": "Personnaliser",
+    "hideDetails": "Masquer les détails",
+    "rejectAll": "Tout rejeter",
+    "acceptAll": "Tout accepter",
+    "savePreferences": "Enregistrer les préférences",
+    "toggleLabel": "Basculer {category}"
   }
 }

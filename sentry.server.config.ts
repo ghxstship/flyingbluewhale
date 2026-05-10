@@ -9,6 +9,8 @@ if (dsn) {
     environment: process.env.VERCEL_ENV ?? process.env.NODE_ENV,
     release: process.env.SENTRY_RELEASE,
     tracesSampleRate: 0.1,
+    // Capture all errors (no sampling) so production incidents are never silently dropped.
+    sampleRate: 1.0,
     // Default PII off (IPs, request bodies, user agents). Everything useful
     // for debugging is already in the structured logger, correlatable via
     // request_id. See docs/audit/06-hardening-report.md IK-041.

@@ -16,10 +16,13 @@ const PolicySchema = z.object({
   category: z.enum(["finance", "safety", "hr", "data", "operations"]).default("operations"),
 });
 
-export type CommitteeState = { error?: string } | null;
-export type PolicyState = { error?: string } | null;
+export type State = { error?: string } | null;
+/** @deprecated Use State */
+export type CommitteeState = State;
+/** @deprecated Use State */
+export type PolicyState = State;
 
-export async function createCommittee(_: CommitteeState, fd: FormData): Promise<CommitteeState> {
+export async function createCommittee(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = CommitteeSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
@@ -35,7 +38,7 @@ export async function createCommittee(_: CommitteeState, fd: FormData): Promise<
   return null;
 }
 
-export async function createPolicy(_: PolicyState, fd: FormData): Promise<PolicyState> {
+export async function createPolicy(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = PolicySchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };

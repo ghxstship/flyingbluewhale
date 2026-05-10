@@ -1,6 +1,7 @@
 import { apiError, apiOk } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { env } from "@/lib/env";
+import { log } from "@/lib/log";
 import { createClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { httpFetch } from "@/lib/http";
 import { urlFor } from "@/lib/urls";
@@ -51,7 +52,8 @@ export async function POST() {
       });
       if (!res.ok) {
         const text = await res.text();
-        return apiError("internal", `Stripe customer create failed: ${text}`);
+        log.warn("stripe.portal.customer_create_failed", { org_id: session.orgId, status: res.status, detail: text });
+        return apiError("internal", "Failed to create Stripe customer");
       }
       const created = (await res.json()) as { id: string };
       customerId = created.id;
@@ -71,7 +73,8 @@ export async function POST() {
     });
     if (!res.ok) {
       const text = await res.text();
-      return apiError("internal", `Stripe error: ${text}`);
+      log.warn("stripe.portal.session_create_failed", { org_id: session.orgId, status: res.status, detail: text });
+      return apiError("internal", "Failed to create Stripe billing portal session");
     }
     const json = (await res.json()) as { url: string };
     return apiOk({ url: json.url });

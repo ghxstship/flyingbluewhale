@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ModuleHeader } from "@/components/Shell";
+import { ModuleHeader, PortalRail } from "@/components/Shell";
+import { portalNav } from "@/lib/nav";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -44,35 +45,38 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   ];
 
   return (
-    <>
-      <ModuleHeader
-        eyebrow="Portal"
-        title="VIP"
-        subtitle="Concierge, dedicated transport, and private hosting"
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "VIP" }]}
-      />
-      <div className="page-content space-y-5">
-        <div className="metric-grid-3">
-          <MetricCard label="Suites" value={fmt.number(blocks ?? 0)} />
-          <MetricCard label="T1 Runs" value={fmt.number(runs ?? 0)} />
-          <MetricCard label="Status" value="Live" accent />
+    <div className="flex min-h-screen">
+      <PortalRail items={portalNav(slug, "vip")} title="VIP" />
+      <div className="flex-1">
+        <ModuleHeader
+          eyebrow="Portal"
+          title="VIP"
+          subtitle="Concierge, dedicated transport, and private hosting"
+          breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "VIP" }]}
+        />
+        <div className="page-content space-y-5">
+          <div className="metric-grid-3">
+            <MetricCard label="Suites" value={fmt.number(blocks ?? 0)} />
+            <MetricCard label="T1 Runs" value={fmt.number(runs ?? 0)} />
+            <MetricCard label="Status" value="Live" accent />
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {tiles.map((t) => (
+              <Link key={t.href} href={t.href} className="surface hover-lift p-5">
+                <div className="text-sm font-semibold">{t.label}</div>
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
+              </Link>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--text-muted)]">
+            Concierge:{" "}
+            <a className="text-[var(--org-primary)]" href="mailto:vip@lytehaus.live">
+              vip@lytehaus.live
+            </a>{" "}
+            — 24/7 during event window.
+          </p>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-              <div className="text-sm font-semibold">{t.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
-            </Link>
-          ))}
-        </div>
-        <p className="text-xs text-[var(--text-muted)]">
-          Concierge:{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:vip@lytehaus.live">
-            vip@lytehaus.live
-          </a>{" "}
-          — 24/7 during event window.
-        </p>
       </div>
-    </>
+    </div>
   );
 }

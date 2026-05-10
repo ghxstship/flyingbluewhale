@@ -117,6 +117,7 @@ export async function proxy(request: NextRequest) {
   // /api/v1/ `write` bucket lives at the bottom so it only triggers when no
   // tighter rule already accounted for the request. Without `break`, an
   // /api/v1/ai/* call would consume both the `ai` and `write` buckets.
+  let rateLimitHeaders: Record<string, string> | undefined;
   if (RATE_LIMITED_METHODS.has(request.method)) {
     for (const rule of PROTECTED) {
       if (!rule.match.test(pathname)) continue;
@@ -157,6 +158,13 @@ export async function proxy(request: NextRequest) {
         applyCors(request, res);
         return res;
       }
+      // Carry the remaining / reset values through so we can set them on the
+      // eventual 2xx response — clients can track their budget without polling.
+      rateLimitHeaders = {
+        "x-ratelimit-bucket": rule.bucket,
+        "x-ratelimit-remaining": String(result.remaining),
+        "x-ratelimit-reset": String(result.resetAt),
+      };
       break;
     }
   }
@@ -248,6 +256,13 @@ export async function proxy(request: NextRequest) {
   response.headers.set("x-request-id", requestId);
   response.headers.set("x-shell", shell);
   if (tenantSlug) response.headers.set("x-tenant-slug", tenantSlug);
+  // Propagate rate-limit budget headers on successful responses so clients
+  // can track remaining quota without waiting for a 429.
+  if (rateLimitHeaders) {
+    for (const [k, v] of Object.entries(rateLimitHeaders)) {
+      response.headers.set(k, v);
+    }
+  }
   // Server-Timing is additive — append if the downstream handler already set it.
   const existingTiming = response.headers.get("server-timing");
   response.headers.set(

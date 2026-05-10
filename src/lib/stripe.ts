@@ -42,7 +42,14 @@ export async function verifyStripeWebhook(
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-  if (hex !== signature) return null;
+  // Constant-time comparison to prevent timing attacks. Both values are the
+  // same length (64 hex chars) so the XOR-accumulation approach is safe.
+  if (hex.length !== signature.length) return null;
+  let diff = 0;
+  for (let i = 0; i < hex.length; i++) {
+    diff |= hex.charCodeAt(i) ^ signature.charCodeAt(i);
+  }
+  if (diff !== 0) return null;
 
   try {
     return JSON.parse(rawBody);

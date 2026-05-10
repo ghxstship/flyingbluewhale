@@ -92,7 +92,9 @@ export async function setInvoiceStatusAction(id: string, status: "draft" | "sent
     .from("invoices")
     .select("number, title, amount_cents, created_by")
     .eq("id", id)
+    .eq("org_id", session.orgId)
     .maybeSingle();
+  if (!before) return { error: "Invoice not found in your organization" };
   const { error } = await supabase.from("invoices").update(patch).eq("org_id", session.orgId).eq("id", id);
   if (error) return { error: error.message };
   // Lifecycle emit → notification + webhook fan-out + optional email.

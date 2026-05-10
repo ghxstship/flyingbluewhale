@@ -111,11 +111,15 @@ export async function setDeliverableStatusAction(deliverableId: string, status: 
   const supabase = await createClient();
 
   // Capture org/project + current status before write so we can validate
-  // the transition AND scope the conditional update.
+  // the transition AND scope the conditional update. Pin org_id on
+  // top of RLS so a foreign-org deliverable id 404s instead of leaking
+  // its existence through a "not found" vs "permission denied" timing
+  // difference.
   const { data: before } = await supabase
     .from("deliverables")
     .select("org_id, project_id, title, type, submitted_by, status")
     .eq("id", deliverableId)
+    .eq("org_id", session.orgId)
     .maybeSingle();
   if (!before) return { error: "Deliverable not found" };
   const current = before.status as DeliverableStatus;
@@ -142,6 +146,7 @@ export async function setDeliverableStatusAction(deliverableId: string, status: 
     .from("deliverables")
     .update(patch)
     .eq("id", deliverableId)
+    .eq("org_id", session.orgId)
     .eq("status", current)
     .select("id");
   if (error) return { error: error.message };

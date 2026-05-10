@@ -4,6 +4,7 @@ import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { validateOutboundUrl } from "@/lib/http-ssrf";
 
 /**
  * /api/v1/webhooks/endpoints — outbound webhook registrations.
@@ -57,6 +58,19 @@ export async function POST(req: NextRequest) {
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
+
+    // SSRF guard at the security boundary — the Edge Function
+    // (supabase/functions/job-worker/index.ts) does the actual
+    // outbound POST in Deno and can't import this Node-only helper,
+    // so we validate when the URL first lands in the table. DNS
+    // resolves at this point; subsequent deliveries trust the
+    // pre-validated URL (DNS rebinding mitigated by the per-host
+    // circuit breaker on the worker side).
+    const ssrf = await validateOutboundUrl(input.url);
+    if (!ssrf.ok) {
+      return apiError("bad_request", `Webhook URL rejected: ${ssrf.reason}`);
+    }
+
     const supabase = await createClient();
     const secret = `whsec_${randomBytes(32).toString("base64url")}`;
     const { data, error } = await supabase

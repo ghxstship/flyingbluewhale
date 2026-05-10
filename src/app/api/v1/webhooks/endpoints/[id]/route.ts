@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { validateOutboundUrl } from "@/lib/http-ssrf";
 import type { Database } from "@/lib/supabase/database.types";
 
 type WebhookEndpointUpdate = Database["public"]["Tables"]["webhook_endpoints"]["Update"];
@@ -21,6 +22,17 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   return withAuth(async (session) => {
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
+
+    // SSRF guard on URL changes — same rationale as the POST handler:
+    // an existing endpoint must not be re-pointed at an internal
+    // address after the fact.
+    if (input.url !== undefined) {
+      const ssrf = await validateOutboundUrl(input.url);
+      if (!ssrf.ok) {
+        return apiError("bad_request", `Webhook URL rejected: ${ssrf.reason}`);
+      }
+    }
+
     const supabase = await createClient();
     const patch: WebhookEndpointUpdate = {};
     if (input.url !== undefined) patch.url = input.url;

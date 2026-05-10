@@ -1,6 +1,14 @@
 import type { NextRequest } from "next/server";
+import { timingSafeEqual } from "node:crypto";
 import { apiError, apiOk } from "@/lib/api";
 import { evaluateSchedules } from "@/lib/automations/schedule";
+
+function tokensMatch(provided: string, expected: string): boolean {
+  // Constant-time — string `===` short-circuits on first mismatch
+  // and leaks one character per request via response timing.
+  if (provided.length !== expected.length) return false;
+  return timingSafeEqual(Buffer.from(provided), Buffer.from(expected));
+}
 
 /**
  * Internal-only — evaluate `automation_schedules` and enqueue
@@ -16,7 +24,7 @@ export async function POST(req: NextRequest) {
   if (!expected) return apiError("service_unavailable", "JOB_WORKER_TOKEN not configured");
   const auth = req.headers.get("authorization") ?? "";
   const provided = auth.startsWith("Bearer ") ? auth.slice(7) : (req.headers.get("x-worker-token") ?? "");
-  if (provided !== expected) return apiError("forbidden", "Invalid worker token");
+  if (!tokensMatch(provided, expected)) return apiError("forbidden", "Invalid worker token");
 
   const result = await evaluateSchedules();
   return apiOk(result);

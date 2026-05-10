@@ -13,9 +13,9 @@ import {
 export type ActionResult = { error?: string } | undefined;
 
 export async function acknowledgeAction(id: string): Promise<ActionResult> {
-  await requireSession();
+  const session = await requireSession();
   try {
-    await acknowledgeAnnotation(id);
+    await acknowledgeAnnotation(id, session.orgId);
   } catch (e) {
     return { error: (e as Error).message };
   }
@@ -26,7 +26,7 @@ export async function acknowledgeAction(id: string): Promise<ActionResult> {
 export async function resolveAction(id: string, note?: string): Promise<ActionResult> {
   const session = await requireSession();
   try {
-    await resolveAnnotation(id, session.userId, note);
+    await resolveAnnotation(id, session.orgId, session.userId, note);
   } catch (e) {
     return { error: (e as Error).message };
   }
@@ -37,7 +37,7 @@ export async function resolveAction(id: string, note?: string): Promise<ActionRe
 export async function dismissAction(id: string, note?: string): Promise<ActionResult> {
   const session = await requireSession();
   try {
-    await dismissAnnotation(id, session.userId, note);
+    await dismissAnnotation(id, session.orgId, session.userId, note);
   } catch (e) {
     return { error: (e as Error).message };
   }
@@ -48,7 +48,7 @@ export async function dismissAction(id: string, note?: string): Promise<ActionRe
 export async function confirmAction(id: string): Promise<ActionResult> {
   const session = await requireSession();
   try {
-    await confirmAnnotation(id, session.userId);
+    await confirmAnnotation(id, session.orgId, session.userId);
   } catch (e) {
     return { error: (e as Error).message };
   }
@@ -60,7 +60,7 @@ export async function replyAction(parentId: string, body: string): Promise<Actio
   const session = await requireSession();
   if (!body.trim()) return { error: "Reply body is required." };
   try {
-    await replyToAnnotation({ parentId, body, createdBy: session.userId });
+    await replyToAnnotation({ parentId, orgId: session.orgId, body, createdBy: session.userId });
   } catch (e) {
     return { error: (e as Error).message };
   }

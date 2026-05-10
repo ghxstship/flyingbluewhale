@@ -105,6 +105,7 @@ export async function clockOutAction(): Promise<ClockOutResult> {
       duration_minutes: durationMinutes,
     })
     .eq("id", open.id)
+    .eq("org_id", session.orgId)
     .eq("user_id", session.userId);
   if (error) return { ok: false, error: error.message };
 

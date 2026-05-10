@@ -114,13 +114,22 @@ export async function createAnnotation(input: CreateAnnotationInput): Promise<An
   return data as unknown as Annotation;
 }
 
-export async function acknowledgeAnnotation(id: string): Promise<void> {
+export async function acknowledgeAnnotation(id: string, orgId: string): Promise<void> {
   const supabase = await createClient();
-  const { error } = await supabase.from("annotations").update({ status: "acknowledged" }).eq("id", id);
+  const { error } = await supabase
+    .from("annotations")
+    .update({ status: "acknowledged" })
+    .eq("id", id)
+    .eq("org_id", orgId);
   if (error) throw error;
 }
 
-export async function resolveAnnotation(id: string, resolvedBy: string, resolutionNote?: string): Promise<void> {
+export async function resolveAnnotation(
+  id: string,
+  orgId: string,
+  resolvedBy: string,
+  resolutionNote?: string,
+): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase
     .from("annotations")
@@ -130,11 +139,17 @@ export async function resolveAnnotation(id: string, resolvedBy: string, resoluti
       resolved_at: new Date().toISOString(),
       resolution_note: resolutionNote ?? null,
     })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("org_id", orgId);
   if (error) throw error;
 }
 
-export async function dismissAnnotation(id: string, resolvedBy: string, resolutionNote?: string): Promise<void> {
+export async function dismissAnnotation(
+  id: string,
+  orgId: string,
+  resolvedBy: string,
+  resolutionNote?: string,
+): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase
     .from("annotations")
@@ -144,11 +159,12 @@ export async function dismissAnnotation(id: string, resolvedBy: string, resoluti
       resolved_at: new Date().toISOString(),
       resolution_note: resolutionNote ?? null,
     })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("org_id", orgId);
   if (error) throw error;
 }
 
-export async function confirmAnnotation(id: string, confirmedBy: string): Promise<void> {
+export async function confirmAnnotation(id: string, orgId: string, confirmedBy: string): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase
     .from("annotations")
@@ -156,20 +172,26 @@ export async function confirmAnnotation(id: string, confirmedBy: string): Promis
       confirmed_by: confirmedBy,
       confirmed_at: new Date().toISOString(),
     })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("org_id", orgId);
   if (error) throw error;
 }
 
 export async function replyToAnnotation(input: {
   parentId: string;
+  orgId: string;
   body: string;
   createdBy: string;
 }): Promise<Annotation> {
   const supabase = await createClient();
+  // Pin org_id when reading the parent — without it, replying could
+  // inherit org/project from a foreign annotation and write into another
+  // org's thread.
   const { data: parent, error: parentErr } = await supabase
     .from("annotations")
     .select("org_id, project_id, target_table, target_id")
     .eq("id", input.parentId)
+    .eq("org_id", input.orgId)
     .single();
   if (parentErr) throw parentErr;
   return createAnnotation({

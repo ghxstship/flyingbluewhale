@@ -165,11 +165,12 @@ export async function grantRecord(opts: {
   return rowFrom(data as GrantRecord);
 }
 
-/** Revoke a single grant by id. */
-export async function revokeRecord(opts: { id: string }): Promise<void> {
+/** Revoke a single grant by id. orgId pins the delete to a single tenant
+ * for defense-in-depth on top of RLS. */
+export async function revokeRecord(opts: { id: string; orgId: string }): Promise<void> {
   if (!opts.id) return;
   const supabase = await createClient();
-  const { error } = await supabase.from("record_grants").delete().eq("id", opts.id);
+  const { error } = await supabase.from("record_grants").delete().eq("id", opts.id).eq("org_id", opts.orgId);
   if (error) throw error;
 }
 

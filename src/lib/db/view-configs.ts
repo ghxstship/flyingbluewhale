@@ -131,10 +131,14 @@ export async function saveViewConfig(opts: {
   };
 
   if (opts.upsertById) {
+    // Pin org_id on the update — RLS already gates by scope, but a future
+    // policy regression must not allow cross-tenant writes via a stale
+    // upsertById from another org.
     const { data, error } = await supabase
       .from("view_configs")
       .update(payload)
       .eq("id", opts.upsertById)
+      .eq("org_id", opts.orgId)
       .select("*")
       .single();
     if (error) throw error;
@@ -152,12 +156,13 @@ export async function saveViewConfig(opts: {
 
 /**
  * Delete a saved view by id. RLS gates whether the caller can delete:
- * the row's `created_by` and org owners/admins are allowed.
+ * the row's `created_by` and org owners/admins are allowed. orgId pins
+ * the delete to a single tenant for defense-in-depth.
  */
-export async function deleteViewConfig(opts: { id: string }): Promise<void> {
+export async function deleteViewConfig(opts: { id: string; orgId: string }): Promise<void> {
   if (!opts.id) return;
   const supabase = await createClient();
-  const { error } = await supabase.from("view_configs").delete().eq("id", opts.id);
+  const { error } = await supabase.from("view_configs").delete().eq("id", opts.id).eq("org_id", opts.orgId);
   if (error) throw error;
 }
 
@@ -166,22 +171,27 @@ export async function deleteViewConfig(opts: { id: string }): Promise<void> {
  * Clears `is_default` on sibling rows in the same scope so only one
  * row is the default at a time.
  */
-export async function setDefaultView(opts: { id: string }): Promise<void> {
+export async function setDefaultView(opts: { id: string; orgId: string }): Promise<void> {
   if (!opts.id) return;
   const supabase = await createClient();
 
-  // Look up the row first so we know its org/table/scope.
+  // Look up the row first so we know its table/scope. Pin org_id so a
+  // foreign id can't reach into another org's defaults.
   const target = await getViewConfig({ id: opts.id });
-  if (!target) return;
+  if (!target || target.orgId !== opts.orgId) return;
 
   const { error: clearErr } = await supabase
     .from("view_configs")
     .update({ is_default: false })
-    .eq("org_id", target.orgId)
+    .eq("org_id", opts.orgId)
     .eq("table_id", target.tableId)
     .eq("scope", target.scope);
   if (clearErr) throw clearErr;
 
-  const { error: setErr } = await supabase.from("view_configs").update({ is_default: true }).eq("id", opts.id);
+  const { error: setErr } = await supabase
+    .from("view_configs")
+    .update({ is_default: true })
+    .eq("id", opts.id)
+    .eq("org_id", opts.orgId);
   if (setErr) throw setErr;
 }

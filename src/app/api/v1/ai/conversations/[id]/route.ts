@@ -35,9 +35,21 @@ export async function DELETE(_req: NextRequest, ctx: { params: Promise<{ id: str
 
   const guard = await withAuth(async (session) => ({ session }));
   if (guard instanceof Response) return guard;
+  const { session } = guard;
 
   const supabase = await createClient();
-  const { error } = await supabase.from("ai_conversations").delete().eq("id", parsed.data);
+  // Belt-and-suspenders authz on top of RLS: pin user_id explicitly
+  // and .select() to surface 404 on a wrong/foreign id instead of a
+  // misleading deleted:true. RLS already restricts delete to the
+  // owner, but routing the failure through "forbidden" without a
+  // rows check made wrong-id silently report success.
+  const { data, error } = await supabase
+    .from("ai_conversations")
+    .delete()
+    .eq("id", parsed.data)
+    .eq("user_id", session.userId)
+    .select("id");
   if (error) return apiError("forbidden", error.message);
+  if (!data || data.length === 0) return apiError("not_found", "Conversation not found");
   return apiOk({ deleted: true });
 }

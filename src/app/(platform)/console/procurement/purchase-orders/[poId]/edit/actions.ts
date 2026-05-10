@@ -39,7 +39,16 @@ export async function updatePurchaseOrder(id: string, _: State, fd: FormData): P
 export async function deletePurchaseOrder(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("purchase_orders").delete().eq("id", id).eq("org_id", session.orgId);
+  // SOFT delete — purchase_orders has a deleted_at tombstone column.
+  // Hard-deleting cascaded onto FK references in po_line_items,
+  // checklist, and change-orders, breaking financial reporting.
+  // .is(deleted_at, null) makes the action idempotent.
+  await supabase
+    .from("purchase_orders")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
   revalidatePath("/console/procurement/purchase-orders");
   redirect("/console/procurement/purchase-orders");
 }

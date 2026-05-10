@@ -43,7 +43,17 @@ export async function updateVendor(id: string, _: State, fd: FormData): Promise<
 export async function deleteVendor(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("vendors").delete().eq("id", id).eq("org_id", session.orgId);
+  // SOFT delete — vendors has a deleted_at tombstone column. Hard-
+  // deleting cascades onto purchase_orders, expenses, and rfqs
+  // referencing the vendor, breaking historical procurement reports.
+  // Soft delete preserves the record; .is(deleted_at, null) makes
+  // the action idempotent.
+  await supabase
+    .from("vendors")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
   revalidatePath("/console/procurement/vendors");
   redirect("/console/procurement/vendors");
 }

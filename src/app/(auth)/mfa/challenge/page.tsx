@@ -12,10 +12,24 @@ type Props = {
   searchParams: Promise<{ next?: string }>;
 };
 
+/**
+ * Sanitize the post-MFA redirect target to defeat open-redirect.
+ * Only same-origin relative paths are accepted; everything else
+ * (full URLs, protocol-relative `//evil.com`, missing leading
+ * slash) collapses to `/me`. Mirrors the action-side guard in
+ * `actions.ts#safeNext`.
+ */
+function safeNext(input: string | null | undefined): string {
+  if (!input) return "/me";
+  if (!input.startsWith("/")) return "/me";
+  if (input.startsWith("//")) return "/me";
+  return input;
+}
+
 export default async function MfaChallengePage({ searchParams }: Props) {
   const session = await getSession();
   const params = await searchParams;
-  const next = params.next ?? "/me";
+  const next = safeNext(params.next);
 
   // Not signed in → bounce through login (which itself will route here once
   // they've completed step 1).

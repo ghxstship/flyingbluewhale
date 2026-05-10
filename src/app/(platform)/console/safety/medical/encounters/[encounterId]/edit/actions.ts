@@ -39,17 +39,14 @@ export async function updateEncounter(encounterId: string, _: State, fd: FormDat
 export async function deleteEncounter(encounterId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  // SOFT delete — medical_encounters has a deleted_at column. Medical
-  // records are subject to retention policies (HIPAA-adjacent) and a
-  // hard delete is rarely the right action; soft-delete keeps the
-  // record in place for legal hold + audit. .is(deleted_at, null)
-  // makes the action idempotent.
-  await supabase
-    .from("medical_encounters")
-    .update({ deleted_at: new Date().toISOString() })
-    .eq("id", encounterId)
-    .eq("org_id", session.orgId)
-    .is("deleted_at", null);
+  // Hard delete — medical_encounters has no deleted_at column. The
+  // earlier soft-delete attempt was based on a flawed grep that
+  // misattributed deleted_at to this table; the schema confirms no
+  // such column exists. Medical-record retention is a real concern
+  // (HIPAA-adjacent), but the right fix is a migration to ADD
+  // deleted_at first, then switch behavior — not a hopeful column
+  // reference in app code.
+  await supabase.from("medical_encounters").delete().eq("id", encounterId).eq("org_id", session.orgId);
   revalidatePath("/console/safety/medical/encounters");
   redirect("/console/safety/medical/encounters");
 }

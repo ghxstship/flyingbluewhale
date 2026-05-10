@@ -65,6 +65,21 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
     caption: string | null;
     taken_by: string;
   }> = [];
+  const uploadedPaths: string[] = [];
+
+  // Best-effort cleanup of any storage objects we wrote before hitting an
+  // error. Without this, a 3rd-of-5 upload failure (or a DB insert
+  // failure) orphans the first uploaded objects: bytes that nothing in
+  // the app references but that still bill against storage.
+  const cleanup = async (reason: string) => {
+    if (uploadedPaths.length === 0) return;
+    const { error: rmErr } = await supabase.storage.from(BUCKET).remove(uploadedPaths);
+    if (rmErr) {
+      // Don't surface the cleanup failure — the original error already
+      // carries the user-facing message. Just log it.
+      console.warn("photos.upload.cleanup_failed", { reason, paths: uploadedPaths.length, err: rmErr.message });
+    }
+  };
 
   for (let i = 0; i < files.length; i++) {
     const f = files[i];
@@ -73,7 +88,11 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
     const { error: upErr } = await supabase.storage
       .from(BUCKET)
       .upload(path, buf, { contentType: f.type || "application/octet-stream", upsert: false });
-    if (upErr) return { error: `Upload failed for ${f.name}: ${upErr.message}` };
+    if (upErr) {
+      await cleanup(`upload_failed_${f.name}`);
+      return { error: `Upload failed for ${f.name}: ${upErr.message}` };
+    }
+    uploadedPaths.push(path);
     rows.push({
       org_id: session.orgId,
       project_id: parsed.data.projectId,
@@ -85,7 +104,10 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
   }
 
   const { error: insErr } = await supabase.from("project_photos").insert(rows);
-  if (insErr) return { error: `DB insert failed: ${insErr.message}` };
+  if (insErr) {
+    await cleanup("db_insert_failed");
+    return { error: `DB insert failed: ${insErr.message}` };
+  }
 
   revalidatePath("/console/photos");
   redirect(

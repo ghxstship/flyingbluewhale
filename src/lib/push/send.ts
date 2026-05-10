@@ -153,15 +153,24 @@ async function markDisabled(id: string): Promise<void> {
 async function bumpFailure(id: string, current: number): Promise<void> {
   try {
     const svc = createServiceClient();
-    await (
-      svc.from as unknown as (table: string) => {
-        update: (patch: Record<string, unknown>) => {
-          eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
+    // CAS on the observed failure_count so concurrent failures don't
+    // lose increments (read-modify-write on the same value: both fail,
+    // both read N, both write N+1, the disable threshold takes 2× the
+    // failures to trip).
+    type FromUpdate = (table: string) => {
+      update: (patch: Record<string, unknown>) => {
+        eq: (
+          col: string,
+          val: string | number,
+        ) => {
+          eq: (col: string, val: string | number) => Promise<{ error: { message: string } | null }>;
         };
-      }
-    )("push_subscriptions")
+      };
+    };
+    await (svc.from as unknown as FromUpdate)("push_subscriptions")
       .update({ failure_count: current + 1 })
-      .eq("id", id);
+      .eq("id", id)
+      .eq("failure_count", current);
   } catch (err) {
     log.warn("push.bump_failure_exception", { id, err: (err as Error).message });
   }

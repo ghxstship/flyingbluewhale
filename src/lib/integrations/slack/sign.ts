@@ -127,12 +127,16 @@ export function verifyOAuthState(opts: {
 
 function cryptoRandomNonce(): string {
   // 16 bytes hex = 32 chars. Plenty for a CSRF nonce.
-  const arr = new Uint8Array(16);
-  if (typeof globalThis.crypto !== "undefined" && globalThis.crypto.getRandomValues) {
-    globalThis.crypto.getRandomValues(arr);
-  } else {
-    for (let i = 0; i < arr.length; i++) arr[i] = Math.floor(Math.random() * 256);
+  // Math.random() fallback was removed — silently downgrading CSRF
+  // entropy to a non-cryptographic PRNG defeats the whole point of
+  // the nonce. globalThis.crypto.getRandomValues is universal in
+  // Node 20+, every browser since 2014, and the Edge runtime, so the
+  // throw path is unreachable in any supported runtime.
+  if (typeof globalThis.crypto === "undefined" || !globalThis.crypto.getRandomValues) {
+    throw new Error("crypto.getRandomValues unavailable — refusing to mint CSRF nonce");
   }
+  const arr = new Uint8Array(16);
+  globalThis.crypto.getRandomValues(arr);
   return Array.from(arr)
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");

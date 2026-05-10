@@ -4,21 +4,55 @@ import { revalidatePath } from "next/cache";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
+type InspectionStatus = "scheduled" | "in_progress" | "passed" | "failed" | "cancelled";
+
+// Inspection FSM: scheduled → in_progress → passed | failed. Cancel is
+// allowed from scheduled or in_progress. passed/failed/cancelled are
+// terminal — re-stamping completed_at would lose the original outcome
+// timestamp.
+const INSPECTION_TRANSITIONS: Record<InspectionStatus, readonly InspectionStatus[]> = {
+  scheduled: ["in_progress", "cancelled"],
+  in_progress: ["passed", "failed", "cancelled"],
+  passed: [],
+  failed: [],
+  cancelled: [],
+};
+
 export async function transitionInspection(
   id: string,
   to: "in_progress" | "passed" | "failed" | "cancelled",
 ): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
+
+  const { data: row } = await supabase
+    .from("inspections")
+    .select("status")
+    .eq("org_id", session.orgId)
+    .eq("id", id)
+    .maybeSingle();
+  if (!row) throw new Error("Inspection not found");
+  const current = (row as { status: InspectionStatus }).status;
+  const allowed = INSPECTION_TRANSITIONS[current] ?? [];
+  if (!allowed.includes(to)) {
+    throw new Error(`Cannot move ${current} → ${to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
+  }
+
   const now = new Date().toISOString();
   const patch: Record<string, unknown> = { status: to };
   if (to === "in_progress") patch.started_at = now;
   if (to === "passed" || to === "failed") patch.completed_at = now;
-  await supabase
+  const { data: updated, error } = await supabase
     .from("inspections")
     .update(patch as never)
     .eq("org_id", session.orgId)
-    .eq("id", id);
+    .eq("id", id)
+    .eq("status", current as "scheduled")
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!updated || updated.length === 0) {
+    throw new Error("Inspection status changed concurrently — refresh and retry");
+  }
   revalidatePath(`/console/inspections/${id}`);
   revalidatePath("/console/inspections");
 }

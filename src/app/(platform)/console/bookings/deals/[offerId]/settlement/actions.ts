@@ -98,20 +98,25 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
   const supabase = await createClient();
 
   // Read settlement to inspect payout destination + balance + currency.
+  // Status is read so we can refuse a re-finalize before firing the Stripe
+  // transfer — Stripe's Idempotency-Key dedups the network call but won't
+  // stop us re-running our own post-transfer side-effects on a stale form.
   const settlementResp = await supabase
     .from("settlements")
-    .select("id, balance_due_cents, payout_destination, currency, stripe_transfer_id")
+    .select("id, status, balance_due_cents, payout_destination, currency, stripe_transfer_id")
     .eq("talent_offer_id", offerId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!settlementResp.data) return { error: "Settlement not found" };
   const s = settlementResp.data as {
     id: string;
+    status: string;
     balance_due_cents: number;
     payout_destination: string | null;
     currency: string;
     stripe_transfer_id: string | null;
   };
+  if (s.status === "final") return { error: "Settlement already final" };
 
   // Stripe Connect transfer — only fire when:
   //   1. STRIPE_SECRET_KEY is configured (graceful no-op locally)
@@ -144,7 +149,10 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
     stripeTransferId = transfer.id;
   }
 
-  const { error } = await supabase
+  // Conditional update: only land if status is still what we observed.
+  // Without it, a concurrent finalize that beat us to the row would get
+  // silently overwritten and we'd lose its finalized_by attribution.
+  const { data: updated, error } = await supabase
     .from("settlements")
     .update({
       status: "final",
@@ -153,8 +161,13 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
       stripe_transfer_id: stripeTransferId,
     })
     .eq("talent_offer_id", offerId)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", s.status as "draft")
+    .select("id");
   if (error) return { error: error.message };
+  if (!updated || updated.length === 0) {
+    return { error: "Settlement was finalized concurrently — refresh and retry" };
+  }
   revalidatePath(`/console/bookings/deals/${offerId}/settlement`);
   return { ok: true };
 }

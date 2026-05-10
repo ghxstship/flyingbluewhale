@@ -55,11 +55,17 @@ async function handler(req: Request) {
     const s = (await res.json()) as { id: string; url: string; payment_intent?: string };
 
     if (s.payment_intent) {
+      // Conditional update — never regress an already-paid invoice back to
+      // "sent". The webhook handler may have flipped it to paid between
+      // our checkout-session create and this update; without the guard we
+      // would silently un-pay it on the next checkout link the operator
+      // generates.
       await supabase
         .from("invoices")
         .update({ stripe_payment_intent: s.payment_intent, status: "sent" })
         .eq("id", invoice.id)
-        .eq("org_id", session.orgId);
+        .eq("org_id", session.orgId)
+        .neq("status", "paid");
     }
 
     return apiOk({ checkoutUrl: s.url, sessionId: s.id });

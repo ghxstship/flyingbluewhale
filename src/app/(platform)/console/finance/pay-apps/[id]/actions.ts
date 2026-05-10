@@ -79,9 +79,38 @@ export async function updatePayAppLine(appId: string, lineId: string, fd: FormDa
   revalidatePath(`/console/finance/pay-apps/${appId}`);
 }
 
+type PayAppStatus = "draft" | "submitted" | "approved" | "rejected" | "paid";
+
+// AIA G702 / pay-app FSM: draft → submitted → approved → paid (or
+// rejected from submitted, which sends it back to draft for revisions).
+// Rejected stays open for resubmission; paid is terminal. Without a
+// guard a stale "Mark Paid" click could reset paid_at on a duplicate
+// click and silently double-stamp the payment timestamp.
+const PAYAPP_TRANSITIONS: Record<PayAppStatus, readonly PayAppStatus[]> = {
+  draft: ["submitted"],
+  submitted: ["approved", "rejected"],
+  rejected: ["draft", "submitted"],
+  approved: ["paid", "rejected"],
+  paid: [],
+};
+
 export async function transitionPayApp(id: string, to: "submitted" | "approved" | "rejected" | "paid"): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
+
+  const { data: row } = await supabase
+    .from("payment_applications")
+    .select("status")
+    .eq("org_id", session.orgId)
+    .eq("id", id)
+    .maybeSingle();
+  if (!row) throw new Error("Pay app not found");
+  const current = (row as { status: PayAppStatus }).status;
+  const allowed = PAYAPP_TRANSITIONS[current] ?? [];
+  if (!allowed.includes(to)) {
+    throw new Error(`Cannot move ${current} → ${to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
+  }
+
   const now = new Date().toISOString();
   const patch: Record<string, unknown> = { status: to };
   if (to === "submitted") patch.submitted_at = now;
@@ -90,11 +119,17 @@ export async function transitionPayApp(id: string, to: "submitted" | "approved" 
     patch.approved_by = session.userId;
   }
   if (to === "paid") patch.paid_at = now;
-  await supabase
+  const { data: updated, error } = await supabase
     .from("payment_applications")
     .update(patch as never)
     .eq("org_id", session.orgId)
-    .eq("id", id);
+    .eq("id", id)
+    .eq("status", current as "draft")
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!updated || updated.length === 0) {
+    throw new Error("Pay app status changed concurrently — refresh and retry");
+  }
   revalidatePath(`/console/finance/pay-apps/${id}`);
   revalidatePath("/console/finance/pay-apps");
 }

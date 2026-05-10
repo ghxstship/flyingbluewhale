@@ -90,14 +90,42 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
   return { ok: true };
 }
 
-export async function setDeliverableStatusAction(
-  deliverableId: string,
-  status: "draft" | "submitted" | "in_review" | "approved" | "rejected" | "revision_requested",
-) {
+type DeliverableStatus = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "revision_requested";
+
+// Deliverable FSM: draft → submitted → in_review → approved | rejected.
+// revision_requested loops back to submitted. Approved + rejected are
+// terminal. The conditional update below prevents a stale review
+// dashboard from re-firing the deliverable.approved notification on a
+// double click.
+const DELIVERABLE_TRANSITIONS: Record<DeliverableStatus, readonly DeliverableStatus[]> = {
+  draft: ["submitted"],
+  submitted: ["in_review", "approved", "rejected", "revision_requested"],
+  in_review: ["approved", "rejected", "revision_requested"],
+  revision_requested: ["submitted", "draft"],
+  approved: [],
+  rejected: [],
+};
+
+export async function setDeliverableStatusAction(deliverableId: string, status: DeliverableStatus) {
   const session = await requireSession();
   const supabase = await createClient();
+
+  // Capture org/project + current status before write so we can validate
+  // the transition AND scope the conditional update.
+  const { data: before } = await supabase
+    .from("deliverables")
+    .select("org_id, project_id, title, type, submitted_by, status")
+    .eq("id", deliverableId)
+    .maybeSingle();
+  if (!before) return { error: "Deliverable not found" };
+  const current = before.status as DeliverableStatus;
+  const allowed = DELIVERABLE_TRANSITIONS[current] ?? [];
+  if (!allowed.includes(status)) {
+    return { error: `Cannot move ${current} → ${status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
+  }
+
   const patch: {
-    status: typeof status;
+    status: DeliverableStatus;
     reviewed_by?: string;
     reviewed_at?: string;
     submitted_by?: string;
@@ -110,15 +138,17 @@ export async function setDeliverableStatusAction(
   if (status === "submitted") {
     patch.submitted_by = session.userId;
   }
-  // Capture org/project before write so the notify event has context.
-  const { data: before } = await supabase
+  const { data: updated, error } = await supabase
     .from("deliverables")
-    .select("org_id, project_id, title, type, submitted_by")
+    .update(patch)
     .eq("id", deliverableId)
-    .maybeSingle();
-  const { error } = await supabase.from("deliverables").update(patch).eq("id", deliverableId);
+    .eq("status", current)
+    .select("id");
   if (error) return { error: error.message };
-  if (before && (status === "submitted" || status === "approved")) {
+  if (!updated || updated.length === 0) {
+    return { error: "Deliverable status changed concurrently — refresh and retry" };
+  }
+  if (status === "submitted" || status === "approved") {
     const { notify } = await import("@/lib/notify");
     await notify({
       orgId: before.org_id,

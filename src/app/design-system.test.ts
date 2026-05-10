@@ -47,6 +47,8 @@ describe("Design system — component primitive adoption", () => {
       "src/components/NotificationsBell.tsx",
       // Calendar day-cell highlight (today marker — semantic indicator, not a button)
       "src/app/(platform)/console/schedule/ScheduleCalendar.tsx",
+      // Phase-stepper active-step dot (XPMS Axis B chrome — semantic indicator, not a button)
+      "src/components/xpms/PhaseStepper.tsx",
       // Sign / Decline mode toggle (segmented-control pattern, not a primary button)
       "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/approvals/[approvalId]/ApprovalSignBlock.tsx",
       // Clerk / auth UI overrides

@@ -2,6 +2,7 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
+import { withIdempotency } from "@/lib/idempotency";
 import { createClient } from "@/lib/supabase/server";
 
 /** /api/v1/incidents — Opportunity #18. */
@@ -34,7 +35,10 @@ export async function GET(req: NextRequest) {
   });
 }
 
-export async function POST(req: NextRequest) {
+// Wrapped with `withIdempotency` so retries (network drops, duplicate
+// click) don't create two incident rows + fan out two admin
+// notifications. Client opt-in via Idempotency-Key header.
+async function postHandler(req: NextRequest) {
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
   return withAuth(async (session) => {
@@ -84,3 +88,5 @@ export async function POST(req: NextRequest) {
     return apiCreated({ incident: data });
   });
 }
+
+export const POST = withIdempotency(postHandler);

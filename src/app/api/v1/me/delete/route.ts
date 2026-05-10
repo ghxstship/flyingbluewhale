@@ -32,9 +32,12 @@ export async function POST(req: NextRequest) {
   }
   const userId = userData.user.id;
 
-  // Soft-delete user with 30-day grace
+  // Soft-delete user with 30-day grace. .is(deleted_at, null) makes
+  // a re-submit idempotent — without it a double-POST would re-stamp
+  // deleted_at and push the purge clock forward by another 30 days,
+  // and would re-scrub already-scrubbed PII (no-op but noisy).
   const purgeAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-  const { error: upErr } = await supabase
+  const { data: scrubbed, error: upErr } = await supabase
     .from("users")
     .update({
       deleted_at: purgeAt,
@@ -43,15 +46,30 @@ export async function POST(req: NextRequest) {
       name: "Deleted user",
       avatar_url: null,
     })
-    .eq("id", userId);
+    .eq("id", userId)
+    .is("deleted_at", null)
+    .select("id");
 
   if (upErr) {
     return apiError("internal", "Couldn't process deletion request");
   }
+  // No-op = already deleted. Sign the user out and return the
+  // idempotent success — they may have hit retry; we shouldn't
+  // confuse them with a non-deterministic error.
+  if (!scrubbed || scrubbed.length === 0) {
+    await supabase.auth.signOut();
+    return apiOk({
+      message: "Account already scheduled for deletion. Sign in within the grace window to cancel.",
+      purgeAt: null,
+      alreadyRequested: true,
+    });
+  }
 
-  // Revoke memberships immediately
+  // Revoke memberships immediately. Same idempotency guard — only
+  // soft-delete rows that aren't already deleted, preserving the
+  // original offboard timestamps.
   const nowIso = new Date().toISOString();
-  await supabase.from("memberships").update({ deleted_at: nowIso }).eq("user_id", userId);
+  await supabase.from("memberships").update({ deleted_at: nowIso }).eq("user_id", userId).is("deleted_at", null);
 
   // H2-07 — audit the deletion request BEFORE we sign out so the
   // actor is still on the session used by emitAudit().

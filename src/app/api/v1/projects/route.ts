@@ -1,8 +1,10 @@
+import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createProject } from "@/lib/db/projects";
 import { listOrgScopedPage } from "@/lib/db/resource";
+import { withIdempotency } from "@/lib/idempotency";
 
 const slugify = (s: string) =>
   s
@@ -52,7 +54,11 @@ export async function GET(req: Request) {
   });
 }
 
-export async function POST(req: Request) {
+// Wrapped with `withIdempotency` so client retries don't create
+// duplicate projects + double-notify org admins. The slug-uniqueness
+// constraint on projects also catches the duplicate, but that surfaces
+// as a 409 instead of replaying the original 201.
+async function postHandler(req: NextRequest) {
   const input = await parseJson(req, CreateProject);
   if (input instanceof Response) return input;
 
@@ -99,3 +105,5 @@ export async function POST(req: Request) {
     }
   });
 }
+
+export const POST = withIdempotency(postHandler);

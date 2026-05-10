@@ -9,7 +9,6 @@ export function GhxstshipJsonLd({ data }: { data: object | object[] }) {
   return (
     <>
       {arr.map((d, i) => (
-        // eslint-disable-next-line react/no-danger
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(d) }} />
       ))}
     </>

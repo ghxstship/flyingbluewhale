@@ -17,23 +17,6 @@ import type { Database, Json } from "@/lib/supabase/database.types";
  * visible. Mirrors the shape of `view-configs.ts` (P3.1).
  */
 
-/**
- * `dashboards` is a brand-new table not yet in the generated Supabase
- * Database types — `npm run gen:types` will pick it up next build. Use a
- * loosely-typed query builder until then; RLS is the actual auth boundary.
- */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type LooseSupabase = {
-  from: (table: string) => {
-    select: (cols?: string) => any;
-    insert: (rows: Record<string, unknown> | Record<string, unknown>[]) => any;
-    update: (row: Record<string, unknown>) => any;
-    delete: () => any;
-  };
-  auth: { getUser: () => Promise<{ data: { user: { id: string } | null } }> };
-};
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
 type DashboardRecord = {
   id: string;
   org_id: string;

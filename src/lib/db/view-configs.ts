@@ -7,20 +7,10 @@ import type { Json } from "@/lib/supabase/database.types";
 /**
  * `view_configs` is a brand-new table not yet in the generated Supabase
  * Database types — `npm run gen:types` will pick it up next build. Until
- * then we expose a loosely-typed query builder so the helpers compile;
- * RLS remains the actual authorization boundary, not the type system.
+ * view_configs is now in the regenerated database.types — the typed
+ * Supabase client handles it directly. The legacy LooseSupabase shim
+ * was deleted as part of the F1 refresh.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type LooseSupabase = {
-  from: (table: string) => {
-    select: (cols?: string) => any;
-    insert: (rows: Record<string, unknown> | Record<string, unknown>[]) => any;
-    update: (row: Record<string, unknown>) => any;
-    delete: () => any;
-  };
-  auth: { getUser: () => Promise<{ data: { user: { id: string } | null } }> };
-};
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /**
  * Server helpers for the `view_configs` table — Phase 3.1 keystone of the

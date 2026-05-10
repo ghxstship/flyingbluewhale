@@ -11,20 +11,10 @@ import type { Database } from "@/lib/supabase/database.types";
  *
  * `teams` and `team_members` are brand-new tables not yet in the generated
  * Supabase Database types — `npm run gen:types` will pick them up next
- * build. Until then we expose a loosely-typed query builder so the helpers
- * compile; RLS remains the actual authorization boundary.
+ * teams + team_members are now in the regenerated database.types — the
+ * typed Supabase client handles them directly. The legacy LooseSupabase
+ * shim that used to live here was deleted as part of the F1 refresh.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type LooseSupabase = {
-  from: (table: string) => {
-    select: (cols?: string) => any;
-    insert: (rows: Record<string, unknown> | Record<string, unknown>[]) => any;
-    update: (row: Record<string, unknown>) => any;
-    delete: () => any;
-  };
-  auth: { getUser: () => Promise<{ data: { user: { id: string } | null } }> };
-};
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export type TeamRole = "admin" | "member";
 

@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient, createServiceClient, isServiceClientAvailable } from "./supabase/server";
+import { createServiceClient, isServiceClientAvailable } from "./supabase/server";
 import { log } from "./log";
 
 /**

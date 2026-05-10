@@ -31,8 +31,6 @@ import { dismissConsent, loginAs } from "./helpers/auth";
  * prefix (`E2E-RFI-...`, etc.) via SQL.
  */
 
-const OWNER_EMAIL = "test+owner@flyingbluewhale.app";
-
 async function pickFirstProjectOption(page: Page, selectName: string) {
   const select = page.locator(`select[name="${selectName}"]`);
   await expect(select).toBeVisible({ timeout: 30000 });

@@ -11,19 +11,10 @@ import { createClient } from "@/lib/supabase/server";
  * RLS gates write to org owner/admin/manager. Read is org-wide so anyone
  * with a grant (and any other org member) can list who has access.
  *
- * `record_grants` is brand-new and not yet in the generated Supabase
- * Database types — `npm run gen:types` will pick it up next build.
+ * record_grants is now in the regenerated database.types — the typed
+ * Supabase client handles it directly. The legacy LooseSupabase shim
+ * was deleted as part of the F1 refresh.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type LooseSupabase = {
-  from: (table: string) => {
-    select: (cols?: string) => any;
-    insert: (rows: Record<string, unknown> | Record<string, unknown>[]) => any;
-    update: (row: Record<string, unknown>) => any;
-    delete: () => any;
-  };
-};
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export const RECORD_ROLES = ["viewer", "commenter", "assignee", "contributor", "editor", "full"] as const;
 

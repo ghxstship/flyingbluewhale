@@ -13,8 +13,6 @@ import { dismissConsent, loginAs } from "./helpers/auth";
  * - Shared password: FlyingBlue!Test2026
  */
 
-const TEST_EMAIL = (role: string) => `test+${role}@flyingbluewhale.app`;
-
 const PERSONAS = {
   internal: ["developer", "owner", "admin", "controller", "collaborator"] as const,
   external: ["client", "vendor"] as const, // not all enum values map to a portal persona

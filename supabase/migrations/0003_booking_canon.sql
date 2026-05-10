@@ -303,8 +303,8 @@ ALTER TABLE "public"."tours" OWNER TO "postgres";
 
 CREATE INDEX IF NOT EXISTS "tours_talent_idx"
   ON "public"."tours" ("talent_profile_id", "starts_on");
-CREATE INDEX IF NOT EXISTS "tours_org_status_idx"
-  ON "public"."tours" ("org_id", "status") WHERE "deleted_at" IS NULL;
+CREATE INDEX IF NOT EXISTS "tours_org_phase_idx"
+  ON "public"."tours" ("org_id", "tour_phase") WHERE "deleted_at" IS NULL;
 
 -- ─── 7. Marketing canon: milestones + co-pro (Phase 3) ──────────────────
 

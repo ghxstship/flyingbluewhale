@@ -35,6 +35,30 @@ export async function createSitePlan(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guards.
+  const projectId = parsed.data.project_id || null;
+  const venueId = parsed.data.venue_id || null;
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+  if (venueId) {
+    const { data: venue } = await supabase
+      .from("venues")
+      .select("id")
+      .eq("id", venueId)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!venue) return { error: "Venue not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("site_plans")
     .insert({
@@ -42,8 +66,8 @@ export async function createSitePlan(_: State, fd: FormData): Promise<State> {
       code: parsed.data.code,
       title: parsed.data.title,
       discipline: parsed.data.discipline,
-      project_id: parsed.data.project_id || null,
-      venue_id: parsed.data.venue_id || null,
+      project_id: projectId,
+      venue_id: venueId,
       notes: parsed.data.notes || null,
       created_by: session.userId,
     } as never)

@@ -31,7 +31,19 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
   const feeCents = Math.round(Number(parsed.data.fee.replace(/[$,]/g, "")) * 100);
   if (!Number.isFinite(feeCents) || feeCents <= 0) return { error: "Invalid fee" };
 
-  // Cross-tenant FK guard for the optional project_id.
+  // Cross-tenant FK guards on talent_profile_id (required) +
+  // project_id (optional). The talent profile is the load-bearing
+  // reference — without the gate a user could send an offer to
+  // another org's roster, which the recipient sees in their portal.
+  const { data: talent } = await supabase
+    .from("talent_profiles")
+    .select("id")
+    .eq("id", parsed.data.talent_profile_id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!talent) return { error: "Talent profile not found in your organization" };
+
   const projectId = parsed.data.project_id || null;
   if (projectId) {
     const { data: project } = await supabase

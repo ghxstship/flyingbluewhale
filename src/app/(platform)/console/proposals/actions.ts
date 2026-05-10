@@ -42,13 +42,39 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const supabase = await createClient();
+
+  // Cross-tenant FK guards. Proposals are quotable instruments —
+  // dangling client_id or project_id corrupts the sales pipeline.
+  const clientId = parsed.data.client_id || null;
+  const projectId = parsed.data.project_id || null;
+  if (clientId) {
+    const { data: client } = await supabase
+      .from("clients")
+      .select("id")
+      .eq("id", clientId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!client) return { error: "Client not found in your organization" };
+  }
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("proposals")
     .insert({
       org_id: session.orgId,
       title: parsed.data.title,
-      client_id: parsed.data.client_id || null,
-      project_id: parsed.data.project_id || null,
+      client_id: clientId,
+      project_id: projectId,
       amount_cents: parsed.data.amount ? dollarsToCents(parsed.data.amount) : null,
       expires_at: parsed.data.expires_at || null,
       notes: parsed.data.notes || null,

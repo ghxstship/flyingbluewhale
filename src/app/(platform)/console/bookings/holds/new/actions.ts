@@ -23,6 +23,30 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guards on the optional venue_id + talent_profile_id.
+  const venueId = parsed.data.venue_id || null;
+  const talentId = parsed.data.talent_profile_id || null;
+  if (venueId) {
+    const { data: venue } = await supabase
+      .from("venues")
+      .select("id")
+      .eq("id", venueId)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!venue) return { error: "Venue not found in your organization" };
+  }
+  if (talentId) {
+    const { data: talent } = await supabase
+      .from("talent_profiles")
+      .select("id")
+      .eq("id", talentId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!talent) return { error: "Talent profile not found in your organization" };
+  }
+
   const { error } = await supabase.from("availability_slots").insert({
     user_id: session.userId,
     org_id: session.orgId,
@@ -31,8 +55,8 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
     starts_at: parsed.data.starts_at,
     ends_at: parsed.data.ends_at,
     label: parsed.data.label || null,
-    venue_id: parsed.data.venue_id || null,
-    talent_profile_id: parsed.data.talent_profile_id || null,
+    venue_id: venueId,
+    talent_profile_id: talentId,
     auto_release_on: parsed.data.auto_release_on || null,
   });
   if (error) return { error: error.message };

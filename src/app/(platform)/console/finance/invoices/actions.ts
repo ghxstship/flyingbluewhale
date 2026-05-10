@@ -34,14 +34,40 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const supabase = await createClient();
+
+  // Cross-tenant FK guards. Invoices flow into finance reporting +
+  // Stripe; a dangling client_id or project_id corrupts AR aging.
+  const clientId = parsed.data.client_id || null;
+  const projectId = parsed.data.project_id || null;
+  if (clientId) {
+    const { data: client } = await supabase
+      .from("clients")
+      .select("id")
+      .eq("id", clientId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!client) return { error: "Client not found in your organization" };
+  }
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("invoices")
     .insert({
       org_id: session.orgId,
       number: generateNumber("INV"),
       title: parsed.data.title,
-      client_id: parsed.data.client_id || null,
-      project_id: parsed.data.project_id || null,
+      client_id: clientId,
+      project_id: projectId,
       amount_cents: dollarsToCents(parsed.data.amount),
       currency: parsed.data.currency.toUpperCase(),
       issued_at: parsed.data.issued_at || null,

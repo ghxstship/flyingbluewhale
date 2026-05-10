@@ -22,6 +22,27 @@ export async function createTourAction(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guards.
+  const { data: talent } = await supabase
+    .from("talent_profiles")
+    .select("id")
+    .eq("id", parsed.data.talent_profile_id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!talent) return { error: "Talent profile not found in your organization" };
+
+  if (parsed.data.agency_id) {
+    const { data: agency } = await supabase
+      .from("agencies")
+      .select("id")
+      .eq("id", parsed.data.agency_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!agency) return { error: "Agency not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("tours")
     .insert({

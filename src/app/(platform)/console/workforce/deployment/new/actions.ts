@@ -20,6 +20,16 @@ export async function createDeployment(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on venue_id.
+  const { data: venue } = await supabase
+    .from("venues")
+    .select("id")
+    .eq("id", parsed.data.venue_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!venue) return { error: "Venue not found in your organization" };
+
   const { data, error } = await supabase
     .from("workforce_deployments")
     .insert({

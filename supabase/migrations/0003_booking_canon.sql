@@ -512,7 +512,7 @@ SELECT
   t.id AS tour_id,
   t.org_id,
   t.name,
-  t.status,
+  t.tour_phase,
   t.starts_on,
   t.ends_on,
   COUNT(DISTINCT o.id) AS leg_count,
@@ -526,7 +526,7 @@ FROM public.tours t
 LEFT JOIN public.talent_offers o ON o.tour_id = t.id
 LEFT JOIN public.settlements s ON s.talent_offer_id = o.id
 WHERE t.deleted_at IS NULL
-GROUP BY t.id, t.org_id, t.name, t.status, t.starts_on, t.ends_on;
+GROUP BY t.id, t.org_id, t.name, t.tour_phase, t.starts_on, t.ends_on;
 
 GRANT SELECT ON "public"."tour_p_and_l" TO "authenticated";
 
@@ -551,7 +551,7 @@ FROM public.settlements s
 INNER JOIN public.orgs o ON o.id = s.org_id AND o.insights_opt_in = true
 LEFT JOIN public.talent_offers o2 ON o2.id = s.talent_offer_id
 LEFT JOIN public.talent_profiles tp ON tp.id = o2.talent_profile_id
-WHERE s.status = 'final'
+WHERE s.settlement_state = 'final'
 GROUP BY 1, 2
 HAVING COUNT(*) >= 3;
 

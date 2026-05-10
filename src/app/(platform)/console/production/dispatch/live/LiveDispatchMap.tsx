@@ -1,7 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { MapShell, type MapMarker, type MapRoute } from "@/components/charts/MapShell";
+import dynamic from "next/dynamic";
+import type { MapMarker, MapRoute } from "@/components/charts/MapShell";
+
+// MapShell pulls in maplibre-gl + its CSS, ~280kb gzipped. The dispatch
+// route is a tab inside the production console; lazy-loading the map chunk
+// keeps the parent route's initial JS small for users who never click here.
+// SSR off because maplibre-gl touches `window` at module load.
+const MapShell = dynamic(() => import("@/components/charts/MapShell").then((m) => ({ default: m.MapShell })), {
+  ssr: false,
+  loading: () => (
+    <div className="surface skeleton w-full" style={{ height: 420 }} aria-busy="true" aria-label="Loading live map" />
+  ),
+});
 
 export type DispatchPoint = {
   id: string;

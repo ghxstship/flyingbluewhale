@@ -39,6 +39,47 @@ create policy storage_signed_read on storage.objects
 After running, `select count(*) from pg_policies where schemaname='storage'`
 should still be 5; only the array contents change.
 
+## 1b · Storage: enforce org-folder layout for user-direct uploads
+
+The buckets that accept user-direct uploads (`advancing`, `incident-photos`)
+must require the path's first folder to be one of the uploader's org_ids
+— otherwise a user in Org A can upload into Org B's prefix. The companion
+file is `supabase/migrations/20260509100009_storage_org_folder_enforcement.sql`.
+
+**Run via Supabase Dashboard → SQL Editor (logged in as service_role):**
+
+```sql
+drop policy if exists storage_authenticated_upload on storage.objects;
+
+create policy storage_service_role_buckets_upload on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = any (array[
+      'proposals'::text, 'receipts'::text, 'credentials'::text,
+      'branding'::text, 'procore-parity'::text
+    ])
+  );
+
+create policy storage_org_scoped_upload on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = any (array['advancing'::text, 'incident-photos'::text])
+    and exists (
+      select 1
+      from public.memberships m
+      where m.user_id = (select auth.uid())
+        and m.org_id::text = (storage.foldername(name))[1]
+    )
+  );
+```
+
+After running, the existing `storage_authenticated_upload` policy is
+gone and two replacements own the surface. Verify with
+`select policyname from pg_policies where schemaname='storage'` —
+expect `storage_service_role_buckets_upload`,
+`storage_org_scoped_upload`, plus the unchanged `storage_signed_read`,
+`storage_owner_modify`, `storage_owner_delete`, `exports_select`.
+
 ## 2 · Auth: enable HaveIBeenPwned password leak protection
 
 Project-level toggle, not in code.

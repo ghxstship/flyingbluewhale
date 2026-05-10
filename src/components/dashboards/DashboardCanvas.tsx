@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import dynamic from "next/dynamic";
 import {
   DndContext,
   type DragEndEvent,
@@ -25,10 +26,19 @@ import {
 } from "@/lib/dashboards/types";
 
 import { KpiWidget } from "./widgets/KpiWidget";
-import { ChartWidget } from "./widgets/ChartWidget";
 import { MarkdownWidget } from "./widgets/MarkdownWidget";
 import { SavedViewWidget, type SavedViewWidgetData } from "./widgets/SavedViewWidget";
 import { WidgetPalette } from "./WidgetPalette";
+
+// ChartWidget owns recharts, which is the largest dep in this surface
+// (~120kb gzipped). Most users land on a dashboard view first; we keep the
+// initial paint lean by code-splitting the chart module out of the canvas
+// chunk. SSR off because recharts touches `window` during hydration and
+// the canvas is editor-only anyway (no SEO need).
+const ChartWidget = dynamic(() => import("./widgets/ChartWidget").then((m) => ({ default: m.ChartWidget })), {
+  ssr: false,
+  loading: () => <div className="surface skeleton h-full w-full" aria-busy="true" />,
+});
 
 /**
  * Pre-resolved data per widget — provided by the dashboard's server page

@@ -136,12 +136,15 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
 
         <div className="flex flex-col items-start gap-5 md:flex-row md:items-center">
           {enroll.qrSvg ? (
-            <div
-              className="rounded bg-white p-3"
-              // The SVG is generated server-side from a controlled otpauth URI
-              // (no user-supplied content) — safe to inline.
-              dangerouslySetInnerHTML={{ __html: enroll.qrSvg }}
-            />
+            <div className="rounded bg-white p-3">
+              {/*
+               * Server returns a sanitized data:image/svg+xml URI. <img>
+               * loads it in passive image mode — scripts and handlers are
+               * ignored by the browser even if the SVG carried them.
+               */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={enroll.qrSvg} alt="Two-factor enrollment QR code" width={240} height={240} />
+            </div>
           ) : (
             <div className="surface-inset flex h-[252px] w-[252px] items-center justify-center text-xs text-[var(--text-muted)]">
               QR unavailable — paste the secret below

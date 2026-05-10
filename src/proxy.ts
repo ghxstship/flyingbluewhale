@@ -164,6 +164,39 @@ export async function proxy(request: NextRequest) {
   const response = await updateSession(request, rewriteUrl);
 
   // ────────────────────────────────────────────────────────────────────
+  // Portal slug pre-check (Bug #18).
+  //
+  // Next 16 streaming RSC means a layout-level `notFound()` keeps the
+  // response status at 200 if the layout has already started flushing
+  // headers — slug enumeration via /p/<unknown>/guide leaks "200 + empty"
+  // instead of "404 + missing". We resolve the slug here, before the
+  // response stream begins, and short-circuit unknown slugs to a hard 404.
+  // The lookup uses an anon-readable RLS policy on `projects` and is
+  // bounded by an in-memory negative cache (per edge instance, 60s TTL)
+  // to absorb scanner traffic without amplifying DB load.
+  // ────────────────────────────────────────────────────────────────────
+  const portalPath = pathname.startsWith("/p/")
+    ? pathname
+    : SUBDOMAINS_ENABLED && shell === "portal" && rewriteUrl?.pathname.startsWith("/p/")
+      ? rewriteUrl.pathname
+      : null;
+  if (portalPath && hasSupabase) {
+    const slug = extractPortalSlug(portalPath);
+    if (slug && !(await portalSlugExists(request, slug))) {
+      const res = new NextResponse(
+        '<!doctype html><html><head><meta charset="utf-8"><title>404 — Portal Not Found</title></head>' +
+          '<body style="font:14px/1.6 system-ui;padding:48px"><h1>404 — Portal Not Found</h1>' +
+          `<p>No portal exists at <code>/p/${escapeHtml(slug)}/</code>.</p></body></html>`,
+        { status: 404, headers: { "content-type": "text/html; charset=utf-8" } },
+      );
+      res.headers.set("x-request-id", requestId);
+      res.headers.set("x-shell", shell);
+      if (tenantSlug) res.headers.set("x-tenant-slug", tenantSlug);
+      return res;
+    }
+  }
+
+  // ────────────────────────────────────────────────────────────────────
   // MFA gate (Phase 2.5).
   //
   // If the org requires 2FA for the user's role and the current session is
@@ -292,6 +325,60 @@ async function checkMfaForRequest(request: NextRequest, pathname: string): Promi
   const redirect = new URL("/mfa/challenge", request.url);
   redirect.searchParams.set("next", pathname + (request.nextUrl.search ?? ""));
   return redirect;
+}
+
+// ────────────────────────────────────────────────────────────────────
+// Portal slug pre-check helpers (Bug #18).
+// ────────────────────────────────────────────────────────────────────
+
+const PORTAL_SLUG_RX = /^\/p\/([^/]+)(?:\/|$)/;
+
+function extractPortalSlug(pathname: string): string | null {
+  const m = PORTAL_SLUG_RX.exec(pathname);
+  if (!m) return null;
+  const slug = m[1];
+  // Reserved/sentinel slug paths that aren't backed by a project row.
+  if (slug === "select" || slug === "undefined" || slug === "null") return null;
+  return slug;
+}
+
+// Per-edge-instance cache. Positive entries get a longer TTL because slugs
+// don't get reused; negative entries expire faster so a freshly published
+// portal becomes reachable without a deploy.
+type SlugCacheEntry = { exists: boolean; expiresAt: number };
+const SLUG_CACHE = new Map<string, SlugCacheEntry>();
+const SLUG_CACHE_POS_TTL_MS = 5 * 60_000; // 5 min
+const SLUG_CACHE_NEG_TTL_MS = 60_000; // 1 min
+const SLUG_CACHE_MAX = 1024;
+
+async function portalSlugExists(request: NextRequest, slug: string): Promise<boolean> {
+  const now = Date.now();
+  const cached = SLUG_CACHE.get(slug);
+  if (cached && cached.expiresAt > now) return cached.exists;
+
+  const supabase = createServerClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+    cookies: {
+      getAll: () => request.cookies.getAll(),
+      setAll: () => {},
+    },
+  });
+  const { data } = await supabase.from("projects").select("id").eq("slug", slug).is("deleted_at", null).maybeSingle();
+  const exists = !!data;
+
+  // Bounded LRU-ish: drop oldest when over cap.
+  if (SLUG_CACHE.size >= SLUG_CACHE_MAX) {
+    const firstKey = SLUG_CACHE.keys().next().value;
+    if (firstKey !== undefined) SLUG_CACHE.delete(firstKey);
+  }
+  SLUG_CACHE.set(slug, {
+    exists,
+    expiresAt: now + (exists ? SLUG_CACHE_POS_TTL_MS : SLUG_CACHE_NEG_TTL_MS),
+  });
+  return exists;
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
 export const config = {

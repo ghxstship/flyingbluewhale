@@ -55,7 +55,12 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
         .pop()
         ?.toLowerCase()
         .replace(/[^a-z0-9]/g, "") ?? "bin";
-    const path = `advancing/${project.id}/${session.userId}/${Date.now()}-${parsed.data.type}.${ext}`;
+    // Org-folder layout: `{orgId}/{projectId}/{userId}/...`. The leading
+    // org_id segment is enforced by storage policy
+    // `storage_org_scoped_upload` (migration
+    // 20260509100009_storage_org_folder_enforcement.sql) — uploads to a
+    // path whose first folder isn't a member-org of auth.uid() are denied.
+    const path = `${project.org_id}/${project.id}/${session.userId}/${Date.now()}-${parsed.data.type}.${ext}`;
     const { error } = await supabase.storage.from("advancing").upload(path, file, {
       contentType: file.type || "application/octet-stream",
       upsert: false,

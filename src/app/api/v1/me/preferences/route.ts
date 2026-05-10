@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
+import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 
@@ -30,58 +31,61 @@ const PatchSchema = z.object({
 const UI_STATE_KEYS = ["palette_recents", "sidebar_width", "sidebar_pinned", "sidebar_collapsed"] as const;
 
 export async function GET() {
-  const supabase = await createClient();
-  const { data: u } = await supabase.auth.getUser();
-  if (!u.user) return apiError("unauthorized", "Sign in required");
+  return withAuth(async (session) => {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("user_preferences")
+      .select("*")
+      .eq("user_id", session.userId)
+      .maybeSingle();
 
-  const { data, error } = await supabase.from("user_preferences").select("*").eq("user_id", u.user.id).maybeSingle();
+    if (error) return apiError("internal", error.message);
 
-  if (error) return apiError("internal", error.message);
+    // Flatten ui_state into the top-level response shape
+    const uiState = (data?.ui_state as Record<string, unknown> | null) ?? {};
+    const flat = data ? { ...data, ...uiState } : null;
 
-  // Flatten ui_state into the top-level response shape
-  const uiState = (data?.ui_state as Record<string, unknown> | null) ?? {};
-  const flat = data ? { ...data, ...uiState } : null;
-
-  return apiOk(flat);
+    return apiOk(flat);
+  });
 }
 
 export async function PATCH(req: NextRequest) {
   const parsed = await parseJson(req, PatchSchema);
   if (parsed instanceof NextResponse) return parsed;
 
-  const supabase = await createClient();
-  const { data: u } = await supabase.auth.getUser();
-  if (!u.user) return apiError("unauthorized", "Sign in required");
+  return withAuth(async (session) => {
+    const supabase = await createClient();
 
-  // Read existing row so we merge ui_state fields non-destructively
-  const { data: existing } = await supabase
-    .from("user_preferences")
-    .select("ui_state")
-    .eq("user_id", u.user.id)
-    .maybeSingle();
+    // Read existing row so we merge ui_state fields non-destructively
+    const { data: existing } = await supabase
+      .from("user_preferences")
+      .select("ui_state")
+      .eq("user_id", session.userId)
+      .maybeSingle();
 
-  // Partition incoming fields
-  const patch: Record<string, unknown> = {};
-  const uiPatch: Record<string, unknown> = { ...((existing?.ui_state as Record<string, unknown> | null) ?? {}) };
-  for (const [k, v] of Object.entries(parsed)) {
-    if ((UI_STATE_KEYS as readonly string[]).includes(k)) {
-      uiPatch[k] = v;
-    } else {
-      patch[k] = v;
+    // Partition incoming fields
+    const patch: Record<string, unknown> = {};
+    const uiPatch: Record<string, unknown> = { ...((existing?.ui_state as Record<string, unknown> | null) ?? {}) };
+    for (const [k, v] of Object.entries(parsed)) {
+      if ((UI_STATE_KEYS as readonly string[]).includes(k)) {
+        uiPatch[k] = v;
+      } else {
+        patch[k] = v;
+      }
     }
-  }
-  if (parsed.consent) patch.consent = parsed.consent as Json;
-  if (parsed.table_views) patch.table_views = parsed.table_views as Json;
-  patch.ui_state = uiPatch as Json;
+    if (parsed.consent) patch.consent = parsed.consent as Json;
+    if (parsed.table_views) patch.table_views = parsed.table_views as Json;
+    patch.ui_state = uiPatch as Json;
 
-  const upsertRow = { user_id: u.user.id, ...patch };
-  const { data, error } = await supabase
-    .from("user_preferences")
-    .upsert(upsertRow, { onConflict: "user_id" })
-    .select()
-    .single();
+    const upsertRow = { user_id: session.userId, ...patch };
+    const { data, error } = await supabase
+      .from("user_preferences")
+      .upsert(upsertRow, { onConflict: "user_id" })
+      .select()
+      .single();
 
-  if (error) return apiError("internal", error.message);
-  const uiState = (data.ui_state as Record<string, unknown> | null) ?? {};
-  return apiOk({ ...data, ...uiState });
+    if (error) return apiError("internal", error.message);
+    const uiState = (data.ui_state as Record<string, unknown> | null) ?? {};
+    return apiOk({ ...data, ...uiState });
+  });
 }

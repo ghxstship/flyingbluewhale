@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 type AppRow = {
   id: string;
   applicant_user_id: string;
-  status: string;
+  application_phase: string;
   score: number | null;
   day_rate_proposed_cents: number | null;
   applied_at: string;
@@ -31,20 +31,20 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
   const [postingResp, appsResp] = await Promise.all([
     supabase
       .from("job_postings")
-      .select("id, title, applicant_count, status")
+      .select("id, title, applicant_count, posting_phase")
       .eq("id", postingId)
       .eq("org_id", session.orgId)
       .maybeSingle(),
     supabase
       .from("job_applications")
-      .select("id, applicant_user_id, status, score, day_rate_proposed_cents, applied_at, cover_note")
+      .select("id, applicant_user_id, application_phase, score, day_rate_proposed_cents, applied_at, cover_note")
       .eq("job_posting_id", postingId)
       .eq("org_id", session.orgId)
       .order("applied_at", { ascending: false })
       .limit(500),
   ]);
   if (!postingResp.data) return notFound();
-  const posting = postingResp.data as { id: string; title: string; applicant_count: number; status: string };
+  const posting = postingResp.data as { id: string; title: string; applicant_count: number; posting_phase: string };
   const rows = (appsResp.data ?? []) as AppRow[];
 
   return (
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
       <ModuleHeader
         eyebrow={`Marketplace · ${posting.title}`}
         title="Applicants"
-        subtitle={`${rows.length} total · ${rows.filter((r) => r.status === "new").length} unreviewed`}
+        subtitle={`${rows.length} total · ${rows.filter((r) => r.application_phase === "new").length} unreviewed`}
       />
       <div className="page-content space-y-5">
         <DataTable<AppRow>
@@ -77,8 +77,8 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
             {
               key: "status",
               header: "Stage",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => <Badge variant={STATUS_TONE[r.application_phase] ?? "muted"}>{r.application_phase}</Badge>,
+              accessor: (r) => r.application_phase,
               filterable: true,
               groupable: true,
             },

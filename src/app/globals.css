@@ -117,6 +117,15 @@
   --org-secondary: #4b4b4b;
   --org-accent: #1a1a1a;
   --sidebar-width: 16rem;
+
+  /* Semantic aliases — referenced across 22+ files; sourced to canonical tokens */
+  --bg-primary: var(--background);
+  --surface-base: var(--background);
+  --danger: var(--color-error);
+  --danger-subtle: color-mix(in srgb, var(--color-error) 12%, transparent);
+  --accent-subtle: color-mix(in srgb, var(--org-accent) 12%, transparent);
+  --text-inverted: var(--background);
+  --white: #ffffff;
 }
 
 /* Removed: the legacy `[data-mode="dark"]` fallback that overrode every

@@ -108,7 +108,13 @@ export type IconName =
   | "BarChart3"
   | "Lock"
   | "Coins"
-  | "Route";
+  | "Route"
+  // Audit additions
+  | "MessageSquare"
+  | "Car"
+  | "Landmark"
+  | "Code2"
+  | "Pencil";
 
 export type NavItem = {
   label: string;
@@ -166,6 +172,10 @@ export const platformNav: NavGroup[] = [
       { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
       { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
       { label: "Time", href: "/console/finance/time", icon: "Clock" },
+      { label: "Mileage", href: "/console/finance/mileage", icon: "Car" },
+      { label: "Advances", href: "/console/finance/advances", icon: "Coins" },
+      { label: "Cost Codes", href: "/console/finance/cost-codes", icon: "Code2" },
+      { label: "Treasury", href: "/console/finance/treasury", icon: "Landmark" },
       { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
       { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
       { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
@@ -207,6 +217,8 @@ export const platformNav: NavGroup[] = [
       { label: "Booking Calendar", href: "/console/bookings/calendar", icon: "CalendarDays" },
       { label: "Settlements", href: "/console/bookings/settlements", icon: "Coins" },
       { label: "Tours", href: "/console/agency/tours", icon: "Route" },
+      { label: "Agency Roster", href: "/console/agency/roster", icon: "Users" },
+      { label: "Commissions", href: "/console/agency/commissions", icon: "Coins" },
       { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
       { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
       { label: "Rosters", href: "/console/workforce/rosters", icon: "ClipboardSignature" },
@@ -220,6 +232,7 @@ export const platformNav: NavGroup[] = [
       { label: "Leads", href: "/console/leads", icon: "UserPlus" },
       { label: "Clients", href: "/console/clients", icon: "Handshake" },
       { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
+      { label: "Campaigns", href: "/console/campaigns", icon: "Megaphone" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
@@ -314,6 +327,9 @@ export const platformNav: NavGroup[] = [
     // is itself a TECHNOLOGY surface).
     label: "9 TECHNOLOGY",
     items: [
+      { label: "AI Assistant", href: "/console/ai/assistant", icon: "MessageSquare" },
+      { label: "AI Agents", href: "/console/ai/agents", icon: "Bot" },
+      { label: "AI Drafting", href: "/console/ai/drafting", icon: "Pencil" },
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },

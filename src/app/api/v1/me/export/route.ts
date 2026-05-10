@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { apiError } from "@/lib/api";
+import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -23,18 +24,14 @@ const TABLES_USER_SCOPED = [
 ] as const;
 
 export async function GET() {
+  return withAuth(async (session) => {
   const supabase = await createClient();
-  const { data: userData, error: userErr } = await supabase.auth.getUser();
-  if (userErr || !userData.user) {
-    return apiError("unauthorized", "Sign in to export your data");
-  }
-  const userId = userData.user.id;
+  const userId = session.userId;
   const bundle: Record<string, unknown> = {
     exportedAt: new Date().toISOString(),
     user: {
       id: userId,
-      email: userData.user.email,
-      created_at: userData.user.created_at,
+      email: session.email,
     },
   };
 
@@ -110,5 +107,6 @@ export async function GET() {
       "content-disposition": `attachment; filename="lytehaus-export-${userId}-${Date.now()}.json"`,
       "cache-control": "no-store",
     },
+  });
   });
 }

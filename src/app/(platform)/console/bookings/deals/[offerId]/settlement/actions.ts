@@ -82,7 +82,7 @@ export async function upsertSettlementAction(_: State, fd: FormData): Promise<St
       .eq("org_id", session.orgId);
     if (error) return { error: error.message };
   } else {
-    const { error } = await supabase.from("settlements").insert({ ...payload, status: "draft" });
+    const { error } = await supabase.from("settlements").insert({ ...payload, settlement_state: "draft" });
     if (error) return { error: error.message };
   }
 
@@ -103,20 +103,20 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
   // stop us re-running our own post-transfer side-effects on a stale form.
   const settlementResp = await supabase
     .from("settlements")
-    .select("id, status, balance_due_cents, payout_destination, currency, stripe_transfer_id")
+    .select("id, settlement_state, balance_due_cents, payout_destination, currency, stripe_transfer_id")
     .eq("talent_offer_id", offerId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!settlementResp.data) return { error: "Settlement not found" };
   const s = settlementResp.data as {
     id: string;
-    status: string;
+    settlement_state: string;
     balance_due_cents: number;
     payout_destination: string | null;
     currency: string;
     stripe_transfer_id: string | null;
   };
-  if (s.status === "final") return { error: "Settlement already final" };
+  if (s.settlement_state === "final") return { error: "Settlement already final" };
 
   // Stripe Connect transfer — only fire when:
   //   1. STRIPE_SECRET_KEY is configured (graceful no-op locally)
@@ -155,14 +155,14 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
   const { data: updated, error } = await supabase
     .from("settlements")
     .update({
-      status: "final",
+      settlement_state: "final",
       finalized_at: new Date().toISOString(),
       finalized_by: session.userId,
       stripe_transfer_id: stripeTransferId,
     })
     .eq("talent_offer_id", offerId)
     .eq("org_id", session.orgId)
-    .eq("status", s.status as "draft")
+    .eq("settlement_state", s.settlement_state as "draft")
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {

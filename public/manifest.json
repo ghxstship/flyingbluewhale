@@ -1,8 +1,8 @@
 {
-  "name": "flyingbluewhale",
-  "short_name": "fbw",
-  "description": "Unified production platform — internal console, external portals, mobile field PWA.",
-  "start_url": "/",
+  "name": "COMPVSS",
+  "short_name": "COMPVSS",
+  "description": "LYTEHAUS Technologies — COMPVSS field PWA for production and event ops.",
+  "start_url": "/m",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#0A0A0A",

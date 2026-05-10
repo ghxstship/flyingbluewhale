@@ -26,7 +26,7 @@ type Deal = {
   agent_commission_bps: number;
   deposit_pct: number;
   deal_type: string;
-  status: string;
+  offer_phase: string;
   talent_profile_id: string;
   co_pro_partners: Array<{ org_name: string; split_pct: number }>;
 };
@@ -49,11 +49,11 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
 
   const settlementResp = await supabase
     .from("settlements")
-    .select("id, status")
+    .select("id, settlement_state")
     .eq("talent_offer_id", d.id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  const settlement = settlementResp.data as { id: string; status: string } | null;
+  const settlement = settlementResp.data as { id: string; settlement_state: string } | null;
 
   // Break-even compute. Estimate total expenses + guarantee, divide by avg
   // ticket price across ticket_scaling.
@@ -85,7 +85,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
         subtitle={`Fee ${formatMoney(d.guarantee_cents ?? d.fee_cents)} · ${d.deposit_pct}% deposit`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[d.status] ?? "muted"}>{d.status}</Badge>
+            <Badge variant={STATUS_TONE[d.offer_phase] ?? "muted"}>{d.offer_phase}</Badge>
             <Button href={`/console/marketplace/offers/${d.id}`} size="sm" variant="ghost">
               Offer view
             </Button>

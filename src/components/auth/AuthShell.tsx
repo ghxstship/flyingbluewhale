@@ -54,7 +54,7 @@ export function AuthShell({
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-base font-semibold tracking-tight"
-          aria-label={productName}
+          aria-label={`${productName} — home`}
         >
           {rail?.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -80,7 +80,7 @@ export function AuthShell({
       </aside>
 
       {/* Form pane */}
-      <main className="flex items-center justify-center px-6 py-12 sm:py-16">
+      <main id="main" className="flex items-center justify-center px-6 py-12 sm:py-16">
         <div className="w-full max-w-sm">
           <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
           {subtitle && <p className="mt-2 text-sm text-[var(--text-secondary)]">{subtitle}</p>}

@@ -44,7 +44,7 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
       currency: parsed.data.currency,
       deposit_pct: Math.min(100, Math.max(0, Math.round(Number(parsed.data.deposit_pct)))),
       balance_terms: parsed.data.balance_terms,
-      status: "draft",
+      offer_phase: "draft",
       created_by: session.userId,
     })
     .select("id")
@@ -75,10 +75,10 @@ export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
-    .update({ status: "sent", sent_at: new Date().toISOString() })
+    .update({ offer_phase: "sent", sent_at: new Date().toISOString() })
     .eq("id", parsed.data.offer_id)
     .eq("org_id", session.orgId)
-    .eq("status", "draft")
+    .eq("offer_phase", "draft")
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Offer can't be sent from its current state" };
@@ -93,10 +93,10 @@ export async function acceptOfferAction(_: State, fd: FormData): Promise<State> 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
-    .update({ status: "accepted", accepted_at: new Date().toISOString() })
+    .update({ offer_phase: "accepted", accepted_at: new Date().toISOString() })
     .eq("id", parsed.data.offer_id)
     .eq("org_id", session.orgId)
-    .in("status", ["sent", "countered"])
+    .in("offer_phase", ["sent", "countered"])
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Offer can only be accepted from sent or countered" };
@@ -111,10 +111,10 @@ export async function declineOfferAction(_: State, fd: FormData): Promise<State>
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
-    .update({ status: "declined" })
+    .update({ offer_phase: "declined" })
     .eq("id", parsed.data.offer_id)
     .eq("org_id", session.orgId)
-    .in("status", ["sent", "countered"])
+    .in("offer_phase", ["sent", "countered"])
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Only a sent or countered offer can be declined" };

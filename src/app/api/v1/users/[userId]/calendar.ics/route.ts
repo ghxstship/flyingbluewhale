@@ -40,10 +40,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ userId: string 
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user || auth.user.id !== p.data.userId) {
-    return new NextResponse("Unauthorized\n", {
-      status: 401,
-      headers: { "content-type": "text/plain" },
-    });
+    return apiError("unauthorized", "Sign in to access this calendar feed");
   }
 
   // Pull every event across every org the user is a member of.

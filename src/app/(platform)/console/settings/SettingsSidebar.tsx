@@ -11,7 +11,7 @@ export function SettingsSidebar() {
   return (
     <aside
       aria-label="Settings"
-      className="w-full shrink-0 border-e border-[var(--border-color)] bg-[var(--bg-secondary)] lg:w-[240px]"
+      className="surface-inset w-full shrink-0 border-e border-[var(--border-color)] lg:w-[240px]"
     >
       <div className="flex h-full flex-col">
         <div className="border-b border-[var(--border-color)] px-3 py-3">

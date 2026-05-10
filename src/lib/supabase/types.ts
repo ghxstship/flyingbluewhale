@@ -604,7 +604,7 @@ export type EventGuide = {
   updated_at: string;
 };
 
-// ═══ Olympic-scope row types (fbw_030) ════════════════════════════════════
+// ═══ Olympic-scope row types (lytehaus_030) ════════════════════════════════════
 export type RiskLikelihood = "rare" | "unlikely" | "possible" | "likely" | "almost_certain";
 export type RiskImpact = "insignificant" | "minor" | "moderate" | "major" | "severe";
 export type RiskStatus = "open" | "mitigating" | "accepted" | "closed";
@@ -2583,7 +2583,7 @@ export type Database = {
         Partial<EventGuide>
       >;
 
-      // ═══ Olympic-scope (fbw_030) ═══════════════════════════════════════
+      // ═══ Olympic-scope (lytehaus_030) ═══════════════════════════════════════
       risks: TableDef<Risk, Partial<Risk> & { org_id: string; title: string }, Partial<Risk>>;
       program_reviews: TableDef<
         ProgramReview,

@@ -33,7 +33,7 @@ const SENSITIVE_HEADER_NAMES = new Set(["authorization", "x-api-key", "x-stripe-
 const SENSITIVE_COOKIE_NAMES = [
   /^sb-[^=]+-auth-token(?:\.0|\.1)?$/i,
   /^__Secure-next-auth\.session-token$/i,
-  /^fbw_session$/i,
+  /^lyt_session$/i,
 ];
 
 export function scrubString(s: MaybeString): MaybeString {

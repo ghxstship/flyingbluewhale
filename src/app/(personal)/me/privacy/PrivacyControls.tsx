@@ -13,7 +13,7 @@ import {
   DialogFooter,
 } from "@/components/ui/Dialog";
 
-const COOKIE_NAME = "fbw_consent";
+const COOKIE_NAME = "lyt_consent";
 
 export function PrivacyControls() {
   const [exporting, setExporting] = React.useState(false);

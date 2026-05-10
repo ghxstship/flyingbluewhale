@@ -8,7 +8,7 @@ import { JOB_APPLICATION_STATUSES, type JobApplicationStatus } from "@/lib/marke
 
 const Transition = z.object({
   application_id: z.string().uuid(),
-  status: z.enum(JOB_APPLICATION_STATUSES),
+  application_phase: z.enum(JOB_APPLICATION_STATUSES),
   reviewer_notes: z.string().max(4000).optional().or(z.literal("")),
   score: z.string().optional().or(z.literal("")),
 });
@@ -38,21 +38,21 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
 
   const { data: row } = await supabase
     .from("job_applications")
-    .select("status")
+    .select("application_phase")
     .eq("id", parsed.data.application_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!row) return { error: "Application not found" };
-  const current = (row as { status: JobApplicationStatus }).status;
+  const current = (row as { application_phase: JobApplicationStatus }).application_phase;
   const allowed = APPLICATION_TRANSITIONS[current] ?? [];
-  if (current !== parsed.data.status && !allowed.includes(parsed.data.status)) {
-    return { error: `Cannot move ${current} → ${parsed.data.status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
+  if (current !== parsed.data.application_phase && !allowed.includes(parsed.data.application_phase)) {
+    return { error: `Cannot move ${current} → ${parsed.data.application_phase}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
   }
 
   const { data: updated, error } = await supabase
     .from("job_applications")
     .update({
-      status: parsed.data.status,
+      application_phase: parsed.data.application_phase,
       reviewer_notes: parsed.data.reviewer_notes || null,
       score,
       reviewed_by: session.userId,
@@ -60,7 +60,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
     })
     .eq("id", parsed.data.application_id)
     .eq("org_id", session.orgId)
-    .eq("status", current as "new")
+    .eq("application_phase", current as "new")
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {

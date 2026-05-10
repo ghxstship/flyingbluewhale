@@ -16,7 +16,7 @@ type Sub = {
   id: string;
   submitter_user_id: string;
   talent_profile_id: string | null;
-  status: string;
+  submission_phase: string;
   score: number | null;
   internal_notes: string | null;
   cover_note: string | null;
@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         eyebrow="Submission"
         title={`#${s.id.slice(0, 8)}`}
         subtitle={`Submitted ${new Date(s.submitted_at).toLocaleString()}`}
-        action={<Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>}
+        action={<Badge variant={STATUS_TONE[s.submission_phase] ?? "muted"}>{s.submission_phase}</Badge>}
       />
       <div className="page-content max-w-2xl space-y-5">
         <section className="surface p-5">
@@ -99,7 +99,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             <input type="hidden" name="submission_id" value={s.id} />
             <div>
               <label className="text-xs font-medium text-[var(--text-secondary)]">Status</label>
-              <select name="status" className="input-base mt-1.5 w-full" defaultValue={s.status}>
+              <select name="submission_phase" className="input-base mt-1.5 w-full" defaultValue={s.submission_phase}>
                 {SUBMISSION_STATUSES.map((st) => (
                   <option key={st} value={st}>
                     {st}

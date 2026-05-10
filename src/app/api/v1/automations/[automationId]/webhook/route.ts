@@ -68,16 +68,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ aut
   });
   if (!rl.ok) {
     const retryAfter = Math.max(1, Math.ceil((rl.resetAt - Date.now()) / 1000));
-    return new Response(
-      JSON.stringify({
-        ok: false,
-        error: { code: "rate_limited", message: "Too many requests", retryAfter },
-      }),
-      {
-        status: 429,
-        headers: { "content-type": "application/json", "retry-after": String(retryAfter) },
-      },
-    );
+    const resp = apiError("rate_limited", "Too many requests");
+    resp.headers.set("retry-after", String(retryAfter));
+    return resp;
   }
 
   // Read raw body with a hard size cap.

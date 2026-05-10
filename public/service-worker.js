@@ -1,15 +1,14 @@
-// flyingbluewhale offline-first service worker
-// Caches the mobile shell + check-in flow + offline fallback page.
+// COMPVSS offline-first service worker — LYTEHAUS Technologies
+// Caches the mobile shell + gate scan + offline fallback page.
 
 const VERSION = "v1";
-const STATIC_CACHE = `fbw-static-${VERSION}`;
-const RUNTIME_CACHE = `fbw-runtime-${VERSION}`;
+const STATIC_CACHE = `compvss-static-${VERSION}`;
+const RUNTIME_CACHE = `compvss-runtime-${VERSION}`;
 
 const PRECACHE = [
-  "/",
   "/m",
-  "/m/check-in",
-  "/m/tasks",
+  "/m/gate",
+  "/m/shift",
   "/manifest.json",
 ];
 
@@ -85,7 +84,7 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = (event.notification.data && event.notification.data.url) || "/";
+  const url = (event.notification.data && event.notification.data.url) || "/m";
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((tabs) => {
       const tab = tabs.find((t) => t.url.includes(url));

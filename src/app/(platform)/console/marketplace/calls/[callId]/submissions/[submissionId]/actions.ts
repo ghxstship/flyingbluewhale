@@ -8,7 +8,7 @@ import { SUBMISSION_STATUSES, type SubmissionStatus } from "@/lib/marketplace";
 
 const Transition = z.object({
   submission_id: z.string().uuid(),
-  status: z.enum(SUBMISSION_STATUSES),
+  submission_phase: z.enum(SUBMISSION_STATUSES),
   internal_notes: z.string().max(4000).optional().or(z.literal("")),
   score: z.string().optional().or(z.literal("")),
 });
@@ -36,21 +36,21 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
 
   const { data: row } = await supabase
     .from("open_call_submissions")
-    .select("status")
+    .select("submission_phase")
     .eq("id", parsed.data.submission_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!row) return { error: "Submission not found" };
-  const current = (row as { status: SubmissionStatus }).status;
+  const current = (row as { submission_phase: SubmissionStatus }).submission_phase;
   const allowed = SUBMISSION_TRANSITIONS[current] ?? [];
-  if (current !== parsed.data.status && !allowed.includes(parsed.data.status)) {
-    return { error: `Cannot move ${current} → ${parsed.data.status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
+  if (current !== parsed.data.submission_phase && !allowed.includes(parsed.data.submission_phase)) {
+    return { error: `Cannot move ${current} → ${parsed.data.submission_phase}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
   }
 
   const { data: updated, error } = await supabase
     .from("open_call_submissions")
     .update({
-      status: parsed.data.status,
+      submission_phase: parsed.data.submission_phase,
       internal_notes: parsed.data.internal_notes || null,
       score,
       reviewed_by: session.userId,
@@ -58,7 +58,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
     })
     .eq("id", parsed.data.submission_id)
     .eq("org_id", session.orgId)
-    .eq("status", current as "submitted")
+    .eq("submission_phase", current as "submitted")
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {

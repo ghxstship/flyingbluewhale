@@ -10,5 +10,14 @@
       "destination": "https://lytehaus.live/:path*",
       "permanent": true
     }
+  ],
+  "headers": [
+    {
+      "source": "/api/v1/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate" },
+        { "key": "Pragma", "value": "no-cache" }
+      ]
+    }
   ]
 }

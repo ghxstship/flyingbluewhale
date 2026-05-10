@@ -2,18 +2,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { requireSession } from "@/lib/auth";
-
-const tabs = [
-  { label: "Dashboard", href: "/me" },
-  { label: "Profile", href: "/me/profile" },
-  { label: "Appearance", href: "/me/settings/appearance" },
-  { label: "Settings", href: "/me/settings" },
-  { label: "Notifications", href: "/me/notifications" },
-  { label: "Security", href: "/me/security" },
-  { label: "Privacy", href: "/me/privacy" },
-  { label: "Tickets", href: "/me/tickets" },
-  { label: "Organizations", href: "/me/organizations" },
-];
+import { PersonalTabs } from "./PersonalTabs";
 
 export default async function PersonalLayout({ children }: { children: React.ReactNode }) {
   // Outer auth guard — matches (platform) and (mobile) shell convention.
@@ -33,7 +22,7 @@ export default async function PersonalLayout({ children }: { children: React.Rea
             <Link
               href="/"
               className="inline-flex items-center gap-2 text-sm font-semibold tracking-tight text-[var(--foreground)]"
-              aria-label={brandAria}
+              aria-label={`${brandAria} — home`}
             >
               {tenant.branding.logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -43,15 +32,9 @@ export default async function PersonalLayout({ children }: { children: React.Rea
             </Link>
             <ThemeToggle />
           </div>
-          <nav className="mt-4 flex flex-wrap gap-1 border-b border-[var(--border-color)] pb-2">
-            {tabs.map((t) => (
-              <Link key={t.href} href={t.href} className="nav-item text-sm">
-                {t.label}
-              </Link>
-            ))}
-          </nav>
+          <PersonalTabs />
         </div>
-        <main className="animate-page-enter mx-auto max-w-5xl px-6 py-8">{children}</main>
+        <main id="main" className="animate-page-enter mx-auto max-w-5xl px-6 py-8">{children}</main>
       </div>
     </TenantShell>
   );

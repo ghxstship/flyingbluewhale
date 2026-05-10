@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 type Row = {
   id: string;
   submitter_user_id: string;
-  status: string;
+  submission_phase: string;
   score: number | null;
   fee_proposed_cents: number | null;
   cover_note: string | null;
@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
       .maybeSingle(),
     supabase
       .from("open_call_submissions")
-      .select("id, submitter_user_id, status, score, fee_proposed_cents, cover_note, submitted_at")
+      .select("id, submitter_user_id, submission_phase, score, fee_proposed_cents, cover_note, submitted_at")
       .eq("open_call_id", callId)
       .eq("org_id", session.orgId)
       .order("submitted_at", { ascending: false })
@@ -50,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
       <ModuleHeader
         eyebrow={`Call · ${call.title}`}
         title="Submissions"
-        subtitle={`${rows.length} total · ${rows.filter((r) => r.status === "submitted").length} unreviewed`}
+        subtitle={`${rows.length} total · ${rows.filter((r) => r.submission_phase === "submitted").length} unreviewed`}
       />
       <div className="page-content space-y-5">
         <DataTable<Row>
@@ -75,8 +75,8 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => <Badge variant={STATUS_TONE[r.submission_phase] ?? "muted"}>{r.submission_phase}</Badge>,
+              accessor: (r) => r.submission_phase,
               filterable: true,
               groupable: true,
             },

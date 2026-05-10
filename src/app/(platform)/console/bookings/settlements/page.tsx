@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 type Row = {
   id: string;
   show_date: string;
-  status: string;
+  settlement_state: string;
   gross_box_office_cents: number;
   nbor_cents: number;
   artist_payout_cents: number;
@@ -42,15 +42,15 @@ export default async function Page() {
   const { data } = await supabase
     .from("settlements")
     .select(
-      "id, show_date, status, gross_box_office_cents, nbor_cents, artist_payout_cents, balance_due_cents, paid_attendance, finalized_at, talent_offer_id",
+      "id, show_date, settlement_state, gross_box_office_cents, nbor_cents, artist_payout_cents, balance_due_cents, paid_attendance, finalized_at, talent_offer_id",
     )
     .eq("org_id", session.orgId)
     .order("show_date", { ascending: false })
     .limit(500);
 
   const rows = (data ?? []) as Row[];
-  const finalCount = rows.filter((r) => r.status === "final").length;
-  const draftCount = rows.filter((r) => r.status === "draft").length;
+  const finalCount = rows.filter((r) => r.settlement_state === "final").length;
+  const draftCount = rows.filter((r) => r.settlement_state === "draft").length;
   const totalGBOR = rows.reduce((s, r) => s + (r.gross_box_office_cents ?? 0), 0);
   const totalNBOR = rows.reduce((s, r) => s + (r.nbor_cents ?? 0), 0);
 
@@ -124,8 +124,8 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => <Badge variant={STATUS_TONE[r.settlement_state] ?? "muted"}>{r.settlement_state}</Badge>,
+              accessor: (r) => r.settlement_state,
               filterable: true,
               groupable: true,
             },

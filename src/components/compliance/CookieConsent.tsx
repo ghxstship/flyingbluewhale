@@ -18,7 +18,7 @@ type Consent = {
   decidedAt: string;
 };
 
-const COOKIE_NAME = "fbw_consent";
+const COOKIE_NAME = "lyt_consent";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 function readConsent(): Consent | null {

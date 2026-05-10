@@ -16,7 +16,7 @@ type PostingRow = {
   title: string;
   region: string | null;
   city: string | null;
-  status: string;
+  posting_phase: string;
   posting_type: string;
   applicant_count: number;
   day_rate_min_cents: number | null;
@@ -44,7 +44,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("job_postings")
     .select(
-      "id, title, region, city, status, posting_type, applicant_count, day_rate_min_cents, day_rate_max_cents, currency, published_at, expires_at",
+      "id, title, region, city, posting_phase, posting_type, applicant_count, day_rate_min_cents, day_rate_max_cents, currency, published_at, expires_at",
     )
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -53,8 +53,8 @@ export default async function Page() {
     .limit(200);
 
   const rows = (data ?? []) as PostingRow[];
-  const published = rows.filter((r) => r.status === "published").length;
-  const drafts = rows.filter((r) => r.status === "draft").length;
+  const published = rows.filter((r) => r.posting_phase === "published").length;
+  const drafts = rows.filter((r) => r.posting_phase === "draft").length;
   const totalApplicants = rows.reduce((s, r) => s + (r.applicant_count ?? 0), 0);
 
   return (
@@ -119,8 +119,8 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => <Badge variant={STATUS_TONE[r.posting_phase] ?? "muted"}>{r.posting_phase}</Badge>,
+              accessor: (r) => r.posting_phase,
               filterable: true,
               groupable: true,
             },

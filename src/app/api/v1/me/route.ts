@@ -1,5 +1,5 @@
-import { apiError, apiOk } from "@/lib/api";
-import { getSession } from "@/lib/auth";
+import { apiOk } from "@/lib/api";
+import { withAuth } from "@/lib/auth";
 
 /**
  * Canonical "who am I" endpoint. Returns the current session payload
@@ -11,14 +11,14 @@ import { getSession } from "@/lib/auth";
  * already existed and stay unchanged.
  */
 export async function GET() {
-  const session = await getSession();
-  if (!session) return apiError("unauthorized", "Not signed in");
-  return apiOk({
-    userId: session.userId,
-    email: session.email,
-    orgId: session.orgId,
-    role: session.role,
-    tier: session.tier,
-    persona: session.persona,
+  return withAuth(async (session) => {
+    return apiOk({
+      userId: session.userId,
+      email: session.email,
+      orgId: session.orgId,
+      role: session.role,
+      tier: session.tier,
+      persona: session.persona,
+    });
   });
 }

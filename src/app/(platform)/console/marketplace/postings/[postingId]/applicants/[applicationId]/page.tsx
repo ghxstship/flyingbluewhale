@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 type App = {
   id: string;
   applicant_user_id: string;
-  status: string;
+  application_phase: string;
   score: number | null;
   cover_note: string | null;
   resume_url: string | null;
@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
         eyebrow="Applicant"
         title={`#${a.id.slice(0, 8)}`}
         subtitle={`Applied ${new Date(a.applied_at).toLocaleDateString()}`}
-        action={<Badge variant={STATUS_TONE[a.status] ?? "muted"}>{a.status}</Badge>}
+        action={<Badge variant={STATUS_TONE[a.application_phase] ?? "muted"}>{a.application_phase}</Badge>}
       />
       <div className="page-content max-w-2xl space-y-5">
         <section className="surface p-5">
@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
             <input type="hidden" name="application_id" value={a.id} />
             <div>
               <label className="text-xs font-medium text-[var(--text-secondary)]">Stage</label>
-              <select name="status" className="input-base mt-1.5 w-full" defaultValue={a.status}>
+              <select name="application_phase" className="input-base mt-1.5 w-full" defaultValue={a.application_phase}>
                 {JOB_APPLICATION_STATUSES.map((s) => (
                   <option key={s} value={s}>
                     {s}

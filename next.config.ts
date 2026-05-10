@@ -61,7 +61,12 @@ const config: NextConfig = {
         headers: [
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
+          // SAMEORIGIN matches the CSP frame-ancestors 'self' policy above —
+          // both permit same-origin iframes (e.g. marketing home page's
+          // /p/<slug>/guide live preview) while blocking cross-origin embedding.
+          // DENY would block the same-origin embed on legacy browsers that
+          // implement X-Frame-Options but not CSP frame-ancestors.
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
           { key: "Content-Security-Policy", value: csp },

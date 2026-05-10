@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { transitionProductionPhaseAction } from "../actions";
 import type { ProductionPhase } from "@/lib/production-phase";
@@ -29,8 +30,7 @@ export function ProductionPhaseControls({
             startTransition(async () => {
               const r = await transitionProductionPhaseAction(orderId, target);
               if ("error" in r) {
-                console.error(r.error);
-                alert(r.error);
+                toast.error("Phase transition failed", { description: r.error });
               }
             });
           }}

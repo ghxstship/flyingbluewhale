@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { transitionSubscriptionAction } from "../actions";
 import type { SubscriptionState } from "@/lib/subscriptions";
@@ -30,8 +31,7 @@ export function SubscriptionStateControls({
             startTransition(async () => {
               const r = await transitionSubscriptionAction(subscriptionId, target, reason);
               if ("error" in r) {
-                console.error(r.error);
-                alert(r.error);
+                toast.error("Transition failed", { description: r.error });
               }
             });
           }}

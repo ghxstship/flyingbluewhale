@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { transitionAccountingPeriodAction } from "../actions";
 import type { AccountingPeriodState } from "@/lib/accounting-periods";
@@ -29,8 +30,7 @@ export function AccountingPeriodStateControls({
             startTransition(async () => {
               const r = await transitionAccountingPeriodAction(periodId, target);
               if ("error" in r) {
-                console.error(r.error);
-                alert(r.error);
+                toast.error("Transition failed", { description: r.error });
               }
             });
           }}

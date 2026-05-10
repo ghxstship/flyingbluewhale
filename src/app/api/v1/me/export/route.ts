@@ -40,6 +40,21 @@ export async function GET() {
 
   // Each table is queried under RLS; the user only gets rows they're entitled to.
   // Per-table query keeps the typed builder narrowed to the correct columns.
+  //
+  // GDPR semantics: every table MUST be filtered by an explicit user-owned
+  // column, NOT just RLS. Several RLS policies (e.g. ai_conversations_select)
+  // also let org owners/admins see other members' rows; without an explicit
+  // user filter an admin requesting their own export would receive every
+  // user's conversations in the org. The user-scoped data export must be
+  // exactly the requesting user's footprint, never broader.
+  //
+  // Step 1: pre-fetch the conversation ids the user OWNS so the ai_messages
+  // query can filter by conversation_id (ai_messages has no user_id column).
+  const userConversationIds: string[] =
+    (await supabase.from("ai_conversations").select("id").eq("user_id", userId).limit(10_000)).data?.map(
+      (r) => r.id as string,
+    ) ?? [];
+
   for (const table of TABLES_USER_SCOPED) {
     try {
       let data: unknown[] = [];
@@ -59,19 +74,27 @@ export async function GET() {
         const r = await supabase.from("notifications").select("*").eq("user_id", userId).limit(10_000);
         data = r.data ?? [];
       } else if (table === "ai_conversations") {
-        const r = await supabase.from("ai_conversations").select("*").limit(10_000);
+        const r = await supabase.from("ai_conversations").select("*").eq("user_id", userId).limit(10_000);
         data = r.data ?? [];
       } else if (table === "ai_messages") {
-        const r = await supabase.from("ai_messages").select("*").limit(10_000);
-        data = r.data ?? [];
+        if (userConversationIds.length === 0) {
+          data = [];
+        } else {
+          const r = await supabase
+            .from("ai_messages")
+            .select("*")
+            .in("conversation_id", userConversationIds)
+            .limit(10_000);
+          data = r.data ?? [];
+        }
       } else if (table === "expenses") {
-        const r = await supabase.from("expenses").select("*").limit(10_000);
+        const r = await supabase.from("expenses").select("*").eq("submitter_id", userId).limit(10_000);
         data = r.data ?? [];
       } else if (table === "time_entries") {
-        const r = await supabase.from("time_entries").select("*").limit(10_000);
+        const r = await supabase.from("time_entries").select("*").eq("user_id", userId).limit(10_000);
         data = r.data ?? [];
       } else if (table === "mileage_logs") {
-        const r = await supabase.from("mileage_logs").select("*").limit(10_000);
+        const r = await supabase.from("mileage_logs").select("*").eq("user_id", userId).limit(10_000);
         data = r.data ?? [];
       }
       bundle[table] = data;

@@ -29,9 +29,21 @@ export async function DELETE(req: NextRequest) {
   const { data: u } = await supabase.auth.getUser();
   if (!u.user) return apiError("unauthorized", "Sign in required");
 
-  const { error } = await supabase.from("user_passkeys").delete().eq("id", parsed.data).eq("user_id", u.user.id);
+  // .select() so we can return 404 on a wrong/foreign id AND so we
+  // only emit the audit log when an actual revocation landed. Without
+  // it, spam DELETEs with random uuids would bloat the audit log with
+  // phantom revocation events.
+  const { data: deleted, error } = await supabase
+    .from("user_passkeys")
+    .delete()
+    .eq("id", parsed.data)
+    .eq("user_id", u.user.id)
+    .select("id");
 
   if (error) return apiError("internal", error.message);
+  if (!deleted || deleted.length === 0) {
+    return apiError("not_found", "Passkey not found");
+  }
 
   // H2-07 — audit the passkey revocation.
   const session = await getSession();

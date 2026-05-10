@@ -72,6 +72,20 @@ export async function POST(req: NextRequest) {
   // a silent data-integrity bug that would fail every subsequent sign-in.
   const publicKeyHex = "\\x" + Buffer.from(publicKey).toString("hex");
 
+  // Claim the challenge FIRST (CAS on consumed=false). If a sibling
+  // request already consumed it, we abort BEFORE inserting the
+  // passkey — without this, a double-submit could insert two passkeys
+  // for the same registration ceremony.
+  const { data: claimed } = await supabase
+    .from("webauthn_challenges")
+    .update({ consumed: true })
+    .eq("id", challengeRow.id)
+    .eq("consumed", false)
+    .select("id");
+  if (!claimed || claimed.length === 0) {
+    return apiError("bad_request", "Registration challenge already consumed");
+  }
+
   await supabase.from("user_passkeys").insert({
     user_id: u.user.id,
     credential_id: credentialId,
@@ -79,8 +93,6 @@ export async function POST(req: NextRequest) {
     counter,
     device_name: parsed.deviceName ?? null,
   });
-
-  await supabase.from("webauthn_challenges").update({ consumed: true }).eq("id", challengeRow.id);
 
   // H2-07 — audit the passkey registration. user_passkeys is not covered by
   // the SSOT audit trigger, so we emit manually.

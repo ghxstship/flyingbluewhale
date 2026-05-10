@@ -50,6 +50,17 @@ const PROTECTED: Array<{ match: RegExp; bucket: keyof typeof RATE_BUDGETS }> = [
   // Auth bucket protects POST endpoints. Marketing GETs to /login render the form
   // and must not consume the budget — that breaks e2e + real users hitting refresh.
   { match: /^\/api\/v1\/auth\//, bucket: "auth" },
+  // Heavy generators — PDFs, GDPR exports, DSAR.
+  { match: /^\/api\/v1\/exports\//, bucket: "export" },
+  { match: /^\/api\/v1\/me\/export/, bucket: "export" },
+  { match: /^\/api\/v1\/privacy\/dsar/, bucket: "export" },
+  { match: /^\/api\/v1\/projects\/[^/]+\/(archive|sponsor-deck|wristbands|signage-grid)/, bucket: "export" },
+  // High-impact mass notifications.
+  { match: /^\/api\/v1\/crisis\//, bucket: "crisis" },
+  { match: /^\/api\/v1\/push\//, bucket: "crisis" },
+  // Fail-safe for everything else state-changing under /api/v1. Last in the
+  // list so the more specific buckets above win the match.
+  { match: /^\/api\/v1\//, bucket: "write" },
 ];
 
 // Public unauthenticated paths — the route handlers verify their own tokens
@@ -101,8 +112,13 @@ export async function proxy(request: NextRequest) {
     return res;
   }
 
-  for (const rule of PROTECTED) {
-    if (rule.match.test(pathname) && RATE_LIMITED_METHODS.has(request.method)) {
+  // Match-and-break: PROTECTED is ordered most-specific-first. The catch-all
+  // /api/v1/ `write` bucket lives at the bottom so it only triggers when no
+  // tighter rule already accounted for the request. Without `break`, an
+  // /api/v1/ai/* call would consume both the `ai` and `write` buckets.
+  if (RATE_LIMITED_METHODS.has(request.method)) {
+    for (const rule of PROTECTED) {
+      if (!rule.match.test(pathname)) continue;
       const budget = RATE_BUDGETS[rule.bucket];
       const key = keyFromRequest(request, `${rule.bucket}:${pathname}`);
       const result = await ratelimit({ key, ...budget });
@@ -140,6 +156,7 @@ export async function proxy(request: NextRequest) {
         applyCors(request, res);
         return res;
       }
+      break;
     }
   }
 

@@ -161,10 +161,28 @@ export function keyFromRequest(req: Request, prefix: string): string {
 }
 
 // Budgets per endpoint family. Extend as we wire more endpoints.
+//
+// Anything not explicitly matched by the PROTECTED list in proxy.ts falls
+// through to the `write` bucket — a permissive but bounded fail-safe so
+// the database can't be hammered even if a specific endpoint forgets to
+// declare its own rate-limit. Read-only GETs are not rate-limited at the
+// edge (they hit caching layers + RLS already).
 export const RATE_BUDGETS = {
   auth: { max: 10, windowMs: 60_000 }, // 10 / min — login/signup/forgot
   ai: { max: 30, windowMs: 60_000 }, // 30 / min — AI chat
   scan: { max: 120, windowMs: 60_000 }, // 120 / min — field scanning is fast
   webhook: { max: 300, windowMs: 60_000 }, // Stripe delivery rate
+  // Heavy generators (PDF / archive / GDPR export). Hand-tuned per endpoint
+  // semantics — DSAR is once-per-day-per-user in the GDPR contract; we let
+  // 3/min absorb a misclick without blowing the underlying job runner.
+  export: { max: 5, windowMs: 60_000 },
+  // High-impact org-wide notifications (mass crisis alerts). 5/min is more
+  // than enough for any legit use; the limit prevents a compromised account
+  // from spamming the entire workforce in seconds.
+  crisis: { max: 5, windowMs: 60_000 },
+  // Catch-all for state-changing endpoints not in the buckets above.
+  // Keyed per-user (or per-IP for unauth'd) so one tenant can't starve
+  // another. 60/min is generous for genuine usage.
+  write: { max: 60, windowMs: 60_000 },
   default: { max: 60, windowMs: 60_000 },
 } as const;

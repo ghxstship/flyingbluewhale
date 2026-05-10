@@ -80,7 +80,7 @@ export function OAuthButtons({ next }: { next?: string }) {
           onClick={() => go(p.id)}
           disabled={pending !== null}
           aria-label={`Continue with ${p.label}`}
-          className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-xs font-medium text-[var(--text-primary)] transition hover:bg-[var(--surface-inset)] disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-xs font-medium text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-inset)] disabled:opacity-50"
         >
           {p.icon()}
           <span>{pending === p.id ? "…" : p.label}</span>

@@ -34,7 +34,7 @@ export function DensityToggle() {
           aria-checked={density === m.key}
           aria-label={m.aria}
           onClick={() => setDensity(m.key)}
-          className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+          className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
             density === m.key
               ? "bg-[var(--background)] text-[var(--foreground)]"
               : "text-[var(--text-muted)] hover:text-[var(--foreground)]"

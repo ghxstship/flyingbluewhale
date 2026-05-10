@@ -308,7 +308,7 @@ export function StagePlotCanvas({
               type="button"
               onClick={() => setSelectedTool(selectedTool === p.kind ? null : p.kind)}
               aria-pressed={selectedTool === p.kind}
-              className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-xs transition ${
+              className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-xs transition-colors ${
                 selectedTool === p.kind
                   ? "bg-[var(--surface-inset)] text-[var(--text-primary)] ring-1 ring-[var(--org-primary)]"
                   : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)]"

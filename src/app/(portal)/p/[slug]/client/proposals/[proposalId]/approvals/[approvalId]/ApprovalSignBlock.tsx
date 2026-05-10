@@ -29,7 +29,7 @@ export function ApprovalSignBlock({
         <button
           type="button"
           onClick={() => setMode("sign")}
-          className={`rounded px-3 py-1.5 text-xs font-medium transition ${
+          className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
             mode === "sign"
               ? "bg-[var(--org-primary)] text-white"
               : "bg-[var(--surface-inset)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -40,7 +40,7 @@ export function ApprovalSignBlock({
         <button
           type="button"
           onClick={() => setMode("decline")}
-          className={`rounded px-3 py-1.5 text-xs font-medium transition ${
+          className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
             mode === "decline"
               ? "bg-[color:var(--color-error)] text-white"
               : "bg-[var(--surface-inset)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"

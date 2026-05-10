@@ -1,7 +1,8 @@
 "use client";
 
 import { forwardRef, useId, useState, type InputHTMLAttributes, type ReactNode } from "react";
-import { Loader2, X } from "lucide-react";
+import { X } from "lucide-react";
+import { Spinner } from "./Spinner";
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "prefix"> {
   label?: string;
@@ -69,7 +70,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
   const hasPrefix = !!prefix;
   const trailing = asyncValidating ? (
-    <Loader2 size={12} className="text-[var(--text-muted)] motion-safe:animate-spin" aria-hidden="true" />
+    <Spinner size="sm" className="text-[var(--text-muted)]" />
   ) : clearable && currentValue ? (
     <button
       type="button"
@@ -114,7 +115,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           />
           <label
             htmlFor={id}
-            className={`pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-xs text-[var(--text-muted)] transition-all duration-[var(--motion-fast)] ease-[var(--ease-out)] peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-[var(--text-secondary)] peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px] ${hasPrefix ? "start-7" : ""}`}
+            className={`pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-xs text-[var(--text-muted)] transition-[top,transform,font-size,color] duration-[var(--motion-fast)] ease-[var(--ease-out)] peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-[var(--text-secondary)] peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px] ${hasPrefix ? "start-7" : ""}`}
           >
             {label}
             {required && (

@@ -77,7 +77,7 @@ export default function ContactPage() {
                   style={{ color: "var(--org-primary)" }}
                 >
                   {r.line}
-                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                  <ArrowRight className="cta-nudge h-3.5 w-3.5" />
                 </div>
               </a>
             ))}

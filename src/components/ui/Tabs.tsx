@@ -73,7 +73,7 @@ export const SegmentedControlItem = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={`rounded px-3 py-1 text-xs font-medium text-[var(--text-muted)] transition-colors outline-none hover:text-[var(--text-primary)] data-[state=active]:bg-[var(--surface-raised)] data-[state=active]:text-[var(--text-primary)] data-[state=active]:shadow-sm ${className}`}
+      className={`focus-ring data-[state=active]:elevation-1 rounded px-3 py-1 text-xs font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] data-[state=active]:bg-[var(--surface-raised)] data-[state=active]:text-[var(--text-primary)] ${className}`}
       {...props}
     />
   );

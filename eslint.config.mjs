@@ -66,13 +66,66 @@ const config = [
       "react-hooks/set-state-in-effect": "off",
       "react-hooks/purity": "off",
       "react-hooks/incompatible-library": "off",
-      // CHROMA BEACON — no hex/rgb/rgba literals in JSX string attributes.
+      // CHROMA BEACON + MOTION CANON — class-string + literal guardrails.
       // Whitelisted files: brand SVGs, admin color pickers, open graph,
       // isolated print stylesheets. Everything else must consume tokens.
-      "no-restricted-syntax": ["warn", {
-        selector: "JSXAttribute Literal[value=/#[0-9a-fA-F]{3,8}/]",
-        message: "Use a CSS variable (--text, --surface, --accent...) instead of a hex literal. If this is a brand SVG or user-input default, add the file to the eslint ignores list.",
-      }],
+      "no-restricted-syntax": ["warn",
+        {
+          selector: "JSXAttribute Literal[value=/#[0-9a-fA-F]{3,8}/]",
+          message: "Use a CSS variable (--text, --surface, --accent...) instead of a hex literal. If this is a brand SVG or user-input default, add the file to the eslint ignores list.",
+        },
+        // MOTION CANON — bare `transition` class (no specifier) animates
+        // every changing property at Tailwind's default 150ms, ignoring
+        // motion tokens and competing with .hover-lift / .press-scale.
+        // Replace with `transition-colors` / `transition-transform` /
+        // `transition-opacity` / `transition-shadow`, or use the canonical
+        // `.hover-lift` / `.press-scale` / `.cta-nudge` utilities.
+        {
+          selector: "JSXAttribute[name.name='className'] Literal[value=/(^|\\s)transition(\\s|$)/]",
+          message: "Bare `transition` class is too broad. Use `transition-colors`, `transition-transform`, `transition-opacity`, `transition-shadow`, or the .hover-lift / .press-scale / .cta-nudge utilities.",
+        },
+        {
+          selector: "JSXAttribute[name.name='className'] TemplateElement[value.raw=/(^|\\s)transition(\\s|$)/]",
+          message: "Bare `transition` class is too broad. Use `transition-colors`, `transition-transform`, `transition-opacity`, `transition-shadow`, or the .hover-lift / .press-scale / .cta-nudge utilities.",
+        },
+        // MOTION CANON — `transition-all` animates every property and is
+        // almost always wider than intended. The single legitimate use
+        // (floating label in Input.tsx) was migrated to an explicit
+        // property list. Allowlist that file via inline disable if it
+        // ever needs to come back.
+        {
+          selector: "JSXAttribute[name.name='className'] Literal[value=/\\btransition-all\\b/]",
+          message: "`transition-all` animates every property. List the changing properties explicitly: `transition-[prop1,prop2]`, or use a tokenized utility (.hover-lift / .press-scale).",
+        },
+        {
+          selector: "JSXAttribute[name.name='className'] TemplateElement[value.raw=/\\btransition-all\\b/]",
+          message: "`transition-all` animates every property. List the changing properties explicitly: `transition-[prop1,prop2]`, or use a tokenized utility (.hover-lift / .press-scale).",
+        },
+        // FOCUS CANON — keyboard-only focus state must be `focus-visible:`,
+        // not `focus:`. The latter fires on click too, which puts the
+        // brand ring on every mouse-clicked element. Strip outline-none
+        // pairing if present and rely on `focus-ring` / `focus-ring-strong`.
+        {
+          selector: "JSXAttribute[name.name='className'] Literal[value=/(^|\\s)focus:[a-z]/]",
+          message: "Use `focus-visible:` (keyboard-only) instead of `focus:` so the ring doesn't appear on mouse click. Or use the `.focus-ring` / `.focus-ring-strong` utility.",
+        },
+        {
+          selector: "JSXAttribute[name.name='className'] TemplateElement[value.raw=/(^|\\s)focus:[a-z]/]",
+          message: "Use `focus-visible:` (keyboard-only) instead of `focus:` so the ring doesn't appear on mouse click. Or use the `.focus-ring` / `.focus-ring-strong` utility.",
+        },
+        // MOTION CANON — `animate-spin` must be wrapped in `motion-safe:`
+        // so users with `prefers-reduced-motion` get a static spinner.
+        // The `<Spinner>` primitive (src/components/ui/Spinner.tsx) does
+        // this for you — prefer it over rolling your own.
+        {
+          selector: "JSXAttribute[name.name='className'] Literal[value=/(^|\\s)animate-spin\\b/]",
+          message: "Use `motion-safe:animate-spin` so reduced-motion users see a static spinner — or just use `<Spinner>` from @/components/ui.",
+        },
+        {
+          selector: "JSXAttribute[name.name='className'] TemplateElement[value.raw=/(^|\\s)animate-spin\\b/]",
+          message: "Use `motion-safe:animate-spin` so reduced-motion users see a static spinner — or just use `<Spinner>` from @/components/ui.",
+        },
+      ],
     },
   },
   {

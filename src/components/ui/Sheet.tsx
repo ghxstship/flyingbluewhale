@@ -56,7 +56,7 @@ export const SheetContent = React.forwardRef<
         {children}
         <DialogPrimitive.Close
           aria-label="Close"
-          className="absolute end-4 top-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-[var(--org-primary)]"
+          className="focus-ring absolute end-4 top-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100"
         >
           <X size={16} />
         </DialogPrimitive.Close>

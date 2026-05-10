@@ -242,7 +242,7 @@ export function IncidentForm({
                     type="button"
                     onClick={() => removePhoto(idx)}
                     aria-label="Remove photo"
-                    className="absolute top-1 right-1 rounded bg-black/50 p-0.5 text-white opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    className="absolute top-1 right-1 rounded bg-black/50 p-0.5 text-white opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                   >
                     <X size={10} />
                   </button>

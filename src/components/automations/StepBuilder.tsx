@@ -17,7 +17,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import type { ZodTypeAny } from "zod";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 import { actionRegistry } from "@/lib/automations/registry";
 import { AddStepMenu, type RegisteredAction } from "./AddStepMenu";
 import { StepCard } from "./StepCard";
@@ -283,7 +283,7 @@ function SaveIndicator({ label, status, error }: { label: string; status: SaveSt
   if (status === "saving") {
     return (
       <span className="inline-flex items-center gap-1.5 text-[11px] text-[var(--text-muted)]">
-        <Loader2 size={11} className="motion-safe:animate-spin" aria-hidden="true" />
+        <Spinner size="xs" />
         Saving {label.toLowerCase()}…
       </span>
     );

@@ -59,11 +59,7 @@ export default function Page() {
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {SECTIONS.map((s) => (
-          <Link
-            key={s.href}
-            href={s.href}
-            className="surface hover-lift flex flex-col gap-2 p-5 focus:outline-2 focus:outline-offset-2 focus:outline-[var(--org-primary)]"
-          >
+          <Link key={s.href} href={s.href} className="surface hover-lift flex flex-col gap-2 p-5">
             <h2 className="text-base font-semibold tracking-wide uppercase">{s.title}</h2>
             <p className="text-sm text-[var(--text-secondary)]">{s.blurb}</p>
           </Link>

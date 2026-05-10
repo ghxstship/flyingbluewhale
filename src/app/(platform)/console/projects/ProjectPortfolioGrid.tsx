@@ -61,7 +61,7 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
           <Link
             key={p.id}
             href={`/console/projects/${p.id}`}
-            className={`block rounded-md border border-[var(--border-color)] p-3 transition-shadow hover:shadow-md ${tone(p.health).bg}`}
+            className={`hover-lift block rounded-md border border-[var(--border-color)] p-3 ${tone(p.health).bg}`}
             style={{ minHeight: 70 + 60 * p.relSize }}
           >
             <div className="flex items-start justify-between gap-2">

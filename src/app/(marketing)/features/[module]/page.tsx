@@ -643,10 +643,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
               className="surface hover-lift group flex items-center justify-between p-5 text-sm"
             >
               <span>{r.label}</span>
-              <ArrowRight
-                size={14}
-                className="text-[var(--text-muted)] transition-transform group-hover:translate-x-0.5"
-              />
+              <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
             </Link>
           ))}
         </div>

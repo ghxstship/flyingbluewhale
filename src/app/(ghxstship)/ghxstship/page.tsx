@@ -257,7 +257,7 @@ export default function GhxstshipHome() {
                   </div>
                   <div className="mt-2 line-clamp-2 text-sm text-[var(--text-secondary)]">{c.definition}</div>
                 </div>
-                <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-[var(--text-muted)] transition group-hover:text-[var(--org-primary)]" />
+                <ArrowRight className="cta-nudge mt-1 h-5 w-5 shrink-0 text-[var(--text-muted)] transition-colors group-hover:text-[var(--org-primary)]" />
               </Link>
             ))}
           </div>
@@ -294,7 +294,7 @@ export default function GhxstshipHome() {
                     {s.name}
                   </div>
                   <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{s.definition}</p>
-                  <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase transition group-hover:text-[var(--org-primary)]">
+                  <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase transition-colors group-hover:text-[var(--org-primary)]">
                     Read more →
                   </div>
                 </Link>
@@ -420,7 +420,7 @@ function AxisCard({
         {title}
       </div>
       <p className="mt-2 text-sm text-[var(--text-secondary)]">{blurb}</p>
-      <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase transition group-hover:text-[var(--org-primary)]">
+      <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase transition-colors group-hover:text-[var(--org-primary)]">
         Open →
       </div>
     </Link>

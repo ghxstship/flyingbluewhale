@@ -20,10 +20,7 @@ export type MarketplaceCardProps = {
  */
 export function MarketplaceCard({ href, title, subtitle, meta, tags, rating, badge, verified }: MarketplaceCardProps) {
   return (
-    <Link
-      href={href}
-      className="surface hover-lift flex flex-col gap-3 p-5 transition focus:outline-2 focus:outline-offset-2 focus:outline-[var(--org-primary)]"
-    >
+    <Link href={href} className="surface hover-lift flex flex-col gap-3 p-5">
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-col gap-1">
           <h3 className="text-base font-semibold tracking-tight">{title}</h3>

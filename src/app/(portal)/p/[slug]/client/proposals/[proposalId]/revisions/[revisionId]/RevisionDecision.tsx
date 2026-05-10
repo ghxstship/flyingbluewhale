@@ -3,15 +3,21 @@
 import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
+import { SelectableCard, type SelectableCardTone } from "@/components/ui/SelectableCard";
 import { decideRevisionAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
 
 type Decision = "approved" | "changes_requested" | "rejected";
 
-const OPTIONS: { value: Decision; title: string; sub: string }[] = [
-  { value: "approved", title: "Approve", sub: "Lock the deliverable as-is." },
-  { value: "changes_requested", title: "Request changes", sub: "Round closes; we'll open the next round." },
-  { value: "rejected", title: "Reject", sub: "Stop the line — significant rethink needed." },
+const OPTIONS: { value: Decision; title: string; sub: string; tone: SelectableCardTone }[] = [
+  { value: "approved", title: "Approve", sub: "Lock the deliverable as-is.", tone: "success" },
+  {
+    value: "changes_requested",
+    title: "Request changes",
+    sub: "Round closes; we'll open the next round.",
+    tone: "brand",
+  },
+  { value: "rejected", title: "Reject", sub: "Stop the line — significant rethink needed.", tone: "error" },
 ];
 
 export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; proposalId: string; roundId: string }) {
@@ -27,21 +33,16 @@ export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; 
       <div className="eyebrow text-xs text-[var(--text-muted)]">Your decision</div>
       <h3 className="text-base font-semibold">Decide on This Round</h3>
 
-      <div className="grid gap-2 md:grid-cols-3">
+      <div className="grid gap-2 md:grid-cols-3" role="radiogroup" aria-label="Round decision">
         {OPTIONS.map((opt) => (
-          <button
+          <SelectableCard
             key={opt.value}
-            type="button"
+            tone={opt.tone}
+            selected={decision === opt.value}
             onClick={() => setDecision(opt.value)}
-            className={`rounded border-2 p-4 text-start transition ${
-              decision === opt.value
-                ? "border-[var(--org-primary)] bg-[var(--org-primary)]/5"
-                : "border-[var(--border-color)] hover:border-[var(--border-hover)]"
-            }`}
-          >
-            <div className="text-sm font-semibold">{opt.title}</div>
-            <div className="text-xs text-[var(--text-muted)]">{opt.sub}</div>
-          </button>
+            title={opt.title}
+            description={opt.sub}
+          />
         ))}
       </div>
 

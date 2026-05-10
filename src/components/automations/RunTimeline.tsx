@@ -23,6 +23,10 @@ const STATUS_TONE: Record<StepStatus, "muted" | "info" | "success" | "warning" |
   failed: "error",
 };
 
+// `animate-pulse` on `running` is a status indicator (not a skeleton). It
+// signals that an automation step is currently executing — the only
+// intentional pulse usage in the platform; everywhere else, animate-pulse
+// means "loading skeleton" and should use the .skeleton utility.
 const STATUS_DOT: Record<StepStatus, string> = {
   pending: "bg-[var(--text-muted)]",
   running: "bg-[var(--org-primary)] motion-safe:animate-pulse",

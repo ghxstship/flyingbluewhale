@@ -72,7 +72,12 @@ export function PullToRefresh({
           style={{ transform: `rotate(${ratio * 360}deg)` }}
         />
       </div>
-      <div style={{ transform: `translateY(${pull}px)`, transition: pull === 0 ? "transform 200ms" : "none" }}>
+      <div
+        style={{
+          transform: `translateY(${pull}px)`,
+          transition: pull === 0 ? "transform var(--motion-normal) var(--ease-out)" : "none",
+        }}
+      >
         {children}
       </div>
     </div>

@@ -286,7 +286,7 @@ pre,
   .progress-indicator {
     width: 100%;
     height: 100%;
-    transition: transform 320ms cubic-bezier(0, 0, 0.2, 1);
+    transition: transform var(--motion-slow) var(--ease-out);
     background: var(--progress-fill, var(--org-primary));
   }
   .progress-root[data-severity="warn"] .progress-indicator {
@@ -516,14 +516,34 @@ pre,
     top: 0;
   }
 
-  /* ───── Focus ───── */
-
+  /* ───── Focus ─────
+   * `.focus-ring` is the canonical focus utility — pair on any focusable
+   * element (button, link, input, [role="…"]). Strips the default outline
+   * on click but renders the brand ring on keyboard focus only.
+   *
+   * `.focus-ring-strong` adds the offset variant for elements that sit on
+   * a tinted/translucent background (overlay surfaces, popovers, dialogs)
+   * where the 2px outline alone reads weakly. Use this for portals and
+   * modal-resident controls.
+   *
+   * The native-element rule below covers `<a>` / `<button>` / `[role=button]`
+   * / `<summary>` automatically so authors don't need to remember the class
+   * for the most common cases. */
   .focus-ring {
     outline: none;
   }
   .focus-ring:focus-visible {
     outline: 2px solid var(--org-primary);
     outline-offset: 2px;
+    border-radius: inherit;
+  }
+  .focus-ring-strong {
+    outline: none;
+  }
+  .focus-ring-strong:focus-visible {
+    outline: 2px solid var(--org-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--background) 100%, transparent);
     border-radius: inherit;
   }
   a:focus-visible,
@@ -632,6 +652,18 @@ pre,
     transform: scale(var(--press-scale));
   }
 
+  /* `.cta-nudge` — the canonical CTA arrow/icon nudge. Apply to the icon
+     element inside a `group` so the parent's :hover triggers the slide.
+     Reads --motion-fast / --ease-out so brutal themes can dial it down to
+     a snappier 2px shift while soft themes can stretch the slide. */
+  .cta-nudge {
+    transition: transform var(--motion-fast) var(--ease-out);
+  }
+  .group:hover .cta-nudge,
+  .group:focus-visible .cta-nudge {
+    transform: translateX(2px);
+  }
+
   /* ───── Surfaces ───── */
 
   /* Surface primitives — all three read the active theme's radius + border
@@ -685,8 +717,8 @@ pre,
     line-height: 1.25rem;
     color: var(--foreground);
     transition:
-      border-color 150ms,
-      box-shadow 150ms;
+      border-color var(--motion-fast) var(--ease-standard),
+      box-shadow var(--motion-fast) var(--ease-standard);
   }
   .input-base::placeholder {
     color: var(--text-muted);
@@ -718,10 +750,10 @@ pre,
     font-size: 0.875rem;
     font-weight: 500;
     transition:
-      background-color 150ms,
-      border-color 150ms,
-      transform 100ms,
-      box-shadow 150ms;
+      background-color var(--motion-fast) var(--ease-standard),
+      border-color var(--motion-fast) var(--ease-standard),
+      transform var(--motion-fast) var(--ease-hover),
+      box-shadow var(--motion-fast) var(--ease-standard);
     cursor: pointer;
     /* Chrome-tier (1px) — buttons share the input weight so a Submit row
        reads as one weight system. .btn-primary's filled background already

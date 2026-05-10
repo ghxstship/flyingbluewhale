@@ -39,7 +39,7 @@ export function PassscodeForm({ token, label }: { token: string; label?: string 
           required
           minLength={1}
           maxLength={128}
-          className="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--org-primary)]"
+          className="input-base w-full"
         />
       </div>
       {state?.error && <Alert kind="error">{state.error}</Alert>}

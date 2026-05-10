@@ -36,7 +36,7 @@ export function LogoCloud({
                 alt={l.name}
                 width={96}
                 height={24}
-                className="h-6 w-auto object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none"
+                className="h-6 w-auto object-contain opacity-70 grayscale transition-[opacity,filter] hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none"
               />
             ) : (
               <span className="text-center font-mono text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)]">

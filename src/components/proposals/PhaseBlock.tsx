@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, Square } from "lucide-react";
+import { SelectableCard } from "@/components/ui/SelectableCard";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
 
 type PhaseBlockType = Extract<ProposalBlock, { type: "phase" }>;
@@ -111,17 +112,18 @@ export function PhaseBlock({
                   </span>
                 )}
               </div>
-              <ul className="mt-2 space-y-2">
+              <ul className="mt-2 space-y-2" role="group" aria-label="Add-ons">
                 {block.addons.map((a) => {
                   const isOn = picked.has(a.id);
                   return (
                     <li key={a.id}>
-                      <button
-                        type="button"
+                      <SelectableCard
+                        selectionRole="checkbox"
+                        selected={isOn}
                         onClick={() => togglePick(a.id)}
-                        className={`flex w-full items-start justify-between gap-4 rounded-lg border p-3 text-left transition ${isOn ? "border-[var(--org-primary)] bg-[var(--bg-secondary)]" : "border-[var(--border-color)]"}`}
-                      >
-                        <div className="flex items-start gap-3">
+                        title={a.name}
+                        description={a.desc}
+                        leading={
                           <span
                             className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded border ${isOn ? "text-white" : "border-[var(--border-color)]"}`}
                             style={isOn ? { background: accent, borderColor: accent } : {}}
@@ -129,13 +131,13 @@ export function PhaseBlock({
                           >
                             {isOn && <Check size={12} strokeWidth={3} />}
                           </span>
-                          <div>
-                            <div className="text-sm font-medium">{a.name}</div>
-                            {a.desc && <div className="mt-0.5 text-xs text-[var(--text-muted)]">{a.desc}</div>}
-                          </div>
-                        </div>
-                        {a.price != null && <div className="font-mono text-xs">{fmtMoney(a.price, currency)}</div>}
-                      </button>
+                        }
+                        trailing={
+                          a.price != null ? (
+                            <span className="font-mono text-xs">{fmtMoney(a.price, currency)}</span>
+                          ) : undefined
+                        }
+                      />
                     </li>
                   );
                 })}

@@ -1285,7 +1285,7 @@ function DensityToggle({
           aria-checked={value === "comfortable"}
           aria-label="Comfortable density"
           onClick={() => onChange("comfortable")}
-          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition ${value === "comfortable" ? "bg-[var(--background)] text-[var(--foreground)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
+          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${value === "comfortable" ? "bg-[var(--background)] text-[var(--foreground)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
         >
           <Rows3 size={13} aria-hidden="true" strokeWidth={2.25} />
         </button>
@@ -1297,7 +1297,7 @@ function DensityToggle({
           aria-checked={value === "compact"}
           aria-label="Compact density"
           onClick={() => onChange("compact")}
-          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition ${value === "compact" ? "bg-[var(--background)] text-[var(--foreground)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
+          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${value === "compact" ? "bg-[var(--background)] text-[var(--foreground)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
         >
           <Rows4 size={13} aria-hidden="true" strokeWidth={2.25} />
         </button>

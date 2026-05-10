@@ -46,7 +46,7 @@ export function ThemeToggle() {
               aria-checked={isActive}
               aria-label={label}
               onClick={() => setMode(key)}
-              className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition ${
+              className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
                 isActive
                   ? "bg-[var(--background)] text-[var(--foreground)]"
                   : "text-[var(--text-muted)] hover:text-[var(--foreground)]"

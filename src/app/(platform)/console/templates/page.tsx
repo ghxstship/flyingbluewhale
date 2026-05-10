@@ -50,7 +50,7 @@ export default async function TemplatesGalleryPage() {
             <Link
               key={tpl.id}
               href={`/console/templates/${tpl.id}/new`}
-              className="hover-lift block focus:ring-2 focus:ring-[var(--org-primary)] focus:ring-offset-2 focus:outline-none"
+              className="hover-lift block"
               aria-label={`Use template ${tpl.name}`}
             >
               <Card>

@@ -191,7 +191,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                 onChange={(e) => setLabel(e.target.value)}
                 placeholder="e.g. Producer preview"
                 maxLength={120}
-                className="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--org-primary)]"
+                className="input-base w-full"
               />
             </label>
             <label className="text-xs">
@@ -199,7 +199,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
               <select
                 value={expiry}
                 onChange={(e) => setExpiry(e.target.value as ExpiryPreset)}
-                className="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--org-primary)]"
+                className="input-base w-full"
               >
                 {(Object.keys(EXPIRY_LABEL) as ExpiryPreset[]).map((k) => (
                   <option key={k} value={k}>
@@ -217,7 +217,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                 placeholder="Leave blank for none"
                 minLength={4}
                 maxLength={128}
-                className="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--org-primary)]"
+                className="input-base w-full"
               />
             </label>
             <label className="text-xs">
@@ -229,7 +229,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                 placeholder="Unlimited"
                 min={1}
                 max={10000}
-                className="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--org-primary)]"
+                className="input-base w-full"
               />
             </label>
             <label className="text-xs sm:col-span-2">
@@ -237,7 +237,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value as "viewer" | "commenter")}
-                className="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--org-primary)]"
+                className="input-base w-full"
               >
                 <option value="viewer">Viewer (read-only)</option>
                 <option value="commenter">Commenter (can leave annotations)</option>

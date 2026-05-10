@@ -75,7 +75,7 @@ export function RiskHeatmap({
                     role="gridcell"
                     aria-label={`${pretty(likeCol)} likelihood, ${pretty(impactRow)} impact: ${cell.risks.length} risks`}
                     onClick={() => cell.risks.length > 0 && setOpen(cell)}
-                    className={`relative m-0.5 flex aspect-square min-h-[56px] items-center justify-center rounded transition-transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)] ${tone}`}
+                    className={`hover-lift relative m-0.5 flex aspect-square min-h-[56px] items-center justify-center rounded ${tone}`}
                   >
                     {cell.risks.length > 0 && (
                       <span className="text-[11px] font-semibold text-white tabular-nums drop-shadow" aria-hidden>

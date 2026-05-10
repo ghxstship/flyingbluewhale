@@ -3,7 +3,8 @@
 import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Spinner } from "./Spinner";
 
 /**
  * Combobox — searchable single-select.
@@ -107,13 +108,7 @@ export function Combobox({
                 onValueChange={setQuery}
                 className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
               />
-              {loading && (
-                <Loader2
-                  size={12}
-                  className="shrink-0 text-[var(--text-muted)] motion-safe:animate-spin"
-                  aria-hidden="true"
-                />
-              )}
+              {loading && <Spinner size="sm" className="shrink-0 text-[var(--text-muted)]" />}
             </div>
             <CommandPrimitive.List className="max-h-60 overflow-y-auto p-1">
               <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--text-muted)]">

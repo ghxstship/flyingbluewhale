@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusChip } from "@/components/ui/StatusChip";
 import { Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /**
@@ -167,7 +168,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
           <h2 className="text-sm font-semibold">Recent Runs</h2>
           {anyBusy && (
             <span className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)]">
-              <Loader2 size={12} className="animate-spin" />
+              <Spinner size="sm" />
               Auto-refreshing while runs are in flight
             </span>
           )}
@@ -206,7 +207,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                     <td>
                       <StatusChip
                         tone={styles.tone}
-                        icon={<styles.Icon size={10} className={spinning ? "animate-spin" : undefined} />}
+                        icon={<styles.Icon size={10} className={spinning ? "motion-safe:animate-spin" : undefined} />}
                       >
                         {r.status}
                       </StatusChip>

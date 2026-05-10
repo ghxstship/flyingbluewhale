@@ -229,7 +229,7 @@ function MobileNavSection({ group, onClick }: { group: NavGroup; onClick: () => 
       <summary className="nav-item cursor-pointer list-none text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase [&::-webkit-details-marker]:hidden">
         <span className="flex items-center justify-between">
           {group.label}
-          <ChevronDown size={12} className="transition group-open:rotate-180" aria-hidden="true" />
+          <ChevronDown size={12} className="transition-transform group-open:rotate-180" aria-hidden="true" />
         </span>
       </summary>
       <nav className="ms-2 mt-1 flex flex-col gap-0.5" aria-label={group.label}>

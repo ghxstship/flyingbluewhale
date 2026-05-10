@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Loader2, AlertTriangle, BarChart3 } from "lucide-react";
+import { AlertTriangle, BarChart3 } from "lucide-react";
+import { Spinner } from "@/components/ui/Spinner";
 
 /**
  * ChartShell — wraps any visualization with built-in loading / empty /
@@ -54,7 +55,7 @@ export function ChartShell({
             className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs text-[var(--text-muted)]"
             role="status"
           >
-            <Loader2 size={18} className="motion-safe:animate-spin" aria-hidden />
+            <Spinner size="lg" />
             Loading…
           </div>
         ) : errorMsg ? (

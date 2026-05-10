@@ -1,6 +1,6 @@
 import type { ReactNode, ButtonHTMLAttributes } from "react";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "./Spinner";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
@@ -65,7 +65,7 @@ export function Button(props: ButtonProps) {
 
   const content = loading ? (
     <>
-      <Loader2 size={14} className="motion-safe:animate-spin" aria-hidden="true" />
+      <Spinner size="md" />
       <span className="ms-1.5">{children}</span>
     </>
   ) : (

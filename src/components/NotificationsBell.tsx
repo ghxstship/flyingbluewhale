@@ -166,9 +166,14 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
                     {Row}
                   </Link>
                 ) : (
-                  <div key={n.id} role="button" tabIndex={0} className="block cursor-pointer">
+                  <button
+                    key={n.id}
+                    type="button"
+                    onClick={() => void markOne(n.id)}
+                    className="block w-full cursor-pointer text-start"
+                  >
                     {Row}
-                  </div>
+                  </button>
                 );
               })
             )}

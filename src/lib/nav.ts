@@ -120,61 +120,165 @@ export type NavItem = {
 export type NavGroup = { label: string; items: NavItem[] };
 
 /**
- * Primary console navigation. Recompressed 2026-05 per the WAYFINDER
- * remediation: 10 groups (Miller's 7±2 with one scroll-tolerant overflow
- * in Commerce), every group ≤8 items except Commerce (13 — sales+finance
- * are one mental cut for event production). Sub-resources that previously
- * surfaced as sidebar siblings now live as tabs on their parent record:
+ * Primary console navigation — XPMS-native (ADR-0004, 2026-05-10).
  *
- *   Crew / Credentials / Offer Letters     → Person detail tabs
- *   Photos                                  → Project detail tab
- *   Venue Training                          → Venue detail tab
- *   Ceremonies / Cases / Sessions / etc.    → Program detail tabs
+ * Sidebar groups are the **10 XPMS Classes** from `XPMS_CLASSES` in
+ * src/lib/xpms/index.ts. The class number prefix on each label is
+ * deliberate: it's the canonical class code (0–9) per the whitepaper
+ * §5, and surfacing it builds operator literacy with the spine. Class
+ * order is the published order; do not reshuffle.
  *
- * Removed entirely (cmd-K only — no sidebar leaf):
- *   Action Items, Portfolio, Command Palette page (folded into Dashboard hub)
- *   TOC, Services Desk, Threats, BC/DR, Cost Codes, Mileage, Treasury,
- *   Catalog (procurement), Scorecards, WO Broadcasts, PO Change Orders
+ * Time-axis filtering happens above the sidebar — `<PhaseStepper />`
+ * binds to `projects.xpms_phase` and dims classes not live in the
+ * current phase. The cell map (Class × Phase → route) is in
+ * docs/decisions/ADR-0004-xpms-native-nav.md Appendix A.
  *
- * Production split out from Procurement (own group): "buying" ≠ "making".
- * Safety lifted out of Operations (own group): one safety officer's day
- * crossed the Operations/Compliance line every hour.
+ * Some routes legitimately span two classes (Catering, Tickets,
+ * Wayfinding, Hospitality). The route appears in BOTH class groups so
+ * either path resolves; the canonical home for each route is the cell
+ * declared in the ADR cell map.
  */
 export const platformNav: NavGroup[] = [
   {
+    // Workspace chrome — not an XPMS class. Single "you are here" tile
+    // at the top of the sidebar, separate from the 10 class groups.
     label: "Dashboard",
     items: [{ label: "Overview", href: "/console", icon: "LayoutDashboard" }],
   },
   {
-    label: "Plan",
+    // 0 EXECUTIVE — Org-level command + control. Strategy / Finance /
+    // Procurement / Legal / HR / Compliance fold under one canonical
+    // class. Today's Plan + Procurement + half of Commerce + half of
+    // People all live here.
+    label: "0 EXECUTIVE",
     items: [
+      // Strategy
       { label: "Projects", href: "/console/projects", icon: "FolderOpen" },
       { label: "Programs", href: "/console/programs", icon: "Layers" },
       { label: "Venues", href: "/console/venues", icon: "Building2" },
-      { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
       { label: "Risk Register", href: "/console/programs/risk", icon: "AlertTriangle" },
       { label: "Readiness", href: "/console/programs/readiness", icon: "ShieldCheck" },
       { label: "Reviews", href: "/console/programs/reviews", icon: "ClipboardCheck" },
-      { label: "Proposals", href: "/console/proposals", icon: "FileText" },
+      // Finance
+      { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
+      { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
+      { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
+      { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
+      { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
+      { label: "Time", href: "/console/finance/time", icon: "Clock" },
+      { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
+      { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+      { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
+      // Procurement (a finance arm — buying)
+      { label: "Vendors", href: "/console/procurement/vendors", icon: "Store" },
+      { label: "Prequalification", href: "/console/procurement/prequalification", icon: "BookOpenCheck" },
+      { label: "Sourcing", href: "/console/procurement/sourcing", icon: "Compass" },
+      { label: "Requisitions", href: "/console/procurement/requisitions", icon: "ShoppingCart" },
+      { label: "Purchase Orders", href: "/console/procurement/purchase-orders", icon: "Package" },
+      { label: "RFQs", href: "/console/procurement/rfqs", icon: "PackageCheck" },
+      { label: "Submittals", href: "/console/submittals", icon: "Inbox" },
+      { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
+      // HR / Workspace people
+      { label: "Directory", href: "/console/people", icon: "Users" },
+      // Sustainability / Compliance reporting
+      { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
     ],
   },
   {
-    label: "Run",
+    // 1 CREATIVE — Authoring class. The work itself: design, art
+    // direction, brand, IP, source files. Programa lives mostly here.
+    label: "1 CREATIVE",
     items: [
+      { label: "Proposals", href: "/console/proposals", icon: "FileText" },
+      { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
+      // Site Plans is a CAD-rooted creative artifact — primary class is
+      // CREATIVE, secondary BUILD (where it materializes).
+      { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
+    ],
+  },
+  {
+    // 2 TALENT — Anyone in front of the audience: bookings, programming,
+    // curation, talent ops, agency, riders. Show economy.
+    label: "2 TALENT",
+    items: [
+      { label: "Bookings", href: "/console/bookings", icon: "TrendingUp" },
+      { label: "Deal Tracker", href: "/console/bookings/deals", icon: "Gavel" },
+      { label: "Holds", href: "/console/bookings/holds", icon: "Lock" },
+      { label: "Booking Calendar", href: "/console/bookings/calendar", icon: "CalendarDays" },
+      { label: "Settlements", href: "/console/bookings/settlements", icon: "Coins" },
+      { label: "Tours", href: "/console/agency/tours", icon: "Route" },
+      { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
+      { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
+      { label: "Rosters", href: "/console/workforce/rosters", icon: "ClipboardSignature" },
+    ],
+  },
+  {
+    // 3 MARKETING — Audience acquisition + revenue partnerships.
+    // Sponsorship sales, CRM, public marketplace surfaces.
+    label: "3 MARKETING",
+    items: [
+      { label: "Leads", href: "/console/leads", icon: "UserPlus" },
+      { label: "Clients", href: "/console/clients", icon: "Handshake" },
+      { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
+      { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
+      { label: "Insights", href: "/console/insights", icon: "BarChart3" },
+      { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
+      { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },
+      { label: "Open Calls", href: "/console/marketplace/calls", icon: "Mic2" },
+    ],
+  },
+  {
+    // 4 BUILD — Everything physically erected on site: site ops, scenic,
+    // construction, install, wayfinding, tents, structures.
+    label: "4 BUILD",
+    items: [
+      { label: "Fabrication", href: "/console/production/fabrication", icon: "Hammer" },
+      { label: "Compounds", href: "/console/production/compounds", icon: "Tent" },
+      { label: "Yard", href: "/console/production/warehouse", icon: "Network" },
+      { label: "Punch List", href: "/console/punch", icon: "ClipboardList" },
+    ],
+  },
+  {
+    // 5 PRODUCTION — Show systems: audio, lighting, video, staging,
+    // rigging, power, SFX. The technical envelope.
+    label: "5 PRODUCTION",
+    items: [
+      { label: "Equipment", href: "/console/production/equipment", icon: "Wrench" },
+      { label: "AV Inventory", href: "/console/production/av", icon: "Speaker" },
+      { label: "Rentals", href: "/console/production/rentals", icon: "ArrowLeftRight" },
+      { label: "Production Logistics", href: "/console/production/logistics", icon: "Crosshair" },
+      { label: "Run of Show", href: "/console/production/ros", icon: "Play" },
+      { label: "Live Dispatch", href: "/console/production/dispatch/live", icon: "Radio" },
+    ],
+  },
+  {
+    // 6 OPERATIONS — People + flow. Largest class: event ops, labor,
+    // logistics, transport, security, medical, permits, workplace.
+    // Today's Run + Safety + Logistics + Workforce + Delegations all
+    // collapse here. Dense — pin frequently-used items.
+    label: "6 OPERATIONS",
+    items: [
+      // Coordination
       { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
       { label: "Look-ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
       { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
       { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
       { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
       { label: "Events", href: "/console/events", icon: "CalendarDays" },
-      { label: "Run of Show", href: "/console/production/ros", icon: "Play" },
       { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
-      { label: "Punch List", href: "/console/punch", icon: "ClipboardList" },
-    ],
-  },
-  {
-    label: "Safety",
-    items: [
+      // Workforce
+      { label: "Teams", href: "/console/people/teams", icon: "UsersRound" },
+      { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
+      { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
+      { label: "Delegations", href: "/console/participants/delegations", icon: "UsersRound" },
+      { label: "Visa", href: "/console/participants/visa", icon: "Stamp" },
+      // Logistics flow
+      { label: "Transport", href: "/console/transport", icon: "Truck" },
+      { label: "Dispatch", href: "/console/transport/dispatch", icon: "Send" },
+      { label: "Freight", href: "/console/logistics/freight", icon: "Container" },
+      { label: "Warehouse", href: "/console/logistics/warehouse", icon: "Warehouse" },
+      { label: "Disposition", href: "/console/logistics/disposition", icon: "PackageOpen" },
+      // Safety (operational care of humans)
       { label: "Incidents", href: "/console/safety/incidents", icon: "Siren" },
       { label: "Crisis", href: "/console/safety/crisis", icon: "Flame" },
       { label: "Medical", href: "/console/safety/medical", icon: "Stethoscope" },
@@ -186,123 +290,35 @@ export const platformNav: NavGroup[] = [
     ],
   },
   {
-    label: "Logistics",
+    // 7 EXPERIENCE — Audience-facing surface. Guest experience,
+    // activations, retail, accessibility, sponsor fulfillment.
+    label: "7 EXPERIENCE",
     items: [
-      { label: "Transport", href: "/console/transport", icon: "Truck" },
-      { label: "Accommodation", href: "/console/accommodation", icon: "BedDouble" },
-      { label: "Dispatch", href: "/console/transport/dispatch", icon: "Send" },
-      { label: "Freight", href: "/console/logistics/freight", icon: "Container" },
-      { label: "Warehouse", href: "/console/logistics/warehouse", icon: "Warehouse" },
-      { label: "Catering", href: "/console/logistics/services", icon: "UtensilsCrossed" },
-      { label: "Disposition", href: "/console/logistics/disposition", icon: "PackageOpen" },
-    ],
-  },
-  {
-    label: "People",
-    items: [
-      { label: "Directory", href: "/console/people", icon: "Users" },
-      // Teams added 2026-05 (SmartSuite parity Phase 5.1) — UsersRound
-      // intentionally shared with Delegations: both are "named groups of
-      // people you can address as one".
-      { label: "Teams", href: "/console/people/teams", icon: "UsersRound" },
-      { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
-      { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
-      { label: "Delegations", href: "/console/participants/delegations", icon: "UsersRound" },
-      { label: "Visa", href: "/console/participants/visa", icon: "Stamp" },
-      { label: "Rosters", href: "/console/workforce/rosters", icon: "ClipboardSignature" },
-      // Training shares the GraduationCap icon — semantically the same
-      // affordance (a learning track), so the duplicate is intentional.
-      { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
-    ],
-  },
-  {
-    label: "Production",
-    items: [
-      { label: "Equipment", href: "/console/production/equipment", icon: "Wrench" },
-      { label: "AV Inventory", href: "/console/production/av", icon: "Speaker" },
-      { label: "Rentals", href: "/console/production/rentals", icon: "ArrowLeftRight" },
-      { label: "Fabrication", href: "/console/production/fabrication", icon: "Hammer" },
-      { label: "Compounds", href: "/console/production/compounds", icon: "Tent" },
-      { label: "Yard", href: "/console/production/warehouse", icon: "Network" },
-      { label: "Production Logistics", href: "/console/production/logistics", icon: "Crosshair" },
-      // Live Dispatch shares the Radio icon — intentional, both are
-      // real-time radio-room surfaces.
-      { label: "Live Dispatch", href: "/console/production/dispatch/live", icon: "Radio" },
-    ],
-  },
-  {
-    label: "Procurement",
-    items: [
-      { label: "Vendors", href: "/console/procurement/vendors", icon: "Store" },
-      // Prequalification shares BookOpenCheck with Playbooks above —
-      // both surface "vetted reference material to act against". OK.
-      { label: "Prequalification", href: "/console/procurement/prequalification", icon: "BookOpenCheck" },
-      { label: "Sourcing", href: "/console/procurement/sourcing", icon: "Compass" },
-      { label: "Requisitions", href: "/console/procurement/requisitions", icon: "ShoppingCart" },
-      { label: "Purchase Orders", href: "/console/procurement/purchase-orders", icon: "Package" },
-      { label: "RFQs", href: "/console/procurement/rfqs", icon: "PackageCheck" },
-      { label: "Submittals", href: "/console/submittals", icon: "Inbox" },
-      { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
-    ],
-  },
-  {
-    // Commerce groups all sales+finance flows in one mental cut. The 0002
-    // marketplace items (public-facing reach) are appended here rather than
-    // surfaced as a sibling group, holding the WAYFINDER 10-group ceiling
-    // and the "sales+finance one mental cut" exception. Reviews + take-rate
-    // settings live in the Settings sidebar — they're moderation / org-config,
-    // not commercial action surfaces.
-    label: "Commerce",
-    items: [
-      { label: "Leads", href: "/console/leads", icon: "UserPlus" },
-      { label: "Clients", href: "/console/clients", icon: "Handshake" },
-      { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
-      { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
-      { label: "Hospitality", href: "/console/commercial/hospitality", icon: "ConciergeBell" },
       { label: "Tickets", href: "/console/commercial/tickets", icon: "Ticket" },
-      { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
-      { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
-      { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
-      { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
-      { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
-      { label: "Time", href: "/console/finance/time", icon: "Clock" },
-      { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
-      { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
-      { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
-      // Marketplace tail — public surfaces extending Commerce outward.
-      { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
-      { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },
-      { label: "Open Calls", href: "/console/marketplace/calls", icon: "Mic2" },
-      { label: "Talent", href: "/console/marketplace/talent", icon: "Music" },
-      { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
+      { label: "Hospitality (guest)", href: "/console/commercial/hospitality", icon: "ConciergeBell" },
+      { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
     ],
   },
   {
-    // Bookings (0003) — show economy: deals, holds, settlement, tour P&L,
-    // marketing milestones, insights pool. Distinct mental cut from Commerce
-    // (which is sales/finance-of-services). 8 items — within 7±2 budget.
-    label: "Bookings",
+    // 8 HOSPITALITY — Care of body. F&B, bar, catering (artist/crew),
+    // lodging, VIP, artist hospitality.
+    label: "8 HOSPITALITY",
     items: [
-      { label: "Overview", href: "/console/bookings", icon: "TrendingUp" },
-      { label: "Deal Tracker", href: "/console/bookings/deals", icon: "Gavel" },
-      { label: "Holds", href: "/console/bookings/holds", icon: "Lock" },
-      { label: "Calendar", href: "/console/bookings/calendar", icon: "CalendarDays" },
-      { label: "Settlements", href: "/console/bookings/settlements", icon: "Coins" },
-      { label: "Tours", href: "/console/agency/tours", icon: "Route" },
-      { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
-      { label: "Insights", href: "/console/insights", icon: "BarChart3" },
+      { label: "Catering", href: "/console/logistics/services", icon: "UtensilsCrossed" },
+      { label: "Accommodation", href: "/console/accommodation", icon: "BedDouble" },
     ],
   },
   {
-    label: "Reference",
+    // 9 TECHNOLOGY — Bits + signals. Networking, IT, RF, ticketing,
+    // data, AR/VR/XR, AI. Includes the XPMS Catalog (the atom registry
+    // is itself a TECHNOLOGY surface).
+    label: "9 TECHNOLOGY",
     items: [
+      { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
-      { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
-      { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
-      // Renamed from "XPMS Spine" — the codebase taxonomy doesn't surface
-      // to users (CLAUDE.md mandate). Internal cmd-K still resolves
-      // `xpms.atoms`, `xpms.codebook`, etc. for power-user direct jumps.
+      // The XPMS Catalog (atom registry) is the canonical TECHNOLOGY-
+      // class surface — a typed, searchable atom browse.
       { label: "Catalog", href: "/console/xpms", icon: "Spline" },
     ],
   },

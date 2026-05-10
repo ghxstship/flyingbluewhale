@@ -132,10 +132,21 @@ export async function reclaimStuck(): Promise<number> {
 
 export async function complete(jobId: string): Promise<void> {
   const svc = createServiceClient();
-  await svc
+  // Conditional update — only the worker that holds the running lease
+  // gets to mark it done. If the visibility lease expired and another
+  // worker reclaimed the job, our late complete() call would otherwise
+  // race with the new worker (potentially marking a still-in-flight
+  // run as done) or silently revive a row that already moved to dead.
+  const { data: claimed, error } = await svc
     .from("job_queue")
     .update({ state: "done", completed_at: new Date().toISOString(), last_error: null })
-    .eq("id", jobId);
+    .eq("id", jobId)
+    .eq("state", "running")
+    .select("id");
+  if (error) throw error;
+  if (!claimed || (claimed as Array<{ id: string }>).length === 0) {
+    log.warn("jobs.complete_lost_lease", { job_id: jobId });
+  }
 }
 
 /**
@@ -153,14 +164,25 @@ export async function fail(jobId: string, err: unknown): Promise<void> {
   const maxAttempts = (current?.max_attempts as number | undefined) ?? 5;
 
   if (attempts >= maxAttempts) {
-    await svc.from("job_queue").update({ state: "dead", last_error: message }).eq("id", jobId);
+    // Same lease guard as complete() — don't overwrite a job that was
+    // already reclaimed or completed by a concurrent worker.
+    const { data: claimed } = await svc
+      .from("job_queue")
+      .update({ state: "dead", last_error: message })
+      .eq("id", jobId)
+      .eq("state", "running")
+      .select("id");
+    if (!claimed || (claimed as Array<{ id: string }>).length === 0) {
+      log.warn("jobs.fail_lost_lease", { job_id: jobId });
+      return;
+    }
     log.error("jobs.dead_letter", { job_id: jobId, err: message, attempts });
     return;
   }
 
   const backoffS = computeBackoffSeconds(attempts);
   const nextRun = new Date(Date.now() + backoffS * 1000).toISOString();
-  await svc
+  const { data: claimed } = await svc
     .from("job_queue")
     .update({
       state: "pending",
@@ -169,6 +191,12 @@ export async function fail(jobId: string, err: unknown): Promise<void> {
       locked_by: null,
       locked_until: null,
     })
-    .eq("id", jobId);
+    .eq("id", jobId)
+    .eq("state", "running")
+    .select("id");
+  if (!claimed || (claimed as Array<{ id: string }>).length === 0) {
+    log.warn("jobs.retry_lost_lease", { job_id: jobId });
+    return;
+  }
   log.warn("jobs.retry_scheduled", { job_id: jobId, attempts, backoff_s: backoffS });
 }

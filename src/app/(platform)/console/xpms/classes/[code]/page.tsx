@@ -71,7 +71,10 @@ export default async function Page({ params }: { params: Promise<{ code: string 
         ]}
       />
       <div className="page-content space-y-5">
-        <div style={{ height: 4, background: klass.accent }} className="rounded" />
+        <div
+          className="h-1 w-full rounded"
+          style={{ "--xpms-accent": klass.accent, background: "var(--xpms-accent)" } as React.CSSProperties}
+        />
 
         <p className="text-sm text-[var(--text-secondary)]">{klass.domain}</p>
 

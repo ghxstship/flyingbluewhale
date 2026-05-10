@@ -22,22 +22,45 @@ export async function createInspection(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on the optional project_id.
+  const projectId = parsed.data.project_id || null;
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const code = await nextOrgCode("inspections", session.orgId, "INSP");
 
   // Look up template category if present, plus its items so we can clone them
   // into inspection_items. This is what makes the inspection "checklist-driven".
+  // Cross-tenant FK guard on template_id — fetched WITH .eq("org_id") so a
+  // user can't pull another tenant's template prompts into their org.
   let category: string | null = null;
   let templateItems: Array<{ position: number; prompt: string; requires_photo: boolean }> = [];
   if (parsed.data.template_id) {
     const [{ data: tpl }, { data: items }] = await Promise.all([
-      supabase.from("inspection_templates").select("category").eq("id", parsed.data.template_id).maybeSingle(),
+      supabase
+        .from("inspection_templates")
+        .select("category")
+        .eq("id", parsed.data.template_id)
+        .eq("org_id", session.orgId)
+        .maybeSingle(),
       supabase
         .from("inspection_template_items")
         .select("position, prompt, requires_photo")
         .eq("template_id", parsed.data.template_id)
+        .eq("org_id", session.orgId)
         .order("position"),
     ]);
-    category = (tpl?.category as string | undefined) ?? null;
+    if (!tpl) return { error: "Template not found in your organization" };
+    category = (tpl.category as string | undefined) ?? null;
     templateItems = (items ?? []) as never;
   }
 

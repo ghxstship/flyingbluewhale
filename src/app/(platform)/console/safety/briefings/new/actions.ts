@@ -20,12 +20,26 @@ export async function createBriefing(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard for the optional project_id.
+  const projectId = parsed.data.project_id || null;
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("safety_briefings")
     .insert({
       org_id: session.orgId,
       topic: parsed.data.topic,
-      project_id: parsed.data.project_id || null,
+      project_id: projectId,
       scheduled_for: parsed.data.scheduled_for,
       notes: parsed.data.notes || null,
       briefer_id: session.userId,

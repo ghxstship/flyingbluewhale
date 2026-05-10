@@ -20,12 +20,29 @@ export async function createTaskAction(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard: when project_id is supplied, confirm it
+  // belongs to the caller's org. Without it a user could attach a
+  // task to another org's project_id while still claiming their
+  // own org_id, leaving a dangling cross-org reference.
+  const projectId = parsed.data.project_id || null;
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const { error } = await supabase.from("tasks").insert({
     org_id: session.orgId,
     title: parsed.data.title,
     description: parsed.data.description || null,
     due_at: parsed.data.due_at || null,
-    project_id: parsed.data.project_id || null,
+    project_id: projectId,
     priority: parsed.data.priority ? parseInt(parsed.data.priority, 10) : 2,
     created_by: session.userId,
   });

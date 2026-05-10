@@ -20,14 +20,41 @@ export async function createPoAction(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guards on the optional FK fields. POs reference
+  // money so a dangling cross-org vendor_id or project_id corrupts
+  // procurement reporting in subtle ways — gate at the boundary.
+  const projectId = parsed.data.project_id || null;
+  const vendorId = parsed.data.vendor_id || null;
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+  if (vendorId) {
+    const { data: vendor } = await supabase
+      .from("vendors")
+      .select("id")
+      .eq("id", vendorId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!vendor) return { error: "Vendor not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("purchase_orders")
     .insert({
       org_id: session.orgId,
       number: generateNumber("PO"),
       title: parsed.data.title,
-      vendor_id: parsed.data.vendor_id || null,
-      project_id: parsed.data.project_id || null,
+      vendor_id: vendorId,
+      project_id: projectId,
       amount_cents: dollarsToCents(parsed.data.amount),
       created_by: session.userId,
     })

@@ -18,6 +18,21 @@ export async function quickCreateDailyLog(fd: FormData): Promise<void> {
   const parsed = Schema.parse(Object.fromEntries(fd));
   const supabase = await createClient();
 
+  // Cross-tenant FK guard: confirm the submitted project_id belongs
+  // to the caller's org before we insert. RLS on daily_logs gates by
+  // is_org_member(org_id), but the FK on project_id only validates
+  // existence — without this check a user could attach a daily-log
+  // row to another org's project_id while still claiming their own
+  // org_id, leaving a dangling cross-org reference.
+  const { data: project } = await supabase
+    .from("projects")
+    .select("id")
+    .eq("id", parsed.project_id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!project) throw new Error("Project not found in your organization");
+
   // Upsert by (org_id, project_id, log_date) — idempotent so a foreman
   // re-submitting at end of shift doesn't create duplicates.
   const { data: existing } = await supabase

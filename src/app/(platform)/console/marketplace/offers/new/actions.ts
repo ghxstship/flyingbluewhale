@@ -31,12 +31,25 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
   const feeCents = Math.round(Number(parsed.data.fee.replace(/[$,]/g, "")) * 100);
   if (!Number.isFinite(feeCents) || feeCents <= 0) return { error: "Invalid fee" };
 
+  // Cross-tenant FK guard for the optional project_id.
+  const projectId = parsed.data.project_id || null;
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("talent_offers")
     .insert({
       org_id: session.orgId,
       talent_profile_id: parsed.data.talent_profile_id,
-      project_id: parsed.data.project_id || null,
+      project_id: projectId,
       performance_date: parsed.data.performance_date,
       slot_start: parsed.data.slot_start || null,
       slot_end: parsed.data.slot_end || null,

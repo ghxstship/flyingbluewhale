@@ -23,6 +23,20 @@ export async function createBroadcast(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard for the optional project_id.
+  const projectId = parsed.data.project_id || null;
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+
   const code = await nextOrgCode("work_order_broadcasts", session.orgId, "WOB");
 
   const { data, error } = await supabase
@@ -32,7 +46,7 @@ export async function createBroadcast(_: State, fd: FormData): Promise<State> {
       code,
       title: parsed.data.title,
       description: parsed.data.description || null,
-      project_id: parsed.data.project_id || null,
+      project_id: projectId,
       category: parsed.data.category || null,
       budget_cents: parsed.data.budget ? Math.round(Number(parsed.data.budget) * 100) : null,
       needed_by: parsed.data.needed_by || null,

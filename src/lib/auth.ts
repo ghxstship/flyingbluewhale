@@ -66,7 +66,13 @@ export async function getSession(): Promise<Session | null> {
     // Cast through unknown until gen:types refreshes; the value is one of
     // the PERSONAS literals enforced by the SQL CHECK constraint.
     .select("org_id, role, persona, is_developer, orgs(slug, tier)")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    // Soft-deleted memberships (set by /api/v1/me/delete or admin removal)
+    // must not resolve to an active session — otherwise an offboarded
+    // user who signs back in within the 30-day grace window is silently
+    // re-granted org access. RLS on dependent tables would still gate,
+    // but session.orgId here is what every action uses for org-scoping.
+    .is("deleted_at", null);
 
   type Row = {
     org_id: string;

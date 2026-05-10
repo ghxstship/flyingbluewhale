@@ -25,6 +25,7 @@ export async function GET() {
       .from("memberships")
       .select("org_id, role, orgs:orgs(id, name, name_override, logo_url, branding)")
       .eq("user_id", session.userId)
+      .is("deleted_at", null)
       .order("created_at", { ascending: true });
     if (error) return apiError("internal", error.message);
     type Row = {
@@ -59,11 +60,15 @@ export async function PATCH(req: NextRequest) {
 
     // Confirm membership before flipping the pointer — RLS would block
     // silently, but a 403 at the boundary is a clearer failure mode.
+    // .is("deleted_at", null) so an offboarded user (their membership
+    // soft-deleted via /api/v1/me/delete or admin removal) can't
+    // re-activate themselves into the org by flipping the pointer.
     const { data: member } = await supabase
       .from("memberships")
       .select("org_id")
       .eq("user_id", session.userId)
       .eq("org_id", input.orgId)
+      .is("deleted_at", null)
       .maybeSingle();
     if (!member) return apiError("forbidden", "You are not a member of that workspace");
 

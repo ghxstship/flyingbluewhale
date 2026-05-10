@@ -89,11 +89,17 @@ export async function verifyApiKey(authorizationHeader: string | null | undefine
   if (!k.created_by) return null;
   if (!constantTimeEq(sha256(parsed.full), k.hashed_secret)) return null;
 
+  // .is("deleted_at", null) — a soft-deleted membership (offboarded
+  // user / pending account purge) must NOT yield an authenticated
+  // session via API key. Without this filter an offboarded user's
+  // un-revoked API key would still authenticate and bypass the
+  // offboarding entirely.
   const { data: membership } = await svc
     .from("memberships")
     .select("role, is_developer, orgs(slug, tier)")
     .eq("user_id", k.created_by)
     .eq("org_id", k.org_id)
+    .is("deleted_at", null)
     .maybeSingle();
   if (!membership) return null;
   const mem = membership as {

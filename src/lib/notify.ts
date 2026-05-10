@@ -161,11 +161,13 @@ export async function notifyOrgAdmins(args: {
   data?: Record<string, unknown>;
 }) {
   const svc = createServiceClient();
+  // .is("deleted_at", null) — don't notify offboarded admins.
   const { data: members } = await svc
     .from("memberships")
     .select("user_id, role")
     .eq("org_id", args.orgId)
-    .in("role", ["owner", "admin"]);
+    .in("role", ["owner", "admin"])
+    .is("deleted_at", null);
   const userIds = (members ?? []).map((m) => m.user_id as string);
   if (userIds.length === 0) return;
 

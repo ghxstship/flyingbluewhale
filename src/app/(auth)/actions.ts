@@ -151,13 +151,21 @@ export async function acceptInviteAction(_: FormState, formData: FormData): Prom
     };
   }
 
-  // Create the membership (role taken from the invite). Unique index on
-  // (org_id, user_id) makes a duplicate accept idempotent — treat the
-  // conflict as success.
+  // Upsert the membership (role taken from the invite). The unique
+  // index on (org_id, user_id) rejected a plain insert with "duplicate"
+  // when a soft-deleted membership existed — but the prior code
+  // treated that as success without restoring access, so a
+  // re-invited user landed on /accept-invite, saw "joined!", then
+  // bounced on every page because their membership stayed
+  // deleted_at != null. Use upsert with deleted_at: null to
+  // restore previously-offboarded users on re-invite.
   const { error: membershipError } = await supabase
     .from("memberships")
-    .insert({ org_id: invite.org_id, user_id: user.id, role: invite.role });
-  if (membershipError && !membershipError.message.toLowerCase().includes("duplicate")) {
+    .upsert(
+      { org_id: invite.org_id, user_id: user.id, role: invite.role, deleted_at: null },
+      { onConflict: "org_id,user_id" },
+    );
+  if (membershipError) {
     return { error: `Couldn't join org: ${membershipError.message}` };
   }
 

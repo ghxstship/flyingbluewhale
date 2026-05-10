@@ -47,7 +47,13 @@ export async function GET(req: Request, ctx: { params: Promise<{ userId: string 
   }
 
   // Pull every event across every org the user is a member of.
-  const { data: memberships } = await supabase.from("memberships").select("org_id").eq("user_id", p.data.userId);
+  // .is("deleted_at", null) so an offboarded user's calendar feed
+  // doesn't include events from orgs they no longer belong to.
+  const { data: memberships } = await supabase
+    .from("memberships")
+    .select("org_id")
+    .eq("user_id", p.data.userId)
+    .is("deleted_at", null);
   const orgIds = (memberships ?? []).map((m) => m.org_id);
   if (orgIds.length === 0) {
     return new NextResponse("BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//lytehaus//calendar//EN\r\nEND:VCALENDAR\r\n", {

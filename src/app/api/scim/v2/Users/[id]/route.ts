@@ -26,11 +26,14 @@ type UserRow = { id: string; email: string; name: string | null; created_at: str
 
 async function fetchScopedUser(orgId: string, userId: string): Promise<UserRow | null> {
   const admin = createServiceClient();
+  // .is("deleted_at", null) so a soft-deleted (deprovisioned) user
+  // returns 404 to the IdP instead of looking still-active.
   const { data } = await admin
     .from("memberships")
     .select("users!inner(id, email, name, created_at)")
     .eq("org_id", orgId)
     .eq("user_id", userId)
+    .is("deleted_at", null)
     .maybeSingle();
   type Row = { users: UserRow } | null;
   return (data as Row)?.users ?? null;
@@ -100,10 +103,16 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     await (admin as unknown as import("@/lib/supabase/loose").LooseSupabase).from("users").update(updates).eq("id", id);
   }
   if (deactivate) {
-    // Deprovision = remove membership in this org. The user record stays
-    // (they may belong to other orgs); only their access to *this* org is
-    // revoked.
-    await admin.from("memberships").delete().eq("org_id", auth.orgId).eq("user_id", id);
+    // Deprovision = soft-revoke this org's membership. Soft delete
+    // (deleted_at) preserves the audit trail of when offboarded by
+    // which IdP — hard delete erased the row, losing that record
+    // and any audit_log target_id references.
+    await (admin as unknown as import("@/lib/supabase/loose").LooseSupabase)
+      .from("memberships")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("org_id", auth.orgId)
+      .eq("user_id", id)
+      .is("deleted_at", null);
     // Treat deactivation as logical "no longer active" — return active:false
     // in the response by short-circuiting display.
     return new Response(
@@ -118,9 +127,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     );
   }
   if (activate) {
+    // Activation: clear deleted_at when restoring. Without it an
+    // upsert with onConflict skips deleted_at and a previously
+    // soft-deleted user stays offboarded even though SCIM reported
+    // success.
     await (admin as unknown as import("@/lib/supabase/loose").LooseSupabase)
       .from("memberships")
-      .upsert({ org_id: auth.orgId, user_id: id, role: "member" }, { onConflict: "org_id,user_id" });
+      .upsert({ org_id: auth.orgId, user_id: id, role: "member", deleted_at: null }, { onConflict: "org_id,user_id" });
   }
 
   const fresh = await fetchScopedUser(auth.orgId, id);
@@ -142,8 +155,15 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
   if (!isServiceClientAvailable()) return scimErrorResponse(new ScimError("internal", "Service unavailable", 503));
   const { id } = await params;
   const admin = createServiceClient();
-  // Deprovision = remove membership in this org. We do not delete the user
-  // row itself — that would clobber audit trails + cross-org membership.
-  await admin.from("memberships").delete().eq("org_id", auth.orgId).eq("user_id", id);
+  // Deprovision = soft-revoke this org's membership. Soft delete
+  // preserves the audit trail of when offboarded by which IdP. We
+  // do not delete the user row itself — they may belong to other
+  // orgs.
+  await (admin as unknown as import("@/lib/supabase/loose").LooseSupabase)
+    .from("memberships")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("org_id", auth.orgId)
+    .eq("user_id", id)
+    .is("deleted_at", null);
   return new Response(null, { status: 204 });
 }

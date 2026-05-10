@@ -49,11 +49,15 @@ export async function GET(req: Request) {
   }
 
   const admin = createServiceClient();
-  // Scope to users who are members of the SCIM-token's org.
+  // Scope to users who are ACTIVE members of the SCIM-token's org.
+  // .is("deleted_at", null) hides soft-deleted memberships so the IdP
+  // doesn't see offboarded users in its periodic sync (which would
+  // make it think they're still active and skip re-provisioning).
   let q = admin
     .from("memberships")
     .select("user_id, users!inner(id, email, name, created_at)", { count: "exact" })
-    .eq("org_id", auth.orgId);
+    .eq("org_id", auth.orgId)
+    .is("deleted_at", null);
 
   if (filter?.op === "eq" && (filter.attr === "userName" || filter.attr === "emails.value")) {
     q = q.eq("users.email", filter.value);
@@ -149,13 +153,29 @@ export async function POST(req: Request) {
     userId = row.id;
   }
 
-  // Ensure membership. Inactive users get no membership (SCIM deactivation == access removal).
+  // SCIM deactivation == access removal. Use SOFT delete so the audit
+  // trail (when offboarded by which IdP) survives; the matching SCIM
+  // activate path below clears deleted_at to restore access. Hard
+  // delete (the prior behavior) erased the row, losing the offboard
+  // timestamp and any joined audit_log target_id references.
   if (!active) {
-    await admin.from("memberships").delete().eq("org_id", auth.orgId).eq("user_id", userId);
+    await (admin as unknown as import("@/lib/supabase/loose").LooseSupabase)
+      .from("memberships")
+      .update({ deleted_at: new Date().toISOString() })
+      .eq("org_id", auth.orgId)
+      .eq("user_id", userId)
+      .is("deleted_at", null);
   } else {
+    // Activation: clear deleted_at so a previously-offboarded user is
+    // restored on the IdP's next sync. Without explicitly clearing it,
+    // an upsert with onConflict skips deleted_at and the user stays
+    // offboarded even though SCIM reported success.
     const { error: memErr } = await (admin as unknown as import("@/lib/supabase/loose").LooseSupabase)
       .from("memberships")
-      .upsert({ org_id: auth.orgId, user_id: userId, role: "member" }, { onConflict: "org_id,user_id" });
+      .upsert(
+        { org_id: auth.orgId, user_id: userId, role: "member", deleted_at: null },
+        { onConflict: "org_id,user_id" },
+      );
     if (memErr) return scimErrorResponse(new ScimError("internal", memErr.message, 500));
   }
   const resource = buildScimUser(

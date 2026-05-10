@@ -28,11 +28,15 @@ export async function requestSwap(fd: FormData): Promise<void> {
 
   // Notify all admin/manager members of the org via service role.
   const service = createServiceClient();
+  // .is("deleted_at", null) so we don't notify offboarded admins
+  // who'll either bounce on the link (RLS denies them) or worse,
+  // re-engage with the org through a stale membership row.
   const { data: admins } = await service
     .from("memberships")
     .select("user_id, role")
     .eq("org_id", session.orgId)
-    .in("role", ["owner", "admin", "manager"]);
+    .in("role", ["owner", "admin", "manager"])
+    .is("deleted_at", null);
 
   const venue = (shift as unknown as { venue?: { name: string | null } | null }).venue?.name ?? "venue TBD";
   const startsAt = new Date((shift as { starts_at: string }).starts_at);

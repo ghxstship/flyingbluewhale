@@ -71,7 +71,11 @@ const config = [
       // isolated print stylesheets. Everything else must consume tokens.
       "no-restricted-syntax": ["warn",
         {
-          selector: "JSXAttribute Literal[value=/#[0-9a-fA-F]{3,8}/]",
+          // Anchor the regex so only full-string hex values (e.g. "#fff",
+          // "#1a2b3c") trigger this rule. Without anchors, URL fragments like
+          // href="#add-ons" match because "#add" is 3 valid hex chars — false
+          // positive. Accepts 3, 4, 6, or 8 hex digits (CSS named lengths).
+          selector: "JSXAttribute Literal[value=/^#[0-9a-fA-F]{3,8}$/]",
           message: "Use a CSS variable (--text, --surface, --accent...) instead of a hex literal. If this is a brand SVG or user-input default, add the file to the eslint ignores list.",
         },
         // MOTION CANON — bare `transition` class (no specifier) animates
@@ -222,9 +226,11 @@ const config = [
     },
   },
   {
-    // E2E tests — Playwright diagnostic logging is intentional and surfaces
-    // a11y / regression detail in the test reporter.
-    files: ["e2e/**/*.{ts,tsx}"],
+    // E2E tests and CLI scripts — console output is intentional diagnostic /
+    // status reporting to stdout. Playwright test reporter surfaces a11y and
+    // regression detail; CI gate scripts report bundle sizes and advisor
+    // budgets; seed/teardown scripts log fixture progress.
+    files: ["e2e/**/*.{ts,tsx}", "scripts/**/*.{ts,tsx,mjs,js}", "seeds/**/*.{ts,tsx,mjs,js}"],
     rules: {
       "no-console": "off",
     },

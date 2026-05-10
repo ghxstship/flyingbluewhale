@@ -54,6 +54,23 @@ const config: NextConfig = {
   // the runtime.
   reactCompiler: true as never,
 
+  // Allow next/image to optimise images from Supabase Storage and Stripe
+  // (invoice/proposal assets). The Supabase hostname is derived from
+  // NEXT_PUBLIC_SUPABASE_URL so it covers both production and preview envs;
+  // **.supabase.co covers the fallback when the env var is absent.
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: supabaseHost.includes("*") ? "**.supabase.co" : supabaseHost,
+      },
+      {
+        protocol: "https",
+        hostname: "**.stripe.com",
+      },
+    ],
+  },
+
   async headers() {
     return [
       {
@@ -61,7 +78,11 @@ const config: NextConfig = {
         headers: [
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
+          // SAMEORIGIN aligns with `frame-ancestors 'self'` in the CSP — both
+          // permit same-origin iframes (marketing home portal-guide live preview).
+          // DENY would contradict frame-ancestors in legacy browsers that ignore
+          // CSP and only honour X-Frame-Options, blocking the live preview there.
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
           { key: "Content-Security-Policy", value: csp },

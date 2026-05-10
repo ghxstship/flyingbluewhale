@@ -24,6 +24,10 @@ const ALLOWED_ERROR_CODES = new Set([
   "conflict",
   "rate_limited",
   "internal",
+  // 503 — endpoint requires an env-gated capability (e.g. service-role key,
+  // VAPID keys for push, automations runtime) that isn't configured in this
+  // environment. The api.ts ApiErrorCode union lists this as canonical.
+  "service_unavailable",
 ]);
 
 type Method = "get" | "post" | "put" | "patch" | "delete";
@@ -93,6 +97,9 @@ function skipReason(path: string, method: Method): string | null {
   }
   if (path === "/api/v1/schedule.ics" && method === "get") {
     return "returns text/calendar, envelope contract N/A";
+  }
+  if (path === "/api/v1/openapi.json" && method === "get") {
+    return "returns raw OpenAPI 3.1 spec, envelope contract N/A";
   }
   if (path === "/api/v1/users/{userId}/calendar.ics" && method === "get") {
     return "returns text/calendar, envelope contract N/A";

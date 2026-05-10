@@ -59,13 +59,17 @@ test.describe("authed REST round-trips (owner)", () => {
 
   test("PATCH /api/v1/me/preferences persists and round-trips a UI toggle", async ({ page }) => {
     const width = 240 + Math.floor(Math.random() * 50);
+    // `theme` stores the chroma theme name (bermuda-triangle, glass, brutal,
+    // bento, kinetic, copilot, cyber, soft, earthy, system) — the
+    // light/dark distinction is the orthogonal `mode` field. Sending "dark"
+    // here would have hit the user_preferences_theme_check constraint.
     const patch = await page.request.patch("/api/v1/me/preferences", {
-      data: { theme: "dark", sidebar_width: width, sidebar_collapsed: false },
+      data: { theme: "cyber", sidebar_width: width, sidebar_collapsed: false },
     });
     expect(patch.status()).toBe(200);
     const pb = await patch.json();
     expect(pb.ok).toBe(true);
-    expect(pb.data.theme).toBe("dark");
+    expect(pb.data.theme).toBe("cyber");
     // sidebar_width is merged into ui_state, flattened on response.
     expect(pb.data.sidebar_width).toBe(width);
 

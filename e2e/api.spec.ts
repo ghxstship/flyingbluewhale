@@ -15,6 +15,8 @@ test("unsigned stripe webhook is rejected when secret is set", async ({ request 
     data: { type: "ping" },
     headers: { "content-type": "application/json" },
   });
-  // Accept either 200 (dev mode, no secret) or 400/401 (strict verification)
-  expect([200, 400, 401]).toContain(r.status());
+  // 200 (dev, no secret), 400/401 (strict verification with secret),
+  // or 503 (no SUPABASE_SERVICE_ROLE_KEY — handler refuses up-front because
+  // the dedup write needs the service client).
+  expect([200, 400, 401, 503]).toContain(r.status());
 });

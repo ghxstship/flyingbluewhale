@@ -37,8 +37,9 @@ test.describe("mobile field shell", () => {
   test("/m home renders with FAB + tab bar", async ({ page }) => {
     const r = await page.goto("/m");
     expect(r?.status()).toBeLessThan(500);
-    // FAB has aria-label="Scan ticket"
-    await expect(page.getByRole("link", { name: "Scan ticket", exact: true })).toBeVisible();
+    // FAB has aria-label="Scan Ticket" — Title Case is the project convention
+    // for labels/buttons/headings (feedback_title_case_default).
+    await expect(page.getByRole("link", { name: "Scan Ticket", exact: true })).toBeVisible();
   });
 
   const PAGES = [

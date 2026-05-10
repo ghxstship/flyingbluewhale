@@ -9,6 +9,9 @@ export default defineConfig({
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   timeout: 45000,
   use: {
+    // localhost works because tests run with NEXT_PUBLIC_USE_SUBDOMAINS=0
+    // (path-prefix mode — /console, /p, /m). For local dev with
+    // SUBDOMAINS=1 (lvh.me), set baseURL to http://lvh.me:3000 instead.
     baseURL: "http://localhost:3000",
     navigationTimeout: 30000,
     trace: "on-first-retry",

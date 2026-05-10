@@ -26,11 +26,17 @@ test.describe("Stripe webhook", () => {
     });
     // In dev mode without a secret this bypasses verification and hits the
     // JSON.parse fallback; either 400 or 200 if the parse somehow succeeds.
-    expect([200, 400, 401]).toContain(r.status());
+    // 503 is also valid when SUPABASE_SERVICE_ROLE_KEY is unset (the handler
+    // refuses up-front because the dedup write needs the service client).
+    expect([200, 400, 401, 503]).toContain(r.status());
     if (r.status() === 400) {
       const body = await r.json();
       expect(body.ok).toBe(false);
       expect(body.error.code).toBe("bad_request");
+    }
+    if (r.status() === 503) {
+      const body = await r.json();
+      expect(body.error.code).toBe("service_unavailable");
     }
   });
 
@@ -39,8 +45,9 @@ test.describe("Stripe webhook", () => {
       data: { type: "ping", data: { object: {} }, id: "evt_test_ping" },
       headers: { "content-type": "application/json" },
     });
-    // If a secret IS configured (CI), this 401s; if not (local dev), 200.
-    expect([200, 401]).toContain(r.status());
+    // 200 (secret unset, service-role configured), 401 (secret set, missing
+    // signature), or 503 (no SUPABASE_SERVICE_ROLE_KEY — endpoint refuses).
+    expect([200, 401, 503]).toContain(r.status());
     const body = await r.json();
     expect(body.ok !== undefined).toBe(true);
   });
@@ -110,6 +117,8 @@ test.describe("Stripe webhook", () => {
     });
     // If a webhook secret IS set, unsigned posts 401. Skip the dedup assertion then.
     test.skip(first.status() === 401, "webhook secret configured — replay test needs unsigned path");
+    // If service-role key is unset, the handler 503s before dedup runs — skip.
+    test.skip(first.status() === 503, "SUPABASE_SERVICE_ROLE_KEY not configured — dedup path needs it");
     expect(first.status()).toBe(200);
     const firstBody = await first.json();
     expect(firstBody.ok).toBe(true);

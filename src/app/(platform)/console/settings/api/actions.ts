@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { randomBytes, createHash } from "node:crypto";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const CreateSchema = z.object({
@@ -23,6 +23,8 @@ export type CreateState =
  */
 export async function createApiKeyAction(_: CreateState, fd: FormData): Promise<CreateState> {
   const session = await requireSession();
+  // API keys grant programmatic org access — owner/admin only.
+  if (!isAdmin(session)) return { error: "Only owners and admins can mint API keys" };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -49,13 +51,18 @@ export async function createApiKeyAction(_: CreateState, fd: FormData): Promise<
 
 export async function revokeApiKeyAction(formData: FormData) {
   const session = await requireSession();
+  if (!isAdmin(session)) return;
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
+  // .is("revoked_at", null) — don't re-stamp revoked_at on an already-
+  // revoked key (would change the audit timestamp from the original
+  // revocation to "now").
   await supabase
     .from("api_keys")
     .update({ revoked_at: new Date().toISOString() })
     .eq("id", id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .is("revoked_at", null);
   revalidatePath("/console/settings/api");
 }

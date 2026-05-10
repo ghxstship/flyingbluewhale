@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { promises as dns } from "node:dns";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const HOSTNAME = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
@@ -17,6 +17,10 @@ export type State = { error?: string } | null;
 
 export async function addDomainAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Custom domains drive auto-membership-claim on signup (a verified
+  // domain gets new users with that email auto-joined). Only owner/
+  // admin can extend the org boundary.
+  if (!isAdmin(session)) return { error: "Only owners and admins can manage domains" };
   const parsed = AddSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -37,6 +41,7 @@ export async function addDomainAction(_: State, fd: FormData): Promise<State> {
  */
 export async function verifyDomainAction(formData: FormData) {
   const session = await requireSession();
+  if (!isAdmin(session)) return;
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
@@ -66,6 +71,7 @@ export async function verifyDomainAction(formData: FormData) {
 
 export async function deleteDomainAction(formData: FormData) {
   const session = await requireSession();
+  if (!isAdmin(session)) return;
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();

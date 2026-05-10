@@ -113,8 +113,13 @@ export async function createDashboard(opts: {
  * Replace a dashboard's layout. Used by `saveLayoutAction`. RLS gates the
  * update; locked-row semantics are not yet exposed (no `is_locked` column
  * on this table — admins can always update, owners can update their own).
+ * orgId pins the write to a single tenant for defense-in-depth.
  */
-export async function updateDashboardLayout(opts: { id: string; layout: DashboardLayout }): Promise<DashboardRow> {
+export async function updateDashboardLayout(opts: {
+  id: string;
+  orgId: string;
+  layout: DashboardLayout;
+}): Promise<DashboardRow> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -128,6 +133,7 @@ export async function updateDashboardLayout(opts: { id: string; layout: Dashboar
       updated_by: userId,
     })
     .eq("id", opts.id)
+    .eq("org_id", opts.orgId)
     .select("*")
     .single();
   if (error) throw error;
@@ -138,6 +144,7 @@ export async function updateDashboardLayout(opts: { id: string; layout: Dashboar
  *  the layout JSON. */
 export async function updateDashboardMeta(opts: {
   id: string;
+  orgId: string;
   name?: string;
   description?: string | null;
   scope?: ViewScope;
@@ -153,16 +160,22 @@ export async function updateDashboardMeta(opts: {
   if (opts.description !== undefined) patch.description = opts.description;
   if (opts.scope !== undefined) patch.scope = opts.scope;
 
-  const { data, error } = await supabase.from("dashboards").update(patch).eq("id", opts.id).select("*").single();
+  const { data, error } = await supabase
+    .from("dashboards")
+    .update(patch)
+    .eq("id", opts.id)
+    .eq("org_id", opts.orgId)
+    .select("*")
+    .single();
   if (error) throw error;
   return rowFrom(data as DashboardRecord);
 }
 
 /** Delete a dashboard. RLS gates by created_by + role. */
-export async function deleteDashboard(opts: { id: string }): Promise<void> {
+export async function deleteDashboard(opts: { id: string; orgId: string }): Promise<void> {
   if (!opts.id) return;
   const supabase = await createClient();
-  const { error } = await supabase.from("dashboards").delete().eq("id", opts.id);
+  const { error } = await supabase.from("dashboards").delete().eq("id", opts.id).eq("org_id", opts.orgId);
   if (error) throw error;
 }
 
@@ -172,23 +185,31 @@ export async function deleteDashboard(opts: { id: string }): Promise<void> {
  * collisions are caller's responsibility (the canvas snaps to an open slot
  * before invoking this).
  */
-export async function addWidgetToDashboard(opts: { id: string; widget: DashboardWidget }): Promise<DashboardRow> {
+export async function addWidgetToDashboard(opts: {
+  id: string;
+  orgId: string;
+  widget: DashboardWidget;
+}): Promise<DashboardRow> {
   const current = await getDashboard({ id: opts.id });
-  if (!current) throw new Error("Dashboard not found");
+  if (!current || current.orgId !== opts.orgId) throw new Error("Dashboard not found");
   const next: DashboardLayout = {
     ...current.layout,
     widgets: [...current.layout.widgets, opts.widget],
   };
-  return updateDashboardLayout({ id: opts.id, layout: next });
+  return updateDashboardLayout({ id: opts.id, orgId: opts.orgId, layout: next });
 }
 
 /** Remove a widget by id from a dashboard's layout. */
-export async function removeWidgetFromDashboard(opts: { id: string; widgetId: string }): Promise<DashboardRow> {
+export async function removeWidgetFromDashboard(opts: {
+  id: string;
+  orgId: string;
+  widgetId: string;
+}): Promise<DashboardRow> {
   const current = await getDashboard({ id: opts.id });
-  if (!current) throw new Error("Dashboard not found");
+  if (!current || current.orgId !== opts.orgId) throw new Error("Dashboard not found");
   const next: DashboardLayout = {
     ...current.layout,
     widgets: current.layout.widgets.filter((w) => w.id !== opts.widgetId),
   };
-  return updateDashboardLayout({ id: opts.id, layout: next });
+  return updateDashboardLayout({ id: opts.id, orgId: opts.orgId, layout: next });
 }

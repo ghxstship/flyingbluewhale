@@ -43,6 +43,7 @@ export async function scanTicket(input: {
     .from("tickets")
     .update({ status: "scanned", scanned_at: now, scanned_by: input.scannerUserId })
     .eq("id", ticket.id)
+    .eq("org_id", input.orgId)
     .eq("status", "issued")
     .select("id,scanned_at");
   if (error) return { result: "not_found" };
@@ -52,7 +53,12 @@ export async function scanTicket(input: {
   // canonical scanned_at + return duplicate so the user sees the
   // correct timestamp from the winning scan.
   if (!claimed || claimed.length === 0) {
-    const { data: latest } = await supabase.from("tickets").select("scanned_at").eq("id", ticket.id).maybeSingle();
+    const { data: latest } = await supabase
+      .from("tickets")
+      .select("scanned_at")
+      .eq("id", ticket.id)
+      .eq("org_id", input.orgId)
+      .maybeSingle();
     return {
       result: "duplicate",
       ticketId: ticket.id,
@@ -60,6 +66,8 @@ export async function scanTicket(input: {
     };
   }
 
+  // ticket_scans has no org_id column — its RLS policy walks up to
+  // tickets.org_id via the FK. Don't add the field here.
   await supabase.from("ticket_scans").insert({
     ticket_id: ticket.id,
     scanner_id: input.scannerUserId,

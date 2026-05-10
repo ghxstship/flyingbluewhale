@@ -79,7 +79,7 @@ const LayoutSchema = z.object({
  * client-side so a flurry of drag events doesn't hammer the API.
  */
 export async function saveLayoutAction(id: string, rawLayout: unknown): Promise<State> {
-  await requireSession();
+  const session = await requireSession();
   if (!id) return { error: "Missing dashboard id" };
 
   const parsed = LayoutSchema.safeParse(rawLayout);
@@ -90,7 +90,7 @@ export async function saveLayoutAction(id: string, rawLayout: unknown): Promise<
     return { error: "Invalid layout shape" };
   }
 
-  await updateDashboardLayout({ id, layout: parsed.data });
+  await updateDashboardLayout({ id, orgId: session.orgId, layout: parsed.data });
   revalidatePath(`/console/dashboards/${id}`);
   revalidatePath(`/console/dashboards/${id}/edit`);
   return { ok: true };
@@ -101,7 +101,7 @@ export async function saveLayoutAction(id: string, rawLayout: unknown): Promise<
  * to refresh.
  */
 export async function addWidgetAction(id: string, rawWidget: unknown): Promise<State> {
-  await requireSession();
+  const session = await requireSession();
   if (!id) return { error: "Missing dashboard id" };
 
   const parsed = WidgetSchema.safeParse(rawWidget);
@@ -109,7 +109,7 @@ export async function addWidgetAction(id: string, rawWidget: unknown): Promise<S
     return { error: parsed.error.issues[0]?.message ?? "Invalid widget" };
   }
 
-  await addWidgetToDashboard({ id, widget: parsed.data as DashboardWidget });
+  await addWidgetToDashboard({ id, orgId: session.orgId, widget: parsed.data as DashboardWidget });
   revalidatePath(`/console/dashboards/${id}`);
   revalidatePath(`/console/dashboards/${id}/edit`);
   return { ok: true };
@@ -117,10 +117,10 @@ export async function addWidgetAction(id: string, rawWidget: unknown): Promise<S
 
 /** Remove a widget by id. */
 export async function removeWidgetAction(id: string, widgetId: string): Promise<State> {
-  await requireSession();
+  const session = await requireSession();
   if (!id || !widgetId) return { error: "Missing id" };
 
-  await removeWidgetFromDashboard({ id, widgetId });
+  await removeWidgetFromDashboard({ id, orgId: session.orgId, widgetId });
   revalidatePath(`/console/dashboards/${id}`);
   revalidatePath(`/console/dashboards/${id}/edit`);
   return { ok: true };
@@ -128,7 +128,7 @@ export async function removeWidgetAction(id: string, widgetId: string): Promise<
 
 /** Update the dashboard's name/description/scope. */
 export async function updateMetaAction(_: State, fd: FormData): Promise<State> {
-  await requireSession();
+  const session = await requireSession();
   const id = String(fd.get("id") ?? "");
   if (!id) return { error: "Missing dashboard id" };
 
@@ -141,6 +141,7 @@ export async function updateMetaAction(_: State, fd: FormData): Promise<State> {
 
   await updateDashboardMeta({
     id,
+    orgId: session.orgId,
     name,
     description: description || null,
     scope: scope.data,

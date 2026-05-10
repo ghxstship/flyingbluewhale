@@ -53,14 +53,24 @@ export type AuditInput = {
 };
 
 export async function emitAudit(input: AuditInput): Promise<void> {
+  // audit_log is a VIEW over audit_events; RLS on the underlying table
+  // restricts inserts to postgres / service_role. Without
+  // SUPABASE_SERVICE_ROLE_KEY we have no way to persist the row — the
+  // session client would always RLS-reject. Skip silently in that case
+  // (typical local dev) so the log isn't flooded with warns that the
+  // operator can't action. A single debug-level note still drops in
+  // case anyone is following the trace.
+  if (!isServiceClientAvailable()) {
+    log.debug("audit.emit.skipped", {
+      action: input.action,
+      reason: "no_service_role_key",
+      request_id: input.requestId ?? undefined,
+    });
+    return;
+  }
+
   try {
-    // audit_log is a VIEW over audit_events; RLS on the underlying table
-    // restricts inserts to postgres / service_role. Use the service client
-    // so production audit emission actually persists. In dev environments
-    // without SUPABASE_SERVICE_ROLE_KEY, fall back to the session client —
-    // the insert will be RLS-rejected and we'll log-warn (silent-failure
-    // policy unchanged), but at least nothing throws.
-    const supabase = isServiceClientAvailable() ? createServiceClient() : await createClient();
+    const supabase = createServiceClient();
     const { error } = await supabase.from("audit_log").insert({
       actor_id: input.actorId,
       org_id: input.orgId,
@@ -73,6 +83,8 @@ export async function emitAudit(input: AuditInput): Promise<void> {
       operation: "EMIT",
     });
     if (error) {
+      // With service-role configured, an RLS or constraint failure here
+      // is a real signal — the audit pipeline is broken.
       log.warn("audit.emit.failed", {
         action: input.action,
         err: error.message,

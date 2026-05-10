@@ -46,12 +46,21 @@ export async function DELETE(_req: NextRequest, ctx: { params: Promise<{ id: str
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     const supabase = await createClient();
-    const { error } = await supabase
+    // .select + .is(deleted_at, null) so a wrong/foreign id surfaces as
+    // 404 instead of silently returning ok:true. Also prevents an
+    // already-soft-deleted row from being re-stamped with a newer
+    // deleted_at, which would extend its purge window past its first
+    // delete.
+    const { data, error } = await supabase
       .from("webhook_endpoints")
       .update({ deleted_at: new Date().toISOString() })
       .eq("id", id)
-      .eq("org_id", session.orgId ?? "");
+      .eq("org_id", session.orgId ?? "")
+      .is("deleted_at", null)
+      .select("id")
+      .maybeSingle();
     if (error) return apiError("internal", error.message);
+    if (!data) return apiError("not_found", "Endpoint not found or already deleted");
     return apiOk({ ok: true });
   });
 }

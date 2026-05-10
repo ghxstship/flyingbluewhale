@@ -67,12 +67,18 @@ export async function DELETE(_req: NextRequest, ctx: { params: Promise<{ id: str
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     const supabase = await createClient();
-    const { error } = await supabase
+    // .select + .is(deleted_at, null) — surface 404 on wrong/foreign id
+    // and refuse to re-stamp deleted_at on an already-deleted row.
+    const { data, error } = await supabase
       .from("stage_plots")
       .update({ deleted_at: new Date().toISOString() })
       .eq("id", id)
-      .eq("org_id", session.orgId);
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .select("id")
+      .maybeSingle();
     if (error) return apiError("internal", error.message);
+    if (!data) return apiError("not_found", "Stage plot not found or already deleted");
     return apiOk({ ok: true });
   });
 }

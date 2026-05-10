@@ -23,7 +23,9 @@ export async function POST(req: Request) {
   if (!rl.ok) return apiError("rate_limited", "AI rate limit reached; try again shortly");
 
   if (!env.ANTHROPIC_API_KEY) {
-    return apiError("internal", "ANTHROPIC_API_KEY is not configured");
+    // 503 + service_unavailable matches the canonical ApiErrorCode shape
+    // for env-gated capability misses (mirrors webhook + push handlers).
+    return apiError("service_unavailable", "ANTHROPIC_API_KEY is not configured");
   }
   const input = await parseJson(req, Schema);
   if (input instanceof Response) return input;

@@ -33,7 +33,7 @@ export async function GET(req: Request) {
   const clientId = process.env.SLACK_CLIENT_ID;
   const clientSecret = process.env.SLACK_CLIENT_SECRET;
   if (!signingSecret || !clientId || !clientSecret) {
-    return apiError("internal", "Slack environment variables not configured");
+    return apiError("service_unavailable", "Slack environment variables not configured");
   }
 
   const verified = verifyOAuthState({ secret: signingSecret, state });

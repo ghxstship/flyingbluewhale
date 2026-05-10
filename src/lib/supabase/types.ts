@@ -8,11 +8,49 @@ export const PROJECT_ROLES = ["lead", "editor", "contributor", "viewer", "vendor
 
 export type Tier = "access" | "core" | "professional" | "enterprise";
 
-// Session-derived persona — drives shell + nav routing. Not stored.
-//   visitor — unauthenticated
-//   guest   — authenticated, demo-org member only (no real org yet)
-//   plus    — derived from PlatformRole + active context
-export type Persona = "visitor" | "guest" | "owner" | "admin" | "manager" | "member";
+// Session-derived persona — drives shell + nav routing AND the per-persona
+// capability matrix. Sourced from `memberships.persona` (SQL column added
+// in migration `memberships_persona_column`); falls back to role for
+// pre-migration data.
+//
+//   visitor       — unauthenticated
+//   guest         — authenticated, demo-org member only (no real org yet)
+//   owner/admin/  — derived from PlatformRole when persona col was role-based
+//   manager/member  on row insert (legacy or default)
+//   collaborator  — co-producer with project-level write authority (member tier)
+//   contractor    — vendor / outside contributor; project-read + task-write
+//   crew          — gate / shift / scan operator (member tier, mobile-first)
+//   client        — proposal recipient / portal viewer (read-only)
+//   viewer        — generic read-only stakeholder
+//   community     — public marketplace browser; no write capabilities
+export type Persona =
+  | "visitor"
+  | "guest"
+  | "owner"
+  | "admin"
+  | "manager"
+  | "member"
+  | "collaborator"
+  | "contractor"
+  | "crew"
+  | "client"
+  | "viewer"
+  | "community";
+
+export const PERSONAS = [
+  "visitor",
+  "guest",
+  "owner",
+  "admin",
+  "manager",
+  "member",
+  "collaborator",
+  "contractor",
+  "crew",
+  "client",
+  "viewer",
+  "community",
+] as const;
 
 export type ProjectStatus = "draft" | "active" | "paused" | "archived" | "complete";
 export type TicketStatus = "issued" | "transferred" | "scanned" | "voided";

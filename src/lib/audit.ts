@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient } from "./supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "./supabase/server";
 import { log } from "./log";
 
 /**
@@ -54,7 +54,13 @@ export type AuditInput = {
 
 export async function emitAudit(input: AuditInput): Promise<void> {
   try {
-    const supabase = await createClient();
+    // audit_log is a VIEW over audit_events; RLS on the underlying table
+    // restricts inserts to postgres / service_role. Use the service client
+    // so production audit emission actually persists. In dev environments
+    // without SUPABASE_SERVICE_ROLE_KEY, fall back to the session client —
+    // the insert will be RLS-rejected and we'll log-warn (silent-failure
+    // policy unchanged), but at least nothing throws.
+    const supabase = isServiceClientAvailable() ? createServiceClient() : await createClient();
     const { error } = await supabase.from("audit_log").insert({
       actor_id: input.actorId,
       org_id: input.orgId,

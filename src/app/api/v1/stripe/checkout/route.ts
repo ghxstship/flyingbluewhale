@@ -22,7 +22,7 @@ async function handler(req: Request) {
     // to probe whether secrets are configured.
     const denial = assertCapability(session, "invoices:write");
     if (denial) return denial;
-    if (!env.STRIPE_SECRET_KEY) return apiError("internal", "STRIPE_SECRET_KEY is not configured");
+    if (!env.STRIPE_SECRET_KEY) return apiError("service_unavailable", "STRIPE_SECRET_KEY is not configured");
     const supabase = await createClient();
     const { data: invoice } = await supabase
       .from("invoices")

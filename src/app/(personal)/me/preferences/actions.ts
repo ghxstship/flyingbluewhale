@@ -12,7 +12,23 @@ import type { Json } from "@/lib/supabase/database.types";
 const BCP47 = /^[a-z]{2,3}(-[A-Z][a-z]{3})?(-[A-Z]{2}|-[0-9]{3})?$/;
 
 const Schema = z.object({
-  theme: z.enum(["light", "dark", "system"]),
+  // Mirrors the user_preferences_theme_check Postgres constraint. The
+  // previous ["light","dark","system"] enum was a stale relic from before
+  // chroma themes; submitting any chroma theme name from the preferences
+  // form would 500 with a check_violation. light/dark is the orthogonal
+  // `data-mode` attribute, not stored in this column.
+  theme: z.enum([
+    "bermuda-triangle",
+    "glass",
+    "brutal",
+    "bento",
+    "kinetic",
+    "copilot",
+    "cyber",
+    "soft",
+    "earthy",
+    "system",
+  ]),
   density: z.enum(["compact", "comfortable", "spacious"]),
   locale: z.string().regex(BCP47, "Use a BCP-47 tag like 'en' or 'fr-CA'"),
   timezone: z.string().min(1).max(64),

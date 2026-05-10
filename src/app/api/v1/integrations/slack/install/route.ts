@@ -26,8 +26,8 @@ export async function GET() {
 
     const clientId = process.env.SLACK_CLIENT_ID;
     const signingSecret = process.env.SLACK_SIGNING_SECRET;
-    if (!clientId) return apiError("internal", "SLACK_CLIENT_ID is not configured");
-    if (!signingSecret) return apiError("internal", "SLACK_SIGNING_SECRET is not configured");
+    if (!clientId) return apiError("service_unavailable", "SLACK_CLIENT_ID is not configured");
+    if (!signingSecret) return apiError("service_unavailable", "SLACK_SIGNING_SECRET is not configured");
 
     const state = signOAuthState({ secret: signingSecret, orgId: session.orgId });
     const redirectUri = urlFor("marketing", "/api/v1/integrations/slack/callback");

@@ -36,6 +36,16 @@ describe("resolveShell", () => {
     expect(resolveShell("guest")).toBe("/me");
     expect(resolveShell("visitor")).toBe("/me");
   });
+  it("marketplace personas all route to /me", () => {
+    // Bug #13 / Workstream A1 — crew/client/etc. are member-tier and land
+    // at /me, not the operator console.
+    expect(resolveShell("collaborator")).toBe("/me");
+    expect(resolveShell("contractor")).toBe("/me");
+    expect(resolveShell("crew")).toBe("/me");
+    expect(resolveShell("client")).toBe("/me");
+    expect(resolveShell("viewer")).toBe("/me");
+    expect(resolveShell("community")).toBe("/me");
+  });
 });
 
 describe("isAdmin / isManagerPlus", () => {
@@ -59,24 +69,95 @@ describe("can (capability gating)", () => {
   it("denies null session", () => {
     expect(can(null, "projects:read")).toBe(false);
   });
-  it("owner/admin have wildcard", () => {
-    expect(can(baseSession({ role: "owner" }), "projects:delete")).toBe(true);
-    expect(can(baseSession({ role: "admin" }), "anything:goes")).toBe(true);
+  it("owner/admin have wildcard (persona falls through to role map)", () => {
+    expect(can(baseSession({ role: "owner", persona: "owner" }), "projects:delete")).toBe(true);
+    expect(can(baseSession({ role: "admin", persona: "admin" }), "anything:goes")).toBe(true);
   });
   it("manager has projects + finance read/write but not billing", () => {
-    const s = baseSession({ role: "manager" });
+    const s = baseSession({ role: "manager", persona: "manager" });
     expect(can(s, "projects:write")).toBe(true);
     expect(can(s, "invoices:write")).toBe(true);
     expect(can(s, "procurement:read")).toBe(true);
     expect(can(s, "billing:read")).toBe(false);
   });
-  it("member can read projects + write tasks/time", () => {
-    const s = baseSession({ role: "member" });
+  it("member (default persona) can read projects + write tasks/time", () => {
+    const s = baseSession({ role: "member", persona: "member" });
     expect(can(s, "projects:read")).toBe(true);
     expect(can(s, "tasks:write")).toBe(true);
     expect(can(s, "time:write")).toBe(true);
   });
   it("member cannot manage other people", () => {
-    expect(can(baseSession({ role: "member" }), "people:write")).toBe(false);
+    expect(can(baseSession({ role: "member", persona: "member" }), "people:write")).toBe(false);
+  });
+});
+
+describe("can (per-persona overlay — Bug #13 / Workstream A1)", () => {
+  // Every marketplace persona has role=member at the platform level. The
+  // per-persona overlay is what differentiates them.
+  const m = (persona: Session["persona"]) => baseSession({ role: "member", persona });
+
+  it("collaborator has project + crew + scheduling write", () => {
+    const s = m("collaborator");
+    expect(can(s, "projects:write")).toBe(true);
+    expect(can(s, "crew:write")).toBe(true);
+    expect(can(s, "schedule:write")).toBe(true);
+    // But no finance / procurement
+    expect(can(s, "invoices:write")).toBe(false);
+    expect(can(s, "procurement:write")).toBe(false);
+    expect(can(s, "check-in:write")).toBe(false); // not a scanner
+  });
+
+  it("contractor has tasks + time, but no project-write or check-in", () => {
+    const s = m("contractor");
+    expect(can(s, "projects:read")).toBe(true);
+    expect(can(s, "projects:write")).toBe(false);
+    expect(can(s, "tasks:write")).toBe(true);
+    expect(can(s, "time:write")).toBe(true);
+    expect(can(s, "check-in:write")).toBe(false);
+  });
+
+  it("crew is the gate-scanner persona — check-in:* is the defining cap", () => {
+    const s = m("crew");
+    expect(can(s, "check-in:write")).toBe(true);
+    expect(can(s, "check-in:read")).toBe(true);
+    expect(can(s, "tasks:write")).toBe(true);
+    expect(can(s, "time:write")).toBe(true);
+    // No project / proposal / finance authority
+    expect(can(s, "projects:write")).toBe(false);
+    expect(can(s, "invoices:write")).toBe(false);
+  });
+
+  it("client is read-only on proposals + deliverables + tasks", () => {
+    const s = m("client");
+    expect(can(s, "proposals:read")).toBe(true);
+    expect(can(s, "deliverables:read")).toBe(true);
+    expect(can(s, "tasks:read")).toBe(true);
+    // Critical denials covered by capability-gating spec
+    expect(can(s, "projects:write")).toBe(false);
+    expect(can(s, "check-in:write")).toBe(false);
+    expect(can(s, "invoices:write")).toBe(false);
+  });
+
+  it("viewer is read-only on projects + tasks; no writes anywhere", () => {
+    const s = m("viewer");
+    expect(can(s, "projects:read")).toBe(true);
+    expect(can(s, "tasks:read")).toBe(true);
+    expect(can(s, "projects:write")).toBe(false);
+    expect(can(s, "check-in:write")).toBe(false);
+  });
+
+  it("community has zero capabilities (public marketplace browser)", () => {
+    const s = m("community");
+    expect(can(s, "projects:read")).toBe(false);
+    expect(can(s, "projects:write")).toBe(false);
+    expect(can(s, "tasks:read")).toBe(false);
+    expect(can(s, "check-in:write")).toBe(false);
+  });
+
+  it("falls back to role when persona has no overlay", () => {
+    // A pre-migration row could have persona = role-as-string; the
+    // role-based map then takes effect bit-for-bit.
+    const s = baseSession({ role: "manager", persona: "manager" });
+    expect(can(s, "procurement:write")).toBe(true);
   });
 });

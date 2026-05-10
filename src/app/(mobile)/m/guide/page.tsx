@@ -8,16 +8,34 @@ import { getGuideByPersona } from "@/lib/db/guides";
 import { GuideView } from "@/components/guides/GuideView";
 import { GuideComments } from "@/components/guides/GuideComments";
 import type { GuideConfig } from "@/lib/guides/types";
-import type { GuidePersona, PlatformRole } from "@/lib/supabase/types";
+import type { GuidePersona, Persona } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-// Mobile guide is the field-crew view. Org owner/admin/manager see the
-// "staff" guide; everyone else (member) sees the "crew" guide. Project-
-// scoped persona overrides happen via project_members in a separate flow.
-function mapPersona(role: PlatformRole): GuidePersona {
-  if (role === "owner" || role === "admin" || role === "manager") return "staff";
-  return "crew";
+// Mobile guide reads `session.persona` directly so the granular
+// marketplace personas (client → client guide, contractor → vendor
+// guide, crew → crew guide) get the right tier. Bug #13 / Workstream A1.
+function mapPersona(persona: Persona): GuidePersona {
+  switch (persona) {
+    case "owner":
+    case "admin":
+    case "manager":
+    case "collaborator":
+      return "staff";
+    case "contractor":
+      return "vendor";
+    case "client":
+      return "client";
+    case "crew":
+      return "crew";
+    case "viewer":
+    case "community":
+    case "member":
+    case "guest":
+    case "visitor":
+    default:
+      return "guest";
+  }
 }
 
 export default async function MobileGuide() {
@@ -45,7 +63,7 @@ export default async function MobileGuide() {
     );
   }
 
-  const persona = mapPersona(session.role);
+  const persona = mapPersona(session.persona);
   const guide = await getGuideByPersona(active.id, persona);
 
   if (!guide) {

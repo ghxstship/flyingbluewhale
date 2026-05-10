@@ -10,18 +10,37 @@ import { GuideView } from "@/components/guides/GuideView";
 import { GuideComments } from "@/components/guides/GuideComments";
 import { createClient } from "@/lib/supabase/server";
 import type { GuideConfig } from "@/lib/guides/types";
-import type { GuidePersona, PlatformRole } from "@/lib/supabase/types";
+import type { GuidePersona, Persona } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-// Map platform role to a guide persona for the portal viewer. Portal-only
-// personas (artist/vendor/client/sponsor) come from the URL/route, not
-// from the session role — anyone hitting /p/<slug>/guide is in some
-// portal context. Org owner/admin/manager see the staff guide; org
-// member sees the crew guide; unauthenticated viewers see guest.
-function mapSessionToGuidePersona(role: PlatformRole): GuidePersona {
-  if (role === "owner" || role === "admin" || role === "manager") return "staff";
-  return "crew";
+// Map session persona → guide persona for the portal viewer. Bug #13 /
+// Workstream A1 — was previously role-based (owner/admin/manager → staff,
+// everyone else → crew), which collapsed every marketplace persona into
+// one guide tier. Now uses the granular session.persona so client sees
+// the client guide, contractor sees the vendor guide, crew sees crew,
+// etc.
+function mapSessionToGuidePersona(persona: Persona): GuidePersona {
+  switch (persona) {
+    case "owner":
+    case "admin":
+    case "manager":
+    case "collaborator":
+      return "staff";
+    case "contractor":
+      return "vendor";
+    case "client":
+      return "client";
+    case "crew":
+      return "crew";
+    case "viewer":
+    case "community":
+    case "member":
+    case "guest":
+    case "visitor":
+    default:
+      return "guest";
+  }
 }
 
 const VALID_PERSONAS = new Set<GuidePersona>([
@@ -51,12 +70,14 @@ export default async function GuidePage({
   if (!project) notFound();
 
   const session = await getSession();
-  const sessionPersona: GuidePersona = session ? mapSessionToGuidePersona(session.role) : "guest";
-  // Dev-mode bypass: in local development, treat the viewer as tier 1 so the
-  // ?as=<persona> override and the chip-bar work without an authenticated session.
-  // Production keeps the strict tier-hierarchy gate below.
-  const isDev = process.env.NODE_ENV === "development";
-  const effectivePersona: GuidePersona = isDev && !session ? "staff" : sessionPersona;
+  const sessionPersona: GuidePersona = session ? mapSessionToGuidePersona(session.persona) : "guest";
+  // No dev-mode bypass: when there's no session the viewer IS the guest
+  // tier, exactly like production. The previous bypass quietly upgraded
+  // dev anon viewers to "staff" which broke the
+  // handoff-shells.spec § "anon sees published guest guide" test —
+  // semantic correctness > dev convenience. Devs who want to see other
+  // tiers can `?as=<persona>` (gated below) or log in with a fixture user.
+  const effectivePersona: GuidePersona = sessionPersona;
   const sessionTier = PERSONA_TIERS[effectivePersona].tier;
 
   // ?as=<persona> preview override gated by tier hierarchy. Lower-numbered tiers
@@ -65,7 +86,7 @@ export default async function GuidePage({
   const asParam = typeof sp.as === "string" ? sp.as : undefined;
   const asPersona: GuidePersona | null =
     !!asParam && VALID_PERSONAS.has(asParam as GuidePersona) ? (asParam as GuidePersona) : null;
-  const asPersonaAllowed = (!!session || isDev) && !!asPersona && PERSONA_TIERS[asPersona].tier >= sessionTier;
+  const asPersonaAllowed = !!session && !!asPersona && PERSONA_TIERS[asPersona].tier >= sessionTier;
   const previewing = asPersonaAllowed && asPersona !== effectivePersona;
   const persona: GuidePersona = previewing ? (asPersona as GuidePersona) : effectivePersona;
   const guide = await getGuideByPersona(project.id, persona);
@@ -110,9 +131,7 @@ export default async function GuidePage({
         }
       />
       <div className="page-content max-w-4xl">
-        {(session || isDev) && (
-          <PreviewSwitcher slug={slug} active={persona} previewing={previewing} sessionTier={sessionTier} />
-        )}
+        {session && <PreviewSwitcher slug={slug} active={persona} previewing={previewing} sessionTier={sessionTier} />}
         <GuideView
           title={guide.title}
           subtitle={guide.subtitle}

@@ -20,7 +20,7 @@ import type { SlackEventEnvelope } from "@/lib/integrations/slack/types";
 
 export async function POST(req: Request) {
   const signingSecret = process.env.SLACK_SIGNING_SECRET;
-  if (!signingSecret) return apiError("internal", "SLACK_SIGNING_SECRET is not configured");
+  if (!signingSecret) return apiError("service_unavailable", "SLACK_SIGNING_SECRET is not configured");
 
   const sig = req.headers.get("x-slack-signature");
   const ts = req.headers.get("x-slack-request-timestamp");

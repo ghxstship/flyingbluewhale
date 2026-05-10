@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -9,6 +10,12 @@ import { CommandPalette } from "@/components/CommandPalette";
  *
  * The slug → project lookup uses an anon-readable RLS policy on `projects`
  * (already in place for portal access).
+ *
+ * Hard-404 on unknown slug at the layout level so the HTTP status is 404,
+ * not 200 (rls-boundaries.spec). Calling notFound() only from a child
+ * page renders the not-found.tsx UI but the layout above had already
+ * started streaming, so the response status stays 200 and slug
+ * enumeration becomes possible.
  */
 export default async function PortalSlugLayout({
   children,
@@ -20,6 +27,7 @@ export default async function PortalSlugLayout({
   const { slug } = await params;
   const supabase = await createClient();
   const { data } = await supabase.from("projects").select("name, branding").eq("slug", slug).maybeSingle();
+  if (!data) notFound();
 
   const branding = safeBranding(data?.branding);
   const style = brandingToCssVars(branding) as React.CSSProperties;

@@ -24,7 +24,17 @@ async function route(req: Request) {
 
   const resolved = resolveShell(session.persona);
   const shell = shellFromResolved(resolved);
-  const target = resolved === "/p" ? urlFor("portal", `/${url.searchParams.get("slug") ?? "select"}`) : urlFor(shell);
+  // Personal shell has no SHELL_PATH_PREFIX (it lives on the apex), so
+  // `urlFor("personal")` would return the base URL with no /me path and
+  // the redirect would land on / (marketing root). Force the path here.
+  // Portal needs the slug appended; everything else (console, mobile)
+  // uses its natural shell prefix correctly.
+  const target =
+    resolved === "/p"
+      ? urlFor("portal", `/${url.searchParams.get("slug") ?? "select"}`)
+      : resolved === "/me"
+        ? urlFor("personal", "/me")
+        : urlFor(shell);
 
   return NextResponse.redirect(target);
 }

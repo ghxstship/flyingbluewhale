@@ -17,6 +17,13 @@ async function cookieDomainForRequest(): Promise<string | undefined> {
     const h = await headers();
     const host = (h.get("host") ?? "").split(":")[0].toLowerCase();
     if (host.endsWith("lytehaus.live")) return ".lytehaus.live";
+    // Dev parity — `lvh.me` resolves to 127.0.0.1 and is the canonical local
+    // dev host (per CLAUDE.md). Without a `.lvh.me` domain the session
+    // cookie is host-only and doesn't follow from the apex (`lvh.me:3000`,
+    // where /login lives) to the subdomains (`atlvs.lvh.me:3000` etc.,
+    // where /auth/resolve redirects). Mirroring the prod cross-subdomain
+    // behaviour locally lets e2e + manual testing exercise the real flow.
+    if (host === "lvh.me" || host.endsWith(".lvh.me")) return ".lvh.me";
   } catch {
     // outside a request context (e.g. build-time prerender) — no domain.
   }

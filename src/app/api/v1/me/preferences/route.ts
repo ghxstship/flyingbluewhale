@@ -5,7 +5,15 @@ import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 
 const PatchSchema = z.object({
-  theme: z.enum(["light", "dark", "system"]).optional(),
+  // Chroma theme names — must mirror the user_preferences_theme_check
+  // CHECK constraint in Postgres. The previous ["light","dark","system"]
+  // shape was a stale relic from before the chroma theme system landed,
+  // and any modern client write would fail with check_violation. The
+  // light/dark distinction is the orthogonal `data-mode` attribute on
+  // <html>, not stored here.
+  theme: z
+    .enum(["bermuda-triangle", "glass", "brutal", "bento", "kinetic", "copilot", "cyber", "soft", "earthy", "system"])
+    .optional(),
   density: z.enum(["compact", "comfortable", "spacious"]).optional(),
   locale: z.string().min(2).max(8).optional(),
   timezone: z.string().min(1).max(64).optional(),

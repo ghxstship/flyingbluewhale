@@ -62,12 +62,16 @@ export async function getSession(): Promise<Session | null> {
   // workspace switcher actually sticks across requests.
   const { data: memberships } = await supabase
     .from("memberships")
-    .select("org_id, role, is_developer, orgs(slug, tier)")
+    // Persona column added in migration `memberships_persona_column`.
+    // Cast through unknown until gen:types refreshes; the value is one of
+    // the PERSONAS literals enforced by the SQL CHECK constraint.
+    .select("org_id, role, persona, is_developer, orgs(slug, tier)")
     .eq("user_id", user.id);
 
   type Row = {
     org_id: string;
     role: PlatformRole;
+    persona: Persona | null;
     is_developer: boolean;
     orgs: { slug: string; tier: Tier } | null;
   };
@@ -113,7 +117,10 @@ export async function getSession(): Promise<Session | null> {
     role: chosen.role,
     isDeveloper: chosen.is_developer,
     tier: chosen.orgs?.tier ?? "access",
-    persona: isGuest ? "guest" : personaForRole(chosen.role),
+    // Persona-first: prefer the per-membership persona (granular: crew /
+    // client / contractor / etc.) and fall back to role-based mapping for
+    // pre-migration rows or memberships that opted not to set it.
+    persona: isGuest ? "guest" : (chosen.persona ?? personaForRole(chosen.role)),
   };
 }
 
@@ -147,13 +154,36 @@ export function personaForRole(role: PlatformRole): Persona {
 }
 
 export function resolveShell(persona: Persona): "/console" | "/p" | "/m" | "/me" {
-  // Guests + member-only personas land at /me — they're applicants /
-  // contributors (talent, crew, vendor candidates), not operators. Manager+
-  // (owner, admin, manager) personas land in the console where org-running
-  // surfaces live. Portal/mobile shells are entered explicitly via
-  // /p/<slug> or /m, not auto-routed.
-  if (persona === "guest" || persona === "visitor" || persona === "member") return "/me";
-  return "/console";
+  // Persona → shell mapping. Drives /auth/resolve auto-routing on login.
+  //
+  //   /console — operator personas (owner/admin/manager + collaborator,
+  //              the co-producer with project-write authority).
+  //   /p       — portal personas (client receives proposals; contractor
+  //              vendor-side workflows).
+  //   /m       — field persona (crew runs gates, scans, shifts).
+  //   /me      — every other persona: pure consumers (viewer, community)
+  //              and pre-org accounts (guest, visitor, generic member).
+  //
+  // Contract enforced by e2e/handoff-shells.spec.ts § handoff/auth-resolve.
+  switch (persona) {
+    case "owner":
+    case "admin":
+    case "manager":
+    case "collaborator":
+      return "/console";
+    case "client":
+    case "contractor":
+      return "/p";
+    case "crew":
+      return "/m";
+    case "viewer":
+    case "community":
+    case "member":
+    case "guest":
+    case "visitor":
+    default:
+      return "/me";
+  }
 }
 
 // Platform-role band checks — the canonical helpers callers should use
@@ -199,6 +229,9 @@ export async function hasProjectRole(
 
 // Capability matrix — keep narrow. Most authorization should be RLS at the
 // data layer; this is for UI gating + 403 responses on mutating routes.
+//
+// PlatformRole map (coarse). Used as a fallback when the more granular
+// per-persona map below has no entry for the caller's persona.
 const CAPABILITIES: Record<PlatformRole, readonly string[]> = {
   owner: ["*"],
   admin: ["*"],
@@ -220,12 +253,59 @@ const CAPABILITIES: Record<PlatformRole, readonly string[]> = {
   member: ["projects:read", "tasks:read", "tasks:write", "time:write", "check-in:*"],
 };
 
-export function can(session: Session | null, capability: string): boolean {
-  if (!session) return false;
-  const caps = CAPABILITIES[session.role] ?? [];
+// Per-persona overlay (granular). Bug #13 / Workstream A1 — the 4-value
+// PlatformRole couldn't distinguish crew (gate scanner) from client
+// (read-only stakeholder) from collaborator (co-producer with project
+// write authority). All three previously collapsed to PlatformRole=member
+// and inherited member capabilities, which let clients scan tickets and
+// hid project-write from collaborators.
+//
+// When a persona has an entry here it is the source of truth — even an
+// EMPTY array means "this persona has no capabilities" (intentional
+// for `community`, the public-marketplace browser). Personas without an
+// entry fall through to the platform-role map.
+const CAPABILITIES_BY_PERSONA: Partial<Record<Persona, readonly string[]>> = {
+  // Co-producer. Project + scheduling + crew authority but no finance /
+  // procurement (those stay manager+).
+  collaborator: [
+    "projects:*",
+    "tasks:*",
+    "schedule:*",
+    "crew:*",
+    "proposals:read",
+    "clients:read",
+    "time:*",
+    "mileage:*",
+  ],
+  // Outside contributor with task-write but no project-write.
+  contractor: ["projects:read", "tasks:read", "tasks:write", "time:write"],
+  // Field operator. Scanning is the defining capability.
+  crew: ["check-in:*", "tasks:read", "tasks:write", "time:write"],
+  // Proposal recipient / portal viewer. Read-only.
+  client: ["proposals:read", "deliverables:read", "tasks:read"],
+  // Generic read-only stakeholder.
+  viewer: ["projects:read", "tasks:read"],
+  // Public marketplace browser; no organizational capabilities at all.
+  community: [],
+  // `guest` (pre-real-org member) and `visitor` (anon) intentionally
+  // omitted — they fall through to role-based and get nothing because
+  // role is "member" with no auth context.
+};
+
+function matchCapability(caps: readonly string[], capability: string): boolean {
   if (caps.includes("*")) return true;
   const [domain] = capability.split(":");
   return caps.some((c) => c === capability || c === `${domain}:*`);
+}
+
+export function can(session: Session | null, capability: string): boolean {
+  if (!session) return false;
+  // Persona-first lookup. Empty array is meaningful — "explicitly nothing".
+  const personaCaps = CAPABILITIES_BY_PERSONA[session.persona];
+  if (personaCaps !== undefined) return matchCapability(personaCaps, capability);
+  // Persona has no per-persona overlay — fall back to platform role.
+  const roleCaps = CAPABILITIES[session.role] ?? [];
+  return matchCapability(roleCaps, capability);
 }
 
 /**
@@ -243,5 +323,10 @@ export function can(session: Session | null, capability: string): boolean {
  */
 export function assertCapability(session: Session, capability: string): Response | null {
   if (can(session, capability)) return null;
-  return apiError("forbidden", `Role "${session.role}" lacks capability "${capability}"`);
+  // Surface persona (granular) in the error so operators auditing 403s see
+  // which marketplace persona was rejected — not just the coarse role.
+  return apiError(
+    "forbidden",
+    `Persona "${session.persona}" (role "${session.role}") lacks capability "${capability}"`,
+  );
 }

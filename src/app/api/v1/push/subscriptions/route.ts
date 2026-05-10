@@ -58,7 +58,20 @@ type SubsClient = {
       };
     };
     delete: () => {
-      eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
+      eq: (
+        col: string,
+        val: string,
+      ) => {
+        eq: (
+          col: string,
+          val: string,
+        ) => {
+          select: (cols: string) => Promise<{
+            data: Array<{ id: string }> | null;
+            error: { message: string } | null;
+          }>;
+        };
+      };
     };
   };
 };
@@ -120,13 +133,23 @@ export async function DELETE(req: NextRequest) {
   }
   return withAuth(async (session) => {
     const supabase = (await createClient()) as unknown as SubsClient;
-    // RLS scopes the delete to the calling user; passing endpoint OR id is
-    // user-supplied but bounded to their own rows.
+    // Belt + suspenders: RLS already scopes delete to the calling user,
+    // but we also pin user_id explicitly so a future RLS regression
+    // (or service-role caller importing this surface) can't delete
+    // another user's subscription. The .select() also lets us 404 on
+    // a wrong/foreign id instead of silently returning deleted:true.
     const col = body.id ? "id" : "endpoint";
     const val = body.id ?? body.endpoint!;
-    const { error } = await supabase.from("push_subscriptions").delete().eq(col, val);
+    const { data, error } = await supabase
+      .from("push_subscriptions")
+      .delete()
+      .eq(col, val)
+      .eq("user_id", session.userId)
+      .select("id");
     if (error) return apiError("internal", error.message);
-    void session;
+    if (!data || data.length === 0) {
+      return apiError("not_found", "Subscription not found");
+    }
     return apiOk({ deleted: true });
   });
 }

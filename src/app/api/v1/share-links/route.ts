@@ -14,8 +14,15 @@ import { emitAudit, type AuditAction } from "@/lib/audit";
  * and is intentionally unauthenticated — see src/app/share/[token]/page.tsx.
  */
 
+// Closed enum — only resource types whose public renderer (or
+// inline-placeholder) is wired in src/app/share/[token]/resolve.ts.
+// Free-form strings would create undeliverable share links and make
+// it easier for a misconfigured renderer downstream to dispatch on
+// an unexpected table name.
+const SHARE_RESOURCE_TABLES = ["proposals", "view_configs", "guides", "event_guides", "dashboards"] as const;
+
 const CreateBody = z.object({
-  resourceTable: z.string().min(1).max(64),
+  resourceTable: z.enum(SHARE_RESOURCE_TABLES),
   resourceId: z.string().uuid(),
   expiresInDays: z.number().int().positive().max(365).optional(),
   passcode: z.string().min(4).max(128).optional(),

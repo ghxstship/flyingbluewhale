@@ -10,37 +10,8 @@
  * Uses the shared seeded fixture password + the `test+<role>@flyingbluewhale.app`
  * naming established by roles.spec.ts and compliance-flow.spec.ts.
  */
-import { expect, test, type Page } from "playwright/test";
-
-const PASSWORD = "FlyingBlue!Test2026";
-
-async function dismissConsent(page: Page) {
-  await page.context().addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
-async function loginAs(page: Page, role: string) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "Email" }).fill(`test+${role}@flyingbluewhale.app`);
-  await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  // Bumped timeout absorbs first-time /login + /console route compilation on a
-  // cold dev server — roles.spec.ts has the same issue on CI retries.
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 25000 });
-}
+import { expect, test } from "playwright/test";
+import { dismissConsent, loginAs } from "./helpers/auth";
 
 test.describe("authed REST round-trips (owner)", () => {
   test.beforeEach(async ({ page }) => {

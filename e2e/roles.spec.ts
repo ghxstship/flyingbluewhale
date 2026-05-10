@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "playwright/test";
+import { expect, test } from "playwright/test";
+import { dismissConsent, loginAs } from "./helpers/auth";
 
 /**
  * Multi-role workflow validation. Drives the actual seeded test users
@@ -12,7 +13,6 @@ import { expect, test, type Page } from "playwright/test";
  * - Shared password: FlyingBlue!Test2026
  */
 
-const PASSWORD = "FlyingBlue!Test2026";
 const TEST_EMAIL = (role: string) => `test+${role}@flyingbluewhale.app`;
 
 const PERSONAS = {
@@ -21,33 +21,6 @@ const PERSONAS = {
   field: ["crew", "contractor"] as const,
   guest: ["community", "viewer"] as const,
 };
-
-async function dismissConsent(page: Page) {
-  await page.context().addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
-async function login(page: Page, role: string) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "Email" }).fill(TEST_EMAIL(role));
-  await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  // Wait for redirect away from /login
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 10000 });
-}
 
 test.describe("multi-role login + shell resolution", () => {
   test.beforeEach(async ({ page }) => {
@@ -62,7 +35,7 @@ test.describe("multi-role login + shell resolution", () => {
     "community",
   ]) {
     test(`login as ${role} succeeds and lands in a shell`, async ({ page }) => {
-      await login(page, role);
+      await loginAs(page, role);
       const url = page.url();
       // Must be in console (/console), portal (/p/), mobile (/m), or personal (/me)
       expect(url).toMatch(/(console|\/p\/|\/m|\/me|auth\/resolve)/);
@@ -77,7 +50,7 @@ test.describe("internal personas land in console", () => {
 
   for (const role of PERSONAS.internal) {
     test(`${role} reaches /console`, async ({ page }) => {
-      await login(page, role);
+      await loginAs(page, role);
       // Owner/admin/etc should get to console eventually
       await page.goto("/console");
       await expect(page.locator("h1, h2").first()).toBeVisible({ timeout: 5000 });
@@ -91,7 +64,7 @@ test.describe("internal personas land in console", () => {
 test.describe("console pages render for owner", () => {
   test.beforeEach(async ({ page }) => {
     await dismissConsent(page);
-    await login(page, "owner");
+    await loginAs(page, "owner");
   });
 
   const PAGES_TO_TEST = [
@@ -129,7 +102,7 @@ test.describe("console pages render for owner", () => {
 test.describe("RLS — users only see their own org data", () => {
   test("crew user can read own membership but not other users' privacy data", async ({ page }) => {
     await dismissConsent(page);
-    await login(page, "crew");
+    await loginAs(page, "crew");
     // /me/privacy is per-user — should load
     await page.goto("/me/privacy");
     await expect(page.locator("h1")).toContainText(/privacy/i);

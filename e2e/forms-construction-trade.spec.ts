@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "playwright/test";
+import { dismissConsent, loginAs } from "./helpers/auth";
 
 /**
  * forms-construction-trade
@@ -30,34 +31,7 @@ import { expect, test, type Page } from "playwright/test";
  * prefix (`E2E-RFI-...`, etc.) via SQL.
  */
 
-const PASSWORD = "FlyingBlue!Test2026";
 const OWNER_EMAIL = "test+owner@flyingbluewhale.app";
-
-async function dismissConsent(page: Page) {
-  await page.context().addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
-async function login(page: Page) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "Email" }).fill(OWNER_EMAIL);
-  await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 30000 });
-}
 
 async function pickFirstProjectOption(page: Page, selectName: string) {
   const select = page.locator(`select[name="${selectName}"]`);
@@ -78,7 +52,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
 
   test.beforeEach(async ({ page }) => {
     await dismissConsent(page);
-    await login(page);
+    await loginAs(page, "owner");
   });
 
   test("RFI: create → edit → answer", async ({ page }) => {

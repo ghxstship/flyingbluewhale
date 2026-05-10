@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "playwright/test";
+import { expect, test } from "playwright/test";
+import { dismissConsent, loginAs } from "./helpers/auth";
 
 /**
  * CHROMA BEACON e2e — theme persistence, FOUC prevention, cross-tab sync.
@@ -18,33 +19,6 @@ const SLUGS = [
   "soft",
   "earthy",
 ] as const;
-const PASSWORD = "FlyingBlue!Test2026";
-
-async function dismissConsent(page: Page) {
-  await page.context().addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
-async function login(page: Page) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "Email" }).fill("test+owner@flyingbluewhale.app");
-  await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 10000 });
-}
 
 test.describe("CHROMA BEACON", () => {
   test("data-theme is set on <html> before first paint (head script)", async ({ page }) => {
@@ -69,7 +43,7 @@ test.describe("CHROMA BEACON", () => {
 
   test("AppearanceGallery renders 9 radio cards for authed users", async ({ page }) => {
     await dismissConsent(page);
-    await login(page);
+    await loginAs(page, "owner");
     await page.goto("/me/settings/appearance");
     await expect(page.getByRole("heading", { name: "Appearance", level: 1 })).toBeVisible();
     // Scope to the AppearanceGallery's own radiogroup — the /me shell chrome
@@ -82,7 +56,7 @@ test.describe("CHROMA BEACON", () => {
 
   test("selecting a theme updates data-theme + persists across reload", async ({ page }) => {
     await dismissConsent(page);
-    await login(page);
+    await loginAs(page, "owner");
     await page.goto("/me/settings/appearance");
 
     // Pick brutal
@@ -110,7 +84,7 @@ test.describe("CHROMA BEACON", () => {
 
   test("keyboard nav: arrow keys move focus between cards; Enter selects", async ({ page }) => {
     await dismissConsent(page);
-    await login(page);
+    await loginAs(page, "owner");
     await page.goto("/me/settings/appearance");
 
     // Scope to the appearance radiogroup so we don't fall into the mode toggle
@@ -128,7 +102,7 @@ test.describe("CHROMA BEACON", () => {
 
   test("Match system button resets to system default", async ({ page }) => {
     await dismissConsent(page);
-    await login(page);
+    await loginAs(page, "owner");
     await page.goto("/me/settings/appearance");
 
     // Pick something explicit first

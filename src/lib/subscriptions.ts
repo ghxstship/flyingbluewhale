@@ -162,12 +162,22 @@ export async function transitionSubscription(args: {
       break;
   }
 
-  const { error: updateError } = await supabase
+  // Conditional update: only land if the state observed above is still
+  // the row's current state. Stripe webhooks arrive concurrently
+  // (especially during dunning + cancel + reactivate cycles), so without
+  // the guard we'd silently overwrite a newer transition with an older
+  // one. The .select("id") tells us if our update actually landed.
+  const { data: updated, error: updateError } = await supabase
     .from("subscriptions")
     .update({ state: args.to, ...timestampPatch })
     .eq("org_id", args.orgId)
-    .eq("id", args.subscriptionId);
+    .eq("id", args.subscriptionId)
+    .eq("state", current.state)
+    .select("id");
   if (updateError) return { ok: false, error: updateError.message };
+  if (!updated || updated.length === 0) {
+    return { ok: false, error: "Subscription state changed concurrently — refresh and retry" };
+  }
 
   const { error: logError } = await supabase.from("subscription_state_transitions").insert({
     org_id: args.orgId,

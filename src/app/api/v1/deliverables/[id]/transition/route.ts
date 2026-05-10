@@ -71,7 +71,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       nextData = { ...nextData, fulfilled_at: new Date().toISOString() };
     }
 
-    const { error: upErr } = await supabase
+    // Conditional update: only land if the row is still in the state we
+    // observed above. Closes the TOCTOU between the SELECT and the
+    // UPDATE — if a concurrent transition raced us, the .eq("status",
+    // row.status) makes the update a no-op (rows = 0) and we surface a
+    // 409 conflict instead of silently overwriting the newer state.
+    const { data: updated, error: upErr } = await supabase
       .from("deliverables")
       .update({
         status: nextStatus,
@@ -80,8 +85,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         reviewed_at: new Date().toISOString(),
       })
       .eq("id", id)
-      .eq("org_id", session.orgId);
+      .eq("org_id", session.orgId)
+      .eq("status", row.status)
+      .select("id");
     if (upErr) return apiError("internal", upErr.message);
+    if (!updated || updated.length === 0) {
+      return apiError("conflict", "Deliverable was modified concurrently — refresh and retry");
+    }
 
     const after = { status: nextStatus, fulfilled_at: nextData.fulfilled_at ?? null };
 

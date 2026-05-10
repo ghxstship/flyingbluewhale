@@ -33,12 +33,32 @@ export async function scanTicket(input: {
   }
 
   const now = new Date().toISOString();
-  const { error } = await supabase
+  // Conditional update: only mark scanned if the row is still `issued`. If
+  // two scanners race on the same ticket, one wins (rows=1) and the other
+  // sees rows=0. The .select("id,scanned_at") tells us which case we're in
+  // — without it we'd have no way to distinguish "I scanned it" from
+  // "someone else scanned it 50ms ago", and would double-record both as
+  // accepted in ticket_scans + return both as the winning scan.
+  const { data: claimed, error } = await supabase
     .from("tickets")
     .update({ status: "scanned", scanned_at: now, scanned_by: input.scannerUserId })
     .eq("id", ticket.id)
-    .eq("status", "issued");
+    .eq("status", "issued")
+    .select("id,scanned_at");
   if (error) return { result: "not_found" };
+
+  // Lost the race — another scanner already claimed this ticket between
+  // our read above and our conditional update. Re-fetch to get the
+  // canonical scanned_at + return duplicate so the user sees the
+  // correct timestamp from the winning scan.
+  if (!claimed || claimed.length === 0) {
+    const { data: latest } = await supabase.from("tickets").select("scanned_at").eq("id", ticket.id).maybeSingle();
+    return {
+      result: "duplicate",
+      ticketId: ticket.id,
+      scannedAt: latest?.scanned_at ?? now,
+    };
+  }
 
   await supabase.from("ticket_scans").insert({
     ticket_id: ticket.id,

@@ -110,12 +110,23 @@ export async function transitionAccountingPeriod(args: {
   const now = new Date().toISOString();
   const closeFields = args.to === "CLOSED" ? { closed_at: now, closed_by: args.transitionedBy ?? null } : {};
 
-  const { error: updateError } = await supabase
+  // Conditional update closes the TOCTOU between getAccountingPeriod()
+  // and the write — if a concurrent transitioner already moved the
+  // period off `current.state`, the .eq guard makes our update a no-op
+  // and we surface the conflict instead of silently overwriting their
+  // newer state. Critical here because accounting periods drive
+  // billing closes (CLOSED → no new journal entries).
+  const { data: updated, error: updateError } = await supabase
     .from("accounting_periods")
     .update({ state: args.to, ...closeFields })
     .eq("org_id", args.orgId)
-    .eq("id", args.periodId);
+    .eq("id", args.periodId)
+    .eq("state", current.state)
+    .select("id");
   if (updateError) return { ok: false, error: updateError.message };
+  if (!updated || updated.length === 0) {
+    return { ok: false, error: "Period state changed concurrently — refresh and retry" };
+  }
 
   const { error: logError } = await supabase.from("accounting_period_state_transitions").insert({
     org_id: args.orgId,

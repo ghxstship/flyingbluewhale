@@ -30,13 +30,19 @@ type UpdatePayload = Partial<
 
 export async function updateOfferLetter(orgId: string, id: string, patch: UpdatePayload): Promise<void> {
   const supabase = await createClient();
-  const { error } = await supabase
+  // .select("id") so we can detect when the .eq("status", "draft") guard
+  // matched no rows (caller tried to edit a non-draft letter). Without
+  // this we silently no-op AND log the edit as if it succeeded — a
+  // misleading audit trail.
+  const { data, error } = await supabase
     .from("offer_letters")
     .update(patch)
     .eq("org_id", orgId)
     .eq("id", id)
-    .eq("status", "draft"); // hard guard: cannot edit non-draft letters
+    .eq("status", "draft")
+    .select("id");
   if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error("Letter not found or no longer in draft state");
   await logActivity(orgId, id, "edited", "Letter draft edited.");
 }
 
@@ -66,14 +72,25 @@ export async function withdrawOfferLetter(orgId: string, id: string, actorLabel:
     .eq("org_id", orgId)
     .eq("id", id)
     .maybeSingle();
-  const { error } = await supabase
+  if (!prior) throw new Error("Letter not found");
+  // Hard guard: only draft + sent letters can be withdrawn. Once a
+  // letter is signed (countersigned, active, etc.) it has legal force
+  // and "withdrawn" is the wrong terminal state — those need
+  // void/supersede semantics, which the canonical flow handles separately.
+  // The .in() filter is the conditional update; .select() proves it landed.
+  const { data: updated, error } = await supabase
     .from("offer_letters")
     .update({ status: "withdrawn" satisfies OfferLetterStatus, withdrawn_at: new Date().toISOString() })
     .eq("org_id", orgId)
-    .eq("id", id);
+    .eq("id", id)
+    .in("status", ["draft", "sent"])
+    .select("id");
   if (error) throw new Error(error.message);
+  if (!updated || updated.length === 0) {
+    throw new Error("Cannot withdraw a signed/active letter — use void/supersede instead");
+  }
   await logActivity(orgId, id, "withdrawn", "Letter withdrawn — public link disabled.", actorLabel);
-  await logDocumentTransition(orgId, id, prior?.status ?? null, "withdrawn", actorLabel);
+  await logDocumentTransition(orgId, id, prior.status, "withdrawn", actorLabel);
 }
 
 export async function rotateAccessCode(orgId: string, id: string, actorLabel: string): Promise<string> {

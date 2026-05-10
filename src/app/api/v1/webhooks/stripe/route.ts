@@ -72,10 +72,18 @@ export async function POST(req: Request) {
       case "payment_intent.succeeded": {
         const pi = event.data.object;
         if (pi?.id && supabase) {
+          // Conditional update: only mark paid if the invoice is still
+          // unpaid. Stripe redelivers events on 2xx delays + a manual
+          // /console mark-paid can race the webhook; without this guard
+          // the second update silently runs and notify() double-fires
+          // (users get two "Invoice paid" notifications). The outer
+          // stripe_events dedup catches identical event_id replays but
+          // not these distinct-event-same-state cases.
           const { data: paid } = await supabase
             .from("invoices")
             .update({ status: "paid", paid_at: new Date().toISOString() })
             .eq("stripe_payment_intent", pi.id)
+            .neq("status", "paid")
             .select("id, org_id, number, title, amount_cents, created_by")
             .maybeSingle();
           if (paid) {

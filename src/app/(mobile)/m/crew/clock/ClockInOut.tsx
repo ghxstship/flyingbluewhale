@@ -3,12 +3,23 @@
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { clockInAction, clockOutAction, type OpenShift } from "./actions";
 
 type State = "idle" | "clocked_in";
 
-export function ClockInOut() {
-  const [state, setState] = useState<State>("idle");
-  const [startedAt, setStartedAt] = useState<string | null>(null);
+/**
+ * Clock-in / clock-out for the field shell. Persists to time_entries
+ * via clockInAction / clockOutAction; restores state from the user's
+ * most recent open shift on mount so a page refresh doesn't lose it.
+ *
+ * Geolocation is opportunistic — if the browser provides coords we
+ * stamp them into the time_entries.description (and pass them as
+ * structured fields). If the device denies or times out, the clock-in
+ * still proceeds; we'd rather have the time entry than block the shift.
+ */
+export function ClockInOut({ initial }: { initial: OpenShift }) {
+  const [state, setState] = useState<State>(initial ? "clocked_in" : "idle");
+  const [startedAt, setStartedAt] = useState<string | null>(initial?.startedAt ?? null);
   const [elapsed, setElapsed] = useState(0);
   const [pending, start] = useTransition();
 
@@ -22,28 +33,43 @@ export function ClockInOut() {
 
   const clockIn = () =>
     start(async () => {
+      let coords: { lat: number; lng: number; accuracy?: number } | null = null;
       try {
         if (navigator.geolocation) {
-          await new Promise<GeolocationPosition>((resolve, reject) =>
+          const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
             navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 }),
           );
+          coords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
+          };
         }
-        const now = new Date().toISOString();
-        setStartedAt(now);
-        setState("clocked_in");
-        setElapsed(0);
-        toast.success("Clocked in");
-      } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Could not acquire location");
+      } catch {
+        // Geolocation denied / timed out — proceed without coords.
       }
+      const result = await clockInAction(coords ?? {});
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
+      setStartedAt(result.startedAt);
+      setState("clocked_in");
+      setElapsed(Math.floor((Date.now() - new Date(result.startedAt).getTime()) / 1000));
+      toast.success("Clocked in");
     });
 
   const clockOut = () =>
     start(async () => {
+      const result = await clockOutAction();
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
       setState("idle");
-      toast.success(`Clocked out · ${Math.floor(elapsed / 60)}m logged`);
       setStartedAt(null);
       setElapsed(0);
+      toast.success(`Clocked out · ${result.durationMinutes}m logged`);
     });
 
   return (

@@ -57,17 +57,31 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
 
 const Transition = z.object({ offer_id: z.string().uuid() });
 
+// Offer state machine — canonical transitions:
+//   draft     → sent
+//   sent      → accepted | countered | declined
+//   countered → accepted | declined
+//
+// Each action below uses .eq("status", <expected>) (or .in("status", [...]))
+// as the conditional guard so a stale UI or a direct API call can't skip
+// states. The .select("id") confirms a row was actually updated — without
+// it, an out-of-state transition silently succeeds with no rows affected
+// and the caller thinks the offer moved.
+
 export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Missing offer" };
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("talent_offers")
     .update({ status: "sent", sent_at: new Date().toISOString() })
     .eq("id", parsed.data.offer_id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .eq("status", "draft")
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Offer can't be sent from its current state" };
   revalidatePath(`/console/marketplace/offers/${parsed.data.offer_id}`);
   return { error: undefined };
 }
@@ -77,12 +91,15 @@ export async function acceptOfferAction(_: State, fd: FormData): Promise<State> 
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Missing offer" };
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("talent_offers")
     .update({ status: "accepted", accepted_at: new Date().toISOString() })
     .eq("id", parsed.data.offer_id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .in("status", ["sent", "countered"])
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Offer can only be accepted from sent or countered" };
   revalidatePath(`/console/marketplace/offers/${parsed.data.offer_id}`);
   return { error: undefined };
 }
@@ -92,12 +109,15 @@ export async function declineOfferAction(_: State, fd: FormData): Promise<State>
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Missing offer" };
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("talent_offers")
     .update({ status: "declined" })
     .eq("id", parsed.data.offer_id)
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .in("status", ["sent", "countered"])
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Only a sent or countered offer can be declined" };
   revalidatePath(`/console/marketplace/offers/${parsed.data.offer_id}`);
   return { error: undefined };
 }

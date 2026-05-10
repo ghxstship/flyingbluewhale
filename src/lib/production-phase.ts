@@ -129,12 +129,20 @@ export async function transitionProductionPhase(args: {
     return { ok: false, error: `Cannot transition ${current.production_phase} -> ${args.to}` };
   }
 
-  const { error: updateError } = await supabase
+  // Conditional update guards against TOCTOU between getFabricationOrder()
+  // and the write — if a concurrent transitioner already moved the order,
+  // we surface the conflict instead of silently overwriting their state.
+  const { data: updated, error: updateError } = await supabase
     .from("fabrication_orders")
     .update({ production_phase: args.to })
     .eq("org_id", args.orgId)
-    .eq("id", args.fabricationOrderId);
+    .eq("id", args.fabricationOrderId)
+    .eq("production_phase", current.production_phase)
+    .select("id");
   if (updateError) return { ok: false, error: updateError.message };
+  if (!updated || updated.length === 0) {
+    return { ok: false, error: "Production phase changed concurrently — refresh and retry" };
+  }
 
   const { error: logError } = await supabase.from("production_phase_transitions").insert({
     org_id: args.orgId,

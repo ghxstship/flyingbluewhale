@@ -196,8 +196,6 @@ type AutomationRow = {
   org_id: string;
 };
 
-type AnySvc = { from: (t: string) => unknown };
-
 /**
  * Tick handler — read every due schedule, enqueue an `automation.run` job
  * with a dedup_key on (automation_id, next_run_at), then advance
@@ -210,12 +208,19 @@ export async function evaluateSchedules(): Promise<{ enqueued: number }> {
   // without server-only side-effects. The pure logic above never touches
   // Supabase.
   const { createServiceClient } = await import("@/lib/supabase/server");
-  const svc = createServiceClient() as unknown as AnySvc;
+  // LooseSupabase is the codebase's centralized typed-loose escape
+  // hatch — used here because automation_schedules + job_queue aren't
+  // narrowed in the generated database.types union for service-role.
+  type Loose = import("@/lib/supabase/loose").LooseSupabase;
+  const svc = createServiceClient() as unknown as Loose;
   const nowIso = new Date().toISOString();
 
-  // 1. Pull due schedules.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: rawSchedules, error: schedErr } = await (svc.from("automation_schedules") as any)
+  // 1. Pull due schedules. automation_schedules isn't in the
+  // generated database.types yet; LooseSupabase is the codebase's
+  // typed-loose helper, then narrow the row shape at the consume
+  // site below via the `as ScheduleRow[]` cast.
+  const { data: rawSchedules, error: schedErr } = await svc
+    .from("automation_schedules")
     .select("id, automation_id, rrule, timezone, next_run_at, enabled")
     .eq("enabled", true)
     .lte("next_run_at", nowIso)
@@ -226,8 +231,7 @@ export async function evaluateSchedules(): Promise<{ enqueued: number }> {
 
   // 2. Resolve org_id per automation in one batch.
   const automationIds = Array.from(new Set(schedules.map((s) => s.automation_id)));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: rawAutos } = await (svc.from("automations") as any).select("id, org_id").in("id", automationIds);
+  const { data: rawAutos } = await svc.from("automations").select("id, org_id").in("id", automationIds);
   const orgByAutomation = new Map<string, string>();
   for (const a of (rawAutos ?? []) as AutomationRow[]) {
     orgByAutomation.set(a.id, a.org_id);
@@ -259,8 +263,8 @@ export async function evaluateSchedules(): Promise<{ enqueued: number }> {
       // Unparseable / exhausted — disable to prevent tight retry loop.
       update.enabled = false;
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: claimed, error: claimErr } = await (svc.from("automation_schedules") as any)
+    const { data: claimed, error: claimErr } = await svc
+      .from("automation_schedules")
       .update(update)
       .eq("id", sched.id)
       .eq("next_run_at", ts)
@@ -271,8 +275,7 @@ export async function evaluateSchedules(): Promise<{ enqueued: number }> {
       continue;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: jobErr } = await (svc.from("job_queue") as any).insert({
+    const { error: jobErr } = await svc.from("job_queue").insert({
       type: "automation.run",
       org_id: orgId,
       payload: {

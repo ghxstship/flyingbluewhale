@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { apiError } from "@/lib/api";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /**
  * IK-011 · Stripe-style idempotency for mutating endpoints.
@@ -44,22 +45,24 @@ export function withIdempotency(handler: Handler): Handler {
     const requestHash = hash(`${method}|${req.nextUrl.pathname}|${bodyText}`);
 
     const supabase = await createClient();
-    const { data: existing } = await supabase
-      .from("idempotency_keys" as never)
-
-      .select("*" as any)
-      .eq("key" as never, key)
-      .maybeSingle();
-
-    const row = existing as {
-      key: string;
-      method: string;
-      path: string;
-      request_hash: string;
-      status_code: number;
-      response: unknown;
-      expires_at: string;
-    } | null;
+    // idempotency_keys isn't in generated database.types yet (added by
+    // a later migration; gen:types pending). Route through the
+    // codebase's typed-loose helper LooseSupabase, then narrow the
+    // row shape at the consume site.
+    const loose = supabase as unknown as LooseSupabase;
+    const lookup = (await loose.from("idempotency_keys").select("*").eq("key", key).maybeSingle()) as {
+      data: {
+        key: string;
+        method: string;
+        path: string;
+        request_hash: string;
+        status_code: number;
+        response: unknown;
+        expires_at: string;
+      } | null;
+      error: { message: string } | null;
+    };
+    const row = lookup.data;
 
     if (row && new Date(row.expires_at) > new Date()) {
       if (row.request_hash !== requestHash || row.method !== method || row.path !== req.nextUrl.pathname) {
@@ -87,24 +90,16 @@ export function withIdempotency(handler: Handler): Handler {
         const body = (await respClone.json()) as unknown;
         // Grab user context if available (we don't throw if anon).
         const { data: u } = await supabase.auth.getUser();
-        await (
-          supabase as unknown as {
-            from: (t: string) => {
-              insert: (row: Record<string, unknown>) => Promise<unknown>;
-            };
-          }
-        )
-          .from("idempotency_keys")
-          .insert({
-            key,
-            user_id: u.user?.id ?? null,
-            org_id: null,
-            method,
-            path: req.nextUrl.pathname,
-            request_hash: requestHash,
-            status_code: resp.status,
-            response: body as Record<string, unknown>,
-          });
+        await loose.from("idempotency_keys").insert({
+          key,
+          user_id: u.user?.id ?? null,
+          org_id: null,
+          method,
+          path: req.nextUrl.pathname,
+          request_hash: requestHash,
+          status_code: resp.status,
+          response: body as Record<string, unknown>,
+        });
       } catch {
         // Persist is best-effort. A failure here shouldn't fail the user.
       }

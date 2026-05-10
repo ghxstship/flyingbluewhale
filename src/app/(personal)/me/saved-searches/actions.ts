@@ -48,8 +48,15 @@ export async function deleteSavedSearchAction(_: State, fd: FormData): Promise<S
   const id = String(fd.get("search_id") ?? "");
   if (!id) return { error: "Missing search" };
   const supabase = await createClient();
-  const { error } = await supabase.from("saved_searches").delete().eq("id", id).eq("user_id", session.userId);
+  // .select() to surface 404 on wrong/foreign id rather than silent ok.
+  const { data, error } = await supabase
+    .from("saved_searches")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", session.userId)
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Saved search not found" };
   revalidatePath("/me/saved-searches");
   return { ok: true };
 }

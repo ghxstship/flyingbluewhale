@@ -1,6 +1,7 @@
 import "server-only";
 import { createServiceClient } from "./supabase/server";
 import { log } from "./log";
+import type { LooseSupabase } from "./supabase/loose";
 
 /**
  * Per-tenant usage metering — H3-01 / IK-023.
@@ -89,19 +90,20 @@ export async function currentBucket(orgId: string, metric: Metric | string): Pro
     const svc = createServiceClient();
     const hourStart = new Date();
     hourStart.setMinutes(0, 0, 0);
-    // Supabase generic types collapse to `never` across the 45-table union
-    // when narrowing by column — we cast to `any` for the query chain and
-    // reassert the row shape on the way out. Same escape hatch the rest
-    // of `src/lib/db` uses (see `lib/db/resource.ts#anyFrom`).
-
-    const { data, error } = await (svc.from("usage_rollups") as any)
+    // usage_rollups isn't in the generated database.types yet (added
+    // by a later migration; gen:types pending). Route through the
+    // codebase's typed-loose helper LooseSupabase, then reassert the
+    // narrow row shape at the consume site.
+    const loose = svc as unknown as LooseSupabase;
+    const { data, error } = (await loose
+      .from("usage_rollups")
       .select("quantity")
       .eq("org_id", orgId)
       .eq("metric", metric)
       .eq("bucket_start", hourStart.toISOString())
-      .maybeSingle();
+      .maybeSingle()) as { data: { quantity: number } | null; error: { message: string } | null };
     if (error || !data) return 0;
-    return Number((data as { quantity: number }).quantity) || 0;
+    return Number(data.quantity) || 0;
   } catch {
     return 0;
   }

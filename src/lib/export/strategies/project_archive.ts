@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { rowsToCsv } from "./csv";
 import { rowsToJson } from "./json";
 import { rowsToZipBuffer, type ZipEntry } from "./zip";
@@ -37,13 +38,19 @@ export async function buildProjectArchive(args: {
   for (const [table, meta] of Object.entries(EXPORT_REGISTRY)) {
     if (SKIP_FROM_ARCHIVE.has(table)) continue;
 
-    let q = (args.supabase.from(table) as any).select("*");
-    // Narrow the registry-whitelisted tables with a project filter when
-    // they have one; otherwise keep the full org scope.
+    // Dynamic-table dispatch via LooseSupabase — the registry's `table`
+    // values are EXPORT_REGISTRY keys (compile-time-known set) but
+    // typed-Supabase's `from()` overloads don't narrow across the
+    // registry-as-string union here.
+    const loose = args.supabase as unknown as LooseSupabase;
+    type Filterable = {
+      eq: (col: string, val: unknown) => Filterable;
+      limit: (n: number) => Promise<{ data: unknown; error: { message: string } | null }>;
+    };
+    let q = loose.from(table).select("*") as unknown as Filterable;
     if (meta.orgScoped) q = q.eq("org_id", args.orgId);
-    q = q.limit(10_000);
 
-    const { data, error } = await q;
+    const { data, error } = await q.limit(10_000);
     if (error) continue;
     const rows = (data ?? []) as Array<Record<string, unknown>>;
     // Apply project filter when the table has a project_id column.

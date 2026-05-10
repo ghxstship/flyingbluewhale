@@ -132,8 +132,15 @@ export async function buildSponsorDeck(input: SponsorDeckInput): Promise<Buffer>
     color: "FFFFFF",
   });
 
-  // Buffer return
-
-  const nodeBuf = (await pptx.write({ outputType: "nodebuffer" })) as any;
-  return Buffer.isBuffer(nodeBuf) ? nodeBuf : Buffer.from(nodeBuf);
+  // Buffer return — pptxgenjs typings declare write() as returning a
+  // string but the `nodebuffer` outputType yields a Buffer at runtime.
+  // Narrow to the actual runtime union (Buffer | string | Uint8Array)
+  // and rehydrate to a Buffer with the existing guard.
+  const nodeBuf: Buffer | string | Uint8Array = (await pptx.write({ outputType: "nodebuffer" })) as unknown as
+    | Buffer
+    | string
+    | Uint8Array;
+  if (Buffer.isBuffer(nodeBuf)) return nodeBuf;
+  if (typeof nodeBuf === "string") return Buffer.from(nodeBuf, "binary");
+  return Buffer.from(nodeBuf);
 }

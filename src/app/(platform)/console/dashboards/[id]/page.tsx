@@ -9,6 +9,7 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getDashboard } from "@/lib/db/dashboards";
 import { getViewConfig } from "@/lib/db/view-configs";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { createClient } from "@/lib/supabase/server";
 import type { ChartWidget, SavedViewWidget } from "@/lib/dashboards/types";
 
@@ -98,8 +99,17 @@ async function resolveWidgetData(widgets: ReadonlyArray<{ id: string; type: stri
           return;
         }
         const limit = w.dataQuery.limit ?? 1000;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let q: any = (supabase as any).from(w.dataQuery.table).select("*").limit(limit);
+        // Dynamic-table dispatch — `w.dataQuery.table` comes from the
+        // dashboard's runtime JSON config, so the typed Supabase client
+        // can't narrow it. LooseSupabase is the codebase's centralized
+        // typed-loose escape hatch — it preserves the chainable query
+        // API surface without `any` infesting the call site.
+        const loose = supabase as unknown as LooseSupabase;
+        type Filterable = {
+          eq: (col: string, val: unknown) => Filterable;
+          in: (col: string, vals: unknown[]) => Filterable;
+        } & PromiseLike<{ data: Array<Record<string, unknown>> | null }>;
+        let q = loose.from(w.dataQuery.table).select("*").limit(limit) as unknown as Filterable;
         if (w.dataQuery.filter) {
           for (const [k, v] of Object.entries(w.dataQuery.filter)) {
             q = Array.isArray(v) ? q.in(k, v) : q.eq(k, v);

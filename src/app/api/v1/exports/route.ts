@@ -8,6 +8,7 @@ import { rowsToCsv } from "@/lib/export/strategies/csv";
 import { rowsToJson } from "@/lib/export/strategies/json";
 import { rowsToXlsxBuffer } from "@/lib/export/strategies/xlsx";
 import { rowsToZipBuffer } from "@/lib/export/strategies/zip";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { log } from "@/lib/log";
 
 /**
@@ -93,16 +94,19 @@ export async function POST(req: NextRequest) {
       return apiCreated({ run, signedUrl: null, queued: true });
     }
 
-    // Dynamic table lookup — the Supabase client types collapse to
-    // `never` across the 9-table union here, so we drop to `any` for
-    // the chain and reassert at the consume site. Same escape hatch
-    // that lib/db/resource.ts uses.
-
-    // ExportTable union includes views (audit_log) and tables that don't all
-    // appear in the same supabase.from() overload — cast through `never` so
-    // the dynamic dispatch compiles cleanly. The `as any` on the result then
-    // unblocks the .select().eq() chain (we reassert types at the consume site).
-    let q = (supabase.from(table as never) as any).select("*").eq("org_id", session.orgId);
+    // Dynamic table lookup — the typed Supabase client's `from()`
+    // overloads collapse to `never` across the 9-element ExportTable
+    // union (which includes a view, audit_log, that isn't in the same
+    // overload tuple). LooseSupabase is the codebase's centralized
+    // typed-loose escape hatch — it preserves the chainable surface
+    // without `as any` infesting the call site. We reassert
+    // row-shape types at the consume site below.
+    type Filterable = {
+      eq: (col: string, val: unknown) => Filterable;
+      limit: (n: number) => Promise<{ data: unknown; error: { message: string } | null }>;
+    };
+    const loose = supabase as unknown as LooseSupabase;
+    let q = loose.from(table).select("*").eq("org_id", session.orgId) as unknown as Filterable;
     if (input.projectId) q = q.eq("project_id", input.projectId);
 
     const { data, error } = await q.limit(10_000);

@@ -4,14 +4,19 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { dateRangeRefine } from "@/lib/zod/dateRange";
 
-const CreateSchema = z.object({
-  kind: z.enum(["hold", "confirm", "block"]),
-  starts_at: z.string().min(1),
-  ends_at: z.string().min(1),
-  label: z.string().max(200).optional().or(z.literal("")),
-  all_day: z.string().optional(),
-});
+const CreateSchema = z
+  .object({
+    kind: z.enum(["hold", "confirm", "block"]),
+    starts_at: z.string().min(1),
+    ends_at: z.string().min(1),
+    label: z.string().max(200).optional().or(z.literal("")),
+    all_day: z.string().optional(),
+  })
+  // Reject end-before-start at the boundary; matches the
+  // .refine pattern used on rentals/projects/site-plans.
+  .refine(...dateRangeRefine("starts_at", "ends_at"));
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -38,8 +43,17 @@ export async function deleteAvailabilityAction(_: State, fd: FormData): Promise<
   const id = String(fd.get("slot_id") ?? "");
   if (!id) return { error: "Missing slot" };
   const supabase = await createClient();
-  const { error } = await supabase.from("availability_slots").delete().eq("id", id).eq("user_id", session.userId);
+  // .select() so a wrong/foreign id surfaces as 404 instead of
+  // silently returning ok:true (RLS would still block, but the UX
+  // signal matters).
+  const { data, error } = await supabase
+    .from("availability_slots")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", session.userId)
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "Slot not found" };
   revalidatePath("/me/availability");
   return { ok: true };
 }

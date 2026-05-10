@@ -67,10 +67,12 @@ async function callAnthropic(
       system: systemPrompt,
       messages: [{ role: "user", content: userText.slice(0, 60_000) }],
     });
+    // Type guard discriminates the Anthropic content union — `.text`
+    // exists only on the text variant, so the post-filter narrowing
+    // is sound without escape hatches.
     const text = res.content
-      .filter((c) => c.type === "text")
-
-      .map((c) => (c as any).text as string)
+      .filter((c): c is Extract<typeof c, { type: "text" }> => c.type === "text")
+      .map((c) => c.text)
       .join("");
     const match = text.match(/\{[\s\S]*\}/);
     if (!match) return { error: "model did not return JSON" };

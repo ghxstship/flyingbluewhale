@@ -76,8 +76,10 @@ export const anthropicProvider: AIProvider = {
       opts.system ??
       "You produce strictly valid JSON output that conforms to the schema you are given. Never include explanatory prose around the JSON.";
 
-    // Cast the SDK params — block-specific shape is generic to avoid
-    // pulling in the entire Anthropic content-block union here.
+    // The local ContentBlock literal is structurally compatible with
+    // Anthropic.MessageParam["content"]; cast through the SDK type
+    // narrows the API contract without pulling the full union into
+    // every call site.
     const res = await client.messages.create({
       model,
       max_tokens: opts.maxTokens ?? 1024,
@@ -86,16 +88,17 @@ export const anthropicProvider: AIProvider = {
       messages: [
         {
           role: "user",
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          content: userContent as any,
+          content: userContent as Anthropic.MessageParam["content"],
         },
       ],
     });
 
+    // Type guard discriminates the response content union — `.text`
+    // exists only on the text variant, so the post-filter narrowing
+    // is sound without escape hatches.
     const text = res.content
-      .filter((c) => c.type === "text")
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((c) => (c as any).text as string)
+      .filter((c): c is Extract<typeof c, { type: "text" }> => c.type === "text")
+      .map((c) => c.text)
       .join("");
 
     return {

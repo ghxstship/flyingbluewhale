@@ -37,7 +37,12 @@ export type RegenerateResult = { error: string } | { ok: true; recoveryCodes: st
 type RecoveryCodesClient = {
   from: (table: "mfa_recovery_codes") => {
     delete: () => {
-      eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
+      eq: (
+        col: string,
+        val: string,
+      ) => Promise<{ error: { message: string } | null }> & {
+        lt: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
+      };
     };
     insert: (rows: Array<{ user_id: string; code_hash: string }>) => Promise<{ error: { message: string } | null }>;
   };
@@ -148,11 +153,20 @@ export async function verifyEnrollmentAction(factorId: string, code: string): Pr
   const codes = generateRecoveryCodes(RECOVERY_CODE_COUNT);
   if (isServiceClientAvailable()) {
     const admin = createServiceClient() as unknown as RecoveryCodesClient;
-    // Wipe any prior codes (e.g. if the user re-enrolled after unenroll).
-    await admin.from("mfa_recovery_codes").delete().eq("user_id", session.userId);
-    await admin
+    // Capture the cutoff BEFORE inserting so we only delete codes
+    // that pre-date this batch. If the insert fails the user keeps
+    // any prior codes; without this ordering a delete-then-insert
+    // failure would leave zero codes for the user.
+    const cutoff = new Date().toISOString();
+    const { error: insErr } = await admin
       .from("mfa_recovery_codes")
       .insert(codes.map((c) => ({ user_id: session.userId, code_hash: sha256(c) })));
+    if (insErr) return { error: `Couldn't save recovery codes: ${insErr.message}` };
+    // Now safe to wipe prior codes (created_at < cutoff). A failure
+    // here is non-fatal — user has a fresh valid set; old codes
+    // would still resolve to this user but get superseded on next
+    // regenerate.
+    await admin.from("mfa_recovery_codes").delete().eq("user_id", session.userId).lt("created_at", cutoff);
   }
 
   await emitAudit({
@@ -222,11 +236,16 @@ export async function regenerateRecoveryCodesAction(): Promise<RegenerateResult>
 
   const codes = generateRecoveryCodes(RECOVERY_CODE_COUNT);
   const admin = createServiceClient() as unknown as RecoveryCodesClient;
-  await admin.from("mfa_recovery_codes").delete().eq("user_id", session.userId);
+  // Insert NEW codes first, then delete the prior batch. If the
+  // insert fails the user keeps their existing valid codes; the
+  // prior delete-then-insert pattern would have wiped all codes
+  // and then failed, leaving the user locked out of recovery.
+  const cutoff = new Date().toISOString();
   const { error } = await admin
     .from("mfa_recovery_codes")
     .insert(codes.map((c) => ({ user_id: session.userId, code_hash: sha256(c) })));
   if (error) return { error: error.message };
+  await admin.from("mfa_recovery_codes").delete().eq("user_id", session.userId).lt("created_at", cutoff);
 
   return { ok: true, recoveryCodes: codes };
 }

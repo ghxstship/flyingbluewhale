@@ -28,15 +28,19 @@ test.describe("marketing-header/theme-toggle", () => {
   test("segmented control uses the System label (M1-01)", async ({ page, context }) => {
     await dismissConsent(context);
     await page.goto("/");
-    // Radiogroup semantics, with three radio buttons — no literal "Auto".
-    const group = page.getByRole("radiogroup", { name: /color theme/i });
+    // ThemeToggle uses aria-label="Color mode" on the radiogroup with
+    // three radios labelled exactly "Light" / "Match System" / "Dark".
+    const group = page.getByRole("radiogroup", { name: /color mode/i });
     await expect(group).toBeVisible();
-    await expect(group.getByRole("radio", { name: /use light/i })).toBeVisible();
-    await expect(group.getByRole("radio", { name: /match system/i })).toBeVisible();
-    await expect(group.getByRole("radio", { name: /use dark/i })).toBeVisible();
-    // The visible label must literally say "System" — not "Auto".
-    await expect(group).toContainText("System");
-    await expect(group).not.toContainText(/^Auto$/);
+    await expect(group.getByRole("radio", { name: "Light", exact: true })).toBeVisible();
+    await expect(group.getByRole("radio", { name: "Match System", exact: true })).toBeVisible();
+    await expect(group.getByRole("radio", { name: "Dark", exact: true })).toBeVisible();
+    // The middle preset's accessible name MUST contain "System" (M1-01
+    // canon) — not "Auto". The radio buttons are icon-only, so we read
+    // the aria-label rather than text content.
+    const systemRadio = group.getByRole("radio", { name: "Match System", exact: true });
+    await expect(systemRadio).toHaveAttribute("aria-label", /System/);
+    await expect(systemRadio).not.toHaveAttribute("aria-label", /^Auto$/);
   });
 
   test("clicking Dark flips checked state AND writes data-mode=dark on <html>", async ({ page, context }) => {
@@ -47,24 +51,26 @@ test.describe("marketing-header/theme-toggle", () => {
     // light/dark/system (resolved), `data-theme` carries the design slug.
     // The two no longer collide, so the mode toggle's effect is observable
     // on <html data-mode>.
-    const darkRadio = page.getByRole("radio", { name: /use dark/i });
+    const darkRadio = page.getByRole("radio", { name: "Dark", exact: true });
     await darkRadio.click();
     await expect(darkRadio).toHaveAttribute("aria-checked", "true");
     await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
 
     // Switching to Light flips both.
-    await page.getByRole("radio", { name: /use light/i }).click();
+    await page.getByRole("radio", { name: "Light", exact: true }).click();
     await expect(page.locator("html")).toHaveAttribute("data-mode", "light");
   });
 
   test("mode cookie (fbw_mode) persists the choice", async ({ page, context }) => {
     await dismissConsent(context);
     await page.goto("/");
-    await page.getByRole("radio", { name: /use dark/i }).click();
-    await expect.poll(async () => {
-      const cookies = await context.cookies();
-      return cookies.find((c) => c.name === "fbw_mode")?.value;
-    }).toBe("dark");
+    await page.getByRole("radio", { name: "Dark", exact: true }).click();
+    await expect
+      .poll(async () => {
+        const cookies = await context.cookies();
+        return cookies.find((c) => c.name === "fbw_mode")?.value;
+      })
+      .toBe("dark");
   });
 });
 
@@ -98,11 +104,11 @@ test.describe("marketing-header/locale-switcher (M1-03)", () => {
 });
 
 test.describe("marketing-header/theme-gallery (M1-04)", () => {
-  test("Themes button opens the CHROMA BEACON sheet with the 8-card gallery", async ({ page, context }) => {
+  test("Themes button opens the CHROMA BEACON sheet with the 9-card gallery", async ({ page, context }) => {
     await dismissConsent(context);
     await page.goto("/");
 
-    await page.getByRole("button", { name: /open design-system theme picker/i }).click();
+    await page.getByRole("button", { name: /open design themes/i }).click();
 
     // Sheet title renders
     await expect(page.getByRole("heading", { name: /pick a design theme/i })).toBeVisible();
@@ -111,24 +117,27 @@ test.describe("marketing-header/theme-gallery (M1-04)", () => {
     // radiogroup exactly "Theme" (singular).
     const gallery = page.getByRole("radiogroup", { name: "Theme" });
     await expect(gallery).toBeVisible();
-    // 8 CHROMA BEACON themes — each card is a radio.
+    // 9 CHROMA BEACON themes — bermuda-triangle joined the registry as
+    // the new default light theme. Each card is a radio.
     const radios = gallery.getByRole("radio");
-    await expect(radios).toHaveCount(8);
+    await expect(radios).toHaveCount(9);
   });
 
   test("picking a theme in the sheet writes the chroma_theme cookie", async ({ page, context }) => {
     await dismissConsent(context);
     await page.goto("/");
 
-    await page.getByRole("button", { name: /open design-system theme picker/i }).click();
+    await page.getByRole("button", { name: /open design themes/i }).click();
     await page.getByRole("radio", { name: /brutal/i }).click();
 
     // Cookie is set by the ThemeProvider's setTheme() path.
     // Poll briefly — write happens after state update.
-    await expect.poll(async () => {
-      const cookies = await context.cookies();
-      return cookies.find((c) => c.name === "chroma_theme")?.value;
-    }).toBe("brutal");
+    await expect
+      .poll(async () => {
+        const cookies = await context.cookies();
+        return cookies.find((c) => c.name === "chroma_theme")?.value;
+      })
+      .toBe("brutal");
 
     // And <html data-theme> reflects the new value.
     await expect(page.locator("html")).toHaveAttribute("data-theme", "brutal");
@@ -151,15 +160,18 @@ test.describe("marketing-header/mobile-nav (M1-05)", () => {
     await expect(trigger).toBeVisible();
     await trigger.click();
 
-    // Mobile sheet nav exposes the same links as desktop primary nav.
+    // Mobile sheet nav exposes the same direct-link items as desktop
+    // primary nav: Marketplace, Pricing, Community. Solutions + Features
+    // moved into the Product / Industries dropdowns and aren't direct
+    // links on either the desktop or mobile primary surface.
     const mobileNav = page.getByRole("navigation", { name: /mobile primary/i });
     await expect(mobileNav).toBeVisible();
-    await expect(mobileNav.getByRole("link", { name: /^solutions$/i })).toBeVisible();
-    await expect(mobileNav.getByRole("link", { name: /^features$/i })).toBeVisible();
+    await expect(mobileNav.getByRole("link", { name: /^marketplace$/i })).toBeVisible();
     await expect(mobileNav.getByRole("link", { name: /^pricing$/i })).toBeVisible();
+    await expect(mobileNav.getByRole("link", { name: /^community$/i })).toBeVisible();
 
     // Theme + language controls are also in the sheet (single source of truth).
-    await expect(page.getByRole("radiogroup", { name: /color theme/i })).toBeVisible();
+    await expect(page.getByRole("radiogroup", { name: /color mode/i })).toBeVisible();
     await expect(page.getByRole("button", { name: /change language/i })).toBeVisible();
     await expect(page.getByRole("button", { name: /design themes/i })).toBeVisible();
   });

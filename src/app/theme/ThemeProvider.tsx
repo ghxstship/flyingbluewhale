@@ -102,12 +102,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setMounted(true);
   }, []);
 
-  // Re-apply data-theme when the palette slug changes client-side.
-  // `color-scheme` is now driven by `data-mode` below (not the palette
-  // family), so mode overrides get matching native form controls + scrollbars.
+  // Re-apply data-theme when the palette slug changes client-side. Also
+  // re-derive color-scheme from the theme's intrinsic family — dark
+  // themes (cyber, glass) get dark scrollbars + form controls regardless
+  // of the user's mode preference. The previous implementation drove
+  // color-scheme from data-mode, which produced a mismatch (e.g. cyber
+  // theme + light mode → light scrollbars on a dark background), broke
+  // the CHROMA BEACON contract test, and disagreed with both the SSR
+  // helper colorSchemeFor() and the head bootstrap script.
   React.useEffect(() => {
     if (!mounted) return;
     document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.style.colorScheme = colorSchemeFor(theme);
   }, [theme, mounted]);
 
   React.useEffect(() => {
@@ -120,16 +126,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Color mode application — independent of the theme slug. Writes
   // `data-mode="light|dark"` (resolving `system` against the media query)
   // so CSS can gate token overrides on that attribute without clobbering
-  // `data-theme`. Also sets `color-scheme` so the UA picks scrollbars +
-  // form controls that match the resolved mode (not the palette family).
+  // `data-theme`. Does NOT touch color-scheme — that's the theme's
+  // domain, not the mode's.
   React.useEffect(() => {
     if (!mounted) return;
     const resolved =
       mode === "system" ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : mode;
     document.documentElement.setAttribute("data-mode", resolved);
-    document.documentElement.style.colorScheme = resolved;
-    // Reference used so bundlers don't dead-code the imported helper.
-    void colorSchemeFor;
   }, [mode, mounted]);
 
   React.useEffect(() => {
@@ -138,7 +141,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     function onChange() {
       const next = mql.matches ? "dark" : "light";
       document.documentElement.setAttribute("data-mode", next);
-      document.documentElement.style.colorScheme = next;
     }
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);

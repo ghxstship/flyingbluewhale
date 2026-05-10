@@ -15,6 +15,13 @@ export const themeScript = `
   try {
     var valid = ['bermuda-triangle','glass','brutal','bento','kinetic','copilot','cyber','soft','earthy'];
     var validModes = ['light','dark','system'];
+    // Themes whose family is intrinsically dark (mirrors
+    // colorSchemeFor() in src/app/theme/themes.config.ts). The script
+    // and the SSR helper MUST agree — if SSR puts color-scheme=dark
+    // and the client bootstrap then overwrites it with light, the
+    // page flashes light scrollbars + form controls before the React
+    // tree hydrates. Hard-code the list rather than ship a JSON blob.
+    var darkThemes = ['cyber','glass'];
 
     // Theme slug (palette)
     var c = document.cookie.match(/(?:^|;\\s*)${THEME_COOKIE_NAME}=([^;]+)/);
@@ -40,7 +47,12 @@ export const themeScript = `
       ? (systemPrefersDark ? 'dark' : 'light')
       : rawMode;
     document.documentElement.setAttribute('data-mode', resolvedMode);
-    document.documentElement.style.colorScheme = resolvedMode;
+    // colorScheme follows the theme's intrinsic family — dark themes
+    // (cyber, glass) get dark scrollbars + form controls regardless of
+    // the user's mode preference. This matches the SSR layout.tsx
+    // behavior (colorSchemeFor()) so there's no flash on hydration.
+    var themeColorScheme = darkThemes.indexOf(picked) > -1 ? 'dark' : 'light';
+    document.documentElement.style.colorScheme = themeColorScheme;
   } catch (e) {
     document.documentElement.setAttribute('data-theme', 'bermuda-triangle');
     document.documentElement.setAttribute('data-mode', 'light');

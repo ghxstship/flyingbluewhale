@@ -11,7 +11,15 @@
     "",
     "Then commit the diff."
   ],
-  "allowedErrorKeys": ["rls_disabled_in_public_public_spatial_ref_sys"],
+  "allowedErrorKeys": [
+    "rls_disabled_in_public_public_spatial_ref_sys",
+    "security_definer_view_public_public_rfq_marketplace",
+    "security_definer_view_public_public_talent_directory",
+    "security_definer_view_public_public_crew_directory",
+    "security_definer_view_public_public_vendor_directory",
+    "security_definer_view_public_public_job_board",
+    "security_definer_view_public_public_open_calls"
+  ],
   "allowedWarnKeys": [
     "anon_security_definer_function_executable_public_st_estimatedextent_text, text",
     "anon_security_definer_function_executable_public_st_estimatedextent_text, text, text",

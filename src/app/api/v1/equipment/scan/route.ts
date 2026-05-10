@@ -40,8 +40,21 @@ export async function POST(req: NextRequest) {
     else if (input.action === "check_out") nextStatus = "in_use";
     else nextStatus = row.status === "in_use" ? "available" : "in_use";
 
-    const { error } = await supabase.from("equipment").update({ status: nextStatus }).eq("id", row.id);
+    // Conditional update on .eq("status", row.status) closes the TOCTOU
+    // between the SELECT above and this write — concurrent scans on the
+    // same asset would otherwise overwrite each other's transitions.
+    // The org_id filter is defense in depth alongside RLS.
+    const { data: updated, error } = await supabase
+      .from("equipment")
+      .update({ status: nextStatus })
+      .eq("id", row.id)
+      .eq("org_id", session.orgId)
+      .eq("status", row.status)
+      .select("id");
     if (error) return apiError("internal", error.message);
+    if (!updated || updated.length === 0) {
+      return apiError("conflict", "Equipment status changed concurrently — re-scan to confirm current state");
+    }
     return apiOk({
       result: "ok" as const,
       equipmentId: row.id,

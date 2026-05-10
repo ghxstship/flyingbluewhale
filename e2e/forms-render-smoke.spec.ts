@@ -29,7 +29,17 @@ const OWNER_EMAIL = "test+owner@flyingbluewhale.app";
 const STORAGE_STATE = "e2e/.auth/owner.json";
 
 test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext();
+  // Ensure the auth dir exists before we try to write into it. Without
+  // this, storageState({path}) ENOENTs on a fresh worktree because the
+  // .gitignored e2e/.auth/ directory doesn't exist yet.
+  const { mkdirSync } = await import("node:fs");
+  const { dirname } = await import("node:path");
+  mkdirSync(dirname(STORAGE_STATE), { recursive: true });
+  // Explicitly pass storageState: undefined so this bootstrap context
+  // doesn't try to read the storage file we're about to create — the
+  // describe block below sets test.use({ storageState }) which would
+  // otherwise be inherited here and ENOENT on the first run.
+  const context = await browser.newContext({ storageState: undefined });
   const page = await context.newPage();
   await context.addCookies([
     {

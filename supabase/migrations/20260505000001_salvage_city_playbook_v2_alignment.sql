@@ -149,7 +149,13 @@ begin
    limit 1;
 
   if v_project_id is null then
-    raise exception 'Salvage City project missing — apply 20260428_000032 first.';
+    -- Local Docker / fresh-reset environments lack the Salvage City
+    -- seed (it was consolidated out of 0001_remote_snapshot). Skip
+    -- the alignment instead of crashing the migration chain — the
+    -- realignment is idempotent and harmless to skip when there's
+    -- no project to align.
+    raise notice 'Salvage City project missing; skipping playbook alignment (local/fresh env).';
+    return;
   end if;
 
   -- ── 1. WITHDRAW offer letters for the 3 removed people ──────────────────

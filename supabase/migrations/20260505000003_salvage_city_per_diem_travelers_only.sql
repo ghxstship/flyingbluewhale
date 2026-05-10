@@ -17,7 +17,10 @@ begin
     from orgs o join projects p on p.org_id = o.id
    where o.slug = 'demo' and p.slug = 'edclv26-salvage-city' limit 1;
 
-  if v_project_id is null then raise exception 'Salvage City project missing.'; end if;
+  if v_project_id is null then
+    raise notice 'Salvage City project missing; skipping per-diem realignment (local/fresh env).';
+    return;
+  end if;
 
   update offer_letters ol
      set per_diem_rate_card_item_id = null,

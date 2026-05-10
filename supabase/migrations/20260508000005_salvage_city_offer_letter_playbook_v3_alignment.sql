@@ -45,7 +45,8 @@ begin
    limit 1;
 
   if v_project_id is null then
-    raise exception 'Salvage City project missing — apply playbook v2 alignment first.';
+    raise notice 'Salvage City project missing; skipping offer-letter playbook v3 alignment (local/fresh env).';
+    return;
   end if;
 
   select id into v_venue_id from venues

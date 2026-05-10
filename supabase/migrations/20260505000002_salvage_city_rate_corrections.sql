@@ -24,7 +24,8 @@ begin
    limit 1;
 
   if v_project_id is null then
-    raise exception 'Salvage City project missing.';
+    raise notice 'Salvage City project missing; skipping rate corrections (local/fresh env).';
+    return;
   end if;
 
   -- Paul + Alvaro: strip rate references entirely.

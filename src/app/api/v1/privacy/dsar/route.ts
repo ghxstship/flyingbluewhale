@@ -34,6 +34,22 @@ export async function POST(req: NextRequest) {
     const orgId = input.orgId ?? session.orgId;
     if (!orgId) return apiError("bad_request", "orgId required");
     const supabase = await createClient();
+
+    // Cross-tenant guard: confirm the caller is an active member of orgId.
+    // Without this, any authed user could file a DSAR against any org.id
+    // they happened to know — RLS would refuse the insert silently and
+    // we'd surface a confusing 500 instead of a clean 403.
+    if (orgId !== session.orgId) {
+      const { data: member } = await supabase
+        .from("memberships")
+        .select("org_id")
+        .eq("user_id", session.userId)
+        .eq("org_id", orgId)
+        .is("deleted_at", null)
+        .maybeSingle();
+      if (!member) return apiError("forbidden", "You are not a member of that organization");
+    }
+
     const due = new Date();
     due.setDate(due.getDate() + 30);
     const { data, error } = await supabase

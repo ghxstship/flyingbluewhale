@@ -49,6 +49,19 @@ export async function POST(req: Request) {
       .single();
     if (error) return apiError("internal", error.message);
     conversationId = data.id;
+  } else {
+    // Cross-tenant FK guard on conversationId. Without it, the user
+    // could pass a peer's conversation_id and append their message
+    // (or read history through the prompt) — RLS may scope by org_id
+    // but each conversation is per-user, so we pin both.
+    const { data: convo } = await supabase
+      .from("ai_conversations")
+      .select("id")
+      .eq("id", conversationId)
+      .eq("user_id", session.userId)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!convo) return apiError("not_found", "Conversation not found");
   }
 
   const { data: history } = await supabase

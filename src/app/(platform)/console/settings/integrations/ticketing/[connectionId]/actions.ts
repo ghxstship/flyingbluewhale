@@ -29,6 +29,16 @@ export async function recordSalesSnapshotAction(_: State, fd: FormData): Promise
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+
+  // Cross-tenant FK guard on connection_id.
+  const { data: connection } = await supabase
+    .from("ticketing_connections")
+    .select("id")
+    .eq("id", parsed.data.connection_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!connection) return { error: "Ticketing connection not found in your organization" };
+
   const totalSold = Math.max(0, Math.round(Number(parsed.data.total_sold)));
   const totalCapacity = parsed.data.total_capacity ? Math.max(0, Math.round(Number(parsed.data.total_capacity))) : null;
 

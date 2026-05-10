@@ -10,12 +10,16 @@ export async function GET(_: Request, ctx: { params: Promise<{ id: string }> }) 
   const { id } = await ctx.params;
   const parsed = IdSchema.safeParse(id);
   if (!parsed.success) return apiError("bad_request", "Invalid deliverable id");
-  return withAuth(async () => {
+  return withAuth(async (session) => {
     const supabase = await createClient();
+    // Defense-in-depth: pin org_id explicitly on top of RLS so a future
+    // policy regression can't leak another org's deliverable file_path
+    // into a signed URL.
     const { data: row, error } = await supabase
       .from("deliverables")
       .select("file_path")
       .eq("id", parsed.data)
+      .eq("org_id", session.orgId)
       .maybeSingle();
     if (error || !row?.file_path) return apiError("not_found", "File not found");
 

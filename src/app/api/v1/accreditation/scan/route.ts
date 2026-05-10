@@ -49,10 +49,13 @@ export async function POST(req: NextRequest) {
 
     let zoneAllowed = true;
     if (input.zoneId) {
+      // Cross-tenant FK guard on zoneId — pin org_id so zone_categories
+      // from another org can't influence our allow/deny outcome.
       const { data: zone } = (await supabase
         .from("venue_zones")
         .select("id, code, allowed_categories")
         .eq("id", input.zoneId)
+        .eq("org_id", session.orgId)
         .maybeSingle()) as { data: ZoneRow | null };
       const categoryCode = (accred as unknown as { accreditation_categories: { code: string } })
         .accreditation_categories?.code;

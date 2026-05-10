@@ -13,18 +13,23 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
 
   const guard = await withAuth(async (session) => ({ session }));
   if (guard instanceof Response) return guard;
+  const { session } = guard;
 
   const supabase = await createClient();
-  const [{ data: convo }, { data: messages }] = await Promise.all([
-    supabase.from("ai_conversations").select("id, title").eq("id", parsed.data).single(),
-    supabase
-      .from("ai_messages")
-      .select("id, role, content, created_at")
-      .eq("conversation_id", parsed.data)
-      .order("created_at", { ascending: true }),
-  ]);
-
+  // Pin user_id on the convo lookup so a foreign id 404s instead of
+  // returning the (RLS-empty) row + querying messages anyway.
+  const { data: convo } = await supabase
+    .from("ai_conversations")
+    .select("id, title")
+    .eq("id", parsed.data)
+    .eq("user_id", session.userId)
+    .maybeSingle();
   if (!convo) return apiError("not_found", "Conversation not found");
+  const { data: messages } = await supabase
+    .from("ai_messages")
+    .select("id, role, content, created_at")
+    .eq("conversation_id", parsed.data)
+    .order("created_at", { ascending: true });
   return apiOk({ conversation: convo, messages: messages ?? [] });
 }
 

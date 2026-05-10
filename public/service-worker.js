@@ -1,12 +1,11 @@
-// flyingbluewhale offline-first service worker
+// COMPVSS offline-first service worker
 // Caches the mobile shell + check-in flow + offline fallback page.
 
 const VERSION = "v1";
-const STATIC_CACHE = `fbw-static-${VERSION}`;
-const RUNTIME_CACHE = `fbw-runtime-${VERSION}`;
+const STATIC_CACHE = `compvss-static-${VERSION}`;
+const RUNTIME_CACHE = `compvss-runtime-${VERSION}`;
 
 const PRECACHE = [
-  "/",
   "/m",
   "/m/check-in",
   "/m/tasks",
@@ -33,6 +32,15 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
+
+  // Only intercept requests on the COMPVSS shell (mobile path or compvss subdomain).
+  const isMobileShell =
+    url.hostname.startsWith("compvss.") ||
+    url.pathname === "/m" ||
+    url.pathname.startsWith("/m/") ||
+    url.pathname === "/manifest.json" ||
+    url.pathname === "/service-worker.js";
+  if (!isMobileShell) return;
 
   // Network-first for API
   if (url.pathname.startsWith("/api/")) {
@@ -85,7 +93,7 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = (event.notification.data && event.notification.data.url) || "/";
+  const url = (event.notification.data && event.notification.data.url) || "/m";
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((tabs) => {
       const tab = tabs.find((t) => t.url.includes(url));

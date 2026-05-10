@@ -53,6 +53,10 @@ const config: NextConfig = {
   // to a top-level option; cast guards against type drift if the typing lags
   // the runtime.
   reactCompiler: true as never,
+  // Suppress the X-Powered-By: Next.js header to avoid fingerprinting.
+  poweredByHeader: false,
+  // Suppress ETag headers to avoid content fingerprinting on authenticated pages.
+  generateEtags: false,
 
   async headers() {
     return [
@@ -61,7 +65,10 @@ const config: NextConfig = {
         headers: [
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
+          // X-Frame-Options: SAMEORIGIN aligns with frame-ancestors 'self' in the CSP
+          // above. Modern browsers honor the CSP directive and ignore X-Frame-Options,
+          // but the header is kept for compatibility with legacy UA/proxies.
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
           { key: "Content-Security-Policy", value: csp },

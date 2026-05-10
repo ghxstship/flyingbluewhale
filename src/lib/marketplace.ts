@@ -76,7 +76,7 @@ export function formatFeeRange(
   minCents: number | null | undefined,
   maxCents: number | null | undefined,
   currency = "USD",
-  locale = "en-US",
+  locale?: string,
 ): string {
   const fmt = (cents: number) =>
     new Intl.NumberFormat(locale, {

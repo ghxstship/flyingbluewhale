@@ -30,7 +30,7 @@ export function EmptyState({
 }) {
   if (size === "compact") {
     return (
-      <div className="flex flex-col items-center justify-center gap-1 p-5 text-center">
+      <div role="status" className="flex flex-col items-center justify-center gap-1 p-5 text-center">
         <h3 className="text-sm font-medium text-[var(--foreground)]">{title}</h3>
         {description && <p className="max-w-sm text-xs text-[var(--text-muted)]">{description}</p>}
         {(action || secondaryAction) && (
@@ -43,7 +43,7 @@ export function EmptyState({
     );
   }
   return (
-    <div className="surface flex flex-col items-center justify-center gap-3 p-10 text-center">
+    <div role="status" className="surface flex flex-col items-center justify-center gap-3 p-10 text-center">
       {illustration ? (
         <div aria-hidden="true" className="mb-2 opacity-80">
           {illustration}

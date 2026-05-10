@@ -45,6 +45,8 @@ export async function GET(req: NextRequest) {
       .from("deliverable_templates")
       .select("id, type, name, description, data, is_global, updated_at")
       .is("deleted_at", null)
+      // Scope to caller's org or platform-wide global templates only.
+      .or(`org_id.eq.${session.orgId},is_global.eq.true`)
       .order("name", { ascending: true });
     if (typeFilter) q = q.eq("type", typeFilter as never);
     const { data, error } = await q;

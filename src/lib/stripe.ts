@@ -42,7 +42,14 @@ export async function verifyStripeWebhook(
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-  if (hex !== signature) return null;
+  // Constant-time comparison to prevent timing oracle on the HMAC output.
+  const enc2 = new TextEncoder();
+  const a = enc2.encode(hex);
+  const b = enc2.encode(signature);
+  if (a.length !== b.length) return null;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i]! ^ b[i]!;
+  if (diff !== 0) return null;
 
   try {
     return JSON.parse(rawBody);

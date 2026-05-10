@@ -19,6 +19,7 @@ type Row = {
   certifications: string[];
   day_rate_min_cents: number | null;
   day_rate_max_cents: number | null;
+  day_rate_currency: string | null;
   travel_radius_km: number | null;
   availability_open: boolean;
   rating_avg: number | null;
@@ -112,7 +113,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         <dl className="space-y-1 text-sm">
           <div>
             <span className="text-[var(--text-secondary)]">Day rate:</span>{" "}
-            {formatFeeRange(c.day_rate_min_cents, c.day_rate_max_cents, "USD")}
+            {formatFeeRange(c.day_rate_min_cents, c.day_rate_max_cents, c.day_rate_currency ?? "USD")}
           </div>
           <div>
             <span className="text-[var(--text-secondary)]">Travel radius:</span>{" "}

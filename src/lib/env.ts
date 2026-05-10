@@ -28,6 +28,24 @@ const schema = z.object({
   WEATHER_DISABLED: z.string().optional(),
   // Logger floor: trace | debug | info | warn | error. Defaults to info.
   LOG_LEVEL: z.enum(["trace", "debug", "info", "warn", "error"]).optional(),
+  // Server-only Sentry DSN (not exposed to client). Falls back to the public DSN.
+  SENTRY_DSN: z.string().optional(),
+  // Slack integration (OAuth + event signing)
+  SLACK_CLIENT_ID: z.string().optional(),
+  SLACK_CLIENT_SECRET: z.string().optional(),
+  SLACK_SIGNING_SECRET: z.string().optional(),
+  // Internal job worker authentication token
+  JOB_WORKER_TOKEN: z.string().optional(),
+  // Cloudflare Turnstile (bot protection on public forms)
+  TURNSTILE_SECRET_KEY: z.string().optional(),
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+  // Web Push (VAPID). Generate with: npx web-push generate-vapid-keys
+  VAPID_SUBJECT: z.string().optional(),
+  VAPID_PUBLIC_KEY: z.string().optional(),
+  VAPID_PRIVATE_KEY: z.string().optional(),
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
+  // HMAC secret for share_links tokens. Generate with: openssl rand -base64 32
+  SHARE_LINK_SECRET: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -50,6 +68,18 @@ export const env = schema.parse({
   NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
   WEATHER_DISABLED: process.env.WEATHER_DISABLED,
   LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
+  SENTRY_DSN: process.env.SENTRY_DSN,
+  SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
+  SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
+  SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
+  JOB_WORKER_TOKEN: process.env.JOB_WORKER_TOKEN,
+  TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+  VAPID_SUBJECT: process.env.VAPID_SUBJECT,
+  VAPID_PUBLIC_KEY: process.env.VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+  SHARE_LINK_SECRET: process.env.SHARE_LINK_SECRET,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);

@@ -7,20 +7,20 @@ export function offerPublicUrl(token: string): string {
   return urlFor("marketing", `/offer/${token}`);
 }
 
-export function formatDateRange(start: string | null, end: string | null): string {
+export function formatDateRange(start: string | null, end: string | null, locale?: string): string {
   if (!start && !end) return "TBD";
   const fmt = (iso: string) => {
     const d = new Date(iso + "T00:00:00");
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    return d.toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" });
   };
   if (start && end) return `${fmt(start)} – ${fmt(end)}`;
   return fmt((start ?? end)!);
 }
 
-export function formatDollars(cents: number): string {
-  return (cents / 100).toLocaleString("en-US", {
+export function formatDollars(cents: number, currency = "USD", locale?: string): string {
+  return (cents / 100).toLocaleString(locale, {
     style: "currency",
-    currency: "USD",
+    currency,
     maximumFractionDigits: 0,
   });
 }

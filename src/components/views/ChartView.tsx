@@ -513,7 +513,7 @@ function TooltipContent({
 // Value formatting
 // ──────────────────────────────────────────────────────────────────────
 
-export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", currency = "USD"): string {
+export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", currency = "USD", locale?: string): string {
   if (v === null || v === undefined || v === "") return "";
   if (typeof v !== "number") {
     if (format === "date" && typeof v === "string") {
@@ -524,20 +524,20 @@ export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", cu
   }
   switch (format) {
     case "currency":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(locale, {
         style: "currency",
         currency,
         maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2,
       }).format(v);
     case "percent":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(locale, {
         style: "percent",
         maximumFractionDigits: 1,
       }).format(Math.abs(v) > 1 ? v / 100 : v);
     case "date":
-      return new Date(v).toLocaleDateString();
+      return new Date(v).toLocaleDateString(locale);
     case "number":
-      return new Intl.NumberFormat("en-US").format(v);
+      return new Intl.NumberFormat(locale).format(v);
     case "auto":
     default:
       if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;

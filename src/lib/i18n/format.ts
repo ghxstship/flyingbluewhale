@@ -131,19 +131,24 @@ export function formatRelative(
 
   if (opts.compact) {
     const abs = Math.abs(diffSeconds);
-    const past = diffSeconds < 0;
-    if (abs < 60) return "just now";
-    const [value, suffix] =
-      abs < 3600
-        ? [Math.round(abs / 60), "m"]
-        : abs < 86400
-          ? [Math.round(abs / 3600), "h"]
-          : abs < 2592000
-            ? [Math.round(abs / 86400), "d"]
-            : abs < 31536000
-              ? [Math.round(abs / 2592000), "mo"]
-              : [Math.round(abs / 31536000), "y"];
-    return past ? `${value}${suffix} ago` : `in ${value}${suffix}`;
+    const locale = opts.locale ?? DEFAULT_LOCALE;
+    // Use Intl.RelativeTimeFormat with "narrow" style for compact display.
+    // This keeps locale-awareness while staying terse ("3 min. ago", "in 2 h.").
+    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "always", style: "narrow" });
+    const units: Array<[Intl.RelativeTimeFormatUnit, number]> = [
+      ["year", 60 * 60 * 24 * 365],
+      ["month", 60 * 60 * 24 * 30],
+      ["day", 60 * 60 * 24],
+      ["hour", 60 * 60],
+      ["minute", 60],
+      ["second", 1],
+    ];
+    for (const [unit, divisor] of units) {
+      if (abs >= divisor || unit === "second") {
+        return rtf.format(Math.round(diffSeconds / divisor), unit);
+      }
+    }
+    return EMPTY;
   }
 
   const locale = opts.locale ?? DEFAULT_LOCALE;

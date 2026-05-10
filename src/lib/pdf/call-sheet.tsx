@@ -38,7 +38,7 @@ export type CallSheetInput = {
 
 function fmtTime(iso: string): string {
   try {
-    return new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    return new Date(iso).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
   } catch {
     return iso;
   }

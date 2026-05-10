@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type InputHTMLAttributes } from "react";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 interface MoneyInputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -30,8 +31,9 @@ interface MoneyInputProps extends Omit<
  */
 export function MoneyInput({ name, defaultCents, label, hint, required, ...rest }: MoneyInputProps) {
   const id = useId();
+  const { locale } = useLocale();
   const initialDollars = defaultCents != null ? (defaultCents / 100).toFixed(2) : "";
-  const [display, setDisplay] = useState(formatDisplay(initialDollars));
+  const [display, setDisplay] = useState(formatDisplay(initialDollars, locale));
   const [cents, setCents] = useState<string>(defaultCents != null ? String(defaultCents) : "");
 
   function onInput(value: string) {
@@ -47,7 +49,7 @@ export function MoneyInput({ name, defaultCents, label, hint, required, ...rest 
     }
     const c = toCents(display);
     setCents(c);
-    setDisplay(c ? formatFromCents(c) : "");
+    setDisplay(c ? formatFromCents(c, locale) : "");
   }
 
   return (
@@ -100,15 +102,15 @@ function toCents(input: string): string {
   return String(Math.round(num * 100));
 }
 
-function formatFromCents(cents: string): string {
+function formatFromCents(cents: string, locale: string): string {
   const n = Number(cents) / 100;
   if (!Number.isFinite(n)) return "";
-  return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function formatDisplay(dollars: string): string {
+function formatDisplay(dollars: string, locale: string): string {
   if (!dollars) return "";
   const n = Number(dollars);
   if (!Number.isFinite(n)) return dollars;
-  return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }

@@ -431,7 +431,7 @@ export function TimelineView({
   );
 }
 
-const RANGE_FMT = new Intl.DateTimeFormat("en-US", {
+const RANGE_FMT = new Intl.DateTimeFormat(undefined, {
   month: "short",
   day: "numeric",
   timeZone: "UTC",

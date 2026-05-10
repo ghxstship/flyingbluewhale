@@ -8,32 +8,39 @@ import { matchRoute } from "@/lib/match-route";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 
 export { PlatformSidebar } from "./PlatformSidebar";
+export { MarketingHeader } from "./MarketingHeader";
+export { AuthShell as AuthCard } from "./auth/AuthShell";
 
 export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {
   return (
-    <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
+    <aside
+      className="flex w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3"
+      aria-label="Portal navigation"
+    >
       <div className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-[var(--org-primary)]">
         GVTEWAY
       </div>
       <div className="nav-label">{title}</div>
-      <ul className="mt-0.5 space-y-0.5">
-        {items.map((i) => {
-          // Unified active-route rule so /p/{slug}/client/invoices/{id} still
-          // marks `Invoices` active. IA spec §7 anti-pattern #2.
-          const { isActive: active } = matchRoute(currentPath ?? "", i.href);
-          return (
-            <li key={i.href}>
-              <Link
-                href={i.href}
-                aria-current={active ? "page" : undefined}
-                className={active ? "nav-item nav-item-active" : "nav-item"}
-              >
-                {i.label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <nav aria-label="Portal navigation">
+        <ul className="mt-0.5 space-y-0.5">
+          {items.map((i) => {
+            // Unified active-route rule so /p/{slug}/client/invoices/{id} still
+            // marks `Invoices` active. IA spec §7 anti-pattern #2.
+            const { isActive: active } = matchRoute(currentPath ?? "", i.href);
+            return (
+              <li key={i.href}>
+                <Link
+                  href={i.href}
+                  aria-current={active ? "page" : undefined}
+                  className={active ? "nav-item nav-item-active" : "nav-item"}
+                >
+                  {i.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
       {/* Language switch parity with the platform sidebar — every authed
           surface needs a way out of English without leaving the page. */}
       <div className="mt-auto flex justify-end pt-3">

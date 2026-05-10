@@ -24,6 +24,7 @@ type Row = {
   certifications: string[];
   day_rate_min_cents: number | null;
   day_rate_max_cents: number | null;
+  day_rate_currency: string | null;
   travel_radius_km: number | null;
   availability_open: boolean;
   rating_avg: number | null;
@@ -67,7 +68,7 @@ export default async function Page() {
               subtitle={r.tagline ?? undefined}
               tags={r.roles}
               meta={[
-                formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, "USD") + "/day",
+                formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.day_rate_currency ?? "USD") + "/day",
                 r.unions.join(", ") || null,
                 r.travel_radius_km ? `${r.travel_radius_km} km radius` : null,
                 r.availability_open ? "Available now" : null,

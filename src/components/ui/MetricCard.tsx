@@ -36,19 +36,20 @@ export function MetricCard({
   return (
     <div className="surface p-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium tracking-wide text-[var(--text-muted)] uppercase">{label}</span>
+        <p className="text-xs font-medium tracking-wide text-[var(--text-muted)] uppercase">{label}</p>
         {icon}
       </div>
       <div
         className={`mt-2 text-2xl font-semibold tracking-tight ${
           accent ? "text-[var(--org-primary)]" : "text-[var(--foreground)]"
         }`}
+        aria-label={typeof value === "string" || typeof value === "number" ? String(value) : undefined}
       >
         {value}
       </div>
       {delta && (
         <div
-          className={`mt-1 text-xs font-medium ${delta.positive ? "text-emerald-600" : "text-[var(--color-error)]"}`}
+          className={`mt-1 text-xs font-medium ${delta.positive ? "text-[var(--color-success)]" : "text-[var(--color-error)]"}`}
         >
           <span aria-hidden="true">{delta.positive ? "↑" : "↓"} </span>
           <span className="sr-only">{delta.positive ? "increased" : "decreased"} by </span>

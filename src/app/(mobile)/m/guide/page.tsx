@@ -8,35 +8,10 @@ import { getGuideByPersona } from "@/lib/db/guides";
 import { GuideView } from "@/components/guides/GuideView";
 import { GuideComments } from "@/components/guides/GuideComments";
 import type { GuideConfig } from "@/lib/guides/types";
-import type { GuidePersona, Persona } from "@/lib/supabase/types";
+import type { GuidePersona } from "@/lib/supabase/types";
+import { mapSessionToGuidePersona } from "@/lib/guides/persona";
 
 export const dynamic = "force-dynamic";
-
-// Mobile guide reads `session.persona` directly so the granular
-// marketplace personas (client → client guide, contractor → vendor
-// guide, crew → crew guide) get the right tier. Bug #13 / Workstream A1.
-function mapPersona(persona: Persona): GuidePersona {
-  switch (persona) {
-    case "owner":
-    case "admin":
-    case "manager":
-    case "collaborator":
-      return "staff";
-    case "contractor":
-      return "vendor";
-    case "client":
-      return "client";
-    case "crew":
-      return "crew";
-    case "viewer":
-    case "community":
-    case "member":
-    case "guest":
-    case "visitor":
-    default:
-      return "guest";
-  }
-}
 
 export default async function MobileGuide() {
   if (!hasSupabase) notFound();
@@ -63,7 +38,7 @@ export default async function MobileGuide() {
     );
   }
 
-  const persona = mapPersona(session.persona);
+  const persona = mapSessionToGuidePersona(session.persona);
   const guide = await getGuideByPersona(active.id, persona);
 
   if (!guide) {

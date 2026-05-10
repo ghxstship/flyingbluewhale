@@ -10,7 +10,7 @@ type PhaseBlockType = Extract<ProposalBlock, { type: "phase" }>;
 function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
   if (m == null) return "";
   if (typeof m === "string") return m;
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: m.currency ?? currency,
     maximumFractionDigits: 0,

@@ -10,38 +10,10 @@ import { GuideView } from "@/components/guides/GuideView";
 import { GuideComments } from "@/components/guides/GuideComments";
 import { createClient } from "@/lib/supabase/server";
 import type { GuideConfig } from "@/lib/guides/types";
-import type { GuidePersona, Persona } from "@/lib/supabase/types";
+import type { GuidePersona } from "@/lib/supabase/types";
+import { mapSessionToGuidePersona } from "@/lib/guides/persona";
 
 export const dynamic = "force-dynamic";
-
-// Map session persona → guide persona for the portal viewer. Bug #13 /
-// Workstream A1 — was previously role-based (owner/admin/manager → staff,
-// everyone else → crew), which collapsed every marketplace persona into
-// one guide tier. Now uses the granular session.persona so client sees
-// the client guide, contractor sees the vendor guide, crew sees crew,
-// etc.
-function mapSessionToGuidePersona(persona: Persona): GuidePersona {
-  switch (persona) {
-    case "owner":
-    case "admin":
-    case "manager":
-    case "collaborator":
-      return "staff";
-    case "contractor":
-      return "vendor";
-    case "client":
-      return "client";
-    case "crew":
-      return "crew";
-    case "viewer":
-    case "community":
-    case "member":
-    case "guest":
-    case "visitor":
-    default:
-      return "guest";
-  }
-}
 
 const VALID_PERSONAS = new Set<GuidePersona>([
   "staff",

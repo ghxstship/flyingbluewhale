@@ -43,7 +43,7 @@ export default async function PersonalLayout({ children }: { children: React.Rea
             </Link>
             <ThemeToggle />
           </div>
-          <nav className="mt-4 flex flex-wrap gap-1 border-b border-[var(--border-color)] pb-2">
+          <nav aria-label="Account navigation" className="mt-4 flex flex-wrap gap-1 border-b border-[var(--border-color)] pb-2">
             {tabs.map((t) => (
               <Link key={t.href} href={t.href} className="nav-item text-sm">
                 {t.label}

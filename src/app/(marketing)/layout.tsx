@@ -71,7 +71,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             <div className="md:col-span-1">
               <Link
                 href="/"
-                className="text-base font-semibold tracking-[0.18em] uppercase"
+                className="text-base font-semibold tracking-[0.18em] whitespace-nowrap uppercase"
                 aria-label="LYTEHAUS Technologies — home"
               >
                 L Y T E H A U S

@@ -96,7 +96,12 @@ export function MarketingHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link
           href="/"
-          className="text-base font-semibold tracking-[0.18em] text-[var(--foreground)] uppercase"
+          // whitespace-nowrap: the spaced "L Y T E H A U S" mark uses literal
+          // U+0020 between letters so screen readers + selection treat each
+          // letter as a separate word. Without nowrap, narrow viewports
+          // (~1024px tablet) wrap the mark letter-by-letter into a vertical
+          // stack instead of keeping it horizontal.
+          className="text-base font-semibold tracking-[0.18em] whitespace-nowrap text-[var(--foreground)] uppercase"
           onClick={() => setMobileOpen(false)}
           aria-label="LYTEHAUS Technologies — home"
         >
@@ -105,7 +110,7 @@ export function MarketingHeader() {
 
         {/* Desktop primary nav — 3 dropdowns + 2 direct links = 5 visible items,
             matching Linear / Vercel / Stripe / ClickUp / Notion convention. */}
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 xl:flex" aria-label="Primary">
           <NavDropdown group={PRODUCT} />
           <NavDropdown group={INDUSTRIES} />
           <Link href="/marketplace" className="nav-item">
@@ -122,7 +127,7 @@ export function MarketingHeader() {
 
         {/* Desktop right cluster — utility icons (palette / locale / mode) +
             Log in (secondary text link) + Start free (primary CTA). */}
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-2 xl:flex">
           <Hint label="Design Themes">
             <button
               type="button"
@@ -138,7 +143,7 @@ export function MarketingHeader() {
           <div aria-hidden="true" className="mx-1 h-5 w-px bg-[var(--border-color)]" />
           <Link
             href="/login"
-            className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)]"
+            className="text-sm font-medium whitespace-nowrap text-[var(--text-secondary)] hover:text-[var(--foreground)]"
           >
             Log in
           </Link>
@@ -154,7 +159,7 @@ export function MarketingHeader() {
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav-sheet"
-          className="btn btn-ghost btn-sm lg:hidden"
+          className="btn btn-ghost btn-sm xl:hidden"
         >
           {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
         </button>
@@ -162,7 +167,7 @@ export function MarketingHeader() {
 
       {/* Mobile sheet */}
       {mobileOpen && (
-        <div id="mobile-nav-sheet" className="border-t border-[var(--border-color)] bg-[var(--background)] lg:hidden">
+        <div id="mobile-nav-sheet" className="border-t border-[var(--border-color)] bg-[var(--background)] xl:hidden">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5">
             <MobileNavSection group={PRODUCT} onClick={() => setMobileOpen(false)} />
             <MobileNavSection group={INDUSTRIES} onClick={() => setMobileOpen(false)} />

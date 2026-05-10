@@ -182,14 +182,22 @@
   --org-on-primary: #ffffff;
 }
 [data-theme="bermuda-triangle"] [data-platform="compvss"] {
-  --org-primary: #f9a825; /* yellow — paired with black text */
-  --org-secondary: #b45309;
-  --org-accent: #ffd54f;
-  --org-on-primary: #0a0a0a;
+  /* amber-800 (#92400e) = 5.7:1 on cream paper (#f5f2ec), passes AA for
+     small text. The previous amber-600 (#f9a825) failed at 1.76:1 when
+     used as a foreground colour — it was speced as a button background
+     paired with black text, but marketing eyebrows use it as text on
+     paper. The vivid yellow lives on in --org-accent for hover / chips. */
+  --org-primary: #92400e;
+  --org-secondary: #78350f;
+  --org-accent: #f9a825; /* canonical brand yellow — pop accent only */
+  --org-on-primary: #ffffff;
 }
 [data-theme="bermuda-triangle"] [data-platform="gvteway"] {
-  --org-primary: #00838f; /* cyan-teal — 5.0:1 white text, AA */
-  --org-secondary: #005662;
+  /* cyan-900 (#006064) = 7.0:1 on cream paper. Previous cyan-800 (#00838f)
+     was 4.04:1 on cream — passed AA on white but failed on the warmer
+     paper. Vivid cyan retained as --org-accent. */
+  --org-primary: #006064;
+  --org-secondary: #003c40;
   --org-accent: #00bcd4; /* vivid cyan for hover / chips */
   --org-on-primary: #ffffff;
 }

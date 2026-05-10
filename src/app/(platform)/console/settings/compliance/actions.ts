@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
@@ -17,6 +17,10 @@ export type State = { error?: string; saved?: boolean } | null;
 
 export async function saveComplianceSettings(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Compliance posture (data residency, retention windows, DPA flag)
+  // is owner/admin-only — non-admins must not be able to flip it via
+  // a stale form post.
+  if (!isAdmin(session)) return { error: "Only owners and admins can change compliance settings" };
   const parsed = Schema.safeParse({
     retention_audit_days: fd.get("retention_audit_days"),
     retention_logs_days: fd.get("retention_logs_days"),
@@ -26,8 +30,14 @@ export async function saveComplianceSettings(_: State, fd: FormData): Promise<St
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
-  const { error } = await supabase.from("orgs").update({ compliance_settings: parsed.data }).eq("id", session.orgId);
+  const { data, error } = await supabase
+    .from("orgs")
+    .update({ compliance_settings: parsed.data })
+    .eq("id", session.orgId)
+    .select("id")
+    .maybeSingle();
   if (error) return { error: error.message };
+  if (!data) return { error: "Org not found in your session" };
   revalidatePath("/console/settings/compliance");
   return { saved: true };
 }

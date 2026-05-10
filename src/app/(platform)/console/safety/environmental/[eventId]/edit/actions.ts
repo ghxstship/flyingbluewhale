@@ -39,7 +39,16 @@ export async function updateEnvEvent(eventId: string, _: State, fd: FormData): P
 export async function deleteEnvEvent(eventId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("environmental_events").delete().eq("id", eventId).eq("org_id", session.orgId);
+  // SOFT delete — environmental_events has a deleted_at column.
+  // Hard delete erases compliance records that may be needed for
+  // regulatory follow-up + audit. Soft-delete preserves the row;
+  // .is(deleted_at, null) makes the action idempotent.
+  await supabase
+    .from("environmental_events")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", eventId)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
   revalidatePath("/console/safety/environmental");
   redirect("/console/safety/environmental");
 }

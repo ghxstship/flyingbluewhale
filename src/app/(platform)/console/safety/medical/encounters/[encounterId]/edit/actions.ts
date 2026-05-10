@@ -39,7 +39,17 @@ export async function updateEncounter(encounterId: string, _: State, fd: FormDat
 export async function deleteEncounter(encounterId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("medical_encounters").delete().eq("id", encounterId).eq("org_id", session.orgId);
+  // SOFT delete — medical_encounters has a deleted_at column. Medical
+  // records are subject to retention policies (HIPAA-adjacent) and a
+  // hard delete is rarely the right action; soft-delete keeps the
+  // record in place for legal hold + audit. .is(deleted_at, null)
+  // makes the action idempotent.
+  await supabase
+    .from("medical_encounters")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", encounterId)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
   revalidatePath("/console/safety/medical/encounters");
   redirect("/console/safety/medical/encounters");
 }

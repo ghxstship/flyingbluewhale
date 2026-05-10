@@ -407,7 +407,7 @@ export const ZAPIER_SAMPLES = {
     spent_at: "2026-03-19",
     created_at: "2026-03-19T20:14:00.000Z",
     updated_at: "2026-03-19T20:14:00.000Z",
-    url: "https://atlvs.lytehaus.live/finance/expenses/00000000-0000-0000-0000-000000000009",
+    url: urlFor("platform", "/finance/expenses/00000000-0000-0000-0000-000000000009"),
   } satisfies ZapierExpense,
   notification: {
     id: "00000000-0000-0000-0000-000000000010",

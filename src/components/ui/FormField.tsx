@@ -19,6 +19,7 @@ export function FormField({
   required,
   children,
   className = "",
+  inputId,
 }: {
   label?: string;
   hint?: string;
@@ -26,11 +27,13 @@ export function FormField({
   required?: boolean;
   children: React.ReactNode;
   className?: string;
+  /** ID of the associated form control — wires `htmlFor` on the label. */
+  inputId?: string;
 }) {
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {label && (
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label htmlFor={inputId} className="text-xs font-medium text-[var(--text-secondary)]">
           {label}
           {required && (
             <span aria-hidden className="ms-0.5 text-[var(--color-error)]">

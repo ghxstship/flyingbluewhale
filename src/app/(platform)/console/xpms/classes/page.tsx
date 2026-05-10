@@ -42,7 +42,7 @@ export default async function ClassesPage() {
           const ct = counts.get(c.code) ?? { uac: 0, tpc: 0 };
           return (
             <Card key={c.code}>
-              <div style={{ height: 4, background: c.accent }} />
+              <div className="h-1 w-full" style={{ "--xpms-accent": c.accent, background: "var(--xpms-accent)" } as React.CSSProperties} />
               <CardHeader title={`${c.code}000 · ${c.name}`} subtitle={c.oneLine} />
               <CardBody>
                 <div className="mb-3 text-xs text-[var(--text-muted)]">{c.domain}</div>

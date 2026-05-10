@@ -233,37 +233,19 @@ export async function evaluateSchedules(): Promise<{ enqueued: number }> {
     orgByAutomation.set(a.id, a.org_id);
   }
 
-  // 3. For each schedule, enqueue + advance.
+  // 3. For each schedule, ADVANCE FIRST (conditional on next_run_at),
+  //    then enqueue only if we won the advance. The job_queue dedup_key
+  //    partial unique index is gated on state IN ('pending','running'),
+  //    so once the first racer's job completes a second tick reading
+  //    the same `ts` would NOT collide and the automation would re-fire.
+  //    Conditional advance closes that window: only one tick gets to
+  //    move next_run_at past `ts`, so only one tick enqueues.
   let enqueued = 0;
   for (const sched of schedules) {
     const orgId = orgByAutomation.get(sched.automation_id);
     if (!orgId) continue;
     const ts = sched.next_run_at;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: jobErr } = await (svc.from("job_queue") as any).insert({
-      type: "automation.run",
-      org_id: orgId,
-      payload: {
-        automationId: sched.automation_id,
-        triggerKind: "schedule",
-        triggerPayload: { scheduledFor: ts },
-      },
-      dedup_key: `${sched.automation_id}:${ts}`,
-    });
-
-    if (jobErr) {
-      const msg = jobErr.message ?? "";
-      if (!/duplicate key|unique constraint/i.test(msg)) {
-        // Real error — skip the advance so we retry next tick.
-        continue;
-      }
-      // Duplicate is the expected race condition; still advance the schedule.
-    } else {
-      enqueued += 1;
-    }
-
-    // Advance next_run_at past the firing instant.
     const fired = new Date(ts);
     const after = new Date(fired.getTime() + 1000); // +1s so we don't recompute the same instant
     const next = nextRunFromRrule(sched.rrule, after, sched.timezone);
@@ -278,7 +260,39 @@ export async function evaluateSchedules(): Promise<{ enqueued: number }> {
       update.enabled = false;
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (svc.from("automation_schedules") as any).update(update).eq("id", sched.id);
+    const { data: claimed, error: claimErr } = await (svc.from("automation_schedules") as any)
+      .update(update)
+      .eq("id", sched.id)
+      .eq("next_run_at", ts)
+      .select("id");
+    if (claimErr) continue;
+    if (!claimed || (claimed as Array<{ id: string }>).length === 0) {
+      // Sibling tick advanced this row first — don't enqueue.
+      continue;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: jobErr } = await (svc.from("job_queue") as any).insert({
+      type: "automation.run",
+      org_id: orgId,
+      payload: {
+        automationId: sched.automation_id,
+        triggerKind: "schedule",
+        triggerPayload: { scheduledFor: ts },
+      },
+      dedup_key: `${sched.automation_id}:${ts}`,
+    });
+    if (jobErr) {
+      const msg = jobErr.message ?? "";
+      if (/duplicate key|unique constraint/i.test(msg)) {
+        // A manual trigger raced us — fine, the schedule still advanced.
+        continue;
+      }
+      // Real error — schedule already advanced so we can't safely retry
+      // this tick; surface via metric counter (no enqueued increment).
+      continue;
+    }
+    enqueued += 1;
   }
 
   return { enqueued };

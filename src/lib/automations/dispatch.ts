@@ -136,9 +136,33 @@ export async function drainPending(opts: { batchSize?: number } = {}): Promise<{
   if (subsErr) throw new Error(`subscriptions read failed: ${subsErr.message}`);
   const subs = (rawSubs ?? []) as unknown as SubscriptionRow[];
 
-  // 3. For each event, fan out to every matching subscription (org + filters).
+  // 3. For each event, claim it FIRST (conditional stamp), then fan out
+  //    only if we won the claim. Without claim-first, two drainers
+  //    racing on the same row could both enqueue automation.run jobs:
+  //    the job_queue (type, dedup_key) partial unique index is gated on
+  //    state IN ('pending','running'), so once the first racer's job
+  //    completes the second racer's insert no longer collides — the
+  //    automation re-fires. Stamping dispatched_at first via .is(null)
+  //    closes that window deterministically.
   let enqueued = 0;
+  let drained = 0;
   for (const ev of events) {
+    const { data: claimed, error: claimErr } = await svc
+      .from("domain_events")
+      .update({ dispatched_at: new Date().toISOString() })
+      .eq("id", ev.id)
+      .is("dispatched_at", null)
+      .select("id");
+    if (claimErr) {
+      log.warn("domain_events.claim_failed", { eventId: ev.id, err: claimErr.message });
+      continue;
+    }
+    if (!claimed || (claimed as Array<{ id: string }>).length === 0) {
+      // Another drainer beat us to this row — skip without re-fanning.
+      continue;
+    }
+    drained += 1;
+
     const matchingSubs = subs.filter(
       (s) =>
         s.org_id === ev.org_id &&
@@ -167,8 +191,9 @@ export async function drainPending(opts: { batchSize?: number } = {}): Promise<{
       });
       if (jobErr) {
         const msg = jobErr.message ?? "";
-        // Duplicate-key collisions are expected (concurrent ticks) — swallow
-        // without counting as enqueued. Real errors get logged + skipped.
+        // Duplicate-key collisions are expected if a manual trigger
+        // already enqueued the same dedup_key — swallow without counting
+        // as enqueued. Real errors get logged + skipped.
         if (!/duplicate key|unique constraint/i.test(msg)) {
           log.warn("domain_events.enqueue_failed", {
             event: ev.event_type,
@@ -180,16 +205,7 @@ export async function drainPending(opts: { batchSize?: number } = {}): Promise<{
       }
       enqueued += 1;
     }
-
-    // 4. Stamp the event as dispatched.
-    const { error: stampErr } = await svc
-      .from("domain_events")
-      .update({ dispatched_at: new Date().toISOString() })
-      .eq("id", ev.id);
-    if (stampErr) {
-      log.warn("domain_events.stamp_failed", { eventId: ev.id, err: stampErr.message });
-    }
   }
 
-  return { drained: events.length, enqueued };
+  return { drained, enqueued };
 }

@@ -53,10 +53,17 @@ function makeDb() {
         return { data: rows[0] ?? null, error: null };
       }
       if (mode === "update" && pendingUpdate) {
+        const touched: Row[] = [];
         for (const row of tables[table]) {
-          if (matches(row)) Object.assign(row, pendingUpdate);
+          if (matches(row)) {
+            Object.assign(row, pendingUpdate);
+            touched.push(row);
+          }
         }
-        return { data: null, error: null };
+        // Match the Supabase JS builder: when .update(...).select(...) is
+        // chained, the response carries the post-update rows so callers
+        // can confirm the conditional update landed.
+        return { data: touched, error: null };
       }
       if (mode === "select") {
         let found = tables[table].filter(matches);

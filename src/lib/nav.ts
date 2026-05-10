@@ -383,25 +383,136 @@ export const settingsNav: NavGroup[] = [
   },
 ];
 
+/**
+ * Portal sub-personas — 15 functional roles, each mapped to one of the
+ * 10 XPMS classes via `classOfPersona()` below. The XPMS class
+ * determines which dashboard template skins the persona's landing
+ * surface (ADR-0004 portal collapse — 10 dashboard templates, 1:1 with
+ * the spine, instead of inventing a separate portal taxonomy).
+ *
+ * Three additions vs the original 12 (2026-05-10): promoter, producer,
+ * stakeholder — the EXECUTIVE-class external counterparts (board, co-pro,
+ * fiscal-strategic) that the prior 12 didn't cover.
+ */
 export type PortalPersona =
+  // EXECUTIVE (0) — board / co-pro / fiscal counterparts
+  | "promoter"
+  | "producer"
+  | "stakeholder"
+  // TALENT (2) — in front of audience
   | "artist"
-  | "vendor"
+  | "athlete"
+  | "delegation"
+  // MARKETING (3) — revenue partners + press
   | "client"
   | "sponsor"
-  | "guest"
-  | "crew"
-  | "delegation"
   | "media"
-  | "vip"
-  | "hospitality"
+  // OPERATIONS (6) — labor + fulfillment
+  | "vendor"
+  | "crew"
   | "volunteer"
-  | "athlete";
+  | "hospitality"
+  // EXPERIENCE (7) — audience-facing
+  | "guest"
+  | "vip";
+
+/**
+ * Map a portal sub-persona to its primary XPMS class (0..9).
+ * Used by the portal layout to pick which dashboard template skins the
+ * landing surface. The 4 unpopulated classes (CREATIVE 1, BUILD 4,
+ * PRODUCTION 5, HOSPITALITY 8, TECHNOLOGY 9) are forward-looking slots
+ * — when a future persona lands in one of those classes, only this
+ * mapping changes; the dashboard template is already there.
+ */
+export function classOfPersona(p: PortalPersona): 0 | 2 | 3 | 6 | 7 {
+  switch (p) {
+    case "promoter":
+    case "producer":
+    case "stakeholder":
+      return 0;
+    case "artist":
+    case "athlete":
+    case "delegation":
+      return 2;
+    case "client":
+    case "sponsor":
+    case "media":
+      return 3;
+    case "vendor":
+    case "crew":
+    case "volunteer":
+    case "hospitality":
+      return 6;
+    case "guest":
+    case "vip":
+      return 7;
+  }
+}
+
+/**
+ * Dashboard template slug for an XPMS class. The 10 slugs match the
+ * folder names under src/components/xpms/dashboards/. Each slug is a
+ * stable identifier that survives class-name changes.
+ */
+export const XPMS_DASHBOARD_TEMPLATES = {
+  0: "executive",
+  1: "creative",
+  2: "talent",
+  3: "marketing",
+  4: "build",
+  5: "production",
+  6: "operations",
+  7: "experience",
+  8: "hospitality",
+  9: "technology",
+} as const;
+export type XpmsDashboardTemplate = (typeof XPMS_DASHBOARD_TEMPLATES)[keyof typeof XPMS_DASHBOARD_TEMPLATES];
+
+export function dashboardTemplateForPersona(p: PortalPersona): XpmsDashboardTemplate {
+  return XPMS_DASHBOARD_TEMPLATES[classOfPersona(p)];
+}
 
 export function portalNav(slug: string, persona: PortalPersona) {
   const base = `/p/${slug}/${persona}`;
   const guide: NavItem = { label: "Guide", href: `/p/${slug}/guide` };
   const privacy: NavItem = { label: "Privacy", href: `${base}/privacy` };
   const map: Record<PortalPersona, NavItem[]> = {
+    // EXECUTIVE (0) — board / co-pro / fiscal counterparts. NEW
+    // 2026-05-10. The three slugs differ in default landing tile but
+    // share the same EXECUTIVE dashboard template; sub-routes mirror
+    // what each role most commonly looks at.
+    promoter: [
+      { label: "Overview", href: base },
+      guide,
+      { label: "Co-Pro Splits", href: `${base}/co-pro` },
+      { label: "Settlements", href: `${base}/settlements` },
+      { label: "Tour P&L", href: `${base}/tour-pnl` },
+      { label: "Marketing Milestones", href: `${base}/marketing` },
+      { label: "Approvals", href: `${base}/approvals` },
+      privacy,
+    ],
+    producer: [
+      { label: "Overview", href: base },
+      guide,
+      { label: "Portfolio", href: `${base}/portfolio` },
+      { label: "P&L", href: `${base}/pnl` },
+      { label: "Risk", href: `${base}/risk` },
+      { label: "Readiness", href: `${base}/readiness` },
+      { label: "Approvals", href: `${base}/approvals` },
+      { label: "Reviews", href: `${base}/reviews` },
+      privacy,
+    ],
+    stakeholder: [
+      { label: "Overview", href: base },
+      guide,
+      { label: "Portfolio", href: `${base}/portfolio` },
+      { label: "P&L", href: `${base}/pnl` },
+      { label: "Governance", href: `${base}/governance` },
+      { label: "Sustainability", href: `${base}/sustainability` },
+      { label: "Audit Trail", href: `${base}/audit` },
+      privacy,
+    ],
+    // TALENT (2) — in front of the audience.
     artist: [
       { label: "Overview", href: base },
       guide,
@@ -411,17 +522,29 @@ export function portalNav(slug: string, persona: PortalPersona) {
       { label: "Schedule", href: `${base}/schedule` },
       { label: "Travel", href: `${base}/travel` },
     ],
-    vendor: [
+    athlete: [
       { label: "Overview", href: base },
       guide,
-      { label: "Submissions", href: `${base}/submissions` },
-      { label: "Equipment Pull List", href: `${base}/equipment-pull-list` },
-      { label: "Purchase Orders", href: `${base}/purchase-orders` },
-      { label: "Invoices", href: `${base}/invoices` },
-      { label: "Credentials", href: `${base}/credentials` },
+      { label: "Requests", href: `${base}/requests` },
       { label: "Training", href: `${base}/training` },
+      { label: "Safeguarding", href: `${base}/safeguarding` },
+      { label: "Visa", href: `${base}/visa` },
       privacy,
     ],
+    delegation: [
+      { label: "Overview", href: base },
+      guide,
+      { label: "Entries", href: `${base}/entries` },
+      { label: "Rate Card", href: `${base}/ratecard` },
+      { label: "Bookings", href: `${base}/bookings` },
+      { label: "Meetings", href: `${base}/meetings` },
+      { label: "Cases", href: `${base}/cases` },
+      { label: "Transport", href: `${base}/transport` },
+      { label: "Accommodation", href: `${base}/accommodation` },
+      { label: "Visa", href: `${base}/visa` },
+      privacy,
+    ],
+    // MARKETING (3) — revenue partners + press.
     client: [
       { label: "Overview", href: base },
       guide,
@@ -441,33 +564,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
       { label: "Reporting", href: `${base}/reporting` },
       privacy,
     ],
-    guest: [
-      { label: "Overview", href: base },
-      guide,
-      { label: "Tickets", href: `${base}/tickets` },
-      { label: "Schedule", href: `${base}/schedule` },
-      { label: "Logistics", href: `${base}/logistics` },
-      privacy,
-    ],
-    crew: [
-      { label: "Overview", href: base },
-      guide,
-      { label: "Call Sheet", href: `${base}/call-sheet` },
-      { label: "Time", href: `${base}/time` },
-    ],
-    delegation: [
-      { label: "Overview", href: base },
-      guide,
-      { label: "Entries", href: `${base}/entries` },
-      { label: "Rate Card", href: `${base}/ratecard` },
-      { label: "Bookings", href: `${base}/bookings` },
-      { label: "Meetings", href: `${base}/meetings` },
-      { label: "Cases", href: `${base}/cases` },
-      { label: "Transport", href: `${base}/transport` },
-      { label: "Accommodation", href: `${base}/accommodation` },
-      { label: "Visa", href: `${base}/visa` },
-      privacy,
-    ],
     media: [
       { label: "Overview", href: base },
       guide,
@@ -477,18 +573,23 @@ export function portalNav(slug: string, persona: PortalPersona) {
       { label: "Press Conferences", href: `${base}/pressconf` },
       { label: "Info-On-Demand", href: `${base}/info` },
     ],
-    vip: [
+    // OPERATIONS (6) — labor + fulfillment.
+    vendor: [
       { label: "Overview", href: base },
       guide,
-      { label: "Transport", href: `${base}/transport` },
-      { label: "Accommodation", href: `${base}/accommodation` },
-      { label: "Itinerary", href: `${base}/itinerary` },
+      { label: "Submissions", href: `${base}/submissions` },
+      { label: "Equipment Pull List", href: `${base}/equipment-pull-list` },
+      { label: "Purchase Orders", href: `${base}/purchase-orders` },
+      { label: "Invoices", href: `${base}/invoices` },
+      { label: "Credentials", href: `${base}/credentials` },
+      { label: "Training", href: `${base}/training` },
+      privacy,
     ],
-    hospitality: [
+    crew: [
       { label: "Overview", href: base },
       guide,
-      { label: "Guests", href: `${base}/guests` },
-      { label: "Itinerary", href: `${base}/itinerary` },
+      { label: "Call Sheet", href: `${base}/call-sheet` },
+      { label: "Time", href: `${base}/time` },
     ],
     volunteer: [
       { label: "Overview", href: base },
@@ -498,14 +599,27 @@ export function portalNav(slug: string, persona: PortalPersona) {
       { label: "Schedule", href: `${base}/schedule` },
       { label: "Uniform", href: `${base}/uniform` },
     ],
-    athlete: [
+    hospitality: [
       { label: "Overview", href: base },
       guide,
-      { label: "Requests", href: `${base}/requests` },
-      { label: "Training", href: `${base}/training` },
-      { label: "Safeguarding", href: `${base}/safeguarding` },
-      { label: "Visa", href: `${base}/visa` },
+      { label: "Guests", href: `${base}/guests` },
+      { label: "Itinerary", href: `${base}/itinerary` },
+    ],
+    // EXPERIENCE (7) — audience-facing.
+    guest: [
+      { label: "Overview", href: base },
+      guide,
+      { label: "Tickets", href: `${base}/tickets` },
+      { label: "Schedule", href: `${base}/schedule` },
+      { label: "Logistics", href: `${base}/logistics` },
       privacy,
+    ],
+    vip: [
+      { label: "Overview", href: base },
+      guide,
+      { label: "Transport", href: `${base}/transport` },
+      { label: "Accommodation", href: `${base}/accommodation` },
+      { label: "Itinerary", href: `${base}/itinerary` },
     ],
   };
   return map[persona];

@@ -1,4 +1,5 @@
-import { expect, test, type Page, type BrowserContext } from "playwright/test";
+import { expect, test, type Page } from "playwright/test";
+import { dismissConsent, loginAs } from "./helpers/auth";
 
 /**
  * Cross-shell HANDOFF suite.
@@ -26,12 +27,17 @@ import { expect, test, type Page, type BrowserContext } from "playwright/test";
  * paths a real user would, which is the point of a handoff test.
  */
 
-const PASSWORD = "FlyingBlue!Test2026";
-const TEST_EMAIL = (role: string) => `test+${role}@flyingbluewhale.app`;
-
 type RoleKey =
-  | "owner" | "admin" | "controller" | "collaborator" | "developer"
-  | "contractor" | "crew" | "client" | "viewer" | "community";
+  | "owner"
+  | "admin"
+  | "controller"
+  | "collaborator"
+  | "developer"
+  | "contractor"
+  | "crew"
+  | "client"
+  | "viewer"
+  | "community";
 
 // The /auth/resolve contract. These are the shell landings we guarantee.
 const SHELL_EXPECT: Record<RoleKey, RegExp> = {
@@ -52,30 +58,11 @@ const PORTAL_ROLES: RoleKey[] = ["client", "contractor"];
 const MOBILE_ROLES: RoleKey[] = ["crew"];
 const PERSONAL_ROLES: RoleKey[] = ["viewer", "community"];
 
-async function dismissConsent(ctx: BrowserContext) {
-  await ctx.addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
+// dismissConsent + loginAs come from helpers/auth — `login(page, role)`
+// shim wraps the canonical helper so the existing `login(page, role)`
+// call sites read identically.
 async function login(page: Page, role: RoleKey) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "Email" }).fill(TEST_EMAIL(role));
-  await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 15000 });
+  await loginAs(page, role);
 }
 
 // ---------------------------------------------------------------------------
@@ -83,8 +70,8 @@ async function login(page: Page, role: RoleKey) {
 // ---------------------------------------------------------------------------
 test.describe("handoff/auth-resolve: session → shell", () => {
   for (const role of INTERNAL_ROLES) {
-    test(`${role} → atlvs (/console)`, async ({ page, context }) => {
-      await dismissConsent(context);
+    test(`${role} → atlvs (/console)`, async ({ page }) => {
+      await dismissConsent(page);
       await login(page, role);
       await page.goto("/auth/resolve");
       await page.waitForLoadState("domcontentloaded");
@@ -95,8 +82,8 @@ test.describe("handoff/auth-resolve: session → shell", () => {
   }
 
   for (const role of PORTAL_ROLES) {
-    test(`${role} → gvteway (/p)`, async ({ page, context }) => {
-      await dismissConsent(context);
+    test(`${role} → gvteway (/p)`, async ({ page }) => {
+      await dismissConsent(page);
       await login(page, role);
       await page.goto("/auth/resolve");
       await page.waitForLoadState("domcontentloaded");
@@ -105,8 +92,8 @@ test.describe("handoff/auth-resolve: session → shell", () => {
   }
 
   for (const role of MOBILE_ROLES) {
-    test(`${role} → compvss (/m)`, async ({ page, context }) => {
-      await dismissConsent(context);
+    test(`${role} → compvss (/m)`, async ({ page }) => {
+      await dismissConsent(page);
       await login(page, role);
       await page.goto("/auth/resolve");
       await page.waitForLoadState("domcontentloaded");
@@ -116,8 +103,8 @@ test.describe("handoff/auth-resolve: session → shell", () => {
   }
 
   for (const role of PERSONAL_ROLES) {
-    test(`${role} → personal (/me)`, async ({ page, context }) => {
-      await dismissConsent(context);
+    test(`${role} → personal (/me)`, async ({ page }) => {
+      await dismissConsent(page);
       await login(page, role);
       await page.goto("/auth/resolve");
       await page.waitForLoadState("domcontentloaded");
@@ -125,8 +112,8 @@ test.describe("handoff/auth-resolve: session → shell", () => {
     });
   }
 
-  test("unauthenticated /auth/resolve → /login", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("unauthenticated /auth/resolve → /login", async ({ page }) => {
+    await dismissConsent(page);
     await page.goto("/auth/resolve");
     await page.waitForURL(/\/login/, { timeout: 10_000 });
     expect(page.url()).toMatch(/\/login/);
@@ -143,17 +130,23 @@ test.describe("handoff/atlvs→gvteway: guide render in portal", () => {
   const SLUG = "test-professional-show";
 
   const PERSONA_FOR_ROLE: Record<RoleKey, string> = {
-    owner: "staff", admin: "staff", controller: "staff",
-    collaborator: "staff", developer: "staff",
-    contractor: "vendor", client: "client", crew: "crew",
-    viewer: "guest", community: "guest",
+    owner: "staff",
+    admin: "staff",
+    controller: "staff",
+    collaborator: "staff",
+    developer: "staff",
+    contractor: "vendor",
+    client: "client",
+    crew: "crew",
+    viewer: "guest",
+    community: "guest",
   };
 
   const PORTAL_VIEWERS: RoleKey[] = ["client", "contractor", "owner"];
 
   for (const role of PORTAL_VIEWERS) {
-    test(`${role} reads /p/${SLUG}/guide and sees ${PERSONA_FOR_ROLE[role]} marker`, async ({ page, context }) => {
-      await dismissConsent(context);
+    test(`${role} reads /p/${SLUG}/guide and sees ${PERSONA_FOR_ROLE[role]} marker`, async ({ page }) => {
+      await dismissConsent(page);
       await login(page, role);
       await page.goto(`/p/${SLUG}/guide`);
       // Portal shell chrome
@@ -164,16 +157,16 @@ test.describe("handoff/atlvs→gvteway: guide render in portal", () => {
     });
   }
 
-  test("anon (no session) sees published guest guide on test-portal-show", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("anon (no session) sees published guest guide on test-portal-show", async ({ page }) => {
+    await dismissConsent(page);
     // No login — rely on projects_select_if_guide_published + event_guides_select_public.
     await page.goto("/p/test-portal-show/guide");
     await expect(page.locator('[data-platform="gvteway"]').first()).toBeVisible({ timeout: 10_000 });
     await expect(page.locator("body")).toContainText("HANDOFF:guest:test-portal-show", { timeout: 10_000 });
   });
 
-  test("anon can still read the long-standing mmw26-hialeah guest guide", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("anon can still read the long-standing mmw26-hialeah guest guide", async ({ page }) => {
+    await dismissConsent(page);
     await page.goto("/p/mmw26-hialeah/guide");
     await expect(page.locator('[data-platform="gvteway"]').first()).toBeVisible({ timeout: 10_000 });
     // Seeded guide title from production seed — use a stable substring.
@@ -185,8 +178,8 @@ test.describe("handoff/atlvs→gvteway: guide render in portal", () => {
 // Handoff 3 — atlvs → compvss: crew sees their persona on /m/guide
 // ---------------------------------------------------------------------------
 test.describe("handoff/atlvs→compvss: guide render on mobile", () => {
-  test("crew reads /m/guide and sees crew marker from most-recent active project", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("crew reads /m/guide and sees crew marker from most-recent active project", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "crew");
     await page.goto("/m/guide");
     await expect(page.locator('[data-platform="compvss"]').first()).toBeVisible({ timeout: 10_000 });
@@ -194,16 +187,16 @@ test.describe("handoff/atlvs→compvss: guide render on mobile", () => {
     await expect(page.locator("body")).toContainText(/HANDOFF:crew:test-[a-z]+-show/, { timeout: 10_000 });
   });
 
-  test("internal role viewing /m/guide maps to staff persona", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("internal role viewing /m/guide maps to staff persona", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "owner");
     await page.goto("/m/guide");
     // owner → staff mapping asserted by the subtitle marker.
     await expect(page.locator("body")).toContainText(/HANDOFF:staff:test-[a-z]+-show/, { timeout: 10_000 });
   });
 
-  test("client viewing /m/guide maps to client persona", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("client viewing /m/guide maps to client persona", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "client");
     await page.goto("/m/guide");
     await expect(page.locator("body")).toContainText(/HANDOFF:client:test-[a-z]+-show/, { timeout: 10_000 });
@@ -214,8 +207,8 @@ test.describe("handoff/atlvs→compvss: guide render on mobile", () => {
 // Handoff 4 — persona-mapping consistency across gvteway + compvss
 // ---------------------------------------------------------------------------
 test.describe("handoff/persona-consistency: same role sees same persona in both portal and mobile", () => {
-  test("owner sees staff persona in BOTH portal and mobile", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("owner sees staff persona in BOTH portal and mobile", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "owner");
 
     await page.goto("/p/test-professional-show/guide");
@@ -225,8 +218,8 @@ test.describe("handoff/persona-consistency: same role sees same persona in both 
     await expect(page.locator("body")).toContainText(/HANDOFF:staff:test-[a-z]+-show/, { timeout: 10_000 });
   });
 
-  test("client sees client persona in BOTH portal and mobile", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("client sees client persona in BOTH portal and mobile", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "client");
 
     await page.goto("/p/test-professional-show/guide");
@@ -243,8 +236,8 @@ test.describe("handoff/persona-consistency: same role sees same persona in both 
 // (and vice versa). This guards against accidentally leaking the wrong layout.
 // ---------------------------------------------------------------------------
 test.describe("handoff/shell-isolation: each shell renders only its own data-platform marker", () => {
-  test("console root carries atlvs only (no gvteway/compvss)", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("console root carries atlvs only (no gvteway/compvss)", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "owner");
     await page.goto("/console");
     await expect(page.locator('[data-platform="atlvs"]').first()).toBeVisible();
@@ -252,8 +245,8 @@ test.describe("handoff/shell-isolation: each shell renders only its own data-pla
     expect(await page.locator('[data-platform="compvss"]').count()).toBe(0);
   });
 
-  test("portal slug carries gvteway only (no atlvs/compvss)", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("portal slug carries gvteway only (no atlvs/compvss)", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "client");
     await page.goto("/p/test-professional-show/guide");
     await expect(page.locator('[data-platform="gvteway"]').first()).toBeVisible();
@@ -261,8 +254,8 @@ test.describe("handoff/shell-isolation: each shell renders only its own data-pla
     expect(await page.locator('[data-platform="compvss"]').count()).toBe(0);
   });
 
-  test("mobile carries compvss only (no atlvs/gvteway)", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("mobile carries compvss only (no atlvs/gvteway)", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "crew");
     await page.goto("/m");
     await expect(page.locator('[data-platform="compvss"]').first()).toBeVisible();
@@ -275,22 +268,22 @@ test.describe("handoff/shell-isolation: each shell renders only its own data-pla
 // Handoff 6 — sign-out must drop all three shells back to /login
 // ---------------------------------------------------------------------------
 test.describe("handoff/signout: cleared session locks every protected shell", () => {
-  test("after clearing cookies, /console redirects to /login", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("after clearing cookies, /console redirects to /login", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "owner");
-    await context.clearCookies();
-    await dismissConsent(context);
+    await page.context().clearCookies();
+    await dismissConsent(page);
     const resp = await page.goto("/console");
     // Either redirected to login, or we're on a page containing the login form.
     expect(page.url()).toMatch(/\/login/);
     expect(resp?.status()).toBeLessThan(500);
   });
 
-  test("after clearing cookies, /m redirects to /login", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("after clearing cookies, /m redirects to /login", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "crew");
-    await context.clearCookies();
-    await dismissConsent(context);
+    await page.context().clearCookies();
+    await dismissConsent(page);
     await page.goto("/m");
     expect(page.url()).toMatch(/\/login/);
   });
@@ -301,16 +294,16 @@ test.describe("handoff/signout: cleared session locks every protected shell", ()
 // A slug with NO published guide must not leak the project to anon.
 // ---------------------------------------------------------------------------
 test.describe("handoff/slug-rls: anon can only see slugs with a published guide", () => {
-  test("anon can resolve test-professional-show because a guide is published", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("anon can resolve test-professional-show because a guide is published", async ({ page }) => {
+    await dismissConsent(page);
     const resp = await page.goto("/p/test-professional-show/guide");
     expect(resp?.status()).toBeLessThan(500);
     // A guide for some persona is published — should render gvteway chrome.
     await expect(page.locator('[data-platform="gvteway"]').first()).toBeVisible({ timeout: 10_000 });
   });
 
-  test("anon gets 404 on a slug that does not exist", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("anon gets 404 on a slug that does not exist", async ({ page }) => {
+    await dismissConsent(page);
     const resp = await page.goto("/p/this-slug-does-not-exist-xyz/guide");
     // notFound() from the page → 404.
     expect(resp?.status()).toBe(404);

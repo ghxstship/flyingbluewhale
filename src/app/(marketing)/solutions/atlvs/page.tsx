@@ -21,6 +21,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
+import { urlFor } from "@/lib/urls";
 
 export const metadata: Metadata = buildMetadata({
   title: "ATLVS — The Console",
@@ -47,7 +48,7 @@ export default function ATLVSPage() {
             name: "ATLVS — The Console",
             description:
               "The office console for production teams. Projects, finance, procurement, advancing, AI — one workspace, one schema.",
-            url: "https://lytehaus.live/solutions/atlvs",
+            url: urlFor("marketing", "/solutions/atlvs"),
             price: "0",
           }),
         ]}

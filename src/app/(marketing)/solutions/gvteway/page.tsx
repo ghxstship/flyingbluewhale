@@ -11,6 +11,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
+import { urlFor } from "@/lib/urls";
 
 export const metadata: Metadata = buildMetadata({
   title: "GVTEWAY — The Portal",
@@ -44,7 +45,7 @@ export default function GvtewayPage() {
             name: "GVTEWAY — The Portal",
             description:
               "External stakeholder portal. Twelve personas, each scoped to their lane via RLS at the database.",
-            url: "https://lytehaus.live/solutions/gvteway",
+            url: urlFor("marketing", "/solutions/gvteway"),
           }),
         ]}
       />

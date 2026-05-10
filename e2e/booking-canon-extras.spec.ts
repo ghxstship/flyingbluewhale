@@ -11,9 +11,8 @@
  *   - Agency roster entry detail + end-relationship
  */
 import { expect, test, type Page } from "playwright/test";
+import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 
-const PASSWORD = "FlyingBlue!Test2026";
-const OWNER_EMAIL = "test+owner@flyingbluewhale.app";
 const TEST_ORG_ID = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
 
 // Fixtures from marketplace-canon-actions.spec.ts seed.
@@ -26,27 +25,8 @@ const FX = {
   offer: "ffffffff-0001-4001-8001-000000000001",
 };
 
-async function dismissConsent(page: Page) {
-  await page.context().addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({ essential: true, analytics: false, marketing: false, decidedAt: new Date().toISOString() }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
 async function loginAsOwner(page: Page) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "Email" }).fill(OWNER_EMAIL);
-  await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 25_000 });
-  const r = await page.request.patch("/api/v1/me/workspaces", { data: { orgId: TEST_ORG_ID } });
-  if (r.status() !== 200) throw new Error(`workspace switch failed: ${r.status()}`);
+  await loginAndSwitchWorkspace(page, "owner", TEST_ORG_ID);
 }
 
 test.describe("Booking canon · extras", () => {

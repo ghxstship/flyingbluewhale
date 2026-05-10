@@ -10,6 +10,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
+import { urlFor } from "@/lib/urls";
 
 export const metadata: Metadata = buildMetadata({
   title: "COMPVSS — The Field",
@@ -43,7 +44,7 @@ export default function CompvssPage() {
             name: "COMPVSS — The Field",
             description:
               "Offline-first PWA for production crew. Gate scan, clock-in, incident, medic, driver, guard, warehouse.",
-            url: "https://lytehaus.live/solutions/compvss",
+            url: urlFor("marketing", "/solutions/compvss"),
           }),
         ]}
       />

@@ -73,3 +73,22 @@ export async function authedSetup(page: Page, role: string): Promise<void> {
   await dismissConsent(page);
   await loginAs(page, role);
 }
+
+/**
+ * Sign in as `role` AND switch the active workspace to `orgId` via
+ * PATCH /api/v1/me/workspaces. Required by spec families that exercise
+ * a non-default tenant (e.g. booking-canon, marketplace-canon-actions —
+ * the seeded fixture user belongs to multiple orgs and the default
+ * workspace isn't the one those tests target).
+ *
+ * Throws if the workspace switch returns a non-200 — that's a real seed
+ * problem, not a transient flake, and silently continuing would let the
+ * tests run against the wrong tenant.
+ */
+export async function loginAndSwitchWorkspace(page: Page, role: string, orgId: string): Promise<void> {
+  await loginAs(page, role);
+  const r = await page.request.patch("/api/v1/me/workspaces", { data: { orgId } });
+  if (r.status() !== 200) {
+    throw new Error(`workspace switch to ${orgId} failed: ${r.status()} ${await r.text()}`);
+  }
+}

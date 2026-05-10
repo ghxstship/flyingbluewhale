@@ -22,6 +22,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata, softwareApplicationSchema } from "@/lib/seo";
+import { urlFor } from "@/lib/urls";
 type ModuleConfig = {
   slug: string;
   name: string;
@@ -599,7 +600,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
           softwareApplicationSchema({
             name: `LYTEHAUS Technologies — ${config.name}`,
             description: config.blurb,
-            url: `https://lytehaus.live/features/${config.slug}`,
+            url: urlFor("marketing", `/features/${config.slug}`),
           }),
         ]}
       />

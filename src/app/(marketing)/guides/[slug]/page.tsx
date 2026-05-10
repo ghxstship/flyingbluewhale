@@ -11,6 +11,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, articleSchema, faqSchema } from "@/lib/seo";
+import { urlFor } from "@/lib/urls";
 import { MARKETING_GUIDES, MARKETING_GUIDE_LIST } from "@/lib/marketing-guides";
 
 export function generateStaticParams() {
@@ -50,7 +51,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
             headline: g.title,
             description: g.blurb,
             datePublished: "2026-04-01",
-            url: `https://lytehaus.live/guides/${g.slug}`,
+            url: urlFor("marketing", `/guides/`),
           }),
           faqSchema(g.faqs),
         ]}

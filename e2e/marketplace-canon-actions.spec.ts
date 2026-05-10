@@ -18,9 +18,8 @@
  * test-professional org (org_id f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7).
  */
 import { expect, test, type Page } from "playwright/test";
+import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 
-const PASSWORD = "FlyingBlue!Test2026";
-const OWNER_EMAIL = "test+owner@flyingbluewhale.app";
 // Lock the session to test-professional so fixture UUIDs resolve. The
 // owner is a member of 4 test orgs and the resolver picks the first
 // non-demo membership; without an explicit pref the choice is whatever
@@ -55,32 +54,11 @@ const SLUG = {
   rfq: "fixture-led-wall-build-pro",
 };
 
-async function dismissConsent(page: Page) {
-  await page.context().addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({ essential: true, analytics: false, marketing: false, decidedAt: new Date().toISOString() }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
 async function loginAsOwner(page: Page) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "Email" }).fill(OWNER_EMAIL);
-  await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 25_000 });
   // Switch active workspace to test-professional so fixture UUIDs resolve
   // deterministically. The PATCH writes user_preferences.last_org_id;
   // getSession() honors it on the next request.
-  const r = await page.request.patch("/api/v1/me/workspaces", { data: { orgId: TEST_ORG_ID } });
-  if (r.status() !== 200) {
-    throw new Error(`workspace switch failed: ${r.status()} ${await r.text()}`);
-  }
+  await loginAndSwitchWorkspace(page, "owner", TEST_ORG_ID);
 }
 
 // ────────────────────────────────────────────────────────────────────

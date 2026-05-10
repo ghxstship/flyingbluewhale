@@ -10,6 +10,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, articleSchema } from "@/lib/seo";
+import { urlFor } from "@/lib/urls";
 import { POSTS, POST_LIST } from "@/lib/blog";
 
 export function generateStaticParams() {
@@ -50,7 +51,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             description: post.blurb,
             datePublished: post.date,
             author: post.author,
-            url: `https://lytehaus.live/blog/${post.slug}`,
+            url: urlFor("marketing", `/blog/`),
           }),
         ]}
       />

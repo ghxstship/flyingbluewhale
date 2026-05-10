@@ -1,4 +1,5 @@
-import { expect, test, type Page, type BrowserContext } from "playwright/test";
+import { expect, test } from "playwright/test";
+import { dismissConsent, loginAs } from "./helpers/auth";
 
 /**
  * End-to-end CMS → portal roundtrip.
@@ -13,9 +14,6 @@ import { expect, test, type Page, type BrowserContext } from "playwright/test";
  *   - Portal render pipeline (`getGuideByPersona` under RLS)
  */
 
-const PASSWORD = "FlyingBlue!Test2026";
-const OWNER_EMAIL = "test+owner@flyingbluewhale.app";
-
 // test+owner belongs to all 4 test orgs, but session.orgId resolves to exactly
 // one of them. Probe /api/v1/projects to discover which (project_id, slug)
 // pair the owner can actually reach — then drive the roundtrip against that.
@@ -26,36 +24,10 @@ const TEST_PROJECTS: Array<{ slug: string; id: string }> = [
   { slug: "test-enterprise-show", id: "e4340ab4-d105-4b49-ab84-90b038542f89" },
 ];
 
-async function dismissConsent(ctx: BrowserContext) {
-  await ctx.addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
-async function login(page: Page, email: string) {
-  await page.goto("/login");
-  await page.getByRole("textbox", { name: "Email" }).fill(email);
-  await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 15_000 });
-}
-
 test.describe("handoff/cms-roundtrip: owner edit → portal render", () => {
-  test("editing client persona title in console shows up on /p/<slug>/guide", async ({ page, context }) => {
-    await dismissConsent(context);
-    await login(page, OWNER_EMAIL);
+  test("editing client persona title in console shows up on /p/<slug>/guide", async ({ page }) => {
+    await dismissConsent(page);
+    await loginAs(page, "owner");
 
     // Discover which project is visible to this owner session.
     let project: { slug: string; id: string } | null = null;
@@ -94,9 +66,9 @@ test.describe("handoff/cms-roundtrip: owner edit → portal render", () => {
     // Portal fetch — same session (owner → staff persona), but we want to
     // assert the client guide specifically. Easiest: log out, log in as
     // a client in the same org, view the portal.
-    await context.clearCookies();
-    await dismissConsent(context);
-    await login(page, "test+client@flyingbluewhale.app");
+    await page.context().clearCookies();
+    await dismissConsent(page);
+    await loginAs(page, "client");
 
     await page.goto(`/p/${project!.slug}/guide`);
     await expect(page.locator('[data-platform="gvteway"]').first()).toBeVisible({ timeout: 10_000 });

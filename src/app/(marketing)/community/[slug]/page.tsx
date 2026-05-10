@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, articleSchema } from "@/lib/seo";
+import { urlFor } from "@/lib/urls";
 import { COMMUNITY, COMMUNITY_LIST } from "@/lib/community";
 
 export function generateStaticParams() {
@@ -46,7 +47,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             headline: c.headline,
             description: c.blurb,
             datePublished: "2026-01-01",
-            url: `https://lytehaus.live/community/${c.slug}`,
+            url: urlFor("marketing", `/community/`),
           }),
         ]}
       />

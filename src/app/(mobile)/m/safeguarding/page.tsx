@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -51,7 +52,7 @@ export default async function SafeguardingPage() {
       </p>
 
       <div className="mt-5">
-        <Link href="/console/safety/safeguarding/new" className="btn btn-danger w-full">
+        <Link href={urlFor("platform", "/safety/safeguarding/new")} className="btn btn-danger w-full">
           File new report
         </Link>
         <p className="mt-2 text-[10px] text-[var(--text-muted)]">

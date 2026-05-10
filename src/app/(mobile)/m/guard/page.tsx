@@ -6,6 +6,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +61,7 @@ export default async function MobileGuardPage() {
               title="No Assigned Tours"
               description="Patrol routes appear here when a supervisor assigns you. See all tours in Safety → Guard tours."
               action={
-                <Link href="/console/safety/guard-tours" className="btn btn-secondary btn-sm">
+                <Link href={urlFor("platform", "/safety/guard-tours")} className="btn btn-secondary btn-sm">
                   Open guard tours
                 </Link>
               }

@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -139,7 +140,7 @@ export default async function WalletPage() {
       )}
 
       <div className="mt-8 border-t border-[var(--border-color)] pt-4">
-        <Link href="/me/profile" className="text-xs text-[var(--org-primary)]">
+        <Link href={urlFor("personal", "/me/profile")} className="text-xs text-[var(--org-primary)]">
           Open profile →
         </Link>
       </div>

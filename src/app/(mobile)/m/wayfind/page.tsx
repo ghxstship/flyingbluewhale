@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -68,7 +69,7 @@ export default async function MobileWayfindPage() {
             title="No Venues Yet"
             description="Author venues from Console → Venues. Each venue's zones become the routable points here."
             action={
-              <Link href="/console/venues" className="btn btn-secondary btn-sm">
+              <Link href={urlFor("platform", "/venues")} className="btn btn-secondary btn-sm">
                 Open Venues
               </Link>
             }

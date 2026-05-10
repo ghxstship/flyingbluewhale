@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -54,7 +55,7 @@ export default async function NotificationsPage() {
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {rows.length === 0 ? "All caught up." : `${unread} unread of ${rows.length} recent`}
         {" · "}
-        <Link href="/me/notifications" className="text-[var(--org-primary)]">
+        <Link href={urlFor("personal", "/me/notifications")} className="text-[var(--org-primary)]">
           settings
         </Link>
       </p>

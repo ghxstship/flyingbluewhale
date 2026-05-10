@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,7 @@ type Rfq = {
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) return notFound();
-  const supabase = await createClient();
+  const [supabase, fmt] = await Promise.all([createClient(), getRequestFormatters()]);
   const { data } = await supabase.from("public_rfq_marketplace").select("*").eq("public_slug", slug).maybeSingle();
   if (!data) return notFound();
   const r = data as Rfq;
@@ -47,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <div className="flex flex-wrap gap-2 text-sm text-[var(--text-secondary)]">
           {r.region && <Badge variant="muted">{r.region}</Badge>}
           {r.budget_band && <Badge variant="muted">{r.budget_band}</Badge>}
-          {r.due_at && <Badge variant="warning">Due {new Date(r.due_at).toLocaleDateString()}</Badge>}
+          {r.due_at && <Badge variant="warning">Due {fmt.date(r.due_at, "medium")}</Badge>}
         </div>
       </header>
 

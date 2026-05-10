@@ -12,6 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
+import { urlFor } from "@/lib/urls";
 
 /**
  * Top-right avatar menu — admin (Settings) lives here, not in the primary
@@ -40,13 +41,13 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/me" className="flex items-center gap-2">
+          <Link href={urlFor("personal", "/me")} className="flex items-center gap-2">
             <User size={14} aria-hidden="true" />
             Account
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/me/preferences" className="flex items-center gap-2">
+          <Link href={urlFor("personal", "/me/preferences")} className="flex items-center gap-2">
             <Sparkles size={14} aria-hidden="true" />
             Preferences
           </Link>

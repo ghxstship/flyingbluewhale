@@ -4,6 +4,7 @@ import { MarketplaceCard } from "@/components/marketplace/MarketplaceCard";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ type Row = {
 
 export default async function Page() {
   let rows: Row[] = [];
+  const fmt = await getRequestFormatters();
   if (hasSupabase) {
     const supabase = await createClient();
     const { data } = await supabase
@@ -65,7 +67,7 @@ export default async function Page() {
               meta={[
                 r.region,
                 r.budget_band,
-                r.due_at ? `Due ${new Date(r.due_at).toLocaleDateString()}` : null,
+                r.due_at ? `Due ${fmt.date(r.due_at, "medium")}` : null,
                 r.requires_prequalification ? "Prequal required" : null,
               ]}
               badge={r.requires_insurance ? "COI required" : null}

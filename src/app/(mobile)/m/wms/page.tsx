@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -74,7 +75,7 @@ export default async function MobileWmsPage() {
           Scan asset
         </Link>
         <Link
-          href="/console/production/equipment"
+          href={urlFor("platform", "/production/equipment")}
           className="surface flex flex-col items-center gap-1 p-4 text-sm font-medium"
         >
           <Package size={20} />

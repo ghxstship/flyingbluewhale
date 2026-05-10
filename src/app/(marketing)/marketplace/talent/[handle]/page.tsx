@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,7 @@ type Row = {
 export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
   if (!hasSupabase) return notFound();
-  const supabase = await createClient();
+  const [supabase, fmt] = await Promise.all([createClient(), getRequestFormatters()]);
   const { data } = await supabase.from("public_talent_directory").select("*").eq("public_handle", handle).maybeSingle();
   if (!data) return notFound();
   const t = data as Row;
@@ -92,11 +93,11 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
           <dl className="space-y-1 text-sm">
             <div>
               <span className="text-[var(--text-secondary)]">Monthly listeners:</span>{" "}
-              {t.monthly_listeners?.toLocaleString() ?? "—"}
+              {t.monthly_listeners != null ? fmt.number(t.monthly_listeners, { maximumFractionDigits: 0 }) : "—"}
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Followers:</span>{" "}
-              {t.follower_count?.toLocaleString() ?? "—"}
+              {t.follower_count != null ? fmt.number(t.follower_count, { maximumFractionDigits: 0 }) : "—"}
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Reel:</span>{" "}

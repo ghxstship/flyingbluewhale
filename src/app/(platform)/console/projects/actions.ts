@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createProject, updateProject } from "@/lib/db/projects";
 
 const slugify = (s: string) =>
@@ -24,6 +24,7 @@ export type CreateProjectState = { error?: string } | null;
 
 export async function createProjectAction(_: CreateProjectState, formData: FormData): Promise<CreateProjectState> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create projects" };
   const parsed = CreateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
@@ -53,6 +54,7 @@ const UpdateSchema = z.object({
 
 export async function updateProjectAction(projectId: string, formData: FormData) {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can change project status" };
   const parsed = UpdateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 

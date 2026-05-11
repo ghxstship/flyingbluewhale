@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents, generateNumber } from "@/lib/format";
 
@@ -17,6 +17,8 @@ export type State = { error?: string } | null;
 
 export async function createPoAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // POs commit money to vendors — manager+ only at the app layer.
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create purchase orders" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
   const supabase = await createClient();
@@ -80,6 +82,7 @@ export async function setPoStatusAction(
   status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled",
 ) {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can change PO status" };
   const supabase = await createClient();
   // Read current status so we can validate the transition + scope the
   // conditional update — without it a stale UI could move fulfilled

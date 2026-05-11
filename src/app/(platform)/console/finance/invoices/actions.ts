@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents, generateNumber } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
@@ -30,6 +30,10 @@ export type State = { error?: string } | null;
 
 export async function createInvoiceAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Invoices are revenue documents that flow to Stripe + AR aging.
+  // manager+ is the documented gate (matches the billing:write
+  // capability that gates the Stripe checkout/portal endpoints).
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create invoices" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
@@ -85,6 +89,7 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
 
 export async function setInvoiceStatusAction(id: string, status: "draft" | "sent" | "paid" | "overdue" | "voided") {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can change invoice status" };
   const supabase = await createClient();
   const patch: { status: typeof status; paid_at?: string } = { status };
   if (status === "paid") patch.paid_at = new Date().toISOString();

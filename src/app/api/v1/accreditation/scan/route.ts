@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiCreated, apiError, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /** /api/v1/accreditation/scan — COMPVSS gate decisioning (WF-053). */
 
@@ -17,6 +18,15 @@ const PostSchema = z.object({
 type ZoneRow = { id: string; code: string; allowed_categories: string[] | null };
 
 export async function POST(req: NextRequest) {
+  // Field-scan bucket — 120/min. Bounds bulk barcode-enumeration so a
+  // compromised gate device can't probe accreditation cards faster than
+  // a human ever would.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "accreditation:scan"),
+    ...RATE_BUDGETS.scan,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Accreditation scan rate limit reached");
+
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
 

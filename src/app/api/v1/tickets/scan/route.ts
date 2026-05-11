@@ -2,6 +2,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { scanTicket } from "@/lib/db/tickets";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const ScanInput = z.object({
   code: z.string().min(1),
@@ -9,6 +10,15 @@ const ScanInput = z.object({
 });
 
 export async function POST(req: Request) {
+  // Field-scan bucket — 120/min. Bounds bulk barcode-enumeration and
+  // catches stuck scanners. Mirrors the per-id /tickets/[id]/scan route
+  // which already gates on the same budget.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "tickets:scan"),
+    ...RATE_BUDGETS.scan,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Ticket scan rate limit reached");
+
   const input = await parseJson(req, ScanInput);
   if (input instanceof Response) return input;
 

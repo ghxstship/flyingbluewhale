@@ -21,14 +21,50 @@ alter view public.public_vendor_directory set (security_invoker=off);
 alter view public.public_job_board set (security_invoker=off);
 alter view public.public_open_calls set (security_invoker=off);
 
-comment on view public.public_rfq_marketplace is
+DO $migrate$ BEGIN
+  comment on view public.public_rfq_marketplace is
   'Public RFQ discovery feed. security_invoker=off (definer mode) so '
   'anon visitors can read public RFQ rows + their org metadata without '
   'requiring a public-read policy on the underlying rfqs/orgs tables. '
   'WHERE clause is the public-read contract: visibility=public AND '
   'status=sent.';
-comment on view public.public_talent_directory is 'Public talent EPK feed — definer mode, see public_rfq_marketplace.';
-comment on view public.public_crew_directory is 'Public crew profile feed — definer mode, see public_rfq_marketplace.';
-comment on view public.public_vendor_directory is 'Public vendor profile feed — definer mode, see public_rfq_marketplace.';
-comment on view public.public_job_board is 'Public job posting feed — definer mode, see public_rfq_marketplace.';
-comment on view public.public_open_calls is 'Public open-call feed — definer mode, see public_rfq_marketplace.';
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
+DO $migrate$ BEGIN
+  comment on view public.public_talent_directory is 'Public talent EPK feed — definer mode, see public_rfq_marketplace.';
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
+DO $migrate$ BEGIN
+  comment on view public.public_crew_directory is 'Public crew profile feed — definer mode, see public_rfq_marketplace.';
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
+DO $migrate$ BEGIN
+  comment on view public.public_vendor_directory is 'Public vendor profile feed — definer mode, see public_rfq_marketplace.';
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
+DO $migrate$ BEGIN
+  comment on view public.public_job_board is 'Public job posting feed — definer mode, see public_rfq_marketplace.';
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
+DO $migrate$ BEGIN
+  comment on view public.public_open_calls is 'Public open-call feed — definer mode, see public_rfq_marketplace.';
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;

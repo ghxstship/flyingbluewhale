@@ -1,4 +1,5 @@
--- Restore SELECT for org members on talent_offers. The original
+DO $migrate$ BEGIN
+  -- Restore SELECT for org members on talent_offers. The original
 -- talent_offers_org_rw policy (FOR ALL) covered SELECT/INSERT/UPDATE/
 -- DELETE for org members. Migration 20260509100012 split it into
 -- specific FOR <cmd> policies but only emitted INSERT/UPDATE/DELETE —
@@ -14,10 +15,27 @@
 -- in some Postgres versions).
 
 drop policy if exists talent_offers_org_select on public.talent_offers;
-create policy talent_offers_org_select on public.talent_offers
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
+DO $migrate$ BEGIN
+  create policy talent_offers_org_select on public.talent_offers
   for select using (private.is_org_member(org_id));
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
 
-comment on policy talent_offers_org_select on public.talent_offers is
+DO $migrate$ BEGIN
+  comment on policy talent_offers_org_select on public.talent_offers is
   'Org members read all of their org''s talent_offers. Companion to '
   'talent_offers_recipient_select (which lets the talent recipient see '
   'offers addressed to them across orgs).';
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;

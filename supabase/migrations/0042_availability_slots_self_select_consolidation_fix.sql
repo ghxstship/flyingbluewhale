@@ -1,4 +1,5 @@
--- Restore SELECT for the slot owner on availability_slots. Same
+DO $migrate$ BEGIN
+  -- Restore SELECT for the slot owner on availability_slots. Same
 -- consolidation regression as talent_offers + the marketplace-canon
 -- batch: the FOR ALL `availability_slots_self_rw` policy was split
 -- into self_insert/update/delete but the SELECT case was lost. The
@@ -11,11 +12,28 @@
 -- slot owner can't read their own row back).
 
 drop policy if exists availability_slots_self_select on public.availability_slots;
-create policy availability_slots_self_select on public.availability_slots
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
+DO $migrate$ BEGIN
+  create policy availability_slots_self_select on public.availability_slots
   for select using (user_id = (select auth.uid()));
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;
 
-comment on policy availability_slots_self_select on public.availability_slots is
+DO $migrate$ BEGIN
+  comment on policy availability_slots_self_select on public.availability_slots is
   'Slot owner reads their own holds (org-scoped or personal). '
   'Companion to availability_slots_org_select (org members read '
   'org-scoped slots) — both needed because /me/availability creates '
   'org_id-NULL slots that the org_select policy excludes.';
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+  WHEN undefined_column THEN NULL;
+  WHEN undefined_object THEN NULL;
+END $migrate$;

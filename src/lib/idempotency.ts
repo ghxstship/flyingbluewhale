@@ -45,12 +45,25 @@ export function withIdempotency(handler: Handler): Handler {
     const requestHash = hash(`${method}|${req.nextUrl.pathname}|${bodyText}`);
 
     const supabase = await createClient();
+    // Resolve the caller's user_id BEFORE the lookup. Idempotency keys
+    // must be scoped per-user — without this, two users picking the
+    // same `Idempotency-Key: foo` value would collide and the second
+    // caller would replay the first caller's response (which can carry
+    // sensitive data). For anonymous callers we fall back to the
+    // raw key (no isolation possible without a session) — anon mutating
+    // endpoints are intentionally rare in the surface area.
+    const { data: authUser } = await supabase.auth.getUser();
+    const callerUserId = authUser.user?.id ?? null;
+
     // idempotency_keys isn't in generated database.types yet (added by
     // a later migration; gen:types pending). Route through the
     // codebase's typed-loose helper LooseSupabase, then narrow the
     // row shape at the consume site.
     const loose = supabase as unknown as LooseSupabase;
-    const lookup = (await loose.from("idempotency_keys").select("*").eq("key", key).maybeSingle()) as {
+    let lookupQ = loose.from("idempotency_keys").select("*").eq("key", key);
+    if (callerUserId) lookupQ = lookupQ.eq("user_id", callerUserId);
+    else lookupQ = lookupQ.is("user_id", null);
+    const lookup = (await lookupQ.maybeSingle()) as {
       data: {
         key: string;
         method: string;
@@ -88,11 +101,11 @@ export function withIdempotency(handler: Handler): Handler {
       try {
         const respClone = resp.clone();
         const body = (await respClone.json()) as unknown;
-        // Grab user context if available (we don't throw if anon).
-        const { data: u } = await supabase.auth.getUser();
+        // user_id resolved upstream so the insert matches the lookup
+        // scope — same row gets replayed on retry.
         await loose.from("idempotency_keys").insert({
           key,
-          user_id: u.user?.id ?? null,
+          user_id: callerUserId,
           org_id: null,
           method,
           path: req.nextUrl.pathname,

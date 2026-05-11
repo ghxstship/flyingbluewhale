@@ -1,5 +1,15 @@
-import { PageStub } from "@/components/Shell";
+import { ModuleHeader } from "@/components/Shell";
+import { DraftingWorkspace } from "./DraftingWorkspace";
 
 export default function Page() {
-  return <PageStub title="AI drafting" description="Document workspace" />;
+  return (
+    <>
+      <ModuleHeader
+        eyebrow="AI"
+        title="Drafting Workspace"
+        subtitle="Generate proposals, SOPs, contracts, press releases, and more"
+      />
+      <DraftingWorkspace />
+    </>
+  );
 }

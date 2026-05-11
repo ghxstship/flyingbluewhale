@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { Database } from "@/lib/supabase/types";
 
 type PublicTables = Database["public"]["Tables"];
@@ -40,7 +41,9 @@ export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
 
 async function anyFrom(t: string) {
   const supabase = await createClient();
-  return (supabase as unknown as { from: (t: string) => any }).from(t);
+  // Dynamic table name → typed client's `from()` collapses to `never`.
+  // LooseSupabase is the centralized escape hatch for this exact pattern.
+  return (supabase as unknown as LooseSupabase).from(t);
 }
 
 export async function listOrgScoped<T extends TableName>(

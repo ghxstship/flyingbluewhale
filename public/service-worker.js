@@ -1,9 +1,9 @@
-// flyingbluewhale offline-first service worker
+// COMPVSS offline-first service worker
 // Caches the mobile shell + check-in flow + offline fallback page.
 
 const VERSION = "v1";
-const STATIC_CACHE = `fbw-static-${VERSION}`;
-const RUNTIME_CACHE = `fbw-runtime-${VERSION}`;
+const STATIC_CACHE = `compvss-static-${VERSION}`;
+const RUNTIME_CACHE = `compvss-runtime-${VERSION}`;
 
 const PRECACHE = [
   "/",

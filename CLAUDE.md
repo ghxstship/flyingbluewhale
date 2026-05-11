@@ -74,6 +74,18 @@ Public surfaces exposing your org's RFQs, gigs, talent calls, talent EPKs, crew 
 - **Compliance gating on public RFQs:** `requires_prequalification`, `requires_insurance`, `requires_w9`, `nda_required` columns on `rfqs`. Vendor portal is the bid-submission surface; gates evaluated app-side before allowing a response.
 - **Code anchor:** schema in `supabase/migrations/0002_marketplace_canon.sql`; shared types + helpers in `src/lib/marketplace.ts`; new-table queries use `as unknown as LooseSupabase` from `src/lib/supabase/loose.ts` until `npm run gen:types` regenerates the typed client.
 
+## Advancing canon (0049)
+
+"Advancing" in this codebase means the unified per-project, per-individual catalog fulfillment lifecycle. It covers everything assignable from the master catalog to a person — **credentials, catering, radios, tools, equipment, uniforms, travel, lodging, vehicles** — plus the project-document deliverables (riders, plans, lists). NEVER financial cash advances.
+
+- **Schema:** `public.deliverables`. Per-individual rows carry `assignee_id`; per-project (org-document) rows have `assignee_id IS NULL`. Lifecycle is the `deliverable_state` enum: `briefed → draft → submitted → in_review → approved → delivered` (also `revision_requested`, `rejected`). Migration `0049_deliverables_individual_assignment.sql` added 9 catalog kinds to `deliverable_type`: `credential_assignment`, `catering_assignment`, `radio_assignment`, `tool_assignment`, `equipment_assignment`, `uniform_assignment`, `travel_assignment`, `lodging_assignment`, `vehicle_assignment`.
+- **One table, three shells.** Same advancing → fulfillment → tracking lifecycle drives ATLVS authoring, GVTEWAY portal display, and COMPVSS field view.
+- **ATLVS admin:** `console/projects/[projectId]/advancing/assignments` (per-project list + new-assignment form). Push-notifies the assignee on insert.
+- **GVTEWAY portal:** `/p/[slug]/crew/advances` (project-scoped, per-individual). Mounted via the existing `crew` persona index.
+- **COMPVSS field:** `/m/advances` (cross-project, per-individual). Project name hydrated for context.
+- **Shared widget:** `<PortalDocVault>` (`src/components/portal/PortalDocVault.tsx`) — reads `deliverables` filtered to the caller (assignee OR submitter) with an optional `types[]` filter. Mounted on `/p/[slug]/{artist, media, delegation}` index pages.
+- **`/console/finance/advances` is gone** — that route was auto-scaffold debris. Never query the legacy `advances` table from any advancing surface.
+
 ## Connecteam parity (0046–0048)
 
 Deskless-workforce features that bring COMPVSS to feature-parity with Connecteam, layered into the existing 3-shell IA — no new shells.

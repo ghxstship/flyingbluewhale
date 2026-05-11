@@ -157,7 +157,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                     <tbody>
                       {items.map((r) => (
                         <tr key={r.id}>
-                          <td>{r.title ?? "Untitled"}</td>
+                          <td>
+                            <a
+                              className="underline-offset-2 hover:underline"
+                              href={`/console/projects/${projectId}/advancing/assignments/${r.id}`}
+                            >
+                              {r.title ?? "Untitled"}
+                            </a>
+                          </td>
                           <td>
                             {r.assignee_id ? (
                               (userMap.get(r.assignee_id) ?? "Unknown")

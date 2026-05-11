@@ -8,19 +8,19 @@
 
 ## 1. Comparative Diagnosis
 
-| Dimension | Red Sea Lion (FlyteDeck) | Opus One (gvteway) | Gap / Opportunity |
-|---|---|---|---|
-| **Shells** | 1 — web app only | 3 — `(platform)` console + `(portal)` external + `(mobile)` PWA | RSL lacks mobile + external portals |
-| **Marketing surface** | Full `(marketing)` group (home, pricing, features, blog) | Minimal / missing | Opus lacks marketing |
-| **Dashboard pattern** | `(hub)` route group, 20+ domain modules | `/console/<module>` flat pattern | Inconsistent hub pattern across sibling apps |
-| **Finance depth** | Invoices, expenses, budgets, time, mileage, advances | Finance implied, shallow | RSL is the reference |
-| **Procurement** | POs, requisitions, vendors, payments | Vendors only | RSL is the reference |
-| **AI** | Assistant, drafting, automations | None | RSL is the reference |
-| **External portals** | `/client-portal`, `/project-portals` (internal-only views) | Slug-based multi-role: artist, vendor, client, sponsor, guest | Opus is the reference |
-| **Field operations** | None | COMPVSS mobile + QR check-in/scan | Opus is the reference |
-| **Ticketing** | None | `/api/v1/tickets/[id]/scan`, personal `/tickets` | Opus is the reference |
-| **RBAC depth** | 10 platform + 4 project roles, 4 tiers | 11 personas, context-based provider | RSL's formalism is stronger; Opus' persona clarity is stronger |
-| **API convention** | `/api/<resource>` | `/api/v1/<resource>` with `apiOk/apiError` helpers + Zod | Opus is cleaner — versioned + typed |
+| Dimension             | Red Sea Lion (FlyteDeck)                                   | Opus One (gvteway)                                              | Gap / Opportunity                                              |
+| --------------------- | ---------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------- |
+| **Shells**            | 1 — web app only                                           | 3 — `(platform)` console + `(portal)` external + `(mobile)` PWA | RSL lacks mobile + external portals                            |
+| **Marketing surface** | Full `(marketing)` group (home, pricing, features, blog)   | Minimal / missing                                               | Opus lacks marketing                                           |
+| **Dashboard pattern** | `(hub)` route group, 20+ domain modules                    | `/console/<module>` flat pattern                                | Inconsistent hub pattern across sibling apps                   |
+| **Finance depth**     | Invoices, expenses, budgets, time, mileage, advances       | Finance implied, shallow                                        | RSL is the reference                                           |
+| **Procurement**       | POs, requisitions, vendors, payments                       | Vendors only                                                    | RSL is the reference                                           |
+| **AI**                | Assistant, drafting, automations                           | None                                                            | RSL is the reference                                           |
+| **External portals**  | `/client-portal`, `/project-portals` (internal-only views) | Slug-based multi-role: artist, vendor, client, sponsor, guest   | Opus is the reference                                          |
+| **Field operations**  | None                                                       | COMPVSS mobile + QR check-in/scan                               | Opus is the reference                                          |
+| **Ticketing**         | None                                                       | `/api/v1/tickets/[id]/scan`, personal `/tickets`                | Opus is the reference                                          |
+| **RBAC depth**        | 10 platform + 4 project roles, 4 tiers                     | 11 personas, context-based provider                             | RSL's formalism is stronger; Opus' persona clarity is stronger |
+| **API convention**    | `/api/<resource>`                                          | `/api/v1/<resource>` with `apiOk/apiError` helpers + Zod        | Opus is cleaner — versioned + typed                            |
 
 **Verdict:** Neither app is complete on its own. The optimized IA adopts **Opus One's three-shell topology** (platform + portal + mobile) and **Red Sea Lion's feature depth** (finance, procurement, AI), normalized to a single `(hub)` pattern with a versioned API.
 
@@ -40,6 +40,7 @@ src/app/
 ```
 
 **Principles:**
+
 1. **Route groups carry no URL segment** — they exist for layout + middleware isolation.
 2. **Every module uses a `(hub)` sub-group** for its list/detail/create triad. One pattern, one sidebar shell.
 3. **External ≠ internal.** `(portal)` is slug-scoped (`/p/[slug]/...`) and never shares the console sidebar.
@@ -138,7 +139,6 @@ FINANCE
 /console/finance/budgets/(hub)
 /console/finance/time/(hub)
 /console/finance/mileage/(hub)
-/console/finance/advances/(hub)
 /console/finance/payouts                   Stripe Connect payouts
 /console/finance/reports                   P&L, cash flow, project profitability
 
@@ -261,6 +261,7 @@ Separate PWA manifest, offline-first, camera + geolocation permissions on instal
 ### 3.7 `api/v1/` — Versioned API
 
 Pattern: `/api/v1/<resource>[/<id>[/<action>]]`. All endpoints:
+
 - Parse input with Zod at the boundary
 - Return `apiOk(data) | apiCreated(data) | apiError(code, message)`
 - Gated by `withAuth` + org-scoped RLS
@@ -290,19 +291,19 @@ Pattern: `/api/v1/<resource>[/<id>[/<action>]]`. All endpoints:
 
 ## 4. Persona → Shell Matrix
 
-| Persona | `(marketing)` | `(auth)` | `(personal)` | `(platform)` | `(portal)` | `(mobile)` |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|
-| Visitor | ✅ | login/signup | — | — | — | — |
-| Owner / Admin | ✅ | ✅ | ✅ | full | preview-as | full |
-| Controller (finance) | — | ✅ | ✅ | finance, procurement | — | — |
-| Project Manager | — | ✅ | ✅ | work, production, people | preview-as | clock, tasks |
-| Crew / Contractor | — | ✅ | ✅ | read-only projects | crew slug | full |
-| Client | — | ✅ | ✅ | — | client slug | — |
-| Vendor | — | ✅ | ✅ | — | vendor slug | scan only |
-| Artist / Talent | — | ✅ | ✅ | — | artist slug | check-in |
-| Sponsor | — | ✅ | ✅ | — | sponsor slug | — |
-| Industry Guest | — | ✅ | ✅ | — | guest slug | check-in |
-| Developer | ✅ | ✅ | ✅ | settings/api | — | — |
+| Persona              | `(marketing)` |   `(auth)`   | `(personal)` |       `(platform)`       |  `(portal)`  |  `(mobile)`  |
+| -------------------- | :-----------: | :----------: | :----------: | :----------------------: | :----------: | :----------: |
+| Visitor              |      ✅       | login/signup |      —       |            —             |      —       |      —       |
+| Owner / Admin        |      ✅       |      ✅      |      ✅      |           full           |  preview-as  |     full     |
+| Controller (finance) |       —       |      ✅      |      ✅      |   finance, procurement   |      —       |      —       |
+| Project Manager      |       —       |      ✅      |      ✅      | work, production, people |  preview-as  | clock, tasks |
+| Crew / Contractor    |       —       |      ✅      |      ✅      |    read-only projects    |  crew slug   |     full     |
+| Client               |       —       |      ✅      |      ✅      |            —             | client slug  |      —       |
+| Vendor               |       —       |      ✅      |      ✅      |            —             | vendor slug  |  scan only   |
+| Artist / Talent      |       —       |      ✅      |      ✅      |            —             | artist slug  |   check-in   |
+| Sponsor              |       —       |      ✅      |      ✅      |            —             | sponsor slug |      —       |
+| Industry Guest       |       —       |      ✅      |      ✅      |            —             |  guest slug  |   check-in   |
+| Developer            |      ✅       |      ✅      |      ✅      |       settings/api       |      —       |      —       |
 
 **Routing rule:** `/auth/resolve` inspects role + context and 307s to the right shell root (`/console`, `/p/[slug]`, `/m`, or `/me`).
 
@@ -339,16 +340,16 @@ Bottom tab bar (max 5): Home · Check-in · Tasks · Scan · Me. Everything else
 
 ## 6. URL & Slug Conventions
 
-| Pattern | Example | Notes |
-|---|---|---|
-| Resource list | `/console/projects` | Plural, no trailing slash |
-| Resource detail | `/console/projects/[projectId]` | Use opaque IDs, not slugs, for internal |
-| Resource create | `/console/projects/new` | Prefer `/new` over `/create` |
-| Sub-resource | `/console/projects/[projectId]/tasks` | Nest only one level deep in URL |
-| External portal | `/p/[slug]/artist/advancing` | `p` prefix reserves portal namespace |
-| Mobile | `/m/check-in/scan/[slug]` | `m` prefix isolates PWA manifest scope |
-| Tokens | `/accept-invite/[token]` | One-time, single-segment, rate-limited |
-| Public share | `/s/[shareId]` | Signed, expirable, read-only |
+| Pattern         | Example                               | Notes                                   |
+| --------------- | ------------------------------------- | --------------------------------------- |
+| Resource list   | `/console/projects`                   | Plural, no trailing slash               |
+| Resource detail | `/console/projects/[projectId]`       | Use opaque IDs, not slugs, for internal |
+| Resource create | `/console/projects/new`               | Prefer `/new` over `/create`            |
+| Sub-resource    | `/console/projects/[projectId]/tasks` | Nest only one level deep in URL         |
+| External portal | `/p/[slug]/artist/advancing`          | `p` prefix reserves portal namespace    |
+| Mobile          | `/m/check-in/scan/[slug]`             | `m` prefix isolates PWA manifest scope  |
+| Tokens          | `/accept-invite/[token]`              | One-time, single-segment, rate-limited  |
+| Public share    | `/s/[shareId]`                        | Signed, expirable, read-only            |
 
 Slugs (portal) are stable, human-readable, lowercase-kebab, max 48 chars. IDs (platform) are nanoid(12) or uuid — never leak DB primary keys.
 
@@ -358,15 +359,15 @@ Slugs (portal) are stable, human-readable, lowercase-kebab, max 48 chars. IDs (p
 
 Rename where the two repos disagree so one convention wins:
 
-| Red Sea Lion | Opus One | Canonical |
-|---|---|---|
-| `/app/purchase-orders` | `/console/vendors` (bundled) | `/console/procurement/purchase-orders` |
-| `/app/client-portal` (internal) | `/[slug]/client` | `/p/[slug]/client` (external only) |
-| `/app/project-portals` | — | Deleted — folded into `/p/[slug]` |
-| `/app/schedule` | `/console/master-schedule` | `/console/schedule` |
-| `/app/people` | `/console/users` + `/console/crew` | `/console/people/{directory,crew,credentials,roles}` |
-| `/app/ai-assistant`, `/app/ai-drafting` | — | `/console/ai/{assistant,drafting,automations,agents}` |
-| `/api/...` | `/api/v1/...` | `/api/v1/...` |
+| Red Sea Lion                            | Opus One                           | Canonical                                             |
+| --------------------------------------- | ---------------------------------- | ----------------------------------------------------- |
+| `/app/purchase-orders`                  | `/console/vendors` (bundled)       | `/console/procurement/purchase-orders`                |
+| `/app/client-portal` (internal)         | `/[slug]/client`                   | `/p/[slug]/client` (external only)                    |
+| `/app/project-portals`                  | —                                  | Deleted — folded into `/p/[slug]`                     |
+| `/app/schedule`                         | `/console/master-schedule`         | `/console/schedule`                                   |
+| `/app/people`                           | `/console/users` + `/console/crew` | `/console/people/{directory,crew,credentials,roles}`  |
+| `/app/ai-assistant`, `/app/ai-drafting` | —                                  | `/console/ai/{assistant,drafting,automations,agents}` |
+| `/api/...`                              | `/api/v1/...`                      | `/api/v1/...`                                         |
 
 ---
 
@@ -377,6 +378,7 @@ Rename where the two repos disagree so one convention wins:
 - **Tiers (4):** portal, starter, professional, enterprise
 
 Enforcement layers (defense in depth):
+
 1. **Middleware** — shell-level route guard (`/console/*` requires platform role; `/p/[slug]/*` requires a project membership for slug).
 2. **Layout** — server component checks role+tier, renders gated nav.
 3. **Server action / API route** — `withAuth` + explicit capability check (`can(user, 'invoices:create', { orgId })`).
@@ -407,6 +409,7 @@ docs/
 ## 10. Migration Plan (per repo)
 
 ### Red Sea Lion (FlyteDeck) — gains portals + mobile
+
 1. Introduce `(portal)` and `(mobile)` groups; keep `(marketing)/(auth)/app/` working.
 2. Rename `/app/` → `/(platform)/console/` with 307 redirects for one release.
 3. Fold `/app/client-portal` and `/app/project-portals` into `/p/[slug]/*`.
@@ -414,6 +417,7 @@ docs/
 5. Version API: `/api/*` → `/api/v1/*` with rewrites; mark old as deprecated.
 
 ### Opus One (gvteway) — gains depth + marketing
+
 1. Add `(marketing)` group with home/pricing/features/blog.
 2. Expand `/console/finance` and introduce `/console/procurement` hubs.
 3. Add `/console/ai/*` modules (assistant, drafting, automations).
@@ -421,6 +425,7 @@ docs/
 5. Formalize RBAC with the 10+4+4 model and migrate the context provider.
 
 ### Shared (do once, copy to both)
+
 - Extract `@workspace/ia` — shared route manifest + navigation config — as a small package consumed by both apps so the sidebar/nav stays in sync.
 - Adopt `apiOk/apiError/apiCreated` helpers + Zod everywhere (Opus already has this; port to RSL).
 - Auth resolve endpoint routes to the right shell based on role + context.

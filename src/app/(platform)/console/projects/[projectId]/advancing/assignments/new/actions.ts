@@ -5,6 +5,19 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { sendPushTo } from "@/lib/push/send";
+
+const KIND_LABEL: Record<string, string> = {
+  credential_assignment: "credential",
+  catering_assignment: "catering item",
+  radio_assignment: "radio",
+  tool_assignment: "tool",
+  equipment_assignment: "equipment",
+  uniform_assignment: "uniform",
+  travel_assignment: "travel item",
+  lodging_assignment: "lodging",
+  vehicle_assignment: "vehicle",
+};
 
 const Schema = z.object({
   type: z.enum([
@@ -65,6 +78,15 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     data: parsed.data.notes ? { notes: parsed.data.notes } : {},
   } as never);
   if (error) return { error: error.message };
+
+  // Notify the assignee — they'll see it on /m/advances and the portal.
+  // Fire-and-forget; push failures don't roll back the insert.
+  void sendPushTo(parsed.data.assignee_id, {
+    title: `New ${KIND_LABEL[parsed.data.type] ?? "advancing item"} assigned`,
+    body: parsed.data.title,
+    url: "/m/advances",
+    tag: `advancing:${projectId}:${parsed.data.assignee_id}:${Date.now()}`,
+  });
 
   revalidatePath(`/console/projects/${projectId}/advancing/assignments`);
   redirect(`/console/projects/${projectId}/advancing/assignments`);

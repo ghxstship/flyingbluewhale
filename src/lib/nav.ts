@@ -485,6 +485,12 @@ export function portalNav(slug: string, persona: PortalPersona) {
   const base = `/p/${slug}/${persona}`;
   const guide: NavItem = { label: "Guide", href: `/p/${slug}/guide` };
   const privacy: NavItem = { label: "Privacy", href: `${base}/privacy` };
+  // Shared portal-wide surfaces (announcements + inbox) live above the
+  // persona slug so they're visible from every persona's rail. The
+  // Updates feed reads org announcements filtered to portal audiences;
+  // the Inbox reads `public.notifications` filtered to the caller.
+  const updates: NavItem = { label: "Updates", href: `/p/${slug}/announcements` };
+  const inbox: NavItem = { label: "Inbox", href: `/p/${slug}/inbox` };
   const map: Record<PortalPersona, NavItem[]> = {
     // EXECUTIVE (0) — board / co-pro / fiscal counterparts. NEW
     // 2026-05-10. The three slugs differ in default landing tile but
@@ -493,6 +499,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     promoter: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Co-Pro Splits", href: `${base}/co-pro` },
       { label: "Settlements", href: `${base}/settlements` },
       { label: "Tour P&L", href: `${base}/tour-pnl` },
@@ -503,6 +511,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     producer: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Portfolio", href: `${base}/portfolio` },
       { label: "P&L", href: `${base}/pnl` },
       { label: "Risk", href: `${base}/risk` },
@@ -514,6 +524,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     stakeholder: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Portfolio", href: `${base}/portfolio` },
       { label: "P&L", href: `${base}/pnl` },
       { label: "Governance", href: `${base}/governance` },
@@ -525,6 +537,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     artist: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Advancing", href: `${base}/advancing` },
       { label: "Catering", href: `${base}/catering` },
       { label: "Venue", href: `${base}/venue` },
@@ -534,6 +548,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     athlete: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Requests", href: `${base}/requests` },
       { label: "Training", href: `${base}/training` },
       { label: "Safeguarding", href: `${base}/safeguarding` },
@@ -543,6 +559,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     delegation: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Entries", href: `${base}/entries` },
       { label: "Rate Card", href: `${base}/ratecard` },
       { label: "Bookings", href: `${base}/bookings` },
@@ -557,6 +575,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     client: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Proposals", href: `${base}/proposals` },
       { label: "Deliverables", href: `${base}/deliverables` },
       { label: "Invoices", href: `${base}/invoices` },
@@ -567,6 +587,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     sponsor: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Entitlements", href: `${base}/entitlements` },
       { label: "Activations", href: `${base}/activations` },
       { label: "Assets", href: `${base}/assets` },
@@ -576,6 +598,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     media: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Services", href: `${base}/services` },
       { label: "Accommodation", href: `${base}/accommodation` },
       { label: "Transport", href: `${base}/transport` },
@@ -586,6 +610,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     vendor: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Submissions", href: `${base}/submissions` },
       { label: "Equipment Pull List", href: `${base}/equipment-pull-list` },
       { label: "Purchase Orders", href: `${base}/purchase-orders` },
@@ -597,12 +623,16 @@ export function portalNav(slug: string, persona: PortalPersona) {
     crew: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Call Sheet", href: `${base}/call-sheet` },
       { label: "Time", href: `${base}/time` },
     ],
     volunteer: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Application", href: `${base}/application` },
       { label: "Training", href: `${base}/training` },
       { label: "Schedule", href: `${base}/schedule` },
@@ -611,6 +641,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     hospitality: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Guests", href: `${base}/guests` },
       { label: "Itinerary", href: `${base}/itinerary` },
     ],
@@ -618,6 +650,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     guest: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Tickets", href: `${base}/tickets` },
       { label: "Schedule", href: `${base}/schedule` },
       { label: "Logistics", href: `${base}/logistics` },
@@ -626,6 +660,8 @@ export function portalNav(slug: string, persona: PortalPersona) {
     vip: [
       { label: "Overview", href: base },
       guide,
+      updates,
+      inbox,
       { label: "Transport", href: `${base}/transport` },
       { label: "Accommodation", href: `${base}/accommodation` },
       { label: "Itinerary", href: `${base}/itinerary` },

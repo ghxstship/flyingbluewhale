@@ -44,6 +44,7 @@ export default async function PeoplePage() {
     .from("memberships")
     .select("id,role,created_at,users(id,name,email)")
     .eq("org_id", session.orgId)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false });
   const rows = (data ?? []) as unknown as MemberRow[];
 

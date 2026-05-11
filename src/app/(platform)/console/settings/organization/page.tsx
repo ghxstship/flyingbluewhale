@@ -33,7 +33,8 @@ export default async function OrgSettingsPage() {
   const { count: members } = await supabase
     .from("memberships")
     .select("*", { count: "exact", head: true })
-    .eq("org_id", session.orgId);
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
 
   return (
     <>

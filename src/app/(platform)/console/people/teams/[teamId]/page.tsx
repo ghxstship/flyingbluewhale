@@ -40,11 +40,13 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
   const memberUserIds = new Set(members.map((m) => m.userId));
 
   // Org members not yet on the team — used to populate the "Add member" picker.
+  // .is("deleted_at", null) so offboarded users don't appear in the picker.
   const supabase = await createClient();
   const { data: orgMembers } = await supabase
     .from("memberships")
     .select("user_id, users(id, name, email)")
     .eq("org_id", session.orgId)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false });
 
   const orgMemberRows = (orgMembers ?? []) as unknown as OrgMemberRow[];

@@ -22,7 +22,8 @@ export default async function OrgsPage() {
   const { data } = await supabase
     .from("memberships")
     .select("id,role,orgs(id,name,slug,tier)")
-    .eq("user_id", session.userId);
+    .eq("user_id", session.userId)
+    .is("deleted_at", null);
   const rows = (data ?? []) as unknown as Row[];
   return (
     <div>

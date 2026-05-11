@@ -34,12 +34,14 @@ export const resolveTenant = cache(async (): Promise<Tenant> => {
 
     let orgId = prefs?.last_org_id;
 
-    // Fall back to first membership
+    // Fall back to first ACTIVE membership — soft-deleted memberships
+    // would otherwise pin the tenant shell to an offboarded org.
     if (!orgId) {
       const { data: member } = await supabase
         .from("memberships")
         .select("org_id")
         .eq("user_id", u.user.id)
+        .is("deleted_at", null)
         .order("created_at", { ascending: true })
         .limit(1)
         .maybeSingle();

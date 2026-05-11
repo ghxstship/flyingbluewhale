@@ -19,6 +19,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
     .select("id, role, is_developer, updated_at, users:users(id, name, email)")
     .eq("org_id", session.orgId)
     .eq("user_id", p.personId)
+    .is("deleted_at", null)
     .maybeSingle();
   type Row = {
     id: string;

@@ -317,11 +317,14 @@ async function checkMfaForRequest(request: NextRequest, pathname: string): Promi
 
   // Resolve role + org for this user. We look up the first non-demo membership
   // (mirrors getSession()'s preference) without pulling the full helper in —
-  // server-only imports aren't available here.
+  // server-only imports aren't available here. .is("deleted_at", null) so
+  // an offboarded user's soft-deleted membership doesn't bring an old org's
+  // MFA-required map into scope.
   const { data: rawMemberships } = await supabase
     .from("memberships")
     .select("org_id, role, orgs(slug)")
-    .eq("user_id", userData.user.id);
+    .eq("user_id", userData.user.id)
+    .is("deleted_at", null);
   type MembershipRow = { org_id: string; role: string; orgs: { slug: string } | null };
   const memberships = (rawMemberships ?? []) as unknown as MembershipRow[];
   if (memberships.length === 0) return null;

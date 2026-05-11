@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
@@ -38,6 +38,8 @@ export type State = { error?: string } | null;
 
 export async function createProposalAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Proposals are sales documents; manager+ only at app layer.
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create proposals" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
@@ -105,6 +107,7 @@ export async function setProposalStatusAction(
   status: "draft" | "sent" | "approved" | "rejected" | "expired" | "signed",
 ) {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can change proposal status" };
   const supabase = await createClient();
   const { data: before } = await supabase
     .from("proposals")

@@ -3,20 +3,24 @@ import type { NextConfig } from "next";
 
 // Pin the workspace root so Next/Turbopack stops inferring it from stray
 // lockfiles in parent directories (e.g. /Users/.../Documents/package-lock.json).
-// Resolving via `process.cwd()` works for both the main checkout and
-// git worktrees (`.claude/worktrees/<branch>`) — the closest `node_modules`
-// is hoisted to the main checkout, so we walk up to find a directory that
-// contains a `node_modules/next` entry.
+// We prefer the project directory itself (`process.cwd()`) because Turbopack
+// treats `root` as the filesystem boundary for resolution; if the root sits
+// above the project, relative `@import "./..."` resolution in CSS files
+// silently truncates. Only walk up if the project directory has no
+// `node_modules` — that happens in git worktrees that haven't run `npm
+// install` (the worktree leans on the main checkout's hoisted modules).
 const workspaceRoot = (() => {
   const { existsSync } = require("node:fs");
-  let dir = process.cwd();
+  const here = process.cwd();
+  if (existsSync(resolve(here, "node_modules", "next"))) return here;
+  let dir = here;
   for (let i = 0; i < 6; i++) {
     if (existsSync(resolve(dir, "node_modules", "next"))) return dir;
     const parent = resolve(dir, "..");
     if (parent === dir) break;
     dir = parent;
   }
-  return process.cwd();
+  return here;
 })();
 
 const supabaseHost = (() => {

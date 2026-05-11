@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /** /api/v1/crisis/alerts — mass-notify (WF-252). */
 
@@ -36,6 +37,15 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  // Mass-notify alerts fan out to push/SMS/email — every send costs real
+  // money + drives crew distraction. The `crisis` bucket caps this at
+  // 5/min per source key, matching the documented budget.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "crisis:alerts"),
+    ...RATE_BUDGETS.crisis,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Crisis alert cap reached; retry shortly");
+
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
   return withAuth(async (session) => {

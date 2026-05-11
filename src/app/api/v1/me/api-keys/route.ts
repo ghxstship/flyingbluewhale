@@ -4,6 +4,7 @@ import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { mintToken } from "@/lib/api-keys";
 import { createClient } from "@/lib/supabase/server";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * Org-scoped programmatic access tokens.
@@ -38,6 +39,15 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  // Token minting is a privileged write — gate on the write bucket
+  // (60/min). Without it a compromised owner session could spew tokens
+  // faster than the audit log can catch.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "api-keys:mint"),
+    ...RATE_BUDGETS.write,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Too many token-mint requests");
+
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
   return withAuth(async (session) => {

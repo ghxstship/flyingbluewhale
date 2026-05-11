@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * Asset-tag lookup + check-in/out toggle. Mirrors `/api/v1/tickets/scan`
@@ -16,6 +17,15 @@ const ScanInput = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Field-scan bucket — 120/min. Same envelope as ticket scans; bounds
+  // the equipment-toggle endpoint against accidental burst (a stuck
+  // scanner) or malicious enumeration of asset_tags.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "equipment:scan"),
+    ...RATE_BUDGETS.scan,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Equipment scan rate limit reached");
+
   const input = await parseJson(req, ScanInput);
   if (input instanceof Response) return input;
   return withAuth(async (session) => {

@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { TICKETING_PROVIDERS } from "@/lib/marketplace";
 
@@ -18,6 +18,10 @@ export type State = { error?: string } | null;
 
 export async function createTicketingConnectionAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Connecting a ticketing provider stores an upstream API key — must
+  // stay owner/admin-only at the app layer (matches the
+  // /console/settings/integrations install/uninstall gate).
+  if (!isAdmin(session)) return { error: "Only owners and admins can connect ticketing providers" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -42,6 +46,7 @@ export async function createTicketingConnectionAction(_: State, fd: FormData): P
 
 export async function deactivateTicketingConnectionAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isAdmin(session)) return { error: "Only owners and admins can disconnect ticketing providers" };
   const id = String(fd.get("connection_id") ?? "");
   if (!id) return { error: "Missing connection" };
   const supabase = await createClient();

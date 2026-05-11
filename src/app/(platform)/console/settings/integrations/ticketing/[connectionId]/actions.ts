@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
@@ -26,6 +26,10 @@ const toCents = (v: string | undefined): number => {
 
 export async function recordSalesSnapshotAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Sales snapshots feed revenue dashboards — manager+ can record them.
+  // (Lower-priv personas like crew/viewer should never write financial
+  // data; RLS likely refuses but app-layer gate is sharper.)
+  if (!isManagerPlus(session)) return { error: "Only manager+ can record sales snapshots" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();

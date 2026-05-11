@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
@@ -20,6 +20,12 @@ export type State = { error?: string } | null;
 
 export async function createCustomRole(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Creating org_roles assigns capabilities — must be owner/admin-only.
+  // Without this gate, a non-admin could craft a POST that creates a
+  // role with arbitrary `permissions[]` and then have an admin assign
+  // it to them later (or themselves, if memberships.role is also
+  // mutable from a different surface — see updatePerson).
+  if (!isAdmin(session)) return { error: "Only owners and admins can create custom roles" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -42,6 +48,7 @@ export async function createCustomRole(_: State, fd: FormData): Promise<State> {
 
 export async function deleteCustomRole(formData: FormData) {
   const session = await requireSession();
+  if (!isAdmin(session)) return;
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();

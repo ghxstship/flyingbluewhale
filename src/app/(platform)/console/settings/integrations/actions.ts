@@ -1,13 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+
+// Bound the connector value so a crafted POST can't smuggle a slug into
+// the org_integrations table (used by the integrations page list and
+// the install gate). Same shape as the connector enum the UI renders.
+const CONNECTOR_RE = /^[a-z0-9-]{1,64}$/;
 
 export async function installConnector(formData: FormData) {
   const session = await requireSession();
+  if (!isAdmin(session)) return;
   const connector = String(formData.get("connector") ?? "");
-  if (!connector) return;
+  if (!CONNECTOR_RE.test(connector)) return;
   const supabase = await createClient();
   await supabase.from("org_integrations").upsert(
     {
@@ -24,8 +30,9 @@ export async function installConnector(formData: FormData) {
 
 export async function uninstallConnector(formData: FormData) {
   const session = await requireSession();
+  if (!isAdmin(session)) return;
   const connector = String(formData.get("connector") ?? "");
-  if (!connector) return;
+  if (!CONNECTOR_RE.test(connector)) return;
   const supabase = await createClient();
   await supabase
     .from("org_integrations")

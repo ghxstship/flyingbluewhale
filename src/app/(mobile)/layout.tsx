@@ -13,7 +13,7 @@ export default async function MobileLayout({ children }: { children: React.React
     <TenantShell>
       <div data-platform="compvss" className="page-shell mobile-shell">
         <ConnectivityBanner />
-        <main className="animate-fade-in">{children}</main>
+        <main id="main" className="animate-fade-in">{children}</main>
         <MobileTabBar items={mobileTabs} />
         <CommandPalette scope="mobile" />
       </div>

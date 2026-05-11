@@ -34,9 +34,9 @@ describe("scrubString", () => {
 
 describe("scrubCookieHeader", () => {
   it("redacts Supabase auth tokens while preserving benign cookies", () => {
-    const header = "fbw_consent=%7B%22essential%22%3Atrue%7D; sb-abc123-auth-token=raw.jwt.value; theme=dark";
+    const header = "lh_consent=%7B%22essential%22%3Atrue%7D; sb-abc123-auth-token=raw.jwt.value; theme=dark";
     const out = scrubCookieHeader(header) ?? "";
-    expect(out).toContain("fbw_consent=%7B%22essential%22%3Atrue%7D");
+    expect(out).toContain("lh_consent=%7B%22essential%22%3Atrue%7D");
     expect(out).toContain("sb-abc123-auth-token=[REDACTED]");
     expect(out).toContain("theme=dark");
     expect(out).not.toContain("raw.jwt.value");

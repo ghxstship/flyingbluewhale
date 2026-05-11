@@ -247,30 +247,32 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       },
       {
         id: "settings-theme-light",
-        label: "Switch to Light Theme",
+        label: "Switch to Light Mode",
         group: "Settings",
         icon: Sun,
         perform: () => {
-          document.documentElement.setAttribute("data-theme", "light");
+          document.documentElement.setAttribute("data-mode", "light");
           try {
-            localStorage.setItem("fbw_theme", "light");
+            localStorage.setItem("chroma.mode", "light");
           } catch {
             /* ignore */
           }
+          document.cookie = `lh_mode=light; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
         },
       },
       {
         id: "settings-theme-dark",
-        label: "Switch to Dark Theme",
+        label: "Switch to Dark Mode",
         group: "Settings",
         icon: Moon,
         perform: () => {
-          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute("data-mode", "dark");
           try {
-            localStorage.setItem("fbw_theme", "dark");
+            localStorage.setItem("chroma.mode", "dark");
           } catch {
             /* ignore */
           }
+          document.cookie = `lh_mode=dark; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
         },
       },
       {

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
@@ -18,6 +18,8 @@ export type State = { error?: string; ok?: true } | null;
 
 export async function addCoProPartnerAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Co-pro splits divide deal revenue between orgs — manager+ only.
+  if (!isManagerPlus(session)) return { error: "Only manager+ can edit co-pro partnerships" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -65,6 +67,7 @@ export async function addCoProPartnerAction(_: State, fd: FormData): Promise<Sta
 
 export async function removeCoProPartnerAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can edit co-pro partnerships" };
   const id = String(fd.get("partnership_id") ?? "");
   const offerId = String(fd.get("offer_id") ?? "");
   if (!id) return { error: "Missing partnership" };

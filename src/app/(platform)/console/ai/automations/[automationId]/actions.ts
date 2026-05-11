@@ -118,12 +118,16 @@ export async function generateWebhookSecretAction(automationId: string, _prev: S
   crypto.getRandomValues(bytes);
   const secret = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 
-  const svc = createServiceClient() as unknown as {
-    from: (t: string) => {
-      update: (p: unknown) => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> };
-    };
-  };
-  const { error } = await svc.from("automations").update({ webhook_secret: secret }).eq("id", automationId);
+  // Service-role write bypasses RLS — pin org_id explicitly so a future
+  // change to this code can't accidentally reach a same-id automation
+  // in another org. The upstream `existing` check already gates by
+  // session.orgId, so this is defense-in-depth.
+  const svc = createServiceClient() as unknown as import("@/lib/supabase/loose").LooseSupabase;
+  const { error } = await svc
+    .from("automations")
+    .update({ webhook_secret: secret })
+    .eq("id", automationId)
+    .eq("org_id", session.orgId);
   if (error) return { error: error.message };
   revalidatePath(`/console/ai/automations/${automationId}`);
   return { ok: true };
@@ -179,16 +183,9 @@ export async function recordManualRunAction(automationId: string, _prev: State, 
 
   // Insert pending run row via service-role (RLS blocks INSERT on the table
   // for the authenticated role — writes go through the runner code path).
-  const svc = createServiceClient() as unknown as {
-    from: (t: string) => {
-      insert: (row: unknown) => {
-        select: (s: string) => {
-          single: () => Promise<{ data: { id: string } | null; error: { message: string } | null }>;
-        };
-      };
-    };
-  };
-  const { data: runRow, error: insertErr } = await svc
+  // LooseSupabase shim covers the not-yet-typed automation_runs table.
+  const svc = createServiceClient() as unknown as import("@/lib/supabase/loose").LooseSupabase;
+  const { data: runRow, error: insertErr } = (await svc
     .from("automation_runs")
     .insert({
       automation_id: automationId,
@@ -199,7 +196,7 @@ export async function recordManualRunAction(automationId: string, _prev: State, 
       status: "pending",
     })
     .select("id")
-    .single();
+    .single()) as { data: { id: string } | null; error: { message: string } | null };
   if (insertErr || !runRow) return { error: insertErr?.message ?? "Failed to start run" };
   const runId = runRow.id;
 
@@ -219,9 +216,7 @@ export async function recordManualRunAction(automationId: string, _prev: State, 
       err: (err as Error).message,
     });
     try {
-      const svc2 = createServiceClient() as unknown as {
-        from: (t: string) => { update: (p: unknown) => { eq: (c: string, v: string) => Promise<unknown> } };
-      };
+      const svc2 = createServiceClient() as unknown as import("@/lib/supabase/loose").LooseSupabase;
       await svc2
         .from("automation_runs")
         .update({
@@ -229,7 +224,8 @@ export async function recordManualRunAction(automationId: string, _prev: State, 
           finished_at: new Date().toISOString(),
           error_summary: (err as Error).message,
         })
-        .eq("id", runId);
+        .eq("id", runId)
+        .eq("org_id", session.orgId);
     } catch {
       // best-effort; the run-row will time out via cron in Phase 4.3
     }

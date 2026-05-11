@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { SUBMISSION_STATUSES, type SubmissionStatus } from "@/lib/marketplace";
 
@@ -29,6 +29,10 @@ const SUBMISSION_TRANSITIONS: Record<SubmissionStatus, readonly SubmissionStatus
 
 export async function transitionSubmissionAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Shortlist / award / reject are reviewer-initiated decisions —
+  // manager+ only. Submitter-initiated withdrawal lives on the
+  // /me/applications surface (per-user RLS).
+  if (!isManagerPlus(session)) return { error: "Only manager+ can decide submission outcomes" };
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { JOB_APPLICATION_STATUSES, type JobApplicationStatus } from "@/lib/marketplace";
 
@@ -31,6 +31,9 @@ const APPLICATION_TRANSITIONS: Record<JobApplicationStatus, readonly JobApplicat
 
 export async function transitionApplicationAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Reviewer-side ATS transitions — manager+ only. Applicant-initiated
+  // withdrawal lives on /me/applications (per-user RLS).
+  if (!isManagerPlus(session)) return { error: "Only manager+ can decide applications" };
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();

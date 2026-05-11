@@ -41,6 +41,8 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
     return { error: error.message };
   }
 
+  if (!invite) return { error: "Failed to create invite" };
+
   // Fire-and-forget the invitation email; failure to send doesn't undo the
   // row — admin can copy the link from the list view if email delivery is
   // down. The table is the source of truth.

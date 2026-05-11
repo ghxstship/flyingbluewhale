@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { PLATFORM_ROLES } from "@/lib/supabase/types";
@@ -19,6 +19,16 @@ export type State = { error?: string } | null;
 
 export async function updatePerson(userId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Role + is_developer are owner/admin-only fields. RLS gates the
+  // membership table write, but a server action MUST also gate at the
+  // app layer — otherwise a non-admin who bypasses RLS via any future
+  // policy regression could escalate to owner with a single POST.
+  if (!isAdmin(session)) return { error: "Only owners and admins can change a member's role" };
+  // Reject self-edits — admins can't change their own role here; the
+  // owner-transfer / leave-org flows have their own surfaces with
+  // explicit confirmation. Without this, the last owner could
+  // accidentally demote themselves and lock the org out of admin.
+  if (userId === session.userId) return { error: "Use the leave-org flow to change your own role" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -50,6 +60,12 @@ export async function updatePerson(userId: string, _: State, fd: FormData): Prom
 
 export async function removePerson(userId: string): Promise<void> {
   const session = await requireSession();
+  // Same gate as updatePerson — offboarding is destructive enough that
+  // it must remain owner/admin-only at the app layer, not just RLS.
+  if (!isAdmin(session)) return;
+  // Refuse self-removal — same rationale as updatePerson. The leave-org
+  // flow handles voluntary departure (with owner-handoff requirements).
+  if (userId === session.userId) return;
   const supabase = await createClient();
   // SOFT delete (set deleted_at) rather than hard delete. Hard delete
   // erased the row and lost the offboard timestamp + audit_log

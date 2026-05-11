@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service — LYTEHAUS Technologies",
+  description: "Terms governing access to and use of the LYTEHAUS Technologies platform.",
+};
+
 export default function TermsPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">

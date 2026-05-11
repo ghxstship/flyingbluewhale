@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Service Level Agreement — LYTEHAUS Technologies",
+  description: "LYTEHAUS Technologies Enterprise SLA — 99.9% monthly uptime target.",
+};
+
 export default function SlaPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">

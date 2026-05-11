@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Data Processing Addendum — LYTEHAUS Technologies",
+  description: "LYTEHAUS Technologies DPA incorporating the EU SCCs and UK IDTA.",
+};
+
 export default function DpaPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">

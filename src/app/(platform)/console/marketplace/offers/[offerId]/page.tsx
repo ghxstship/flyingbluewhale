@@ -17,7 +17,7 @@ type Offer = {
   currency: string;
   deposit_pct: number;
   balance_terms: string;
-  status: string;
+  talent_offer_phase: string;
   talent_profile_id: string;
   project_id: string | null;
   slot_start: string | null;
@@ -57,10 +57,10 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
         eyebrow="Marketplace · Offer"
         title={talent?.act_name ?? "Offer"}
         subtitle={`${o.performance_date} · ${formatMoney(o.fee_cents)}`}
-        action={<Badge variant={STATUS_TONE[o.status] ?? "muted"}>{o.status}</Badge>}
+        action={<Badge variant={STATUS_TONE[o.talent_offer_phase] ?? "muted"}>{o.talent_offer_phase}</Badge>}
       />
       <div className="page-content space-y-5">
-        <OfferControls offerId={o.id} status={o.status} />
+        <OfferControls offerId={o.id} status={o.talent_offer_phase} />
 
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="surface p-5">

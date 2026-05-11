@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 type Sub = {
   id: string;
-  status: string;
+  submission_state: string;
   cover_note: string | null;
   fee_proposed_cents: number | null;
   submitted_at: string;
@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
       <div className="text-label text-[var(--color-text-tertiary)]">Submission</div>
       <div className="mt-1 flex items-center gap-2">
         <h1 className="text-display text-3xl">#{s.id.slice(0, 8)}</h1>
-        <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>
+        <Badge variant={STATUS_TONE[s.submission_state] ?? "muted"}>{s.submission_state}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         Submitted {new Date(s.submitted_at).toLocaleString()}

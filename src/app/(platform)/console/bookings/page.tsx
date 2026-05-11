@@ -26,26 +26,26 @@ export default async function Page() {
   const fmt = await getRequestFormatters();
 
   const [offers, holds, settlements] = await Promise.all([
-    supabase.from("talent_offers").select("id, status, fee_cents").eq("org_id", session.orgId),
+    supabase.from("talent_offers").select("id, talent_offer_phase, fee_cents").eq("org_id", session.orgId),
     supabase.from("availability_slots").select("id, kind, tier").eq("kind", "hold"),
     supabase
       .from("settlements")
-      .select("id, status, gross_box_office_cents, balance_due_cents")
+      .select("id, settlement_phase, gross_box_office_cents, balance_due_cents")
       .eq("org_id", session.orgId),
   ]);
 
-  const offerRows = (offers.data ?? []) as Array<{ status: string; fee_cents: number }>;
+  const offerRows = (offers.data ?? []) as Array<{ talent_offer_phase: string; fee_cents: number }>;
   const holdRows = (holds.data ?? []) as Array<{ tier: number }>;
   const settlementRows = (settlements.data ?? []) as Array<{
-    status: string;
+    settlement_phase: string;
     gross_box_office_cents: number;
     balance_due_cents: number;
   }>;
 
-  const liveDeals = offerRows.filter((r) => ["sent", "countered"].includes(r.status)).length;
-  const accepted = offerRows.filter((r) => ["accepted", "contracted"].includes(r.status)).length;
+  const liveDeals = offerRows.filter((r) => ["sent", "countered"].includes(r.talent_offer_phase)).length;
+  const accepted = offerRows.filter((r) => ["accepted", "contracted"].includes(r.talent_offer_phase)).length;
   const tier1 = holdRows.filter((r) => r.tier === 1).length;
-  const finalized = settlementRows.filter((r) => r.status === "final").length;
+  const finalized = settlementRows.filter((r) => r.settlement_phase === "final").length;
   const grossBO = settlementRows.reduce((s, r) => s + (r.gross_box_office_cents ?? 0), 0);
 
   return (

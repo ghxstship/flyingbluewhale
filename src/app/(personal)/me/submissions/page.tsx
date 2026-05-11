@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 type Row = {
   id: string;
-  status: string;
+  submission_state: string;
   submitted_at: string;
   open_call: { title: string; public_slug: string } | null;
 };
@@ -22,7 +22,7 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("open_call_submissions")
-    .select("id, status, submitted_at, open_call:open_call_id(title, public_slug)")
+    .select("id, submission_state, submitted_at, open_call:open_call_id(title, public_slug)")
     .eq("submitter_user_id", session.userId)
     .order("submitted_at", { ascending: false })
     .limit(200);
@@ -54,7 +54,7 @@ export default async function Page() {
                   Submitted {new Date(r.submitted_at).toLocaleDateString()}
                 </p>
               </div>
-              <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>
+              <Badge variant={STATUS_TONE[r.submission_state] ?? "muted"}>{r.submission_state}</Badge>
             </li>
           ))}
         </ul>

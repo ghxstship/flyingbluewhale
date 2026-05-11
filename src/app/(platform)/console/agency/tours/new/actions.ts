@@ -54,7 +54,7 @@ export async function createTourAction(_: State, fd: FormData): Promise<State> {
       description: parsed.data.description || null,
       starts_on: parsed.data.starts_on || null,
       ends_on: parsed.data.ends_on || null,
-      status: "planning",
+      tour_phase: "planning",
       created_by: session.userId,
     })
     .select("id")

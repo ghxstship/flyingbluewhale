@@ -13,7 +13,7 @@ type Offer = {
   performance_date: string;
   fee_cents: number;
   currency: string;
-  status: string;
+  talent_offer_phase: string;
   deposit_pct: number;
   talent_profile_id: string;
 };
@@ -30,7 +30,7 @@ export default async function Page() {
   if (profileIds.length > 0) {
     const { data } = await supabase
       .from("talent_offers")
-      .select("id, performance_date, fee_cents, currency, status, deposit_pct, talent_profile_id")
+      .select("id, performance_date, fee_cents, currency, talent_offer_phase, deposit_pct, talent_profile_id")
       .in("talent_profile_id", profileIds)
       .order("performance_date", { ascending: false })
       .limit(200);
@@ -62,7 +62,7 @@ export default async function Page() {
                   {formatMoney(o.fee_cents)} · {o.deposit_pct}% deposit
                 </p>
               </div>
-              <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{o.status}</Badge>
+              <Badge variant={STATUS_TONE[o.talent_offer_phase] ?? "muted"}>{o.talent_offer_phase}</Badge>
             </li>
           ))}
         </ul>

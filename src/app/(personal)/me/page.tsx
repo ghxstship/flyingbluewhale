@@ -34,7 +34,7 @@ export default async function MePage() {
   // talent_profile recipients automatically.
   const supabase = await createClient();
   const [appsResp, talentResp, offersResp, slotsResp] = await Promise.all([
-    supabase.from("job_applications").select("id, status").eq("applicant_user_id", session.userId),
+    supabase.from("job_applications").select("id, job_application_state").eq("applicant_user_id", session.userId),
     supabase
       .from("talent_profiles")
       .select("id, is_public")
@@ -43,12 +43,12 @@ export default async function MePage() {
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
       .limit(1),
-    supabase.from("open_call_submissions").select("id, status").eq("submitter_user_id", session.userId),
+    supabase.from("open_call_submissions").select("id, submission_state").eq("submitter_user_id", session.userId),
     supabase.from("availability_slots").select("id, kind").eq("user_id", session.userId),
   ]);
-  const appCount = ((appsResp.data ?? []) as Array<{ status: string }>).filter((r) => r.status !== "withdrawn").length;
-  const submissionCount = ((offersResp.data ?? []) as Array<{ status: string }>).filter(
-    (r) => r.status !== "withdrawn",
+  const appCount = ((appsResp.data ?? []) as Array<{ job_application_state: string }>).filter((r) => r.job_application_state !== "withdrawn").length;
+  const submissionCount = ((offersResp.data ?? []) as Array<{ submission_state: string }>).filter(
+    (r) => r.submission_state !== "withdrawn",
   ).length;
   const slotCount = (slotsResp.data ?? []).length;
   const talent = ((talentResp.data ?? []) as Array<{ is_public: boolean }>)[0] ?? null;

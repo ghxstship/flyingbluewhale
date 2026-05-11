@@ -16,7 +16,7 @@ type Row = {
   id: string; // alias for tour_id to satisfy DataTable<Row extends { id: string }>
   tour_id: string;
   name: string;
-  status: string;
+  tour_phase: string;
   starts_on: string | null;
   ends_on: string | null;
   leg_count: number;
@@ -87,10 +87,10 @@ export default async function Page() {
           columns={[
             { key: "name", header: "Tour", render: (r) => r.name, accessor: (r) => r.name },
             {
-              key: "status",
-              header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
-              accessor: (r) => r.status,
+              key: "tour_phase",
+              header: "Phase",
+              render: (r) => <Badge variant={STATUS_TONE[r.tour_phase] ?? "muted"}>{r.tour_phase}</Badge>,
+              accessor: (r) => r.tour_phase,
               filterable: true,
             },
             {

@@ -70,7 +70,7 @@ export async function createCallAction(_: State, fd: FormData): Promise<State> {
       fee_max_cents: toCents(parsed.data.fee_max),
       currency: parsed.data.currency,
       deadline_at: parsed.data.deadline_at || null,
-      status: "draft",
+      open_call_phase: "draft",
       created_by: session.userId,
     })
     .select("id")
@@ -83,9 +83,7 @@ export async function createCallAction(_: State, fd: FormData): Promise<State> {
 
 // Open-call FSM: draft → published → closed. publish/close are guarded
 // against invalid source states so a stale UI or direct API call can't
-// jump the rails. .select("id") confirms the conditional update landed
-// — without it, an out-of-state transition silently succeeds with no
-// rows affected and the caller thinks the call moved.
+// jump the rails. .select("id") confirms the conditional update landed.
 
 export async function publishCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -94,10 +92,10 @@ export async function publishCallAction(_: State, fd: FormData): Promise<State> 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("open_calls")
-    .update({ status: "published", published_at: new Date().toISOString() })
+    .update({ open_call_phase: "published", published_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
-    .eq("status", "draft")
+    .eq("open_call_phase", "draft")
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Only a draft call can be published" };
@@ -113,10 +111,10 @@ export async function closeCallAction(_: State, fd: FormData): Promise<State> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("open_calls")
-    .update({ status: "closed", closed_at: new Date().toISOString() })
+    .update({ open_call_phase: "closed", closed_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
-    .eq("status", "published")
+    .eq("open_call_phase", "published")
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Only a published call can be closed" };

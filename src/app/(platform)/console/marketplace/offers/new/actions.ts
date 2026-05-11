@@ -72,7 +72,7 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
       currency: parsed.data.currency,
       deposit_pct: Math.min(100, Math.max(0, Math.round(Number(parsed.data.deposit_pct)))),
       balance_terms: parsed.data.balance_terms,
-      status: "draft",
+      talent_offer_phase: "draft",
       created_by: session.userId,
     })
     .select("id")
@@ -90,11 +90,9 @@ const Transition = z.object({ offer_id: z.string().uuid() });
 //   sent      → accepted | countered | declined
 //   countered → accepted | declined
 //
-// Each action below uses .eq("status", <expected>) (or .in("status", [...]))
-// as the conditional guard so a stale UI or a direct API call can't skip
-// states. The .select("id") confirms a row was actually updated — without
-// it, an out-of-state transition silently succeeds with no rows affected
-// and the caller thinks the offer moved.
+// Each action uses .eq("talent_offer_phase", <expected>) as the guard so a
+// stale UI or direct API call can't jump states. .select("id") confirms the
+// conditional update actually matched a row.
 
 export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -103,10 +101,10 @@ export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
-    .update({ status: "sent", sent_at: new Date().toISOString() })
+    .update({ talent_offer_phase: "sent", sent_at: new Date().toISOString() })
     .eq("id", parsed.data.offer_id)
     .eq("org_id", session.orgId)
-    .eq("status", "draft")
+    .eq("talent_offer_phase", "draft")
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Offer can't be sent from its current state" };
@@ -121,10 +119,10 @@ export async function acceptOfferAction(_: State, fd: FormData): Promise<State> 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
-    .update({ status: "accepted", accepted_at: new Date().toISOString() })
+    .update({ talent_offer_phase: "accepted", accepted_at: new Date().toISOString() })
     .eq("id", parsed.data.offer_id)
     .eq("org_id", session.orgId)
-    .in("status", ["sent", "countered"])
+    .in("talent_offer_phase", ["sent", "countered"])
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Offer can only be accepted from sent or countered" };
@@ -139,10 +137,10 @@ export async function declineOfferAction(_: State, fd: FormData): Promise<State>
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
-    .update({ status: "declined" })
+    .update({ talent_offer_phase: "declined" })
     .eq("id", parsed.data.offer_id)
     .eq("org_id", session.orgId)
-    .in("status", ["sent", "countered"])
+    .in("talent_offer_phase", ["sent", "countered"])
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Only a sent or countered offer can be declined" };

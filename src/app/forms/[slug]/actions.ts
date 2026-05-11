@@ -78,6 +78,29 @@ export async function submitFormAction(slug: string, _: SubmitState, fd: FormDat
       // For now we record the filename; an upload call follows below before the row insert.
       if (raw instanceof File) {
         if (raw.size > 10 * 1024 * 1024) return { error: `Field "${f.label}" must be 10 MB or smaller.` };
+        // Closed MIME allowlist — anonymous public visitors can submit
+        // here, so .html / .svg / .exe must NOT round-trip through the
+        // forms bucket and back out via signed-URL preview links.
+        const ALLOWED_FORM_MIME = new Set([
+          "application/pdf",
+          "image/jpeg",
+          "image/png",
+          "image/webp",
+          "image/heic",
+          "image/heif",
+          "image/gif",
+          "text/plain",
+          "text/csv",
+          "application/zip",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "application/vnd.ms-excel",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        ]);
+        const mime = (raw.type || "").toLowerCase();
+        if (mime && !ALLOWED_FORM_MIME.has(mime)) {
+          return { error: `Field "${f.label}": unsupported file type ${mime}` };
+        }
         const safeName = raw.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(-200);
         const path = `form-uploads/${form.id}/${crypto.randomUUID()}/${f.key}-${safeName}`;
         const { error: upErr } = await supabase.storage.from("forms").upload(path, raw, {

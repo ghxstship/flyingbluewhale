@@ -8,6 +8,7 @@ import { compileAndStore } from "@/lib/pdf/render";
 import { CallSheetPdf } from "@/lib/pdf/call-sheet";
 import { fetchWeather } from "@/lib/external/weather";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * GET /api/v1/projects/{projectId}/call-sheet?date=YYYY-MM-DD&variant=full|labor
@@ -26,6 +27,13 @@ const QuerySchema = z.object({
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+  // Heavy generator (PDF compile). Bound to export bucket (5/min).
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "call-sheet"),
+    ...RATE_BUDGETS.export,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Call-sheet render rate limit reached");
+
   const { projectId } = await ctx.params;
   const paramsParsed = ParamsSchema.safeParse({ projectId });
   if (!paramsParsed.success) return apiError("bad_request", "Invalid project id");

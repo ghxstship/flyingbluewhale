@@ -5,6 +5,7 @@ import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { buildProjectArchive } from "@/lib/export/strategies/project_archive";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * GET /api/v1/projects/{projectId}/archive — Opportunity #9.
@@ -15,7 +16,16 @@ const ParamsSchema = z.object({ projectId: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+  // Project archives are heavy: full ZIP build, multi-table reads,
+  // storage upload. Bound to the export bucket (5/min) so a stuck
+  // download spinner can't hammer the pipeline.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "project-archive:build"),
+    ...RATE_BUDGETS.export,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Project archive rate limit reached");
+
   const { projectId } = await ctx.params;
   const p = ParamsSchema.safeParse({ projectId });
   if (!p.success) return apiError("bad_request", "Invalid project id");

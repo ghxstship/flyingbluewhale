@@ -7,6 +7,7 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { RentalPullSheetPdf } from "@/lib/pdf/reports";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /** GET /api/v1/rentals/{rentalId}/pull-sheet — Opportunity #25. */
 
@@ -14,7 +15,10 @@ const ParamsSchema = z.object({ rentalId: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ rentalId: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ rentalId: string }> }) {
+  const rl = await ratelimit({ key: keyFromRequest(req, "pull-sheet"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Pull-sheet render rate limit reached");
+
   const { rentalId } = await ctx.params;
   const p = ParamsSchema.safeParse({ rentalId });
   if (!p.success) return apiError("bad_request", "Invalid rental id");

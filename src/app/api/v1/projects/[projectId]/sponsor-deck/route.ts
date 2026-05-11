@@ -6,6 +6,7 @@ import { createClient, createServiceClient, isServiceClientAvailable } from "@/l
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { buildSponsorDeck } from "@/lib/pptx/sponsor-deck";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * POST /api/v1/projects/{projectId}/sponsor-deck — Opportunity #23.
@@ -32,6 +33,15 @@ const BodySchema = z.object({
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+  // PPTX generation is heavy CPU + storage IO. Bound to the export
+  // bucket (5/min) so a stuck client can't repeatedly trigger the
+  // pptx render pipeline.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "sponsor-deck:render"),
+    ...RATE_BUDGETS.export,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Sponsor deck render rate limit reached");
+
   const { projectId } = await ctx.params;
   const p = ParamsSchema.safeParse({ projectId });
   if (!p.success) return apiError("bad_request", "Invalid project id");

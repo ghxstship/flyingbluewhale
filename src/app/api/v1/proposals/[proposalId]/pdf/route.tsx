@@ -7,12 +7,22 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { ProposalPdf } from "@/lib/pdf/proposal";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const ParamsSchema = z.object({ proposalId: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ proposalId: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ proposalId: string }> }) {
+  // Heavy generator — react-pdf compile + storage upload. Bound to
+  // export bucket (5/min) so a stuck "Download PDF" loop can't burn
+  // through CPU.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "proposal-pdf"),
+    ...RATE_BUDGETS.export,
+  });
+  if (!rl.ok) return apiError("rate_limited", "PDF render rate limit reached");
+
   const { proposalId } = await ctx.params;
   const parsed = ParamsSchema.safeParse({ proposalId });
   if (!parsed.success) return apiError("bad_request", "Invalid proposal id");

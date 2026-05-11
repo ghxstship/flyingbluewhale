@@ -7,6 +7,7 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { VendorRfpPdf } from "@/lib/pdf/vendor-rfp";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const ParamsSchema = z.object({ vendorId: z.string().uuid() });
 const BodySchema = z.object({
@@ -22,6 +23,9 @@ const BodySchema = z.object({
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request, ctx: { params: Promise<{ vendorId: string }> }) {
+  const rl = await ratelimit({ key: keyFromRequest(req, "vendor-rfp"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Vendor RFP render rate limit reached");
+
   const { vendorId } = await ctx.params;
   const p = ParamsSchema.safeParse({ vendorId });
   if (!p.success) return apiError("bad_request", "Invalid vendor id");

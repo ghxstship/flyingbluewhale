@@ -7,12 +7,15 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { TaskReportPdf } from "@/lib/pdf/reports";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const ParamsSchema = z.object({ projectId: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+  const rl = await ratelimit({ key: keyFromRequest(req, "task-report"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Task report rate limit reached");
   const { projectId } = await ctx.params;
   const p = ParamsSchema.safeParse({ projectId });
   if (!p.success) return apiError("bad_request", "Invalid project id");

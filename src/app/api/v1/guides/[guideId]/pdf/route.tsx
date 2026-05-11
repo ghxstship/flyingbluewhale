@@ -6,6 +6,7 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { GuidePdf } from "@/lib/pdf/guide";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import type { GuideConfig } from "@/lib/guides/types";
 
 /**
@@ -22,7 +23,13 @@ const ParamsSchema = z.object({ guideId: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ guideId: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ guideId: string }> }) {
+  // Public-readable endpoint — anon visitors can hit it for published
+  // guides. Bound to export bucket (5/min) per source IP so a public
+  // crawler can't burn through CPU on every revision.
+  const rl = await ratelimit({ key: keyFromRequest(req, "guide-pdf"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Guide PDF rate limit reached");
+
   const { guideId } = await ctx.params;
   const parsed = ParamsSchema.safeParse({ guideId });
   if (!parsed.success) return apiError("bad_request", "Invalid guide id");

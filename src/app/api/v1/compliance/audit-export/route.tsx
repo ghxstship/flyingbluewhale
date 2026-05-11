@@ -7,6 +7,7 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { AuditExportPdf } from "@/lib/pdf/audit-export";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const QuerySchema = z.object({
   from: z
@@ -23,6 +24,9 @@ const QuerySchema = z.object({
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
+  const rl = await ratelimit({ key: keyFromRequest(req, "audit-export"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Audit export rate limit reached");
+
   const url = new URL(req.url);
   const q = QuerySchema.safeParse({
     from: url.searchParams.get("from") ?? undefined,

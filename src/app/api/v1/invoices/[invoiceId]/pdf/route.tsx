@@ -7,6 +7,7 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { InvoicePdf } from "@/lib/pdf/invoice";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * GET /api/v1/invoices/[invoiceId]/pdf
@@ -27,7 +28,9 @@ const ParamsSchema = z.object({ invoiceId: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ invoiceId: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ invoiceId: string }> }) {
+  const rl = await ratelimit({ key: keyFromRequest(req, "invoice-pdf"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Invoice PDF rate limit reached");
   const { invoiceId } = await ctx.params;
   const parsed = ParamsSchema.safeParse({ invoiceId });
   if (!parsed.success) return apiError("bad_request", "Invalid invoice id");

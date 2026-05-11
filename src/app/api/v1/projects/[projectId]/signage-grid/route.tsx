@@ -8,12 +8,16 @@ import { compileAndStore } from "@/lib/pdf/render";
 import { SignageGridPdf } from "@/lib/pdf/reports";
 import { SignageGridSchema } from "@/lib/pdf/schemas/deliverables";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const ParamsSchema = z.object({ projectId: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+  const rl = await ratelimit({ key: keyFromRequest(req, "signage-grid"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Signage grid render rate limit reached");
+
   const { projectId } = await ctx.params;
   const p = ParamsSchema.safeParse({ projectId });
   if (!p.success) return apiError("bad_request", "Invalid project id");

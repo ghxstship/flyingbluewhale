@@ -8,6 +8,7 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { WristbandSheetPdf } from "@/lib/pdf/wristband-sheet";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * GET /api/v1/projects/{projectId}/wristbands — Opportunity #16.
@@ -20,7 +21,12 @@ const ParamsSchema = z.object({ projectId: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ projectId: string }> }) {
+  // Wristband sheets fan thousands of QR codes through the PDF
+  // pipeline. Bound to export bucket (5/min).
+  const rl = await ratelimit({ key: keyFromRequest(req, "wristbands"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Wristband render rate limit reached");
+
   const { projectId } = await ctx.params;
   const p = ParamsSchema.safeParse({ projectId });
   if (!p.success) return apiError("bad_request", "Invalid project id");

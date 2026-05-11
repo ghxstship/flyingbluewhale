@@ -8,6 +8,7 @@ import { compileAndStore } from "@/lib/pdf/render";
 import { DeliverablePdf } from "@/lib/pdf/deliverables/document";
 import { labelFor } from "@/lib/pdf/deliverables/registry";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * GET /api/v1/deliverables/{id}/pdf — Opportunity #2.
@@ -21,7 +22,9 @@ const ParamsSchema = z.object({ id: z.string().uuid() });
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const rl = await ratelimit({ key: keyFromRequest(req, "deliverable-pdf"), ...RATE_BUDGETS.export });
+  if (!rl.ok) return apiError("rate_limited", "Deliverable PDF rate limit reached");
   const { id } = await ctx.params;
   const parsed = ParamsSchema.safeParse({ id });
   if (!parsed.success) return apiError("bad_request", "Invalid deliverable id");

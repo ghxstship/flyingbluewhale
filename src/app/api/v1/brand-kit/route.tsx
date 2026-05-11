@@ -6,12 +6,20 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { BrandKitPdf } from "@/lib/pdf/brand-kit";
 import { log } from "@/lib/log";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /** GET /api/v1/brand-kit — Opportunity #20. */
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
+  // Brand-kit PDF render is heavy. Bound to the export bucket (5/min).
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "brand-kit"),
+    ...RATE_BUDGETS.export,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Brand kit render rate limit reached");
+
   const guard = await withAuth(async (session) => ({ session }));
   if (guard instanceof Response) return guard;
   const { session } = guard;

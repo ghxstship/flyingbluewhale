@@ -48,6 +48,31 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
   const file = fd.get("file");
   if (file instanceof File && file.size > 0) {
     if (file.size > 25 * 1024 * 1024) return { error: "File exceeds 25MB" };
+    // Closed allowlist of MIME types we accept on the advancing bucket.
+    // Without this, talent could upload `.html` / `.svg` (active content)
+    // or `.exe` and have it served back via signed URLs, creating an
+    // XSS / drive-by-download surface against producers who click the
+    // download link in the console.
+    const ALLOWED_MIME = new Set([
+      "application/pdf",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/heic",
+      "image/heif",
+      "application/zip",
+      "text/plain",
+      "text/csv",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "application/msword",
+      "application/vnd.ms-excel",
+    ]);
+    const mime = (file.type || "").toLowerCase();
+    if (mime && !ALLOWED_MIME.has(mime)) {
+      return { error: `Unsupported file type: ${mime}` };
+    }
     const supabase = await createClient();
     const ext =
       file.name

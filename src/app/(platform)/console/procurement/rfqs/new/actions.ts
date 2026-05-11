@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
@@ -16,6 +16,7 @@ export type State = { error?: string } | null;
 
 export async function createRfqAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create RFQs" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();

@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
@@ -18,6 +18,9 @@ export type State = { error?: string } | null;
 
 export async function createPoChangeOrder(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // PO change orders modify committed money on an existing PO —
+  // manager+ only.
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create PO change orders" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();

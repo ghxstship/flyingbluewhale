@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 type PoChangeOrderStatus = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "void";
@@ -21,6 +21,10 @@ const PO_CO_TRANSITIONS: Record<PoChangeOrderStatus, readonly PoChangeOrderStatu
 
 export async function transitionPoChangeOrder(id: string, to: PoChangeOrderStatus): Promise<void> {
   const session = await requireSession();
+  // CO approval rolls the change-order amount onto the parent PO —
+  // manager+ only. Without this gate a lower-priv user could craft a
+  // POST that approves a CO and silently raises the committed PO total.
+  if (!isManagerPlus(session)) throw new Error("Only manager+ can transition PO change orders");
   const supabase = await createClient();
 
   const { data: co } = await supabase

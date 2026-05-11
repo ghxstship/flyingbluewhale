@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { DocDownloadLink } from "./DocDownloadLink";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +50,12 @@ export default async function MobileDocsPage() {
         Personal IDs, licenses, tax forms, and signed contracts. Only you can see these.
       </p>
 
+      <div className="mt-4 flex justify-end">
+        <Link href="/m/docs/new" className="btn btn-primary btn-sm">
+          + Upload
+        </Link>
+      </div>
+
       <ul className="mt-5 space-y-2">
         {list.length === 0 ? (
           <li>
@@ -59,15 +67,22 @@ export default async function MobileDocsPage() {
           </li>
         ) : (
           list.map((d) => (
-            <li key={d.id} className="surface flex items-center justify-between p-3">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <Badge variant={KIND_TONE[d.doc_kind] ?? "muted"}>{d.doc_kind}</Badge>
-                  {d.mime_type && <span className="font-mono text-[10px] text-[var(--text-muted)]">{d.mime_type}</span>}
+            <li key={d.id} className="surface p-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Badge variant={KIND_TONE[d.doc_kind] ?? "muted"}>{d.doc_kind}</Badge>
+                    {d.mime_type && (
+                      <span className="font-mono text-[10px] text-[var(--text-muted)]">{d.mime_type}</span>
+                    )}
+                  </div>
+                  <div className="mt-1 truncate text-sm font-semibold">{d.label}</div>
                 </div>
-                <div className="mt-1 truncate text-sm font-semibold">{d.label}</div>
+                <span className="shrink-0 font-mono text-xs text-[var(--text-muted)]">{fmt.date(d.uploaded_at)}</span>
               </div>
-              <span className="font-mono text-xs text-[var(--text-muted)]">{fmt.date(d.uploaded_at)}</span>
+              <div className="mt-2 flex justify-end">
+                <DocDownloadLink docId={d.id} />
+              </div>
             </li>
           ))
         )}

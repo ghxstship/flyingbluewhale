@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { sendPushTo } from "@/lib/push/send";
 
 const Schema = z.object({
   to_user_id: z.string().uuid(),
@@ -36,6 +37,15 @@ export async function createKudos(fd: FormData): Promise<void> {
     value_tag: parsed.value_tag || null,
     points: 0,
     visibility_state: "public",
+  });
+
+  // Notify the recipient. Fire-and-forget; a failed push doesn't roll
+  // back the kudos.
+  void sendPushTo(parsed.to_user_id, {
+    title: "You got kudos",
+    body: parsed.message.slice(0, 200),
+    url: "/m/kudos",
+    tag: `kudos:${session.userId}:${Date.now()}`,
   });
 
   revalidatePath("/m/kudos");

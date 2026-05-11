@@ -26,14 +26,22 @@ export default async function MobileKudosPage() {
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
-  const { data: posts } = await supabase
-    .from("recognition_posts")
-    .select("id, from_user_id, to_user_id, message, value_tag, points, created_at")
-    .eq("org_id", session.orgId)
-    .eq("visibility_state", "public")
-    .is("deleted_at", null)
-    .order("created_at", { ascending: false })
-    .limit(50);
+  const [{ data: posts }, { data: myBadges }] = await Promise.all([
+    supabase
+      .from("recognition_posts")
+      .select("id, from_user_id, to_user_id, message, value_tag, points, created_at")
+      .eq("org_id", session.orgId)
+      .eq("visibility_state", "public")
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(50),
+    supabase
+      .from("badge_awards")
+      .select("id, badge_id, note, awarded_at, badge:badge_id(name, icon)")
+      .eq("user_id", session.userId)
+      .order("awarded_at", { ascending: false })
+      .limit(20),
+  ]);
 
   const { data: memberships } = await supabase
     .from("memberships")
@@ -49,6 +57,36 @@ export default async function MobileKudosPage() {
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
       <h1 className="mt-1 text-2xl font-semibold">Kudos</h1>
+
+      {(
+        (myBadges ?? []) as Array<{
+          id: string;
+          badge_id: string;
+          note: string | null;
+          awarded_at: string;
+          badge: { name: string; icon: string | null } | null;
+        }>
+      ).length > 0 && (
+        <section className="mt-5">
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">My Badges</h2>
+          <ul className="mt-2 flex flex-wrap gap-2">
+            {(
+              (myBadges ?? []) as Array<{
+                id: string;
+                badge_id: string;
+                note: string | null;
+                awarded_at: string;
+                badge: { name: string; icon: string | null } | null;
+              }>
+            ).map((ba) => (
+              <li key={ba.id} className="surface flex items-center gap-2 px-3 py-2 text-xs">
+                <span className="font-mono text-base">{ba.badge?.icon ?? "🏅"}</span>
+                <span className="font-semibold">{ba.badge?.name ?? "Badge"}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <details className="surface mt-4 p-3">
         <summary className="cursor-pointer text-sm font-semibold">Give Kudos</summary>

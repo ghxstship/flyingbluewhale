@@ -21266,6 +21266,7 @@ export type Database = {
           punch_lat: number | null
           punch_lng: number | null
           rate_cents: number | null
+          shift_id: string | null
           started_at: string
           timesheet_id: string | null
           updated_at: string
@@ -21289,6 +21290,7 @@ export type Database = {
           punch_lat?: number | null
           punch_lng?: number | null
           rate_cents?: number | null
+          shift_id?: string | null
           started_at: string
           timesheet_id?: string | null
           updated_at?: string
@@ -21312,6 +21314,7 @@ export type Database = {
           punch_lat?: number | null
           punch_lng?: number | null
           rate_cents?: number | null
+          shift_id?: string | null
           started_at?: string
           timesheet_id?: string | null
           updated_at?: string
@@ -21346,6 +21349,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entries_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
             referencedColumns: ["id"]
           },
           {

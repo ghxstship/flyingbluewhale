@@ -6,6 +6,19 @@ import { useRouter } from "next/navigation";
 
 type Action = "check_in" | "check_out" | "break_start" | "break_end";
 
+/** Browser geolocation as a Promise. Resolves null instead of rejecting
+ * so a denied permission or missing API doesn't block the punch. */
+function tryGetPosition(): Promise<{ lat: number; lng: number } | null> {
+  if (typeof navigator === "undefined" || !navigator.geolocation) return Promise.resolve(null);
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      (p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }),
+      () => resolve(null),
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 30_000 },
+    );
+  });
+}
+
 export function CheckInControls({
   shiftId,
   attendance,
@@ -19,10 +32,18 @@ export function CheckInControls({
   const submit = (action: Action, label: string) => {
     start(async () => {
       try {
+        // Capture GPS only for the clock_in/clock_out events. Break
+        // toggles don't need a position fix.
+        const needsGps = action === "check_in" || action === "check_out";
+        const pos = needsGps ? await tryGetPosition() : null;
         const res = await fetch("/api/v1/shifts/checkin", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ shiftId, action }),
+          body: JSON.stringify({
+            shiftId,
+            action,
+            ...(pos ? { lat: pos.lat, lng: pos.lng } : {}),
+          }),
         });
         const json = (await res.json()) as { ok: boolean; error?: { message: string } };
         if (!json.ok) {
@@ -37,7 +58,6 @@ export function CheckInControls({
     });
   };
 
-  // Render the relevant action(s) for the current state.
   if (attendance === "checked_out") {
     return <div className="text-xs text-[var(--text-muted)]">Shift closed.</div>;
   }

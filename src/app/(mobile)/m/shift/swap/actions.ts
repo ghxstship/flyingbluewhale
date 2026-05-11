@@ -26,6 +26,17 @@ export async function requestSwap(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!shift) redirect("/m/shift/swap?error=not_found");
 
+  // Canonical record — shift_swaps carries the state machine. The
+  // notification fan-out below stays so admins see the request before
+  // they navigate to /console/workforce/shift-swaps.
+  await supabase.from("shift_swaps").insert({
+    org_id: session.orgId,
+    shift_id: parsed.data!.shift_id,
+    requested_by: session.userId,
+    reason: parsed.data!.reason,
+    swap_state: "requested",
+  });
+
   // Notify all admin/manager members of the org via service role.
   const service = createServiceClient();
   // .is("deleted_at", null) so we don't notify offboarded admins
@@ -49,7 +60,7 @@ export async function requestSwap(fd: FormData): Promise<void> {
     user_id: a.user_id,
     title,
     body,
-    href: "/console/workforce/rosters",
+    href: "/console/workforce/shift-swaps",
   }));
   if (inserts.length > 0) {
     await service.from("notifications").insert(inserts);

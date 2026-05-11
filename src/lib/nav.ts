@@ -272,7 +272,10 @@ export const platformNav: NavGroup[] = [
       { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
       { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
       { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
+      { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
       { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
+      { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
+      { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
       { label: "Announcements", href: "/console/comms/announcements", icon: "Megaphone" },
       { label: "Polls", href: "/console/comms/polls", icon: "BarChart3" },
       { label: "Surveys", href: "/console/comms/surveys", icon: "ClipboardCheck" },
@@ -676,4 +679,5 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Surveys", href: "/m/surveys" },
   { label: "My Docs", href: "/m/docs" },
   { label: "Directory", href: "/m/directory" },
+  { label: "Onboarding", href: "/m/onboarding" },
 ];

@@ -83,8 +83,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
   // in `database.types.ts` until the type-gen runs against the migrated DB.
   // Untype the client at the boundary to avoid an editor-only error blocking
   // the runner from compiling. Every write is org-scoped and validated.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const svc = createServiceClient() as unknown as { from: (t: string) => any };
+  const svc = createServiceClient() as unknown as import("@/lib/supabase/loose").LooseSupabase;
 
   // 1. Load automation
   const { data: autoRow, error: loadErr } = await svc

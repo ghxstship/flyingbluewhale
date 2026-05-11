@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { apiCreated, apiError } from "@/lib/api";
 import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { keyFromRequest, ratelimit } from "@/lib/ratelimit";
 import { log } from "@/lib/log";
 import { runAutomation } from "@/lib/automations/run";
@@ -86,9 +87,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ aut
     return apiError("bad_request", "Request body exceeds 1 MB limit");
   }
 
-  // Look up the automation row.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const svc = createServiceClient() as unknown as { from: (t: string) => any };
+  // Look up the automation row via the centralized LooseSupabase shim
+  // (the typed client's per-table overloads collapse to `never` when
+  // the column set isn't yet in the regenerated database.types).
+  const svc = createServiceClient() as unknown as LooseSupabase;
   const { data: autoRow, error: loadErr } = await svc
     .from("automations")
     .select("id, org_id, trigger_kind, enabled, webhook_secret")

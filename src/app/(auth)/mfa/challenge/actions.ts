@@ -1,11 +1,20 @@
 "use server";
 
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getEnrolledFactors } from "@/lib/auth/mfa";
 import type { FormState } from "@/components/FormShell";
+
+function constantTimeHashEq(a: string, b: string): boolean {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
+  try {
+    return timingSafeEqual(Buffer.from(a, "hex"), Buffer.from(b, "hex"));
+  } catch {
+    return false;
+  }
+}
 
 // `mfa_recovery_codes` isn't in the generated Database type yet — narrow
 // just the slice we touch (mirrors the push_subscriptions pattern).
@@ -138,7 +147,12 @@ export async function verifyChallengeAction(_: FormState, fd: FormData): Promise
       .is("used_at", null);
     if (error || !data) return { error: "Couldn't verify recovery code." };
 
-    const hit = data.find((row) => candidates.some((c) => sha256(c) === row.code_hash));
+    // Constant-time hash compare per row — string `===` short-circuits
+    // on the first mismatched byte and leaks one byte per request via
+    // response timing. Stored hashes are sha256 (16-hex codes have
+    // 64-bit entropy, so an offline brute force is still infeasible),
+    // but use timingSafeEqual anyway as defense in depth.
+    const hit = data.find((row) => candidates.some((c) => constantTimeHashEq(sha256(c), row.code_hash)));
     if (!hit) return { error: "That recovery code is invalid or already used." };
 
     // Conditional consume — only land the used_at stamp if the row is

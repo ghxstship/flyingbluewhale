@@ -4,7 +4,9 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { publishAnnouncement, archiveAnnouncement } from "./actions";
+import Link from "next/link";
+import { publishAnnouncement, archiveAnnouncement, deleteAnnouncement } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +18,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const { data } = await supabase
     .from("announcements")
-    .select("id, title, body, audience, pinned, publish_state, published_at, created_at")
+    .select("id, title, body, audience, pinned, publish_state, published_at, created_at, read_count")
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -31,12 +33,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     publish_state: string;
     published_at: string | null;
     created_at: string;
+    read_count: number;
   };
-
-  const { count: readCount } = await supabase
-    .from("announcement_reads")
-    .select("announcement_id", { count: "exact", head: true })
-    .eq("announcement_id", id);
+  const readCount = a.read_count;
 
   return (
     <>
@@ -58,7 +57,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content max-w-2xl space-y-4">
         <article className="surface p-6 text-sm whitespace-pre-wrap">{a.body}</article>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Link href={`/console/comms/announcements/${a.id}/edit`} className="btn btn-secondary">
+            Edit
+          </Link>
           {a.publish_state === "draft" && (
             <form action={publishAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
@@ -75,6 +77,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </button>
             </form>
           )}
+          <DeleteForm
+            action={deleteAnnouncement.bind(null, a.id)}
+            confirm="Soft-delete this announcement? It will stop appearing in /m/feed."
+          />
         </div>
       </div>
     </>

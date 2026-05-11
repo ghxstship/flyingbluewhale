@@ -74,6 +74,19 @@ Public surfaces exposing your org's RFQs, gigs, talent calls, talent EPKs, crew 
 - **Compliance gating on public RFQs:** `requires_prequalification`, `requires_insurance`, `requires_w9`, `nda_required` columns on `rfqs`. Vendor portal is the bid-submission surface; gates evaluated app-side before allowing a response.
 - **Code anchor:** schema in `supabase/migrations/0002_marketplace_canon.sql`; shared types + helpers in `src/lib/marketplace.ts`; new-table queries use `as unknown as LooseSupabase` from `src/lib/supabase/loose.ts` until `npm run gen:types` regenerates the typed client.
 
+## Connecteam parity (0046–0048)
+
+Deskless-workforce features that bring COMPVSS to feature-parity with Connecteam, layered into the existing 3-shell IA — no new shells.
+
+- **Schema:** `supabase/migrations/0046_connecteam_parity.sql` (19 tables: time_clock_zones, shift_swaps, announcements, announcement_reads, chat_rooms/members/messages, surveys/questions/responses, polls/options/votes, courses/lessons/quiz_questions/assignments/completions, time_off_policies/balances/requests, recognition_posts/reactions, badges/awards, personal_documents, new_hire_flows/steps/assignments) · `0047_connecteam_parity_wiring.sql` (time_entries.shift_id, personal-documents bucket, touch_updated_at triggers) · `0048_connecteam_parity_loop_closure.sql` (courses.completion_badge_id, announcements.read_count denorm trigger, approve_time_off_request SECURITY DEFINER RPC).
+- **Canonical lib:** `src/lib/connecteam.ts` — enum tuples + `metersBetween`/`classifyPunch`/`scoreQuiz`/`daysBetween` helpers, mirrors the `src/lib/marketplace.ts` shape.
+- **COMPVSS surfaces (/m):** `feed`, `inbox` + `[roomId]`, `learning` + `[courseId]`, `time-off` + `/new`, `kudos`, `polls`, `surveys` + `[surveyId]`, `docs` + `/new`, `directory`, `onboarding` + `[assignmentId]`, `checkin` (read-only meal/break summary, distinct from `/m/clock` punch), `incident` (My Incidents view, distinct from `/m/incidents` org queue), `incident/new` (express one-field quick-file).
+- **ATLVS admin (/console):** under `comms/announcements`, `comms/polls`, `comms/surveys`, `workforce/courses`, `workforce/time-off`, `workforce/recognition`, `workforce/badges`, `workforce/onboarding`, `workforce/shift-swaps`, `settings/time-clock-zones`.
+- **Realtime:** `src/components/RealtimeRefresh.tsx` is a tiny client island that subscribes to Supabase Realtime on a filtered table and nudges `router.refresh()` on changes. Mounted on `/m/feed` (announcements) and `/m/inbox/[roomId]` (chat_messages).
+- **Push fan-out:** announcement publish, kudos creation, chat message post, and badge award all fire `sendPushTo`/`sendPushBulk` from `src/lib/push/send.ts`. `/m/settings` reuses `<PushToggle>` for subscription enable/disable.
+- **Test users (demo org):** `performer@gvteway.test` (owner), `admin@gvteway.test` (admin), `mgmt@gvteway.test` (manager), `crew@gvteway.test` (member) — all password `CompvssTest2026!`. Re-role via SQL; passwords reset via pgcrypto's `crypt()`.
+- **Smoke harnesses:** `scripts/compvss-smoke.mjs` (47 routes × 4 roles = 188 page-render checks with unique-title matchers + stub detection); `scripts/compvss-actions-smoke.mjs` (27 RLS-gated mutation checks across roles). Both run against a live dev server on :3000.
+
 ## Boarding Pass (event guides)
 
 Per-role Know-Before-You-Go — same Boarding Pass pattern, shared schema, role-scoped rendering.

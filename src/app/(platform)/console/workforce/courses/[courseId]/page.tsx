@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { addLesson, addQuizQuestion, publishCourse, assignCourse } from "./actions";
+import { addLesson, addQuizQuestion, publishCourse, assignCourse, setCompletionBadge, deleteCourse } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
 
   const { data: course } = await supabase
     .from("courses")
-    .select("id, title, summary, publish_state, duration_minutes")
+    .select("id, title, summary, publish_state, duration_minutes, completion_badge_id")
     .eq("id", courseId)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -33,7 +34,15 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
     summary: string | null;
     publish_state: string;
     duration_minutes: number | null;
+    completion_badge_id: string | null;
   };
+
+  const { data: badges } = await supabase
+    .from("badges")
+    .select("id, code, name, icon")
+    .eq("org_id", session.orgId)
+    .order("name");
+  const badgeList = (badges ?? []) as Array<{ id: string; code: string; name: string; icon: string | null }>;
 
   const [{ data: lessons }, { data: questions }, { data: assignments }, { data: members }] = await Promise.all([
     supabase
@@ -87,17 +96,45 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
           </span>
         }
         action={
-          c.publish_state === "draft" ? (
-            <form action={publishCourse}>
-              <input type="hidden" name="courseId" value={c.id} />
-              <Button type="submit" size="sm">
-                Publish
-              </Button>
-            </form>
-          ) : null
+          <div className="flex items-center gap-2">
+            {c.publish_state === "draft" && (
+              <form action={publishCourse}>
+                <input type="hidden" name="courseId" value={c.id} />
+                <Button type="submit" size="sm">
+                  Publish
+                </Button>
+              </form>
+            )}
+            <DeleteForm
+              action={deleteCourse.bind(null, c.id)}
+              confirm="Soft-delete this course? Existing assignments stay; new assignments will fail."
+            />
+          </div>
         }
       />
       <div className="page-content grid gap-4 lg:grid-cols-2">
+        <section className="surface p-4 lg:col-span-2">
+          <h2 className="text-sm font-semibold">Completion Badge</h2>
+          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+            Optional. When set, any assignee who passes the quiz auto-receives this badge.
+          </p>
+          <form action={setCompletionBadge} className="mt-3 flex items-end gap-2">
+            <input type="hidden" name="courseId" value={c.id} />
+            <select name="badge_id" defaultValue={c.completion_badge_id ?? ""} className="input-base flex-1">
+              <option value="">— None —</option>
+              {badgeList.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.icon ? `${b.icon} ` : ""}
+                  {b.name}
+                </option>
+              ))}
+            </select>
+            <Button type="submit" variant="secondary" size="sm">
+              Save
+            </Button>
+          </form>
+        </section>
+
         <section className="surface p-4">
           <h2 className="text-sm font-semibold">Lessons</h2>
           <ol className="mt-3 space-y-2">

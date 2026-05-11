@@ -53,6 +53,18 @@ export async function publishAnnouncement(fd: FormData): Promise<void> {
   revalidatePath("/console/comms/announcements");
 }
 
+export async function deleteAnnouncement(id: string): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const supabase = await createClient();
+  await supabase
+    .from("announcements")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  revalidatePath("/console/comms/announcements");
+}
+
 export async function archiveAnnouncement(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;

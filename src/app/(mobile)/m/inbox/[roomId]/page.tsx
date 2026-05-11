@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { postMessage, markRoomRead } from "../actions";
+import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,12 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col">
+      <RealtimeRefresh
+        channelName={`m-inbox-${roomId}`}
+        table="chat_messages"
+        filter={`room_id=eq.${roomId}`}
+        event="INSERT"
+      />
       <div className="border-b border-[var(--border-color)] px-4 pt-4 pb-3">
         <h1 className="truncate text-base font-semibold">{room.name ?? "Direct message"}</h1>
         <p className="text-xs text-[var(--text-muted)]">{room.room_kind}</p>

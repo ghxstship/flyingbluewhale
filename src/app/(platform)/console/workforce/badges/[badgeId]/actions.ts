@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
@@ -55,4 +56,20 @@ export async function awardBadge(fd: FormData): Promise<void> {
   });
 
   revalidatePath(`/console/workforce/badges/${parsed.badgeId}`);
+}
+
+export async function deleteBadge(badgeId: string): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const supabase = await createClient();
+  // Existing awards keep their badge_id FK — ON DELETE CASCADE on
+  // badge_awards would erase award history, so we soft-delete by leaving
+  // badge_awards intact and just dropping the badges row. We DELETE
+  // hard here because badge_awards.badge_id is FK ON DELETE CASCADE in
+  // migration 0046 — admins should explicitly tombstone via UI rename
+  // if they want to keep audit. Manager+ gated so the destruction is
+  // intentional.
+  await supabase.from("badges").delete().eq("id", badgeId).eq("org_id", session.orgId);
+  revalidatePath("/console/workforce/badges");
+  redirect("/console/workforce/badges");
 }

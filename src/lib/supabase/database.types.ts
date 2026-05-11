@@ -1042,6 +1042,7 @@ export type Database = {
           project_id: string | null
           publish_state: string
           published_at: string | null
+          read_count: number
           title: string
           updated_at: string
         }
@@ -1057,6 +1058,7 @@ export type Database = {
           project_id?: string | null
           publish_state?: string
           published_at?: string | null
+          read_count?: number
           title: string
           updated_at?: string
         }
@@ -1072,6 +1074,7 @@ export type Database = {
           project_id?: string | null
           publish_state?: string
           published_at?: string | null
+          read_count?: number
           title?: string
           updated_at?: string
         }
@@ -4601,6 +4604,7 @@ export type Database = {
       }
       courses: {
         Row: {
+          completion_badge_id: string | null
           created_at: string
           created_by: string | null
           deleted_at: string | null
@@ -4614,6 +4618,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          completion_badge_id?: string | null
           created_at?: string
           created_by?: string | null
           deleted_at?: string | null
@@ -4627,6 +4632,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          completion_badge_id?: string | null
           created_at?: string
           created_by?: string | null
           deleted_at?: string | null
@@ -4640,6 +4646,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "courses_completion_badge_id_fkey"
+            columns: ["completion_badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "courses_org_id_fkey"
             columns: ["org_id"]
@@ -26293,6 +26306,35 @@ export type Database = {
             }
             Returns: string
           }
+      approve_time_off_request: {
+        Args: {
+          p_decider_id: string
+          p_decision_note?: string
+          p_request_id: string
+        }
+        Returns: {
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_note: string | null
+          ends_on: string
+          hours_requested: number
+          id: string
+          org_id: string
+          policy_id: string
+          reason: string | null
+          request_state: string
+          starts_on: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "time_off_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       auth_team_ids: { Args: never; Returns: string[] }
       can_record: {
         Args: { p_id: string; p_op: string; p_table: string }

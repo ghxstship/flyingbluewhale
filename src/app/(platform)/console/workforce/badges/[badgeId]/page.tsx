@@ -5,7 +5,8 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { awardBadge } from "./actions";
+import { awardBadge, deleteBadge } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
 
 export const dynamic = "force-dynamic";
 
@@ -68,6 +69,12 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
             <Badge variant="muted">{b.code}</Badge>
             <span className="font-mono text-xs">{awardList.length} awarded</span>
           </span>
+        }
+        action={
+          <DeleteForm
+            action={deleteBadge.bind(null, b.id)}
+            confirm="Hard-delete this badge? All award history will also be removed (FK ON DELETE CASCADE)."
+          />
         }
       />
       <div className="page-content max-w-3xl space-y-4">

@@ -33,15 +33,50 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     audience: string;
   };
 
-  const [{ data: questions }, { count: responseCount }] = await Promise.all([
+  const [{ data: questions }, { count: responseCount }, { data: responses }] = await Promise.all([
     supabase
       .from("survey_questions")
       .select("id, ordinal, prompt, question_kind, options, required")
       .eq("survey_id", id)
       .order("ordinal"),
     supabase.from("survey_responses").select("id", { count: "exact", head: true }).eq("survey_id", id),
+    supabase
+      .from("survey_responses")
+      .select("id, answers, submitted_at")
+      .eq("survey_id", id)
+      .order("submitted_at", { ascending: false })
+      .limit(200),
   ]);
   const qs = (questions ?? []) as Q[];
+
+  // Tally per-question answer distribution. Single-choice/scale/boolean
+  // get straight count-by-value; multi-choice splits the array into
+  // independent ticks; free-text is left as a sample of the latest 5
+  // responses for context (no aggregation makes sense).
+  const respList = (responses ?? []) as Array<{ id: string; answers: Record<string, unknown>; submitted_at: string }>;
+  const tallies: Record<string, Map<string, number>> = {};
+  const textSamples: Record<string, string[]> = {};
+  for (const q of qs) {
+    tallies[q.id] = new Map<string, number>();
+    textSamples[q.id] = [];
+  }
+  for (const r of respList) {
+    for (const q of qs) {
+      const ans = r.answers?.[q.id];
+      if (ans == null) continue;
+      if (q.question_kind === "text") {
+        if (textSamples[q.id].length < 5 && typeof ans === "string") textSamples[q.id].push(ans);
+      } else if (Array.isArray(ans)) {
+        for (const v of ans) {
+          const k = String(v);
+          tallies[q.id].set(k, (tallies[q.id].get(k) ?? 0) + 1);
+        }
+      } else {
+        const k = String(ans);
+        tallies[q.id].set(k, (tallies[q.id].get(k) ?? 0) + 1);
+      }
+    }
+  }
 
   return (
     <>
@@ -86,22 +121,54 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="surface p-4">
           <h2 className="text-sm font-semibold">Questions</h2>
           <ol className="mt-3 space-y-2">
-            {qs.map((q) => (
-              <li key={q.id} className="rounded-md border border-[var(--border-color)] p-3">
-                <div className="flex items-center justify-between">
-                  <Badge variant="muted">{q.question_kind}</Badge>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">#{q.ordinal}</span>
-                </div>
-                <div className="mt-1 text-sm font-semibold">{q.prompt}</div>
-                {Array.isArray(q.options) && (q.options as string[]).length > 0 && (
-                  <ul className="mt-1 text-xs text-[var(--text-secondary)]">
-                    {(q.options as string[]).map((o, idx) => (
-                      <li key={idx}>○ {o}</li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
+            {qs.map((q) => {
+              const tally = tallies[q.id] ?? new Map<string, number>();
+              const totalAns = Array.from(tally.values()).reduce((a, b) => a + b, 0);
+              const opts = Array.isArray(q.options) ? (q.options as string[]) : [];
+              const isText = q.question_kind === "text";
+              return (
+                <li key={q.id} className="rounded-md border border-[var(--border-color)] p-3">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="muted">{q.question_kind}</Badge>
+                    <span className="font-mono text-xs text-[var(--text-muted)]">#{q.ordinal}</span>
+                  </div>
+                  <div className="mt-1 text-sm font-semibold">{q.prompt}</div>
+                  {isText ? (
+                    <ul className="mt-2 space-y-1 text-xs text-[var(--text-secondary)]">
+                      {(textSamples[q.id] ?? []).map((s, i) => (
+                        <li key={i} className="italic">
+                          &ldquo;{s}&rdquo;
+                        </li>
+                      ))}
+                      {(textSamples[q.id] ?? []).length === 0 && <li>No text responses yet.</li>}
+                    </ul>
+                  ) : (
+                    <ul className="mt-2 space-y-1.5">
+                      {(opts.length > 0 ? opts : Array.from(tally.keys()).sort()).map((o, idx) => {
+                        const count = tally.get(o) ?? 0;
+                        const pct = totalAns > 0 ? Math.round((count / totalAns) * 100) : 0;
+                        return (
+                          <li key={idx} className="text-xs">
+                            <div className="flex items-center justify-between">
+                              <span>{o}</span>
+                              <span className="font-mono">
+                                {count} ({pct}%)
+                              </span>
+                            </div>
+                            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[var(--bg-inset)]">
+                              <div
+                                className="h-full rounded-full bg-[var(--org-primary)]"
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
           </ol>
           {s.publish_state === "draft" && (
             <form action={addQuestion} className="mt-4 space-y-2 border-t border-[var(--border-color)] pt-4">

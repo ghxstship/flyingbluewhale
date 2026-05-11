@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { markAnnouncementRead } from "./actions";
+import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,11 @@ export default async function MobileFeedPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
+      <RealtimeRefresh
+        channelName={`m-feed-${session.orgId}`}
+        table="announcements"
+        filter={`org_id=eq.${session.orgId}`}
+      />
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
       <h1 className="mt-1 text-2xl font-semibold">Updates</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { scoreQuiz } from "@/lib/connecteam";
+import { sendPushTo } from "@/lib/push/send";
 
 const Schema = z.object({
   assignmentId: z.string().uuid(),
@@ -26,6 +27,15 @@ export async function submitQuiz(fd: FormData): Promise<void> {
     .eq("assignee_id", session.userId)
     .maybeSingle();
   if (!assignment) return;
+
+  // Pull the course's optional completion_badge_id so we can auto-award
+  // on pass. Cheap single-row read, kept on the optimistic happy path.
+  const { data: course } = await supabase
+    .from("courses")
+    .select("id, title, completion_badge_id")
+    .eq("id", parsed.courseId)
+    .eq("org_id", (assignment as { org_id: string }).org_id)
+    .maybeSingle();
 
   const { data: questions } = await supabase
     .from("course_quiz_questions")
@@ -53,6 +63,29 @@ export async function submitQuiz(fd: FormData): Promise<void> {
     .from("course_assignments")
     .update({ assignment_state: passed ? "completed" : "in_progress" })
     .eq("id", parsed.assignmentId);
+
+  // Auto-award the completion badge on pass. The badge_awards insert
+  // re-checks RLS via the caller's session — they're org-scoped, so the
+  // member can self-award the badge tied to their course. Fire-and-forget
+  // push notify so a slow VAPID send doesn't block the redirect.
+  const c = course as { id: string; title: string; completion_badge_id: string | null } | null;
+  if (passed && c?.completion_badge_id) {
+    const ca = assignment as { id: string; course_id: string; org_id: string };
+    const { error: awardErr } = await supabase.from("badge_awards").insert({
+      org_id: ca.org_id,
+      badge_id: c.completion_badge_id,
+      user_id: session.userId,
+      note: `Auto-awarded for completing "${c.title}"`,
+    });
+    if (!awardErr) {
+      void sendPushTo(session.userId, {
+        title: "Badge earned",
+        body: `Course passed: ${c.title}`,
+        url: "/m/kudos",
+        tag: `course-badge:${c.id}:${session.userId}`,
+      });
+    }
+  }
 
   revalidatePath(`/m/learning/${parsed.courseId}`);
   revalidatePath("/m/learning");

@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
@@ -130,4 +131,52 @@ export async function assignCourse(fd: FormData): Promise<void> {
     assigned_by: session.userId,
   });
   revalidatePath(`/console/workforce/courses/${parsed.courseId}`);
+}
+
+const BadgeSchema = z.object({
+  courseId: z.string().uuid(),
+  badge_id: z.string().uuid().optional().or(z.literal("")),
+});
+
+export async function setCompletionBadge(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const parsed = BadgeSchema.parse(Object.fromEntries(fd));
+  if (!(await guardCourse(parsed.courseId, session.orgId))) return;
+  const supabase = await createClient();
+
+  // Empty value = clear the auto-award. Otherwise the badge must be in
+  // this org — the FK check would catch a cross-tenant id, but the
+  // explicit guard surfaces the failure before the UPDATE fires.
+  let badgeId: string | null = null;
+  if (parsed.badge_id) {
+    const { data: b } = await supabase
+      .from("badges")
+      .select("id")
+      .eq("id", parsed.badge_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!b) return;
+    badgeId = parsed.badge_id;
+  }
+  await supabase
+    .from("courses")
+    .update({ completion_badge_id: badgeId })
+    .eq("id", parsed.courseId)
+    .eq("org_id", session.orgId);
+  revalidatePath(`/console/workforce/courses/${parsed.courseId}`);
+}
+
+export async function deleteCourse(courseId: string): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  if (!(await guardCourse(courseId, session.orgId))) return;
+  const supabase = await createClient();
+  await supabase
+    .from("courses")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", courseId)
+    .eq("org_id", session.orgId);
+  revalidatePath("/console/workforce/courses");
+  redirect("/console/workforce/courses");
 }

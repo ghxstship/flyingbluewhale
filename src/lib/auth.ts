@@ -41,8 +41,15 @@ export async function getSession(): Promise<Session | null> {
   // a token explicitly attached by the caller is the strongest signal of
   // intent, and it lets a developer test a token from a logged-in browser
   // without first signing out.
+  //
+  // Token prefix is `sk_` (see mintToken in src/lib/api-keys.ts). The
+  // earlier `pat_` prefix matcher was a leftover from a planned rename
+  // that never landed — it made the entire PAT auth path dead code, so
+  // every documented API call with `Authorization: Bearer sk_…` silently
+  // fell through to cookie-only auth. Aligning the regex restores PAT
+  // auth as documented in `/api/v1/openapi.json`.
   const authHeader = await readAuthorizationHeader();
-  if (authHeader && /^Bearer\s+pat_/i.test(authHeader)) {
+  if (authHeader && /^Bearer\s+sk_/i.test(authHeader)) {
     const { verifyApiKey } = await import("./api-keys");
     const tokenSession = await verifyApiKey(authHeader);
     if (tokenSession) return tokenSession;

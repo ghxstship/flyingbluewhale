@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { TALENT_RIDER_KINDS, slugify } from "@/lib/marketplace";
 
@@ -41,6 +41,7 @@ const toArray = (v: string | undefined): string[] =>
 
 export async function createTalentAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create talent profiles" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -80,6 +81,9 @@ export async function createTalentAction(_: State, fd: FormData): Promise<State>
 
 export async function publishTalentAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // is_public makes the talent profile reachable on the public
+  // marketplace — manager+ only at the app layer.
+  if (!isManagerPlus(session)) return { error: "Only manager+ can publish talent profiles" };
   const id = String(fd.get("talent_id") ?? "");
   if (!id) return { error: "Missing talent" };
   const supabase = await createClient();
@@ -96,6 +100,7 @@ export async function publishTalentAction(_: State, fd: FormData): Promise<State
 
 export async function unpublishTalentAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can unpublish talent profiles" };
   const id = String(fd.get("talent_id") ?? "");
   if (!id) return { error: "Missing talent" };
   const supabase = await createClient();

@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { JOB_POSTING_TYPES, slugify } from "@/lib/marketplace";
 
@@ -45,6 +45,8 @@ const toArray = (v: string | undefined): string[] =>
 
 export async function createPostingAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Job postings reach the public marketplace surface — manager+ only.
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create job postings" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -99,6 +101,7 @@ const PublishSchema = z.object({
 
 export async function publishPostingAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can publish job postings" };
   const parsed = PublishSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -124,6 +127,7 @@ export async function publishPostingAction(_: State, fd: FormData): Promise<Stat
 
 export async function closePostingAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can close job postings" };
   const id = String(fd.get("posting_id") ?? "");
   if (!id) return { error: "Missing posting" };
   const supabase = await createClient();

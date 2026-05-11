@@ -86,7 +86,7 @@ export function CueRow({ cue }: { cue: Cue }) {
                 onClick={() => setPendingTo(b.to)}
                 className={`rounded px-2 py-0.5 text-[11px] font-medium transition-colors ${
                   b.to === "live"
-                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                    ? "bg-[var(--color-success)] text-white hover:opacity-90"
                     : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
                 }`}
               >

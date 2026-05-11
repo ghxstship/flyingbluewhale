@@ -41,6 +41,16 @@ const ALLOW_HTTPS_LITERAL = new Set<string>([
   "src/app/url-canon.test.ts",
 ]);
 
+// Subdomain literals that must also go through urlFor() / SITE.baseUrl.
+// The apex check above catches "https://lytehaus.live"; these catch the three
+// app subdomain variants. Test files are excluded (they pin literals in
+// assertions). Allowlist must be EMPTY — no subdomain literals in source.
+const SUBDOMAIN_LITERALS = [
+  "https://atlvs.lytehaus.live",
+  "https://gvteway.lytehaus.live",
+  "https://compvss.lytehaus.live",
+];
+
 const ALLOW_FALLBACK_PATTERN = new Set<string>([
   // Only the canonical definition resolves NEXT_PUBLIC_APP_URL with a
   // string fallback. Every other site delegates to `SITE.baseUrl`.
@@ -80,6 +90,24 @@ describe("URL canon", () => {
     expect(
       offenders,
       `Files contain the literal "https://lytehaus.live" — use SITE.baseUrl from @/lib/seo instead. Offenders: ${offenders.join(", ")}`,
+    ).toEqual([]);
+  });
+
+  it("no hardcoded app subdomain literals (atlvs/gvteway/compvss) — use urlFor() instead", () => {
+    const offenders: string[] = [];
+    for (const file of ALL) {
+      const rel = relative(REPO_ROOT, file);
+      const txt = readFileSync(file, "utf8");
+      for (const sub of SUBDOMAIN_LITERALS) {
+        if (txt.includes(`"${sub}`) || txt.includes(`'${sub}`)) {
+          offenders.push(rel);
+          break; // one entry per file is enough
+        }
+      }
+    }
+    expect(
+      offenders,
+      `Files contain hardcoded subdomain URLs — use urlFor("platform"|"portal"|"mobile", path) instead. Offenders: ${offenders.join(", ")}`,
     ).toEqual([]);
   });
 

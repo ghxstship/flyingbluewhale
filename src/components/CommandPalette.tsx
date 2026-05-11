@@ -28,6 +28,7 @@ import { Dialog, DialogContent } from "@/components/ui/Dialog";
 import { platformNav, portalNav, mobileTabs, mobileSurfaces, settingsNav } from "@/lib/nav";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { registerShortcut } from "@/lib/hooks/useHotkeys";
+import { useTheme } from "@/app/theme/ThemeProvider";
 
 type Action = {
   id: string;
@@ -50,6 +51,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
   const [search, setSearch] = React.useState("");
   const router = useRouter();
   const { prefs, setPrefs } = useUserPreferences();
+  const { setMode } = useTheme();
   const recents = React.useMemo(() => (prefs.palette_recents ?? []) as string[], [prefs.palette_recents]);
 
   // Register shortcut in the cheatsheet registry
@@ -247,31 +249,17 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       },
       {
         id: "settings-theme-light",
-        label: "Switch to Light Theme",
+        label: "Switch to Light Mode",
         group: "Settings",
         icon: Sun,
-        perform: () => {
-          document.documentElement.setAttribute("data-theme", "light");
-          try {
-            localStorage.setItem("fbw_theme", "light");
-          } catch {
-            /* ignore */
-          }
-        },
+        perform: () => setMode("light"),
       },
       {
         id: "settings-theme-dark",
-        label: "Switch to Dark Theme",
+        label: "Switch to Dark Mode",
         group: "Settings",
         icon: Moon,
-        perform: () => {
-          document.documentElement.setAttribute("data-theme", "dark");
-          try {
-            localStorage.setItem("fbw_theme", "dark");
-          } catch {
-            /* ignore */
-          }
-        },
+        perform: () => setMode("dark"),
       },
       {
         id: "logout",

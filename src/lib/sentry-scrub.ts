@@ -33,6 +33,11 @@ const SENSITIVE_HEADER_NAMES = new Set(["authorization", "x-api-key", "x-stripe-
 const SENSITIVE_COOKIE_NAMES = [
   /^sb-[^=]+-auth-token(?:\.0|\.1)?$/i,
   /^__Secure-next-auth\.session-token$/i,
+  // lh_ prefixed cookies carry user preferences and consent — preserve names,
+  // values are benign, but scrub any future session cookie to be safe.
+  /^lh_session$/i,
+  // Legacy fbw_ prefix — kept so scrubbing still applies to cookies set by
+  // earlier deployments that haven't yet cycled through expiry.
   /^fbw_session$/i,
 ];
 

@@ -49,6 +49,8 @@ describe("Design system — component primitive adoption", () => {
       "src/app/(platform)/console/schedule/ScheduleCalendar.tsx",
       // Phase-stepper active-step dot (XPMS Axis B chrome — semantic indicator, not a button)
       "src/components/xpms/PhaseStepper.tsx",
+      // ROS cue "Go live" state button (uses --color-success token, not org-primary)
+      "src/app/(platform)/console/production/ros/CueForm.tsx",
       // Sign / Decline mode toggle (segmented-control pattern, not a primary button)
       "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/approvals/[approvalId]/ApprovalSignBlock.tsx",
       // Clerk / auth UI overrides
@@ -150,6 +152,29 @@ describe("Design system — component primitive adoption", () => {
     expect(
       offenders,
       `Hand-rolled brand-tinted pills — use <Badge variant="brand-soft">: ${offenders.join(", ")}`,
+    ).toEqual([]);
+  });
+
+  it("no raw solid Tailwind semantic-color buttons (`bg-{emerald|amber|sky|rose}-{400,500,600}` paired with `text-white`)", () => {
+    const ALLOW = new Set<string>([
+      // Canonical primitive — defines the token-backed `.bg-success` / etc. classes.
+      "src/components/ui/StatusChip.tsx",
+      "src/components/ui/GlobalBanner.tsx",
+      // Self-reference
+      "src/app/design-system.test.ts",
+    ]);
+    const offenders: string[] = [];
+    for (const file of ALL_FILES) {
+      const rel = relative(REPO_ROOT, file);
+      if (ALLOW.has(rel)) continue;
+      const txt = readFileSync(file, "utf8");
+      if (/bg-(?:emerald|amber|sky|rose)-(?:400|500|600)[^"]*text-white/.test(txt)) {
+        offenders.push(rel);
+      }
+    }
+    expect(
+      offenders,
+      `Raw solid semantic-color button — use bg-[var(--color-success|warning|info|error)] or <Button> instead: ${offenders.join(", ")}`,
     ).toEqual([]);
   });
 

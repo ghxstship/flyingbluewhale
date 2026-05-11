@@ -1,5 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
+import { SITE } from "@/lib/seo";
 
 // ────────────────────────────────────────────────────────────────────
 // SCIM 2.0 helpers — server-only.
@@ -186,7 +187,7 @@ export function scimErrorResponse(err: ScimError): Response {
 export function buildServiceProviderConfig(): Record<string, unknown> {
   return {
     schemas: [SCIM_SP_CONFIG],
-    documentationUri: "https://lytehaus.live/docs/scim",
+    documentationUri: `${SITE.baseUrl}/docs/scim`,
     patch: { supported: true },
     bulk: { supported: false, maxOperations: 0, maxPayloadSize: 0 },
     filter: { supported: true, maxResults: 200 },

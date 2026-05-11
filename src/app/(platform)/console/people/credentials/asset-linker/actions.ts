@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
@@ -15,6 +15,7 @@ export type State = { error?: string } | null;
 
 export async function linkAssetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can link assets to credentials" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
@@ -41,6 +42,7 @@ export async function linkAssetAction(_: State, fd: FormData): Promise<State> {
 
 export async function revokeLinkAction(formData: FormData) {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return;
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();

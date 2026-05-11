@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import {
   markOfferLetterSent,
   rotateAccessCode,
@@ -15,6 +15,10 @@ export type State = { error?: string; ok?: true } | null;
 export async function saveLetter(id: string, _prev: State, fd: FormData): Promise<State> {
   try {
     const session = await requireSession();
+    // Offer letters bind the org legally — manager+ only. Lower personas
+    // (crew/viewer/community) should never edit compensation, classification,
+    // or engagement dates even if RLS lets them through.
+    if (!isManagerPlus(session)) return { error: "Only manager+ can edit offer letters" };
     const extraInclusionsRaw = (fd.get("extra_inclusions") as string | null) ?? "";
     const extraInclusions = extraInclusionsRaw
       .split("\n")
@@ -64,6 +68,7 @@ export async function saveLetter(id: string, _prev: State, fd: FormData): Promis
 export async function sendLetter(id: string, _prev: State, _fd: FormData): Promise<State> {
   try {
     const session = await requireSession();
+    if (!isManagerPlus(session)) return { error: "Only manager+ can send offer letters" };
     await markOfferLetterSent(session.orgId, id, session.email);
     revalidatePath(`/console/people/offer-letters/${id}`);
     revalidatePath(`/console/people/offer-letters`);
@@ -76,6 +81,7 @@ export async function sendLetter(id: string, _prev: State, _fd: FormData): Promi
 export async function withdrawLetter(id: string, _prev: State, _fd: FormData): Promise<State> {
   try {
     const session = await requireSession();
+    if (!isManagerPlus(session)) return { error: "Only manager+ can withdraw offer letters" };
     await withdrawOfferLetter(session.orgId, id, session.email);
     revalidatePath(`/console/people/offer-letters/${id}`);
     revalidatePath(`/console/people/offer-letters`);
@@ -88,6 +94,7 @@ export async function withdrawLetter(id: string, _prev: State, _fd: FormData): P
 export async function rotateLetterCode(id: string, _prev: State, _fd: FormData): Promise<State> {
   try {
     const session = await requireSession();
+    if (!isManagerPlus(session)) return { error: "Only manager+ can rotate letter access codes" };
     await rotateAccessCode(session.orgId, id, session.email);
     revalidatePath(`/console/people/offer-letters/${id}`);
     return { ok: true };

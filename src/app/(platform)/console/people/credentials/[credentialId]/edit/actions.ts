@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
@@ -18,6 +18,7 @@ export type State = { error?: string } | null;
 
 export async function updateCredential(credentialId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can edit credentials" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   // Sea Trial FINDING-022: optimistic concurrency.
@@ -38,6 +39,7 @@ export async function updateCredential(credentialId: string, _: State, fd: FormD
 
 export async function deleteCredential(credentialId: string): Promise<void> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return;
   const supabase = await createClient();
   await supabase.from("credentials").delete().eq("id", credentialId).eq("org_id", session.orgId);
   revalidatePath("/console/people/credentials");

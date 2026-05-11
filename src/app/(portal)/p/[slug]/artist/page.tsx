@@ -4,6 +4,7 @@ import { ModuleHeader, PortalRail } from "@/components/Shell";
 import { portalNav } from "@/lib/nav";
 import { hasSupabase } from "@/lib/env";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { PortalDocVault } from "@/components/portal/PortalDocVault";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,21 @@ export default async function ArtistHome({ params }: { params: Promise<{ slug: s
               </Link>
             ))}
           </div>
+
+          <section className="mt-6">
+            <h2 className="text-sm font-semibold">Document Vault</h2>
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              Riders, stage plots, and input lists you&apos;ve submitted or had assigned to you.
+            </p>
+            <div className="surface mt-3 p-3">
+              <PortalDocVault
+                projectId={project.id}
+                types={["technical_rider", "hospitality_rider", "input_list", "stage_plot"]}
+                emptyTitle="No Documents Yet"
+                emptyDescription="Once you submit a rider or have one assigned, it appears here."
+              />
+            </div>
+          </section>
         </div>
       </div>
     </div>

@@ -680,4 +680,5 @@ export const mobileSurfaces: NavItem[] = [
   { label: "My Docs", href: "/m/docs" },
   { label: "Directory", href: "/m/directory" },
   { label: "Onboarding", href: "/m/onboarding" },
+  { label: "Advancing", href: "/m/advances" },
 ];

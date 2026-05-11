@@ -6,6 +6,8 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { projectIdFromSlug } from "@/lib/db/advancing";
+import { PortalDocVault } from "@/components/portal/PortalDocVault";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +25,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const project = await projectIdFromSlug(slug);
 
   const fmt = await getRequestFormatters();
   const [{ count: entries }, { count: visas }, { count: orders }, { count: blocks }] = await Promise.all([
@@ -89,6 +92,21 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             </Link>
           ))}
         </div>
+
+        <section>
+          <h2 className="text-sm font-semibold">Document Vault</h2>
+          <p className="mt-1 text-xs text-[var(--text-muted)]">
+            Visa packages, credentials, and delegation-specific paperwork assigned to you.
+          </p>
+          <div className="surface mt-3 p-3">
+            <PortalDocVault
+              projectId={project?.id ?? null}
+              types={["credential_assignment", "travel_assignment", "lodging_assignment"]}
+              emptyTitle="No Documents Yet"
+              emptyDescription="Visa packages and delegation credentials assigned to you appear here."
+            />
+          </div>
+        </section>
       </div>
     </>
   );

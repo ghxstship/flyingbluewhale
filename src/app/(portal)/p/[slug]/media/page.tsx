@@ -5,6 +5,8 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { projectIdFromSlug } from "@/lib/db/advancing";
+import { PortalDocVault } from "@/components/portal/PortalDocVault";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const project = await projectIdFromSlug(slug);
 
   const fmt = await getRequestFormatters();
   const [{ count: kbCount }] = await Promise.all([
@@ -58,6 +61,21 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             </Link>
           ))}
         </div>
+
+        <section>
+          <h2 className="text-sm font-semibold">Document Vault</h2>
+          <p className="mt-1 text-xs text-[var(--text-muted)]">
+            Credentials and editorial collateral assigned to you for this project.
+          </p>
+          <div className="surface mt-3 p-3">
+            <PortalDocVault
+              projectId={project?.id ?? null}
+              types={["credential_assignment", "vendor_package", "comms_plan"]}
+              emptyTitle="No Documents Yet"
+              emptyDescription="Press credentials and editorial packages assigned to you appear here."
+            />
+          </div>
+        </section>
       </div>
     </>
   );

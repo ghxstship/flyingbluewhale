@@ -1,0 +1,98 @@
+import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
+import { projectIdFromSlug } from "@/lib/db/advancing";
+import { PortalRail } from "@/components/Shell";
+import { portalNav } from "@/lib/nav";
+
+export const dynamic = "force-dynamic";
+
+/**
+ * Portal-wide announcements feed. Reuses the org-wide `announcements`
+ * table (migration 0046) with no portal-specific schema additions — any
+ * `published_state='published'` announcement scoped to the project's
+ * org with audience in {all, contractors, vendors} reaches portal
+ * recipients. Internal-only audiences (admins, crew) stay hidden.
+ *
+ * Per-persona surfacing: this index lives at `/p/[slug]/announcements`
+ * and each persona index links to it from its rail.
+ */
+
+type Row = {
+  id: string;
+  title: string;
+  body: string;
+  audience: string;
+  pinned: boolean;
+  published_at: string | null;
+};
+
+const PORTAL_AUDIENCES = ["all", "contractors", "vendors"];
+
+export default async function PortalAnnouncementsPage({ params }: { params: Promise<{ slug: string }> }) {
+  if (!hasSupabase) {
+    return <div className="page-content">Configure Supabase.</div>;
+  }
+  const { slug } = await params;
+  const session = await requireSession();
+  const supabase = await createClient();
+  const fmt = await getRequestFormatters();
+  const project = await projectIdFromSlug(slug);
+
+  const { data } = await supabase
+    .from("announcements")
+    .select("id, title, body, audience, pinned, published_at")
+    .eq("org_id", session.orgId)
+    .eq("publish_state", "published")
+    .is("deleted_at", null)
+    .in("audience", PORTAL_AUDIENCES)
+    .order("pinned", { ascending: false })
+    .order("published_at", { ascending: false, nullsFirst: false })
+    .limit(50);
+  const rows = (data ?? []) as Row[];
+
+  return (
+    <div className="flex">
+      <PortalRail items={portalNav(slug, "crew")} title="Portal" />
+      <div className="flex-1">
+        <div className="page-content">
+          <h1 className="text-2xl font-semibold">Updates</h1>
+          <p className="mt-1 text-xs text-[var(--text-muted)]">
+            Broadcasts from the production team. {rows.length} active for {project?.name ?? "this project"}.
+          </p>
+
+          <ul className="mt-5 space-y-3">
+            {rows.length === 0 ? (
+              <li>
+                <EmptyState
+                  size="compact"
+                  title="No Updates"
+                  description="Production-team broadcasts will appear here as they're published."
+                />
+              </li>
+            ) : (
+              rows.map((a) => (
+                <li key={a.id} className="surface p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      {a.pinned && <Badge variant="warning">Pinned</Badge>}
+                      <Badge variant="muted">{a.audience}</Badge>
+                    </div>
+                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                      {a.published_at ? fmt.date(a.published_at) : ""}
+                    </span>
+                  </div>
+                  <h2 className="mt-2 text-sm font-semibold">{a.title}</h2>
+                  <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{a.body}</p>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}

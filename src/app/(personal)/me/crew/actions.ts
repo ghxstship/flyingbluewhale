@@ -74,7 +74,8 @@ export async function upsertMyCrewAction(_: State, fd: FormData): Promise<State>
       .from("crew_members")
       .update(payload)
       .eq("id", existing.id)
-      .eq("user_id", session.userId);
+      .eq("user_id", session.userId)
+      .eq("org_id", session.orgId);
     if (error) return { error: error.message };
   } else {
     const { error } = await supabase.from("crew_members").insert(payload);

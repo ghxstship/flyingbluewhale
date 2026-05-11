@@ -68,7 +68,8 @@ export async function upsertMyTalentAction(_: State, fd: FormData): Promise<Stat
       .from("talent_profiles")
       .update(payload)
       .eq("id", existing.id)
-      .eq("user_id", session.userId);
+      .eq("user_id", session.userId)
+      .eq("org_id", session.orgId);
     if (error) return { error: error.message };
   } else {
     const { error } = await supabase.from("talent_profiles").insert({ ...payload, created_by: session.userId });

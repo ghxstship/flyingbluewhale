@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import {
   ACCOUNTING_PERIOD_STATES,
@@ -21,6 +21,9 @@ export type State = { error?: string } | null;
 
 export async function createAccountingPeriodAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  // Accounting periods are critical financial controls — opening one
+  // is org-policy, closing one locks journal entries. Owner/admin only.
+  if (!isAdmin(session)) return { error: "Only owners and admins can manage accounting periods" };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   if (parsed.data.ends_on < parsed.data.starts_on) {
@@ -56,6 +59,7 @@ export async function createAccountingPeriodAction(_: State, fd: FormData): Prom
 
 export async function transitionAccountingPeriodAction(id: string, to: AccountingPeriodState, reason?: string) {
   const session = await requireSession();
+  if (!isAdmin(session)) return { error: "Only owners and admins can transition accounting periods" };
   if (!ACCOUNTING_PERIOD_STATES.includes(to)) return { error: "Invalid target state" };
   const result = await transitionAccountingPeriod({
     orgId: session.orgId,

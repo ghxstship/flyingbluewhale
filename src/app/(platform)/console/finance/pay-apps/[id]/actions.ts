@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const PctSchema = z.object({ pct: z.string() });
@@ -14,6 +14,8 @@ const PctSchema = z.object({ pct: z.string() });
  */
 export async function updatePayAppLine(appId: string, lineId: string, fd: FormData): Promise<void> {
   const session = await requireSession();
+  // % complete on pay-app lines drives draw-down totals — manager+ only.
+  if (!isManagerPlus(session)) return;
   const parsed = PctSchema.parse(Object.fromEntries(fd));
   const newPct = Math.max(0, Math.min(100, Number(parsed.pct) || 0));
   const supabase = await createClient();
@@ -96,6 +98,10 @@ const PAYAPP_TRANSITIONS: Record<PayAppStatus, readonly PayAppStatus[]> = {
 
 export async function transitionPayApp(id: string, to: "submitted" | "approved" | "rejected" | "paid"): Promise<void> {
   const session = await requireSession();
+  // Pay-app FSM transitions (especially → paid) move money — manager+
+  // only. Without this an authenticated lower-priv user could mark a
+  // pay app paid via a crafted POST.
+  if (!isManagerPlus(session)) throw new Error("Only manager+ can transition pay applications");
   const supabase = await createClient();
 
   const { data: row } = await supabase

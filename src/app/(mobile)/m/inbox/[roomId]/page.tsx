@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -77,9 +78,7 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
           maxLength={4000}
           className="flex-1 rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
         />
-        <button type="submit" className="btn btn-primary btn-sm">
-          Send
-        </button>
+        <Button type="submit" size="sm">Send</Button>
       </form>
     </div>
   );

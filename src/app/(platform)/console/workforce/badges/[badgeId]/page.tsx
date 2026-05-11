@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { awardBadge } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +18,7 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
   const { badgeId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const { data: badge } = await supabase
     .from("badges")
@@ -91,9 +94,7 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
               placeholder="Why this person earned it (optional)"
               className="input-base w-full"
             />
-            <button type="submit" className="btn btn-primary btn-sm">
-              Award
-            </button>
+            <Button type="submit" size="sm">Award</Button>
           </form>
         </section>
 
@@ -112,7 +113,7 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
                     {a.note && <p className="text-[var(--text-secondary)]">{a.note}</p>}
                   </div>
                   <span className="font-mono text-[10px] text-[var(--text-muted)]">
-                    {new Date(a.awarded_at).toLocaleDateString()}
+                    {fmt.date(a.awarded_at)}
                   </span>
                 </li>
               ))}

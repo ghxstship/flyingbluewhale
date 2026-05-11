@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -113,16 +114,12 @@ export default async function Page() {
                       <form action={decideSwap}>
                         <input type="hidden" name="id" value={r.id} />
                         <input type="hidden" name="decision" value="approved" />
-                        <button type="submit" className="btn btn-primary btn-sm w-full">
-                          Approve
-                        </button>
+                        <Button type="submit" size="sm" className="w-full">Approve</Button>
                       </form>
                       <form action={decideSwap}>
                         <input type="hidden" name="id" value={r.id} />
                         <input type="hidden" name="decision" value="declined" />
-                        <button type="submit" className="btn btn-secondary btn-sm w-full">
-                          Decline
-                        </button>
+                        <Button type="submit" size="sm" variant="secondary" className="w-full">Decline</Button>
                       </form>
                     </div>
                   )}

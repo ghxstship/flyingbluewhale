@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -86,9 +87,7 @@ export default async function MobilePollsPage() {
                         {o.label}
                       </label>
                     ))}
-                    <button type="submit" className="btn btn-primary btn-sm mt-2 w-full">
-                      Vote
-                    </button>
+                    <Button type="submit" size="sm" className="mt-2 w-full">Vote</Button>
                   </form>
                 )}
               </li>

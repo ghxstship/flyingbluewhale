@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -62,17 +63,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           {a.publish_state === "draft" && (
             <form action={publishAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
-              <button type="submit" className="btn btn-primary">
-                Publish
-              </button>
+              <Button type="submit">Publish</Button>
             </form>
           )}
           {a.publish_state !== "archived" && (
             <form action={archiveAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
-              <button type="submit" className="btn btn-secondary">
-                Archive
-              </button>
+              <Button type="submit" variant="secondary">Archive</Button>
             </form>
           )}
         </div>

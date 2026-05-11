@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -101,9 +102,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
                   </div>
                 </fieldset>
               ))}
-              <button type="submit" className="btn btn-primary w-full">
-                Submit
-              </button>
+              <Button type="submit" className="w-full">Submit</Button>
             </form>
           )}
         </section>

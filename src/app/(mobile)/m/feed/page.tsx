@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -74,9 +75,7 @@ export default async function MobileFeedPage() {
                 {!read && (
                   <form action={markAnnouncementRead} className="mt-3 flex justify-end">
                     <input type="hidden" name="announcementId" value={a.id} />
-                    <button type="submit" className="btn btn-secondary btn-sm">
-                      Mark Read
-                    </button>
+                    <Button type="submit" size="sm" variant="secondary">Mark Read</Button>
                   </form>
                 )}
               </li>

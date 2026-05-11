@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -91,9 +92,7 @@ export default async function SurveyPage({ params }: { params: Promise<{ surveyI
             </fieldset>
           );
         })}
-        <button type="submit" className="btn btn-primary w-full">
-          Submit
-        </button>
+        <Button type="submit" className="w-full">Submit</Button>
       </form>
     </div>
   );

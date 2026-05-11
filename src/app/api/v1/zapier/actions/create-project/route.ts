@@ -4,6 +4,7 @@ import { apiCreated, apiError, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { toZapierProject } from "@/lib/integrations/zapier/payloads";
 import { createClient } from "@/lib/supabase/server";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
  * Zapier action — creates a project in the caller's org. Slug is
@@ -32,6 +33,15 @@ const Schema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Zapier-side actions can fire from a misconfigured Zap and fan out
+  // hundreds of project rows in seconds. Bind to the write bucket
+  // (60/min) — same envelope as other Zapier action endpoints.
+  const rl = await ratelimit({
+    key: keyFromRequest(req, "zapier:create-project"),
+    ...RATE_BUDGETS.write,
+  });
+  if (!rl.ok) return apiError("rate_limited", "Zapier project-create rate limit reached");
+
   const input = await parseJson(req, Schema);
   if (input instanceof Response) return input;
 

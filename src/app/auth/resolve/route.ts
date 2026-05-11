@@ -29,12 +29,16 @@ async function route(req: Request) {
   // the redirect would land on / (marketing root). Force the path here.
   // Portal needs the slug appended; everything else (console, mobile)
   // uses its natural shell prefix correctly.
+  //
+  // Validate the slug as a flat token (project slugs are
+  // ^[a-z0-9-]+$). Without this, an attacker could pass
+  // `?slug=foo%2F..%2Fbar` and have urlFor() emit a multi-segment
+  // path. Browsers normalize `..` away, but we don't want to redirect
+  // anyone to anything other than `/p/<slug>`.
+  const rawSlug = url.searchParams.get("slug") ?? "select";
+  const slug = /^[a-z0-9-]{1,64}$/i.test(rawSlug) ? rawSlug : "select";
   const target =
-    resolved === "/p"
-      ? urlFor("portal", `/${url.searchParams.get("slug") ?? "select"}`)
-      : resolved === "/me"
-        ? urlFor("personal", "/me")
-        : urlFor(shell);
+    resolved === "/p" ? urlFor("portal", `/${slug}`) : resolved === "/me" ? urlFor("personal", "/me") : urlFor(shell);
 
   return NextResponse.redirect(target);
 }

@@ -1,4 +1,5 @@
 import "server-only";
+import { timingSafeEqual } from "node:crypto";
 import { env } from "./env";
 
 export const hasStripe = Boolean(env.STRIPE_SECRET_KEY);
@@ -42,7 +43,16 @@ export async function verifyStripeWebhook(
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-  if (hex !== signature) return null;
+  // Constant-time compare — `hex !== signature` short-circuits on the
+  // first mismatched character and leaks one byte per request via
+  // response timing. timingSafeEqual requires equal-length buffers,
+  // so length-check first to bypass the throw.
+  if (hex.length !== signature.length) return null;
+  try {
+    if (!timingSafeEqual(Buffer.from(hex, "hex"), Buffer.from(signature, "hex"))) return null;
+  } catch {
+    return null;
+  }
 
   try {
     return JSON.parse(rawBody);

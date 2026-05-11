@@ -1,4 +1,23 @@
+import { resolve } from "node:path";
 import type { NextConfig } from "next";
+
+// Pin the workspace root so Next/Turbopack stops inferring it from stray
+// lockfiles in parent directories (e.g. /Users/.../Documents/package-lock.json).
+// Resolving via `process.cwd()` works for both the main checkout and
+// git worktrees (`.claude/worktrees/<branch>`) — the closest `node_modules`
+// is hoisted to the main checkout, so we walk up to find a directory that
+// contains a `node_modules/next` entry.
+const workspaceRoot = (() => {
+  const { existsSync } = require("node:fs");
+  let dir = process.cwd();
+  for (let i = 0; i < 6; i++) {
+    if (existsSync(resolve(dir, "node_modules", "next"))) return dir;
+    const parent = resolve(dir, "..");
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return process.cwd();
+})();
 
 const supabaseHost = (() => {
   try {
@@ -53,6 +72,9 @@ const config: NextConfig = {
   // to a top-level option; cast guards against type drift if the typing lags
   // the runtime.
   reactCompiler: true as never,
+  turbopack: {
+    root: workspaceRoot,
+  },
 
   async headers() {
     return [

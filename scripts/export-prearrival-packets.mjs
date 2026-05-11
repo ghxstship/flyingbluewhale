@@ -285,9 +285,9 @@ async function main() {
   }
   await browser.close();
 
-  console.log(`\n=== Pre-arrival packet export — ${PREVIEW ? "PREVIEW" : "FINAL"} ===`);
-  for (const r of results) console.log(`  ✓ ${r.name.padEnd(28)}  ${r.file}  (${r.kb} KB)`);
-  console.log(`\nWrote ${results.length} packets to: ${OUT}`);
+  console.info(`\n=== Pre-arrival packet export — ${PREVIEW ? "PREVIEW" : "FINAL"} ===`);
+  for (const r of results) console.info(`  ✓ ${r.name.padEnd(28)}  ${r.file}  (${r.kb} KB)`);
+  console.info(`\nWrote ${results.length} packets to: ${OUT}`);
 }
 
 main().catch((e) => {

@@ -34,7 +34,7 @@ async function main() {
 
   const orgIds = (orgs.data ?? []).map((o: { id: string }) => o.id);
   if (!orgIds.length) {
-    console.log(`No seeded orgs found for run ${SEED_RUN_ID}. Nothing to teardown.`);
+    console.info(`No seeded orgs found for run ${SEED_RUN_ID}. Nothing to teardown.`);
     return;
   }
 
@@ -56,7 +56,7 @@ async function main() {
     await supabase.auth.admin.deleteUser(userId);
   }
 
-  console.log(`Teardown complete. Removed ${orgIds.length} org(s) and ${seedUserIds.length} user(s).`);
+  console.info(`Teardown complete. Removed ${orgIds.length} org(s) and ${seedUserIds.length} user(s).`);
 }
 
 main().catch((err) => {

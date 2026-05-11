@@ -325,7 +325,7 @@ async function main() {
 
   const manifestPath = resolve(import.meta.dirname, "..", "..", "reports", "SEED_MANIFEST.md");
   writeFileSync(manifestPath, formatManifest(manifest));
-  console.log(`Seed complete. Manifest: ${manifestPath}`);
+  console.info(`Seed complete. Manifest: ${manifestPath}`);
 }
 
 function formatManifest(m: SeedManifest): string {

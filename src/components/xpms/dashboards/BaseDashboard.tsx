@@ -35,6 +35,7 @@ export function BaseDashboard({ classCode, title, subtitle, branding, sections, 
         ) : null}
         <div className="relative flex items-start gap-4 p-6">
           {branding?.logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- org-uploaded logo on arbitrary storage host; next/image would require per-org remotePatterns entries.
             <img
               src={branding.logoUrl}
               alt=""

@@ -72,7 +72,7 @@ if (process.argv.includes("--update")) {
       2,
     ) + "\n",
   );
-  console.log(`Updated ${BUDGET_PATH} with ${errors.length} error keys + ${warns.length} warn keys.`);
+  console.info(`Updated ${BUDGET_PATH} with ${errors.length} error keys + ${warns.length} warn keys.`);
   process.exit(0);
 }
 
@@ -104,7 +104,7 @@ if (newWarns.length > 0) {
 
 const allowedErrors = errors.length - newErrors.length;
 const allowedWarns = warns.length - newWarns.length;
-console.log(
+console.info(
   `Advisor: ${errors.length} errors (${allowedErrors} pre-budgeted, ${newErrors.length} new) / ${warns.length} warns (${allowedWarns} pre-budgeted, ${newWarns.length} new)`,
 );
 

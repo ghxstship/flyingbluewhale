@@ -71,10 +71,10 @@ for (const [route, files] of Object.entries(pages)) {
 }
 
 reports.sort((a, b) => b.firstLoadKb - a.firstLoadKb);
-console.log(`Bundle-size report (shared baseline: ${sharedKb} kb gz):`);
+console.info(`Bundle-size report (shared baseline: ${sharedKb} kb gz):`);
 for (const r of reports.slice(0, 30)) {
   const flag = r.firstLoadKb > r.cap ? "❌" : "✓ ";
-  console.log(`  ${flag} ${r.route.padEnd(50)} ${String(r.firstLoadKb).padStart(6)} kb / ${r.cap} kb`);
+  console.info(`  ${flag} ${r.route.padEnd(50)} ${String(r.firstLoadKb).padStart(6)} kb / ${r.cap} kb`);
 }
 
 if (offenders.length > 0) {
@@ -122,4 +122,4 @@ if (existsSync(chunkDir)) {
   }
 }
 
-console.log(`✓ ${reports.length} routes + all static chunks within budget.`);
+console.info(`✓ ${reports.length} routes + all static chunks within budget.`);

@@ -191,7 +191,6 @@ export type Database = {
           period_label: string
           starts_on: string
           state: Database["public"]["Enums"]["accounting_period_state"]
-          status: string
         }
         Insert: {
           closed_at?: string | null
@@ -203,7 +202,6 @@ export type Database = {
           period_label: string
           starts_on: string
           state?: Database["public"]["Enums"]["accounting_period_state"]
-          status?: string
         }
         Update: {
           closed_at?: string | null
@@ -215,7 +213,6 @@ export type Database = {
           period_label?: string
           starts_on?: string
           state?: Database["public"]["Enums"]["accounting_period_state"]
-          status?: string
         }
         Relationships: [
           {
@@ -2937,6 +2934,98 @@ export type Database = {
           },
         ]
       }
+      client_dashboards: {
+        Row: {
+          branding: Json
+          client_id: string | null
+          cover_url: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          expires_at: string | null
+          id: string
+          last_viewed_at: string | null
+          org_id: string
+          project_id: string
+          sections: Json
+          share_passcode_hash: string | null
+          share_token: string | null
+          shared_at: string | null
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          branding?: Json
+          client_id?: string | null
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          expires_at?: string | null
+          id?: string
+          last_viewed_at?: string | null
+          org_id: string
+          project_id: string
+          sections?: Json
+          share_passcode_hash?: string | null
+          share_token?: string | null
+          shared_at?: string | null
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          branding?: Json
+          client_id?: string | null
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          expires_at?: string | null
+          id?: string
+          last_viewed_at?: string | null
+          org_id?: string
+          project_id?: string
+          sections?: Json
+          share_passcode_hash?: string | null
+          share_token?: string | null
+          shared_at?: string | null
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_dashboards_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_dashboards_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_dashboards_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_dashboards_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           contact_email: string | null
@@ -5484,10 +5573,16 @@ export type Database = {
           data: Json
           deadline: string | null
           deleted_at: string | null
+          deliverable_state: Database["public"]["Enums"]["deliverable_state"]
           file_path: string | null
           id: string
           org_id: string
           project_id: string
+          render_qr_token: string | null
+          rendered_at: string | null
+          rendered_by: string | null
+          rendered_pdf_path: string | null
+          rendered_xlsx_path: string | null
           reviewed_at: string | null
           reviewed_by: string | null
           status: Database["public"]["Enums"]["deliverable_state"]
@@ -5505,10 +5600,16 @@ export type Database = {
           data?: Json
           deadline?: string | null
           deleted_at?: string | null
+          deliverable_state?: Database["public"]["Enums"]["deliverable_state"]
           file_path?: string | null
           id?: string
           org_id: string
           project_id: string
+          render_qr_token?: string | null
+          rendered_at?: string | null
+          rendered_by?: string | null
+          rendered_pdf_path?: string | null
+          rendered_xlsx_path?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: Database["public"]["Enums"]["deliverable_state"]
@@ -5526,10 +5627,16 @@ export type Database = {
           data?: Json
           deadline?: string | null
           deleted_at?: string | null
+          deliverable_state?: Database["public"]["Enums"]["deliverable_state"]
           file_path?: string | null
           id?: string
           org_id?: string
           project_id?: string
+          render_qr_token?: string | null
+          rendered_at?: string | null
+          rendered_by?: string | null
+          rendered_pdf_path?: string | null
+          rendered_xlsx_path?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           status?: Database["public"]["Enums"]["deliverable_state"]
@@ -5560,6 +5667,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverables_rendered_by_fkey"
+            columns: ["rendered_by"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
@@ -9071,6 +9185,7 @@ export type Database = {
           crew_member_id: string | null
           day_rate_proposed_cents: number | null
           id: string
+          job_application_state: Database["public"]["Enums"]["job_application_status"]
           job_posting_id: string
           org_id: string
           reel_url: string | null
@@ -9091,6 +9206,7 @@ export type Database = {
           crew_member_id?: string | null
           day_rate_proposed_cents?: number | null
           id?: string
+          job_application_state?: Database["public"]["Enums"]["job_application_status"]
           job_posting_id: string
           org_id: string
           reel_url?: string | null
@@ -9111,6 +9227,7 @@ export type Database = {
           crew_member_id?: string | null
           day_rate_proposed_cents?: number | null
           id?: string
+          job_application_state?: Database["public"]["Enums"]["job_application_status"]
           job_posting_id?: string
           org_id?: string
           reel_url?: string | null
@@ -9157,6 +9274,7 @@ export type Database = {
           expires_at: string | null
           gear_required: Json
           id: string
+          job_posting_phase: Database["public"]["Enums"]["job_posting_status"]
           lodging_provided: boolean
           org_id: string
           posting_type: Database["public"]["Enums"]["job_posting_type"]
@@ -9191,6 +9309,7 @@ export type Database = {
           expires_at?: string | null
           gear_required?: Json
           id?: string
+          job_posting_phase?: Database["public"]["Enums"]["job_posting_status"]
           lodging_provided?: boolean
           org_id: string
           posting_type?: Database["public"]["Enums"]["job_posting_type"]
@@ -9225,6 +9344,7 @@ export type Database = {
           expires_at?: string | null
           gear_required?: Json
           id?: string
+          job_posting_phase?: Database["public"]["Enums"]["job_posting_status"]
           lodging_provided?: boolean
           org_id?: string
           posting_type?: Database["public"]["Enums"]["job_posting_type"]
@@ -11212,6 +11332,7 @@ export type Database = {
           reviewed_by: string | null
           score: number | null
           status: Database["public"]["Enums"]["submission_status"]
+          submission_state: Database["public"]["Enums"]["submission_status"]
           submitted_at: string
           submitter_user_id: string
           talent_profile_id: string | null
@@ -11233,6 +11354,7 @@ export type Database = {
           reviewed_by?: string | null
           score?: number | null
           status?: Database["public"]["Enums"]["submission_status"]
+          submission_state?: Database["public"]["Enums"]["submission_status"]
           submitted_at?: string
           submitter_user_id: string
           talent_profile_id?: string | null
@@ -11254,6 +11376,7 @@ export type Database = {
           reviewed_by?: string | null
           score?: number | null
           status?: Database["public"]["Enums"]["submission_status"]
+          submission_state?: Database["public"]["Enums"]["submission_status"]
           submitted_at?: string
           submitter_user_id?: string
           talent_profile_id?: string | null
@@ -11294,6 +11417,7 @@ export type Database = {
           genre_tags: string[]
           id: string
           kind: Database["public"]["Enums"]["marketplace_kind"]
+          open_call_phase: Database["public"]["Enums"]["open_call_status"]
           org_id: string
           performance_date: string | null
           project_id: string | null
@@ -11325,6 +11449,7 @@ export type Database = {
           genre_tags?: string[]
           id?: string
           kind: Database["public"]["Enums"]["marketplace_kind"]
+          open_call_phase?: Database["public"]["Enums"]["open_call_status"]
           org_id: string
           performance_date?: string | null
           project_id?: string | null
@@ -11356,6 +11481,7 @@ export type Database = {
           genre_tags?: string[]
           id?: string
           kind?: Database["public"]["Enums"]["marketplace_kind"]
+          open_call_phase?: Database["public"]["Enums"]["open_call_status"]
           org_id?: string
           performance_date?: string | null
           project_id?: string | null
@@ -12650,6 +12776,177 @@ export type Database = {
           subsystem?: string
         }
         Relationships: []
+      }
+      pinboard_items: {
+        Row: {
+          body: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          external_url: string | null
+          height: number | null
+          id: string
+          kind: Database["public"]["Enums"]["pinboard_item_kind"]
+          media_path: string | null
+          metadata: Json
+          org_id: string
+          pinboard_id: string
+          position_x: number
+          position_y: number
+          swatch_hex: string | null
+          title: string | null
+          updated_at: string
+          vendor_product_id: string | null
+          width: number | null
+          z_index: number
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          external_url?: string | null
+          height?: number | null
+          id?: string
+          kind?: Database["public"]["Enums"]["pinboard_item_kind"]
+          media_path?: string | null
+          metadata?: Json
+          org_id: string
+          pinboard_id: string
+          position_x?: number
+          position_y?: number
+          swatch_hex?: string | null
+          title?: string | null
+          updated_at?: string
+          vendor_product_id?: string | null
+          width?: number | null
+          z_index?: number
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          external_url?: string | null
+          height?: number | null
+          id?: string
+          kind?: Database["public"]["Enums"]["pinboard_item_kind"]
+          media_path?: string | null
+          metadata?: Json
+          org_id?: string
+          pinboard_id?: string
+          position_x?: number
+          position_y?: number
+          swatch_hex?: string | null
+          title?: string | null
+          updated_at?: string
+          vendor_product_id?: string | null
+          width?: number | null
+          z_index?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pinboard_items_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pinboard_items_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pinboard_items_pinboard_id_fkey"
+            columns: ["pinboard_id"]
+            isOneToOne: false
+            referencedRelation: "pinboards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pinboard_items_vendor_product_id_fkey"
+            columns: ["vendor_product_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pinboards: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          org_id: string
+          project_id: string | null
+          share_passcode_hash: string | null
+          share_token: string | null
+          shared_at: string | null
+          title: string
+          updated_at: string
+          xpms_atom_id: string | null
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          org_id: string
+          project_id?: string | null
+          share_passcode_hash?: string | null
+          share_token?: string | null
+          shared_at?: string | null
+          title: string
+          updated_at?: string
+          xpms_atom_id?: string | null
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          org_id?: string
+          project_id?: string | null
+          share_passcode_hash?: string | null
+          share_token?: string | null
+          shared_at?: string | null
+          title?: string
+          updated_at?: string
+          xpms_atom_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pinboards_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pinboards_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pinboards_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       pipeline_definitions: {
         Row: {
@@ -18690,6 +18987,7 @@ export type Database = {
           status: Database["public"]["Enums"]["talent_offer_status"]
           stripe_deposit_intent_id: string | null
           stripe_payout_destination: string | null
+          talent_offer_state: Database["public"]["Enums"]["talent_offer_status"]
           talent_profile_id: string
           terms: Json
           ticket_scaling: Json
@@ -18734,6 +19032,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["talent_offer_status"]
           stripe_deposit_intent_id?: string | null
           stripe_payout_destination?: string | null
+          talent_offer_state?: Database["public"]["Enums"]["talent_offer_status"]
           talent_profile_id: string
           terms?: Json
           ticket_scaling?: Json
@@ -18778,6 +19077,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["talent_offer_status"]
           stripe_deposit_intent_id?: string | null
           stripe_payout_destination?: string | null
+          talent_offer_state?: Database["public"]["Enums"]["talent_offer_status"]
           talent_profile_id?: string
           terms?: Json
           ticket_scaling?: Json
@@ -21174,6 +21474,113 @@ export type Database = {
           },
           {
             foreignKeyName: "vendor_prequalifications_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendor_products: {
+        Row: {
+          captured_at: string | null
+          captured_via: string
+          category: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deleted_at: string | null
+          external_url: string | null
+          id: string
+          image_path: string | null
+          image_url: string | null
+          org_id: string
+          sku: string | null
+          spec: Json
+          summary: string | null
+          supplier_lead_time_days: number | null
+          supplier_sku: string | null
+          tags: string[]
+          title: string
+          unit_price_cents: number | null
+          updated_at: string
+          vendor_id: string | null
+          xpms_atom_id: string | null
+        }
+        Insert: {
+          captured_at?: string | null
+          captured_via?: string
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          external_url?: string | null
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          org_id: string
+          sku?: string | null
+          spec?: Json
+          summary?: string | null
+          supplier_lead_time_days?: number | null
+          supplier_sku?: string | null
+          tags?: string[]
+          title: string
+          unit_price_cents?: number | null
+          updated_at?: string
+          vendor_id?: string | null
+          xpms_atom_id?: string | null
+        }
+        Update: {
+          captured_at?: string | null
+          captured_via?: string
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          external_url?: string | null
+          id?: string
+          image_path?: string | null
+          image_url?: string | null
+          org_id?: string
+          sku?: string | null
+          spec?: Json
+          summary?: string | null
+          supplier_lead_time_days?: number | null
+          supplier_sku?: string | null
+          tags?: string[]
+          title?: string
+          unit_price_cents?: number | null
+          updated_at?: string
+          vendor_id?: string | null
+          xpms_atom_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_products_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_products_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_products_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_products_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "vendors"
@@ -23989,6 +24396,7 @@ export type Database = {
           bio: string | null
           certifications: string[] | null
           created_at: string | null
+          day_rate_currency: string | null
           day_rate_max_cents: number | null
           day_rate_min_cents: number | null
           id: string | null
@@ -24009,6 +24417,7 @@ export type Database = {
           bio?: string | null
           certifications?: string[] | null
           created_at?: string | null
+          day_rate_currency?: string | null
           day_rate_max_cents?: number | null
           day_rate_min_cents?: number | null
           id?: string | null
@@ -24029,6 +24438,7 @@ export type Database = {
           bio?: string | null
           certifications?: string[] | null
           created_at?: string | null
+          day_rate_currency?: string | null
           day_rate_max_cents?: number | null
           day_rate_min_cents?: number | null
           id?: string | null
@@ -25702,6 +26112,7 @@ export type Database = {
         | "awarded"
         | "cancelled"
       party_type: "person" | "organization"
+      pinboard_item_kind: "image" | "note" | "product_ref" | "swatch"
       platform_role: "owner" | "admin" | "manager" | "member"
       po_status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled"
       production_phase:
@@ -26354,6 +26765,7 @@ export const Constants = {
         "cancelled",
       ],
       party_type: ["person", "organization"],
+      pinboard_item_kind: ["image", "note", "product_ref", "swatch"],
       platform_role: ["owner", "admin", "manager", "member"],
       po_status: ["draft", "sent", "acknowledged", "fulfilled", "cancelled"],
       production_phase: [

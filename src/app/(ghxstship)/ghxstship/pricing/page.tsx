@@ -82,7 +82,7 @@ export default function PricingPage() {
             <Link href="#retainer" className="btn btn-secondary btn-sm">
               Retainer
             </Link>
-            <Link href="#add-ons" className="btn btn-secondary btn-sm">
+            <Link href="#stack" className="btn btn-secondary btn-sm">
               Add-Ons
             </Link>
           </div>
@@ -246,7 +246,7 @@ export default function PricingPage() {
         </section>
 
         {/* ADD-ONS */}
-        <section id="add-ons" className="mx-auto max-w-6xl scroll-mt-24 px-6">
+        <section id="stack" className="mx-auto max-w-6xl scroll-mt-24 px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>

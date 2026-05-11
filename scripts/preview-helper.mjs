@@ -33,7 +33,7 @@ if (!letter) { console.error("not found:", target); process.exit(1); }
 const sched = schedules[letter.recipient_name] || [];
 const html = fn(letter, sched);
 await fs.writeFile("/tmp/_preview.html", html);
-console.log("wrote /tmp/_preview.html");
+console.info("wrote /tmp/_preview.html");
 `;
 await fs.writeFile("/tmp/_render_one.mjs", helperJS);
 execSync(`node /tmp/_render_one.mjs ${JSON.stringify(TARGET)}`, { stdio: "inherit" });
@@ -55,7 +55,7 @@ for (let i = 0; i < slices; i++) {
   await page.waitForTimeout(200);
   const out = `/tmp/letter_${safe}_p${i + 1}.png`;
   await page.screenshot({ path: out });
-  console.log(`captured slice ${i + 1}/${slices} (offset ${i * sliceH}) → ${out}`);
+  console.info(`captured slice ${i + 1}/${slices} (offset ${i * sliceH}) → ${out}`);
 }
 await browser.close();
-console.log(`Total document height: ${totalH}px, ${slices} slices.`);
+console.info(`Total document height: ${totalH}px, ${slices} slices.`);

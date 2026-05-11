@@ -38,17 +38,21 @@ const LEGACY_ALLOWLIST = new Set<string>([
   "0002_marketplace_canon.sql",
   // Booking canon — same pre-LDP era.
   "0003_booking_canon.sql",
-  // Onboarding v2 industry lead (May 6) — pre-LDP enforcement window.
-  "20260506000001_onboarding_v2_industry_lead.sql",
   // Salvage City playbook alignment (May 5–8) — pre-LDP window.
-  "20260505000001_salvage_city_playbook_v2_alignment.sql",
-  "20260505000003_salvage_city_per_diem_travelers_only.sql",
-  "20260508000005_salvage_city_offer_letter_playbook_v3_alignment.sql",
+  "0004_salvage_city_playbook_v2_alignment.sql",
+  "0006_salvage_city_per_diem_travelers_only.sql",
+  "0013_salvage_city_offer_letter_playbook_v3_alignment.sql",
+  // Onboarding v2 industry lead (May 6) — pre-LDP enforcement window.
+  "0007_onboarding_v2_industry_lead.sql",
   // LDP remediation migrations themselves reference `status` while
   // performing the rename — they're allowed to touch the column.
-  "20260509000004_ldp_lifecycle_columns.sql",
-  "20260509000005_ldp_proposal_phase_status_rename.sql",
-  "20260509060000_ldp_lifecycle_remediations_reconciled.sql",
+  "0017_ldp_lifecycle_columns.sql",
+  "0018_ldp_proposal_phase_status_rename.sql",
+  "0020_ldp_lifecycle_remediations_reconciled.sql",
+  // USNP canon local parity (May 2026) — recreates pre-LDP table shape
+  // for accounting_periods locally so the LDP rename in 0020 has a column
+  // to operate on. The `status` column is dropped/renamed downstream.
+  "0019_usnp_canon_local_parity.sql",
 ]);
 
 const STATUS_DECL_RE = /^\s+"?status"?\s+("?(text|character\s+varying|public\.[a-z_]+)"?)/i;

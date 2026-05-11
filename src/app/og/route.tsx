@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
-
+// Node runtime — next/og works on both edge and node; staying on node
+// keeps the route eligible for ISR/caching and avoids the
+// "edge runtime disables static generation" build warning.
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const title = searchParams.get("title") ?? "LYTEHAUS Technologies";

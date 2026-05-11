@@ -588,12 +588,12 @@ async function main() {
 
   await browser.close();
 
-  console.log(`\n=== Offer-letter export — ${PREVIEW ? "PREVIEW" : "FINAL"} ===`);
+  console.info(`\n=== Offer-letter export — ${PREVIEW ? "PREVIEW" : "FINAL"} ===`);
   for (const r of results) {
-    console.log(`  ✓ ${r.name.padEnd(28)}  ${r.pdf}  (${r.kb} KB)${r.ics ? `  + ${r.ics}` : ""}${r.thumb ? "  + thumb" : ""}`);
+    console.info(`  ✓ ${r.name.padEnd(28)}  ${r.pdf}  (${r.kb} KB)${r.ics ? `  + ${r.ics}` : ""}${r.thumb ? "  + thumb" : ""}`);
   }
-  console.log(`\nWrote ${results.length} PDFs to: ${OUT}`);
-  if (PREVIEW) console.log("\nThumbnails generated. Re-run without PREVIEW=1 to publish to Desktop.");
+  console.info(`\nWrote ${results.length} PDFs to: ${OUT}`);
+  if (PREVIEW) console.info("\nThumbnails generated. Re-run without PREVIEW=1 to publish to Desktop.");
 }
 
 main().catch((e) => {

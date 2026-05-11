@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
+    "noEmit": true
+  },
+  "include": ["**/*.ts", "../playwright.config.ts", "../playwright.audit.config.ts"],
+  "exclude": ["../seeds/**/*", "../node_modules"]
+}

@@ -4,19 +4,19 @@ import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
-import { listOnboardingSteps, type OnboardingStep } from "@/lib/db/onboarding";
+import { listOnboardingSteps, type OnboardingStepState } from "@/lib/db/onboarding";
 import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_VARIANT: Record<OnboardingStep["status"], "muted" | "warning" | "success" | "error"> = {
+const STATUS_VARIANT: Record<OnboardingStepState, "muted" | "warning" | "success" | "error"> = {
   pending: "muted",
   in_progress: "warning",
   done: "success",
   waived: "muted",
   blocked: "error",
 };
-const STATUS_LABEL: Record<OnboardingStep["status"], string> = {
+const STATUS_LABEL: Record<OnboardingStepState, string> = {
   pending: "Pending",
   in_progress: "In Progress",
   done: "Done",
@@ -33,8 +33,8 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
   if (steps.length === 0) notFound();
 
   const total = steps.length;
-  const done = steps.filter((s) => s.status === "done" || s.status === "waived").length;
-  const cpOpen = steps.filter((s) => s.critical_path && s.status !== "done" && s.status !== "waived").length;
+  const done = steps.filter((s) => s.onboarding_step_state === "done" || s.onboarding_step_state === "waived").length;
+  const cpOpen = steps.filter((s) => s.critical_path && s.onboarding_step_state !== "done" && s.onboarding_step_state !== "waived").length;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 
   return (
@@ -52,7 +52,7 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
                 <div className="flex items-center gap-2">
                   {s.critical_path ? <span className="font-bold text-red-600">★</span> : null}
                   <span className="font-medium">{s.title}</span>
-                  <Badge variant={STATUS_VARIANT[s.status]}>{STATUS_LABEL[s.status]}</Badge>
+                  <Badge variant={STATUS_VARIANT[s.onboarding_step_state]}>{STATUS_LABEL[s.onboarding_step_state]}</Badge>
                   {s.category ? <span className="text-xs text-(--ink-soft) uppercase">{s.category}</span> : null}
                 </div>
                 {s.description ? <p className="mt-1 text-sm text-(--ink-soft)">{s.description}</p> : null}

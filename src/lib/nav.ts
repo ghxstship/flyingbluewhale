@@ -108,7 +108,12 @@ export type IconName =
   | "BarChart3"
   | "Lock"
   | "Coins"
-  | "Route";
+  | "Route"
+  // Extra modules (0003+)
+  | "Flag"
+  | "Video"
+  | "Camera"
+  | "LayoutGrid";
 
 export type NavItem = {
   label: string;
@@ -221,6 +226,7 @@ export const platformNav: NavGroup[] = [
       { label: "Clients", href: "/console/clients", icon: "Handshake" },
       { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
+      { label: "Campaigns", href: "/console/campaigns", icon: "Flag" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
       { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },
@@ -263,6 +269,8 @@ export const platformNav: NavGroup[] = [
       { label: "Look-ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
       { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
       { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
+      { label: "Meetings", href: "/console/meetings", icon: "Video" },
+      { label: "Photos", href: "/console/photos", icon: "Camera" },
       { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
       { label: "Events", href: "/console/events", icon: "CalendarDays" },
       { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },

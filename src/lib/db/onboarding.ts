@@ -1,7 +1,11 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
-export type OnboardingStepStatus = "pending" | "in_progress" | "done" | "waived" | "blocked";
+export type OnboardingStepState = "pending" | "in_progress" | "done" | "waived" | "blocked";
+
+/** @deprecated Use OnboardingStepState — renamed per LDP §NAMING DISCIPLINE */
+export type OnboardingStepStatus = OnboardingStepState;
 
 export type OnboardingStep = {
   id: string;
@@ -14,7 +18,7 @@ export type OnboardingStep = {
   critical_path: boolean;
   sort_order: number;
   due_at: string | null;
-  status: OnboardingStepStatus;
+  onboarding_step_state: OnboardingStepState;
   completed_at: string | null;
   completed_by: string | null;
   notes: string | null;
@@ -70,21 +74,23 @@ export async function listOnboardingByProject(
       letter_id: l.id,
       recipient_name: l.recipient_name,
       total: steps.length,
-      done: steps.filter((s) => s.status === "done" || s.status === "waived").length,
-      critical_path_open: steps.filter((s) => s.critical_path && s.status !== "done" && s.status !== "waived").length,
+      done: steps.filter((s) => s.onboarding_step_state === "done" || s.onboarding_step_state === "waived").length,
+      critical_path_open: steps.filter((s) => s.critical_path && s.onboarding_step_state !== "done" && s.onboarding_step_state !== "waived").length,
     });
   }
   return out;
 }
 
-export async function setStepStatus(stepId: string, status: OnboardingStepStatus, userId?: string): Promise<void> {
+export async function setStepStatus(stepId: string, state: OnboardingStepState, userId?: string): Promise<void> {
   const supabase = await createClient();
-  const { error } = await supabase
+  // LooseSupabase cast: onboarding_step_state column was renamed from status in
+  // migration 20260511000001; generated types will reflect this after gen:types runs.
+  const { error } = await (supabase as unknown as LooseSupabase)
     .from("onboarding_steps")
     .update({
-      status,
-      completed_at: status === "done" || status === "waived" ? new Date().toISOString() : null,
-      completed_by: status === "done" || status === "waived" ? (userId ?? null) : null,
+      onboarding_step_state: state,
+      completed_at: state === "done" || state === "waived" ? new Date().toISOString() : null,
+      completed_by: state === "done" || state === "waived" ? (userId ?? null) : null,
     })
     .eq("id", stepId);
   if (error) throw error;
@@ -102,10 +108,10 @@ export async function recordCheckIn(letterId: string, ip: string | null, userAge
     .limit(1);
   if (error) throw error;
   if (steps && steps.length) {
-    await supabase
+    await (supabase as unknown as LooseSupabase)
       .from("onboarding_steps")
       .update({
-        status: "done",
+        onboarding_step_state: "done",
         completed_at: new Date().toISOString(),
         notes: `Checked in via QR — ip=${ip ?? "unknown"} ua=${userAgent?.slice(0, 80) ?? "unknown"}`,
       })

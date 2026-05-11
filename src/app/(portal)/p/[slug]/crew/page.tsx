@@ -22,7 +22,11 @@ export default async function CrewHome({ params }: { params: Promise<{ slug: str
             {[
               { href: `/p/${slug}/crew/call-sheet`, label: "Call Sheet", desc: "Day-of info, parking, contacts" },
               { href: `/p/${slug}/crew/time`, label: "Time", desc: "Submit hours worked" },
-              { href: `/p/${slug}/crew/advances`, label: "Advances", desc: "Request per-diem or advance" },
+              {
+                href: `/p/${slug}/crew/advances`,
+                label: "Advancing",
+                desc: "Catalog items assigned to you: credentials, catering, radios, tools, uniforms, travel, lodging, vehicles",
+              },
             ].map((t) => (
               <Link key={t.href} href={t.href} className="surface hover-lift p-5">
                 <div className="text-sm font-semibold">{t.label}</div>

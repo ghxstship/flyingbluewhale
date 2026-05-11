@@ -6092,6 +6092,7 @@ export type Database = {
       }
       deliverables: {
         Row: {
+          assignee_id: string | null
           closed_at: string | null
           closed_by: string | null
           created_at: string
@@ -6119,6 +6120,7 @@ export type Database = {
           version: number
         }
         Insert: {
+          assignee_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
@@ -6146,6 +6148,7 @@ export type Database = {
           version?: number
         }
         Update: {
+          assignee_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
@@ -27359,6 +27362,15 @@ export type Database = {
         | "comms_plan"
         | "signage_grid"
         | "custom"
+        | "credential_assignment"
+        | "catering_assignment"
+        | "radio_assignment"
+        | "tool_assignment"
+        | "equipment_assignment"
+        | "uniform_assignment"
+        | "travel_assignment"
+        | "lodging_assignment"
+        | "vehicle_assignment"
       dispatch_fleet: "t1" | "t2" | "t3" | "media" | "workforce" | "spectator"
       dsar_kind:
         | "access"
@@ -28007,6 +28019,15 @@ export const Constants = {
         "comms_plan",
         "signage_grid",
         "custom",
+        "credential_assignment",
+        "catering_assignment",
+        "radio_assignment",
+        "tool_assignment",
+        "equipment_assignment",
+        "uniform_assignment",
+        "travel_assignment",
+        "lodging_assignment",
+        "vehicle_assignment",
       ],
       dispatch_fleet: ["t1", "t2", "t3", "media", "workforce", "spectator"],
       dsar_kind: [

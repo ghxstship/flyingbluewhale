@@ -66,6 +66,7 @@ export type DeliverableStatus =
 /** Alias matching the renamed enum in the database (deliverable_status -> deliverable_state, 2026-05-09). */
 export type DeliverableState = DeliverableStatus;
 export type DeliverableType =
+  // Project-document kinds (org-level — assignee_id IS NULL).
   | "technical_rider"
   | "hospitality_rider"
   | "input_list"
@@ -81,7 +82,19 @@ export type DeliverableType =
   | "safety_compliance"
   | "comms_plan"
   | "signage_grid"
-  | "custom";
+  | "custom"
+  // Per-individual catalog kinds (migration 0049 — assignee_id set).
+  // Same advancing → fulfillment → tracking lifecycle as the project
+  // kinds; the surface filters by `assignee_id = caller`.
+  | "credential_assignment"
+  | "catering_assignment"
+  | "radio_assignment"
+  | "tool_assignment"
+  | "equipment_assignment"
+  | "uniform_assignment"
+  | "travel_assignment"
+  | "lodging_assignment"
+  | "vehicle_assignment";
 export type LeadStage = "new" | "qualified" | "contacted" | "proposal" | "won" | "lost";
 export type ProposalStatus = "draft" | "sent" | "approved" | "rejected" | "expired" | "signed";
 export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "voided";

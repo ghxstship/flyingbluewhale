@@ -270,6 +270,12 @@ export const platformNav: NavGroup[] = [
       { label: "Teams", href: "/console/people/teams", icon: "UsersRound" },
       { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
       { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
+      { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
+      { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
+      { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
+      { label: "Announcements", href: "/console/comms/announcements", icon: "Megaphone" },
+      { label: "Polls", href: "/console/comms/polls", icon: "BarChart3" },
+      { label: "Surveys", href: "/console/comms/surveys", icon: "ClipboardCheck" },
       { label: "Delegations", href: "/console/participants/delegations", icon: "UsersRound" },
       { label: "Visa", href: "/console/participants/visa", icon: "Stamp" },
       // Logistics flow
@@ -634,11 +640,12 @@ export const mobileTabs: NavItem[] = [
 ];
 
 /**
- * The 19 secondary mobile surfaces. Reachable from the Tools tab on /m
- * and from the mobile cmd-K palette. Phase D of the WAYFINDER remediation
- * unblocks discovery — these were dead routes before.
+ * Secondary mobile surfaces. Reachable from the Tools tab on /m and
+ * from the mobile cmd-K palette. Connecteam-parity additions live in
+ * the second cluster.
  */
 export const mobileSurfaces: NavItem[] = [
+  // Field-ops surfaces (existing).
   { label: "Gate Scan", href: "/m/gate" },
   { label: "Wallet", href: "/m/wallet" },
   { label: "Shift", href: "/m/shift" },
@@ -659,4 +666,14 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Chain of Custody", href: "/m/coc" },
   { label: "Wayfind", href: "/m/wayfind" },
   { label: "Open Gigs", href: "/m/gigs" },
+  // Connecteam-parity surfaces (0046).
+  { label: "Updates", href: "/m/feed" },
+  { label: "Inbox", href: "/m/inbox" },
+  { label: "Learning", href: "/m/learning" },
+  { label: "Time Off", href: "/m/time-off" },
+  { label: "Kudos", href: "/m/kudos" },
+  { label: "Polls", href: "/m/polls" },
+  { label: "Surveys", href: "/m/surveys" },
+  { label: "My Docs", href: "/m/docs" },
+  { label: "Directory", href: "/m/directory" },
 ];

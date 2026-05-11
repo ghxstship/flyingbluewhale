@@ -1064,10 +1064,14 @@ export const HEAT_CADENCE_RUNWAY: Record<TierId, string> = {
   large: "13-Week Runway",
 };
 
-export function fmtMoney(n: number): string {
-  return "$" + n.toLocaleString("en-US");
+export function fmtMoney(n: number, locale?: string, currency = "USD"): string {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  }).format(n);
 }
 
-export function fmtRange(base: number, ceiling: number): string {
-  return `${fmtMoney(base)} – ${fmtMoney(ceiling)}`;
+export function fmtRange(base: number, ceiling: number, locale?: string, currency?: string): string {
+  return `${fmtMoney(base, locale, currency)} – ${fmtMoney(ceiling, locale, currency)}`;
 }

@@ -29,6 +29,13 @@ export type PdfBrand = {
 
   /** Footer legal line. Falls back to producer + year. */
   legalFooter: string;
+
+  /**
+   * BCP 47 locale for number/currency/date formatting in the rendered PDF.
+   * Defaults to "en" when not supplied. Thread the resolved request locale
+   * from `getRequestFormatters()` through every PDF call site.
+   */
+  locale?: string;
 };
 
 export const DEFAULT_ACCENT = "#2563EB";

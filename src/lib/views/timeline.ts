@@ -116,20 +116,15 @@ export function dateFromPx(px: number, anchor: Date, pxPerDay: number): Date {
   return addDaysUTC(startOfDayUTC(anchor), days);
 }
 
-const MONTH_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
-const SHORT_MONTH_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  timeZone: "UTC",
-});
-const DAY_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  timeZone: "UTC",
-});
+function makeMonthFmt(locale?: string) {
+  return new Intl.DateTimeFormat(locale, { month: "short", year: "numeric", timeZone: "UTC" });
+}
+function makeShortMonthFmt(locale?: string) {
+  return new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" });
+}
+function makeDayFmt(locale?: string) {
+  return new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", timeZone: "UTC" });
+}
 
 function quarterLabel(d: Date): string {
   const q = Math.floor(d.getUTCMonth() / 3) + 1;
@@ -151,10 +146,13 @@ function quarterLabel(d: Date): string {
  * pxPerDay if needed. Most consumers use the default px-per-day mapping
  * provided alongside `<TimelineView>`.
  */
-export function monthMarkers(start: Date, end: Date, zoom: TimelineZoom, pxPerDay = 1): TimelineMarker[] {
+export function monthMarkers(start: Date, end: Date, zoom: TimelineZoom, pxPerDay = 1, locale?: string): TimelineMarker[] {
   if (start.getTime() >= end.getTime()) return [];
   const out: TimelineMarker[] = [];
   const cap = 5_000; // safety guard
+  const MONTH_FMT = makeMonthFmt(locale);
+  const SHORT_MONTH_FMT = makeShortMonthFmt(locale);
+  const DAY_FMT = makeDayFmt(locale);
 
   if (zoom === "day") {
     let cursor = startOfDayUTC(start);

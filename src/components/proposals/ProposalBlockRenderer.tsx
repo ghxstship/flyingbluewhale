@@ -3,10 +3,12 @@ import type { ProposalBlock, Money } from "@/lib/proposals/types";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { PhaseBlock } from "./PhaseBlock";
 
-function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
+
+function fmtMoney(m: Money | string | undefined, currency = "USD", locale = DEFAULT_LOCALE): string {
   if (m == null) return "";
   if (typeof m === "string") return m;
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: m.currency ?? currency,
     maximumFractionDigits: 0,
@@ -17,15 +19,17 @@ export function ProposalBlockRenderer({
   blocks,
   theme,
   currency = "USD",
+  locale = DEFAULT_LOCALE,
 }: {
   blocks: ProposalBlock[];
   theme: { primary: string; secondary: string };
   currency?: string;
+  locale?: string;
 }) {
   return (
     <>
       {blocks.map((b, i) => (
-        <BlockSwitch key={i} block={b} theme={theme} currency={currency} />
+        <BlockSwitch key={i} block={b} theme={theme} currency={currency} locale={locale} />
       ))}
     </>
   );
@@ -35,10 +39,12 @@ function BlockSwitch({
   block,
   theme,
   currency,
+  locale,
 }: {
   block: ProposalBlock;
   theme: { primary: string; secondary: string };
   currency: string;
+  locale: string;
 }) {
   switch (block.type) {
     case "hero":
@@ -62,9 +68,9 @@ function BlockSwitch({
     case "capabilities":
       return <CapabilitiesBlock block={block} />;
     case "investment_table":
-      return <InvestmentTable block={block} currency={currency} />;
+      return <InvestmentTable block={block} currency={currency} locale={locale} />;
     case "total_block":
-      return <TotalBlock block={block} currency={currency} />;
+      return <TotalBlock block={block} currency={currency} locale={locale} />;
     case "engagement_split":
       return <EngagementSplit block={block} theme={theme} />;
     case "payment_method":
@@ -72,7 +78,7 @@ function BlockSwitch({
     case "equipment_manifest":
       return <EquipmentManifest block={block} />;
     case "change_orders":
-      return <ChangeOrders block={block} currency={currency} />;
+      return <ChangeOrders block={block} currency={currency} locale={locale} />;
     case "exclusions":
       return <Exclusions block={block} />;
     case "terms_grid":
@@ -308,9 +314,11 @@ function CapabilitiesBlock({ block }: { block: Extract<ProposalBlock, { type: "c
 function InvestmentTable({
   block,
   currency,
+  locale,
 }: {
   block: Extract<ProposalBlock, { type: "investment_table" }>;
   currency: string;
+  locale?: string;
 }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
@@ -334,7 +342,7 @@ function InvestmentTable({
                       {it.desc && <div className="text-xs text-[var(--text-muted)]">{it.desc}</div>}
                     </td>
                     <td className="font-display w-36 text-right text-lg tabular-nums">
-                      {fmtMoney(it.price, currency)}
+                      {fmtMoney(it.price, currency, locale)}
                     </td>
                   </tr>
                 ))}
@@ -344,7 +352,7 @@ function InvestmentTable({
           <tfoot>
             <tr>
               <td className="text-sm font-semibold tracking-wider uppercase">Total investment</td>
-              <td className="font-display text-right text-2xl tabular-nums">{fmtMoney(block.total, currency)}</td>
+              <td className="font-display text-right text-2xl tabular-nums">{fmtMoney(block.total, currency, locale)}</td>
             </tr>
           </tfoot>
         </table>
@@ -354,7 +362,7 @@ function InvestmentTable({
   );
 }
 
-function TotalBlock({ block, currency }: { block: Extract<ProposalBlock, { type: "total_block" }>; currency: string }) {
+function TotalBlock({ block, currency, locale }: { block: Extract<ProposalBlock, { type: "total_block" }>; currency: string; locale?: string }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface rounded-2xl p-8 text-center">
@@ -364,7 +372,7 @@ function TotalBlock({ block, currency }: { block: Extract<ProposalBlock, { type:
         >
           {block.label}
         </div>
-        <div className="font-display mt-4 text-6xl tracking-tight tabular-nums">{fmtMoney(block.amount, currency)}</div>
+        <div className="font-display mt-4 text-6xl tracking-tight tabular-nums">{fmtMoney(block.amount, currency, locale)}</div>
         {block.note && <div className="mt-3 text-xs text-[var(--text-muted)]">{block.note}</div>}
       </div>
     </section>
@@ -465,9 +473,11 @@ function EquipmentManifest({ block }: { block: Extract<ProposalBlock, { type: "e
 function ChangeOrders({
   block,
   currency,
+  locale,
 }: {
   block: Extract<ProposalBlock, { type: "change_orders" }>;
   currency: string;
+  locale?: string;
 }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
@@ -481,7 +491,7 @@ function ChangeOrders({
               </span>
             </div>
             <div className="mt-1 text-xs text-[var(--text-secondary)]">{it.description}</div>
-            {it.price != null && <div className="mt-2 font-mono text-xs">{fmtMoney(it.price, currency)}</div>}
+            {it.price != null && <div className="mt-2 font-mono text-xs">{fmtMoney(it.price, currency, locale)}</div>}
           </div>
         ))}
       </div>

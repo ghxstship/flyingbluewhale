@@ -51,9 +51,9 @@ export type ProposalPdfInput = {
   }>;
 };
 
-function money(cents: number, currency: string): string {
+function money(cents: number, currency: string, locale?: string): string {
   try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(cents / 100);
+    return new Intl.NumberFormat(locale, { style: "currency", currency }).format(cents / 100);
   } catch {
     return `${currency} ${(cents / 100).toFixed(2)}`;
   }
@@ -75,7 +75,7 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
           [
             proposal.doc_number ? `# ${proposal.doc_number}` : null,
             proposal.version != null ? `v${proposal.version}` : null,
-            money(proposal.amount_cents, proposal.currency),
+            money(proposal.amount_cents, proposal.currency, brand.locale),
           ]
             .filter(Boolean)
             .join(" · ") || undefined
@@ -87,13 +87,13 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
         <SectionHeading title="Summary" />
         <KeyValue label="Proposal #" value={proposal.doc_number ?? "—"} />
         <KeyValue label="Status" value={statusLabel} />
-        <KeyValue label="Total" value={money(proposal.amount_cents, proposal.currency)} />
+        <KeyValue label="Total" value={money(proposal.amount_cents, proposal.currency, brand.locale)} />
         {proposal.deposit_percent != null ? <KeyValue label="Deposit" value={`${proposal.deposit_percent}%`} /> : null}
         {proposal.sent_at ? <KeyValue label="Sent" value={proposal.sent_at} /> : null}
         {proposal.expires_at ? <KeyValue label="Expires" value={proposal.expires_at} /> : null}
 
         {blocks.map((b, i) => (
-          <ProposalBlockView key={i} block={b} currency={proposal.currency} />
+          <ProposalBlockView key={i} block={b} currency={proposal.currency} locale={brand.locale} />
         ))}
 
         {proposal.notes ? (
@@ -133,7 +133,7 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
   );
 }
 
-function ProposalBlockView({ block, currency }: { block: ProposalBlock; currency: string }) {
+function ProposalBlockView({ block, currency, locale }: { block: ProposalBlock; currency: string; locale?: string }) {
   const title = block.title ?? block.kind ?? "Section";
   if (block.kind === "pricing" && block.items) {
     return (
@@ -148,7 +148,7 @@ function ProposalBlockView({ block, currency }: { block: ProposalBlock; currency
           rows={block.items.map((it) => ({
             title: it.title ?? "",
             description: it.description ?? "",
-            amount: it.amount_cents != null ? money(it.amount_cents, currency) : "",
+            amount: it.amount_cents != null ? money(it.amount_cents, currency, locale) : "",
           }))}
         />
       </>

@@ -16,6 +16,7 @@ import {
   type TimelineZoom,
 } from "@/lib/views/timeline";
 import { TimelineBar, type TimelineBarTone } from "./TimelineBar";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 export type TimelineLane = {
   id: string;
@@ -87,6 +88,7 @@ export function TimelineView({
   const [localItems, setLocalItems] = React.useState<TimelineItem[]>(items);
   React.useEffect(() => setLocalItems(items), [items]);
 
+  const { bcp47 } = useLocale();
   const announce = useAnnounce();
 
   const { start: anchor, end: rangeEnd } = React.useMemo(() => dateRange(localItems), [localItems]);
@@ -392,7 +394,7 @@ export function TimelineView({
                       const start = new Date(it.start);
                       const end = new Date(it.end);
                       const { left, width } = barGeometry(start, end, anchor, ppd);
-                      const rangeLabel = formatRange(start, end);
+                      const rangeLabel = formatRange(start, end, bcp47);
                       return (
                         <TimelineBar
                           key={it.id}
@@ -431,15 +433,14 @@ export function TimelineView({
   );
 }
 
-const RANGE_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  timeZone: "UTC",
-});
-
-function formatRange(start: Date, end: Date): string {
-  const a = RANGE_FMT.format(start);
-  const b = RANGE_FMT.format(end);
+function formatRange(start: Date, end: Date, locale?: string): string {
+  const fmt = new Intl.DateTimeFormat(locale, {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+  const a = fmt.format(start);
+  const b = fmt.format(end);
   if (a === b) return a;
   return `${a} – ${b}`;
 }

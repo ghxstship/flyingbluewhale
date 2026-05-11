@@ -61,7 +61,12 @@ const config: NextConfig = {
         headers: [
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
+          // SAMEORIGIN (not DENY): the marketing home page embeds a same-origin
+          // /p/<slug>/guide iframe for the live boarding-pass preview. DENY
+          // would block that. The CSP `frame-ancestors 'self'` directive is the
+          // primary modern guard; X-Frame-Options is a legacy fallback for
+          // browsers that pre-date frame-ancestors support. Both must agree.
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
           { key: "Content-Security-Policy", value: csp },

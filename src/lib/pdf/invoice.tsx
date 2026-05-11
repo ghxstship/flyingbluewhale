@@ -41,10 +41,10 @@ export type InvoicePdfInput = {
   paymentIntentUrl?: string | null;
 };
 
-function money(cents: number, currency: string): string {
+function money(cents: number, currency: string, locale?: string): string {
   const amt = cents / 100;
   try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amt);
+    return new Intl.NumberFormat(locale, { style: "currency", currency }).format(amt);
   } catch {
     return `${currency} ${amt.toFixed(2)}`;
   }
@@ -73,7 +73,7 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
         brand={brand}
         eyebrow={statusEyebrow}
         title={invoice.title ?? `Invoice ${invoice.number}`}
-        subtitle={money(total, invoice.currency)}
+        subtitle={money(total, invoice.currency, brand.locale)}
         classification={invoice.paid_at ? undefined : "DUE"}
         classificationTier={invoice.paid_at ? 0 : 3}
       />
@@ -97,16 +97,16 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
           rows={lineItems.map((li) => ({
             description: li.description,
             quantity: Number(li.quantity).toString(),
-            unit: money(li.unit_price_cents, invoice.currency),
-            amount: money(Math.round(Number(li.quantity) * Number(li.unit_price_cents)), invoice.currency),
+            unit: money(li.unit_price_cents, invoice.currency, brand.locale),
+            amount: money(Math.round(Number(li.quantity) * Number(li.unit_price_cents)), invoice.currency, brand.locale),
           }))}
         />
 
         <View style={{ marginTop: 12, alignItems: "flex-end" }}>
-          <KeyValue label="Subtotal" value={money(subtotal, invoice.currency)} />
-          {adjustments !== 0 ? <KeyValue label="Taxes / fees" value={money(adjustments, invoice.currency)} /> : null}
+          <KeyValue label="Subtotal" value={money(subtotal, invoice.currency, brand.locale)} />
+          {adjustments !== 0 ? <KeyValue label="Taxes / fees" value={money(adjustments, invoice.currency, brand.locale)} /> : null}
           <View style={{ marginTop: 8, borderTopWidth: 1, borderTopColor: brand.producerAccent, paddingTop: 4 }}>
-            <Text style={{ fontSize: 14, fontWeight: 700 }}>{money(total, invoice.currency)}</Text>
+            <Text style={{ fontSize: 14, fontWeight: 700 }}>{money(total, invoice.currency, brand.locale)}</Text>
           </View>
         </View>
 

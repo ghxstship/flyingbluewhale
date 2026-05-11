@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type InputHTMLAttributes } from "react";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 interface MoneyInputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -13,13 +14,15 @@ interface MoneyInputProps extends Omit<
   label?: string;
   hint?: string;
   required?: boolean;
+  /** Currency code override. Defaults to the locale context currency. */
+  currency?: string;
 }
 
 /**
  * MoneyInput — producer-friendly money entry.
  *
- * Renders a `$`-prefixed text input that accepts a dollar amount the way a
- * human types it ("27500", "27,500", "27500.50"), formats it on blur with
+ * Renders a currency-symbol-prefixed text input that accepts an amount the way
+ * a human types it ("27500", "27,500", "27500.50"), formats it on blur with
  * thousands separators + 2-decimal precision, and submits the canonical
  * integer cents value via a hidden `<input name={name}>` so server actions
  * receive the same shape they did before.
@@ -28,10 +31,15 @@ interface MoneyInputProps extends Omit<
  * 2,750,000 to mean $27,500 is producer-hostile. Prefer this for every
  * monetary field across Finance, Procurement, and Proposals.
  */
-export function MoneyInput({ name, defaultCents, label, hint, required, ...rest }: MoneyInputProps) {
+export function MoneyInput({ name, defaultCents, label, hint, required, currency: currencyProp, ...rest }: MoneyInputProps) {
   const id = useId();
+  const { bcp47, currency: ctxCurrency } = useLocale();
+  const currency = currencyProp ?? ctxCurrency;
+
+  const currencySymbol = getCurrencySymbol(bcp47, currency);
+
   const initialDollars = defaultCents != null ? (defaultCents / 100).toFixed(2) : "";
-  const [display, setDisplay] = useState(formatDisplay(initialDollars));
+  const [display, setDisplay] = useState(formatDisplay(initialDollars, bcp47));
   const [cents, setCents] = useState<string>(defaultCents != null ? String(defaultCents) : "");
 
   function onInput(value: string) {
@@ -47,7 +55,7 @@ export function MoneyInput({ name, defaultCents, label, hint, required, ...rest 
     }
     const c = toCents(display);
     setCents(c);
-    setDisplay(c ? formatFromCents(c) : "");
+    setDisplay(c ? formatFromCents(c, bcp47) : "");
   }
 
   return (
@@ -68,7 +76,7 @@ export function MoneyInput({ name, defaultCents, label, hint, required, ...rest 
           aria-hidden="true"
           className="absolute inset-y-0 start-0 flex items-center ps-3 text-sm text-[var(--text-muted)]"
         >
-          $
+          {currencySymbol}
         </span>
         <input
           {...rest}
@@ -91,6 +99,17 @@ export function MoneyInput({ name, defaultCents, label, hint, required, ...rest 
   );
 }
 
+function getCurrencySymbol(locale: string, currency: string): string {
+  try {
+    const parts = new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "narrowSymbol" })
+      .formatToParts(0);
+    const sym = parts.find((p) => p.type === "currency");
+    return sym?.value ?? currency;
+  } catch {
+    return currency;
+  }
+}
+
 function toCents(input: string): string {
   // Strip everything except digits, decimal point, and minus.
   const cleaned = input.replace(/[^\d.\-]/g, "");
@@ -100,15 +119,15 @@ function toCents(input: string): string {
   return String(Math.round(num * 100));
 }
 
-function formatFromCents(cents: string): string {
+function formatFromCents(cents: string, locale: string): string {
   const n = Number(cents) / 100;
   if (!Number.isFinite(n)) return "";
-  return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function formatDisplay(dollars: string): string {
+function formatDisplay(dollars: string, locale: string): string {
   if (!dollars) return "";
   const n = Number(dollars);
   if (!Number.isFinite(n)) return dollars;
-  return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }

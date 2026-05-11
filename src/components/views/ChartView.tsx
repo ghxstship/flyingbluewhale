@@ -46,6 +46,7 @@ import {
 } from "@/lib/views/chart-config";
 import { pivotForChart } from "@/lib/views/chart-aggregate";
 import { HeatmapGrid, type HeatmapCell } from "./HeatmapGrid";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 export type ChartViewProps<T extends Record<string, unknown> = Record<string, unknown>> = {
   config: ChartViewConfig;
@@ -483,24 +484,25 @@ function TooltipContent({
   yAxis,
   series,
 }: TooltipContentProps): React.ReactElement | null {
+  const { bcp47, currency: ctxCurrency } = useLocale();
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px] shadow-sm">
       {label !== undefined && label !== null && (
         <div className="mb-1 font-medium text-[var(--text-primary)]">
-          {formatValue(label, xAxis.format ?? "auto", xAxis.currency)}
+          {formatValue(label, xAxis.format ?? "auto", xAxis.currency, bcp47)}
         </div>
       )}
       {payload.map((p, i) => {
         const seriesDef = series.find((s) => (s.label ?? s.field) === p.name || s.field === p.dataKey);
         const fmt = yAxis?.format ?? "auto";
-        const currency = yAxis?.currency ?? (seriesDef ? "USD" : undefined);
+        const currency = yAxis?.currency ?? (seriesDef ? ctxCurrency : undefined);
         return (
           <div key={i} className="flex items-center gap-1.5">
             <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
             <span className="text-[var(--text-secondary)]">{p.name}:</span>
             <span className="font-mono text-[var(--text-primary)]">
-              {typeof p.value === "number" ? formatValue(p.value, fmt, currency) : "—"}
+              {typeof p.value === "number" ? formatValue(p.value, fmt, currency, bcp47) : "—"}
             </span>
           </div>
         );
@@ -513,31 +515,31 @@ function TooltipContent({
 // Value formatting
 // ──────────────────────────────────────────────────────────────────────
 
-export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", currency = "USD"): string {
+export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", currency = "USD", locale = "en"): string {
   if (v === null || v === undefined || v === "") return "";
   if (typeof v !== "number") {
     if (format === "date" && typeof v === "string") {
       const d = new Date(v);
-      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString();
+      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString(locale);
     }
     return String(v);
   }
   switch (format) {
     case "currency":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(locale, {
         style: "currency",
         currency,
         maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2,
       }).format(v);
     case "percent":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(locale, {
         style: "percent",
         maximumFractionDigits: 1,
       }).format(Math.abs(v) > 1 ? v / 100 : v);
     case "date":
-      return new Date(v).toLocaleDateString();
+      return new Date(v).toLocaleDateString(locale);
     case "number":
-      return new Intl.NumberFormat("en-US").format(v);
+      return new Intl.NumberFormat(locale).format(v);
     case "auto":
     default:
       if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;

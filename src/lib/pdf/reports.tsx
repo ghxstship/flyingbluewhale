@@ -44,7 +44,7 @@ export function ExpenseReportPdf({
 }) {
   const money = (c: number) => {
     try {
-      return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(c / 100);
+      return new Intl.NumberFormat(brand.locale, { style: "currency", currency }).format(c / 100);
     } catch {
       return `${currency} ${(c / 100).toFixed(2)}`;
     }

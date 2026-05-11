@@ -1,5 +1,6 @@
 import { urlFor } from "@/lib/urls";
 import type { OfferLetterResolved, CompensationBasis } from "./types";
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 export function offerPublicUrl(token: string): string {
   // Public offer-letter URL — unauthenticated, served by the apex (marketing
@@ -7,20 +8,20 @@ export function offerPublicUrl(token: string): string {
   return urlFor("marketing", `/offer/${token}`);
 }
 
-export function formatDateRange(start: string | null, end: string | null): string {
+export function formatDateRange(start: string | null, end: string | null, locale = DEFAULT_LOCALE): string {
   if (!start && !end) return "TBD";
   const fmt = (iso: string) => {
     const d = new Date(iso + "T00:00:00");
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    return d.toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" });
   };
   if (start && end) return `${fmt(start)} – ${fmt(end)}`;
   return fmt((start ?? end)!);
 }
 
-export function formatDollars(cents: number): string {
-  return (cents / 100).toLocaleString("en-US", {
+export function formatDollars(cents: number, locale = DEFAULT_LOCALE, currency = DEFAULT_CURRENCY): string {
+  return (cents / 100).toLocaleString(locale, {
     style: "currency",
-    currency: "USD",
+    currency,
     maximumFractionDigits: 0,
   });
 }
@@ -30,20 +31,20 @@ export function formatDollars(cents: number): string {
  * `effective_compensation_cents` (which already accounts for override or
  * rate × engagement_days).
  */
-export function formatCompensation(letter: OfferLetterResolved): string {
+export function formatCompensation(letter: OfferLetterResolved, locale = DEFAULT_LOCALE, currency = DEFAULT_CURRENCY): string {
   if (letter.compensation_basis === "tbd" || letter.effective_compensation_cents === 0) {
     return letter.rate_name ? `TBD — rate card: ${letter.rate_name}` : "To be confirmed prior to signature";
   }
-  const total = formatDollars(letter.effective_compensation_cents);
+  const total = formatDollars(letter.effective_compensation_cents, locale, currency);
   switch (letter.compensation_basis) {
     case "per_day":
     case "per_show_day":
       return letter.rate_unit_price_cents
-        ? `${formatDollars(letter.rate_unit_price_cents)} per day × ${letter.engagement_days} days = ${total}`
+        ? `${formatDollars(letter.rate_unit_price_cents, locale, currency)} per day × ${letter.engagement_days} days = ${total}`
         : total;
     case "hourly":
       return letter.rate_unit_price_cents
-        ? `${formatDollars(letter.rate_unit_price_cents)} per hour (${total} estimated)`
+        ? `${formatDollars(letter.rate_unit_price_cents, locale, currency)} per hour (${total} estimated)`
         : total;
     case "flat_fee":
     default:

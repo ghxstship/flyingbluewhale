@@ -20,7 +20,7 @@ SET persona = split_part(split_part(u.email, '+', 2), '@', 1)
 FROM auth.users u
 WHERE m.user_id = u.id
   AND m.persona IS NULL
-  AND u.email LIKE 'test+%@flyingbluewhale.app'
+  AND u.email LIKE 'test+%@lytehaus.live'
   AND split_part(split_part(u.email, '+', 2), '@', 1) IN (
     'owner','admin','manager','member','collaborator','contractor','crew',
     'client','viewer','community','controller','developer'

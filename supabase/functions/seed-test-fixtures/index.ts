@@ -10,7 +10,7 @@
 // @ts-expect-error — Deno runtime imports
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
-const PASSWORD = "FlyingBlue!Test2026"; // shared test password
+const PASSWORD = "LyteHaus!Test2026"; // shared test password
 
 const TIERS = ["portal", "starter", "professional", "enterprise"] as const;
 const ROLES = [
@@ -29,7 +29,7 @@ const ROLES = [
 // @ts-expect-error — Deno globals
 Deno.serve(async (req: Request) => {
   // @ts-expect-error — Deno globals
-  const expected = Deno.env.get("SEED_TOKEN") ?? "seed-flyingbluewhale-2026";
+  const expected = Deno.env.get("SEED_TOKEN") ?? "seed-lytehaus-2026";
   const provided = req.headers.get("x-seed-token");
   if (provided !== expected) {
     return new Response(JSON.stringify({ ok: false, error: "forbidden" }), { status: 403 });
@@ -61,9 +61,9 @@ Deno.serve(async (req: Request) => {
   const orgsByTier: Record<string, string> = {};
   for (const o of created.orgs as Array<{ id: string; tier: string }>) orgsByTier[o.tier] = o.id;
 
-  // 2. Users — one per role; emailed test+{role}@flyingbluewhale.app
+  // 2. Users — one per role; emailed test+{role}@lytehaus.live
   for (const role of ROLES) {
-    const email = `test+${role}@flyingbluewhale.app`;
+    const email = `test+${role}@lytehaus.live`;
     const userMeta = { name: `Test ${role[0].toUpperCase()}${role.slice(1)}` };
 
     // Check if exists

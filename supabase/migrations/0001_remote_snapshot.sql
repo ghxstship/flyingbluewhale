@@ -4758,7 +4758,7 @@ COMMENT ON COLUMN "public"."orgs"."name_override" IS 'Display name shown in UI h
 
 
 
-COMMENT ON COLUMN "public"."orgs"."logo_url" IS 'https URL to org logo, replaces flyingbluewhale wordmark inside the tenant shell.';
+COMMENT ON COLUMN "public"."orgs"."logo_url" IS 'https URL to org logo, replaces the LYTEHAUS wordmark inside the tenant shell.';
 
 
 

@@ -92,7 +92,7 @@ export function WebhookEndpointForm() {
           </Button>
         </div>
         <p className="mt-4 text-xs text-[var(--text-muted)]">
-          Every delivery carries <code className="font-mono">x-fbw-signature: t=&lt;ms&gt;,v1=&lt;hex&gt;</code> where{" "}
+          Every delivery carries <code className="font-mono">x-lytehaus-signature: t=&lt;ms&gt;,v1=&lt;hex&gt;</code> where{" "}
           <code className="font-mono">hex = HMAC-SHA256(t + "." + body, secret)</code>. Stripe-style.
         </p>
         <div className="mt-4 flex justify-end">

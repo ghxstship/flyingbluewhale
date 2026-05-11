@@ -92,10 +92,10 @@ async function deliverWebhook(delivery: {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "user-agent": "flyingbluewhale-webhook/1",
-        "x-fbw-event": delivery.event_type,
-        "x-fbw-delivery": delivery.id,
-        "x-fbw-signature": `t=${ts},v1=${sigHex}`,
+        "user-agent": "lytehaus-webhook/1",
+        "x-lytehaus-event": delivery.event_type,
+        "x-lytehaus-delivery": delivery.id,
+        "x-lytehaus-signature": `t=${ts},v1=${sigHex}`,
       },
       body,
       signal: controller.signal,
@@ -206,7 +206,7 @@ const HANDLERS: Record<string, Handler> = {
         org_id: orgId ?? null,
         payload: {
           to: email,
-          subject: `Your flyingbluewhale digest (${list.length} new)`,
+          subject: `Your LYTEHAUS Technologies digest (${list.length} new)`,
           html:
             `<h2>${list.length} new notifications</h2>` +
             list
@@ -233,7 +233,7 @@ const HANDLERS: Record<string, Handler> = {
       method: "POST",
       headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json" },
       body: JSON.stringify({
-        from: Deno.env.get("RESEND_FROM") ?? "flyingbluewhale <no-reply@flyingbluewhale.app>",
+        from: Deno.env.get("RESEND_FROM") ?? "LYTEHAUS Technologies <no-reply@lytehaus.live>",
         to: Array.isArray(to) ? to : [to],
         subject,
         html,

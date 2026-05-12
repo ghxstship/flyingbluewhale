@@ -111,3 +111,32 @@ atomically decrements `time_off_balances.balance_hours` and bumps
 `used_ytd_hours`. Denials don't touch the balance. The action falls back
 to a plain UPDATE if the RPC is missing (e.g. on a branch DB without
 0048).
+
+## Per-kind push prefs (matrix → wire)
+
+`notification_preferences.matrix` is read by `sendPushTo`/`sendPushBulk`
+in `src/lib/push/send.ts` via `filterByPushPrefs()`. Every caller passes
+a `kind: PushKind` payload field (one of the values in the
+`notification_kind_catalog` view). Users who set `matrix[<kind>].push =
+false` via `/m/settings/notifications` are short-circuited before the
+push send.
+
+If you add a new push call site, **always** thread `kind:` through the
+payload — omitting it broadcasts unconditionally. The canonical list of
+kinds is in `PushKind` (announcement, chat, kudos, badge, advancing,
+advancing_state, shift_swap, time_off, course, incident).
+
+## Outstanding admin toggle — leaked-password protection
+
+The Supabase security advisor flags
+`auth_leaked_password_protection` as disabled. It's a dashboard-only
+setting: **Auth → Policies → Password Strength → Enable HaveIBeenPwned**.
+Not a code change. Enable it before public marketplace launch.
+
+## Pre-existing LDP naming debt
+
+`equipment.status` and a few legacy tables still use `status` instead of
+the `*_state` / `*_phase` LDP convention (see
+`reports/LDP_LIFECYCLE_AUDIT.md`). Renaming requires: column rename
+migration → app-wide refactor → backfill → drop old column. Tracked
+separately, not blocking.

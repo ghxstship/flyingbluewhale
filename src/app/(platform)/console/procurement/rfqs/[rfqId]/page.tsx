@@ -24,7 +24,7 @@ type RfqRow = {
 
 type ResponseRow = {
   id: string;
-  status: string;
+  response_state: string;
   total_cents: number | null;
   notes: string | null;
   submitted_at: string | null;
@@ -84,13 +84,13 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
 
   const { data: respData } = await supabase
     .from("rfq_responses")
-    .select("id, status, total_cents, notes, submitted_at, awarded_at, vendor:vendor_id(name)")
+    .select("id, response_state, total_cents, notes, submitted_at, awarded_at, vendor:vendor_id(name)")
     .eq("org_id", session.orgId)
     .order("submitted_at", { ascending: false })
     .limit(50);
 
   const responses = (respData ?? []) as unknown as ResponseRow[];
-  const responded = responses.filter((r) => r.status === "responded" || r.status === "awarded").length;
+  const responded = responses.filter((r) => r.response_state === "responded" || r.response_state === "awarded").length;
   const lowestBid = responses
     .filter((r) => r.total_cents != null)
     .sort((a, b) => (a.total_cents ?? 0) - (b.total_cents ?? 0))[0];
@@ -152,7 +152,9 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="font-mono text-xs">{fmtMoney(r.total_cents)}</span>
-                      <Badge variant={RESPONSE_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                      <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>
+                        {r.response_state.replace(/_/g, " ")}
+                      </Badge>
                     </div>
                   </li>
                 ))}

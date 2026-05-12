@@ -8,7 +8,7 @@ export async function awardResponse(reqId: string, responseId: string): Promise<
   const session = await requireSession();
   const supabase = await createClient();
 
-  // Award the winner. The .eq("status", "responded") guard prevents
+  // Award the winner. The .eq("response_state", "responded") guard prevents
   // double-awarding (calling award twice for the same bid would otherwise
   // re-stamp awarded_at + awarded_by) and prevents awarding a bid that
   // wasn't actually submitted yet (invited/viewed states). Errors throw
@@ -17,13 +17,13 @@ export async function awardResponse(reqId: string, responseId: string): Promise<
   const { data: awarded, error: awardErr } = await supabase
     .from("rfq_responses")
     .update({
-      status: "awarded",
+      response_state: "awarded",
       awarded_at: new Date().toISOString(),
       awarded_by: session.userId,
     } as never)
     .eq("org_id", session.orgId)
     .eq("id", responseId)
-    .eq("status", "responded")
+    .eq("response_state", "responded")
     .select("id");
   if (awardErr) throw new Error(awardErr.message);
   if (!awarded || awarded.length === 0) {
@@ -35,11 +35,11 @@ export async function awardResponse(reqId: string, responseId: string): Promise<
   // requisition in a state with no winner + no live bids.
   const { error: declineErr } = await supabase
     .from("rfq_responses")
-    .update({ status: "declined" } as never)
+    .update({ response_state: "declined" } as never)
     .eq("org_id", session.orgId)
     .eq("requisition_id", reqId)
     .neq("id", responseId)
-    .in("status", ["responded", "invited", "viewed"]);
+    .in("response_state", ["responded", "invited", "viewed"]);
   if (declineErr) throw new Error(declineErr.message);
 
   revalidatePath(`/console/procurement/requisitions/${reqId}/leveling`);

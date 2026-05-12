@@ -21,7 +21,7 @@ type RfqRow = {
 
 type ResponseRow = {
   id: string;
-  status: string;
+  response_state: string;
   total_cents: number | null;
   notes: string | null;
   submitted_at: string | null;
@@ -66,13 +66,13 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
 
   const { data: respData } = await supabase
     .from("rfq_responses")
-    .select("id, status, total_cents, notes, submitted_at, awarded_at, vendor_id, vendor:vendor_id(name)")
+    .select("id, response_state, total_cents, notes, submitted_at, awarded_at, vendor_id, vendor:vendor_id(name)")
     .eq("org_id", session.orgId)
     .eq("requisition_id", rfqId)
     .order("submitted_at", { ascending: false, nullsFirst: false });
   const responses = (respData ?? []) as unknown as ResponseRow[];
 
-  const submitted = responses.filter((r) => r.status === "responded" || r.status === "awarded");
+  const submitted = responses.filter((r) => r.response_state === "responded" || r.response_state === "awarded");
   const bidsWithTotal = submitted.filter((r) => r.total_cents != null);
   const lowest = bidsWithTotal.length ? Math.min(...bidsWithTotal.map((r) => r.total_cents ?? 0)) : null;
   const average = bidsWithTotal.length
@@ -117,10 +117,14 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
               accessor: (r) => r.vendor?.name ?? null,
             },
             {
-              key: "status",
-              header: "Status",
-              render: (r) => <Badge variant={RESPONSE_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>,
-              accessor: (r) => r.status,
+              key: "response_state",
+              header: "State",
+              render: (r) => (
+                <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>
+                  {r.response_state.replace(/_/g, " ")}
+                </Badge>
+              ),
+              accessor: (r) => r.response_state,
               filterable: true,
               groupable: true,
             },

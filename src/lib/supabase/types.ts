@@ -1817,12 +1817,14 @@ export type PoChangeOrderLine = {
   position: number;
   created_at: string;
 };
+export type RfqResponseState = "invited" | "viewed" | "responded" | "no_bid" | "withdrawn" | "awarded" | "declined";
+
 export type RfqResponse = {
   id: string;
   org_id: string;
   requisition_id: string;
   vendor_id: string | null;
-  status: "invited" | "viewed" | "responded" | "no_bid" | "withdrawn" | "awarded" | "declined";
+  response_state: RfqResponseState;
   total_cents: number | null;
   notes: string | null;
   submitted_at: string | null;

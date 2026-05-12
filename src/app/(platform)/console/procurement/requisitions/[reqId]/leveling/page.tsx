@@ -12,14 +12,14 @@ import { awardResponse } from "./actions";
 type ResponseRow = {
   id: string;
   vendor: { name: string | null } | null;
-  status: string;
+  response_state: string;
   total_cents: number | null;
   submitted_at: string | null;
 };
 
 export const dynamic = "force-dynamic";
 
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
+const STATE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
   invited: "muted",
   viewed: "info",
   responded: "info",
@@ -50,12 +50,12 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
     .order("total_cents", { ascending: true, nullsFirst: false });
 
   const all = responses ?? [];
-  const responded = all.filter((r) => r.status === "responded" || r.status === "awarded");
+  const responded = all.filter((r) => r.response_state === "responded" || r.response_state === "awarded");
   const lowest = responded.reduce(
     (lo, r) => (r.total_cents != null && (lo == null || r.total_cents < lo) ? r.total_cents : lo),
     null as number | null,
   );
-  const awardedRow = all.find((r) => r.status === "awarded");
+  const awardedRow = all.find((r) => r.response_state === "awarded");
 
   return (
     <>
@@ -88,10 +88,12 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
               sortable: true,
             },
             {
-              key: "status",
-              header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>,
-              accessor: (r) => r.status,
+              key: "response_state",
+              header: "State",
+              render: (r) => (
+                <Badge variant={STATE_TONE[r.response_state] ?? "muted"}>{r.response_state.replace("_", " ")}</Badge>
+              ),
+              accessor: (r) => r.response_state,
               filterable: true,
               groupable: true,
             },
@@ -134,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
               key: "actions",
               header: "",
               render: (r) =>
-                !awardedRow && r.status === "responded" ? (
+                !awardedRow && r.response_state === "responded" ? (
                   <form action={awardResponse.bind(null, reqId, r.id)}>
                     <button
                       type="submit"

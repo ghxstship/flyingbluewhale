@@ -13,16 +13,22 @@
 | Category                                                         | Count                                                                                |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | Public tables                                                    | 412                                                                                  |
-| Public enum types                                                | 98                                                                                   |
-| `*_state` columns, typed enum (LDP-correct)                      | **22**                                                                               |
+| Public enum types                                                | 99                                                                                   |
+| `*_state` columns, typed enum (LDP-correct)                      | **23**                                                                               |
 | `*_phase` columns                                                | **3** (xpms_phase × 2 + production_phase)                                            |
 | `*_stage` column                                                 | 1 (`leads.stage lead_stage`)                                                         |
 | `*_status` columns, typed enum (cosmetic naming violation)       | **27**                                                                               |
-| `*_status` columns, untyped text + CHECK or default-only (worse) | **~58**                                                                              |
+| `*_status` columns, untyped text + CHECK or default-only (worse) | **~57**                                                                              |
 | Hybrid `*_phase_status` enum                                     | 0 (renamed to `proposal_phase_state` this session)                                   |
 | Same enum reused across multiple tables                          | 2 (`xpms_phase` on projects+xpms_atoms; `upo_state` on purchase_orders+requisitions) |
 
-**Naming compliance rate:** ~25 / ~110 lifecycle-bearing columns = **~23%** LDP-name-compliant. (v1 reported ~20% on a smaller surface; absolute number of compliant columns grew but proportion barely moved because so many text-status columns were uncovered.)
+**Naming compliance rate:** ~26 / ~110 lifecycle-bearing columns = **~24%** LDP-name-compliant. Incrementing as Wave A of R-LDP-v2-5 lands per-table.
+
+**Wave A progress (R-LDP-v2-5 — untyped-text → typed `*_state`):**
+
+| Table           | Migration | Status     | Notes                                                         |
+| --------------- | --------- | ---------- | ------------------------------------------------------------- |
+| `rfq_responses` | 0054      | ✅ APPLIED | Clean rename (0 rows, no back-compat shim needed). 2026-05-12 |
 
 ---
 
@@ -47,6 +53,7 @@
 | `proposal_revision_rounds.state` | `revision_state`          | UFS-adjacent                           | ✅                                                             |
 | `purchase_orders.state`          | `upo_state`               | UPO                                    | ✅ — **but coexists with `status po_status` (P1 CONFLATION)**  |
 | `requisitions.state`             | `upo_state`               | UPO                                    | ✅ — **but coexists with `status req_status` (P1 CONFLATION)** |
+| `rfq_responses.response_state`   | `rfq_response_state`      | URM bid response                       | ✅ **NEW 2026-05-12 (migration 0054)**                         |
 | `rosters.state`                  | `roster_state`            | workforce                              | ✅                                                             |
 | `subscriptions.state`            | `subscription_state`      | LDP §8 Subscription                    | ✅ **NEW this session**                                        |
 | `tasks_v2.state`                 | `utm_state`               | UTM task                               | ✅                                                             |
@@ -58,7 +65,7 @@
 | `wizard_step_completions.state`  | text                      | onboarding wizard                      | ⚠️ untyped                                                     |
 | `xpms_atoms.state`               | `xpms_state`              | XPMS atom (uac/tpc)                    | ✅                                                             |
 
-**Subtotal:** 17 typed-enum (LDP-correct) + 5 untyped text + 1 jsonb non-lifecycle + 1 ui_state jsonb (not a lifecycle).
+**Subtotal:** 18 typed-enum (LDP-correct) + 5 untyped text + 1 jsonb non-lifecycle + 1 ui_state jsonb (not a lifecycle).
 
 ---
 
@@ -114,9 +121,11 @@
 ### C.2 Untyped-text status columns (S2 — type + name) — ~58
 
 Tables with `status text` (unconstrained or check-only):
-`accounting_periods, accreditation_changes, ad_manifests, automation_step_runs, campaigns, contract_renewals, cues, daily_logs, data_export_jobs, delegation_entries, dispatch_runs, fabrication_orders, form_definitions, form_defs, governance_policies, guard_tours, import_runs, inspections, invites, invoice_reminders, itil_changes, itil_problems, knowledge_articles, major_incidents, notification_deliveries, notification_templates, onboarding_steps, org_integrations, payment_applications, payment_processor_records.external_status, playbooks, po_change_orders, po_checklist_items, po_invoice_matches.match_status, punch_items, punch_lists, rate_card_orders, regulatory_filing_records, report_runs, rfis, rfq_responses, rfqs, role_documents, safeguarding_reports, safety_briefings, service_requests, sponsor_entitlements, submittals, sync_runs, threats, trademarks, ufs_form_submissions, vendor_prequalifications, venue_closeout_items, venue_design_specs, venue_handover_items, venue_vop_sections, visa_cases, wizard_definitions, work_order_broadcast_invites, work_order_broadcasts, files.virus_scan_status`
+`accounting_periods, accreditation_changes, ad_manifests, automation_step_runs, campaigns, contract_renewals, cues, daily_logs, data_export_jobs, delegation_entries, dispatch_runs, fabrication_orders, form_definitions, form_defs, governance_policies, guard_tours, import_runs, inspections, invites, invoice_reminders, itil_changes, itil_problems, knowledge_articles, major_incidents, notification_deliveries, notification_templates, onboarding_steps, org_integrations, payment_applications, payment_processor_records.external_status, playbooks, po_change_orders, po_checklist_items, po_invoice_matches.match_status, punch_items, punch_lists, rate_card_orders, regulatory_filing_records, report_runs, rfis, rfqs, role_documents, safeguarding_reports, safety_briefings, service_requests, sponsor_entitlements, submittals, sync_runs, threats, trademarks, ufs_form_submissions, vendor_prequalifications, venue_closeout_items, venue_design_specs, venue_handover_items, venue_vop_sections, visa_cases, wizard_definitions, work_order_broadcast_invites, work_order_broadcasts, files.virus_scan_status`
 
-**Subtotal C.2:** ~58 untyped text-status columns. Each is a candidate for typed-enum promotion + rename.
+(`rfq_responses` removed 2026-05-12 — promoted to typed `response_state` via migration 0054.)
+
+**Subtotal C.2:** ~57 untyped text-status columns. Each is a candidate for typed-enum promotion + rename.
 
 ---
 
@@ -130,7 +139,7 @@ The `proposal_phase_status` → `proposal_phase_state` rename this session remov
 
 | Category                                  | Count                  | LDP-correct?             |
 | ----------------------------------------- | ---------------------- | ------------------------ |
-| Typed-enum `*_state` (correct)            | 17                     | ✅                       |
+| Typed-enum `*_state` (correct)            | 18                     | ✅                       |
 | Typed-enum `*_state` reused across tables | 1 (`upo_state`)        | ⚠️ but same subsystem    |
 | `*_state` text/jsonb (wrong type)         | 7                      | ⚠️                       |
 | `*_phase` correct                         | 1 (`production_phase`) | ✅                       |
@@ -138,6 +147,6 @@ The `proposal_phase_status` → `proposal_phase_state` rename this session remov
 | `*_stage`                                 | 1                      | ⚠️ third vocabulary word |
 | Typed-enum `status` (cosmetic)            | 27                     | ❌                       |
 | Typed-enum `status` part of P1 conflation | 2                      | ❌❌                     |
-| Untyped text `status`                     | ~58                    | ❌❌❌                   |
+| Untyped text `status`                     | ~57                    | ❌❌❌                   |
 
 **Headline metric:** **2 hard P1 conflations** (purchase_orders, requisitions) — each carries BOTH a `state` AND a `status` column for the same record, with overlapping non-identical semantics. These are the schema-review-stop pattern per LDP.

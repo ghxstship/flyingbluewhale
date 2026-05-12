@@ -17508,7 +17508,7 @@ export type Database = {
           notes: string | null
           org_id: string
           requisition_id: string
-          status: string
+          response_state: Database["public"]["Enums"]["rfq_response_state"]
           submitted_at: string | null
           total_cents: number | null
           updated_at: string
@@ -17522,7 +17522,7 @@ export type Database = {
           notes?: string | null
           org_id: string
           requisition_id: string
-          status?: string
+          response_state?: Database["public"]["Enums"]["rfq_response_state"]
           submitted_at?: string | null
           total_cents?: number | null
           updated_at?: string
@@ -17536,7 +17536,7 @@ export type Database = {
           notes?: string | null
           org_id?: string
           requisition_id?: string
-          status?: string
+          response_state?: Database["public"]["Enums"]["rfq_response_state"]
           submitted_at?: string | null
           total_cents?: number | null
           updated_at?: string
@@ -27839,6 +27839,14 @@ export type Database = {
         | "changes_requested"
         | "rejected"
         | "withdrawn"
+      rfq_response_state:
+        | "invited"
+        | "viewed"
+        | "responded"
+        | "no_bid"
+        | "withdrawn"
+        | "awarded"
+        | "declined"
       rfq_visibility: "private" | "network" | "public"
       risk_impact: "insignificant" | "minor" | "moderate" | "major" | "severe"
       risk_likelihood:
@@ -28517,6 +28525,15 @@ export const Constants = {
         "changes_requested",
         "rejected",
         "withdrawn",
+      ],
+      rfq_response_state: [
+        "invited",
+        "viewed",
+        "responded",
+        "no_bid",
+        "withdrawn",
+        "awarded",
+        "declined",
       ],
       rfq_visibility: ["private", "network", "public"],
       risk_impact: ["insignificant", "minor", "moderate", "major", "severe"],

@@ -44,7 +44,7 @@ export async function addResponse(reqId: string, _: State, fd: FormData): Promis
     vendor_id: parsed.data.vendor_id,
     total_cents: totalCents,
     notes: parsed.data.notes || null,
-    status: totalCents != null ? "responded" : "invited",
+    response_state: totalCents != null ? "responded" : "invited",
     submitted_at: totalCents != null ? new Date().toISOString() : null,
   } as never);
   if (error) {

@@ -39,7 +39,8 @@ export async function updateOfferLetter(orgId: string, id: string, patch: Update
   // misleading audit trail.
   const { data, error } = await supabase
     .from("offer_letters")
-    .update(patch)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .update(patch as any)
     .eq("org_id", orgId)
     .eq("id", id)
     .eq("status", "draft")

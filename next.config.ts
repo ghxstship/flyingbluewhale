@@ -72,6 +72,7 @@ const csp = [
 
 const config: NextConfig = {
   reactStrictMode: true,
+  poweredByHeader: false,
   // react compiler opt-in. In Next 16 the key graduated out of `experimental`
   // to a top-level option; cast guards against type drift if the typing lags
   // the runtime.

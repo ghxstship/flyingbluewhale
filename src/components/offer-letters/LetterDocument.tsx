@@ -223,7 +223,7 @@ export function LetterDocument({ letter }: { letter: OfferLetterResolved }) {
               const items = (letter.effective_onboarding_items ?? [])
                 .slice()
                 .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
-              const guideStep = letter.guide_url
+              const guideStep: import("@/lib/offer-letters/types").OnboardingItem | null = letter.guide_url
                 ? {
                     key: "production_guide",
                     label: "Review the Salvage City Production Guide",

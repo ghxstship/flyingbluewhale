@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
 import { DataTable } from "@/components/DataTable";
@@ -48,7 +49,7 @@ const KIND_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
 
 function fmt(d: string | null): string {
   if (!d) return "—";
-  return new Date(d).toLocaleDateString();
+  return formatDate(d);
 }
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ mine?: string }> }) {

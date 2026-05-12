@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { hasSupabase } from "@/lib/env";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,7 @@ export default async function PortalOverview({ params }: { params: Promise<{ slu
       <div className="page-content">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {["artist", "vendor", "client", "sponsor", "guest", "crew"].map((p) => (
-            <Link key={p} href={`/p/${slug}/${p}`} className="surface hover-lift p-5">
+            <Link key={p} href={urlFor("portal", `/${slug}/${p}`)} className="surface hover-lift p-5">
               <div className="text-sm font-semibold capitalize">{p}</div>
               <div className="mt-1 text-xs text-[var(--text-muted)]">Open {p} portal →</div>
             </Link>

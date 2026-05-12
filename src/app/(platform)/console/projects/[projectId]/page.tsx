@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -84,7 +85,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
             Stakeholders access this project via slug-scoped portal.
           </p>
           <Link
-            href={`/p/${project.slug}/overview`}
+            href={urlFor("portal", `/${project.slug}/overview`)}
             className="mt-3 inline-block font-mono text-xs text-[var(--org-primary)] hover:underline"
           >
             /p/{project.slug}/overview →

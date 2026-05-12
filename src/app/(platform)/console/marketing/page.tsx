@@ -1,3 +1,4 @@
+import { formatDateTime } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -86,7 +87,7 @@ export default async function Page() {
                     <span>{r.label ?? "—"}</span>
                   </div>
                   <span className="font-mono text-xs text-[var(--text-secondary)]">
-                    {new Date(r.occurs_at).toLocaleString()}
+                    {formatDateTime(r.occurs_at)}
                   </span>
                 </li>
               ))}

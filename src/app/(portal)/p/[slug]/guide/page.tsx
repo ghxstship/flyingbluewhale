@@ -17,6 +17,7 @@ import {
   isPublicPersona,
   verifyToken as verifyGuideAccessToken,
 } from "@/lib/guides/access-token";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -264,7 +265,7 @@ function PreviewSwitcher({
         return (
           <Link
             key={p.value}
-            href={`/p/${slug}/guide?as=${p.value}`}
+            href={urlFor("portal", `/${slug}/guide?as=${p.value}`)}
             aria-current={isActive ? "page" : undefined}
             className={
               isActive
@@ -277,7 +278,7 @@ function PreviewSwitcher({
         );
       })}
       {previewing && (
-        <Link href={`/p/${slug}/guide`} className="ml-auto text-[var(--text-muted)] underline-offset-2 hover:underline">
+        <Link href={urlFor("portal", `/${slug}/guide`)} className="ml-auto text-[var(--text-muted)] underline-offset-2 hover:underline">
           Exit preview
         </Link>
       )}

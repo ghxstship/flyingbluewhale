@@ -7,6 +7,7 @@ import { projectIdFromSlug } from "@/lib/db/advancing";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import type { Proposal } from "@/lib/supabase/types";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +35,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             header: "Title",
             render: (r) => (
               <Link
-                href={`/p/${slug}/client/proposals/${r.id}`}
+                href={urlFor("portal", `/${slug}/client/proposals/${r.id}`)}
                 className="font-medium hover:text-[var(--org-primary)]"
               >
                 {r.title}
@@ -69,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             header: "",
             render: (r) => (
               <Link
-                href={`/p/${slug}/client/proposals/${r.id}`}
+                href={urlFor("portal", `/${slug}/client/proposals/${r.id}`)}
                 className="text-xs text-[var(--text-muted)] hover:text-[var(--org-primary)]"
               >
                 Open →

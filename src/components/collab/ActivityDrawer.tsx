@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/Sheet";
 import type { ActivityItem as ActivityItemType } from "@/lib/db/activity";
 import { ActivityItem } from "./ActivityItem";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export type ActivityDrawerProps = {
   targetTable: string;
@@ -38,11 +39,11 @@ function dayLabel(iso: string): string {
   const today = startOfDay(new Date());
   if (item === today) return "Today";
   if (item === today - DAY_MS) return "Yesterday";
-  return new Date(iso).toLocaleDateString(undefined, {
+  return formatDateParts(iso, {
     weekday: "short",
     month: "short",
     day: "numeric",
-    year: item < today - 180 * DAY_MS ? "numeric" : undefined,
+    ...(item < today - 180 * DAY_MS ? { year: "numeric" as const } : {}),
   });
 }
 

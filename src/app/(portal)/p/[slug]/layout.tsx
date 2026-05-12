@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
 import { CommandPalette } from "@/components/CommandPalette";
+import { urlFor } from "@/lib/urls";
 
 /**
  * Per-slug portal layout.
@@ -35,7 +36,7 @@ export default async function PortalSlugLayout({
   return (
     <div data-portal-slug={slug} style={style}>
       {data?.branding && Object.keys(branding).length > 0 && (
-        <a className="sr-only" href={`/p/${slug}/overview`}>
+        <a className="sr-only" href={urlFor("portal", `/${slug}/overview`)}>
           {data.name ?? slug} portal
         </a>
       )}

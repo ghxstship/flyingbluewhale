@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -80,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
               {items.map((a) => (
                 <li key={a.id} className="flex items-center justify-between py-2 text-sm">
-                  <Link href={`/console/knowledge/${a.slug}`} className="font-medium hover:text-[var(--org-primary)]">
+                  <Link href={urlFor("platform", `/knowledge/${a.slug}`)} className="font-medium hover:text-[var(--org-primary)]">
                     {a.title}
                   </Link>
                   <div className="flex items-center gap-1 font-mono text-[10px] text-[var(--text-muted)]">

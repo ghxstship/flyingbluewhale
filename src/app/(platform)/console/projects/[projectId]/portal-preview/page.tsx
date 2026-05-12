@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { urlFor } from "@/lib/urls";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/Badge";
@@ -43,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             {PERSONAS.map((p) => (
               <li key={p.slug}>
                 <Link
-                  href={`/p/${project.slug}/${p.slug}`}
+                  href={urlFor("portal", `/${project.slug}/${p.slug}`)}
                   className="surface hover-lift flex items-center justify-between p-4"
                 >
                   <div>

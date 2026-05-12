@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -82,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 const tags = tagsOf(a.tags).filter((t) => REQUIRED_TAGS.includes(t));
                 return (
                   <li key={a.id} className="flex items-center justify-between py-2 text-sm">
-                    <Link href={`/console/knowledge/${a.slug}`} className="font-medium hover:text-[var(--org-primary)]">
+                    <Link href={urlFor("platform", `/knowledge/${a.slug}`)} className="font-medium hover:text-[var(--org-primary)]">
                       {a.title}
                     </Link>
                     <div className="flex items-center gap-1">

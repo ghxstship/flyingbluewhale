@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { ModuleHeader } from "@/components/Shell";
+import { urlFor } from "@/lib/urls";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/Button";
@@ -57,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         ]}
         action={
           project ? (
-            <Button href={`/p/${project.slug}/artist/advancing`} size="sm">
+            <Button href={urlFor("portal", `/${project.slug}/artist/advancing`)} size="sm">
               Open portal view →
             </Button>
           ) : undefined

@@ -1,3 +1,4 @@
+import { formatDateTime } from "@/lib/i18n/format";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -100,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 }>
               ).map((p) => (
                 <li key={p.id} className="flex items-center justify-between text-xs">
-                  <span className="font-mono">{new Date(p.started_at).toLocaleString()}</span>
+                  <span className="font-mono">{formatDateTime(p.started_at)}</span>
                   <span className="flex items-center gap-2">
                     <Badge
                       variant={

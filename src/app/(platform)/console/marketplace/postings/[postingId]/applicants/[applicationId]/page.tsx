@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { FormShell } from "@/components/FormShell";
@@ -44,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
       <ModuleHeader
         eyebrow="Applicant"
         title={`#${a.id.slice(0, 8)}`}
-        subtitle={`Applied ${new Date(a.applied_at).toLocaleDateString()}`}
+        subtitle={`Applied ${formatDate(a.applied_at)}`}
         action={<Badge variant={STATUS_TONE[a.status] ?? "muted"}>{a.status}</Badge>}
       />
       <div className="page-content max-w-2xl space-y-5">

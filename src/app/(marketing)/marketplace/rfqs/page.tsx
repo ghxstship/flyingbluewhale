@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { MarketplaceCard } from "@/components/marketplace/MarketplaceCard";
@@ -65,7 +66,7 @@ export default async function Page() {
               meta={[
                 r.region,
                 r.budget_band,
-                r.due_at ? `Due ${new Date(r.due_at).toLocaleDateString()}` : null,
+                r.due_at ? `Due ${formatDate(r.due_at)}` : null,
                 r.requires_prequalification ? "Prequal required" : null,
               ]}
               badge={r.requires_insurance ? "COI required" : null}

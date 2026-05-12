@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { revokeLinkAction } from "./actions";
@@ -93,7 +94,7 @@ export default async function AssetLinkerPage() {
                         </td>
                         <td className="text-xs capitalize">{l.asset_kind.replace("_", " ")}</td>
                         <td className="font-mono text-xs">{l.asset_serial}</td>
-                        <td className="font-mono text-xs">{new Date(l.issued_at).toLocaleDateString()}</td>
+                        <td className="font-mono text-xs">{formatDate(l.issued_at)}</td>
                         <td>
                           <Badge variant={l.revoked_at ? "muted" : "success"}>
                             {l.revoked_at ? "Revoked" : "Active"}

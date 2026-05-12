@@ -5,6 +5,7 @@ import { ModuleHeader, PortalRail } from "@/components/Shell";
 import { portalNav } from "@/lib/nav";
 import { hasSupabase } from "@/lib/env";
 import { resolveProposalContext } from "@/lib/proposals/portal/queries";
+import { urlFor } from "@/lib/urls";
 
 const SUBNAV: { href: string; label: string }[] = [
   { href: "", label: "Overview" },
@@ -51,7 +52,7 @@ export default async function ProposalPortalLayout({
               </Link>
             ))}
             <Link
-              href={`/p/${slug}/client/proposals`}
+              href={urlFor("portal", `/${slug}/client/proposals`)}
               className="nav-item ms-auto rounded-t px-3 py-2 text-xs text-[var(--text-muted)] hover:bg-[var(--surface-inset)]"
             >
               ← All proposals

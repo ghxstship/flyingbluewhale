@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import type { DeliverableType } from "@/lib/supabase/types";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -167,7 +168,7 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
 
       <p className="mt-6 text-xs text-[var(--text-muted)]">
         Issue with anything here? Reach your production coordinator via{" "}
-        <Link className="underline" href={`/p/${slug}/crew`}>
+        <Link className="underline" href={urlFor("portal", `/${slug}/crew`)}>
           your call-sheet
         </Link>
         .

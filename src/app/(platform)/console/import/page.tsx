@@ -1,3 +1,4 @@
+import { formatDateTime } from "@/lib/i18n/format";
 import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { listImportJobs } from "@/lib/db/import-jobs";
@@ -82,7 +83,7 @@ export default async function ImportPage() {
                 <Card>
                   <CardHeader
                     title={`${IMPORT_RESOURCE_LABEL[j.resource] ?? j.resource} · ${j.sourceLabel ?? j.source}`}
-                    subtitle={new Date(j.createdAt).toLocaleString()}
+                    subtitle={formatDateTime(j.createdAt)}
                     action={<Badge variant={STATE_TONE[j.state] ?? "muted"}>{j.state.toUpperCase()}</Badge>}
                   />
                   <CardBody>

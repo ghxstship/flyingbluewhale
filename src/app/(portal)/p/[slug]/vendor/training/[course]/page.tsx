@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { Markdown } from "@/components/Markdown";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -70,7 +71,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
           { label: article.title },
         ]}
         action={
-          <Button href={`/p/${slug}/vendor/training`} variant="ghost" size="sm">
+          <Button href={urlFor("portal", `/${slug}/vendor/training`)} variant="ghost" size="sm">
             Back
           </Button>
         }
@@ -98,7 +99,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
           </p>
           <div className="mt-3">
             <Link
-              href={`/p/${slug}/vendor/training`}
+              href={urlFor("portal", `/${slug}/vendor/training`)}
               className="text-[var(--org-primary)] underline-offset-2 hover:underline"
             >
               All training modules →

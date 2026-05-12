@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -62,7 +63,7 @@ export default async function Page() {
                   {r.posting?.title ?? "(deleted posting)"}
                 </Link>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                  Applied {new Date(r.applied_at).toLocaleDateString()}
+                  Applied {formatDate(r.applied_at)}
                 </p>
               </div>
               <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>

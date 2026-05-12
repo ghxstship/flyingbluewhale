@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -132,16 +133,14 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
           pipelines.length > 1 ? (
             <div className="flex items-center gap-1">
               {pipelines.map((p) => (
-                <Link
+                <Button
                   key={p.id}
                   href={`/console/pipeline?pipeline=${p.slug}`}
-                  className={
-                    "rounded px-2 py-1 text-xs " +
-                    (p.id === active.id ? "bg-[var(--org-primary)] text-white" : "surface hover-lift")
-                  }
+                  variant={p.id === active.id ? "primary" : "ghost"}
+                  size="sm"
                 >
                   {p.name}
-                </Link>
+                </Button>
               ))}
             </div>
           ) : null

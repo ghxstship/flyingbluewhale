@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -91,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             access, and issue your card on approval.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href={`/p/${slug}/apply/changes`} className="btn btn-secondary btn-sm">
+            <Link href={urlFor("portal", `/${slug}/apply/changes`)} className="btn btn-secondary btn-sm">
               Request a category change
             </Link>
             <Link

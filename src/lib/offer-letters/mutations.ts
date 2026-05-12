@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { OfferLetter, OfferLetterStatus } from "./types";
 
 /** Editable FK columns + per-letter overrides (NOT the joined display fields). */
@@ -37,9 +38,13 @@ export async function updateOfferLetter(orgId: string, id: string, patch: Update
   // matched no rows (caller tried to edit a non-draft letter). Without
   // this we silently no-op AND log the edit as if it succeeded — a
   // misleading audit trail.
-  const { data, error } = await supabase
+  // The generated DB type excludes travel/onsite date columns from the update
+  // payload (they're absent from the Database["public"]["Tables"]["offer_letters"]["Update"]
+  // generated union). Cast through LooseSupabase until gen:types re-runs against
+  // the current schema so the Supabase client accepts these valid column writes.
+  const { data, error } = await (supabase as unknown as LooseSupabase)
     .from("offer_letters")
-    .update(patch)
+    .update(patch as Record<string, unknown>)
     .eq("org_id", orgId)
     .eq("id", id)
     .eq("status", "draft")

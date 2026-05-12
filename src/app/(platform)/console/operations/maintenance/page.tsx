@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
@@ -171,7 +172,7 @@ export default async function Page() {
                           <div className="mt-1 text-sm">{j.title}</div>
                         </div>
                         <span className="font-mono text-xs text-[var(--text-muted)]">
-                          {new Date(j.due_at).toLocaleDateString()}
+                          {formatDate(j.due_at)}
                         </span>
                       </Link>
                     </li>

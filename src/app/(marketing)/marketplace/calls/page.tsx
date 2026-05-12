@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { MarketplaceCard } from "@/components/marketplace/MarketplaceCard";
@@ -71,8 +72,8 @@ export default async function Page() {
               meta={[
                 r.region,
                 r.venue_type,
-                r.performance_date ? `Show ${new Date(r.performance_date).toLocaleDateString()}` : null,
-                r.deadline_at ? `Closes ${new Date(r.deadline_at).toLocaleDateString()}` : null,
+                r.performance_date ? `Show ${formatDate(r.performance_date)}` : null,
+                r.deadline_at ? `Closes ${formatDate(r.deadline_at)}` : null,
                 formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
               ]}
             />

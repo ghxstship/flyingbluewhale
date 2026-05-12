@@ -1,3 +1,4 @@
+import { formatDateTime } from "@/lib/i18n/format";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
@@ -45,7 +46,7 @@ export default async function SubscriptionTransitionsPage({ params }: { params: 
             <tbody>
               {transitions.map((t) => (
                 <tr key={t.id}>
-                  <td className="font-mono text-xs">{new Date(t.transitioned_at).toLocaleString()}</td>
+                  <td className="font-mono text-xs">{formatDateTime(t.transitioned_at)}</td>
                   <td className="font-mono text-xs">{t.from_state ?? "(initial)"}</td>
                   <td className="font-mono text-xs font-bold">{t.to_state}</td>
                   <td>{t.reason ?? "—"}</td>

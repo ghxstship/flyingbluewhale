@@ -1,3 +1,4 @@
+import { formatDateTime } from "@/lib/i18n/format";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -40,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
         <Badge variant={STATUS_TONE[a.status] ?? "muted"}>{a.status}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Applied {new Date(a.applied_at).toLocaleString()}
+        Applied {formatDateTime(a.applied_at)}
       </p>
 
       <div className="mt-6 space-y-4">

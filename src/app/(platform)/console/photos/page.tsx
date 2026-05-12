@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -19,7 +20,7 @@ type Photo = {
 };
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString();
+  return formatDate(iso);
 }
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ album?: string; project?: string }> }) {

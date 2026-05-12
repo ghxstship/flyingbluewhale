@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { formatDate } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -151,7 +152,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
             {transitions.slice(0, 5).map((t) => (
               <li key={t.id} className="font-mono">
                 {t.from_phase ?? "(initial)"} → <strong>{t.to_phase}</strong> ·{" "}
-                {new Date(t.transitioned_at).toLocaleDateString()}
+                {formatDate(t.transitioned_at)}
                 {t.reason ? <span className="ml-2 font-sans">{t.reason}</span> : null}
               </li>
             ))}

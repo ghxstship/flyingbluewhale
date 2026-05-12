@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { CommitteeForm, PolicyForm } from "./Forms";
@@ -100,7 +101,7 @@ export default async function GovernancePage() {
                       <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>
                     </td>
                     <td className="font-mono text-xs">
-                      {p.next_review_at ? new Date(p.next_review_at).toLocaleDateString() : "—"}
+                      {p.next_review_at ? formatDate(p.next_review_at) : "—"}
                     </td>
                   </tr>
                 ))

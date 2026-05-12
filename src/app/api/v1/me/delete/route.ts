@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
@@ -112,7 +113,7 @@ export async function POST(req: NextRequest) {
         payload: {
           to: session.email,
           subject: "Account deletion requested — 30-day grace",
-          html: `<p>Your FLYTEHAUS Technologies account is scheduled for permanent deletion on <strong>${new Date(purgeAt).toLocaleDateString()}</strong>.</p><p>Sign in within that window to cancel the deletion. After 30 days all your data will be unrecoverable.</p>`,
+          html: `<p>Your FLYTEHAUS Technologies account is scheduled for permanent deletion on <strong>${formatDate(purgeAt)}</strong>.</p><p>Sign in within that window to cancel the deletion. After 30 days all your data will be unrecoverable.</p>`,
         },
       });
     }

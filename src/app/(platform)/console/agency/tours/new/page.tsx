@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";

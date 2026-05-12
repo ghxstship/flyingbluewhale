@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -172,7 +173,7 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                   <div>
                     <div className="text-sm font-semibold">{memberMap.get(a.assignee_id) ?? "Unknown"}</div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                      assigned {new Date(a.assigned_at).toLocaleDateString()}
+                      assigned {formatDate(a.assigned_at)}
                     </div>
                   </div>
                   <Badge variant={tone}>{a.assignment_phase}</Badge>

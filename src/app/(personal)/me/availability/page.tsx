@@ -1,3 +1,4 @@
+import { formatDateTime } from "@/lib/i18n/format";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -76,7 +77,7 @@ export default async function Page() {
                     {s.kind}
                   </Badge>
                   <span className="ml-3 font-mono text-xs">
-                    {new Date(s.starts_at).toLocaleString()} → {new Date(s.ends_at).toLocaleString()}
+                    {formatDateTime(s.starts_at)} → {formatDateTime(s.ends_at)}
                   </span>
                   {s.label && <span className="ml-3">{s.label}</span>}
                 </div>

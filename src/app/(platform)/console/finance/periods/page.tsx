@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
@@ -54,7 +55,7 @@ export default async function FinancePeriodsPage() {
             {
               key: "closed",
               header: "Closed",
-              render: (r) => (r.closed_at ? new Date(r.closed_at).toLocaleDateString() : "—"),
+              render: (r) => (r.closed_at ? formatDate(r.closed_at) : "—"),
               className: "text-xs text-[var(--text-secondary)]",
               accessor: (r) => r.closed_at,
             },

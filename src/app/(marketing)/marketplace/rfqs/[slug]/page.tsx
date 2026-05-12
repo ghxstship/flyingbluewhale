@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -47,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <div className="flex flex-wrap gap-2 text-sm text-[var(--text-secondary)]">
           {r.region && <Badge variant="muted">{r.region}</Badge>}
           {r.budget_band && <Badge variant="muted">{r.budget_band}</Badge>}
-          {r.due_at && <Badge variant="warning">Due {new Date(r.due_at).toLocaleDateString()}</Badge>}
+          {r.due_at && <Badge variant="warning">Due {formatDate(r.due_at)}</Badge>}
         </div>
       </header>
 

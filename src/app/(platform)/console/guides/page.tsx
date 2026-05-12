@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -77,7 +78,7 @@ export default async function GuidesIndex() {
                       <Badge variant="muted">{g.persona}</Badge>
                     </td>
                     <td className="font-mono text-xs">
-                      {g.updated_at ? new Date(g.updated_at).toLocaleDateString() : "—"}
+                      {g.updated_at ? formatDate(g.updated_at) : "—"}
                     </td>
                     <td>
                       <Link

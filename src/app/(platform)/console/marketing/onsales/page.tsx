@@ -1,3 +1,4 @@
+import { formatDateTime } from "@/lib/i18n/format";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
@@ -57,7 +58,7 @@ export default async function Page() {
             {
               key: "when",
               header: "Occurs",
-              render: (r) => new Date(r.occurs_at).toLocaleString(),
+              render: (r) => formatDateTime(r.occurs_at),
               accessor: (r) => r.occurs_at,
               className: "font-mono text-xs",
             },

@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -119,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
                     {a.note && <p className="text-[var(--text-secondary)]">{a.note}</p>}
                   </div>
                   <span className="font-mono text-[10px] text-[var(--text-muted)]">
-                    {new Date(a.awarded_at).toLocaleDateString()}
+                    {formatDate(a.awarded_at)}
                   </span>
                 </li>
               ))}

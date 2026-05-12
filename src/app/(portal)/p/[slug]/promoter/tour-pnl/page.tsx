@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PortalRail } from "@/components/Shell";
 import { portalNav } from "@/lib/nav";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -23,20 +24,20 @@ export default async function PromoterTourPnL({ params }: { params: Promise<{ sl
         <p className="mt-1 text-xs text-[var(--text-muted)]">
           Routing economics across the legs on this engagement. For the audited finance roll-up your AM owns the numbers
           — request the closing pack from{" "}
-          <Link className="underline" href={`/p/${slug}/messages`}>
+          <Link className="underline" href={urlFor("portal", `/${slug}/messages`)}>
             /p/{slug}/messages
           </Link>
           .
         </p>
 
         <section className="mt-5 grid gap-3 sm:grid-cols-2">
-          <Link href={`/p/${slug}/promoter/co-pro`} className="surface hover-lift block p-5">
+          <Link href={urlFor("portal", `/${slug}/promoter/co-pro`)} className="surface hover-lift block p-5">
             <div className="text-sm font-semibold">Co-Pro Splits</div>
             <div className="mt-1 text-xs text-[var(--text-muted)]">
               Per-show guarantee + walkout split that drives net.
             </div>
           </Link>
-          <Link href={`/p/${slug}/promoter/settlements`} className="surface hover-lift block p-5">
+          <Link href={urlFor("portal", `/${slug}/promoter/settlements`)} className="surface hover-lift block p-5">
             <div className="text-sm font-semibold">Settlements</div>
             <div className="mt-1 text-xs text-[var(--text-muted)]">
               Show-night gross, paid attendance, comps, payout, balance due.

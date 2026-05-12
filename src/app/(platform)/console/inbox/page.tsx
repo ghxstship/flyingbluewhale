@@ -1,3 +1,4 @@
+import { formatDateTime } from "@/lib/i18n/format";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -91,7 +92,7 @@ export default async function Page() {
                       </div>
                       {r.last_message_at && (
                         <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-                          {new Date(r.last_message_at).toLocaleString()}
+                          {formatDateTime(r.last_message_at)}
                         </div>
                       )}
                     </div>

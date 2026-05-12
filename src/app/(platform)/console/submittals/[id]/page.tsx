@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -89,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {all.map((r) => (
                 <tr key={r.id}>
                   <td className="font-mono text-xs">#{r.round}</td>
-                  <td className="font-mono text-xs">{new Date(r.submitted_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{formatDate(r.submitted_at)}</td>
                   <td>
                     <Badge variant={STATUS_TONE[r.stamp] ?? "muted"}>{r.stamp.replace(/_/g, " ")}</Badge>
                   </td>

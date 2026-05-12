@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDate } from "@/lib/i18n/format";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
@@ -168,7 +169,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
                   <td>{t.name}</td>
                   <td className="text-[var(--text-muted)]">{t.subject}</td>
                   <td>{t.is_active ? "Yes" : "No"}</td>
-                  <td className="font-mono text-xs">{new Date(t.updated_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{formatDate(t.updated_at)}</td>
                   <td>
                     <button
                       type="button"

@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { formatDate } from "@/lib/i18n/format";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
@@ -65,7 +66,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
                   <td className="font-mono text-xs">
                     {p.width_ft && p.depth_ft ? `${p.width_ft}′ × ${p.depth_ft}′` : "—"}
                   </td>
-                  <td className="font-mono text-xs">{new Date(p.updated_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{formatDate(p.updated_at)}</td>
                 </tr>
               ))}
             </tbody>

@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -96,7 +97,7 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
                       {list.map((p) => (
                         <li key={p.id}>
                           <Link
-                            href={p.slug ? `/p/${p.slug}/producer` : `/console/projects/${p.id}`}
+                            href={p.slug ? urlFor("portal", `/${p.slug}/producer`) : urlFor("platform", `/projects/${p.id}`)}
                             className="surface hover-lift block p-4"
                           >
                             <div className="truncate text-sm font-semibold">{p.name}</div>

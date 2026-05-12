@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -19,7 +20,7 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
 
 function fmt(d: string | null): string {
   if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString();
+  return formatDate(d + "T00:00:00");
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -86,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={c.id} className="flex items-center justify-between py-3 text-sm">
                   <div className="min-w-0">
                     <Link
-                      href={`/p/${slug}/vendor/training/${c.slug}`}
+                      href={urlFor("portal", `/${slug}/vendor/training/${c.slug}`)}
                       className="font-medium hover:text-[var(--org-primary)]"
                     >
                       {c.title}

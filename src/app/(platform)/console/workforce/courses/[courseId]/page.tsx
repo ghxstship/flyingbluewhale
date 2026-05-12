@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/i18n/format";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -232,7 +233,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
                 <li key={a.id} className="rounded-md border border-[var(--border-color)] p-3">
                   <div className="text-sm">{memberMap.get(a.assignee_id) ?? "Unknown"}</div>
                   <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                    {new Date(a.assigned_at).toLocaleDateString()}
+                    {formatDate(a.assigned_at)}
                   </div>
                   <Badge variant={tone} className="mt-1">
                     {a.assignment_state}

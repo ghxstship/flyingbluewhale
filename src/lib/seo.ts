@@ -120,7 +120,7 @@ export function organizationSchema() {
     legalName: "LYTEHAUS Technologies, Inc.",
     url: SITE.baseUrl,
     logo: `${SITE.baseUrl}/icon-512.png`,
-    sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],
+    sameAs: [`https://x.com/${SITE.twitter.replace("@", "")}`],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer support",

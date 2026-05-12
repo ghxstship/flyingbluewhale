@@ -2,11 +2,11 @@
 
 import type { Metadata } from "next";
 import { Mail, MessageCircle, Calendar, Building2 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
+import { ContactForm } from "./ContactForm";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact — Talk to the Studio",
@@ -110,56 +110,7 @@ export default function ContactPage() {
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leave a Note.</h2>
-        <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@lytehaus.live">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Name
-              <input name="name" required className="input-base mt-1.5 w-full" />
-            </label>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Work email
-              <input name="email" type="email" required className="input-base mt-1.5 w-full" />
-            </label>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Company
-              <input name="company" className="input-base mt-1.5 w-full" />
-            </label>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Productions per year
-              <select name="scale" className="input-base mt-1.5 w-full">
-                <option>1–5</option>
-                <option>6–20</option>
-                <option>21–50</option>
-                <option>50+</option>
-              </select>
-            </label>
-          </div>
-          <label className="block text-xs font-medium text-[var(--text-secondary)]">
-            What do you run?
-            <select name="vertical" className="input-base mt-1.5 w-full">
-              <option>Live events / festivals</option>
-              <option>Touring / artist management</option>
-              <option>Corporate / activations</option>
-              <option>Fabrication / shop</option>
-              <option>Other</option>
-            </select>
-          </label>
-          <label className="block text-xs font-medium text-[var(--text-secondary)]">
-            What are you running?
-            <textarea name="message" rows={4} className="input-base mt-1.5 w-full" />
-          </label>
-          <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-            <input type="checkbox" name="demo" /> I&apos;d rather walk it through live than trade emails.
-          </label>
-          <div className="flex items-center justify-end gap-2">
-            <Button href="/signup" variant="secondary">
-              Open the console instead
-            </Button>
-            <Button type="submit">Send to the Studio</Button>
-          </div>
-        </form>
+        <ContactForm />
       </section>
 
       <FAQSection title="Contact FAQ" faqs={FAQS} />

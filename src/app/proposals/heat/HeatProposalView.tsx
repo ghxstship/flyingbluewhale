@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   HEAT_DOC,
   HEAT_LIFECYCLE,
@@ -1025,7 +1026,7 @@ function Authorization() {
 
   const execute = () => {
     if (!canSign) {
-      alert("Add your signature and printed name to execute.");
+      toast.error("Add your signature and printed name to execute.");
       return;
     }
     setSigned(true);

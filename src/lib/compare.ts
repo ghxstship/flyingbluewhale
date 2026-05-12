@@ -18,19 +18,19 @@ export const COMPARE: Record<string, CompareConfig> = {
   asana: {
     slug: "asana",
     competitor: "Asana",
-    headline: "LYTEHAUS Technologies vs. Asana: production-native vs. generic work management.",
+    headline: "Coming from general-purpose project tools. Here's what production-native looks like.",
     blurb:
-      "Asana is great project management software. It isn't event production software. Here's what's missing — and what you stop paying separately for when you switch.",
-    hero: "Asana is the default 'we need to organize this' SaaS. For production teams it's a starting point that quickly needs augmentation: a separate portal tool for clients, a separate ticketing platform for events, a separate finance add-on, a separate KBYG wiki, a separate check-in app for the gate. The bill adds up and the seams leak.",
+      "You outgrew the generic task manager. Production teams need typed primitives, external stakeholder portals, and field tooling that works offline. This is what that looks like.",
+    hero: "General project management tools are a natural starting point for production teams. The gap shows up when you need a portal for the artist, a scanner at the gate, a finance roll-up, and a KBYG guide for each persona — and realize each one requires a separate product. LYTEHAUS is the suite built for that stack.",
     bottomLine:
-      "If you run shows, you'll outgrow Asana by your fifth event. The LYTEHAUS Technologies suite is the production-native spine that doesn't need augmentation.",
+      "One platform with the primitives production actually needs. Pitch through wrap, no augmentation required.",
     features: [
       { feature: "Task + project management", us: true, them: true },
       {
         feature: "Stakeholder portals (artist / vendor / client / sponsor / guest / crew)",
         us: true,
         them: false,
-        note: "Asana guest access is read-limited and unsuitable for external stakeholders",
+        note: "External stakeholder access requires a full seat on most general tools",
       },
       { feature: "Offline ticket scanning", us: true, them: false },
       { feature: "Race-safe atomic scan (sub-100ms)", us: true, them: false },
@@ -38,7 +38,7 @@ export const COMPARE: Record<string, CompareConfig> = {
         feature: "Finance (invoices, budgets, expenses, advances)",
         us: true,
         them: false,
-        note: "Asana has no finance primitives",
+        note: "Finance primitives are absent from most general project tools",
       },
       { feature: "Procurement (POs, vendor COI/W-9)", us: true, them: false },
       { feature: "Production (equipment, rentals, fabrication)", us: true, them: false },
@@ -48,11 +48,11 @@ export const COMPARE: Record<string, CompareConfig> = {
         feature: "Streaming AI assistant (Claude)",
         us: true,
         them: "Limited",
-        note: "Asana AI is summary-only; no streaming, no drafting workflows",
+        note: "ATLVS AI is streaming and grounded in your workspace data",
       },
       { feature: "RLS-enforced multi-tenancy", us: true, them: true },
       { feature: "SSO + SCIM on enterprise", us: true, them: true },
-      { feature: "Per-org pricing (unlimited users)", us: true, them: false, note: "Asana charges per seat" },
+      { feature: "Per-org pricing (unlimited users)", us: true, them: false, note: "ATLVS charges per org, not per seat" },
       { feature: "Stripe Connect vendor payouts", us: true, them: false },
       { feature: "Mobile PWA with service worker", us: true, them: "Native app only" },
     ],
@@ -63,49 +63,49 @@ export const COMPARE: Record<string, CompareConfig> = {
       },
       {
         title: "One platform, not seven",
-        body: "You stop paying for Asana + Eventbrite + DocuSign + a portal tool + a KBYG wiki. It's all one subscription.",
+        body: "Finance, portals, procurement, field tooling, KBYG guides — one subscription, one schema.",
       },
       {
         title: "Stakeholder portals",
-        body: "Your clients, artists, vendors, and sponsors don't need Asana seats. They get a slug URL and see only what they should see.",
+        body: "Your clients, artists, vendors, and sponsors don't need seats. They get a slug URL scoped by RLS.",
       },
       {
         title: "Show-day mobile",
-        body: "Your scanner works without cell signal. Asana doesn't help at the gate — and it doesn't try to.",
+        body: "COMPVSS handles the gate offline. Sub-100ms, queue-backed, no signal required.",
       },
     ],
     whenTheyWin: [
-      "You don't run events. If you're a marketing team, software team, or generic services agency, Asana is a better fit.",
-      "You have deep Asana integrations (Salesforce, Jira) that depend on its project graph. Those flows stay on Asana; consider ATLVS for just the production-adjacent work.",
+      "You don't run events. A marketing team or software agency will find general project tools a better fit.",
+      "You have deep integrations (Salesforce, Jira) built on an existing tool's project graph. Keep those flows there; layer ATLVS for production-adjacent work.",
     ],
     quote: {
-      text: "We used Asana for four years. We didn't hate it — we just kept adding tools around it. ATLVS replaced the tools around it and made the center redundant.",
+      text: "We didn't hate the general tools — we just kept adding products around them. ATLVS replaced the products around them and made the center redundant.",
       attribution: "Owner, Live Events Inc.",
     },
     migration: [
-      "Export Asana projects + tasks as CSV",
+      "Export projects + tasks as CSV from your existing tool",
       "Our import tool maps project → project, section → milestone, task → task, custom fields → our custom fields",
       "Stakeholder invites (artists, vendors, clients) ported to GVTEWAY slug URLs — no seats required",
       "Typical 50-show / 10-person team migration: 2–3 days",
     ],
     faqs: [
       {
-        q: "Can I import from Asana?",
-        a: "Yes. CSV export from Asana maps cleanly to ATLVS projects, milestones, and tasks. Custom fields map to our custom fields. Comments and attachments port over. A 50-project migration runs in under a day once the export is in hand.",
+        q: "Can I import from a general project tool?",
+        a: "Yes. CSV export maps cleanly to ATLVS projects, milestones, and tasks. Custom fields map to our custom fields. Comments and attachments port over. A 50-project migration runs in under a day once the export is in hand.",
       },
       {
-        q: "What if my team lives in Asana for non-event work?",
+        q: "What if my team uses another tool for non-event work?",
         a: "Keep them there. Run production-adjacent work on ATLVS. The webhooks API at /api/v1/webhooks makes it easy to pipe status changes between the two; we have a sample adapter.",
       },
       {
         q: "Is pricing really unlimited users?",
-        a: "Yes. Professional is $199/month per org, unlimited users. Asana Business is $24.99/user/month — a 10-person team is $3,000/year. A 20-person team is $6,000/year. Our Professional tier is $2,388/year regardless.",
+        a: "Yes. Professional is $199/month per org, unlimited users.",
       },
     ],
     keywords: [
-      "ATLVS vs asana",
-      "LYTEHAUS Technologies vs asana",
-      "event production vs asana",
+      "ATLVS production management",
+      "LYTEHAUS Technologies production platform",
+      "event production software",
       "asana alternative for events",
     ],
   },
@@ -113,12 +113,12 @@ export const COMPARE: Record<string, CompareConfig> = {
   monday: {
     slug: "monday",
     competitor: "Monday.com",
-    headline: "LYTEHAUS Technologies vs. Monday.com: typed primitives vs. a pretty spreadsheet.",
+    headline: "Coming from flexible boards. Here's what typed production primitives look like.",
     blurb:
-      "Monday is a lovely general-purpose board. If your team runs shows, you'll need primitives Monday doesn't have — and portals Monday can't safely expose.",
-    hero: "Monday.com is flexible. That's its strength and the reason production teams outgrow it. Event operations need typed primitives (deliverables, scans, call sheets, COIs) not just columns you name 'deliverable status.' And they need a way to bring external stakeholders in without giving them seats.",
+      "Flexible boards are great for general work. Production teams find the gap when they need typed primitives, portal access without seats, and field tooling at the gate.",
+    hero: "Flexible board tools give teams the freedom to model anything. Production operations have a well-defined shape: typed deliverables, role-scoped portals, procurement with COI tracking, and a field PWA that works offline. LYTEHAUS models that shape at the database level so you don't have to enforce it with team discipline.",
     bottomLine:
-      "If you can build it in Monday with enough discipline, you can run shows on it. That discipline costs more than the software.",
+      "Typed primitives enforced at the schema. Standard production patterns, zero improvisation required.",
     features: [
       { feature: "Board-based project views", us: true, them: true },
       { feature: "Gantt + timeline views", us: true, them: true },
@@ -138,51 +138,51 @@ export const COMPARE: Record<string, CompareConfig> = {
     whyWeWin: [
       {
         title: "Typed, not freeform",
-        body: "A deliverable in ATLVS is a typed entity — tech rider, hotel block, insurance cert. Monday columns are freeform. Typed primitives prevent the 'which column is status this quarter?' drift.",
+        body: "A deliverable in ATLVS is a typed entity — tech rider, hotel block, insurance cert. Typed primitives prevent schema drift at scale.",
       },
       {
         title: "Portals without seats",
-        body: "Artists, vendors, clients don't count as users. They open a slug URL scoped by RLS. Your per-org bill doesn't go up as your stakeholder count grows.",
+        body: "Artists, vendors, clients don't count as users. They open a slug URL scoped by RLS. Your per-org bill doesn't grow as your stakeholder count does.",
       },
       {
         title: "Field tooling",
-        body: "COMPVSS handles the gate. Monday has no scanner, no offline queue, no atomic check-in. You'd pair it with another product.",
+        body: "COMPVSS handles the gate. Sub-100ms atomic check-in, offline queue, no cell signal required.",
       },
     ],
     whenTheyWin: [
-      "You need a fully custom workflow we haven't modeled. Monday's open-ended columns give you freedom we don't; we optimize for standard production patterns.",
-      "You already use Monday for a broader business and need consistent cross-department reporting.",
+      "You need a fully custom workflow we haven't modeled. Our strength is standard production patterns — open-ended columns give teams more freedom for non-standard work.",
+      "You already use a board tool for cross-department reporting and need consistent data across business units.",
     ],
     migration: [
-      "Monday's CSV + board export is well-structured; our import adapter reads it directly",
+      "CSV + board export is well-structured; our import adapter reads it directly",
       "Column types map: status → status, people → members, date → due_date, formula → custom field",
-      "Monday automations → our webhooks; we provide a mapping doc",
+      "Automations → our webhooks; we provide a mapping doc",
     ],
     faqs: [
       {
-        q: "Can the LYTEHAUS Technologies suite do everything Monday can?",
-        a: "For production workflows, yes and more. For generic business tracking — warehouse inventory, hiring pipelines, software bugs — Monday is more flexible. If you run events, we're the better fit. If you're a 500-person conglomerate, Monday covers more ground.",
+        q: "Can the LYTEHAUS Technologies suite do everything a flexible board can?",
+        a: "For production workflows, yes and more. For generic business tracking — warehouse inventory, hiring pipelines, software bugs — flexible boards offer more freedom. If you run events, we're optimized for that. If you're a 500-person conglomerate with many business units, a horizontal tool covers more ground.",
       },
       {
         q: "What about pricing?",
-        a: "Monday Standard is $12/user/month. A 15-person production team is $2,160/year. Our Professional tier is $2,388/year unlimited users — roughly the same headline price but every stakeholder beyond the 15 is free on our side, paid on theirs.",
+        a: "LYTEHAUS Professional is $199/month per org, unlimited users. Every stakeholder beyond the core team is free on our side.",
       },
     ],
     keywords: [
-      "ATLVS vs monday",
-      "LYTEHAUS Technologies vs monday",
+      "ATLVS production management",
+      "LYTEHAUS Technologies typed primitives",
       "monday alternative events",
-      "production software vs monday.com",
+      "production software board tool alternative",
     ],
   },
 
   spreadsheets: {
     slug: "spreadsheets",
     competitor: "Spreadsheets",
-    headline: "LYTEHAUS Technologies vs. spreadsheets: when the duct tape starts costing more than software.",
+    headline: "Coming from spreadsheets. Here's when the duct tape starts costing more than software.",
     blurb:
-      "Every production team starts on spreadsheets. Most stay there too long. Here's the tipping point — and what you gain the day you stop.",
-    hero: "Spreadsheets are free. They're also infinitely flexible. That's why every production team starts there, and why every production team eventually realizes they're spending 40% of operations on maintaining the spreadsheet, not running the show.",
+      "Every production team starts on spreadsheets. Most stay there too long. Here's the tipping point — and what you reclaim the day you stop.",
+    hero: "Spreadsheets are free and infinitely flexible. That's why every production team starts there, and why every production team eventually realizes they're spending 40% of operations maintaining the sheet, not running the show. LYTEHAUS is what comes after the spreadsheet.",
     bottomLine:
       "If you run more than six shows a year, or have more than five people on ops, you are paying for spreadsheets — in hours, not dollars. Here's what you reclaim.",
     features: [
@@ -204,11 +204,11 @@ export const COMPARE: Record<string, CompareConfig> = {
     whyWeWin: [
       {
         title: "Your schema enforces itself",
-        body: "Every row has typed columns. Status is a controlled enum. Due dates are actual dates. Finance rolls up because it was typed correctly the first time — not because someone cleaned it up on Monday morning.",
+        body: "Every row has typed columns. Status is a controlled enum. Due dates are actual dates. Finance rolls up because it was typed correctly the first time.",
       },
       {
         title: "Access control is real",
-        body: "An intern cannot see exec compensation. A vendor cannot see another vendor's pricing. A client cannot edit the production schedule. RLS enforces all of this in the database.",
+        body: "An intern cannot see exec compensation. A vendor cannot see another vendor's pricing. A client cannot edit the production schedule. RLS enforces all of this at the database.",
       },
       {
         title: "It stops being a person's job",
@@ -227,7 +227,7 @@ export const COMPARE: Record<string, CompareConfig> = {
     faqs: [
       {
         q: "How do I know it's time to graduate from spreadsheets?",
-        a: "Three signals. One: someone's full-time role is 'keeps the spreadsheet alive.' Two: you've had a mistake that cost money or relationships and blamed it on the spreadsheet. Three: you've tried to give a client or vendor view-only access and ended up sharing the whole file.",
+        a: "Three signals. One: someone's full-time role is 'keeps the spreadsheet alive.' Two: you've had a mistake that cost money or relationships and traced it to the sheet. Three: you've tried to give a client or vendor view-only access and ended up sharing the whole file.",
       },
       {
         q: "What if my spreadsheet is genuinely working?",
@@ -240,7 +240,7 @@ export const COMPARE: Record<string, CompareConfig> = {
     ],
     keywords: [
       "spreadsheet alternative events",
-      "production management vs spreadsheets",
+      "production management platform",
       "stop using spreadsheets events",
     ],
   },

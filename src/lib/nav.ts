@@ -108,7 +108,9 @@ export type IconName =
   | "BarChart3"
   | "Lock"
   | "Coins"
-  | "Route";
+  | "Route"
+  // Sales pipeline
+  | "GitBranch";
 
 export type NavItem = {
   label: string;
@@ -218,6 +220,7 @@ export const platformNav: NavGroup[] = [
     label: "3 MARKETING",
     items: [
       { label: "Leads", href: "/console/leads", icon: "UserPlus" },
+      { label: "Pipeline", href: "/console/pipeline", icon: "GitBranch" },
       { label: "Clients", href: "/console/clients", icon: "Handshake" },
       { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },

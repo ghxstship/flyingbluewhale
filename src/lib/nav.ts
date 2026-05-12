@@ -108,7 +108,11 @@ export type IconName =
   | "BarChart3"
   | "Lock"
   | "Coins"
-  | "Route";
+  | "Route"
+  // Competitive features
+  | "BrainCircuit"
+  | "HeartPulse"
+  | "MapPin";
 
 export type NavItem = {
   label: string;
@@ -206,6 +210,7 @@ export const platformNav: NavGroup[] = [
       { label: "Holds", href: "/console/bookings/holds", icon: "Lock" },
       { label: "Booking Calendar", href: "/console/bookings/calendar", icon: "CalendarDays" },
       { label: "Settlements", href: "/console/bookings/settlements", icon: "Coins" },
+      { label: "Radius Check", href: "/console/bookings/radius-check", icon: "MapPin" },
       { label: "Tours", href: "/console/agency/tours", icon: "Route" },
       { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
       { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
@@ -222,6 +227,7 @@ export const platformNav: NavGroup[] = [
       { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
+      { label: "Sentiment", href: "/console/insights/sentiment", icon: "HeartPulse" },
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
       { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },
       { label: "Open Calls", href: "/console/marketplace/calls", icon: "Mic2" },
@@ -324,6 +330,7 @@ export const platformNav: NavGroup[] = [
     label: "9 TECHNOLOGY",
     items: [
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
+      { label: "Shift Assist", href: "/console/ai/shift-assist", icon: "BrainCircuit" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
       // The XPMS Catalog (atom registry) is the canonical TECHNOLOGY-
@@ -746,6 +753,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Wayfind", href: "/m/wayfind" },
   { label: "Open Gigs", href: "/m/gigs" },
   // Connecteam-parity surfaces (0046).
+  { label: "My ID Card", href: "/m/id-card" },
   { label: "Updates", href: "/m/feed" },
   { label: "Inbox", href: "/m/inbox" },
   { label: "Learning", href: "/m/learning" },

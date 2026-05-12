@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import type {
   OfferLetter,
   OfferLetterResolved,
@@ -103,7 +103,7 @@ export async function listRateCardItems(orgId: string, catalog = "crew_day_rates
 // the public API.
 
 export async function getOfferLetterByToken(token: string, code: string): Promise<OfferLetterResolved | null> {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc("get_offer_letter_by_token", {
     p_token: token,
     p_code: code,
@@ -113,7 +113,7 @@ export async function getOfferLetterByToken(token: string, code: string): Promis
 }
 
 export async function recordOfferLetterView(token: string, code: string): Promise<void> {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
   await supabase.rpc("record_offer_letter_view", { p_token: token, p_code: code });
 }
 
@@ -124,7 +124,7 @@ export async function acceptOfferLetterByToken(
   ip: string | null,
   userAgent: string | null,
 ): Promise<OfferLetterResolved> {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc("accept_offer_letter", {
     p_token: token,
     p_code: code,
@@ -141,7 +141,7 @@ export async function declineOfferLetterByToken(
   code: string,
   reason: string,
 ): Promise<OfferLetterResolved> {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc("decline_offer_letter", {
     p_token: token,
     p_code: code,

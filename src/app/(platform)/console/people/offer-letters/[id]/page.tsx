@@ -24,6 +24,8 @@ import { LetterDocument } from "@/components/offer-letters/LetterDocument";
 import { LetterEditor } from "./LetterEditor";
 import { LetterShareCard } from "./LetterShareCard";
 import { LetterLifecycleActions } from "./LetterLifecycleActions";
+import { LetterEmailComposer } from "./LetterEmailComposer";
+import { composeOfferLetterEmail } from "@/lib/offer-letters/compose";
 import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -69,6 +71,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   ]);
 
   const publicUrl = offerPublicUrl(raw.public_token);
+  const email = composeOfferLetterEmail(resolved);
+  const printUrl = `/offer/${raw.public_token}/print`;
 
   return (
     <>
@@ -94,6 +98,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-8">
         <LetterShareCard letterId={raw.id} accessCode={raw.access_code} publicUrl={publicUrl} status={raw.status} />
+
+        <div className="flex flex-wrap items-center gap-3 text-xs">
+          <a
+            href={printUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded border border-[var(--border-default)] px-3 py-1.5 hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
+          >
+            Print / Save as PDF →
+          </a>
+          <span className="text-[var(--text-muted)]">
+            Bare-bones print view — browser&apos;s Save-as-PDF target produces a clean document.
+          </span>
+        </div>
 
         {raw.snapshot && (
           <div className="surface px-4 py-3 text-xs text-[var(--text-muted)]">
@@ -153,6 +171,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </section>
           </div>
         </div>
+
+        <LetterEmailComposer email={email} />
 
         <LetterEditor raw={raw} resolved={resolved} crew={crew} roles={roles} venues={venues} rates={rates} />
       </div>

@@ -186,25 +186,31 @@ export function LetterEditor({
             </div>
           </fieldset>
 
-          {/* ── ENGAGEMENT WINDOW ────────────────────────────────────────── */}
+          {/* ── ENGAGEMENT WINDOW (4 dates) ──────────────────────────────── */}
           <fieldset className="space-y-3">
             <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-              Engagement window (NULL = inherit from project)
+              Engagement window (on-site dates drive compensation; travel dates are logistical only)
             </legend>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <FormField
-                name="engagement_start"
-                label="Engagement Start"
-                hint={`Project default: ${resolved.project_start_date ?? "—"}`}
-              >
-                <TextInput name="engagement_start" type="date" defaultValue={raw.engagement_start ?? ""} />
+              <FormField name="travel_in_date" label="Travel In" hint="Leave blank if no travel">
+                <TextInput name="travel_in_date" type="date" defaultValue={raw.travel_in_date ?? ""} />
+              </FormField>
+              <FormField name="travel_out_date" label="Travel Out" hint="Leave blank if no travel">
+                <TextInput name="travel_out_date" type="date" defaultValue={raw.travel_out_date ?? ""} />
               </FormField>
               <FormField
-                name="engagement_end"
-                label="Engagement End"
-                hint={`Project default: ${resolved.project_end_date ?? "—"}`}
+                name="onsite_start_date"
+                label="On Site Start"
+                hint={`Project default: ${resolved.project_start_date ?? "—"} · drives day-rate × days math`}
               >
-                <TextInput name="engagement_end" type="date" defaultValue={raw.engagement_end ?? ""} />
+                <TextInput name="onsite_start_date" type="date" defaultValue={raw.onsite_start_date ?? ""} />
+              </FormField>
+              <FormField
+                name="onsite_end_date"
+                label="On Site End"
+                hint={`Project default: ${resolved.project_end_date ?? "—"} · drives day-rate × days math`}
+              >
+                <TextInput name="onsite_end_date" type="date" defaultValue={raw.onsite_end_date ?? ""} />
               </FormField>
             </div>
           </fieldset>

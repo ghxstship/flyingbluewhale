@@ -28,9 +28,19 @@ export default async function Page({ params }: { params: Promise<{ token: string
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <Badge variant={STATUS_VARIANT[letter.status]}>{STATUS_LABEL[letter.status]}</Badge>
-        <span className="text-xs text-[var(--text-muted)]">Reference · OL-{letter.id.slice(0, 8).toUpperCase()}</span>
+        <div className="flex items-center gap-3 text-xs">
+          <a
+            href={`/offer/${token}/print`}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded border border-[var(--border-default)] px-3 py-1.5 text-[var(--text-secondary)] hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
+          >
+            Download PDF / Print
+          </a>
+          <span className="text-[var(--text-muted)]">Reference · OL-{letter.id.slice(0, 8).toUpperCase()}</span>
+        </div>
       </div>
 
       <LetterDocument letter={letter} />

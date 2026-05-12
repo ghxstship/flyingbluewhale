@@ -37,14 +37,11 @@ export function formatCompensation(letter: OfferLetterResolved): string {
   const total = formatDollars(letter.effective_compensation_cents);
   switch (letter.compensation_basis) {
     case "per_day":
+      return letter.rate_unit_price_cents ? `${formatDollars(letter.rate_unit_price_cents)} per day` : total;
     case "per_show_day":
-      return letter.rate_unit_price_cents
-        ? `${formatDollars(letter.rate_unit_price_cents)} per day × ${letter.engagement_days} days = ${total}`
-        : total;
+      return letter.rate_unit_price_cents ? `${formatDollars(letter.rate_unit_price_cents)} per show day` : total;
     case "hourly":
-      return letter.rate_unit_price_cents
-        ? `${formatDollars(letter.rate_unit_price_cents)} per hour (${total} estimated)`
-        : total;
+      return letter.rate_unit_price_cents ? `${formatDollars(letter.rate_unit_price_cents)} per hour` : total;
     case "flat_fee":
     default:
       return total;

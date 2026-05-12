@@ -13,6 +13,31 @@ export type OfferLetterEmployer = "ghxstship" | "five_senses" | "joint";
 export type OfferLetterClassification = "w2" | "1099" | "agency" | "intern";
 export type CompensationBasis = "per_day" | "per_show_day" | "flat_fee" | "hourly" | "tbd";
 
+/** Per-day call-sheet entry (schedule_items jsonb element). */
+export type ScheduleItem = {
+  date: string; // YYYY-MM-DD
+  day_label: string; // "Fri · Show Day 1"
+  call_time: string; // "16:00" or "—"
+  wrap_time: string; // "00:00" or "—"
+  location: string;
+  activities: string[];
+  notes?: string;
+};
+
+/** Onboarding checklist entry (onboarding_items jsonb element). */
+export type OnboardingItem = {
+  key: string;
+  label: string;
+  required: boolean;
+  order: number;
+  /** Optional single helper link rendered as "open ↗" badge. */
+  link?: string;
+  /** Optional multi-link list rendered as labeled "open ↗" badges. Overrides `link` when present. */
+  links?: { label: string; url: string }[];
+  /** Optional helper text rendered as muted small line under the label. */
+  note?: string;
+};
+
 /** Raw row in offer_letters — only FKs + lifecycle, no resolved data. */
 export type OfferLetter = {
   id: string;
@@ -29,14 +54,18 @@ export type OfferLetter = {
   compensation_basis: CompensationBasis;
   override_amount_cents: number | null;
   override_per_diem_cents: number | null;
-  engagement_start: string | null;
-  engagement_end: string | null;
+  travel_in_date: string | null;
+  onsite_start_date: string | null;
+  onsite_end_date: string | null;
+  travel_out_date: string | null;
   travel_provided: boolean | null;
   lodging_provided: boolean | null;
   meals_provided: boolean | null;
   extra_inclusions: string[];
   expectations_override: string | null;
   terms_override: string | null;
+  schedule_items: ScheduleItem[];
+  onboarding_items: OnboardingItem[];
   public_token: string;
   access_code: string;
   token_expires_at: string | null;
@@ -76,6 +105,7 @@ export type OfferLetterResolved = OfferLetter & {
   reports_to_name: string | null;
   reports_to_email: string | null;
   reports_to_phone: string | null;
+  reports_to_role: string | null;
   // venues + locations
   venue_name: string | null;
   venue_address: string | null;
@@ -93,8 +123,12 @@ export type OfferLetterResolved = OfferLetter & {
   rate_sku: string | null;
   per_diem_unit_price_cents: number | null;
   per_diem_sku: string | null;
-  // effective (override → canonical)
+  // effective (override → canonical) — 4-date engagement window
+  effective_onsite_start: string | null;
+  effective_onsite_end: string | null;
+  /** @deprecated alias for effective_onsite_start */
   effective_start: string | null;
+  /** @deprecated alias for effective_onsite_end */
   effective_end: string | null;
   engagement_days: number;
   effective_travel_provided: boolean;
@@ -105,12 +139,17 @@ export type OfferLetterResolved = OfferLetter & {
   effective_payment_schedule: string;
   effective_confidentiality: boolean;
   effective_inclusions: string[];
+  effective_inclusions_footnote: string | null;
   effective_expectations: string;
   effective_compensation_cents: number;
   effective_per_diem_cents: number;
+  effective_onboarding_items: OnboardingItem[];
+  guide_url: string | null;
   // signing authority (org_offer_letter_settings → crew_members)
   signing_authority_name: string | null;
   signing_authority_email: string | null;
+  signing_authority_phone: string | null;
+  signing_authority_title: string | null;
 };
 
 export type OfferLetterActivity = {

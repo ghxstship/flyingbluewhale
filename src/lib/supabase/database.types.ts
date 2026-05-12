@@ -5851,8 +5851,8 @@ export type Database = {
           org_id: string
           query: Json
           result_file_id: string | null
+          run_state: Database["public"]["Enums"]["export_job_state"]
           source: string
-          status: string
         }
         Insert: {
           completed_at?: string | null
@@ -5863,8 +5863,8 @@ export type Database = {
           org_id: string
           query: Json
           result_file_id?: string | null
+          run_state: Database["public"]["Enums"]["export_job_state"]
           source: string
-          status: string
         }
         Update: {
           completed_at?: string | null
@@ -5875,8 +5875,8 @@ export type Database = {
           org_id?: string
           query?: Json
           result_file_id?: string | null
+          run_state?: Database["public"]["Enums"]["export_job_state"]
           source?: string
-          status?: string
         }
         Relationships: [
           {
@@ -27722,6 +27722,12 @@ export type Database = {
         | "press_embargo"
       event_status: "draft" | "scheduled" | "live" | "complete" | "cancelled"
       expense_status: "pending" | "approved" | "rejected" | "reimbursed"
+      export_job_state:
+        | "pending"
+        | "running"
+        | "succeeded"
+        | "failed"
+        | "expired"
       export_kind: "csv" | "json" | "xlsx" | "zip" | "project_archive"
       export_status: "pending" | "running" | "done" | "failed"
       guide_persona:
@@ -28410,6 +28416,13 @@ export const Constants = {
       ],
       event_status: ["draft", "scheduled", "live", "complete", "cancelled"],
       expense_status: ["pending", "approved", "rejected", "reimbursed"],
+      export_job_state: [
+        "pending",
+        "running",
+        "succeeded",
+        "failed",
+        "expired",
+      ],
       export_kind: ["csv", "json", "xlsx", "zip", "project_archive"],
       export_status: ["pending", "running", "done", "failed"],
       guide_persona: [

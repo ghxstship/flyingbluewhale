@@ -10,7 +10,7 @@ Phase 0 is complete. **No code has changed.** All findings are documented and re
 
 | File                                                                                 | Purpose                                                         |
 | ------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
-| [docs/XPMS_TO_LYTEHAUS_MAPPING.md](docs/XPMS_TO_LYTEHAUS_MAPPING.md)                 | Conceptual ⇄ implementation mapping; future protocols cite this |
+| [docs/XPMS_TO_FLYTEHAUS_MAPPING.md](docs/XPMS_TO_FLYTEHAUS_MAPPING.md)               | Conceptual ⇄ implementation mapping; future protocols cite this |
 | [reports/E2E_GROUND_TRUTH_MAP.md](reports/E2E_GROUND_TRUTH_MAP.md)                   | Master Phase 0 deliverable: scope, schema, routes, auth, env    |
 | [reports/LDP_LIFECYCLE_AUDIT.md](reports/LDP_LIFECYCLE_AUDIT.md)                     | Each of LDP's 8 canonical lifecycles: implementation status     |
 | [reports/LDP_NAMING_AUDIT.md](reports/LDP_NAMING_AUDIT.md)                           | Every status/state/phase column classified                      |
@@ -27,7 +27,7 @@ Phase 0 is complete. **No code has changed.** All findings are documented and re
 
 2. **A prior UJV audit shipped GO 17 days ago.** [reports/00–05\_\*.md](reports/00_DISCOVERY.md) at HEAD `72f45e7` (2026-04-22) ran the same shape of validation and certified deploy-ready. UJV asks "do all roles complete the lifecycle?" and got 39/39 GREEN. **This new run is LDP overlay** — same surface, different question (is the lifecycle decomposition itself well-formed?). LDP findings do not invalidate UJV's GO; they're orthogonal.
 
-3. **Three competing 8-phase models exist; reality is two of them.** Per [docs/XPMS_TO_LYTEHAUS_MAPPING.md §Layer 2](docs/XPMS_TO_LYTEHAUS_MAPPING.md):
+3. **Three competing 8-phase models exist; reality is two of them.** Per [docs/XPMS_TO_FLYTEHAUS_MAPPING.md §Layer 2](docs/XPMS_TO_FLYTEHAUS_MAPPING.md):
    - `xpms_phase` enum in code (discovery → concept → development → advance → build → show → strike → wrap) **IS** LDP §1 Project Lifecycle. Naming differs but values match.
    - The fab-shop sequence in `feedback_8_phase_lifecycle.md` (Engineering / Pre-Pro / Fab / Logistics / Install) is **LDP §2 Production Lifecycle** as proposed-document convention. **Not in schema.** No `production_phase` column anywhere. `fabrication_orders.status` is 4 coarse states.
    - The repo memory and the code disagree about which "8 phases" we mean. Your turn-3 instruction "use the repo's 8-phase production lifecycle" pointed at the memory file; the implementation column would force the LDP §1 set instead. **Decision needed (Q1 below).**

@@ -109,7 +109,7 @@ export function WebhookEndpointForm() {
         type="url"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
-        placeholder="https://example.com/webhooks/lytehaus"
+        placeholder="https://example.com/webhooks/flytehaus"
         required
       />
       <Input

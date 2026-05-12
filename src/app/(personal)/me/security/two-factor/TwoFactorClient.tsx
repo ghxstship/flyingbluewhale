@@ -300,7 +300,7 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "lytehaus-recovery-codes.txt";
+    a.download = "flytehaus-recovery-codes.txt";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

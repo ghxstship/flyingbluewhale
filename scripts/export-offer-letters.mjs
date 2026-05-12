@@ -42,8 +42,8 @@ const OUT_PREVIEW = "/tmp/sc_offer_letters_preview";
 const OUT = PREVIEW ? OUT_PREVIEW : OUT_DESKTOP;
 
 const TRAVELERS = new Set(["Sarah Fry", "Vida Sotakoun"]);
-const APP_BASE = "https://lytehaus.live";
-const PRODUCTION_GUIDE_URL = "https://gvteway.lytehaus.live/edclv26-salvage-city/guide";
+const APP_BASE = "https://flytehaus.live";
+const PRODUCTION_GUIDE_URL = "https://gvteway.flytehaus.live/edclv26-salvage-city/guide";
 
 const EMPLOYER_LABEL = {
   ghxstship: "GHXSTSHIP Industries LLC",
@@ -112,7 +112,7 @@ const fmtSchedDate = (s) => {
 
 // .ics generation — RFC 5545 minimal valid calendar.
 function buildICS(letter, schedule) {
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//LYTEHAUS//Salvage City//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH"];
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//FLYTEHAUS//Salvage City//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH"];
   const venueAddr = "Las Vegas Motor Speedway, 7000 N Las Vegas Blvd, Las Vegas, NV 89115";
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
   const fmtICSDateTime = (date, time) => {
@@ -135,7 +135,7 @@ function buildICS(letter, schedule) {
     const startUTC = fmtICSDateTime(day.date, day.start);
     const endUTC = fmtICSDateTime(day.date, day.end || day.start);
     lines.push("BEGIN:VEVENT");
-    lines.push(`UID:salvage-city-${letter.id}-${day.date.replace(/\//g, "")}@lytehaus.live`);
+    lines.push(`UID:salvage-city-${letter.id}-${day.date.replace(/\//g, "")}@flytehaus.live`);
     lines.push(`DTSTAMP:${stamp}`);
     lines.push(`DTSTART;TZID=America/Los_Angeles:${startUTC}`);
     lines.push(`DTEND;TZID=America/Los_Angeles:${endUTC}`);

@@ -1080,7 +1080,7 @@
     },
     {
       "identity": {
-        "name": "Run your next show on LYTEHAUS Technologies",
+        "name": "Run your next show on FLYTEHAUS Technologies",
         "atomic_level": "Page",
         "parent": "Marketing",
         "location_path": "/blog/[slug]",
@@ -1245,7 +1245,7 @@
     },
     {
       "identity": {
-        "name": "Ship your next show on LYTEHAUS Technologies",
+        "name": "Ship your next show on FLYTEHAUS Technologies",
         "atomic_level": "Page",
         "parent": "Marketing",
         "location_path": "/community/[slug]",
@@ -1355,7 +1355,7 @@
     },
     {
       "identity": {
-        "name": "Try LYTEHAUS Technologies",
+        "name": "Try FLYTEHAUS Technologies",
         "atomic_level": "Page",
         "parent": "Marketing",
         "location_path": "/compare/[competitor]",
@@ -1410,7 +1410,7 @@
     },
     {
       "identity": {
-        "name": "Try LYTEHAUS Technologies",
+        "name": "Try FLYTEHAUS Technologies",
         "atomic_level": "Page",
         "parent": "Marketing",
         "location_path": "/compare",
@@ -1795,7 +1795,7 @@
     },
     {
       "identity": {
-        "name": "Run your ops on LYTEHAUS Technologies",
+        "name": "Run your ops on FLYTEHAUS Technologies",
         "atomic_level": "Page",
         "parent": "Marketing",
         "location_path": "/guides/[slug]",

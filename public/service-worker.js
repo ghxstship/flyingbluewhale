@@ -192,9 +192,9 @@ self.addEventListener("push", (event) => {
   try {
     payload = event.data.json();
   } catch {
-    payload = { title: "LYTEHAUS", body: event.data.text() };
+    payload = { title: "FLYTEHAUS", body: event.data.text() };
   }
-  const title = payload.title || "LYTEHAUS";
+  const title = payload.title || "FLYTEHAUS";
   const options = {
     body: payload.body || "",
     icon: payload.icon || "/icon-192.png",

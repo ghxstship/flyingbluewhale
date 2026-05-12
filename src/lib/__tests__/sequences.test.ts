@@ -16,7 +16,7 @@ describe("formatSequencePreview", () => {
   });
 
   it("uppercases org slug", () => {
-    expect(formatSequencePreview("{ORG}-{seq}", { seq: 1, orgSlug: "lytehaus" })).toBe("LYTEHAUS-0001");
+    expect(formatSequencePreview("{ORG}-{seq}", { seq: 1, orgSlug: "flytehaus" })).toBe("FLYTEHAUS-0001");
   });
 
   it("falls back to ORG when no slug supplied", () => {

@@ -126,13 +126,13 @@ async function sendHttp(dest: DestinationRow, events: AuditRow[]): Promise<boole
     return false;
   }
   const body = JSON.stringify({
-    schema: "lytehaus.audit.v1",
+    schema: "flytehaus.audit.v1",
     org_id: dest.org_id,
     events,
   });
   const headers: Record<string, string> = {
     "content-type": "application/json",
-    "user-agent": "lytehaus-event-log/1",
+    "user-agent": "flytehaus-event-log/1",
   };
   // If the destination row has a secret stored as plaintext under
   // `config.secret`, sign the body. (We hash the same plaintext into
@@ -141,8 +141,8 @@ async function sendHttp(dest: DestinationRow, events: AuditRow[]): Promise<boole
   if (secret) {
     const ts = Date.now().toString();
     const sig = createHmac("sha256", secret).update(`${ts}.${body}`).digest("hex");
-    headers["x-lytehaus-timestamp"] = ts;
-    headers["x-lytehaus-signature"] = `t=${ts},v1=${sig}`;
+    headers["x-flytehaus-timestamp"] = ts;
+    headers["x-flytehaus-signature"] = `t=${ts},v1=${sig}`;
   }
   const controller = new AbortController();
   const to = setTimeout(() => controller.abort(), 8000);
@@ -182,9 +182,9 @@ async function sendDatadog(dest: DestinationRow, events: AuditRow[]): Promise<bo
   const url = `https://http-intake.logs.${site}/api/v2/logs`;
   const body = JSON.stringify(
     events.map((e) => ({
-      ddsource: "lytehaus",
+      ddsource: "flytehaus",
       ddtags: `org:${e.org_id}`,
-      service: "lytehaus.audit",
+      service: "flytehaus.audit",
       message: e.action,
       ...e,
     })),

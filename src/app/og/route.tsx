@@ -5,7 +5,7 @@ import { ImageResponse } from "next/og";
 // "edge runtime disables static generation" build warning.
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const title = searchParams.get("title") ?? "LYTEHAUS Technologies";
+  const title = searchParams.get("title") ?? "FLYTEHAUS Technologies";
   const eyebrow = searchParams.get("eyebrow") ?? "Production OS";
   const platform = (searchParams.get("platform") ?? "") as "atlvs" | "gvteway" | "compvss" | "";
   const accent =
@@ -58,7 +58,7 @@ export async function GET(req: Request) {
       </div>
       <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" }}>
-          L Y T E H A U S
+          F L Y T E H A U S
         </div>
         <div style={{ fontSize: 16, color: "#555", fontFamily: "ui-monospace, SFMono-Regular, monospace" }}>
           ATLVS · GVTEWAY · COMPVSS

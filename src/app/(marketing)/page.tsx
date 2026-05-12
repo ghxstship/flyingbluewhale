@@ -31,7 +31,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, SITE } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "LYTEHAUS — Production Runs On It",
+  title: "FLYTEHAUS — Production Runs On It",
   description:
     "The platform for production. Pitch to wrap, in one console. Three apps, one schema, every module — pre-pro through strike.",
   path: "/",
@@ -41,7 +41,7 @@ export const metadata: Metadata = buildMetadata({
     "live event software",
     "festival operations platform",
     "experiential production platform",
-    "LYTEHAUS Technologies",
+    "FLYTEHAUS Technologies",
     "ATLVS",
     "GVTEWAY",
     "COMPVSS",
@@ -56,7 +56,7 @@ export default function Home() {
         data={[
           organizationSchema(),
           softwareApplicationSchema({
-            name: "LYTEHAUS Technologies",
+            name: "FLYTEHAUS Technologies",
             description: SITE.description,
             url: SITE.baseUrl,
             price: "0",
@@ -67,7 +67,7 @@ export default function Home() {
       {/* Hero — definitive, no pitch */}
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          LYTEHAUS Technologies
+          FLYTEHAUS Technologies
         </div>
         <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
           Production
@@ -109,7 +109,7 @@ export default function Home() {
                 aria-hidden="true"
               />
               <span className="ml-3 font-mono text-xs text-[var(--text-muted)]">
-                lytehaus.live/p/mmw26-hialeah/guide
+                flytehaus.live/p/mmw26-hialeah/guide
               </span>
             </div>
             <iframe

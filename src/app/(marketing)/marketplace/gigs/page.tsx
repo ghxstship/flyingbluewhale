@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = buildMetadata({
   title: "Crew Gigs — Production Job Board",
-  description: "Paid production crew gigs from operators in the LYTEHAUS network.",
+  description: "Paid production crew gigs from operators in the FLYTEHAUS network.",
   path: "/marketplace/gigs",
 });
 

@@ -26,10 +26,10 @@ export async function POST(req: NextRequest) {
   }
   return withAuth(async (session) => {
     const result = await sendPushTo(session.userId, {
-      title: "Hello from LYTEHAUS",
+      title: "Hello from FLYTEHAUS",
       body: "Push notifications are working on this device.",
       url: "/me/notifications/inbox",
-      tag: "lytehaus-test",
+      tag: "flytehaus-test",
       data: { event: "push.test" },
     });
     return apiOk(result);

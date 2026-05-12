@@ -1,12 +1,12 @@
 # SmartSuite Views + Dashboards — Parity Gap Analysis
 
-> Scope: SmartSuite's "Views" collection (10 view types, ~62 documented articles) and Dashboards (widgets, charts, sharing, drill-in). Compared against LYTEHAUS Technologies (`flyingbluewhale`) — Next.js 16 / Supabase / recharts platform with three shells (ATLVS, GVTEWAY, COMPVSS).
+> Scope: SmartSuite's "Views" collection (10 view types, ~62 documented articles) and Dashboards (widgets, charts, sharing, drill-in). Compared against FLYTEHAUS Technologies (`flyingbluewhale`) — Next.js 16 / Supabase / recharts platform with three shells (ATLVS, GVTEWAY, COMPVSS).
 >
-> Companion doc to `01-fields-and-records.md`. Source-of-truth on the LYTEHAUS side: `src/components/DataTable.tsx`, `src/components/DataTableInteractive.tsx`, `src/components/charts/*`, `src/app/(platform)/console/dashboards/page.tsx`, `src/lib/hooks/useUserPreferences.ts`.
+> Companion doc to `01-fields-and-records.md`. Source-of-truth on the FLYTEHAUS side: `src/components/DataTable.tsx`, `src/components/DataTableInteractive.tsx`, `src/components/charts/*`, `src/app/(platform)/console/dashboards/page.tsx`, `src/lib/hooks/useUserPreferences.ts`.
 
 ## 1. Executive summary
 
-The single biggest finding: **LYTEHAUS has one excellent view (Grid) and zero second-class views**. SmartSuite's competitive moat in this collection is not any one view — it's the polymorphism. The same record set rendered nine different ways, each with the same filter/sort/group/spotlight toolbar, and a tenth Dashboard surface that composes them. That is what we lack.
+The single biggest finding: **FLYTEHAUS has one excellent view (Grid) and zero second-class views**. SmartSuite's competitive moat in this collection is not any one view — it's the polymorphism. The same record set rendered nine different ways, each with the same filter/sort/group/spotlight toolbar, and a tenth Dashboard surface that composes them. That is what we lack.
 
 - **P0 — Kanban view is missing entirely.** Production ops live in Kanban (lanes by status: `not_started → in_progress → blocked → done`). We have `@dnd-kit` already wired in `DataTableInteractive` and `SortableList`; the primitive cost is one `<KanbanBoard>` component. ([SmartSuite Kanban][ss-kanban])
 - **P0 — Calendar view is single-instance.** `src/app/(platform)/console/schedule/ScheduleCalendar.tsx` is read-only month/week, schedule-module-specific, no drag-to-reschedule, no day/agenda mode. SmartSuite supports day/week/month/year/list and overlays up to 5 calendars. ([SmartSuite Calendar][ss-calendar])
@@ -23,7 +23,7 @@ The single biggest finding: **LYTEHAUS has one excellent view (Grid) and zero se
 
 ## 2. View type matrix
 
-| SmartSuite view           | Purpose                                                                                                                            | LYTEHAUS equivalent                                                                                                                                               | Severity | Note                                                                                                                                            |
+| SmartSuite view           | Purpose                                                                                                                            | FLYTEHAUS equivalent                                                                                                                                              | Severity | Note                                                                                                                                            |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Grid**                  | Spreadsheet-like data grid with inline edit, sort, filter, group, totals ([Grid View][ss-grid])                                    | `src/components/DataTableInteractive.tsx` (1,729 LOC, virtualized, sortable, filterable, groupable, pinnable, density toggle, CSV export, multi-sort, URL-synced) | —        | Strong. Missing: inline cell-edit, fill handle, right-click menu, summary footer, undo/redo.                                                    |
 | **Card**                  | Visual cards with cover image + selected fields ([Card View][ss-card])                                                             | MISSING — closest is `console/projects/ProjectPortfolioGrid.tsx` (one bespoke heatmap tile grid)                                                                  | P1       | Many list pages would benefit (clients, vendors, accreditation badges, sponsor decks).                                                          |
@@ -44,7 +44,7 @@ The single biggest finding: **LYTEHAUS has one excellent view (Grid) and zero se
 
 Across `DataTableInteractive`'s `SavedView` shape (`query, sort[], density, hidden[], pinned[], order[], filters{}, groupBy, collapsed[]`) — surveyed in `src/components/DataTableInteractive.tsx` lines 152–168.
 
-| Feature                                   | SmartSuite                                                                                                         | LYTEHAUS (`DataTableInteractive`)                          | Gap                                                      |
+| Feature                                   | SmartSuite                                                                                                         | FLYTEHAUS (`DataTableInteractive`)                         | Gap                                                      |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------------- |
 | Single-key sort                           | Yes ([Sorting][ss-sort])                                                                                           | Yes                                                        | —                                                        |
 | Multi-key sort (up to 15 keys)            | Yes ([Sorting][ss-sort])                                                                                           | Yes (shift-click adds; `sortStack`)                        | Match                                                    |
@@ -80,7 +80,7 @@ Across `DataTableInteractive`'s `SavedView` shape (`query, sort[], density, hidd
 
 SmartSuite's Dashboard is "a special View that pulls data from any table." Widget categories per [Dashboard creation][ss-dashcreate] and [Dashboard widgets — bubble/scatter][ss-bubble], [Editable drill-in grids][ss-drillin]:
 
-| SmartSuite widget category                   | Examples                                                                                              | LYTEHAUS state                                                                                                     | Severity                                               |
+| SmartSuite widget category                   | Examples                                                                                              | FLYTEHAUS state                                                                                                    | Severity                                               |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
 | **Page Display**                             | Hero, Banner, Heading, FAQ, Webpage, Text, Spacing, Divider                                           | None — `console/dashboards/page.tsx` is hardcoded sections                                                         | P2                                                     |
 | **Record Display**                           | Record Selector, Record Details, Record History, Record Comments, My Work                             | Partial — `console/page.tsx` shows recent projects table                                                           | P2                                                     |
@@ -100,7 +100,7 @@ SmartSuite's Dashboard is "a special View that pulls data from any table." Widge
 
 ## 5. Cross-cutting UX patterns
 
-| Pattern                         | LYTEHAUS today                                                                                                              | Notes                                                                     |
+| Pattern                         | FLYTEHAUS today                                                                                                             | Notes                                                                     |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | **Empty states**                | `src/components/ui/EmptyState.tsx` consumed by `DataTable`, `console/page.tsx`, `console/dashboards/page.tsx`, `ChartShell` | Strong                                                                    |
 | **Loading / skeleton**          | `.skeleton` utility in `globals.css`; `MetricCard` has `loading` prop; `ChartShell` has `loading` prop with `Loader2`       | Strong                                                                    |

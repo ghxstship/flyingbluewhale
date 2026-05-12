@@ -1,6 +1,6 @@
 # SmartSuite Parity — Master Roadmap
 
-> Synthesis across five thematic gap-analysis reports comparing SmartSuite (help.smartsuite.com, ~500+ articles) to LYTEHAUS Technologies (`flyingbluewhale`) at commit `71a40e4`, dated 2026-05-04.
+> Synthesis across five thematic gap-analysis reports comparing SmartSuite (help.smartsuite.com, ~500+ articles) to FLYTEHAUS Technologies (`flyingbluewhale`) at commit `71a40e4`, dated 2026-05-04.
 >
 > Read this first. The five companion reports drill into specific subsystems — every claim here links to the most-relevant detail in those docs.
 
@@ -18,7 +18,7 @@
 
 ## 1. Executive summary
 
-SmartSuite's competitive moat isn't any single feature — it's the **polymorphism**: one record set rendered nine different ways, one comment thread on every record, one AI Assist callable from any field or automation, one share-link primitive for views/dashboards/forms/PDFs. LYTEHAUS today ships strong vertical slices (`DataTableInteractive`, COMPVSS scanners, Boarding Pass, Stripe Connect) but each is hand-rolled per page. **Closing parity is mostly about lifting these slices to primitives** — we already have most of the data and infrastructure.
+SmartSuite's competitive moat isn't any single feature — it's the **polymorphism**: one record set rendered nine different ways, one comment thread on every record, one AI Assist callable from any field or automation, one share-link primitive for views/dashboards/forms/PDFs. FLYTEHAUS today ships strong vertical slices (`DataTableInteractive`, COMPVSS scanners, Boarding Pass, Stripe Connect) but each is hand-rolled per page. **Closing parity is mostly about lifting these slices to primitives** — we already have most of the data and infrastructure.
 
 **Eight architectural keystones** (each unlocks 5+ downstream features):
 
@@ -252,9 +252,9 @@ The eight keystones are independent of each other — they can be sequenced or p
 
 ---
 
-## 5. Where LYTEHAUS already exceeds SmartSuite (keep, market)
+## 5. Where FLYTEHAUS already exceeds SmartSuite (keep, market)
 
-| Capability                                           | LYTEHAUS                                                                               | SmartSuite                                                             |
+| Capability                                           | FLYTEHAUS                                                                              | SmartSuite                                                             |
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | WebAuthn passkeys (registration + login)             | Shipped — `webauthn_challenges` table, `PasskeyManager.tsx`, `@simplewebauthn/browser` | Not documented                                                         |
 | Outbound webhooks with HMAC-SHA256 + delivery outbox | `webhook_endpoints` + `webhook_deliveries` + 16 canonical event types                  | Documented but undifferentiated                                        |
@@ -278,7 +278,7 @@ The eight keystones are independent of each other — they can be sequenced or p
 
 - **Source corpus:** SmartSuite help center, 20 collections, 500+ articles. Each thematic agent fetched 25–50 articles with priority on field types, view types, automation triggers/actions, permission roles, mobile features, API contract, and Nov 2025 → Mar 2026 release notes.
 - **Codebase corpus:** `flyingbluewhale@main` (commit `71a40e4`), 167+ Postgres tables across 49 migrations, ~33 UI primitives in `src/components/ui/`, all `/api/v1/*` routes, `src/proxy.ts`, `src/lib/auth.ts`, `supabase/functions/job-worker/`, and the entire `src/app/(mobile)/m/` shell.
-- **Output:** five subsystem reports (~17,000 words combined), this master synthesis (~2,500 words), citing ~120 distinct SmartSuite help-article URLs. Every gap claim is traceable to a specific help URL and a specific LYTEHAUS file path.
+- **Output:** five subsystem reports (~17,000 words combined), this master synthesis (~2,500 words), citing ~120 distinct SmartSuite help-article URLs. Every gap claim is traceable to a specific help URL and a specific FLYTEHAUS file path.
 
 ---
 

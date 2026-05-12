@@ -137,7 +137,7 @@ preview_eval → {
 ```js
 preview_eval → {
   url:     "http://localhost:3000/marketplace",
-  title:   "Marketplace — Live Production Crew, Talent, RFQs · LYTEHAUS Technologies",
+  title:   "Marketplace — Live Production Crew, Talent, RFQs · FLYTEHAUS Technologies",
   h1_text: "FIND THE WORK. FIND THE CREW. FIND THE ACT.",
   status:  "rendered"
 }
@@ -159,10 +159,10 @@ preview_eval → fetch(..., { redirect: 'manual' }):
   /me/security                     → 0   opaque redirect (Set-Cookie + 302 to /login; CORS-blocked status read)
   /console                         → 0   opaque redirect (auth-gated)
   /p/mmw26-hialeah/guide           → 200 ok (public KBYG via slug-as-secret)
-  /api/v1/health                   → 200 { ok: true, data: { service: "lytehaus-technologies", status: "ok", version: "v1" } }
+  /api/v1/health                   → 200 { ok: true, data: { service: "flytehaus-technologies", status: "ok", version: "v1" } }
 ```
 
-**Result:** ✅ All five guards behave per UJV baseline. UJV R-1 (personal shell `requireSession`) still active. API health endpoint returns the rebranded service identifier `lytehaus-technologies` (confirms LYTEHAUS rebrand successful).
+**Result:** ✅ All five guards behave per UJV baseline. UJV R-1 (personal shell `requireSession`) still active. API health endpoint returns the rebranded service identifier `flytehaus-technologies` (confirms FLYTEHAUS rebrand successful).
 
 ---
 

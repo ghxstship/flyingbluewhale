@@ -22,8 +22,8 @@ export default async function PersonalLayout({ children }: { children: React.Rea
   // client component that assumed a session existed. UJV cell R1-R10·S1/S3.
   await requireSession("/login");
   const tenant = await resolveTenant();
-  const brandName = tenant.branding.productName ?? tenant.orgName ?? "L Y T E H A U S";
-  const brandAria = tenant.branding.productName ?? tenant.orgName ?? "LYTEHAUS Technologies";
+  const brandName = tenant.branding.productName ?? tenant.orgName ?? "F L Y T E H A U S";
+  const brandAria = tenant.branding.productName ?? tenant.orgName ?? "FLYTEHAUS Technologies";
   const isDefaultBrand = !tenant.branding.productName && !tenant.orgName;
   return (
     <TenantShell tenant={tenant}>

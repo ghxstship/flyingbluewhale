@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/Button";
 
 /**
- * GHXSTSHIP marketing header. Same primitives as the LYTEHAUS marketing
+ * GHXSTSHIP marketing header. Same primitives as the FLYTEHAUS marketing
  * header (DropdownMenu, <Button>, .btn classes) so hover/active behavior
  * stays in lockstep — only the brand mark, nav groups, and accent color
  * differ.

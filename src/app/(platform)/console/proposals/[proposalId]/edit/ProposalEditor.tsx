@@ -79,7 +79,7 @@ const BLOCK_DEFAULTS: Record<ProposalBlockType, ProposalBlock> = {
   },
   signature_block: {
     type: "signature_block",
-    parties: [{ role: "Client" }, { role: "Producer", name: "LYTEHAUS Technologies" }],
+    parties: [{ role: "Client" }, { role: "Producer", name: "FLYTEHAUS Technologies" }],
     instructions: "Sign below to accept this proposal.",
   },
   cta: { type: "cta", label: "Accept proposal", href: "#authorize", variant: "primary" },

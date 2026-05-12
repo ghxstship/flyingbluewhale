@@ -6,8 +6,8 @@ import type { Database } from "./database.types";
 
 /**
  * Compute the cookie `domain` attribute for the current request so a session
- * minted on `lytehaus.live` is sent to `atlvs.lytehaus.live` /
- * `gvteway.lytehaus.live` / `compvss.lytehaus.live`. Returns `undefined` for
+ * minted on `flytehaus.live` is sent to `atlvs.flytehaus.live` /
+ * `gvteway.flytehaus.live` / `compvss.flytehaus.live`. Returns `undefined` for
  * localhost / lvh.me / vercel.app — those rely on host-only cookies (cookies
  * are still shared across `*.lvh.me` because the browser scopes them by
  * eTLD+1 when no domain is set).
@@ -16,7 +16,7 @@ async function cookieDomainForRequest(): Promise<string | undefined> {
   try {
     const h = await headers();
     const host = (h.get("host") ?? "").split(":")[0].toLowerCase();
-    if (host.endsWith("lytehaus.live")) return ".lytehaus.live";
+    if (host.endsWith("flytehaus.live")) return ".flytehaus.live";
     // Dev parity — `lvh.me` resolves to 127.0.0.1 and is the canonical local
     // dev host (per CLAUDE.md). Without a `.lvh.me` domain the session
     // cookie is host-only and doesn't follow from the apex (`lvh.me:3000`,

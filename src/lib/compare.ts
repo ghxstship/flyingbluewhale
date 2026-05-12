@@ -18,12 +18,12 @@ export const COMPARE: Record<string, CompareConfig> = {
   asana: {
     slug: "asana",
     competitor: "Asana",
-    headline: "LYTEHAUS Technologies vs. Asana: production-native vs. generic work management.",
+    headline: "FLYTEHAUS Technologies vs. Asana: production-native vs. generic work management.",
     blurb:
       "Asana is great project management software. It isn't event production software. Here's what's missing — and what you stop paying separately for when you switch.",
     hero: "Asana is the default 'we need to organize this' SaaS. For production teams it's a starting point that quickly needs augmentation: a separate portal tool for clients, a separate ticketing platform for events, a separate finance add-on, a separate KBYG wiki, a separate check-in app for the gate. The bill adds up and the seams leak.",
     bottomLine:
-      "If you run shows, you'll outgrow Asana by your fifth event. The LYTEHAUS Technologies suite is the production-native spine that doesn't need augmentation.",
+      "If you run shows, you'll outgrow Asana by your fifth event. The FLYTEHAUS Technologies suite is the production-native spine that doesn't need augmentation.",
     features: [
       { feature: "Task + project management", us: true, them: true },
       {
@@ -104,7 +104,7 @@ export const COMPARE: Record<string, CompareConfig> = {
     ],
     keywords: [
       "ATLVS vs asana",
-      "LYTEHAUS Technologies vs asana",
+      "FLYTEHAUS Technologies vs asana",
       "event production vs asana",
       "asana alternative for events",
     ],
@@ -113,7 +113,7 @@ export const COMPARE: Record<string, CompareConfig> = {
   monday: {
     slug: "monday",
     competitor: "Monday.com",
-    headline: "LYTEHAUS Technologies vs. Monday.com: typed primitives vs. a pretty spreadsheet.",
+    headline: "FLYTEHAUS Technologies vs. Monday.com: typed primitives vs. a pretty spreadsheet.",
     blurb:
       "Monday is a lovely general-purpose board. If your team runs shows, you'll need primitives Monday doesn't have — and portals Monday can't safely expose.",
     hero: "Monday.com is flexible. That's its strength and the reason production teams outgrow it. Event operations need typed primitives (deliverables, scans, call sheets, COIs) not just columns you name 'deliverable status.' And they need a way to bring external stakeholders in without giving them seats.",
@@ -160,7 +160,7 @@ export const COMPARE: Record<string, CompareConfig> = {
     ],
     faqs: [
       {
-        q: "Can the LYTEHAUS Technologies suite do everything Monday can?",
+        q: "Can the FLYTEHAUS Technologies suite do everything Monday can?",
         a: "For production workflows, yes and more. For generic business tracking — warehouse inventory, hiring pipelines, software bugs — Monday is more flexible. If you run events, we're the better fit. If you're a 500-person conglomerate, Monday covers more ground.",
       },
       {
@@ -170,7 +170,7 @@ export const COMPARE: Record<string, CompareConfig> = {
     ],
     keywords: [
       "ATLVS vs monday",
-      "LYTEHAUS Technologies vs monday",
+      "FLYTEHAUS Technologies vs monday",
       "monday alternative events",
       "production software vs monday.com",
     ],
@@ -179,7 +179,7 @@ export const COMPARE: Record<string, CompareConfig> = {
   spreadsheets: {
     slug: "spreadsheets",
     competitor: "Spreadsheets",
-    headline: "LYTEHAUS Technologies vs. spreadsheets: when the duct tape starts costing more than software.",
+    headline: "FLYTEHAUS Technologies vs. spreadsheets: when the duct tape starts costing more than software.",
     blurb:
       "Every production team starts on spreadsheets. Most stay there too long. Here's the tipping point — and what you gain the day you stop.",
     hero: "Spreadsheets are free. They're also infinitely flexible. That's why every production team starts there, and why every production team eventually realizes they're spending 40% of operations on maintaining the spreadsheet, not running the show.",

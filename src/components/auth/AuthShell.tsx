@@ -38,13 +38,13 @@ export function AuthShell({
   /** White-label rail content (driven by orgs.branding for tenant deployments). */
   rail?: AuthRailContent;
 }) {
-  const productName = rail?.productName ?? "LYTEHAUS Technologies";
+  const productName = rail?.productName ?? "FLYTEHAUS Technologies";
   const tagline = rail?.tagline ?? "The unified production platform.";
   const description =
     rail?.description ??
     "One Postgres. One identity. Three shells — internal, external, mobile. Built for the ops teams behind festivals, tours, and corporate activations.";
   const highlights = rail?.highlights ?? DEFAULT_HIGHLIGHTS;
-  const copyright = rail?.copyright ?? `© ${new Date().getFullYear()} LYTEHAUS Technologies`;
+  const copyright = rail?.copyright ?? `© ${new Date().getFullYear()} FLYTEHAUS Technologies`;
   return (
     <div className="grid min-h-[calc(100vh-72px)] lg:grid-cols-2">
       <aside
@@ -61,7 +61,7 @@ export function AuthShell({
             <img src={rail.logoUrl} alt="" className="h-6 w-auto" />
           ) : null}
           <span className={rail?.productName ? "" : "tracking-[0.14em] uppercase"}>
-            {rail?.productName ?? "LYTEHAUS"}
+            {rail?.productName ?? "FLYTEHAUS"}
           </span>
         </Link>
         <div>

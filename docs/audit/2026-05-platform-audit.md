@@ -245,7 +245,7 @@ Same pattern split across `checkin/` vs `check-in/`. One is the live route; the 
 - **FormShell adoption**: 140 files use FormShell vs 33 manual `<form>` (81% adoption).
 - **Auth + RLS**: Every console module uses `requireSession()` + `is_org_member()` RLS guards (verified via grep — every module that calls `createClient()` also calls `requireSession()`).
 - **Audit log**: Every state change logs to `audit_log` (per CLAUDE.md).
-- **Brand + voice canon**: Recently aligned (LYTEHAUS rebrand + voice rewrite).
+- **Brand + voice canon**: Recently aligned (FLYTEHAUS rebrand + voice rewrite).
 - **Theme system**: Bermuda Triangle + 8 alt themes work; CHROMA BEACON token contract holds.
 - **No broken nav links**: 0 dead hrefs in `nav.ts`.
 - **No broken internal hrefs anywhere**: Re-audit after the route-resolution sweep showed 0 missing.

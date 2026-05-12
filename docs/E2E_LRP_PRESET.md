@@ -1,6 +1,6 @@
 # E2E-LRP Preset
 
-**Status:** canonical · **Applies to:** `flyingbluewhale` (LYTEHAUS Technologies) · **Authority:** user-confirmed 2026-05-09
+**Status:** canonical · **Applies to:** `flyingbluewhale` (FLYTEHAUS Technologies) · **Authority:** user-confirmed 2026-05-09
 
 This is the durable answer-set for the 6 inputs the [E2E-LRP protocol](../../Downloads/CLAUDE_CODE_PROMPT__E2E_LRP.md) requires. Future runs of E2E-LRP against this codebase should use these defaults unless the user explicitly amends them.
 
@@ -77,7 +77,7 @@ Any new code that needs to ask "what state is this party-in-this-project in?" re
 When next invoking E2E-LRP against this codebase, the agent should treat Q1–Q6 above as resolved unless the user explicitly amends. The protocol still requires explicit confirmation of:
 
 - **Archetype** (real vs synthetic)
-- **In-scope subsystems** (LYTEHAUS-native list per [docs/XPMS_TO_LYTEHAUS_MAPPING.md](XPMS_TO_LYTEHAUS_MAPPING.md))
+- **In-scope subsystems** (FLYTEHAUS-native list per [docs/XPMS_TO_FLYTEHAUS_MAPPING.md](XPMS_TO_FLYTEHAUS_MAPPING.md))
 - **Browser harness** (Playwright is the canonical choice; already installed)
 - **Environment** (local dev `lvh.me:3000` with subdomains)
 - **Time budget** (default 4h, max 8h per protocol)

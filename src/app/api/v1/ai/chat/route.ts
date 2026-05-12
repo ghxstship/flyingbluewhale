@@ -13,7 +13,7 @@ const Schema = z.object({
   model: z.enum(["claude-opus-4-7", "claude-sonnet-4-6"]).default("claude-sonnet-4-6"),
 });
 
-const SYSTEM = `You are the LYTEHAUS Technologies AI assistant, embedded in a production operations platform (ATLVS console, GVTEWAY portals, COMPVSS mobile) for live events, fabrication, and creative ops. Answer questions about the user's projects, invoices, deliverables, and crew using concise, operator-friendly language. Be specific and action-oriented.`;
+const SYSTEM = `You are the FLYTEHAUS Technologies AI assistant, embedded in a production operations platform (ATLVS console, GVTEWAY portals, COMPVSS mobile) for live events, fabrication, and creative ops. Answer questions about the user's projects, invoices, deliverables, and crew using concise, operator-friendly language. Be specific and action-oriented.`;
 
 export async function POST(req: Request) {
   // AI calls cost real dollars and are abuse magnets. 30/min per user, per the

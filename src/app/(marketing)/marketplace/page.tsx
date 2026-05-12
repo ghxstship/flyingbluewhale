@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Marketplace — Live Production Crew, Talent, RFQs",
   description:
-    "Discover open production gigs, casting calls, talent, vetted crew, and live RFQs from the LYTEHAUS network.",
+    "Discover open production gigs, casting calls, talent, vetted crew, and live RFQs from the FLYTEHAUS network.",
   path: "/marketplace",
 });
 

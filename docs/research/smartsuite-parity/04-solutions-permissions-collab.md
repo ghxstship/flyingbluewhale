@@ -2,7 +2,7 @@
 
 Research date: 2026-05-04
 Scope: SmartSuite collections "Solutions", "Collaborating in SmartSuite", "Account", plus the canonical `Managing Solution Permissions` article.
-Codebase reference: `flyingbluewhale` (LYTEHAUS Technologies) at commit `71a40e4`.
+Codebase reference: `flyingbluewhale` (FLYTEHAUS Technologies) at commit `71a40e4`.
 
 ---
 
@@ -10,7 +10,7 @@ Codebase reference: `flyingbluewhale` (LYTEHAUS Technologies) at commit `71a40e4
 
 The biggest parity gaps, ranked roughly by impact:
 
-1. **No "solution" / sub-space concept.** SmartSuite Workspace → Solution → Application → Record is a 4-level hierarchy. LYTEHAUS has Org → Project → Resource (effectively 3 levels), and Project is a domain entity, not a generic container. There is no template / blueprint primitive for spinning up a project.
+1. **No "solution" / sub-space concept.** SmartSuite Workspace → Solution → Application → Record is a 4-level hierarchy. FLYTEHAUS has Org → Project → Resource (effectively 3 levels), and Project is a domain entity, not a generic container. There is no template / blueprint primitive for spinning up a project.
 2. **Permission model stops at org + project.** SmartSuite has 6 record-level roles (Full / Editor / Contributor / Assignee / Commenter / Viewer) per Solution, plus Team-based assignment, plus field-level locks. We have 4 platform roles + 5 project roles; both are coarse, with no "Assignee-only" or "Commenter" tier and no field-level RLS. ([SmartSuite][p1])
 3. **No first-class generic comments.** Annotations (`annotations` table) cover flag/note/comment/tag polymorphically but no UI surfaces it as the canonical "comment thread" pattern, no rich text, no attachments, no reactions, no resolve/reopen UX. SmartSuite Conversations have all of these. ([SmartSuite][c1])
 4. **No @mentions infrastructure.** No mention tokens, no team mentions, no notification fan-out from a mention. Only the annotations `assigned_to` carries a user reference. ([SmartSuite][m1])
@@ -33,7 +33,7 @@ The biggest parity gaps, ranked roughly by impact:
 - **Solution Guides** = embedded documentation per solution.
 - **Tables** can be moved between Solutions, hidden, duplicated, deleted.
 
-### LYTEHAUS today
+### FLYTEHAUS today
 
 - `orgs` (= Workspace) — `src/lib/auth.ts`, `supabase/migrations/20260416_000001_identity_tenancy.sql`.
 - `projects` — closest to a Solution but is a domain noun (it's a production gig), not a generic container. No "create project from template" flow.
@@ -43,7 +43,7 @@ The biggest parity gaps, ranked roughly by impact:
 
 ### Gap
 
-| Concept                | SmartSuite                 | LYTEHAUS                                   | Gap                       |
+| Concept                | SmartSuite                 | FLYTEHAUS                                  | Gap                       |
 | ---------------------- | -------------------------- | ------------------------------------------ | ------------------------- |
 | Tenant root            | Workspace                  | `orgs`                                     | Same                      |
 | Sub-container          | Solution (n per workspace) | `projects`                                 | Domain-locked, no generic |
@@ -79,7 +79,7 @@ System role (workspace) → Solution role → Application role → Record-level 
 
 When a user has multiple grants, "highest level" wins. **Solution Managers** override everything within their solution. Team-of-managers is supported.
 
-### LYTEHAUS today
+### FLYTEHAUS today
 
 | Layer           | Implementation                                                                                                                                                                                                                                                         |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -93,7 +93,7 @@ When a user has multiple grants, "highest level" wins. **Solution Managers** ove
 
 ### Gap
 
-- **No "Commenter" or "Assignee-only"** — closest LYTEHAUS analog is `viewer` (read all) or `vendor` (locked to one project). Neither matches Commenter, neither matches "can edit only assigned records".
+- **No "Commenter" or "Assignee-only"** — closest FLYTEHAUS analog is `viewer` (read all) or `vendor` (locked to one project). Neither matches Commenter, neither matches "can edit only assigned records".
 - **No Teams** — RLS expressions check `auth.uid()`, never a group membership.
 - **No field-level RLS** — Postgres RLS is row-only. Field locks would require column-grants (DB-managed) or app-layer gates per column.
 - **Multi-grant precedence** is implicit in our model (capabilities are role-based, not stacked).
@@ -142,7 +142,7 @@ We'd then layer this **below** `is_org_member()` / `has_org_role()` so org-admin
 
 The provided article set didn't cover password-protected or expiring share links explicitly, but `Shared Views and Forms` are listed in the IP-restrictions article as scoped link types ([SmartSuite][ip]).
 
-### LYTEHAUS today
+### FLYTEHAUS today
 
 - **Portal shell** at `/p/[slug]/<persona>` — slug is the auth boundary; portal users still need a `memberships` row in the org backing that slug.
 - **Custom domains** for portals: `org_domains` table (`supabase/migrations/20260425_000031_settings_completion.sql`). Verifies via TXT or CNAME. UI: `src/app/(platform)/console/settings/domains/`.
@@ -152,7 +152,7 @@ The provided article set didn't cover password-protected or expiring share links
 
 ### Gap
 
-| Feature                        | SmartSuite                     | LYTEHAUS                           | Gap     |
+| Feature                        | SmartSuite                     | FLYTEHAUS                          | Gap     |
 | ------------------------------ | ------------------------------ | ---------------------------------- | ------- |
 | Email invite to existing space | yes                            | yes (`invites`)                    | Same    |
 | Public unauthenticated link    | yes (Shared Views/Forms)       | no                                 | Missing |
@@ -167,7 +167,7 @@ The provided article set didn't cover password-protected or expiring share links
 
 ## 5. Collaboration Features
 
-| Feature                                | SmartSuite                                                                    | LYTEHAUS                                                                                                                                               | File / Table                                                |
+| Feature                                | SmartSuite                                                                    | FLYTEHAUS                                                                                                                                              | File / Table                                                |
 | -------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
 | Comments on a record                   | yes — per-record thread, rich text, attachments ([SmartSuite][c1])            | partial — `annotations.kind='comment'` is generic, only used inside `console/annotations`; per-record threading scaffolded but not surfaced everywhere | `supabase/migrations/20260504000003_annotations_system.sql` |
 | @mentions of users                     | yes — typeahead `@`, inline tokens, opens member directory ([SmartSuite][m1]) | no                                                                                                                                                     | n/a                                                         |
@@ -195,7 +195,7 @@ Headline: **the polymorphic `annotations` table is structurally close to SmartSu
 
 ## 6. Account / Admin Features
 
-| Feature                   | SmartSuite                                                 | LYTEHAUS                                                                                    | Source                                                    |
+| Feature                   | SmartSuite                                                 | FLYTEHAUS                                                                                   | Source                                                    |
 | ------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | Workspace branding (logo) | yes ([SmartSuite][brand])                                  | yes — `orgs.logo_url`, `orgs.branding`, `safeBranding()`                                    | `console/settings/branding/`                              |
 | Accent color / theme      | not detailed                                               | yes — `branding.accentColor`, `accentForeground`, `og`, `hero`, `favicon`                   | `BrandingForm.tsx`                                        |

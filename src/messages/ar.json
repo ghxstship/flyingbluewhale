@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "LYTEHAUS Technologies",
-    "appNameStylized": "L Y T E H A U S",
+    "appName": "FLYTEHAUS Technologies",
+    "appNameStylized": "F L Y T E H A U S",
     "save": "حفظ",
     "cancel": "إلغاء",
     "delete": "حذف",
@@ -97,8 +97,8 @@
       "broadcast-tv-film": "البث والتلفزيون والسينما"
     },
     "footer": {
-      "copyright": "© {year} LYTEHAUS Technologies",
-      "trademark": "ATLVS وGVTEWAY وCOMPVSS علامات تجارية مسجلة لشركة LYTEHAUS Technologies، إحدى شركات G H X S T S H I P Industries.",
+      "copyright": "© {year} FLYTEHAUS Technologies",
+      "trademark": "ATLVS وGVTEWAY وCOMPVSS علامات تجارية مسجلة لشركة FLYTEHAUS Technologies، إحدى شركات G H X S T S H I P Industries.",
       "tagline": "ATLVS · GVTEWAY · COMPVSS — ثلاثة تطبيقات متصلة لفِرَق الإنتاج.",
       "ctaTired": "مصمَّم لفِرَق الإنتاج التي سئمت الحلول المرتجلة."
     },
@@ -197,8 +197,8 @@
     },
     "acceptInvite": {
       "title": "انضم إلى فريقك",
-      "subtitle": "اقبل دعوتك إلى LYTEHAUS Technologies",
-      "body": "تمت دعوتك إلى مساحة عمل LYTEHAUS Technologies. اقبل أدناه وسننقلك مباشرة.",
+      "subtitle": "اقبل دعوتك إلى FLYTEHAUS Technologies",
+      "body": "تمت دعوتك إلى مساحة عمل FLYTEHAUS Technologies. اقبل أدناه وسننقلك مباشرة.",
       "submit": "قبول الدعوة",
       "submitting": "جارٍ الانضمام…",
       "signInInstead": "تسجيل الدخول بدلًا من ذلك",
@@ -260,7 +260,7 @@
         "when": "متى"
       }
     },
-    "emailSubject": "أنت مدعو للانضمام إلى مساحة عمل LYTEHAUS Technologies",
+    "emailSubject": "أنت مدعو للانضمام إلى مساحة عمل FLYTEHAUS Technologies",
     "emailHeading": "تمت دعوتك",
     "emailBody": "{inviter} دعاك للانضمام إلى مساحة العمل بصفة {role}.",
     "emailCta": "قبول الدعوة",
@@ -315,7 +315,7 @@
     "toggleTheme": "تبديل النمط",
     "toggleMenu": "تبديل القائمة",
     "openMenu": "فتح القائمة",
-    "homeAriaLabel": "LYTEHAUS Technologies — الرئيسية",
+    "homeAriaLabel": "FLYTEHAUS Technologies — الرئيسية",
     "loading": "جارٍ التحميل",
     "saving": "جارٍ الحفظ",
     "saved": "تم الحفظ",
@@ -325,13 +325,13 @@
   },
   "community": {
     "meta": {
-      "title": "المجتمع — فِرَق الإنتاج التي تبني على LYTEHAUS",
+      "title": "المجتمع — فِرَق الإنتاج التي تبني على FLYTEHAUS",
       "description": "المهرجانات والجولات والوكالات والورش التي تدير إنتاجها على ATLVS وGVTEWAY وCOMPVSS. قصص الأعضاء والأرقام وما يقدمونه فعلًا."
     },
     "hero": {
       "eyebrow": "المجتمع",
       "title": "فِرَق الإنتاج، تبني على الملأ.",
-      "subtitle": "المهرجانات والجولات والوكالات والورش التي تدير عروضها على LYTEHAUS Technologies. تدفقات حقيقية. أرقام حقيقية. أدلة حقيقية."
+      "subtitle": "المهرجانات والجولات والوكالات والورش التي تدير عروضها على FLYTEHAUS Technologies. تدفقات حقيقية. أرقام حقيقية. أدلة حقيقية."
     },
     "metrics": {
       "productionTeams": "فِرَق إنتاج",
@@ -346,7 +346,7 @@
     "join": {
       "eyebrow": "انضم إلى القائمة",
       "title": "فريقك، هنا.",
-      "body": "تنفذ عروضًا حقيقية على LYTEHAUS Technologies؟ نبحث دائمًا عن قصص أعضاء جديدة. مقابلة قصيرة، أرقام مُجهَّلة، كلامك."
+      "body": "تنفذ عروضًا حقيقية على FLYTEHAUS Technologies؟ نبحث دائمًا عن قصص أعضاء جديدة. مقابلة قصيرة، أرقام مُجهَّلة، كلامك."
     },
     "finalCta": {
       "title": "كن القصة التالية",

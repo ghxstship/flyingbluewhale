@@ -102,8 +102,8 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.baseUrl),
   title: {
-    default: "LYTEHAUS Technologies — ATLVS, GVTEWAY, COMPVSS",
-    template: "%s · LYTEHAUS Technologies",
+    default: "FLYTEHAUS Technologies — ATLVS, GVTEWAY, COMPVSS",
+    template: "%s · FLYTEHAUS Technologies",
   },
   description:
     "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. The bridge, the ports of call, the open deck. From horizon to homecoming.",
@@ -117,22 +117,22 @@ export const metadata: Metadata = {
     "ATLVS",
     "GVTEWAY",
     "COMPVSS",
-    "LYTEHAUS Technologies",
+    "FLYTEHAUS Technologies",
   ],
   manifest: "/manifest.json",
   openGraph: {
-    title: "LYTEHAUS Technologies",
+    title: "FLYTEHAUS Technologies",
     description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
-    siteName: "LYTEHAUS Technologies",
+    siteName: "FLYTEHAUS Technologies",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LYTEHAUS Technologies",
+    title: "FLYTEHAUS Technologies",
     description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
   },
   robots: { index: true, follow: true },
-  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "LYTEHAUS" },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "FLYTEHAUS" },
 };
 
 export const viewport: Viewport = {
@@ -190,7 +190,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             and inherits across every route. */}
         <StructuredData
           data={organization({
-            name: "LYTEHAUS Technologies",
+            name: "FLYTEHAUS Technologies",
             url: SITE.baseUrl,
             description:
               "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",

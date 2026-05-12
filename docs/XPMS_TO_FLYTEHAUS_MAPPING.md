@@ -1,16 +1,16 @@
-# XPMS → LYTEHAUS Mapping
+# XPMS → FLYTEHAUS Mapping
 
-**Status:** canonical · **Authority:** USNP/XPMS conceptual layer ⇄ LYTEHAUS implementation layer · **Owner:** platform · **Created:** Phase 0 deliverable item zero, E2E-LRP run 2026-05-09
+**Status:** canonical · **Authority:** USNP/XPMS conceptual layer ⇄ FLYTEHAUS implementation layer · **Owner:** platform · **Created:** Phase 0 deliverable item zero, E2E-LRP run 2026-05-09
 
-This document is the single source of truth for translating between the **conceptual XPMS/USNP architecture vocabulary** and the **LYTEHAUS implementation vocabulary** as it exists in this codebase. Future protocols (E2E-LRP, LDP, USNP work, audits) reference this doc instead of duplicating the mapping.
+This document is the single source of truth for translating between the **conceptual XPMS/USNP architecture vocabulary** and the **FLYTEHAUS implementation vocabulary** as it exists in this codebase. Future protocols (E2E-LRP, LDP, USNP work, audits) reference this doc instead of duplicating the mapping.
 
-> **Two layers, one platform.** XPMS/USNP names the abstractions. LYTEHAUS names the tables, route groups, and SDK modules that ship them. When a protocol says "UIS," look here for the implementation. When the codebase says `talent_offers`, look here for the conceptual placement.
+> **Two layers, one platform.** XPMS/USNP names the abstractions. FLYTEHAUS names the tables, route groups, and SDK modules that ship them. When a protocol says "UIS," look here for the implementation. When the codebase says `talent_offers`, look here for the conceptual placement.
 
 ---
 
 ## Layer 1 — Subsystem mapping
 
-| Conceptual (XPMS / USNP)                         | LYTEHAUS implementation                                                                                                                                                                                                       | Status in code                                                                                                                | Anchors                                                                                                                            |
+| Conceptual (XPMS / USNP)                         | FLYTEHAUS implementation                                                                                                                                                                                                      | Status in code                                                                                                                | Anchors                                                                                                                            |
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | **UIS** — Identity / Parties / Roles / Lifecycle | `orgs`, `users`, `memberships`, `project_members`, `crew_members`, `delegations`, `delegation_entries`, marketplace `talent_profiles`, `user_profiles`; SDK in `src/lib/auth.ts`, `src/lib/security/`, `src/lib/webauthn.ts`  | **REAL** — multi-table; lacks unified `engagement_state` (see LDP audit)                                                      | `0001_remote_snapshot.sql:4272` (memberships), `:4981` (project_members), `0002:160` (talent_profiles), `0002:590` (user_profiles) |
 | **UAL** — Asset Ledger                           | `equipment`, `rentals`, `asset_links`, `maintenance_jobs`, `maintenance_schedules`; warehouse routes under `/console/production/warehouse/*`                                                                                  | **REAL** — typed `equipment_status` enum; missing IN_TRANSIT / RETURNED / LOST states; no append-only movement ledger         | `0001:3421` (equipment), `:2716` (asset_links), `:4189` (maintenance_jobs), enum `:196`                                            |
@@ -58,15 +58,15 @@ There are **three** competing 8-phase models in the project ecosystem. The imple
 
 ## Layer 3 — Shell / surface mapping
 
-| Conceptual (USNP)                           | LYTEHAUS shell           | Route prefix                                | Subdomain               | Brand                     |
-| ------------------------------------------- | ------------------------ | ------------------------------------------- | ----------------------- | ------------------------- |
-| Marketing / SEO surface                     | `(marketing)`            | `/`                                         | `lytehaus.live`         | LYTEHAUS apex             |
-| Auth / pre-session                          | `(auth)`                 | `/login`, `/signup`, `/accept-invite/*` etc | apex                    | LYTEHAUS apex             |
-| Personal (any authed user)                  | `(personal)`             | `/me/*`                                     | apex                    | LYTEHAUS apex             |
-| Internal Ops Console                        | `(platform)` / **ATLVS** | `/console/*`                                | `atlvs.lytehaus.live`   | red                       |
-| External Stakeholder Portal                 | `(portal)` / **GVTEWAY** | `/p/[slug]/*`                               | `gvteway.lytehaus.live` | blue                      |
-| Field Ops PWA                               | `(mobile)` / **COMPVSS** | `/m/*`                                      | `compvss.lytehaus.live` | yellow/amber              |
-| Parent-co marketing (out of LYTEHAUS scope) | `(ghxstship)`            | `/ghxstship/*`                              | apex                    | bermuda-triangle (locked) |
+| Conceptual (USNP)                            | FLYTEHAUS shell          | Route prefix                                | Subdomain                | Brand                     |
+| -------------------------------------------- | ------------------------ | ------------------------------------------- | ------------------------ | ------------------------- |
+| Marketing / SEO surface                      | `(marketing)`            | `/`                                         | `flytehaus.live`         | FLYTEHAUS apex            |
+| Auth / pre-session                           | `(auth)`                 | `/login`, `/signup`, `/accept-invite/*` etc | apex                     | FLYTEHAUS apex            |
+| Personal (any authed user)                   | `(personal)`             | `/me/*`                                     | apex                     | FLYTEHAUS apex            |
+| Internal Ops Console                         | `(platform)` / **ATLVS** | `/console/*`                                | `atlvs.flytehaus.live`   | red                       |
+| External Stakeholder Portal                  | `(portal)` / **GVTEWAY** | `/p/[slug]/*`                               | `gvteway.flytehaus.live` | blue                      |
+| Field Ops PWA                                | `(mobile)` / **COMPVSS** | `/m/*`                                      | `compvss.flytehaus.live` | yellow/amber              |
+| Parent-co marketing (out of FLYTEHAUS scope) | `(ghxstship)`            | `/ghxstship/*`                              | apex                     | bermuda-triangle (locked) |
 
 ---
 

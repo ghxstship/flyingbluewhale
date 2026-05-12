@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               Request a category change
             </Link>
             <Link
-              href={`mailto:accreditation@lytehaus.live?subject=New%20application%20—%20${slug}`}
+              href={`mailto:accreditation@flytehaus.live?subject=New%20application%20—%20${slug}`}
               className="btn btn-primary btn-sm"
             >
               Email producer

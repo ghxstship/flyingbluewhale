@@ -20,11 +20,11 @@ export async function GET() {
       .order("starts_at", { ascending: true });
     if (error) return apiError("internal", error.message);
 
-    const lines: string[] = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//lytehaus//EN"];
+    const lines: string[] = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//flytehaus//EN"];
     for (const ev of data ?? []) {
       lines.push(
         "BEGIN:VEVENT",
-        `UID:${ev.id}@lytehaus`,
+        `UID:${ev.id}@flytehaus`,
         `DTSTAMP:${toIcsDate(new Date().toISOString())}`,
         `DTSTART:${toIcsDate(ev.starts_at)}`,
         `DTEND:${toIcsDate(ev.ends_at)}`,

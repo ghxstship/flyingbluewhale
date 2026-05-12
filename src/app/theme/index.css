@@ -86,7 +86,7 @@
  *   secondary = green-900 (#1b5e20) — hover-deepen
  *   accent    = green-500 (#4caf50) — vivid pop for chips / selection
  * Both the --org-* and --accent token groups flip green so the surface
- * paints uniformly green-on-cream the way LYTEHAUS BT paints ink-on-cream. */
+ * paints uniformly green-on-cream the way FLYTEHAUS BT paints ink-on-cream. */
 [data-platform="ghxstship"] {
   --org-primary: #2e7d32;
   --org-secondary: #1b5e20;

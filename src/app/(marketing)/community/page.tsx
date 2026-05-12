@@ -9,13 +9,13 @@ import { COMMUNITY_LIST } from "@/lib/community";
 // and skip the streaming loading.tsx on client-side navigation.
 
 export const metadata: Metadata = buildMetadata({
-  title: "Community — the production teams building on LYTEHAUS",
+  title: "Community — the production teams building on FLYTEHAUS",
   description:
     "The festivals, tours, agencies, and fabrication shops running their production on ATLVS, GVTEWAY, and COMPVSS. Member stories, numbers, and what they actually ship.",
   path: "/community",
-  keywords: ["production community", "event production teams", "LYTEHAUS Technologies community"],
+  keywords: ["production community", "event production teams", "FLYTEHAUS Technologies community"],
   ogImageEyebrow: "Community",
-  ogImageTitle: "Production teams running on LYTEHAUS.",
+  ogImageTitle: "Production teams running on FLYTEHAUS.",
 });
 
 export default function CommunityPage() {
@@ -34,7 +34,7 @@ export default function CommunityPage() {
           Production teams, building in public.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The festivals, tours, agencies, and fabrication shops running their shows on LYTEHAUS Technologies. Real
+          The festivals, tours, agencies, and fabrication shops running their shows on FLYTEHAUS Technologies. Real
           workflows. Real numbers. Real receipts.
         </p>
       </section>
@@ -94,7 +94,7 @@ export default function CommunityPage() {
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">Your Team, Here.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Shipping real shows on LYTEHAUS Technologies? We&apos;re always looking to document new member stories. A
+              Shipping real shows on FLYTEHAUS Technologies? We&apos;re always looking to document new member stories. A
               short interview, anonymized numbers, your words.
             </p>
           </div>

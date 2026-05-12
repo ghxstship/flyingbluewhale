@@ -36,7 +36,7 @@ export const COMMUNITY: Record<string, CaseStudy> = {
       "Six distinct stakeholder personas (guest, artist, crew, vendor, sponsor, club) with wildly different information needs — a single PDF KBYG was unmanageable.",
     ],
     solution: [
-      "Migrated to the LYTEHAUS Technologies suite three months before show. One Supabase project, one schema, one design system across internal + external + mobile.",
+      "Migrated to the FLYTEHAUS Technologies suite three months before show. One Supabase project, one schema, one design system across internal + external + mobile.",
       "Authored one canonical KBYG in ATLVS CMS. The Boarding Pass pattern rendered six different persona views from the same config — no PDF duplication, no sync drift.",
       "Crew installed COMPVSS PWA from the URL. Zero App Store review. Scanner cached app shell + today's data before doors; queued scans during the signal dead-zone at peak.",
       "Vendor portal (GVTEWAY) handled 14 vendors' COIs, W-9s, POs, and Stripe Connect payouts. Finance closed books on the Monday after show.",
@@ -75,7 +75,7 @@ export const COMMUNITY: Record<string, CaseStudy> = {
     industry: "Corporate activations · agency",
     blurb: "Moved production ops off Notion + Excel + DocuSign and cut invoicing cycle from 14 to 2 days.",
     headline: "How Live Events Inc. compressed their invoicing cycle by 86%.",
-    hero: "Live Events Inc. is a 22-person corporate activation agency running 40–60 shows a year. They migrated to the LYTEHAUS Technologies suite to kill their internal duct tape. The invoicing cycle compression was the surprise.",
+    hero: "Live Events Inc. is a 22-person corporate activation agency running 40–60 shows a year. They migrated to the FLYTEHAUS Technologies suite to kill their internal duct tape. The invoicing cycle compression was the surprise.",
     stats: [
       { value: "86%", label: "Faster invoicing cycle" },
       { value: "14 → 2", label: "Days from show close to client invoice" },

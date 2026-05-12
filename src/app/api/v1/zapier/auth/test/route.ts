@@ -4,7 +4,7 @@ import { withAuth } from "@/lib/auth";
 /**
  * Zapier "Auth Test" — invoked once when a Zapier user connects their
  * account. Returns a stable, human-readable identity blob that Zapier
- * displays in the connection list ("Connected as Julian @ LYTEHAUS Demo").
+ * displays in the connection list ("Connected as Julian @ FLYTEHAUS Demo").
  *
  * Auth is a Bearer PAT minted at /console/settings/api. Failure returns
  * 401 via `withAuth`, which Zapier maps to "credentials are invalid".

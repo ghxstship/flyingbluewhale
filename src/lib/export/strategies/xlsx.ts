@@ -18,7 +18,7 @@ export async function rowsToXlsxBuffer(args: {
   columns: Array<{ key: string; header: string }>;
 }): Promise<Buffer> {
   const wb = new ExcelJS.Workbook();
-  wb.creator = "LYTEHAUS Technologies";
+  wb.creator = "FLYTEHAUS Technologies";
   wb.created = new Date();
 
   const coverSheet = wb.addWorksheet("Cover");

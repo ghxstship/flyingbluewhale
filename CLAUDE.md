@@ -1,13 +1,13 @@
 # CLAUDE.md
 
-Project-specific notes for Claude Code agents working on `flyingbluewhale` (the engineering repo for **LYTEHAUS Technologies** — the brand name visitors see in the marketing site, console chrome, and OG cards).
+Project-specific notes for Claude Code agents working on `flyingbluewhale` (the engineering repo for **FLYTEHAUS Technologies** — the brand name visitors see in the marketing site, console chrome, and OG cards).
 
 ## Brand
 
-- **Brand name (legal/text)**: `LYTEHAUS Technologies`
-- **Brand mark (visible)**: `L Y T E H A U S` — literal spaces in JSX, matches the spaced `G H X S T S H I P` parent-company treatment. Use `aria-label="LYTEHAUS Technologies — home"` so screen readers don't read it letter-by-letter.
-- **Apex domain**: `lytehaus.live` — marketing, auth, `/me`, public proposals/offers. The whole platform lives under this apex; `flyingbluewhale` is a _repo nickname only_ and must not appear in any URL, email, identifier, or copy.
-- **App subdomains**: `atlvs.lytehaus.live` (console) · `gvteway.lytehaus.live` (portal) · `compvss.lytehaus.live` (field PWA). Host-rewrite middleware in `src/proxy.ts` maps each subdomain to its internal route group (`/console`, `/p`, `/m`).
+- **Brand name (legal/text)**: `FLYTEHAUS Technologies`
+- **Brand mark (visible)**: `F L Y T E H A U S` — literal spaces in JSX, matches the spaced `G H X S T S H I P` parent-company treatment. Use `aria-label="FLYTEHAUS Technologies — home"` so screen readers don't read it letter-by-letter.
+- **Apex domain**: `flytehaus.live` — marketing, auth, `/me`, public proposals/offers. The whole platform lives under this apex; `flyingbluewhale` is a _repo nickname only_ and must not appear in any URL, email, identifier, or copy.
+- **App subdomains**: `atlvs.flytehaus.live` (console) · `gvteway.flytehaus.live` (portal) · `compvss.flytehaus.live` (field PWA). Host-rewrite middleware in `src/proxy.ts` maps each subdomain to its internal route group (`/console`, `/p`, `/m`).
 - **Sub-products**: ATLVS (red, the console), GVTEWAY (blue, the portal), COMPVSS (yellow, the field PWA) — sub-brand names + colors stay; do not rename or recolor these.
 - **Voice canon**: see `feedback_marketing_voice.md` in memory — definitive, luxury self-confidence with hacker irreverence. Never compare to competitors.
 
@@ -42,7 +42,7 @@ Six route groups, three of them are full shells with distinct layouts:
 - **RLS:** Enforced on every table. `is_org_member(org_id)` and `has_org_role(org_id, roles[])` are the canonical helpers.
 - **Seed:** `demo` org with existing auth users as owners. MMW26 Hialeah project with a guest-facing event guide.
 - **Migrations:** In `supabase/migrations/`. Apply via the Supabase MCP `apply_migration` — do not hand-edit the remote DB.
-- **Lifecycle naming discipline (LDP):** New schema-bearing columns MUST be named `*_phase` (sequential macro arc) or `*_state` (cyclical operational), per `LIFECYCLE_DECOMPOSITION_PROTOCOL.md` §NAMING DISCIPLINE. **`status` is banned in new tables** — every `status` column is a defect candidate at schema review. Eight canonical lifecycles, with their LYTEHAUS column homes: `xpms_phase` (project), `production_phase` (fabrication_orders), `ual_state` (asset_movements), `deliverable_status` (deliverables — pending rename), `uis_lifecycle_state` (uis_roles — engagement, per Party × Project × channel), `offer_letter_status` (engagement-document, including COUNTERSIGNED/ACTIVE/SUPERSEDED/VOIDED), `accounting_period_state` (accounting_periods.state), `subscription_state` (subscriptions). See `docs/XPMS_TO_LYTEHAUS_MAPPING.md` for the conceptual ⇄ implementation translation, `docs/E2E_LRP_PRESET.md` for the durable Q1–Q6 answers for future protocol runs, and `reports/LDP_LIFECYCLE_AUDIT.md` for current conformance per table.
+- **Lifecycle naming discipline (LDP):** New schema-bearing columns MUST be named `*_phase` (sequential macro arc) or `*_state` (cyclical operational), per `LIFECYCLE_DECOMPOSITION_PROTOCOL.md` §NAMING DISCIPLINE. **`status` is banned in new tables** — every `status` column is a defect candidate at schema review. Eight canonical lifecycles, with their FLYTEHAUS column homes: `xpms_phase` (project), `production_phase` (fabrication_orders), `ual_state` (asset_movements), `deliverable_status` (deliverables — pending rename), `uis_lifecycle_state` (uis_roles — engagement, per Party × Project × channel), `offer_letter_status` (engagement-document, including COUNTERSIGNED/ACTIVE/SUPERSEDED/VOIDED), `accounting_period_state` (accounting_periods.state), `subscription_state` (subscriptions). See `docs/XPMS_TO_FLYTEHAUS_MAPPING.md` for the conceptual ⇄ implementation translation, `docs/E2E_LRP_PRESET.md` for the durable Q1–Q6 answers for future protocol runs, and `reports/LDP_LIFECYCLE_AUDIT.md` for current conformance per table.
 
 ## Conventions
 
@@ -51,7 +51,7 @@ Six route groups, three of them are full shells with distinct layouts:
 - **Forms:** Use `<FormShell action={...}>` from `src/components/FormShell.tsx` for the standard layout + error surface.
 - **Data fetching:** Server components use `listOrgScoped(table, orgId)` / `getOrgScoped(table, orgId, id)` from `src/lib/db/resource.ts`.
 - **External portal prefix:** `/p/[slug]/...` (internal route). Don't add external features to `/console/*`.
-- **Cross-shell URLs:** Always use `urlFor(shell, path)` from `@/lib/urls` — never hardcode `https://...lytehaus.live` and never concat `NEXT_PUBLIC_APP_URL` with `/console`/`/p`/`/m`. The helper is the single switch between subdomain mode and path-prefix fallback (preview deploys). Examples: `urlFor("platform", "/projects/abc")`, `urlFor("portal", "/mmw26/guide")`, `urlFor("auth", "/login")`.
+- **Cross-shell URLs:** Always use `urlFor(shell, path)` from `@/lib/urls` — never hardcode `https://...flytehaus.live` and never concat `NEXT_PUBLIC_APP_URL` with `/console`/`/p`/`/m`. The helper is the single switch between subdomain mode and path-prefix fallback (preview deploys). Examples: `urlFor("platform", "/projects/abc")`, `urlFor("portal", "/mmw26/guide")`, `urlFor("auth", "/login")`.
 - **API:** All endpoints under `/api/v1/*`. Use `apiOk`, `apiCreated`, `apiError`, `parseJson` from `@/lib/api`. Guard with `withAuth` from `@/lib/auth`. Zod-validate all inputs at the boundary.
 - **Nav:** When adding a platform module, also add it to `src/lib/nav.ts#platformNav`.
 - **Stubs:** New routes are added via `scripts/routes.txt` + `bash scripts/generate-stubs.sh`. The generator is idempotent.
@@ -126,7 +126,7 @@ Per-role Know-Before-You-Go — same Boarding Pass pattern, shared schema, role-
 - `SUPABASE_SERVICE_ROLE_KEY` (for webhooks + admin flows)
 - `ANTHROPIC_API_KEY` (for AI assistant)
 - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (for billing + payouts)
-- `NEXT_PUBLIC_APP_URL` — apex base URL (e.g. `https://lytehaus.live` in prod, `http://lvh.me:3000` in dev). Used as the canonical origin for sitemaps + as the host base from which subdomains are derived.
+- `NEXT_PUBLIC_APP_URL` — apex base URL (e.g. `https://flytehaus.live` in prod, `http://lvh.me:3000` in dev). Used as the canonical origin for sitemaps + as the host base from which subdomains are derived.
 - `NEXT_PUBLIC_USE_SUBDOMAINS` — set to `"1"` in prod and (with `lvh.me`) in dev to enable subdomain routing. Leave unset on Vercel preview deploys; the helper falls back to single-host path-prefix mode (`/console`, `/p`, `/m`).
 
 ### Local dev with subdomains
@@ -142,9 +142,9 @@ Set `NEXT_PUBLIC_APP_URL=http://lvh.me:3000` and `NEXT_PUBLIC_USE_SUBDOMAINS=1` 
 
 ## Deployment
 
-- **Vercel:** `vercel.json` sets security headers + API no-cache. Add `lytehaus.live`, `www.lytehaus.live`, `atlvs.lytehaus.live`, `gvteway.lytehaus.live`, `compvss.lytehaus.live` as project domains (all four point to the same deployment; `src/proxy.ts` does the host rewrite).
+- **Vercel:** `vercel.json` sets security headers + API no-cache. Add `flytehaus.live`, `www.flytehaus.live`, `atlvs.flytehaus.live`, `gvteway.flytehaus.live`, `compvss.flytehaus.live` as project domains (all four point to the same deployment; `src/proxy.ts` does the host rewrite).
 - **Service worker:** Registered only on `compvss.*` (the offline-first PWA shell). Other shells unregister any prior SW so they don't compete for scope.
-- **Proxy (Next 16 middleware):** `src/proxy.ts` runs on non-static paths — host-rewrites subdomains to internal route groups, refreshes Supabase session cookies (with `domain=.lytehaus.live` for SSO across subdomains), enforces rate limits, and applies CORS.
+- **Proxy (Next 16 middleware):** `src/proxy.ts` runs on non-static paths — host-rewrites subdomains to internal route groups, refreshes Supabase session cookies (with `domain=.flytehaus.live` for SSO across subdomains), enforces rate limits, and applies CORS.
 
 ## Repo siblings
 

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const SITE = {
-  name: "LYTEHAUS Technologies",
-  shortName: "LYTEHAUS",
-  domain: "lytehaus.live",
-  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://lytehaus.live",
+  name: "FLYTEHAUS Technologies",
+  shortName: "FLYTEHAUS",
+  domain: "flytehaus.live",
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://flytehaus.live",
   tagline: "Production Runs On It.",
   description:
     "The platform for production. ATLVS · GVTEWAY · COMPVSS — three apps, one schema, every module. Pitch through wrap. RLS at the database. Built by operators.",
-  twitter: "@lytehaus",
+  twitter: "@flytehaus",
   /** Parent company chain — surfaces in Organization JSON-LD + legal footer. */
   parent: {
     name: "G H X S T S H I P Industries",
@@ -117,7 +117,7 @@ export function organizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: SITE.name,
-    legalName: "LYTEHAUS Technologies, Inc.",
+    legalName: "FLYTEHAUS Technologies, Inc.",
     url: SITE.baseUrl,
     logo: `${SITE.baseUrl}/icon-512.png`,
     sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],

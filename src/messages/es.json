@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "LYTEHAUS Technologies",
-    "appNameStylized": "L Y T E H A U S",
+    "appName": "FLYTEHAUS Technologies",
+    "appNameStylized": "F L Y T E H A U S",
     "save": "Guardar",
     "cancel": "Cancelar",
     "delete": "Eliminar",
@@ -97,8 +97,8 @@
       "broadcast-tv-film": "Radiodifusión, TV y Cine"
     },
     "footer": {
-      "copyright": "© {year} LYTEHAUS Technologies",
-      "trademark": "ATLVS, GVTEWAY y COMPVSS son marcas registradas de LYTEHAUS Technologies, una empresa de G H X S T S H I P Industries.",
+      "copyright": "© {year} FLYTEHAUS Technologies",
+      "trademark": "ATLVS, GVTEWAY y COMPVSS son marcas registradas de FLYTEHAUS Technologies, una empresa de G H X S T S H I P Industries.",
       "tagline": "ATLVS, GVTEWAY y COMPVSS — tres aplicaciones conectadas para equipos de producción.",
       "ctaTired": "Hecho para equipos de producción cansados de soluciones improvisadas."
     },
@@ -197,8 +197,8 @@
     },
     "acceptInvite": {
       "title": "Únete a tu equipo",
-      "subtitle": "Acepta tu invitación a LYTEHAUS Technologies",
-      "body": "Has sido invitado a un espacio de trabajo de LYTEHAUS Technologies. Acepta abajo y te llevaremos directamente.",
+      "subtitle": "Acepta tu invitación a FLYTEHAUS Technologies",
+      "body": "Has sido invitado a un espacio de trabajo de FLYTEHAUS Technologies. Acepta abajo y te llevaremos directamente.",
       "submit": "Aceptar invitación",
       "submitting": "Uniéndose…",
       "signInInstead": "Iniciar sesión en su lugar",
@@ -260,7 +260,7 @@
         "when": "Cuándo"
       }
     },
-    "emailSubject": "Estás invitado a unirte a un espacio de trabajo de LYTEHAUS Technologies",
+    "emailSubject": "Estás invitado a unirte a un espacio de trabajo de FLYTEHAUS Technologies",
     "emailHeading": "Has sido invitado",
     "emailBody": "{inviter} te invitó a unirte a su espacio de trabajo como {role}.",
     "emailCta": "Aceptar invitación",
@@ -315,7 +315,7 @@
     "toggleTheme": "Cambiar tema",
     "toggleMenu": "Alternar menú",
     "openMenu": "Abrir menú",
-    "homeAriaLabel": "LYTEHAUS Technologies — inicio",
+    "homeAriaLabel": "FLYTEHAUS Technologies — inicio",
     "loading": "Cargando",
     "saving": "Guardando",
     "saved": "Guardado",
@@ -325,13 +325,13 @@
   },
   "community": {
     "meta": {
-      "title": "Comunidad — los equipos de producción que construyen sobre LYTEHAUS",
+      "title": "Comunidad — los equipos de producción que construyen sobre FLYTEHAUS",
       "description": "Los festivales, giras, agencias y talleres que ejecutan su producción en ATLVS, GVTEWAY y COMPVSS. Historias de miembros, números y lo que realmente entregan."
     },
     "hero": {
       "eyebrow": "Comunidad",
       "title": "Equipos de producción, construyendo en público.",
-      "subtitle": "Los festivales, giras, agencias y talleres que ejecutan sus shows en LYTEHAUS Technologies. Flujos reales. Números reales. Recibos reales."
+      "subtitle": "Los festivales, giras, agencias y talleres que ejecutan sus shows en FLYTEHAUS Technologies. Flujos reales. Números reales. Recibos reales."
     },
     "metrics": {
       "productionTeams": "equipos de producción",
@@ -346,7 +346,7 @@
     "join": {
       "eyebrow": "Únete a la lista",
       "title": "Tu equipo, aquí.",
-      "body": "¿Entregando shows reales en LYTEHAUS Technologies? Siempre buscamos documentar nuevas historias de miembros. Una entrevista breve, números anonimizados, tus palabras."
+      "body": "¿Entregando shows reales en FLYTEHAUS Technologies? Siempre buscamos documentar nuevas historias de miembros. Una entrevista breve, números anonimizados, tus palabras."
     },
     "finalCta": {
       "title": "Sé la próxima historia",

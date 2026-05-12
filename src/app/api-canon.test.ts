@@ -27,7 +27,7 @@ const API_ROOT = join(REPO_ROOT, "src/app/api");
 // Routes that DO NOT need to use parseJson, with reason.
 const ALLOWLIST = new Set<string>([
   // SCIM 2.0 RFC implementation — must serve `application/scim+json` and the
-  // SCIM error schema, neither of which fits the LYTEHAUS api envelope. The
+  // SCIM error schema, neither of which fits the FLYTEHAUS api envelope. The
   // routes validate input shapes via dedicated SCIM helpers.
   "src/app/api/scim/v2/Users/route.ts",
   "src/app/api/scim/v2/Users/[id]/route.ts",

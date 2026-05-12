@@ -7,7 +7,7 @@ export default function TermsPage() {
         <section>
           <h2 className="text-base font-semibold text-[var(--foreground)]">1. Acceptance of Terms</h2>
           <p className="mt-2">
-            By accessing or using the LYTEHAUS Technologies platform you agree to these Terms. If you do not agree, do
+            By accessing or using the FLYTEHAUS Technologies platform you agree to these Terms. If you do not agree, do
             not use the Service.
           </p>
         </section>

@@ -7,7 +7,7 @@
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "(www\\.)?flyingbluewhale\\.(app|tech|pro|com)" }],
-      "destination": "https://lytehaus.live/:path*",
+      "destination": "https://flytehaus.live/:path*",
       "permanent": true
     }
   ]

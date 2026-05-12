@@ -72,16 +72,16 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               <Link
                 href="/"
                 className="text-base font-semibold tracking-[0.18em] whitespace-nowrap uppercase"
-                aria-label="LYTEHAUS Technologies — home"
+                aria-label="FLYTEHAUS Technologies — home"
               >
-                L Y T E H A U S
+                F L Y T E H A U S
               </Link>
               <p className="mt-3 text-xs text-[var(--text-muted)]">
                 The platform for production. Three apps, one schema.
               </p>
               <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
                 <a
-                  href="https://twitter.com/lytehaus.live"
+                  href="https://twitter.com/flytehaus.live"
                   target="_blank"
                   rel="noreferrer"
                   className="hover:text-[var(--text-primary)]"
@@ -117,11 +117,11 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           </div>
           <div className="mt-12 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span>© {new Date().getFullYear()} LYTEHAUS Technologies</span>
+              <span>© {new Date().getFullYear()} FLYTEHAUS Technologies</span>
               <span>Production runs on it.</span>
             </div>
             <div className="mt-3 text-[11px] leading-relaxed">
-              ATLVS, GVTEWAY, and COMPVSS are registered trademarks of LYTEHAUS Technologies, a{" "}
+              ATLVS, GVTEWAY, and COMPVSS are registered trademarks of FLYTEHAUS Technologies, a{" "}
               <span className="font-medium tracking-[0.18em] text-[var(--text-secondary)]">G H X S T S H I P</span>{" "}
               Industries company.
             </div>

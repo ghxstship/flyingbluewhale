@@ -33,6 +33,24 @@ const schema = z.object({
   // local cookies survive process restarts. Rotating this value revokes
   // every outstanding access token.
   GUIDE_ACCESS_SECRET: z.string().optional(),
+  // Web Push (VAPID). Generate with: npx web-push generate-vapid-keys
+  VAPID_SUBJECT: z.string().optional(),
+  VAPID_PUBLIC_KEY: z.string().optional(),
+  VAPID_PRIVATE_KEY: z.string().optional(),
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
+  // HMAC secret for /share/[token] public link signing. Rotating invalidates
+  // every outstanding /share/* URL. Generate: openssl rand -base64 32
+  SHARE_LINK_SECRET: z.string().optional(),
+  // Slack integration (OAuth app credentials + signing secret).
+  SLACK_CLIENT_ID: z.string().optional(),
+  SLACK_CLIENT_SECRET: z.string().optional(),
+  SLACK_SIGNING_SECRET: z.string().optional(),
+  // Internal automation worker bearer token. Guards /api/v1/internal/*.
+  JOB_WORKER_TOKEN: z.string().optional(),
+  // Cloudflare Turnstile bot-protection secret (public forms).
+  TURNSTILE_SECRET_KEY: z.string().optional(),
+  // Cloudflare Turnstile site key — sent to the browser.
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -56,6 +74,17 @@ export const env = schema.parse({
   WEATHER_DISABLED: process.env.WEATHER_DISABLED,
   LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
   GUIDE_ACCESS_SECRET: process.env.GUIDE_ACCESS_SECRET,
+  VAPID_SUBJECT: process.env.VAPID_SUBJECT,
+  VAPID_PUBLIC_KEY: process.env.VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+  SHARE_LINK_SECRET: process.env.SHARE_LINK_SECRET,
+  SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
+  SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
+  SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
+  JOB_WORKER_TOKEN: process.env.JOB_WORKER_TOKEN,
+  TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
@@ -64,3 +93,6 @@ export const hasResend = Boolean(env.RESEND_API_KEY);
 export const hasUpstash = Boolean(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN);
 export const hasGrowthbook = Boolean(env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY);
 export const isWeatherEnabled = !env.WEATHER_DISABLED;
+export const hasVapid = Boolean(env.VAPID_SUBJECT && env.VAPID_PUBLIC_KEY && env.VAPID_PRIVATE_KEY);
+export const hasSlack = Boolean(env.SLACK_CLIENT_ID && env.SLACK_CLIENT_SECRET);
+export const hasTurnstile = Boolean(env.TURNSTILE_SECRET_KEY);

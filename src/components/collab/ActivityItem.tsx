@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import type { ActivityItem as ActivityItemType } from "@/lib/db/activity";
 
 /**
@@ -35,40 +36,6 @@ export function formatActivity(item: ActivityItemType): string {
   return item.action;
 }
 
-const RTF = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
-
-const RELATIVE_THRESHOLDS: Array<{ unit: Intl.RelativeTimeFormatUnit; ms: number }> = [
-  { unit: "year", ms: 365 * 24 * 60 * 60 * 1000 },
-  { unit: "month", ms: 30 * 24 * 60 * 60 * 1000 },
-  { unit: "week", ms: 7 * 24 * 60 * 60 * 1000 },
-  { unit: "day", ms: 24 * 60 * 60 * 1000 },
-  { unit: "hour", ms: 60 * 60 * 1000 },
-  { unit: "minute", ms: 60 * 1000 },
-];
-
-function formatRelative(iso: string): string {
-  const then = new Date(iso).getTime();
-  const now = Date.now();
-  const delta = then - now;
-  const abs = Math.abs(delta);
-  if (abs < 30_000) return "just now";
-  for (const { unit, ms } of RELATIVE_THRESHOLDS) {
-    if (abs >= ms) {
-      return RTF.format(Math.round(delta / ms), unit);
-    }
-  }
-  return RTF.format(Math.round(delta / 1000), "second");
-}
-
-function formatAbsolute(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 function fieldsTouched(item: ActivityItemType): string[] {
   if (!item.diff) return [];
   return Object.keys(item.diff);
@@ -87,6 +54,7 @@ function renderValue(value: unknown): string {
  */
 export function ActivityItem({ item }: { item: ActivityItemType }) {
   const [open, setOpen] = React.useState(false);
+  const fmt = useFormatters();
   const verb = formatActivity(item);
   const actorName = item.actorName ?? item.actorEmail ?? "Someone";
   const fields = fieldsTouched(item);
@@ -113,8 +81,11 @@ export function ActivityItem({ item }: { item: ActivityItemType }) {
             </>
           )}
         </p>
-        <p className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]" title={formatAbsolute(item.occurredAt)}>
-          {formatRelative(item.occurredAt)}
+        <p
+          className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]"
+          title={fmt.dateParts(item.occurredAt, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+        >
+          {fmt.relative(item.occurredAt)}
         </p>
         {hasDiff && (
           <button

@@ -81,7 +81,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               </p>
               <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
                 <a
-                  href="https://twitter.com/flytehaus.live"
+                  href="https://x.com/flytehaus"
                   target="_blank"
                   rel="noreferrer"
                   className="hover:text-[var(--text-primary)]"

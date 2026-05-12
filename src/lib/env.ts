@@ -28,6 +28,11 @@ const schema = z.object({
   WEATHER_DISABLED: z.string().optional(),
   // Logger floor: trace | debug | info | warn | error. Defaults to info.
   LOG_LEVEL: z.enum(["trace", "debug", "info", "warn", "error"]).optional(),
+  // HMAC secret for signing the public-link-plus-code guide-access cookie.
+  // Set in prod via Vercel env; in dev a deterministic fallback is used so
+  // local cookies survive process restarts. Rotating this value revokes
+  // every outstanding access token.
+  GUIDE_ACCESS_SECRET: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -50,6 +55,7 @@ export const env = schema.parse({
   NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
   WEATHER_DISABLED: process.env.WEATHER_DISABLED,
   LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
+  GUIDE_ACCESS_SECRET: process.env.GUIDE_ACCESS_SECRET,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);

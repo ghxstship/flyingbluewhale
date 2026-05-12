@@ -118,6 +118,16 @@ describe("internalPathFor", () => {
     expect(internalPathFor("platform", "/")).toBe("/console");
     expect(internalPathFor("marketing", "/")).toBe("/");
   });
+
+  it("does not prefix shared /api or /_next paths", async () => {
+    // Regression: portal-originated fetch("/api/v1/...") must not become
+    // /p/api/v1/... — API routes are shared across shells.
+    const { internalPathFor } = await loadUrls({ subdomains: true, appUrl: "https://lytehaus.live" });
+    expect(internalPathFor("portal", "/api/v1/guides/unlock")).toBe("/api/v1/guides/unlock");
+    expect(internalPathFor("platform", "/api/v1/health")).toBe("/api/v1/health");
+    expect(internalPathFor("mobile", "/_next/static/chunks/foo.js")).toBe("/_next/static/chunks/foo.js");
+    expect(internalPathFor("portal", "/.well-known/assetlinks.json")).toBe("/.well-known/assetlinks.json");
+  });
 });
 
 describe("shellFromResolved", () => {

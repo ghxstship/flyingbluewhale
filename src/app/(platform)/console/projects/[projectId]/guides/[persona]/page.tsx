@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { getProject } from "@/lib/db/projects";
 import { getGuideByPersona, PERSONA_TIERS } from "@/lib/db/guides";
 import { hasSupabase } from "@/lib/env";
+import { isPublicPersona } from "@/lib/guides/access-token";
 import type { GuidePersona } from "@/lib/supabase/types";
 import { GuideEditor } from "./GuideEditor";
 
@@ -62,6 +64,13 @@ export default async function GuideEditorPage({ params }: { params: Promise<{ pr
         eyebrow={project.name}
         title={`${persona.charAt(0).toUpperCase() + persona.slice(1)} guide`}
         subtitle={`Tier ${tierInfo.tier} · ${tierInfo.classification}`}
+        action={
+          !isPublicPersona(persona) ? (
+            <Link href={`/console/projects/${projectId}/guides/${persona}/access`} className="btn btn-secondary btn-sm">
+              Manage access codes
+            </Link>
+          ) : undefined
+        }
       />
       <div className="page-content max-w-4xl">
         <GuideEditor

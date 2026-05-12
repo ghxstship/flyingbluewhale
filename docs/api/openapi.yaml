@@ -402,6 +402,9 @@ paths:
     get:  { summary: List comments for a guide section. }
     post: { summary: Post a comment to a guide section. }
 
+  /api/v1/guides/unlock:
+    post: { summary: Redeem an access code for an internal-persona guide; sets a signed httpOnly cookie that unlocks that persona on /p/<slug>/guide. Rate-limited; tier-5 (guest/custom) personas are rejected. }
+
   /api/v1/me/api-keys:
     get:
       summary: List the caller's personal access tokens (never includes the secret).

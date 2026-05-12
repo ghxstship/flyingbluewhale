@@ -92,6 +92,17 @@ export function urlFor(shell: Shell, path: string = ""): string {
 export function internalPathFor(shell: Shell, requestPath: string): string {
   const prefix = SHELL_PATH_PREFIX[shell];
   if (!prefix) return requestPath;
+  // /api routes are shared across all shells — never prefix them, otherwise a
+  // portal-side `fetch("/api/v1/...")` becomes /p/api/v1/... and 404s. The
+  // same applies to Next's internal asset paths.
+  if (
+    requestPath.startsWith("/api/") ||
+    requestPath === "/api" ||
+    requestPath.startsWith("/_next/") ||
+    requestPath.startsWith("/.well-known/")
+  ) {
+    return requestPath;
+  }
   if (requestPath === prefix || requestPath.startsWith(`${prefix}/`)) return requestPath;
   if (requestPath === "/") return prefix;
   return `${prefix}${requestPath}`;

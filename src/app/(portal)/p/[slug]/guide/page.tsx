@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FileDown } from "lucide-react";
-import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { hasSupabase } from "@/lib/env";
 import { getSession } from "@/lib/auth";
@@ -11,6 +12,11 @@ import { GuideComments } from "@/components/guides/GuideComments";
 import { createClient } from "@/lib/supabase/server";
 import type { GuideConfig } from "@/lib/guides/types";
 import type { GuidePersona, Persona } from "@/lib/supabase/types";
+import {
+  cookieName as guideCookieName,
+  isPublicPersona,
+  verifyToken as verifyGuideAccessToken,
+} from "@/lib/guides/access-token";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +76,7 @@ export default async function GuidePage({
   if (!project) notFound();
 
   const session = await getSession();
+  const isOrgMemberOfProject = !!session && session.orgId === project.org_id;
   const sessionPersona: GuidePersona = session ? mapSessionToGuidePersona(session.persona) : "guest";
   // No dev-mode bypass: when there's no session the viewer IS the guest
   // tier, exactly like production. The previous bypass quietly upgraded
@@ -77,18 +84,59 @@ export default async function GuidePage({
   // handoff-shells.spec § "anon sees published guest guide" test —
   // semantic correctness > dev convenience. Devs who want to see other
   // tiers can `?as=<persona>` (gated below) or log in with a fixture user.
-  const effectivePersona: GuidePersona = sessionPersona;
+
+  // Read the per-project access cookie up front. If present + valid, the
+  // bearer has redeemed one or more codes and can view those personas
+  // without auth.
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(guideCookieName(project.id))?.value ?? null;
+  const verified = await verifyGuideAccessToken(accessToken, project.id);
+  const unlockedPersonas = new Set<GuidePersona>(verified?.personas ?? []);
+
+  // Effective default persona priority:
+  //   1. Live session → role-mapped persona.
+  //   2. Code-only viewer → highest-permission unlocked persona.
+  //   3. Anon visitor → guest.
+  function highestUnlocked(): GuidePersona | null {
+    let best: GuidePersona | null = null;
+    let bestTier = Infinity;
+    for (const p of unlockedPersonas) {
+      const t = PERSONA_TIERS[p].tier;
+      if (t < bestTier) {
+        bestTier = t;
+        best = p;
+      }
+    }
+    return best;
+  }
+  const effectivePersona: GuidePersona = session ? sessionPersona : (highestUnlocked() ?? "guest");
   const sessionTier = PERSONA_TIERS[effectivePersona].tier;
 
-  // ?as=<persona> preview override gated by tier hierarchy. Lower-numbered tiers
-  // hold higher permissions, so a user can view as any persona whose tier is
-  // greater than or equal to their own (i.e. equal-or-lower permission).
+  // ?as=<persona> preview override. Two paths grant the switch:
+  //   1. Org session / dev mode — gated by tier hierarchy (lower number =
+  //      higher permission, can view equal-or-lower tier).
+  //   2. Redeemed access code — bearer can switch to any persona they've
+  //      unlocked, plus the public-tier personas (guest, custom).
   const asParam = typeof sp.as === "string" ? sp.as : undefined;
   const asPersona: GuidePersona | null =
     !!asParam && VALID_PERSONAS.has(asParam as GuidePersona) ? (asParam as GuidePersona) : null;
-  const asPersonaAllowed = !!session && !!asPersona && PERSONA_TIERS[asPersona].tier >= sessionTier;
+  const asViaSession = !!session && !!asPersona && PERSONA_TIERS[asPersona].tier >= sessionTier;
+  const asViaCode = !!asPersona && (unlockedPersonas.has(asPersona) || isPublicPersona(asPersona));
+  const asPersonaAllowed = asViaSession || asViaCode;
   const previewing = asPersonaAllowed && asPersona !== effectivePersona;
   const persona: GuidePersona = previewing ? (asPersona as GuidePersona) : effectivePersona;
+
+  // Access gate: public personas are always allowed (published-guide RLS
+  // still enforces visibility). Internal personas require either an org
+  // session for this project or a redeemed code unlocking this persona.
+  // Anything else → redirect to the unlock page.
+  const internalPersonaRequested = !isPublicPersona(persona);
+  const allowedInternal = isOrgMemberOfProject || unlockedPersonas.has(persona);
+  if (internalPersonaRequested && !allowedInternal) {
+    const from = `/p/${slug}/guide${asParam ? `?as=${persona}` : ""}`;
+    redirect(`/p/${slug}/guide/unlock?as=${persona}&from=${encodeURIComponent(from)}`);
+  }
+
   const guide = await getGuideByPersona(project.id, persona);
 
   if (!guide || !guide.published) {
@@ -131,7 +179,16 @@ export default async function GuidePage({
         }
       />
       <div className="page-content max-w-4xl">
-        {session && <PreviewSwitcher slug={slug} active={persona} previewing={previewing} sessionTier={sessionTier} />}
+        {(session || unlockedPersonas.size > 0) && (
+          <PreviewSwitcher
+            slug={slug}
+            active={persona}
+            previewing={previewing}
+            sessionTier={session ? sessionTier : 99}
+            unlockedPersonas={Array.from(unlockedPersonas)}
+            hasOrgSession={!!session}
+          />
+        )}
         <GuideView
           title={guide.title}
           subtitle={guide.subtitle}
@@ -170,15 +227,25 @@ function PreviewSwitcher({
   active,
   previewing,
   sessionTier,
+  unlockedPersonas,
+  hasOrgSession,
 }: {
   slug: string;
   active: GuidePersona;
   previewing: boolean;
   sessionTier: number;
+  unlockedPersonas: GuidePersona[];
+  hasOrgSession: boolean;
 }) {
-  // A user can preview any persona whose tier is greater than or equal to
-  // their own session tier (i.e. equal-or-lower permission level).
-  const visible = PREVIEW_PERSONAS.filter((p) => PERSONA_TIERS[p.value].tier >= sessionTier);
+  // Visibility rules:
+  //   - Org session / dev: anything at or below caller's permission tier.
+  //   - Code-only viewer (no session): only personas they've unlocked, plus
+  //     the public-tier personas (guest, custom) which are always visible.
+  const unlockedSet = new Set(unlockedPersonas);
+  const visible = PREVIEW_PERSONAS.filter((p) => {
+    if (hasOrgSession) return PERSONA_TIERS[p.value].tier >= sessionTier;
+    return unlockedSet.has(p.value) || p.value === "guest" || p.value === "custom";
+  });
   if (visible.length < 2) return null;
   return (
     <div className="surface mb-4 flex flex-wrap items-center gap-2 px-4 py-2.5 text-xs">

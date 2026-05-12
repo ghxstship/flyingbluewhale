@@ -1,4 +1,4 @@
--- flyingbluewhale · XPMS · Seaworthy hardening
+-- LYTEHAUS Technologies · XPMS · Seaworthy hardening
 --
 -- Closes every Supabase advisor finding owned by the XPMS spine:
 --   1) The 3 spine views (v_xtc_codebook, v_xpms_atom_tier_composition,

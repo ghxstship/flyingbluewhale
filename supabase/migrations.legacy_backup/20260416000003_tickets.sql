@@ -1,4 +1,4 @@
--- flyingbluewhale · ticketing + scans
+-- LYTEHAUS Technologies · ticketing + scans
 
 create type ticket_status as enum ('issued','transferred','scanned','voided');
 

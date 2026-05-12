@@ -1,4 +1,4 @@
--- flyingbluewhale · XPMS — Experiential Project Management System (v1.0)
+-- LYTEHAUS Technologies · XPMS — Experiential Project Management System (v1.0)
 --
 -- Whitepaper: docs/decisions/ADR-0002-xpms-spine.md (to follow).
 --

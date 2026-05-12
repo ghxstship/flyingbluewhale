@@ -1,4 +1,4 @@
--- flyingbluewhale · XPMS · promote existing rows to atoms
+-- LYTEHAUS Technologies · XPMS · promote existing rows to atoms
 --
 -- The atoms table is the new SSOT for cross-class addressing. Existing
 -- single-purpose tables (crew_members, equipment, fabrication_orders,

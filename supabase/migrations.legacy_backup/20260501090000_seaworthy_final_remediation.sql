@@ -1,4 +1,4 @@
--- flyingbluewhale · Seaworthy final remediation (function-level)
+-- LYTEHAUS Technologies · Seaworthy final remediation (function-level)
 --
 -- Closes the function/permission flags from the Seaworthy audit.
 -- Storage-policy and Supabase-Dashboard items are tracked in

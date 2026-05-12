@@ -1,4 +1,4 @@
--- flyingbluewhale · artist advancing submissions
+-- LYTEHAUS Technologies · artist advancing submissions
 
 create type advancing_status as enum ('pending','submitted','approved','rejected','revision_requested');
 

@@ -1,7 +1,7 @@
 # MARKETING
 (marketing)/page.tsx|Home|Unified production platform for live events, fabrication, and creative ops
 (marketing)/pricing/page.tsx|Pricing|Portal · Starter · Professional · Enterprise
-(marketing)/features/page.tsx|Features|Everything in flyingbluewhale
+(marketing)/features/page.tsx|Features|Everything in LYTEHAUS Technologies
 (marketing)/features/[module]/page.tsx|Feature|Per-module landing
 (marketing)/solutions/[industry]/page.tsx|Solutions|Vertical landing page
 (marketing)/customers/page.tsx|Customers|Case studies

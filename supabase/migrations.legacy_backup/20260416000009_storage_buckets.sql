@@ -1,4 +1,4 @@
--- flyingbluewhale · storage buckets + policies
+-- LYTEHAUS Technologies · storage buckets + policies
 -- Run with service role — modifies storage.objects RLS.
 
 insert into storage.buckets (id, name, public) values

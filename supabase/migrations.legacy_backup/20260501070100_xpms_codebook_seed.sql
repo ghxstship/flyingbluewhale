@@ -1,4 +1,4 @@
--- flyingbluewhale · XPMS · XTC Protocol™ codebook seed (v1.0)
+-- LYTEHAUS Technologies · XPMS · XTC Protocol™ codebook seed (v1.0)
 --
 -- Seeds the canonical ten classes, their published divisions, the published
 -- sections within each division, and a representative set of position-root

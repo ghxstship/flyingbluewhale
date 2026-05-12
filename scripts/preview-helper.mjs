@@ -15,7 +15,7 @@ const TARGET = process.argv[2] || "Sarah Fry";
 // and the renderHTML, then writes the HTML to /tmp.
 const helperJS = `
 import fs from "node:fs/promises";
-const code = await fs.readFile("/Users/julianclarkson/Documents/flyingbluewhale/scripts/export-offer-letters.mjs", "utf8");
+const code = await fs.readFile(new URL("./export-offer-letters.mjs", import.meta.url), "utf8");
 const m = code.match(/^function renderHTML[\\s\\S]+?^}$/m);
 if (!m) { console.error("renderHTML not found"); process.exit(1); }
 // Pull supporting helpers too

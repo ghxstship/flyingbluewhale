@@ -1,4 +1,4 @@
--- flyingbluewhale · projects
+-- LYTEHAUS Technologies · projects
 
 create type project_status as enum ('draft','active','paused','archived','complete');
 

@@ -1,4 +1,4 @@
--- flyingbluewhale · Seaworthy hardening (legacy views)
+-- LYTEHAUS Technologies · Seaworthy hardening (legacy views)
 --
 -- Three pre-existing views were left at SECURITY DEFINER, which makes them
 -- run with the view-owner's RLS instead of the caller's. All three are

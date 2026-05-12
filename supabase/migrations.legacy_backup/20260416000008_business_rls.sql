@@ -1,4 +1,4 @@
--- flyingbluewhale · RLS for business tables
+-- LYTEHAUS Technologies · RLS for business tables
 
 alter table clients enable row level security;
 alter table leads enable row level security;

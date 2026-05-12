@@ -1,4 +1,4 @@
--- flyingbluewhale · identity + tenancy
+-- LYTEHAUS Technologies · identity + tenancy
 -- Organizations, users, memberships, platform roles, subscription tiers.
 
 create extension if not exists "uuid-ossp";

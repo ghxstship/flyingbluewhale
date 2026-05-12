@@ -1,4 +1,4 @@
--- flyingbluewhale · dev seed (idempotent)
+-- LYTEHAUS Technologies · dev seed (idempotent)
 -- Requires service role; run after signing up a real user and grabbing their auth.users.id.
 
 -- NOTE: seeding via SQL with auth integrations is awkward — prefer `scripts/seed.ts`

@@ -1,4 +1,4 @@
--- flyingbluewhale · sales, finance, procurement, production, ops
+-- LYTEHAUS Technologies · sales, finance, procurement, production, ops
 
 -- ──────── SALES / CRM ────────
 create type lead_stage as enum ('new','qualified','contacted','proposal','won','lost');

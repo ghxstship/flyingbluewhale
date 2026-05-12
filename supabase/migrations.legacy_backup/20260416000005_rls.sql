@@ -1,4 +1,4 @@
--- flyingbluewhale · row-level security policies
+-- LYTEHAUS Technologies · row-level security policies
 -- Defense-in-depth layer #4 (middleware + layout + server action are #1–3).
 
 alter table orgs                   enable row level security;

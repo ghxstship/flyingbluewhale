@@ -1,4 +1,4 @@
--- flyingbluewhale · EDCLV26 Salvage City Supper Club seed (v3)
+-- LYTEHAUS Technologies · EDCLV26 Salvage City Supper Club seed (v3)
 -- Project + 7 persona-scoped event_guides for the Boarding Pass KBYG.
 -- Idempotent: re-applying refreshes guide content without duplicating the project.
 -- v3 sourced from the 2026 ProductionPlaybook_EDCLV26.SC and EDCLV26_SalvageCity_ProductionPlaybook

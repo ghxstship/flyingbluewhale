@@ -3,12 +3,5 @@
   "buildCommand": "next build",
   "framework": "nextjs",
   "crons": [],
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "(www\\.)?flyingbluewhale\\.(app|tech|pro|com)" }],
-      "destination": "https://lytehaus.live/:path*",
-      "permanent": true
-    }
-  ]
+  "redirects": []
 }

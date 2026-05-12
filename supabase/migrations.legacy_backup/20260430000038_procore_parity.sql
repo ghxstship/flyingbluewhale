@@ -1,4 +1,4 @@
--- flyingbluewhale · Procore/HeyPros parity additions
+-- LYTEHAUS Technologies · Procore/HeyPros parity additions
 --
 -- Adds Daily Logs, Site Plans, Inspections, RFIs, Submittals, Punch Lists,
 -- Pay Apps, Vendor COs, Bid Leveling, Prequalification, Safety Briefings,

@@ -1,4 +1,4 @@
--- flyingbluewhale · Audit-trail coverage extension
+-- LYTEHAUS Technologies · Audit-trail coverage extension
 --
 -- Coverage went from 146 → 164 of 169 mutable user tables (97%).
 -- The 5 that remain are deliberate skips:

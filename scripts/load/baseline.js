@@ -1,7 +1,7 @@
 // H3-03 / IK-050 — k6 baseline load test.
 //
 // Run locally:  k6 run -e BASE_URL=http://localhost:3000 scripts/load/baseline.js
-// Run on CI:    k6 run -e BASE_URL=https://staging.flyingbluewhale.app \
+// Run on CI:    k6 run -e BASE_URL=https://staging.lytehaus.live \
 //                 --summary-export=./k6-summary.json scripts/load/baseline.js
 //
 // Scenarios:

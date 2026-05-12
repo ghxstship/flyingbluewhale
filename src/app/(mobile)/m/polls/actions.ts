@@ -34,17 +34,15 @@ export async function castVote(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!option) return;
 
-  await supabase
-    .from("poll_votes")
-    .upsert(
-      {
-        poll_id: parsed.poll_id,
-        option_id: parsed.option_id,
-        voter_id: session.userId,
-        voted_at: new Date().toISOString(),
-      },
-      { onConflict: "poll_id,voter_id" },
-    );
+  await supabase.from("poll_votes").upsert(
+    {
+      poll_id: parsed.poll_id,
+      option_id: parsed.option_id,
+      voter_id: session.userId,
+      voted_at: new Date().toISOString(),
+    },
+    { onConflict: "poll_id,voter_id" },
+  );
 
   revalidatePath("/m/polls");
 }

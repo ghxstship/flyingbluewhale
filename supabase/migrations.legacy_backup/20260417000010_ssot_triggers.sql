@@ -1,4 +1,4 @@
--- flyingbluewhale · SSOT triggers (updated_at + audit_log + request_id)
+-- LYTEHAUS Technologies · SSOT triggers (updated_at + audit_log + request_id)
 -- Ensures every mutable business table:
 --   1. Has updated_at maintained by trigger (no app-code drift)
 --   2. Writes to audit_log on INSERT/UPDATE/DELETE (SSOT for "who did what")

@@ -29,7 +29,7 @@ k6 run -e BASE_URL=http://localhost:3000 scripts/load/baseline.js
 ## Run against a preview or staging URL
 
 ```bash
-k6 run -e BASE_URL=https://flyingbluewhale-pr-42.vercel.app \
+k6 run -e BASE_URL=https://lytehaus-pr-42.vercel.app \
   --summary-export=./k6-summary.json \
   scripts/load/baseline.js
 ```

@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { generateCode, hashCode, codePrefix, normalizeCode } from "@/lib/guides/access-token";
 import type { GuidePersona } from "@/lib/guides/types";
@@ -179,8 +179,7 @@ export async function listRedemptions(
   }>
 > {
   if (!orgId || !projectId) return [];
-  if (!isServiceClientAvailable()) return [];
-  const sb = createServiceClient() as unknown as LooseSupabase;
+  const sb = (await createClient()) as unknown as LooseSupabase;
   const { data } = (await sb
     .from("guide_access_redemption_log")
     .select("id, code_id, persona, redeemed_at, ip, user_agent, code_label, code_prefix, org_id")

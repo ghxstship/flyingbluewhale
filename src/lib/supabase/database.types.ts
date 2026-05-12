@@ -3959,25 +3959,25 @@ export type Database = {
           id: string
           metadata: Json
           renewal_contract_id: string | null
+          renewal_state: Database["public"]["Enums"]["contract_renewal_state"]
           scheduled_at: string
           source_contract_id: string
-          status: string
         }
         Insert: {
           id?: string
           metadata?: Json
           renewal_contract_id?: string | null
+          renewal_state: Database["public"]["Enums"]["contract_renewal_state"]
           scheduled_at: string
           source_contract_id: string
-          status: string
         }
         Update: {
           id?: string
           metadata?: Json
           renewal_contract_id?: string | null
+          renewal_state?: Database["public"]["Enums"]["contract_renewal_state"]
           scheduled_at?: string
           source_contract_id?: string
-          status?: string
         }
         Relationships: [
           {
@@ -27646,6 +27646,12 @@ export type Database = {
         | "flat_fee"
         | "hourly"
         | "tbd"
+      contract_renewal_state:
+        | "pending"
+        | "reminded"
+        | "renewed"
+        | "lapsed"
+        | "declined"
       deal_type:
         | "flat"
         | "door"
@@ -28319,6 +28325,13 @@ export const Constants = {
         "flat_fee",
         "hourly",
         "tbd",
+      ],
+      contract_renewal_state: [
+        "pending",
+        "reminded",
+        "renewed",
+        "lapsed",
+        "declined",
       ],
       deal_type: [
         "flat",

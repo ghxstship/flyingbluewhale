@@ -25,7 +25,7 @@ export function useUrlState<T extends string | number | boolean | string[] | Rec
   const useJson = opts.serializer === "json";
 
   const initial = useMemo(() => {
-    const raw = searchParams.get(key);
+    const raw = searchParams?.get(key) ?? null;
     if (raw == null) return initialValue;
     if (useJson) {
       try {
@@ -44,7 +44,7 @@ export function useUrlState<T extends string | number | boolean | string[] | Rec
 
   // Keep URL in sync when value changes
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
     const serialized = useJson ? JSON.stringify(value) : String(value);
     if (value == null || value === "" || serialized === String(initialValue)) {
       params.delete(key);
@@ -52,7 +52,8 @@ export function useUrlState<T extends string | number | boolean | string[] | Rec
       params.set(key, serialized);
     }
     const next = params.toString();
-    const target = next ? `${pathname}?${next}` : pathname;
+    const base = pathname ?? "/";
+    const target = next ? `${base}?${next}` : base;
     if (replace) router.replace(target, { scroll: false });
     else router.push(target, { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps

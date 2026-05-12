@@ -1,4 +1,4 @@
-// flyingbluewhale offline-first service worker
+// COMPVSS (FLYTEHAUS Technologies) offline-first service worker
 // Caches the mobile shell + check-in flow + offline fallback page.
 //
 // Offline queue: clock-punch POSTs to /api/v1/shifts/checkin are

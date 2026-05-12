@@ -1,8 +1,9 @@
 {
-  "name": "flyingbluewhale",
-  "short_name": "fbw",
-  "description": "Unified production platform — internal console, external portals, mobile field PWA.",
-  "start_url": "/",
+  "name": "COMPVSS — FLYTEHAUS Technologies",
+  "short_name": "COMPVSS",
+  "description": "COMPVSS field PWA — offline-first crew operations, time clock, and advancing for FLYTEHAUS Technologies.",
+  "start_url": "/m",
+  "scope": "/m",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#0A0A0A",

@@ -136,8 +136,8 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
                   key={p.id}
                   href={`/console/pipeline?pipeline=${p.slug}`}
                   className={
-                    "rounded px-2 py-1 text-xs " +
-                    (p.id === active.id ? "bg-[var(--org-primary)] text-white" : "surface hover-lift")
+                    "nav-item text-xs py-1 px-2 " +
+                    (p.id === active.id ? "nav-item-active" : "hover:bg-[var(--bg-secondary)]")
                   }
                 >
                   {p.name}

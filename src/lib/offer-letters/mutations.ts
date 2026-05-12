@@ -37,13 +37,15 @@ export async function updateOfferLetter(orgId: string, id: string, patch: Update
   // matched no rows (caller tried to edit a non-draft letter). Without
   // this we silently no-op AND log the edit as if it succeeded — a
   // misleading audit trail.
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const { data, error } = await supabase
     .from("offer_letters")
-    .update(patch)
+    .update(patch as any)
     .eq("org_id", orgId)
     .eq("id", id)
     .eq("status", "draft")
     .select("id");
+  /* eslint-enable @typescript-eslint/no-explicit-any */
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("Letter not found or no longer in draft state");
   await logActivity(orgId, id, "edited", "Letter draft edited.");

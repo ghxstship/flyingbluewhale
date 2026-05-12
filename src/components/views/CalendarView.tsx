@@ -74,8 +74,8 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
 
   // Hydrate state from URL on mount; fall back to props.
   const initialFromUrl = React.useMemo(() => {
-    const urlMode = searchParams.get("mode");
-    const urlDate = searchParams.get("date");
+    const urlMode = searchParams?.get("mode") ?? null;
+    const urlDate = searchParams?.get("date") ?? null;
     const mode = urlMode && (MODES as string[]).includes(urlMode) ? (urlMode as CalendarMode) : initialMode;
     let cursor: Date;
     if (urlDate && /^\d{4}-\d{2}-\d{2}$/.test(urlDate)) {
@@ -94,11 +94,12 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
 
   // Sync URL when state changes — replace history.
   React.useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
     params.set("mode", mode);
     params.set("date", isoDateUTC(cursor));
     const next = params.toString();
-    router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
+    const base = pathname ?? "/";
+    router.replace(next ? `${base}?${next}` : base, { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, cursor]);
 

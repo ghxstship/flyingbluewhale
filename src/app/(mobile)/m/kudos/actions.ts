@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushTo } from "@/lib/push/send";
+import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
   to_user_id: z.string().uuid(),
@@ -44,7 +45,7 @@ export async function createKudos(fd: FormData): Promise<void> {
   void sendPushTo(parsed.to_user_id, {
     title: "You got kudos",
     body: parsed.message.slice(0, 200),
-    url: "/m/kudos",
+    url: urlFor("mobile", "/kudos"),
     tag: `kudos:${session.userId}:${Date.now()}`,
     kind: "kudos",
   });

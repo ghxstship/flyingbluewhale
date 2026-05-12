@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushTo } from "@/lib/push/send";
+import { urlFor } from "@/lib/urls";
 
 async function guardAssignment(projectId: string, deliverableId: string, orgId: string) {
   const supabase = await createClient();
@@ -68,7 +69,7 @@ export async function advanceState(fd: FormData): Promise<void> {
     void sendPushTo(assignment.assignee_id, {
       title: `Advancing item ${parsed.next_state.replace(/_/g, " ")}`,
       body: assignment.title ?? "",
-      url: "/m/advances",
+      url: urlFor("mobile", "/advances"),
       tag: `advancing-state:${parsed.deliverableId}:${Date.now()}`,
       kind: "advancing_state",
     });
@@ -112,7 +113,7 @@ export async function reassignAssignment(fd: FormData): Promise<void> {
   void sendPushTo(parsed.assignee_id, {
     title: "Advancing item reassigned to you",
     body: assignment.title ?? "",
-    url: "/m/advances",
+    url: urlFor("mobile", "/advances"),
     tag: `advancing-reassign:${parsed.deliverableId}:${Date.now()}`,
     kind: "advancing",
   });

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
   shift_id: z.string().uuid(),
@@ -60,7 +61,7 @@ export async function requestSwap(fd: FormData): Promise<void> {
     user_id: a.user_id,
     title,
     body,
-    href: "/console/workforce/shift-swaps",
+    href: urlFor("platform", "/workforce/shift-swaps"),
   }));
   if (inserts.length > 0) {
     await service.from("notifications").insert(inserts);

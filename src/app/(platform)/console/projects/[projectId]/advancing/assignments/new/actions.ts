@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushTo } from "@/lib/push/send";
+import { urlFor } from "@/lib/urls";
 
 const KIND_LABEL: Record<string, string> = {
   credential_assignment: "credential",
@@ -84,7 +85,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
   void sendPushTo(parsed.data.assignee_id, {
     title: `New ${KIND_LABEL[parsed.data.type] ?? "advancing item"} assigned`,
     body: parsed.data.title,
-    url: "/m/advances",
+    url: urlFor("mobile", "/advances"),
     tag: `advancing:${projectId}:${parsed.data.assignee_id}:${Date.now()}`,
     kind: "advancing",
   });

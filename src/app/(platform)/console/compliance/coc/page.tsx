@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { urlFor } from "@/lib/urls";
 import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -90,7 +91,7 @@ export default async function Page() {
         title="Chain of Custody"
         subtitle="Tamper-evident audit trail for evidence + samples · last 30 days"
         action={
-          <Button href="/m/coc" size="sm">
+          <Button href={urlFor("mobile", "/coc")} size="sm">
             Mobile capture
           </Button>
         }

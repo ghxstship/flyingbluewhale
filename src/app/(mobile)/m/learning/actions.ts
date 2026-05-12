@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { scoreQuiz } from "@/lib/connecteam";
 import { sendPushTo } from "@/lib/push/send";
+import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
   assignmentId: z.string().uuid(),
@@ -81,7 +82,7 @@ export async function submitQuiz(fd: FormData): Promise<void> {
       void sendPushTo(session.userId, {
         title: "Badge earned",
         body: `Course passed: ${c.title}`,
-        url: "/m/kudos",
+        url: urlFor("mobile", "/kudos"),
         tag: `course-badge:${c.id}:${session.userId}`,
         kind: "badge",
       });

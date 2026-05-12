@@ -27,6 +27,10 @@ export type TelemetryProps = Record<string, string | number | boolean | null>;
 
 export function track(event: MarketingEvent, props?: TelemetryProps): void {
   if (typeof window === "undefined") return;
+  // Honor cookie consent — ePrivacy Directive requires consent before
+  // firing analytics beacons. Mirrors the Sentry beforeSend gate.
+  const consent = (window as Window & { __consent?: { analytics?: boolean } }).__consent;
+  if (consent && consent.analytics !== true) return;
   const payload = JSON.stringify({ event, props });
   try {
     // sendBeacon returns false if the user-agent rejects it (payload too

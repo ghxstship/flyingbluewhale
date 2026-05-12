@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,7 @@ const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
   { href: "/console/production/equipment", label: "Equipment", description: "Asset register · 5-state lifecycle" },
   { href: "/console/production/rentals", label: "Rentals", description: "Bookings + handover tracking" },
   { href: "/console/production/rentals/availability", label: "Availability", description: "7-day matrix" },
-  { href: "/m/inventory/scan", label: "Mobile Scan", description: "Receive / put-away / pick" },
+  { href: urlFor("mobile", "/inventory/scan"), label: "Mobile Scan", description: "Receive / put-away / pick" },
 ];
 
 export default async function Page() {

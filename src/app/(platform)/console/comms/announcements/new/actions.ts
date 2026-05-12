@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
+import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -63,7 +64,7 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
       void sendPushBulk(userIds, {
         title: parsed.data.title,
         body: parsed.data.body.slice(0, 200),
-        url: "/m/feed",
+        url: urlFor("mobile", "/feed"),
         tag: `announcement:${data.id}`,
         kind: "announcement",
       });

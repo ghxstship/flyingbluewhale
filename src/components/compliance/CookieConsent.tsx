@@ -33,7 +33,8 @@ function readConsent(): Consent | null {
 }
 
 function writeConsent(c: Consent) {
-  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(JSON.stringify(c))}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax`;
+  const secure = location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(JSON.stringify(c))}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax${secure}`;
   // Expose to window so analytics scripts can gate
   (window as Window & { __consent?: Consent }).__consent = c;
   window.dispatchEvent(new CustomEvent("consentchange", { detail: c }));

@@ -36,7 +36,8 @@ const ThemeContext = React.createContext<ThemeContextValue | null>(null);
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 function writeCookie(key: string, value: string) {
-  document.cookie = `${key}=${encodeURIComponent(value)}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax`;
+  const secure = location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${key}=${encodeURIComponent(value)}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax${secure}`;
 }
 
 async function persistRemote(patch: { theme?: ThemeSlug; density?: Density }) {

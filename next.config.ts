@@ -52,8 +52,13 @@ const csp = [
   `script-src 'self' ${scriptUnsafe} https://js.stripe.com`,
   `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
   `font-src 'self' data: https://fonts.gstatic.com`,
-  `img-src 'self' data: blob: https://${supabaseHost} https://*.stripe.com`,
-  `connect-src 'self' https://${supabaseHost} wss://${supabaseHost} https://api.anthropic.com https://api.stripe.com https://*.ingest.sentry.io`,
+  `img-src 'self' data: blob: https://${supabaseHost} https://*.stripe.com https://*.openfreemap.org https://demotiles.maplibre.org`,
+  // MapLibre-GL loads vector tile data, glyphs, and sprites via fetch/XHR —
+  // all go through connect-src (not img-src). openfreemap.org serves the
+  // default map style (MapView); demotiles.maplibre.org serves the MapShell
+  // demo style. Both are self-hosted-friendly and can be swapped via
+  // the styleUrl prop with no CSP change required for same-domain proxies.
+  `connect-src 'self' https://${supabaseHost} wss://${supabaseHost} https://api.anthropic.com https://api.stripe.com https://*.ingest.sentry.io https://*.openfreemap.org https://demotiles.maplibre.org`,
   // 'self' is required so the home page's same-origin <iframe> live-preview
   // of /p/<slug>/guide loads. Without it, CSP blocks the embed and
   // top-level hydration fails for any client component declared after the
@@ -87,7 +92,7 @@ const config: NextConfig = {
         headers: [
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
           { key: "Content-Security-Policy", value: csp },

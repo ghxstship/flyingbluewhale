@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -73,7 +74,7 @@ export default async function MobilePunchPage() {
               title="Punch List Clear"
               description="Open items assigned to you appear here. Visit Tasks on desktop to assign new ones."
               action={
-                <Link href="/console/tasks" className="btn btn-secondary btn-sm">
+                <Link href={urlFor("platform", "/tasks")} className="btn btn-secondary btn-sm">
                   Open Tasks
                 </Link>
               }

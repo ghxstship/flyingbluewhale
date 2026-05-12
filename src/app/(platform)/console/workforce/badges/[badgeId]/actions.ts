@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushTo } from "@/lib/push/send";
+import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
   badgeId: z.string().uuid(),
@@ -51,7 +52,7 @@ export async function awardBadge(fd: FormData): Promise<void> {
   void sendPushTo(parsed.user_id, {
     title: `${b.icon ?? "🏅"} ${b.name}`,
     body: parsed.note || "You earned a badge.",
-    url: "/m/kudos",
+    url: urlFor("mobile", "/kudos"),
     tag: `badge:${parsed.badgeId}:${parsed.user_id}:${Date.now()}`,
     kind: "badge",
   });

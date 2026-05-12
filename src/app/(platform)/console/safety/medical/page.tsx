@@ -7,13 +7,14 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
 const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
   { href: "/console/safety/medical/encounters", label: "Encounters", description: "PHI-encrypted clinical log" },
   { href: "/console/safety/medical/plan", label: "Medical Plan", description: "Games medical services plan" },
-  { href: "/m/medic", label: "Mobile Triage", description: "Field clinicians log encounters" },
+  { href: urlFor("mobile", "/medic"), label: "Mobile Triage", description: "Field clinicians log encounters" },
   { href: "/console/operations/incidents", label: "Incidents", description: "Cross-domain feed" },
 ];
 

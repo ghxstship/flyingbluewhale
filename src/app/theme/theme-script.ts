@@ -7,7 +7,7 @@
 
 export const THEME_COOKIE_NAME = "chroma_theme";
 export const THEME_STORAGE_KEY = "chroma.theme";
-export const MODE_COOKIE_NAME = "fbw_mode";
+export const MODE_COOKIE_NAME = "fth_mode";
 export const MODE_STORAGE_KEY = "chroma.mode";
 
 export const themeScript = `

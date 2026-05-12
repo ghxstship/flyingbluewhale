@@ -204,7 +204,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch {
       /* ignore */
     }
-    writeCookie("fbw_density", d);
+    writeCookie("fth_density", d);
     void persistRemote({ density: d });
   }, []);
 

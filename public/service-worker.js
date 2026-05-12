@@ -1,4 +1,4 @@
-// flyingbluewhale offline-first service worker
+// FLYTEHAUS Technologies — COMPVSS offline-first service worker
 // Caches the mobile shell + check-in flow + offline fallback page.
 //
 // Offline queue: clock-punch POSTs to /api/v1/shifts/checkin are
@@ -6,9 +6,9 @@
 // next reconnect via the background-sync event.
 
 const VERSION = "v2";
-const STATIC_CACHE = `fbw-static-${VERSION}`;
-const RUNTIME_CACHE = `fbw-runtime-${VERSION}`;
-const QUEUE_DB = "fbw-punch-queue";
+const STATIC_CACHE = `fth-static-${VERSION}`;
+const RUNTIME_CACHE = `fth-runtime-${VERSION}`;
+const QUEUE_DB = "fth-punch-queue";
 const QUEUE_STORE = "punches";
 const SYNC_TAG = "punch-replay";
 

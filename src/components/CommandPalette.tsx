@@ -253,7 +253,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         perform: () => {
           document.documentElement.setAttribute("data-theme", "light");
           try {
-            localStorage.setItem("fbw_theme", "light");
+            localStorage.setItem("fth_theme", "light");
           } catch {
             /* ignore */
           }
@@ -267,7 +267,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         perform: () => {
           document.documentElement.setAttribute("data-theme", "dark");
           try {
-            localStorage.setItem("fbw_theme", "dark");
+            localStorage.setItem("fth_theme", "dark");
           } catch {
             /* ignore */
           }

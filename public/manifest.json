@@ -1,8 +1,8 @@
 {
-  "name": "flyingbluewhale",
-  "short_name": "fbw",
+  "name": "FLYTEHAUS Technologies",
+  "short_name": "FLYTEHAUS",
   "description": "Unified production platform — internal console, external portals, mobile field PWA.",
-  "start_url": "/",
+  "start_url": "/m",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#0A0A0A",

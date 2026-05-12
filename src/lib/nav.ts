@@ -110,7 +110,11 @@ export type IconName =
   | "Coins"
   | "Route"
   // Sales pipeline
-  | "GitBranch";
+  | "GitBranch"
+  // Modules added to platformNav (2026-05-12)
+  | "Camera"
+  | "Upload"
+  | "MailOpen";
 
 export type NavItem = {
   label: string;
@@ -184,6 +188,10 @@ export const platformNav: NavGroup[] = [
       { label: "Directory", href: "/console/people", icon: "Users" },
       // Sustainability / Compliance reporting
       { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
+      // Cross-cutting workspace modules
+      { label: "Dashboards", href: "/console/dashboards", icon: "LayoutDashboard" },
+      { label: "Action Items", href: "/console/action-items", icon: "CheckSquare" },
+      { label: "Import Jobs", href: "/console/import", icon: "Upload" },
     ],
   },
   {
@@ -193,6 +201,8 @@ export const platformNav: NavGroup[] = [
     items: [
       { label: "Proposals", href: "/console/proposals", icon: "FileText" },
       { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
+      { label: "Project Templates", href: "/console/templates", icon: "Files" },
+      { label: "Photos & Media", href: "/console/photos", icon: "Camera" },
       // Site Plans is a CAD-rooted creative artifact — primary class is
       // CREATIVE, secondary BUILD (where it materializes).
       { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
@@ -224,6 +234,7 @@ export const platformNav: NavGroup[] = [
       { label: "Clients", href: "/console/clients", icon: "Handshake" },
       { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
+      { label: "Campaigns", href: "/console/campaigns", icon: "Megaphone" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
       { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },
@@ -266,6 +277,12 @@ export const platformNav: NavGroup[] = [
       { label: "Look-ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
       { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
       { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
+      { label: "Action Items", href: "/console/action-items", icon: "CheckSquare" },
+      { label: "Meetings", href: "/console/meetings", icon: "CalendarDays" },
+      { label: "Team Inbox", href: "/console/inbox", icon: "MailOpen" },
+      { label: "Forms", href: "/console/forms", icon: "ClipboardList" },
+      { label: "Service Desk", href: "/console/services", icon: "ConciergeBell" },
+      { label: "Ops Hub", href: "/console/ops", icon: "Command" },
       { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
       { label: "Events", href: "/console/events", icon: "CalendarDays" },
       { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
@@ -392,6 +409,7 @@ export const settingsNav: NavGroup[] = [
     items: [
       { label: "Audit Log", href: "/console/settings/audit" },
       { label: "Compliance", href: "/console/settings/compliance" },
+      { label: "Chain of Custody", href: "/console/compliance/coc" },
       { label: "Marketplace Reviews", href: "/console/marketplace/reviews" },
       { label: "Privacy", href: "/console/legal/privacy" },
       { label: "DSAR", href: "/console/legal/privacy/dsar" },

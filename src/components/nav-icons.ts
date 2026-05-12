@@ -10,6 +10,9 @@ import {
   AlertTriangle,
   ArrowLeftRight,
   Award,
+  Camera,
+  Upload,
+  MailOpen,
   BadgeCheck,
   BarChart3,
   BedDouble,
@@ -103,6 +106,9 @@ export const NAV_ICONS: Record<IconName, LucideIcon> = {
   // Atlas reads as a routing/wayfinding metaphor; Lucide's Compass is the
   // canonical "atlas" stand-in (no Atlas glyph in the set).
   Atlas: Compass,
+  Camera,
+  Upload,
+  MailOpen,
   Award,
   BadgeCheck,
   BarChart3,

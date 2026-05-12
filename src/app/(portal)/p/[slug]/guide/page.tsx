@@ -129,12 +129,21 @@ export default async function GuidePage({
   // Access gate: public personas are always allowed (published-guide RLS
   // still enforces visibility). Internal personas require either an org
   // session for this project or a redeemed code unlocking this persona.
-  // Anything else → redirect to the unlock page.
-  const internalPersonaRequested = !isPublicPersona(persona);
-  const allowedInternal = isOrgMemberOfProject || unlockedPersonas.has(persona);
-  if (internalPersonaRequested && !allowedInternal) {
-    const from = `/p/${slug}/guide${asParam ? `?as=${persona}` : ""}`;
-    redirect(`/p/${slug}/guide/unlock?as=${persona}&from=${encodeURIComponent(from)}`);
+  //
+  // Two redirect triggers, both end up on the unlock page:
+  //   1. The *resolved* persona is internal but not entitled — usually
+  //      means an org-session viewer's session lapsed.
+  //   2. The user explicitly asked via ?as=<internal-persona> and isn't
+  //      entitled. We send them to unlock instead of silently falling
+  //      back to guest, otherwise the "click my staff link" UX feels
+  //      broken ("I clicked a Production link but landed on Guests").
+  const resolvedNeedsCode = !isPublicPersona(persona) && !isOrgMemberOfProject && !unlockedPersonas.has(persona);
+  const askedNeedsCode =
+    !!asPersona && !isPublicPersona(asPersona) && !isOrgMemberOfProject && !unlockedPersonas.has(asPersona);
+  if (resolvedNeedsCode || askedNeedsCode) {
+    const targetPersona = askedNeedsCode ? (asPersona as GuidePersona) : persona;
+    const from = `/p/${slug}/guide?as=${targetPersona}`;
+    redirect(`/p/${slug}/guide/unlock?as=${targetPersona}&from=${encodeURIComponent(from)}`);
   }
 
   const guide = await getGuideByPersona(project.id, persona);

@@ -70,6 +70,7 @@ export async function advanceState(fd: FormData): Promise<void> {
       body: assignment.title ?? "",
       url: "/m/advances",
       tag: `advancing-state:${parsed.deliverableId}:${Date.now()}`,
+      kind: "advancing_state",
     });
   }
 
@@ -113,6 +114,7 @@ export async function reassignAssignment(fd: FormData): Promise<void> {
     body: assignment.title ?? "",
     url: "/m/advances",
     tag: `advancing-reassign:${parsed.deliverableId}:${Date.now()}`,
+    kind: "advancing",
   });
 
   revalidatePath(`/console/projects/${parsed.projectId}/advancing/assignments/${parsed.deliverableId}`);

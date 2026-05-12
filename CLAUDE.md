@@ -95,9 +95,18 @@ Deskless-workforce features that bring COMPVSS to feature-parity with Connecteam
 - **COMPVSS surfaces (/m):** `feed`, `inbox` + `[roomId]`, `learning` + `[courseId]`, `time-off` + `/new`, `kudos`, `polls`, `surveys` + `[surveyId]`, `docs` + `/new`, `directory`, `onboarding` + `[assignmentId]`, `checkin` (read-only meal/break summary, distinct from `/m/clock` punch), `incident` (My Incidents view, distinct from `/m/incidents` org queue), `incident/new` (express one-field quick-file).
 - **ATLVS admin (/console):** under `comms/announcements`, `comms/polls`, `comms/surveys`, `workforce/courses`, `workforce/time-off`, `workforce/recognition`, `workforce/badges`, `workforce/onboarding`, `workforce/shift-swaps`, `settings/time-clock-zones`.
 - **Realtime:** `src/components/RealtimeRefresh.tsx` is a tiny client island that subscribes to Supabase Realtime on a filtered table and nudges `router.refresh()` on changes. Mounted on `/m/feed` (announcements) and `/m/inbox/[roomId]` (chat_messages).
-- **Push fan-out:** announcement publish, kudos creation, chat message post, and badge award all fire `sendPushTo`/`sendPushBulk` from `src/lib/push/send.ts`. `/m/settings` reuses `<PushToggle>` for subscription enable/disable.
+- **Push fan-out:** announcement publish, kudos creation, chat message post, badge award, advancing-state transitions, course pass, time-off, shift-swap, and incident filing all fire `sendPushTo`/`sendPushBulk` from `src/lib/push/send.ts`. `/m/settings` reuses `<PushToggle>` for subscription enable/disable. **Per-kind opt-out:** every call passes a `kind: PushKind` payload field; `sendPushTo`/`sendPushBulk` read `notification_preferences.matrix[<kind>].push` and short-circuit users who toggled the kind off in `/m/settings/notifications`. Omit `kind` only for system-level pings that shouldn't be user-disable-able.
 - **Test users (demo org):** `performer@gvteway.test` (owner), `admin@gvteway.test` (admin), `mgmt@gvteway.test` (manager), `crew@gvteway.test` (member) — all password `CompvssTest2026!`. Re-role via SQL; passwords reset via pgcrypto's `crypt()`.
 - **Smoke harnesses:** `scripts/compvss-smoke.mjs` (47 routes × 4 roles = 188 page-render checks with unique-title matchers + stub detection); `scripts/compvss-actions-smoke.mjs` (27 RLS-gated mutation checks across roles). Both run against a live dev server on :3000.
+
+## Connecteam parity loop-closure (0050–0051)
+
+Migrations that close the hardening loop on the 0046–0048 layer.
+
+- **Schema:** `0050_connecteam_fk_indexes.sql` (20 missing FK indexes on the new Connecteam tables — announcements.author_id, badge_awards.badge_id, chat_messages.author_id, etc.) · `0051_catalog_account_manager_canon.sql` (three pieces).
+- **Master catalog (0051 §1):** `public.master_catalog_items` — org-scoped reusable inventory (`catalog_kind` enum: credential/catering/radio/tool/equipment/uniform/travel/lodging/vehicle). `deliverables.catalog_item_id` FK points back so advancing assignments can reference a canonical SKU instead of free-text titles. ATLVS admin at `/console/settings/catalog` (list + new + detail + edit + soft-delete + toggle).
+- **Account-manager assignments (0051 §2):** `public.account_manager_assignments` — pairs a portal user (vendor/sponsor/delegation contact/etc.) with their org-side AM for a given persona × project. Drives `/p/[slug]/messages` (the portal's direct-to-AM thread) and `/p/[slug]/messages/start` (lazy chat_rooms row creation). ATLVS admin at `/console/settings/account-managers` (list + new + detail + toggle + delete; rooms preserved on delete via ON DELETE SET NULL on chat_room_id).
+- **Notification preference taxonomy (0051 §3):** `notification_kind_catalog` view — canonical list of `PushKind` values that the `/m/settings/notifications` matrix renders against. See "Push fan-out" above for how the matrix is enforced.
 
 ## Boarding Pass (event guides)
 

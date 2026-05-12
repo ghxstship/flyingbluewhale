@@ -53,6 +53,7 @@ export async function awardBadge(fd: FormData): Promise<void> {
     body: parsed.note || "You earned a badge.",
     url: "/m/kudos",
     tag: `badge:${parsed.badgeId}:${parsed.user_id}:${Date.now()}`,
+    kind: "badge",
   });
 
   revalidatePath(`/console/workforce/badges/${parsed.badgeId}`);

@@ -17,6 +17,23 @@ import { hasVapid, vapid } from "./vapid";
  * push delivery.
  */
 
+/** Canonical event kinds from migration 0051's notification_kind_catalog
+ *  view. Per-user preferences in `notification_preferences.matrix` gate
+ *  delivery — sendPushTo/Bulk skip users who've toggled the kind off
+ *  via /m/settings/notifications. Omit `kind` only for system-level
+ *  pings that shouldn't be user-disable-able (e.g. security alerts). */
+export type PushKind =
+  | "announcement"
+  | "chat"
+  | "kudos"
+  | "badge"
+  | "advancing"
+  | "advancing_state"
+  | "shift_swap"
+  | "time_off"
+  | "course"
+  | "incident";
+
 export type PushPayload = {
   title: string;
   body: string;
@@ -25,6 +42,8 @@ export type PushPayload = {
   badge?: string;
   tag?: string;
   data?: Record<string, unknown>;
+  /** Categorisation tag for user-prefs filtering. */
+  kind?: PushKind;
 };
 
 export type PushSendResult = { sent: number; failed: number; disabled: number };
@@ -215,8 +234,29 @@ async function sendOne(sub: PushSubRow, serialized: string): Promise<"sent" | "d
   }
 }
 
+/** Read the caller's notification_preferences.matrix and return the
+ *  set of user_ids who have toggled `kind` to false on the `push`
+ *  channel. Default-on: if a user has no prefs row, or no entry for the
+ *  kind, or push is undefined for the kind, we include them in delivery.
+ *  Only an explicit `push:false` excludes a user. */
+async function filterByPushPrefs(userIds: string[], kind: PushKind | undefined): Promise<Set<string>> {
+  // No kind → broadcast to everyone (system-level pings).
+  if (!kind || userIds.length === 0) return new Set();
+  const supabase = createServiceClient();
+  const { data } = await supabase.from("notification_preferences").select("user_id, matrix").in("user_id", userIds);
+  const excluded = new Set<string>();
+  for (const row of (data ?? []) as Array<{ user_id: string; matrix: Record<string, { push?: boolean }> | null }>) {
+    const cell = row.matrix?.[kind];
+    if (cell?.push === false) excluded.add(row.user_id);
+  }
+  return excluded;
+}
+
 export async function sendPushTo(userId: string, payload: PushPayload): Promise<PushSendResult> {
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
+  // Pref gate: if the user has toggled this kind off, short-circuit.
+  const excluded = await filterByPushPrefs([userId], payload.kind);
+  if (excluded.has(userId)) return { sent: 0, failed: 0, disabled: 0 };
   const subs = await fetchActiveSubs(userId);
   if (subs.length === 0) return { sent: 0, failed: 0, disabled: 0 };
   const serialized = JSON.stringify(payload);
@@ -239,7 +279,12 @@ export async function sendPushTo(userId: string, payload: PushPayload): Promise<
 export async function sendPushBulk(userIds: string[], payload: PushPayload): Promise<PushSendResult> {
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   if (userIds.length === 0) return { sent: 0, failed: 0, disabled: 0 };
-  const byUser = await fetchActiveSubsBulk(userIds);
+  // Pref gate: drop users who've toggled this kind off before we hit
+  // the push_subscriptions read.
+  const excluded = await filterByPushPrefs(userIds, payload.kind);
+  const allowed = userIds.filter((u) => !excluded.has(u));
+  if (allowed.length === 0) return { sent: 0, failed: 0, disabled: 0 };
+  const byUser = await fetchActiveSubsBulk(allowed);
   const subs: PushSubRow[] = [];
   for (const list of byUser.values()) subs.push(...list);
   if (subs.length === 0) return { sent: 0, failed: 0, disabled: 0 };

@@ -65,6 +65,7 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
         body: parsed.data.body.slice(0, 200),
         url: "/m/feed",
         tag: `announcement:${data.id}`,
+        kind: "announcement",
       });
     }
   }

@@ -47,6 +47,7 @@ export async function postMessage(fd: FormData): Promise<void> {
       body: parsed.body.slice(0, 200),
       url: `/m/inbox/${parsed.roomId}`,
       tag: `chat:${parsed.roomId}`,
+      kind: "chat",
     });
   }
 

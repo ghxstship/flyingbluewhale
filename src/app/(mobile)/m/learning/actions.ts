@@ -83,6 +83,7 @@ export async function submitQuiz(fd: FormData): Promise<void> {
         body: `Course passed: ${c.title}`,
         url: "/m/kudos",
         tag: `course-badge:${c.id}:${session.userId}`,
+        kind: "badge",
       });
     }
   }

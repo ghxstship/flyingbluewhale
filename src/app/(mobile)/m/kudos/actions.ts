@@ -46,6 +46,7 @@ export async function createKudos(fd: FormData): Promise<void> {
     body: parsed.message.slice(0, 200),
     url: "/m/kudos",
     tag: `kudos:${session.userId}:${Date.now()}`,
+    kind: "kudos",
   });
 
   revalidatePath("/m/kudos");

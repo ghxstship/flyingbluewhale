@@ -355,7 +355,15 @@ export const settingsNav: NavGroup[] = [
     items: [
       { label: "Roles", href: "/console/people/roles" },
       { label: "Invites", href: "/console/people/invites" },
+      { label: "Account Managers", href: "/console/settings/account-managers" },
       { label: "Governance", href: "/console/settings/governance" },
+    ],
+  },
+  {
+    label: "Catalog & Field",
+    items: [
+      { label: "Master Catalog", href: "/console/settings/catalog" },
+      { label: "Time-Clock Zones", href: "/console/settings/time-clock-zones" },
     ],
   },
   {

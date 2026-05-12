@@ -86,6 +86,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     body: parsed.data.title,
     url: "/m/advances",
     tag: `advancing:${projectId}:${parsed.data.assignee_id}:${Date.now()}`,
+    kind: "advancing",
   });
 
   revalidatePath(`/console/projects/${projectId}/advancing/assignments`);

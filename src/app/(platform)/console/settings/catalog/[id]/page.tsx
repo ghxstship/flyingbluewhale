@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
@@ -59,6 +60,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
         action={
           <div className="flex items-center gap-2">
+            <Link href={`/console/settings/catalog/${item.id}/edit`} className="btn btn-secondary btn-sm">
+              Edit
+            </Link>
             <form action={toggleActive}>
               <input type="hidden" name="id" value={item.id} />
               <input type="hidden" name="next" value={item.active ? "false" : "true"} />

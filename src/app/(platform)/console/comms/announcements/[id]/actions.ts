@@ -46,6 +46,7 @@ export async function publishAnnouncement(fd: FormData): Promise<void> {
         body: u.body.slice(0, 200),
         url: "/m/feed",
         tag: `announcement:${u.id}`,
+        kind: "announcement",
       });
     }
   }

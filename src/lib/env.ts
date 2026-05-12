@@ -33,6 +33,11 @@ const schema = z.object({
   // local cookies survive process restarts. Rotating this value revokes
   // every outstanding access token.
   GUIDE_ACCESS_SECRET: z.string().optional(),
+  // Web Push VAPID public key — passed to the browser's PushManager so it
+  // can authenticate the application server. Must be set for COMPVSS push
+  // notifications to work. Read via process.env in server components; this
+  // entry centralises validation so a missing key surfaces at build time.
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -56,6 +61,7 @@ export const env = schema.parse({
   WEATHER_DISABLED: process.env.WEATHER_DISABLED,
   LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
   GUIDE_ACCESS_SECRET: process.env.GUIDE_ACCESS_SECRET,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);

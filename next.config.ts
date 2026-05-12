@@ -87,7 +87,11 @@ const config: NextConfig = {
         headers: [
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
+          // SAMEORIGIN matches CSP frame-ancestors 'self' — same-origin iframes
+          // (marketing home page portal-guide live preview) are permitted while
+          // cross-origin embedding remains blocked. DENY would break that preview
+          // in legacy browsers that honour X-Frame-Options but not CSP.
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
           { key: "Content-Security-Policy", value: csp },

@@ -504,7 +504,7 @@ pre,
   .skip-link {
     position: absolute;
     top: -100%;
-    left: 0;
+    inset-inline-start: 0;
     z-index: var(--z-skip-link);
     padding: 0.5rem 1rem;
     background: var(--org-primary);
@@ -920,7 +920,7 @@ pre,
   }
   .data-table th {
     padding: 0.625rem 0.875rem;
-    text-align: left;
+    text-align: start;
     font-size: 0.75rem;
     font-weight: 600;
     /* Audit DS-TC1: Title Case canon — column headers render the source

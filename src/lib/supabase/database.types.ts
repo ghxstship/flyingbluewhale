@@ -11958,6 +11958,8 @@ export type Database = {
           last_viewed_at: string | null
           lodging_provided: boolean | null
           meals_provided: boolean | null
+          onsite_end_date: string | null
+          onsite_start_date: string | null
           org_id: string
           override_amount_cents: number | null
           override_per_diem_cents: number | null
@@ -11974,6 +11976,8 @@ export type Database = {
           status: Database["public"]["Enums"]["offer_letter_status"]
           terms_override: string | null
           token_expires_at: string | null
+          travel_in_date: string | null
+          travel_out_date: string | null
           travel_provided: boolean | null
           updated_at: string
           venue_id: string | null
@@ -12003,6 +12007,8 @@ export type Database = {
           last_viewed_at?: string | null
           lodging_provided?: boolean | null
           meals_provided?: boolean | null
+          onsite_end_date?: string | null
+          onsite_start_date?: string | null
           org_id: string
           override_amount_cents?: number | null
           override_per_diem_cents?: number | null
@@ -12019,6 +12025,8 @@ export type Database = {
           status?: Database["public"]["Enums"]["offer_letter_status"]
           terms_override?: string | null
           token_expires_at?: string | null
+          travel_in_date?: string | null
+          travel_out_date?: string | null
           travel_provided?: boolean | null
           updated_at?: string
           venue_id?: string | null
@@ -12048,6 +12056,8 @@ export type Database = {
           last_viewed_at?: string | null
           lodging_provided?: boolean | null
           meals_provided?: boolean | null
+          onsite_end_date?: string | null
+          onsite_start_date?: string | null
           org_id?: string
           override_amount_cents?: number | null
           override_per_diem_cents?: number | null
@@ -12064,6 +12074,8 @@ export type Database = {
           status?: Database["public"]["Enums"]["offer_letter_status"]
           terms_override?: string | null
           token_expires_at?: string | null
+          travel_in_date?: string | null
+          travel_out_date?: string | null
           travel_provided?: boolean | null
           updated_at?: string
           venue_id?: string | null

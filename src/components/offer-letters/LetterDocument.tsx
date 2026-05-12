@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { OfferLetterResolved } from "@/lib/offer-letters/types";
+import type { OfferLetterResolved, OnboardingItem } from "@/lib/offer-letters/types";
 import { EMPLOYER_LABEL, CLASSIFICATION_LABEL, BASIS_LABEL } from "@/lib/offer-letters/types";
 import { formatCompensation, formatDollars } from "@/lib/offer-letters/format";
 import { formatDate, formatDateTime } from "@/lib/i18n/format";
@@ -223,7 +223,7 @@ export function LetterDocument({ letter }: { letter: OfferLetterResolved }) {
               const items = (letter.effective_onboarding_items ?? [])
                 .slice()
                 .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
-              const guideStep = letter.guide_url
+              const guideStep: OnboardingItem | null = letter.guide_url
                 ? {
                     key: "production_guide",
                     label: "Review the Salvage City Production Guide",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useTransition } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
@@ -37,6 +37,7 @@ export function AccessCodeManager({
   }, null);
 
   const [revokeBusy, startRevoke] = useTransition();
+  const [revokeError, setRevokeError] = useState<string | null>(null);
 
   const active = codes.filter((c) => !c.revoked_at);
   const revoked = codes.filter((c) => c.revoked_at);
@@ -137,8 +138,10 @@ export function AccessCodeManager({
                       disabled={revokeBusy}
                       onClick={() => {
                         if (!confirm(`Revoke code ${c.code_prefix}-…? Anyone holding it loses access.`)) return;
+                        setRevokeError(null);
                         startRevoke(async () => {
-                          await revokeCodeAction(projectId, persona, c.id);
+                          const result = await revokeCodeAction(projectId, persona, c.id);
+                          if ("error" in result) setRevokeError(result.error);
                         });
                       }}
                     >
@@ -150,6 +153,7 @@ export function AccessCodeManager({
             </tbody>
           </table>
         )}
+        {revokeError && <div className="text-sm text-[var(--color-error)]">{revokeError}</div>}
       </div>
 
       {/* Revoked / expired (collapsed list) */}

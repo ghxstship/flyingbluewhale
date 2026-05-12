@@ -50,7 +50,9 @@ export default async function UnlockPage({
   const asParam = typeof sp.as === "string" ? sp.as : undefined;
   const persona: GuidePersona =
     asParam && VALID_PERSONAS.has(asParam as GuidePersona) ? (asParam as GuidePersona) : "crew";
-  const from = typeof sp.from === "string" ? sp.from : `/p/${slug}/guide`;
+  const fromRaw = typeof sp.from === "string" ? sp.from : undefined;
+  // Restrict to same-origin relative paths to prevent open redirect.
+  const from = fromRaw && fromRaw.startsWith("/") && !fromRaw.startsWith("//") ? fromRaw : `/p/${slug}/guide`;
   const personaLabel = PERSONA_LABELS[persona];
   const tier = PERSONA_TIERS[persona].tier;
 
@@ -72,11 +74,7 @@ export default async function UnlockPage({
           </p>
           <UnlockForm slug={slug} persona={persona} from={from} />
           <p className="text-xs text-[var(--text-muted)]">
-            Need a code? Contact your production lead, or email{" "}
-            <a className="underline" href="mailto:hello@salvagecitysupperclub.com">
-              hello@salvagecitysupperclub.com
-            </a>
-            .
+            Need a code? Contact your production lead directly.
           </p>
         </div>
       </div>

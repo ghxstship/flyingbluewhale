@@ -11,7 +11,34 @@ import { GuideEditor } from "./GuideEditor";
 
 export const dynamic = "force-dynamic";
 
-const VALID: GuidePersona[] = ["artist", "vendor", "client", "sponsor", "guest", "crew", "staff", "custom"];
+function labelFor(p: GuidePersona): string {
+  const labels: Record<GuidePersona, string> = {
+    staff: "Production",
+    crew: "Operations",
+    vendor: "Food & Beverage",
+    brand_ambassador: "Brand Ambassador",
+    sponsor: "Sponsors",
+    artist: "Talent",
+    media_press: "Media & Press",
+    client: "Client",
+    guest: "Guests",
+    custom: "Temporary Access",
+  };
+  return labels[p] ?? p;
+}
+
+const VALID: GuidePersona[] = [
+  "staff",
+  "crew",
+  "vendor",
+  "brand_ambassador",
+  "sponsor",
+  "artist",
+  "media_press",
+  "client",
+  "guest",
+  "custom",
+];
 
 const SEED_CONFIG = JSON.stringify(
   {
@@ -62,7 +89,7 @@ export default async function GuideEditorPage({ params }: { params: Promise<{ pr
     <>
       <ModuleHeader
         eyebrow={project.name}
-        title={`${persona.charAt(0).toUpperCase() + persona.slice(1)} guide`}
+        title={`${labelFor(persona)} guide`}
         subtitle={`Tier ${tierInfo.tier} · ${tierInfo.classification}`}
         action={
           !isPublicPersona(persona) ? (
@@ -77,7 +104,7 @@ export default async function GuideEditorPage({ params }: { params: Promise<{ pr
           projectId={projectId}
           persona={persona}
           defaultValues={{
-            title: existing?.title ?? `${project.name} — ${persona} guide`,
+            title: existing?.title ?? `${project.name} — ${labelFor(persona)} guide`,
             subtitle: existing?.subtitle ?? "",
             classification: existing?.classification ?? tierInfo.classification,
             published: existing?.published ?? false,

@@ -11,7 +11,34 @@ import type { GuidePersona } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-const ALL_PERSONAS: GuidePersona[] = ["staff", "crew", "vendor", "artist", "client", "sponsor", "guest", "custom"];
+function labelFor(p: GuidePersona): string {
+  const labels: Record<GuidePersona, string> = {
+    staff: "Production",
+    crew: "Operations",
+    vendor: "Food & Beverage",
+    brand_ambassador: "Brand Ambassador",
+    sponsor: "Sponsors",
+    artist: "Talent",
+    media_press: "Media & Press",
+    client: "Client",
+    guest: "Guests",
+    custom: "Temporary Access",
+  };
+  return labels[p] ?? p;
+}
+
+const ALL_PERSONAS: GuidePersona[] = [
+  "staff",
+  "crew",
+  "vendor",
+  "brand_ambassador",
+  "sponsor",
+  "artist",
+  "media_press",
+  "client",
+  "guest",
+  "custom",
+];
 
 export default async function GuidesIndex({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
@@ -38,7 +65,7 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
             return (
               <Link key={p} href={`/console/projects/${projectId}/guides/${p}`} className="surface hover-lift p-5">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold capitalize">{p}</div>
+                  <div className="text-sm font-semibold">{labelFor(p)}</div>
                   {existing?.published ? (
                     <Badge variant="success">Live</Badge>
                   ) : existing ? (

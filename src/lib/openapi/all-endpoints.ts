@@ -263,6 +263,41 @@ registerEndpoint({
   auth: "session",
 });
 
+// ─── Guide access codes ──────────────────────────────────────────────
+registerEndpoint({
+  method: "POST",
+  path: "/guides/unlock",
+  summary: "Redeem a guide access code",
+  description:
+    "Validates the code, bumps its use_count, records the redemption, and sets an httpOnly signed JWT cookie that unlocks the requested persona on /p/<slug>/guide. Rate-limited to 10 attempts per minute per IP. Public-tier personas (guest, custom) are rejected — they do not require a code.",
+  tags: ["Guides"],
+  requestBody: z.object({
+    slug: z.string().min(1),
+    persona: z.enum([
+      "staff",
+      "crew",
+      "vendor",
+      "brand_ambassador",
+      "sponsor",
+      "artist",
+      "media_press",
+      "client",
+    ]),
+    code: z.string().min(4).max(64),
+  }),
+  responses: {
+    200: {
+      description: "Code accepted; signed access cookie set; redirect path returned",
+      schema: okEnvelope(z.object({ redirect: z.string() })),
+    },
+    400: { description: "Validation error or public persona", schema: ErrorEnvelope },
+    403: { description: "Invalid, expired, or exhausted code", schema: ErrorEnvelope },
+    404: { description: "Project not found", schema: ErrorEnvelope },
+    429: { description: "Rate limit exceeded", schema: ErrorEnvelope },
+  },
+  auth: "none",
+});
+
 registerEndpoint({
   method: "POST",
   path: "/push/subscriptions",

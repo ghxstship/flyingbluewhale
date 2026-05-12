@@ -48,6 +48,8 @@ const ROUTES = [
   { path: `/p/${SLUG}`, label: "Portal gateway", expect: "portal|gateway" },
   { path: `/p/${SLUG}/announcements`, label: "Updates feed", expect: "updates" },
   { path: `/p/${SLUG}/inbox`, label: "Notifications inbox", expect: "inbox" },
+  { path: `/p/${SLUG}/tasks`, label: "Portal tasks", expect: "my tasks" },
+  { path: `/p/${SLUG}/messages`, label: "Portal messages", expect: "messages" },
   { path: `/p/${SLUG}/guide`, label: "Boarding pass", expect: "guide|boarding" },
   { path: `/p/${SLUG}/overview`, label: "Project overview", expect: "overview" },
 
@@ -87,7 +89,14 @@ const ROUTES = [
   { path: `/p/${SLUG}/vip/itinerary`, label: "VIP itinerary", expect: "itinerary" },
   { path: `/p/${SLUG}/guest/schedule`, label: "Guest schedule", expect: "schedule" },
   { path: `/p/${SLUG}/producer/portfolio`, label: "Producer portfolio", expect: "portfolio" },
+  { path: `/p/${SLUG}/producer/risk`, label: "Producer risk", expect: "risk register" },
+  { path: `/p/${SLUG}/producer/approvals`, label: "Producer approvals", expect: "approvals" },
+  { path: `/p/${SLUG}/producer/pnl`, label: "Producer P&L", expect: "p&l|p&amp;l" },
   { path: `/p/${SLUG}/promoter/settlements`, label: "Promoter settlements", expect: "settlement" },
+  { path: `/p/${SLUG}/promoter/co-pro`, label: "Promoter co-pro", expect: "co-pro" },
+  { path: `/p/${SLUG}/promoter/tour-pnl`, label: "Promoter tour P&L", expect: "tour p&l|tour p&amp;l" },
+  { path: `/p/${SLUG}/promoter/marketing`, label: "Promoter marketing", expect: "marketing" },
+  { path: `/p/${SLUG}/promoter/approvals`, label: "Promoter approvals", expect: "approvals" },
 ];
 
 const STUB_MARKER = /scaffolded but not yet wired/i;

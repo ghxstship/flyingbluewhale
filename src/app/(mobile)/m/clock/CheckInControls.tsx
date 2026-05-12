@@ -45,12 +45,23 @@ export function CheckInControls({
             ...(pos ? { lat: pos.lat, lng: pos.lng } : {}),
           }),
         });
-        const json = (await res.json()) as { ok: boolean; error?: { message: string } };
+        const json = (await res.json()) as {
+          ok: boolean;
+          queued?: boolean;
+          error?: { message: string };
+        };
         if (!json.ok) {
           toast.error(json.error?.message ?? "Couldn't update");
           return;
         }
-        toast.success(label);
+        // 202 from the service worker means the punch is queued for
+        // background sync. Surface this so the user knows their action
+        // landed (just not against the server yet).
+        if (json.queued) {
+          toast.info(`${label} (queued — will sync when online)`);
+        } else {
+          toast.success(label);
+        }
         router.refresh();
       } catch (e) {
         toast.error(e instanceof Error ? e.message : "Network error");

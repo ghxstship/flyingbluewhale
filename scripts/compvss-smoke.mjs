@@ -66,6 +66,7 @@ const ROUTES = [
   { path: "/m/directory", label: "Directory", expect: "directory" },
   { path: "/m/onboarding", label: "Onboarding", expect: "onboarding" },
   { path: "/m/advances", label: "My advancing (mobile)", expect: "my advancing" },
+  { path: "/m/settings/notifications", label: "Notif prefs", expect: "notifications" },
   // Existing field-ops surfaces
   { path: "/m/clock", label: "Time clock", expect: "check-in" },
   { path: "/m/shift/swap", label: "Shift swap", expect: "swap shift" },

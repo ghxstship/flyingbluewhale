@@ -123,6 +123,64 @@ export type Database = {
         }
         Relationships: []
       }
+      account_manager_assignments: {
+        Row: {
+          active: boolean
+          chat_room_id: string | null
+          created_at: string
+          id: string
+          manager_user_id: string
+          org_id: string
+          persona: string
+          portal_user_id: string
+          project_id: string | null
+        }
+        Insert: {
+          active?: boolean
+          chat_room_id?: string | null
+          created_at?: string
+          id?: string
+          manager_user_id: string
+          org_id: string
+          persona: string
+          portal_user_id: string
+          project_id?: string | null
+        }
+        Update: {
+          active?: boolean
+          chat_room_id?: string | null
+          created_at?: string
+          id?: string
+          manager_user_id?: string
+          org_id?: string
+          persona?: string
+          portal_user_id?: string
+          project_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_manager_assignments_chat_room_id_fkey"
+            columns: ["chat_room_id"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "account_manager_assignments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "account_manager_assignments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       accounting_period_state_transitions: {
         Row: {
           accounting_period_id: string
@@ -6093,6 +6151,7 @@ export type Database = {
       deliverables: {
         Row: {
           assignee_id: string | null
+          catalog_item_id: string | null
           closed_at: string | null
           closed_by: string | null
           created_at: string
@@ -6121,6 +6180,7 @@ export type Database = {
         }
         Insert: {
           assignee_id?: string | null
+          catalog_item_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
@@ -6149,6 +6209,7 @@ export type Database = {
         }
         Update: {
           assignee_id?: string | null
+          catalog_item_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
@@ -6176,6 +6237,13 @@ export type Database = {
           version?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "deliverables_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "master_catalog_items"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "deliverables_closed_by_fkey"
             columns: ["closed_by"]
@@ -8246,6 +8314,127 @@ export type Database = {
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_access_codes: {
+        Row: {
+          code_hash: string
+          code_prefix: string
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          label: string | null
+          last_used_at: string | null
+          max_uses: number | null
+          org_id: string
+          persona: Database["public"]["Enums"]["guide_persona"]
+          project_id: string
+          revoked_at: string | null
+          use_count: number
+        }
+        Insert: {
+          code_hash: string
+          code_prefix: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          label?: string | null
+          last_used_at?: string | null
+          max_uses?: number | null
+          org_id: string
+          persona: Database["public"]["Enums"]["guide_persona"]
+          project_id: string
+          revoked_at?: string | null
+          use_count?: number
+        }
+        Update: {
+          code_hash?: string
+          code_prefix?: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          label?: string | null
+          last_used_at?: string | null
+          max_uses?: number | null
+          org_id?: string
+          persona?: Database["public"]["Enums"]["guide_persona"]
+          project_id?: string
+          revoked_at?: string | null
+          use_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_access_codes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_access_codes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_access_codes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_access_redemptions: {
+        Row: {
+          code_id: string
+          cookie_jti: string
+          id: string
+          ip: unknown
+          persona: Database["public"]["Enums"]["guide_persona"]
+          project_id: string
+          redeemed_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          code_id: string
+          cookie_jti: string
+          id?: string
+          ip?: unknown
+          persona: Database["public"]["Enums"]["guide_persona"]
+          project_id: string
+          redeemed_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          code_id?: string
+          cookie_jti?: string
+          id?: string
+          ip?: unknown
+          persona?: Database["public"]["Enums"]["guide_persona"]
+          project_id?: string
+          redeemed_at?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_access_redemptions_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "guide_access_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_access_redemptions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -10753,6 +10942,79 @@ export type Database = {
             columns: ["incident_id"]
             isOneToOne: false
             referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      master_catalog_items: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          currency: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          inventory_qty: number | null
+          kind: Database["public"]["Enums"]["catalog_kind"]
+          name: string
+          org_id: string
+          supplier_id: string | null
+          unit_cost_cents: number | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          currency?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          inventory_qty?: number | null
+          kind: Database["public"]["Enums"]["catalog_kind"]
+          name: string
+          org_id: string
+          supplier_id?: string | null
+          unit_cost_cents?: number | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          currency?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          inventory_qty?: number | null
+          kind?: Database["public"]["Enums"]["catalog_kind"]
+          name?: string
+          org_id?: string
+          supplier_id?: string | null
+          unit_cost_cents?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "master_catalog_items_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "master_catalog_items_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "master_catalog_items_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
         ]
@@ -25451,6 +25713,51 @@ export type Database = {
         }
         Relationships: []
       }
+      guide_access_redemption_log: {
+        Row: {
+          code_id: string | null
+          code_label: string | null
+          code_prefix: string | null
+          id: string | null
+          ip: unknown
+          org_id: string | null
+          persona: Database["public"]["Enums"]["guide_persona"] | null
+          project_id: string | null
+          redeemed_at: string | null
+          user_agent: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_access_codes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_access_redemptions_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "guide_access_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_access_redemptions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_kind_catalog: {
+        Row: {
+          description: string | null
+          kind: string | null
+          label: string | null
+        }
+        Relationships: []
+      }
       offer_letters_resolved: {
         Row: {
           accepted_at: string | null
@@ -27315,6 +27622,16 @@ export type Database = {
         | "failed"
         | "cancelled"
       availability_kind: "hold" | "confirm" | "block"
+      catalog_kind:
+        | "credential"
+        | "catering"
+        | "radio"
+        | "tool"
+        | "equipment"
+        | "uniform"
+        | "travel"
+        | "lodging"
+        | "vehicle"
       change_order_state:
         | "draft"
         | "requested"
@@ -27968,6 +28285,17 @@ export const Constants = {
         "cancelled",
       ],
       availability_kind: ["hold", "confirm", "block"],
+      catalog_kind: [
+        "credential",
+        "catering",
+        "radio",
+        "tool",
+        "equipment",
+        "uniform",
+        "travel",
+        "lodging",
+        "vehicle",
+      ],
       change_order_state: [
         "draft",
         "requested",

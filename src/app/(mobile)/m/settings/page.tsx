@@ -72,6 +72,12 @@ export default async function MobileSettings() {
                 Push requires NEXT_PUBLIC_VAPID_PUBLIC_KEY in env. Ask an admin to configure.
               </p>
             )}
+            <Link
+              href="/m/settings/notifications"
+              className="mt-3 inline-block text-xs text-[var(--text-secondary)] underline"
+            >
+              Manage per-kind notification preferences →
+            </Link>
           </div>
         </div>
 

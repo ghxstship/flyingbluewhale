@@ -102,6 +102,7 @@ export default async function MobileGuide() {
         subtitle={guide.subtitle}
         classification={guide.classification}
         tier={guide.tier}
+        updatedAt={guide.updated_at}
         config={guide.config as GuideConfig}
         comments={
           <GuideComments

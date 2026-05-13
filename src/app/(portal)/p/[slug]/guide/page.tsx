@@ -203,6 +203,8 @@ export default async function GuidePage({
           subtitle={guide.subtitle}
           classification={guide.classification}
           tier={guide.tier}
+          updatedAt={guide.updated_at}
+          hideTitle
           config={guide.config as GuideConfig}
           comments={
             <GuideComments

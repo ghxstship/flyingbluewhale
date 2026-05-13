@@ -51,9 +51,6 @@ export function LetterDocument({
       <section className="space-y-2">
         <div className="text-xs tracking-widest text-[var(--text-muted)] uppercase">Recipient</div>
         <div className="text-base font-medium">{letter.recipient_name}</div>
-        {letter.recipient_phone && (
-          <div className="font-mono text-xs text-[var(--text-muted)]">{letter.recipient_phone}</div>
-        )}
       </section>
 
       <section className="space-y-3">

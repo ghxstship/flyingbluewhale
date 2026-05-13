@@ -9,6 +9,8 @@ export function GuideView({
   classification,
   config,
   tier,
+  updatedAt,
+  hideTitle = false,
   comments,
 }: {
   title: string;
@@ -16,10 +18,18 @@ export function GuideView({
   classification?: string | null;
   config: GuideConfig;
   tier?: number;
+  /** Last-updated timestamp. Rendered as "Last updated {date}" below the
+   *  classification chip — replaces version strings in guide subtitles. */
+  updatedAt?: string | null;
+  /** When true, suppress title + subtitle (caller's shell already renders
+   *  them via ModuleHeader). Classification pill, access tier, and
+   *  last-updated line still render. */
+  hideTitle?: boolean;
   /** Optional comments slot rendered after sections (typically <GuideComments />). */
   comments?: ReactNode;
 }) {
   const sections = config.sections ?? [];
+  const lastUpdated = updatedAt ? formatLastUpdated(updatedAt) : null;
 
   return (
     <article className="space-y-10">
@@ -29,10 +39,18 @@ export function GuideView({
             {classification}
           </div>
         )}
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance">{title}</h1>
-        {subtitle && <p className="mt-2 text-sm text-[var(--text-secondary)]">{subtitle}</p>}
-        {typeof tier === "number" && (
-          <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">Access tier {tier}</div>
+        {!hideTitle && (
+          <>
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance">{title}</h1>
+            {subtitle && <p className="mt-2 text-sm text-[var(--text-secondary)]">{subtitle}</p>}
+          </>
+        )}
+        {(typeof tier === "number" || lastUpdated) && (
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-[var(--text-muted)]">
+            {typeof tier === "number" && <span>Access tier {tier}</span>}
+            {typeof tier === "number" && lastUpdated && <span aria-hidden>·</span>}
+            {lastUpdated && <span>Last updated {lastUpdated}</span>}
+          </div>
         )}
       </header>
 
@@ -377,5 +395,13 @@ function SectionBody({ section }: { section: GuideSection }) {
 
     case "custom":
       return <p className="text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{section.body}</p>;
+  }
+}
+
+function formatLastUpdated(iso: string): string {
+  try {
+    return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return iso;
   }
 }

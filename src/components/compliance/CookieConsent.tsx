@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +19,7 @@ type Consent = {
   decidedAt: string;
 };
 
-const COOKIE_NAME = "fbw_consent";
+const COOKIE_NAME = "fh_consent";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 function readConsent(): Consent | null {
@@ -33,7 +34,8 @@ function readConsent(): Consent | null {
 }
 
 function writeConsent(c: Consent) {
-  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(JSON.stringify(c))}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax`;
+  const secure = location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(JSON.stringify(c))}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax${secure}`;
   // Expose to window so analytics scripts can gate
   (window as Window & { __consent?: Consent }).__consent = c;
   window.dispatchEvent(new CustomEvent("consentchange", { detail: c }));
@@ -69,8 +71,11 @@ export function CookieConsent() {
         <DialogHeader>
           <DialogTitle>Cookies & privacy</DialogTitle>
           <DialogDescription>
-            We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use
-            analytics and marketing cookies to improve the product.
+            We use essential cookies to keep you signed in and protect your account. With your permission, we&apos;d also
+            use analytics and marketing cookies to improve the product.{" "}
+            <Link href="/legal/cookies" className="underline underline-offset-2">
+              Cookie Policy
+            </Link>
           </DialogDescription>
         </DialogHeader>
 

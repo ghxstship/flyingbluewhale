@@ -26,7 +26,7 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
         eyebrow="People · MSAs"
         title={`MSA · ${resolved.crew_member_name}`}
         subtitle={resolved.crew_member_role ?? "—"}
-        actions={
+        action={
           <div className="flex items-center gap-2">
             <Badge variant={MSA_STATUS_VARIANT[resolved.msa_status]}>{MSA_STATUS_LABEL[resolved.msa_status]}</Badge>
             <Link

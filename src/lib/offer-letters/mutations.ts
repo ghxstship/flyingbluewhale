@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { OfferLetter, OfferLetterStatus } from "./types";
 
 /** Editable FK columns + per-letter overrides (NOT the joined display fields). */
@@ -32,7 +33,7 @@ type UpdatePayload = Partial<
 >;
 
 export async function updateOfferLetter(orgId: string, id: string, patch: UpdatePayload): Promise<void> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as unknown as LooseSupabase;
   // .select("id") so we can detect when the .eq("status", "draft") guard
   // matched no rows (caller tried to edit a non-draft letter). Without
   // this we silently no-op AND log the edit as if it succeeded — a

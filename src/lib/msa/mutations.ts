@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { ExhibitBOtherClient, ExhibitCCapitalItem, IndependentContractorMsaResolved } from "./types";
 
 // ── ADMIN MUTATIONS (org-scoped, RLS-gated) ─────────────────────────────────
@@ -9,7 +10,7 @@ import type { ExhibitBOtherClient, ExhibitCCapitalItem, IndependentContractorMsa
  *  contractor sees the exact text they're signing (frozen at draft time, not
  *  re-pulled at sign time). Caller verifies no active MSA already exists. */
 export async function createMsaDraft(orgId: string, crewMemberId: string): Promise<string> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as unknown as LooseSupabase;
 
   // Snapshot terms + governing law at draft time so the contractor reviews
   // exactly what they will sign.
@@ -36,7 +37,7 @@ export async function createMsaDraft(orgId: string, crewMemberId: string): Promi
 
 /** Flip status from draft → sent (after admin reviews + emails the link). */
 export async function markMsaSent(orgId: string, msaId: string): Promise<void> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
     .from("independent_contractor_msas")
     .update({ msa_status: "sent", sent_at: new Date().toISOString() })
@@ -47,7 +48,7 @@ export async function markMsaSent(orgId: string, msaId: string): Promise<void> {
 }
 
 export async function revokeMsa(orgId: string, msaId: string, reason: string): Promise<void> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
     .from("independent_contractor_msas")
     .update({
@@ -72,7 +73,7 @@ export async function signMsaByToken(
   ip: string | null,
   userAgent: string | null,
 ): Promise<IndependentContractorMsaResolved> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as unknown as LooseSupabase;
   const { data, error } = await supabase.rpc("sign_msa", {
     p_token: token,
     p_code: code,

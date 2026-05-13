@@ -12,8 +12,24 @@ const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: s
       { label: "GVTEWAY", href: "/solutions/gvteway" },
       { label: "COMPVSS", href: "/solutions/compvss" },
       { label: "Features", href: "/features" },
+      { label: "AI", href: "/ai" },
+      { label: "Integrations", href: "/integrations" },
       { label: "Pricing", href: "/pricing" },
       { label: "Changelog", href: "/changelog" },
+      { label: "Roadmap", href: "/roadmap" },
+    ],
+  },
+  {
+    heading: "Built For",
+    items: [
+      { label: "Tour Managers", href: "/teams/tour-managers" },
+      { label: "Production Managers", href: "/teams/production-managers" },
+      { label: "Stage Managers", href: "/teams/stage-managers" },
+      { label: "Festival Directors", href: "/teams/festival-directors" },
+      { label: "Site Managers", href: "/teams/site-managers" },
+      { label: "Tech Directors", href: "/teams/technical-directors" },
+      { label: "Talent Buyers", href: "/teams/talent-buyers" },
+      { label: "EHS Leads", href: "/teams/hse-leads" },
     ],
   },
   {
@@ -65,6 +81,9 @@ const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: s
       { label: "Contact", href: "/contact" },
       { label: "Careers", href: "/careers" },
       { label: "Customers", href: "/customers" },
+      { label: "Press", href: "/press" },
+      { label: "Partners", href: "/partners" },
+      { label: "Status", href: "/status" },
     ],
   },
   {
@@ -87,7 +106,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <StickyCTABar />
       <footer className="mt-24 border-t border-[var(--border-color)] bg-[var(--surface-inset)]">
         <div className="mx-auto max-w-6xl px-6 py-16">
-          <div className="grid gap-10 md:grid-cols-6">
+          <div className="grid gap-10 md:grid-cols-3 lg:grid-cols-7">
             <div className="md:col-span-1">
               <Link
                 href="/"

@@ -6,6 +6,9 @@ import { MARKETING_GUIDE_LIST } from "@/lib/marketing-guides";
 import { GLOSSARY } from "@/lib/marketing/glossary";
 import { TEMPLATES } from "@/lib/marketing/templates";
 import { DEMO_PERSONAS } from "@/lib/marketing/demo-personas";
+import { AI_USES } from "@/lib/marketing/ai-uses";
+import { TEAMS } from "@/lib/marketing/teams";
+import { INTEGRATIONS } from "@/lib/marketing/integrations";
 import { SITE } from "@/lib/seo";
 
 const FEATURE_SLUGS = [
@@ -65,6 +68,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/tools/per-diem-calculator", priority: 0.75, changeFrequency: "monthly" },
     { path: "/tools/capacity-calculator", priority: 0.75, changeFrequency: "monthly" },
     { path: "/demo", priority: 0.85, changeFrequency: "monthly" },
+    { path: "/ai", priority: 0.9, changeFrequency: "monthly" },
+    { path: "/teams", priority: 0.85, changeFrequency: "monthly" },
+    { path: "/integrations", priority: 0.85, changeFrequency: "monthly" },
+    { path: "/es-ES", priority: 0.8, changeFrequency: "monthly" },
+    { path: "/pt-BR", priority: 0.8, changeFrequency: "monthly" },
+    { path: "/roadmap", priority: 0.7, changeFrequency: "weekly" },
+    { path: "/status", priority: 0.6, changeFrequency: "daily" },
+    { path: "/press", priority: 0.6, changeFrequency: "monthly" },
+    { path: "/partners", priority: 0.7, changeFrequency: "monthly" },
     { path: "/community", priority: 0.85, changeFrequency: "monthly" },
     { path: "/blog", priority: 0.8, changeFrequency: "weekly" },
     { path: "/guides", priority: 0.85, changeFrequency: "monthly" },
@@ -119,6 +131,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...DEMO_PERSONAS.map((p) => ({
       path: `/demo/${p.slug}`,
       priority: 0.8,
+      changeFrequency: "monthly" as const,
+    })),
+    ...AI_USES.map((u) => ({
+      path: `/ai/${u.slug}`,
+      priority: 0.8,
+      changeFrequency: "monthly" as const,
+    })),
+    ...TEAMS.map((t) => ({
+      path: `/teams/${t.slug}`,
+      priority: 0.8,
+      changeFrequency: "monthly" as const,
+    })),
+    ...INTEGRATIONS.map((i) => ({
+      path: `/integrations/${i.slug}`,
+      priority: 0.75,
       changeFrequency: "monthly" as const,
     })),
     ...MARKETING_GUIDE_LIST.map((g) => ({

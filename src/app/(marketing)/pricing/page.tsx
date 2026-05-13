@@ -372,6 +372,45 @@ export default function PricingPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-6 py-12">
+        <div className="surface relative overflow-hidden p-8 md:p-10">
+          <span
+            className="absolute inset-x-0 top-0 h-1"
+            style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+          />
+          <div className="grid gap-8 md:grid-cols-2 md:items-center">
+            <div>
+              <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+                Coming Soon
+              </div>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">Savings Calculator.</h2>
+              <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                Drop in your current stack — Asana, Eventbrite, DocuSign, QuickBooks, the per-vendor PO tool — with the
+                seat counts and per-event fees. The calculator returns annual savings vs. running on ATLVS, layered AI
+                pricing included. Landing in Q3.
+              </p>
+              <p className="mt-3 text-xs text-[var(--text-muted)]">
+                Want an early preview tuned to your stack? Send your current line items via{" "}
+                <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">
+                  contact
+                </a>{" "}
+                and we&apos;ll do the math for you in the meantime.
+              </p>
+            </div>
+            <div className="rounded-lg border border-dashed border-[var(--border-color)] bg-[var(--surface-inset)] p-6 text-center">
+              <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                Preview
+              </div>
+              <div className="mt-3 font-mono text-3xl font-semibold opacity-50">$ ?,???</div>
+              <div className="mt-1 text-xs text-[var(--text-muted)]">annual savings vs. fragmented stack</div>
+              <div className="mt-4 text-[10px] tracking-wide text-[var(--text-muted)] uppercase">
+                Calculator launches Q3
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <FAQSection title="Pricing FAQ" faqs={FAQS} />
 
       <CTASection

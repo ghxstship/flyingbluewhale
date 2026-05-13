@@ -36,6 +36,10 @@ export const metadata: Metadata = buildMetadata({
   description:
     "The platform for production. Pitch to wrap, in one console. Three apps, one schema, every module — pre-pro through strike.",
   path: "/",
+  languages: {
+    "es-ES": `${SITE.baseUrl}/es-ES`,
+    "pt-BR": `${SITE.baseUrl}/pt-BR`,
+  },
   keywords: [
     "production management software",
     "event operations platform",

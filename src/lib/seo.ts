@@ -74,6 +74,9 @@ export type PageMeta = {
   /** Locale variants that ship a translation. Keys are BCP-47 codes
    *  (`es-ES`, `pt-BR`, …) and values are absolute or relative URLs. */
   languages?: Record<string, string>;
+  /** OpenGraph locale override (default `en_US`). Use `es_ES` / `pt_BR`
+   *  on the localized variants so social previews render correctly. */
+  ogLocale?: string;
   noIndex?: boolean;
 };
 
@@ -108,7 +111,7 @@ export function buildMetadata(m: PageMeta): Metadata {
         },
     openGraph: {
       type: m.article ? "article" : "website",
-      locale: "en_US",
+      locale: m.ogLocale ?? "en_US",
       url,
       siteName: SITE.name,
       title: m.title,

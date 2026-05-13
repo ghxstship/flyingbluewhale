@@ -240,3 +240,65 @@ export const BASIS_LABEL: Record<CompensationBasis, string> = {
   hourly: "Hourly",
   tbd: "To Be Confirmed",
 };
+
+// ── Nevada IC Compliance — Risk Tier Map ────────────────────────────────────
+// Mirrors the SCXEDC26-NV-IC-LETTERS-v1.md template package.
+// Roles in tiers 3 + 4 trigger an Eligibility Prerequisite call-out in §7 of
+// the letter and require stricter Exhibits B/C documentation (12-month
+// trailing client history vs. 24-month).
+
+export type EligibilityTier =
+  | "tier_1_executive" // Producer / Project Director — fee-based creative direction
+  | "tier_2_specialty" // Production Manager / Project Coordinator — established practice required
+  | "tier_3_trade" // Certified equipment ops + Chapter 624 trades — NSCB / OSHA gating
+  | "tier_4_high_risk"; // General labor / PA Guest / PA Merch — very-high misclassification risk
+
+export const TIER_LABEL: Record<EligibilityTier, string> = {
+  tier_1_executive: "Executive — Fee-Based Creative Direction",
+  tier_2_specialty: "Specialty — Established Practice Required",
+  tier_3_trade: "Trade — NSCB / OSHA Gating Applies",
+  tier_4_high_risk: "High Misclassification Risk — Eligibility Prerequisite",
+};
+
+/** Resolve a role slug to its Nevada IC eligibility tier. Unknown roles
+ *  default to tier_2_specialty (the safest non-trade middle path). */
+export function tierForRoleSlug(slug: string | null | undefined): EligibilityTier {
+  if (!slug) return "tier_2_specialty";
+  if (slug === "producer" || slug === "executive-producer" || slug.startsWith("project-director")) {
+    return "tier_1_executive";
+  }
+  if (slug === "production-manager" || slug === "production-manager-fb" || slug.startsWith("project-coordinator")) {
+    return "tier_2_specialty";
+  }
+  if (
+    slug === "production-crew-heavy" ||
+    slug === "production-crew-carpentry-av" ||
+    slug === "production-crew-electrical" ||
+    slug === "production-crew-rigging" ||
+    slug === "production-crew-steel" ||
+    slug.startsWith("production-crew-")
+  ) {
+    return "tier_3_trade";
+  }
+  if (
+    slug === "production-crew-general-labor" ||
+    slug.startsWith("production-assistant") ||
+    slug.startsWith("brand-ambassador")
+  ) {
+    return "tier_4_high_risk";
+  }
+  return "tier_2_specialty";
+}
+
+/** Trade-scope routing — these slugs touch NRS Chapter 624 (NSCB licensure). */
+export function isChapter624Trade(slug: string | null | undefined): boolean {
+  if (!slug) return false;
+  return (
+    slug === "production-crew-carpentry-av" || // C-3
+    slug === "production-crew-electrical" || // C-2
+    slug === "production-crew-rigging" || // A-14 / C-14
+    slug === "production-crew-steel" ||
+    slug === "production-crew-painting" || // C-4
+    slug === "production-crew-signs" // C-6
+  );
+}

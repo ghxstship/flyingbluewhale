@@ -29,15 +29,15 @@ function compLine(letter: OfferLetterResolved): string {
     return "Compensation: To be confirmed prior to signature.";
   }
   if (letter.compensation_basis === "flat_fee") {
-    return `Compensation: ${formatDollars(letter.effective_compensation_cents)} (flat project fee).`;
+    return `Compensation: ${formatDollars(letter.effective_compensation_cents)} flat project fee (milestone schedule in §5).`;
   }
   if (letter.compensation_basis === "per_day" && letter.rate_unit_price_cents) {
-    return `Compensation: ${formatDollars(letter.rate_unit_price_cents)} per day.`;
+    return `Compensation: ${formatDollars(letter.rate_unit_price_cents)} per documented service-day deliverable (each day a discrete deliverable per §5).`;
   }
   if (letter.compensation_basis === "per_show_day" && letter.rate_unit_price_cents) {
-    return `Compensation: ${formatDollars(letter.rate_unit_price_cents)} per show day.`;
+    return `Compensation: ${formatDollars(letter.rate_unit_price_cents)} per documented show-day deliverable.`;
   }
-  return `Compensation: ${formatDollars(letter.effective_compensation_cents)}.`;
+  return `Compensation: ${formatDollars(letter.effective_compensation_cents)} per scope deliverable.`;
 }
 
 /**

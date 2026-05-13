@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 type Row = {
   id: string;
   status: string;
-  engagement_start: string | null;
+  onsite_start_date: string | null;
   sent_at: string | null;
   accepted_at: string | null;
   declined_at: string | null;
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
   const { data } = ids.length
     ? await supabase
         .from("offer_letters")
-        .select("id,status,engagement_start,sent_at,accepted_at,declined_at,classification")
+        .select("id,status,onsite_start_date,sent_at,accepted_at,declined_at,classification")
         .eq("org_id", session.orgId)
         .in("crew_member_id", ids)
         .order("created_at", { ascending: false })
@@ -76,10 +76,10 @@ export default async function Page({ params }: { params: Promise<{ personId: str
               groupable: true,
             },
             {
-              key: "engagement_start",
+              key: "onsite_start_date",
               header: "Engagement Starts",
-              render: (r) => (r.engagement_start ? formatDate(r.engagement_start) : "—"),
-              accessor: (r) => r.engagement_start ?? "",
+              render: (r) => (r.onsite_start_date ? formatDate(r.onsite_start_date) : "—"),
+              accessor: (r) => r.onsite_start_date ?? "",
               mono: true,
               sortable: true,
             },

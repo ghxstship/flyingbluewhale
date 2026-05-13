@@ -12800,6 +12800,63 @@ export type Database = {
           },
         ]
       }
+      onboarding_step_state_transitions: {
+        Row: {
+          correlation_id: string | null
+          from_state:
+            | Database["public"]["Enums"]["onboarding_step_state"]
+            | null
+          id: string
+          org_id: string
+          reason: string | null
+          step_id: string
+          to_state: Database["public"]["Enums"]["onboarding_step_state"]
+          transitioned_at: string
+          transitioned_by: string | null
+        }
+        Insert: {
+          correlation_id?: string | null
+          from_state?:
+            | Database["public"]["Enums"]["onboarding_step_state"]
+            | null
+          id?: string
+          org_id: string
+          reason?: string | null
+          step_id: string
+          to_state: Database["public"]["Enums"]["onboarding_step_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Update: {
+          correlation_id?: string | null
+          from_state?:
+            | Database["public"]["Enums"]["onboarding_step_state"]
+            | null
+          id?: string
+          org_id?: string
+          reason?: string | null
+          step_id?: string
+          to_state?: Database["public"]["Enums"]["onboarding_step_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_step_state_transitions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "onboarding_step_state_transitions_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "onboarding_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       onboarding_steps: {
         Row: {
           category: string | null
@@ -12815,8 +12872,8 @@ export type Database = {
           offer_letter_id: string
           org_id: string
           sort_order: number
-          status: string
           step_key: string
+          step_state: Database["public"]["Enums"]["onboarding_step_state"]
           title: string
           updated_at: string
         }
@@ -12834,8 +12891,8 @@ export type Database = {
           offer_letter_id: string
           org_id: string
           sort_order?: number
-          status?: string
           step_key: string
+          step_state?: Database["public"]["Enums"]["onboarding_step_state"]
           title: string
           updated_at?: string
         }
@@ -12853,8 +12910,8 @@ export type Database = {
           offer_letter_id?: string
           org_id?: string
           sort_order?: number
-          status?: string
           step_key?: string
+          step_state?: Database["public"]["Enums"]["onboarding_step_state"]
           title?: string
           updated_at?: string
         }
@@ -28910,6 +28967,12 @@ export type Database = {
         | "expired"
         | "superseded"
         | "voided"
+      onboarding_step_state:
+        | "pending"
+        | "in_progress"
+        | "done"
+        | "waived"
+        | "blocked"
       open_call_status:
         | "draft"
         | "published"
@@ -29672,6 +29735,13 @@ export const Constants = {
         "expired",
         "superseded",
         "voided",
+      ],
+      onboarding_step_state: [
+        "pending",
+        "in_progress",
+        "done",
+        "waived",
+        "blocked",
       ],
       open_call_status: [
         "draft",

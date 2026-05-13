@@ -246,31 +246,38 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         perform: () => goto("/me/settings"),
       },
       {
-        id: "settings-theme-light",
-        label: "Switch to Light Theme",
+        id: "settings-mode-light",
+        label: "Switch to Light Mode",
         group: "Settings",
         icon: Sun,
         perform: () => {
-          document.documentElement.setAttribute("data-theme", "light");
+          // Color mode is `data-mode`, separate from the theme palette
+          // (`data-theme`). The canonical writer is ThemeProvider.setMode,
+          // but the command palette can't hook into that without a context
+          // boundary refactor — so write the cookie + localStorage pair
+          // directly using the same names the bootstrap script reads.
+          document.documentElement.setAttribute("data-mode", "light");
           try {
-            localStorage.setItem("fbw_theme", "light");
+            localStorage.setItem("chroma.mode", "light");
           } catch {
             /* ignore */
           }
+          document.cookie = `atlvs_mode=light; max-age=${60 * 60 * 24 * 365}; path=/; samesite=lax`;
         },
       },
       {
-        id: "settings-theme-dark",
-        label: "Switch to Dark Theme",
+        id: "settings-mode-dark",
+        label: "Switch to Dark Mode",
         group: "Settings",
         icon: Moon,
         perform: () => {
-          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute("data-mode", "dark");
           try {
-            localStorage.setItem("fbw_theme", "dark");
+            localStorage.setItem("chroma.mode", "dark");
           } catch {
             /* ignore */
           }
+          document.cookie = `atlvs_mode=dark; max-age=${60 * 60 * 24 * 365}; path=/; samesite=lax`;
         },
       },
       {

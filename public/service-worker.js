@@ -1,14 +1,14 @@
-// flyingbluewhale offline-first service worker
+// ATLVS Technologies — offline-first service worker (COMPVSS field PWA).
 // Caches the mobile shell + check-in flow + offline fallback page.
 //
 // Offline queue: clock-punch POSTs to /api/v1/shifts/checkin are
 // buffered in IndexedDB when the network is down and replayed on the
 // next reconnect via the background-sync event.
 
-const VERSION = "v2";
-const STATIC_CACHE = `fbw-static-${VERSION}`;
-const RUNTIME_CACHE = `fbw-runtime-${VERSION}`;
-const QUEUE_DB = "fbw-punch-queue";
+const VERSION = "v3";
+const STATIC_CACHE = `atlvs-static-${VERSION}`;
+const RUNTIME_CACHE = `atlvs-runtime-${VERSION}`;
+const QUEUE_DB = "atlvs-punch-queue";
 const QUEUE_STORE = "punches";
 const SYNC_TAG = "punch-replay";
 
@@ -25,13 +25,68 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
+// One-time legacy-name reconciliation. The pre-brand-sweep SW (≤v2) used
+// `fbw-*` IndexedDB + cache identifiers. Drain any leftover queued punches
+// from `fbw-punch-queue` into the canonical store on the next activate, then
+// drop the legacy DB. Safe to leave indefinitely — `indexedDB.databases()`
+// will return [] once the upgrade has run, making subsequent calls cheap
+// no-ops.
+async function migrateLegacyQueue() {
+  let legacy;
+  try {
+    legacy = await new Promise((resolve, reject) => {
+      const req = indexedDB.open("fbw-punch-queue");
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+      req.onupgradeneeded = () => {
+        // Opened a brand-new DB (i.e. legacy never existed) — close + delete.
+        const db = req.result;
+        db.close();
+      };
+    });
+  } catch {
+    return;
+  }
+  if (!legacy.objectStoreNames.contains(QUEUE_STORE)) {
+    legacy.close();
+    indexedDB.deleteDatabase("fbw-punch-queue");
+    return;
+  }
+  const rows = await new Promise((resolve, reject) => {
+    const tx = legacy.transaction(QUEUE_STORE, "readonly");
+    const req = tx.objectStore(QUEUE_STORE).getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  }).catch(() => []);
+  legacy.close();
+  if (rows && rows.length) {
+    const target = await openQueueDb();
+    await Promise.all(
+      rows.map(
+        (row) =>
+          new Promise((resolve, reject) => {
+            const tx = target.transaction(QUEUE_STORE, "readwrite");
+            tx.objectStore(QUEUE_STORE).add({ body: row.body, enqueued_at: row.enqueued_at ?? Date.now() });
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          }),
+      ),
+    );
+    target.close();
+  }
+  indexedDB.deleteDatabase("fbw-punch-queue");
+}
+
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.filter((k) => k !== STATIC_CACHE && k !== RUNTIME_CACHE).map((k) => caches.delete(k)),
+    Promise.all([
+      caches.keys().then((keys) =>
+        Promise.all(
+          keys.filter((k) => k !== STATIC_CACHE && k !== RUNTIME_CACHE).map((k) => caches.delete(k)),
+        ),
       ),
-    ),
+      migrateLegacyQueue().catch(() => {}),
+    ]),
   );
   self.clients.claim();
 });

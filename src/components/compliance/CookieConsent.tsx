@@ -18,14 +18,22 @@ type Consent = {
   decidedAt: string;
 };
 
-const COOKIE_NAME = "fbw_consent";
+const COOKIE_NAME = "atlvs_consent";
+/** Legacy cookie name from the pre-brand-sweep era. Read-only fallback so
+ * existing users don't get re-prompted for consent on the deploy that ships
+ * the rename. Remove after one release once the legacy cookie has expired
+ * via natural max-age rollover or been overwritten by `writeConsent`. */
+const LEGACY_COOKIE_NAME = "fbw_consent";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
 
 function readConsent(): Consent | null {
   try {
-    const m = document.cookie.split("; ").find((r) => r.startsWith(`${COOKIE_NAME}=`));
+    const cookies = document.cookie.split("; ");
+    const m =
+      cookies.find((r) => r.startsWith(`${COOKIE_NAME}=`)) ??
+      cookies.find((r) => r.startsWith(`${LEGACY_COOKIE_NAME}=`));
     if (!m) return null;
-    const value = decodeURIComponent(m.slice(COOKIE_NAME.length + 1));
+    const value = decodeURIComponent(m.slice(m.indexOf("=") + 1));
     return JSON.parse(value) as Consent;
   } catch {
     return null;
@@ -34,6 +42,9 @@ function readConsent(): Consent | null {
 
 function writeConsent(c: Consent) {
   document.cookie = `${COOKIE_NAME}=${encodeURIComponent(JSON.stringify(c))}; max-age=${COOKIE_MAX_AGE}; path=/; samesite=lax`;
+  // Drop the legacy cookie so it doesn't shadow the canonical one on
+  // future reads (cookie order is implementation-defined).
+  document.cookie = `${LEGACY_COOKIE_NAME}=; max-age=0; path=/`;
   // Expose to window so analytics scripts can gate
   (window as Window & { __consent?: Consent }).__consent = c;
   window.dispatchEvent(new CustomEvent("consentchange", { detail: c }));

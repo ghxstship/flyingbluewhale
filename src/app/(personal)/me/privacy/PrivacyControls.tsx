@@ -13,7 +13,8 @@ import {
   DialogFooter,
 } from "@/components/ui/Dialog";
 
-const COOKIE_NAME = "fbw_consent";
+const COOKIE_NAME = "atlvs_consent";
+const LEGACY_COOKIE_NAME = "fbw_consent";
 
 export function PrivacyControls() {
   const [exporting, setExporting] = React.useState(false);
@@ -32,6 +33,9 @@ export function PrivacyControls() {
 
   function reopenConsent() {
     document.cookie = `${COOKIE_NAME}=; max-age=0; path=/`;
+    // Also clear the pre-brand-sweep cookie so the consent dialog isn't
+    // shadowed by it on next load.
+    document.cookie = `${LEGACY_COOKIE_NAME}=; max-age=0; path=/`;
     window.location.reload();
   }
 

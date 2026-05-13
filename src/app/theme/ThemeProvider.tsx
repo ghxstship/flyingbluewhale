@@ -2,7 +2,13 @@
 
 import * as React from "react";
 import { THEMES, isValidThemeSlug, colorSchemeFor, type ThemeSlug, type ThemeFamily } from "./themes.config";
-import { THEME_COOKIE_NAME, THEME_STORAGE_KEY, MODE_COOKIE_NAME, MODE_STORAGE_KEY } from "./theme-script";
+import {
+  THEME_COOKIE_NAME,
+  THEME_STORAGE_KEY,
+  MODE_COOKIE_NAME,
+  LEGACY_MODE_COOKIE_NAME,
+  MODE_STORAGE_KEY,
+} from "./theme-script";
 
 export type ColorMode = "light" | "dark" | "system";
 export type Density = "compact" | "comfortable" | "spacious";
@@ -83,11 +89,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setDensityState(isValidDensity(storedDensity) ? storedDensity : "comfortable");
 
     // Color mode hydration — cookie first, then localStorage, then default "system".
+    // Reads the canonical cookie, falling back to the pre-brand-sweep
+    // legacy name (`fbw_mode`) so existing users keep their preference for
+    // one deploy cycle. The next `setMode` call rewrites under the
+    // canonical name; the legacy cookie expires naturally.
     const cookieMode = (() => {
-      const re = new RegExp(`(?:^|;\\s*)${MODE_COOKIE_NAME}=([^;]+)`);
-      const m = document.cookie.match(re);
-      const v = m ? decodeURIComponent(m[1]) : null;
-      return v === "light" || v === "dark" || v === "system" ? (v as ColorMode) : null;
+      const tryRead = (key: string) => {
+        const re = new RegExp(`(?:^|;\\s*)${key}=([^;]+)`);
+        const m = document.cookie.match(re);
+        const v = m ? decodeURIComponent(m[1]) : null;
+        return v === "light" || v === "dark" || v === "system" ? (v as ColorMode) : null;
+      };
+      return tryRead(MODE_COOKIE_NAME) ?? tryRead(LEGACY_MODE_COOKIE_NAME);
     })();
     const storedMode = (() => {
       try {
@@ -204,7 +217,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch {
       /* ignore */
     }
-    writeCookie("fbw_density", d);
+    writeCookie("atlvs_density", d);
     void persistRemote({ density: d });
   }, []);
 

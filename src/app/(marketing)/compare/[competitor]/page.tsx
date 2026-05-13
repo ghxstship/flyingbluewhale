@@ -59,7 +59,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         </div>
       </section>
 
-      {/* What FLYTEHAUS is — definitive, not comparative */}
+      {/* What ATLVS is — definitive, not comparative */}
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What This Is.</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">

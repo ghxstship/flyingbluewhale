@@ -36,7 +36,7 @@ registerAction({
 
     const body = input.method === "GET" ? undefined : JSON.stringify(input.payload);
     const headers: Record<string, string> = {
-      "user-agent": "flytehaus-automation/1",
+      "user-agent": "atlvs-automation/1",
       ...(input.headers ?? {}),
     };
     if (body !== undefined) headers["content-type"] = "application/json";

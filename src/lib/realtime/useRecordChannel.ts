@@ -14,7 +14,7 @@ export type RecordChangePayload = {
  * Subscribe to Postgres `UPDATE`/`DELETE` events for a single row.
  *
  * NOTE: Requires that the table is added to the `supabase_realtime`
- * publication in Supabase. Most FLYTEHAUS tables aren't yet — this hook is
+ * publication in Supabase. Most ATLVS tables aren't yet — this hook is
  * forward-looking. When the table isn't published, the subscription
  * succeeds but no events fire, which is the desired no-op fallback.
  *

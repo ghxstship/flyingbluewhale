@@ -6,7 +6,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     eyebrow: "Production proposal",
     title: "Open Air — Hialeah",
     subtitle: "Miami Music Week 2026 · Partnership proposal",
-    partners: ["Black Coffee", "Hialeah Park", "FLYTEHAUS Technologies"],
+    partners: ["Black Coffee", "Hialeah Park", "ATLVS Technologies"],
     narrative:
       "A turnkey production engagement to deliver Open Air at the Racetrack — 15,000 guests, three stages, and full advancing support.",
     meta: [
@@ -172,7 +172,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     type: "payment_method",
     method: "ach",
     details: {
-      Beneficiary: "FLYTEHAUS Technologies Inc.",
+      Beneficiary: "ATLVS Technologies Inc.",
       Bank: "Mercury",
       "Routing (ACH)": "084106768",
       Account: "wire on request",
@@ -246,7 +246,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     type: "signature_block",
     parties: [
       { role: "Client", name: "— to be completed —" },
-      { role: "Producer", name: "FLYTEHAUS Technologies Inc.", email: "producer@flytehaus.studio" },
+      { role: "Producer", name: "ATLVS Technologies Inc.", email: "producer@atlvs.pro" },
     ],
     instructions:
       "Sign below to accept this engagement. An e-sign receipt with reference hash is emailed on completion.",

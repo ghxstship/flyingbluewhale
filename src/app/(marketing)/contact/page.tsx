@@ -13,7 +13,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Direct line. Demos, partnerships, concierge support, Festival access. Routed to producers who&apos;ve run the room.",
   path: "/contact",
-  keywords: ["FLYTEHAUS Technologies contact", "talk to sales", "production software demo", "book demo"],
+  keywords: ["ATLVS Technologies contact", "talk to sales", "production software demo", "book demo"],
   ogImageEyebrow: "Contact",
   ogImageTitle: "Talk to the Studio.",
 });
@@ -30,22 +30,22 @@ const ROUTES = [
     icon: Mail,
     title: "Studio",
     body: "Direct line to a producer. One business day, usually faster.",
-    cta: "sales@flytehaus.studio",
-    href: "mailto:sales@flytehaus.studio",
+    cta: "sales@atlvs.pro",
+    href: "mailto:sales@atlvs.pro",
   },
   {
     icon: MessageCircle,
     title: "Concierge",
     body: "For current customers — triaged by tier. Festival gets an SLA.",
-    cta: "support@flytehaus.studio",
-    href: "mailto:support@flytehaus.studio",
+    cta: "support@atlvs.pro",
+    href: "mailto:support@atlvs.pro",
   },
   {
     icon: Building2,
     title: "Partners",
     body: "Integrations, agencies, distribution. Build with us.",
-    cta: "partners@flytehaus.studio",
-    href: "mailto:partners@flytehaus.studio",
+    cta: "partners@atlvs.pro",
+    href: "mailto:partners@atlvs.pro",
   },
 ];
 
@@ -110,7 +110,7 @@ export default function ContactPage() {
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leave a Note.</h2>
-        <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@flytehaus.studio">
+        <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@atlvs.pro">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-xs font-medium text-[var(--text-secondary)]">
               Name

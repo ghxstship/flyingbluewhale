@@ -24,7 +24,7 @@ type LogEntry = {
 };
 
 type ScannerMode = "wedge" | "camera";
-const MODE_STORAGE_KEY = "flytehaus.scanner.mode";
+const MODE_STORAGE_KEY = "atlvs.scanner.mode";
 
 export function CheckInScanner() {
   const [code, setCode] = useState("");

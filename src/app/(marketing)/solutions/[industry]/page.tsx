@@ -30,11 +30,11 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Live Events",
     tagline: "Venue residencies, club nights, one-offs",
     description:
-      "FLYTEHAUS Technologies is the production platform for Live Events — club residencies, brand-hosted nights, album release parties, rooftop pop-ups. Ticketing with on-site scan, artist advancing, direct vendor payouts, and per-role Know Before You Go guides — all connected on day one.",
+      "ATLVS Technologies is the production platform for Live Events — club residencies, brand-hosted nights, album release parties, rooftop pop-ups. Ticketing with on-site scan, artist advancing, direct vendor payouts, and per-role Know Before You Go guides — all connected on day one.",
     hero: {
       eyebrow: "Live Events",
       title: "From Pitch to Wrap. One Platform.",
-      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. FLYTEHAUS Technologies unifies all of it.",
+      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. ATLVS Technologies unifies all of it.",
     },
     stats: [
       { value: "15k+", label: "guests / night" },
@@ -240,7 +240,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     hero: {
       eyebrow: "Brand Activations",
       title: "From RFP to Recap. Same Platform.",
-      body: "Activations live or die by the speed of the hand-off — agency to client, creative to production, production to vendors. FLYTEHAUS Technologies shortens every hand-off to zero.",
+      body: "Activations live or die by the speed of the hand-off — agency to client, creative to production, production to vendors. ATLVS Technologies shortens every hand-off to zero.",
     },
     stats: [
       { value: "< 1 day", label: "proposal → signed project" },
@@ -286,7 +286,7 @@ const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Corporate Events",
     tagline: "Conferences, AGMs, summits, internal events",
     description:
-      "FLYTEHAUS Technologies for Corporate Events — conferences, shareholder meetings, executive summits, internal kickoffs. Client-facing proposals, vendor COI tracking, stakeholder portals, and executive-grade guest experiences.",
+      "ATLVS Technologies for Corporate Events — conferences, shareholder meetings, executive summits, internal kickoffs. Client-facing proposals, vendor COI tracking, stakeholder portals, and executive-grade guest experiences.",
     hero: {
       eyebrow: "Corporate Events",
       title: "Executive Grade. Field Ready.",
@@ -440,7 +440,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!info)
     return buildMetadata({ title: "Solution", description: "Industry solution", path: `/solutions/${industry}` });
   return buildMetadata({
-    title: `${info.name} — ${info.tagline} on FLYTEHAUS Technologies`,
+    title: `${info.name} — ${info.tagline} on ATLVS Technologies`,
     description: info.description,
     path: `/solutions/${industry}`,
     keywords: [info.name.toLowerCase(), info.tagline.toLowerCase()],

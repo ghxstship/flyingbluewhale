@@ -14,7 +14,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Self-serve guides, status, and direct support channels. Concierge for customers — triaged by tier. Festival gets an SLA.",
   path: "/help",
-  keywords: ["FLYTEHAUS help", "ATLVS support", "GVTEWAY support", "COMPVSS support", "event production software help"],
+  keywords: ["ATLVS help", "ATLVS support", "GVTEWAY support", "COMPVSS support", "event production software help"],
   ogImageEyebrow: "Help",
   ogImageTitle: "Crew Support.",
 });
@@ -38,8 +38,8 @@ const CHANNELS = [
     icon: MessageCircle,
     title: "Concierge",
     body: "For customers — triaged by tier (Free, Crew, Production, Festival). Festival gets a four-hour SLA.",
-    cta: "support@flytehaus.studio",
-    href: "mailto:support@flytehaus.studio",
+    cta: "support@atlvs.pro",
+    href: "mailto:support@atlvs.pro",
   },
   {
     icon: Headset,
@@ -71,11 +71,11 @@ const TROUBLESHOOTING = [
 const FAQS: FAQ[] = [
   {
     q: "Where do I report a bug?",
-    a: "Email support@flytehaus.studio with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side.",
+    a: "Email support@atlvs.pro with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side.",
   },
   {
     q: "Do you have a status page?",
-    a: "Yes — status.flytehaus.studio. Production incidents post within ten minutes. Maintenance windows announce 48 hours ahead.",
+    a: "Yes — status.atlvs.pro. Production incidents post within ten minutes. Maintenance windows announce 48 hours ahead.",
   },
   {
     q: "Can I get phone support?",
@@ -170,7 +170,7 @@ export default function HelpPage() {
         title="Still Stuck? Talk to a Producer."
         subtitle="Concierge email is the fastest path. We respond within hours, faster on Festival."
         primaryLabel="Email Concierge"
-        primaryHref="mailto:support@flytehaus.studio"
+        primaryHref="mailto:support@atlvs.pro"
         secondaryLabel="Open the field guide"
         secondaryHref="/docs"
       />

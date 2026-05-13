@@ -15,10 +15,10 @@ import "@/lib/openapi/all-endpoints";
  */
 export async function GET() {
   const doc = buildOpenAPI({
-    title: "FLYTEHAUS API",
+    title: "ATLVS API",
     version: "1.0.0",
     description:
-      "Public REST surface for FLYTEHAUS Technologies (ATLVS / GVTEWAY / COMPVSS). Auth via session cookie or Bearer PAT (`/me/api-keys`). Rate limits scale with your org plan tier.",
+      "Public REST surface for ATLVS Technologies (ATLVS / GVTEWAY / COMPVSS). Auth via session cookie or Bearer PAT (`/me/api-keys`). Rate limits scale with your org plan tier.",
     serverUrl: SITE.baseUrl,
   });
   return new NextResponse(JSON.stringify(doc), {

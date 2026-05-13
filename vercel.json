@@ -7,7 +7,31 @@
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "(www\\.)?flyingbluewhale\\.(app|tech|pro|com)" }],
-      "destination": "https://flytehaus.studio/:path*",
+      "destination": "https://atlvs.pro/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "(www\\.)?flytehaus\\.(studio|live|com|app|pro)" }],
+      "destination": "https://atlvs.pro/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "atlvs\\.flytehaus\\.studio" }],
+      "destination": "https://app.atlvs.pro/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "gvteway\\.flytehaus\\.studio" }],
+      "destination": "https://gvteway.atlvs.pro/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "compvss\\.flytehaus\\.studio" }],
+      "destination": "https://compvss.atlvs.pro/:path*",
       "permanent": true
     }
   ]

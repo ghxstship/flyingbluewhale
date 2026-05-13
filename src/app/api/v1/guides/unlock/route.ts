@@ -99,7 +99,7 @@ export async function POST(req: Request) {
   // cookie behavior in src/lib/supabase/server.ts).
   const hostHeader = h.get("host") ?? "";
   const host = hostHeader.split(":")[0].toLowerCase();
-  const domain = host.endsWith("flytehaus.studio") ? ".flytehaus.studio" : undefined;
+  const domain = host.endsWith("atlvs.pro") ? ".atlvs.pro" : undefined;
   cookieStore.set(guideCookieName(project.id), token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

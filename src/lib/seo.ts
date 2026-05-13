@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
 
 export const SITE = {
-  name: "FLYTEHAUS Technologies",
-  shortName: "FLYTEHAUS",
-  domain: "flytehaus.studio",
-  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://flytehaus.studio",
+  name: "ATLVS Technologies",
+  shortName: "ATLVS",
+  domain: "atlvs.pro",
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://atlvs.pro",
   tagline: "Production Runs On It.",
   description:
     "The platform for production. ATLVS · GVTEWAY · COMPVSS — three apps, one schema, every module. Pitch through wrap. RLS at the database. Built by operators.",
-  twitter: "@flytehaus",
+  /**
+   * Social handle. Same string across every platform we live on; not a
+   * Twitter/X handle — ATLVS does not run an X account. The Twitter Card
+   * metadata block below still emits because `summary_large_image` cards
+   * remain the de-facto preview spec for links shared TO X.
+   */
+  socialHandle: "@atlvs.pro",
   /** Parent company chain — surfaces in Organization JSON-LD + legal footer. */
   parent: {
     name: "G H X S T S H I P Industries",
@@ -101,7 +107,6 @@ export function buildMetadata(m: PageMeta): Metadata {
       title: m.title,
       description: m.description,
       images: [ogImage],
-      creator: SITE.twitter,
     },
   };
 }
@@ -117,10 +122,12 @@ export function organizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: SITE.name,
-    legalName: "FLYTEHAUS Technologies, Inc.",
+    legalName: "ATLVS Technologies, Inc.",
     url: SITE.baseUrl,
     logo: `${SITE.baseUrl}/icon-512.png`,
-    sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],
+    // ATLVS does not run an X/Twitter account — sameAs stays empty until
+    // we publish profile URLs on the platforms we actually use.
+    sameAs: [],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer support",

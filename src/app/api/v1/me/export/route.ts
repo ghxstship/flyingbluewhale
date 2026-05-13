@@ -107,7 +107,7 @@ export async function GET() {
     status: 200,
     headers: {
       "content-type": "application/json",
-      "content-disposition": `attachment; filename="flytehaus-export-${userId}-${Date.now()}.json"`,
+      "content-disposition": `attachment; filename="atlvs-export-${userId}-${Date.now()}.json"`,
       "cache-control": "no-store",
     },
   });

@@ -96,16 +96,16 @@ export function MarketingHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link
           href="/"
-          // whitespace-nowrap: the spaced "F L Y T E H A U S" mark uses literal
+          // whitespace-nowrap: the spaced "A T L V S" mark uses literal
           // U+0020 between letters so screen readers + selection treat each
           // letter as a separate word. Without nowrap, narrow viewports
           // (~1024px tablet) wrap the mark letter-by-letter into a vertical
           // stack instead of keeping it horizontal.
           className="text-base font-semibold tracking-[0.18em] whitespace-nowrap text-[var(--foreground)] uppercase"
           onClick={() => setMobileOpen(false)}
-          aria-label="FLYTEHAUS Technologies — home"
+          aria-label="ATLVS Technologies — home"
         >
-          F L Y T E H A U S
+          A T L V S
         </Link>
 
         {/* Desktop primary nav — 3 dropdowns + 2 direct links = 5 visible items,

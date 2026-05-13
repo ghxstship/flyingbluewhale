@@ -31,7 +31,7 @@ What to expect:
 
 In scope:
 
-- The deployed `flyingbluewhale.app` web app + its `/api/v1/*` endpoints
+- The deployed `atlvs.pro` web app + its `/api/v1/*` endpoints
 - The Supabase Postgres schema in `supabase/migrations/**`
 - Edge functions in `supabase/functions/**`
 - Authentication, authorization, RLS, and audit-log integrity

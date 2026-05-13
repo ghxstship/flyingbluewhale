@@ -93,8 +93,8 @@ export default function AboutPage() {
               </h2>
               <div className="mt-6 space-y-4 text-sm text-[var(--text-secondary)]">
                 <p>
-                  GHXSTSHIP Industries is the parent. FLYTEHAUS Technologies — operating ATLVS, GVTEWAY, and COMPVSS —
-                  is the software arm we built so we&apos;d stop running production on spreadsheets.
+                  GHXSTSHIP Industries is the parent. ATLVS Technologies — operating ATLVS, GVTEWAY, and COMPVSS — is
+                  the software arm we built so we&apos;d stop running production on spreadsheets.
                 </p>
                 <p>
                   ATLVS is the producer&apos;s console. GVTEWAY is the stakeholder portal. COMPVSS is the offline-first

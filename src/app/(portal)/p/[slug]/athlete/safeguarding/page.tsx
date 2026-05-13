@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
-              href={`mailto:safeguarding@flytehaus.studio?subject=Safeguarding%20report%20—%20${slug}`}
+              href={`mailto:safeguarding@atlvs.pro?subject=Safeguarding%20report%20—%20${slug}`}
               className="btn btn-primary btn-sm"
             >
               Email safeguarding lead

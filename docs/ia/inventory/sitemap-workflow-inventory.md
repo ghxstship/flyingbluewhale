@@ -4583,7 +4583,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 #### Marketing · [competitor] — 1 pages
 
-### Try FLYTEHAUS Technologies `/compare/[competitor]`
+### Try ATLVS Technologies `/compare/[competitor]`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/compare/[competitor]/page.tsx`](<src/app/(marketing)/compare/[competitor]/page.tsx>)
@@ -4619,7 +4619,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 #### Marketing · [slug] — 4 pages
 
-### Run your next show on FLYTEHAUS Technologies `/blog/[slug]`
+### Run your next show on ATLVS Technologies `/blog/[slug]`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/blog/[slug]/page.tsx`](<src/app/(marketing)/blog/[slug]/page.tsx>)
@@ -4629,7 +4629,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
   - _Section:_ **PageChrome** → Breadcrumbs, ModuleHeader
   - _Section:_ **PageContent** → (page-specific — inspect source)
 
-### Ship your next show on FLYTEHAUS Technologies `/community/[slug]`
+### Ship your next show on ATLVS Technologies `/community/[slug]`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/community/[slug]/page.tsx`](<src/app/(marketing)/community/[slug]/page.tsx>)
@@ -4649,7 +4649,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
   - _Section:_ **PageChrome** → Breadcrumbs, ModuleHeader
   - _Section:_ **PageContent** → ProseSurface
 
-### Run your ops on FLYTEHAUS Technologies `/guides/[slug]`
+### Run your ops on ATLVS Technologies `/guides/[slug]`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/guides/[slug]/page.tsx`](<src/app/(marketing)/guides/[slug]/page.tsx>)
@@ -4721,7 +4721,7 @@ Generated from `src/app/` + `docs/ia/benchmarks/olympics_raci_fbw_gap.xlsx`.
 
 #### Marketing · compare — 1 pages
 
-### Try FLYTEHAUS Technologies `/compare`
+### Try ATLVS Technologies `/compare`
 
 - **Atomic:** Page · **Platform:** Marketing · **Template:** bespoke
 - **Source:** [`src/app/(marketing)/compare/page.tsx`](<src/app/(marketing)/compare/page.tsx>)

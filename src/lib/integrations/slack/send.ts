@@ -133,7 +133,7 @@ async function workspaceById(workspaceId: string): Promise<SlackWorkspaceRow | n
   }
 }
 
-/** Look up the slack_user_links row for a FLYTEHAUS user. */
+/** Look up the slack_user_links row for a ATLVS user. */
 async function userLinkFor(userId: string): Promise<SlackUserLinkRow | null> {
   try {
     const svc = createServiceClient();
@@ -159,7 +159,7 @@ async function userLinkFor(userId: string): Promise<SlackUserLinkRow | null> {
 }
 
 /**
- * Send a DM to the FLYTEHAUS user (by their `users.id`).
+ * Send a DM to the ATLVS user (by their `users.id`).
  *
  * Resolution chain:
  *   1. slack_user_links row → workspace_id + slack_user_id
@@ -280,7 +280,7 @@ export async function getMatchingChannelMappings(orgId: string, eventType: strin
 }
 
 /**
- * Slack `users.lookupByEmail` — used by "Auto-detect" to map a FLYTEHAUS
+ * Slack `users.lookupByEmail` — used by "Auto-detect" to map a ATLVS
  * user.email → Slack user id without a full user-OAuth flow.
  */
 export async function lookupSlackUserByEmail(opts: {

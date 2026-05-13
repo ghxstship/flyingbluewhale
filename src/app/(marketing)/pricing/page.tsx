@@ -18,7 +18,7 @@ export const metadata: Metadata = buildMetadata({
   keywords: [
     "production software pricing",
     "event management software cost",
-    "FLYTEHAUS Technologies pricing",
+    "ATLVS Technologies pricing",
     "ATLVS pricing",
     "GVTEWAY pricing",
     "COMPVSS pricing",
@@ -234,7 +234,7 @@ const FAQS = [
   },
   {
     q: "Nonprofits and community programs?",
-    a: "30% off Crew and Production for registered nonprofits and community arts programs. Email hello@flytehaus.studio with your 501(c)(3) or equivalent.",
+    a: "30% off Crew and Production for registered nonprofits and community arts programs. Email hello@atlvs.pro with your 501(c)(3) or equivalent.",
   },
   {
     q: "Is there a per-scan fee?",

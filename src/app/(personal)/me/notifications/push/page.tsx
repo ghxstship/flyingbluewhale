@@ -89,7 +89,7 @@ function Header() {
     <header className="mb-6">
       <h1 className="text-2xl font-semibold tracking-tight">Push Notifications</h1>
       <p className="mt-2 text-sm text-[var(--text-muted)]">
-        Get notified in your browser even when the FLYTEHAUS tab is closed.
+        Get notified in your browser even when the ATLVS tab is closed.
       </p>
       <div className="surface mt-4 flex items-center justify-between gap-3 p-3">
         <div className="flex items-center gap-2">

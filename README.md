@@ -1,6 +1,6 @@
-# flyingbluewhale
+# ATLVS
 
-Unified production platform scaffolded against the optimized IA shared with FlyteDeck (redsealion) and gvteway (opus-one).
+Engineering repo (codename `flyingbluewhale`) for **ATLVS Technologies** — the production platform deployed at [atlvs.pro](https://atlvs.pro). Scaffolded against the optimized IA shared with FlyteDeck (redsealion) and gvteway (opus-one).
 
 ## Shell topology
 

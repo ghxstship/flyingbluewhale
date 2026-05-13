@@ -7,7 +7,7 @@ import "@/lib/openapi/all-endpoints";
 export const metadata: Metadata = {
   title: "API Reference",
   description:
-    "REST + OpenAPI 3.1 documentation for the FLYTEHAUS public API. Auth via session cookie or Bearer PAT; rate limits scale with your plan tier.",
+    "REST + OpenAPI 3.1 documentation for the ATLVS public API. Auth via session cookie or Bearer PAT; rate limits scale with your plan tier.",
 };
 
 export const dynamic = "force-static";
@@ -71,9 +71,9 @@ const METHOD_COLORS: Record<string, string> = {
 
 export default function ApiDocsPage() {
   const doc = buildOpenAPI({
-    title: "FLYTEHAUS API",
+    title: "ATLVS API",
     version: "1.0.0",
-    description: "Public REST surface for FLYTEHAUS Technologies.",
+    description: "Public REST surface for ATLVS Technologies.",
     serverUrl: SITE.baseUrl,
   });
 
@@ -96,7 +96,7 @@ export default function ApiDocsPage() {
     <main className="mx-auto w-full max-w-5xl px-6 py-12">
       <header className="mb-12">
         <p className="text-xs tracking-[0.2em] text-[var(--text-secondary)] uppercase">REST API · v1</p>
-        <h1 className="mt-2 text-4xl font-semibold">FLYTEHAUS API Reference</h1>
+        <h1 className="mt-2 text-4xl font-semibold">ATLVS API Reference</h1>
         <p className="mt-4 max-w-3xl text-base text-[var(--text-secondary)]">{doc.info.description}</p>
         <div className="mt-6 flex flex-wrap gap-3 text-sm">
           <a

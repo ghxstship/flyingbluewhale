@@ -359,7 +359,7 @@ const MODULES: Record<string, ModuleConfig> = {
     blurb: "Data walled off per organization. Immutable audit log. Retention policies. Signed DPA on Enterprise.",
     heroTitle: "Built to pass a security review.",
     heroBody:
-      "The FLYTEHAUS Technologies platform's security posture is not a checklist — it's enforced on the data. Every organization's data walled off at the deepest layer. Every change written to an immutable audit trail. Files shared through auto-expiring links, not public buckets.",
+      "The ATLVS Technologies platform's security posture is not a checklist — it's enforced on the data. Every organization's data walled off at the deepest layer. Every change written to an immutable audit trail. Files shared through auto-expiring links, not public buckets.",
     highlights: [
       { title: "Data walled off per org", body: "No exceptions. Enforced at the database, not in the app." },
       {
@@ -566,7 +566,7 @@ export async function generateMetadata({ params }: { params: Promise<{ module: s
   if (!config) {
     return buildMetadata({
       title: "Feature",
-      description: "FLYTEHAUS Technologies — the unified production management platform.",
+      description: "ATLVS Technologies — the unified production management platform.",
       path: `/features/${module}`,
     });
   }
@@ -598,7 +598,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <JsonLd
         data={[
           softwareApplicationSchema({
-            name: `FLYTEHAUS Technologies — ${config.name}`,
+            name: `ATLVS Technologies — ${config.name}`,
             description: config.blurb,
             url: urlFor("marketing", `/features/${config.slug}`),
           }),

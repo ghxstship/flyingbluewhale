@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = buildMetadata({
   title: "Agency Directory — Booking Agencies",
-  description: "Verified booking agencies on the FLYTEHAUS network.",
+  description: "Verified booking agencies on the ATLVS network.",
   path: "/marketplace/agencies",
 });
 

@@ -31,7 +31,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, SITE } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "FLYTEHAUS — Production Runs On It",
+  title: "ATLVS — Production Runs On It",
   description:
     "The platform for production. Pitch to wrap, in one console. Three apps, one schema, every module — pre-pro through strike.",
   path: "/",
@@ -41,7 +41,7 @@ export const metadata: Metadata = buildMetadata({
     "live event software",
     "festival operations platform",
     "experiential production platform",
-    "FLYTEHAUS Technologies",
+    "ATLVS Technologies",
     "ATLVS",
     "GVTEWAY",
     "COMPVSS",
@@ -56,7 +56,7 @@ export default function Home() {
         data={[
           organizationSchema(),
           softwareApplicationSchema({
-            name: "FLYTEHAUS Technologies",
+            name: "ATLVS Technologies",
             description: SITE.description,
             url: SITE.baseUrl,
             price: "0",
@@ -67,7 +67,7 @@ export default function Home() {
       {/* Hero — definitive, no pitch */}
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          FLYTEHAUS Technologies
+          ATLVS Technologies
         </div>
         <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
           Production
@@ -108,9 +108,7 @@ export default function Home() {
                 className="h-2.5 w-2.5 rounded-full bg-[color-mix(in_oklab,var(--text-muted)_60%,transparent)]"
                 aria-hidden="true"
               />
-              <span className="ml-3 font-mono text-xs text-[var(--text-muted)]">
-                flytehaus.studio/p/mmw26-hialeah/guide
-              </span>
+              <span className="ml-3 font-mono text-xs text-[var(--text-muted)]">atlvs.pro/p/mmw26-hialeah/guide</span>
             </div>
             <iframe
               src="/p/mmw26-hialeah/guide"

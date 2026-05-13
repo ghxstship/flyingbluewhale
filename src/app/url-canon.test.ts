@@ -7,7 +7,7 @@ import { join, relative } from "node:path";
  *
  * Per CLAUDE.md (`Conventions › Cross-shell URLs`):
  *   "Always use `urlFor(shell, path)` from `@/lib/urls` — never hardcode
- *   `https://...flytehaus.studio` and never concat `NEXT_PUBLIC_APP_URL` with
+ *   `https://...atlvs.pro` and never concat `NEXT_PUBLIC_APP_URL` with
  *   `/console`/`/p`/`/m`."
  *
  * The single source of truth for the apex base URL is `SITE.baseUrl` in
@@ -15,7 +15,7 @@ import { join, relative } from "node:path";
  * must consume `SITE.baseUrl` (or `urlFor(shell, path)` for cross-shell).
  *
  * This spec asserts that:
- *   1. The literal string `"https://flytehaus.studio"` only appears in a
+ *   1. The literal string `"https://atlvs.pro"` only appears in a
  *      narrowly allowlisted set of files — the canon definition itself,
  *      env wiring, urls helper, sample fixtures, docs/JSDoc.
  *   2. Nobody else duplicates `process.env.NEXT_PUBLIC_APP_URL ?? "..."`
@@ -29,6 +29,8 @@ const REPO_ROOT = process.cwd();
 const SRC_DIR = join(REPO_ROOT, "src");
 
 const ALLOW_HTTPS_LITERAL = new Set<string>([
+  // Brand canon — defines `BRAND.apexUrl`, the literal everyone else reads.
+  "src/lib/brand.ts",
   // Single source of truth — the canonical fallback definition.
   "src/lib/seo.ts",
   // urls.ts has the literal in JSDoc examples documenting `urlFor`.
@@ -67,19 +69,19 @@ function walk(dir: string): string[] {
 const ALL = walk(SRC_DIR).filter((f) => !/\.test\.[tj]sx?$/.test(f));
 
 describe("URL canon", () => {
-  it('the literal "https://flytehaus.studio" is only allowed in narrowly allowlisted files', () => {
+  it('the literal "https://atlvs.pro" is only allowed in narrowly allowlisted files', () => {
     const offenders: string[] = [];
     for (const file of ALL) {
       const rel = relative(REPO_ROOT, file);
       if (ALLOW_HTTPS_LITERAL.has(rel)) continue;
       const txt = readFileSync(file, "utf8");
-      if (txt.includes('"https://flytehaus.studio"') || txt.includes("'https://flytehaus.studio'")) {
+      if (txt.includes('"https://atlvs.pro"') || txt.includes("'https://atlvs.pro'")) {
         offenders.push(rel);
       }
     }
     expect(
       offenders,
-      `Files contain the literal "https://flytehaus.studio" — use SITE.baseUrl from @/lib/seo instead. Offenders: ${offenders.join(", ")}`,
+      `Files contain the literal "https://atlvs.pro" — use SITE.baseUrl from @/lib/seo instead. Offenders: ${offenders.join(", ")}`,
     ).toEqual([]);
   });
 

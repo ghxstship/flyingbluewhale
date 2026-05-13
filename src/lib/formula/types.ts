@@ -5,7 +5,7 @@
  * SmartSuite ships ~80 formula functions. This v1 covers the 12 most commonly
  * referenced — enough to express deliverable progress, project completion %,
  * payment-app % billed, due-date math, and currency rollups (the patterns
- * scattered across the FLYTEHAUS code today).
+ * scattered across the ATLVS code today).
  *
  * Design:
  *   - Pure-logic parser + evaluator (no DB, no async, no IO)

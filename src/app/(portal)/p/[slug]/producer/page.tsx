@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * Producer portal landing — EXECUTIVE-class dashboard for the external
- * production lead (when FLYTEHAUS is the platform under their direction).
+ * production lead (when ATLVS is the platform under their direction).
  * Strategy + approvals + risk view, no operational detail.
  */
 export default async function ProducerHome({ params }: { params: Promise<{ slug: string }> }) {

@@ -61,7 +61,7 @@ export function GhxstshipFooter() {
             </p>
             <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
               <a href={SITE.baseUrl} className="hover:text-[var(--text-primary)]">
-                FLYTEHAUS Technologies →
+                ATLVS Technologies →
               </a>
             </div>
           </div>
@@ -88,7 +88,7 @@ export function GhxstshipFooter() {
             <span>Miami · New York · Chicago · Los Angeles</span>
           </div>
           <div className="mt-3 text-[11px] leading-relaxed">
-            ATLVS, GVTEWAY, and COMPVSS are operating brands of FLYTEHAUS Technologies, a GHXSTSHIP Industries company.
+            ATLVS, GVTEWAY, and COMPVSS are operating brands of ATLVS Technologies, a GHXSTSHIP Industries company.
           </div>
         </div>
       </div>

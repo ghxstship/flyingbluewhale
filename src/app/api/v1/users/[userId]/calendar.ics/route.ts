@@ -56,12 +56,9 @@ export async function GET(req: Request, ctx: { params: Promise<{ userId: string 
     .is("deleted_at", null);
   const orgIds = (memberships ?? []).map((m) => m.org_id);
   if (orgIds.length === 0) {
-    return new NextResponse(
-      "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//flytehaus//calendar//EN\r\nEND:VCALENDAR\r\n",
-      {
-        headers: { "content-type": "text/calendar; charset=utf-8" },
-      },
-    );
+    return new NextResponse("BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//atlvs//calendar//EN\r\nEND:VCALENDAR\r\n", {
+      headers: { "content-type": "text/calendar; charset=utf-8" },
+    });
   }
   const { data: events } = await supabase
     .from("events")
@@ -73,14 +70,14 @@ export async function GET(req: Request, ctx: { params: Promise<{ userId: string 
   const lines: string[] = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//flytehaus//calendar//EN",
+    "PRODID:-//atlvs//calendar//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
   ];
   for (const e of events ?? []) {
     lines.push(
       "BEGIN:VEVENT",
-      `UID:${e.id}@flytehaus.studio`,
+      `UID:${e.id}@atlvs.pro`,
       `DTSTAMP:${fmtIcs(new Date())}`,
       `DTSTART:${fmtIcs(e.starts_at as string)}`,
       `DTEND:${fmtIcs(e.ends_at as string)}`,

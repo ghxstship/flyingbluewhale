@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "FLYTEHAUS Technologies",
-    "appNameStylized": "F L Y T E H A U S",
+    "appName": "ATLVS Technologies",
+    "appNameStylized": "A T L V S",
     "save": "保存",
     "cancel": "キャンセル",
     "delete": "削除",
@@ -97,8 +97,8 @@
       "broadcast-tv-film": "放送・TV・映画"
     },
     "footer": {
-      "copyright": "© {year} FLYTEHAUS Technologies",
-      "trademark": "ATLVS、GVTEWAY、COMPVSS は、G H X S T S H I P Industries 傘下の FLYTEHAUS Technologies の登録商標です。",
+      "copyright": "© {year} ATLVS Technologies",
+      "trademark": "ATLVS、GVTEWAY、COMPVSS は、G H X S T S H I P Industries 傘下の ATLVS Technologies の登録商標です。",
       "tagline": "ATLVS・GVTEWAY・COMPVSS — プロダクションチームのための3つの連携アプリ。",
       "ctaTired": "場当たり対応に疲れたプロダクションチームのために。"
     },
@@ -197,8 +197,8 @@
     },
     "acceptInvite": {
       "title": "チームに参加",
-      "subtitle": "FLYTEHAUS Technologies への招待を承諾",
-      "body": "FLYTEHAUS Technologies のワークスペースに招待されました。下で承諾するとそのままアクセスできます。",
+      "subtitle": "ATLVS Technologies への招待を承諾",
+      "body": "ATLVS Technologies のワークスペースに招待されました。下で承諾するとそのままアクセスできます。",
       "submit": "招待を承諾",
       "submitting": "参加中…",
       "signInInstead": "代わりにログイン",
@@ -260,7 +260,7 @@
         "when": "日時"
       }
     },
-    "emailSubject": "FLYTEHAUS Technologies のワークスペースに招待されました",
+    "emailSubject": "ATLVS Technologies のワークスペースに招待されました",
     "emailHeading": "招待が届いています",
     "emailBody": "{inviter} があなたを {role} としてワークスペースに招待しました。",
     "emailCta": "招待を承諾",
@@ -315,7 +315,7 @@
     "toggleTheme": "テーマを切り替え",
     "toggleMenu": "メニューを切り替え",
     "openMenu": "メニューを開く",
-    "homeAriaLabel": "FLYTEHAUS Technologies — ホーム",
+    "homeAriaLabel": "ATLVS Technologies — ホーム",
     "loading": "読み込み中",
     "saving": "保存中",
     "saved": "保存しました",
@@ -325,13 +325,13 @@
   },
   "community": {
     "meta": {
-      "title": "コミュニティ — FLYTEHAUS で構築するプロダクションチーム",
+      "title": "コミュニティ — ATLVS で構築するプロダクションチーム",
       "description": "ATLVS、GVTEWAY、COMPVSS でプロダクションを動かすフェスティバル、ツアー、エージェンシー、製作会社。メンバーの事例、数字、実際にデリバリーするもの。"
     },
     "hero": {
       "eyebrow": "コミュニティ",
       "title": "プロダクションチーム、公開の場で構築。",
-      "subtitle": "FLYTEHAUS Technologies でショーを動かすフェスティバル、ツアー、エージェンシー、製作会社。実ワークフロー。実数字。実証拠。"
+      "subtitle": "ATLVS Technologies でショーを動かすフェスティバル、ツアー、エージェンシー、製作会社。実ワークフロー。実数字。実証拠。"
     },
     "metrics": {
       "productionTeams": "プロダクションチーム",
@@ -346,7 +346,7 @@
     "join": {
       "eyebrow": "リスターに参加",
       "title": "あなたのチームを、ここに。",
-      "body": "FLYTEHAUS Technologies で実ショーをデリバリーしていますか？常に新しいメンバー事例を募集中。短いインタビュー、匿名化された数字、あなたの言葉。"
+      "body": "ATLVS Technologies で実ショーをデリバリーしていますか？常に新しいメンバー事例を募集中。短いインタビュー、匿名化された数字、あなたの言葉。"
     },
     "finalCta": {
       "title": "次の事例になる",

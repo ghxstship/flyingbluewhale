@@ -14,7 +14,7 @@ const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1y
  *
  *   1. Cookies update for anonymous + authed users alike — they survive the
  *      next prerender and propagate across the three subdomains via the
- *      `domain=.flytehaus.studio` attribute that `proxy.ts` already sets on
+ *      `domain=.atlvs.pro` attribute that `proxy.ts` already sets on
  *      the Supabase session cookies (set with `SameSite=Lax`).
  *
  *   2. If the caller is authed, the same prefs are written to

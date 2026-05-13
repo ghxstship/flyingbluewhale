@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: flyingbluewhale API
+  title: ATLVS API
   version: v1
   description: |
     Unified production platform API. Every response body follows the envelope
@@ -10,7 +10,7 @@ info:
     versa. Add new routes here FIRST, then implement.
 
 servers:
-  - url: https://flyingbluewhale.pro
+  - url: https://atlvs.pro
     description: Production
   - url: http://localhost:3000
     description: Local dev

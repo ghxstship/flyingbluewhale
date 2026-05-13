@@ -69,7 +69,7 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
         )}
       </main>
       <footer className="mx-auto max-w-4xl border-t border-[var(--border-color)] px-8 py-12 text-center text-xs text-[var(--text-muted)]">
-        Prepared by FLYTEHAUS Technologies · {proposal.doc_number ?? proposal.id.slice(0, 8)} · v{proposal.version}
+        Prepared by ATLVS Technologies · {proposal.doc_number ?? proposal.id.slice(0, 8)} · v{proposal.version}
       </footer>
     </div>
   );

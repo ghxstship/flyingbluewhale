@@ -1,4 +1,4 @@
-# Brand Voice — FLYTEHAUS Technologies
+# Brand Voice — ATLVS Technologies
 
 **The blend:** ClickUp × Virgin Voyages × SXSW — delivered as a **journey**, not a dashboard.
 

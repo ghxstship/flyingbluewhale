@@ -9,7 +9,7 @@ export default function SlaPage() {
         </p>
         <p>Service credits for missed SLA: 10% (99.0–99.9%), 25% (98.0–99.0%), 50% (below 98.0%).</p>
         <p>
-          Report incidents to <span className="font-mono">oncall@flytehaus.studio</span>.
+          Report incidents to <span className="font-mono">oncall@atlvs.pro</span>.
         </p>
       </div>
     </div>

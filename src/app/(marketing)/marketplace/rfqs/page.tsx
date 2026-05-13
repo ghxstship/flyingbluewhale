@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = buildMetadata({
   title: "Open RFQs — Production Marketplace",
-  description: "Browse open requests for quotes from production operators in the FLYTEHAUS network.",
+  description: "Browse open requests for quotes from production operators in the ATLVS network.",
   path: "/marketplace/rfqs",
 });
 

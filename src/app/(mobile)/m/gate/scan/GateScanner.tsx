@@ -27,7 +27,7 @@ type LogEntry = {
 };
 
 type ScannerMode = "wedge" | "camera";
-const MODE_STORAGE_KEY = "flytehaus.scanner.mode";
+const MODE_STORAGE_KEY = "atlvs.scanner.mode";
 
 /**
  * Mobile gate scanner — keyboard-wedge friendly. Reads a barcode and POSTs

@@ -26,8 +26,8 @@ const OUT = PREVIEW
   : path.join(os.homedir(), "Desktop", "EDCLV26_Salvage_City_PreArrival_Packets");
 
 const TRAVELERS = new Set(["Sarah Fry", "Vida Sotakoun"]);
-const APP_BASE = "https://flytehaus.studio";
-const PRODUCTION_GUIDE_URL = "https://gvteway.flytehaus.studio/edclv26-salvage-city/guide";
+const APP_BASE = "https://atlvs.pro";
+const PRODUCTION_GUIDE_URL = "https://gvteway.atlvs.pro/edclv26-salvage-city/guide";
 
 const safe = (s) => s.replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "");
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

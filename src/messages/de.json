@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "FLYTEHAUS Technologies",
-    "appNameStylized": "F L Y T E H A U S",
+    "appName": "ATLVS Technologies",
+    "appNameStylized": "A T L V S",
     "save": "Speichern",
     "cancel": "Abbrechen",
     "delete": "Löschen",
@@ -97,8 +97,8 @@
       "broadcast-tv-film": "Rundfunk, TV und Film"
     },
     "footer": {
-      "copyright": "© {year} FLYTEHAUS Technologies",
-      "trademark": "ATLVS, GVTEWAY und COMPVSS sind eingetragene Marken von FLYTEHAUS Technologies, einem Unternehmen der G H X S T S H I P Industries.",
+      "copyright": "© {year} ATLVS Technologies",
+      "trademark": "ATLVS, GVTEWAY und COMPVSS sind eingetragene Marken von ATLVS Technologies, einem Unternehmen der G H X S T S H I P Industries.",
       "tagline": "ATLVS, GVTEWAY und COMPVSS — drei vernetzte Apps für Produktionsteams.",
       "ctaTired": "Gemacht für Produktionsteams, die genug von Notlösungen haben."
     },
@@ -197,8 +197,8 @@
     },
     "acceptInvite": {
       "title": "Tritt deinem Team bei",
-      "subtitle": "Akzeptiere deine Einladung zu FLYTEHAUS Technologies",
-      "body": "Du wurdest in einen FLYTEHAUS-Technologies-Workspace eingeladen. Akzeptiere unten und wir bringen dich direkt hinein.",
+      "subtitle": "Akzeptiere deine Einladung zu ATLVS Technologies",
+      "body": "Du wurdest in einen ATLVS-Technologies-Workspace eingeladen. Akzeptiere unten und wir bringen dich direkt hinein.",
       "submit": "Einladung annehmen",
       "submitting": "Beitritt…",
       "signInInstead": "Stattdessen anmelden",
@@ -260,7 +260,7 @@
         "when": "Wann"
       }
     },
-    "emailSubject": "Du bist eingeladen, einem FLYTEHAUS-Technologies-Workspace beizutreten",
+    "emailSubject": "Du bist eingeladen, einem ATLVS-Technologies-Workspace beizutreten",
     "emailHeading": "Du wurdest eingeladen",
     "emailBody": "{inviter} hat dich eingeladen, dem Workspace als {role} beizutreten.",
     "emailCta": "Einladung annehmen",
@@ -315,7 +315,7 @@
     "toggleTheme": "Design wechseln",
     "toggleMenu": "Menü umschalten",
     "openMenu": "Menü öffnen",
-    "homeAriaLabel": "FLYTEHAUS Technologies — Startseite",
+    "homeAriaLabel": "ATLVS Technologies — Startseite",
     "loading": "Wird geladen",
     "saving": "Wird gespeichert",
     "saved": "Gespeichert",
@@ -325,13 +325,13 @@
   },
   "community": {
     "meta": {
-      "title": "Community — die Produktionsteams, die auf FLYTEHAUS aufbauen",
+      "title": "Community — die Produktionsteams, die auf ATLVS aufbauen",
       "description": "Die Festivals, Tourneen, Agenturen und Werkstätten, die ihre Produktion auf ATLVS, GVTEWAY und COMPVSS betreiben. Mitgliedergeschichten, Zahlen und was sie tatsächlich liefern."
     },
     "hero": {
       "eyebrow": "Community",
       "title": "Produktionsteams, die öffentlich aufbauen.",
-      "subtitle": "Die Festivals, Tourneen, Agenturen und Werkstätten, die ihre Shows auf FLYTEHAUS Technologies betreiben. Echte Workflows. Echte Zahlen. Echte Belege."
+      "subtitle": "Die Festivals, Tourneen, Agenturen und Werkstätten, die ihre Shows auf ATLVS Technologies betreiben. Echte Workflows. Echte Zahlen. Echte Belege."
     },
     "metrics": {
       "productionTeams": "Produktionsteams",
@@ -346,7 +346,7 @@
     "join": {
       "eyebrow": "Auf die Liste",
       "title": "Dein Team, hier.",
-      "body": "Du lieferst echte Shows auf FLYTEHAUS Technologies? Wir dokumentieren immer neue Mitgliedergeschichten. Ein kurzes Interview, anonymisierte Zahlen, deine Worte."
+      "body": "Du lieferst echte Shows auf ATLVS Technologies? Wir dokumentieren immer neue Mitgliedergeschichten. Ein kurzes Interview, anonymisierte Zahlen, deine Worte."
     },
     "finalCta": {
       "title": "Sei die nächste Geschichte",

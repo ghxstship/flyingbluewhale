@@ -117,8 +117,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         <p className="text-xs text-[var(--text-muted)]">
           Passport numbers are masked on screen but retained for letter generation. Email{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:visas@flytehaus.studio">
-            visas@flytehaus.studio
+          <a className="text-[var(--org-primary)]" href="mailto:visas@atlvs.pro">
+            visas@atlvs.pro
           </a>{" "}
           if your case isn't progressing.
         </p>

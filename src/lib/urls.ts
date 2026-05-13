@@ -7,10 +7,15 @@
  *
  * Modes:
  *   - Subdomain mode (NEXT_PUBLIC_USE_SUBDOMAINS=1):
- *       flytehaus.studio            → marketing / auth / personal
- *       atlvs.flytehaus.studio      → platform (rewrites to /console/*)
- *       gvteway.flytehaus.studio    → portal   (rewrites to /p/*)
- *       compvss.flytehaus.studio    → mobile   (rewrites to /m/*)
+ *       atlvs.pro                → marketing / auth / personal
+ *       app.atlvs.pro            → platform (rewrites to /console/*)
+ *       gvteway.atlvs.pro        → portal   (rewrites to /p/*)
+ *       compvss.atlvs.pro        → mobile   (rewrites to /m/*)
+ *
+ *     ATLVS is the parent brand; the operator console lives at `app.` (the
+ *     Linear/Notion/Slack pattern) rather than `atlvs.atlvs.pro`. Portal and
+ *     mobile keep their function-named subdomains so they each get their own
+ *     cookie scope, PWA service-worker origin, and CSP envelope.
  *
  *   - Path-prefix fallback (Vercel previews, plain localhost):
  *       single base URL with /console, /p, /m path prefixes (legacy layout).
@@ -26,7 +31,7 @@ const SHELL_SUBDOMAIN: Record<Shell, string | null> = {
   marketing: null,
   auth: null,
   personal: null,
-  platform: "atlvs",
+  platform: "app",
   portal: "gvteway",
   mobile: "compvss",
 };
@@ -68,9 +73,9 @@ export function baseUrlFor(shell: Shell): string {
 
 /**
  * Build an absolute URL for a path inside `shell`. Examples:
- *   urlFor("platform", "/projects/abc")   // https://atlvs.flytehaus.studio/projects/abc
+ *   urlFor("platform", "/projects/abc")   // https://app.atlvs.pro/projects/abc
  *   urlFor("portal", "/mmw26-hialeah/guide")
- *   urlFor("auth", "/login")              // https://flytehaus.studio/login
+ *   urlFor("auth", "/login")              // https://atlvs.pro/login
  */
 export function urlFor(shell: Shell, path: string = ""): string {
   const base = baseUrlFor(shell);
@@ -135,17 +140,20 @@ export function shellForHost(host: string | null | undefined): {
 
   const sub = bareHost.slice(0, bareHost.length - bareApex.length - 1);
 
-  // Future hook: peel `[slug].gvteway.flytehaus.studio` so the portal can offer
+  // Future hook: peel `[slug].gvteway.atlvs.pro` so the portal can offer
   // per-tenant subdomains without touching call sites. The middleware will
   // forward `tenantSlug` via a request header so portal routes can inject
-  // it into params alongside the existing `[slug]` segment.
+  // it into params alongside the existing `[slug]` segment. Same hook
+  // applies to `[slug].app.atlvs.pro` for tenant-scoped console hosts and
+  // to custom-domain CNAMEs (portal.{tenantbrand}.com → gvteway.atlvs.pro)
+  // that resolve their org by request header.
   //
   // const parts = sub.split(".");
   // if (parts.length === 2 && parts[1] === "gvteway") {
   //   return { shell: "portal", tenantSlug: parts[0] };
   // }
 
-  if (sub === "atlvs") return { shell: "platform", tenantSlug: null };
+  if (sub === "app") return { shell: "platform", tenantSlug: null };
   if (sub === "gvteway") return { shell: "portal", tenantSlug: null };
   if (sub === "compvss") return { shell: "mobile", tenantSlug: null };
 

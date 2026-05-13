@@ -279,6 +279,8 @@ export const platformNav: NavGroup[] = [
       { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
       { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
       { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
+      { label: "MSAs", href: "/console/people/msas", icon: "FileSignature" },
+      { label: "Offer Letters", href: "/console/people/offer-letters", icon: "FileText" },
       { label: "Announcements", href: "/console/comms/announcements", icon: "Megaphone" },
       { label: "Polls", href: "/console/comms/polls", icon: "BarChart3" },
       { label: "Surveys", href: "/console/comms/surveys", icon: "ClipboardCheck" },

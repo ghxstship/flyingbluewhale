@@ -46,7 +46,16 @@ function compLine(letter: OfferLetterResolved): string {
  * click straight into their mail client). No automatic send — Julian reviews
  * and dispatches each one.
  */
-export function composeOfferLetterEmail(letter: OfferLetterResolved): ComposedEmail {
+/** Optional MSA-on-file state — when provided, the email softens the
+ *  "Sign your MSA" call-out to a quiet reference line. */
+export type MsaContext = {
+  signed: boolean;
+  signerUrl: string | null;
+  signedAt: string | null;
+  version: number | null;
+};
+
+export function composeOfferLetterEmail(letter: OfferLetterResolved, msa: MsaContext | null = null): ComposedEmail {
   const firstName = letter.recipient_name.split(/\s+/)[0] ?? letter.recipient_name;
   const url = letterUrl(letter.public_token);
   const code = letter.access_code;
@@ -83,16 +92,24 @@ Sign in two clicks:
 Once you sign, please complete the onboarding checklist within 48 hours so credentials can ship:
 ${(() => {
   const items = (letter.effective_onboarding_items ?? []).slice().sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
-  const lines = items.map(
-    (i) =>
+  const lines: string[] = [];
+  // First-timers get a star-step pointing at the MSA before everything else.
+  if (msa && !msa.signed && msa.signerUrl) {
+    lines.push(`★ Sign your Master Services Agreement (one-time, covers every future engagement) — ${msa.signerUrl}`);
+  }
+  for (const i of items) {
+    lines.push(
       `${i.order}. ${i.label}${i.link ? ` — ${i.link}` : ""}${i.links ? i.links.map((l) => ` — ${l.label}: ${l.url}`).join("") : ""}${i.note ? `\n   (${i.note})` : ""}`,
-  );
+    );
+  }
   if (guide) {
     const nextOrder = (items[items.length - 1]?.order ?? items.length) + 1;
     lines.push(`${nextOrder}. Review the Salvage City Production Guide — ${guide}`);
   }
   return lines.join("\n");
 })()}
+
+This engagement is subject to our Independent Contractor Master Services Agreement.${msa && msa.signed && msa.signedAt ? ` Your signed MSA is on file (v${msa.version ?? 1}, ${formatShortDate(msa.signedAt)}).` : msa && msa.signerUrl ? ` Read & sign your copy here — ${msa.signerUrl}` : ""}
 
 If you have any questions or concerns, just hit reply — I'll get back to you within 4 business hours.
 
@@ -120,6 +137,7 @@ ${letter.signing_authority_email ?? "julian.clarkson@ghxstship.pro"}
     code,
     guide,
     onboarding: (letter.effective_onboarding_items ?? []).slice().sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
+    msa,
     signer,
     signerTitle,
     signerEmail: letter.signing_authority_email ?? "julian.clarkson@ghxstship.pro",
@@ -147,6 +165,7 @@ type HtmlArgs = {
   code: string;
   guide: string | null;
   onboarding: Array<{ order: number; label: string; required: boolean; link?: string }>;
+  msa: MsaContext | null;
   signer: string;
   signerTitle: string;
   signerEmail: string;
@@ -166,6 +185,11 @@ function renderHtml(a: HtmlArgs): string {
     const nextOrder = (items[items.length - 1]?.order ?? items.length) + 1;
     items.push({ order: nextOrder, label: "Review the Salvage City Production Guide", link: a.guide, required: true });
   }
+  // First-timers get a prominent ★ MSA step at the top of the onboarding list.
+  const msaStepHtml =
+    a.msa && !a.msa.signed && a.msa.signerUrl
+      ? `<li style="margin-bottom:12px;background:#fffaf0;border:1px solid #f2c94c;border-radius:6px;padding:10px 12px"><strong>★ Sign your Master Services Agreement</strong> <a href="${a.msa.signerUrl}" style="color:#3b6cff">Open MSA ↗</a><div style="font-size:12px;color:#666;margin-top:4px">One-time. Applies to every future engagement we book you on — you won&rsquo;t see this step again.</div></li>`
+      : "";
   const onboardingHtml = items
     .map((i) => {
       const linkBadges =
@@ -214,7 +238,7 @@ function renderHtml(a: HtmlArgs): string {
   </div>
 
   <h3 style="font-size:13px;text-transform:uppercase;letter-spacing:0.12em;color:#444;margin:24px 0 8px">After you sign &mdash; please complete within 48 hours</h3>
-  <ol style="padding-left:0;list-style:none;font-size:13px">${onboardingHtml}</ol>
+  <ol style="padding-left:0;list-style:none;font-size:13px">${msaStepHtml}${onboardingHtml}</ol>
 
   <p style="margin-top:28px">If you have any questions or concerns, just hit reply &mdash; I&rsquo;ll get back to you within 4 business hours.</p>
 
@@ -222,7 +246,27 @@ function renderHtml(a: HtmlArgs): string {
   <strong>${escapeHtml(a.signer)}</strong><br/>
   <span style="color:#888;font-size:12px">${escapeHtml(a.signerTitle)} &middot; ${escapeHtml(a.employerName)}</span><br/>
   <span style="color:#888;font-size:12px">${escapeHtml(a.signerEmail)}</span></p>
+
+  <p style="margin-top:32px;padding-top:16px;border-top:1px solid #e6e6e0;color:#888;font-size:11px;line-height:1.5">
+    This engagement is subject to our <strong>Independent Contractor Master Services Agreement</strong>.${
+      a.msa && a.msa.signed && a.msa.signedAt
+        ? ` Your signed MSA is on file (v${a.msa.version ?? 1}, ${escapeHtml(formatShortDate(a.msa.signedAt))}).`
+        : a.msa && a.msa.signerUrl
+          ? ` <a href="${a.msa.signerUrl}" style="color:#3b6cff">Read &amp; sign your copy here ↗</a> (one-time, applies to every future engagement).`
+          : ""
+    }<br/>
+    Governing law: State of Nevada. Venue: Clark County, NV. Confidential and proprietary to ${escapeHtml(a.employerName)}.
+  </p>
 </body></html>`;
+}
+
+function formatShortDate(iso: string): string {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return iso;
+  }
 }
 
 function engagementWindowSummary(letter: OfferLetterResolved): {

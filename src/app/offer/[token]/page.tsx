@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/Badge";
 import { hasSupabase } from "@/lib/env";
 import { getOfferLetterByToken } from "@/lib/offer-letters/queries";
 import { STATUS_LABEL, STATUS_VARIANT } from "@/lib/offer-letters/types";
+import { getActiveMsaForCrew } from "@/lib/msa/queries";
+import { msaPublicUrl } from "@/lib/msa/format";
 import { UnlockForm } from "./UnlockForm";
 import { ResponseForms } from "./ResponseForms";
 
@@ -26,6 +28,9 @@ export default async function Page({ params }: { params: Promise<{ token: string
     return <UnlockForm token={token} expired />;
   }
 
+  const activeMsa = await getActiveMsaForCrew(letter.crew_member_id);
+  const msaSignerUrl = activeMsa ? msaPublicUrl(activeMsa.public_token) : null;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
@@ -43,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ token: string
         </div>
       </div>
 
-      <LetterDocument letter={letter} />
+      <LetterDocument letter={letter} activeMsa={activeMsa} msaSignerUrl={msaSignerUrl} />
 
       <ResponseForms token={token} status={letter.status} recipientName={letter.recipient_name} />
     </div>

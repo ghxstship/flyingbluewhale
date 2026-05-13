@@ -1,34 +1,25 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasSupabase } from "@/lib/env";
-import { getOfferLetterByToken } from "@/lib/offer-letters/queries";
-import { getActiveMsaForCrew } from "@/lib/msa/queries";
-import { msaPublicUrl } from "@/lib/msa/format";
-import { LetterDocument } from "@/components/offer-letters/LetterDocument";
-import { PrintTrigger } from "./PrintTrigger";
+import { getMsaByToken } from "@/lib/msa/queries";
+import { MSADocument } from "@/components/msa/MSADocument";
+import { PrintTrigger } from "@/app/offer/[token]/print/PrintTrigger";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Engagement Letter — Print",
+  title: "Master Services Agreement — Print",
   robots: { index: false, follow: false },
 };
 
-/**
- * Bare-bones print view. The browser's "Save as PDF" / "Print" target
- * produces a clean single-document PDF. No nav chrome, no response forms,
- * no badge — just the letter.
- */
 export default async function PrintPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   if (!hasSupabase) notFound();
   const c = await cookies();
-  const code = c.get(`offer_${token}`)?.value;
+  const code = c.get(`msa_${token}`)?.value;
   if (!code) notFound();
-  const letter = await getOfferLetterByToken(token, code);
-  if (!letter || !letter.id) notFound();
-  const activeMsa = await getActiveMsaForCrew(letter.crew_member_id);
-  const msaSignerUrl = activeMsa ? msaPublicUrl(activeMsa.public_token) : null;
+  const msa = await getMsaByToken(token, code);
+  if (!msa || !msa.id) notFound();
 
   return (
     <main className="min-h-screen bg-white text-black" data-theme="light">
@@ -41,7 +32,6 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
               .no-print { display: none !important; }
             }
             html, body { background: #fff; color: #000; }
-            /* Force the letter document into a print-friendly palette */
             main[data-theme="light"] {
               --surface-base: #ffffff;
               --surface-raised: #ffffff;
@@ -71,12 +61,12 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
           </div>
           <div className="flex items-center gap-3">
             <PrintTrigger />
-            <a href={`/offer/${token}`} className="text-blue-700 hover:underline">
-              ← Back to letter
+            <a href={`/msa/${token}`} className="text-blue-700 hover:underline">
+              ← Back to MSA
             </a>
           </div>
         </div>
-        <LetterDocument letter={letter} activeMsa={activeMsa} msaSignerUrl={msaSignerUrl} />
+        <MSADocument msa={msa} orgName={msa.org_name} />
       </div>
     </main>
   );

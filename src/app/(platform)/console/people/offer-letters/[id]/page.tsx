@@ -13,6 +13,8 @@ import {
   listRateCardItems,
 } from "@/lib/offer-letters/queries";
 import { offerPublicUrl } from "@/lib/offer-letters/format";
+import { getActiveMsaForCrew } from "@/lib/msa/queries";
+import { msaPublicUrl } from "@/lib/msa/format";
 import {
   STATUS_LABEL,
   STATUS_VARIANT,
@@ -39,6 +41,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const fmt = await getRequestFormatters();
   if (!data) notFound();
   const { raw, resolved } = data;
+  const activeMsa = await getActiveMsaForCrew(raw.crew_member_id);
+  const msaSignerUrl = activeMsa ? msaPublicUrl(activeMsa.public_token) : null;
 
   // Letter renders from snapshot if frozen (immutable contract), else from the
   // resolved view. Either way, lifecycle fields (status / accepted / declined /
@@ -71,7 +75,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   ]);
 
   const publicUrl = offerPublicUrl(raw.public_token);
-  const email = composeOfferLetterEmail(resolved);
+  const email = composeOfferLetterEmail(resolved, {
+    signed: !!activeMsa,
+    signerUrl: msaSignerUrl,
+    signedAt: activeMsa?.signed_at ?? null,
+    version: activeMsa?.version ?? null,
+  });
   const printUrl = `/offer/${raw.public_token}/print`;
 
   return (
@@ -123,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr,1fr]">
           <div className="space-y-6">
-            <LetterDocument letter={renderable} />
+            <LetterDocument letter={renderable} activeMsa={activeMsa} msaSignerUrl={msaSignerUrl} />
           </div>
 
           <div className="space-y-6">

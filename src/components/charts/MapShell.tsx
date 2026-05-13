@@ -113,6 +113,15 @@ export function MapShell({
   React.useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
+    // MapLibre paint properties don't support CSS custom-property strings.
+    // Resolve any var(--token) reference to its computed hex value so the
+    // WebGL renderer gets a concrete color.
+    const resolveColor = (c: string): string => {
+      if (!c.startsWith("var(")) return c;
+      const token = c.slice(4, -1).trim();
+      return getComputedStyle(document.documentElement).getPropertyValue(token).trim() || c;
+    };
+    const defaultRouteColor = resolveColor("var(--org-primary)");
     const apply = () => {
       // Clean previous route layers
       const style = map.getStyle();
@@ -136,7 +145,7 @@ export function MapShell({
           type: "line",
           source: id,
           paint: {
-            "line-color": r.color ?? "#3b82f6",
+            "line-color": resolveColor(r.color ?? defaultRouteColor),
             "line-width": r.width ?? 3,
           },
         });

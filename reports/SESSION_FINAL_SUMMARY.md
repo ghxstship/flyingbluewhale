@@ -37,7 +37,7 @@ All applied directly to remote (Supabase Pro plan needed for branching; user exp
 
 ### Documentation
 
-- `docs/XPMS_TO_FLYTEHAUS_MAPPING.md` — Phase 0 item zero
+- `docs/XPMS_TO_ATLVS_MAPPING.md` — Phase 0 item zero
 - `docs/E2E_LRP_PRESET.md` — durable Q1–Q6 answers for future protocol runs
 - `CLAUDE.md` — LDP naming-discipline gate added to backend section
 - `reports/E2E_GROUND_TRUTH_MAP.md` + 5 LDP audit deliverables (v1, then v2 after live-DB re-audit)

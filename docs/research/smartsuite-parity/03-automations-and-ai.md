@@ -1,6 +1,6 @@
-# SmartSuite Automations + AI vs FLYTEHAUS — Gap Analysis
+# SmartSuite Automations + AI vs ATLVS — Gap Analysis
 
-> Scope: SmartSuite's Automations (43 articles) and AI (5 articles) + Scripting Widget (3 articles) measured against the current `flyingbluewhale` (FLYTEHAUS Technologies) codebase as of 2026-05-04.
+> Scope: SmartSuite's Automations (43 articles) and AI (5 articles) + Scripting Widget (3 articles) measured against the current `flyingbluewhale` (ATLVS Technologies) codebase as of 2026-05-04.
 > All file paths are absolute; all SmartSuite claims are linked to a help-article URL in §8.
 
 ---
@@ -9,11 +9,11 @@
 
 1. **The `automations` table is a UI shell with no runner.** `src/app/(platform)/console/ai/automations/*` lets a user create a row with `trigger_kind`/`trigger_config`/`steps` JSON, but no worker reads `steps`, no scheduler dispatches `trigger_kind="schedule"`, no inbound endpoint accepts `trigger_kind="webhook"`, and the "manual run" action just stamps `last_run_at = now()` without executing anything ([`actions.ts:28-40`](<file:///Users/julianclarkson/Documents/flyingbluewhale/src/app/(platform)/console/ai/automations/[automationId]/actions.ts>)). Severity: **XL gap**.
 2. **The runtime primitives already exist** — `job_queue` with `claim_jobs()` SKIP LOCKED, exponential-backoff retries, a deployed `job-worker` Edge Function on a 1-min cron, and an outbound `webhook_endpoints` + `webhook_deliveries` outbox with HMAC-SHA256 signing. An automation engine can be built **on top of** this rather than from scratch.
-3. **No condition/filter language.** SmartSuite ships ~7 operators per field type with AND/OR groups up to 15 conditions; FLYTEHAUS has none — `trigger_config` is opaque JSON with no schema, no UI to author it, and no runtime to evaluate it.
-4. **No action library.** SmartSuite offers 25+ pre-built actions (Create/Update/Find/Merge Records, Email, Slack, Teams, Twilio SMS/Voice, Google Drive/Sheets/Calendar, HubSpot, Salesforce, Jira, Generate PDF, AI Assist, Looping, Webhook). FLYTEHAUS has zero canonical action handlers wired to the automations table.
-5. **No record-event triggers.** SmartSuite fires on record-created / record-updated / record-matches-condition. FLYTEHAUS has SSOT triggers writing to `audit_log` and an `emit_notification()` RPC, but no event bus that automations subscribe to.
+3. **No condition/filter language.** SmartSuite ships ~7 operators per field type with AND/OR groups up to 15 conditions; ATLVS has none — `trigger_config` is opaque JSON with no schema, no UI to author it, and no runtime to evaluate it.
+4. **No action library.** SmartSuite offers 25+ pre-built actions (Create/Update/Find/Merge Records, Email, Slack, Teams, Twilio SMS/Voice, Google Drive/Sheets/Calendar, HubSpot, Salesforce, Jira, Generate PDF, AI Assist, Looping, Webhook). ATLVS has zero canonical action handlers wired to the automations table.
+5. **No record-event triggers.** SmartSuite fires on record-created / record-updated / record-matches-condition. ATLVS has SSOT triggers writing to `audit_log` and an `emit_notification()` RPC, but no event bus that automations subscribe to.
 6. **AI integration is a single chat endpoint.** `src/app/api/v1/ai/chat/route.ts` streams Claude responses for an interactive assistant; there is no AI Assist _action_, no AI _field agent_ (auto-summarize/classify/sentiment on field change), no structured output schema (Custom Outputs), no provider-abstraction layer.
-7. **Scripting widget = 0% built.** SmartSuite ships a sandboxed JS widget with `get_record`, `proxy_fetch`, `download_data`, etc. FLYTEHAUS has no end-user scripting surface.
+7. **Scripting widget = 0% built.** SmartSuite ships a sandboxed JS widget with `get_record`, `proxy_fetch`, `download_data`, etc. ATLVS has no end-user scripting surface.
 8. **Inbound webhook triggers do not exist.** Stripe webhooks are bespoke (`/api/v1/webhooks/stripe`), not extensible. Customers cannot publish their own webhook URL with auto-mapped JSON payloads.
 9. **Scheduled-time triggers are unsolved.** `job_queue.run_at` supports one-shot delayed jobs, but there is no cron/recurrence engine, no "next 10 runs" preview, no per-org scheduler limits.
 10. **Highest impact, lowest effort wins:** (a) wire a `automation_runs` ledger + dispatch loop into the existing `job-worker`, (b) ship 5 first-class actions (notify, email, webhook, update record, AI Assist), (c) lift `notify()`'s event-type registry into a record-event bus that automations can subscribe to. Estimated 3–4 weeks gets us to demonstrable parity for ~70% of customer use cases.
@@ -36,9 +36,9 @@
 | Scheduling         | Minutes/Hours/Days/Weeks/Months/One-time intervals; "next 10 runs" preview ([Automation Triggers](https://help.smartsuite.com/en/articles/5162303-automation-triggers))                                                                                                                         |
 | Inbound webhooks   | Per-automation URL accepting GET + POST JSON ≤1 MB at 5 req/s; nested objects converted to `customer.name` dot notation; arrays auto-detected ([Automation Trigger: Webhook](https://help.smartsuite.com/en/articles/10753627-automation-trigger-webhook))                                      |
 
-### What FLYTEHAUS has today
+### What ATLVS has today
 
-| Layer                         | FLYTEHAUS state                                                                                                                                                                                                                                                                                    |
+| Layer                         | ATLVS state                                                                                                                                                                                                                                                                                        |
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Authoring UI                  | `name`, `description`, `trigger_kind` enum, no condition or step editor — the page renders `trigger_config` and `steps` as raw `<pre>JSON</pre>` ([detail page](<file:///Users/julianclarkson/Documents/flyingbluewhale/src/app/(platform)/console/ai/automations/[automationId]/page.tsx>))       |
 | Runner                        | None. `recordManualRunAction` updates `last_run_status='ok'` without dispatching anything                                                                                                                                                                                                          |
@@ -65,7 +65,7 @@
 
 ## 3. Trigger Matrix
 
-| SmartSuite trigger                                                                                         | FLYTEHAUS equivalent                                                                                                                                                                   | Severity | Note                                                                           |
+| SmartSuite trigger                                                                                         | ATLVS equivalent                                                                                                                                                                       | Severity | Note                                                                           |
 | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------ |
 | Record matches a condition ([source](https://help.smartsuite.com/en/articles/5162303-automation-triggers)) | None — no event bus subscribed by `automations`                                                                                                                                        | XL       | Needs `domain_events` + condition evaluator                                    |
 | Record is created                                                                                          | SSOT trigger writes `audit_log`, but no automation subscribes                                                                                                                          | L        | Easy once §2 step 5 lands                                                      |
@@ -82,7 +82,7 @@
 
 ## 4. Action Matrix
 
-| SmartSuite action                                                                                                                           | FLYTEHAUS equivalent                                                                      | Severity | Note                                                                       |
+| SmartSuite action                                                                                                                           | ATLVS equivalent                                                                          | Severity | Note                                                                       |
 | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------- |
 | Create a Record ([source](https://help.smartsuite.com/en/articles/5163903-smartsuite-automation-actions))                                   | None as automation primitive — server actions do this manually                            | L        | Map to `listOrgScoped`/`getOrgScoped` already in `src/lib/db/resource.ts`  |
 | Update Records                                                                                                                              | None                                                                                      | L        | Same                                                                       |
@@ -118,7 +118,7 @@
 | **SmartDoc AI Assistant**       | In-doc `/Ask AI`: generate, improve clarity, simplify, fix spelling, summarize, action-item extraction. Uses GPT-4 by default; 200 free requests/yr/workspace then BYO OpenAI key.                                                                                                                                      | [SmartSuite AI Assistant (SmartDoc)](https://help.smartsuite.com/en/articles/7900592-smartsuite-ai-assistant-smartdoc)     |
 | **Provider abstraction**        | 9 providers via BYO-key: OpenAI, Anthropic, Google Gemini, Amazon Bedrock, Azure OpenAI, Perplexity, Nscale, IBM watsonx, xAI/Grok. Some use SigV4. Models offered: GPT-5 Mini default, GPT-5, GPT-4o, O1 Pro.                                                                                                          | [AI Assist: Connecting Your Provider](https://help.smartsuite.com/en/articles/11769675-ai-assist-connecting-your-provider) |
 
-### What FLYTEHAUS has
+### What ATLVS has
 
 - **One streaming chat endpoint** at [`src/app/api/v1/ai/chat/route.ts`](file:///Users/julianclarkson/Documents/flyingbluewhale/src/app/api/v1/ai/chat/route.ts) — `claude-opus-4-7` / `claude-sonnet-4-6` only, hard-coded SYSTEM prompt, conversation persistence in `ai_conversations` / `ai_messages`, usage metering via `recordUsage()`. Not callable from automations or fields.
 - **One bespoke extractor** at [`src/lib/ai/extract-credential.ts`](file:///Users/julianclarkson/Documents/flyingbluewhale/src/lib/ai/extract-credential.ts) — extracts COI/W9 fields with strict JSON schemas. The right pattern, but locked to credentials.
@@ -152,7 +152,7 @@ Pros:
 Cons (decisive):
 
 - Sandboxing JS in production is a meaningful security surface — `proxy_fetch` allowlists, CPU/memory caps, secret redaction, audit-trail of script execution.
-- FLYTEHAUS' competitive edge is **opinionated production-ops vocabulary** (advancing, ROS, load-in, credentials, COI). A scripting hatch invites users to bend the model in ways that fight the platform.
+- ATLVS' competitive edge is **opinionated production-ops vocabulary** (advancing, ROS, load-in, credentials, COI). A scripting hatch invites users to bend the model in ways that fight the platform.
 - The `ai.assist` action covers ~80% of "I need a custom field calc" use cases at lower risk.
 
 If/when scripting ships, scope it to **read-only** (`get_record`, `find_records`, `proxy_fetch` against a HTTPS allowlist) and require Workspace-Admin + 2-person review on save. Never write-back from a script.

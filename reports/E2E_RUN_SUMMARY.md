@@ -51,7 +51,7 @@ Verified GREEN by overlaying the worktree copy onto parent repo + running the sp
 
 ### Documentation landed
 
-- `docs/XPMS_TO_FLYTEHAUS_MAPPING.md` — canonical conceptual ⇄ implementation map (Phase 0 item zero)
+- `docs/XPMS_TO_ATLVS_MAPPING.md` — canonical conceptual ⇄ implementation map (Phase 0 item zero)
 - `CLAUDE.md` — new bullet under "Backend (Supabase)" enforcing LDP naming discipline at schema review
 - `reports/` — full Phase 0–8 deliverable set (15 files)
 

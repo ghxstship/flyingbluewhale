@@ -51,6 +51,8 @@ describe("Design system — component primitive adoption", () => {
       "src/components/xpms/PhaseStepper.tsx",
       // Sign / Decline mode toggle (segmented-control pattern, not a primary button)
       "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/approvals/[approvalId]/ApprovalSignBlock.tsx",
+      // Pipeline switcher pill row (segmented-control pattern, not a primary button)
+      "src/app/(platform)/console/pipeline/page.tsx",
       // Clerk / auth UI overrides
       "src/app/layout.tsx",
       // Stage-plot SVG (paper-white fill, not a button)

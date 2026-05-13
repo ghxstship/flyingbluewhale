@@ -1,7 +1,7 @@
 # E2E_GROUND_TRUTH_MAP
 
 **Protocol:** E2E-LRP Phase 0 deliverable + LDP overlay
-**Run:** 2026-05-09 · operator: Claude Opus 4.7 · scope: flyingbluewhale (FLYTEHAUS Technologies)
+**Run:** 2026-05-09 · operator: Claude Opus 4.7 · scope: flyingbluewhale (ATLVS Technologies)
 **Branch:** `claude/naughty-wu-b69201` (worktree)
 **HEAD prior to run:** `75d4fdb` _feat(salvage-city): 8th-persona model + offer-letter alignment to playbook v3_
 
@@ -32,7 +32,7 @@ The two questions are independent. UJV's GO does not invalidate LDP findings; LD
 
 ## Section 1 — Subsystem implementation status
 
-Per the user's reconciled mapping (turn 3): use FLYTEHAUS-implementation names; treat XPMS/USNP as conceptual labels. Full mapping in [docs/XPMS_TO_FLYTEHAUS_MAPPING.md](../docs/XPMS_TO_FLYTEHAUS_MAPPING.md). Summarised here for the in-scope subsystem list.
+Per the user's reconciled mapping (turn 3): use ATLVS-implementation names; treat XPMS/USNP as conceptual labels. Full mapping in [docs/XPMS_TO_ATLVS_MAPPING.md](../docs/XPMS_TO_ATLVS_MAPPING.md). Summarised here for the in-scope subsystem list.
 
 | In-scope subsystem                                                                               | Implementation status                                                                                                                                                                                                         | Anchor                                                                                                                                                                                                                                                         |
 | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -81,7 +81,7 @@ Per the user's reconciled mapping (turn 3): use FLYTEHAUS-implementation names; 
 | `(platform)` ATLVS | **541** | Internal ops console — Olympic-scale (programs, venues, accreditation, workforce, safety, transport, accommodation, participants, commercial, logistics, legal, comms, sustainability, KB, ops, marketplace, bookings, agency, marketing, insights, finance, procurement, production, people, projects, ai, inbox, files, forms, settings) | [src/app/(platform)/console/](<../src/app/(platform)/console/>) |
 | `(portal)` GVTEWAY | 90      | External stakeholder portals — slug-gated. Personas: artist, vendor, client, sponsor, guest, crew, **delegation, media, vip, hospitality, volunteer, athlete** (last 6 are Olympic-scale additions per `scripts/routes.txt:431-484`)                                                                                                       | [src/app/(portal)/](<../src/app/(portal)/>)                     |
 | `(mobile)` COMPVSS | 43      | Field-ops PWA: gate, scan, shift, check-in, incident, medic, safeguarding, alerts, driver, A&D, run-of-show, guard, WMS, punch, handover                                                                                                                                                                                                   | [src/app/(mobile)/](<../src/app/(mobile)/>)                     |
-| `(ghxstship)`      | 15      | **Parent-co marketing surface** — separate brand (locked bermuda-triangle theme), out of FLYTEHAUS app scope; included for completeness                                                                                                                                                                                                    | [src/app/(ghxstship)/](<../src/app/(ghxstship)/>)               |
+| `(ghxstship)`      | 15      | **Parent-co marketing surface** — separate brand (locked bermuda-triangle theme), out of ATLVS app scope; included for completeness                                                                                                                                                                                                        | [src/app/(ghxstship)/](<../src/app/(ghxstship)/>)               |
 
 ### Page-content reality (sample of `(platform)` shell)
 
@@ -183,7 +183,7 @@ Per LDP §STOP CONDITIONS:
 
 **Phase 0 deliverables landed:**
 
-- ✅ [docs/XPMS_TO_FLYTEHAUS_MAPPING.md](../docs/XPMS_TO_FLYTEHAUS_MAPPING.md)
+- ✅ [docs/XPMS_TO_ATLVS_MAPPING.md](../docs/XPMS_TO_ATLVS_MAPPING.md)
 - ✅ [reports/E2E_GROUND_TRUTH_MAP.md](E2E_GROUND_TRUTH_MAP.md) (this file)
 - ✅ [reports/LDP_LIFECYCLE_AUDIT.md](LDP_LIFECYCLE_AUDIT.md)
 - ✅ [reports/LDP_NAMING_AUDIT.md](LDP_NAMING_AUDIT.md)

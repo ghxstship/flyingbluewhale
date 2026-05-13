@@ -32,7 +32,7 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
   const t = TEMPLATES_BY_SLUG[slug];
   if (!t) notFound();
 
-  const module = MODULES[t.module];
+  const moduleInfo = MODULES[t.module];
   const crumbs = [
     { label: "Home", href: "/" },
     { label: "Templates", href: "/templates" },
@@ -82,11 +82,11 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
               </span>
             ))}
           </div>
-          {module ? (
+          {moduleInfo ? (
             <div className="mt-6 border-t border-[var(--border-color)] pt-4 text-sm">
               <span className="text-[var(--text-muted)]">Lives in: </span>
-              <Link href={`/features/${module.slug}`} className="font-medium text-[var(--org-primary)]">
-                {module.name} →
+              <Link href={`/features/${moduleInfo.slug}`} className="font-medium text-[var(--org-primary)]">
+                {moduleInfo.name} →
               </Link>
             </div>
           ) : null}

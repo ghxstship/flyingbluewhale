@@ -6,36 +6,59 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { STATE_LABEL, STATE_TONE } from "@/lib/charthouse/state";
+import type { CharthouseDocumentState, CharthouseSheetType } from "@/lib/charthouse/types";
 
 export const dynamic = "force-dynamic";
 
 type Row = {
   id: string;
+  atom_id: string | null;
   code: string;
   title: string;
+  sheet_type: CharthouseSheetType;
+  document_state: CharthouseDocumentState;
+  primary_class: number | null;
+  revision_letter: string | null;
   discipline: string;
   created_at: string;
+  issued_at: string | null;
   project: { name: string | null } | null;
   venue: { name: string | null } | null;
-  current_revision: { revision_label: string | null } | null;
 };
 
-const DISCIPLINE_TONE: Record<string, "muted" | "info" | "warning" | "error" | "success"> = {
-  rigging: "warning",
+const SHEET_TYPE_TONE: Record<CharthouseSheetType, "muted" | "info" | "warning" | "error" | "success"> = {
+  site_plan: "muted",
+  floor_plan: "info",
+  rcp: "info",
   power: "warning",
-  evacuation: "error",
-  accessibility: "info",
-  audio: "info",
-  video: "info",
-  lighting: "info",
+  egress: "error",
+  flow: "info",
+  signage: "info",
+  section: "muted",
+  as_built: "success",
+};
+
+const XPMS_CLASS_LABEL: Record<number, string> = {
+  0: "0 EXECUTIVE",
+  1: "1 CREATIVE",
+  2: "2 TALENT",
+  3: "3 MARKETING",
+  4: "4 BUILD",
+  5: "5 PRODUCTION",
+  6: "6 OPERATIONS",
+  7: "7 EXPERIENCE",
+  8: "8 HOSPITALITY",
+  9: "9 TECHNOLOGY",
 };
 
 export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venues" title="Site Plans" />
+        <ModuleHeader eyebrow="CHARTHOUSE" title="Site Plans" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -43,80 +66,104 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const supabase = await createClient();
-
+  const supabase = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
+
   const { data } = await supabase
     .from("site_plans")
     .select(
-      "id, code, title, discipline, created_at, project:project_id(name), venue:venue_id(name), current_revision:current_revision_id(revision_label)",
+      "id, atom_id, code, title, sheet_type, document_state, primary_class, revision_letter, discipline, created_at, issued_at, project:project_id(name), venue:venue_id(name)",
     )
     .eq("org_id", session.orgId)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .limit(200);
 
   const rows = (data ?? []) as unknown as Row[];
 
+  const issuedCount = rows.filter((r) => r.document_state === "issued").length;
+  const inReviewCount = rows.filter((r) => r.document_state === "in_review").length;
+  const draftCount = rows.filter((r) => r.document_state === "draft").length;
+
   return (
     <>
       <ModuleHeader
-        eyebrow="Venues"
+        eyebrow="CHARTHOUSE"
         title="Site Plans"
-        subtitle={`${rows.length} sheet${rows.length === 1 ? "" : "s"} across all projects · floorplans, rigging, power, evacuation, hospitality zones`}
+        subtitle={`${rows.length} sheet${rows.length === 1 ? "" : "s"} · CHARTHOUSE protocol v1.0 (FP-CHARTHOUSE-001) · floor / site / power / egress / flow / signage / section / as-built`}
         action={
           <Button href="/console/site-plans/new" size="sm">
-            + New Plan
+            + New Sheet
           </Button>
         }
       />
       <div className="page-content space-y-5">
-        <div className="metric-grid-3">
-          <MetricCard label="Total Plans" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Disciplines" value={String(new Set(rows.map((r) => r.discipline)).size)} />
-          <MetricCard
-            label="Venues Covered"
-            value={String(new Set(rows.map((r) => r.venue?.name).filter(Boolean)).size)}
-          />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <MetricCard label="Total Sheets" value={fmt.number(rows.length)} accent />
+          <MetricCard label="Issued (IFC)" value={fmt.number(issuedCount)} />
+          <MetricCard label="In Review" value={fmt.number(inReviewCount)} />
+          <MetricCard label="Draft" value={fmt.number(draftCount)} />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/site-plans/${r.id}`}
-          emptyLabel="No site plans yet"
-          emptyDescription="Upload venue floorplans or production drawings. Versioned via revisions, pinnable to issues, RFIs, and punch items."
+          emptyLabel="No CHARTHOUSE sheets yet"
+          emptyDescription="Mint a sheet with a canonical Atom ID. Pick a preset to scaffold zones, bands, and stations in one step."
           emptyAction={
             <Button href="/console/site-plans/new" size="sm">
-              + New Plan
+              + New Sheet
             </Button>
           }
           columns={[
             {
-              key: "code",
-              header: "Sheet",
-              render: (r) => r.code,
-              className: "font-mono text-xs",
-              accessor: (r) => r.code,
+              key: "atom_id",
+              header: "Atom ID",
+              render: (r) => r.atom_id ?? <span className="text-[var(--text-muted)]">— pending —</span>,
+              accessor: (r) => r.atom_id,
+              className: "font-mono text-[11px]",
             },
             { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
-              key: "venue",
-              header: "Venue",
-              render: (r) => r.venue?.name ?? r.project?.name ?? "—",
-              accessor: (r) => r.venue?.name ?? r.project?.name ?? null,
+              key: "sheet_type",
+              header: "Type",
+              render: (r) => <Badge variant={SHEET_TYPE_TONE[r.sheet_type]}>{r.sheet_type}</Badge>,
+              accessor: (r) => r.sheet_type,
+              filterable: true,
+              groupable: true,
             },
             {
-              key: "discipline",
-              header: "Discipline",
-              render: (r) => <Badge variant={DISCIPLINE_TONE[r.discipline] ?? "muted"}>{r.discipline}</Badge>,
-              accessor: (r) => r.discipline ?? null,
+              key: "class",
+              header: "Class",
+              render: (r) =>
+                r.primary_class != null ? (
+                  <span className="font-mono text-[11px]">{XPMS_CLASS_LABEL[r.primary_class]}</span>
+                ) : (
+                  "—"
+                ),
+              accessor: (r) => (r.primary_class != null ? XPMS_CLASS_LABEL[r.primary_class] : null),
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "document_state",
+              header: "State",
+              render: (r) => <Badge variant={STATE_TONE[r.document_state]}>{STATE_LABEL[r.document_state]}</Badge>,
+              accessor: (r) => r.document_state,
               filterable: true,
               groupable: true,
             },
             {
               key: "rev",
-              header: "Current Rev",
-              render: (r) => r.current_revision?.revision_label ?? "—",
+              header: "Rev",
+              render: (r) => r.revision_letter ?? "—",
               className: "font-mono text-xs",
-              accessor: (r) => r.current_revision?.revision_label ?? null,
+              accessor: (r) => r.revision_letter,
+            },
+            {
+              key: "venue",
+              header: "Venue / Project",
+              render: (r) => r.venue?.name ?? r.project?.name ?? "—",
+              accessor: (r) => r.venue?.name ?? r.project?.name ?? null,
             },
           ]}
         />

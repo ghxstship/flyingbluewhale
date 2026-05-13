@@ -35,7 +35,7 @@ export function MobileHomeTabs({ today, tools, reports }: { today: Tile[]; tools
             role="tab"
             aria-selected={active === key}
             onClick={() => setActive(key)}
-            className={`flex-1 rounded px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--brand-color)] ${
+            className={`flex-1 rounded px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
               active === key
                 ? "bg-[var(--surface-raised)] text-[var(--text-primary)] shadow-sm"
                 : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -49,9 +49,9 @@ export function MobileHomeTabs({ today, tools, reports }: { today: Tile[]; tools
 
       <div className="mt-4 grid grid-cols-2 gap-3">
         {tiles.map((t) => (
-          <Link key={t.href} href={t.href} className="card p-4">
-            <div className="text-label">{t.label}</div>
-            <div className="text-mono mt-1 text-xs text-[var(--color-text-tertiary)]">{t.sub}</div>
+          <Link key={t.href} href={t.href} className="surface hover-lift p-4">
+            <div className="text-xs font-semibold tracking-wider uppercase">{t.label}</div>
+            <div className="font-mono mt-1 text-xs text-[var(--text-muted)]">{t.sub}</div>
           </Link>
         ))}
       </div>

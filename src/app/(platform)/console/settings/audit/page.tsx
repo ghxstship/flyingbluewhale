@@ -53,7 +53,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
                   ? "/console/settings/audit"
                   : `/console/settings/audit?cursor=${offset - PAGE_SIZE}`
               }
-              className="text-[var(--brand-color)] hover:underline"
+              className="text-[var(--org-primary)] hover:underline"
             >
               ← Newer
             </Link>
@@ -63,7 +63,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
           {page.nextCursor ? (
             <Link
               href={`/console/settings/audit?cursor=${page.nextCursor}`}
-              className="text-[var(--brand-color)] hover:underline"
+              className="text-[var(--org-primary)] hover:underline"
             >
               Older →
             </Link>

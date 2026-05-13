@@ -215,7 +215,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <ThemeProvider>
             <TooltipProvider delayDuration={350}>
               <LiveRegionProvider>
-                <div id="main" className="flex min-w-0 flex-1 flex-col">
+                <div className="flex min-w-0 flex-1 flex-col">
                   {children}
                 </div>
                 <CookieConsent />

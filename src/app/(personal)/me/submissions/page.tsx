@@ -30,8 +30,8 @@ export default async function Page() {
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">My submissions</div>
-      <h1 className="text-display mt-1 text-3xl">Submissions</h1>
+      <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">My submissions</div>
+      <h1 className="font-display mt-1 text-3xl">Submissions</h1>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Open-call submissions you've made.</p>
 
       {rows.length === 0 ? (
@@ -45,7 +45,7 @@ export default async function Page() {
       ) : (
         <ul className="mt-6 space-y-2">
           {rows.map((r) => (
-            <li key={r.id} className="card-elevated flex items-center justify-between p-4">
+            <li key={r.id} className="surface-raised flex items-center justify-between p-4">
               <div>
                 <Link href={`/me/submissions/${r.id}`} className="text-sm font-semibold">
                   {r.open_call?.title ?? "(deleted call)"}

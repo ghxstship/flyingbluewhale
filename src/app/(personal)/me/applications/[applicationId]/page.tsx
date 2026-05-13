@@ -34,9 +34,9 @@ export default async function Page({ params }: { params: Promise<{ applicationId
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">Application</div>
+      <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Application</div>
       <div className="mt-1 flex items-center gap-2">
-        <h1 className="text-display text-3xl">{a.id.slice(0, 8)}</h1>
+        <h1 className="font-display text-3xl">{a.id.slice(0, 8)}</h1>
         <Badge variant={STATUS_TONE[a.status] ?? "muted"}>{a.status}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
@@ -44,21 +44,21 @@ export default async function Page({ params }: { params: Promise<{ applicationId
       </p>
 
       <div className="mt-6 space-y-4">
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Cover note</div>
+        <div className="surface-raised p-4">
+          <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Cover note</div>
           <div className="mt-1 text-sm whitespace-pre-wrap">{a.cover_note ?? "—"}</div>
         </div>
         {a.day_rate_proposed_cents && (
-          <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">Proposed day rate</div>
+          <div className="surface-raised p-4">
+            <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Proposed day rate</div>
             <div className="mt-1 font-mono text-sm">${(a.day_rate_proposed_cents / 100).toFixed(0)}/day</div>
           </div>
         )}
         {a.resume_url && (
-          <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">Resume</div>
+          <div className="surface-raised p-4">
+            <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Resume</div>
             <a
-              className="mt-1 block text-sm text-[var(--brand-color)]"
+              className="mt-1 block text-sm text-[var(--org-primary)]"
               href={a.resume_url}
               target="_blank"
               rel="noopener"

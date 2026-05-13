@@ -64,7 +64,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     <div className="page-shell">
       <MarketingHeader />
       <WebVitalsReporter />
-      <main>{children}</main>
+      <main id="main">{children}</main>
       <footer className="mt-24 border-t border-[var(--border-color)] bg-[var(--surface-inset)]">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="grid gap-10 md:grid-cols-5">

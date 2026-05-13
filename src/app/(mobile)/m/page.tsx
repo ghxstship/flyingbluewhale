@@ -49,8 +49,8 @@ export default function MobileHome() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-label text-[var(--brand-color)]">Field</div>
-      <h1 className="text-display mt-2 text-3xl">Today</h1>
+      <div className="text-xs font-semibold tracking-wider uppercase text-[var(--org-primary)]">Field</div>
+      <h1 className="font-display mt-2 text-3xl">Today</h1>
       <MobileHomeTabs today={today} tools={tools} reports={reports} />
       <FAB href="/m/check-in" label="Scan Ticket">
         <QrCode size={22} />

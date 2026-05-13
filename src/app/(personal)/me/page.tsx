@@ -20,7 +20,7 @@ export default async function MePage() {
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-display text-3xl">My Dashboard</h1>
+        <h1 className="font-display text-3xl">My Dashboard</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Configure Supabase to sign in.</p>
       </div>
     );
@@ -57,8 +57,8 @@ export default async function MePage() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-label text-[var(--color-text-tertiary)]">My dashboard</div>
-          <h1 className="text-display mt-1 text-3xl">{session.email}</h1>
+          <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">My dashboard</div>
+          <h1 className="font-display mt-1 text-3xl">{session.email}</h1>
         </div>
         <form action="/auth/signout" method="post">
           <button className="btn btn-ghost text-xs" type="submit">
@@ -68,29 +68,29 @@ export default async function MePage() {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Role</div>
+        <div className="surface-raised p-4">
+          <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Role</div>
           <div className="mt-2">
             <Badge variant="info">{session.role}</Badge>
           </div>
         </div>
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Tier</div>
+        <div className="surface-raised p-4">
+          <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Tier</div>
           <div className="mt-2">
             <Badge variant="cyan">{session.tier}</Badge>
           </div>
         </div>
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Organization</div>
-          <div className="text-mono mt-2 text-xs">{session.orgSlug || session.orgId || "None"}</div>
+        <div className="surface-raised p-4">
+          <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Organization</div>
+          <div className="font-mono mt-2 text-xs">{session.orgSlug || session.orgId || "None"}</div>
         </div>
       </div>
 
       {isManagerPlus && (
         <div className="mt-8">
-          <Link href="/console" className="card flex items-center justify-between p-6">
+          <Link href="/console" className="surface hover-lift flex items-center justify-between p-6">
             <div>
-              <div className="text-label text-[var(--brand-color)]">Open console →</div>
+              <div className="text-xs font-semibold tracking-wider uppercase text-[var(--org-primary)]">Open console →</div>
               <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
                 Projects, finance, procurement, production, people, AI.
               </p>
@@ -100,7 +100,7 @@ export default async function MePage() {
         </div>
       )}
 
-      <h2 className="text-label mt-10 mb-3 text-[var(--color-text-tertiary)]">Marketplace</h2>
+      <h2 className="text-xs font-semibold tracking-wider uppercase mt-10 mb-3 text-[var(--text-muted)]">Marketplace</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <MeCard
           href="/me/applications"
@@ -134,7 +134,7 @@ export default async function MePage() {
         />
       </div>
 
-      <h2 className="text-label mt-10 mb-3 text-[var(--color-text-tertiary)]">Account</h2>
+      <h2 className="text-xs font-semibold tracking-wider uppercase mt-10 mb-3 text-[var(--text-muted)]">Account</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <MeCard href="/me/profile" label="Profile" blurb="Identity, avatar, contact." />
         <MeCard href="/me/notifications" label="Notifications" blurb="Channel + push preferences." />
@@ -161,9 +161,9 @@ function MeCard({
   badge?: string;
 }) {
   return (
-    <Link href={href} className="card-elevated flex flex-col gap-2 p-4">
+    <Link href={href} className="surface-raised hover-lift flex flex-col gap-2 p-4">
       <div className="flex items-start justify-between gap-2">
-        <span className="text-sm font-semibold text-[var(--brand-color)]">{label} →</span>
+        <span className="text-sm font-semibold text-[var(--org-primary)]">{label} →</span>
         {typeof count === "number" && <Badge variant="muted">{count}</Badge>}
         {badge && (
           <Badge variant={badge === "live" ? "success" : badge === "draft" ? "warning" : "muted"}>{badge}</Badge>

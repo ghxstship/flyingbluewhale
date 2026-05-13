@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-xs">{formatMoney(l.fee_cents)}</span>
                     <Badge variant={STATUS_TONE[l.status] ?? "muted"}>{l.status}</Badge>
-                    <Link href={`/console/bookings/deals/${l.id}`} className="text-xs text-[var(--brand-color)]">
+                    <Link href={`/console/bookings/deals/${l.id}`} className="text-xs text-[var(--org-primary)]">
                       Open →
                     </Link>
                   </div>

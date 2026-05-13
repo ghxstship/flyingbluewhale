@@ -120,13 +120,13 @@ export function InventoryScanner() {
   return (
     <div className="space-y-4">
       <form
-        className="card-elevated space-y-3 p-4"
+        className="surface-raised space-y-3 p-4"
         onSubmit={(e) => {
           e.preventDefault();
           submit(tag);
         }}
       >
-        <label className="text-label text-[var(--color-text-tertiary)]">Asset Tag</label>
+        <label className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Asset Tag</label>
         <input
           value={tag}
           onChange={(e) => setTag(e.target.value)}
@@ -163,8 +163,8 @@ export function InventoryScanner() {
         </div>
       </form>
 
-      <div className="card-elevated">
-        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
+      <div className="surface-raised">
+        <div className="font-semibold border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
         {log.length === 0 ? (
           <EmptyState size="compact" title="No Scans Yet" />
         ) : (
@@ -172,10 +172,10 @@ export function InventoryScanner() {
             {log.map((e, i) => (
               <li
                 key={i}
-                className="text-mono flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-2 text-xs"
+                className="font-mono flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2 text-xs"
               >
-                <span className="font-mono text-[var(--color-text-primary)]">{e.tag}</span>
-                <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
+                <span className="font-mono text-[var(--foreground)]">{e.tag}</span>
+                <span className="flex items-center gap-2 text-[var(--text-muted)]">
                   {e.name && <span className="text-[var(--color-text-secondary)]">{e.name}</span>}
                   {e.result === "ok" && e.status && (
                     <Badge variant={e.status === "available" ? "success" : "brand"}>{e.status}</Badge>

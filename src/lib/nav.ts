@@ -85,6 +85,7 @@ export type IconName =
   | "Ticket"
   | "Receipt"
   | "FileSpreadsheet"
+  | "FileSignature"
   | "CreditCard"
   | "PiggyBank"
   | "Wallet"

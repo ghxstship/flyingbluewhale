@@ -45,11 +45,11 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">My crew profile</div>
-        <h1 className="text-display mt-1 text-3xl">Crew Profile</h1>
+        <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">My crew profile</div>
+        <h1 className="font-display mt-1 text-3xl">Crew Profile</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
           Public when toggled. Discovered via{" "}
-          <Link className="text-[var(--brand-color)]" href="/marketplace/crew">
+          <Link className="text-[var(--org-primary)]" href="/marketplace/crew">
             /marketplace/crew
           </Link>
           .
@@ -57,7 +57,7 @@ export default async function Page() {
             <>
               {" "}
               Live at{" "}
-              <Link className="font-mono text-[var(--brand-color)]" href={`/marketplace/crew/${c.public_handle}`}>
+              <Link className="font-mono text-[var(--org-primary)]" href={`/marketplace/crew/${c.public_handle}`}>
                 /marketplace/crew/{c.public_handle}
               </Link>
             </>
@@ -66,7 +66,7 @@ export default async function Page() {
       </header>
 
       {c?.is_public_profile && (
-        <div className="card-elevated p-3">
+        <div className="surface-raised p-3">
           <Badge variant="success">live</Badge>
           <span className="ml-3 text-sm text-[var(--color-text-secondary)]">Profile published.</span>
         </div>

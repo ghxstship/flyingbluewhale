@@ -44,11 +44,11 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">My talent profile</div>
-        <h1 className="text-display mt-1 text-3xl">EPK</h1>
+        <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">My talent profile</div>
+        <h1 className="font-display mt-1 text-3xl">EPK</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
           Public when toggled. Discovered via{" "}
-          <Link className="text-[var(--brand-color)]" href="/marketplace/talent">
+          <Link className="text-[var(--org-primary)]" href="/marketplace/talent">
             /marketplace/talent
           </Link>
           .
@@ -56,7 +56,7 @@ export default async function Page() {
             <>
               {" "}
               Live at{" "}
-              <Link className="font-mono text-[var(--brand-color)]" href={`/marketplace/talent/${t.public_handle}`}>
+              <Link className="font-mono text-[var(--org-primary)]" href={`/marketplace/talent/${t.public_handle}`}>
                 /marketplace/talent/{t.public_handle}
               </Link>
             </>
@@ -65,7 +65,7 @@ export default async function Page() {
       </header>
 
       {t?.is_public && (
-        <div className="card-elevated p-3">
+        <div className="surface-raised p-3">
           <Badge variant="success">live</Badge>
           <span className="ml-3 text-sm text-[var(--color-text-secondary)]">Your EPK is published.</span>
         </div>

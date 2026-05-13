@@ -43,17 +43,17 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">My reviews</div>
-        <h1 className="text-display mt-1 text-3xl">Reviews</h1>
+        <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">My reviews</div>
+        <h1 className="font-display mt-1 text-3xl">Reviews</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
           Reviews remain hidden until both sides post. No retaliation surface.
         </p>
       </header>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Received</h2>
+        <h2 className="text-xs font-semibold tracking-wider uppercase mb-3 text-[var(--text-muted)]">Received</h2>
         {received.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">No public reviews yet.</div>
+          <div className="surface-raised p-6 text-sm text-[var(--color-text-secondary)]">No public reviews yet.</div>
         ) : (
           <ul className="space-y-2">
             {received.map((r) => (
@@ -64,9 +64,9 @@ export default async function Page() {
       </section>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Written</h2>
+        <h2 className="text-xs font-semibold tracking-wider uppercase mb-3 text-[var(--text-muted)]">Written</h2>
         {written.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
+          <div className="surface-raised p-6 text-sm text-[var(--color-text-secondary)]">
             You haven't written any reviews yet.
           </div>
         ) : (
@@ -83,7 +83,7 @@ export default async function Page() {
 
 function ReviewLi({ r }: { r: Row }) {
   return (
-    <li className="card-elevated p-4">
+    <li className="surface-raised p-4">
       <div className="flex items-center gap-2 text-sm">
         <span className="font-mono">★ {r.rating}</span>
         <Badge variant="muted">{r.subject_kind}</Badge>

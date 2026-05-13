@@ -68,15 +68,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-3xl space-y-5">
         <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">GBOR</div>
+            <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">GBOR</div>
             <div className="font-mono text-lg">{formatMoney(s.gross_box_office_cents)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">NBOR</div>
+            <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">NBOR</div>
             <div className="font-mono text-lg">{formatMoney(s.nbor_cents)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">Balance Due</div>
+            <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Balance Due</div>
             <div className="font-mono text-lg">{formatMoney(s.balance_due_cents)}</div>
           </div>
         </section>

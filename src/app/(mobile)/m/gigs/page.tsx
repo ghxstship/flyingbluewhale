@@ -45,20 +45,20 @@ export default async function Page() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-label text-[var(--brand-color)]">Marketplace</div>
-      <h1 className="text-display mt-2 text-3xl">Open Gigs</h1>
+      <div className="text-xs font-semibold tracking-wider uppercase text-[var(--org-primary)]">Marketplace</div>
+      <h1 className="font-display mt-2 text-3xl">Open Gigs</h1>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         {rows.length} live gig{rows.length === 1 ? "" : "s"} across the network.
       </p>
 
       {rows.length === 0 ? (
-        <div className="card-elevated mt-6 p-6 text-sm text-[var(--color-text-secondary)]">
+        <div className="surface-raised mt-6 p-6 text-sm text-[var(--color-text-secondary)]">
           No live gigs at the moment.
         </div>
       ) : (
         <ul className="mt-6 space-y-2">
           {rows.map((r) => (
-            <li key={r.id} className="card-elevated p-4">
+            <li key={r.id} className="surface-raised p-4">
               <Link href={`/marketplace/gigs/${r.public_slug}`} className="block">
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-sm font-semibold">{r.title}</span>
@@ -72,7 +72,7 @@ export default async function Page() {
                   {r.travel_paid ? " · travel paid" : ""}
                 </p>
                 {r.role_taxonomy.length > 0 && (
-                  <p className="mt-2 text-xs text-[var(--color-text-tertiary)]">
+                  <p className="mt-2 text-xs text-[var(--text-muted)]">
                     {r.role_taxonomy.slice(0, 3).join(" · ")}
                   </p>
                 )}

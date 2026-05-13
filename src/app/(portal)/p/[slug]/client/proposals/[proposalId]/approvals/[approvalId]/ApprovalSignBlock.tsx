@@ -31,7 +31,7 @@ export function ApprovalSignBlock({
           onClick={() => setMode("sign")}
           className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
             mode === "sign"
-              ? "bg-[var(--org-primary)] text-white"
+              ? "bg-[var(--org-primary)] text-[var(--org-on-primary,white)]"
               : "bg-[var(--surface-inset)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
           }`}
         >

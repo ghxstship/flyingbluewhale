@@ -39,8 +39,8 @@ export default async function Page() {
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">My offers</div>
-      <h1 className="text-display mt-1 text-3xl">Booking Offers</h1>
+      <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">My offers</div>
+      <h1 className="font-display mt-1 text-3xl">Booking Offers</h1>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         Offers sent to acts you're attached to. Default 60/40, balance on load-in.
       </p>
@@ -55,7 +55,7 @@ export default async function Page() {
       ) : (
         <ul className="mt-6 space-y-2">
           {offers.map((o) => (
-            <li key={o.id} className="card-elevated flex items-center justify-between p-4">
+            <li key={o.id} className="surface-raised flex items-center justify-between p-4">
               <div>
                 <p className="text-sm font-semibold">{o.performance_date}</p>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">

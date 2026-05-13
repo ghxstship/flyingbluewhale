@@ -22,7 +22,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-display text-3xl">My Applications</h1>
+        <h1 className="font-display text-3xl">My Applications</h1>
         <p className="mt-2 text-sm">Configure Supabase.</p>
       </div>
     );
@@ -39,8 +39,8 @@ export default async function Page() {
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">My applications</div>
-      <h1 className="text-display mt-1 text-3xl">Applications</h1>
+      <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">My applications</div>
+      <h1 className="font-display mt-1 text-3xl">Applications</h1>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         Job applications you've submitted. Stage updates land here when an operator moves you through their ATS.
       </p>
@@ -56,7 +56,7 @@ export default async function Page() {
       ) : (
         <ul className="mt-6 space-y-2">
           {rows.map((r) => (
-            <li key={r.id} className="card-elevated flex items-center justify-between p-4">
+            <li key={r.id} className="surface-raised flex items-center justify-between p-4">
               <div>
                 <Link href={`/me/applications/${r.id}`} className="text-sm font-semibold">
                   {r.posting?.title ?? "(deleted posting)"}

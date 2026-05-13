@@ -140,33 +140,33 @@ export function GateScanner() {
 
   return (
     <div className="space-y-4">
-      <div className="card-elevated p-4">
+      <div className="surface-raised p-4">
         <div className="grid grid-cols-3 gap-2 text-center">
           <div>
-            <div className="text-display text-2xl">{counts.allow}</div>
+            <div className="font-display text-2xl">{counts.allow}</div>
             <Badge variant="success">Allow</Badge>
           </div>
           <div>
-            <div className="text-display text-2xl">{counts.warn}</div>
+            <div className="font-display text-2xl">{counts.warn}</div>
             <Badge variant="warning">Warn</Badge>
           </div>
           <div>
-            <div className="text-display text-2xl">{counts.deny}</div>
+            <div className="font-display text-2xl">{counts.deny}</div>
             <Badge variant="error">Deny</Badge>
           </div>
         </div>
       </div>
 
-      <div role="tablist" aria-label="Scanner Input Mode" className="card-elevated grid grid-cols-2 gap-1 p-1">
+      <div role="tablist" aria-label="Scanner Input Mode" className="surface-raised grid grid-cols-2 gap-1 p-1">
         <button
           type="button"
           role="tab"
           aria-selected={mode === "wedge"}
           onClick={() => setModePersisted("wedge")}
-          className={`text-label rounded px-3 py-2 text-xs ${
+          className={`text-xs font-semibold tracking-wider uppercase rounded px-3 py-2 ${
             mode === "wedge"
-              ? "bg-[var(--color-bg-inset)] text-[var(--color-text-primary)]"
-              : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+              ? "bg-[var(--surface-inset)] text-[var(--foreground)]"
+              : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
           }`}
         >
           Keyboard Wedge
@@ -176,10 +176,10 @@ export function GateScanner() {
           role="tab"
           aria-selected={mode === "camera"}
           onClick={() => setModePersisted("camera")}
-          className={`text-label rounded px-3 py-2 text-xs ${
+          className={`text-xs font-semibold tracking-wider uppercase rounded px-3 py-2 ${
             mode === "camera"
-              ? "bg-[var(--color-bg-inset)] text-[var(--color-text-primary)]"
-              : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+              ? "bg-[var(--surface-inset)] text-[var(--foreground)]"
+              : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
           }`}
         >
           Camera
@@ -192,9 +192,9 @@ export function GateScanner() {
             e.preventDefault();
             submit(barcode);
           }}
-          className="card-elevated p-4"
+          className="surface-raised p-4"
         >
-          <label className="text-label text-[var(--color-text-tertiary)]">Card Barcode</label>
+          <label className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Card Barcode</label>
           <input
             ref={inputRef}
             value={barcode}
@@ -203,7 +203,7 @@ export function GateScanner() {
             autoComplete="off"
             autoCapitalize="characters"
             placeholder="Scan or type"
-            className="input text-mono mt-1.5 w-full text-base"
+            className="input-base font-mono mt-1.5 w-full text-base"
             disabled={pending}
           />
           <div className="mt-3 flex gap-2">
@@ -213,19 +213,19 @@ export function GateScanner() {
           </div>
         </form>
       ) : (
-        <div className="card-elevated p-4">
-          <label className="text-label text-[var(--color-text-tertiary)]">Card Barcode</label>
+        <div className="surface-raised p-4">
+          <label className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Card Barcode</label>
           <div className="mt-1.5">
             <CameraScanner onScan={handleCameraScan} formats={["qr_code", "code_128"]} />
           </div>
-          <p className="text-mono mt-2 text-[11px] text-[var(--color-text-tertiary)]">
+          <p className="font-mono mt-2 text-[11px] text-[var(--text-muted)]">
             Point at a credential barcode. Validates automatically on detect.
           </p>
         </div>
       )}
 
-      <div className="card-elevated">
-        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
+      <div className="surface-raised">
+        <div className="font-semibold border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
         {log.length === 0 ? (
           <EmptyState size="compact" title="No Scans Yet" />
         ) : (
@@ -233,13 +233,13 @@ export function GateScanner() {
             {log.map((e, i) => (
               <li
                 key={i}
-                className="text-mono flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-2 text-xs"
+                className="font-mono flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2 text-xs"
               >
                 <span className="flex flex-col">
-                  <span className="text-[var(--color-text-primary)]">{e.barcode}</span>
-                  <span className="text-[var(--color-text-tertiary)]">{e.detail}</span>
+                  <span className="text-[var(--foreground)]">{e.barcode}</span>
+                  <span className="text-[var(--text-muted)]">{e.detail}</span>
                 </span>
-                <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
+                <span className="flex items-center gap-2 text-[var(--text-muted)]">
                   {fmt.time(e.at, { seconds: true })}
                   <Badge variant={e.result === "allow" ? "success" : e.result === "warn" ? "warning" : "error"}>
                     {e.result}

@@ -34,15 +34,15 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">Availability</div>
-        <h1 className="text-display mt-1 text-3xl">Booking Calendar</h1>
+        <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Availability</div>
+        <h1 className="font-display mt-1 text-3xl">Booking Calendar</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
           Holds, confirms, and blocks. Booking surfaces (gigs, talent offers) read from here when checking your fit.
         </p>
       </header>
 
-      <section className="card-elevated p-4">
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Add slot</h2>
+      <section className="surface-raised p-4">
+        <h2 className="text-xs font-semibold tracking-wider uppercase mb-3 text-[var(--text-muted)]">Add slot</h2>
         <FormShell action={addAvailabilityAction} submitLabel="Add">
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -64,13 +64,13 @@ export default async function Page() {
       </section>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Upcoming</h2>
+        <h2 className="text-xs font-semibold tracking-wider uppercase mb-3 text-[var(--text-muted)]">Upcoming</h2>
         {slots.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">No availability slots yet.</div>
+          <div className="surface-raised p-6 text-sm text-[var(--color-text-secondary)]">No availability slots yet.</div>
         ) : (
           <ul className="space-y-2">
             {slots.map((s) => (
-              <li key={s.id} className="card-elevated flex items-center justify-between p-3 text-sm">
+              <li key={s.id} className="surface-raised flex items-center justify-between p-3 text-sm">
                 <div>
                   <Badge variant={s.kind === "confirm" ? "success" : s.kind === "block" ? "error" : "warning"}>
                     {s.kind}

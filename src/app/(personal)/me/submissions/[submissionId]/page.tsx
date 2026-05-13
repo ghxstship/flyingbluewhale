@@ -34,9 +34,9 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">Submission</div>
+      <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Submission</div>
       <div className="mt-1 flex items-center gap-2">
-        <h1 className="text-display text-3xl">#{s.id.slice(0, 8)}</h1>
+        <h1 className="font-display text-3xl">#{s.id.slice(0, 8)}</h1>
         <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
@@ -44,13 +44,13 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
       </p>
 
       <div className="mt-6 space-y-4">
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Cover note</div>
+        <div className="surface-raised p-4">
+          <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Cover note</div>
           <div className="mt-1 text-sm whitespace-pre-wrap">{s.cover_note ?? "—"}</div>
         </div>
         {s.fee_proposed_cents && (
-          <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">Proposed fee</div>
+          <div className="surface-raised p-4">
+            <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-muted)]">Proposed fee</div>
             <div className="mt-1 font-mono text-sm">{formatMoney(s.fee_proposed_cents)}</div>
           </div>
         )}

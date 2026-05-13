@@ -31,8 +31,8 @@ export default async function PortalGateway({ params }: { params: Promise<{ slug
       <div className="page-content">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {PERSONAS.map((p) => (
-            <Link key={p.key} href={`/p/${slug}/${p.key}`} className="card p-6">
-              <div className="text-label text-[var(--brand-color)]">{p.label}</div>
+            <Link key={p.key} href={`/p/${slug}/${p.key}`} className="surface hover-lift p-6">
+              <div className="text-xs font-semibold tracking-wider uppercase text-[var(--org-primary)]">{p.label}</div>
               <p className="mt-3 text-sm text-[var(--color-text-secondary)]">{p.desc}</p>
             </Link>
           ))}

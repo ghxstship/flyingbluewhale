@@ -1,6 +1,7 @@
 import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
 import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
+import { StickyCTABar } from "@/components/marketing/StickyCTABar";
 
 const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: string }> }> = [
   {
@@ -33,10 +34,28 @@ const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: s
     items: [
       { label: "Docs", href: "/docs" },
       { label: "Guides", href: "/guides" },
-      { label: "Knowledge", href: "/knowledge" },
+      { label: "Glossary", href: "/glossary" },
+      { label: "Templates", href: "/templates" },
+      { label: "Tools", href: "/tools" },
       { label: "Blog", href: "/blog" },
       { label: "Community", href: "/community" },
       { label: "Help", href: "/help" },
+    ],
+  },
+  {
+    heading: "Compare",
+    items: [
+      { label: "vs Cvent", href: "/compare/cvent" },
+      { label: "vs Procore", href: "/compare/procore" },
+      { label: "vs Eventbrite", href: "/compare/eventbrite" },
+      { label: "vs Master Tour", href: "/compare/master-tour" },
+      { label: "vs Monday", href: "/compare/monday" },
+      { label: "vs Notion", href: "/compare/notion" },
+      { label: "vs Airtable", href: "/compare/airtable" },
+      { label: "vs Asana", href: "/compare/asana" },
+      { label: "vs DocuSign", href: "/compare/docusign" },
+      { label: "vs Salesforce", href: "/compare/salesforce" },
+      { label: "All alternatives", href: "/alternatives" },
     ],
   },
   {
@@ -65,9 +84,10 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <MarketingHeader />
       <WebVitalsReporter />
       <main>{children}</main>
+      <StickyCTABar />
       <footer className="mt-24 border-t border-[var(--border-color)] bg-[var(--surface-inset)]">
         <div className="mx-auto max-w-6xl px-6 py-16">
-          <div className="grid gap-10 md:grid-cols-5">
+          <div className="grid gap-10 md:grid-cols-6">
             <div className="md:col-span-1">
               <Link
                 href="/"

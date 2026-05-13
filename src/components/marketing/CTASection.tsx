@@ -1,12 +1,13 @@
 import Link from "next/link";
+import { CANONICAL_CTAS } from "@/lib/seo";
 
 export function CTASection({
-  title = "The Manifest Is Open.",
-  subtitle = "The Day Pass is free, forever. No card. No countdown. No lock-in.",
-  primaryLabel = "Book passage",
-  primaryHref = "/signup",
-  secondaryLabel = "Captain's briefing",
-  secondaryHref = "/contact",
+  title = "The Console Is Open.",
+  subtitle = "Free, forever, for small teams. Per-org pricing the rest of the way up.",
+  primaryLabel = CANONICAL_CTAS.primary.label,
+  primaryHref = CANONICAL_CTAS.primary.href,
+  secondaryLabel = CANONICAL_CTAS.secondary.label,
+  secondaryHref = CANONICAL_CTAS.secondary.href,
 }: {
   title?: string;
   subtitle?: string;

@@ -1,5 +1,19 @@
 import type { Metadata } from "next";
 
+/**
+ * Canonical CTA pair — every marketing surface that needs a primary +
+ * secondary action imports these so the copy stays aligned with the
+ * voice canon. Don't fork. If a page needs different wording, raise it.
+ */
+export const CANONICAL_CTAS = {
+  primary: { label: "Open the console", href: "/signup" },
+  secondary: { label: "Book a walkthrough", href: "/contact" },
+} as const;
+
+// Locale SSOT lives in `src/lib/i18n/config.ts`. The cookie-based switcher
+// in `LocaleSwitcher.tsx` is the active path today. When /[locale] URL
+// routing lands, `buildMetadata.languages` already plumbs hreflang.
+
 export const SITE = {
   name: "ATLVS Technologies",
   shortName: "ATLVS",
@@ -57,6 +71,9 @@ export type PageMeta = {
     authors?: string[];
     tags?: string[];
   };
+  /** Locale variants that ship a translation. Keys are BCP-47 codes
+   *  (`es-ES`, `pt-BR`, …) and values are absolute or relative URLs. */
+  languages?: Record<string, string>;
   noIndex?: boolean;
 };
 
@@ -67,11 +84,15 @@ export function buildMetadata(m: PageMeta): Metadata {
     eyebrow: m.ogImageEyebrow ?? SITE.name,
   }).toString()}`;
 
+  // hreflang map: only emit when the caller declares translated variants.
+  // Including `x-default` lets Google route ambiguous geos to the canonical.
+  const languages = m.languages && Object.keys(m.languages).length ? { "x-default": url, ...m.languages } : undefined;
+
   return {
     title: m.title,
     description: m.description,
     keywords: [...(m.keywords ?? []), ...SITE.keywords],
-    alternates: { canonical: url },
+    alternates: { canonical: url, ...(languages ? { languages } : {}) },
     robots: m.noIndex
       ? { index: false, follow: false }
       : {
@@ -261,5 +282,245 @@ export function productSchema({
           },
         }
       : {}),
+  };
+}
+
+export function breadcrumbSchema(items: Array<{ label: string; href?: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((c, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      name: c.label,
+      ...(c.href ? { item: `${SITE.baseUrl}${c.href}` } : {}),
+    })),
+  };
+}
+
+export function howToSchema({
+  name,
+  description,
+  steps,
+  totalTime,
+}: {
+  name: string;
+  description: string;
+  steps: Array<{ name: string; text: string }>;
+  totalTime?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name,
+    description,
+    ...(totalTime ? { totalTime } : {}),
+    step: steps.map((s, idx) => ({
+      "@type": "HowToStep",
+      position: idx + 1,
+      name: s.name,
+      text: s.text,
+    })),
+  };
+}
+
+export function videoSchema({
+  name,
+  description,
+  thumbnailUrl,
+  uploadDate,
+  contentUrl,
+  embedUrl,
+  duration,
+}: {
+  name: string;
+  description: string;
+  thumbnailUrl: string;
+  uploadDate: string;
+  contentUrl?: string;
+  embedUrl?: string;
+  duration?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name,
+    description,
+    thumbnailUrl,
+    uploadDate,
+    ...(contentUrl ? { contentUrl } : {}),
+    ...(embedUrl ? { embedUrl } : {}),
+    ...(duration ? { duration } : {}),
+  };
+}
+
+export function reviewSchema({
+  itemName,
+  rating,
+  reviewBody,
+  authorName,
+  datePublished,
+}: {
+  itemName: string;
+  rating: number;
+  reviewBody: string;
+  authorName: string;
+  datePublished?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: { "@type": "SoftwareApplication", name: itemName },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: rating,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    reviewBody,
+    author: { "@type": "Person", name: authorName },
+    ...(datePublished ? { datePublished } : {}),
+  };
+}
+
+export function eventSchema({
+  name,
+  description,
+  url,
+  startDate,
+  endDate,
+  location,
+  isOnline,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  startDate: string;
+  endDate?: string;
+  location?: { name: string; address?: string };
+  isOnline?: boolean;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name,
+    description,
+    url,
+    startDate,
+    ...(endDate ? { endDate } : {}),
+    eventAttendanceMode: isOnline
+      ? "https://schema.org/OnlineEventAttendanceMode"
+      : "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    ...(location
+      ? {
+          location: isOnline
+            ? {
+                "@type": "VirtualLocation",
+                url,
+              }
+            : {
+                "@type": "Place",
+                name: location.name,
+                ...(location.address ? { address: location.address } : {}),
+              },
+        }
+      : {}),
+  };
+}
+
+export function jobPostingSchema({
+  title,
+  description,
+  url,
+  datePosted,
+  employmentType,
+  location,
+  baseSalary,
+}: {
+  title: string;
+  description: string;
+  url: string;
+  datePosted: string;
+  employmentType?: "FULL_TIME" | "PART_TIME" | "CONTRACTOR" | "TEMPORARY" | "INTERN";
+  location?: { city?: string; region?: string; country?: string; remote?: boolean };
+  baseSalary?: { min: number; max: number; currency?: string; unitText?: "HOUR" | "DAY" | "MONTH" | "YEAR" };
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title,
+    description,
+    url,
+    datePosted,
+    hiringOrganization: {
+      "@type": "Organization",
+      name: SITE.name,
+      sameAs: SITE.baseUrl,
+    },
+    ...(employmentType ? { employmentType } : {}),
+    ...(location?.remote ? { jobLocationType: "TELECOMMUTE" } : {}),
+    ...(location && !location.remote
+      ? {
+          jobLocation: {
+            "@type": "Place",
+            address: {
+              "@type": "PostalAddress",
+              ...(location.city ? { addressLocality: location.city } : {}),
+              ...(location.region ? { addressRegion: location.region } : {}),
+              ...(location.country ? { addressCountry: location.country } : {}),
+            },
+          },
+        }
+      : {}),
+    ...(baseSalary
+      ? {
+          baseSalary: {
+            "@type": "MonetaryAmount",
+            currency: baseSalary.currency ?? "USD",
+            value: {
+              "@type": "QuantitativeValue",
+              minValue: baseSalary.min,
+              maxValue: baseSalary.max,
+              unitText: baseSalary.unitText ?? "YEAR",
+            },
+          },
+        }
+      : {}),
+  };
+}
+
+export function websiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.name,
+    url: SITE.baseUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${SITE.baseUrl}/search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function definedTermSchema({
+  name,
+  description,
+  url,
+  inDefinedTermSet,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  inDefinedTermSet?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    name,
+    description,
+    url,
+    ...(inDefinedTermSet ? { inDefinedTermSet } : {}),
   };
 }

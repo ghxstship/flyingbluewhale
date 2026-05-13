@@ -244,6 +244,675 @@ export const COMPARE: Record<string, CompareConfig> = {
       "stop using spreadsheets events",
     ],
   },
+
+  cvent: {
+    slug: "cvent",
+    competitor: "Cvent",
+    headline: "ATLVS Technologies vs. Cvent: production operations vs. corporate event management.",
+    blurb:
+      "Cvent owns the corporate meeting and conference space. For producers running festivals, residencies, touring, or experiential — the surface area is wrong and the seat math is hostile.",
+    hero: "Cvent was built for corporate event marketers — registration, badges, room blocks, sponsorship reporting. It's exceptional for that. Live-event production teams find it expensive, slow to configure, and missing the primitives they actually need: stage plots, riders, gate scan that works at 15k guests, vendor COIs, build calls, RFIs.",
+    bottomLine:
+      "If you run AGMs, sales kickoffs, and corporate conferences, Cvent is the right call. If you run shows, the production-native surface area on ATLVS replaces what you'd be paying Cvent for and adds what Cvent never had.",
+    features: [
+      { feature: "Corporate event registration", us: "Light", them: true, note: "We don't compete here" },
+      { feature: "Badge printing + onsite kiosks", us: false, them: true },
+      { feature: "Hotel room block management", us: true, them: true },
+      { feature: "Production advancing (riders, plots, input lists)", us: true, them: false },
+      { feature: "RFIs · submittals · daily logs", us: true, them: false },
+      { feature: "Gate scan offline-first PWA", us: true, them: false },
+      { feature: "Vendor COI tracking + Stripe Connect payouts", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false, note: "Cvent quotes per-event, per-registration tiers" },
+      { feature: "Stakeholder portals (artist/vendor/sponsor)", us: true, them: "Limited" },
+      { feature: "AI assistant grounded in workspace", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Production-native, not registration-native",
+        body: "Our primitives are riders, stage plots, COIs, gate scans. Cvent's primitives are registrations, badges, sessions.",
+      },
+      {
+        title: "Per-org, not per-registration",
+        body: "Cvent's quote scales with attendees; ours doesn't. A 15k-guest festival is the same price as a 500-guest activation.",
+      },
+      {
+        title: "Field-tool included",
+        body: "COMPVSS gate scanner ships in the platform. Cvent OnArrival is a separate SKU.",
+      },
+    ],
+    whenTheyWin: [
+      "Corporate meetings, AGMs, multi-day conferences with badge-and-session logistics.",
+      "You need extensive integrations with marketing-automation tools that Cvent partners with deeply.",
+    ],
+    migration: [
+      "Export Cvent attendees + sessions as CSV → maps to crew/guests + ROS slots",
+      "Vendor COI uploads port directly into procurement",
+      "Most teams keep Cvent for one corporate program and run shows on ATLVS",
+    ],
+    faqs: [
+      {
+        q: "Should I cancel Cvent?",
+        a: "Probably not — they're optimized for what they do. Run shows on ATLVS; run AGMs and sales summits on Cvent.",
+      },
+      {
+        q: "What about registration?",
+        a: "Light registration is fine on ATLVS. Deep marketing-attribution registration flows are Cvent territory.",
+      },
+    ],
+    keywords: ["Cvent alternative", "production event software vs Cvent", "live events vs corporate event management"],
+  },
+
+  bizzabo: {
+    slug: "bizzabo",
+    competitor: "Bizzabo",
+    headline: "ATLVS Technologies vs. Bizzabo: production-grade vs. hybrid-event platform.",
+    blurb:
+      "Bizzabo is great for hybrid conference experiences with deep registration and content streaming. Production-native operations are a different problem with different primitives.",
+    hero: "Bizzabo earned its place in the hybrid-conference category. For a producer building festivals, immersive activations, or running a touring crew, the platform optimizes for an audience experience layer — not for the production team behind it.",
+    bottomLine:
+      "Bizzabo for the audience side of a hybrid conference. ATLVS for the production side of any live event.",
+    features: [
+      { feature: "Hybrid event streaming", us: false, them: true },
+      { feature: "Branded event apps for attendees", us: "Via portals", them: true },
+      { feature: "Production advancing (riders, plots)", us: true, them: false },
+      { feature: "RFIs · submittals · punch lists", us: true, them: false },
+      { feature: "Offline gate scan", us: true, them: "Limited" },
+      { feature: "Stripe Connect vendor payouts", us: true, them: false },
+      { feature: "Per-org pricing (not per-registration)", us: true, them: false },
+      { feature: "Stakeholder portals beyond attendees", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Producers, not attendees",
+        body: "We optimize the workflow of the team running the event. Bizzabo optimizes the experience of attending it.",
+      },
+      {
+        title: "Production primitives ship native",
+        body: "Stage plots, riders, COIs, scanning — first-class. Bizzabo's plug-ins don't cover this.",
+      },
+    ],
+    whenTheyWin: [
+      "Hybrid conferences with deep streaming + registration + sponsorship.",
+      "You need 1st-party attendee analytics tied into your marketing automation.",
+    ],
+    migration: [
+      "Export Bizzabo session list → maps to ROS + advancing",
+      "Sponsor records port to ATLVS sponsorship + portal access",
+      "Most teams run both: Bizzabo for the attendee app, ATLVS for production",
+    ],
+    faqs: [
+      {
+        q: "Can we keep using Bizzabo for our hybrid conference?",
+        a: "Yes — most teams do. Webhooks let you sync session changes between the two.",
+      },
+    ],
+    keywords: ["Bizzabo alternative", "event production platform", "hybrid event vs production operations"],
+  },
+
+  eventbrite: {
+    slug: "eventbrite",
+    competitor: "Eventbrite",
+    headline: "ATLVS Technologies vs. Eventbrite: production platform vs. ticketing platform.",
+    blurb:
+      "Eventbrite is excellent ticketing. It is not a production platform. Most teams run both — sell tickets on Eventbrite, run the show on ATLVS.",
+    hero: "Eventbrite is built for selling tickets — discovery, checkout, fee collection. The producer needs are downstream of that: advancing, gate scan throughput, vendor management, finance reconciliation, post-event audit. Eventbrite doesn't try to solve those, and that's fine.",
+    bottomLine: "Eventbrite for the ticket sale. ATLVS for everything from the day after the on-sale through wrap.",
+    features: [
+      {
+        feature: "Public ticket discovery / search",
+        us: false,
+        them: true,
+        note: "Eventbrite has a marketplace; we don't",
+      },
+      { feature: "Ticket fee collection", us: true, them: true, note: "We're cheaper; they're stickier" },
+      { feature: "Offline gate scan sub-100ms", us: true, them: "Variable" },
+      { feature: "Advancing, RFIs, COIs, daily logs", us: true, them: false },
+      { feature: "Vendor portals + payouts", us: true, them: false },
+      { feature: "Stage plots + input lists", us: true, them: false },
+      { feature: "Event guides (KBYG)", us: true, them: false },
+      { feature: "Per-org pricing for production tooling", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Production downstream of ticketing",
+        body: "Eventbrite hands off after the sale. We pick up the moment the show is booked and run it through wrap.",
+      },
+      {
+        title: "Offline scan throughput",
+        body: "Sub-100ms scan tested at 15k-guest gates. Eventbrite's mobile scanner is adequate; ours is built for festival gates.",
+      },
+    ],
+    whenTheyWin: [
+      "Discovery — Eventbrite's marketplace surfaces your event to new audiences.",
+      "Simple consumer events where the ticket sale is the entire workflow.",
+    ],
+    migration: [
+      "Sync Eventbrite ticket batches via webhook → ATLVS gate scanner",
+      "Reconcile sales numbers nightly against ATLVS finance",
+      "Most producers keep Eventbrite for sale, ATLVS for scan + ops",
+    ],
+    faqs: [
+      {
+        q: "Can I scan Eventbrite tickets on COMPVSS?",
+        a: "Yes. Import the ticket batch via CSV or webhook; the scanner respects Eventbrite's barcode format.",
+      },
+      {
+        q: "Do I need to switch ticketing?",
+        a: "No. Keep Eventbrite if your audience finds you there. Run production on ATLVS.",
+      },
+    ],
+    keywords: [
+      "Eventbrite alternative",
+      "Eventbrite scanner alternative",
+      "ticketing + production",
+      "Eventbrite vs production software",
+    ],
+  },
+
+  procore: {
+    slug: "procore",
+    competitor: "Procore",
+    headline: "ATLVS Technologies vs. Procore: production timelines vs. construction timelines.",
+    blurb:
+      "Procore is the construction industry standard. Live-event production borrows the same primitives — RFIs, submittals, daily logs, punch — at a different clock speed and with different vocabulary.",
+    hero: "Procore was built for 18-month build cycles with deep BIM, drawings, and procurement integration. Live-event production runs the same workflow primitives but on 4–12 week clocks with different vendors and different vocabulary. The Procore feature set is right; the velocity isn't.",
+    bottomLine:
+      "If you build buildings, Procore. If you build shows that look like buildings (festivals, immersive, scenic, large activations), ATLVS — same primitives, production-velocity.",
+    features: [
+      { feature: "RFIs with ball-in-court routing", us: true, them: true },
+      { feature: "Submittals with reviewer workflow", us: true, them: true },
+      { feature: "Daily logs (weather + manpower + photos)", us: true, them: true },
+      { feature: "Punch lists with photo evidence", us: true, them: true },
+      { feature: "Change orders + pay applications", us: true, them: true },
+      { feature: "BIM / CAD / Revit integrations", us: false, them: true },
+      { feature: "Public stakeholder portals (artist/sponsor/guest)", us: true, them: false },
+      { feature: "Offline gate scan", us: true, them: false },
+      { feature: "Event guides (KBYG) CMS", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Production velocity",
+        body: "Show-day urgency on the same workflow primitives. RFIs that close in 24 hours, not 14 days.",
+      },
+      {
+        title: "Live-event surface area",
+        body: "Stage plots, artist riders, gate scan, vendor COIs, KBYG — none of which Procore models.",
+      },
+    ],
+    whenTheyWin: [
+      "Construction-led projects with BIM, drawing markups, and 12+ month timelines.",
+      "Permanent-build venues where the build IS the deliverable.",
+    ],
+    migration: [
+      "Procore RFI/submittal exports map directly to our primitives",
+      "Daily logs port over; weather and manpower fields one-to-one",
+      "Most build-shop teams move scenic/fabrication to ATLVS, keep Procore for venue-build projects",
+    ],
+    faqs: [
+      {
+        q: "Are you a Procore replacement?",
+        a: "For event-production timelines, yes. For permanent construction, no.",
+      },
+    ],
+    keywords: ["Procore alternative events", "RFI submittal software live events", "Procore vs production"],
+  },
+
+  notion: {
+    slug: "notion",
+    competitor: "Notion",
+    headline: "ATLVS Technologies vs. Notion: typed primitives vs. flexible blocks.",
+    blurb:
+      "Notion is the best block-editor on the market. Production teams hit its limits at the second show — typed primitives, role-scoped portals, gate scan, vendor payouts aren't in the kit.",
+    hero: "Notion is the right answer to 'we need a flexible workspace.' Production teams love it for the first month and outgrow it by the second show. The pain points are predictable: no typed primitives, no offline mobile, no stakeholder portals that scale, no vendor payout rail.",
+    bottomLine: "Notion stays for internal docs and SOPs. Production workflow moves to ATLVS.",
+    features: [
+      {
+        feature: "Block-based docs and wikis",
+        us: "Light",
+        them: true,
+        note: "Use Notion for docs; we don't compete here",
+      },
+      { feature: "Typed deliverables (rider, COI, hotel block)", us: true, them: false },
+      { feature: "Offline gate scan PWA", us: true, them: false },
+      { feature: "Stakeholder portals (no Notion seat needed)", us: true, them: false },
+      { feature: "Stripe Connect vendor payouts", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false },
+      { feature: "RFIs, submittals, punch lists, daily logs", us: true, them: "DIY" },
+      { feature: "Streaming AI grounded in workspace data", us: true, them: "Limited" },
+    ],
+    whyWeWin: [
+      {
+        title: "Typed not freeform",
+        body: "A deliverable is a deliverable. A status is a known enum. No 'which property did we use for this last season' drift.",
+      },
+      {
+        title: "Field tooling",
+        body: "Phone-camera scanner, offline queue, geo-verified clock-in. Notion has none of this.",
+      },
+    ],
+    whenTheyWin: [
+      "SOPs, runbooks, post-mortems, internal wikis — Notion is the right tool.",
+      "1-person ops where every primitive is a custom page.",
+    ],
+    migration: [
+      "Notion database CSV export maps to ATLVS tables",
+      "Internal docs stay on Notion; cross-link with deep URLs",
+      "Most teams cut the workspace clutter by 60% within a month of moving production",
+    ],
+    faqs: [{ q: "Should we leave Notion entirely?", a: "No. Keep Notion for docs/wikis. Move production workflow." }],
+    keywords: ["Notion alternative events", "Notion for production", "Notion vs production platform"],
+  },
+
+  airtable: {
+    slug: "airtable",
+    competitor: "Airtable",
+    headline: "ATLVS Technologies vs. Airtable: production schema vs. flexible base.",
+    blurb:
+      "Airtable is the platonic flexible database. Production teams either spend a season building it into a platform — or they outgrow it.",
+    hero: "Airtable is what you reach for when you've outgrown Sheets but haven't picked a real platform. It's a great prototype tool — and a costly long-term answer if you're trying to run shows.",
+    bottomLine: "Airtable for prototyping a workflow. ATLVS when the workflow ships.",
+    features: [
+      { feature: "Flexible database with views", us: true, them: true, note: "We're typed, they're freeform" },
+      { feature: "Automations + scripts", us: true, them: true },
+      { feature: "Stakeholder portals at scale", us: true, them: "Limited" },
+      {
+        feature: "RLS-enforced multi-tenancy",
+        us: true,
+        them: false,
+        note: "Airtable security is permission-based, not row-level",
+      },
+      { feature: "Offline gate scan", us: true, them: false },
+      { feature: "Stripe Connect payouts", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false },
+      { feature: "Production templates that work day 1", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Day-1 production schema",
+        body: "You don't build the platform; you run shows on it. 47 modules pre-modeled.",
+      },
+      { title: "Database-enforced security", body: "Row-level security at the DB, not column visibility at the UI." },
+    ],
+    whenTheyWin: [
+      "Prototyping a workflow before committing to a platform.",
+      "Niche internal databases that no production tool models.",
+    ],
+    migration: [
+      "Airtable CSV export → our import maps tables to modules",
+      "Per-record links port via lookup-key resolution",
+      "Most teams keep one or two niche bases on Airtable, move production to us",
+    ],
+    faqs: [
+      {
+        q: "Is ATLVS as flexible as Airtable?",
+        a: "Less flexible by design. We model what we know about production. The trade is faster setup, enforced typing, and no DIY platform-building.",
+      },
+    ],
+    keywords: ["Airtable alternative events", "Airtable for production", "Airtable vs production database"],
+  },
+
+  smartsheet: {
+    slug: "smartsheet",
+    competitor: "Smartsheet",
+    headline: "ATLVS Technologies vs. Smartsheet: production-native vs. spreadsheet-with-features.",
+    blurb:
+      "Smartsheet adds workflow over a spreadsheet. Production teams need more than that — typed primitives, portals, scanners, payouts.",
+    hero: "Smartsheet is the most spreadsheet-shaped of the big PM tools, which is why corporate teams like it. Production teams find it more rigid than Airtable and less production-shaped than ATLVS.",
+    bottomLine: "For corporate program management, Smartsheet has its niche. For production, the primitives are wrong.",
+    features: [
+      { feature: "Grid + Gantt + card views", us: true, them: true },
+      { feature: "Typed deliverables (production)", us: true, them: false },
+      { feature: "Stakeholder portals", us: true, them: "Limited (Dynamic View)" },
+      { feature: "Offline gate scan", us: true, them: false },
+      { feature: "Stripe Connect payouts", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Built for show calls",
+        body: "ROS, advancing, COIs, riders — first-class. Smartsheet asks you to build them in cells.",
+      },
+    ],
+    whenTheyWin: [
+      "Corporate program management with strong Excel-native users.",
+      "Cross-department reporting in a Microsoft-heavy org.",
+    ],
+    migration: ["Smartsheet CSV exports map cleanly", "Workflow automations port to our webhooks"],
+    faqs: [
+      {
+        q: "Is Smartsheet's pricing similar?",
+        a: "Per-user. A 15-person team at $25/user is $4,500/year. We're $2,388/year unlimited at Production.",
+      },
+    ],
+    keywords: ["Smartsheet alternative events", "Smartsheet vs production"],
+  },
+
+  "ms-project": {
+    slug: "ms-project",
+    competitor: "Microsoft Project",
+    headline: "ATLVS Technologies vs. Microsoft Project: production ops vs. waterfall PM.",
+    blurb:
+      "MS Project is excellent waterfall scheduling. Live-event production is more than a Gantt chart — and the team that runs shows doesn't live in Project all day.",
+    hero: "MS Project owns the deep-Gantt, deep-resource-leveling, deep-critical-path space. For event production where the actual day-to-day is RFIs, advancing, gate scans, and vendor payouts, it's the wrong center of gravity.",
+    bottomLine: "Microsoft Project for the planning. ATLVS for the running.",
+    features: [
+      { feature: "Detailed Gantt + critical path", us: "Light", them: true, note: "Their strength" },
+      { feature: "Resource leveling", us: "Light", them: true },
+      { feature: "Production advancing", us: true, them: false },
+      { feature: "Offline gate scan", us: true, them: false },
+      { feature: "Stakeholder portals", us: true, them: false },
+      { feature: "Stripe Connect payouts", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Production lives day to day",
+        body: "Project plans help you plan. They don't help you run the gate or pay the vendor.",
+      },
+    ],
+    whenTheyWin: ["Detailed multi-year master schedules with extensive dependency analysis."],
+    migration: ["MS Project tasks port via XML/CSV → ROS + milestones"],
+    faqs: [
+      {
+        q: "Can we keep MS Project for the master schedule?",
+        a: "Yes. Most do. Use Project for the master, run operations on ATLVS.",
+      },
+    ],
+    keywords: ["MS Project alternative events", "Microsoft Project vs production software"],
+  },
+
+  docusign: {
+    slug: "docusign",
+    competitor: "DocuSign",
+    headline: "ATLVS Technologies vs. DocuSign: interactive proposals vs. PDF e-signature.",
+    blurb:
+      "DocuSign signs PDFs. ATLVS proposals scroll, quantify, and accept in place — and the production starts the moment they sign.",
+    hero: "DocuSign won the e-signature market. It also locked the industry into PDF-by-email as the proposal format. Interactive proposals — scroll storytelling, live pricing, accept buttons — are a better experience and they connect directly to the production that follows the signature.",
+    bottomLine: "DocuSign for arbitrary contracts. ATLVS for proposals that turn into shows.",
+    features: [
+      {
+        feature: "PDF e-signature on arbitrary documents",
+        us: false,
+        them: true,
+        note: "Use DocuSign for general contracts",
+      },
+      { feature: "Interactive scroll proposals", us: true, them: false },
+      { feature: "Live pricing computed server-side", us: true, them: false },
+      { feature: "Accept buttons with IP + timestamp + version", us: true, them: true },
+      { feature: "Proposal → live project on accept", us: true, them: false },
+      { feature: "Revocable share links", us: true, them: "Limited" },
+      { feature: "Stripe checkout on accept", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Acceptance starts production",
+        body: "Sign → project created → deposit invoiced → advancing opens. DocuSign signs the file and stops there.",
+      },
+      {
+        title: "Scroll, not PDF",
+        body: "Interactive proposals close better than PDFs. Industry data is consistent on this.",
+      },
+    ],
+    whenTheyWin: ["NDAs, MSAs, employment agreements, generic legal contracts."],
+    migration: [
+      "DocuSign signed proposals re-create as ATLVS proposals via template",
+      "Most teams keep DocuSign for legal, move proposals to us",
+    ],
+    faqs: [
+      {
+        q: "Is ATLVS signature legally binding?",
+        a: "It captures IP, timestamp, typed name, and version — consistent with US ESIGN Act standards. Talk to your counsel on specifics.",
+      },
+    ],
+    keywords: ["DocuSign alternative events", "interactive proposals", "DocuSign vs proposal software"],
+  },
+
+  pandadoc: {
+    slug: "pandadoc",
+    competitor: "PandaDoc",
+    headline: "ATLVS Technologies vs. PandaDoc: production proposals vs. generic doc automation.",
+    blurb:
+      "PandaDoc is solid generic proposal automation. ATLVS proposals know what a rider is, what a load-in is, and write the project on accept.",
+    hero: "PandaDoc and we share the proposal-acceptance pattern. The difference is what happens before and after acceptance — our proposals pull line items from your live production catalog, and on accept they create the project, invoice, and deposit, automatically.",
+    bottomLine: "PandaDoc for generic sales proposals. ATLVS for proposals that ARE the production setup.",
+    features: [
+      { feature: "Drag-drop proposal builder", us: true, them: true },
+      { feature: "Pricing tables + e-sign", us: true, them: true },
+      { feature: "CRM integrations (Salesforce/HubSpot)", us: "Webhooks", them: true },
+      { feature: "Line items from production catalog", us: true, them: false },
+      { feature: "Accept → project + invoice + deposit", us: true, them: false },
+      { feature: "Stripe Connect payouts on the back end", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Knows production",
+        body: "Riders, stage plots, KBYG sections render natively. PandaDoc requires templates.",
+      },
+      { title: "Acceptance → production", body: "Sign and the project, deposit, and advancing open." },
+    ],
+    whenTheyWin: ["Non-event sales proposals (SaaS, services, etc.)."],
+    migration: ["PandaDoc templates port via copy + paste; line items hand-mapped"],
+    faqs: [
+      {
+        q: "Do you replace PandaDoc fully?",
+        a: "For event proposals, yes. For general sales proposals across other industries, keep PandaDoc.",
+      },
+    ],
+    keywords: ["PandaDoc alternative events", "PandaDoc vs proposal software"],
+  },
+
+  salesforce: {
+    slug: "salesforce",
+    competitor: "Salesforce",
+    headline: "ATLVS Technologies vs. Salesforce: production CRM vs. enterprise CRM.",
+    blurb:
+      "Salesforce will run your sales org. It will not run your show. The CRM in ATLVS is production-shaped — clients, gigs, proposals, advancing in one record.",
+    hero: "Salesforce is the heavyweight champion of enterprise CRM. For production teams it's massive — and the production-side data (vendors, talent, gigs) doesn't live there cleanly. Most teams that run both pay for Salesforce, log everything in ATLVS, and reconcile by hand.",
+    bottomLine: "Salesforce for the sales org. ATLVS for the production org. Sync via webhooks where it matters.",
+    features: [
+      { feature: "Deep enterprise CRM + reporting", us: "Light", them: true },
+      { feature: "Production CRM (clients, gigs, advancing)", us: true, them: false },
+      { feature: "Proposals → projects → invoices", us: true, them: false },
+      { feature: "Stakeholder portals (artist/vendor/sponsor)", us: true, them: false },
+      { feature: "Webhooks bidirectional", us: true, them: true },
+    ],
+    whyWeWin: [
+      { title: "Production-native CRM", body: "Our records are gigs, not opportunities. Riders, not attachments." },
+    ],
+    whenTheyWin: ["Enterprise sales org with deep multi-line-of-business reporting needs."],
+    migration: ["Webhook bridge: Salesforce Opportunity ↔ ATLVS Project. Field mapping doc provided."],
+    faqs: [{ q: "Do I need to drop Salesforce?", a: "No. Use both. Webhooks keep them aligned." }],
+    keywords: ["Salesforce for events", "Salesforce alternative events", "production CRM"],
+  },
+
+  hubspot: {
+    slug: "hubspot",
+    competitor: "HubSpot",
+    headline: "ATLVS Technologies vs. HubSpot: production CRM vs. inbound-marketing CRM.",
+    blurb:
+      "HubSpot owns inbound marketing CRM. Production teams need a different shape — gigs, riders, advancing, vendor payouts. Use both.",
+    hero: "HubSpot is the right CRM for the inbound funnel — content, forms, attribution, nurture. Production teams need that for lead-gen and a separate production-native CRM for everything after the deal closes.",
+    bottomLine: "HubSpot for inbound. ATLVS for everything from signed proposal through wrap.",
+    features: [
+      { feature: "Inbound marketing + nurture", us: false, them: true },
+      { feature: "Production CRM + advancing", us: true, them: false },
+      { feature: "Webhooks bidirectional", us: true, them: true },
+      { feature: "Per-org pricing", us: true, them: false },
+    ],
+    whyWeWin: [{ title: "Post-signature workflow", body: "HubSpot ends at deal-close. We start there." }],
+    whenTheyWin: ["Top-of-funnel marketing and lead capture."],
+    migration: ["HubSpot Deal closed → ATLVS Project via webhook"],
+    faqs: [
+      {
+        q: "Should I move marketing to ATLVS?",
+        a: "No. Keep HubSpot for marketing. Webhook the won deals into ATLVS.",
+      },
+    ],
+    keywords: ["HubSpot alternative events", "HubSpot for production"],
+  },
+
+  eventbase: {
+    slug: "eventbase",
+    competitor: "Eventbase",
+    headline: "ATLVS Technologies vs. Eventbase: production platform vs. event mobile app.",
+    blurb: "Eventbase makes a beautiful attendee app. ATLVS runs the production behind it. They're different layers.",
+    hero: "Eventbase is the gold standard for branded attendee apps at major events. For the production team running the event, the workflow lives somewhere else — and ATLVS is built for that.",
+    bottomLine: "Eventbase for the attendee. ATLVS for the producer. Webhook them together.",
+    features: [
+      { feature: "Branded attendee mobile app", us: "Via portal", them: true },
+      { feature: "Production advancing", us: true, them: false },
+      { feature: "RFIs · submittals · punch", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Producer-facing primitives",
+        body: "Riders, COIs, gate scans, vendor payouts. Eventbase doesn't touch these.",
+      },
+    ],
+    whenTheyWin: ["You need a custom-branded attendee app at flagship scale."],
+    migration: ["Webhook attendee data both directions"],
+    faqs: [{ q: "Are we competitive with Eventbase?", a: "No — different layers. Most large events run both." }],
+    keywords: ["Eventbase alternative", "event production behind the app"],
+  },
+
+  "master-tour": {
+    slug: "master-tour",
+    competitor: "Master Tour",
+    headline: "ATLVS Technologies vs. Master Tour: modern stack vs. industry-standard tour book.",
+    blurb:
+      "Master Tour is the industry-default tour book. It's also pre-cloud-era in shape. Modern tour managers want portals, mobile, AI, and per-org pricing.",
+    hero: "Master Tour is what most tour managers learned on. It works, and the install base is real. ATLVS is what tour managers ask for when they get to design from scratch: cloud-native, real portals, offline mobile, AI assistant, per-org pricing, no per-tour-book seat math.",
+    bottomLine:
+      "If you're locked into Master Tour, the muscle memory is real. If you're picking fresh, picking modern matters.",
+    features: [
+      { feature: "Tour-book day sheets", us: true, them: true },
+      { feature: "Advancing per stop", us: true, them: true },
+      { feature: "Cloud-native multi-user", us: true, them: "Partial" },
+      { feature: "Offline mobile (COMPVSS)", us: true, them: false },
+      { feature: "Stakeholder portals (artist/vendor)", us: true, them: false },
+      { feature: "Streaming AI assistant", us: true, them: false },
+      { feature: "Stripe Connect payouts", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Cloud-native + offline mobile",
+        body: "Modern tour managers expect both. Master Tour's mobile story is improving but trails.",
+      },
+      { title: "Portals", body: "Artists, vendors, drivers — all see scoped views. No more emailing day sheets." },
+    ],
+    whenTheyWin: ["Veteran TMs with deep Master Tour muscle memory who aren't switching costs they want to take on."],
+    migration: ["Master Tour CSV exports map to advancing + ROS"],
+    faqs: [
+      {
+        q: "Are you a Master Tour replacement?",
+        a: "Yes, for modern touring orgs. We lose to muscle memory; we win on every spec.",
+      },
+    ],
+    keywords: ["Master Tour alternative", "modern tour management software", "Master Tour vs ATLVS"],
+  },
+
+  eventric: {
+    slug: "eventric",
+    competitor: "Eventric",
+    headline: "ATLVS Technologies vs. Eventric: full stack vs. tour-only suite.",
+    blurb:
+      "Eventric (and its Master Tour product line) cover touring. ATLVS covers touring plus everything around it — fabrication, festivals, activations, broadcast.",
+    hero: "Eventric is a respected name in touring. ATLVS is touring-native AND covers the fabrication, festival, immersive, and broadcast production work that touring orgs increasingly run alongside their tours.",
+    bottomLine: "Eventric for tour-only orgs. ATLVS for orgs that run tours plus other production work.",
+    features: [
+      { feature: "Tour day sheets + advancing", us: true, them: true },
+      { feature: "Festival + activation surface area", us: true, them: false },
+      { feature: "Fabrication shop ops", us: true, them: false },
+      { feature: "Broadcast compound ops", us: true, them: false },
+      { feature: "Stakeholder portals + per-org pricing", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "One platform for the full org",
+        body: "Your touring shop, your fab shop, your activations team — same database.",
+      },
+    ],
+    whenTheyWin: ["Pure-touring orgs with no fabrication, festival, or activation work."],
+    migration: ["Eventric exports port to advancing + ROS"],
+    faqs: [
+      {
+        q: "Do we lose touring functionality?",
+        a: "No — we match the spec on touring primitives and add the rest of the org's surface area.",
+      },
+    ],
+    keywords: ["Eventric alternative", "tour management plus production"],
+  },
+
+  onstage: {
+    slug: "onstage",
+    competitor: "Onstage",
+    headline: "ATLVS Technologies vs. Onstage: integrated production platform vs. tour management.",
+    blurb: "Onstage handles tour logistics. ATLVS handles touring plus the rest of the production stack the org runs.",
+    hero: "Onstage is a capable tour management suite — schedules, advancing, day sheets, expenses. The trade-off is the same as Eventric: tour-shaped, not org-shaped.",
+    bottomLine: "Onstage for tour-only orgs. ATLVS for orgs running multiple production lines.",
+    features: [
+      { feature: "Tour scheduling + day sheets", us: true, them: true },
+      { feature: "Per-stop advancing", us: true, them: true },
+      { feature: "Festival + activation modules", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "One platform across production lines",
+        body: "Tours, festivals, activations, fab — one database, one auth, one audit log.",
+      },
+    ],
+    whenTheyWin: ["Tour-only orgs."],
+    migration: ["Onstage CSV exports map to advancing"],
+    faqs: [],
+    keywords: ["Onstage alternative", "tour management software"],
+  },
+
+  "show-co": {
+    slug: "show-co",
+    competitor: "Show.co",
+    headline: "ATLVS Technologies vs. Show.co: production platform vs. fan marketing.",
+    blurb:
+      "Show.co is for fan-marketing — pre-saves, presales, drops. ATLVS is the production platform that runs the show those fans show up to.",
+    hero: "Show.co lives in the marketing-to-fans layer. ATLVS lives in the production-team layer. Different problems; we don't overlap meaningfully.",
+    bottomLine: "Use both. Show.co for fan marketing. ATLVS for production.",
+    features: [
+      { feature: "Fan marketing automation", us: false, them: true },
+      { feature: "Production operations", us: true, them: false },
+    ],
+    whyWeWin: [{ title: "Different problem", body: "We don't compete; we run downstream of fan marketing." }],
+    whenTheyWin: ["Fan-marketing automation. Use Show.co."],
+    migration: ["N/A — different layers"],
+    faqs: [],
+    keywords: ["Show.co alternative", "production behind fan marketing"],
+  },
+
+  aconex: {
+    slug: "aconex",
+    competitor: "Aconex (Oracle)",
+    headline: "ATLVS Technologies vs. Aconex: production-speed RFIs vs. construction document control.",
+    blurb:
+      "Aconex is Oracle's enterprise construction document control system. Live-event production borrows the workflow primitives at a different velocity.",
+    hero: "Aconex shines for mega-projects with thousands of stakeholders and multi-year document trails. Event production runs faster and lighter, on the same primitives.",
+    bottomLine: "Aconex for mega-construction. ATLVS for event production on construction-style primitives.",
+    features: [
+      { feature: "Document control + RFI/submittal workflows", us: true, them: true },
+      { feature: "Production primitives (rider, gate scan)", us: true, them: false },
+      { feature: "Per-org pricing", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Velocity + production primitives",
+        body: "Aconex is built for slow, structured construction. We're built for show calls.",
+      },
+    ],
+    whenTheyWin: ["Mega-construction with regulatory document retention."],
+    migration: ["Aconex RFI/submittal exports map cleanly"],
+    faqs: [],
+    keywords: ["Aconex alternative events", "construction document control"],
+  },
 };
 
 export const COMPARE_LIST = Object.values(COMPARE);

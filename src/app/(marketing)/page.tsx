@@ -26,9 +26,10 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { LogoCloud } from "@/components/marketing/LogoCloud";
 import { StatStrip } from "@/components/marketing/StatStrip";
+import { TrustStrip } from "@/components/marketing/TrustStrip";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, organizationSchema, softwareApplicationSchema, SITE } from "@/lib/seo";
+import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "ATLVS — Production Runs On It",
@@ -55,6 +56,7 @@ export default function Home() {
       <JsonLd
         data={[
           organizationSchema(),
+          websiteSchema(),
           softwareApplicationSchema({
             name: "ATLVS Technologies",
             description: SITE.description,
@@ -89,6 +91,8 @@ export default function Home() {
             Read the Docs →
           </Link>
         </div>
+
+        <TrustStrip />
 
         {/* Live portal preview — anon visitors see real product chrome at
             reduced scale, no signup wall. sandbox="" blocks scripts/forms/popups

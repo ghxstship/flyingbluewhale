@@ -1,0 +1,451 @@
+/**
+ * Production-ops glossary — canonical definitions of the terms live-event
+ * operators use day-to-day. Each entry powers a /glossary/[slug] page and
+ * is the highest-ROI GEO surface for ATLVS: clean, definitional, easy
+ * for answer-engines (ChatGPT / Perplexity / Google SGE) to cite.
+ *
+ * Voice rules: operator vernacular, definitive, no comparison shopping.
+ * Length: ~120-200 words per entry, structured for clean schema extraction.
+ */
+
+export type GlossaryTerm = {
+  slug: string;
+  term: string;
+  /** Short one-line definition — used for og:description + meta. */
+  short: string;
+  /** Full definitional paragraph. ~80-150 words. */
+  long: string;
+  /** Related glossary terms by slug. */
+  related: string[];
+  /** Production modules that touch this concept; link back to /features. */
+  modules?: string[];
+  /** Alternate phrasings — surface in keywords. */
+  aka?: string[];
+  category:
+    | "scheduling"
+    | "advancing"
+    | "credentials"
+    | "rigging"
+    | "production"
+    | "safety"
+    | "logistics"
+    | "finance"
+    | "tickets"
+    | "broadcast";
+};
+
+export const GLOSSARY: GlossaryTerm[] = [
+  {
+    slug: "advancing",
+    term: "Advancing",
+    short: "The pre-event workflow of finalizing every operational detail with each stakeholder.",
+    long: "Advancing is the production process of confirming every operational detail with each stakeholder — artists, vendors, venues, crew — before load-in. It covers technical riders, hospitality riders, stage plots, input lists, ground transport, hotel blocks, insurance certificates, credentials, and any per-stop variances. Strong advancing reduces show-day surprise; weak advancing creates day-of fires that cost real money. In modern stacks, advancing is tracked as typed deliverables with status, owner, due date, and history — not as PDF chains in email.",
+    related: ["technical-rider", "hospitality-rider", "stage-plot", "input-list", "kbyg"],
+    modules: ["advancing"],
+    aka: ["show advancing", "tour advancing", "artist advancing"],
+    category: "advancing",
+  },
+  {
+    slug: "kbyg",
+    term: "KBYG (Know Before You Go)",
+    short: "A pre-event briefing document scoped to a stakeholder's role.",
+    long: "KBYG — Know Before You Go — is a stakeholder-facing document that gathers everything someone needs to show up to an event prepared: schedule, set times, credentials, parking, dressing-room location, comms channels, PPE requirements, evacuation plan, code of conduct. The strongest KBYG implementations scope by role: a guest sees parking and schedule, a crew member sees radio channels and call sheet, an artist sees rider and hospitality. Same canonical content; different views.",
+    related: ["advancing", "credentials", "call-sheet", "ros"],
+    modules: ["guides"],
+    aka: ["boarding pass", "event guide", "know-before-you-go"],
+    category: "scheduling",
+  },
+  {
+    slug: "ros",
+    term: "Run-of-Show (ROS)",
+    short: "The minute-by-minute schedule of an event — cues, transitions, departments.",
+    long: "Run-of-Show, or ROS, is the canonical minute-by-minute schedule of an event from doors through strike. Each row carries a cue number, a time, a duration, a department (audio, lighting, video, scenic, security, hospitality), and a note. Show callers and production managers run from the ROS in real time. The ROS publishes to portals so artists see set times, crew see calls, and vendors see delivery windows — all from one canonical record. A weak ROS lives in a shared document that nobody trusts after the second revision.",
+    related: ["call-sheet", "set-time", "show-call", "kbyg"],
+    modules: ["schedule"],
+    aka: ["run of show", "show flow", "cue sheet"],
+    category: "scheduling",
+  },
+  {
+    slug: "load-in",
+    term: "Load-In",
+    short: "The process of moving gear and crew into a venue and building the show.",
+    long: "Load-in is the period — from a few hours to several days — during which trucks unload, crew rigs the show, audio and lighting strike configurations, scenic elements assemble, and the event takes physical form in the venue. Load-in windows are negotiated with the venue and constrain everything downstream: rigging access times, freight elevator slots, parking, security clearances. Production managers track load-in against a per-department schedule and against the venue's hard constraints.",
+    related: ["load-out", "strike", "ros", "rigging"],
+    modules: ["schedule", "logistics"],
+    aka: ["bump-in", "set-up"],
+    category: "scheduling",
+  },
+  {
+    slug: "load-out",
+    term: "Load-Out",
+    short: "The process of breaking down the show and clearing the venue.",
+    long: "Load-out is the reverse of load-in: the show ends, doors clear, and crew dismantles audio, lighting, scenic, and rigging in reverse-build order to load trucks. Venues impose hard exit deadlines (often tied to next-day load-ins for the next event), and load-out velocity often determines whether overtime hours kick in. Tight load-out planning saves money and labor.",
+    related: ["load-in", "strike", "ros"],
+    modules: ["schedule", "logistics"],
+    aka: ["strike", "bump-out", "tear-down"],
+    category: "scheduling",
+  },
+  {
+    slug: "strike",
+    term: "Strike",
+    short: "The full breakdown and removal of all event production from a venue.",
+    long: "Strike is the final phase of an event: every piece of gear, scenic element, signage, cable run, and consumable is removed and the venue returned to its pre-event state. Strike is typically the highest-injury period of a show — crew is tired, deadlines are tight, and heavy gear is moving fast — making safety briefings, PPE compliance, and load-out scheduling especially important.",
+    related: ["load-out", "load-in", "wrap"],
+    modules: ["schedule", "safety"],
+    aka: ["tear-down", "load-out"],
+    category: "scheduling",
+  },
+  {
+    slug: "call-sheet",
+    term: "Call Sheet",
+    short: "A per-day document telling each crew member when and where to report.",
+    long: "A call sheet is the daily roster published to every crew member: their call time (when to arrive), department, role, location, and any specific instructions. Originally a film-production artifact, call sheets are now standard in events and touring. Modern call sheets publish to a stakeholder portal or mobile app rather than as PDF attachments, with automatic conflict detection against double-booked crew.",
+    related: ["ros", "crew-call", "show-call"],
+    modules: ["schedule"],
+    aka: ["crew sheet", "day sheet"],
+    category: "scheduling",
+  },
+  {
+    slug: "show-call",
+    term: "Show Call",
+    short: "The act of calling cues during the live event.",
+    long: "Show calling is the live act of calling cues — lighting cues, audio cues, video cues, automation cues, talent intros, security pivots — during the show. The show caller works from the ROS, communicating over comms to each department. The show caller's role is the single most important live-event coordination position. A clean show call is invisible; a broken show call is the difference between a great show and a recoverable one.",
+    related: ["ros", "call-sheet", "comms"],
+    modules: ["schedule"],
+    aka: ["calling the show"],
+    category: "scheduling",
+  },
+  {
+    slug: "set-time",
+    term: "Set Time",
+    short: "The scheduled start time of an artist's performance.",
+    long: "Set time is the moment an artist takes the stage. Set times are negotiated between booking and production, locked into the ROS, and published to artists via their advancing portal. Festivals typically have hard set time windows with strict changeover periods; concerts have softer windows tied to support-act performance. Conflicts between set times (overlapping stages with shared crew) surface in modern schedule tools automatically.",
+    related: ["ros", "advancing", "doors"],
+    modules: ["schedule", "advancing"],
+    aka: ["stage time", "performance slot"],
+    category: "scheduling",
+  },
+  {
+    slug: "doors",
+    term: "Doors",
+    short: "The time the venue opens to the public.",
+    long: "Doors is the moment the venue's public-facing entry opens. Everything inside the venue must be show-ready by doors — sound check complete, security in position, hospitality stocked, gates and scanners online. Doors is one of the show's hard gates: nothing slips past it. ROS counts forward from doors to set times and backward from doors to load-in milestones.",
+    related: ["last-entry", "set-time", "gate-scan"],
+    modules: ["ticketing", "schedule"],
+    aka: ["house open", "venue open"],
+    category: "scheduling",
+  },
+
+  {
+    slug: "technical-rider",
+    term: "Technical Rider",
+    short: "An artist's production-spec document — audio, lighting, video, stage, power.",
+    long: "A technical rider is the document the artist's team sends ahead of a performance specifying the exact production setup required: audio I/O, monitor configuration, lighting needs, video playback, stage dimensions, riser locations, power requirements. Riders range from a single page (small touring acts) to dozens of pages (headliner festivals). Modern advancing systems track riders as typed deliverables — versioned, status-tracked, and acknowledged in writing.",
+    related: ["hospitality-rider", "stage-plot", "input-list", "advancing"],
+    modules: ["advancing"],
+    aka: ["tech rider", "production rider"],
+    category: "advancing",
+  },
+  {
+    slug: "hospitality-rider",
+    term: "Hospitality Rider",
+    short: "An artist's non-production needs — food, drink, dressing room, transport.",
+    long: "A hospitality rider lists the non-production needs of the artist's traveling party: catering preferences, dressing room stocking (drinks, snacks, towels), ground transport requirements, hotel preferences, runner allowances. Hospitality riders include both contractual obligations (catering by X time) and preferences (specific brands, dietary restrictions). Production teams treat hospitality riders as binding even when they're informal.",
+    related: ["technical-rider", "advancing", "dressing-room"],
+    modules: ["advancing"],
+    aka: ["hospitality contract", "comfort rider"],
+    category: "advancing",
+  },
+  {
+    slug: "stage-plot",
+    term: "Stage Plot",
+    short: "A diagram showing the placement of equipment, talent, and monitors onstage.",
+    long: "A stage plot is the bird's-eye-view diagram of an artist's onstage configuration: where drums sit, where monitors face, where mic stands rise, where amps anchor. Stage plots inform the audio engineer, the monitor engineer, the lighting designer, and the staging team. They're submitted as PDF attachments to advancing and are increasingly stored as typed artifacts with revision history.",
+    related: ["technical-rider", "input-list", "advancing"],
+    modules: ["advancing"],
+    aka: ["stage layout", "stage diagram"],
+    category: "advancing",
+  },
+  {
+    slug: "input-list",
+    term: "Input List",
+    short: "An audio-channel-by-channel map of microphones, DI boxes, and patch points.",
+    long: "An input list is the audio team's reference: every channel on the console, what's plugged into it (mic model, DI box, line in), and how it's labeled. Input lists are bundled with the technical rider, given to the front-of-house and monitor engineers in advance, and used to pre-patch the console before sound check. A clean input list saves hours at load-in.",
+    related: ["technical-rider", "stage-plot", "advancing"],
+    modules: ["advancing"],
+    aka: ["channel list", "patch list"],
+    category: "advancing",
+  },
+  {
+    slug: "coi",
+    term: "Certificate of Insurance (COI)",
+    short: "A vendor's proof of insurance coverage for general liability and related risks.",
+    long: "A Certificate of Insurance, or COI, is the document a vendor submits to prove they carry general liability, auto liability, workers' compensation, and umbrella coverage at the limits a venue or producer requires. COIs name the producer or venue as additional insured and list policy effective and expiration dates. Production teams gate purchase orders behind a current COI: if the cert is expired, the PO blocks.",
+    related: ["w9", "vendor", "compliance"],
+    modules: ["procurement", "compliance"],
+    aka: ["certificate of insurance", "liability cert"],
+    category: "finance",
+  },
+  {
+    slug: "w9",
+    term: "W-9",
+    short: "A US tax form vendors complete to enable 1099 reporting.",
+    long: "Form W-9 is the IRS document a US vendor completes to give the producer their taxpayer ID number and business classification, enabling year-end 1099-NEC issuance for non-employee compensation. Production teams collect W-9s during vendor onboarding and gate payouts on having a current W-9 on file. Foreign vendors complete W-8 series forms instead.",
+    related: ["coi", "vendor", "1099"],
+    modules: ["procurement"],
+    aka: ["W9", "Form W-9"],
+    category: "finance",
+  },
+
+  {
+    slug: "credentials",
+    term: "Credentials",
+    short: "Physical or digital passes granting access to event-restricted areas.",
+    long: "Credentials — also called passes — are the physical (laminate, wristband) or digital (QR, NFC) tokens that grant access to event-restricted areas. Tiered credentials (AAA all-access, working pass, talent pass, crew pass, vendor pass, guest pass) carry different access levels: front-of-house, backstage, dressing rooms, production offices, rigging zones. Credentials are issued from a manifest, scanned at zone gates, and revoked when someone leaves their role.",
+    related: ["all-access", "manifest", "gate-scan"],
+    modules: ["ticketing", "advancing"],
+    aka: ["passes", "credentialing", "access badges"],
+    category: "credentials",
+  },
+  {
+    slug: "all-access",
+    term: "All-Access (AAA)",
+    short: "The highest credential tier — grants access to every zone.",
+    long: "All-Access — often abbreviated AAA — is the top credential tier issued at a production: it grants access to every zone, including talent dressing rooms, production offices, and rigging areas. AAA credentials are tightly controlled; the AAA list is small and runs through senior production leadership. The credentials manager treats AAA as the most audit-sensitive credential tier.",
+    related: ["credentials", "working-pass", "manifest"],
+    modules: ["ticketing"],
+    aka: ["AAA", "all access pass"],
+    category: "credentials",
+  },
+  {
+    slug: "working-pass",
+    term: "Working Pass",
+    short: "A credential identifying crew or vendors actively working the event.",
+    long: "A working pass is the credential that identifies a person as crew or vendor actively working an event. Working passes typically grant access to backstage, production offices, and any zone needed for their role, but exclude high-restriction areas like artist dressing rooms unless the role requires it. Working pass holders are vetted at credential pickup and may sign acknowledgements at check-in.",
+    related: ["credentials", "all-access", "crew-pass"],
+    modules: ["ticketing"],
+    aka: ["working credential"],
+    category: "credentials",
+  },
+  {
+    slug: "manifest",
+    term: "Manifest",
+    short: "The canonical roster of who is credentialed, ticketed, or accommodated.",
+    long: "A manifest is the canonical list — of credentialed crew, of ticketed guests, of accommodation-block residents, of vehicle passengers. Manifests reconcile against the gate scanner: every credential or ticket on the manifest scans to accepted; everything else scans to denied. A clean manifest is the difference between a smooth gate and a 30-minute line.",
+    related: ["gate-scan", "credentials", "ticket"],
+    modules: ["ticketing"],
+    aka: ["roster", "credential manifest"],
+    category: "credentials",
+  },
+
+  {
+    slug: "gate-scan",
+    term: "Gate Scan",
+    short: "The act of scanning a credential or ticket to verify entry rights.",
+    long: "Gate scan is the single most time-sensitive operation at a live event: a credential or ticket presents at the gate, scans against the manifest, and resolves to accepted, denied, voided, or used in under a hundred milliseconds. Modern gate scanners run as offline-first mobile apps so they keep working when venue cellular drops; scans queue locally and replay in order when signal returns. Race conditions (the same ticket presenting at two gates) resolve atomically — every ticket scans exactly once.",
+    related: ["manifest", "ticket", "doors", "last-entry"],
+    modules: ["ticketing", "mobile"],
+    aka: ["check-in", "scan-in"],
+    category: "tickets",
+  },
+  {
+    slug: "last-entry",
+    term: "Last Entry",
+    short: "The deadline after which the gate stops admitting new attendees.",
+    long: "Last entry is the time after which the gate stops admitting guests. Most events publish a last-entry time in the KBYG so attendees know to arrive before it. Late entries are sometimes accommodated for VIP or talent guests via separate channels but rarely for the general public. The gate scanner enforces last entry: scans after the cutoff resolve to denied.",
+    related: ["doors", "gate-scan", "ticket"],
+    modules: ["ticketing"],
+    aka: ["last admit"],
+    category: "tickets",
+  },
+
+  {
+    slug: "rigging",
+    term: "Rigging",
+    short: "The art of suspending lighting, audio, video, and scenic from venue structure.",
+    long: "Rigging is the discipline of suspending heavy production gear — lighting trusses, line arrays, video walls, scenic — safely from a venue's structural points. Rigging crews work with the venue's rig plot to identify load-bearing points, calculate point loads and distributed loads, and rig motors, chains, and trusses. Rigging is among the highest-injury disciplines on a production; reputable shops use third-party rigging inspections before doors.",
+    related: ["point-load", "dynamic-load", "rigging-inspection", "fall-protection"],
+    modules: ["inspections", "production"],
+    aka: ["rig", "rigging crew"],
+    category: "rigging",
+  },
+  {
+    slug: "point-load",
+    term: "Point Load",
+    short: "The weight applied at a single suspension point on a venue's rig structure.",
+    long: "A point load is the static weight applied at a single suspension point in a venue's rigging structure — a single beam clamp, a single motor pickup. Venues publish rated capacities per point (e.g., 1,000 lbs per beam), and riggers must ensure no single point exceeds rated capacity. Point load math is on every rigging plot; modern production tools track it per suspension point with margins.",
+    related: ["dynamic-load", "rigging", "deadhang"],
+    modules: ["inspections"],
+    aka: ["static load"],
+    category: "rigging",
+  },
+  {
+    slug: "dynamic-load",
+    term: "Dynamic Load",
+    short: "The peak load applied during motion or sudden change — exceeds static load.",
+    long: "Dynamic load is the peak force applied to a rigging point during motion — a lift, a release, a sudden stop — and can substantially exceed the static load. Rigging engineers calculate dynamic loads with safety factors (typically 7:1 over peak dynamic) to ensure structural integrity. The dynamic load math is why a motor with a static rating of 1,000 lbs isn't lifting 1,000 lbs of gear — it's lifting some fraction with the dynamic factor preserved.",
+    related: ["point-load", "rigging"],
+    modules: ["inspections"],
+    aka: ["kinetic load"],
+    category: "rigging",
+  },
+
+  {
+    slug: "foh",
+    term: "Front of House (FOH)",
+    short: "The audience-facing side of the venue — where the mixing console lives.",
+    long: "Front of House — FOH — refers to the audience-facing side of a venue and the audio mixing position located there. The FOH engineer mixes what the audience hears through the main sound system. FOH is also where the lighting console often sits, giving the lighting designer line-of-sight to the stage. In broader production usage, FOH refers to anything visible to the audience (signage, ushers, ticket scanners).",
+    related: ["boh", "show-call", "doors"],
+    modules: ["production"],
+    aka: ["front-of-house", "audience side"],
+    category: "production",
+  },
+  {
+    slug: "boh",
+    term: "Back of House (BOH)",
+    short: "The non-public side of the venue — dressing rooms, production offices, loading.",
+    long: "Back of House — BOH — covers everything not visible to the audience: dressing rooms, production offices, loading docks, green rooms, catering, freight elevators. BOH access is credentialed: only working passes, talent passes, and higher-tier credentials get in. The line between FOH and BOH is the operational divide of a venue.",
+    related: ["foh", "credentials", "dressing-room"],
+    modules: ["production"],
+    aka: ["back-of-house", "backstage"],
+    category: "production",
+  },
+  {
+    slug: "comms",
+    term: "Comms",
+    short: "The wired or wireless intercom system connecting departments during a show.",
+    long: "Comms — short for communications — is the intercom infrastructure that lets show callers, stage managers, lighting, audio, video, and security talk to each other in real time during load-in, show call, and load-out. Comms channels separate by department; the show caller typically sits on a master channel that punches into each department's channel as needed. Wired comms (Clear-Com) and wireless comms (Riedel Bolero) coexist on most large productions.",
+    related: ["show-call", "ros", "radio"],
+    modules: ["production"],
+    aka: ["intercom", "headset comms"],
+    category: "production",
+  },
+
+  {
+    slug: "rfi",
+    term: "Request for Information (RFI)",
+    short: "A formal question raised during production with a routed, official answer.",
+    long: "A Request for Information — RFI — is a formal, tracked question raised during production: a contractor asks a producer for clarification on scope, a vendor asks for a spec confirmation, a producer asks a venue for an access detail. Each RFI has a recipient (ball-in-court), a clock (due date), and an official answer that becomes part of the project record. Construction projects pioneered the RFI pattern; live-event production borrows it for fabrication, scenic, and major build-outs.",
+    related: ["submittal", "change-order", "punch-list"],
+    modules: ["procore-parity"],
+    aka: ["request for information"],
+    category: "production",
+  },
+  {
+    slug: "submittal",
+    term: "Submittal",
+    short: "A formal product or spec submission for approval before installation.",
+    long: "A submittal is the formal proposal a contractor or vendor sends for review and approval before installing or fabricating: a paint color, a lighting fixture model, a custom-built piece, a finish material. Submittals route through a reviewer, get approved-as-noted, rejected, or approved-with-revisions, and become part of the project record. Strong submittal workflows prevent costly mid-build pivots.",
+    related: ["rfi", "punch-list", "change-order"],
+    modules: ["procore-parity"],
+    aka: ["spec submittal"],
+    category: "production",
+  },
+  {
+    slug: "punch-list",
+    term: "Punch List",
+    short: "The list of remaining items to fix before a build is considered complete.",
+    long: "A punch list — also called a snag list — is the running register of items that need attention before a build or installation is considered complete: paint touch-ups, wire dressings, finish corrections, missing labels, alignment issues. Each item has a location, a responsible trade, a photo, and a due date. The punch list closes via a final walk-through where each item is signed off.",
+    related: ["rfi", "submittal", "show-ready"],
+    modules: ["procore-parity"],
+    aka: ["snag list", "punch", "close-out list"],
+    category: "production",
+  },
+  {
+    slug: "change-order",
+    term: "Change Order",
+    short: "A formal modification to scope, schedule, or price after the contract is signed.",
+    long: "A change order is the formal mechanism for modifying a signed contract: scope changes, schedule extensions, price adjustments. Change orders quantify the work in question, price it, and require approval before execution. In events and fabrication, change orders prevent the all-too-common 'the producer asked for this, we did it, now no one wants to pay for it' pattern. Every change order writes to the project budget on approval.",
+    related: ["rfi", "submittal", "budget"],
+    modules: ["procore-parity", "finance"],
+    aka: ["change-of-scope", "CO"],
+    category: "finance",
+  },
+  {
+    slug: "show-ready",
+    term: "Show-Ready",
+    short: "A gated status indicating a project is complete and cleared for doors.",
+    long: "Show-ready is the gate that has to clear before doors open: every inspection signed, every punch item resolved, every credential printed, every comms checked. Modern production tools enforce show-ready as a hard gate — invoicing, doors, or final payment can't proceed without it. Show-ready is the producer's equivalent of construction's substantial-completion.",
+    related: ["punch-list", "inspection"],
+    modules: ["procore-parity", "inspections"],
+    aka: ["doors-ready", "go-status"],
+    category: "production",
+  },
+
+  {
+    slug: "incident-report",
+    term: "Incident Report",
+    short: "A documented record of a safety, security, or medical event during a production.",
+    long: "An incident report is the documented record of any safety, security, or medical event during a production: an injury, a near-miss, a security intervention, a medical response, an environmental release. Incident reports capture the time, location, witnesses, photos, and resolution. OSHA-recordable incidents flow into the annual 300 log. Anonymous reporting channels — where the reporter chooses what they disclose — are increasingly standard for safeguarding and harassment reporting.",
+    related: ["osha-300", "near-miss", "safeguarding"],
+    modules: ["safety"],
+    aka: ["safety report", "near-miss report"],
+    category: "safety",
+  },
+  {
+    slug: "osha-300",
+    term: "OSHA 300 Log",
+    short: "The US workplace-injury and illness log required by federal OSHA regulations.",
+    long: "The OSHA Form 300 is the log of work-related injuries and illnesses that US employers with more than ten employees maintain annually. Each entry records the case, the employee, the date, the diagnosis, and the outcome (days away, restricted work, transfer). The 300A annual summary is posted publicly Feb-Apr each year. Production teams with field-injury exposure run this against the 300 and 300A as part of their year-end compliance cadence.",
+    related: ["incident-report", "near-miss", "ehs"],
+    modules: ["safety", "compliance"],
+    aka: ["OSHA log", "Form 300"],
+    category: "safety",
+  },
+  {
+    slug: "near-miss",
+    term: "Near-Miss",
+    short: "An incident with potential for harm that didn't result in injury or damage.",
+    long: "A near-miss is an event with potential for harm — a falling object that didn't hit anyone, an unsecured cable that almost tripped a crew member, an electrical issue caught before contact — that didn't result in injury or property damage. Robust safety cultures capture near-misses at higher rates than recordable incidents because they're the leading indicator. Each near-miss is an opportunity to fix a structural risk before it costs someone.",
+    related: ["incident-report", "osha-300", "ehs"],
+    modules: ["safety"],
+    aka: ["close call"],
+    category: "safety",
+  },
+
+  {
+    slug: "per-diem",
+    term: "Per Diem",
+    short: "A daily allowance paid to crew or talent for meals and incidentals while traveling.",
+    long: "Per diem is the daily cash allowance paid to crew or talent for meals and incidentals while traveling for a production. Per diem rates vary by city and country (GSA publishes US federal rates) and may differ for crew vs. union-rate crew vs. talent. Per diem typically settles in cash on a per-show basis or accumulates on a paystub. Tour managers track per diem against the city × day rate matrix.",
+    related: ["payroll", "advance", "tour-manager"],
+    modules: ["finance", "logistics"],
+    aka: ["PD"],
+    category: "finance",
+  },
+  {
+    slug: "advance",
+    term: "Advance (Cash Advance)",
+    short: "A cash payment made ahead of a production to cover anticipated expenses.",
+    long: "A cash advance — in production-finance context — is money paid ahead of a show to cover anticipated expenses: per diem, runner cash, vendor deposits, on-the-fly purchases. Cash advances reconcile against receipts and remaining cash on settlement night. Note: 'advancing' (the pre-event workflow) and 'cash advance' (the finance instrument) are different concepts that share a name — context distinguishes them.",
+    related: ["per-diem", "settlement", "payroll"],
+    modules: ["finance"],
+    aka: ["float", "cash float"],
+    category: "finance",
+  },
+  {
+    slug: "settlement",
+    term: "Settlement",
+    short: "The post-show financial reconciliation between artist, promoter, and venue.",
+    long: "Settlement is the post-show financial close-out: reconciling box-office numbers, deducting venue costs, paying artist guarantees and back-end percentages, settling per diems, and producing a settlement sheet signed by the artist's representative. Settlements happen at the venue, often the same night as the show, and depend on accurate, real-time box-office data. Mature production stacks run settlement off live data, not next-day spreadsheets.",
+    related: ["advance", "per-diem", "guarantee"],
+    modules: ["finance"],
+    aka: ["show settle"],
+    category: "finance",
+  },
+];
+
+export const GLOSSARY_BY_SLUG = Object.fromEntries(GLOSSARY.map((t) => [t.slug, t]));
+
+export const GLOSSARY_CATEGORIES: Array<{ slug: GlossaryTerm["category"]; label: string }> = [
+  { slug: "scheduling", label: "Scheduling + ROS" },
+  { slug: "advancing", label: "Advancing" },
+  { slug: "credentials", label: "Credentials" },
+  { slug: "rigging", label: "Rigging" },
+  { slug: "production", label: "Production" },
+  { slug: "safety", label: "Safety + HSE" },
+  { slug: "logistics", label: "Logistics" },
+  { slug: "finance", label: "Finance" },
+  { slug: "tickets", label: "Tickets + Gates" },
+  { slug: "broadcast", label: "Broadcast" },
+];

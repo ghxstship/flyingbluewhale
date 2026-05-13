@@ -35,7 +35,7 @@ export default async function MsasPage() {
         eyebrow="People"
         title="Master Services Agreements"
         subtitle={`${rows.length} on file · ${counts["signed"] ?? 0} signed · ${counts["draft"] ?? 0} draft`}
-        actions={
+        action={
           <Link
             href="/console/people/msas/new"
             className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"

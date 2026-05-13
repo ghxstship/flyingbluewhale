@@ -79,9 +79,12 @@ export async function signMsaByToken(
     p_signature: signature,
     p_exhibit_b: exhibitB,
     p_exhibit_c: exhibitC,
-    p_nscb_license: nscb.license,
-    p_nscb_classification: nscb.classification,
-    p_nscb_monetary_limit_cents: nscb.monetaryLimitCents,
+    // RPC generated types declare these as non-null; the underlying SQL
+    // function tolerates nulls (NSCB only applies to Nevada engagements).
+    // Cast to satisfy the type signature without losing the nullable intent.
+    p_nscb_license: nscb.license as string,
+    p_nscb_classification: nscb.classification as string,
+    p_nscb_monetary_limit_cents: nscb.monetaryLimitCents as number,
     p_ip: ip,
     p_user_agent: userAgent ?? "",
   });

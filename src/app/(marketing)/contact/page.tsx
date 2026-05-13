@@ -30,22 +30,22 @@ const ROUTES = [
     icon: Mail,
     title: "Studio",
     body: "Direct line to a producer. One business day, usually faster.",
-    cta: "sales@flytehaus.live",
-    href: "mailto:sales@flytehaus.live",
+    cta: "sales@flytehaus.studio",
+    href: "mailto:sales@flytehaus.studio",
   },
   {
     icon: MessageCircle,
     title: "Concierge",
     body: "For current customers — triaged by tier. Festival gets an SLA.",
-    cta: "support@flytehaus.live",
-    href: "mailto:support@flytehaus.live",
+    cta: "support@flytehaus.studio",
+    href: "mailto:support@flytehaus.studio",
   },
   {
     icon: Building2,
     title: "Partners",
     body: "Integrations, agencies, distribution. Build with us.",
-    cta: "partners@flytehaus.live",
-    href: "mailto:partners@flytehaus.live",
+    cta: "partners@flytehaus.studio",
+    href: "mailto:partners@flytehaus.studio",
   },
 ];
 
@@ -110,7 +110,7 @@ export default function ContactPage() {
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leave a Note.</h2>
-        <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@flytehaus.live">
+        <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@flytehaus.studio">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-xs font-medium text-[var(--text-secondary)]">
               Name

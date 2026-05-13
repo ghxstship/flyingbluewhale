@@ -11,18 +11,18 @@ Generated 2026-05-11 (rotate periodically):
 ```
 Public  : BB9dcZAoiR2XtPaou85Cv8lpPjRQyhAjxIm3uUE4Bv4F6GEDXCSy8F-8bVk4cFnOlJUoDTfh_2dt9BUtdvvIsBg
 Private : Y_4iTjQbQBbM5Vfzh-zK7vbkj_P67AJB3pBxWUmtdic
-Subject : mailto:ops@flytehaus.live
+Subject : mailto:ops@flytehaus.studio
 ```
 
 Set on **Vercel → Project → Settings → Environment Variables** (apply to
 Production + Preview + Development):
 
-| Variable                       | Value                       |
-| ------------------------------ | --------------------------- |
-| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | _public key above_          |
-| `VAPID_PUBLIC_KEY`             | _public key above_          |
-| `VAPID_PRIVATE_KEY`            | _private key above_         |
-| `VAPID_SUBJECT`                | `mailto:ops@flytehaus.live` |
+| Variable                       | Value                         |
+| ------------------------------ | ----------------------------- |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | _public key above_            |
+| `VAPID_PUBLIC_KEY`             | _public key above_            |
+| `VAPID_PRIVATE_KEY`            | _private key above_           |
+| `VAPID_SUBJECT`                | `mailto:ops@flytehaus.studio` |
 
 Regenerate locally with `npx web-push generate-vapid-keys`. Existing
 push subscriptions invalidate on rotation — users will re-enroll via

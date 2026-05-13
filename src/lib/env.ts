@@ -8,8 +8,8 @@ const schema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
-  // "1" enables subdomain routing (atlvs.flytehaus.live, gvteway.flytehaus.live,
-  // compvss.flytehaus.live). Anything else falls back to path-prefix mode
+  // "1" enables subdomain routing (atlvs.flytehaus.studio, gvteway.flytehaus.studio,
+  // compvss.flytehaus.studio). Anything else falls back to path-prefix mode
   // (single-host /console, /p, /m). Vercel preview deploys leave it unset.
   NEXT_PUBLIC_USE_SUBDOMAINS: z.string().optional(),
   NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),

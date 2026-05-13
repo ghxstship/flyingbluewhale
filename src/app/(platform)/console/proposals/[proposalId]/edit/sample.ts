@@ -246,7 +246,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     type: "signature_block",
     parties: [
       { role: "Client", name: "— to be completed —" },
-      { role: "Producer", name: "FLYTEHAUS Technologies Inc.", email: "producer@flytehaus.live" },
+      { role: "Producer", name: "FLYTEHAUS Technologies Inc.", email: "producer@flytehaus.studio" },
     ],
     instructions:
       "Sign below to accept this engagement. An e-sign receipt with reference hash is emailed on completion.",

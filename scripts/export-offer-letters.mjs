@@ -42,8 +42,8 @@ const OUT_PREVIEW = "/tmp/sc_offer_letters_preview";
 const OUT = PREVIEW ? OUT_PREVIEW : OUT_DESKTOP;
 
 const TRAVELERS = new Set(["Sarah Fry", "Vida Sotakoun"]);
-const APP_BASE = "https://flytehaus.live";
-const PRODUCTION_GUIDE_URL = "https://gvteway.flytehaus.live/edclv26-salvage-city/guide";
+const APP_BASE = "https://flytehaus.studio";
+const PRODUCTION_GUIDE_URL = "https://gvteway.flytehaus.studio/edclv26-salvage-city/guide";
 
 const EMPLOYER_LABEL = {
   ghxstship: "GHXSTSHIP Industries LLC",
@@ -135,7 +135,7 @@ function buildICS(letter, schedule) {
     const startUTC = fmtICSDateTime(day.date, day.start);
     const endUTC = fmtICSDateTime(day.date, day.end || day.start);
     lines.push("BEGIN:VEVENT");
-    lines.push(`UID:salvage-city-${letter.id}-${day.date.replace(/\//g, "")}@flytehaus.live`);
+    lines.push(`UID:salvage-city-${letter.id}-${day.date.replace(/\//g, "")}@flytehaus.studio`);
     lines.push(`DTSTAMP:${stamp}`);
     lines.push(`DTSTART;TZID=America/Los_Angeles:${startUTC}`);
     lines.push(`DTEND;TZID=America/Los_Angeles:${endUTC}`);

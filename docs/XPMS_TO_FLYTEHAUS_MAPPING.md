@@ -58,15 +58,15 @@ There are **three** competing 8-phase models in the project ecosystem. The imple
 
 ## Layer 3 — Shell / surface mapping
 
-| Conceptual (USNP)                            | FLYTEHAUS shell          | Route prefix                                | Subdomain                | Brand                     |
-| -------------------------------------------- | ------------------------ | ------------------------------------------- | ------------------------ | ------------------------- |
-| Marketing / SEO surface                      | `(marketing)`            | `/`                                         | `flytehaus.live`         | FLYTEHAUS apex            |
-| Auth / pre-session                           | `(auth)`                 | `/login`, `/signup`, `/accept-invite/*` etc | apex                     | FLYTEHAUS apex            |
-| Personal (any authed user)                   | `(personal)`             | `/me/*`                                     | apex                     | FLYTEHAUS apex            |
-| Internal Ops Console                         | `(platform)` / **ATLVS** | `/console/*`                                | `atlvs.flytehaus.live`   | red                       |
-| External Stakeholder Portal                  | `(portal)` / **GVTEWAY** | `/p/[slug]/*`                               | `gvteway.flytehaus.live` | blue                      |
-| Field Ops PWA                                | `(mobile)` / **COMPVSS** | `/m/*`                                      | `compvss.flytehaus.live` | yellow/amber              |
-| Parent-co marketing (out of FLYTEHAUS scope) | `(ghxstship)`            | `/ghxstship/*`                              | apex                     | bermuda-triangle (locked) |
+| Conceptual (USNP)                            | FLYTEHAUS shell          | Route prefix                                | Subdomain                  | Brand                     |
+| -------------------------------------------- | ------------------------ | ------------------------------------------- | -------------------------- | ------------------------- |
+| Marketing / SEO surface                      | `(marketing)`            | `/`                                         | `flytehaus.studio`         | FLYTEHAUS apex            |
+| Auth / pre-session                           | `(auth)`                 | `/login`, `/signup`, `/accept-invite/*` etc | apex                       | FLYTEHAUS apex            |
+| Personal (any authed user)                   | `(personal)`             | `/me/*`                                     | apex                       | FLYTEHAUS apex            |
+| Internal Ops Console                         | `(platform)` / **ATLVS** | `/console/*`                                | `atlvs.flytehaus.studio`   | red                       |
+| External Stakeholder Portal                  | `(portal)` / **GVTEWAY** | `/p/[slug]/*`                               | `gvteway.flytehaus.studio` | blue                      |
+| Field Ops PWA                                | `(mobile)` / **COMPVSS** | `/m/*`                                      | `compvss.flytehaus.studio` | yellow/amber              |
+| Parent-co marketing (out of FLYTEHAUS scope) | `(ghxstship)`            | `/ghxstship/*`                              | apex                       | bermuda-triangle (locked) |
 
 ---
 

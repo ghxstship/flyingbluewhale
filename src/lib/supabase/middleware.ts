@@ -4,13 +4,13 @@ import { env, hasSupabase } from "../env";
 import type { Database } from "./database.types";
 
 /**
- * Sets the cookie `domain` to `.flytehaus.live` so a session minted on the
+ * Sets the cookie `domain` to `.flytehaus.studio` so a session minted on the
  * apex (login) is sent to the atlvs/gvteway/compvss subdomains. Returns
  * `undefined` for localhost/lvh.me/vercel.app — host-only cookies there.
  */
 function cookieDomainForHost(host: string): string | undefined {
   const bare = host.split(":")[0].toLowerCase();
-  if (bare.endsWith("flytehaus.live")) return ".flytehaus.live";
+  if (bare.endsWith("flytehaus.studio")) return ".flytehaus.studio";
   return undefined;
 }
 

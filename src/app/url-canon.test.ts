@@ -7,7 +7,7 @@ import { join, relative } from "node:path";
  *
  * Per CLAUDE.md (`Conventions › Cross-shell URLs`):
  *   "Always use `urlFor(shell, path)` from `@/lib/urls` — never hardcode
- *   `https://...flytehaus.live` and never concat `NEXT_PUBLIC_APP_URL` with
+ *   `https://...flytehaus.studio` and never concat `NEXT_PUBLIC_APP_URL` with
  *   `/console`/`/p`/`/m`."
  *
  * The single source of truth for the apex base URL is `SITE.baseUrl` in
@@ -15,7 +15,7 @@ import { join, relative } from "node:path";
  * must consume `SITE.baseUrl` (or `urlFor(shell, path)` for cross-shell).
  *
  * This spec asserts that:
- *   1. The literal string `"https://flytehaus.live"` only appears in a
+ *   1. The literal string `"https://flytehaus.studio"` only appears in a
  *      narrowly allowlisted set of files — the canon definition itself,
  *      env wiring, urls helper, sample fixtures, docs/JSDoc.
  *   2. Nobody else duplicates `process.env.NEXT_PUBLIC_APP_URL ?? "..."`
@@ -67,19 +67,19 @@ function walk(dir: string): string[] {
 const ALL = walk(SRC_DIR).filter((f) => !/\.test\.[tj]sx?$/.test(f));
 
 describe("URL canon", () => {
-  it('the literal "https://flytehaus.live" is only allowed in narrowly allowlisted files', () => {
+  it('the literal "https://flytehaus.studio" is only allowed in narrowly allowlisted files', () => {
     const offenders: string[] = [];
     for (const file of ALL) {
       const rel = relative(REPO_ROOT, file);
       if (ALLOW_HTTPS_LITERAL.has(rel)) continue;
       const txt = readFileSync(file, "utf8");
-      if (txt.includes('"https://flytehaus.live"') || txt.includes("'https://flytehaus.live'")) {
+      if (txt.includes('"https://flytehaus.studio"') || txt.includes("'https://flytehaus.studio'")) {
         offenders.push(rel);
       }
     }
     expect(
       offenders,
-      `Files contain the literal "https://flytehaus.live" — use SITE.baseUrl from @/lib/seo instead. Offenders: ${offenders.join(", ")}`,
+      `Files contain the literal "https://flytehaus.studio" — use SITE.baseUrl from @/lib/seo instead. Offenders: ${offenders.join(", ")}`,
     ).toEqual([]);
   });
 

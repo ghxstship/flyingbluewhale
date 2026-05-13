@@ -58,8 +58,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
         <p className="text-xs text-[var(--text-muted)]">
           Need a change to your booking? Email{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:hospitality@flytehaus.live">
-            hospitality@flytehaus.live
+          <a className="text-[var(--org-primary)]" href="mailto:hospitality@flytehaus.studio">
+            hospitality@flytehaus.studio
           </a>{" "}
           and reference your booking ID.
         </p>

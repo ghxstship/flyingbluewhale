@@ -186,7 +186,7 @@ export function scimErrorResponse(err: ScimError): Response {
 export function buildServiceProviderConfig(): Record<string, unknown> {
   return {
     schemas: [SCIM_SP_CONFIG],
-    documentationUri: "https://flytehaus.live/docs/scim",
+    documentationUri: "https://flytehaus.studio/docs/scim",
     patch: { supported: true },
     bulk: { supported: false, maxOperations: 0, maxPayloadSize: 0 },
     filter: { supported: true, maxResults: 200 },

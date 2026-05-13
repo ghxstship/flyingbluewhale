@@ -454,8 +454,8 @@ after each sprint before committing the next.
 
 ## Out-of-band notes
 
-- Domain cutover (`secondstar.tech` → `flytehaus.live`) and Twitter handle
-  cutover (`@secondstartech` → `@flytehaus.live`) landed in commit
+- Domain cutover (`secondstar.tech` → `flytehaus.studio`) and Twitter handle
+  cutover (`@secondstartech` → `@flytehaus.studio`) landed in commit
   `<see commit pushing alongside this ADR>`.
 - This audit explicitly excludes the `proposal_portal` workstream currently
   living in untracked files (`src/lib/proposals/portal/*`,

@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 export const SITE = {
   name: "FLYTEHAUS Technologies",
   shortName: "FLYTEHAUS",
-  domain: "flytehaus.live",
-  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://flytehaus.live",
+  domain: "flytehaus.studio",
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://flytehaus.studio",
   tagline: "Production Runs On It.",
   description:
     "The platform for production. ATLVS · GVTEWAY · COMPVSS — three apps, one schema, every module. Pitch through wrap. RLS at the database. Built by operators.",

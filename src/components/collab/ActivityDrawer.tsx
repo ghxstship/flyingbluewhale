@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/Sheet";
 import type { ActivityItem as ActivityItemType } from "@/lib/db/activity";
 import { ActivityItem } from "./ActivityItem";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 export type ActivityDrawerProps = {
   targetTable: string;
@@ -33,28 +34,28 @@ function startOfDay(d: Date): number {
   return x.getTime();
 }
 
-function dayLabel(iso: string): string {
+function dayLabel(iso: string, locale: string): string {
   const item = startOfDay(new Date(iso));
   const today = startOfDay(new Date());
   if (item === today) return "Today";
   if (item === today - DAY_MS) return "Yesterday";
-  return new Date(iso).toLocaleDateString(undefined, {
+  return new Intl.DateTimeFormat(locale, {
     weekday: "short",
     month: "short",
     day: "numeric",
     year: item < today - 180 * DAY_MS ? "numeric" : undefined,
-  });
+  }).format(new Date(iso));
 }
 
 /**
  * Group activity items by calendar day. Preserves the input order
  * (newest first) so the most recent day surfaces at the top.
  */
-function groupByDay(items: ActivityItemType[]): Array<{ label: string; items: ActivityItemType[] }> {
+function groupByDay(items: ActivityItemType[], locale: string): Array<{ label: string; items: ActivityItemType[] }> {
   const groups: Array<{ label: string; items: ActivityItemType[] }> = [];
   let current: { label: string; items: ActivityItemType[] } | null = null;
   for (const item of items) {
-    const label = dayLabel(item.occurredAt);
+    const label = dayLabel(item.occurredAt, locale);
     if (!current || current.label !== label) {
       current = { label, items: [] };
       groups.push(current);
@@ -65,6 +66,7 @@ function groupByDay(items: ActivityItemType[]): Array<{ label: string; items: Ac
 }
 
 function TimelineBody({ items }: { items: ActivityItemType[] }) {
+  const { locale } = useLocale();
   if (items.length === 0) {
     return (
       <EmptyState
@@ -75,7 +77,7 @@ function TimelineBody({ items }: { items: ActivityItemType[] }) {
       />
     );
   }
-  const groups = groupByDay(items);
+  const groups = groupByDay(items, locale);
   return (
     <div className="space-y-5">
       {groups.map((group) => (

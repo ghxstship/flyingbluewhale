@@ -1,14 +1,6 @@
 import { listMessagesFor, type ConversationRecordType } from "@/lib/db/conversations";
 import { ConversationComposer } from "./ConversationComposer";
-
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 /**
  * Per-record threaded comments. Renders a chronological list of messages
@@ -27,7 +19,11 @@ export async function ConversationPanel({
   recordType: ConversationRecordType;
   recordId: string;
 }) {
-  const messages = await listMessagesFor(orgId, recordType, recordId);
+  const [messages, fmtrs] = await Promise.all([
+    listMessagesFor(orgId, recordType, recordId),
+    getRequestFormatters(),
+  ]);
+  const { locale, timezone } = fmtrs.settings;
 
   return (
     <section className="surface p-4">
@@ -42,7 +38,15 @@ export async function ConversationPanel({
               <span className="text-xs font-semibold text-[var(--foreground)]">
                 {m.author_name ?? m.author_email ?? "Someone"}
               </span>
-              <span className="font-mono text-[10px] text-[var(--text-muted)]">{fmt(m.created_at)}</span>
+              <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                {new Intl.DateTimeFormat(locale, {
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  timeZone: timezone,
+                }).format(new Date(m.created_at))}
+              </span>
             </div>
             <p className="mt-1 text-sm whitespace-pre-wrap">{m.body}</p>
           </div>

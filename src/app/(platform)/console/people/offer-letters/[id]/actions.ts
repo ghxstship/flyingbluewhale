@@ -8,6 +8,8 @@ import {
   updateOfferLetter,
   withdrawOfferLetter,
 } from "@/lib/offer-letters/mutations";
+import { getOfferLetter } from "@/lib/offer-letters/queries";
+import { getActiveMsaForCrew } from "@/lib/msa/queries";
 import type { CompensationBasis, OfferLetterClassification, OfferLetterEmployer } from "@/lib/offer-letters/types";
 
 export type State = { error?: string; ok?: true } | null;
@@ -71,6 +73,19 @@ export async function sendLetter(id: string, _prev: State, _fd: FormData): Promi
   try {
     const session = await requireSession();
     if (!isManagerPlus(session)) return { error: "Only manager+ can send offer letters" };
+    // Gate: contractor must have an Independent Contractor MSA on file (any
+    // non-revoked, non-superseded state — signed, pending, or in-review).
+    // The MSA carries the Nevada IC compliance language; sending an offer
+    // letter without one leaves the engagement without its legal frame.
+    const letterData = await getOfferLetter(session.orgId, id);
+    if (!letterData) return { error: "Offer letter not found" };
+    const activeMsa = await getActiveMsaForCrew(letterData.raw.crew_member_id);
+    if (!activeMsa) {
+      return {
+        error:
+          "No Master Services Agreement on file for this contractor. Issue an MSA at /console/people/msas/new before sending this letter.",
+      };
+    }
     await markOfferLetterSent(session.orgId, id, session.email);
     revalidatePath(`/console/people/offer-letters/${id}`);
     revalidatePath(`/console/people/offer-letters`);

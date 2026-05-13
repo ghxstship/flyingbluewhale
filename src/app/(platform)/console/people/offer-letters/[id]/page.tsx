@@ -136,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </div>
 
           <div className="space-y-6">
-            <LetterLifecycleActions letterId={raw.id} status={raw.status} />
+            <LetterLifecycleActions letterId={raw.id} status={raw.status} hasMsa={!!activeMsa} />
 
             <section className="surface space-y-3 p-5">
               <h3 className="text-sm font-semibold tracking-wider uppercase">Resolved Sources (SSOT)</h3>

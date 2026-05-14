@@ -639,9 +639,30 @@ pre,
   }
   .hover-lift:hover {
     transform: translateY(var(--hover-lift-y)) scale(var(--hover-scale));
-    box-shadow: var(--shadow-elev-hover);
+    /* Tier-2 (4px in BT) as the canonical hover lift — was --shadow-elev-hover
+       (12px brutal) which thumped on every card and undermined the rule that
+       the heavy brutal moment is reserved for Dialog + the hero CTA. Themes
+       that want a heavier card hover override `--shadow-card-hover` directly. */
+    box-shadow: var(--shadow-card-hover, var(--shadow-2));
   }
   .hover-lift:active {
+    transform: translateY(0) scale(var(--press-scale));
+  }
+
+  /* `.hover-lift-strong` — opt-in heavier lift for the rare moments that
+     should thump (hero CTA card, "talk to the studio" anchor, pricing
+     highlight tier). Restores the 12px brutal end of the scale without
+     forcing every consumer of `.hover-lift` onto it. */
+  .hover-lift-strong {
+    transition:
+      transform var(--motion-hover) var(--ease-hover),
+      box-shadow var(--motion-hover) var(--ease-hover);
+  }
+  .hover-lift-strong:hover {
+    transform: translateY(var(--hover-lift-y)) scale(var(--hover-scale));
+    box-shadow: var(--shadow-elev-hover);
+  }
+  .hover-lift-strong:active {
     transform: translateY(0) scale(var(--press-scale));
   }
 
@@ -699,6 +720,71 @@ pre,
        of the heavy 3px floating-lift weight reserved for .surface-raised. */
     border: var(--border-width-chrome) solid var(--border-color);
     border-radius: var(--radius-sm);
+  }
+
+  /* `.surface-terminal` — engineered/CLI surface variant. Mono type,
+     subtle scanline gradient, recessed bg. Used for activity feeds,
+     audit log previews, AI streaming output, command-palette demos.
+     Differentiates the system from generic SaaS chrome without breaking
+     the brutal core elsewhere.
+
+     Bg uses --bg-secondary (the canonical "recessed below page bg" token
+     that every theme defines with real contrast) — not --surface-inset,
+     which is a thin color-mix that collapses to invisible on cyber's dark
+     near-black palette. Scanline alpha is 6% so the texture reads as
+     "engineered" without becoming a moiré pattern. */
+  .surface-terminal {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--foreground) 6%, transparent) 0,
+        color-mix(in oklab, var(--foreground) 6%, transparent) 1px,
+        transparent 1px,
+        transparent 3px
+      ),
+      var(--bg-secondary);
+    border: var(--border-width-chrome) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--foreground);
+  }
+  .surface-terminal .term-prompt {
+    color: var(--org-primary);
+    margin-right: 0.5rem;
+    user-select: none;
+  }
+  .surface-terminal .term-dim {
+    color: var(--text-muted);
+  }
+  .surface-terminal .term-ok {
+    color: var(--color-success);
+  }
+  .surface-terminal .term-warn {
+    color: var(--color-warning);
+  }
+  .surface-terminal .term-err {
+    color: var(--color-error);
+  }
+  .surface-terminal .term-accent {
+    color: var(--org-primary);
+  }
+
+  /* `.glow-accent` — accent-color glow on hover/focus. Replaces background
+     fills as the brand-color affordance — color reads as energy/motion,
+     not as decoration. Sub-brand colors (ATLVS red, GVTEWAY blue, COMPVSS
+     yellow) flow through via --org-primary at the shell scope. */
+  .glow-accent {
+    transition:
+      box-shadow var(--motion-hover) var(--ease-hover),
+      border-color var(--motion-hover) var(--ease-hover);
+  }
+  .glow-accent:hover,
+  .glow-accent:focus-visible {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--org-primary) 50%, transparent),
+      0 0 24px color-mix(in srgb, var(--org-primary) 25%, transparent);
   }
 
   /* ───── Form input base ───── */
@@ -1128,6 +1214,34 @@ pre,
     max-width: 45ch;
   }
 
+  /* `.eyebrow` — canonical mono-uppercase trust label. Replaces the
+     ad-hoc `text-xs font-semibold tracking-[0.25em] uppercase` pattern
+     scattered across marketing surfaces. Mono fixes the cap-height
+     wobble in Inter at small sizes and reads as engineered/trust signal
+     (Linear/Vercel/Resend convention, 2026 B2B canon). */
+  .eyebrow {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .eyebrow-accent {
+    color: var(--org-primary);
+  }
+
+  /* `.kinetic-display` — large-format display text with a subtle slide-up
+     reveal when entering viewport. Pair with `.reveal` for scroll-tied
+     activation. Reduced-motion fully zeroes the transform. */
+  .kinetic-display {
+    font-family: var(--font-display, var(--font-body, system-ui, sans-serif));
+    font-size: var(--font-size-6xl);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+
   /* ───── Density (compact / comfortable / spacious) ───── */
 
   [data-density="compact"] .input-base {
@@ -1168,6 +1282,48 @@ pre,
   }
   [data-mode="dark"] .overlay-backdrop {
     background: var(--overlay-backdrop-strong);
+  }
+
+  /* ───── Scroll-tied reveal ─────
+   * Pair with the `<ScrollReveal>` client island. Initial state is
+   * `data-reveal="off"` (opacity 0, translated 8px down). IntersectionObserver
+   * flips to `data-reveal="on"` when the element enters the viewport.
+   * `.reveal-stagger > *` applies a per-child delay so a list animates
+   * in waves rather than as a block. Reduced-motion zeros the transform. */
+  [data-reveal="off"] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  [data-reveal="on"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--motion-slow) var(--ease-out),
+      transform var(--motion-slow) var(--ease-out);
+  }
+  .reveal-stagger[data-reveal="on"] > *:nth-child(1) {
+    transition-delay: 0ms;
+  }
+  .reveal-stagger[data-reveal="on"] > *:nth-child(2) {
+    transition-delay: 60ms;
+  }
+  .reveal-stagger[data-reveal="on"] > *:nth-child(3) {
+    transition-delay: 120ms;
+  }
+  .reveal-stagger[data-reveal="on"] > *:nth-child(4) {
+    transition-delay: 180ms;
+  }
+  .reveal-stagger[data-reveal="on"] > *:nth-child(5) {
+    transition-delay: 240ms;
+  }
+  .reveal-stagger[data-reveal="on"] > *:nth-child(6) {
+    transition-delay: 300ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal="off"] {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   /* ───── Iconography ─────

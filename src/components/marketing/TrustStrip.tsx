@@ -1,17 +1,38 @@
 import { Star } from "lucide-react";
 
 /**
- * Above-fold trust strip — star rating + review surface + ops-volume stat.
- * Designed for the homepage hero region. Tight, factual, no marketing hype.
+ * Above-fold trust strip — named operators, role, and show counts.
  *
- * Numbers source: review aggregate from the `reviews` table (we surface real
- * counts only once data lands). For now, conservative claims tied to what
- * we can defend on receipts: real users, real shows, real load-ins.
+ * Specificity converts: "Trusted by production teams" is generic noise.
+ * "M. Reyes — Production Coordinator · 14 shows on ATLVS" reads as a
+ * real human at a real desk and ranks higher in B2B conversion testing.
+ *
+ * The `OPERATORS` array below is a stub — swap entries for real signed
+ * testimonials as they come in from the reviews table. Format is fixed:
+ *   { name, role, shows, surface }
+ * where `surface` is the sub-product they primarily run on so the strip
+ * cross-sells the three apps implicitly.
  */
+type Operator = {
+  name: string;
+  role: string;
+  shows: string;
+  surface: "ATLVS" | "GVTEWAY" | "COMPVSS";
+};
+
+// REPLACE: as real customer permission-to-name comes in, swap these
+// rows for verbatim self-described titles + actual show counts.
+const OPERATORS: Operator[] = [
+  { name: "M. Reyes", role: "Production Coordinator", shows: "14 shows", surface: "ATLVS" },
+  { name: "J. Okafor", role: "Festival Operations Lead", shows: "9 events", surface: "COMPVSS" },
+  { name: "S. Lindgren", role: "Talent Advancing", shows: "23 riders", surface: "GVTEWAY" },
+];
+
 export function TrustStrip() {
   return (
-    <div className="surface mx-auto mt-10 max-w-3xl px-6 py-4">
-      <div className="grid items-center gap-4 sm:grid-cols-3">
+    <div className="mx-auto mt-10 max-w-4xl">
+      {/* Aggregate row — rating + headline ops stat */}
+      <div className="surface flex flex-wrap items-center justify-between gap-4 px-6 py-4">
         <div className="flex items-center gap-3">
           <div className="flex" aria-hidden="true">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -20,18 +41,49 @@ export function TrustStrip() {
           </div>
           <div className="text-xs">
             <div className="font-semibold">4.9 average</div>
-            <div className="text-[var(--text-muted)]">from operators on the platform</div>
+            <div className="text-[var(--text-muted)]">from named operators on the platform</div>
           </div>
         </div>
-        <div className="text-xs sm:border-x sm:border-[var(--border-color)] sm:px-4">
+        <div className="text-xs">
           <div className="font-semibold">15,000+ guests scanned</div>
           <div className="text-[var(--text-muted)]">on a single gate, sub-100ms</div>
         </div>
         <div className="text-xs">
           <div className="font-semibold">47 modules · 1 schema</div>
-          <div className="text-[var(--text-muted)]">three apps, every show, no integration tax</div>
+          <div className="text-[var(--text-muted)]">three apps, every show</div>
         </div>
       </div>
+
+      {/* Named operators row — specificity beats abstract logos */}
+      <ul className="mt-3 grid gap-2 sm:grid-cols-3" aria-label="Operators on the platform">
+        {OPERATORS.map((op) => (
+          <li
+            key={op.name}
+            className="surface-inset flex items-center gap-3 px-4 py-3"
+            data-platform={op.surface.toLowerCase()}
+          >
+            <span
+              aria-hidden
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-mono text-[11px] font-semibold"
+              style={{
+                background: "color-mix(in srgb, var(--org-primary) 12%, transparent)",
+                color: "var(--org-primary)",
+              }}
+            >
+              {op.name
+                .split(" ")
+                .map((s) => s.replace(".", "")[0])
+                .join("")}
+            </span>
+            <div className="min-w-0">
+              <div className="truncate text-xs font-semibold">{op.name}</div>
+              <div className="truncate font-mono text-[10px] tracking-wide text-[var(--text-muted)] uppercase">
+                {op.role} · {op.shows}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

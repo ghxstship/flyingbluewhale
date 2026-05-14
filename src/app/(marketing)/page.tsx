@@ -29,6 +29,9 @@ import { StatStrip } from "@/components/marketing/StatStrip";
 import { TrustStrip } from "@/components/marketing/TrustStrip";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
+import { ScrollReveal } from "@/components/marketing/ScrollReveal";
+import { CommandPaletteDemo } from "@/components/marketing/CommandPaletteDemo";
+import { ActivityTerminal } from "@/components/marketing/ActivityTerminal";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -72,29 +75,29 @@ export default function Home() {
 
       {/* Hero — definitive, no pitch */}
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          ATLVS Technologies
-        </div>
-        <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
-          Production
-          <br />
-          Runs On It.
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The platform for live work. Pitch to wrap, in one console. Three apps, one schema, every module — pre-pro
-          through strike.
-        </p>
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Button href="/signup" size="lg">
-            Open the Console
-          </Button>
-          <Button href="/contact" size="lg" variant="secondary">
-            Talk to the Studio
-          </Button>
-          <Link href="/docs" className="btn btn-ghost btn-lg">
-            Read the Docs →
-          </Link>
-        </div>
+        <ScrollReveal>
+          <div className="eyebrow eyebrow-accent">ATLVS Technologies</div>
+          <h1 className="kinetic-display mt-4 text-5xl leading-[1.05] sm:text-7xl">
+            Production
+            <br />
+            Runs On It.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+            The platform for live work. Pitch to wrap, in one console. Three apps, one schema, every module — pre-pro
+            through strike.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-3">
+            <Button href="/signup" size="lg">
+              Open the Console
+            </Button>
+            <Button href="/contact" size="lg" variant="secondary">
+              Talk to the Studio
+            </Button>
+            <Link href="/docs" className="btn btn-ghost btn-lg">
+              Read the Docs →
+            </Link>
+          </div>
+        </ScrollReveal>
 
         <TrustStrip />
 
@@ -132,21 +135,39 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Receipts row — live activity feed + AI palette demo */}
+      <section className="mx-auto max-w-6xl px-6 pt-2 pb-16">
+        <ScrollReveal>
+          <div className="text-center">
+            <div className="eyebrow">Receipts over promises</div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">What it looks like, running.</h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
+              Real product surfaces. Audit log on the left, AI-native command palette on the right. Both ship in the
+              console today — not in a roadmap card.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2 md:items-start">
+            <ActivityTerminal />
+            <CommandPaletteDemo />
+          </div>
+        </ScrollReveal>
+      </section>
+
       <LogoCloud />
 
       {/* Three-app showcase */}
       <section className="mx-auto max-w-6xl px-6 pt-10 pb-16">
-        <div className="text-center">
-          <div className="text-xs font-semibold tracking-[0.25em] text-[var(--text-muted)] uppercase">
-            Three apps · one schema
+        <ScrollReveal>
+          <div className="text-center">
+            <div className="eyebrow">Three apps · one schema</div>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">ATLVS · GVTEWAY · COMPVSS</h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
+              One database. Three optimized surfaces. Same record from the office, the portal, and the field.
+            </p>
           </div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">ATLVS · GVTEWAY · COMPVSS</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-            One database. Three optimized surfaces. Same record from the office, the portal, and the field.
-          </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
+        <ScrollReveal stagger className="mt-10 grid gap-4 md:grid-cols-3">
           {[
             {
               slug: "atlvs",
@@ -189,15 +210,10 @@ export default function Home() {
               key={app.slug}
               href={app.href}
               data-platform={app.slug}
-              className="surface hover-lift relative overflow-hidden p-6"
+              className="surface hover-lift glow-accent relative overflow-hidden p-6"
             >
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--org-primary)" }} />
-              <div
-                className="text-[11px] font-semibold tracking-[0.2em] uppercase"
-                style={{ color: "var(--org-primary)" }}
-              >
-                {app.eyebrow}
-              </div>
+              <div className="eyebrow eyebrow-accent">{app.eyebrow}</div>
               <h3 className="mt-2 text-lg font-semibold tracking-tight">{app.title}</h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{app.body}</p>
               <ul className="mt-4 space-y-1.5 text-xs text-[var(--text-secondary)]">
@@ -212,11 +228,11 @@ export default function Home() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Walk the room <ArrowRight size={12} />
+                Walk the room <ArrowRight size={12} className="cta-nudge" />
               </div>
             </Link>
           ))}
-        </div>
+        </ScrollReveal>
       </section>
 
       <StatStrip
@@ -230,17 +246,15 @@ export default function Home() {
 
       {/* Pitch / Build / Wrap */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-            Pitch · Build · Wrap
-          </div>
+        <ScrollReveal className="mx-auto max-w-3xl text-center">
+          <div className="eyebrow eyebrow-accent">Pitch · Build · Wrap</div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
             Every Phase. One Console.
           </h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             The work doesn&apos;t hand off between platforms. Neither does the data.
           </p>
-        </div>
+        </ScrollReveal>
         <div className="mt-12 grid gap-4 md:grid-cols-3">
           {[
             {
@@ -282,9 +296,7 @@ export default function Home() {
             },
           ].map((act) => (
             <article key={act.act} className="surface p-6">
-              <div className="text-[11px] font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-                {act.act}
-              </div>
+              <div className="eyebrow eyebrow-accent">{act.act}</div>
               <h3 className="mt-2 text-xl font-semibold">{act.title}</h3>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">{act.body}</p>
               <ul className="mt-4 space-y-1.5 text-xs">
@@ -306,7 +318,7 @@ export default function Home() {
       {/* Module index */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">Modules</div>
+          <div className="eyebrow eyebrow-accent">Modules</div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">Every Module. Native.</h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             Forty-seven modules. Same database, same auth, same audit log. No integration tax.
@@ -452,9 +464,7 @@ export default function Home() {
         <div className="surface overflow-hidden">
           <div className="grid gap-10 p-10 md:grid-cols-2 md:items-center">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-                The Studio
-              </div>
+              <div className="eyebrow eyebrow-accent">The Studio</div>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built by the People Who Run the Show.</h2>
               <p className="mt-4 text-sm text-[var(--text-secondary)]">
                 Every founder has run a load-in that didn&apos;t go to plan. Every module came out of opening a

@@ -1,6 +1,7 @@
 import "server-only";
 
 import React from "react";
+import { formatTime } from "@/lib/i18n/format";
 import { Text } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
@@ -37,11 +38,7 @@ export type CallSheetInput = {
 };
 
 function fmtTime(iso: string): string {
-  try {
-    return new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-  } catch {
-    return iso;
-  }
+  return formatTime(iso);
 }
 
 export function CallSheetPdf({

@@ -1,6 +1,7 @@
 import { env } from "@/lib/env";
 import type { OfferLetterResolved } from "./types";
 import { formatDateRange, formatDollars } from "./format";
+import { formatDate } from "@/lib/i18n/format";
 import { EMPLOYER_LABEL } from "./types";
 
 export type ComposedEmail = {
@@ -261,12 +262,7 @@ function renderHtml(a: HtmlArgs): string {
 }
 
 function formatShortDate(iso: string): string {
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return iso;
-  }
+  return formatDate(iso, "medium");
 }
 
 function engagementWindowSummary(letter: OfferLetterResolved): {

@@ -77,7 +77,7 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
                   </td>
                   <td className="font-mono text-xs">
                     {c.spent_cents != null
-                      ? (c.spent_cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" })
+                      ? fmt.money(c.spent_cents, "USD")
                       : "—"}
                   </td>
                   <td>

@@ -1,6 +1,7 @@
 import "server-only";
 
 import React from "react";
+import { formatMoney } from "@/lib/i18n/format";
 import { Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
@@ -52,11 +53,7 @@ export type ProposalPdfInput = {
 };
 
 function money(cents: number, currency: string): string {
-  try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(cents / 100);
-  } catch {
-    return `${currency} ${(cents / 100).toFixed(2)}`;
-  }
+  return formatMoney(cents, currency);
 }
 
 export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdfInput) {

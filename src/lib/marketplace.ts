@@ -4,6 +4,8 @@
  * to migration 0002_marketplace_canon.sql.
  */
 
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
+
 export const RFQ_VISIBILITIES = ["private", "network", "public"] as const;
 export type RfqVisibility = (typeof RFQ_VISIBILITIES)[number];
 
@@ -76,7 +78,7 @@ export function formatFeeRange(
   minCents: number | null | undefined,
   maxCents: number | null | undefined,
   currency = "USD",
-  locale = "en-US",
+  locale: string = DEFAULT_LOCALE,
 ): string {
   const fmt = (cents: number) =>
     new Intl.NumberFormat(locale, {

@@ -1,16 +1,13 @@
 import Link from "next/link";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { formatMoney } from "@/lib/i18n/format";
 import { PhaseBlock } from "./PhaseBlock";
 
 function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
   if (m == null) return "";
   if (typeof m === "string") return m;
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: m.currency ?? currency,
-    maximumFractionDigits: 0,
-  }).format(m.cents / 100);
+  return formatMoney(m.cents, { currency: m.currency ?? currency, fractionDigits: 0 });
 }
 
 export function ProposalBlockRenderer({

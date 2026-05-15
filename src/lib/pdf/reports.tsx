@@ -1,6 +1,7 @@
 import "server-only";
 
 import React from "react";
+import { formatMoney } from "@/lib/i18n/format";
 import { Text } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
@@ -42,13 +43,7 @@ export function ExpenseReportPdf({
   totalCents: number;
   currency: string;
 }) {
-  const money = (c: number) => {
-    try {
-      return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(c / 100);
-    } catch {
-      return `${currency} ${(c / 100).toFixed(2)}`;
-    }
-  };
+  const money = (c: number) => formatMoney(c, currency);
   return (
     <PdfDocument title={`Expense report · ${project.name}`} author={brand.producerName} subject="Expense report">
       <CoverPage

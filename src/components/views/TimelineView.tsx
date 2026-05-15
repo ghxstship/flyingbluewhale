@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -83,6 +84,7 @@ export function TimelineView({
   onCreate,
   className,
 }: TimelineViewProps): React.ReactElement {
+  const { bcp47 } = useLocale();
   const [zoom, setZoom] = React.useState<TimelineZoom>(initialZoom);
   const [localItems, setLocalItems] = React.useState<TimelineItem[]>(items);
   React.useEffect(() => setLocalItems(items), [items]);
@@ -95,7 +97,7 @@ export function TimelineView({
   const totalDays = Math.max(1, Math.round((rangeEnd.getTime() - anchor.getTime()) / 86_400_000));
   const canvasWidth = totalDays * ppd;
 
-  const markers = React.useMemo(() => monthMarkers(anchor, rangeEnd, zoom, ppd), [anchor, rangeEnd, zoom, ppd]);
+  const markers = React.useMemo(() => monthMarkers(anchor, rangeEnd, zoom, ppd, bcp47), [anchor, rangeEnd, zoom, ppd, bcp47]);
 
   // Today vertical line.
   const today = React.useMemo(() => startOfDayUTC(new Date()), []);
@@ -392,7 +394,7 @@ export function TimelineView({
                       const start = new Date(it.start);
                       const end = new Date(it.end);
                       const { left, width } = barGeometry(start, end, anchor, ppd);
-                      const rangeLabel = formatRange(start, end);
+                      const rangeLabel = formatRange(start, end, bcp47);
                       return (
                         <TimelineBar
                           key={it.id}
@@ -431,15 +433,10 @@ export function TimelineView({
   );
 }
 
-const RANGE_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  timeZone: "UTC",
-});
-
-function formatRange(start: Date, end: Date): string {
-  const a = RANGE_FMT.format(start);
-  const b = RANGE_FMT.format(end);
+function formatRange(start: Date, end: Date, locale: string): string {
+  const fmt = new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", timeZone: "UTC" });
+  const a = fmt.format(start);
+  const b = fmt.format(end);
   if (a === b) return a;
   return `${a} – ${b}`;
 }

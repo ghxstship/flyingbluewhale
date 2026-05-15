@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import { Calculator, ArrowRight } from "lucide-react";
 
 /**
@@ -24,11 +25,9 @@ import { Calculator, ArrowRight } from "lucide-react";
  */
 const ATLVS_PRODUCTION_ANNUAL = 199 * 12; // $2,388/yr
 
-function formatUsd(n: number) {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-}
-
 export function PricingCalculator() {
+  const { money: moneyFmt } = useFormatters();
+  const formatUsd = (n: number) => moneyFmt(n * 100, "USD");
   const [shows, setShows] = useState(12);
   const [crew, setCrew] = useState(25);
   const [stackMonthly, setStackMonthly] = useState(1400);

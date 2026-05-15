@@ -4,6 +4,7 @@ import { MarketplaceCard } from "@/components/marketplace/MarketplaceCard";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,7 @@ type Row = {
 };
 
 export default async function Page() {
+  const fmt = await getRequestFormatters();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -61,7 +63,7 @@ export default async function Page() {
               subtitle={r.bio ? r.bio.slice(0, 80) : undefined}
               meta={[
                 `${r.artist_count} artist${r.artist_count === 1 ? "" : "s"}`,
-                `${(r.default_commission_bps / 100).toFixed(2)}% default commission`,
+                `${fmt.number(r.default_commission_bps / 100, { maximumFractionDigits: 2 })}% default commission`,
                 r.website_url,
               ]}
               verified={r.is_verified}

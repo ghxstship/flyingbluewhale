@@ -18,6 +18,7 @@ import {
 } from "recharts";
 import { ChartShell } from "@/components/charts/ChartShell";
 import { ChartView } from "@/components/views/ChartView";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import type { ChartViewConfig } from "@/lib/views/chart-config";
 
 type MonthPoint = { month: string; revenue: number; expenses: number; margin: number };
@@ -192,6 +193,7 @@ function DarkTooltip({
   payload?: Array<{ name?: string; value?: number; color?: string }>;
   label?: string;
 }) {
+  const { money } = useFormatters();
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px]">
@@ -200,13 +202,9 @@ function DarkTooltip({
         <div key={i} className="flex items-center gap-1.5">
           <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
           <span className="text-[var(--text-secondary)]">{p.name}:</span>
-          <span className="font-mono">{typeof p.value === "number" ? fmtTooltip(p.value) : "—"}</span>
+          <span className="font-mono">{typeof p.value === "number" ? money(p.value * 100, "USD") : "—"}</span>
         </div>
       ))}
     </div>
   );
-}
-
-function fmtTooltip(v: number): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v);
 }

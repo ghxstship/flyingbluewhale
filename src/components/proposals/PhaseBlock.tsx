@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import { Check, Square } from "lucide-react";
 import { SelectableCard } from "@/components/ui/SelectableCard";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
 
 type PhaseBlockType = Extract<ProposalBlock, { type: "phase" }>;
 
-function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
+function fmtMoney(
+  m: Money | string | undefined,
+  currency: string,
+  moneyFmt: (cents: number, cur?: string) => string,
+): string {
   if (m == null) return "";
   if (typeof m === "string") return m;
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: m.currency ?? currency,
-    maximumFractionDigits: 0,
-  }).format(m.cents / 100);
+  return moneyFmt(m.cents, m.currency ?? currency);
 }
 
 export function PhaseBlock({
@@ -28,6 +29,7 @@ export function PhaseBlock({
 }) {
   const [open, setOpen] = useState(false);
   const [picked, setPicked] = useState<Set<string>>(new Set());
+  const { money: moneyFmt } = useFormatters();
   const accent = block.accent ?? theme.primary;
 
   const addonTotalCents = (block.addons ?? []).reduce((sum, a) => {
@@ -94,7 +96,7 @@ export function PhaseBlock({
                       {c.desc && <div className="text-xs text-[var(--text-muted)]">{c.desc}</div>}
                     </div>
                     {c.price != null && (
-                      <div className="font-display text-base tabular-nums">{fmtMoney(c.price, currency)}</div>
+                      <div className="font-display text-base tabular-nums">{fmtMoney(c.price, currency, moneyFmt)}</div>
                     )}
                   </li>
                 ))}
@@ -108,7 +110,7 @@ export function PhaseBlock({
                 Add-ons{" "}
                 {addonTotalCents > 0 && (
                   <span className="ml-2 font-mono text-[var(--foreground)] normal-case">
-                    +{fmtMoney({ cents: addonTotalCents }, currency)} selected
+                    +{fmtMoney({ cents: addonTotalCents }, currency, moneyFmt)} selected
                   </span>
                 )}
               </div>
@@ -134,7 +136,7 @@ export function PhaseBlock({
                         }
                         trailing={
                           a.price != null ? (
-                            <span className="font-mono text-xs">{fmtMoney(a.price, currency)}</span>
+                            <span className="font-mono text-xs">{fmtMoney(a.price, currency, moneyFmt)}</span>
                           ) : undefined
                         }
                       />

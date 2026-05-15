@@ -1,6 +1,7 @@
 import "server-only";
 
 import React from "react";
+import { formatMoney } from "@/lib/i18n/format";
 import { Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
@@ -42,12 +43,7 @@ export type InvoicePdfInput = {
 };
 
 function money(cents: number, currency: string): string {
-  const amt = cents / 100;
-  try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amt);
-  } catch {
-    return `${currency} ${amt.toFixed(2)}`;
-  }
+  return formatMoney(cents, currency);
 }
 
 export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _paymentIntentUrl }: InvoicePdfInput) {

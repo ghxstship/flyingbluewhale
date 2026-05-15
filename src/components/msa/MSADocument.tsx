@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { IndependentContractorMsaResolved } from "@/lib/msa/types";
-import { formatDate, formatDateTime } from "@/lib/i18n/format";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/i18n/format";
 
 /**
  * Independent Contractor Master Services Agreement — branded, print-friendly.
@@ -192,7 +192,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
                 <>
                   {" · Monetary Limit: "}
                   <strong>
-                    ${(msa.nscb_monetary_limit_cents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                    {formatMoney(msa.nscb_monetary_limit_cents, { fractionDigits: 0 })}
                   </strong>
                 </>
               )}

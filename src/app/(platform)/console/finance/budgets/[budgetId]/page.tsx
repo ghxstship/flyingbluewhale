@@ -59,6 +59,14 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
   const utilization = budget.amount_cents > 0 ? (recomputed / budget.amount_cents) * 100 : 0;
   const remaining = budget.amount_cents - recomputed;
 
+  // Burn-rate forecast (competitor feature: Monday.com AI + Teamwork).
+  const createdMs = new Date(budget.created_at).getTime();
+  const daysElapsed = Math.max(1, (Date.now() - createdMs) / 86_400_000);
+  const dailyBurnCents = recomputed / daysElapsed;
+  const daysUntilExhausted = dailyBurnCents > 0 ? remaining / dailyBurnCents : null;
+  const projectedFinalCents = dailyBurnCents > 0 ? recomputed + dailyBurnCents * Math.max(0, daysUntilExhausted ?? 0) : null;
+  const overrunRisk = budget.amount_cents > 0 && daysUntilExhausted != null && daysUntilExhausted < 7 && remaining < 0.2 * budget.amount_cents;
+
   return (
     <>
       <ModuleHeader
@@ -203,6 +211,50 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
             </table>
           </section>
         </div>
+
+        {/* Burn-rate health forecast (Deputy AI / Monday.com-parity). */}
+        <section className="surface p-5">
+          <h3 className="mb-3 text-sm font-semibold tracking-wide uppercase">Burn Rate Forecast</h3>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 text-sm">
+            <div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Daily Burn</div>
+              <div className="mt-1 font-semibold">{money(Math.round(dailyBurnCents))}<span className="text-xs font-normal text-[var(--text-muted)]">/day</span></div>
+            </div>
+            <div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Days Elapsed</div>
+              <div className="mt-1 font-semibold">{Math.round(daysElapsed)}</div>
+            </div>
+            <div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+                {daysUntilExhausted != null && daysUntilExhausted > 0 ? "Budget lasts" : "Overrun"}
+              </div>
+              <div className={`mt-1 font-semibold ${overrunRisk ? "text-[var(--color-error)]" : ""}`}>
+                {daysUntilExhausted == null
+                  ? "∞"
+                  : daysUntilExhausted > 0
+                  ? `${Math.round(daysUntilExhausted)} days`
+                  : `${Math.abs(Math.round(daysUntilExhausted))} days ago`}
+              </div>
+            </div>
+            <div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">On Track</div>
+              <div className="mt-1">
+                {overrunRisk ? (
+                  <Badge variant="error">At Risk</Badge>
+                ) : utilization > 90 ? (
+                  <Badge variant="warning">Watch</Badge>
+                ) : (
+                  <Badge variant="success">OK</Badge>
+                )}
+              </div>
+            </div>
+          </div>
+          {overrunRisk && (
+            <p className="mt-3 rounded-md bg-[var(--color-error)]/10 px-3 py-2 text-xs text-[var(--color-error)]">
+              At current burn rate this budget will be exhausted within 7 days. Reconcile actuals or request an increase.
+            </p>
+          )}
+        </section>
 
         <section className="surface p-4 text-xs text-[var(--text-muted)]">
           <Badge variant="muted">Created</Badge> <span className="font-mono">{fmtDate(budget.created_at)}</span>

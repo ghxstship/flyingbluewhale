@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
+import { AutoApproveButton } from "./AutoApproveButton";
 import type { TimeEntry } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -36,7 +37,12 @@ export default async function TimePage() {
         eyebrow="Finance"
         title="Time Tracking"
         subtitle={`${rows.length} entries · ${fmtMinutes(totalMin)} logged`}
-        action={<Button href="/console/finance/time/new">+ New Entry</Button>}
+        action={
+          <div className="flex items-center gap-2">
+            <AutoApproveButton />
+            <Button href="/console/finance/time/new">+ New Entry</Button>
+          </div>
+        }
       />
       <div className="page-content">
         <DataTable<TimeEntry>

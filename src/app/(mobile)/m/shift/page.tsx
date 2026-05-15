@@ -146,6 +146,16 @@ export default async function MobileShiftPage() {
           Swap shift
         </Link>
       </div>
+
+      {todayShifts.some((s) => s.attendance === "checked_out") && (
+        <div className="mt-4 surface rounded-xl p-4 text-center">
+          <p className="text-sm font-medium">Shift complete — how was it?</p>
+          <p className="mt-0.5 text-xs text-[var(--text-muted)]">Takes 10 seconds</p>
+          <Link href="/m/shift/pulse" className="btn btn-primary mt-3 block">
+            Rate My Shift ✨
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

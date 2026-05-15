@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
 import { CallControls } from "./CallControls";
+import { RankSubmissions } from "./RankSubmissions";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +70,8 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Description</h2>
           <div className="text-sm whitespace-pre-wrap text-[var(--text-primary)]">{c.description ?? "—"}</div>
         </section>
+
+        <RankSubmissions callId={c.id} />
 
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="surface p-5">

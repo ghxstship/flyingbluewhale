@@ -111,7 +111,10 @@ export type IconName =
   | "Coins"
   | "Route"
   // Sales pipeline
-  | "GitBranch";
+  | "GitBranch"
+  // Sentiment / pulse
+  | "HeartPulse"
+  | "Sparkles";
 
 export type NavItem = {
   label: string;
@@ -277,6 +280,7 @@ export const platformNav: NavGroup[] = [
       { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
       { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
       { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
+      { label: "Sentiment", href: "/console/workforce/sentiment", icon: "HeartPulse" },
       { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
       { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
       { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
@@ -763,4 +767,5 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Directory", href: "/m/directory" },
   { label: "Onboarding", href: "/m/onboarding" },
   { label: "Advancing", href: "/m/advances" },
+  { label: "Shift Pulse", href: "/m/shift/pulse" },
 ];

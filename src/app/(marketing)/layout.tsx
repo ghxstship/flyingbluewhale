@@ -139,9 +139,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             </div>
             {FOOTER_NAV.map((col) => (
               <div key={col.heading}>
-                <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                  {col.heading}
-                </div>
+                <div className="eyebrow">{col.heading}</div>
                 <ul className="mt-4 space-y-2 text-sm">
                   {col.items.map((item) => (
                     <li key={item.href}>

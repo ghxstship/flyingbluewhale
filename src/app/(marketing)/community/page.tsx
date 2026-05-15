@@ -29,10 +29,8 @@ export default function CommunityPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Community</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
-          Production teams, building in public.
-        </h1>
+        <div className="eyebrow eyebrow-brand">Community</div>
+        <h1 className="hed-2xl mt-4">Production teams, building in public.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           The festivals, tours, agencies, and fabrication shops running their shows on ATLVS Technologies. Real
           workflows. Real numbers. Real receipts.
@@ -49,7 +47,7 @@ export default function CommunityPage() {
             { value: "34", label: "countries" },
           ].map((m) => (
             <div key={m.label}>
-              <div className="text-2xl font-semibold tracking-tight text-[var(--org-primary)]">{m.value}</div>
+              <div className="hed-lg text-[var(--org-primary)]">{m.value}</div>
               <div className="mt-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{m.label}</div>
             </div>
           ))}
@@ -59,7 +57,7 @@ export default function CommunityPage() {
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight">Member Stories</h2>
+            <h2 className="hed-lg">Member Stories</h2>
             <p className="mt-1 text-sm text-[var(--text-muted)]">
               What they were running before, what they switched, what measurably improved.
             </p>
@@ -68,10 +66,8 @@ export default function CommunityPage() {
         <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {COMMUNITY_LIST.map((c) => (
             <Link key={c.slug} href={`/community/${c.slug}`} className="surface hover-lift flex flex-col p-6">
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                {c.industry}
-              </div>
-              <div className="mt-3 text-lg font-semibold">{c.name}</div>
+              <div className="eyebrow">{c.industry}</div>
+              <div className="hed-lg mt-3">{c.name}</div>
               <div className="mt-2 flex-1 text-sm text-[var(--text-secondary)]">{c.blurb}</div>
               <div className="mt-4 grid grid-cols-2 gap-2">
                 {c.stats.slice(0, 2).map((s) => (
@@ -89,10 +85,8 @@ export default function CommunityPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-6 p-8 md:grid-cols-2 md:items-center">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              Join the roster
-            </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Your Team, Here.</h3>
+            <div className="eyebrow eyebrow-brand">Join the roster</div>
+            <h3 className="hed-lg mt-3">Your Team, Here.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
               Shipping real shows on ATLVS Technologies? We&apos;re always looking to document new member stories. A
               short interview, anonymized numbers, your words.

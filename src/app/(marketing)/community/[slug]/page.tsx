@@ -54,10 +54,8 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          Case study · {c.industry}
-        </div>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{c.headline}</h1>
+        <div className="eyebrow eyebrow-brand">Case study · {c.industry}</div>
+        <h1 className="hed-xl mt-4">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
         <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{c.timeline}</div>
       </section>
@@ -66,7 +64,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
           {c.stats.map((s) => (
             <div key={s.label} className="surface p-5">
-              <div className="text-3xl font-semibold tracking-tight text-[var(--org-primary)]">{s.value}</div>
+              <div className="hed-xl text-[var(--org-primary)]">{s.value}</div>
               <div className="mt-2 text-[11px] tracking-wider text-[var(--text-muted)] uppercase">{s.label}</div>
             </div>
           ))}
@@ -76,9 +74,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-8 md:grid-cols-3">
           <div className="surface p-6">
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-              Challenge
-            </div>
+            <div className="eyebrow">Challenge</div>
             <ul className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
               {c.challenge.map((x) => (
                 <li key={x}>· {x}</li>
@@ -86,9 +82,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             </ul>
           </div>
           <div className="surface p-6">
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-              Solution
-            </div>
+            <div className="eyebrow">Solution</div>
             <ul className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
               {c.solution.map((x) => (
                 <li key={x}>· {x}</li>
@@ -96,7 +90,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             </ul>
           </div>
           <div className="surface p-6">
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Outcome</div>
+            <div className="eyebrow">Outcome</div>
             <ul className="mt-4 space-y-3 text-sm">
               {c.outcome.map((x) => (
                 <li key={x} className="flex items-start gap-2">
@@ -119,9 +113,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8">
-          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-            Modules used
-          </div>
+          <div className="eyebrow">Modules used</div>
           <div className="mt-4 flex flex-wrap gap-2">
             {c.modules.map((m) => (
               <Badge key={m} variant="brand-soft">
@@ -134,7 +126,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">More From the Community</h2>
+          <h2 className="hed-lg">More From the Community</h2>
           <Link href="/community" className="text-sm text-[var(--org-primary)]">
             See all →
           </Link>

@@ -46,10 +46,8 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          Demo · {p.buyer}
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">{p.hero}</h1>
+        <div className="eyebrow eyebrow-brand">Demo · {p.buyer}</div>
+        <h1 className="hed-2xl mt-4">{p.hero}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{p.subhero}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={`${CANONICAL_CTAS.primary.href}?from=demo-${p.slug}`}>{CANONICAL_CTAS.primary.label}</Button>
@@ -60,7 +58,7 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">What You'll See.</h2>
+        <h2 className="hed-xl">What You'll See.</h2>
         <ul className="mt-6 space-y-3 text-sm">
           {p.outcomes.map((o) => (
             <li key={o} className="flex items-start gap-2">
@@ -72,7 +70,7 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Modules We'll Walk Through.</h2>
+        <h2 className="hed-lg">Modules We'll Walk Through.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {p.modules
             .map((slug) => MODULES[slug])

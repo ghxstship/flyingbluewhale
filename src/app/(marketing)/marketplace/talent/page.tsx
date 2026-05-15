@@ -45,38 +45,44 @@ export default async function Page() {
   }
 
   return (
-    <main className="page-content space-y-6">
-      <Breadcrumbs items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Talent" }]} />
-      <header>
-        <p className="eyebrow">Marketplace · Talent</p>
-        <h1 className="hed-2xl">TALENT DIRECTORY</h1>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+    <>
+      <Breadcrumbs
+        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Talent" }]}
+        className="mx-auto max-w-6xl px-6 pt-6"
+      />
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">Marketplace · Talent</div>
+        <h1 className="hed-2xl mt-4">Talent Directory</h1>
+        <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} act{rows.length === 1 ? "" : "s"}
         </p>
-      </header>
+      </section>
 
-      {rows.length === 0 ? (
-        <div className="surface p-6 text-sm text-[var(--text-secondary)]">No published talent yet.</div>
-      ) : (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {rows.map((r) => (
-            <MarketplaceCard
-              key={r.id}
-              href={`/marketplace/talent/${r.public_handle}`}
-              title={r.act_name}
-              subtitle={r.tagline ?? undefined}
-              tags={r.genre_tags}
-              meta={[
-                formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
-                r.travel_radius_km ? `${r.travel_radius_km} km radius` : null,
-                r.monthly_listeners ? `${r.monthly_listeners.toLocaleString()} mo listeners` : null,
-              ]}
-              rating={{ avg: r.rating_avg, count: r.rating_count }}
-              verified={r.is_verified}
-            />
-          ))}
-        </div>
-      )}
-    </main>
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        {rows.length === 0 ? (
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No published talent yet.</div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {rows.map((r) => (
+              <MarketplaceCard
+                key={r.id}
+                href={`/marketplace/talent/${r.public_handle}`}
+                title={r.act_name}
+                subtitle={r.tagline ?? undefined}
+                tags={r.genre_tags}
+                meta={[
+                  formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
+                  r.travel_radius_km ? `${r.travel_radius_km} km radius` : null,
+                  r.monthly_listeners ? `${r.monthly_listeners.toLocaleString()} mo listeners` : null,
+                ]}
+                rating={{ avg: r.rating_avg, count: r.rating_count }}
+                verified={r.is_verified}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 }

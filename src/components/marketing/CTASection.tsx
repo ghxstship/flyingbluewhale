@@ -23,7 +23,7 @@ export function CTASection({
           className="absolute inset-x-0 top-0 h-1"
           style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
         />
-        <h2 className="text-3xl font-semibold tracking-tight">{title}</h2>
+        <h2 className="hed-xl">{title}</h2>
         <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">{subtitle}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link href={primaryHref} className="btn btn-primary">

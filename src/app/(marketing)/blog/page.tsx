@@ -30,8 +30,8 @@ export default function BlogIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Blog</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Updates From the Team.</h1>
+        <div className="eyebrow eyebrow-brand">Blog</div>
+        <h1 className="hed-2xl mt-4">Updates From the Team.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Essays on production operations, platform architecture, and how to run shows with less duct tape.
         </p>
@@ -45,7 +45,7 @@ export default function BlogIndex() {
                 <div className="font-mono text-xs text-[var(--text-muted)]">
                   {p.date} · {p.readingTime}
                 </div>
-                <div className="mt-2 text-xl font-semibold tracking-tight">{p.title}</div>
+                <div className="hed-lg mt-3 tracking-tight">{p.title}</div>
                 <div className="mt-2 text-sm text-[var(--text-secondary)]">{p.blurb}</div>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {p.keywords.slice(0, 4).map((k) => (

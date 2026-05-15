@@ -54,10 +54,8 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          {t.hero.eyebrow}
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">{t.hero.title}</h1>
+        <div className="eyebrow eyebrow-brand">{t.hero.eyebrow}</div>
+        <h1 className="hed-2xl mt-4">{t.hero.title}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t.hero.body}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
@@ -68,7 +66,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What {t.role} Run Day-To-Day.</h2>
+        <h2 className="hed-xl">What {t.role} Run Day-To-Day.</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {t.workflows.map((w) => (
             <div key={w.title} className="surface p-6">
@@ -82,8 +80,8 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       {t.painPoints.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
           <div className="surface p-8 md:p-10">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">Familiar?</div>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight">The Pain You're Working Around.</h2>
+            <div className="eyebrow eyebrow-brand">Familiar?</div>
+            <h2 className="hed-lg mt-3">The Pain You're Working Around.</h2>
             <ul className="mt-6 space-y-3 text-sm">
               {t.painPoints.map((p) => (
                 <li key={p} className="flex items-start gap-2">
@@ -97,7 +95,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       ) : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Modules You Live In.</h2>
+        <h2 className="hed-lg">Modules You Live In.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {t.modules
             .map((m) => MODULES[m])
@@ -117,7 +115,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
 
       {t.industries.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-2xl font-semibold tracking-tight">Industries You Work In.</h2>
+          <h2 className="hed-lg">Industries You Work In.</h2>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {t.industries
               .map((s) => ({ slug: s, info: INDUSTRIES[s] }))
@@ -144,7 +142,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Other Roles.</h2>
+        <h2 className="hed-lg">Other Roles.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {sibling.map((s) => (
             <Link

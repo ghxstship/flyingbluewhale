@@ -45,10 +45,8 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          Template · {t.category}
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">{t.title}</h1>
+        <div className="eyebrow eyebrow-brand">Template · {t.category}</div>
+        <h1 className="hed-2xl mt-4">{t.title}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t.long}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={`${CANONICAL_CTAS.primary.href}?template=${t.slug}`}>Open This Template</Button>
@@ -59,7 +57,7 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">What's In It.</h2>
+        <h2 className="hed-xl">What's In It.</h2>
         <ul className="mt-6 grid gap-3 sm:grid-cols-2">
           {t.whatsInIt.map((line) => (
             <li key={line} className="surface p-4 text-sm">
@@ -71,7 +69,7 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-6">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Best For</div>
+          <div className="eyebrow">Best For</div>
           <div className="mt-4 flex flex-wrap gap-2">
             {t.bestFor.map((p) => (
               <span

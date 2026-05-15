@@ -33,61 +33,65 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const r = data as Rfq;
 
   return (
-    <main className="page-content space-y-6">
+    <>
       <Breadcrumbs
         items={[
           { label: "Marketplace", href: "/marketplace" },
           { label: "Open RFQs", href: "/marketplace/rfqs" },
           { label: r.title },
         ]}
+        className="mx-auto max-w-6xl px-6 pt-6"
       />
-      <header className="space-y-2">
-        <p className="eyebrow">RFQ · {r.org_name}</p>
-        <h1 className="hed-2xl">{r.title}</h1>
-        <div className="flex flex-wrap gap-2 text-sm text-[var(--text-secondary)]">
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">RFQ · {r.org_name}</div>
+        <h1 className="hed-2xl mt-4">{r.title}</h1>
+        <div className="mt-5 flex flex-wrap gap-2 text-sm text-[var(--text-secondary)]">
           {r.region && <Badge variant="muted">{r.region}</Badge>}
           {r.budget_band && <Badge variant="muted">{r.budget_band}</Badge>}
           {r.due_at && <Badge variant="warning">Due {new Date(r.due_at).toLocaleDateString()}</Badge>}
         </div>
-      </header>
-
-      <section className="surface p-5">
-        <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Scope</h2>
-        <div className="text-sm whitespace-pre-wrap">{r.description ?? "—"}</div>
       </section>
 
-      <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <section className="mx-auto max-w-6xl space-y-6 px-6 pb-16">
         <div className="surface p-5">
-          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Trades</h2>
-          <div className="flex flex-wrap gap-1.5">
-            {r.trade_categories.length === 0 ? (
-              <span className="text-sm text-[var(--text-secondary)]">—</span>
-            ) : (
-              r.trade_categories.map((t) => (
-                <Badge key={t} variant="muted">
-                  {t}
-                </Badge>
-              ))
-            )}
+          <h2 className="hed-md mb-3">Scope</h2>
+          <div className="text-sm whitespace-pre-wrap">{r.description ?? "—"}</div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="surface p-5">
+            <h2 className="hed-md mb-3">Trades</h2>
+            <div className="flex flex-wrap gap-1.5">
+              {r.trade_categories.length === 0 ? (
+                <span className="text-sm text-[var(--text-secondary)]">—</span>
+              ) : (
+                r.trade_categories.map((t) => (
+                  <Badge key={t} variant="muted">
+                    {t}
+                  </Badge>
+                ))
+              )}
+            </div>
+          </div>
+          <div className="surface p-5">
+            <h2 className="hed-md mb-3">Compliance Gates</h2>
+            <ul className="space-y-1 text-sm">
+              <li>{r.requires_prequalification ? "✓" : "—"} Prequalification</li>
+              <li>{r.requires_insurance ? "✓" : "—"} Insurance (COI)</li>
+              <li>{r.requires_w9 ? "✓" : "—"} W-9 / W-8</li>
+              <li>{r.nda_required ? "✓" : "—"} NDA acceptance</li>
+            </ul>
           </div>
         </div>
-        <div className="surface p-5">
-          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Compliance Gates</h2>
-          <ul className="space-y-1 text-sm">
-            <li>{r.requires_prequalification ? "✓" : "—"} Prequalification</li>
-            <li>{r.requires_insurance ? "✓" : "—"} Insurance (COI)</li>
-            <li>{r.requires_w9 ? "✓" : "—"} W-9 / W-8</li>
-            <li>{r.nda_required ? "✓" : "—"} NDA acceptance</li>
-          </ul>
+
+        <div className="flex items-center gap-3">
+          <Button href={`/login?redirect=/marketplace/rfqs/${r.public_slug}`}>Bid on This RFQ</Button>
+          <Button href="/signup" variant="ghost">
+            Need an account?
+          </Button>
         </div>
       </section>
-
-      <div className="flex items-center gap-3">
-        <Button href={`/login?redirect=/marketplace/rfqs/${r.public_slug}`}>Bid on This RFQ</Button>
-        <Button href="/signup" variant="ghost">
-          Need an account?
-        </Button>
-      </div>
-    </main>
+    </>
   );
 }

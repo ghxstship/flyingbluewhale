@@ -58,10 +58,8 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          AI · {u.title.replace(/^AI For /, "")}
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">{u.title}.</h1>
+        <div className="eyebrow eyebrow-brand">AI · {u.title.replace(/^AI For /, "")}</div>
+        <h1 className="hed-2xl mt-4">{u.title}.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{u.hero}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
@@ -74,9 +72,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="surface p-6">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-              What It Reads
-            </div>
+            <div className="eyebrow">What It Reads</div>
             <ul className="mt-4 space-y-2 text-sm">
               {u.reads.map((r) => (
                 <li key={r} className="flex items-start gap-2">
@@ -87,9 +83,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
             </ul>
           </div>
           <div className="surface p-6">
-            <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
-              What It Drafts
-            </div>
+            <div className="eyebrow eyebrow-brand">What It Drafts</div>
             <ul className="mt-4 space-y-2 text-sm">
               {u.outputs.map((o) => (
                 <li key={o} className="flex items-start gap-2">
@@ -103,7 +97,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Where It Shows Up.</h2>
+        <h2 className="hed-lg">Where It Shows Up.</h2>
         <ul className="mt-6 space-y-3 text-sm">
           {u.surfaces.map((s) => (
             <li key={s} className="flex items-start gap-2">
@@ -115,7 +109,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Modules It Touches.</h2>
+        <h2 className="hed-lg">Modules It Touches.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {u.modules
             .map((m) => MODULES[m])
@@ -136,7 +130,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
       {u.faqs.length > 0 ? <FAQSection title={`${u.title} · FAQ`} faqs={u.faqs} /> : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Other AI Use Cases.</h2>
+        <h2 className="hed-lg">Other AI Use Cases.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {sibling.map((s) => (
             <Link

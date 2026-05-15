@@ -9,7 +9,7 @@ export default function MarketingError({ error, reset }: { error: Error & { dige
   }, [error]);
   return (
     <main className="mx-auto max-w-3xl px-6 py-24 text-center">
-      <p className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Off Course</p>
+      <p className="eyebrow eyebrow-brand">Off Course</p>
       <h1 className="mt-4 text-4xl font-semibold tracking-tight">Something went wrong loading this page.</h1>
       <p className="mt-3 text-sm text-[var(--text-secondary)]">
         {error.message || "We hit a snag. Try again, or head back to the homepage."}

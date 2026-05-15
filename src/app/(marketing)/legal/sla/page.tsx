@@ -1,7 +1,7 @@
 export default function SlaPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-3xl font-semibold tracking-tight">Service Level Agreement</h1>
+      <h1 className="hed-xl">Service Level Agreement</h1>
       <p className="mt-4 text-xs text-[var(--text-muted)]">Applies to Enterprise tier · effective 2026-04-16</p>
       <div className="mt-8 space-y-4 text-sm text-[var(--text-secondary)]">
         <p>

@@ -46,39 +46,45 @@ export default async function Page() {
   }
 
   return (
-    <main className="page-content space-y-6">
-      <Breadcrumbs items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Open Calls" }]} />
-      <header>
-        <p className="eyebrow">Marketplace · Open Calls</p>
-        <h1 className="hed-2xl">OPEN CALLS</h1>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+    <>
+      <Breadcrumbs
+        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Open Calls" }]}
+        className="mx-auto max-w-6xl px-6 pt-6"
+      />
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">Marketplace · Open Calls</div>
+        <h1 className="hed-2xl mt-4">Open Calls</h1>
+        <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} active call{rows.length === 1 ? "" : "s"}
         </p>
-      </header>
+      </section>
 
-      {rows.length === 0 ? (
-        <div className="surface p-6 text-sm text-[var(--text-secondary)]">No active calls at the moment.</div>
-      ) : (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {rows.map((r) => (
-            <MarketplaceCard
-              key={r.id}
-              href={`/marketplace/calls/${r.public_slug}`}
-              title={r.title}
-              subtitle={r.org_name}
-              tags={[...r.genre_tags, ...r.trade_categories]}
-              badge={r.kind.replace("_", " ")}
-              meta={[
-                r.region,
-                r.venue_type,
-                r.performance_date ? `Show ${new Date(r.performance_date).toLocaleDateString()}` : null,
-                r.deadline_at ? `Closes ${new Date(r.deadline_at).toLocaleDateString()}` : null,
-                formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
-              ]}
-            />
-          ))}
-        </div>
-      )}
-    </main>
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        {rows.length === 0 ? (
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No active calls at the moment.</div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {rows.map((r) => (
+              <MarketplaceCard
+                key={r.id}
+                href={`/marketplace/calls/${r.public_slug}`}
+                title={r.title}
+                subtitle={r.org_name}
+                tags={[...r.genre_tags, ...r.trade_categories]}
+                badge={r.kind.replace("_", " ")}
+                meta={[
+                  r.region,
+                  r.venue_type,
+                  r.performance_date ? `Show ${new Date(r.performance_date).toLocaleDateString()}` : null,
+                  r.deadline_at ? `Closes ${new Date(r.deadline_at).toLocaleDateString()}` : null,
+                  formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
+                ]}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 }

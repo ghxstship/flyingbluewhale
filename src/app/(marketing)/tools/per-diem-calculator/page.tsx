@@ -45,8 +45,8 @@ export default function PerDiemCalculatorPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Free Tool</div>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">Per-Diem Calculator.</h1>
+        <div className="eyebrow eyebrow-brand">Free Tool</div>
+        <h1 className="hed-xl mt-4">Per-Diem Calculator.</h1>
         <p className="mt-5 text-lg text-[var(--text-secondary)]">
           Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates;
           overridable per-city.
@@ -58,7 +58,7 @@ export default function PerDiemCalculatorPage() {
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">How Per-Diem Works.</h2>
+        <h2 className="hed-lg">How Per-Diem Works.</h2>
         <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
           Per-diem is the daily allowance paid to a traveler — typically crew, talent, or contractors — for meals and
           incidentals while away from their home base. The US General Services Administration (GSA) publishes

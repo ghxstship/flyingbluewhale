@@ -46,35 +46,40 @@ const SECTIONS = [
 
 export default function Page() {
   return (
-    <main className="page-content space-y-8">
-      <Breadcrumbs items={[{ label: "Marketplace" }]} />
-      <header className="space-y-3">
-        <p className="eyebrow">Marketplace</p>
-        <h1 className="hed-2xl">FIND THE WORK. FIND THE CREW. FIND THE ACT.</h1>
-        <p className="max-w-2xl text-base text-[var(--text-secondary)]">
+    <>
+      <Breadcrumbs items={[{ label: "Marketplace" }]} className="mx-auto max-w-6xl px-6 pt-6" />
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">Marketplace</div>
+        <h1 className="hed-2xl mt-4">Find the Work. Find the Crew. Find the Act.</h1>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           One network for production RFQs, crew gigs, casting calls, and direct artist booking. Vetted, not
           crowdsourced. Bidirectional reviews. Bid + book + advance, end to end.
         </p>
-      </header>
-
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-        {SECTIONS.map((s) => (
-          <Link key={s.href} href={s.href} className="surface hover-lift flex flex-col gap-2 p-5">
-            <h2 className="text-base font-semibold tracking-wide uppercase">{s.title}</h2>
-            <p className="text-sm text-[var(--text-secondary)]">{s.blurb}</p>
-          </Link>
-        ))}
-      </div>
-
-      <section className="surface p-6">
-        <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">For Operators</h2>
-        <p className="mb-3 text-sm text-[var(--text-secondary)]">
-          Publish your own RFQs, gigs, and casting calls — gated by your prequalification rules.
-        </p>
-        <Button href="/signup" size="sm">
-          Sign Up Free
-        </Button>
       </section>
-    </main>
+
+      <section className="mx-auto max-w-6xl px-6 pb-12">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {SECTIONS.map((s) => (
+            <Link key={s.href} href={s.href} className="surface hover-lift flex flex-col gap-2 p-5">
+              <h2 className="hed-lg">{s.title}</h2>
+              <p className="text-sm text-[var(--text-secondary)]">{s.blurb}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="surface p-6">
+          <h2 className="hed-lg mb-2">For Operators</h2>
+          <p className="mb-3 text-sm text-[var(--text-secondary)]">
+            Publish your own RFQs, gigs, and casting calls — gated by your prequalification rules.
+          </p>
+          <Button href="/signup" size="sm">
+            Sign Up Free
+          </Button>
+        </div>
+      </section>
+    </>
   );
 }

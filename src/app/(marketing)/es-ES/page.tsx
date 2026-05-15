@@ -70,9 +70,7 @@ export default function HomeES() {
       />
 
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          ATLVS Technologies
-        </div>
+        <div className="eyebrow eyebrow-brand">ATLVS Technologies</div>
         <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
           La Producción
           <br />
@@ -93,7 +91,7 @@ export default function HomeES() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">ATLVS · GVTEWAY · COMPVSS</h2>
+        <h2 className="hed-xl">ATLVS · GVTEWAY · COMPVSS</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
           Una base de datos. Tres superficies optimizadas. El mismo registro desde la oficina, el portal y el campo.
         </p>

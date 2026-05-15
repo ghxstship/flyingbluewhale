@@ -59,10 +59,8 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          Glossary · {t.category.replace(/-/g, " ")}
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">{t.term}</h1>
+        <div className="eyebrow eyebrow-brand">Glossary · {t.category.replace(/-/g, " ")}</div>
+        <h1 className="hed-2xl mt-4">{t.term}</h1>
         {t.aka && t.aka.length > 0 ? (
           <p className="mt-3 text-sm text-[var(--text-muted)]">Also: {t.aka.join(", ")}</p>
         ) : null}
@@ -72,9 +70,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
       {t.modules && t.modules.length > 0 ? (
         <section className="mx-auto max-w-3xl px-6 py-8">
           <div className="surface p-6">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              How ATLVS Handles This
-            </div>
+            <div className="eyebrow eyebrow-brand">How ATLVS Handles This</div>
             <div className="mt-4 flex flex-wrap gap-2">
               {t.modules
                 .map((m) => MODULES[m])
@@ -95,7 +91,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
 
       {t.related.length > 0 ? (
         <section className="mx-auto max-w-3xl px-6 py-8">
-          <h2 className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Related terms</h2>
+          <h2 className="eyebrow">Related terms</h2>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             {t.related
               .map((r) => GLOSSARY_BY_SLUG[r])

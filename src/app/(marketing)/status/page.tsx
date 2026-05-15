@@ -51,10 +51,8 @@ export default function StatusPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Status</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">
-          All Systems Operational.
-        </h1>
+        <div className="eyebrow eyebrow-brand">Status</div>
+        <h1 className="hed-3xl mt-4">All Systems Operational.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           Real-time platform health across ATLVS, GVTEWAY, COMPVSS, and the marketing surface. Subscribe for incident
           alerts via email or webhook.
@@ -97,8 +95,8 @@ export default function StatusPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8 md:p-10">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">Coming Soon</div>
-          <h2 className="mt-3 text-2xl font-semibold tracking-tight">Live Status Page.</h2>
+          <div className="eyebrow eyebrow-brand">Coming Soon</div>
+          <h2 className="hed-lg mt-3">Live Status Page.</h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             The page above shows current state. Soon: 90-day uptime per service, incident history with post-mortems,
             subscribe-by-email and webhook for alerts. Targeting Q4 launch on

@@ -37,69 +37,73 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const c = data as Row;
 
   return (
-    <main className="page-content space-y-6">
+    <>
       <Breadcrumbs
         items={[
           { label: "Marketplace", href: "/marketplace" },
           { label: "Open Calls", href: "/marketplace/calls" },
           { label: c.title },
         ]}
+        className="mx-auto max-w-6xl px-6 pt-6"
       />
-      <header className="space-y-2">
-        <p className="eyebrow">
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">
           {c.kind.replace("_", " ")} · {c.org_name}
-        </p>
-        <h1 className="hed-2xl">{c.title}</h1>
-        <div className="flex flex-wrap gap-2">
+        </div>
+        <h1 className="hed-2xl mt-4">{c.title}</h1>
+        <div className="mt-5 flex flex-wrap gap-2">
           {c.region && <Badge variant="muted">{c.region}</Badge>}
           {c.venue_type && <Badge variant="muted">{c.venue_type}</Badge>}
           {c.deadline_at && <Badge variant="warning">Closes {new Date(c.deadline_at).toLocaleDateString()}</Badge>}
         </div>
-      </header>
-
-      <section className="surface p-5">
-        <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Brief</h2>
-        <div className="text-sm whitespace-pre-wrap">{c.description ?? "—"}</div>
       </section>
 
-      <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <section className="mx-auto max-w-6xl space-y-6 px-6 pb-16">
         <div className="surface p-5">
-          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Tags</h2>
-          <div className="flex flex-wrap gap-1.5">
-            {[...c.genre_tags, ...c.trade_categories].map((t) => (
-              <Badge key={t} variant="muted">
-                {t}
-              </Badge>
-            ))}
+          <h2 className="hed-md mb-3">Brief</h2>
+          <div className="text-sm whitespace-pre-wrap">{c.description ?? "—"}</div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="surface p-5">
+            <h2 className="hed-md mb-3">Tags</h2>
+            <div className="flex flex-wrap gap-1.5">
+              {[...c.genre_tags, ...c.trade_categories].map((t) => (
+                <Badge key={t} variant="muted">
+                  {t}
+                </Badge>
+              ))}
+            </div>
+          </div>
+          <div className="surface p-5">
+            <h2 className="hed-md mb-3">Booking Window</h2>
+            <dl className="space-y-1 text-sm">
+              <div>
+                <span className="text-[var(--text-secondary)]">Performance:</span> {c.performance_date ?? "TBD"}
+              </div>
+              <div>
+                <span className="text-[var(--text-secondary)]">Fee:</span>{" "}
+                {formatFeeRange(c.fee_min_cents, c.fee_max_cents, c.currency)}
+              </div>
+              <div>
+                <span className="text-[var(--text-secondary)]">Deadline:</span>{" "}
+                {c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}
+              </div>
+              <div>
+                <span className="text-[var(--text-secondary)]">Submissions:</span> {c.submission_count}
+              </div>
+            </dl>
           </div>
         </div>
-        <div className="surface p-5">
-          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Booking Window</h2>
-          <dl className="space-y-1 text-sm">
-            <div>
-              <span className="text-[var(--text-secondary)]">Performance:</span> {c.performance_date ?? "TBD"}
-            </div>
-            <div>
-              <span className="text-[var(--text-secondary)]">Fee:</span>{" "}
-              {formatFeeRange(c.fee_min_cents, c.fee_max_cents, c.currency)}
-            </div>
-            <div>
-              <span className="text-[var(--text-secondary)]">Deadline:</span>{" "}
-              {c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}
-            </div>
-            <div>
-              <span className="text-[var(--text-secondary)]">Submissions:</span> {c.submission_count}
-            </div>
-          </dl>
+
+        <div className="flex items-center gap-3">
+          <Button href={`/login?redirect=/marketplace/calls/${c.public_slug}/submit`}>Submit</Button>
+          <Button href="/signup" variant="ghost">
+            Need an account?
+          </Button>
         </div>
       </section>
-
-      <div className="flex items-center gap-3">
-        <Button href={`/login?redirect=/marketplace/calls/${c.public_slug}/submit`}>Submit</Button>
-        <Button href="/signup" variant="ghost">
-          Need an account?
-        </Button>
-      </div>
-    </main>
+    </>
   );
 }

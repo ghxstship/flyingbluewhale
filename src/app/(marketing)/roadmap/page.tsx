@@ -112,8 +112,8 @@ export default function RoadmapPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Roadmap</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">What's Shipping Next.</h1>
+        <div className="eyebrow eyebrow-brand">Roadmap</div>
+        <h1 className="hed-3xl mt-4">What's Shipping Next.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           Three-quarter horizon. In Flight is committed and tracking to date. Next is sized and prioritized. Exploring
           is on the table for the quarter after.
@@ -135,7 +135,7 @@ export default function RoadmapPage() {
               style={{ background: STATUS_COLOR[q.status] }}
               aria-hidden="true"
             />
-            <h2 className="text-2xl font-semibold tracking-tight">{q.label}</h2>
+            <h2 className="hed-lg">{q.label}</h2>
             <span
               className="rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase"
               style={{ color: STATUS_COLOR[q.status] }}

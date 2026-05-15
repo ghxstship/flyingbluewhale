@@ -41,34 +41,40 @@ export default async function Page() {
   }
 
   return (
-    <main className="page-content space-y-6">
-      <Breadcrumbs items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Vendors" }]} />
-      <header>
-        <p className="eyebrow">Marketplace · Vendors</p>
-        <h1 className="hed-2xl">VENDOR DIRECTORY</h1>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+    <>
+      <Breadcrumbs
+        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Vendors" }]}
+        className="mx-auto max-w-6xl px-6 pt-6"
+      />
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">Marketplace · Vendors</div>
+        <h1 className="hed-2xl mt-4">Vendor Directory</h1>
+        <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} vetted vendor{rows.length === 1 ? "" : "s"}
         </p>
-      </header>
+      </section>
 
-      {rows.length === 0 ? (
-        <div className="surface p-6 text-sm text-[var(--text-secondary)]">No published vendors yet.</div>
-      ) : (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {rows.map((r) => (
-            <MarketplaceCard
-              key={r.id}
-              href={`/marketplace/vendors/${r.public_handle}`}
-              title={r.name}
-              subtitle={r.tagline ?? undefined}
-              tags={r.trade_categories}
-              meta={[r.regions.join(", ") || null, r.year_founded ? `Est. ${r.year_founded}` : null]}
-              rating={{ avg: r.rating_avg, count: r.rating_count }}
-              verified={r.is_verified}
-            />
-          ))}
-        </div>
-      )}
-    </main>
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        {rows.length === 0 ? (
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No published vendors yet.</div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {rows.map((r) => (
+              <MarketplaceCard
+                key={r.id}
+                href={`/marketplace/vendors/${r.public_handle}`}
+                title={r.name}
+                subtitle={r.tagline ?? undefined}
+                tags={r.trade_categories}
+                meta={[r.regions.join(", ") || null, r.year_founded ? `Est. ${r.year_founded}` : null]}
+                rating={{ avg: r.rating_avg, count: r.rating_count }}
+                verified={r.is_verified}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 }

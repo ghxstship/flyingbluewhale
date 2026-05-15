@@ -50,39 +50,45 @@ export default async function Page() {
   }
 
   return (
-    <main className="page-content space-y-6">
-      <Breadcrumbs items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Crew Gigs" }]} />
-      <header>
-        <p className="eyebrow">Marketplace · Crew Gigs</p>
-        <h1 className="hed-2xl">CREW GIGS</h1>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+    <>
+      <Breadcrumbs
+        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Crew Gigs" }]}
+        className="mx-auto max-w-6xl px-6 pt-6"
+      />
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">Marketplace · Crew Gigs</div>
+        <h1 className="hed-2xl mt-4">Crew Gigs</h1>
+        <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} live gig{rows.length === 1 ? "" : "s"} · single shows, tour legs, recurring
         </p>
-      </header>
+      </section>
 
-      {rows.length === 0 ? (
-        <div className="surface p-6 text-sm text-[var(--text-secondary)]">No live gigs at the moment.</div>
-      ) : (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {rows.map((r) => (
-            <MarketplaceCard
-              key={r.id}
-              href={`/marketplace/gigs/${r.public_slug}`}
-              title={r.title}
-              subtitle={r.org_name}
-              tags={r.role_taxonomy}
-              meta={[
-                [r.city, r.region, r.country].filter(Boolean).join(", ") || null,
-                formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency) + "/day",
-                r.posting_type,
-                r.travel_paid ? "Travel paid" : null,
-                r.lodging_provided ? "Lodging provided" : null,
-              ]}
-              badge={r.union_required.length > 0 ? r.union_required[0] : null}
-            />
-          ))}
-        </div>
-      )}
-    </main>
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        {rows.length === 0 ? (
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No live gigs at the moment.</div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {rows.map((r) => (
+              <MarketplaceCard
+                key={r.id}
+                href={`/marketplace/gigs/${r.public_slug}`}
+                title={r.title}
+                subtitle={r.org_name}
+                tags={r.role_taxonomy}
+                meta={[
+                  [r.city, r.region, r.country].filter(Boolean).join(", ") || null,
+                  formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency) + "/day",
+                  r.posting_type,
+                  r.travel_paid ? "Travel paid" : null,
+                  r.lodging_provided ? "Lodging provided" : null,
+                ]}
+                badge={r.union_required.length > 0 ? r.union_required[0] : null}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 }

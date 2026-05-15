@@ -1214,11 +1214,71 @@ pre,
     max-width: 45ch;
   }
 
+  /* ───── Marketing typography scale ─────
+   * Bermuda Triangle canon — h1/h2/h3 render in --font-display (Anton) via
+   * the global `h1,h2,h3 { font-family: var(--font-display) }` rule.
+   * `.hed-*` classes provide the size/weight scale and CAPITAL CASE via
+   * `text-transform: uppercase` so the JSX source stays Title Case
+   * (accessible to screen readers, grep-friendly, i18n-portable) while the
+   * visible chrome holds the brutal display vocabulary Anton was designed
+   * for.
+   *
+   * BEFORE these classes existed, 16+ marketplace pages referenced
+   * `hed-2xl` / `eyebrow` in JSX with no CSS definition — they rendered
+   * with browser defaults. Defining them here is the canonical fix; do NOT
+   * inline-override these properties in pages. Add a new tier here instead.
+   *
+   * Scale (clamp pairs the minimum at mobile to the maximum at lg+ via the
+   * vw component, so the heading breathes through the breakpoint without
+   * needing `sm:` / `md:` / `lg:` class clouds at every call site):
+   *   .hed-3xl  → page hero (home) — 48 → 80 px
+   *   .hed-2xl  → page h1          — 40 → 60 px
+   *   .hed-xl   → section h2       — 28 → 40 px
+   *   .hed-lg   → card / subhead   — 20 → 24 px
+   *   .hed-md   → small h4         — 16 px (mini-eyebrow inside cards) */
+  .hed-3xl,
+  .hed-2xl,
+  .hed-xl,
+  .hed-lg,
+  .hed-md {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 600;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  .hed-3xl {
+    font-size: clamp(3rem, 4.5vw + 1.5rem, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+  .hed-2xl {
+    font-size: clamp(2.5rem, 3vw + 1.25rem, 3.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+  }
+  .hed-xl {
+    font-size: clamp(1.75rem, 1.5vw + 1rem, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: 0;
+  }
+  .hed-lg {
+    font-size: clamp(1.25rem, 0.5vw + 1rem, 1.5rem);
+    line-height: 1.2;
+    letter-spacing: 0.005em;
+  }
+  .hed-md {
+    font-size: 1rem;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+  }
+
   /* `.eyebrow` — canonical mono-uppercase trust label. Replaces the
      ad-hoc `text-xs font-semibold tracking-[0.25em] uppercase` pattern
      scattered across marketing surfaces. Mono fixes the cap-height
      wobble in Inter at small sizes and reads as engineered/trust signal
-     (Linear/Vercel/Resend convention, 2026 B2B canon). */
+     (Linear/Vercel/Resend convention, 2026 B2B canon).
+     `.eyebrow-accent` is the canonical brand-color modifier;
+     `.eyebrow-brand` is a deprecated alias kept until call sites migrate. */
   .eyebrow {
     font-family: var(--font-mono, ui-monospace, monospace);
     font-size: 0.6875rem;
@@ -1227,7 +1287,8 @@ pre,
     text-transform: uppercase;
     color: var(--text-muted);
   }
-  .eyebrow-accent {
+  .eyebrow-accent,
+  .eyebrow-brand {
     color: var(--org-primary);
   }
 
@@ -1241,6 +1302,7 @@ pre,
     letter-spacing: -0.01em;
     font-weight: 600;
   }
+
 
   /* ───── Density (compact / comfortable / spacious) ───── */
 

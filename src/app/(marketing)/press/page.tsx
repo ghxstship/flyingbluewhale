@@ -43,24 +43,22 @@ export default function PressPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Press</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">Press + Brand.</h1>
+        <div className="eyebrow eyebrow-brand">Press</div>
+        <h1 className="hed-3xl mt-4">Press + Brand.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           For journalists, analysts, and partners covering ATLVS. Quick facts below; full press kit landing Q4.
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Quick Facts.</h2>
+        <h2 className="hed-lg">Quick Facts.</h2>
         <div className="surface mt-6 overflow-hidden">
           {FACTS.map((f, i) => (
             <div
               key={f.label}
               className={`grid grid-cols-1 gap-2 p-5 sm:grid-cols-[160px_1fr] ${i < FACTS.length - 1 ? "border-b border-[var(--border-color)]" : ""}`}
             >
-              <div className="text-[11px] font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
-                {f.label}
-              </div>
+              <div className="eyebrow">{f.label}</div>
               <div className="text-sm">{f.value}</div>
             </div>
           ))}
@@ -73,8 +71,8 @@ export default function PressPage() {
             className="absolute inset-x-0 top-0 h-1"
             style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
           />
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">Coming Soon</div>
-          <h2 className="mt-3 text-2xl font-semibold tracking-tight">Full Press Kit.</h2>
+          <div className="eyebrow eyebrow-brand">Coming Soon</div>
+          <h2 className="hed-lg mt-3">Full Press Kit.</h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
             Logo lockups (full color, mono, knockout) in SVG + PNG. Brand guidelines (typography, color tokens,
             spacing). Product screenshot library across all three shells. Founder bios + headshots. Q4 launch.
@@ -90,7 +88,7 @@ export default function PressPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Press Contact</div>
+          <div className="eyebrow">Press Contact</div>
           <div className="mt-3 flex items-center gap-2 text-sm">
             <Mail size={14} aria-hidden="true" className="text-[var(--text-muted)]" />
             <Link href="mailto:press@atlvs.pro" className="font-medium text-[var(--org-primary)]">

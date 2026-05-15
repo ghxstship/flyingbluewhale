@@ -52,10 +52,8 @@ export default async function IndustryPage({ params }: Props) {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          {info.hero.eyebrow}
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">{info.hero.title}</h1>
+        <div className="eyebrow eyebrow-brand">{info.hero.eyebrow}</div>
+        <h1 className="hed-2xl mt-4">{info.hero.title}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{info.hero.body}</p>
         <div className="mt-8 flex gap-3">
           <Button href="/signup">Start Free</Button>
@@ -68,7 +66,7 @@ export default async function IndustryPage({ params }: Props) {
       <StatStrip stats={info.stats} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Outcomes</h2>
+        <h2 className="hed-xl">Outcomes</h2>
         <ul className="mt-6 grid gap-3 md:grid-cols-2">
           {info.outcomes.map((o) => (
             <li key={o} className="surface flex items-start gap-3 p-4">
@@ -80,7 +78,7 @@ export default async function IndustryPage({ params }: Props) {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Modules Used</h2>
+        <h2 className="hed-xl">Modules Used</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {info.modules.map((m) => (
             <div key={m.name} className="surface p-5">
@@ -94,7 +92,7 @@ export default async function IndustryPage({ params }: Props) {
       <FAQSection title={`${info.name} · FAQ`} faqs={info.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Related Industries</h2>
+        <h2 className="hed-lg">Related Industries</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {info.related.map((r) => {
             const rel = INDUSTRIES[r];

@@ -46,9 +46,7 @@ export function CapacityCalculator() {
     <div className="surface p-6">
       <div className="space-y-4">
         <div>
-          <label className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-            Total square footage
-          </label>
+          <label className="eyebrow">Total square footage</label>
           <input
             type="number"
             min={0}
@@ -58,9 +56,7 @@ export function CapacityCalculator() {
           />
         </div>
         <div>
-          <label className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-            Use type
-          </label>
+          <label className="eyebrow">Use type</label>
           <select
             value={useType}
             onChange={(e) => setUseType(e.target.value)}
@@ -75,9 +71,7 @@ export function CapacityCalculator() {
           <p className="mt-2 text-[11px] text-[var(--text-muted)]">{selectedUse.hint}</p>
         </div>
         <div>
-          <label className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-            Usable floor area %
-          </label>
+          <label className="eyebrow">Usable floor area %</label>
           <input
             type="number"
             min={0}
@@ -96,9 +90,7 @@ export function CapacityCalculator() {
       <div className="mt-6 border-t border-[var(--border-color)] pt-4">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-              Estimated capacity
-            </div>
+            <div className="eyebrow">Estimated capacity</div>
             <div className="mt-1 text-[11px] text-[var(--text-muted)]">
               Usable area: {Math.round(usableSqft).toLocaleString()} sf at {selectedUse.sqftPerPerson} sf/person
             </div>

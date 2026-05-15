@@ -119,10 +119,10 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+        <div className="eyebrow eyebrow-brand">
           {mod.name} · {ind.name}
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+        <h1 className="hed-2xl mt-4">
           {mod.name} for {ind.name}.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
@@ -137,10 +137,8 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-          How It Shows Up
-        </div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+        <div className="eyebrow eyebrow-brand">How It Shows Up</div>
+        <h2 className="hed-xl mt-4">
           What {ind.name} Teams Run On {mod.name}.
         </h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
@@ -156,10 +154,8 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
         <div className="surface p-8 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-                Industry Outcomes
-              </div>
-              <h2 className="mt-3 text-2xl font-semibold tracking-tight">What Changes For {ind.name} Operators.</h2>
+              <div className="eyebrow eyebrow-brand">Industry Outcomes</div>
+              <h2 className="hed-lg mt-3">What Changes For {ind.name} Operators.</h2>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">{ind.description}</p>
             </div>
             <ul className="space-y-3 text-sm">
@@ -175,7 +171,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">The {mod.name} Feature Set.</h2>
+        <h2 className="hed-lg">The {mod.name} Feature Set.</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
           The same primitives that ship in our {mod.name} module — applied to {ind.name.toLowerCase()} workflows.
         </p>
@@ -197,7 +193,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       <FAQSection title={`${mod.name} for ${ind.name} · FAQ`} faqs={faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Other Modules For {ind.name}.</h2>
+        <h2 className="hed-lg">Other Modules For {ind.name}.</h2>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
           One database. Every module reads from the same record.
         </p>
@@ -216,7 +212,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">{mod.name} For Other Industries.</h2>
+        <h2 className="hed-lg">{mod.name} For Other Industries.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {siblingIndustries.map(([slug, sib]) => (
             <Link

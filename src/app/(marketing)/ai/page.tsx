@@ -72,8 +72,8 @@ export default function AiHub() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">AI</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">
+        <div className="eyebrow eyebrow-brand">AI</div>
+        <h1 className="hed-3xl mt-4">
           Drafts From Your Workspace.
           <br />
           Never The Public Internet.
@@ -92,7 +92,7 @@ export default function AiHub() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What It Drafts.</h2>
+        <h2 className="hed-xl">What It Drafts.</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
           Six production workflows where the assistant takes a draft 80% of the way and you ship the last 20%.
         </p>
@@ -122,10 +122,8 @@ export default function AiHub() {
         <div className="surface p-8 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-                The Rules
-              </div>
-              <h2 className="mt-3 text-2xl font-semibold tracking-tight">What The AI Does — And Won't Do.</h2>
+              <div className="eyebrow eyebrow-brand">The Rules</div>
+              <h2 className="hed-lg mt-3">What The AI Does — And Won't Do.</h2>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">
                 Production teams asked us where the lines are. Here's the canon.
               </p>

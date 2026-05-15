@@ -41,38 +41,44 @@ export default async function Page() {
   }
 
   return (
-    <main className="page-content space-y-6">
-      <Breadcrumbs items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Open RFQs" }]} />
-      <header>
-        <p className="eyebrow">Marketplace · Open RFQs</p>
-        <h1 className="hed-2xl">OPEN RFQS</h1>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+    <>
+      <Breadcrumbs
+        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Open RFQs" }]}
+        className="mx-auto max-w-6xl px-6 pt-6"
+      />
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">Marketplace · Open RFQs</div>
+        <h1 className="hed-2xl mt-4">Open RFQs</h1>
+        <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} live RFQ{rows.length === 1 ? "" : "s"} · vendor prequalification + COI required
         </p>
-      </header>
+      </section>
 
-      {rows.length === 0 ? (
-        <div className="surface p-6 text-sm text-[var(--text-secondary)]">No open RFQs at the moment.</div>
-      ) : (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {rows.map((r) => (
-            <MarketplaceCard
-              key={r.id}
-              href={`/marketplace/rfqs/${r.public_slug}`}
-              title={r.title}
-              subtitle={r.org_name}
-              tags={r.trade_categories}
-              meta={[
-                r.region,
-                r.budget_band,
-                r.due_at ? `Due ${new Date(r.due_at).toLocaleDateString()}` : null,
-                r.requires_prequalification ? "Prequal required" : null,
-              ]}
-              badge={r.requires_insurance ? "COI required" : null}
-            />
-          ))}
-        </div>
-      )}
-    </main>
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        {rows.length === 0 ? (
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No open RFQs at the moment.</div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {rows.map((r) => (
+              <MarketplaceCard
+                key={r.id}
+                href={`/marketplace/rfqs/${r.public_slug}`}
+                title={r.title}
+                subtitle={r.org_name}
+                tags={r.trade_categories}
+                meta={[
+                  r.region,
+                  r.budget_band,
+                  r.due_at ? `Due ${new Date(r.due_at).toLocaleDateString()}` : null,
+                  r.requires_prequalification ? "Prequal required" : null,
+                ]}
+                badge={r.requires_insurance ? "COI required" : null}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 }

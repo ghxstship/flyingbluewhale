@@ -37,8 +37,8 @@ export default function TeamsHub() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Built For</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">The Role You Run.</h1>
+        <div className="eyebrow eyebrow-brand">Built For</div>
+        <h1 className="hed-3xl mt-4">The Role You Run.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           One platform, eight production roles. Each gets the modules they live in day-to-day, the workflows that move
           first, and the FAQs operators actually ask. Same backbone, different starting point.
@@ -49,13 +49,11 @@ export default function TeamsHub() {
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
           {TEAMS.map((t) => (
             <Link key={t.slug} href={`/teams/${t.slug}`} className="surface hover-lift p-6">
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-                {t.hero.eyebrow}
-              </div>
-              <h3 className="mt-2 text-lg font-semibold">{t.role}</h3>
+              <div className="eyebrow eyebrow-brand">{t.hero.eyebrow}</div>
+              <h3 className="hed-lg mt-3">{t.role}</h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{t.blurb}</p>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                See the fit <ArrowRight size={12} />
+                See the Fit <ArrowRight size={12} />
               </div>
             </Link>
           ))}

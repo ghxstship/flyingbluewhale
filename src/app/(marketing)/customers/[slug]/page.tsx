@@ -72,15 +72,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
-      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Customer story</div>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">{cs.customer_name}</h1>
+      <div className="eyebrow eyebrow-brand">Customer story</div>
+      <h1 className="hed-xl mt-4">{cs.customer_name}</h1>
       {meta && <p className="mt-2 font-mono text-xs text-[var(--text-muted)]">{meta}</p>}
 
       {metrics.length > 0 && (
         <section className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {metrics.map((m, i) => (
             <div key={i} className="surface p-4">
-              <div className="text-2xl font-semibold tracking-tight">{m.value ?? "—"}</div>
+              <div className="hed-lg">{m.value ?? "—"}</div>
               <div className="mt-1 text-xs text-[var(--text-muted)]">{m.label ?? ""}</div>
             </div>
           ))}

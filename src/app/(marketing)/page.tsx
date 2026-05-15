@@ -160,7 +160,7 @@ export default function Home() {
         <ScrollReveal>
           <div className="text-center">
             <div className="eyebrow">Three apps · one schema</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">ATLVS · GVTEWAY · COMPVSS</h2>
+            <h2 className="hed-xl mt-4">ATLVS · GVTEWAY · COMPVSS</h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
               One database. Three optimized surfaces. Same record from the office, the portal, and the field.
             </p>
@@ -214,7 +214,7 @@ export default function Home() {
             >
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--org-primary)" }} />
               <div className="eyebrow eyebrow-accent">{app.eyebrow}</div>
-              <h3 className="mt-2 text-lg font-semibold tracking-tight">{app.title}</h3>
+              <h3 className="hed-lg mt-3">{app.title}</h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{app.body}</p>
               <ul className="mt-4 space-y-1.5 text-xs text-[var(--text-secondary)]">
                 {app.bullets.map((b) => (
@@ -228,7 +228,7 @@ export default function Home() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Walk the room <ArrowRight size={12} className="cta-nudge" />
+                Walk the Room <ArrowRight size={12} className="cta-nudge" />
               </div>
             </Link>
           ))}
@@ -248,9 +248,7 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-6 py-16">
         <ScrollReveal className="mx-auto max-w-3xl text-center">
           <div className="eyebrow eyebrow-accent">Pitch · Build · Wrap</div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Every Phase. One Workspace.
-          </h2>
+          <h2 className="hed-xl mt-4">Every Phase. One Workspace.</h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             The work doesn&apos;t hand off between platforms. Neither does the data.
           </p>
@@ -297,7 +295,7 @@ export default function Home() {
           ].map((act) => (
             <article key={act.act} className="surface p-6">
               <div className="eyebrow eyebrow-accent">{act.act}</div>
-              <h3 className="mt-2 text-xl font-semibold">{act.title}</h3>
+              <h3 className="hed-lg mt-3">{act.title}</h3>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">{act.body}</p>
               <ul className="mt-4 space-y-1.5 text-xs">
                 {act.stops.map((s) => (
@@ -319,7 +317,7 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
           <div className="eyebrow eyebrow-accent">Modules</div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">Every Module. Native.</h2>
+          <h2 className="hed-xl mt-4">Every Module. Native.</h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             Forty-seven modules. Same database, same auth, same audit log. No integration tax.
           </p>
@@ -436,7 +434,7 @@ export default function Home() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="text-3xl font-semibold tracking-tight">Live Work, Whatever the Shape.</h2>
+        <h2 className="hed-xl">Live Work, Whatever the Shape.</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
           The schema is generic. The vernacular is specific. Festivals. Residencies. Touring. Fab. Activations.
           Broadcast. Private events.
@@ -452,7 +450,7 @@ export default function Home() {
               <div className="text-sm font-semibold">{x.title}</div>
               <div className="mt-1 text-xs text-[var(--text-muted)]">{x.sub}</div>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                See the fit <ArrowRight size={12} />
+                See the Fit <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -465,7 +463,7 @@ export default function Home() {
           <div className="grid gap-10 p-10 md:grid-cols-2 md:items-center">
             <div>
               <div className="eyebrow eyebrow-accent">The Studio</div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">Built by the People Who Run the Show.</h2>
+              <h2 className="hed-xl mt-4">Built by the People Who Run the Show.</h2>
               <p className="mt-4 text-sm text-[var(--text-secondary)]">
                 Every founder has run a load-in that didn&apos;t go to plan. Every module came out of opening a
                 spreadsheet for the third time and saying &quot;why isn&apos;t this in the platform.&quot;

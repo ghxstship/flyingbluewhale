@@ -24,7 +24,7 @@ const CHANNELS = [
     icon: BookOpen,
     title: "Field Guide",
     body: "Long-form guides on every shell — how to run a load-in week, set up advancing, wire Stripe payouts, configure portal access.",
-    cta: "Open the field guide",
+    cta: "Open the Field Guide",
     href: "/docs",
   },
   {
@@ -122,8 +122,8 @@ export default function HelpPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <Breadcrumbs items={trail} />
         <div className="mt-6 max-w-3xl">
-          <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Help</div>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">Crew Support.</h1>
+          <div className="eyebrow eyebrow-brand">Help</div>
+          <h1 className="hed-2xl mt-4">Crew Support.</h1>
           <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
             Self-serve guides for the patient, concierge for the urgent, hotline for the load-in. Choose your channel by
             how live the show is.
@@ -132,7 +132,7 @@ export default function HelpPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Get Help</h2>
+        <h2 className="hed-xl">Get Help</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {CHANNELS.map(({ icon: Icon, title, body, cta, href }) => (
             <Link key={title} href={href} className="surface hover-lift block p-6">
@@ -150,7 +150,7 @@ export default function HelpPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Common Issues</h2>
+        <h2 className="hed-xl">Common Issues</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           {TROUBLESHOOTING.map(({ icon: Icon, title, body }) => (
             <div key={title} className="surface p-6">
@@ -171,7 +171,7 @@ export default function HelpPage() {
         subtitle="Concierge email is the fastest path. We respond within hours, faster on Festival."
         primaryLabel="Email Concierge"
         primaryHref="mailto:support@atlvs.pro"
-        secondaryLabel="Open the field guide"
+        secondaryLabel="Open the Field Guide"
         secondaryHref="/docs"
       />
     </>

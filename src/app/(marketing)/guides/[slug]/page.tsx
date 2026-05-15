@@ -59,20 +59,20 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Guide</div>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{g.title}</h1>
+        <div className="eyebrow eyebrow-brand">Guide</div>
+        <h1 className="hed-xl mt-4">{g.title}</h1>
         <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{g.readingTime}</div>
         <p className="mt-6 text-lg text-[var(--text-secondary)]">{g.hero}</p>
 
         <div className="surface mt-8 p-6">
-          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">TL;DR</div>
+          <div className="eyebrow">TL;DR</div>
           <div className="mt-2 text-sm">{g.tldr}</div>
         </div>
 
         <div className="mt-12 space-y-10 text-[15px] leading-7 text-[var(--text-secondary)]">
           {g.sections.map((s, i) => (
             <section key={i}>
-              <h2 className="mt-10 text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{s.heading}</h2>
+              <h2 className="hed-lg mt-10 text-[var(--text-primary)]">{s.heading}</h2>
               {s.body.map((p, j) =>
                 p === "" ? (
                   <div key={j} className="h-2" />
@@ -108,7 +108,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
       <FAQSection title={`${g.title} · FAQ`} faqs={g.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Other Guides</h2>
+        <h2 className="hed-lg">Other Guides</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {MARKETING_GUIDE_LIST.filter((x) => x.slug !== g.slug).map((x) => (
             <Link key={x.slug} href={`/guides/${x.slug}`} className="surface hover-lift p-5">

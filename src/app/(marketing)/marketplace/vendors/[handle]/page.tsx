@@ -33,69 +33,73 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const v = data as Row;
 
   return (
-    <main className="page-content space-y-6">
+    <>
       <Breadcrumbs
         items={[
           { label: "Marketplace", href: "/marketplace" },
           { label: "Vendors", href: "/marketplace/vendors" },
           { label: v.name },
         ]}
+        className="mx-auto max-w-6xl px-6 pt-6"
       />
-      <header className="space-y-2">
-        <p className="eyebrow">@{v.public_handle}</p>
-        <div className="flex items-start gap-2">
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">@{v.public_handle}</div>
+        <div className="mt-4 flex items-start gap-3">
           <h1 className="hed-2xl">{v.name}</h1>
           {v.is_verified && <Badge variant="success">verified</Badge>}
         </div>
-        {v.tagline && <p className="text-base text-[var(--text-secondary)]">{v.tagline}</p>}
-        <div className="flex flex-wrap gap-1.5">
+        {v.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{v.tagline}</p>}
+        <div className="mt-5 flex flex-wrap gap-1.5">
           {v.trade_categories.map((t) => (
             <Badge key={t} variant="muted">
               {t}
             </Badge>
           ))}
         </div>
-      </header>
-
-      {v.bio && (
-        <section className="surface p-5">
-          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">About</h2>
-          <div className="text-sm whitespace-pre-wrap">{v.bio}</div>
-        </section>
-      )}
-
-      <section className="surface p-5">
-        <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Coverage</h2>
-        <dl className="space-y-1 text-sm">
-          <div>
-            <span className="text-[var(--text-secondary)]">Regions:</span> {v.regions.join(", ") || "—"}
-          </div>
-          <div>
-            <span className="text-[var(--text-secondary)]">Founded:</span> {v.year_founded ?? "—"}
-          </div>
-          <div>
-            <span className="text-[var(--text-secondary)]">Web:</span>{" "}
-            {v.website_url ? (
-              <a href={v.website_url} target="_blank" rel="noopener" className="font-mono text-[var(--org-primary)]">
-                {v.website_url} ↗
-              </a>
-            ) : (
-              "—"
-            )}
-          </div>
-          <div>
-            <span className="text-[var(--text-secondary)]">Rating:</span>{" "}
-            {v.rating_avg == null ? "no reviews yet" : `★ ${v.rating_avg} (${v.rating_count})`}
-          </div>
-        </dl>
       </section>
 
-      <div className="flex items-center gap-3">
-        <Button href={`/login?redirect=/marketplace/vendors/${v.public_handle}/inquire`}>Request Quote</Button>
-        <Button href="/signup" variant="ghost">
-          Need an account?
-        </Button>
-      </div>
-    </main>
+      <section className="mx-auto max-w-6xl space-y-6 px-6 pb-16">
+        {v.bio && (
+          <div className="surface p-5">
+            <h2 className="hed-md mb-3">About</h2>
+            <div className="text-sm whitespace-pre-wrap">{v.bio}</div>
+          </div>
+        )}
+
+        <div className="surface p-5">
+          <h2 className="hed-md mb-3">Coverage</h2>
+          <dl className="space-y-1 text-sm">
+            <div>
+              <span className="text-[var(--text-secondary)]">Regions:</span> {v.regions.join(", ") || "—"}
+            </div>
+            <div>
+              <span className="text-[var(--text-secondary)]">Founded:</span> {v.year_founded ?? "—"}
+            </div>
+            <div>
+              <span className="text-[var(--text-secondary)]">Web:</span>{" "}
+              {v.website_url ? (
+                <a href={v.website_url} target="_blank" rel="noopener" className="font-mono text-[var(--org-primary)]">
+                  {v.website_url} ↗
+                </a>
+              ) : (
+                "—"
+              )}
+            </div>
+            <div>
+              <span className="text-[var(--text-secondary)]">Rating:</span>{" "}
+              {v.rating_avg == null ? "no reviews yet" : `★ ${v.rating_avg} (${v.rating_count})`}
+            </div>
+          </dl>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Button href={`/login?redirect=/marketplace/vendors/${v.public_handle}/inquire`}>Request Quote</Button>
+          <Button href="/signup" variant="ghost">
+            Need an account?
+          </Button>
+        </div>
+      </section>
+    </>
   );
 }

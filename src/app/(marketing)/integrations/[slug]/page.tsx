@@ -52,10 +52,8 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          Integration · {i.category}
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">{i.name}.</h1>
+        <div className="eyebrow eyebrow-brand">Integration · {i.category}</div>
+        <h1 className="hed-2xl mt-4">{i.name}.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{i.long}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
@@ -66,7 +64,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">What It Does.</h2>
+        <h2 className="hed-xl">What It Does.</h2>
         <ul className="mt-6 space-y-3 text-sm">
           {i.capabilities.map((c) => (
             <li key={c} className="flex items-start gap-2">
@@ -79,16 +77,14 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-6">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-            Technical Anchor
-          </div>
+          <div className="eyebrow">Technical Anchor</div>
           <p className="mt-3 font-mono text-xs leading-relaxed text-[var(--text-secondary)]">{i.technicalAnchor}</p>
         </div>
       </section>
 
       {i.modules.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-2xl font-semibold tracking-tight">Modules That Depend On It.</h2>
+          <h2 className="hed-lg">Modules That Depend On It.</h2>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {i.modules
               .map((m) => MODULES[m])
@@ -110,7 +106,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
       {i.faqs.length > 0 ? <FAQSection title={`${i.name} · FAQ`} faqs={i.faqs} /> : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Other Integrations.</h2>
+        <h2 className="hed-lg">Other Integrations.</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {sibling.map((s) => (
             <Link

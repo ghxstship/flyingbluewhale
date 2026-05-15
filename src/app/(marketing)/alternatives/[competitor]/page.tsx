@@ -66,12 +66,8 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          {c.competitor} Alternatives
-        </div>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-          {c.competitor} Alternatives, For Production Teams.
-        </h1>
+        <div className="eyebrow eyebrow-brand">{c.competitor} Alternatives</div>
+        <h1 className="hed-xl mt-4">{c.competitor} Alternatives, For Production Teams.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           If you're searching for an alternative to {c.competitor}, you've probably outgrown one of these: the per-seat
           cost math, missing production primitives, or the workflow that doesn't survive the second show. Here's what to
@@ -80,7 +76,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">What {c.competitor} Does Well.</h2>
+        <h2 className="hed-xl">What {c.competitor} Does Well.</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
           Setting the record straight before talking alternatives. {c.competitor} earned its place — here's where it
           shines.
@@ -107,7 +103,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
 
       {cons.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-3xl font-semibold tracking-tight">Where Production Teams Hit The Wall.</h2>
+          <h2 className="hed-xl">Where Production Teams Hit The Wall.</h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
             These are the gaps we hear from teams searching for an alternative. Your mileage may vary.
           </p>
@@ -124,10 +120,8 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8 md:p-10">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-            The ATLVS Alternative
-          </div>
-          <h2 className="mt-3 text-2xl font-semibold tracking-tight">{c.headline}</h2>
+          <div className="eyebrow eyebrow-brand">The ATLVS Alternative</div>
+          <h2 className="hed-lg mt-3">{c.headline}</h2>
           <p className="mt-4 text-sm text-[var(--text-secondary)]">{c.hero}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {c.whyWeWin.slice(0, 3).map((w) => (
@@ -150,7 +144,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">How To Migrate.</h2>
+        <h2 className="hed-lg">How To Migrate.</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
           The path teams take to move off {c.competitor}.
         </p>
@@ -166,7 +160,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
       <FAQSection title={`${c.competitor} Alternatives · FAQ`} faqs={c.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Other Alternatives To Consider.</h2>
+        <h2 className="hed-lg">Other Alternatives To Consider.</h2>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">See how production teams evaluate other tools.</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {COMPARE_LIST.filter((other) => other.slug !== c.slug)

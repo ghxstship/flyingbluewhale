@@ -31,8 +31,8 @@ export default function GuidesPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Guides</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Written by Operators.</h1>
+        <div className="eyebrow eyebrow-brand">Guides</div>
+        <h1 className="hed-2xl mt-4">Written by Operators.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Deep-dive guides to the fundamentals of production operations — the disciplines, the taxonomies, and the
           tooling that makes a show work.
@@ -45,7 +45,7 @@ export default function GuidesPage() {
             <li key={g.slug}>
               <Link href={`/guides/${g.slug}`} className="surface hover-lift block p-6">
                 <div className="font-mono text-xs text-[var(--text-muted)]">{g.readingTime}</div>
-                <div className="mt-2 text-xl font-semibold tracking-tight">{g.title}</div>
+                <div className="hed-lg mt-3 tracking-tight">{g.title}</div>
                 <div className="mt-2 text-sm text-[var(--text-secondary)]">{g.blurb}</div>
               </Link>
             </li>

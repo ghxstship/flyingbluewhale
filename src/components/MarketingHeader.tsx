@@ -126,7 +126,7 @@ export function MarketingHeader() {
         </nav>
 
         {/* Desktop right cluster — utility icons (palette / locale / mode) +
-            Log in (secondary text link) + Start free (primary CTA). */}
+            Log In (secondary text link) + Start free (primary CTA). */}
         <div className="hidden items-center gap-2 xl:flex">
           <Hint label="Design Themes">
             <button
@@ -145,7 +145,7 @@ export function MarketingHeader() {
             href="/login"
             className="text-sm font-medium whitespace-nowrap text-[var(--text-secondary)] hover:text-[var(--foreground)]"
           >
-            Log in
+            Log In
           </Link>
           <Link href="/signup" className="btn btn-primary btn-sm">
             Sign Up Free
@@ -210,7 +210,7 @@ export function MarketingHeader() {
                 className="btn btn-ghost btn-sm w-full justify-center"
                 onClick={() => setMobileOpen(false)}
               >
-                Log in
+                Log In
               </Link>
               <Link
                 href="/signup"

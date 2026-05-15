@@ -42,16 +42,8 @@ export function MarketingHero({
 }) {
   return (
     <section className={`mx-auto max-w-6xl px-6 py-16 md:py-24 ${className}`}>
-      {eyebrow && (
-        <div className="text-xs font-semibold tracking-wider text-[var(--accent-solid,var(--org-primary))] uppercase">
-          {eyebrow}
-        </div>
-      )}
-      <h1
-        className={`${eyebrow ? "mt-3" : ""} max-w-4xl text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl`}
-      >
-        {title}
-      </h1>
+      {eyebrow && <div className="eyebrow eyebrow-brand">{eyebrow}</div>}
+      <h1 className={`${eyebrow ? "mt-4" : ""} hed-3xl max-w-4xl`}>{title}</h1>
       {subtitle && <p className="mt-5 max-w-2xl text-lg text-pretty text-[var(--text-secondary)]">{subtitle}</p>}
       {actions && <div className="mt-8 flex flex-wrap items-center gap-3">{actions}</div>}
     </section>
@@ -85,15 +77,9 @@ export function MarketingSection({
     <section id={id} aria-label={ariaLabel} className={`mx-auto max-w-6xl px-6 py-16 md:py-20 ${className}`}>
       {(eyebrow || title || subtitle) && (
         <header className={`mb-10 ${alignClass}`}>
-          {eyebrow && (
-            <div className="text-xs font-semibold tracking-wider text-[var(--accent-solid,var(--org-primary))] uppercase">
-              {eyebrow}
-            </div>
-          )}
+          {eyebrow && <div className="eyebrow eyebrow-brand">{eyebrow}</div>}
           {title && (
-            <h2
-              className={`${eyebrow ? "mt-3" : ""} max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl ${align === "center" ? "mx-auto" : ""}`}
-            >
+            <h2 className={`${eyebrow ? "mt-4" : ""} hed-xl max-w-3xl ${align === "center" ? "mx-auto" : ""}`}>
               {title}
             </h2>
           )}

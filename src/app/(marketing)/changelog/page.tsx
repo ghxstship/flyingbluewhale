@@ -46,8 +46,8 @@ export default function ChangelogPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Changelog</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">What Shipped.</h1>
+        <div className="eyebrow eyebrow-brand">Changelog</div>
+        <h1 className="hed-2xl mt-4">What Shipped.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Every release since v0.6, with enough context to understand why we shipped it. Subscribe via RSS at{" "}
           <a className="underline" href="/changelog.rss">
@@ -74,7 +74,7 @@ export default function ChangelogPage() {
                     {e.date} · {e.version}
                   </div>
                 </div>
-                <div className="mt-2 text-xl font-semibold tracking-tight">{e.title}</div>
+                <div className="hed-lg mt-3 tracking-tight">{e.title}</div>
                 <p className="mt-2 text-sm text-[var(--text-secondary)]">{e.body}</p>
                 <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-[var(--text-secondary)]">
                   {e.items.map((item) => (

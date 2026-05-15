@@ -38,9 +38,7 @@ export function PerDiemCalculator() {
         {legs.map((l, idx) => (
           <div key={l.id} className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-inset)] p-4">
             <div className="mb-3 flex items-center justify-between">
-              <div className="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
-                Leg {idx + 1}
-              </div>
+              <div className="eyebrow">Leg {idx + 1}</div>
               {legs.length > 1 ? (
                 <button
                   type="button"
@@ -54,9 +52,7 @@ export function PerDiemCalculator() {
             </div>
             <div className="grid gap-3 sm:grid-cols-4">
               <div className="sm:col-span-2">
-                <label className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  City / venue
-                </label>
+                <label className="eyebrow">City / venue</label>
                 <input
                   type="text"
                   value={l.city}
@@ -66,9 +62,7 @@ export function PerDiemCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  Days
-                </label>
+                <label className="eyebrow">Days</label>
                 <input
                   type="number"
                   min={0}
@@ -78,9 +72,7 @@ export function PerDiemCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  Headcount
-                </label>
+                <label className="eyebrow">Headcount</label>
                 <input
                   type="number"
                   min={0}
@@ -90,9 +82,7 @@ export function PerDiemCalculator() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  Daily rate (USD)
-                </label>
+                <label className="eyebrow">Daily rate (USD)</label>
                 <input
                   type="number"
                   min={0}
@@ -115,9 +105,7 @@ export function PerDiemCalculator() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <label className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  Leg total
-                </label>
+                <label className="eyebrow">Leg total</label>
                 <div className="mt-1 rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 font-mono text-sm">
                   ${(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount)).toLocaleString()}
                 </div>
@@ -133,7 +121,7 @@ export function PerDiemCalculator() {
       <div className="mt-6 border-t border-[var(--border-color)] pt-4">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Total</div>
+            <div className="eyebrow">Total</div>
             <div className="mt-1 text-[10px] text-[var(--text-muted)]">
               {totalDays} crew-days across {legs.length} leg{legs.length === 1 ? "" : "s"}
             </div>

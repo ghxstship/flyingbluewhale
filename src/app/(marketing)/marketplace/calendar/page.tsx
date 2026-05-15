@@ -36,41 +36,47 @@ export default async function Page() {
   const days = Object.keys(byDay).sort();
 
   return (
-    <main className="page-content space-y-6">
-      <Breadcrumbs items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Calendar" }]} />
-      <header>
-        <p className="eyebrow">Marketplace · Calendar</p>
-        <h1 className="hed-2xl">EVENT CALENDAR</h1>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+    <>
+      <Breadcrumbs
+        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Calendar" }]}
+        className="mx-auto max-w-6xl px-6 pt-6"
+      />
+
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+        <div className="eyebrow eyebrow-brand">Marketplace · Calendar</div>
+        <h1 className="hed-2xl mt-4">Event Calendar</h1>
+        <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} upcoming announcement{rows.length === 1 ? "" : "s"} + on-sale milestone
           {rows.length === 1 ? "" : "s"}
         </p>
-      </header>
+      </section>
 
-      {days.length === 0 ? (
-        <div className="surface p-6 text-sm text-[var(--text-secondary)]">
-          No public milestones in the upcoming window.
-        </div>
-      ) : (
-        days.map((d) => (
-          <section key={d} className="surface p-5">
-            <h2 className="mb-2 font-mono text-sm text-[var(--text-secondary)]">{new Date(d).toDateString()}</h2>
-            <ul className="divide-y divide-[var(--border-subtle)]">
-              {byDay[d].map((r) => (
-                <li key={r.id} className="flex items-center justify-between py-2 text-sm">
-                  <div className="flex items-center gap-3">
-                    <Badge variant={STATUS_TONE[r.kind] ?? "muted"}>{r.kind}</Badge>
-                    <span>{r.label ?? r.org_name}</span>
-                  </div>
-                  <span className="font-mono text-xs text-[var(--text-secondary)]">
-                    {new Date(r.occurs_at).toLocaleTimeString()}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))
-      )}
-    </main>
+      <section className="mx-auto max-w-6xl space-y-6 px-6 pb-16">
+        {days.length === 0 ? (
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+            No public milestones in the upcoming window.
+          </div>
+        ) : (
+          days.map((d) => (
+            <div key={d} className="surface p-5">
+              <h2 className="mb-2 font-mono text-sm text-[var(--text-secondary)]">{new Date(d).toDateString()}</h2>
+              <ul className="divide-y divide-[var(--border-subtle)]">
+                {byDay[d].map((r) => (
+                  <li key={r.id} className="flex items-center justify-between py-2 text-sm">
+                    <div className="flex items-center gap-3">
+                      <Badge variant={STATUS_TONE[r.kind] ?? "muted"}>{r.kind}</Badge>
+                      <span>{r.label ?? r.org_name}</span>
+                    </div>
+                    <span className="font-mono text-xs text-[var(--text-secondary)]">
+                      {new Date(r.occurs_at).toLocaleTimeString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        )}
+      </section>
+    </>
   );
 }

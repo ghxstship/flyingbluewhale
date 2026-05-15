@@ -45,8 +45,8 @@ export default function CapacityCalculatorPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Free Tool</div>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">Venue Capacity Calculator.</h1>
+        <div className="eyebrow eyebrow-brand">Free Tool</div>
+        <h1 className="hed-xl mt-4">Venue Capacity Calculator.</h1>
         <p className="mt-5 text-lg text-[var(--text-secondary)]">
           Estimate maximum legal occupancy from square footage and use type. IBC-aligned defaults for assembly,
           concentrated, standing, and dining configurations. Confirm with the AHJ before publishing.
@@ -58,7 +58,7 @@ export default function CapacityCalculatorPage() {
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">How Occupant Load Works.</h2>
+        <h2 className="hed-lg">How Occupant Load Works.</h2>
         <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
           Occupant load is the maximum number of people permitted in a space, set by the International Building Code
           (IBC) and adopted (with modifications) by most US jurisdictions. The IBC sets per-occupant area factors by use

@@ -74,10 +74,8 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          ATLVS vs. {c.competitor}
-        </div>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{c.headline}</h1>
+        <div className="eyebrow eyebrow-brand">ATLVS vs. {c.competitor}</div>
+        <h1 className="hed-xl mt-4">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
@@ -86,33 +84,27 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
           </Button>
         </div>
         <div className="surface mt-8 p-5">
-          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-            Bottom line
-          </div>
+          <div className="eyebrow">Bottom line</div>
           <div className="mt-2 text-sm font-medium">{c.bottomLine}</div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Feature Comparison.</h2>
+        <h2 className="hed-xl">Feature Comparison.</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">Side by side, without the marketing math.</p>
         <div className="surface mt-8 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--border-color)] bg-[var(--surface-inset)]">
-                  <th className="px-4 py-3 text-left text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                    Feature
-                  </th>
+                  <th className="eyebrow px-4 py-3 text-left">Feature</th>
                   <th
                     className="px-4 py-3 text-left text-[11px] font-semibold tracking-[0.2em] uppercase"
                     style={{ color: "var(--org-primary)" }}
                   >
                     ATLVS
                   </th>
-                  <th className="px-4 py-3 text-left text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                    {c.competitor}
-                  </th>
+                  <th className="eyebrow px-4 py-3 text-left">{c.competitor}</th>
                 </tr>
               </thead>
               <tbody>
@@ -137,7 +129,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Where We Win.</h2>
+        <h2 className="hed-xl">Where We Win.</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {c.whyWeWin.map((w) => (
             <div key={w.title} className="surface p-6">
@@ -150,7 +142,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
 
       {c.whenTheyWin.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-2xl font-semibold tracking-tight">When {c.competitor} Wins.</h2>
+          <h2 className="hed-lg">When {c.competitor} Wins.</h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
             We're not the answer to every problem. These are the cases where they're the right call.
           </p>
@@ -179,7 +171,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       ) : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">Migration Path.</h2>
+        <h2 className="hed-lg">Migration Path.</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">For teams moving from {c.competitor}.</p>
         <div className="surface mt-6 p-6">
           <ol className="list-decimal space-y-2 pl-5 text-sm text-[var(--text-secondary)]">

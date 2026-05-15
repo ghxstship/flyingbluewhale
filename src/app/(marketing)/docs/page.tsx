@@ -51,8 +51,8 @@ const SECTIONS = [
 export default function DocsLanding() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-16">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Docs</div>
-      <h1 className="mt-3 text-4xl font-semibold tracking-tight">How the Platform Works</h1>
+      <div className="eyebrow eyebrow-brand">Docs</div>
+      <h1 className="hed-xl mt-4">How the Platform Works</h1>
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
         {SECTIONS.map((s) => (
           <Link key={s.title} href={s.href} className="surface hover-lift p-5">

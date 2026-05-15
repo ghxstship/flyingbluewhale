@@ -26,7 +26,7 @@ export function LogoCloud({
 }) {
   return (
     <section className="mx-auto max-w-6xl px-6 py-10 text-center">
-      <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--text-muted)] uppercase">{eyebrow}</div>
+      <div className="eyebrow">{eyebrow}</div>
       <ul className="mt-6 grid grid-cols-2 items-center gap-8 sm:grid-cols-4 md:grid-cols-8 md:gap-4">
         {logos.map((l) => (
           <li key={l.name} className="flex items-center justify-center">

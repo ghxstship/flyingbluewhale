@@ -58,10 +58,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          ATLVS Technologies · Blog
-        </div>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{post.title}</h1>
+        <div className="eyebrow eyebrow-brand">ATLVS Technologies · Blog</div>
+        <h1 className="hed-xl mt-4">{post.title}</h1>
         <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--text-muted)]">
           <span>{post.date}</span>
           <span>·</span>
@@ -75,7 +73,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             if (block.kind === "p") return <p key={i}>{block.text}</p>;
             if (block.kind === "h2")
               return (
-                <h2 key={i} className="mt-10 text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+                <h2 key={i} className="hed-lg mt-10 text-[var(--text-primary)]">
                   {block.text}
                 </h2>
               );

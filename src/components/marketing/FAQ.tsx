@@ -7,7 +7,7 @@ export function FAQSection({ title = "Frequently asked questions", faqs }: { tit
   return (
     <section className="mx-auto max-w-3xl px-6 py-16">
       <JsonLd data={faqSchema(faqs)} />
-      <h2 className="text-3xl font-semibold tracking-tight">{title}</h2>
+      <h2 className="hed-xl">{title}</h2>
       <div className="mt-8 space-y-2">
         {faqs.map((f) => (
           <details key={f.q} className="surface p-5">

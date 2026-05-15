@@ -120,8 +120,8 @@ export default function CareersPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <Breadcrumbs items={trail} />
         <div className="mt-6 max-w-3xl">
-          <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Careers</div>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">Build for Production.</h1>
+          <div className="eyebrow eyebrow-brand">Careers</div>
+          <h1 className="hed-2xl mt-4">Build for Production.</h1>
           <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
             We&apos;re building the platform the live-events industry has needed for fifteen years — one operating
             system that runs the producer&apos;s desk, the crew&apos;s phone, and the client&apos;s portal off the same
@@ -131,7 +131,7 @@ export default function CareersPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">How We Crew</h2>
+        <h2 className="hed-xl">How We Crew</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {VALUES.map(({ icon: Icon, title, body }) => (
             <div key={title} className="surface p-6">
@@ -149,15 +149,13 @@ export default function CareersPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-end justify-between">
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Open Roles</h2>
+          <h2 className="hed-xl">Open Roles</h2>
           <span className="text-xs text-[var(--text-muted)]">Updated continuously</span>
         </div>
 
         {ROLES.length === 0 ? (
           <div className="surface mt-8 p-10 text-center">
-            <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-              No open roles right now
-            </div>
+            <div className="eyebrow">No open roles right now</div>
             <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
               We hire deliberately and post openings here when they exist. If your background is unusual or specifically
               aligned with what we&apos;re building, we read every thoughtful intro that comes through the contact form.
@@ -174,10 +172,10 @@ export default function CareersPage() {
               <li key={r.title} className="surface p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+                    <div className="eyebrow">
                       {r.team} · {r.location} · {r.type}
                     </div>
-                    <h3 className="mt-2 text-lg font-semibold">{r.title}</h3>
+                    <h3 className="hed-lg mt-3">{r.title}</h3>
                     <p className="mt-2 text-sm text-[var(--text-secondary)]">{r.body}</p>
                   </div>
                   <Link href="/contact" className="btn btn-secondary btn-sm shrink-0">
@@ -195,9 +193,9 @@ export default function CareersPage() {
       <CTASection
         title="Not Listed? Tell Us Anyway."
         subtitle="If your background is unusual or specifically built for what we ship, write us. The studio reads every note."
-        primaryLabel="Send a note"
+        primaryLabel="Send a Note"
         primaryHref="/contact"
-        secondaryLabel="Read the about page"
+        secondaryLabel="Read the About Page"
         secondaryHref="/about"
       />
     </>

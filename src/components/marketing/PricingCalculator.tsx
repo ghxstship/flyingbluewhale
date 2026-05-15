@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { formatNumber } from "@/lib/i18n/format";
 import { Calculator, ArrowRight } from "lucide-react";
 
 /**
@@ -165,7 +166,7 @@ function Field({
         <label className="text-xs font-semibold tracking-tight">{label}</label>
         <div className="font-mono text-sm tabular-nums">
           {prefix}
-          {value.toLocaleString()}
+          {formatNumber(value, { maximumFractionDigits: 0 })}
           {suffix && <span className="ml-1 text-[var(--text-muted)]">{suffix}</span>}
         </div>
       </div>

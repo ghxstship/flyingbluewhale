@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { STATUS_TONE } from "@/lib/marketplace";
-import { formatMoney } from "@/lib/i18n/format";
+import { formatDate, formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             {
               key: "when",
               header: "Submitted",
-              render: (r) => new Date(r.submitted_at).toLocaleDateString(),
+              render: (r) => formatDate(r.submitted_at),
               accessor: (r) => r.submitted_at,
               className: "font-mono text-xs",
             },

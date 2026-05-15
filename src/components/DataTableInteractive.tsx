@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { formatNumber } from "@/lib/i18n/format";
 import Link from "next/link";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
@@ -1159,7 +1160,7 @@ function toNumberOrNull(v: string | number | null | undefined): number | null {
 
 function defaultFormat(n: number, agg: "sum" | "avg" | "min" | "max" | "count"): string {
   if (agg === "count") return String(n);
-  return n.toLocaleString();
+  return formatNumber(n);
 }
 
 /**

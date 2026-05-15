@@ -41,14 +41,14 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
               fontWeight: 600,
               letterSpacing: "0.2em",
               textTransform: "uppercase",
-              color: "#8a8a8a",
+              color: "#595959",
               marginBottom: 12,
             }}
           >
             Something Broke at the Root
           </div>
           <h1 style={{ fontSize: 28, fontWeight: 700, margin: "0 0 12px", lineHeight: 1.1 }}>We hit a wall.</h1>
-          <p style={{ fontSize: 14, color: "#4a4a4a", margin: "0 0 20px" }}>
+          <p style={{ fontSize: 14, color: "#4b4b4b", margin: "0 0 20px" }}>
             The application failed to load. Our error reporter has been notified.
             {error.digest ? (
               <>

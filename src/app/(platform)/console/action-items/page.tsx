@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -48,7 +49,7 @@ const KIND_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
 
 function fmt(d: string | null): string {
   if (!d) return "—";
-  return new Date(d).toLocaleDateString();
+  return formatDate(d);
 }
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ mine?: string }> }) {

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { formatDate } from "@/lib/i18n/format";
 import Link from "next/link";
 import type { SavedViewWidget as SavedViewWidgetConfig } from "@/lib/dashboards/types";
 import type { SavedView, ViewConfigRow } from "@/lib/views/types";
@@ -141,7 +142,7 @@ function formatCell(value: unknown): string {
   if (typeof value === "boolean") return value ? "Yes" : "No";
   if (typeof value === "number") return Number.isInteger(value) ? String(value) : value.toFixed(2);
   if (typeof value === "string") return value;
-  if (value instanceof Date) return value.toLocaleDateString();
+  if (value instanceof Date) return formatDate(value);
   try {
     return JSON.stringify(value);
   } catch {

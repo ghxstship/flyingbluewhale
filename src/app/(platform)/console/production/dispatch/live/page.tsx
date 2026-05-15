@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { LiveDispatchMap, type DispatchPoint } from "./LiveDispatchMap";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -135,14 +136,14 @@ export default async function LiveDispatchPage() {
                     </td>
                     <td className="font-mono text-xs">
                       {p.actualDepart
-                        ? new Date(p.actualDepart).toLocaleTimeString()
-                        : new Date(p.scheduledDepart).toLocaleTimeString()}
+                        ? formatDate(p.actualDepart, { timeStyle: "short" })
+                        : formatDate(p.scheduledDepart, { timeStyle: "short" })}
                     </td>
                     <td className="font-mono text-xs">
                       {p.actualArrive
-                        ? new Date(p.actualArrive).toLocaleTimeString()
+                        ? formatDate(p.actualArrive, { timeStyle: "short" })
                         : p.scheduledArrive
-                          ? new Date(p.scheduledArrive).toLocaleTimeString()
+                          ? formatDate(p.scheduledArrive, { timeStyle: "short" })
                           : "—"}
                     </td>
                   </tr>

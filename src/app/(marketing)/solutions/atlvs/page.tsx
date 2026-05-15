@@ -24,11 +24,11 @@ import { buildMetadata, productSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 
 export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — The Console",
+  title: "ATLVS — Production Operations Workspace",
   description:
     "Where the production lives. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. Pitch through wrap. One sidebar.",
   path: "/solutions/atlvs",
-  keywords: ["ATLVS", "production operations console", "event production dashboard", "internal production platform"],
+  keywords: ["ATLVS", "production operations workspace", "event production dashboard", "internal production platform"],
   ogImageEyebrow: "ATLVS",
   ogImageTitle: "Where the Production Lives",
 });
@@ -45,9 +45,9 @@ export default function ATLVSPage() {
       <JsonLd
         data={[
           productSchema({
-            name: "ATLVS — The Console",
+            name: "ATLVS — Production Operations Workspace",
             description:
-              "The office console for production teams. Projects, finance, procurement, advancing, AI — one workspace, one schema.",
+              "Production operations workspace. Projects, finance, procurement, advancing, AI — one workspace, one schema.",
             url: urlFor("marketing", "/solutions/atlvs"),
             price: "0",
           }),
@@ -56,18 +56,16 @@ export default function ATLVSPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          ATLVS · The Console
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Where the Production Lives.</h1>
+        <div className="eyebrow eyebrow-accent">ATLVS</div>
+        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">Where the Production Lives.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Pitch to wrap, in one sidebar. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI.
           Forty-seven modules on one schema.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Open the Console</Button>
+          <Button href="/signup">Sign Up Free</Button>
           <Button href="/contact" variant="secondary">
-            Talk to the Studio
+            Book a Walkthrough
           </Button>
           <Link href="/pricing" className="btn btn-ghost">
             Pricing →
@@ -80,7 +78,7 @@ export default function ATLVSPage() {
         <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
           Nine domains · forty-seven modules
         </div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Pitch Through Wrap. Same Console.</h2>
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Pitch Through Wrap. Same Workspace.</h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
@@ -148,8 +146,8 @@ export default function ATLVSPage() {
               (invoices, proposals, POs, tasks, RFIs). Validation at the door. Tenant walled at the database.
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Same rails mean the team learns the console once. New modules ship in days. The work changes — the
-              workflow holds.
+              Same rails mean the team learns ATLVS once. New modules ship in days. The work changes — the workflow
+              holds.
             </p>
           </div>
           <ul className="space-y-3 text-sm">
@@ -203,7 +201,7 @@ export default function ATLVSPage() {
         faqs={[
           {
             q: "What is ATLVS?",
-            a: "The console. Red-branded, desk-bound, always on. Forty-seven modules — proposals, RFIs, submittals, daily logs, punch, inspections, advancing, finance, procurement, AI. Where the production lives.",
+            a: "The production operations workspace. Red-branded, desk-bound, always on. Forty-seven modules — proposals, RFIs, submittals, daily logs, punch, inspections, advancing, finance, procurement, AI. Where the production lives.",
           },
           {
             q: "How does role-aware access work?",
@@ -221,11 +219,11 @@ export default function ATLVSPage() {
       />
 
       <CTASection
-        title="Open the Console."
+        title="ATLVS Is Open."
         subtitle="Free forever for small teams. Per-org pricing the rest of the way up."
-        primaryLabel="Open the console"
+        primaryLabel="Sign Up Free"
         primaryHref="/signup"
-        secondaryLabel="Talk to the studio"
+        secondaryLabel="Book a Walkthrough"
         secondaryHref="/contact"
       />
     </div>

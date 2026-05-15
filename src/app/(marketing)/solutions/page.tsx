@@ -12,7 +12,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Solutions — Three Apps. One Schema.",
   description:
-    "ATLVS — the console. GVTEWAY — the portal. COMPVSS — the field. Same record from the office, the stakeholder, and the gate.",
+    "ATLVS — production operations workspace. GVTEWAY — stakeholder portal. COMPVSS — offline-first field PWA. Same record from the office, the stakeholder, and the gate.",
   path: "/solutions",
   keywords: [
     "live events software",
@@ -40,8 +40,8 @@ export default function SolutionsIndex() {
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Solutions</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Schema.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          The console, the portal, the field. One database underneath. Same record, three optimized surfaces — your
-          office, your stakeholders, your crew, all reading the same truth.
+          ATLVS, GVTEWAY, COMPVSS. One database underneath. Same record, three optimized surfaces — your office, your
+          stakeholders, your crew, all reading the same truth.
         </p>
       </section>
 
@@ -109,7 +109,7 @@ export default function SolutionsIndex() {
         faqs={[
           {
             q: "How are the three apps different?",
-            a: "ATLVS is the office console — where the production lives. GVTEWAY is the stakeholder portal — twelve personas, each their lane. COMPVSS is the offline-first field PWA. One database underneath.",
+            a: "ATLVS is the production operations workspace — where the production lives. GVTEWAY is the stakeholder portal — twelve personas, each their lane. COMPVSS is the offline-first field PWA. One database underneath.",
           },
           {
             q: "Do I get all three?",
@@ -127,10 +127,10 @@ export default function SolutionsIndex() {
       />
 
       <CTASection
-        title="The Console Is Open."
-        primaryLabel="Open the console"
+        title="ATLVS Is Open."
+        primaryLabel="Sign Up Free"
         primaryHref="/signup"
-        secondaryLabel="Talk to the studio"
+        secondaryLabel="Book a Walkthrough"
         secondaryHref="/contact"
       />
     </>
@@ -141,7 +141,7 @@ const APPS = [
   {
     slug: "atlvs",
     name: "ATLVS",
-    tier: "CONSOLE",
+    tier: "WORKSPACE",
     title: "Where the production lives",
     body: "Forty-seven modules in one sidebar. Pitch through wrap. Proposals to payouts, RFIs to inspections, advancing to AI.",
     bullets: [

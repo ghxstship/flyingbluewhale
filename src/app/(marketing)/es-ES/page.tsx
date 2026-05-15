@@ -37,7 +37,7 @@ export const metadata: Metadata = buildMetadata({
 const FAQ_ES = [
   {
     q: "¿Qué hace la plataforma?",
-    a: "Cuarenta y siete módulos en tres apps que comparten una base de datos. ATLVS es la consola de oficina — RFIs, submittals, daily logs, punch, advancing, finanzas, procurement, IA. GVTEWAY es el portal de stakeholders. COMPVSS es la PWA offline-first del campo — escaneo de puertas, fichaje de turno, incidentes, médico, briefing diario de seguridad.",
+    a: "Cuarenta y siete módulos en tres apps que comparten una base de datos. ATLVS es el espacio de trabajo de operaciones — RFIs, submittals, daily logs, punch, advancing, finanzas, procurement, IA. GVTEWAY es el portal de stakeholders. COMPVSS es la PWA offline-first del campo — escaneo de puertas, fichaje de turno, incidentes, médico, briefing diario de seguridad.",
   },
   {
     q: "¿Para quién es?",
@@ -79,15 +79,15 @@ export default function HomeES() {
           Corre Sobre Esto.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          La plataforma para trabajo en vivo. Del pitch al wrap, en una consola. Tres apps, un esquema, cada módulo —
-          desde pre-producción hasta strike.
+          La plataforma para trabajo en vivo. Del pitch al wrap, en un espacio de trabajo. Tres apps, un esquema, cada
+          módulo — desde pre-producción hasta strike.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href} size="lg">
-            Abrir La Consola
+            Regístrate Gratis
           </Button>
           <Button href={CANONICAL_CTAS.secondary.href} size="lg" variant="secondary">
-            Habla Con El Estudio
+            Agenda Un Recorrido
           </Button>
         </div>
       </section>
@@ -100,17 +100,17 @@ export default function HomeES() {
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {[
             {
-              name: "ATLVS · La Consola",
+              name: "ATLVS",
               body: "RFIs, submittals, daily logs, punch, advancing, finanzas, procurement, IA. Un solo sidebar. Del pitch al wrap.",
               href: "/solutions/atlvs",
             },
             {
-              name: "GVTEWAY · El Portal",
+              name: "GVTEWAY",
               body: "Doce personas. Cada una en su carril. Artistas ven riders. Vendors ven POs. Clientes ven propuestas.",
               href: "/solutions/gvteway",
             },
             {
-              name: "COMPVSS · El Campo",
+              name: "COMPVSS",
               body: "Offline. Sub-100ms. Escaneo, fichaje, incidente, médico, brief diario. Funciona con una barra de LTE.",
               href: "/solutions/compvss",
             },
@@ -129,10 +129,10 @@ export default function HomeES() {
       <FAQSection title="FAQ" faqs={FAQ_ES} />
 
       <CTASection
-        title="La Consola Está Abierta."
+        title="ATLVS Está Abierto."
         subtitle="Gratis, para siempre, para equipos pequeños. Precios por organización, no por asiento."
-        primaryLabel="Abrir la consola"
-        secondaryLabel="Habla con el estudio"
+        primaryLabel="Regístrate Gratis"
+        secondaryLabel="Agenda Un Recorrido"
       />
     </div>
   );

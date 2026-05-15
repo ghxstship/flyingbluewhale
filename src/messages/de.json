@@ -298,8 +298,7 @@
   },
   "shell": {
     "platform": {
-      "brand": "ATLVS",
-      "consoleEyebrow": "Operations-Konsole"
+      "brand": "ATLVS"
     },
     "portal": {
       "brand": "GVTEWAY"

@@ -163,7 +163,7 @@ export default function RoadmapPage() {
       ))}
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Free for small teams. Per-org pricing the rest of the way up."
         primaryLabel={CANONICAL_CTAS.primary.label}
         primaryHref={CANONICAL_CTAS.primary.href}

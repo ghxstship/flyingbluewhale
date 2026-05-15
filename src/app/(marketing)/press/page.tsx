@@ -24,7 +24,11 @@ const FACTS = [
   { label: "Founded", value: "2024" },
   { label: "Apex domain", value: SITE.domain },
   { label: "Categories", value: "Production operations · live event ops · advancing platform" },
-  { label: "Sub-products", value: "ATLVS (console, red) · GVTEWAY (portal, blue) · COMPVSS (field PWA, yellow)" },
+  {
+    label: "Sub-products",
+    value:
+      "ATLVS (production operations workspace, red) · GVTEWAY (stakeholder portal, blue) · COMPVSS (field PWA, yellow)",
+  },
 ];
 
 export default function PressPage() {
@@ -101,7 +105,7 @@ export default function PressPage() {
       </section>
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Free for small teams. Per-org pricing the rest of the way up."
         primaryLabel={CANONICAL_CTAS.primary.label}
         primaryHref={CANONICAL_CTAS.primary.href}

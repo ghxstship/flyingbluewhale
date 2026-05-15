@@ -148,7 +148,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// COMPVSS is the offline-first PWA shell. ATLVS (console) and GVTEWAY
+// COMPVSS is the offline-first PWA shell. ATLVS (workspace) and GVTEWAY
 // (portal) don't need a service worker — registering one there would steal
 // the SW scope and break offline behavior on compvss when a user visits
 // multiple shells from the same browser. Path-prefix mode (no subdomains)
@@ -193,7 +193,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             name: "ATLVS Technologies",
             url: SITE.baseUrl,
             description:
-              "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Internal console, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
+              "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Production operations workspace, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
             logo: `${SITE.baseUrl}/og/logo.png`,
           })}
         />

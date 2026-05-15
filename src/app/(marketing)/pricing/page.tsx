@@ -41,7 +41,7 @@ const TIERS = [
       "Up to 100 portal credentials per project",
       "Community support",
     ],
-    cta: "Open the console",
+    cta: "Sign Up Free",
     href: "/signup",
   },
   {
@@ -116,7 +116,7 @@ const COMPARISON: Array<{
     ],
   },
   {
-    category: "ATLVS · The Console",
+    category: "ATLVS",
     rows: [
       { feature: "Projects, tasks, schedule, ROS", free: true, crew: true, production: true, festival: true },
       { feature: "RFIs · submittals · daily logs · punch", free: false, crew: true, production: true, festival: true },
@@ -142,7 +142,7 @@ const COMPARISON: Array<{
     ],
   },
   {
-    category: "GVTEWAY · The Portal",
+    category: "GVTEWAY",
     rows: [
       { feature: "Guest portal", free: true, crew: true, production: true, festival: true },
       { feature: "Artist portal", free: true, crew: true, production: true, festival: true },
@@ -154,7 +154,7 @@ const COMPARISON: Array<{
     ],
   },
   {
-    category: "COMPVSS · The Field",
+    category: "COMPVSS",
     rows: [
       { feature: "Offline gate scan", free: true, crew: true, production: true, festival: true },
       { feature: "Geo-verified shift clock-in", free: false, crew: true, production: true, festival: true },
@@ -378,11 +378,11 @@ export default function PricingPage() {
       <FAQSection title="Pricing FAQ" faqs={FAQS} />
 
       <CTASection
-        title="The Console Is Open."
-        subtitle="Open the console — 30 seconds, no card. Free is free, forever."
-        primaryLabel="Open the console"
+        title="ATLVS Is Open."
+        subtitle="Sign up free — 30 seconds, no card. Free is free, forever."
+        primaryLabel="Sign Up Free"
         primaryHref="/signup"
-        secondaryLabel="Talk to the studio"
+        secondaryLabel="Book a Walkthrough"
         secondaryHref="/contact"
       />
     </div>

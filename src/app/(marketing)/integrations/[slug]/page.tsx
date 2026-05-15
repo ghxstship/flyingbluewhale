@@ -125,7 +125,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
         </div>
       </section>
 
-      <CTASection title="The Console Is Open." subtitle="Free for small teams. All integrations included." />
+      <CTASection title="ATLVS Is Open." subtitle="Free for small teams. All integrations included." />
     </div>
   );
 }

@@ -69,10 +69,7 @@ export default function IntegrationsIndex() {
         </section>
       ))}
 
-      <CTASection
-        title="The Console Is Open."
-        subtitle="Free for small teams. All integrations included on every tier."
-      />
+      <CTASection title="ATLVS Is Open." subtitle="Free for small teams. All integrations included on every tier." />
     </div>
   );
 }

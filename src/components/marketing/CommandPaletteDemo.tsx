@@ -5,7 +5,7 @@ import { Sparkles, Search, ArrowRight, CornerDownLeft, Command } from "lucide-re
 
 /**
  * `<CommandPaletteDemo>` — an animated, looping marketing replica of the
- * `⌘K` command palette inside the console. Demonstrates the AI-native
+ * `⌘K` command palette inside ATLVS. Demonstrates the AI-native
  * affordances (slash + natural-language entry, ranked suggestions, inline
  * AI assist) without dragging the actual palette state into the marketing
  * bundle.

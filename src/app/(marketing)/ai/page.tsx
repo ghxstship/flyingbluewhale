@@ -151,7 +151,7 @@ export default function AiHub() {
 
       <FAQSection title="AI · FAQ" faqs={HUB_FAQS} />
 
-      <CTASection title="The Console Is Open." subtitle="Free for small teams. AI included on Crew and up." />
+      <CTASection title="ATLVS Is Open." subtitle="Free for small teams. AI included on Crew and up." />
     </div>
   );
 }

@@ -57,7 +57,7 @@ const MILESTONES = [
   {
     date: "2026 Q1",
     title: "Three apps on one schema",
-    body: "ATLVS, GVTEWAY, COMPVSS shipped on one database — console, portal, field.",
+    body: "ATLVS, GVTEWAY, COMPVSS shipped on one database — workspace, portal, field.",
   },
   {
     date: "2025 Q4",
@@ -145,7 +145,7 @@ export default function AboutPage() {
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
             ATLVS is a production + technology studio. We&apos;ve staffed residencies, touring runs, private launches,
             gallery programs, brand activations. We shipped software for every one of them. The platform is a decade of
-            in-the-field instinct, compressed into one console.
+            in-the-field instinct, compressed into one workspace.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <Link className="underline underline-offset-4" href="/careers">
@@ -169,11 +169,11 @@ export default function AboutPage() {
       </section>
 
       <CTASection
-        title="Open the Console."
+        title="ATLVS Is Open."
         subtitle="Free forever for small teams. Per-org pricing the rest of the way up."
-        primaryLabel="Open the console"
+        primaryLabel="Sign Up Free"
         primaryHref="/signup"
-        secondaryLabel="Talk to the studio"
+        secondaryLabel="Book a Walkthrough"
         secondaryHref="/contact"
       />
     </div>

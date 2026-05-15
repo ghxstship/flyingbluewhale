@@ -8,7 +8,7 @@ import { buildMetadata, breadcrumbSchema, SITE } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Status — Platform Uptime + Incident History",
   description:
-    "Real-time platform status across console, portal, field, and the marketing surface. Subscribe to incident alerts.",
+    "Real-time platform status across ATLVS, GVTEWAY, COMPVSS, and the marketing surface. Subscribe to incident alerts.",
   path: "/status",
   keywords: ["ATLVS status", "ATLVS uptime", "ATLVS Technologies incidents", "platform health"],
   ogImageEyebrow: "Status",
@@ -18,7 +18,7 @@ export const metadata: Metadata = buildMetadata({
 type ServiceRow = { name: string; description: string; state: "operational" | "degraded" | "outage" };
 
 const SERVICES: ServiceRow[] = [
-  { name: "ATLVS Console", description: "Internal operations (app.atlvs.pro)", state: "operational" },
+  { name: "ATLVS", description: "Production operations workspace (app.atlvs.pro)", state: "operational" },
   { name: "GVTEWAY Portal", description: "Stakeholder portals (gvteway.atlvs.pro)", state: "operational" },
   { name: "COMPVSS Field", description: "Offline-first PWA (compvss.atlvs.pro)", state: "operational" },
   { name: "Marketing + Auth", description: "atlvs.pro + auth flows", state: "operational" },
@@ -56,7 +56,7 @@ export default function StatusPage() {
           All Systems Operational.
         </h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          Real-time platform health across console, portal, field, and the marketing surface. Subscribe for incident
+          Real-time platform health across ATLVS, GVTEWAY, COMPVSS, and the marketing surface. Subscribe for incident
           alerts via email or webhook.
         </p>
         <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-1.5">
@@ -112,10 +112,7 @@ export default function StatusPage() {
         </div>
       </section>
 
-      <CTASection
-        title="The Console Is Open."
-        subtitle="Free for small teams. Per-org pricing the rest of the way up."
-      />
+      <CTASection title="ATLVS Is Open." subtitle="Free for small teams. Per-org pricing the rest of the way up." />
     </div>
   );
 }

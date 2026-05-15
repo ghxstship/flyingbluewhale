@@ -44,7 +44,7 @@ export function StickyCTABar() {
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-xs sm:text-sm">
-          <span className="font-semibold">The console is open.</span>{" "}
+          <span className="font-semibold">ATLVS is open.</span>{" "}
           <span className="text-[var(--text-muted)]">Free for small teams. No card.</span>
         </div>
         <div className="flex items-center gap-2">

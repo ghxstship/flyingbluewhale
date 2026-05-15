@@ -37,7 +37,7 @@ import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSc
 export const metadata: Metadata = buildMetadata({
   title: "ATLVS — Production Runs On It",
   description:
-    "The platform for production. Pitch to wrap, in one console. Three apps, one schema, every module — pre-pro through strike.",
+    "The production operations platform. Pitch to wrap, in one workspace. Three apps, one schema, every module — pre-pro through strike.",
   path: "/",
   languages: {
     "es-ES": `${SITE.baseUrl}/es-ES`,
@@ -83,15 +83,15 @@ export default function Home() {
             Runs On It.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-            The platform for live work. Pitch to wrap, in one console. Three apps, one schema, every module — pre-pro
+            The platform for live work. Pitch to wrap, in one workspace. Three apps, one schema, every module — pre-pro
             through strike.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Button href="/signup" size="lg">
-              Open the Console
+              Sign Up Free
             </Button>
             <Button href="/contact" size="lg" variant="secondary">
-              Talk to the Studio
+              Book a Walkthrough
             </Button>
             <Link href="/docs" className="btn btn-ghost btn-lg">
               Read the Docs →
@@ -142,8 +142,8 @@ export default function Home() {
             <div className="eyebrow">Receipts over promises</div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">What it looks like, running.</h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-              Real product surfaces. Audit log on the left, AI-native command palette on the right. Both ship in the
-              console today — not in a roadmap card.
+              Real product surfaces. Audit log on the left, AI-native command palette on the right. Both ship in ATLVS
+              today — not in a roadmap card.
             </p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-2 md:items-start">
@@ -171,7 +171,7 @@ export default function Home() {
           {[
             {
               slug: "atlvs",
-              eyebrow: "ATLVS · The Console",
+              eyebrow: "ATLVS",
               title: "Where the production lives.",
               body: "RFIs, submittals, daily logs, punch list, inspections, advancing, finance, procurement, AI assistant. One sidebar. Pitch through wrap.",
               bullets: [
@@ -183,7 +183,7 @@ export default function Home() {
             },
             {
               slug: "gvteway",
-              eyebrow: "GVTEWAY · The Portal",
+              eyebrow: "GVTEWAY",
               title: "Twelve personas. Each their lane.",
               body: "Artists see riders. Vendors see POs. Clients see proposals. Sponsors see activations. Same project, scoped reads, RLS at the database.",
               bullets: [
@@ -195,7 +195,7 @@ export default function Home() {
             },
             {
               slug: "compvss",
-              eyebrow: "COMPVSS · The Field",
+              eyebrow: "COMPVSS",
               title: "Offline. Sub-100ms.",
               body: "Gate scan, shift clock-in, daily log, incident, medic triage, driver run, guard tour, warehouse, daily safety brief. Works on one-bar LTE.",
               bullets: [
@@ -237,7 +237,7 @@ export default function Home() {
 
       <StatStrip
         stats={[
-          { value: "47", label: "modules in the console" },
+          { value: "47", label: "modules in ATLVS" },
           { value: "1 schema", label: "across three apps" },
           { value: "<100ms", label: "gate scan, signal or none" },
           { value: "Per org", label: "never per seat" },
@@ -249,7 +249,7 @@ export default function Home() {
         <ScrollReveal className="mx-auto max-w-3xl text-center">
           <div className="eyebrow eyebrow-accent">Pitch · Build · Wrap</div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Every Phase. One Console.
+            Every Phase. One Workspace.
           </h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             The work doesn&apos;t hand off between platforms. Neither does the data.
@@ -504,11 +504,11 @@ export default function Home() {
       <FAQSection title="FAQ" faqs={HOME_FAQ} />
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
-        primaryLabel="Open the console"
+        primaryLabel="Sign Up Free"
         primaryHref="/signup"
-        secondaryLabel="Talk to the studio"
+        secondaryLabel="Book a Walkthrough"
         secondaryHref="/contact"
       />
     </>
@@ -518,7 +518,7 @@ export default function Home() {
 const HOME_FAQ = [
   {
     q: "What does the platform do?",
-    a: "Forty-seven modules across three apps that share one database. ATLVS is the office console — RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. GVTEWAY is the stakeholder portal — twelve personas, each their lane. COMPVSS is the offline-first field PWA — gate scan, shift clock-in, incidents, medical, daily safety brief. Same record, three optimized surfaces.",
+    a: "Forty-seven modules across three apps that share one database. ATLVS is the production operations workspace — RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. GVTEWAY is the stakeholder portal — twelve personas, each their lane. COMPVSS is the offline-first field PWA — gate scan, shift clock-in, incidents, medical, daily safety brief. Same record, three optimized surfaces.",
   },
   {
     q: "Who's it for?",
@@ -550,6 +550,6 @@ const HOME_FAQ = [
   },
   {
     q: "How do I get started?",
-    a: 'Open the console — 30 seconds, no card. Or talk to the studio if you want a walkthrough wired to a real production. We don\'t do "talk to sales" walls — the platform is open to look at.',
+    a: 'Sign up free — 30 seconds, no card. Or book a walkthrough wired to a real production. We don\'t do "talk to sales" walls — the platform is open to look at.',
   },
 ];

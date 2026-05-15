@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = buildMetadata({
   title: "Features — Every Module. Native.",
   description:
-    "Forty-seven modules across three apps that share one database. Console, portal, field. AI, finance, procurement, audit. One source.",
+    "Forty-seven modules across three apps that share one database. ATLVS, GVTEWAY, COMPVSS. AI, finance, procurement, audit. One source.",
   path: "/features",
   keywords: ["production software features", "event management platform", "stakeholder portals", "mobile field PWA"],
   ogImageEyebrow: "Features",
@@ -22,16 +22,16 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const CATEGORIES = [
-  { key: "console", title: "The console", desc: "ATLVS — 47 modules, 9 domains, one sidebar." },
+  { key: "atlvs", title: "ATLVS", desc: "Production operations workspace — 47 modules, 9 domains, one sidebar." },
   {
     key: "portals",
-    title: "The portal",
-    desc: "GVTEWAY — twelve personas, each their lane.",
+    title: "GVTEWAY",
+    desc: "Stakeholder portal — twelve personas, each their lane.",
   },
   {
     key: "mobile",
-    title: "The field",
-    desc: "COMPVSS — offline-first PWA. Gate, shift, incident, medic.",
+    title: "COMPVSS",
+    desc: "Offline-first field PWA. Gate, shift, incident, medic.",
   },
   {
     key: "procore-parity",

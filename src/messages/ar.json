@@ -298,8 +298,7 @@
   },
   "shell": {
     "platform": {
-      "brand": "ATLVS",
-      "consoleEyebrow": "وحدة تحكم العمليات"
+      "brand": "ATLVS"
     },
     "portal": {
       "brand": "GVTEWAY"

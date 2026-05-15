@@ -197,7 +197,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
 
       <FAQSection title={`vs. ${c.competitor} · FAQ`} faqs={c.faqs} />
 
-      <CTASection title="The Console Is Open." subtitle="Free forever for small teams. Migrate when you're ready." />
+      <CTASection title="ATLVS Is Open." subtitle="Free forever for small teams. Migrate when you're ready." />
     </div>
   );
 }

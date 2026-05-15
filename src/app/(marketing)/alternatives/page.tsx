@@ -59,7 +59,7 @@ export default function AlternativesIndex() {
         </div>
       </section>
 
-      <CTASection title="The Console Is Open." subtitle="Free forever for small teams. Migrate when you're ready." />
+      <CTASection title="ATLVS Is Open." subtitle="Free forever for small teams. Migrate when you're ready." />
     </div>
   );
 }

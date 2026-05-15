@@ -51,10 +51,8 @@ export default function CompvssPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          COMPVSS · The Field
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+        <div className="eyebrow eyebrow-accent">COMPVSS</div>
+        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">
           Offline.
           <br />
           Sub-100ms.
@@ -64,9 +62,9 @@ export default function CompvssPage() {
           tour, warehouse, daily safety brief. Works on one-bar LTE.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Open the Console</Button>
+          <Button href="/signup">Sign Up Free</Button>
           <Button href="/contact" variant="secondary">
-            Talk to the Studio
+            Book a Walkthrough
           </Button>
         </div>
       </section>
@@ -179,9 +177,9 @@ export default function CompvssPage() {
       <CTASection
         title="Open the Field App."
         subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap."
-        primaryLabel="Open the console"
+        primaryLabel="Sign Up Free"
         primaryHref="/signup"
-        secondaryLabel="Talk to the studio"
+        secondaryLabel="Book a Walkthrough"
         secondaryHref="/contact"
       />
     </div>

@@ -52,18 +52,16 @@ export default function GvtewayPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          GVTEWAY · The Portal
-        </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Twelve Personas. Each Their Lane.</h1>
+        <div className="eyebrow eyebrow-accent">GVTEWAY</div>
+        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">Twelve Personas. Each Their Lane.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same project. Twelve scoped
           reads. RLS at the database.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Open the Console</Button>
+          <Button href="/signup">Sign Up Free</Button>
           <Button href="/contact" variant="secondary">
-            Talk to the Studio
+            Book a Walkthrough
           </Button>
         </div>
       </section>
@@ -166,7 +164,7 @@ export default function GvtewayPage() {
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">Written Once. Read Twelve Ways.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              One Know-Before-You-Go doc in the console. Renders per-persona in the portal and in the field. Artists get
+              One Know-Before-You-Go doc in ATLVS. Renders per-persona in the portal and in the field. Artists get
               riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. Seventeen section
               types. One source, twelve reads.
             </p>
@@ -241,9 +239,9 @@ export default function GvtewayPage() {
       <CTASection
         title="Twelve Personas. One Source."
         subtitle="Wired default. Reskin if you want. Use it if you don't."
-        primaryLabel="Open the console"
+        primaryLabel="Sign Up Free"
         primaryHref="/signup"
-        secondaryLabel="Talk to the studio"
+        secondaryLabel="Book a Walkthrough"
         secondaryHref="/contact"
       />
     </div>

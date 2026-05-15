@@ -53,11 +53,11 @@ export default function ComparePage() {
       </section>
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Free forever for small teams."
-        primaryLabel="Open the console"
+        primaryLabel="Sign Up Free"
         primaryHref="/signup"
-        secondaryLabel="Talk to the studio"
+        secondaryLabel="Book a Walkthrough"
         secondaryHref="/contact"
       />
     </div>

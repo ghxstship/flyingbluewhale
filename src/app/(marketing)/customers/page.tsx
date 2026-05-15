@@ -112,7 +112,7 @@ export default function CustomersHub() {
         subtitle="Send a one-paragraph note about your upcoming event window and we'll talk about a partnership."
         primaryLabel="Book a brief"
         primaryHref={CANONICAL_CTAS.secondary.href}
-        secondaryLabel="Open the console"
+        secondaryLabel="Sign Up Free"
       />
     </div>
   );

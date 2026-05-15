@@ -94,7 +94,7 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
       </section>
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Open this template — and the other 47 modules — free for small teams."
       />
     </div>

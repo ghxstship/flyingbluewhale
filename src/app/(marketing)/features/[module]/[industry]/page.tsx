@@ -191,7 +191,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
 
       <CTASection
         title={`Run ${mod.name} On ${ind.name} Production.`}
-        subtitle="Open the console free for small teams. Per-org pricing the rest of the way up."
+        subtitle="Sign up free for small teams. Per-org pricing the rest of the way up."
       />
 
       <FAQSection title={`${mod.name} for ${ind.name} · FAQ`} faqs={faqs} />
@@ -232,7 +232,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
       />
     </div>

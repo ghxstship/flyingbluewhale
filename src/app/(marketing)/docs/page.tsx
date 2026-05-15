@@ -31,7 +31,10 @@ const SECTIONS = [
   {
     title: "API v1",
     desc: "A clean REST API with validated inputs and predictable responses.",
-    href: "/console/settings/api",
+    // Unauthenticated visitors land on signup; auth flow returns them to
+    // Settings → API inside ATLVS once they're in. Avoids surfacing the
+    // internal /console/* route path in the marketing site.
+    href: "/signup?next=/settings/api",
   },
   {
     title: "Guides CMS",

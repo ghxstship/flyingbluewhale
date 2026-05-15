@@ -148,7 +148,7 @@ export function MarketingHeader() {
             Log in
           </Link>
           <Link href="/signup" className="btn btn-primary btn-sm">
-            Open the console
+            Sign Up Free
           </Link>
         </div>
 
@@ -217,7 +217,7 @@ export function MarketingHeader() {
                 className="btn btn-primary btn-sm w-full justify-center"
                 onClick={() => setMobileOpen(false)}
               >
-                Open the console
+                Sign Up Free
               </Link>
             </div>
           </div>

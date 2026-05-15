@@ -36,7 +36,7 @@ const FAQS = [
   },
   {
     q: "Can I just try it without a call?",
-    a: "Yes. Open the console — 30 seconds, no card. The walkthrough is for teams that want to see specific workflows wired to their use case.",
+    a: "Yes. Sign up free — 30 seconds, no card. The walkthrough is for teams that want to see specific workflows wired to their use case.",
   },
 ];
 
@@ -55,11 +55,11 @@ export default function DemoIndex() {
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Demo</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">Walk The Platform.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          Forty minutes, wired to a real production. Pick the walkthrough that matches your work — or open the console
-          for free first and bring questions later.
+          Forty minutes, wired to a real production. Pick the walkthrough that matches your work — or sign up free first
+          and bring questions later.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href={CANONICAL_CTAS.primary.href}>Open the console (free)</Button>
+          <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
             {CANONICAL_CTAS.secondary.label}
           </Button>
@@ -90,7 +90,7 @@ export default function DemoIndex() {
       <FAQSection title="FAQ" faqs={FAQS} />
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
       />
     </div>

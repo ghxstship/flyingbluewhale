@@ -197,7 +197,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <FAQSection title={`${config.name} · FAQ`} faqs={config.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">The Rest Of The Console.</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">The Rest Of ATLVS.</h2>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
           One database. Every module reads from the same record.
         </p>
@@ -218,7 +218,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       </section>
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
       />
     </div>

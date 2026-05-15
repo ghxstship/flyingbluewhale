@@ -37,7 +37,7 @@ export const metadata: Metadata = buildMetadata({
 const FAQ_PT = [
   {
     q: "O que a plataforma faz?",
-    a: "Quarenta e sete módulos em três apps que compartilham um banco de dados. ATLVS é o console do escritório — RFIs, submittals, daily logs, punch, advancing, financeiro, procurement, IA. GVTEWAY é o portal de stakeholders. COMPVSS é o PWA offline-first do campo — scan de portão, ponto eletrônico, incidentes, médico, briefing diário de segurança.",
+    a: "Quarenta e sete módulos em três apps que compartilham um banco de dados. ATLVS é o workspace de operações — RFIs, submittals, daily logs, punch, advancing, financeiro, procurement, IA. GVTEWAY é o portal de stakeholders. COMPVSS é o PWA offline-first do campo — scan de portão, ponto eletrônico, incidentes, médico, briefing diário de segurança.",
   },
   {
     q: "Pra quem é?",
@@ -79,15 +79,15 @@ export default function HomePT() {
           Roda Aqui.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          A plataforma para trabalho ao vivo. Do pitch ao wrap, em um console. Três apps, um schema, cada módulo — da
+          A plataforma para trabalho ao vivo. Do pitch ao wrap, em um workspace. Três apps, um schema, cada módulo — da
           pré-produção ao strike.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href} size="lg">
-            Abrir O Console
+            Cadastre-se Grátis
           </Button>
           <Button href={CANONICAL_CTAS.secondary.href} size="lg" variant="secondary">
-            Fale Com O Estúdio
+            Agende Um Walkthrough
           </Button>
         </div>
       </section>
@@ -100,17 +100,17 @@ export default function HomePT() {
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {[
             {
-              name: "ATLVS · O Console",
+              name: "ATLVS",
               body: "RFIs, submittals, daily logs, punch, advancing, financeiro, procurement, IA. Uma sidebar só. Do pitch ao wrap.",
               href: "/solutions/atlvs",
             },
             {
-              name: "GVTEWAY · O Portal",
+              name: "GVTEWAY",
               body: "Doze personas. Cada uma na sua faixa. Artistas veem riders. Vendors veem POs. Clientes veem propostas.",
               href: "/solutions/gvteway",
             },
             {
-              name: "COMPVSS · O Campo",
+              name: "COMPVSS",
               body: "Offline. Sub-100ms. Scan, ponto, incidente, médico, brief diário. Funciona com uma barra de LTE.",
               href: "/solutions/compvss",
             },
@@ -129,10 +129,10 @@ export default function HomePT() {
       <FAQSection title="FAQ" faqs={FAQ_PT} />
 
       <CTASection
-        title="O Console Está Aberto."
+        title="ATLVS Está Aberto."
         subtitle="Grátis, pra sempre, para times pequenos. Preço por organização, não por assento."
-        primaryLabel="Abrir o console"
-        secondaryLabel="Fale com o estúdio"
+        primaryLabel="Cadastre-se Grátis"
+        secondaryLabel="Agende Um Walkthrough"
       />
     </div>
   );

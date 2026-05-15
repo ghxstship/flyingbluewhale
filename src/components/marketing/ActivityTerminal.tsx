@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 /**
  * `<ActivityTerminal>` — a live-looking, ticker-style activity feed in the
  * `.surface-terminal` aesthetic. Visually replicates the audit-log /
- * production-feed surface inside the console so marketing visitors see the
- * actual texture of the product (mono type, timestamps, color-coded events)
- * rather than an abstract illustration.
+ * production-feed surface inside ATLVS so marketing visitors see the actual
+ * texture of the product (mono type, timestamps, color-coded events) rather
+ * than an abstract illustration.
  *
  * Content is scripted, not live. Loops through `EVENTS` and prepends one
  * row every ~2.2s up to MAX_VISIBLE. Old rows fade. Designed to read as

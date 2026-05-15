@@ -4,10 +4,15 @@ import type { Metadata } from "next";
  * Canonical CTA pair — every marketing surface that needs a primary +
  * secondary action imports these so the copy stays aligned with the
  * voice canon. Don't fork. If a page needs different wording, raise it.
+ *
+ * "Sign Up Free" is the canonical primary — direct action verb + value
+ * loaded ("Free"). Outperforms generic "Get Started" in 2026 freemium B2B
+ * conversion tests, and the "Free" qualifier earns the click from buyers
+ * who'd otherwise bounce on a perceived sales-call wall.
  */
 export const CANONICAL_CTAS = {
-  primary: { label: "Open the console", href: "/signup" },
-  secondary: { label: "Book a walkthrough", href: "/contact" },
+  primary: { label: "Sign Up Free", href: "/signup" },
+  secondary: { label: "Book a Walkthrough", href: "/contact" },
 } as const;
 
 // Locale SSOT lives in `src/lib/i18n/config.ts`. The cookie-based switcher
@@ -52,9 +57,13 @@ export const SITE = {
     "creative operations platform",
   ],
   apps: {
-    atlvs: { name: "ATLVS", tagline: "The console · where the production lives", color: "#DC2626" },
-    gvteway: { name: "GVTEWAY", tagline: "The portal · twelve personas, each their lane", color: "#2563EB" },
-    compvss: { name: "COMPVSS", tagline: "The field · offline, sub-100ms", color: "#D97706" },
+    // Taglines are SEO/GEO comprehension copy (meta descriptions, OG cards,
+    // schema.org subProducts) — NOT branded chrome. Branded surfaces render
+    // the bare sub-brand name (ATLVS / GVTEWAY / COMPVSS) without "The X"
+    // descriptors. See feedback_brand_no_descriptors.md.
+    atlvs: { name: "ATLVS", tagline: "Production operations workspace — where the production lives", color: "#DC2626" },
+    gvteway: { name: "GVTEWAY", tagline: "Stakeholder portal — twelve personas, each their lane", color: "#2563EB" },
+    compvss: { name: "COMPVSS", tagline: "Offline-first field PWA — sub-100ms gate scan", color: "#D97706" },
   },
 } as const;
 

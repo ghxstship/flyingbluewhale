@@ -22,7 +22,7 @@ const ROUTES = [
   {
     icon: Calendar,
     title: "Walkthrough",
-    body: "Thirty minutes. Screen-share the console wired to a real production. No deck.",
+    body: "Thirty minutes. Screen-share ATLVS wired to a real production. No deck.",
     cta: "Get on the calendar",
     href: "#form",
   },
@@ -83,7 +83,7 @@ export default function ContactPage() {
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Contact</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Talk to the Studio.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          No dark patterns. No forced calls. Open the console straight from{" "}
+          No dark patterns. No forced calls. Sign up free at{" "}
           <a className="underline" href="/signup">
             /signup
           </a>
@@ -155,7 +155,7 @@ export default function ContactPage() {
           </label>
           <div className="flex items-center justify-end gap-2">
             <Button href="/signup" variant="secondary">
-              Open the console instead
+              Sign Up Free Instead
             </Button>
             <Button type="submit">Send to the Studio</Button>
           </div>

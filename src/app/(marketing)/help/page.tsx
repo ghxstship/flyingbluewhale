@@ -54,7 +54,7 @@ const TROUBLESHOOTING = [
   {
     icon: ShieldAlert,
     title: "Can't sign in",
-    body: "Try the magic-link flow first — it bypasses password issues. If your email isn't recognized, an admin needs to invite you. The producer or workspace owner can issue an invite from /console/people.",
+    body: "Try the magic-link flow first — it bypasses password issues. If your email isn't recognized, an admin needs to invite you. The producer or workspace owner can issue an invite from Settings → People.",
   },
   {
     icon: Wrench,
@@ -83,7 +83,7 @@ const FAQS: FAQ[] = [
   },
   {
     q: "Where do I find my invoice or change billing details?",
-    a: "Inside the console: Settings → Billing. Stripe-hosted self-serve, so you can update card, download past invoices, or change billing email there directly.",
+    a: "Inside ATLVS: Settings → Billing. Stripe-hosted self-serve, so you can update card, download past invoices, or change billing email there directly.",
   },
   {
     q: "How do I cancel?",

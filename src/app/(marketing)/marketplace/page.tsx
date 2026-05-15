@@ -72,7 +72,7 @@ export default function Page() {
           Publish your own RFQs, gigs, and casting calls — gated by your prequalification rules.
         </p>
         <Button href="/signup" size="sm">
-          Open the console
+          Sign Up Free
         </Button>
       </section>
     </main>

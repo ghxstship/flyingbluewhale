@@ -65,7 +65,7 @@ export default function TemplatesIndex() {
       </section>
 
       <CTASection
-        title="The Console Is Open."
+        title="ATLVS Is Open."
         subtitle="Free, forever, for small teams. Open these templates inside ATLVS."
       />
     </div>

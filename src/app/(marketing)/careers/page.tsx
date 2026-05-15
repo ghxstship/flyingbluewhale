@@ -29,7 +29,7 @@ const VALUES = [
   {
     icon: Layers,
     title: "Crew, not staff",
-    body: "Small group, deep ownership. Every role touches every shell — marketing, console, portal, mobile.",
+    body: "Small group, deep ownership. Every role touches every shell — marketing, ATLVS, portal, mobile.",
   },
   {
     icon: Compass,
@@ -124,8 +124,8 @@ export default function CareersPage() {
           <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-6xl">Build for Production.</h1>
           <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
             We&apos;re building the platform the live-events industry has needed for fifteen years — one operating
-            system that runs the producer&apos;s console, the crew&apos;s phone, and the client&apos;s portal off the
-            same database. Small studio, deep ownership, real shows.
+            system that runs the producer&apos;s desk, the crew&apos;s phone, and the client&apos;s portal off the same
+            database. Small studio, deep ownership, real shows.
           </p>
         </div>
       </section>

@@ -132,7 +132,7 @@ export function PricingCalculator() {
             href="/signup"
             className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-semibold text-[var(--org-primary)] underline underline-offset-4"
           >
-            Open the console <ArrowRight size={12} className="cta-nudge" aria-hidden />
+            Sign up free <ArrowRight size={12} className="cta-nudge" aria-hidden />
           </a>
         </div>
       </div>

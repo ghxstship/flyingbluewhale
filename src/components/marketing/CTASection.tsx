@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CANONICAL_CTAS } from "@/lib/seo";
 
 export function CTASection({
-  title = "The Console Is Open.",
+  title = "ATLVS Is Open.",
   subtitle = "Free, forever, for small teams. Per-org pricing the rest of the way up.",
   primaryLabel = CANONICAL_CTAS.primary.label,
   primaryHref = CANONICAL_CTAS.primary.href,

@@ -92,7 +92,7 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
 
       <FAQSection title={`${p.buyer} · FAQ`} faqs={p.faqs} />
 
-      <CTASection title="Ready When You Are." subtitle="Free console first. Walkthrough when you have questions." />
+      <CTASection title="Ready When You Are." subtitle="Sign up free first. Walkthrough when you have questions." />
     </div>
   );
 }

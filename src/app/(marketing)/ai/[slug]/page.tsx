@@ -151,7 +151,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
         </div>
       </section>
 
-      <CTASection title="The Console Is Open." subtitle="Free for small teams. AI included on Crew and up." />
+      <CTASection title="ATLVS Is Open." subtitle="Free for small teams. AI included on Crew and up." />
     </div>
   );
 }

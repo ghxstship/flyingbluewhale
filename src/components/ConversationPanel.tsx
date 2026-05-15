@@ -1,14 +1,6 @@
 import { listMessagesFor, type ConversationRecordType } from "@/lib/db/conversations";
 import { ConversationComposer } from "./ConversationComposer";
-
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+import { formatDateTime } from "@/lib/i18n/format";
 
 /**
  * Per-record threaded comments. Renders a chronological list of messages
@@ -42,7 +34,7 @@ export async function ConversationPanel({
               <span className="text-xs font-semibold text-[var(--foreground)]">
                 {m.author_name ?? m.author_email ?? "Someone"}
               </span>
-              <span className="font-mono text-[10px] text-[var(--text-muted)]">{fmt(m.created_at)}</span>
+              <span className="font-mono text-[10px] text-[var(--text-muted)]">{formatDateTime(m.created_at)}</span>
             </div>
             <p className="mt-1 text-sm whitespace-pre-wrap">{m.body}</p>
           </div>

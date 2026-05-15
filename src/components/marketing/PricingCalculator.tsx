@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Calculator, ArrowRight } from "lucide-react";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /**
  * `<PricingCalculator>` — total-cost-of-ownership calculator for /pricing.
@@ -24,14 +25,12 @@ import { Calculator, ArrowRight } from "lucide-react";
  */
 const ATLVS_PRODUCTION_ANNUAL = 199 * 12; // $2,388/yr
 
-function formatUsd(n: number) {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-}
-
 export function PricingCalculator() {
   const [shows, setShows] = useState(12);
   const [crew, setCrew] = useState(25);
   const [stackMonthly, setStackMonthly] = useState(1400);
+  const fmt = useFormatters();
+  const usd = (dollars: number) => fmt.money(Math.round(dollars * 100));
 
   const numbers = useMemo(() => {
     const stackAnnual = stackMonthly * 12;
@@ -111,14 +110,14 @@ export function PricingCalculator() {
           </div>
 
           <dl className="mt-4 space-y-3">
-            <Row label="Current stack — annual" value={formatUsd(numbers.stackAnnual)} tone="dim" />
-            <Row label="ATLVS Production — annual" value={formatUsd(numbers.atlvsAnnual)} tone="accent" />
-            <Row label="Annual savings" value={formatUsd(numbers.savings)} tone="ok" emphasize />
+            <Row label="Current stack — annual" value={usd(numbers.stackAnnual)} tone="dim" />
+            <Row label="ATLVS Production — annual" value={usd(numbers.atlvsAnnual)} tone="accent" />
+            <Row label="Annual savings" value={usd(numbers.savings)} tone="ok" emphasize />
           </dl>
 
           <div className="mt-5 grid grid-cols-2 gap-3 border-t border-[var(--border-color)] pt-4">
-            <Tile label="Current per show" value={formatUsd(numbers.stackPerShow)} />
-            <Tile label="ATLVS per show" value={formatUsd(numbers.atlvsPerShow)} tone="accent" />
+            <Tile label="Current per show" value={usd(numbers.stackPerShow)} />
+            <Tile label="ATLVS per show" value={usd(numbers.atlvsPerShow)} tone="accent" />
           </div>
 
           <div className="mt-5 flex items-center justify-between border-t border-[var(--border-color)] pt-4">
@@ -159,13 +158,14 @@ function Field({
   prefix?: string;
   suffix?: string;
 }) {
+  const fmt = useFormatters();
   return (
     <div>
       <div className="flex items-baseline justify-between">
         <label className="text-xs font-semibold tracking-tight">{label}</label>
         <div className="font-mono text-sm tabular-nums">
           {prefix}
-          {value.toLocaleString()}
+          {fmt.number(value, { maximumFractionDigits: 0 })}
           {suffix && <span className="ml-1 text-[var(--text-muted)]">{suffix}</span>}
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Plus, X } from "lucide-react";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 type Leg = { id: string; city: string; days: number; rate: number; headcount: number };
 
@@ -16,6 +17,8 @@ const GSA_TIER_PRESETS: Array<{ label: string; rate: number; hint: string }> = [
 
 export function PerDiemCalculator() {
   const [legs, setLegs] = useState<Leg[]>([{ id: "1", city: "", days: 5, rate: DEFAULT_RATE, headcount: 6 }]);
+  const fmt = useFormatters();
+  const usd = (dollars: number) => fmt.money(Math.round(dollars * 100));
 
   const total = useMemo(
     () => legs.reduce((sum, l) => sum + Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount), 0),
@@ -119,7 +122,7 @@ export function PerDiemCalculator() {
                   Leg total
                 </label>
                 <div className="mt-1 rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 font-mono text-sm">
-                  ${(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount)).toLocaleString()}
+                  {usd(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount))}
                 </div>
               </div>
             </div>
@@ -138,7 +141,7 @@ export function PerDiemCalculator() {
               {totalDays} crew-days across {legs.length} leg{legs.length === 1 ? "" : "s"}
             </div>
           </div>
-          <div className="font-mono text-2xl font-semibold">${total.toLocaleString()}</div>
+          <div className="font-mono text-2xl font-semibold">{usd(total)}</div>
         </div>
       </div>
     </div>

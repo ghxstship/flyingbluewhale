@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 const USE_TYPES: Array<{ slug: string; label: string; sqftPerPerson: number; hint: string }> = [
   {
@@ -36,6 +37,7 @@ export function CapacityCalculator() {
   const [sqft, setSqft] = useState(5000);
   const [useType, setUseType] = useState(USE_TYPES[0].slug);
   const [usableFactor, setUsableFactor] = useState(80);
+  const fmt = useFormatters();
 
   const selectedUse = USE_TYPES.find((u) => u.slug === useType) ?? USE_TYPES[0];
 
@@ -100,10 +102,10 @@ export function CapacityCalculator() {
               Estimated capacity
             </div>
             <div className="mt-1 text-[11px] text-[var(--text-muted)]">
-              Usable area: {Math.round(usableSqft).toLocaleString()} sf at {selectedUse.sqftPerPerson} sf/person
+              Usable area: {fmt.number(Math.round(usableSqft), { maximumFractionDigits: 0 })} sf at {selectedUse.sqftPerPerson} sf/person
             </div>
           </div>
-          <div className="font-mono text-2xl font-semibold">{occupancy.toLocaleString()}</div>
+          <div className="font-mono text-2xl font-semibold">{fmt.number(occupancy, { maximumFractionDigits: 0 })}</div>
         </div>
       </div>
 

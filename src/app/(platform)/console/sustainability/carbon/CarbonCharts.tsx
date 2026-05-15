@@ -19,9 +19,9 @@ import { ChartShell } from "@/components/charts/ChartShell";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 const SCOPE_COLORS: Record<string, string> = {
-  "Scope 1": "#ef4444",
-  "Scope 2": "#f59e0b",
-  "Scope 3": "#22c55e",
+  "Scope 1": "var(--color-error)",
+  "Scope 2": "var(--color-warning)",
+  "Scope 3": "var(--color-success)",
 };
 
 export function CarbonCharts({

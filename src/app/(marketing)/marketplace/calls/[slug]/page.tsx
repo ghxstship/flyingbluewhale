@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { formatDate, formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +31,7 @@ type Row = {
 };
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
   if (!hasSupabase) return notFound();
   const supabase = await createClient();
   const { data } = await supabase.from("public_open_calls").select("*").eq("public_slug", slug).maybeSingle();
@@ -53,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <div className="flex flex-wrap gap-2">
           {c.region && <Badge variant="muted">{c.region}</Badge>}
           {c.venue_type && <Badge variant="muted">{c.venue_type}</Badge>}
-          {c.deadline_at && <Badge variant="warning">Closes {new Date(c.deadline_at).toLocaleDateString()}</Badge>}
+          {c.deadline_at && <Badge variant="warning">Closes {formatDate(c.deadline_at, { locale })}</Badge>}
         </div>
       </header>
 
@@ -85,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Deadline:</span>{" "}
-              {c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}
+              {c.deadline_at ? formatDateTime(c.deadline_at, { locale }) : "—"}
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Submissions:</span> {c.submission_count}

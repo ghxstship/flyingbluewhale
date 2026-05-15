@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +36,7 @@ type Row = {
 };
 
 export default async function Page() {
+  const locale = await getRequestLocale();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -71,8 +74,8 @@ export default async function Page() {
               meta={[
                 r.region,
                 r.venue_type,
-                r.performance_date ? `Show ${new Date(r.performance_date).toLocaleDateString()}` : null,
-                r.deadline_at ? `Closes ${new Date(r.deadline_at).toLocaleDateString()}` : null,
+                r.performance_date ? `Show ${formatDate(r.performance_date, { locale })}` : null,
+                r.deadline_at ? `Closes ${formatDate(r.deadline_at, { locale })}` : null,
                 formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
               ]}
             />

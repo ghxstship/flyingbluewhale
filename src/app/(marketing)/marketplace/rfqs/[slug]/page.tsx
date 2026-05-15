@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +27,7 @@ type Rfq = {
 };
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
   if (!hasSupabase) return notFound();
   const supabase = await createClient();
   const { data } = await supabase.from("public_rfq_marketplace").select("*").eq("public_slug", slug).maybeSingle();
@@ -47,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <div className="flex flex-wrap gap-2 text-sm text-[var(--text-secondary)]">
           {r.region && <Badge variant="muted">{r.region}</Badge>}
           {r.budget_band && <Badge variant="muted">{r.budget_band}</Badge>}
-          {r.due_at && <Badge variant="warning">Due {new Date(r.due_at).toLocaleDateString()}</Badge>}
+          {r.due_at && <Badge variant="warning">Due {formatDate(r.due_at, { locale })}</Badge>}
         </div>
       </header>
 

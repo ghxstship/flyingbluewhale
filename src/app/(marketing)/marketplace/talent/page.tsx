@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { formatNumber } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +34,7 @@ type Row = {
 };
 
 export default async function Page() {
+  const locale = await getRequestLocale();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -69,7 +72,7 @@ export default async function Page() {
               meta={[
                 formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
                 r.travel_radius_km ? `${r.travel_radius_km} km radius` : null,
-                r.monthly_listeners ? `${r.monthly_listeners.toLocaleString()} mo listeners` : null,
+                r.monthly_listeners ? `${formatNumber(r.monthly_listeners, { locale })} mo listeners` : null,
               ]}
               rating={{ avg: r.rating_avg, count: r.rating_count }}
               verified={r.is_verified}

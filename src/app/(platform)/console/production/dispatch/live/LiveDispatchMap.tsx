@@ -73,14 +73,14 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
 function statusColor(status: string): string {
   switch (status) {
     case "in_transit":
-      return "#3b82f6";
+      return "var(--color-info)";
     case "arrived":
-      return "#22c55e";
+      return "var(--color-success)";
     case "delayed":
-      return "#f59e0b";
+      return "var(--color-warning)";
     case "cancelled":
-      return "#ef4444";
+      return "var(--color-error)";
     default:
-      return "#94a3b8";
+      return "var(--color-text-muted)";
   }
 }

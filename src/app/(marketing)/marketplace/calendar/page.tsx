@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestLocale } from "@/lib/i18n/server";
+import { formatDate, formatTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +19,7 @@ export const metadata: Metadata = buildMetadata({
 type Row = { id: string; kind: string; label: string | null; occurs_at: string; org_name: string; org_slug: string };
 
 export default async function Page() {
+  const locale = await getRequestLocale();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -54,7 +57,7 @@ export default async function Page() {
       ) : (
         days.map((d) => (
           <section key={d} className="surface p-5">
-            <h2 className="mb-2 font-mono text-sm text-[var(--text-secondary)]">{new Date(d).toDateString()}</h2>
+            <h2 className="mb-2 font-mono text-sm text-[var(--text-secondary)]">{formatDate(d, { locale, dateStyle: "full" })}</h2>
             <ul className="divide-y divide-[var(--border-subtle)]">
               {byDay[d].map((r) => (
                 <li key={r.id} className="flex items-center justify-between py-2 text-sm">
@@ -63,7 +66,7 @@ export default async function Page() {
                     <span>{r.label ?? r.org_name}</span>
                   </div>
                   <span className="font-mono text-xs text-[var(--text-secondary)]">
-                    {new Date(r.occurs_at).toLocaleTimeString()}
+                    {formatTime(r.occurs_at, { locale })}
                   </span>
                 </li>
               ))}

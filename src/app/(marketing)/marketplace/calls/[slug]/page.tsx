@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -88,7 +89,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               </div>
               <div>
                 <span className="text-[var(--text-secondary)]">Deadline:</span>{" "}
-                {c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}
+                {c.deadline_at ? formatDateTime(c.deadline_at) : "—"}
               </div>
               <div>
                 <span className="text-[var(--text-secondary)]">Submissions:</span> {c.submission_count}

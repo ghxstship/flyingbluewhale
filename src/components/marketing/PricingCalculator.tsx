@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { formatMoney, formatNumber } from "@/lib/i18n/format";
 import { Calculator, ArrowRight } from "lucide-react";
 
 /**
@@ -25,7 +26,7 @@ import { Calculator, ArrowRight } from "lucide-react";
 const ATLVS_PRODUCTION_ANNUAL = 199 * 12; // $2,388/yr
 
 function formatUsd(n: number) {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  return formatMoney(n * 100, { fractionDigits: 0 });
 }
 
 export function PricingCalculator() {
@@ -165,7 +166,7 @@ function Field({
         <label className="text-xs font-semibold tracking-tight">{label}</label>
         <div className="font-mono text-sm tabular-nums">
           {prefix}
-          {value.toLocaleString()}
+          {formatNumber(value, { maximumFractionDigits: 0 })}
           {suffix && <span className="ml-1 text-[var(--text-muted)]">{suffix}</span>}
         </div>
       </div>

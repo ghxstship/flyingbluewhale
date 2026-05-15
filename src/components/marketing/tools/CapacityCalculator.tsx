@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { formatNumber } from "@/lib/i18n/format";
 
 const USE_TYPES: Array<{ slug: string; label: string; sqftPerPerson: number; hint: string }> = [
   {
@@ -92,10 +93,10 @@ export function CapacityCalculator() {
           <div>
             <div className="eyebrow">Estimated capacity</div>
             <div className="mt-1 text-[11px] text-[var(--text-muted)]">
-              Usable area: {Math.round(usableSqft).toLocaleString()} sf at {selectedUse.sqftPerPerson} sf/person
+              Usable area: {formatNumber(Math.round(usableSqft), { maximumFractionDigits: 0 })} sf at {selectedUse.sqftPerPerson} sf/person
             </div>
           </div>
-          <div className="font-mono text-2xl font-semibold">{occupancy.toLocaleString()}</div>
+          <div className="font-mono text-2xl font-semibold">{formatNumber(occupancy, { maximumFractionDigits: 0 })}</div>
         </div>
       </div>
 

@@ -7,9 +7,9 @@ const messagesCreate = vi.fn();
 
 vi.mock("@anthropic-ai/sdk", () => {
   return {
-    default: vi.fn().mockImplementation(() => ({
-      messages: { create: messagesCreate },
-    })),
+    default: class MockAnthropic {
+      messages = { create: messagesCreate };
+    },
   };
 });
 

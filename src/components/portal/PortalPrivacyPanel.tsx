@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { BRAND } from "@/lib/brand";
 
 type DsarRow = {
   id: string;
@@ -128,7 +129,7 @@ export async function PortalPrivacyPanel({
               Download my data (JSON)
             </Link>
             <Link
-              href={`mailto:privacy@atlvs.pro?subject=DSAR%20—%20${persona}%20${slug}`}
+              href={`mailto:${BRAND.emails.privacy}?subject=DSAR%20—%20${persona}%20${slug}`}
               className="btn btn-secondary btn-sm w-full justify-center"
             >
               Email a DSAR

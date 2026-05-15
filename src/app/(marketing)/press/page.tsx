@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata, breadcrumbSchema, SITE, CANONICAL_CTAS } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = buildMetadata({
   title: "Press — Brand, Logos, Spokespersons",
@@ -93,8 +94,8 @@ export default function PressPage() {
           <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Press Contact</div>
           <div className="mt-3 flex items-center gap-2 text-sm">
             <Mail size={14} aria-hidden="true" className="text-[var(--text-muted)]" />
-            <Link href="mailto:press@atlvs.pro" className="font-medium text-[var(--org-primary)]">
-              press@atlvs.pro
+            <Link href={`mailto:${BRAND.emails.press}`} className="font-medium text-[var(--org-primary)]">
+              {BRAND.emails.press}
             </Link>
           </div>
           <p className="mt-3 text-xs text-[var(--text-muted)]">

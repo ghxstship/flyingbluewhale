@@ -45,7 +45,10 @@ export const BRAND = {
     sales: "sales@atlvs.pro",
     press: "press@atlvs.pro",
     careers: "careers@atlvs.pro",
-    support: "sos@atlvs.pro",
+    support: "support@atlvs.pro",
+    partners: "partners@atlvs.pro",
+    oncall: "oncall@atlvs.pro",
+    privacy: "privacy@atlvs.pro",
     /** Web Push VAPID subject + low-level ops escalation. */
     ops: "ops@atlvs.pro",
     /** Transactional `from:` for Resend. */

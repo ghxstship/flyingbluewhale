@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { FAQSection, type FAQ } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema, SITE } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = buildMetadata({
   title: "Help — Crew Support",
@@ -38,8 +39,8 @@ const CHANNELS = [
     icon: MessageCircle,
     title: "Concierge",
     body: "For customers — triaged by tier (Free, Crew, Production, Festival). Festival gets a four-hour SLA.",
-    cta: "support@atlvs.pro",
-    href: "mailto:support@atlvs.pro",
+    cta: BRAND.emails.support,
+    href: `mailto:${BRAND.emails.support}`,
   },
   {
     icon: Headset,
@@ -71,7 +72,7 @@ const TROUBLESHOOTING = [
 const FAQS: FAQ[] = [
   {
     q: "Where do I report a bug?",
-    a: "Email support@atlvs.pro with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side.",
+    a: `Email ${BRAND.emails.support} with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side.`,
   },
   {
     q: "Do you have a status page?",
@@ -170,7 +171,7 @@ export default function HelpPage() {
         title="Still Stuck? Talk to a Producer."
         subtitle="Concierge email is the fastest path. We respond within hours, faster on Festival."
         primaryLabel="Email Concierge"
-        primaryHref="mailto:support@atlvs.pro"
+        primaryHref={`mailto:${BRAND.emails.support}`}
         secondaryLabel="Open the field guide"
         secondaryHref="/docs"
       />

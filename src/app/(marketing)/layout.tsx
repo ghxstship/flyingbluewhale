@@ -2,6 +2,7 @@ import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
 import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
 import { StickyCTABar } from "@/components/marketing/StickyCTABar";
+import { BRAND } from "@/lib/brand";
 
 const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: string }> }> = [
   {
@@ -120,7 +121,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               </p>
               <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
                 <a
-                  href="https://twitter.com/atlvs.pro"
+                  href={`https://x.com/${BRAND.socialHandle.replace("@", "")}`}
                   target="_blank"
                   rel="noreferrer"
                   className="hover:text-[var(--text-primary)]"

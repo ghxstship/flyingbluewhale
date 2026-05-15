@@ -85,10 +85,10 @@ export function PasswordField({
                     ? score <= 1
                       ? "bg-[var(--color-error)]"
                       : score <= 2
-                        ? "bg-amber-500"
+                        ? "bg-[var(--color-warning)]"
                         : score <= 3
-                          ? "bg-yellow-500"
-                          : "bg-emerald-500"
+                          ? "bg-[var(--color-warning)]"
+                          : "bg-[var(--color-success)]"
                     : "bg-[var(--border-color)]"
                 }`}
               />

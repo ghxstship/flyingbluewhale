@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
+import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = buildMetadata({
   title: "Contact — Talk to the Studio",
@@ -30,22 +31,22 @@ const ROUTES = [
     icon: Mail,
     title: "Studio",
     body: "Direct line to a producer. One business day, usually faster.",
-    cta: "sales@atlvs.pro",
-    href: "mailto:sales@atlvs.pro",
+    cta: BRAND.emails.sales,
+    href: `mailto:${BRAND.emails.sales}`,
   },
   {
     icon: MessageCircle,
     title: "Concierge",
     body: "For current customers — triaged by tier. Festival gets an SLA.",
-    cta: "support@atlvs.pro",
-    href: "mailto:support@atlvs.pro",
+    cta: BRAND.emails.support,
+    href: `mailto:${BRAND.emails.support}`,
   },
   {
     icon: Building2,
     title: "Partners",
     body: "Integrations, agencies, distribution. Build with us.",
-    cta: "partners@atlvs.pro",
-    href: "mailto:partners@atlvs.pro",
+    cta: BRAND.emails.partners,
+    href: `mailto:${BRAND.emails.partners}`,
   },
 ];
 
@@ -110,7 +111,7 @@ export default function ContactPage() {
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leave a Note.</h2>
-        <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@atlvs.pro">
+        <form className="surface mt-8 space-y-4 p-6" method="post" action={`mailto:${BRAND.emails.sales}`}>
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-xs font-medium text-[var(--text-secondary)]">
               Name

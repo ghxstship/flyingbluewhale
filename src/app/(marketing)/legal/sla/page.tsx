@@ -1,3 +1,5 @@
+import { BRAND } from "@/lib/brand";
+
 export default function SlaPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
@@ -9,7 +11,7 @@ export default function SlaPage() {
         </p>
         <p>Service credits for missed SLA: 10% (99.0–99.9%), 25% (98.0–99.0%), 50% (below 98.0%).</p>
         <p>
-          Report incidents to <span className="font-mono">oncall@atlvs.pro</span>.
+          Report incidents to <span className="font-mono">{BRAND.emails.oncall}</span>.
         </p>
       </div>
     </div>

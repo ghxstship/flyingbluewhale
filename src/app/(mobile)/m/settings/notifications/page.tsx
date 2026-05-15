@@ -82,10 +82,10 @@ export default async function NotifPrefsPage() {
                       <div className="text-xs text-[var(--text-muted)]">{k.description}</div>
                     </td>
                     <td className="text-center align-middle">
-                      <input type="checkbox" name={`push_${k.kind}`} defaultChecked={pushOn} className="h-4 w-4" />
+                      <input type="checkbox" name={`push_${k.kind}`} defaultChecked={pushOn} className="h-4 w-4" aria-label={`${k.label} — push`} />
                     </td>
                     <td className="text-center align-middle">
-                      <input type="checkbox" name={`email_${k.kind}`} defaultChecked={emailOn} className="h-4 w-4" />
+                      <input type="checkbox" name={`email_${k.kind}`} defaultChecked={emailOn} className="h-4 w-4" aria-label={`${k.label} — email`} />
                     </td>
                   </tr>
                 );

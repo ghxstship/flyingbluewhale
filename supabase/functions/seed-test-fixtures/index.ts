@@ -29,7 +29,7 @@ const ROLES = [
 // @ts-expect-error — Deno globals
 Deno.serve(async (req: Request) => {
   // @ts-expect-error — Deno globals
-  const expected = Deno.env.get("SEED_TOKEN") ?? "seed-flyingbluewhale-2026";
+  const expected = Deno.env.get("SEED_TOKEN") ?? "seed-atlvs-2026";
   const provided = req.headers.get("x-seed-token");
   if (provided !== expected) {
     return new Response(JSON.stringify({ ok: false, error: "forbidden" }), { status: 403 });
@@ -61,9 +61,9 @@ Deno.serve(async (req: Request) => {
   const orgsByTier: Record<string, string> = {};
   for (const o of created.orgs as Array<{ id: string; tier: string }>) orgsByTier[o.tier] = o.id;
 
-  // 2. Users — one per role; emailed test+{role}@flyingbluewhale.app
+  // 2. Users — one per role; emailed test+{role}@atlvs.pro
   for (const role of ROLES) {
-    const email = `test+${role}@flyingbluewhale.app`;
+    const email = `test+${role}@atlvs.pro`;
     const userMeta = { name: `Test ${role[0].toUpperCase()}${role.slice(1)}` };
 
     // Check if exists

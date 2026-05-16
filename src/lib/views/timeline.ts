@@ -116,16 +116,16 @@ export function dateFromPx(px: number, anchor: Date, pxPerDay: number): Date {
   return addDaysUTC(startOfDayUTC(anchor), days);
 }
 
-const MONTH_FMT = new Intl.DateTimeFormat("en-US", {
+const MONTH_FMT = new Intl.DateTimeFormat(undefined, {
   month: "short",
   year: "numeric",
   timeZone: "UTC",
 });
-const SHORT_MONTH_FMT = new Intl.DateTimeFormat("en-US", {
+const SHORT_MONTH_FMT = new Intl.DateTimeFormat(undefined, {
   month: "short",
   timeZone: "UTC",
 });
-const DAY_FMT = new Intl.DateTimeFormat("en-US", {
+const DAY_FMT = new Intl.DateTimeFormat(undefined, {
   month: "short",
   day: "numeric",
   timeZone: "UTC",

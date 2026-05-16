@@ -46,6 +46,7 @@ import {
 } from "@/lib/views/chart-config";
 import { pivotForChart } from "@/lib/views/chart-aggregate";
 import { HeatmapGrid, type HeatmapCell } from "./HeatmapGrid";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 export type ChartViewProps<T extends Record<string, unknown> = Record<string, unknown>> = {
   config: ChartViewConfig;
@@ -104,6 +105,7 @@ export function ChartView<T extends Record<string, unknown>>({
 }: ChartViewProps<T>): React.ReactElement {
   const data = React.useMemo(() => pivotForChart(rows, config), [rows, config]);
   const isEmpty = !loading && !error && data.length === 0;
+  const { locale } = useLocale();
 
   // Adapter to widen the user's typed onClick to the unknown-row signature
   // recharts hands us back from event payloads.
@@ -140,7 +142,7 @@ export function ChartView<T extends Record<string, unknown>>({
         <EmptyState size="compact" title="No data" description="This chart populates as records are added." />
       ) : (
         <ResponsiveContainer width="100%" height={height}>
-          {renderChart({ config, data, onClick: onClickWide })}
+          {renderChart({ config, data, onClick: onClickWide, locale })}
         </ResponsiveContainer>
       )}
     </ChartShell>
@@ -155,9 +157,10 @@ type RenderArgs = {
   config: ChartViewConfig;
   data: Array<Record<string, unknown>>;
   onClick?: (point: Record<string, unknown>) => void;
+  locale?: string;
 };
 
-function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement {
+function renderChart({ config, data, onClick, locale }: RenderArgs): React.ReactElement {
   const showGrid = config.grid ?? true;
   const showLegend = config.legend ?? true;
   const showTooltip = config.tooltip ?? true;
@@ -165,7 +168,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
   const commonAxes = (
     <>
       {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />}
-      {showTooltip && <ChartTooltip xAxis={config.x} yAxis={config.y} series={config.series} />}
+      {showTooltip && <ChartTooltip xAxis={config.x} yAxis={config.y} series={config.series} locale={locale} />}
       {showLegend && <Legend wrapperStyle={{ fontSize: 10 }} />}
     </>
   );
@@ -174,14 +177,14 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
     <XAxis
       dataKey={config.x.field}
       tick={{ fontSize: 10, fill: "var(--text-muted)" }}
-      tickFormatter={(v) => formatValue(v, config.x.format ?? "auto", config.x.currency)}
+      tickFormatter={(v) => formatValue(v, config.x.format ?? "auto", config.x.currency, locale)}
     />
   );
   const yAxisEl = (
     <YAxis
       tick={{ fontSize: 10, fill: "var(--text-muted)" }}
       tickFormatter={(v) =>
-        formatValue(v, (config.y?.format ?? config.series[0]?.field) ? "auto" : "auto", config.y?.currency)
+        formatValue(v, (config.y?.format ?? config.series[0]?.field) ? "auto" : "auto", config.y?.currency, locale)
       }
     />
   );
@@ -202,7 +205,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
               <XAxis
                 type="number"
                 tick={{ fontSize: 10, fill: "var(--text-muted)" }}
-                tickFormatter={(v) => formatValue(v, config.y?.format ?? "auto", config.y?.currency)}
+                tickFormatter={(v) => formatValue(v, config.y?.format ?? "auto", config.y?.currency, locale)}
               />
               <YAxis type="category" dataKey={config.x.field} tick={{ fontSize: 10, fill: "var(--text-muted)" }} />
             </>
@@ -212,7 +215,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
               {yAxisEl}
             </>
           )}
-          {showTooltip && <ChartTooltip xAxis={config.x} yAxis={config.y} series={config.series} />}
+          {showTooltip && <ChartTooltip xAxis={config.x} yAxis={config.y} series={config.series} locale={locale} />}
           {showLegend && <Legend wrapperStyle={{ fontSize: 10 }} />}
           {config.series.map((s, i) => (
             <Bar
@@ -308,7 +311,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
               return <Cell key={i} fill={TONE_VAR[tone]} />;
             })}
           </Pie>
-          {showTooltip && <ChartTooltip xAxis={config.x} yAxis={config.y} series={config.series} />}
+          {showTooltip && <ChartTooltip xAxis={config.x} yAxis={config.y} series={config.series} locale={locale} />}
           {showLegend && <Legend wrapperStyle={{ fontSize: 10 }} />}
         </PieChart>
       );
@@ -324,21 +327,21 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
             dataKey={config.x.field}
             type="number"
             tick={{ fontSize: 10, fill: "var(--text-muted)" }}
-            tickFormatter={(v) => formatValue(v, config.x.format ?? "auto", config.x.currency)}
+            tickFormatter={(v) => formatValue(v, config.x.format ?? "auto", config.x.currency, locale)}
             name={config.x.label ?? config.x.field}
           />
           <YAxis
             dataKey={config.series[0]?.field}
             type="number"
             tick={{ fontSize: 10, fill: "var(--text-muted)" }}
-            tickFormatter={(v) => formatValue(v, config.y?.format ?? "auto", config.y?.currency)}
+            tickFormatter={(v) => formatValue(v, config.y?.format ?? "auto", config.y?.currency, locale)}
             name={config.y?.label ?? config.series[0]?.field}
           />
           {isBubble && zField && <ZAxis dataKey={zField} range={[40, 400]} name={zField} />}
           {showTooltip && (
             <Tooltip
               cursor={{ strokeDasharray: "3 3" }}
-              content={<TooltipContent xAxis={config.x} yAxis={config.y} series={config.series} />}
+              content={<TooltipContent xAxis={config.x} yAxis={config.y} series={config.series} locale={locale} />}
             />
           )}
           {showLegend && <Legend wrapperStyle={{ fontSize: 10 }} />}
@@ -453,15 +456,17 @@ function ChartTooltip({
   xAxis,
   yAxis,
   series,
+  locale,
 }: {
   xAxis: ChartAxis;
   yAxis?: ChartAxis;
   series: ChartSeries[];
+  locale?: string;
 }): React.ReactElement {
   return (
     <Tooltip
       cursor={{ fill: "var(--surface-inset)" }}
-      content={<TooltipContent xAxis={xAxis} yAxis={yAxis} series={series} />}
+      content={<TooltipContent xAxis={xAxis} yAxis={yAxis} series={series} locale={locale} />}
     />
   );
 }
@@ -473,6 +478,7 @@ type TooltipContentProps = {
   xAxis: ChartAxis;
   yAxis?: ChartAxis;
   series: ChartSeries[];
+  locale?: string;
 };
 
 function TooltipContent({
@@ -482,13 +488,14 @@ function TooltipContent({
   xAxis,
   yAxis,
   series,
+  locale,
 }: TooltipContentProps): React.ReactElement | null {
   if (!active || !payload?.length) return null;
   return (
     <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px] shadow-sm">
       {label !== undefined && label !== null && (
         <div className="mb-1 font-medium text-[var(--text-primary)]">
-          {formatValue(label, xAxis.format ?? "auto", xAxis.currency)}
+          {formatValue(label, xAxis.format ?? "auto", xAxis.currency, locale)}
         </div>
       )}
       {payload.map((p, i) => {
@@ -500,7 +507,7 @@ function TooltipContent({
             <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
             <span className="text-[var(--text-secondary)]">{p.name}:</span>
             <span className="font-mono text-[var(--text-primary)]">
-              {typeof p.value === "number" ? formatValue(p.value, fmt, currency) : "—"}
+              {typeof p.value === "number" ? formatValue(p.value, fmt, currency, locale) : "—"}
             </span>
           </div>
         );
@@ -513,31 +520,36 @@ function TooltipContent({
 // Value formatting
 // ──────────────────────────────────────────────────────────────────────
 
-export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", currency = "USD"): string {
+export function formatValue(
+  v: unknown,
+  format: ChartAxis["format"] = "auto",
+  currency = "USD",
+  locale?: string,
+): string {
   if (v === null || v === undefined || v === "") return "";
   if (typeof v !== "number") {
     if (format === "date" && typeof v === "string") {
       const d = new Date(v);
-      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString();
+      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString(locale);
     }
     return String(v);
   }
   switch (format) {
     case "currency":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(locale, {
         style: "currency",
         currency,
         maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2,
       }).format(v);
     case "percent":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(locale, {
         style: "percent",
         maximumFractionDigits: 1,
       }).format(Math.abs(v) > 1 ? v / 100 : v);
     case "date":
-      return new Date(v).toLocaleDateString();
+      return new Date(v).toLocaleDateString(locale);
     case "number":
-      return new Intl.NumberFormat("en-US").format(v);
+      return new Intl.NumberFormat(locale).format(v);
     case "auto":
     default:
       if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;

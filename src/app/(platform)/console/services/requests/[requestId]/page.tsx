@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest, ServiceRequestEvent } from "@/lib/supabase/types";
 import { transitionRequest } from "../actions";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { formatTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -181,7 +182,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
                 return (
                   <li key={e.id} className="flex items-start gap-3">
                     <span className="font-mono text-[var(--text-muted)]">
-                      {new Date(e.occurred_at).toLocaleTimeString()}
+                      {formatTime(e.occurred_at)}
                     </span>
                     <span className="flex-1">
                       <Badge variant="muted">{e.kind.replace("_", " ")}</Badge>

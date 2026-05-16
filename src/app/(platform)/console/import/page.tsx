@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { IMPORT_RESOURCE_LABEL, type ImportJob } from "@/lib/import/types";
+import { formatDateTime } from "@/lib/i18n/format";
 
 /**
  * Import Center — Phase 6.4 of the SmartSuite parity roadmap.
@@ -82,7 +83,7 @@ export default async function ImportPage() {
                 <Card>
                   <CardHeader
                     title={`${IMPORT_RESOURCE_LABEL[j.resource] ?? j.resource} · ${j.sourceLabel ?? j.source}`}
-                    subtitle={new Date(j.createdAt).toLocaleString()}
+                    subtitle={formatDateTime(j.createdAt)}
                     action={<Badge variant={STATE_TONE[j.state] ?? "muted"}>{j.state.toUpperCase()}</Badge>}
                   />
                   <CardBody>

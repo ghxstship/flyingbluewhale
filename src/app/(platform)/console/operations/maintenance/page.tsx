@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -171,7 +172,7 @@ export default async function Page() {
                           <div className="mt-1 text-sm">{j.title}</div>
                         </div>
                         <span className="font-mono text-xs text-[var(--text-muted)]">
-                          {new Date(j.due_at).toLocaleDateString()}
+                          {formatDate(j.due_at, "short")}
                         </span>
                       </Link>
                     </li>

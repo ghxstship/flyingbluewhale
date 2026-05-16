@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { formatDate, formatTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -59,7 +60,7 @@ export default async function Page() {
         ) : (
           days.map((d) => (
             <div key={d} className="surface p-5">
-              <h2 className="mb-2 font-mono text-sm text-[var(--text-secondary)]">{new Date(d).toDateString()}</h2>
+              <h2 className="mb-2 font-mono text-sm text-[var(--text-secondary)]">{formatDate(d, "long")}</h2>
               <ul className="divide-y divide-[var(--border-subtle)]">
                 {byDay[d].map((r) => (
                   <li key={r.id} className="flex items-center justify-between py-2 text-sm">
@@ -68,7 +69,7 @@ export default async function Page() {
                       <span>{r.label ?? r.org_name}</span>
                     </div>
                     <span className="font-mono text-xs text-[var(--text-secondary)]">
-                      {new Date(r.occurs_at).toLocaleTimeString()}
+                      {formatTime(r.occurs_at)}
                     </span>
                   </li>
                 ))}

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
+import { formatNumber } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Default commission:</span>{" "}
-              {(a.default_commission_bps / 100).toFixed(2)}%
+              {formatNumber(a.default_commission_bps / 100, { maximumFractionDigits: 2 })}%
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Web:</span>{" "}

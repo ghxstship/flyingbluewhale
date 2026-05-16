@@ -6,6 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatMoney } from "@/lib/i18n/format";
 import { toggleActive, deleteItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -83,12 +84,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div>
             <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Unit Cost</div>
             <div className="mt-1 font-mono">
-              {item.unit_cost_cents != null
-                ? (item.unit_cost_cents / 100).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: item.currency ?? "USD",
-                  })
-                : "—"}
+              {item.unit_cost_cents != null ? formatMoney(item.unit_cost_cents, item.currency ?? "USD") : "—"}
             </div>
           </div>
           <div>

@@ -15,10 +15,13 @@ import { join, relative } from "node:path";
  * must consume `SITE.baseUrl` (or `urlFor(shell, path)` for cross-shell).
  *
  * This spec asserts that:
- *   1. The literal string `"https://atlvs.pro"` only appears in a
+ *   1. The literal string `"https://atlvs.pro"` (apex) only appears in a
  *      narrowly allowlisted set of files — the canon definition itself,
  *      env wiring, urls helper, sample fixtures, docs/JSDoc.
- *   2. Nobody else duplicates `process.env.NEXT_PUBLIC_APP_URL ?? "..."`
+ *   2. Subdomain literals (`https://app.atlvs.pro`, `https://gvteway.atlvs.pro`,
+ *      `https://compvss.atlvs.pro`) are likewise restricted to SSOT files and
+ *      designated fixture files. Runtime code must use `urlFor(shell, path)`.
+ *   3. Nobody else duplicates `process.env.NEXT_PUBLIC_APP_URL ?? "..."`
  *      — they should call `SITE.baseUrl` instead.
  *
  * Test files (`.test.ts`) are excluded because they pin literal URLs in
@@ -41,6 +44,23 @@ const ALLOW_HTTPS_LITERAL = new Set<string>([
   "src/proxy.ts",
   // This canon spec itself contains the literal in the rule description.
   "src/app/url-canon.test.ts",
+]);
+
+const ALLOW_SUBDOMAIN_LITERAL = new Set<string>([
+  // SSOT files that already appear in ALLOW_HTTPS_LITERAL.
+  "src/lib/brand.ts",
+  "src/lib/seo.ts",
+  "src/lib/urls.ts",
+  "src/lib/env.ts",
+  "src/proxy.ts",
+  "src/app/url-canon.test.ts",
+  // Supabase client wiring — explains cookie domain scope in a comment.
+  "src/lib/supabase/server.ts",
+  // Zapier webhook sample payloads — static fixture objects showing what real
+  // webhook events look like; these are documentation, not runtime URL generation.
+  "src/lib/integrations/zapier/payloads.ts",
+  // Email template editor — merge-tag sample values shown to operators in UI.
+  "src/app/(platform)/console/settings/email-templates/EmailTemplatesPanel.tsx",
 ]);
 
 const ALLOW_FALLBACK_PATTERN = new Set<string>([
@@ -68,6 +88,8 @@ function walk(dir: string): string[] {
 
 const ALL = walk(SRC_DIR).filter((f) => !/\.test\.[tj]sx?$/.test(f));
 
+const SUBDOMAIN_RE = /["'](https:\/\/(app|gvteway|compvss)\.atlvs\.pro)[/"']/;
+
 describe("URL canon", () => {
   it('the literal "https://atlvs.pro" is only allowed in narrowly allowlisted files', () => {
     const offenders: string[] = [];
@@ -82,6 +104,20 @@ describe("URL canon", () => {
     expect(
       offenders,
       `Files contain the literal "https://atlvs.pro" — use SITE.baseUrl from @/lib/seo instead. Offenders: ${offenders.join(", ")}`,
+    ).toEqual([]);
+  });
+
+  it("subdomain literals (app/gvteway/compvss.atlvs.pro) are restricted to SSOT + fixture files", () => {
+    const offenders: string[] = [];
+    for (const file of ALL) {
+      const rel = relative(REPO_ROOT, file);
+      if (ALLOW_SUBDOMAIN_LITERAL.has(rel)) continue;
+      const txt = readFileSync(file, "utf8");
+      if (SUBDOMAIN_RE.test(txt)) offenders.push(rel);
+    }
+    expect(
+      offenders,
+      `Files contain hardcoded subdomain URLs — use urlFor(shell, path) from @/lib/urls instead. Offenders: ${offenders.join(", ")}`,
     ).toEqual([]);
   });
 

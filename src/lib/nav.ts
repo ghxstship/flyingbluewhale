@@ -277,6 +277,7 @@ export const platformNav: NavGroup[] = [
       { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
       { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
       { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
+      { label: "Open Shifts", href: "/console/workforce/open-shifts", icon: "CalendarDays" },
       { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
       { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
       { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
@@ -763,4 +764,6 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Directory", href: "/m/directory" },
   { label: "Onboarding", href: "/m/onboarding" },
   { label: "Advancing", href: "/m/advances" },
+  // Competitive additions (0052 — open shifts, Deputy/LASSO parity).
+  { label: "Open Shifts", href: "/m/open-shifts" },
 ];

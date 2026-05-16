@@ -304,6 +304,10 @@
 (platform)/console/workforce/rosters/page.tsx|Rosters|Shift engine
 (platform)/console/workforce/rosters/[rosterId]/page.tsx|Roster|
 (platform)/console/workforce/housing/page.tsx|Housing|Workforce billeting
+(platform)/console/workforce/open-shifts/page.tsx|Open Shifts|Self-claim unfilled shifts — Deputy/LASSO parity
+
+# PUBLIC — Schedule Share (Propared parity)
+schedule-share/[token]/page.tsx|Shared Schedule|Read-only public event schedule via share token
 
 # ATLVS — Safety & Incidents (WF-060, 061, 062, 064, 065, 090, 092, 094, 142, 241, 252, 035)
 (platform)/console/safety/page.tsx|Safety|Threats, incidents, crisis
@@ -511,6 +515,7 @@
 (mobile)/m/coc/page.tsx|Chain of custody|Sample and evidence
 (mobile)/m/wayfind/page.tsx|Wayfind|Indoor map
 (mobile)/m/notifications/page.tsx|Notifications|
+(mobile)/m/open-shifts/page.tsx|Open Shifts|Browse + self-claim open shifts — Deputy/LASSO parity
 
 # Chain of custody (WF-101) — generic COC for doping/evidence
 (platform)/console/compliance/coc/page.tsx|Chain of custody|Sample and evidence tracking

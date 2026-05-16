@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import type { CalendarEvent } from "@/components/views/CalendarView";
 import { ScheduleCalendarView } from "./ScheduleCalendarView";
+import { ScheduleShareButton } from "./ScheduleShareActions";
 import type { EventRow } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +50,7 @@ export default async function SchedulePage() {
         subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"}`}
         action={
           <div className="flex gap-2">
+            <ScheduleShareButton orgId={session.orgId} />
             <Button href="/api/v1/schedule.ics" variant="secondary">
               Export .ics
             </Button>

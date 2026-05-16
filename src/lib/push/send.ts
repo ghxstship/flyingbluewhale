@@ -32,7 +32,11 @@ export type PushKind =
   | "shift_swap"
   | "time_off"
   | "course"
-  | "incident";
+  | "incident"
+  /** Open shift posted — crew browse /m/open-shifts to claim. */
+  | "open_shift"
+  /** Crew member has an open time_entry past the org's grace period. */
+  | "clock_alert";
 
 export type PushPayload = {
   title: string;

@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { ClockAlertWidget } from "./ClockAlertWidget";
+import { LaborCostWidget } from "./LaborCostWidget";
 
 type Row = {
   id: string;
@@ -61,6 +63,47 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
   const session = await requireSession();
   const supabase = await createClient();
 
+  // Clock alert: how many active time_entries are overdue (if alerts configured)
+  const { data: overdueRows } = await supabase
+    .rpc("get_overdue_clock_ins", { p_org_id: session.orgId })
+    .limit(50);
+  const overdueList = (overdueRows ?? []) as Array<{
+    entry_id: string;
+    user_id: string;
+    started_at: string;
+    hours_elapsed: number;
+  }>;
+
+  // Labor cost: active time_entries this week vs budget
+  const weekStart = new Date();
+  weekStart.setHours(0, 0, 0, 0);
+  weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+  const { data: weekEntries } = await supabase
+    .from("time_entries")
+    .select("duration_minutes, rate_cents")
+    .eq("org_id", session.orgId)
+    .gte("started_at", weekStart.toISOString())
+    .not("duration_minutes", "is", null);
+  const laborMinutes = (weekEntries ?? []).reduce(
+    (sum: number, r: { duration_minutes: number | null; rate_cents: number | null }) =>
+      sum + (r.duration_minutes ?? 0),
+    0,
+  );
+  const laborCostCents = (weekEntries ?? []).reduce(
+    (sum: number, r: { duration_minutes: number | null; rate_cents: number | null }) =>
+      sum + Math.round(((r.duration_minutes ?? 0) / 60) * (r.rate_cents ?? 0)),
+    0,
+  );
+  const { data: budgets } = await supabase
+    .from("budgets")
+    .select("amount_cents, spent_cents")
+    .eq("org_id", session.orgId)
+    .eq("category", "labor");
+  const totalBudgetCents = (budgets ?? []).reduce(
+    (sum: number, b: { amount_cents: number; spent_cents: number }) => sum + b.amount_cents,
+    0,
+  );
+
   let q = supabase
     .from("workforce_members")
     .select("id,full_name,email,phone,role,kind,venue_id")
@@ -92,6 +135,16 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
         }
       />
       <div className="page-content space-y-5">
+        {/* Competitive widgets: clock alerts (Connecteam) + labor cost forecast (Connecteam) */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <ClockAlertWidget overdueCount={overdueList.length} overdueList={overdueList} />
+          <LaborCostWidget
+            laborMinutes={laborMinutes}
+            laborCostCents={laborCostCents}
+            totalBudgetCents={totalBudgetCents}
+          />
+        </div>
+
         <div
           role="tablist"
           aria-label="Filter by workforce kind"

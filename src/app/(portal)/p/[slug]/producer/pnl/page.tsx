@@ -46,7 +46,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
     .filter((i) => i.status === "paid")
     .reduce((s, i) => s + (i.amount_cents ?? 0), 0);
   const margin = invoiceTotal - expenseTotal;
-  const fmtMoney = (cents: number) => (cents / 100).toLocaleString("en-US", { style: "currency", currency });
+  const fmtMoney = (cents: number) => fmt.money(cents, currency);
 
   return (
     <div className="flex min-h-screen">

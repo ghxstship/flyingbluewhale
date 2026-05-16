@@ -4,13 +4,14 @@ import { useState } from "react";
 import { Check, Square } from "lucide-react";
 import { SelectableCard } from "@/components/ui/SelectableCard";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 type PhaseBlockType = Extract<ProposalBlock, { type: "phase" }>;
 
 function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
   if (m == null) return "";
   if (typeof m === "string") return m;
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(DEFAULT_LOCALE, {
     style: "currency",
     currency: m.currency ?? currency,
     maximumFractionDigits: 0,

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from "@/lib/i18n/config";
 import {
   Bar,
   BarChart,
@@ -208,5 +209,5 @@ function DarkTooltip({
 }
 
 function fmtTooltip(v: number): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v);
+  return new Intl.NumberFormat(DEFAULT_LOCALE, { style: "currency", currency: DEFAULT_CURRENCY, maximumFractionDigits: 0 }).format(v);
 }

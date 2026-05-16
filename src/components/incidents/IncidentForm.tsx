@@ -255,7 +255,7 @@ export function IncidentForm({
 
       <div className="flex items-center justify-between gap-2 border-t border-[var(--border-color)] pt-4">
         <div className="flex items-center gap-1 text-[11px] text-[var(--text-muted)]">
-          <AlertTriangle size={12} className="text-amber-500" />
+          <AlertTriangle size={12} className="text-[var(--color-warning)]" />
           In emergencies, call local services first — then log here.
         </div>
         <Button type="submit" variant="danger" disabled={submitting || uploading}>

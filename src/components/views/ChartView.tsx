@@ -37,6 +37,7 @@ import {
 } from "recharts";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ChartShell } from "@/components/charts/ChartShell";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 import {
   DEFAULT_TONE_ROTATION,
   type ChartAxis,
@@ -518,26 +519,26 @@ export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", cu
   if (typeof v !== "number") {
     if (format === "date" && typeof v === "string") {
       const d = new Date(v);
-      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString();
+      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString(DEFAULT_LOCALE);
     }
     return String(v);
   }
   switch (format) {
     case "currency":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(DEFAULT_LOCALE, {
         style: "currency",
         currency,
         maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2,
       }).format(v);
     case "percent":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(DEFAULT_LOCALE, {
         style: "percent",
         maximumFractionDigits: 1,
       }).format(Math.abs(v) > 1 ? v / 100 : v);
     case "date":
-      return new Date(v).toLocaleDateString();
+      return new Date(v).toLocaleDateString(DEFAULT_LOCALE);
     case "number":
-      return new Intl.NumberFormat("en-US").format(v);
+      return new Intl.NumberFormat(DEFAULT_LOCALE).format(v);
     case "auto":
     default:
       if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;

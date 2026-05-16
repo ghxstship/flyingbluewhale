@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useAnnounce } from "@/components/ui/LiveRegion";
@@ -431,7 +432,7 @@ export function TimelineView({
   );
 }
 
-const RANGE_FMT = new Intl.DateTimeFormat("en-US", {
+const RANGE_FMT = new Intl.DateTimeFormat(DEFAULT_LOCALE, {
   month: "short",
   day: "numeric",
   timeZone: "UTC",

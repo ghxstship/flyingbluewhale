@@ -50,7 +50,7 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
             <li key={s.id} className="surface flex items-start gap-3 p-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  {s.critical_path ? <span className="font-bold text-red-600">★</span> : null}
+                  {s.critical_path ? <span className="font-bold text-[var(--color-error)]">★</span> : null}
                   <span className="font-medium">{s.title}</span>
                   <Badge variant={STATE_VARIANT[s.step_state]}>{STATE_LABEL[s.step_state]}</Badge>
                   {s.category ? <span className="text-xs text-(--ink-soft) uppercase">{s.category}</span> : null}

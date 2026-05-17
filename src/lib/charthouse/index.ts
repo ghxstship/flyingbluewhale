@@ -1,5 +1,5 @@
 /**
- * @lytehaus/charthouse — public surface.
+ * @atlvs/charthouse — public surface.
  *
  * CHARTHOUSE PROTOCOL v1.0 (FP-CHARTHOUSE-001).
  *

@@ -13,7 +13,188 @@ const Schema = z.object({
   model: z.enum(["claude-opus-4-7", "claude-sonnet-4-6"]).default("claude-sonnet-4-6"),
 });
 
-const SYSTEM = `You are the ATLVS Technologies AI assistant, embedded in a production operations platform (ATLVS console, GVTEWAY portals, COMPVSS mobile) for live events, fabrication, and creative ops. Answer questions about the user's projects, invoices, deliverables, and crew using concise, operator-friendly language. Be specific and action-oriented.`;
+const SYSTEM = `You are the ATLVS Technologies AI assistant, embedded in a production operations platform (ATLVS console, GVTEWAY portals, COMPVSS mobile) for live events, fabrication, and creative ops. Answer questions about the user's projects, invoices, deliverables, and crew using concise, operator-friendly language. Be specific and action-oriented.
+
+You have access to live workspace tools. Use them when the user asks about specific projects, tasks, crew, budgets, or events. Always cite the data you retrieved.`;
+
+// Workspace intelligence tools — ClickUp Brain / Asana AI Teammates parity.
+const AI_TOOLS: Anthropic.Tool[] = [
+  {
+    name: "query_projects",
+    description: "List projects for this org. Use when the user asks about project status, what's active, what's upcoming, or project health.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        phase: { type: "string", description: "Filter by xpms_phase value (e.g. discovery, planning, active, closeout)" },
+        limit: { type: "number", description: "Max rows to return (default 15)" },
+      },
+    },
+  },
+  {
+    name: "query_overdue_tasks",
+    description: "Return tasks whose due date has passed and are not yet complete. Use when the user asks what's overdue, blocked, or behind.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        project_id: { type: "string", description: "Scope to a single project UUID" },
+        limit: { type: "number", description: "Max rows (default 20)" },
+      },
+    },
+  },
+  {
+    name: "query_crew_availability",
+    description: "Return crew members with their current shift and time-entry state. Use when the user asks who is available, scheduled, or clocked in.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        project_id: { type: "string", description: "Scope to crew assigned to a project" },
+        limit: { type: "number", description: "Max rows (default 25)" },
+      },
+    },
+  },
+  {
+    name: "query_budget_health",
+    description: "Return budget vs actual spend for projects. Use when the user asks about budget, spend, overrun, or financial health.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        project_id: { type: "string", description: "Specific project UUID, or omit for org-wide summary" },
+      },
+    },
+  },
+  {
+    name: "query_upcoming_events",
+    description: "Return upcoming events and show dates for the org. Use when the user asks what's coming up, next shows, or event schedule.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        days: { type: "number", description: "Look-ahead window in days (default 30)" },
+      },
+    },
+  },
+];
+
+type ToolInput = Record<string, unknown>;
+
+async function executeTools(
+  content: Anthropic.ContentBlock[],
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  session: { orgId: string; userId: string },
+): Promise<Anthropic.ToolResultBlockParam[]> {
+  const results: Anthropic.ToolResultBlockParam[] = [];
+
+  for (const block of content) {
+    if (block.type !== "tool_use") continue;
+    const input = (block.input ?? {}) as ToolInput;
+    let data: unknown;
+
+    try {
+      if (block.name === "query_projects") {
+        const q = supabase
+          .from("projects")
+          .select("id, name, xpms_phase, start_date, end_date, budget_cents, updated_at")
+          .eq("org_id", session.orgId)
+          .is("deleted_at", null)
+          .order("updated_at", { ascending: false })
+          .limit(typeof input.limit === "number" ? input.limit : 15);
+        if (input.phase) q.eq("xpms_phase", input.phase as string);
+        const { data: rows } = await q;
+        data = rows ?? [];
+      } else if (block.name === "query_overdue_tasks") {
+        const now = new Date().toISOString();
+        const q = supabase
+          .from("tasks")
+          .select("id, title, due_date, assignee_id, project_id, created_at")
+          .eq("org_id", session.orgId)
+          .lt("due_date", now)
+          .not("status", "in", '("done","cancelled")')
+          .order("due_date", { ascending: true })
+          .limit(typeof input.limit === "number" ? input.limit : 20);
+        if (input.project_id) q.eq("project_id", input.project_id as string);
+        const { data: rows } = await q;
+        data = rows ?? [];
+      } else if (block.name === "query_crew_availability") {
+        const q = supabase
+          .from("crew_members")
+          .select("id, name, role, email")
+          .eq("org_id", session.orgId)
+          .order("name")
+          .limit(typeof input.limit === "number" ? input.limit : 25);
+        if (input.project_id) {
+          // crew_members don't have project_id directly; skip filter if provided
+        }
+        const { data: rows } = await q;
+        data = rows ?? [];
+      } else if (block.name === "query_budget_health") {
+        if (input.project_id) {
+          const [{ data: project }, { data: expenses }, { data: time }] = await Promise.all([
+            supabase
+              .from("projects")
+              .select("id, name, budget_cents")
+              .eq("id", input.project_id as string)
+              .eq("org_id", session.orgId)
+              .maybeSingle(),
+            supabase
+              .from("expenses")
+              .select("amount_cents")
+              .eq("project_id", input.project_id as string)
+              .eq("org_id", session.orgId),
+            supabase
+              .from("time_entries")
+              .select("duration_minutes, rate_cents")
+              .eq("project_id", input.project_id as string)
+              .eq("org_id", session.orgId),
+          ]);
+          const expenseTotal = (expenses ?? []).reduce((s, r) => s + (r.amount_cents ?? 0), 0);
+          const timeTotal = (time ?? []).reduce(
+            (s, r) => s + Math.round(((r.duration_minutes ?? 0) / 60) * (r.rate_cents ?? 0)),
+            0,
+          );
+          data = {
+            project: project ?? {},
+            expense_spend_cents: expenseTotal,
+            time_spend_cents: timeTotal,
+            total_spend_cents: expenseTotal + timeTotal,
+            budget_cents: (project as { budget_cents?: number } | null)?.budget_cents ?? null,
+          };
+        } else {
+          const { data: projects } = await supabase
+            .from("projects")
+            .select("id, name, budget_cents")
+            .eq("org_id", session.orgId)
+            .is("deleted_at", null)
+            .order("name")
+            .limit(10);
+          data = projects ?? [];
+        }
+      } else if (block.name === "query_upcoming_events") {
+        const days = typeof input.days === "number" ? input.days : 30;
+        const until = new Date(Date.now() + days * 86_400_000).toISOString();
+        const { data: rows } = await supabase
+          .from("events")
+          .select("id, name, starts_at, ends_at, location_id")
+          .eq("org_id", session.orgId)
+          .gte("starts_at", new Date().toISOString())
+          .lte("starts_at", until)
+          .order("starts_at")
+          .limit(20);
+        data = rows ?? [];
+      } else {
+        data = { error: "unknown tool" };
+      }
+    } catch (e) {
+      data = { error: e instanceof Error ? e.message : "tool_error" };
+    }
+
+    results.push({
+      type: "tool_result",
+      tool_use_id: block.id,
+      content: JSON.stringify(data),
+    });
+  }
+
+  return results;
+}
 
 export async function POST(req: Request) {
   // AI calls cost real dollars and are abuse magnets. 30/min per user, per the
@@ -76,10 +257,10 @@ export async function POST(req: Request) {
     content: input.message,
   });
 
-  const messages = [
+  const baseMessages: Anthropic.MessageParam[] = [
     ...(history ?? [])
       .filter((m) => m.role === "user" || m.role === "assistant")
-      .map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
+      .map((m) => ({ role: m.role as "user" | "assistant", content: m.content as string })),
     { role: "user" as const, content: input.message },
   ];
 
@@ -92,11 +273,34 @@ export async function POST(req: Request) {
 
       let assistantText = "";
       try {
+        // Phase 1: non-streaming call with tools to resolve any tool use.
+        // This adds ~200–500 ms latency but keeps the final stream clean.
+        let finalMessages: Anthropic.MessageParam[] = baseMessages;
+
+        const probe = await anthropic.messages.create({
+          model: input.model,
+          max_tokens: 1024,
+          system: SYSTEM,
+          messages: baseMessages,
+          tools: AI_TOOLS,
+          tool_choice: { type: "auto" },
+        });
+
+        if (probe.stop_reason === "tool_use") {
+          const toolResults = await executeTools(probe.content, supabase, session);
+          finalMessages = [
+            ...baseMessages,
+            { role: "assistant", content: probe.content },
+            { role: "user", content: toolResults },
+          ];
+        }
+
+        // Phase 2: stream the final response (no tools — pure text).
         const s = anthropic.messages.stream({
           model: input.model,
           max_tokens: 4096,
           system: SYSTEM,
-          messages,
+          messages: finalMessages,
         });
 
         for await (const event of s) {

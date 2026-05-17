@@ -111,7 +111,12 @@ export type IconName =
   | "Coins"
   | "Route"
   // Sales pipeline
-  | "GitBranch";
+  | "GitBranch"
+  // Competitive features (0517)
+  | "MessageSquare"
+  | "Briefcase"
+  | "Brain"
+  | "CalendarCheck";
 
 export type NavItem = {
   label: string;
@@ -277,6 +282,9 @@ export const platformNav: NavGroup[] = [
       { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
       { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
       { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
+      { label: "Shift Feedback", href: "/console/workforce/shift-feedback", icon: "MessageSquare" },
+      { label: "Open Shifts", href: "/console/workforce/open-shifts", icon: "CalendarCheck" },
+      { label: "Smart Scheduler", href: "/console/workforce/smart-schedule", icon: "Brain" },
       { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
       { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
       { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },

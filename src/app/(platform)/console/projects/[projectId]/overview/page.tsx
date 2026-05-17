@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { money, fmtDate } from "@/components/detail/DetailShell";
+import { RiskWidget } from "@/components/RiskWidget";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
@@ -96,6 +97,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             </div>
           </Link>
         </div>
+        <RiskWidget projectId={projectId} />
       </div>
     </>
   );

@@ -289,6 +289,9 @@
 
 # ATLVS — Workforce (WF-016, 190, 191, 192, 193, 194, 195, 196, 197, 082)
 (platform)/console/workforce/page.tsx|Workforce|Plan, roster, services
+(platform)/console/workforce/shift-feedback/page.tsx|Shift Feedback|Post-shift Pulse — mood, energy, safety ratings
+(platform)/console/workforce/open-shifts/page.tsx|Open Shifts|Rentman Job Board parity — post and manage open crew slots
+(platform)/console/workforce/smart-schedule/page.tsx|Smart Scheduler|AI-powered crew suggestions for roles and windows
 (platform)/console/workforce/planning/page.tsx|Planning|FTE strategy and headcount
 (platform)/console/workforce/deployment/page.tsx|Deployment|By venue, zone, shift
 (platform)/console/workforce/staff/page.tsx|Paid staff|Applicant pipeline and onboarding
@@ -491,6 +494,8 @@
 (mobile)/m/wallet/page.tsx|Wallet|My credential
 (mobile)/m/shift/page.tsx|Shift|Today's shift
 (mobile)/m/shift/swap/page.tsx|Swap shift|
+(mobile)/m/shift-feedback/[entryId]/page.tsx|Shift Feedback|Post-shift Pulse — mood, energy, safety
+(mobile)/m/open-shifts/page.tsx|Open Shifts|Browse and apply to open crew slots
 (mobile)/m/checkin/page.tsx|Check-in|Clock and meal credit
 (mobile)/m/incident/page.tsx|Incident|Field intake
 (mobile)/m/incident/new/page.tsx|New incident|
@@ -577,6 +582,7 @@
 
 # MARKETING — public marketplace discovery
 (marketing)/marketplace/page.tsx|Marketplace|Public RFQs, gigs, talent calls, talent, crew, vendors
+(marketing)/marketplace/shifts/page.tsx|Open Shifts|Public crew shift board — browse and apply to open gigs
 (marketing)/marketplace/rfqs/page.tsx|Open RFQs|Public RFQ marketplace
 (marketing)/marketplace/rfqs/[slug]/page.tsx|RFQ|Public RFQ detail
 (marketing)/marketplace/gigs/page.tsx|Gigs|Public crew job board

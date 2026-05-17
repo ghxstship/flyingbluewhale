@@ -10,6 +10,31 @@ import { OfferControls } from "./OfferControls";
 
 export const dynamic = "force-dynamic";
 
+type Flight = {
+  type: "inbound" | "outbound";
+  number: string;
+  departs_at: string;
+  arrives_at: string;
+  origin: string;
+  destination: string;
+  notes?: string;
+};
+
+type Logistics = {
+  flights?: Flight[];
+  hotel?: {
+    name?: string;
+    address?: string;
+    check_in?: string;
+    check_out?: string;
+    confirmation?: string;
+    notes?: string;
+  };
+  ground?: string;
+  dietary?: string;
+  other?: string;
+};
+
 type Offer = {
   id: string;
   performance_date: string;
@@ -25,6 +50,8 @@ type Offer = {
   sent_at: string | null;
   accepted_at: string | null;
   contracted_at: string | null;
+  logistics: Logistics | null;
+  advance_doc_url: string | null;
 };
 
 export default async function Page({ params }: { params: Promise<{ offerId: string }> }) {
@@ -91,6 +118,87 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
               <li>Contracted · {o.contracted_at ? new Date(o.contracted_at).toLocaleString() : "—"}</li>
             </ul>
           </div>
+        </section>
+
+        {/* Logistics — Gigwell artist advancing parity */}
+        <section className="surface p-5">
+          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Logistics</h2>
+          {!o.logistics ? (
+            <p className="text-sm text-[var(--text-muted)]">No logistics on file yet.</p>
+          ) : (
+            <div className="space-y-4 text-sm">
+              {o.logistics.flights && o.logistics.flights.length > 0 && (
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-muted)] mb-2">Flights</p>
+                  <ul className="space-y-2">
+                    {o.logistics.flights.map((f, i) => (
+                      <li key={i} className="surface-inset rounded-lg px-3 py-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{f.number}</span>
+                          <span className="text-[var(--text-muted)] capitalize">{f.type}</span>
+                        </div>
+                        <p className="text-[var(--text-muted)]">{f.origin} → {f.destination}</p>
+                        <p className="text-[var(--text-muted)]">
+                          Departs {new Date(f.departs_at).toLocaleString()} · Arrives {new Date(f.arrives_at).toLocaleString()}
+                        </p>
+                        {f.notes && <p className="mt-1 text-[var(--text-muted)]">{f.notes}</p>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {o.logistics.hotel && (
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-muted)] mb-2">Hotel</p>
+                  <div className="surface-inset rounded-lg px-3 py-2 space-y-1">
+                    {o.logistics.hotel.name && <p className="font-medium">{o.logistics.hotel.name}</p>}
+                    {o.logistics.hotel.address && <p className="text-[var(--text-muted)]">{o.logistics.hotel.address}</p>}
+                    {(o.logistics.hotel.check_in || o.logistics.hotel.check_out) && (
+                      <p className="text-[var(--text-muted)]">
+                        {o.logistics.hotel.check_in && `Check-in: ${new Date(o.logistics.hotel.check_in).toLocaleDateString()}`}
+                        {o.logistics.hotel.check_in && o.logistics.hotel.check_out && " · "}
+                        {o.logistics.hotel.check_out && `Check-out: ${new Date(o.logistics.hotel.check_out).toLocaleDateString()}`}
+                      </p>
+                    )}
+                    {o.logistics.hotel.confirmation && (
+                      <p className="text-[var(--text-muted)]">Conf: {o.logistics.hotel.confirmation}</p>
+                    )}
+                    {o.logistics.hotel.notes && <p className="text-[var(--text-muted)]">{o.logistics.hotel.notes}</p>}
+                  </div>
+                </div>
+              )}
+              {o.logistics.ground && (
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-muted)] mb-1">Ground transport</p>
+                  <p>{o.logistics.ground}</p>
+                </div>
+              )}
+              {o.logistics.dietary && (
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-muted)] mb-1">Dietary</p>
+                  <p>{o.logistics.dietary}</p>
+                </div>
+              )}
+              {o.logistics.other && (
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-[var(--text-muted)] mb-1">Other notes</p>
+                  <p>{o.logistics.other}</p>
+                </div>
+              )}
+            </div>
+          )}
+          {o.advance_doc_url && (
+            <div className="mt-4 pt-4 border-t border-[var(--border)]">
+              <a
+                href={o.advance_doc_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm text-[var(--org-primary)] hover:underline"
+              >
+                📄 Advancing document ↗
+              </a>
+            </div>
+          )}
         </section>
       </div>
     </>

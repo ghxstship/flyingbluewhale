@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toggleActive, deleteAssignment } from "./actions";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -103,7 +104,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </div>
           <div>
             <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Created</div>
-            <div className="mt-1 font-mono">{new Date(a.created_at).toLocaleString()}</div>
+            <div className="mt-1 font-mono">{formatDateTime(a.created_at)}</div>
           </div>
         </section>
       </div>

@@ -5,7 +5,7 @@ import { ConversationPanel } from "@/components/ConversationPanel";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney } from "@/lib/i18n/format";
+import { formatDate, formatMoney } from "@/lib/i18n/format";
 import { transitionPayApp, updatePayAppLine } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 
@@ -23,7 +23,7 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
 };
 
 function fmt(d: string): string {
-  return new Date(d + "T00:00:00").toLocaleDateString();
+  return formatDate(d + "T00:00:00", "short");
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {

@@ -7,6 +7,7 @@ import { getSubscription, listSubscriptionTransitions, SUBSCRIPTION_TRANSITION_G
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { SubscriptionStateControls } from "./SubscriptionStateControls";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -49,15 +50,15 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
             </Link>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-sm">
-            <Field label="Started" value={sub.started_at ? new Date(sub.started_at).toLocaleString() : "—"} />
-            <Field label="Trial ends" value={sub.trial_ends_at ? new Date(sub.trial_ends_at).toLocaleString() : "—"} />
-            <Field label="Last renewed" value={sub.renewed_at ? new Date(sub.renewed_at).toLocaleString() : "—"} />
-            <Field label="Lapsed at" value={sub.lapsed_at ? new Date(sub.lapsed_at).toLocaleString() : "—"} />
+            <Field label="Started" value={sub.started_at ? formatDateTime(sub.started_at) : "—"} />
+            <Field label="Trial ends" value={sub.trial_ends_at ? formatDateTime(sub.trial_ends_at) : "—"} />
+            <Field label="Last renewed" value={sub.renewed_at ? formatDateTime(sub.renewed_at) : "—"} />
+            <Field label="Lapsed at" value={sub.lapsed_at ? formatDateTime(sub.lapsed_at) : "—"} />
             <Field
               label="Reactivated at"
-              value={sub.reactivated_at ? new Date(sub.reactivated_at).toLocaleString() : "—"}
+              value={sub.reactivated_at ? formatDateTime(sub.reactivated_at) : "—"}
             />
-            <Field label="Churned at" value={sub.churned_at ? new Date(sub.churned_at).toLocaleString() : "—"} />
+            <Field label="Churned at" value={sub.churned_at ? formatDateTime(sub.churned_at) : "—"} />
           </dl>
         </section>
 

@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { getMsa } from "@/lib/msa/queries";
 import { MSA_STATUS_LABEL, MSA_STATUS_VARIANT } from "@/lib/msa/types";
 import { msaPublicUrl } from "@/lib/msa/format";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -81,7 +82,7 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
             <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">Signature</h3>
             <div className="font-subdisplay text-2xl">{resolved.signed_signature}</div>
             <div className="text-xs text-[var(--text-muted)]">
-              {resolved.signed_at ? new Date(resolved.signed_at).toLocaleString() : ""} · IP {resolved.signed_ip ?? "—"}
+              {resolved.signed_at ? formatDateTime(resolved.signed_at) : ""} · IP {resolved.signed_ip ?? "—"}
             </div>
           </section>
         )}

@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 
+import { formatDate } from "@/lib/i18n/format";
+
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = buildMetadata({
@@ -70,7 +72,7 @@ export default async function Page() {
                 meta={[
                   r.region,
                   r.budget_band,
-                  r.due_at ? `Due ${new Date(r.due_at).toLocaleDateString()}` : null,
+                  r.due_at ? `Due ${formatDate(r.due_at, "short")}` : null,
                   r.requires_prequalification ? "Prequal required" : null,
                 ]}
                 badge={r.requires_insurance ? "COI required" : null}

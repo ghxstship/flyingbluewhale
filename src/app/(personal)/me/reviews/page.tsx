@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -95,7 +96,7 @@ function ReviewLi({ r }: { r: Row }) {
         )}
       </div>
       {r.body && <p className="mt-2 text-sm whitespace-pre-wrap">{r.body}</p>}
-      <p className="mt-2 text-xs text-[var(--color-text-secondary)]">{new Date(r.created_at).toLocaleString()}</p>
+      <p className="mt-2 text-xs text-[var(--color-text-secondary)]">{formatDateTime(r.created_at)}</p>
     </li>
   );
 }

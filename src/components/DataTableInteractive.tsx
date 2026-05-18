@@ -59,6 +59,7 @@ import { Hint } from "@/components/ui/Tooltip";
 import type { SavedView, ViewConfigRow, ViewScope, ViewType } from "@/lib/views/types";
 import { SavedViewSelector } from "@/components/views/SavedViewSelector";
 import type { SaveViewSubmit } from "@/components/views/SaveViewDialog";
+import { formatNumber } from "@/lib/i18n/format";
 
 /**
  * Shared toolbar trigger className — every dropdown trigger and action
@@ -1159,7 +1160,7 @@ function toNumberOrNull(v: string | number | null | undefined): number | null {
 
 function defaultFormat(n: number, agg: "sum" | "avg" | "min" | "max" | "count"): string {
   if (agg === "count") return String(n);
-  return n.toLocaleString();
+  return formatNumber(n);
 }
 
 /**

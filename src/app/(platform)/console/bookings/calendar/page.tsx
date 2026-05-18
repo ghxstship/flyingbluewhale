@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -76,7 +77,7 @@ export default async function Page() {
                   <span className="text-sm">{it.row.label ?? "—"}</span>
                 </div>
                 <span className="font-mono text-xs text-[var(--text-secondary)]">
-                  {new Date(it.date).toLocaleString()}
+                  {formatDateTime(it.date)}
                 </span>
               </li>
             ))}

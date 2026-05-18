@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
-import { formatMoney } from "@/lib/i18n/format";
+import { formatMoney, formatDateTime } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <ModuleHeader
         eyebrow="Settlement"
         title={s.show_date}
-        subtitle={s.finalized_at ? `Finalized ${new Date(s.finalized_at).toLocaleString()}` : "Draft / reconciling"}
+        subtitle={s.finalized_at ? `Finalized ${formatDateTime(s.finalized_at)}` : "Draft / reconciling"}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>

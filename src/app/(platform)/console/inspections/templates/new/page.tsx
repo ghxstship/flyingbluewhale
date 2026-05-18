@@ -44,7 +44,7 @@ export default function Page() {
               maxLength={40}
               placeholder="RIG-PRE"
               hint="Short slug — uppercase, dashes ok. Used on inspection records."
-              style={{ textTransform: "uppercase" }}
+              className="uppercase"
             />
             <div>
               <label className="text-xs font-medium text-[var(--text-secondary)]">

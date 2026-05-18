@@ -6,6 +6,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
+import { formatDate } from "@/lib/i18n/format";
 import { setFabStatus, deleteFab } from "../actions";
 import type { FabricationStatus } from "@/lib/supabase/types";
 import {
@@ -151,7 +152,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
             {transitions.slice(0, 5).map((t) => (
               <li key={t.id} className="font-mono">
                 {t.from_phase ?? "(initial)"} → <strong>{t.to_phase}</strong> ·{" "}
-                {new Date(t.transitioned_at).toLocaleDateString()}
+                {formatDate(t.transitioned_at)}
                 {t.reason ? <span className="ml-2 font-sans">{t.reason}</span> : null}
               </li>
             ))}

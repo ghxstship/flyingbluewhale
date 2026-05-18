@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, env } from "@/lib/env";
 import { money } from "@/components/detail/DetailShell";
+import { formatDate } from "@/lib/i18n/format";
 import { OpenPortalButton } from "./OpenPortalButton";
 
 const TIERS = [
@@ -138,9 +139,9 @@ export default async function BillingPage() {
                       </td>
                       <td className="font-mono text-xs">{money(i.amount_cents)}</td>
                       <td className="font-mono text-xs">
-                        {i.issued_at ? new Date(i.issued_at).toLocaleDateString() : "—"}
+                        {i.issued_at ? formatDate(i.issued_at) : "—"}
                       </td>
-                      <td className="font-mono text-xs">{i.due_at ? new Date(i.due_at).toLocaleDateString() : "—"}</td>
+                      <td className="font-mono text-xs">{i.due_at ? formatDate(i.due_at) : "—"}</td>
                     </tr>
                   ))
                 )}

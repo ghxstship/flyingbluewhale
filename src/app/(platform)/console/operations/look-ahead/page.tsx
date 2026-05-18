@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -20,13 +21,7 @@ export default async function Page() {
   const fmt = await getRequestFormatters();
 
   function fmtDate(d: string): string {
-    return new Date(d).toLocaleString(undefined, {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return formatDateTime(d);
   }
   const now = new Date();
   const end = new Date(Date.now() + 21 * 24 * 60 * 60 * 1000);

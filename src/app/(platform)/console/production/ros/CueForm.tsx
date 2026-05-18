@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { createCueAction, setCueStatus, deleteCue, type State } from "./actions";
 import type { Cue } from "@/lib/supabase/types";
+import { formatDate, formatTime } from "@/lib/i18n/format";
 
 export function CueForm() {
   const [state, action, pending] = useActionState<State, FormData>(createCueAction, null);
@@ -61,7 +62,7 @@ export function CueRow({ cue }: { cue: Cue }) {
   return (
     <tr>
       <td className="font-mono text-xs">
-        {new Date(cue.scheduled_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        {formatDate(cue.scheduled_at, { timeStyle: "short" })}
         {cue.duration_seconds ? ` · ${formatDuration(cue.duration_seconds)}` : ""}
       </td>
       <td>

@@ -5,6 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -91,10 +92,7 @@ export default async function Page() {
               header: "Unit",
               render: (r) =>
                 r.unit_cost_cents != null
-                  ? (r.unit_cost_cents / 100).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: r.currency ?? "USD",
-                    })
+                  ? formatMoney(r.unit_cost_cents)
                   : "—",
               mono: true,
             },

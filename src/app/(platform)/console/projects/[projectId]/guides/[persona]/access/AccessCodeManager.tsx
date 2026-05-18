@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { createCodeAction, revokeCodeAction, type CreateState } from "./actions";
 import type { GuideAccessCode } from "@/lib/db/guide-access";
 import type { GuidePersona } from "@/lib/supabase/types";
+import { formatDate, formatDateParts } from "@/lib/i18n/format";
 
 type Redemption = {
   id: string;
@@ -224,22 +225,9 @@ export function AccessCodeManager({
 }
 
 function fmtDate(s: string): string {
-  try {
-    return new Date(s).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return s;
-  }
+  return formatDate(s);
 }
 
 function fmtDateTime(s: string): string {
-  try {
-    return new Date(s).toLocaleString(undefined, {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return s;
-  }
+  return formatDateParts(s, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 }

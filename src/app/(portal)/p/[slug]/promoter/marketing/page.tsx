@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +78,7 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
                   </td>
                   <td className="font-mono text-xs">
                     {c.spent_cents != null
-                      ? (c.spent_cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" })
+                      ? formatMoney(c.spent_cents)
                       : "—"}
                   </td>
                   <td>

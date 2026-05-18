@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -80,7 +81,7 @@ export default async function Page() {
             {
               key: "sync",
               header: "Last Sync",
-              render: (r) => (r.last_synced_at ? new Date(r.last_synced_at).toLocaleString() : "—"),
+              render: (r) => (r.last_synced_at ? formatDateTime(r.last_synced_at) : "—"),
               accessor: (r) => r.last_synced_at,
               className: "font-mono text-xs",
             },

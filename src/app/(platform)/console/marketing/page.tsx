@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { formatDateTime } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import Link from "next/link";
 
@@ -86,7 +87,7 @@ export default async function Page() {
                     <span>{r.label ?? "—"}</span>
                   </div>
                   <span className="font-mono text-xs text-[var(--text-secondary)]">
-                    {new Date(r.occurs_at).toLocaleString()}
+                    {formatDateTime(r.occurs_at)}
                   </span>
                 </li>
               ))}

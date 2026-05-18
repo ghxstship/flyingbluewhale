@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -91,7 +92,7 @@ export default async function Page() {
                       </div>
                       {r.last_message_at && (
                         <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-                          {new Date(r.last_message_at).toLocaleString()}
+                          {formatDateTime(r.last_message_at)}
                         </div>
                       )}
                     </div>

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { stampRevision, addNextRound, closeSubmittal } from "./actions";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -89,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {all.map((r) => (
                 <tr key={r.id}>
                   <td className="font-mono text-xs">#{r.round}</td>
-                  <td className="font-mono text-xs">{new Date(r.submitted_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{formatDate(r.submitted_at)}</td>
                   <td>
                     <Badge variant={STATUS_TONE[r.stamp] ?? "muted"}>{r.stamp.replace(/_/g, " ")}</Badge>
                   </td>

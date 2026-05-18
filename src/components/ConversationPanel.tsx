@@ -1,13 +1,9 @@
 import { listMessagesFor, type ConversationRecordType } from "@/lib/db/conversations";
 import { ConversationComposer } from "./ConversationComposer";
+import { formatDateTime } from "@/lib/i18n/format";
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateTime(iso);
 }
 
 /**

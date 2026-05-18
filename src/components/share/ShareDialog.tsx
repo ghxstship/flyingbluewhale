@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import type { CreateShareLinkInput, ShareLink } from "@/lib/share/types";
+import { formatDateTime } from "@/lib/i18n/format";
 
 /**
  * Reusable Share dialog. Shows existing links for a (resource_table,
@@ -295,7 +296,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                   <p className="mt-0.5 text-xs text-[var(--text-muted)]">
                     {l.uses} use{l.uses === 1 ? "" : "s"}
                     {l.max_uses !== null && ` / ${l.max_uses}`}
-                    {l.expires_at && ` · expires ${new Date(l.expires_at).toLocaleString()}`}
+                    {l.expires_at && ` · expires ${formatDateTime(l.expires_at)}`}
                     {!l.expires_at && " · no expiry"}
                   </p>
                 </div>

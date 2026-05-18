@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -30,8 +31,7 @@ const MEETING_PATTERN =
   /(meet|brief|sync|standup|review|coordination|liaison|interface|chef|kickoff|kick-off|debrief|technical)/i;
 
 function fmt(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  return formatDateTime(iso);
 }
 
 export default async function Page() {

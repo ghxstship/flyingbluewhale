@@ -9,6 +9,7 @@ import type { Json } from "@/lib/supabase/database.types";
 import { AutomationControls } from "./AutomationControls";
 import { WebhookSection } from "./WebhookSection";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { formatDateTime } from "@/lib/i18n/format";
 import { urlFor } from "@/lib/urls";
 import { StepBuilder, type AutomationStep } from "@/components/automations/StepBuilder";
 // Side-effect import — registers all built-in actions with the in-memory
@@ -51,13 +52,7 @@ const RUN_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateTime(iso);
 }
 
 function stepCount(steps: Json): number {

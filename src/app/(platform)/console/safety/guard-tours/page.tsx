@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
+import { formatDateParts, formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -76,12 +77,7 @@ export default async function Page() {
               header: "Next Run",
               render: (r) =>
                 r.next_run_at
-                  ? new Date(String(r.next_run_at)).toLocaleString(undefined, {
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
+                  ? formatDateTime(String(r.next_run_at))
                   : "—",
               className: "font-mono text-xs",
               accessor: (r) => r.next_run_at ?? null,

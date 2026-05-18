@@ -50,9 +50,9 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
       height={undefined as unknown as number}
       actions={
         <div className="flex items-center gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
-          <Legend tone="bg-emerald-500" label={`On track ${counts.green}`} />
-          <Legend tone="bg-amber-500" label={`Watch ${counts.amber}`} />
-          <Legend tone="bg-red-600" label={`At risk ${counts.red}`} />
+          <Legend tone="bg-[var(--color-success)]" label={`On track ${counts.green}`} />
+          <Legend tone="bg-[var(--color-caution)]" label={`Watch ${counts.amber}`} />
+          <Legend tone="bg-[var(--color-error)]" label={`At risk ${counts.red}`} />
         </div>
       }
     >
@@ -104,17 +104,17 @@ function computeHealth(p: PortfolioEntry): Health {
 function tone(h: Health): { bg: string; dot: string } {
   if (h === "red")
     return {
-      bg: "bg-[color:var(--color-error)]/8 hover:bg-[color:var(--color-error)]/12",
-      dot: "bg-red-500",
+      bg: "bg-[color-mix(in_srgb,var(--color-error)_8%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-error)_12%,transparent)]",
+      dot: "bg-[var(--color-error)]",
     };
   if (h === "amber")
     return {
-      bg: "bg-amber-500/8 hover:bg-amber-500/12",
-      dot: "bg-amber-500",
+      bg: "bg-[color-mix(in_srgb,var(--color-caution)_8%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-caution)_12%,transparent)]",
+      dot: "bg-[var(--color-caution)]",
     };
   return {
-    bg: "bg-emerald-500/8 hover:bg-emerald-500/12",
-    dot: "bg-emerald-500",
+    bg: "bg-[color-mix(in_srgb,var(--color-success)_8%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-success)_12%,transparent)]",
+    dot: "bg-[var(--color-success)]",
   };
 }
 

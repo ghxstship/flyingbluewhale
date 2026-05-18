@@ -121,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
                     ? "text-[var(--text-muted)]"
                     : variance > 0
                       ? "text-[var(--color-warning)]"
-                      : "text-emerald-600"
+                      : "text-[var(--color-success)]"
                 }`}
               >
                 {variance === 0 ? "—" : `${variance > 0 ? "+" : ""}${money(variance)}`}

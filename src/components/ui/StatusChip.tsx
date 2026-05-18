@@ -22,11 +22,11 @@ export type StatusTone =
   | "muted"; // even lower contrast than neutral
 
 const TONE_CLASS: Record<StatusTone, string> = {
-  neutral: "bg-slate-500/10 text-slate-600 dark:text-slate-300",
-  info: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
-  success: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  warning: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
-  danger: "bg-rose-500/10 text-rose-700 dark:text-rose-300",
+  neutral: "bg-[color-mix(in_srgb,var(--text-muted)_10%,transparent)] text-[var(--text-secondary)]",
+  info: "bg-[color-mix(in_srgb,var(--color-info)_10%,transparent)] text-[var(--color-info)]",
+  success: "bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)] text-[var(--color-success)]",
+  warning: "bg-[color-mix(in_srgb,var(--color-caution)_10%,transparent)] text-[var(--color-caution)]",
+  danger: "bg-[color-mix(in_srgb,var(--color-error)_10%,transparent)] text-[var(--color-error)]",
   muted: "bg-[var(--surface-inset)] text-[var(--text-muted)]",
 };
 

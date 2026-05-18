@@ -221,7 +221,7 @@ function weekLabel(start: Date, end: Date): string {
 function eventTone(status: string): string {
   switch (status) {
     case "confirmed":
-      return "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25";
+      return "bg-[color-mix(in_srgb,var(--color-success)_15%,transparent)] text-[var(--color-success)] hover:bg-[color-mix(in_srgb,var(--color-success)_25%,transparent)]";
     case "live":
       return "bg-[var(--org-primary)]/15 text-[var(--org-primary)] hover:bg-[var(--org-primary)]/25";
     case "completed":
@@ -229,6 +229,6 @@ function eventTone(status: string): string {
     case "cancelled":
       return "bg-[color:var(--color-error)]/10 text-[color:var(--color-error)] line-through hover:bg-[color:var(--color-error)]/20";
     default:
-      return "bg-amber-500/15 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25";
+      return "bg-[color-mix(in_srgb,var(--color-caution)_15%,transparent)] text-[var(--color-caution)] hover:bg-[color-mix(in_srgb,var(--color-caution)_25%,transparent)]";
   }
 }

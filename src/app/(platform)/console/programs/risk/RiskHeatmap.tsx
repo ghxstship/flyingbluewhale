@@ -90,10 +90,10 @@ export function RiskHeatmap({
         </div>
 
         <div className="mt-3 flex items-center justify-end gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
-          <Legend tone="bg-emerald-500" label="Low" />
-          <Legend tone="bg-yellow-500" label="Moderate" />
-          <Legend tone="bg-orange-500" label="High" />
-          <Legend tone="bg-red-600" label="Severe" />
+          <Legend tone="bg-[var(--color-success)]" label="Low" />
+          <Legend tone="bg-[var(--color-caution)]" label="Moderate" />
+          <Legend tone="bg-[var(--color-warning)]" label="High" />
+          <Legend tone="bg-[var(--color-error)]" label="Severe" />
         </div>
 
         {open && (
@@ -155,8 +155,8 @@ function pretty(s: string) {
  */
 function riskTone(likelihoodIdx: number, impactIdx: number): string {
   const sum = likelihoodIdx + impactIdx; // 0..8
-  if (sum <= 2) return "bg-emerald-500/85 hover:bg-emerald-500";
-  if (sum <= 4) return "bg-yellow-500/85 hover:bg-yellow-500";
-  if (sum <= 6) return "bg-orange-500/85 hover:bg-orange-500";
-  return "bg-red-600/90 hover:bg-red-600";
+  if (sum <= 2) return "bg-[color-mix(in_srgb,var(--color-success)_85%,transparent)] hover:bg-[var(--color-success)]";
+  if (sum <= 4) return "bg-[color-mix(in_srgb,var(--color-caution)_85%,transparent)] hover:bg-[var(--color-caution)]";
+  if (sum <= 6) return "bg-[color-mix(in_srgb,var(--color-warning)_85%,transparent)] hover:bg-[var(--color-warning)]";
+  return "bg-[color-mix(in_srgb,var(--color-error)_90%,transparent)] hover:bg-[var(--color-error)]";
 }

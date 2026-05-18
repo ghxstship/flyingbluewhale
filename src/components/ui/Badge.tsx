@@ -32,8 +32,8 @@ const VARIANT: Record<BadgeVariant, string> = {
 
 const DOT_BG: Record<BadgeVariant, string> = {
   default: "bg-[var(--text-muted)]",
-  success: "bg-emerald-500",
-  warning: "bg-amber-500",
+  success: "bg-[var(--color-success)]",
+  warning: "bg-[var(--color-caution)]",
   error: "bg-[var(--color-error)]",
   info: "bg-[var(--org-primary)]",
   brand: "bg-[var(--org-primary)]",

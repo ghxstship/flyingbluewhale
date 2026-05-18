@@ -30,8 +30,8 @@ const STATUS_TONE: Record<StepStatus, "muted" | "info" | "success" | "warning" |
 const STATUS_DOT: Record<StepStatus, string> = {
   pending: "bg-[var(--text-muted)]",
   running: "bg-[var(--org-primary)] motion-safe:animate-pulse",
-  success: "bg-emerald-500",
-  skipped: "bg-amber-500",
+  success: "bg-[var(--color-success)]",
+  skipped: "bg-[var(--color-caution)]",
   failed: "bg-[var(--color-error)]",
 };
 

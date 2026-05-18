@@ -82,7 +82,7 @@ export function DiffViewer({
                   <code
                     className={`rounded px-1 py-0.5 break-all ${
                       r.kind === "added"
-                        ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                        ? "bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)] text-[var(--color-success)]"
                         : "bg-[color:var(--color-warning)]/10 text-[var(--text-primary)]"
                     }`}
                   >

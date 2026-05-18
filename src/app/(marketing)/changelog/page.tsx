@@ -29,8 +29,8 @@ type EntryKind = ChangelogKind;
 const KINDS: Record<EntryKind, { label: string; className: string; icon: typeof Sparkles }> = {
   feature: { label: "Feature", className: "bg-[var(--org-primary)]/10 text-[var(--org-primary)]", icon: Sparkles },
   improvement: { label: "Improvement", className: "bg-[var(--accent)]/10 text-[var(--accent)]", icon: Wrench },
-  security: { label: "Security", className: "bg-emerald-500/10 text-emerald-600", icon: ShieldCheck },
-  performance: { label: "Performance", className: "bg-amber-500/10 text-amber-600", icon: Zap },
+  security: { label: "Security", className: "bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)] text-[var(--color-success)]", icon: ShieldCheck },
+  performance: { label: "Performance", className: "bg-[color-mix(in_srgb,var(--color-caution)_10%,transparent)] text-[var(--color-caution)]", icon: Zap },
 };
 
 const ENTRIES = CHANGELOG_ENTRIES;

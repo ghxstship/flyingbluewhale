@@ -40,7 +40,7 @@ Tests that don't require auth state. **7/7 passing** (4.2s total):
 
 ### 2.2 `forms-construction-trade.spec.ts` — full CRUD lifecycle on 5 modules
 
-End-to-end create → detail → edit → save for the 5 P0a modules. Each test logs in as `test+owner@flyingbluewhale.app`, creates a real DB record, edits it, and verifies persistence.
+End-to-end create → detail → edit → save for the 5 P0a modules. Each test logs in as `test+owner@atlvs.pro`, creates a real DB record, edits it, and verifies persistence.
 
 **Initial run: 0/5 passing** — but the failures were diagnostic, not flake. Surfaced 3 latent column-name / enum bugs (RFI `official_answer`, punch `closed_at`/`closed_by`, submittal `approved_with_comments`/`void`).
 

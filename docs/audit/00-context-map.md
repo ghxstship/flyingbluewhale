@@ -167,7 +167,7 @@ Every `public.*` table has RLS enabled. Policies gated on `is_org_member(org_id)
 
 | Environment | Provider | URL | Notes |
 |---|---|---|---|
-| Production | Vercel | `https://flyingbluewhale.app` | Not yet deployed |
+| Production | Vercel | `https://atlvs.pro` | Subdomains: `app.atlvs.pro`, `gvteway.atlvs.pro`, `compvss.atlvs.pro` |
 | Preview | Vercel (per-PR) | `*.vercel.app` | Not yet wired |
 | Local dev | `npm run dev` | `http://localhost:3000` | |
 

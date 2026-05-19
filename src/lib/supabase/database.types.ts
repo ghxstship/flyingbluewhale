@@ -9439,7 +9439,7 @@ export type Database = {
           governing_law_snapshot: string | null
           id: string
           last_viewed_at: string | null
-          msa_status: string
+          msa_state: string
           nscb_classification: string | null
           nscb_license_number: string | null
           nscb_monetary_limit_cents: number | null
@@ -9471,7 +9471,7 @@ export type Database = {
           governing_law_snapshot?: string | null
           id?: string
           last_viewed_at?: string | null
-          msa_status?: string
+          msa_state?: string
           nscb_classification?: string | null
           nscb_license_number?: string | null
           nscb_monetary_limit_cents?: number | null
@@ -9503,7 +9503,7 @@ export type Database = {
           governing_law_snapshot?: string | null
           id?: string
           last_viewed_at?: string | null
-          msa_status?: string
+          msa_state?: string
           nscb_classification?: string | null
           nscb_license_number?: string | null
           nscb_monetary_limit_cents?: number | null
@@ -26619,7 +26619,7 @@ export type Database = {
           governing_law_snapshot: string | null
           id: string | null
           last_viewed_at: string | null
-          msa_status: string | null
+          msa_state: string | null
           nscb_classification: string | null
           nscb_license_number: string | null
           nscb_monetary_limit_cents: number | null
@@ -27789,7 +27789,7 @@ export type Database = {
         Args: { p_crew_member_id: string }
         Returns: {
           msa_id: string
-          msa_status: string
+          msa_state: string
           public_token: string
           signed_at: string
           version: number

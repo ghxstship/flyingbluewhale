@@ -28,7 +28,7 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
         subtitle={resolved.crew_member_role ?? "—"}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={MSA_STATUS_VARIANT[resolved.msa_status]}>{MSA_STATUS_LABEL[resolved.msa_status]}</Badge>
+            <Badge variant={MSA_STATUS_VARIANT[resolved.msa_state]}>{MSA_STATUS_LABEL[resolved.msa_state]}</Badge>
             <Link
               href="/console/people/msas"
               className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
@@ -76,7 +76,7 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
           </div>
         </section>
 
-        {resolved.msa_status === "signed" && (
+        {resolved.msa_state === "signed" && (
           <section className="surface space-y-2 p-6">
             <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">Signature</h3>
             <div className="font-subdisplay text-2xl">{resolved.signed_signature}</div>

@@ -34,12 +34,12 @@ export default async function Page({ params }: { params: Promise<{ token: string
     role.includes("steel") ||
     role.includes("heavy");
 
-  const alreadySigned = msa.msa_status === "signed";
+  const alreadySigned = msa.msa_state === "signed";
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
-        <Badge variant={MSA_STATUS_VARIANT[msa.msa_status]}>{MSA_STATUS_LABEL[msa.msa_status]}</Badge>
+        <Badge variant={MSA_STATUS_VARIANT[msa.msa_state]}>{MSA_STATUS_LABEL[msa.msa_state]}</Badge>
         <div className="flex items-center gap-3 text-xs">
           <a
             href={`/msa/${token}/print`}

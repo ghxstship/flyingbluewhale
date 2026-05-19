@@ -9,7 +9,7 @@ export default function GhxstshipNotFound() {
         The page doesn&apos;t exist or has moved. Try one of these.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Link href="/ghxstship" className="btn">
+        <Link href="/ghxstship" className="btn btn-primary">
           GHXSTSHIP
         </Link>
         <Link href="/ghxstship/services" className="btn btn-secondary">

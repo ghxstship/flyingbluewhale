@@ -65,7 +65,7 @@ test.describe("graceful 404s", () => {
     // Without a session the middleware redirects to /login, which is fine too.
     await context.addCookies([
       {
-        name: "fbw_consent",
+        name: "atlvs_consent",
         value: encodeURIComponent(
           JSON.stringify({ essential: true, analytics: false, marketing: false, decidedAt: new Date().toISOString() }),
         ),

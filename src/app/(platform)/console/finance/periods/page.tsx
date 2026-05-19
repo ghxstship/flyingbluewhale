@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listAccountingPeriods, type AccountingPeriod } from "@/lib/accounting-periods";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -54,7 +55,7 @@ export default async function FinancePeriodsPage() {
             {
               key: "closed",
               header: "Closed",
-              render: (r) => (r.closed_at ? new Date(r.closed_at).toLocaleDateString() : "—"),
+              render: (r) => (r.closed_at ? formatDate(r.closed_at) : "—"),
               className: "text-xs text-[var(--text-secondary)]",
               accessor: (r) => r.closed_at,
             },

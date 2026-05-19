@@ -1159,7 +1159,7 @@ function toNumberOrNull(v: string | number | null | undefined): number | null {
 
 function defaultFormat(n: number, agg: "sum" | "avg" | "min" | "max" | "count"): string {
   if (agg === "count") return String(n);
-  return n.toLocaleString();
+  return new Intl.NumberFormat(undefined).format(n);
 }
 
 /**

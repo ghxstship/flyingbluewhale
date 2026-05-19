@@ -29,7 +29,7 @@ const SNAPSHOT_ROUTES = [
 async function setTheme(page: Page, theme: string) {
   await page.context().addCookies([
     {
-      name: "fbw_consent",
+      name: "atlvs_consent",
       value: encodeURIComponent(
         '{"essential":true,"analytics":false,"marketing":false,"decidedAt":"2026-04-20T00:00:00Z"}',
       ),

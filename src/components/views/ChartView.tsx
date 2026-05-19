@@ -46,6 +46,7 @@ import {
 } from "@/lib/views/chart-config";
 import { pivotForChart } from "@/lib/views/chart-aggregate";
 import { HeatmapGrid, type HeatmapCell } from "./HeatmapGrid";
+import { formatDate, formatMoney, formatNumber } from "@/lib/i18n/format";
 
 export type ChartViewProps<T extends Record<string, unknown> = Record<string, unknown>> = {
   config: ChartViewConfig;
@@ -518,26 +519,19 @@ export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", cu
   if (typeof v !== "number") {
     if (format === "date" && typeof v === "string") {
       const d = new Date(v);
-      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString();
+      if (!Number.isNaN(d.getTime())) return formatDate(d, "short");
     }
     return String(v);
   }
   switch (format) {
     case "currency":
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2,
-      }).format(v);
+      return formatMoney(v * 100, { currency, fractionDigits: Math.abs(v) >= 1000 ? 0 : 2 });
     case "percent":
-      return new Intl.NumberFormat("en-US", {
-        style: "percent",
-        maximumFractionDigits: 1,
-      }).format(Math.abs(v) > 1 ? v / 100 : v);
+      return formatNumber(Math.abs(v) > 1 ? v / 100 : v, { style: "percent", maximumFractionDigits: 1 });
     case "date":
-      return new Date(v).toLocaleDateString();
+      return formatDate(v, "short");
     case "number":
-      return new Intl.NumberFormat("en-US").format(v);
+      return formatNumber(v, { maximumFractionDigits: 0 });
     case "auto":
     default:
       if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;

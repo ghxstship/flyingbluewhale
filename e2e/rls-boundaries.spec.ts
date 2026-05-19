@@ -27,7 +27,7 @@ const TEST_PROJECT_IDS: Record<string, string> = {
 async function dismissConsent(ctx: BrowserContext) {
   await ctx.addCookies([
     {
-      name: "fbw_consent",
+      name: "atlvs_consent",
       value: encodeURIComponent(
         JSON.stringify({
           essential: true,

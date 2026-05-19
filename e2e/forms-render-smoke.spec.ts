@@ -43,7 +43,7 @@ test.beforeAll(async ({ browser }) => {
   const page = await context.newPage();
   await context.addCookies([
     {
-      name: "fbw_consent",
+      name: "atlvs_consent",
       value: encodeURIComponent(
         JSON.stringify({
           essential: true,

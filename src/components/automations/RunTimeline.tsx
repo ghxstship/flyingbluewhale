@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
+import { formatTime } from "@/lib/i18n/format";
 
 /**
  * RunTimeline — vertical step timeline rendered on a single-run page.
@@ -53,11 +54,7 @@ export type RunTimelineProps = {
 
 function fmtTime(iso?: string): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleTimeString(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  return formatTime(iso, { seconds: true });
 }
 
 function fmtLatency(ms?: number): string {

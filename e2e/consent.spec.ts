@@ -23,7 +23,7 @@ test.describe("cookie consent", () => {
       timeout: 5000,
     });
     const cookies = await context.cookies();
-    const consent = cookies.find((c) => c.name === "fbw_consent");
+    const consent = cookies.find((c) => c.name === "atlvs_consent");
     expect(consent).toBeDefined();
     expect(consent!.value).toContain("essential");
   });
@@ -35,7 +35,7 @@ test.describe("cookie consent", () => {
       timeout: 5000,
     });
     const cookies = await context.cookies();
-    const consent = cookies.find((c) => c.name === "fbw_consent");
+    const consent = cookies.find((c) => c.name === "atlvs_consent");
     expect(consent).toBeDefined();
     expect(decodeURIComponent(consent!.value)).toMatch(/"analytics":false/);
     expect(decodeURIComponent(consent!.value)).toMatch(/"marketing":false/);

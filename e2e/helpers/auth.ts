@@ -34,7 +34,7 @@ export function fixtureEmail(role: string): string {
 export async function dismissConsent(page: Page): Promise<void> {
   await page.context().addCookies([
     {
-      name: "fbw_consent",
+      name: "atlvs_consent",
       value: encodeURIComponent(
         JSON.stringify({
           essential: true,

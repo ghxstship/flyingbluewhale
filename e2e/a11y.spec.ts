@@ -12,7 +12,7 @@ import AxeBuilder from "@axe-core/playwright";
 test.beforeEach(async ({ context }) => {
   await context.addCookies([
     {
-      name: "fbw_consent",
+      name: "atlvs_consent",
       value: encodeURIComponent(
         JSON.stringify({
           essential: true,

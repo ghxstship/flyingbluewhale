@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Activity as ActivityIcon, RefreshCw } from "lucide-react";
+import { formatDateParts } from "@/lib/i18n/format";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -38,7 +39,7 @@ function dayLabel(iso: string): string {
   const today = startOfDay(new Date());
   if (item === today) return "Today";
   if (item === today - DAY_MS) return "Yesterday";
-  return new Date(iso).toLocaleDateString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",

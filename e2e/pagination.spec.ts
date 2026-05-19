@@ -15,7 +15,7 @@ const PASSWORD = "FlyingBlue!Test2026";
 async function dismissConsent(ctx: BrowserContext) {
   await ctx.addCookies([
     {
-      name: "fbw_consent",
+      name: "atlvs_consent",
       value: encodeURIComponent(JSON.stringify({ essential: true, decidedAt: new Date().toISOString() })),
       domain: "localhost",
       path: "/",

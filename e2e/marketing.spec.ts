@@ -4,7 +4,7 @@ test.describe("marketing", () => {
   test.beforeEach(async ({ context }) => {
     await context.addCookies([
       {
-        name: "fbw_consent",
+        name: "atlvs_consent",
         value: encodeURIComponent(
           JSON.stringify({
             essential: true,

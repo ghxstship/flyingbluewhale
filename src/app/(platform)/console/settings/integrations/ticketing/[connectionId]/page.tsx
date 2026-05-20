@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { recordSalesSnapshotAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -54,13 +55,14 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
   const c = connResp.data as Connection;
   const snapshots = (snapshotsResp.data ?? []) as Snapshot[];
   const latest = snapshots[0] ?? null;
+  const fmtIntl = await getRequestFormatters();
 
   return (
     <>
       <ModuleHeader
         eyebrow={`Ticketing · ${c.provider}`}
         title={c.label ?? c.external_event_id ?? "Connection"}
-        subtitle={c.last_synced_at ? `Last sync ${new Date(c.last_synced_at).toLocaleString()}` : "Never synced"}
+        subtitle={c.last_synced_at ? `Last sync ${fmtIntl.dateTime(c.last_synced_at)}` : "Never synced"}
         action={<Badge variant={c.is_active ? "success" : "muted"}>{c.is_active ? "active" : "inactive"}</Badge>}
       />
       <div className="page-content max-w-3xl space-y-5">
@@ -76,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
               <dt className="text-[var(--text-secondary)]">Gross</dt>
               <dd className="font-mono">{formatMoney(latest.total_gross_cents)}</dd>
               <dt className="text-[var(--text-secondary)]">As of</dt>
-              <dd className="font-mono">{new Date(latest.snapshot_at).toLocaleString()}</dd>
+              <dd className="font-mono">{fmtIntl.dateTime(latest.snapshot_at)}</dd>
             </dl>
           </section>
         )}
@@ -106,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
               {snapshots.map((s) => (
                 <li key={s.id} className="flex items-center justify-between py-2 text-sm">
                   <span className="font-mono text-xs text-[var(--text-secondary)]">
-                    {new Date(s.snapshot_at).toLocaleString()}
+                    {fmtIntl.dateTime(s.snapshot_at)}
                   </span>
                   <span className="font-mono text-xs">
                     {s.total_sold} sold · {formatMoney(s.total_gross_cents)}

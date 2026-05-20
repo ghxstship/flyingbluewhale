@@ -43,16 +43,6 @@ const RISK_TONE: Record<string, "muted" | "warning" | "error"> = {
   high: "error",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -136,7 +126,7 @@ export default async function Page() {
             {
               key: "window",
               header: "Window",
-              render: (r) => `${fmt(r.planned_start)} → ${fmt(r.planned_end)}`,
+              render: (r) => `${r.planned_start ? fmtIntl.dateTime(r.planned_start) : "—"} → ${r.planned_end ? fmtIntl.dateTime(r.planned_end) : "—"}`,
               className: "font-mono text-xs",
               accessor: (r) => r.planned_start ?? null,
             },

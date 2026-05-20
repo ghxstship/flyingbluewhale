@@ -27,16 +27,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   cancelled: "error",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -101,14 +91,14 @@ export default async function Page() {
             {
               key: "starts",
               header: "Starts",
-              render: (r) => fmt(r.starts_at),
+              render: (r) => fmtIntl.dateTime(r.starts_at),
               className: "font-mono text-xs",
               accessor: (r) => r.starts_at ?? null,
             },
             {
               key: "ends",
               header: "Ends",
-              render: (r) => fmt(r.ends_at),
+              render: (r) => fmtIntl.dateTime(r.ends_at),
               className: "font-mono text-xs",
               accessor: (r) => r.ends_at ?? null,
             },

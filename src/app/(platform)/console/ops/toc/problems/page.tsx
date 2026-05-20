@@ -38,15 +38,6 @@ const PRIORITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
   P4: "muted",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -62,6 +53,7 @@ export default async function Page() {
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string) => fmtIntl.dateTime(iso);
   const { data } = await supabase
     .from("itil_problems")
     .select(

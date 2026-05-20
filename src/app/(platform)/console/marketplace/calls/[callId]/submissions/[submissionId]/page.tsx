@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { SUBMISSION_STATUSES, STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { transitionSubmissionAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -38,13 +39,14 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
     .maybeSingle();
   if (!data) return notFound();
   const s = data as Sub;
+  const fmt = await getRequestFormatters();
 
   return (
     <>
       <ModuleHeader
         eyebrow="Submission"
         title={`#${s.id.slice(0, 8)}`}
-        subtitle={`Submitted ${new Date(s.submitted_at).toLocaleString()}`}
+        subtitle={`Submitted ${fmt.dateTime(s.submitted_at)}`}
         action={<Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>}
       />
       <div className="page-content max-w-2xl space-y-5">

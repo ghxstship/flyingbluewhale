@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 /**
  * Run history — list view.
@@ -46,17 +47,6 @@ const STATUS_FILTERS: Array<{ key: "all" | RunRow["status"]; label: string }> = 
   { key: "running", label: "Running" },
   { key: "pending", label: "Pending" },
 ];
-
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-}
 
 function durationMs(started: string | null, finished: string | null): number | null {
   if (!started || !finished) return null;
@@ -99,6 +89,8 @@ export default async function Page({
 
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string | null) => (iso ? fmtIntl.dateTime(iso) : "—");
 
   // Verify automation exists + caller has access (RLS enforces the org bound,
   // but we want a 404 if the path is bogus).

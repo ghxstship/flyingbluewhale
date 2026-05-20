@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { transitionPayApp, updatePayAppLine } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 
@@ -22,15 +23,13 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
   paid: "success",
 };
 
-function fmt(d: string): string {
-  return new Date(d + "T00:00:00").toLocaleDateString();
-}
-
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
+  const fmt = (d: string) => fmtIntl.date(d + "T12:00:00Z");
 
   const { data: app } = await supabase
     .from("payment_applications")

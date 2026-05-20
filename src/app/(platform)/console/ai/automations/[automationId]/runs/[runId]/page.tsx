@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { RunTimeline, type RunTimelineStep } from "@/components/automations/RunTimeline";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 /**
  * Run detail — single run view with per-step timeline.
@@ -54,18 +55,6 @@ const STATUS_TONE: Record<RunRow["status"], "muted" | "info" | "success" | "warn
   cancelled: "warning",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-}
-
 function durationMs(started: string | null, finished: string | null): number | null {
   if (!started || !finished) return null;
   const s = Date.parse(started);
@@ -99,6 +88,8 @@ export default async function Page({ params }: { params: Promise<{ automationId:
 
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string | null) => (iso ? fmtIntl.dateTime(iso) : "—");
 
   const { data: autoRow } = await supabase
     .from("automations")

@@ -6,6 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { OfferControls } from "./OfferControls";
 
 export const dynamic = "force-dynamic";
@@ -48,6 +49,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
     .maybeSingle();
   const talent = talentResp.data as { id: string; act_name: string; public_handle: string | null } | null;
 
+  const fmt = await getRequestFormatters();
   const depositCents = Math.round(o.fee_cents * (o.deposit_pct / 100));
   const balanceCents = o.fee_cents - depositCents;
 
@@ -77,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
                 {formatMoney(balanceCents)} on {o.balance_terms.replace("_", " ")}
               </dd>
               <dt className="text-[var(--text-secondary)]">Slot</dt>
-              <dd>{o.slot_start ? `${new Date(o.slot_start).toLocaleString()}` : "—"}</dd>
+              <dd>{o.slot_start ? fmt.dateTime(o.slot_start) : "—"}</dd>
               <dt className="text-[var(--text-secondary)]">Project</dt>
               <dd>{o.project_id ?? "—"}</dd>
             </dl>
@@ -86,9 +88,9 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
             <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Timeline</h2>
             <ul className="space-y-1.5 text-sm">
               <li>Created · {/* via created_at */} —</li>
-              <li>Sent · {o.sent_at ? new Date(o.sent_at).toLocaleString() : "—"}</li>
-              <li>Accepted · {o.accepted_at ? new Date(o.accepted_at).toLocaleString() : "—"}</li>
-              <li>Contracted · {o.contracted_at ? new Date(o.contracted_at).toLocaleString() : "—"}</li>
+              <li>Sent · {o.sent_at ? fmt.dateTime(o.sent_at) : "—"}</li>
+              <li>Accepted · {o.accepted_at ? fmt.dateTime(o.accepted_at) : "—"}</li>
+              <li>Contracted · {o.contracted_at ? fmt.dateTime(o.contracted_at) : "—"}</li>
             </ul>
           </div>
         </section>

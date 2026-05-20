@@ -28,16 +28,6 @@ type RunRow = {
 
 const VIP_CODES = ["VIP", "VVIP", "DIGNITARY", "PROTOCOL", "OFFICIAL", "T3"];
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -53,6 +43,7 @@ export default async function Page() {
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string) => fmtIntl.dateTime(iso);
   const horizon = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
   const [{ data: catData }, { data: runsData }, { count: blockCount }] = await Promise.all([
     supabase

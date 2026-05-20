@@ -49,17 +49,6 @@ const RUN_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
   running: "warning",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 function stepCount(steps: Json): number {
   return Array.isArray(steps) ? steps.length : 0;
 }
@@ -146,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         title={automation.name}
         subtitle={
           <span className="font-mono text-xs">
-            {automation.trigger_kind} · updated {fmt(automation.updated_at)}
+            {automation.trigger_kind} · updated {fmtIntl.dateTime(automation.updated_at)}
           </span>
         }
         breadcrumbs={[{ label: "Automations", href: "/console/ai/automations" }, { label: automation.name }]}
@@ -164,7 +153,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
 
         <div className="metric-grid-3">
           <MetricCard label="Steps" value={fmtIntl.number(steps)} />
-          <MetricCard label="Last Run" value={automation.last_run_at ? fmt(automation.last_run_at) : "Never"} />
+          <MetricCard label="Last Run" value={automation.last_run_at ? fmtIntl.dateTime(automation.last_run_at) : "Never"} />
           <MetricCard
             label="Last Status"
             value={automation.last_run_status ?? "—"}
@@ -217,7 +206,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
             <h3 className="text-sm font-semibold">Last Run</h3>
             <div className="mt-2 flex items-center gap-2 text-sm">
               <Badge variant={RUN_TONE[automation.last_run_status] ?? "muted"}>{automation.last_run_status}</Badge>
-              <span className="font-mono text-xs text-[var(--text-muted)]">{fmt(automation.last_run_at)}</span>
+              <span className="font-mono text-xs text-[var(--text-muted)]">{automation.last_run_at ? fmtIntl.dateTime(automation.last_run_at) : "—"}</span>
             </div>
           </section>
         )}

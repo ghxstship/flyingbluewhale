@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +52,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
     (acc[r.kind] ??= []).push(r);
     return acc;
   }, {});
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -90,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
                         {r.is_current && <Badge variant="success">current</Badge>}
                       </Link>
                       <span className="font-mono text-xs text-[var(--text-secondary)]">
-                        {new Date(r.created_at).toLocaleDateString()}
+                        {fmt.date(r.created_at)}
                       </span>
                     </li>
                   ))}

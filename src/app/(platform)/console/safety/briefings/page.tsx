@@ -26,21 +26,12 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
   cancelled: "muted",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
   const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string | null) => (iso ? fmtIntl.dateTime(iso) : "—");
   const { data } = await supabase
     .from("safety_briefings")
     .select("id, topic, status, scheduled_for, conducted_at, briefer:briefer_id(name, email), project:project_id(name)")

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const { data } = await supabase.from("public_agency_directory").select("*").eq("public_handle", handle).maybeSingle();
   if (!data) return notFound();
   const a = data as Row;
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -62,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Default commission:</span>{" "}
-              {(a.default_commission_bps / 100).toFixed(2)}%
+              {fmt.number(a.default_commission_bps / 10000, { style: "percent", minimumFractionDigits: 2 })}
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Web:</span>{" "}

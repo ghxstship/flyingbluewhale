@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { transitionPoChangeOrder } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 
@@ -33,6 +34,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .eq("id", id)
     .maybeSingle();
   if (!co) notFound();
+  const fmtIntl = await getRequestFormatters();
 
   const po = co.purchase_order as unknown as {
     number: string;
@@ -77,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </div>
           <div className="surface p-3">
             <div className="text-xs text-[var(--text-muted)]">Proposed</div>
-            <div className="text-lg font-semibold">{new Date(co.proposed_at).toLocaleDateString()}</div>
+            <div className="text-lg font-semibold">{fmtIntl.date(co.proposed_at)}</div>
           </div>
         </section>
         {co.reason && (

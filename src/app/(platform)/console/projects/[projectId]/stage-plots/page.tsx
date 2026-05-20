@@ -5,6 +5,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { NewStagePlotButton } from "@/components/stage-plots/NewStagePlotButton";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 /** Stage plot list for a project — Opportunity #11 UI surface. */
 
@@ -12,6 +13,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
   const { projectId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const [{ data: project }, { data: plots }] = await Promise.all([
     supabase
       .from("projects")
@@ -65,7 +67,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
                   <td className="font-mono text-xs">
                     {p.width_ft && p.depth_ft ? `${p.width_ft}′ × ${p.depth_ft}′` : "—"}
                   </td>
-                  <td className="font-mono text-xs">{new Date(p.updated_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{fmt.date(p.updated_at)}</td>
                 </tr>
               ))}
             </tbody>

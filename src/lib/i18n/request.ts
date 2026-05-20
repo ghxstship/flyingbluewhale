@@ -134,7 +134,7 @@ export type RequestFormatters = {
   money: (cents: number | null | undefined, currencyOverride?: string) => string;
   number: (
     n: number | null | undefined,
-    opts?: { maximumFractionDigits?: number; style?: "decimal" | "percent" },
+    opts?: { maximumFractionDigits?: number; minimumFractionDigits?: number; style?: "decimal" | "percent" },
   ) => string;
   list: (items: string[], type?: "conjunction" | "disjunction") => string;
   settings: RequestLocaleSettings;

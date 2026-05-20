@@ -5,6 +5,7 @@ import { Alert } from "@/components/ui/Alert";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, env } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { money } from "@/components/detail/DetailShell";
 import { OpenPortalButton } from "./OpenPortalButton";
 
@@ -54,6 +55,7 @@ export default async function BillingPage() {
     .order("issued_at", { ascending: false })
     .limit(5);
   const invoices = invoiceRows ?? [];
+  const fmtIntl = await getRequestFormatters();
 
   return (
     <>
@@ -138,9 +140,9 @@ export default async function BillingPage() {
                       </td>
                       <td className="font-mono text-xs">{money(i.amount_cents)}</td>
                       <td className="font-mono text-xs">
-                        {i.issued_at ? new Date(i.issued_at).toLocaleDateString() : "—"}
+                        {i.issued_at ? fmtIntl.date(i.issued_at + "T12:00:00Z") : "—"}
                       </td>
-                      <td className="font-mono text-xs">{i.due_at ? new Date(i.due_at).toLocaleDateString() : "—"}</td>
+                      <td className="font-mono text-xs">{i.due_at ? fmtIntl.date(i.due_at + "T12:00:00Z") : "—"}</td>
                     </tr>
                   ))
                 )}

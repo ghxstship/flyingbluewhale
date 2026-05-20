@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   if (!callResp.data) return notFound();
   const call = callResp.data as { id: string; title: string; submission_count: number };
   const rows = (subsResp.data ?? []) as Row[];
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -62,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             {
               key: "when",
               header: "Submitted",
-              render: (r) => new Date(r.submitted_at).toLocaleDateString(),
+              render: (r) => fmt.date(r.submitted_at),
               accessor: (r) => r.submitted_at,
               className: "font-mono text-xs",
             },

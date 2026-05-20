@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { JOB_APPLICATION_STATUSES, STATUS_TONE } from "@/lib/marketplace";
 import { transitionApplicationAction } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -38,13 +39,14 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
     .maybeSingle();
   if (!data) return notFound();
   const a = data as App;
+  const fmtIntl = await getRequestFormatters();
 
   return (
     <>
       <ModuleHeader
         eyebrow="Applicant"
         title={`#${a.id.slice(0, 8)}`}
-        subtitle={`Applied ${new Date(a.applied_at).toLocaleDateString()}`}
+        subtitle={`Applied ${fmtIntl.date(a.applied_at)}`}
         action={<Badge variant={STATUS_TONE[a.status] ?? "muted"}>{a.status}</Badge>}
       />
       <div className="page-content max-w-2xl space-y-5">

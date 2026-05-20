@@ -4,6 +4,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { getAccountingPeriod, listAccountingPeriodTransitions } from "@/lib/accounting-periods";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { hasSupabase } from "@/lib/env";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ export default async function AccountingPeriodTransitionsPage({ params }: { para
   const period = await getAccountingPeriod(session.orgId, periodId);
   if (!period) notFound();
   const transitions = await listAccountingPeriodTransitions(session.orgId, periodId);
+  const fmtIntl = await getRequestFormatters();
 
   return (
     <>
@@ -44,7 +46,7 @@ export default async function AccountingPeriodTransitionsPage({ params }: { para
             <tbody>
               {transitions.map((t) => (
                 <tr key={t.id}>
-                  <td className="font-mono text-xs">{new Date(t.transitioned_at).toLocaleString()}</td>
+                  <td className="font-mono text-xs">{fmtIntl.dateTime(t.transitioned_at)}</td>
                   <td className="font-mono text-xs">{t.from_state ?? "(initial)"}</td>
                   <td className="font-mono text-xs font-bold">{t.to_state}</td>
                   <td>{t.reason ?? "—"}</td>

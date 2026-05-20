@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { data } = await supabase.from("public_open_calls").select("*").eq("public_slug", slug).maybeSingle();
   if (!data) return notFound();
   const c = data as Row;
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -55,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <div className="mt-5 flex flex-wrap gap-2">
           {c.region && <Badge variant="muted">{c.region}</Badge>}
           {c.venue_type && <Badge variant="muted">{c.venue_type}</Badge>}
-          {c.deadline_at && <Badge variant="warning">Closes {new Date(c.deadline_at).toLocaleDateString()}</Badge>}
+          {c.deadline_at && <Badge variant="warning">Closes {fmt.date(c.deadline_at)}</Badge>}
         </div>
       </section>
 
@@ -88,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               </div>
               <div>
                 <span className="text-[var(--text-secondary)]">Deadline:</span>{" "}
-                {c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}
+                {c.deadline_at ? fmt.dateTime(c.deadline_at) : "—"}
               </div>
               <div>
                 <span className="text-[var(--text-secondary)]">Submissions:</span> {c.submission_count}

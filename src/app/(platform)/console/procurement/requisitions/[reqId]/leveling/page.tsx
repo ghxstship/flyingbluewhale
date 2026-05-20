@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { awardResponse } from "./actions";
 
 type ResponseRow = {
@@ -56,6 +57,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
     null as number | null,
   );
   const awardedRow = all.find((r) => r.response_state === "awarded");
+  const fmtIntl = await getRequestFormatters();
 
   return (
     <>
@@ -127,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             {
               key: "submitted_at",
               header: "Submitted",
-              render: (r) => (r.submitted_at ? new Date(r.submitted_at).toLocaleDateString() : "—"),
+              render: (r) => (r.submitted_at ? fmtIntl.date(r.submitted_at) : "—"),
               accessor: (r) => r.submitted_at ?? "",
               mono: true,
               sortable: true,

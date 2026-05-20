@@ -33,10 +33,6 @@ const CLASS_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
   fatality: "error",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString();
-}
-
 export default async function Page({ searchParams }: { searchParams: Promise<{ year?: string }> }) {
   const sp = await searchParams;
   if (!hasSupabase) return null;
@@ -106,7 +102,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
             {
               key: "date",
               header: "Date",
-              render: (r) => fmt(r.occurred_at),
+              render: (r) => fmtIntl.date(r.occurred_at),
               className: "font-mono text-xs",
               accessor: (r) => r.occurred_at ?? null,
             },

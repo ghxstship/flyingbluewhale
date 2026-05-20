@@ -29,11 +29,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   expired: "muted",
 };
 
-function fmt(d: string | null): string {
-  if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString();
-}
-
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
@@ -111,7 +106,7 @@ export default async function Page() {
             {
               key: "exp",
               header: "Expires",
-              render: (r) => fmt(r.expires_at),
+              render: (r) => (r.expires_at ? fmtIntl.date(r.expires_at + "T12:00:00Z") : "—"),
               className: "font-mono text-xs",
               accessor: (r) => r.expires_at ?? null,
             },

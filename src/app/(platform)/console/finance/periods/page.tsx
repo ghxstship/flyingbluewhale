@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listAccountingPeriods, type AccountingPeriod } from "@/lib/accounting-periods";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function FinancePeriodsPage() {
     );
   }
   const session = await requireSession();
+  const fmtIntl = await getRequestFormatters();
   const rows = await listAccountingPeriods(session.orgId);
   const open = rows.filter((r) => r.state === "OPEN" || r.state === "IN_PERIOD").length;
   const closed = rows.filter((r) => r.state === "CLOSED" || r.state === "AUDITED").length;
@@ -54,7 +56,7 @@ export default async function FinancePeriodsPage() {
             {
               key: "closed",
               header: "Closed",
-              render: (r) => (r.closed_at ? new Date(r.closed_at).toLocaleDateString() : "—"),
+              render: (r) => (r.closed_at ? fmtIntl.date(r.closed_at) : "—"),
               className: "text-xs text-[var(--text-secondary)]",
               accessor: (r) => r.closed_at,
             },

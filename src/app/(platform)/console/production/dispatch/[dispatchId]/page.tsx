@@ -41,17 +41,6 @@ const FLEET_LABEL: Record<string, string> = {
   spectator: "Spectator",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 function manifestLength(raw: unknown): number {
   return Array.isArray(raw) ? raw.length : 0;
 }

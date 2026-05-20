@@ -4,6 +4,7 @@ import { CommitteeForm, PolicyForm } from "./Forms";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function GovernancePage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const [{ data: committees }, { data: policies }] = await Promise.all([
     supabase
       .from("governance_committees")
@@ -100,7 +102,7 @@ export default async function GovernancePage() {
                       <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>
                     </td>
                     <td className="font-mono text-xs">
-                      {p.next_review_at ? new Date(p.next_review_at).toLocaleDateString() : "—"}
+                      {p.next_review_at ? fmtIntl.date(p.next_review_at) : "—"}
                     </td>
                   </tr>
                 ))

@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { CallControls } from "./CallControls";
 
 export const dynamic = "force-dynamic";
@@ -43,6 +44,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
     .maybeSingle();
   if (!data) return notFound();
   const c = data as Call;
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -81,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               <dt className="text-[var(--text-secondary)]">Fee band</dt>
               <dd>{formatFeeRange(c.fee_min_cents, c.fee_max_cents, c.currency)}</dd>
               <dt className="text-[var(--text-secondary)]">Deadline</dt>
-              <dd>{c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}</dd>
+              <dd>{c.deadline_at ? fmt.dateTime(c.deadline_at) : "—"}</dd>
             </dl>
           </div>
           <div className="surface p-5">

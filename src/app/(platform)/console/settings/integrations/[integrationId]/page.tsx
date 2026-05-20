@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -34,16 +35,6 @@ const KIND_LABEL: Record<string, string> = {
   hris: "HRIS",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 export default async function Page({ params }: { params: Promise<{ integrationId: string }> }) {
   const { integrationId } = await params;
   if (!hasSupabase) {
@@ -58,6 +49,7 @@ export default async function Page({ params }: { params: Promise<{ integrationId
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const { dateTime: fmt } = await getRequestFormatters();
 
   const { data } = await supabase
     .from("integration_connectors")

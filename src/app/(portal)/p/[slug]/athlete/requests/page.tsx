@@ -36,16 +36,6 @@ const SEVERITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
   urgent: "error",
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -62,6 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string | null) => (iso ? fmtIntl.dateTime(iso) : "—");
   const { data } = await supabase
     .from("service_requests")
     .select(

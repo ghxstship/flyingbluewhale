@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("open_call_submissions")
     .select("*")
@@ -40,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
         <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Submitted {new Date(s.submitted_at).toLocaleString()}
+        Submitted {fmtIntl.dateTime(s.submitted_at)}
       </p>
 
       <div className="mt-6 space-y-4">

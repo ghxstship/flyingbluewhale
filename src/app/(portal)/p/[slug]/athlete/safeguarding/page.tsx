@@ -26,10 +26,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
   escalated: "error",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!hasSupabase) {
@@ -46,6 +42,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string) => fmtIntl.dateTime(iso);
   const { data } = await supabase
     .from("safeguarding_reports")
     .select("id, status, narrative, subject_ref, created_at, updated_at")

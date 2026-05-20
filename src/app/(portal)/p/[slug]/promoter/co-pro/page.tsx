@@ -88,10 +88,7 @@ export default async function PromoterCoPro({ params }: { params: Promise<{ slug
                   <td className="font-mono text-xs">{o.performance_date ? fmt.date(o.performance_date) : "—"}</td>
                   <td className="font-mono text-xs">
                     {o.guarantee_cents != null
-                      ? (o.guarantee_cents / 100).toLocaleString("en-US", {
-                          style: "currency",
-                          currency: o.currency ?? "USD",
-                        })
+                      ? fmt.money(o.guarantee_cents, o.currency ?? "USD")
                       : "—"}
                   </td>
                   <td className="font-mono text-xs">{o.door_pct != null ? `${o.door_pct}%` : "—"}</td>

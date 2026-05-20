@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function Page() {
   if (!hasSupabase) return <div>Configure Supabase.</div>;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("open_call_submissions")
     .select("id, status, submitted_at, open_call:open_call_id(title, public_slug)")
@@ -51,7 +53,7 @@ export default async function Page() {
                   {r.open_call?.title ?? "(deleted call)"}
                 </Link>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                  Submitted {new Date(r.submitted_at).toLocaleDateString()}
+                  Submitted {fmtIntl.date(r.submitted_at)}
                 </p>
               </div>
               <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>

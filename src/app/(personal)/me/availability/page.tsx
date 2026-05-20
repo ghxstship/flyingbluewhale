@@ -5,6 +5,7 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { addAvailabilityAction, deleteAvailabilityAction } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("availability_slots")
     .select("id, kind, starts_at, ends_at, all_day, label")
@@ -76,7 +78,7 @@ export default async function Page() {
                     {s.kind}
                   </Badge>
                   <span className="ml-3 font-mono text-xs">
-                    {new Date(s.starts_at).toLocaleString()} → {new Date(s.ends_at).toLocaleString()}
+                    {fmtIntl.dateTime(s.starts_at)} → {fmtIntl.dateTime(s.ends_at)}
                   </span>
                   {s.label && <span className="ml-3">{s.label}</span>}
                 </div>

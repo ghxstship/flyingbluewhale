@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export default async function Page() {
   if (!hasSupabase) return <div>Configure Supabase.</div>;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
 
   const [outResp, inResp] = await Promise.all([
     supabase
@@ -57,7 +59,7 @@ export default async function Page() {
         ) : (
           <ul className="space-y-2">
             {received.map((r) => (
-              <ReviewLi key={r.id} r={r} />
+              <ReviewLi key={r.id} r={r} fmtDateTime={(iso) => fmtIntl.dateTime(iso)} />
             ))}
           </ul>
         )}
@@ -72,7 +74,7 @@ export default async function Page() {
         ) : (
           <ul className="space-y-2">
             {written.map((r) => (
-              <ReviewLi key={r.id} r={r} />
+              <ReviewLi key={r.id} r={r} fmtDateTime={(iso) => fmtIntl.dateTime(iso)} />
             ))}
           </ul>
         )}
@@ -81,7 +83,7 @@ export default async function Page() {
   );
 }
 
-function ReviewLi({ r }: { r: Row }) {
+function ReviewLi({ r, fmtDateTime }: { r: Row; fmtDateTime: (iso: string) => string }) {
   return (
     <li className="card-elevated p-4">
       <div className="flex items-center gap-2 text-sm">
@@ -95,7 +97,7 @@ function ReviewLi({ r }: { r: Row }) {
         )}
       </div>
       {r.body && <p className="mt-2 text-sm whitespace-pre-wrap">{r.body}</p>}
-      <p className="mt-2 text-xs text-[var(--color-text-secondary)]">{new Date(r.created_at).toLocaleString()}</p>
+      <p className="mt-2 text-xs text-[var(--color-text-secondary)]">{fmtDateTime(r.created_at)}</p>
     </li>
   );
 }

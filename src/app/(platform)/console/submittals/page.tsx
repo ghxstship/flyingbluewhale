@@ -37,11 +37,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
   closed: "muted",
 };
 
-function fmt(d: string | null): string {
-  if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString();
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -56,6 +51,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
   const fmtIntl = await getRequestFormatters();
+  const fmt = (d: string | null) => (d ? fmtIntl.date(d + "T12:00:00Z") : "—");
   const { data } = await supabase
     .from("submittals")
     .select(

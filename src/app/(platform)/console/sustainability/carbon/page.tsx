@@ -101,7 +101,7 @@ export default async function Page() {
               key: "kg_co2e",
               header: "kg CO₂e",
               render: (r) => <span className="font-mono text-xs">{fmt.number(r.kg_co2e)}</span>,
-              accessor: (r) => r.kg_co2e.toLocaleString ?? null,
+              accessor: (r) => r.kg_co2e,
             },
             {
               key: "source",

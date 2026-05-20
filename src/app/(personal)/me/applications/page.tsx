@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("job_applications")
     .select("id, status, applied_at, cover_note, job_posting_id, posting:job_posting_id(title, public_slug, org_id)")
@@ -62,7 +64,7 @@ export default async function Page() {
                   {r.posting?.title ?? "(deleted posting)"}
                 </Link>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                  Applied {new Date(r.applied_at).toLocaleDateString()}
+                  Applied {fmtIntl.date(r.applied_at)}
                 </p>
               </div>
               <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>

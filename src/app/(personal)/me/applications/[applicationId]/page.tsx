@@ -4,6 +4,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("job_applications")
     .select("*")
@@ -40,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
         <Badge variant={STATUS_TONE[a.status] ?? "muted"}>{a.status}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Applied {new Date(a.applied_at).toLocaleString()}
+        Applied {fmtIntl.dateTime(a.applied_at)}
       </p>
 
       <div className="mt-6 space-y-4">

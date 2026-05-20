@@ -4,6 +4,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
+import { formatMoney } from "@/lib/i18n/format";
 
 /**
  * Invoice PDF — Opportunity #5.
@@ -21,6 +22,8 @@ import type { PdfBrand } from "./branding";
 
 export type InvoicePdfInput = {
   brand: PdfBrand;
+  /** BCP-47 locale for number/currency formatting (e.g. "en", "es", "fr"). */
+  locale?: string;
   invoice: {
     number: string;
     title: string | null;
@@ -41,16 +44,8 @@ export type InvoicePdfInput = {
   paymentIntentUrl?: string | null;
 };
 
-function money(cents: number, currency: string): string {
-  const amt = cents / 100;
-  try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amt);
-  } catch {
-    return `${currency} ${amt.toFixed(2)}`;
-  }
-}
-
-export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _paymentIntentUrl }: InvoicePdfInput) {
+export function InvoicePdf({ brand, locale, invoice, lineItems, paymentIntentUrl: _paymentIntentUrl }: InvoicePdfInput) {
+  const money = (cents: number) => formatMoney(cents, { locale: (locale ?? "en") as import("@/lib/i18n/config").Locale, currency: invoice.currency });
   const total = invoice.amount_cents;
   const subtotal = lineItems.reduce(
     (sum, li) => sum + Math.round(Number(li.quantity) * Number(li.unit_price_cents)),
@@ -73,7 +68,7 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
         brand={brand}
         eyebrow={statusEyebrow}
         title={invoice.title ?? `Invoice ${invoice.number}`}
-        subtitle={money(total, invoice.currency)}
+        subtitle={money(total)}
         classification={invoice.paid_at ? undefined : "DUE"}
         classificationTier={invoice.paid_at ? 0 : 3}
       />
@@ -97,16 +92,16 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
           rows={lineItems.map((li) => ({
             description: li.description,
             quantity: Number(li.quantity).toString(),
-            unit: money(li.unit_price_cents, invoice.currency),
-            amount: money(Math.round(Number(li.quantity) * Number(li.unit_price_cents)), invoice.currency),
+            unit: money(li.unit_price_cents),
+            amount: money(Math.round(Number(li.quantity) * Number(li.unit_price_cents))),
           }))}
         />
 
         <View style={{ marginTop: 12, alignItems: "flex-end" }}>
-          <KeyValue label="Subtotal" value={money(subtotal, invoice.currency)} />
-          {adjustments !== 0 ? <KeyValue label="Taxes / fees" value={money(adjustments, invoice.currency)} /> : null}
+          <KeyValue label="Subtotal" value={money(subtotal)} />
+          {adjustments !== 0 ? <KeyValue label="Taxes / fees" value={money(adjustments)} /> : null}
           <View style={{ marginTop: 8, borderTopWidth: 1, borderTopColor: brand.producerAccent, paddingTop: 4 }}>
-            <Text style={{ fontSize: 14, fontWeight: 700 }}>{money(total, invoice.currency)}</Text>
+            <Text style={{ fontSize: 14, fontWeight: 700 }}>{money(total)}</Text>
           </View>
         </View>
 

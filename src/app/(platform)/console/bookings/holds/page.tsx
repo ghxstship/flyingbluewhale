@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -99,7 +100,7 @@ export default async function Page() {
             {
               key: "auto",
               header: "Auto-release",
-              render: (r) => (r.auto_release_on ? new Date(r.auto_release_on).toLocaleDateString() : "—"),
+              render: (r) => (r.auto_release_on ? formatDate(r.auto_release_on) : "—"),
               accessor: (r) => r.auto_release_on,
               className: "font-mono text-xs",
             },

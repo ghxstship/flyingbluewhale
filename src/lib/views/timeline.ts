@@ -116,20 +116,13 @@ export function dateFromPx(px: number, anchor: Date, pxPerDay: number): Date {
   return addDaysUTC(startOfDayUTC(anchor), days);
 }
 
-const MONTH_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
-const SHORT_MONTH_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  timeZone: "UTC",
-});
-const DAY_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  timeZone: "UTC",
-});
+function makeTimelineFmts(locale: string) {
+  return {
+    month: new Intl.DateTimeFormat(locale, { month: "short", year: "numeric", timeZone: "UTC" }),
+    shortMonth: new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" }),
+    day: new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", timeZone: "UTC" }),
+  };
+}
 
 function quarterLabel(d: Date): string {
   const q = Math.floor(d.getUTCMonth() / 3) + 1;
@@ -151,17 +144,18 @@ function quarterLabel(d: Date): string {
  * pxPerDay if needed. Most consumers use the default px-per-day mapping
  * provided alongside `<TimelineView>`.
  */
-export function monthMarkers(start: Date, end: Date, zoom: TimelineZoom, pxPerDay = 1): TimelineMarker[] {
+export function monthMarkers(start: Date, end: Date, zoom: TimelineZoom, pxPerDay = 1, locale = "en"): TimelineMarker[] {
   if (start.getTime() >= end.getTime()) return [];
   const out: TimelineMarker[] = [];
   const cap = 5_000; // safety guard
+  const fmt = makeTimelineFmts(locale);
 
   if (zoom === "day") {
     let cursor = startOfDayUTC(start);
     let i = 0;
     while (cursor.getTime() < end.getTime() && i < cap) {
       const offset = pxFromDate(cursor, start, pxPerDay);
-      out.push({ date: new Date(cursor), label: DAY_FMT.format(cursor), offset });
+      out.push({ date: new Date(cursor), label: fmt.day.format(cursor), offset });
       cursor = addDaysUTC(cursor, 1);
       i++;
     }
@@ -174,7 +168,7 @@ export function monthMarkers(start: Date, end: Date, zoom: TimelineZoom, pxPerDa
     let i = 0;
     while (cursor.getTime() < end.getTime() && i < cap) {
       const offset = pxFromDate(cursor, start, pxPerDay);
-      out.push({ date: new Date(cursor), label: DAY_FMT.format(cursor), offset });
+      out.push({ date: new Date(cursor), label: fmt.day.format(cursor), offset });
       cursor = addDaysUTC(cursor, 7);
       i++;
     }
@@ -187,7 +181,7 @@ export function monthMarkers(start: Date, end: Date, zoom: TimelineZoom, pxPerDa
     let i = 0;
     while (cursor.getTime() < end.getTime() && i < cap) {
       const offset = pxFromDate(cursor, start, pxPerDay);
-      const label = cursor.getUTCMonth() === 0 ? MONTH_FMT.format(cursor) : SHORT_MONTH_FMT.format(cursor);
+      const label = cursor.getUTCMonth() === 0 ? fmt.month.format(cursor) : fmt.shortMonth.format(cursor);
       out.push({ date: new Date(cursor), label, offset });
       cursor = startOfNextMonthUTC(cursor);
       i++;

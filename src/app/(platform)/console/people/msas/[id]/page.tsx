@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { getMsa } from "@/lib/msa/queries";
 import { MSA_STATUS_LABEL, MSA_STATUS_VARIANT } from "@/lib/msa/types";
 import { msaPublicUrl } from "@/lib/msa/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,7 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
   if (!hasSupabase) notFound();
   const { id } = await params;
   const session = await requireSession();
+  const fmtIntl = await getRequestFormatters();
   const result = await getMsa(session.orgId, id);
   if (!result) notFound();
   const { resolved } = result;
@@ -81,7 +83,7 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
             <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">Signature</h3>
             <div className="font-subdisplay text-2xl">{resolved.signed_signature}</div>
             <div className="text-xs text-[var(--text-muted)]">
-              {resolved.signed_at ? new Date(resolved.signed_at).toLocaleString() : ""} · IP {resolved.signed_ip ?? "—"}
+              {resolved.signed_at ? fmtIntl.dateTime(resolved.signed_at) : ""} · IP {resolved.signed_ip ?? "—"}
             </div>
           </section>
         )}

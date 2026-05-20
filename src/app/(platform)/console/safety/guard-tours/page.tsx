@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,7 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
+  const fmtIntl = await getRequestFormatters();
   const rows = (await listOrgScoped("guard_tours", session.orgId, {
     orderBy: "next_run_at",
     ascending: true,
@@ -76,12 +78,7 @@ export default async function Page() {
               header: "Next Run",
               render: (r) =>
                 r.next_run_at
-                  ? new Date(String(r.next_run_at)).toLocaleString(undefined, {
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
+                  ? fmtIntl.dateParts(String(r.next_run_at), { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
                   : "—",
               className: "font-mono text-xs",
               accessor: (r) => r.next_run_at ?? null,

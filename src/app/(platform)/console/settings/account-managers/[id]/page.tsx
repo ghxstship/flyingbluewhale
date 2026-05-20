@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toggleActive, deleteAssignment } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
 
   const { data } = await supabase
     .from("account_manager_assignments")
@@ -103,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </div>
           <div>
             <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Created</div>
-            <div className="mt-1 font-mono">{new Date(a.created_at).toLocaleString()}</div>
+            <div className="mt-1 font-mono">{fmtIntl.dateTime(a.created_at)}</div>
           </div>
         </section>
       </div>

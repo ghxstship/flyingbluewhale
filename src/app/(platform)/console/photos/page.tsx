@@ -18,10 +18,6 @@ type Photo = {
   project: { name: string | null } | null;
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString();
-}
-
 export default async function Page({ searchParams }: { searchParams: Promise<{ album?: string; project?: string }> }) {
   const sp = await searchParams;
   if (!hasSupabase) return null;
@@ -29,6 +25,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string) => fmtIntl.date(iso);
   let q = supabase
     .from("project_photos")
     .select("id, album, file_path, caption, taken_at, project:project_id(name)")

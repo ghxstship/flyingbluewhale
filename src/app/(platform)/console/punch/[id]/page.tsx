@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { transitionPunchItem } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,16 +18,13 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
   void: "muted",
 };
 
-function fmt(d: string | null): string {
-  if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString();
-}
-
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
+  const fmt = (d: string | null) => (d ? fmtIntl.date(d + "T12:00:00Z") : "—");
 
   const { data: item } = await supabase
     .from("punch_items")

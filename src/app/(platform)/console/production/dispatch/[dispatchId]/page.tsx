@@ -61,6 +61,7 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string | null) => (iso ? fmtIntl.dateTime(iso) : "—");
   const { data } = await supabase
     .from("dispatch_runs")
     .select(

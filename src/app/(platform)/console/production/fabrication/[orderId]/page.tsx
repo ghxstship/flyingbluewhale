@@ -6,6 +6,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { setFabStatus, deleteFab } from "../actions";
 import type { FabricationStatus } from "@/lib/supabase/types";
 import {
@@ -126,6 +127,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
   const fab = await getFabricationOrder(orgId, orderId);
   if (!fab) return null;
   const transitions = await listProductionPhaseTransitions(orgId, orderId);
+  const fmtIntl = await getRequestFormatters();
   const allowedNext = PRODUCTION_PHASE_GRAPH[fab.production_phase as ProductionPhase];
 
   return (
@@ -151,7 +153,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
             {transitions.slice(0, 5).map((t) => (
               <li key={t.id} className="font-mono">
                 {t.from_phase ?? "(initial)"} → <strong>{t.to_phase}</strong> ·{" "}
-                {new Date(t.transitioned_at).toLocaleDateString()}
+                {fmtIntl.date(t.transitioned_at)}
                 {t.reason ? <span className="ml-2 font-sans">{t.reason}</span> : null}
               </li>
             ))}

@@ -29,16 +29,6 @@ const STATUS_TONE: Record<string, "muted" | "success" | "warning" | "info"> = {
   archived: "warning",
 };
 
-function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
 function fieldCount(schema: Json): number {
   if (!schema || typeof schema !== "object" || Array.isArray(schema)) return 0;
   const fields = (schema as { fields?: unknown }).fields;
@@ -61,6 +51,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string) => fmtIntl.dateTime(iso);
   const { data } = await supabase
     .from("form_defs")
     .select("id, title, slug, status, description, schema, created_at, updated_at")

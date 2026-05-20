@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("event_milestones")
     .select("id, kind, occurs_at, label, visibility")
@@ -57,7 +59,7 @@ export default async function Page() {
             {
               key: "when",
               header: "Occurs",
-              render: (r) => new Date(r.occurs_at).toLocaleString(),
+              render: (r) => fmtIntl.dateTime(r.occurs_at),
               accessor: (r) => r.occurs_at,
               className: "font-mono text-xs",
             },

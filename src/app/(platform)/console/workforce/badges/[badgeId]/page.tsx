@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { awardBadge, deleteBadge } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
   const { badgeId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
 
   const { data: badge } = await supabase
     .from("badges")
@@ -119,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
                     {a.note && <p className="text-[var(--text-secondary)]">{a.note}</p>}
                   </div>
                   <span className="font-mono text-[10px] text-[var(--text-muted)]">
-                    {new Date(a.awarded_at).toLocaleDateString()}
+                    {fmtIntl.date(a.awarded_at)}
                   </span>
                 </li>
               ))}

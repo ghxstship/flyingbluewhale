@@ -46,11 +46,6 @@ const KIND_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
   task: "muted",
 };
 
-function fmt(d: string | null): string {
-  if (!d) return "—";
-  return new Date(d).toLocaleDateString();
-}
-
 export default async function Page({ searchParams }: { searchParams: Promise<{ mine?: string }> }) {
   const sp = await searchParams;
   if (!hasSupabase) return null;
@@ -58,6 +53,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const fmt = (d: string | null) => (d ? fmtIntl.date(d) : "—");
   let q = supabase
     .from("v_action_items")
     .select("*")

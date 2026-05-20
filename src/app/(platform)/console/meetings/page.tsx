@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,11 +30,6 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 const MEETING_PATTERN =
   /(meet|brief|sync|standup|review|coordination|liaison|interface|chef|kickoff|kick-off|debrief|technical)/i;
 
-function fmt(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
-}
-
 export default async function Page() {
   if (!hasSupabase) {
     return (
@@ -47,6 +43,8 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
+  const fmt = (iso: string) => fmtIntl.dateTime(iso);
 
   const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await supabase

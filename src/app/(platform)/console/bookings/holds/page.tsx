@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
 
   const { data } = await supabase
     .from("availability_slots")
@@ -85,21 +87,21 @@ export default async function Page() {
             {
               key: "starts",
               header: "Starts",
-              render: (r) => new Date(r.starts_at).toLocaleString(),
+              render: (r) => fmtIntl.dateTime(r.starts_at),
               accessor: (r) => r.starts_at,
               className: "font-mono text-xs",
             },
             {
               key: "ends",
               header: "Ends",
-              render: (r) => new Date(r.ends_at).toLocaleString(),
+              render: (r) => fmtIntl.dateTime(r.ends_at),
               accessor: (r) => r.ends_at,
               className: "font-mono text-xs",
             },
             {
               key: "auto",
               header: "Auto-release",
-              render: (r) => (r.auto_release_on ? new Date(r.auto_release_on).toLocaleDateString() : "—"),
+              render: (r) => (r.auto_release_on ? fmtIntl.date(r.auto_release_on) : "—"),
               accessor: (r) => r.auto_release_on,
               className: "font-mono text-xs",
             },

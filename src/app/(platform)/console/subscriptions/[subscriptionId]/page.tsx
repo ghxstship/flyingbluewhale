@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { getSubscription, listSubscriptionTransitions, SUBSCRIPTION_TRANSITION_GRAPH } from "@/lib/subscriptions";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { SubscriptionStateControls } from "./SubscriptionStateControls";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const { subscriptionId } = await params;
+  const fmtIntl = await getRequestFormatters();
   const sub = await getSubscription(session.orgId, subscriptionId);
   if (!sub) notFound();
 
@@ -49,15 +51,15 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
             </Link>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-sm">
-            <Field label="Started" value={sub.started_at ? new Date(sub.started_at).toLocaleString() : "—"} />
-            <Field label="Trial ends" value={sub.trial_ends_at ? new Date(sub.trial_ends_at).toLocaleString() : "—"} />
-            <Field label="Last renewed" value={sub.renewed_at ? new Date(sub.renewed_at).toLocaleString() : "—"} />
-            <Field label="Lapsed at" value={sub.lapsed_at ? new Date(sub.lapsed_at).toLocaleString() : "—"} />
+            <Field label="Started" value={sub.started_at ? fmtIntl.dateTime(sub.started_at) : "—"} />
+            <Field label="Trial ends" value={sub.trial_ends_at ? fmtIntl.dateTime(sub.trial_ends_at) : "—"} />
+            <Field label="Last renewed" value={sub.renewed_at ? fmtIntl.dateTime(sub.renewed_at) : "—"} />
+            <Field label="Lapsed at" value={sub.lapsed_at ? fmtIntl.dateTime(sub.lapsed_at) : "—"} />
             <Field
               label="Reactivated at"
-              value={sub.reactivated_at ? new Date(sub.reactivated_at).toLocaleString() : "—"}
+              value={sub.reactivated_at ? fmtIntl.dateTime(sub.reactivated_at) : "—"}
             />
-            <Field label="Churned at" value={sub.churned_at ? new Date(sub.churned_at).toLocaleString() : "—"} />
+            <Field label="Churned at" value={sub.churned_at ? fmtIntl.dateTime(sub.churned_at) : "—"} />
           </dl>
         </section>
 

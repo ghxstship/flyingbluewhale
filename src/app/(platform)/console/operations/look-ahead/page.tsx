@@ -19,15 +19,6 @@ export default async function Page() {
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
-  function fmtDate(d: string): string {
-    return new Date(d).toLocaleString(undefined, {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
   const now = new Date();
   const end = new Date(Date.now() + 21 * 24 * 60 * 60 * 1000);
 
@@ -162,7 +153,7 @@ export default async function Page() {
                       <span>{it.title}</span>
                       {it.project && <span className="text-xs text-[var(--text-muted)]">· {it.project}</span>}
                     </div>
-                    <span className="font-mono text-[10px] text-[var(--text-muted)]">{fmtDate(it.when)}</span>
+                    <span className="font-mono text-[10px] text-[var(--text-muted)]">{fmt.dateParts(it.when, { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
                   </li>
                 ))}
               </ul>

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { IMPORT_RESOURCE_LABEL, type ImportJob } from "@/lib/import/types";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 /**
  * Import Center — Phase 6.4 of the SmartSuite parity roadmap.
@@ -30,6 +31,7 @@ const STATE_TONE: Record<string, "info" | "success" | "warning" | "error" | "mut
 
 export default async function ImportPage() {
   const session = await requireSession();
+  const fmtIntl = await getRequestFormatters();
   if (!session.orgId) {
     return (
       <main className="mx-auto w-full max-w-4xl px-6 py-8">
@@ -82,7 +84,7 @@ export default async function ImportPage() {
                 <Card>
                   <CardHeader
                     title={`${IMPORT_RESOURCE_LABEL[j.resource] ?? j.resource} · ${j.sourceLabel ?? j.source}`}
-                    subtitle={new Date(j.createdAt).toLocaleString()}
+                    subtitle={fmtIntl.dateTime(j.createdAt)}
                     action={<Badge variant={STATE_TONE[j.state] ?? "muted"}>{j.state.toUpperCase()}</Badge>}
                   />
                   <CardBody>

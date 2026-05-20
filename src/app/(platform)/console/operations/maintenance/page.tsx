@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
 
   // Lane 1: explicit maintenance jobs from schedules.
   const { data: jobsData } = await supabase
@@ -171,7 +173,7 @@ export default async function Page() {
                           <div className="mt-1 text-sm">{j.title}</div>
                         </div>
                         <span className="font-mono text-xs text-[var(--text-muted)]">
-                          {new Date(j.due_at).toLocaleDateString()}
+                          {fmtIntl.date(j.due_at)}
                         </span>
                       </Link>
                     </li>

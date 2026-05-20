@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("settlements")
     .select("*")
@@ -53,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <ModuleHeader
         eyebrow="Settlement"
         title={s.show_date}
-        subtitle={s.finalized_at ? `Finalized ${new Date(s.finalized_at).toLocaleString()}` : "Draft / reconciling"}
+        subtitle={s.finalized_at ? `Finalized ${fmtIntl.dateTime(s.finalized_at)}` : "Draft / reconciling"}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>

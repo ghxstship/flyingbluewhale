@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
 
   const [slotsResp, milestonesResp] = await Promise.all([
     supabase
@@ -76,7 +78,7 @@ export default async function Page() {
                   <span className="text-sm">{it.row.label ?? "—"}</span>
                 </div>
                 <span className="font-mono text-xs text-[var(--text-secondary)]">
-                  {new Date(it.date).toLocaleString()}
+                  {fmtIntl.dateTime(it.date)}
                 </span>
               </li>
             ))}

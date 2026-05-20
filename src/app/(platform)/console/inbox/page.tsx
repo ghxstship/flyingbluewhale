@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
 
   // ATLVS-side counterpart to /m/inbox: same chat_rooms surface, but
   // rendered inside the console shell so operators can keep chat threads
@@ -91,7 +93,7 @@ export default async function Page() {
                       </div>
                       {r.last_message_at && (
                         <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-                          {new Date(r.last_message_at).toLocaleString()}
+                          {fmtIntl.dateTime(r.last_message_at)}
                         </div>
                       )}
                     </div>

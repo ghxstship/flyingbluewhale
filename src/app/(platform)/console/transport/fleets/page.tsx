@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +38,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("dispatch_runs")
     .select("id, fleet, vehicle_ref, status, scheduled_depart")
@@ -119,12 +121,7 @@ export default async function Page() {
                         <td className="font-mono text-xs">{v.vehicle}</td>
                         <td className="font-mono text-xs">{v.runs.length}</td>
                         <td className="font-mono text-xs">
-                          {new Date(v.latest.scheduled_depart).toLocaleString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {fmtIntl.dateParts(v.latest.scheduled_depart, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                         </td>
                         <td>
                           <Badge

@@ -105,7 +105,6 @@ export type ShellDimensions = {
   length_in: number;
   width_in: number;
   height_in: number;
-  gross_sqft?: number;
 };
 
 /** Computed acceptance snapshot — mirrors v_charthouse_sheet_acceptance. */

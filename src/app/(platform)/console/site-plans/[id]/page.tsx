@@ -165,7 +165,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               label="Dimensions"
               value={
                 dims
-                  ? `${dims.length_in}" × ${dims.width_in}" × ${dims.height_in}" · ${dims.gross_sqft ?? "?"} sqft`
+                  ? `${dims.length_in}" × ${dims.width_in}" × ${dims.height_in}" · ${Math.round((dims.length_in * dims.width_in) / 144)} sqft`
                   : "—"
               }
             />

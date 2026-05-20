@@ -133,7 +133,6 @@ export async function createCharthouseSheet(_: State, fd: FormData): Promise<Sta
           length_in: parsed.data.shell_length_in,
           width_in: parsed.data.shell_width_in,
           height_in: parsed.data.shell_height_in ?? 0,
-          gross_sqft: Math.round((parsed.data.shell_length_in * parsed.data.shell_width_in) / 144),
         }
       : null;
 

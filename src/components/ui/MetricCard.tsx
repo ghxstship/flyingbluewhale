@@ -48,7 +48,7 @@ export function MetricCard({
       </div>
       {delta && (
         <div
-          className={`mt-1 text-xs font-medium ${delta.positive ? "text-emerald-600" : "text-[var(--color-error)]"}`}
+          className={`mt-1 text-xs font-medium ${delta.positive ? "text-[var(--color-success)]" : "text-[var(--color-error)]"}`}
         >
           <span aria-hidden="true">{delta.positive ? "↑" : "↓"} </span>
           <span className="sr-only">{delta.positive ? "increased" : "decreased"} by </span>

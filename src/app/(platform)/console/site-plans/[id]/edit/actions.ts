@@ -98,7 +98,6 @@ export async function updateCharthouseSheet(_: State, fd: FormData): Promise<Sta
           length_in: patch.shell_length_in,
           width_in: patch.shell_width_in,
           height_in: patch.shell_height_in ?? 0,
-          gross_sqft: Math.round((patch.shell_length_in * patch.shell_width_in) / 144),
         }
       : null;
 

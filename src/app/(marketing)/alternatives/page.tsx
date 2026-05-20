@@ -35,7 +35,7 @@ export default function AlternativesIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Alternatives</div>
+        <div className="eyebrow eyebrow-accent">Alternatives</div>
         <h1 className="hed-2xl mt-4">Production Software, Side By Side.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           Each page below is the long-form on a tool production teams commonly evaluate — what it does well, where the

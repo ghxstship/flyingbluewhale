@@ -42,7 +42,7 @@ export default function IntegrationsIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Integrations</div>
+        <div className="eyebrow eyebrow-accent">Integrations</div>
         <h1 className="hed-3xl mt-4">Wired In Code, Not On A Slide.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           The integrations below ship live in production. No coming-soon list, no aspirational entries. Each page links
@@ -52,7 +52,7 @@ export default function IntegrationsIndex() {
 
       {INTEGRATION_CATEGORIES.filter((cat) => byCategory.has(cat.slug)).map((cat) => (
         <section key={cat.slug} className="mx-auto max-w-6xl px-6 py-8">
-          <div className="eyebrow eyebrow-brand">{cat.label}</div>
+          <div className="eyebrow eyebrow-accent">{cat.label}</div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {(byCategory.get(cat.slug) ?? []).map((i) => (
               <Link key={i.slug} href={`/integrations/${i.slug}`} className="surface hover-lift p-5">

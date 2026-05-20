@@ -51,7 +51,7 @@ export default function StatusPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Status</div>
+        <div className="eyebrow eyebrow-accent">Status</div>
         <h1 className="hed-3xl mt-4">All Systems Operational.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           Real-time platform health across ATLVS, GVTEWAY, COMPVSS, and the marketing surface. Subscribe for incident
@@ -95,7 +95,7 @@ export default function StatusPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8 md:p-10">
-          <div className="eyebrow eyebrow-brand">Coming Soon</div>
+          <div className="eyebrow eyebrow-accent">Coming Soon</div>
           <h2 className="hed-lg mt-3">Live Status Page.</h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             The page above shows current state. Soon: 90-day uptime per service, incident history with post-mortems,

@@ -20,7 +20,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, productSchema } from "@/lib/seo";
+import { buildMetadata, productSchema, CANONICAL_CTAS } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 
 export const metadata: Metadata = buildMetadata({
@@ -57,15 +57,15 @@ export default function ATLVSPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-accent">ATLVS</div>
-        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">Where the Production Lives.</h1>
+        <h1 className="kinetic-display mt-3">Where the Production Lives.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Pitch to wrap, in one sidebar. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI.
           Forty-seven modules on one schema.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Sign Up Free</Button>
-          <Button href="/contact" variant="secondary">
-            Book a Walkthrough
+          <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
+          <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
+            {CANONICAL_CTAS.secondary.label}
           </Button>
           <Link href="/pricing" className="btn btn-ghost">
             Pricing →
@@ -78,7 +78,7 @@ export default function ATLVSPage() {
         <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
           Nine domains · forty-seven modules
         </div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Pitch Through Wrap. Same Workspace.</h2>
+        <h2 className="hed-xl mt-3">Pitch Through Wrap. Same Workspace.</h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
@@ -140,7 +140,7 @@ export default function ATLVSPage() {
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Under the hood
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Same Rails. Every Module.</h2>
+            <h2 className="hed-xl mt-3">Same Rails. Every Module.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
               List, detail, create, edit. Every module rides the same rails — with status flow where it counts
               (invoices, proposals, POs, tasks, RFIs). Validation at the door. Tenant walled at the database.
@@ -172,7 +172,7 @@ export default function ATLVSPage() {
 
       {/* Persona tiles */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Who Lives Here.</h2>
+        <h2 className="hed-xl">Who Lives Here.</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {[
             {
@@ -221,10 +221,6 @@ export default function ATLVSPage() {
       <CTASection
         title="ATLVS Is Open."
         subtitle="Free forever for small teams. Per-org pricing the rest of the way up."
-        primaryLabel="Sign Up Free"
-        primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
-        secondaryHref="/contact"
       />
     </div>
   );

@@ -112,7 +112,7 @@ export default function RoadmapPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Roadmap</div>
+        <div className="eyebrow eyebrow-accent">Roadmap</div>
         <h1 className="hed-3xl mt-4">What's Shipping Next.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           Three-quarter horizon. In Flight is committed and tracking to date. Next is sized and prioritized. Exploring

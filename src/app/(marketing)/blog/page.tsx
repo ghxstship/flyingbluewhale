@@ -30,7 +30,7 @@ export default function BlogIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="eyebrow eyebrow-brand">Blog</div>
+        <div className="eyebrow eyebrow-accent">Blog</div>
         <h1 className="hed-2xl mt-4">Updates From the Team.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Essays on production operations, platform architecture, and how to run shows with less duct tape.

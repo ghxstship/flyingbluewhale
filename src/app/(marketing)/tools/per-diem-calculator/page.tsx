@@ -45,7 +45,7 @@ export default function PerDiemCalculatorPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Free Tool</div>
+        <div className="eyebrow eyebrow-accent">Free Tool</div>
         <h1 className="hed-xl mt-4">Per-Diem Calculator.</h1>
         <p className="mt-5 text-lg text-[var(--text-secondary)]">
           Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates;

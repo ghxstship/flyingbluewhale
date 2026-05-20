@@ -46,7 +46,7 @@ export default function ChangelogPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="eyebrow eyebrow-brand">Changelog</div>
+        <div className="eyebrow eyebrow-accent">Changelog</div>
         <h1 className="hed-2xl mt-4">What Shipped.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Every release since v0.6, with enough context to understand why we shipped it. Subscribe via RSS at{" "}

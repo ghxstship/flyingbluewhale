@@ -31,7 +31,7 @@ export default function ComparePage() {
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
           Category Notes
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">We Don&apos;t Compare. We Define.</h1>
+        <h1 className="hed-2xl mt-3">We Don&apos;t Compare. We Define.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Producers land here because a general-purpose tool taught them what they didn&apos;t want. These pages are
           notes for the search engine — what we are, said plainly. No scorecards.
@@ -45,7 +45,7 @@ export default function ComparePage() {
               <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
                 Coming from {c.competitor}
               </div>
-              <div className="mt-3 text-2xl font-semibold tracking-tight">Read the notes</div>
+              <div className="hed-lg mt-3">Read the notes</div>
               <div className="mt-3 text-sm text-[var(--text-secondary)]">{c.blurb}</div>
             </Link>
           ))}
@@ -55,10 +55,6 @@ export default function ComparePage() {
       <CTASection
         title="ATLVS Is Open."
         subtitle="Free forever for small teams."
-        primaryLabel="Sign Up Free"
-        primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
-        secondaryHref="/contact"
       />
     </div>
   );

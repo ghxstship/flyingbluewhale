@@ -74,7 +74,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">ATLVS vs. {c.competitor}</div>
+        <div className="eyebrow eyebrow-accent">ATLVS vs. {c.competitor}</div>
         <h1 className="hed-xl mt-4">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
         <div className="mt-8 flex flex-wrap gap-3">

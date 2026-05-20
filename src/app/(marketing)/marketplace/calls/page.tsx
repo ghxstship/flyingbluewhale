@@ -53,7 +53,7 @@ export default async function Page() {
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace · Open Calls</div>
+        <div className="eyebrow eyebrow-accent">Marketplace · Open Calls</div>
         <h1 className="hed-2xl mt-4">Open Calls</h1>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} active call{rows.length === 1 ? "" : "s"}

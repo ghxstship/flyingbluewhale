@@ -59,7 +59,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Glossary · {t.category.replace(/-/g, " ")}</div>
+        <div className="eyebrow eyebrow-accent">Glossary · {t.category.replace(/-/g, " ")}</div>
         <h1 className="hed-2xl mt-4">{t.term}</h1>
         {t.aka && t.aka.length > 0 ? (
           <p className="mt-3 text-sm text-[var(--text-muted)]">Also: {t.aka.join(", ")}</p>
@@ -70,7 +70,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
       {t.modules && t.modules.length > 0 ? (
         <section className="mx-auto max-w-3xl px-6 py-8">
           <div className="surface p-6">
-            <div className="eyebrow eyebrow-brand">How ATLVS Handles This</div>
+            <div className="eyebrow eyebrow-accent">How ATLVS Handles This</div>
             <div className="mt-4 flex flex-wrap gap-2">
               {t.modules
                 .map((m) => MODULES[m])

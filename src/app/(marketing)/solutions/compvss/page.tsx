@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, productSchema } from "@/lib/seo";
+import { buildMetadata, productSchema, CANONICAL_CTAS } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 
 export const metadata: Metadata = buildMetadata({
@@ -52,7 +52,7 @@ export default function CompvssPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-accent">COMPVSS</div>
-        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">
+        <h1 className="kinetic-display mt-3">
           Offline.
           <br />
           Sub-100ms.
@@ -62,16 +62,16 @@ export default function CompvssPage() {
           tour, warehouse, daily safety brief. Works on one-bar LTE.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Sign Up Free</Button>
-          <Button href="/contact" variant="secondary">
-            Book a Walkthrough
+          <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
+          <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
+            {CANONICAL_CTAS.secondary.label}
           </Button>
         </div>
       </section>
 
       {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What the Crew Runs in the Field.</h2>
+        <h2 className="hed-xl">What the Crew Runs in the Field.</h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
@@ -118,7 +118,7 @@ export default function CompvssPage() {
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               <Wifi size={14} /> Offline-first
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">The Cell Tower Is Not Your Problem.</h2>
+            <h2 className="hed-xl mt-3">The Cell Tower Is Not Your Problem.</h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
               Gate scan, manual lookup, tonight&apos;s call sheet — cached on device. Scans queue locally and replay in
               order the second signal returns. Nothing drops. Nobody waits.
@@ -177,10 +177,6 @@ export default function CompvssPage() {
       <CTASection
         title="Open the Field App."
         subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap."
-        primaryLabel="Sign Up Free"
-        primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
-        secondaryHref="/contact"
       />
     </div>
   );

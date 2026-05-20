@@ -37,7 +37,7 @@ export default function CustomersHub() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Customers</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">
+        <h1 className="hed-2xl mt-3">
           Production Teams Running On ATLVS.
         </h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
@@ -54,7 +54,7 @@ export default function CustomersHub() {
 
       {PUBLISHED_CUSTOMER_STORIES.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-2xl font-semibold tracking-tight">Published.</h2>
+          <h2 className="hed-lg">Published.</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {PUBLISHED_CUSTOMER_STORIES.map((s) => (
               <Link key={s.slug} href={`/customers/${s.slug}`} className="surface hover-lift p-5">
@@ -71,7 +71,7 @@ export default function CustomersHub() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">Landing Soon.</h2>
+          <h2 className="hed-lg">Landing Soon.</h2>
           <span className="text-xs text-[var(--text-muted)]">
             {IN_PROGRESS_CUSTOMER_STORIES.length} stories in production
           </span>
@@ -112,7 +112,8 @@ export default function CustomersHub() {
         subtitle="Send a one-paragraph note about your upcoming event window and we'll talk about a partnership."
         primaryLabel="Book a brief"
         primaryHref={CANONICAL_CTAS.secondary.href}
-        secondaryLabel="Sign Up Free"
+        secondaryLabel={CANONICAL_CTAS.primary.label}
+        secondaryHref={CANONICAL_CTAS.primary.href}
       />
     </div>
   );

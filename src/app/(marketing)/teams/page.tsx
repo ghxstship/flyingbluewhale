@@ -37,7 +37,7 @@ export default function TeamsHub() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Built For</div>
+        <div className="eyebrow eyebrow-accent">Built For</div>
         <h1 className="hed-3xl mt-4">The Role You Run.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           One platform, eight production roles. Each gets the modules they live in day-to-day, the workflows that move
@@ -49,7 +49,7 @@ export default function TeamsHub() {
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
           {TEAMS.map((t) => (
             <Link key={t.slug} href={`/teams/${t.slug}`} className="surface hover-lift p-6">
-              <div className="eyebrow eyebrow-brand">{t.hero.eyebrow}</div>
+              <div className="eyebrow eyebrow-accent">{t.hero.eyebrow}</div>
               <h3 className="hed-lg mt-3">{t.role}</h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{t.blurb}</p>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">

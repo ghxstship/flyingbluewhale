@@ -54,7 +54,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Case study · {c.industry}</div>
+        <div className="eyebrow eyebrow-accent">Case study · {c.industry}</div>
         <h1 className="hed-xl mt-4">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
         <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{c.timeline}</div>

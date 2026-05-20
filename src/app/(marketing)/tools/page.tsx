@@ -49,7 +49,7 @@ export default function ToolsIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Free Tools</div>
+        <div className="eyebrow eyebrow-accent">Free Tools</div>
         <h1 className="hed-2xl mt-4">Production Calculators.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           The math production teams redo every Monday morning, automated. Free, no signup, no email gate.

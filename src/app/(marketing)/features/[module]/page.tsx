@@ -95,7 +95,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
           {config.eyebrow}
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">{config.heroTitle}</h1>
+        <h1 className="hed-2xl mt-3">{config.heroTitle}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{config.heroBody}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
@@ -107,7 +107,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
 
       {config.withoutUs && config.withUs ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-3xl font-semibold tracking-tight">Before And After.</h2>
+          <h2 className="hed-xl">Before And After.</h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
             What changes when this module lands in your stack.
           </p>
@@ -146,7 +146,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       ) : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What This Module Does.</h2>
+        <h2 className="hed-xl">What This Module Does.</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {config.highlights.map((h) => (
             <div key={h.title} className="surface p-6">
@@ -161,7 +161,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
         <section className="mx-auto max-w-6xl px-6 py-12">
           <div className="surface p-8 md:p-10">
             <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">Built For</div>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight">Who Runs This Day-To-Day.</h2>
+            <h2 className="hed-lg mt-3">Who Runs This Day-To-Day.</h2>
             <div className="mt-6 flex flex-wrap gap-2">
               {config.personas.map((p) => (
                 <span
@@ -197,7 +197,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <FAQSection title={`${config.name} · FAQ`} faqs={config.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">The Rest Of ATLVS.</h2>
+        <h2 className="hed-lg">The Rest Of ATLVS.</h2>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
           One database. Every module reads from the same record.
         </p>

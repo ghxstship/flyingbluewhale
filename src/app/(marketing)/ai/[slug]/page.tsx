@@ -58,7 +58,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">AI · {u.title.replace(/^AI For /, "")}</div>
+        <div className="eyebrow eyebrow-accent">AI · {u.title.replace(/^AI For /, "")}</div>
         <h1 className="hed-2xl mt-4">{u.title}.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{u.hero}</p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -83,7 +83,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
             </ul>
           </div>
           <div className="surface p-6">
-            <div className="eyebrow eyebrow-brand">What It Drafts</div>
+            <div className="eyebrow eyebrow-accent">What It Drafts</div>
             <ul className="mt-4 space-y-2 text-sm">
               {u.outputs.map((o) => (
                 <li key={o} className="flex items-start gap-2">

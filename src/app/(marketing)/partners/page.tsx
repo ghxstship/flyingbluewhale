@@ -50,7 +50,7 @@ export default function PartnersPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Partners</div>
+        <div className="eyebrow eyebrow-accent">Partners</div>
         <h1 className="hed-3xl mt-4">Implementation + Consulting.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           ATLVS-trained production consultants who help teams migrate, configure, and optimize on the platform. Partner
@@ -69,7 +69,7 @@ export default function PartnersPage() {
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {TRACKS.map((t) => (
             <div key={t.name} className="surface p-6">
-              <div className="eyebrow eyebrow-brand">{t.forWho}</div>
+              <div className="eyebrow eyebrow-accent">{t.forWho}</div>
               <h3 className="mt-2 text-base font-semibold">{t.name}</h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{t.body}</p>
             </div>
@@ -83,7 +83,7 @@ export default function PartnersPage() {
             className="absolute inset-x-0 top-0 h-1"
             style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
           />
-          <div className="eyebrow eyebrow-brand">Coming Soon</div>
+          <div className="eyebrow eyebrow-accent">Coming Soon</div>
           <h2 className="hed-lg mt-3">Partner Directory.</h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
             Browse vetted partners by region, vertical, certification level, and language. Each profile lists project

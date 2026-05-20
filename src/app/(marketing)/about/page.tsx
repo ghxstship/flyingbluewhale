@@ -94,7 +94,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">The Studio</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+        <h1 className="hed-2xl mt-3">
           Built by the People Who Run the Show.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
@@ -108,7 +108,7 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">How We Build.</h2>
+        <h2 className="hed-xl">How We Build.</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {PRINCIPLES.map(({ icon: Icon, title, body }) => (
             <div key={title} className="surface p-6">
@@ -125,7 +125,7 @@ export default function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What Shipped, When.</h2>
+        <h2 className="hed-xl">What Shipped, When.</h2>
         <ul className="mt-8 space-y-6">
           {MILESTONES.map((m) => (
             <li key={m.date} className="surface grid gap-2 p-6 md:grid-cols-[140px_1fr] md:items-start md:gap-6">
@@ -141,7 +141,7 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-10">
-          <h2 className="text-3xl font-semibold tracking-tight">Who Builds It.</h2>
+          <h2 className="hed-xl">Who Builds It.</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
             ATLVS is a production + technology studio. We&apos;ve staffed residencies, touring runs, private launches,
             gallery programs, brand activations. We shipped software for every one of them. The platform is a decade of
@@ -171,10 +171,6 @@ export default function AboutPage() {
       <CTASection
         title="ATLVS Is Open."
         subtitle="Free forever for small teams. Per-org pricing the rest of the way up."
-        primaryLabel="Sign Up Free"
-        primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
-        secondaryHref="/contact"
       />
     </div>
   );

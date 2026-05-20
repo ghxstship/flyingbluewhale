@@ -46,7 +46,7 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Demo · {p.buyer}</div>
+        <div className="eyebrow eyebrow-accent">Demo · {p.buyer}</div>
         <h1 className="hed-2xl mt-4">{p.hero}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{p.subhero}</p>
         <div className="mt-8 flex flex-wrap gap-3">

@@ -59,7 +59,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Guide</div>
+        <div className="eyebrow eyebrow-accent">Guide</div>
         <h1 className="hed-xl mt-4">{g.title}</h1>
         <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{g.readingTime}</div>
         <p className="mt-6 text-lg text-[var(--text-secondary)]">{g.hero}</p>

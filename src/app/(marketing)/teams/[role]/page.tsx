@@ -54,7 +54,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">{t.hero.eyebrow}</div>
+        <div className="eyebrow eyebrow-accent">{t.hero.eyebrow}</div>
         <h1 className="hed-2xl mt-4">{t.hero.title}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t.hero.body}</p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -80,7 +80,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       {t.painPoints.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
           <div className="surface p-8 md:p-10">
-            <div className="eyebrow eyebrow-brand">Familiar?</div>
+            <div className="eyebrow eyebrow-accent">Familiar?</div>
             <h2 className="hed-lg mt-3">The Pain You're Working Around.</h2>
             <ul className="mt-6 space-y-3 text-sm">
               {t.painPoints.map((p) => (

@@ -42,7 +42,7 @@ export function MarketingHero({
 }) {
   return (
     <section className={`mx-auto max-w-6xl px-6 py-16 md:py-24 ${className}`}>
-      {eyebrow && <div className="eyebrow eyebrow-brand">{eyebrow}</div>}
+      {eyebrow && <div className="eyebrow eyebrow-accent">{eyebrow}</div>}
       <h1 className={`${eyebrow ? "mt-4" : ""} hed-3xl max-w-4xl`}>{title}</h1>
       {subtitle && <p className="mt-5 max-w-2xl text-lg text-pretty text-[var(--text-secondary)]">{subtitle}</p>}
       {actions && <div className="mt-8 flex flex-wrap items-center gap-3">{actions}</div>}
@@ -77,7 +77,7 @@ export function MarketingSection({
     <section id={id} aria-label={ariaLabel} className={`mx-auto max-w-6xl px-6 py-16 md:py-20 ${className}`}>
       {(eyebrow || title || subtitle) && (
         <header className={`mb-10 ${alignClass}`}>
-          {eyebrow && <div className="eyebrow eyebrow-brand">{eyebrow}</div>}
+          {eyebrow && <div className="eyebrow eyebrow-accent">{eyebrow}</div>}
           {title && (
             <h2 className={`${eyebrow ? "mt-4" : ""} hed-xl max-w-3xl ${align === "center" ? "mx-auto" : ""}`}>
               {title}

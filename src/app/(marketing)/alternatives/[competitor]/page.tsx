@@ -66,7 +66,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">{c.competitor} Alternatives</div>
+        <div className="eyebrow eyebrow-accent">{c.competitor} Alternatives</div>
         <h1 className="hed-xl mt-4">{c.competitor} Alternatives, For Production Teams.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           If you're searching for an alternative to {c.competitor}, you've probably outgrown one of these: the per-seat
@@ -120,7 +120,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8 md:p-10">
-          <div className="eyebrow eyebrow-brand">The ATLVS Alternative</div>
+          <div className="eyebrow eyebrow-accent">The ATLVS Alternative</div>
           <h2 className="hed-lg mt-3">{c.headline}</h2>
           <p className="mt-4 text-sm text-[var(--text-secondary)]">{c.hero}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">

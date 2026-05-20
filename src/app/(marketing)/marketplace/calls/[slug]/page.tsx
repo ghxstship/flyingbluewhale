@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">
+        <div className="eyebrow eyebrow-accent">
           {c.kind.replace("_", " ")} · {c.org_name}
         </div>
         <h1 className="hed-2xl mt-4">{c.title}</h1>

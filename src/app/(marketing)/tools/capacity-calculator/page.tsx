@@ -45,7 +45,7 @@ export default function CapacityCalculatorPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Free Tool</div>
+        <div className="eyebrow eyebrow-accent">Free Tool</div>
         <h1 className="hed-xl mt-4">Venue Capacity Calculator.</h1>
         <p className="mt-5 text-lg text-[var(--text-secondary)]">
           Estimate maximum legal occupancy from square footage and use type. IBC-aligned defaults for assembly,

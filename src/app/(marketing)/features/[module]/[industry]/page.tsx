@@ -119,7 +119,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">
+        <div className="eyebrow eyebrow-accent">
           {mod.name} · {ind.name}
         </div>
         <h1 className="hed-2xl mt-4">
@@ -137,7 +137,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="eyebrow eyebrow-brand">How It Shows Up</div>
+        <div className="eyebrow eyebrow-accent">How It Shows Up</div>
         <h2 className="hed-xl mt-4">
           What {ind.name} Teams Run On {mod.name}.
         </h2>
@@ -154,7 +154,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
         <div className="surface p-8 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div>
-              <div className="eyebrow eyebrow-brand">Industry Outcomes</div>
+              <div className="eyebrow eyebrow-accent">Industry Outcomes</div>
               <h2 className="hed-lg mt-3">What Changes For {ind.name} Operators.</h2>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">{ind.description}</p>
             </div>

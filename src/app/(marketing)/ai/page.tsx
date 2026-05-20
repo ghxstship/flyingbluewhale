@@ -72,7 +72,7 @@ export default function AiHub() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">AI</div>
+        <div className="eyebrow eyebrow-accent">AI</div>
         <h1 className="hed-3xl mt-4">
           Drafts From Your Workspace.
           <br />
@@ -122,7 +122,7 @@ export default function AiHub() {
         <div className="surface p-8 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div>
-              <div className="eyebrow eyebrow-brand">The Rules</div>
+              <div className="eyebrow eyebrow-accent">The Rules</div>
               <h2 className="hed-lg mt-3">What The AI Does — And Won't Do.</h2>
               <p className="mt-3 text-sm text-[var(--text-secondary)]">
                 Production teams asked us where the lines are. Here's the canon.

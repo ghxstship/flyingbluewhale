@@ -10,7 +10,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, productSchema } from "@/lib/seo";
+import { buildMetadata, productSchema, CANONICAL_CTAS } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 
 export const metadata: Metadata = buildMetadata({
@@ -53,22 +53,22 @@ export default function GvtewayPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-accent">GVTEWAY</div>
-        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">Twelve Personas. Each Their Lane.</h1>
+        <h1 className="kinetic-display mt-3">Twelve Personas. Each Their Lane.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same project. Twelve scoped
           reads. RLS at the database.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Sign Up Free</Button>
-          <Button href="/contact" variant="secondary">
-            Book a Walkthrough
+          <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
+          <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
+            {CANONICAL_CTAS.secondary.label}
           </Button>
         </div>
       </section>
 
       {/* Personas */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Twelve Personas. Same Database.</h2>
+        <h2 className="hed-xl">Twelve Personas. Same Database.</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
           Every persona arrives at its own lane — nav, flows, deliverables tuned to the role. The artist never sees the
           sponsor&apos;s invoice. The delegation never sees the vendor&apos;s COI. Enforced in Postgres.
@@ -145,7 +145,7 @@ export default function GvtewayPage() {
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               <Share2 size={14} /> Proposals
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Proposals That Close Themselves.</h3>
+            <h3 className="hed-lg mt-3">Proposals That Close Themselves.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
               Twenty-three block types. Scroll-spy nav. Per-phase contract refs. Add-on pickers with live totals. E-sign
               in place — typed or drawn. Revocable share links. Version history. Engagement analytics on every scroll.
@@ -162,7 +162,7 @@ export default function GvtewayPage() {
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               <BookOpen size={14} /> KBYG
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Written Once. Read Twelve Ways.</h3>
+            <h3 className="hed-lg mt-3">Written Once. Read Twelve Ways.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
               One Know-Before-You-Go doc in ATLVS. Renders per-persona in the portal and in the field. Artists get
               riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. Seventeen section
@@ -185,7 +185,7 @@ export default function GvtewayPage() {
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
               Security
             </div>
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight">RLS at the Database.</h3>
+            <h3 className="hed-xl mt-3">RLS at the Database.</h3>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
               Every record is scoped to its org and project in Postgres. Share links are signed, expirable, revocable,
               audit-logged. Nobody slips from the sponsor lounge into the artist compound — access enforced on the data,
@@ -239,10 +239,6 @@ export default function GvtewayPage() {
       <CTASection
         title="Twelve Personas. One Source."
         subtitle="Wired default. Reskin if you want. Use it if you don't."
-        primaryLabel="Sign Up Free"
-        primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
-        secondaryHref="/contact"
       />
     </div>
   );

@@ -58,7 +58,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">ATLVS Technologies · Blog</div>
+        <div className="eyebrow eyebrow-accent">ATLVS Technologies · Blog</div>
         <h1 className="hed-xl mt-4">{post.title}</h1>
         <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--text-muted)]">
           <span>{post.date}</span>

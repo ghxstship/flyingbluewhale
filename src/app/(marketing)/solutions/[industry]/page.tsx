@@ -52,7 +52,7 @@ export default async function IndustryPage({ params }: Props) {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">{info.hero.eyebrow}</div>
+        <div className="eyebrow eyebrow-accent">{info.hero.eyebrow}</div>
         <h1 className="hed-2xl mt-4">{info.hero.title}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{info.hero.body}</p>
         <div className="mt-8 flex gap-3">

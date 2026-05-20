@@ -43,7 +43,7 @@ export default function PressPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Press</div>
+        <div className="eyebrow eyebrow-accent">Press</div>
         <h1 className="hed-3xl mt-4">Press + Brand.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           For journalists, analysts, and partners covering ATLVS. Quick facts below; full press kit landing Q4.
@@ -71,7 +71,7 @@ export default function PressPage() {
             className="absolute inset-x-0 top-0 h-1"
             style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
           />
-          <div className="eyebrow eyebrow-brand">Coming Soon</div>
+          <div className="eyebrow eyebrow-accent">Coming Soon</div>
           <h2 className="hed-lg mt-3">Full Press Kit.</h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
             Logo lockups (full color, mono, knockout) in SVG + PNG. Brand guidelines (typography, color tokens,

@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Gig · {r.org_name}</div>
+        <div className="eyebrow eyebrow-accent">Gig · {r.org_name}</div>
         <h1 className="hed-2xl mt-4">{r.title}</h1>
         <div className="mt-5 flex flex-wrap gap-2">
           <Badge variant="muted">{r.posting_type}</Badge>

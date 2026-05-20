@@ -57,7 +57,7 @@ export default async function Page() {
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace · Crew Gigs</div>
+        <div className="eyebrow eyebrow-accent">Marketplace · Crew Gigs</div>
         <h1 className="hed-2xl mt-4">Crew Gigs</h1>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} live gig{rows.length === 1 ? "" : "s"} · single shows, tour legs, recurring

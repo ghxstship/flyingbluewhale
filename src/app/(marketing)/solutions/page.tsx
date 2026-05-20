@@ -38,7 +38,7 @@ export default function SolutionsIndex() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Solutions</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Schema.</h1>
+        <h1 className="hed-2xl mt-3">Three Apps. One Schema.</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
           ATLVS, GVTEWAY, COMPVSS. One database underneath. Same record, three optimized surfaces — your office, your
           stakeholders, your crew, all reading the same truth.
@@ -47,7 +47,7 @@ export default function SolutionsIndex() {
 
       {/* Apps */}
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h2 className="text-3xl font-semibold tracking-tight">The Three Apps</h2>
+        <h2 className="hed-xl">The Three Apps</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {APPS.map((a) => (
             <Link
@@ -89,7 +89,7 @@ export default function SolutionsIndex() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Live Work, Whatever the Shape</h2>
+        <h2 className="hed-xl">Live Work, Whatever the Shape</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
           Each shape gets a tuned setup — starter templates, default role matrix, vernacular notes from operators
           who&apos;ve done it.
@@ -126,13 +126,7 @@ export default function SolutionsIndex() {
         ]}
       />
 
-      <CTASection
-        title="ATLVS Is Open."
-        primaryLabel="Sign Up Free"
-        primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
-        secondaryHref="/contact"
-      />
+      <CTASection title="ATLVS Is Open." />
     </>
   );
 }

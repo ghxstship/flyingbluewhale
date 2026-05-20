@@ -59,7 +59,7 @@ export function PricingCalculator() {
           <div className="eyebrow eyebrow-accent flex items-center gap-2">
             <Calculator size={12} aria-hidden /> What it actually costs
           </div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Run the math.</h2>
+          <h2 className="hed-xl mt-3">Run the math.</h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
             Plug in shows per year, crew at peak, and what you spend monthly on the fragmented stack. We&apos;ll show
             you annual spend and per-show cost on both sides. Math is conservative — no integration tax, no per-seat

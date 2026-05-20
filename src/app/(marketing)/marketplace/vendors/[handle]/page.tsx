@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">@{v.public_handle}</div>
+        <div className="eyebrow eyebrow-accent">@{v.public_handle}</div>
         <div className="mt-4 flex items-start gap-3">
           <h1 className="hed-2xl">{v.name}</h1>
           {v.is_verified && <Badge variant="success">verified</Badge>}

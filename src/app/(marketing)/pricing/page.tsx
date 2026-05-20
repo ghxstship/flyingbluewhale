@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { PricingCalculator } from "@/components/marketing/PricingCalculator";
-import { buildMetadata, faqSchema } from "@/lib/seo";
+import { buildMetadata, faqSchema, CANONICAL_CTAS } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Pricing — Per Org. Never Per Seat.",
@@ -41,8 +41,8 @@ const TIERS = [
       "Up to 100 portal credentials per project",
       "Community support",
     ],
-    cta: "Sign Up Free",
-    href: "/signup",
+    cta: CANONICAL_CTAS.primary.label,
+    href: CANONICAL_CTAS.primary.href,
   },
   {
     tier: "Crew",
@@ -275,7 +275,7 @@ export default function PricingPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
         <div className="eyebrow eyebrow-accent">Pricing</div>
-        <h1 className="kinetic-display mx-auto mt-3 max-w-3xl text-5xl sm:text-6xl">Per Org. Never Per Seat.</h1>
+        <h1 className="kinetic-display mx-auto mt-3 max-w-3xl">Per Org. Never Per Seat.</h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Tenant walled at the database on every tier. Audit log immutable on every tier. The team gets bigger; the bill
           doesn&apos;t.
@@ -294,7 +294,7 @@ export default function PricingPage() {
                 {t.highlight && <Badge variant="brand">Most Common</Badge>}
               </div>
               <div className="mt-4">
-                <span className="text-3xl font-semibold tracking-tight">{t.price}</span>
+                <span className="hed-xl">{t.price}</span>
                 {t.per && <span className="text-sm text-[var(--text-muted)]"> / {t.per}</span>}
               </div>
               <p className="mt-2 text-xs text-[var(--text-secondary)]">{t.description}</p>
@@ -317,7 +317,7 @@ export default function PricingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Every Module, Every Tier.</h2>
+        <h2 className="hed-xl">Every Module, Every Tier.</h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
           The full grid. If a module you need is gated above where you are,{" "}
           <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">
@@ -380,10 +380,6 @@ export default function PricingPage() {
       <CTASection
         title="ATLVS Is Open."
         subtitle="Sign up free — 30 seconds, no card. Free is free, forever."
-        primaryLabel="Sign Up Free"
-        primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
-        secondaryHref="/contact"
       />
     </div>
   );

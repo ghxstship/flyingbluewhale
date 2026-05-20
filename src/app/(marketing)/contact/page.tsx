@@ -81,7 +81,7 @@ export default function ContactPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Contact</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">Talk to the Studio.</h1>
+        <h1 className="hed-2xl mt-3">Talk to the Studio.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           No dark patterns. No forced calls. Sign up free at{" "}
           <a className="underline" href="/signup">
@@ -109,7 +109,7 @@ export default function ContactPage() {
       </section>
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leave a Note.</h2>
+        <h2 className="hed-xl">Leave a Note.</h2>
         <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@atlvs.pro">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-xs font-medium text-[var(--text-secondary)]">

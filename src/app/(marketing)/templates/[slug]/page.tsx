@@ -45,7 +45,7 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Template · {t.category}</div>
+        <div className="eyebrow eyebrow-accent">Template · {t.category}</div>
         <h1 className="hed-2xl mt-4">{t.title}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t.long}</p>
         <div className="mt-8 flex flex-wrap gap-3">

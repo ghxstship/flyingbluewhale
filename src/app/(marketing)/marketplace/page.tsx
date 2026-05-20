@@ -50,7 +50,7 @@ export default function Page() {
       <Breadcrumbs items={[{ label: "Marketplace" }]} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace</div>
+        <div className="eyebrow eyebrow-accent">Marketplace</div>
         <h1 className="hed-2xl mt-4">Find the Work. Find the Crew. Find the Act.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           One network for production RFQs, crew gigs, casting calls, and direct artist booking. Vetted, not

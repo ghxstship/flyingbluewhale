@@ -31,7 +31,7 @@ export default function GuidesPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="eyebrow eyebrow-brand">Guides</div>
+        <div className="eyebrow eyebrow-accent">Guides</div>
         <h1 className="hed-2xl mt-4">Written by Operators.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           Deep-dive guides to the fundamentals of production operations — the disciplines, the taxonomies, and the

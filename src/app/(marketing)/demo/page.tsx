@@ -53,7 +53,7 @@ export default function DemoIndex() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Demo</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">Walk The Platform.</h1>
+        <h1 className="hed-2xl mt-3 text-balance sm:text-6xl">Walk The Platform.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           Forty minutes, wired to a real production. Pick the walkthrough that matches your work — or sign up free first
           and bring questions later.
@@ -67,7 +67,7 @@ export default function DemoIndex() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Walkthroughs By Operation.</h2>
+        <h2 className="hed-xl">Walkthroughs By Operation.</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
           Each variant tunes the walkthrough to your work. Same platform, different starting point.
         </p>

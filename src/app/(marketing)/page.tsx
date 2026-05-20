@@ -32,7 +32,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { ScrollReveal } from "@/components/marketing/ScrollReveal";
 import { CommandPaletteDemo } from "@/components/marketing/CommandPaletteDemo";
 import { ActivityTerminal } from "@/components/marketing/ActivityTerminal";
-import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
+import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE, CANONICAL_CTAS } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "ATLVS — Production Runs On It",
@@ -77,7 +77,7 @@ export default function Home() {
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
         <ScrollReveal>
           <div className="eyebrow eyebrow-accent">ATLVS Technologies</div>
-          <h1 className="kinetic-display mt-4 text-5xl leading-[1.05] sm:text-7xl">
+          <h1 className="kinetic-display mt-4">
             Production
             <br />
             Runs On It.
@@ -87,11 +87,11 @@ export default function Home() {
             through strike.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button href="/signup" size="lg">
-              Sign Up Free
+            <Button href={CANONICAL_CTAS.primary.href} size="lg">
+              {CANONICAL_CTAS.primary.label}
             </Button>
-            <Button href="/contact" size="lg" variant="secondary">
-              Book a Walkthrough
+            <Button href={CANONICAL_CTAS.secondary.href} size="lg" variant="secondary">
+              {CANONICAL_CTAS.secondary.label}
             </Button>
             <Link href="/docs" className="btn btn-ghost btn-lg">
               Read the Docs →
@@ -140,7 +140,7 @@ export default function Home() {
         <ScrollReveal>
           <div className="text-center">
             <div className="eyebrow">Receipts over promises</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">What it looks like, running.</h2>
+            <h2 className="hed-xl mt-3">What it looks like, running.</h2>
             <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
               Real product surfaces. Audit log on the left, AI-native command palette on the right. Both ship in ATLVS
               today — not in a roadmap card.
@@ -504,10 +504,10 @@ export default function Home() {
       <CTASection
         title="ATLVS Is Open."
         subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
-        primaryLabel="Sign Up Free"
-        primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
-        secondaryHref="/contact"
+        primaryLabel={CANONICAL_CTAS.primary.label}
+        primaryHref={CANONICAL_CTAS.primary.href}
+        secondaryLabel={CANONICAL_CTAS.secondary.label}
+        secondaryHref={CANONICAL_CTAS.secondary.href}
       />
     </>
   );

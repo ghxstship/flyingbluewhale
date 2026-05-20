@@ -57,7 +57,7 @@ export default function GlossaryIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Glossary</div>
+        <div className="eyebrow eyebrow-accent">Glossary</div>
         <h1 className="hed-2xl mt-4">The Vocabulary Of Live Production.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
           The terms operators use to run shows — explained the way operators use them. No academic gloss. No marketing
@@ -67,7 +67,7 @@ export default function GlossaryIndex() {
 
       {GLOSSARY_CATEGORIES.filter((cat) => byCategory.has(cat.slug)).map((cat) => (
         <section key={cat.slug} className="mx-auto max-w-6xl px-6 py-8">
-          <div className="eyebrow eyebrow-brand">{cat.label}</div>
+          <div className="eyebrow eyebrow-accent">{cat.label}</div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {(byCategory.get(cat.slug) ?? []).map((t) => (
               <Link key={t.slug} href={`/glossary/${t.slug}`} className="surface hover-lift p-4">

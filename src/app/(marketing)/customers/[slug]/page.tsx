@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
-      <div className="eyebrow eyebrow-brand">Customer story</div>
+      <div className="eyebrow eyebrow-accent">Customer story</div>
       <h1 className="hed-xl mt-4">{cs.customer_name}</h1>
       {meta && <p className="mt-2 font-mono text-xs text-[var(--text-muted)]">{meta}</p>}
 

@@ -52,7 +52,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Integration · {i.category}</div>
+        <div className="eyebrow eyebrow-accent">Integration · {i.category}</div>
         <h1 className="hed-2xl mt-4">{i.name}.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{i.long}</p>
         <div className="mt-8 flex flex-wrap gap-3">

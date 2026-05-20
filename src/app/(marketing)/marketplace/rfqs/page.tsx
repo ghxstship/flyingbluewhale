@@ -48,7 +48,7 @@ export default async function Page() {
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace · Open RFQs</div>
+        <div className="eyebrow eyebrow-accent">Marketplace · Open RFQs</div>
         <h1 className="hed-2xl mt-4">Open RFQs</h1>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
           {rows.length} live RFQ{rows.length === 1 ? "" : "s"} · vendor prequalification + COI required

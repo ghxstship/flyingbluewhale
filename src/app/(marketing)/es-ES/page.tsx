@@ -70,8 +70,8 @@ export default function HomeES() {
       />
 
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
-        <div className="eyebrow eyebrow-brand">ATLVS Technologies</div>
-        <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
+        <div className="eyebrow eyebrow-accent">ATLVS Technologies</div>
+        <h1 className="kinetic-display mt-4">
           La Producción
           <br />
           Corre Sobre Esto.

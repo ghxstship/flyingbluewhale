@@ -29,7 +29,7 @@ export default function CommunityPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Community</div>
+        <div className="eyebrow eyebrow-accent">Community</div>
         <h1 className="hed-2xl mt-4">Production teams, building in public.</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
           The festivals, tours, agencies, and fabrication shops running their shows on ATLVS Technologies. Real
@@ -85,7 +85,7 @@ export default function CommunityPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-6 p-8 md:grid-cols-2 md:items-center">
           <div>
-            <div className="eyebrow eyebrow-brand">Join the roster</div>
+            <div className="eyebrow eyebrow-accent">Join the roster</div>
             <h3 className="hed-lg mt-3">Your Team, Here.</h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
               Shipping real shows on ATLVS Technologies? We&apos;re always looking to document new member stories. A

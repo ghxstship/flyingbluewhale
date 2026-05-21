@@ -6,10 +6,19 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { SELECT_COLUMNS, TrackerView, type TrackerRow } from "@/components/xpms/TrackerView";
+import { AtomDrillIn } from "@/components/xpms/AtomDrillIn";
+import { fetchAtomDrillIn } from "@/lib/xpms/drill-in";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
-export default async function TrackerPage({ params }: { params: Promise<{ projectId: string }> }) {
+export default async function TrackerPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ projectId: string }>;
+  searchParams: Promise<{ atom?: string }>;
+}) {
   const { projectId } = await params;
+  const { atom: focusedAtomId } = await searchParams;
   const session = await requireSession();
   const supabase = await createClient();
   const { data: project } = await supabase
@@ -29,6 +38,7 @@ export default async function TrackerPage({ params }: { params: Promise<{ projec
     .order("wbs_path", { ascending: true })) as { data: TrackerRow[] | null };
 
   const atoms = rows ?? [];
+  const drillIn = focusedAtomId ? await fetchAtomDrillIn(session.orgId, focusedAtomId) : null;
 
   return (
     <>
@@ -53,6 +63,16 @@ export default async function TrackerPage({ params }: { params: Promise<{ projec
           }
         />
       </div>
+      {drillIn && (
+        <AtomDrillIn
+          atom={drillIn.atom}
+          tasks={drillIn.tasks}
+          deliverables={drillIn.deliverables}
+          expenses={drillIn.expenses}
+          poLines={drillIn.poLines}
+          variances={drillIn.variances}
+        />
+      )}
     </>
   );
 }

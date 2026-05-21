@@ -6,22 +6,26 @@ import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { hasSupabase } from "@/lib/env";
 import { SELECT_COLUMNS, TrackerView, type TrackerRow } from "@/components/xpms/TrackerView";
+import { AtomDrillIn } from "@/components/xpms/AtomDrillIn";
+import { fetchAtomDrillIn } from "@/lib/xpms/drill-in";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
 export const dynamic = "force-dynamic";
 
 /**
  * Producer portal — read-only WBS rollup tracker mirroring the console
- * Tracker. Producer is the EXECUTIVE-class external lead who wants
- * budget / variance / progress at a glance without operational detail.
- *
- * RLS on xpms_atoms + the underlying artifact tables enforces project
- * scope. We additionally filter the view to project_id = the slug's
- * project so cross-project atoms don't appear.
+ * Tracker, with per-atom drill-in.
  */
-export default async function ProducerTracker({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProducerTracker({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ atom?: string }>;
+}) {
   if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
   const { slug } = await params;
+  const { atom: focusedAtomId } = await searchParams;
   const project = await projectIdFromSlug(slug);
   if (!project) notFound();
 
@@ -34,6 +38,7 @@ export default async function ProducerTracker({ params }: { params: Promise<{ sl
     .order("wbs_path", { ascending: true })) as { data: TrackerRow[] | null };
 
   const atoms = rows ?? [];
+  const drillIn = focusedAtomId ? await fetchAtomDrillIn(project.org_id, focusedAtomId) : null;
 
   return (
     <div className="flex min-h-screen">
@@ -55,6 +60,16 @@ export default async function ProducerTracker({ params }: { params: Promise<{ sl
           />
         </div>
       </div>
+      {drillIn && (
+        <AtomDrillIn
+          atom={drillIn.atom}
+          tasks={drillIn.tasks}
+          deliverables={drillIn.deliverables}
+          expenses={drillIn.expenses}
+          poLines={drillIn.poLines}
+          variances={drillIn.variances}
+        />
+      )}
     </div>
   );
 }

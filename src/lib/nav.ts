@@ -534,6 +534,7 @@ export function portalNav(slug: string, persona: PortalPersona) {
       tasks,
       messages,
       { label: "Portfolio", href: `${base}/portfolio` },
+      { label: "Tracker", href: `${base}/tracker` },
       { label: "P&L", href: `${base}/pnl` },
       { label: "Risk", href: `${base}/risk` },
       { label: "Readiness", href: `${base}/readiness` },
@@ -763,4 +764,5 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Directory", href: "/m/directory" },
   { label: "Onboarding", href: "/m/onboarding" },
   { label: "Advancing", href: "/m/advances" },
+  { label: "Tracker", href: "/m/tracker" },
 ];

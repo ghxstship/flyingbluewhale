@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { awardBadge, deleteBadge } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -119,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
                     {a.note && <p className="text-[var(--text-secondary)]">{a.note}</p>}
                   </div>
                   <span className="font-mono text-[10px] text-[var(--text-muted)]">
-                    {new Date(a.awarded_at).toLocaleDateString()}
+                    {formatDate(a.awarded_at, "short")}
                   </span>
                 </li>
               ))}

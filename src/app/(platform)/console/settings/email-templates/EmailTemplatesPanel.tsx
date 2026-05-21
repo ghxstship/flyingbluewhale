@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { formatDate } from "@/lib/i18n/format";
 
 /**
  * Email-template editor with merge-tag autocomplete.
@@ -168,7 +169,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
                   <td>{t.name}</td>
                   <td className="text-[var(--text-muted)]">{t.subject}</td>
                   <td>{t.is_active ? "Yes" : "No"}</td>
-                  <td className="font-mono text-xs">{new Date(t.updated_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{formatDate(t.updated_at, "short")}</td>
                   <td>
                     <button
                       type="button"

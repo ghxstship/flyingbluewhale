@@ -26,7 +26,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
            */}
           <header className="glass-nav sticky top-0 z-30 flex shrink-0 items-center justify-between px-6">
             <div className="flex flex-1 items-center gap-2 text-xs font-semibold tracking-wide text-[var(--text-muted)]">
-              <span className="tracking-wider text-[var(--org-primary)]">ATLVS</span>
+              <span className="tracking-wider text-[var(--org-primary)]" aria-label="ATLVS Technologies">A T L V S</span>
             </div>
             <div className="flex items-center gap-2">
               <CommandPaletteTrigger />

@@ -284,7 +284,7 @@ export function PlatformSidebar({
           </Hint>
         ) : (
           <div className="flex items-center justify-between gap-2 border-t border-[var(--border-color)] px-3 py-2.5">
-            <span className="text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)]">ATLVS</span>
+            <span className="text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)]" aria-label="ATLVS Technologies">A T L V S</span>
             {/* Language switcher mirrors the marketing header so authed
                 operators can flip the entire console — internal labels,
                 date formats, currency — without leaving the page. Persists

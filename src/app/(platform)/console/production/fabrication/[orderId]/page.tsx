@@ -15,6 +15,7 @@ import {
   type ProductionPhase,
 } from "@/lib/production-phase";
 import { ProductionPhaseControls } from "./ProductionPhaseControls";
+import { formatDate } from "@/lib/i18n/format";
 
 const NEXT: Record<FabricationStatus, { to: FabricationStatus; label: string }[]> = {
   open: [
@@ -151,7 +152,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
             {transitions.slice(0, 5).map((t) => (
               <li key={t.id} className="font-mono">
                 {t.from_phase ?? "(initial)"} → <strong>{t.to_phase}</strong> ·{" "}
-                {new Date(t.transitioned_at).toLocaleDateString()}
+                {formatDate(t.transitioned_at, "short")}
                 {t.reason ? <span className="ml-2 font-sans">{t.reason}</span> : null}
               </li>
             ))}

@@ -18,6 +18,7 @@ const Schema = z.object({
   spent_at: z.string().date(),
   project_id: z.string().uuid().optional().or(z.literal("")),
   notes: z.string().max(2000).optional(),
+  atom_id: z.string().uuid().optional().or(z.literal("")),
 });
 
 export type State = { error?: string } | null;
@@ -40,6 +41,21 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
     if (!project) return { error: "Project not found in your organization" };
   }
 
+  // Cross-tenant guard on atom pin.
+  const atomId = parsed.data.atom_id || null;
+  if (atomId) {
+    const { data: atom } = await supabase
+      .from("xpms_atoms")
+      .select("id, project_id")
+      .eq("id", atomId)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!atom) return { error: "Atom not found in your organization" };
+    if (parsed.data.project_id && atom.project_id && atom.project_id !== parsed.data.project_id) {
+      return { error: "Atom belongs to a different project" };
+    }
+  }
+
   const { error } = await supabase.from("expenses").insert({
     org_id: session.orgId,
     submitter_id: session.userId,
@@ -48,6 +64,7 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
     category: parsed.data.category || null,
     spent_at: parsed.data.spent_at,
     project_id: parsed.data.project_id || null,
+    atom_id: atomId,
   });
   if (error) return { error: error.message };
   revalidatePath("/console/finance/expenses");

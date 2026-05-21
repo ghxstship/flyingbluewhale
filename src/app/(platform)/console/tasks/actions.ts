@@ -11,6 +11,7 @@ const Schema = z.object({
   due_at: z.string().date().optional().or(z.literal("")),
   project_id: z.string().uuid().optional().or(z.literal("")),
   priority: z.string().optional(),
+  xpms_atom_id: z.string().uuid().optional().or(z.literal("")),
 });
 
 export type State = { error?: string } | null;
@@ -37,6 +38,22 @@ export async function createTaskAction(_: State, fd: FormData): Promise<State> {
     if (!project) return { error: "Project not found in your organization" };
   }
 
+  // Cross-tenant guard on atom pin — must belong to same org, and to
+  // the same project if both are set.
+  const atomId = parsed.data.xpms_atom_id || null;
+  if (atomId) {
+    const { data: atom } = await supabase
+      .from("xpms_atoms")
+      .select("id, project_id")
+      .eq("id", atomId)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!atom) return { error: "Atom not found in your organization" };
+    if (projectId && atom.project_id && atom.project_id !== projectId) {
+      return { error: "Atom belongs to a different project" };
+    }
+  }
+
   const { error } = await supabase.from("tasks").insert({
     org_id: session.orgId,
     title: parsed.data.title,
@@ -45,6 +62,7 @@ export async function createTaskAction(_: State, fd: FormData): Promise<State> {
     project_id: projectId,
     priority: parsed.data.priority ? parseInt(parsed.data.priority, 10) : 2,
     created_by: session.userId,
+    xpms_atom_id: atomId,
   });
   if (error) return { error: error.message };
   revalidatePath("/console/tasks");

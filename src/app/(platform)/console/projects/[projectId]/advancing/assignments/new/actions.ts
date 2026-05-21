@@ -35,6 +35,7 @@ const Schema = z.object({
   assignee_id: z.string().uuid(),
   deadline: z.string().optional().or(z.literal("")),
   notes: z.string().max(2000).optional().or(z.literal("")),
+  atom_id: z.string().uuid().optional().or(z.literal("")),
 });
 
 export type State = { error?: string } | null;
@@ -67,6 +68,19 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     .maybeSingle();
   if (!member) return { error: "Assignee is not in your organization" };
 
+  // Cross-tenant guard on the picked atom — must belong to the same
+  // org as the project. RLS would block reads but we still validate the
+  // FK at insert time to surface a clean error instead of a 23503.
+  if (parsed.data.atom_id) {
+    const { data: atom } = await supabase
+      .from("xpms_atoms")
+      .select("id")
+      .eq("id", parsed.data.atom_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!atom) return { error: "Atom not found in your organization" };
+  }
+
   const { error } = await supabase.from("deliverables").insert({
     org_id: session.orgId,
     project_id: projectId,
@@ -76,6 +90,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     deliverable_state: "briefed",
     deadline: parsed.data.deadline || null,
     data: parsed.data.notes ? { notes: parsed.data.notes } : {},
+    atom_id: parsed.data.atom_id || null,
   } as never);
   if (error) return { error: error.message };
 

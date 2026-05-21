@@ -1,9 +1,30 @@
 "use client";
+import { useState } from "react";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { AtomPicker } from "@/components/xpms/AtomPicker";
 import { createTaskAction } from "../actions";
 
-export function NewTaskForm({ projects }: { projects: { id: string; name: string }[] }) {
+export type AtomOptionWithProject = {
+  id: string;
+  identifier: string;
+  name: string;
+  project_id: string;
+  project_name: string | null;
+};
+
+export function NewTaskForm({
+  projects,
+  atoms,
+}: {
+  projects: { id: string; name: string }[];
+  atoms: AtomOptionWithProject[];
+}) {
+  const [projectId, setProjectId] = useState<string>("");
+  // When a project is picked, narrow atoms to that project. With no
+  // project selected, hide the picker — tasks.xpms_atom_id has no home
+  // without a project anyway.
+  const scoped = projectId ? atoms.filter((a) => a.project_id === projectId) : [];
   return (
     <FormShell action={createTaskAction} cancelHref="/console/tasks" submitLabel="Create Task">
       <Input label="Title" name="title" required maxLength={200} />
@@ -24,7 +45,12 @@ export function NewTaskForm({ projects }: { projects: { id: string; name: string
         </div>
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">Project</label>
-          <select name="project_id" className="input-base mt-1.5 w-full">
+          <select
+            name="project_id"
+            className="input-base mt-1.5 w-full"
+            value={projectId}
+            onChange={(e) => setProjectId(e.target.value)}
+          >
             <option value="">— No project —</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -34,6 +60,13 @@ export function NewTaskForm({ projects }: { projects: { id: string; name: string
           </select>
         </div>
       </div>
+      {projectId && scoped.length > 0 && (
+        <AtomPicker
+          name="xpms_atom_id"
+          atoms={scoped}
+          hint="Pin this task to a WBS atom so it rolls up on the project Tracker."
+        />
+      )}
     </FormShell>
   );
 }

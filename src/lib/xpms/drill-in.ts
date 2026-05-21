@@ -1,7 +1,6 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import type {
   AtomMeta,
   AtomTask,
@@ -29,25 +28,15 @@ export async function fetchAtomDrillIn(
   variances: AtomVariance[];
 } | null> {
   const supabase = await createClient();
-  const loose = supabase as unknown as LooseSupabase;
 
-  // wbs_path was added by 0058 as a generated column; it is not in the
-  // typed Database yet so this read uses LooseSupabase.
-  const { data: atomRow } = (await loose
+  // `wbs_path` is materialized as ltree and types as `unknown` in the
+  // generated Database — coerce to string at this boundary.
+  const { data: atomRow } = await supabase
     .from("xpms_atoms")
     .select("id, identifier, name, state, phase, wbs_path")
     .eq("id", atomId)
     .eq("org_id", orgId)
-    .maybeSingle()) as {
-    data: {
-      id: string;
-      identifier: string;
-      name: string;
-      state: "uac" | "tpc";
-      phase: string;
-      wbs_path: string;
-    } | null;
-  };
+    .maybeSingle();
   if (!atomRow) return null;
 
   const [{ data: tasks }, { data: deliverables }, { data: expenses }, { data: poLines }, { data: variances }] =
@@ -58,8 +47,7 @@ export async function fetchAtomDrillIn(
         .eq("org_id", orgId)
         .eq("xpms_atom_id", atomId)
         .order("due_at", { ascending: true, nullsFirst: false }),
-      // `deliverables.atom_id` was added by 0058; not yet in typed Database.
-      loose
+      supabase
         .from("deliverables")
         .select("id, title, type, deliverable_state, status, deadline")
         .eq("org_id", orgId)
@@ -92,12 +80,12 @@ export async function fetchAtomDrillIn(
       name: atomRow.name,
       state: atomRow.state,
       phase: atomRow.phase,
-      wbs_path: atomRow.wbs_path,
+      wbs_path: String(atomRow.wbs_path ?? ""),
     },
     tasks: (tasks ?? []) as AtomTask[],
-    deliverables: (deliverables ?? []) as unknown as AtomDeliverable[],
+    deliverables: (deliverables ?? []) as AtomDeliverable[],
     expenses: (expenses ?? []) as AtomExpense[],
     poLines: (poLines ?? []) as AtomPO[],
-    variances: (variances ?? []) as unknown as AtomVariance[],
+    variances: (variances ?? []) as AtomVariance[],
   };
 }

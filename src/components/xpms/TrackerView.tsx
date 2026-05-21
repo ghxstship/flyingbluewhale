@@ -36,6 +36,7 @@ function pct(n: number | string | null | undefined): number {
 
 export const SELECT_COLUMNS = [
   "atom_id",
+  "project_id",
   "identifier",
   "name",
   "phase",

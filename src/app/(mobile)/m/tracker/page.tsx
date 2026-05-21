@@ -7,7 +7,6 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { money } from "@/components/detail/DetailShell";
 import { SELECT_COLUMNS, trackerTotals, type TrackerRow } from "@/components/xpms/TrackerView";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 export const dynamic = "force-dynamic";
 
@@ -26,17 +25,16 @@ export default async function MobileTrackerPage() {
 
   // Pull all atoms in the user's org, then bucket by project_id to
   // render per-project rollup cards. RLS still filters to atoms the
-  // caller can see.
-  const loose = supabase as unknown as LooseSupabase;
-  const { data: rows } = (await loose
+  // caller can see. project_id is included in the base SELECT_COLUMNS.
+  const { data: rows } = await supabase
     .from("v_xpms_atom_rollup_recursive")
-    .select(`${SELECT_COLUMNS},project_id`)
+    .select(SELECT_COLUMNS)
     .eq("org_id", session.orgId)
     .not("project_id", "is", null)
     .order("project_id", { ascending: true })
-    .order("wbs_path", { ascending: true })) as { data: (TrackerRow & { project_id: string })[] | null };
+    .order("wbs_path", { ascending: true });
 
-  const atoms = rows ?? [];
+  const atoms = (rows ?? []) as unknown as (TrackerRow & { project_id: string })[];
 
   // Resolve project names — one round-trip rather than N joins.
   const projectIds = Array.from(new Set(atoms.map((a) => a.project_id)));

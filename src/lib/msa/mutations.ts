@@ -24,7 +24,7 @@ export async function createMsaDraft(orgId: string, crewMemberId: string): Promi
     .insert({
       org_id: orgId,
       crew_member_id: crewMemberId,
-      msa_status: "draft",
+      msa_state: "draft",
       body_snapshot: (settings as { default_terms?: string } | null)?.default_terms ?? null,
       governing_law_snapshot: (settings as { default_governing_law?: string } | null)?.default_governing_law ?? null,
     })
@@ -39,10 +39,10 @@ export async function markMsaSent(orgId: string, msaId: string): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase
     .from("independent_contractor_msas")
-    .update({ msa_status: "sent", sent_at: new Date().toISOString() })
+    .update({ msa_state: "sent", sent_at: new Date().toISOString() })
     .eq("org_id", orgId)
     .eq("id", msaId)
-    .eq("msa_status", "draft");
+    .eq("msa_state", "draft");
   if (error) throw new Error(error.message);
 }
 
@@ -51,7 +51,7 @@ export async function revokeMsa(orgId: string, msaId: string, reason: string): P
   const { error } = await supabase
     .from("independent_contractor_msas")
     .update({
-      msa_status: "revoked",
+      msa_state: "revoked",
       revoked_at: new Date().toISOString(),
       revoke_reason: reason,
     })

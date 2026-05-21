@@ -8,7 +8,6 @@ import { createClient } from "@/lib/supabase/server";
 import { SELECT_COLUMNS, TrackerView, type TrackerRow } from "@/components/xpms/TrackerView";
 import { AtomDrillIn } from "@/components/xpms/AtomDrillIn";
 import { fetchAtomDrillIn } from "@/lib/xpms/drill-in";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 export default async function TrackerPage({
   params,
@@ -30,14 +29,15 @@ export default async function TrackerPage({
     .maybeSingle();
   if (!project) notFound();
 
-  const loose = supabase as unknown as LooseSupabase;
-  const { data: rows } = (await loose
+  // View is typed; `wbs_path` resolves to `unknown` (ltree) — narrow cast
+  // at the boundary so the renderer can treat it as a string.
+  const { data: rows } = await supabase
     .from("v_xpms_atom_rollup_recursive")
     .select(SELECT_COLUMNS)
     .eq("project_id", projectId)
-    .order("wbs_path", { ascending: true })) as { data: TrackerRow[] | null };
+    .order("wbs_path", { ascending: true });
 
-  const atoms = rows ?? [];
+  const atoms = (rows ?? []) as unknown as TrackerRow[];
   const drillIn = focusedAtomId ? await fetchAtomDrillIn(session.orgId, focusedAtomId) : null;
 
   return (

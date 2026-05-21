@@ -25,7 +25,7 @@ export type IndependentContractorMsa = {
   public_token: string;
   access_code: string;
   token_expires_at: string | null;
-  msa_status: MsaStatus;
+  msa_state: MsaStatus;
   version: number;
   body_snapshot: string | null;
   governing_law_snapshot: string | null;
@@ -61,7 +61,7 @@ export type IndependentContractorMsaResolved = IndependentContractorMsa & {
 
 export type CrewMemberActiveMsa = {
   msa_id: string;
-  msa_status: MsaStatus;
+  msa_state: MsaStatus;
   signed_at: string | null;
   version: number;
   public_token: string;

@@ -8,7 +8,6 @@ import { hasSupabase } from "@/lib/env";
 import { SELECT_COLUMNS, TrackerView, type TrackerRow } from "@/components/xpms/TrackerView";
 import { AtomDrillIn } from "@/components/xpms/AtomDrillIn";
 import { fetchAtomDrillIn } from "@/lib/xpms/drill-in";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 export const dynamic = "force-dynamic";
 
@@ -30,14 +29,13 @@ export default async function ProducerTracker({
   if (!project) notFound();
 
   const supabase = await createClient();
-  const loose = supabase as unknown as LooseSupabase;
-  const { data: rows } = (await loose
+  const { data: rows } = await supabase
     .from("v_xpms_atom_rollup_recursive")
     .select(SELECT_COLUMNS)
     .eq("project_id", project.id)
-    .order("wbs_path", { ascending: true })) as { data: TrackerRow[] | null };
+    .order("wbs_path", { ascending: true });
 
-  const atoms = rows ?? [];
+  const atoms = (rows ?? []) as unknown as TrackerRow[];
   const drillIn = focusedAtomId ? await fetchAtomDrillIn(project.org_id, focusedAtomId) : null;
 
   return (

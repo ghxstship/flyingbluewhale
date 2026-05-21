@@ -25,7 +25,7 @@ export default async function MsasPage() {
   const session = await requireSession();
   const rows = await listMsas(session.orgId);
   const counts = rows.reduce<Record<string, number>>((acc, r) => {
-    acc[r.msa_status] = (acc[r.msa_status] ?? 0) + 1;
+    acc[r.msa_state] = (acc[r.msa_state] ?? 0) + 1;
     return acc;
   }, {});
 
@@ -79,10 +79,10 @@ export default async function MsasPage() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={MSA_STATUS_VARIANT[r.msa_status]}>{MSA_STATUS_LABEL[r.msa_status]}</Badge>,
+              render: (r) => <Badge variant={MSA_STATUS_VARIANT[r.msa_state]}>{MSA_STATUS_LABEL[r.msa_state]}</Badge>,
               filterable: true,
               groupable: true,
-              accessor: (r) => r.msa_status ?? null,
+              accessor: (r) => r.msa_state ?? null,
             },
             {
               key: "signed_at",

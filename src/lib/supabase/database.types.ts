@@ -5487,6 +5487,20 @@ export type Database = {
             foreignKeyName: "crew_members_xpms_atom_id_fkey"
             columns: ["xpms_atom_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "crew_members_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
@@ -6654,6 +6668,7 @@ export type Database = {
       deliverables: {
         Row: {
           assignee_id: string | null
+          atom_id: string | null
           catalog_item_id: string | null
           closed_at: string | null
           closed_by: string | null
@@ -6683,6 +6698,7 @@ export type Database = {
         }
         Insert: {
           assignee_id?: string | null
+          atom_id?: string | null
           catalog_item_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
@@ -6712,6 +6728,7 @@ export type Database = {
         }
         Update: {
           assignee_id?: string | null
+          atom_id?: string | null
           catalog_item_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
@@ -6740,6 +6757,27 @@ export type Database = {
           version?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "deliverables_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverables_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "deliverables_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "deliverables_catalog_item_id_fkey"
             columns: ["catalog_item_id"]
@@ -7162,6 +7200,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "orgs"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
           },
           {
             foreignKeyName: "equipment_xpms_atom_id_fkey"
@@ -7625,6 +7677,20 @@ export type Database = {
             foreignKeyName: "expenses_atom_id_fkey"
             columns: ["atom_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "expenses_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
@@ -7767,6 +7833,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fabrication_orders_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fabrication_orders_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
           },
           {
             foreignKeyName: "fabrication_orders_xpms_atom_id_fkey"
@@ -9439,7 +9519,7 @@ export type Database = {
           governing_law_snapshot: string | null
           id: string
           last_viewed_at: string | null
-          msa_status: string
+          msa_state: Database["public"]["Enums"]["ic_msa_state"]
           nscb_classification: string | null
           nscb_license_number: string | null
           nscb_monetary_limit_cents: number | null
@@ -9471,7 +9551,7 @@ export type Database = {
           governing_law_snapshot?: string | null
           id?: string
           last_viewed_at?: string | null
-          msa_status?: string
+          msa_state?: Database["public"]["Enums"]["ic_msa_state"]
           nscb_classification?: string | null
           nscb_license_number?: string | null
           nscb_monetary_limit_cents?: number | null
@@ -9503,7 +9583,7 @@ export type Database = {
           governing_law_snapshot?: string | null
           id?: string
           last_viewed_at?: string | null
-          msa_status?: string
+          msa_state?: Database["public"]["Enums"]["ic_msa_state"]
           nscb_classification?: string | null
           nscb_license_number?: string | null
           nscb_monetary_limit_cents?: number | null
@@ -10153,6 +10233,20 @@ export type Database = {
           xtc_code?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "invoice_line_items_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_line_items_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
           {
             foreignKeyName: "invoice_line_items_atom_id_fkey"
             columns: ["atom_id"]
@@ -12086,6 +12180,71 @@ export type Database = {
           {
             foreignKeyName: "mileage_logs_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      msa_state_transitions: {
+        Row: {
+          correlation_id: string | null
+          from_state: Database["public"]["Enums"]["ic_msa_state"] | null
+          id: string
+          msa_id: string
+          org_id: string
+          reason: string | null
+          to_state: Database["public"]["Enums"]["ic_msa_state"]
+          transitioned_at: string
+          transitioned_by: string | null
+        }
+        Insert: {
+          correlation_id?: string | null
+          from_state?: Database["public"]["Enums"]["ic_msa_state"] | null
+          id?: string
+          msa_id: string
+          org_id: string
+          reason?: string | null
+          to_state: Database["public"]["Enums"]["ic_msa_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Update: {
+          correlation_id?: string | null
+          from_state?: Database["public"]["Enums"]["ic_msa_state"] | null
+          id?: string
+          msa_id?: string
+          org_id?: string
+          reason?: string | null
+          to_state?: Database["public"]["Enums"]["ic_msa_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "msa_state_transitions_msa_id_fkey"
+            columns: ["msa_id"]
+            isOneToOne: false
+            referencedRelation: "independent_contractor_msas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "msa_state_transitions_msa_id_fkey"
+            columns: ["msa_id"]
+            isOneToOne: false
+            referencedRelation: "independent_contractor_msas_resolved"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "msa_state_transitions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "msa_state_transitions_transitioned_by_fkey"
+            columns: ["transitioned_by"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -15144,6 +15303,20 @@ export type Database = {
             foreignKeyName: "po_line_items_atom_id_fkey"
             columns: ["atom_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "po_line_items_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "po_line_items_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
@@ -17714,6 +17887,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rentals_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rentals_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
           },
           {
             foreignKeyName: "rentals_xpms_atom_id_fkey"
@@ -21674,6 +21861,20 @@ export type Database = {
             foreignKeyName: "tasks_xpms_atom_id_fkey"
             columns: ["xpms_atom_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "tasks_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
@@ -22453,6 +22654,20 @@ export type Database = {
           zone_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "time_entries_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entries_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
           {
             foreignKeyName: "time_entries_atom_id_fkey"
             columns: ["atom_id"]
@@ -25606,6 +25821,20 @@ export type Database = {
             foreignKeyName: "xpms_atom_tiers_atom_id_fkey"
             columns: ["atom_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atom_tiers_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "xpms_atom_tiers_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
@@ -25642,6 +25871,7 @@ export type Database = {
           unit: string | null
           updated_at: string
           venue_token: string | null
+          wbs_path: unknown
           xtc_code: number
           zone_token: string | null
         }
@@ -25675,6 +25905,7 @@ export type Database = {
           unit?: string | null
           updated_at?: string
           venue_token?: string | null
+          wbs_path?: unknown
           xtc_code: number
           zone_token?: string | null
         }
@@ -25708,6 +25939,7 @@ export type Database = {
           unit?: string | null
           updated_at?: string
           venue_token?: string | null
+          wbs_path?: unknown
           xtc_code?: number
           zone_token?: string | null
         }
@@ -25751,6 +25983,20 @@ export type Database = {
             foreignKeyName: "xpms_atoms_lineage_root_id_fkey"
             columns: ["lineage_root_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_lineage_root_id_fkey"
+            columns: ["lineage_root_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_lineage_root_id_fkey"
+            columns: ["lineage_root_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
@@ -25788,6 +26034,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "xtc_sections"
             referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_uac_origin_id_fkey"
+            columns: ["uac_origin_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_uac_origin_id_fkey"
+            columns: ["uac_origin_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
           },
           {
             foreignKeyName: "xpms_atoms_uac_origin_id_fkey"
@@ -25887,6 +26147,20 @@ export type Database = {
             foreignKeyName: "xpms_provenance_edges_from_atom_id_fkey"
             columns: ["from_atom_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_provenance_edges_from_atom_id_fkey"
+            columns: ["from_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "xpms_provenance_edges_from_atom_id_fkey"
+            columns: ["from_atom_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
@@ -25896,6 +26170,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "orgs"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_provenance_edges_to_atom_id_fkey"
+            columns: ["to_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_provenance_edges_to_atom_id_fkey"
+            columns: ["to_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
           },
           {
             foreignKeyName: "xpms_provenance_edges_to_atom_id_fkey"
@@ -25962,8 +26250,36 @@ export type Database = {
             foreignKeyName: "xpms_variance_ledger_tpc_atom_id_fkey"
             columns: ["tpc_atom_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_variance_ledger_tpc_atom_id_fkey"
+            columns: ["tpc_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "xpms_variance_ledger_tpc_atom_id_fkey"
+            columns: ["tpc_atom_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_variance_ledger_uac_atom_id_fkey"
+            columns: ["uac_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_variance_ledger_uac_atom_id_fkey"
+            columns: ["uac_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
           },
           {
             foreignKeyName: "xpms_variance_ledger_uac_atom_id_fkey"
@@ -26279,6 +26595,20 @@ export type Database = {
             foreignKeyName: "expenses_atom_id_fkey"
             columns: ["atom_id"]
             isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "expenses_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
           },
@@ -26439,6 +26769,20 @@ export type Database = {
           xtc_code?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "time_entries_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entries_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
           {
             foreignKeyName: "time_entries_atom_id_fkey"
             columns: ["atom_id"]
@@ -26619,7 +26963,7 @@ export type Database = {
           governing_law_snapshot: string | null
           id: string | null
           last_viewed_at: string | null
-          msa_status: string | null
+          msa_state: Database["public"]["Enums"]["ic_msa_state"] | null
           nscb_classification: string | null
           nscb_license_number: string | null
           nscb_monetary_limit_cents: number | null
@@ -27402,6 +27746,135 @@ export type Database = {
           },
         ]
       }
+      v_xpms_atom_rollup: {
+        Row: {
+          actual_cost_cents: number | null
+          budget_cents: number | null
+          committed_cents: number | null
+          deliverable_count: number | null
+          deliverables_approved: number | null
+          deliverables_open: number | null
+          id: string | null
+          identifier: string | null
+          invoiced_cents: number | null
+          name: string | null
+          org_id: string | null
+          pct_complete: number | null
+          phase: Database["public"]["Enums"]["xpms_atom_phase"] | null
+          project_id: string | null
+          state: Database["public"]["Enums"]["xpms_state"] | null
+          task_count: number | null
+          tasks_done: number | null
+          variance_cost_cents: number | null
+          variance_count: number | null
+          wbs_depth: number | null
+          wbs_path: unknown
+        }
+        Insert: {
+          actual_cost_cents?: never
+          budget_cents?: never
+          committed_cents?: never
+          deliverable_count?: never
+          deliverables_approved?: never
+          deliverables_open?: never
+          id?: string | null
+          identifier?: string | null
+          invoiced_cents?: never
+          name?: string | null
+          org_id?: string | null
+          pct_complete?: never
+          phase?: Database["public"]["Enums"]["xpms_atom_phase"] | null
+          project_id?: string | null
+          state?: Database["public"]["Enums"]["xpms_state"] | null
+          task_count?: never
+          tasks_done?: never
+          variance_cost_cents?: never
+          variance_count?: never
+          wbs_depth?: never
+          wbs_path?: unknown
+        }
+        Update: {
+          actual_cost_cents?: never
+          budget_cents?: never
+          committed_cents?: never
+          deliverable_count?: never
+          deliverables_approved?: never
+          deliverables_open?: never
+          id?: string | null
+          identifier?: string | null
+          invoiced_cents?: never
+          name?: string | null
+          org_id?: string | null
+          pct_complete?: never
+          phase?: Database["public"]["Enums"]["xpms_atom_phase"] | null
+          project_id?: string | null
+          state?: Database["public"]["Enums"]["xpms_state"] | null
+          task_count?: never
+          tasks_done?: never
+          variance_cost_cents?: never
+          variance_count?: never
+          wbs_depth?: never
+          wbs_path?: unknown
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_atoms_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_xpms_atom_rollup_recursive: {
+        Row: {
+          actual_cost_cents_rollup: number | null
+          atom_id: string | null
+          budget_cents_rollup: number | null
+          committed_cents_rollup: number | null
+          deliverable_count_rollup: number | null
+          deliverables_approved_rollup: number | null
+          deliverables_open_rollup: number | null
+          descendant_count: number | null
+          identifier: string | null
+          invoiced_cents_rollup: number | null
+          name: string | null
+          org_id: string | null
+          pct_complete_rollup: number | null
+          phase: Database["public"]["Enums"]["xpms_atom_phase"] | null
+          project_id: string | null
+          state: Database["public"]["Enums"]["xpms_state"] | null
+          task_count_rollup: number | null
+          tasks_done_rollup: number | null
+          variance_cost_cents_rollup: number | null
+          variance_count_rollup: number | null
+          wbs_depth: number | null
+          wbs_path: unknown
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_atoms_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "xpms_atoms_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_xpms_atom_tier_composition: {
         Row: {
           atom_count: number | null
@@ -27789,7 +28262,7 @@ export type Database = {
         Args: { p_crew_member_id: string }
         Returns: {
           msa_id: string
-          msa_status: string
+          msa_state: Database["public"]["Enums"]["ic_msa_state"]
           public_token: string
           signed_at: string
           version: number
@@ -28664,6 +29137,7 @@ export type Database = {
         Args: { p_category: string; p_org_id: string; p_project_id: string }
         Returns: undefined
       }
+      text2ltree: { Args: { "": string }; Returns: unknown }
       uap_emit: {
         Args: {
           p_actor_id: string
@@ -28923,6 +29397,13 @@ export type Database = {
         | "sign_off"
         | "accepted"
         | "closeout"
+      ic_msa_state:
+        | "draft"
+        | "sent"
+        | "viewed"
+        | "signed"
+        | "revoked"
+        | "superseded"
       import_job_state:
         | "pending"
         | "parsing"
@@ -29695,6 +30176,14 @@ export const Constants = {
         "accepted",
         "closeout",
       ],
+      ic_msa_state: [
+        "draft",
+        "sent",
+        "viewed",
+        "signed",
+        "revoked",
+        "superseded",
+      ],
       import_job_state: [
         "pending",
         "parsing",
@@ -30133,3 +30622,4 @@ export const Constants = {
     },
   },
 } as const
+

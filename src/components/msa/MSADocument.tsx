@@ -202,7 +202,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       </section>
 
       <section className="border-t border-[var(--border-default)] pt-6">
-        {msa.msa_status === "signed" && msa.signed_signature ? (
+        {msa.msa_state === "signed" && msa.signed_signature ? (
           <div className="space-y-2">
             <div className="text-xs tracking-widest text-[var(--text-muted)] uppercase">Signed</div>
             <div className="font-subdisplay text-2xl tracking-wide">{msa.signed_signature}</div>

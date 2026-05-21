@@ -40,6 +40,7 @@ export default async function ProjectLayout({
 
   const tabs = [
     { label: "Overview", href: `/console/projects/${projectId}/overview` },
+    { label: "Tracker", href: `/console/projects/${projectId}/tracker` },
     { label: "Tasks", href: `/console/projects/${projectId}/tasks` },
     { label: "Gantt", href: `/console/projects/${projectId}/gantt` },
     { label: "Files", href: `/console/projects/${projectId}/files` },

@@ -61,7 +61,7 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
           </div>
           <div className="flex items-center gap-3">
             <PrintTrigger />
-            <a href={`/msa/${token}`} className="text-blue-700 hover:underline">
+            <a href={`/msa/${token}`} className="text-[var(--org-primary)] hover:underline">
               ← Back to MSA
             </a>
           </div>

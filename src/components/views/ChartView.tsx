@@ -46,6 +46,7 @@ import {
 } from "@/lib/views/chart-config";
 import { pivotForChart } from "@/lib/views/chart-aggregate";
 import { HeatmapGrid, type HeatmapCell } from "./HeatmapGrid";
+import { formatDate } from "@/lib/i18n/format";
 
 export type ChartViewProps<T extends Record<string, unknown> = Record<string, unknown>> = {
   config: ChartViewConfig;
@@ -518,7 +519,7 @@ export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", cu
   if (typeof v !== "number") {
     if (format === "date" && typeof v === "string") {
       const d = new Date(v);
-      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString();
+      if (!Number.isNaN(d.getTime())) return formatDate(d);
     }
     return String(v);
   }
@@ -535,7 +536,7 @@ export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", cu
         maximumFractionDigits: 1,
       }).format(Math.abs(v) > 1 ? v / 100 : v);
     case "date":
-      return new Date(v).toLocaleDateString();
+      return formatDate(v);
     case "number":
       return new Intl.NumberFormat("en-US").format(v);
     case "auto":

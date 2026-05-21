@@ -343,15 +343,15 @@ export function StagePlotCanvas({
                 <path
                   d={`M ${SCALE * GRID_FT * 4} 0 L 0 0 0 ${SCALE * GRID_FT * 4}`}
                   fill="none"
-                  stroke="#e2e8f0"
+                  stroke="var(--border-color)"
                   strokeWidth="0.5"
                 />
               </pattern>
             </defs>
             <rect width={canvasW} height={canvasH} fill="url(#grid)" />
             {/* Downstage edge label */}
-            <line x1={0} y1={canvasH} x2={canvasW} y2={canvasH} stroke="#1e293b" strokeWidth={2} />
-            <text x={canvasW / 2} y={canvasH - 4} fill="#1e293b" fontSize="10" textAnchor="middle">
+            <line x1={0} y1={canvasH} x2={canvasW} y2={canvasH} stroke="var(--text-primary)" strokeWidth={2} />
+            <text x={canvasW / 2} y={canvasH - 4} fill="var(--text-primary)" fontSize="10" textAnchor="middle">
               Downstage · audience
             </text>
             {/* Elements */}

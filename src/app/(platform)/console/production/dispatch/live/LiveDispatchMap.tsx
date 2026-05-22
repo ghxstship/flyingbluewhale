@@ -70,17 +70,16 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
   );
 }
 
+// MapLibre-GL is a WebGL renderer — it requires literal hex, not CSS vars.
+// Values are pinned to the design-system semantic palette: info/success/warning/danger/muted.
+const DISPATCH_STATUS_COLOR: Record<string, string> = {
+  in_transit: "#3b82f6", // --info (blue-500)
+  arrived: "#22c55e", // --success (green-500)
+  delayed: "#f59e0b", // --warning (amber-500)
+  cancelled: "#ef4444", // --danger (red-500)
+};
+const DISPATCH_STATUS_COLOR_DEFAULT = "#94a3b8"; // --muted-foreground (slate-400)
+
 function statusColor(status: string): string {
-  switch (status) {
-    case "in_transit":
-      return "#3b82f6";
-    case "arrived":
-      return "#22c55e";
-    case "delayed":
-      return "#f59e0b";
-    case "cancelled":
-      return "#ef4444";
-    default:
-      return "#94a3b8";
-  }
+  return DISPATCH_STATUS_COLOR[status] ?? DISPATCH_STATUS_COLOR_DEFAULT;
 }

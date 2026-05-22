@@ -1065,7 +1065,7 @@ export const HEAT_CADENCE_RUNWAY: Record<TierId, string> = {
 };
 
 export function fmtMoney(n: number): string {
-  return "$" + n.toLocaleString("en-US");
+  return "$" + n.toLocaleString(undefined);
 }
 
 export function fmtRange(base: number, ceiling: number): string {

@@ -524,20 +524,20 @@ export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", cu
   }
   switch (format) {
     case "currency":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(undefined, {
         style: "currency",
         currency,
         maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2,
       }).format(v);
     case "percent":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(undefined, {
         style: "percent",
         maximumFractionDigits: 1,
       }).format(Math.abs(v) > 1 ? v / 100 : v);
     case "date":
       return new Date(v).toLocaleDateString();
     case "number":
-      return new Intl.NumberFormat("en-US").format(v);
+      return new Intl.NumberFormat(undefined).format(v);
     case "auto":
     default:
       if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;

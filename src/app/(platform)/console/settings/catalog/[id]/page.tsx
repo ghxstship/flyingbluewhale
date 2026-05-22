@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toggleActive, deleteItem } from "./actions";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = await createClient();
 
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("master_catalog_items")
     .select("id, kind, code, name, description, unit_cost_cents, currency, inventory_qty, active, created_at")
@@ -83,12 +85,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div>
             <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Unit Cost</div>
             <div className="mt-1 font-mono">
-              {item.unit_cost_cents != null
-                ? (item.unit_cost_cents / 100).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: item.currency ?? "USD",
-                  })
-                : "—"}
+              {item.unit_cost_cents != null ? fmt.money(item.unit_cost_cents, item.currency ?? "USD") : "—"}
             </div>
           </div>
           <div>

@@ -53,7 +53,7 @@ export type ProposalPdfInput = {
 
 function money(cents: number, currency: string): string {
   try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(cents / 100);
+    return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(cents / 100);
   } catch {
     return `${currency} ${(cents / 100).toFixed(2)}`;
   }

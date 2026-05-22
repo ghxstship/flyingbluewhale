@@ -5,6 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("master_catalog_items")
     .select("id, kind, code, name, unit_cost_cents, currency, inventory_qty, active, created_at")
@@ -89,13 +91,7 @@ export default async function Page() {
             {
               key: "unit_cost_cents",
               header: "Unit",
-              render: (r) =>
-                r.unit_cost_cents != null
-                  ? (r.unit_cost_cents / 100).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: r.currency ?? "USD",
-                    })
-                  : "—",
+              render: (r) => (r.unit_cost_cents != null ? fmt.money(r.unit_cost_cents, r.currency ?? "USD") : "—"),
               mono: true,
             },
             {

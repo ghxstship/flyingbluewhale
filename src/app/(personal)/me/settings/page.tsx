@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { updateSettings } from "./actions";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
 
@@ -48,7 +49,7 @@ export default async function PersonalSettings() {
               label="Locale (e.g. en, en-US, es)"
               name="locale"
               maxLength={8}
-              defaultValue={prefs.locale ?? "en-US"}
+              defaultValue={prefs.locale ?? DEFAULT_LOCALE}
             />
             <Input
               label="Timezone (IANA, e.g. America/New_York)"

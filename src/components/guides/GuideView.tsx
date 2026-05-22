@@ -400,7 +400,7 @@ function SectionBody({ section }: { section: GuideSection }) {
 
 function formatLastUpdated(iso: string): string {
   try {
-    return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
   } catch {
     return iso;
   }

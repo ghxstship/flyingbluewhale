@@ -103,12 +103,12 @@ function toCents(input: string): string {
 function formatFromCents(cents: string): string {
   const n = Number(cents) / 100;
   if (!Number.isFinite(n)) return "";
-  return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function formatDisplay(dollars: string): string {
   if (!dollars) return "";
   const n = Number(dollars);
   if (!Number.isFinite(n)) return dollars;
-  return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }

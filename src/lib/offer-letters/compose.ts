@@ -262,8 +262,7 @@ function renderHtml(a: HtmlArgs): string {
 
 function formatShortDate(iso: string): string {
   try {
-    const d = new Date(iso);
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
   } catch {
     return iso;
   }

@@ -76,9 +76,7 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
                     {c.ends_on ? ` → ${fmt.date(c.ends_on)}` : ""}
                   </td>
                   <td className="font-mono text-xs">
-                    {c.spent_cents != null
-                      ? (c.spent_cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" })
-                      : "—"}
+                    {c.spent_cents != null ? fmt.money(c.spent_cents) : "—"}
                   </td>
                   <td>
                     <Badge variant={c.status === "live" ? "success" : c.status === "scheduled" ? "info" : "muted"}>

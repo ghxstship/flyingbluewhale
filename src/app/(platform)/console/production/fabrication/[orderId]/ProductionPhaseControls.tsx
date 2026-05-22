@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { Button } from "@/components/ui/Button";
+import { captureException } from "@/lib/observability";
 import { transitionProductionPhaseAction } from "../actions";
 import type { ProductionPhase } from "@/lib/production-phase";
 
@@ -29,7 +30,7 @@ export function ProductionPhaseControls({
             startTransition(async () => {
               const r = await transitionProductionPhaseAction(orderId, target);
               if ("error" in r) {
-                console.error(r.error);
+                captureException(r.error);
                 alert(r.error);
               }
             });

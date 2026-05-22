@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { Button } from "@/components/ui/Button";
+import { captureException } from "@/lib/observability";
 import { transitionSubscriptionAction } from "../actions";
 import type { SubscriptionState } from "@/lib/subscriptions";
 
@@ -30,7 +31,7 @@ export function SubscriptionStateControls({
             startTransition(async () => {
               const r = await transitionSubscriptionAction(subscriptionId, target, reason);
               if ("error" in r) {
-                console.error(r.error);
+                captureException(r.error);
                 alert(r.error);
               }
             });

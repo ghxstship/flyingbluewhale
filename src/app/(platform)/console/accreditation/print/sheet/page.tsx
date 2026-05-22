@@ -94,7 +94,7 @@ export default async function PrintSheetPage() {
                     </div>
                     {c.qrDataUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={c.qrDataUrl} alt="" className="h-16 w-16" />
+                      <img src={c.qrDataUrl} alt={`QR code — ${c.person_name}`} className="h-16 w-16" />
                     )}
                   </div>
                   <div className="mt-auto flex items-end justify-between text-[8px] text-black/60">

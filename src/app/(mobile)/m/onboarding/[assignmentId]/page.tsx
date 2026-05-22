@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -80,9 +81,9 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
                 <form action={completeStep} className="mt-3 flex justify-end">
                   <input type="hidden" name="assignmentId" value={a.id} />
                   <input type="hidden" name="stepId" value={s.id} />
-                  <button type="submit" className="btn btn-primary btn-sm">
+                  <Button type="submit" size="sm">
                     Mark Done
-                  </button>
+                  </Button>
                 </form>
               )}
               {done && <p className="mt-2 text-xs text-[var(--color-success)]">✓ Completed</p>}
@@ -94,9 +95,9 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
       {requiredDone && a.assignment_phase !== "completed" && (
         <form action={finalizeAssignment} className="mt-6">
           <input type="hidden" name="assignmentId" value={a.id} />
-          <button type="submit" className="btn btn-primary w-full">
+          <Button type="submit" className="w-full">
             Finish Onboarding
-          </button>
+          </Button>
         </form>
       )}
     </div>

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -100,17 +101,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {s.publish_state === "draft" && (
               <form action={publishSurvey}>
                 <input type="hidden" name="id" value={s.id} />
-                <button type="submit" className="btn btn-primary btn-sm">
+                <Button size="sm" type="submit">
                   Publish
-                </button>
+                </Button>
               </form>
             )}
             {s.publish_state === "published" && (
               <form action={closeSurvey}>
                 <input type="hidden" name="id" value={s.id} />
-                <button type="submit" className="btn btn-secondary btn-sm">
+                <Button variant="secondary" size="sm" type="submit">
                   Close
-                </button>
+                </Button>
               </form>
             )}
           </div>
@@ -194,9 +195,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 placeholder="Options (one per line) — only for choice/scale"
                 className="input-base w-full"
               />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <Button variant="secondary" size="sm" type="submit">
                 + Add Question
-              </button>
+              </Button>
             </form>
           )}
         </section>

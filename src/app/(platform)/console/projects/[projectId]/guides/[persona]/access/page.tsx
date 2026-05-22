@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { getProject } from "@/lib/db/projects";
 import { PERSONA_TIERS } from "@/lib/db/guides";
@@ -63,9 +63,9 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
               </code>
             </p>
             <div className="pt-2">
-              <Link href={`/console/projects/${projectId}/guides/${persona}`} className="btn btn-secondary btn-sm">
+              <Button href={`/console/projects/${projectId}/guides/${persona}`} variant="secondary" size="sm">
                 Edit guide content
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

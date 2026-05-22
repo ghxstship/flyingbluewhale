@@ -93,9 +93,9 @@ export default function Home() {
             <Button href="/contact" size="lg" variant="secondary">
               Book a Walkthrough
             </Button>
-            <Link href="/docs" className="btn btn-ghost btn-lg">
+            <Button href="/docs" variant="ghost" size="lg">
               Read the Docs →
-            </Link>
+            </Button>
           </div>
         </ScrollReveal>
 

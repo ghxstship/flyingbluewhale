@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 
 export default function GhxstshipNotFound() {
   return (
@@ -9,15 +9,15 @@ export default function GhxstshipNotFound() {
         The page doesn&apos;t exist or has moved. Try one of these.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Link href="/ghxstship" className="btn">
+        <Button href="/ghxstship">
           GHXSTSHIP
-        </Link>
-        <Link href="/ghxstship/services" className="btn btn-secondary">
+        </Button>
+        <Button href="/ghxstship/services" variant="secondary">
           Services
-        </Link>
-        <Link href="/ghxstship/contact" className="btn btn-ghost">
+        </Button>
+        <Button href="/ghxstship/contact" variant="ghost">
           Contact
-        </Link>
+        </Button>
       </div>
     </main>
   );

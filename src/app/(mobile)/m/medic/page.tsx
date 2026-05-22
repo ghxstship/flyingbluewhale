@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -72,9 +72,9 @@ export default async function MobileMedicPage() {
           : `${rows.length} in last 24h${open ? ` · ${open} open` : ""}`}
       </p>
 
-      <Link href="/m/medic/new" className="btn btn-primary mt-5 w-full">
+      <Button href="/m/medic/new" className="mt-5 w-full">
         + New Encounter
-      </Link>
+      </Button>
 
       <ul className="mt-6 space-y-2">
         {rows.length === 0 ? (

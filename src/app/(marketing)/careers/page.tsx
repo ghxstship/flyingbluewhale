@@ -1,8 +1,8 @@
 // Static page — pre-render at build, no streaming Suspense on client nav.
 
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Compass, Globe2, Heart, Layers, Rocket, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
@@ -161,9 +161,9 @@ export default function CareersPage() {
               aligned with what we&apos;re building, we read every thoughtful intro that comes through the contact form.
             </p>
             <div className="mt-5">
-              <Link href="/contact" className="btn btn-primary">
+              <Button href="/contact">
                 Send a thoughtful intro
-              </Link>
+              </Button>
             </div>
           </div>
         ) : (
@@ -178,9 +178,9 @@ export default function CareersPage() {
                     <h3 className="hed-lg mt-3">{r.title}</h3>
                     <p className="mt-2 text-sm text-[var(--text-secondary)]">{r.body}</p>
                   </div>
-                  <Link href="/contact" className="btn btn-secondary btn-sm shrink-0">
+                  <Button href="/contact" variant="secondary" size="sm" className="shrink-0">
                     Apply
-                  </Link>
+                  </Button>
                 </div>
               </li>
             ))}

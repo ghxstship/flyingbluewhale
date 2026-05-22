@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { getProject } from "@/lib/db/projects";
 import { getGuideByPersona, PERSONA_TIERS } from "@/lib/db/guides";
@@ -66,9 +66,9 @@ export default async function GuideEditorPage({ params }: { params: Promise<{ pr
         subtitle={`Tier ${tierInfo.tier} · ${tierInfo.classification}`}
         action={
           !isPublicPersona(persona) ? (
-            <Link href={`/console/projects/${projectId}/guides/${persona}/access`} className="btn btn-secondary btn-sm">
+            <Button href={`/console/projects/${projectId}/guides/${persona}/access`} variant="secondary" size="sm">
               Manage access codes
-            </Link>
+            </Button>
           ) : undefined
         }
       />

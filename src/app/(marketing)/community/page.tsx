@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Button } from "@/components/ui/Button";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { COMMUNITY_LIST } from "@/lib/community";
@@ -93,12 +94,12 @@ export default function CommunityPage() {
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row md:justify-end">
-            <Link href="/contact?topic=community-story" className="btn btn-primary btn-md">
+            <Button href="/contact?topic=community-story">
               Pitch a story
-            </Link>
-            <Link href="/signup" className="btn btn-ghost btn-md">
+            </Button>
+            <Button href="/signup" variant="ghost">
               Start free
-            </Link>
+            </Button>
           </div>
         </div>
       </section>

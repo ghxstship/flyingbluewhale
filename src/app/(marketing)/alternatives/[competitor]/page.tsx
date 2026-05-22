@@ -136,9 +136,9 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
-            <Link href={`/compare/${c.slug}`} className="btn btn-secondary">
+            <Button href={`/compare/${c.slug}`} variant="secondary">
               Head-to-head comparison →
-            </Link>
+            </Button>
           </div>
         </div>
       </section>

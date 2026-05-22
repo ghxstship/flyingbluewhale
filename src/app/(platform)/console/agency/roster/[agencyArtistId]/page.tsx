@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
@@ -73,9 +74,9 @@ export default async function Page({ params }: { params: Promise<{ agencyArtistI
             }}
           >
             <input type="hidden" name="agency_artist_id" value={e.id} />
-            <button type="submit" className="btn btn-ghost text-xs text-[var(--color-error)]">
+            <Button type="submit" variant="danger" size="sm">
               End relationship
-            </button>
+            </Button>
           </form>
         )}
       </div>

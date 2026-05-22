@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { revokeLinkAction } from "./actions";
 import { LinkAssetForm } from "./LinkAssetForm";
 import { requireSession } from "@/lib/auth";
@@ -103,9 +104,9 @@ export default async function AssetLinkerPage() {
                           {!l.revoked_at && (
                             <form action={revokeLinkAction}>
                               <input type="hidden" name="id" value={l.id} />
-                              <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                              <Button type="submit" variant="danger" size="sm">
                                 Revoke
-                              </button>
+                              </Button>
                             </form>
                           )}
                         </td>

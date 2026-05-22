@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/Button";
 import { quickFileIncident } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -37,9 +38,9 @@ export default function QuickFilePage() {
             className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-3 text-base"
           />
         </label>
-        <button type="submit" className="btn btn-primary w-full">
+        <Button type="submit" className="w-full">
           File Now
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -98,9 +99,9 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
               placeholder="Why this person earned it (optional)"
               className="input-base w-full"
             />
-            <button type="submit" className="btn btn-primary btn-sm">
+            <Button size="sm" type="submit">
               Award
-            </button>
+            </Button>
           </form>
         </section>
 

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -72,9 +72,9 @@ export default async function MobileShiftSwapPage() {
               title="No Upcoming Shifts to Swap"
               description="Only shifts you haven't checked into can be swapped. See your roster on the Shift screen."
               action={
-                <Link href="/m/shift" className="btn btn-secondary btn-sm">
+                <Button href="/m/shift" variant="secondary" size="sm">
                   Open shift
-                </Link>
+                </Button>
               }
             />
           </li>
@@ -101,9 +101,9 @@ export default async function MobileShiftSwapPage() {
                   placeholder="Reason for swap…"
                   className="input-base w-full text-sm"
                 />
-                <button type="submit" className="btn btn-primary btn-sm w-full">
+                <Button type="submit" size="sm" className="w-full">
                   Request swap
-                </button>
+                </Button>
               </form>
             </li>
           ))

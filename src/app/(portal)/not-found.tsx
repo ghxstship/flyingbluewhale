@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 
 export default function PortalNotFound() {
   return (
@@ -8,9 +8,9 @@ export default function PortalNotFound() {
       <p className="mt-2 text-sm text-[var(--text-muted)]">
         The project portal you&apos;re looking for doesn&apos;t exist, isn&apos;t published, or the link has expired.
       </p>
-      <Link href="/" className="btn btn-secondary mt-6 inline-block">
+      <Button href="/" variant="secondary" className="mt-6">
         Home
-      </Link>
+      </Button>
     </div>
   );
 }

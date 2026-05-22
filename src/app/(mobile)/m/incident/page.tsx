@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -63,12 +64,12 @@ export default async function MyIncidentsPage() {
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        <Link href="/m/incident/new" className="btn btn-primary btn-sm">
+        <Button href="/m/incident/new" size="sm">
           Quick-file (one field)
-        </Link>
-        <Link href="/m/incidents/new" className="btn btn-secondary btn-sm">
+        </Button>
+        <Button href="/m/incidents/new" variant="secondary" size="sm">
           Full report
-        </Link>
+        </Button>
       </div>
 
       <ul className="mt-5 space-y-3">

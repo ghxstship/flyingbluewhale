@@ -113,9 +113,9 @@ export default async function Page() {
             title="No Vendors Yet"
             description="Author vendors via Procurement → Vendors. Scorecards rank them by PO volume + compliance."
             action={
-              <Link href="/console/procurement/vendors" className="btn btn-secondary btn-sm">
+              <Button href="/console/procurement/vendors" variant="secondary" size="sm">
                 Open vendors
-              </Link>
+              </Button>
             }
           />
         ) : (

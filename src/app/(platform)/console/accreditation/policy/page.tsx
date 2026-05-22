@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Check } from "lucide-react";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
@@ -84,12 +83,12 @@ export default async function Page() {
             description="The matrix derives from accreditation_categories and venue_zones. Author at least one of each before the policy renders."
             action={
               <div className="flex items-center gap-2">
-                <Link href="/console/accreditation/categories/new" className="btn btn-primary btn-sm">
+                <Button href="/console/accreditation/categories/new" size="sm">
                   + New Policy
-                </Link>
-                <Link href="/console/venues" className="btn btn-secondary btn-sm">
+                </Button>
+                <Button href="/console/venues" variant="secondary" size="sm">
                   Open Venues
-                </Link>
+                </Button>
               </div>
             }
           />

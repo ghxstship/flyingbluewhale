@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -134,9 +133,9 @@ export default async function Page() {
               title="No Hospitality Entitlements"
               description="Author sponsor entitlements with 'hospitality' in the title via the Commercial → Sponsors module."
               action={
-                <Link href="/console/commercial/sponsors" className="btn btn-secondary btn-sm">
+                <Button href="/console/commercial/sponsors" variant="secondary" size="sm">
                   Open sponsors
-                </Link>
+                </Button>
               }
             />
           ) : (

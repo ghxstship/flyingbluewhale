@@ -132,9 +132,9 @@ export default function GhxstshipHome() {
             <Button href={paths.servicesRoot()} size="lg" variant="secondary">
               Services Catalog
             </Button>
-            <Link href={paths.pricing()} className="btn btn-ghost btn-lg">
+            <Button href={paths.pricing()} variant="ghost" size="lg">
               Pricing →
-            </Link>
+            </Button>
           </div>
         </section>
 

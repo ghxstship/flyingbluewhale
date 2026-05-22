@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
@@ -46,9 +47,9 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
           {TRANSITIONS.filter((t) => t.value !== task.status).map((t) => (
             <form key={t.value} action={setTaskStatus.bind(null, taskId)}>
               <input type="hidden" name="status" value={t.value} />
-              <button type="submit" className="btn btn-secondary w-full">
+              <Button type="submit" variant="secondary" className="w-full">
                 {t.label}
-              </button>
+              </Button>
             </form>
           ))}
         </div>

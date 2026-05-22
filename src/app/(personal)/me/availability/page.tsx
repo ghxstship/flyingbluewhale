@@ -1,5 +1,6 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { Button } from "@/components/ui/Button";
 import { hasSupabase } from "@/lib/env";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
@@ -87,9 +88,9 @@ export default async function Page() {
                   }}
                 >
                   <input type="hidden" name="slot_id" value={s.id} />
-                  <button type="submit" className="btn btn-ghost text-xs">
+                  <Button type="submit" variant="ghost" size="sm">
                     Remove
-                  </button>
+                  </Button>
                 </form>
               </li>
             ))}

@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import Link from "next/link";
 import { publishAnnouncement, archiveAnnouncement, deleteAnnouncement } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
 
@@ -58,23 +58,23 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-2xl space-y-4">
         <article className="surface p-6 text-sm whitespace-pre-wrap">{a.body}</article>
         <div className="flex flex-wrap gap-2">
-          <Link href={`/console/comms/announcements/${a.id}/edit`} className="btn btn-secondary">
+          <Button href={`/console/comms/announcements/${a.id}/edit`} variant="secondary">
             Edit
-          </Link>
+          </Button>
           {a.publish_state === "draft" && (
             <form action={publishAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
-              <button type="submit" className="btn btn-primary">
+              <Button type="submit">
                 Publish
-              </button>
+              </Button>
             </form>
           )}
           {a.publish_state !== "archived" && (
             <form action={archiveAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
-              <button type="submit" className="btn btn-secondary">
+              <Button variant="secondary" type="submit">
                 Archive
-              </button>
+              </Button>
             </form>
           )}
           <DeleteForm

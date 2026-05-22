@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -61,9 +62,9 @@ export default async function MePage() {
           <h1 className="text-display mt-1 text-3xl">{session.email}</h1>
         </div>
         <form action="/auth/signout" method="post">
-          <button className="btn btn-ghost text-xs" type="submit">
+          <Button type="submit" variant="ghost" size="sm">
             Sign Out
-          </button>
+          </Button>
         </form>
       </div>
 

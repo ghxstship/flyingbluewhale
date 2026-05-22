@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 import { CANONICAL_CTAS } from "@/lib/seo";
 
 /**
@@ -48,9 +48,9 @@ export function StickyCTABar() {
           <span className="text-[var(--text-muted)]">Free for small teams. No card.</span>
         </div>
         <div className="flex items-center gap-2">
-          <Link href={CANONICAL_CTAS.primary.href} className="btn btn-primary btn-sm whitespace-nowrap">
+          <Button href={CANONICAL_CTAS.primary.href} size="sm" className="whitespace-nowrap">
             {CANONICAL_CTAS.primary.label}
-          </Link>
+          </Button>
           <button
             type="button"
             onClick={dismiss}

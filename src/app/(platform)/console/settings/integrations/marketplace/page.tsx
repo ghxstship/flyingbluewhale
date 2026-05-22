@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -117,16 +116,18 @@ export default async function Page() {
                     </div>
                     <div className="mt-4">
                       {c.available ? (
-                        <Link
-                          href={isInstalled ? "/console/settings/integrations" : `/console/settings/integrations`}
-                          className="btn btn-secondary btn-sm w-full"
+                        <Button
+                          href="/console/settings/integrations"
+                          variant="secondary"
+                          size="sm"
+                          className="w-full"
                         >
                           {isInstalled ? "Manage" : "Install"}
-                        </Link>
+                        </Button>
                       ) : (
-                        <button type="button" className="btn btn-secondary btn-sm w-full" disabled>
+                        <Button variant="secondary" size="sm" className="w-full" disabled>
                           Notify me
-                        </button>
+                        </Button>
                       )}
                     </div>
                   </div>

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -54,9 +55,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           p.publish_state === "live" ? (
             <form action={closePoll}>
               <input type="hidden" name="id" value={p.id} />
-              <button type="submit" className="btn btn-secondary">
+              <Button variant="secondary" type="submit">
                 Close Poll
-              </button>
+              </Button>
             </form>
           ) : null
         }

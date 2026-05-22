@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MapPin, Compass } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -68,9 +69,9 @@ export default async function MobileWayfindPage() {
             title="No Venues Yet"
             description="Author venues from Console → Venues. Each venue's zones become the routable points here."
             action={
-              <Link href="/console/venues" className="btn btn-secondary btn-sm">
+              <Button href="/console/venues" variant="secondary" size="sm">
                 Open Venues
-              </Link>
+              </Button>
             }
           />
         </div>

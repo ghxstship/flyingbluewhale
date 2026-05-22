@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -97,9 +98,9 @@ export default async function MobileSettings() {
           <div className="mt-1 text-xs text-[var(--text-muted)]">Used for geo-verified clock in/out.</div>
         </div>
         <form action="/auth/signout" method="post">
-          <button type="submit" className="btn btn-ghost w-full">
+          <Button type="submit" variant="ghost" className="w-full">
             Sign Out
-          </button>
+          </Button>
         </form>
         <div className="text-center text-[10px] text-[var(--text-muted)]">
           <Link href="/" className="font-medium text-[var(--text-muted)]">

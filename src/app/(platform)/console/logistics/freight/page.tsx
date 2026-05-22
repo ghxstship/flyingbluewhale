@@ -127,9 +127,9 @@ export default async function Page() {
               title="No A&D manifests on file"
               description="Customs + bonded warehouse routing flows through ad_manifests. Capture flight refs and carriers as runs land."
               action={
-                <Link href="/console/transport/ad" className="btn btn-secondary btn-sm">
+                <Button href="/console/transport/ad" variant="secondary" size="sm">
                   Open A&D
-                </Link>
+                </Button>
               }
             />
           ) : (

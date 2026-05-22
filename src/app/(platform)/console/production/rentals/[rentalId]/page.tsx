@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDateTime, money } from "@/components/detail/DetailShell";
@@ -52,17 +53,14 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
             {status === "active" && (
               <form action={endRentalNow} className="inline">
                 <input type="hidden" name="id" value={row.id} />
-                <button
-                  type="submit"
-                  className="rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-                >
+                <Button type="submit" variant="secondary" size="sm">
                   End rental now
-                </button>
+                </Button>
               </form>
             )}
-            <a href={`/console/production/rentals/${row.id}/edit`} className="btn btn-secondary btn-sm">
+            <Button href={`/console/production/rentals/${row.id}/edit`} variant="secondary" size="sm">
               Edit
-            </a>
+            </Button>
           </div>
         }
       />
@@ -93,9 +91,9 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
             <Badge variant="muted">Lifecycle</Badge>
             <form action={deleteRental}>
               <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
+              <Button type="submit" variant="danger" size="sm">
                 Delete rental
-              </button>
+              </Button>
             </form>
           </div>
         </section>

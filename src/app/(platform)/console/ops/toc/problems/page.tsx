@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
@@ -101,9 +100,9 @@ export default async function Page() {
           emptyLabel="No problems registered"
           emptyDescription="ITIL problem management — record root-cause investigations triggered by incidents. Link incidents and the change(s) that resolve them."
           emptyAction={
-            <Link href="/console/ops/toc/problems/new" className="btn btn-primary btn-sm">
+            <Button href="/console/ops/toc/problems/new" size="sm">
               + New Problem
-            </Link>
+            </Button>
           }
           columns={[
             {

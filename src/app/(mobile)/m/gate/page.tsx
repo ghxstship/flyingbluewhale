@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { QrCode } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -59,10 +59,10 @@ export default async function MobileGatePage() {
         {rows.length === 0 ? "No scans yet today." : `${rows.length} today · ${granted} granted · ${denied} denied`}
       </p>
 
-      <Link href="/m/gate/scan" className="btn btn-primary mt-5 flex w-full items-center justify-center gap-2">
+      <Button href="/m/gate/scan" className="mt-5 flex w-full items-center justify-center gap-2">
         <QrCode size={18} />
         Open scanner
-      </Link>
+      </Button>
 
       <section className="mt-6">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Recent Scans</h2>

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Direct recovery-token landing. Supabase normally bounces password-reset
@@ -30,9 +31,9 @@ export default async function Page({ params }: { params: Promise<{ token: string
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
         Reset links expire after 24 hours. Request a fresh one to continue.
       </p>
-      <a href="/forgot-password" className="btn btn-primary mt-4 w-full">
+      <Button href="/forgot-password" className="mt-4 w-full">
         Request a new reset link
-      </a>
+      </Button>
     </AuthShell>
   );
 }

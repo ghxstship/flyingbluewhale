@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -124,15 +124,17 @@ export async function PortalPrivacyPanel({
             correction, or erasure of personal data we process about you.
           </p>
           <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <Link href="/api/v1/me/export" className="btn btn-primary btn-sm w-full justify-center">
+            <Button href="/api/v1/me/export" size="sm" className="w-full justify-center">
               Download my data (JSON)
-            </Link>
-            <Link
+            </Button>
+            <Button
               href={`mailto:privacy@atlvs.pro?subject=DSAR%20—%20${persona}%20${slug}`}
-              className="btn btn-secondary btn-sm w-full justify-center"
+              variant="secondary"
+              size="sm"
+              className="w-full justify-center"
             >
               Email a DSAR
-            </Link>
+            </Button>
           </div>
         </section>
 

@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 type Action = "check_in" | "check_out" | "break_start" | "break_end";
 
@@ -76,53 +77,47 @@ export function CheckInControls({
   return (
     <div className="grid grid-cols-2 gap-2">
       {attendance === "scheduled" && (
-        <button
-          type="button"
-          className="btn btn-primary col-span-2"
+        <Button
+          className="col-span-2"
           disabled={pending}
           onClick={() => submit("check_in", "Checked in")}
         >
           {pending ? "Working…" : "Clock in"}
-        </button>
+        </Button>
       )}
       {attendance === "checked_in" && (
         <>
-          <button
-            type="button"
-            className="btn btn-secondary"
+          <Button
+            variant="secondary"
             disabled={pending}
             onClick={() => submit("break_start", "Break started")}
           >
             Start break
-          </button>
-          <button
-            type="button"
-            className="btn btn-danger"
+          </Button>
+          <Button
+            variant="danger"
             disabled={pending}
             onClick={() => submit("check_out", "Clocked out")}
           >
             Clock out
-          </button>
+          </Button>
         </>
       )}
       {attendance === "on_break" && (
         <>
-          <button
-            type="button"
-            className="btn btn-primary"
+          <Button
             disabled={pending}
             onClick={() => submit("break_end", "Back from break")}
           >
             End break
-          </button>
-          <button
-            type="button"
-            className="btn btn-danger"
+          </Button>
+          <Button
+            variant="danger"
             disabled={pending}
             onClick={() => submit("check_out", "Clocked out")}
           >
             Clock out
-          </button>
+          </Button>
         </>
       )}
     </div>

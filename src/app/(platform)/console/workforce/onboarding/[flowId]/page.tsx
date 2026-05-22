@@ -145,9 +145,9 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                 <option value="course">Course</option>
                 <option value="form">Form</option>
               </select>
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <Button variant="secondary" size="sm" type="submit">
                 + Add Step
-              </button>
+              </Button>
             </form>
           )}
         </section>
@@ -192,9 +192,9 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                     </option>
                   ))}
               </select>
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <Button variant="secondary" size="sm" type="submit">
                 + Assign
-              </button>
+              </Button>
             </form>
           )}
         </section>

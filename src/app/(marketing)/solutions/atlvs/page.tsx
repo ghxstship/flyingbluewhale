@@ -1,7 +1,6 @@
 // ISR — regenerate static HTML every 5 min.
 export const revalidate = 300;
 
-import Link from "next/link";
 import type { Metadata } from "next";
 import {
   CheckCircle2,
@@ -67,9 +66,9 @@ export default function ATLVSPage() {
           <Button href="/contact" variant="secondary">
             Book a Walkthrough
           </Button>
-          <Link href="/pricing" className="btn btn-ghost">
+          <Button href="/pricing" variant="ghost">
             Pricing →
-          </Link>
+          </Button>
         </div>
       </section>
 

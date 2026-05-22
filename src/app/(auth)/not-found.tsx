@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export default function AuthNotFound() {
@@ -14,9 +13,9 @@ export default function AuthNotFound() {
         <Button href="/signup" variant="secondary">
           Create Account
         </Button>
-        <Link href="/forgot-password" className="btn btn-ghost">
+        <Button href="/forgot-password" variant="ghost">
           Reset Password
-        </Link>
+        </Button>
       </div>
     </main>
   );

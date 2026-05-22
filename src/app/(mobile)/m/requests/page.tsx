@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -41,9 +42,9 @@ export default async function MobileRequests() {
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
       <div className="mt-1 flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Service Requests</h1>
-        <Link href="/m/requests/new" className="btn btn-primary btn-sm">
+        <Button href="/m/requests/new" size="sm">
           + Open
-        </Link>
+        </Button>
       </div>
       <p className="mt-1 text-xs text-[var(--text-muted)]">Active requests across the org.</p>
 

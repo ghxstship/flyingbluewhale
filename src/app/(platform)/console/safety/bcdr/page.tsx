@@ -104,9 +104,9 @@ export default async function Page() {
                   title="No Crisis Runbooks Yet"
                   description="Author crisis-tagged playbooks (evac, weather hold, IT outage) — they appear here."
                   action={
-                    <Link href="/console/safety/playbooks/new" className="btn btn-secondary btn-sm">
+                    <Button href="/console/safety/playbooks/new" variant="secondary" size="sm">
                       + New Runbook
-                    </Link>
+                    </Button>
                   }
                 />
               </li>
@@ -139,9 +139,9 @@ export default async function Page() {
                   title="No Exercises Scheduled"
                   description="TTX, drills, full-scale exercises live in Programs → Readiness."
                   action={
-                    <Link href="/console/programs/readiness" className="btn btn-secondary btn-sm">
+                    <Button href="/console/programs/readiness" variant="secondary" size="sm">
                       Open Readiness
-                    </Link>
+                    </Button>
                   }
                 />
               </li>

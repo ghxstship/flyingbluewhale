@@ -158,9 +158,9 @@ export default async function Page() {
                   title="No Medical Playbooks Authored"
                   description="Author safety playbooks tagged with 'medical' to surface them here."
                   action={
-                    <Link href="/console/safety/playbooks/new" className="btn btn-secondary btn-sm">
+                    <Button href="/console/safety/playbooks/new" variant="secondary" size="sm">
                       + New Plan
-                    </Link>
+                    </Button>
                   }
                 />
               </li>

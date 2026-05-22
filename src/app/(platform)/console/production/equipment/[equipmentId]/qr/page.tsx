@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import QRCode from "qrcode";
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
@@ -40,13 +39,13 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             <Button href={`/console/production/equipment/${equipmentId}`} variant="ghost" size="sm">
               Back
             </Button>
-            <Link
+            <a
               href={dataUrl}
               download={`equipment-${assetTag ?? equipmentId}.png`}
               className="btn btn-secondary btn-sm"
             >
               Download PNG
-            </Link>
+            </a>
             <span className="text-xs text-[var(--text-muted)]">⌘P to print</span>
           </div>
         }

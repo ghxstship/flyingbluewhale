@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -74,9 +75,9 @@ export default async function MobileIncidentPage() {
           : `${rows.length} in last 30 days · ${open} open${critical ? ` · ${critical} critical` : ""}`}
       </p>
 
-      <Link href="/m/incidents/new" className="btn btn-primary mt-5 w-full">
+      <Button href="/m/incidents/new" className="mt-5 w-full">
         + Report incident
-      </Link>
+      </Button>
 
       <ul className="mt-6 space-y-2">
         {rows.length === 0 ? (

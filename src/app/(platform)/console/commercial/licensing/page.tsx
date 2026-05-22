@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -85,9 +84,9 @@ export default async function Page() {
             title="No Trademarks Registered"
             description="Track marks, registration numbers, jurisdictions, and renewal dates here. Royalty + merchandise revenue tracking lives alongside Sponsors."
             action={
-              <Link href="/console/legal/ip" className="btn btn-secondary btn-sm">
+              <Button href="/console/legal/ip" variant="secondary" size="sm">
                 Open Legal · IP
-              </Link>
+              </Button>
             }
           />
         ) : (

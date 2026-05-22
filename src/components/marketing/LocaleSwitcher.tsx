@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Globe, Check, ChevronDown } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Button } from "@/components/ui/Button";
 import { SUPPORTED_LOCALES, isSupportedLocale, type Locale, DEFAULT_LOCALE } from "@/lib/i18n/config";
 import { setLocalePreferences } from "@/lib/i18n/actions";
 import { track } from "@/lib/marketing-telemetry";
@@ -75,16 +76,18 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <button
+        <Button
           type="button"
-          className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
+          variant="ghost"
+          size="sm"
+          className="inline-flex items-center gap-1.5"
           aria-label="Change language"
           disabled={isPending}
         >
           <Globe size={14} aria-hidden="true" />
           <span className="hidden lg:inline">{active.toUpperCase()}</span>
           <ChevronDown size={12} aria-hidden="true" />
-        </button>
+        </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content

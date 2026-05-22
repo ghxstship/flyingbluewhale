@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export default function MarketingNotFound() {
@@ -17,9 +16,9 @@ export default function MarketingNotFound() {
         <Button href="/pricing" variant="secondary">
           Pricing
         </Button>
-        <Link href="/contact" className="btn btn-ghost">
+        <Button href="/contact" variant="ghost">
           Contact
-        </Link>
+        </Button>
       </div>
     </main>
   );

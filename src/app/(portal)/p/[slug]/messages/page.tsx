@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PortalRail } from "@/components/Shell";
 import { portalNav } from "@/lib/nav";
@@ -102,15 +102,15 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
                     </div>
                     <div className="mt-3 flex justify-end">
                       {r.chat_room_id ? (
-                        <Link href={`/m/inbox/${r.chat_room_id}`} className="btn btn-primary btn-sm">
+                        <Button href={`/m/inbox/${r.chat_room_id}`} size="sm">
                           Open Thread
-                        </Link>
+                        </Button>
                       ) : (
                         <form action={`/p/${slug}/messages/start`} method="post">
                           <input type="hidden" name="assignment_id" value={r.id} />
-                          <button type="submit" className="btn btn-primary btn-sm">
+                          <Button type="submit" size="sm">
                             Start Thread
-                          </button>
+                          </Button>
                         </form>
                       )}
                     </div>

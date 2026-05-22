@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -51,9 +51,9 @@ export default async function MobileDocsPage() {
       </p>
 
       <div className="mt-4 flex justify-end">
-        <Link href="/m/docs/new" className="btn btn-primary btn-sm">
+        <Button href="/m/docs/new" size="sm">
           + Upload
-        </Link>
+        </Button>
       </div>
 
       <ul className="mt-5 space-y-2">

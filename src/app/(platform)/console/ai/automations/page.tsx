@@ -96,9 +96,9 @@ export default async function Page() {
             title="No Automations Yet"
             description="Author AI-driven automations triggered manually, on a cron schedule, by webhooks, or by domain events."
             action={
-              <Link href="/console/ai/automations/new" className="btn btn-primary btn-sm">
+              <Button href="/console/ai/automations/new" size="sm">
                 + New Automation
-              </Link>
+              </Button>
             }
           />
         ) : (

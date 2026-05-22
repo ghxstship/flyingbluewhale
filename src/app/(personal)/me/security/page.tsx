@@ -101,9 +101,9 @@ export default async function SecurityPage() {
             <div className="mt-1 text-xs text-[var(--text-muted)]">Sign out of all other devices</div>
           </div>
           <form action="/auth/signout" method="post">
-            <button type="submit" className="btn btn-danger btn-sm">
+            <Button type="submit" variant="danger" size="sm">
               Sign out everywhere
-            </button>
+            </Button>
           </form>
         </div>
         <div className="flex items-center justify-between p-5">

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -59,16 +60,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           z.lifecycle_state === "active" ? (
             <form action={archiveZone}>
               <input type="hidden" name="id" value={z.id} />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <Button variant="secondary" size="sm" type="submit">
                 Archive
-              </button>
+              </Button>
             </form>
           ) : (
             <form action={reactivateZone}>
               <input type="hidden" name="id" value={z.id} />
-              <button type="submit" className="btn btn-primary btn-sm">
+              <Button size="sm" type="submit">
                 Reactivate
-              </button>
+              </Button>
             </form>
           )
         }

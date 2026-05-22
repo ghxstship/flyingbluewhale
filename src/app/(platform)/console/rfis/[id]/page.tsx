@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { ConversationPanel } from "@/components/ConversationPanel";
 import { Presence } from "@/components/collab/Presence";
 import { getPresenceUser } from "@/components/collab/getPresenceUser";
@@ -53,9 +54,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </a>
             {rfi.status === "answered" && (
               <form action={closeRfi.bind(null, id)}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <Button variant="secondary" size="sm" type="submit">
                   Close RFI
-                </button>
+                </Button>
               </form>
             )}
           </div>
@@ -90,9 +91,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   className={INPUT}
                 />
                 <div className="flex justify-end">
-                  <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+                  <Button variant="secondary" size="sm" type="submit">
                     Post answer
-                  </button>
+                  </Button>
                 </div>
               </form>
             )

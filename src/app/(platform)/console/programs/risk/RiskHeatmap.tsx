@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 import { ChartShell } from "@/components/charts/ChartShell";
 import type { RiskLikelihood, RiskImpact, RiskStatus } from "@/lib/supabase/types";
 
@@ -106,13 +107,9 @@ export function RiskHeatmap({
                 {pretty(open.likelihood)} × {pretty(open.impact)} — {open.risks.length} risk
                 {open.risks.length === 1 ? "" : "s"}
               </h4>
-              <button
-                type="button"
-                onClick={() => setOpen(null)}
-                className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-              >
+              <Button variant="ghost" size="sm" onClick={() => setOpen(null)}>
                 Close
-              </button>
+              </Button>
             </div>
             <ul className="space-y-1">
               {open.risks.map((r) => (

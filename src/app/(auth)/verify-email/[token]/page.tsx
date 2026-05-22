@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Direct email-confirmation landing. Same pattern as /magic-link/[token] —
@@ -28,9 +28,9 @@ export default async function Page({ params }: { params: Promise<{ token: string
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
         Verification links expire after 24 hours. Request a fresh one from the verify-email page.
       </p>
-      <Link href="/verify-email" className="btn btn-primary mt-4 w-full">
+      <Button href="/verify-email" className="mt-4 w-full">
         Resend verification email
-      </Link>
+      </Button>
     </AuthShell>
   );
 }

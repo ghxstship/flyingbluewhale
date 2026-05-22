@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
@@ -107,9 +106,9 @@ export default async function Page() {
           emptyLabel="No change records"
           emptyDescription="ITIL change management — author records for non-trivial changes during live ops (rigging swap, generator hot-swap, software patch on the timing box). Each record carries risk, impact, planned window, and a backout plan."
           emptyAction={
-            <Link href="/console/ops/toc/changes/new" className="btn btn-primary btn-sm">
+            <Button href="/console/ops/toc/changes/new" size="sm">
               + New Change
-            </Link>
+            </Button>
           }
           columns={[
             {

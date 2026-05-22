@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -74,9 +75,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <form action={toggleActive}>
               <input type="hidden" name="id" value={a.id} />
               <input type="hidden" name="next" value={a.active ? "false" : "true"} />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <Button variant="secondary" size="sm" type="submit">
                 {a.active ? "Deactivate" : "Reactivate"}
-              </button>
+              </Button>
             </form>
             <DeleteForm
               action={deleteAssignment.bind(null, a.id)}

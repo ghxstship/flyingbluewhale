@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -126,9 +127,9 @@ export default async function MobileKudosPage() {
               className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
             />
           </label>
-          <button type="submit" className="btn btn-primary w-full">
+          <Button type="submit" className="w-full">
             Send
-          </button>
+          </Button>
         </form>
       </details>
 

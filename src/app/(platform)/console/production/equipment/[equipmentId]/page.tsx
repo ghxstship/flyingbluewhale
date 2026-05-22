@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 import * as React from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -71,12 +72,12 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                 </button>
               </form>
             ))}
-            <a href={`/console/production/equipment/${row.id}/qr`} className="btn btn-ghost btn-sm">
+            <Button href={`/console/production/equipment/${row.id}/qr`} variant="ghost" size="sm">
               QR
-            </a>
-            <a href={`/console/production/equipment/${row.id}/edit`} className="btn btn-secondary btn-sm">
+            </Button>
+            <Button href={`/console/production/equipment/${row.id}/edit`} variant="secondary" size="sm">
               Edit
-            </a>
+            </Button>
           </div>
         }
       />
@@ -102,9 +103,9 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             <Badge variant="muted">Lifecycle</Badge>
             <form action={deleteEquipment}>
               <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
+              <Button type="submit" variant="danger" size="sm">
                 Retire & remove
-              </button>
+              </Button>
             </form>
           </div>
         </section>

@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
@@ -31,9 +31,9 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
         ]}
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/proposals/${proposal.id}/edit`} className="btn btn-secondary btn-sm">
+            <Button href={`/console/proposals/${proposal.id}/edit`} variant="secondary" size="sm">
               Edit Document
-            </Link>
+            </Button>
             <ProposalStatusControls id={proposal.id} status={proposal.status} />
           </div>
         }

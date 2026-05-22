@@ -215,14 +215,15 @@ export function ProposalEditor({
                   </div>
                   <div className="mt-0.5 truncate text-sm">{describeBlock(item.block)}</div>
                 </div>
-                <button
+                <Button
                   type="button"
+                  variant="danger"
+                  size="icon"
                   onClick={() => removeBlock(item.block._dragId)}
-                  className="btn btn-ghost btn-sm text-[var(--color-error)]"
                   aria-label="Remove"
                 >
                   <Trash2 size={14} />
-                </button>
+                </Button>
               </div>
             )}
           />

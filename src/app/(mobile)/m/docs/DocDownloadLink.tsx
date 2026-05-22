@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { signDocumentUrl } from "./actions";
+import { Button } from "@/components/ui/Button";
 
 /** Renders a "Download" button that calls the server action to mint a
  * 5-min signed URL and opens it. Used over a plain `<a>` so we never
@@ -24,8 +25,8 @@ export function DocDownloadLink({ docId }: { docId: string }) {
     });
   };
   return (
-    <button type="button" className="btn btn-secondary btn-sm" disabled={pending} onClick={click}>
+    <Button type="button" variant="secondary" size="sm" disabled={pending} onClick={click}>
       {pending ? "Opening…" : "Download"}
-    </button>
+    </Button>
   );
 }

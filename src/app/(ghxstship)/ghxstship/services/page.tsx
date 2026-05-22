@@ -79,9 +79,9 @@ export default function ServicesHub() {
                       </h2>
                       <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">{c.definition}</p>
                     </div>
-                    <Link href={paths.classDetail(c.slug)} className="btn btn-secondary btn-sm">
+                    <Button href={paths.classDetail(c.slug)} variant="secondary" size="sm">
                       {items.length} services <ArrowRight className="h-3 w-3" />
-                    </Link>
+                    </Button>
                   </div>
                   <ul className="grid gap-px bg-[var(--border-color)] sm:grid-cols-2 lg:grid-cols-3">
                     {items.map((s) => (

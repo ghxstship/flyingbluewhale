@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 import { FileDown } from "lucide-react";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
@@ -177,14 +178,16 @@ export default async function GuidePage({
         title={guide.title}
         subtitle={guide.subtitle ?? undefined}
         action={
-          <Link
+          <Button
             href={`/api/v1/guides/${guide.id}/pdf`}
-            className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
+            variant="ghost"
+            size="sm"
+            className="inline-flex items-center gap-1.5"
             aria-label="Download this guide as a PDF"
           >
             <FileDown size={14} aria-hidden="true" />
             Download PDF
-          </Link>
+          </Button>
         }
       />
       <div className="page-content max-w-4xl">

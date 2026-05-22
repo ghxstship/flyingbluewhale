@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -51,9 +51,9 @@ export default async function SafeguardingPage() {
       </p>
 
       <div className="mt-5">
-        <Link href="/console/safety/safeguarding/new" className="btn btn-danger w-full">
+        <Button href="/console/safety/safeguarding/new" variant="danger" className="w-full">
           File new report
-        </Link>
+        </Button>
         <p className="mt-2 text-[10px] text-[var(--text-muted)]">
           The form is currently desktop-only. Mobile-native intake is on the roadmap.
         </p>

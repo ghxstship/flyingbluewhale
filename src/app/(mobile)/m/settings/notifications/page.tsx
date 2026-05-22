@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { savePreferences } from "./actions";
+import { Button } from "@/components/ui/Button";
 
 export const dynamic = "force-dynamic";
 
@@ -94,9 +95,9 @@ export default async function NotifPrefsPage() {
           </table>
         </div>
 
-        <button type="submit" className="btn btn-primary w-full">
+        <Button type="submit" className="w-full">
           Save Preferences
-        </button>
+        </Button>
       </form>
     </div>
   );

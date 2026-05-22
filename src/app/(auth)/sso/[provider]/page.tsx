@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
 
 const SUPPORTED_PROVIDERS = ["google", "github", "azure", "apple", "linkedin_oidc"] as const;
 type SupportedProvider = (typeof SUPPORTED_PROVIDERS)[number];
@@ -50,9 +51,9 @@ export default async function Page({
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
         Make sure the provider is enabled for this workspace, or sign in with email instead.
       </p>
-      <a href="/login" className="btn btn-primary mt-4 w-full">
+      <Button href="/login" className="mt-4 w-full">
         Back to sign in
-      </a>
+      </Button>
     </AuthShell>
   );
 }

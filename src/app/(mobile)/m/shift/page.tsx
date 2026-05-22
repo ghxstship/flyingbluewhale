@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -139,12 +140,12 @@ export default async function MobileShiftPage() {
       )}
 
       <div className="mt-8 grid grid-cols-2 gap-2">
-        <Link href="/m/clock" className="btn btn-primary">
+        <Button href="/m/clock">
           Check in
-        </Link>
-        <Link href="/m/shift/swap" className="btn btn-secondary">
+        </Button>
+        <Button href="/m/shift/swap" variant="secondary">
           Swap shift
-        </Link>
+        </Button>
       </div>
     </div>
   );

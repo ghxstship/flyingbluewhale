@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 import { CANONICAL_CTAS } from "@/lib/seo";
 
 export function CTASection({
@@ -26,12 +26,12 @@ export function CTASection({
         <h2 className="hed-xl">{title}</h2>
         <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">{subtitle}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link href={primaryHref} className="btn btn-primary">
+          <Button href={primaryHref}>
             {primaryLabel}
-          </Link>
-          <Link href={secondaryHref} className="btn btn-secondary">
+          </Button>
+          <Button href={secondaryHref} variant="secondary">
             {secondaryLabel}
-          </Link>
+          </Button>
         </div>
       </div>
     </section>

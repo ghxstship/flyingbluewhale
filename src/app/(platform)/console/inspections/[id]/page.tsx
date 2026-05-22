@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { ConversationPanel } from "@/components/ConversationPanel";
@@ -107,12 +108,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <div className="mt-2 flex gap-1.5">
                       {(["pass", "fail", "na"] as const).map((r) => (
                         <form key={r} action={setInspectionItemResult.bind(null, id, it.id, r)}>
-                          <button
-                            className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
-                            type="submit"
-                          >
+                          <Button type="submit" variant="secondary" size="sm">
                             {r.toUpperCase()}
-                          </button>
+                          </Button>
                         </form>
                       ))}
                     </div>

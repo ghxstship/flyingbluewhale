@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -60,9 +60,9 @@ export default async function MobileGuardPage() {
               title="No Assigned Tours"
               description="Patrol routes appear here when a supervisor assigns you. See all tours in Safety → Guard tours."
               action={
-                <Link href="/console/safety/guard-tours" className="btn btn-secondary btn-sm">
+                <Button href="/console/safety/guard-tours" variant="secondary" size="sm">
                   Open guard tours
-                </Link>
+                </Button>
               }
             />
           </li>

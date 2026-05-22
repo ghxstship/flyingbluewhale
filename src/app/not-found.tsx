@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 
 export default function NotFound() {
   return (
@@ -9,12 +9,12 @@ export default function NotFound() {
         The page you&apos;re looking for doesn&apos;t exist, or the link has expired.
       </p>
       <div className="mt-6 flex justify-center gap-2">
-        <Link href="/" className="btn btn-primary">
+        <Button href="/">
           Home
-        </Link>
-        <Link href="/contact" className="btn btn-secondary">
+        </Button>
+        <Button href="/contact" variant="secondary">
           Contact Us
-        </Link>
+        </Button>
       </div>
     </div>
   );

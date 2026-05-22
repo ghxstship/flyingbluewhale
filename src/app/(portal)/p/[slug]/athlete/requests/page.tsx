@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -87,9 +87,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           { label: "Requests" },
         ]}
         action={
-          <Link href={`/m/requests/new`} className="btn btn-primary btn-sm">
+          <Button href="/m/requests/new" size="sm">
             + New Request
-          </Link>
+          </Button>
         }
       />
       <div className="page-content space-y-5">

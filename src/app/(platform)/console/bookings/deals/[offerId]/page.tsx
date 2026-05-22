@@ -218,9 +218,9 @@ async function CoProSection({ offerId }: { offerId: string }) {
               >
                 <input type="hidden" name="partnership_id" value={r.id} />
                 <input type="hidden" name="offer_id" value={offerId} />
-                <button type="submit" className="btn btn-ghost text-xs">
+                <Button type="submit" variant="ghost" size="sm">
                   Remove
-                </button>
+                </Button>
               </form>
             </li>
           ))}

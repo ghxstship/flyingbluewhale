@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { Button } from "@/components/ui/Button";
 import { PhaseBlock } from "./PhaseBlock";
 
 function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
@@ -84,9 +84,9 @@ function BlockSwitch({
     case "cta":
       return (
         <div className="mx-auto my-6 max-w-2xl text-center">
-          <Link href={block.href} className={`btn ${block.variant === "secondary" ? "btn-secondary" : "btn-primary"}`}>
+          <Button href={block.href} variant={block.variant === "secondary" ? "secondary" : "primary"}>
             {block.label}
-          </Link>
+          </Button>
         </div>
       );
     case "spacer":

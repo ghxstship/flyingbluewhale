@@ -1,6 +1,7 @@
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { uploadPersonalDoc } from "../actions";
+import { Button } from "@/components/ui/Button";
 
 export const dynamic = "force-dynamic";
 
@@ -47,9 +48,9 @@ export default async function NewDocPage() {
           File
           <input type="file" name="file" required accept="image/*,.pdf,.doc,.docx" className="mt-1 w-full text-sm" />
         </label>
-        <button type="submit" className="btn btn-primary w-full">
+        <Button type="submit" className="w-full">
           Upload
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -103,9 +102,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         }
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/projects/${projectId}/advancing/assignments`} className="btn btn-ghost btn-sm">
+            <Button href={`/console/projects/${projectId}/advancing/assignments`} variant="ghost" size="sm">
               Back
-            </Link>
+            </Button>
             <DeleteForm
               action={deleteAssignment.bind(null, projectId, d.id)}
               confirm="Cancel this assignment? The assignee will no longer see it on their advancing surface."

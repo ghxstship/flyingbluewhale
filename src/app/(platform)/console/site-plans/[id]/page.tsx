@@ -682,13 +682,9 @@ function DeleteFormBtn({
     <form action={wrapped} className="inline">
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="sheet_id" value={sheetId} />
-      <button
-        type="submit"
-        className="text-[11px] font-medium text-[var(--text-muted)] hover:text-[var(--color-error)]"
-        aria-label="Delete"
-      >
+      <Button type="submit" variant="ghost" size="icon" aria-label="Delete">
         ×
-      </button>
+      </Button>
     </form>
   );
 }

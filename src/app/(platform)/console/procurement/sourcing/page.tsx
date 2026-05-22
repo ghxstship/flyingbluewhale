@@ -108,9 +108,9 @@ export default async function Page() {
               title="No Requisitions"
               description="Sourcing pulls from open requisitions. Author one to start the funnel."
               action={
-                <Link href="/console/procurement/requisitions/new" className="btn btn-secondary btn-sm">
+                <Button href="/console/procurement/requisitions/new" variant="secondary" size="sm">
                   + New Requisition
-                </Link>
+                </Button>
               }
             />
           ) : (

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -95,9 +96,9 @@ export default async function AlertsPage() {
                   ) : (
                     <form action={acknowledgeAlert}>
                       <input type="hidden" name="alertId" value={a.id} />
-                      <button type="submit" className="btn btn-primary btn-sm">
+                      <Button type="submit" size="sm">
                         Acknowledge
-                      </button>
+                      </Button>
                     </form>
                   )}
                 </div>

@@ -74,12 +74,9 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
           <div className="flex items-center gap-2">
             <form action={reconcileBudget}>
               <input type="hidden" name="id" value={budget.id} />
-              <button
-                type="submit"
-                className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
-              >
+              <Button type="submit" variant="secondary" size="sm">
                 Reconcile to actuals
-              </button>
+              </Button>
             </form>
             <Button href={`/console/finance/budgets/${budget.id}/edit`} size="sm" variant="secondary">
               Edit

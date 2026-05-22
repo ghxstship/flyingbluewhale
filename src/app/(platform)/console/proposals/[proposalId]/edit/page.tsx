@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -44,9 +44,9 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
         subtitle={`v${proposal.version} · ${proposal.status}`}
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/proposals/${proposalId}`} className="btn btn-ghost btn-sm">
+            <Button href={`/console/proposals/${proposalId}`} variant="ghost" size="sm">
               Back to detail
-            </Link>
+            </Button>
           </div>
         }
       />

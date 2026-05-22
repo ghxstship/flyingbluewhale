@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { CustomRoleForm } from "./CustomRoleForm";
 import { deleteCustomRole } from "./actions";
 import { requireSession } from "@/lib/auth";
@@ -145,9 +146,9 @@ export default async function RolesPage() {
                       {!r.is_system && (
                         <form action={deleteCustomRole}>
                           <input type="hidden" name="id" value={r.id} />
-                          <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                          <Button type="submit" variant="danger" size="sm">
                             Delete
-                          </button>
+                          </Button>
                         </form>
                       )}
                     </td>

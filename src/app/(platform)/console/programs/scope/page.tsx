@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -84,9 +83,9 @@ export default async function Page() {
             title="No Participant Entries Yet"
             description="Program scope is derived from delegation_entries. Author entries via Console → Participants → Entries."
             action={
-              <Link href="/console/participants/entries/new" className="btn btn-primary btn-sm">
+              <Button href="/console/participants/entries/new" size="sm">
                 + New Entry
-              </Link>
+              </Button>
             }
           />
         ) : (

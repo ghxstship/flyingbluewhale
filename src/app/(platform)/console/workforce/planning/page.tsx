@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -86,9 +85,9 @@ export default async function Page() {
             title="No Deployments Planned"
             description="Author workforce_deployments rows per venue+zone+window to drive headcount planning."
             action={
-              <Link href="/console/workforce/deployment" className="btn btn-secondary btn-sm">
+              <Button href="/console/workforce/deployment" variant="secondary" size="sm">
                 Open deployment
-              </Link>
+              </Button>
             }
           />
         ) : (

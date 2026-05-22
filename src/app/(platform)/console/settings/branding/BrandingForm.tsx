@@ -145,12 +145,12 @@ export function BrandingForm({ initial }: { initial: Initial }) {
           Live preview reflects your pending changes; save to apply everywhere.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <button type="button" className="btn btn-primary btn-sm" disabled>
+          <Button type="button" size="sm" disabled>
             {productName || "Primary action"}
-          </button>
-          <button type="button" className="btn btn-ghost btn-sm" disabled>
+          </Button>
+          <Button type="button" variant="ghost" size="sm" disabled>
             Ghost
-          </button>
+          </Button>
           <span className="text-xs" style={{ color: accent }}>
             Sample brand text · {productName || "ATLVS Technologies"}
           </span>

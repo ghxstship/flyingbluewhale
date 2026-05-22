@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/Button";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { revokeApiKeyAction } from "./actions";
@@ -98,9 +99,9 @@ export default async function ApiSettingsPage() {
                         {!revoked && (
                           <form action={revokeApiKeyAction}>
                             <input type="hidden" name="id" value={k.id} />
-                            <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                            <Button type="submit" variant="danger" size="sm">
                               Revoke
-                            </button>
+                            </Button>
                           </form>
                         )}
                       </td>

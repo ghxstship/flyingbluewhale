@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -82,9 +83,9 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
                 </button>
               </form>
             ))}
-            <a href={`/console/production/fabrication/${row.id}/edit`} className="btn btn-secondary btn-sm">
+            <Button href={`/console/production/fabrication/${row.id}/edit`} variant="secondary" size="sm">
               Edit
-            </a>
+            </Button>
           </div>
         }
       />
@@ -107,9 +108,9 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             <Badge variant="muted">Lifecycle</Badge>
             <form action={deleteFab}>
               <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
+              <Button type="submit" variant="danger" size="sm">
                 Delete order
-              </button>
+              </Button>
             </form>
           </div>
         </section>

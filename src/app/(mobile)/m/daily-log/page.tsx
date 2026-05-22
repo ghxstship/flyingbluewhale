@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -57,9 +58,9 @@ export default async function Page() {
             className={INPUT}
           />
           <input type="hidden" name="log_date" value={today} />
-          <button type="submit" className="surface hover-lift w-full rounded-md py-2.5 text-sm font-medium">
+          <Button type="submit" variant="secondary" className="w-full">
             Save log
-          </button>
+          </Button>
         </form>
 
         <section className="surface p-3">

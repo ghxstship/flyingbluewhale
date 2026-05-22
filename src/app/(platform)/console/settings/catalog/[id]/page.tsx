@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { DeleteForm } from "@/components/DeleteForm";
@@ -60,15 +60,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/settings/catalog/${item.id}/edit`} className="btn btn-secondary btn-sm">
+            <Button href={`/console/settings/catalog/${item.id}/edit`} variant="secondary" size="sm">
               Edit
-            </Link>
+            </Button>
             <form action={toggleActive}>
               <input type="hidden" name="id" value={item.id} />
               <input type="hidden" name="next" value={item.active ? "false" : "true"} />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <Button type="submit" variant="secondary" size="sm">
                 {item.active ? "Deactivate" : "Reactivate"}
-              </button>
+              </Button>
             </form>
             <DeleteForm
               action={deleteItem.bind(null, item.id)}

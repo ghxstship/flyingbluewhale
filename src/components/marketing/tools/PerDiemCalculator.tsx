@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Plus, X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 type Leg = { id: string; city: string; days: number; rate: number; headcount: number };
 
@@ -113,9 +114,9 @@ export function PerDiemCalculator() {
             </div>
           </div>
         ))}
-        <button type="button" onClick={add} className="btn btn-secondary btn-sm inline-flex items-center gap-1.5">
+        <Button type="button" onClick={add} variant="secondary" size="sm" className="inline-flex items-center gap-1.5">
           <Plus size={14} aria-hidden="true" /> Add leg
-        </button>
+        </Button>
       </div>
 
       <div className="mt-6 border-t border-[var(--border-color)] pt-4">

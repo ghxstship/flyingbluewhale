@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -91,15 +91,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             access, and issue your card on approval.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href={`/p/${slug}/apply/changes`} className="btn btn-secondary btn-sm">
+            <Button href={`/p/${slug}/apply/changes`} variant="secondary" size="sm">
               Request a category change
-            </Link>
-            <Link
+            </Button>
+            <Button
               href={`mailto:accreditation@atlvs.pro?subject=New%20application%20—%20${slug}`}
-              className="btn btn-primary btn-sm"
+              size="sm"
             >
               Email producer
-            </Link>
+            </Button>
           </div>
         </section>
 

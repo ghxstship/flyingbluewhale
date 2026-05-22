@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Check, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PROJECT_TIERS, RETAINER_TIERS, ADD_ONS, paths } from "@/lib/ghxstship";
@@ -76,15 +75,15 @@ export default function PricingPage() {
             path. Production costs pass through at cost.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link href="#per-project" className="btn btn-secondary btn-sm">
+            <Button href="#per-project" variant="secondary" size="sm">
               Per-Project
-            </Link>
-            <Link href="#retainer" className="btn btn-secondary btn-sm">
+            </Button>
+            <Button href="#retainer" variant="secondary" size="sm">
               Retainer
-            </Link>
-            <Link href="#stack" className="btn btn-secondary btn-sm">
+            </Button>
+            <Button href="#stack" variant="secondary" size="sm">
               Add-Ons
-            </Link>
+            </Button>
           </div>
         </section>
 

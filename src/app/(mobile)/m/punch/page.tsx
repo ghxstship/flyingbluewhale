@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -73,9 +73,9 @@ export default async function MobilePunchPage() {
               title="Punch List Clear"
               description="Open items assigned to you appear here. Visit Tasks on desktop to assign new ones."
               action={
-                <Link href="/console/tasks" className="btn btn-secondary btn-sm">
+                <Button href="/console/tasks" variant="secondary" size="sm">
                   Open Tasks
-                </Link>
+                </Button>
               }
             />
           </li>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export default function PersonalNotFound() {
@@ -14,9 +13,9 @@ export default function PersonalNotFound() {
         <Button href="/me/security" variant="secondary">
           Security
         </Button>
-        <Link href="/" className="btn btn-ghost">
+        <Button href="/" variant="ghost">
           Home
-        </Link>
+        </Button>
       </div>
     </main>
   );

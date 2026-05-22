@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -97,9 +97,9 @@ export default async function Page() {
               title="No VIP categories defined"
               description="Author categories with codes like VIP, VVIP, DIGNITARY, T3 in Console → Accreditation → Categories."
               action={
-                <Link href="/console/accreditation/categories" className="btn btn-secondary btn-sm">
+                <Button href="/console/accreditation/categories" variant="secondary" size="sm">
                   Open categories
-                </Link>
+                </Button>
               }
             />
           ) : (
@@ -124,9 +124,9 @@ export default async function Page() {
               title="No T3 dispatch runs scheduled"
               description="Author dispatch runs with fleet = 't3' under Transport → Dispatch."
               action={
-                <Link href="/console/transport/dispatch/new" className="btn btn-secondary btn-sm">
+                <Button href="/console/transport/dispatch/new" variant="secondary" size="sm">
                   + Schedule run
-                </Link>
+                </Button>
               }
             />
           ) : (

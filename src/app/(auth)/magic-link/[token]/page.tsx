@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Direct magic-link landing. Supabase normally bounces magic-link clicks
@@ -32,9 +32,9 @@ export default async function Page({ params }: { params: Promise<{ token: string
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
         Magic links expire after a short window. Request a fresh one and try again.
       </p>
-      <Link href="/magic-link" className="btn btn-primary mt-4 w-full">
+      <Button href="/magic-link" className="mt-4 w-full">
         Send another magic link
-      </Link>
+      </Button>
     </AuthShell>
   );
 }

@@ -24,6 +24,13 @@ const TransitionSchema = z.object({
   transition: z.enum(CHARTHOUSE_TRANSITIONS),
 });
 
+// Strip the internal "charthouse:" prefix that the SQL RAISE EXCEPTIONs use
+// so end users see a clean message instead of leaking the lib name.
+function cleanTransitionError(msg: string): string {
+  const stripped = msg.replace(/^charthouse:\s*/i, "").trim();
+  return stripped.charAt(0).toUpperCase() + stripped.slice(1);
+}
+
 export async function transitionSheet(_: State, fd: FormData): Promise<State> {
   await requireSession();
   const parsed = TransitionSchema.safeParse(Object.fromEntries(fd));
@@ -34,7 +41,7 @@ export async function transitionSheet(_: State, fd: FormData): Promise<State> {
     p_sheet_id: parsed.data.sheet_id,
     p_transition: parsed.data.transition,
   });
-  if (error) return { error: error.message };
+  if (error) return { error: cleanTransitionError(error.message) };
 
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
   revalidatePath(`/console/site-plans`);

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
-import { writeInboxBulk } from "@/lib/inbox";
+import { writeInbox, writeInboxBulk } from "@/lib/inbox";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -131,6 +131,24 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
         href: "/m/feed",
       });
     }
+  }
+
+  // Always write a self-row for the publisher even when service key
+  // isn't available — RLS lets them write their own. Without this,
+  // dev environments leave the author's inbox empty after publish.
+  if (publish) {
+    void writeInbox({
+      userId: session.userId,
+      orgId: session.orgId,
+      kind: "announcement",
+      sourceType: "announcements",
+      sourceId: data.id,
+      actorId: session.userId,
+      title: parsed.data.title,
+      body: parsed.data.body,
+      href: "/m/feed",
+      push: false, // author doesn't need to push to themselves
+    });
   }
 
   revalidatePath("/console/comms/announcements");

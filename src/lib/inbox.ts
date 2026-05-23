@@ -1,5 +1,5 @@
 import "server-only";
-import { createServiceClient, isServiceClientAvailable } from "./supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "./supabase/server";
 import { sendPushTo, sendPushBulk, type PushKind, type PushPayload } from "./push/send";
 import { log } from "./log";
 
@@ -45,27 +45,30 @@ export async function writeInbox(entry: InboxEntry): Promise<{ inboxed: boolean;
   let inboxed = false;
   let pushed = false;
 
-  if (isServiceClientAvailable()) {
-    const service = createServiceClient();
-    const { error } = await service.from("notifications").upsert(
-      {
-        org_id: entry.orgId,
-        user_id: entry.userId,
-        kind: entry.kind,
-        title: entry.title,
-        body: entry.body ?? null,
-        href: entry.href ?? null,
-        source_type: entry.sourceType,
-        source_id: entry.sourceId,
-        actor_id: entry.actorId ?? null,
-      } as never,
-      { onConflict: "user_id,source_type,source_id", ignoreDuplicates: false },
-    );
-    if (error) {
-      log.warn("inbox.write.failed", { kind: entry.kind, sourceType: entry.sourceType, error: error.message });
-    } else {
-      inboxed = true;
-    }
+  // Prefer the service client (writes to anyone's inbox), fall back to
+  // the user-authenticated client when the service key isn't present
+  // (local dev). RLS gates the user client to the caller's own
+  // user_id — so writeInbox() to a different user is a no-op in that
+  // fallback path, but self-writes still land.
+  const writer = isServiceClientAvailable() ? createServiceClient() : await createClient();
+  const { error } = await writer.from("notifications").upsert(
+    {
+      org_id: entry.orgId,
+      user_id: entry.userId,
+      kind: entry.kind,
+      title: entry.title,
+      body: entry.body ?? null,
+      href: entry.href ?? null,
+      source_type: entry.sourceType,
+      source_id: entry.sourceId,
+      actor_id: entry.actorId ?? null,
+    } as never,
+    { onConflict: "user_id,source_type,source_id", ignoreDuplicates: false },
+  );
+  if (error) {
+    log.warn("inbox.write.failed", { kind: entry.kind, sourceType: entry.sourceType, error: error.message });
+  } else {
+    inboxed = true;
   }
 
   if (entry.push !== false) {

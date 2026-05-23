@@ -41,7 +41,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
       <ModuleHeader
         eyebrow="Settings"
         title="Workspace Settings"
-        subtitle={`Audit log · showing ${showingFrom}–${showingTo} of ${page.totalCount}`}
+        subtitle={`Audit Log · ${showingFrom}–${showingTo} of ${page.totalCount}`}
       />
       <div className="page-content max-w-6xl space-y-3">
         <AuditLogViewer rows={rows} />

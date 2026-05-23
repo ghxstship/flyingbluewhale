@@ -57,7 +57,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Housing"
-        subtitle={`${rows.length} Block${rows.length === 1 ? "" : "s"} · ${totalConfirmed} of ${totalReserved} room${totalReserved === 1 ? "" : "s"} confirmed`}
+        subtitle={`${rows.length} Block${rows.length === 1 ? "" : "s"} · ${totalConfirmed} of ${totalReserved} Room${totalReserved === 1 ? "" : "s"} Confirmed`}
         action={
           <Button href="/console/accommodation/blocks/new" size="sm">
             + New Block

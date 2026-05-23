@@ -29,7 +29,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Accreditation"
         title="Print Queue"
-        subtitle={`${rows.length} Approved badge${rows.length === 1 ? "" : "s"} pending print`}
+        subtitle={`${rows.length} Approved Badge${rows.length === 1 ? "" : "s"} Pending Print`}
         action={
           rows.length > 0 ? (
             <Button href="/console/accreditation/print/sheet" size="sm">

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { urlFor } from "@/lib/urls";
 
 /**
  * Email-template editor with merge-tag autocomplete.
@@ -37,7 +38,7 @@ const MERGE_TAGS: Array<{ tag: string; sample: string; description: string }> = 
   { tag: "invoice_number", sample: "INV-26-00042", description: "Invoice number" },
   { tag: "invoice_total", sample: "$12,450.00", description: "Formatted invoice total" },
   { tag: "proposal_number", sample: "PROP-26-00009", description: "Proposal number" },
-  { tag: "portal_url", sample: "https://gvteway.atlvs.pro/acme-26-tour", description: "Signed portal URL" },
+  { tag: "portal_url", sample: urlFor("portal", "/acme-26-tour"), description: "Signed portal URL" },
   { tag: "sender_name", sample: "Alex Chen", description: "User sending the email" },
   { tag: "today", sample: "Apr 19, 2026", description: "Today's formatted date" },
 ];

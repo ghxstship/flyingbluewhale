@@ -338,7 +338,7 @@ export const ZAPIER_SAMPLES = {
     end_date: "2026-03-25",
     created_at: "2026-01-15T10:23:00.000Z",
     updated_at: "2026-01-15T10:23:00.000Z",
-    url: "https://app.atlvs.pro/projects/00000000-0000-0000-0000-000000000001",
+    url: urlFor("platform", "/projects/00000000-0000-0000-0000-000000000001"),
   } satisfies ZapierProject,
   ticket_scan: {
     id: "00000000-0000-0000-0000-000000000002",
@@ -347,7 +347,7 @@ export const ZAPIER_SAMPLES = {
     result: "ok",
     scanned_at: "2026-03-21T19:04:11.000Z",
     location: { lat: 25.8576, lng: -80.2781 },
-    url: "https://app.atlvs.pro/commercial/tickets/00000000-0000-0000-0000-000000000003",
+    url: urlFor("platform", "/commercial/tickets/00000000-0000-0000-0000-000000000003"),
   } satisfies ZapierTicketScan,
   deliverable: {
     id: "00000000-0000-0000-0000-000000000005",
@@ -362,7 +362,7 @@ export const ZAPIER_SAMPLES = {
     deadline: "2026-03-01",
     created_at: "2026-02-10T12:00:00.000Z",
     updated_at: "2026-02-14T16:30:00.000Z",
-    url: "https://app.atlvs.pro/projects/00000000-0000-0000-0000-000000000001/advancing/00000000-0000-0000-0000-000000000005",
+    url: urlFor("platform", "/projects/00000000-0000-0000-0000-000000000001/advancing/00000000-0000-0000-0000-000000000005"),
   } satisfies ZapierDeliverable,
   invoice: {
     id: "00000000-0000-0000-0000-000000000006",
@@ -379,7 +379,7 @@ export const ZAPIER_SAMPLES = {
     paid_at: "2026-02-15T11:42:00.000Z",
     created_at: "2026-01-20T00:00:00.000Z",
     updated_at: "2026-02-15T11:42:00.000Z",
-    url: "https://app.atlvs.pro/finance/invoices/00000000-0000-0000-0000-000000000006",
+    url: urlFor("platform", "/finance/invoices/00000000-0000-0000-0000-000000000006"),
   } satisfies ZapierInvoice,
   task: {
     id: "00000000-0000-0000-0000-000000000008",
@@ -392,7 +392,7 @@ export const ZAPIER_SAMPLES = {
     due_at: "2026-03-15T00:00:00.000Z",
     created_at: "2026-02-01T09:00:00.000Z",
     updated_at: "2026-02-01T09:00:00.000Z",
-    url: "https://app.atlvs.pro/tasks/00000000-0000-0000-0000-000000000008",
+    url: urlFor("platform", "/tasks/00000000-0000-0000-0000-000000000008"),
   } satisfies ZapierTask,
   expense: {
     id: "00000000-0000-0000-0000-000000000009",
@@ -407,7 +407,7 @@ export const ZAPIER_SAMPLES = {
     spent_at: "2026-03-19",
     created_at: "2026-03-19T20:14:00.000Z",
     updated_at: "2026-03-19T20:14:00.000Z",
-    url: "https://app.atlvs.pro/finance/expenses/00000000-0000-0000-0000-000000000009",
+    url: urlFor("platform", "/finance/expenses/00000000-0000-0000-0000-000000000009"),
   } satisfies ZapierExpense,
   notification: {
     id: "00000000-0000-0000-0000-000000000010",

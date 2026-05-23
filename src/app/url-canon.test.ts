@@ -43,6 +43,17 @@ const ALLOW_HTTPS_LITERAL = new Set<string>([
   "src/app/url-canon.test.ts",
 ]);
 
+// Files allowed to contain hardcoded subdomain URL strings (app/gvteway/compvss.atlvs.pro).
+// Only the urls helper and the test suite itself are exempt; everywhere else must call urlFor().
+const ALLOW_SUBDOMAIN_LITERAL = new Set<string>([
+  "src/lib/urls.ts",
+  "src/lib/urls.test.ts",
+  "src/lib/env.ts",
+  "src/proxy.ts",
+  "src/lib/supabase/server.ts",
+  "src/app/url-canon.test.ts",
+]);
+
 const ALLOW_FALLBACK_PATTERN = new Set<string>([
   // Only the canonical definition resolves NEXT_PUBLIC_APP_URL with a
   // string fallback. Every other site delegates to `SITE.baseUrl`.
@@ -82,6 +93,21 @@ describe("URL canon", () => {
     expect(
       offenders,
       `Files contain the literal "https://atlvs.pro" — use SITE.baseUrl from @/lib/seo instead. Offenders: ${offenders.join(", ")}`,
+    ).toEqual([]);
+  });
+
+  it("hardcoded subdomain URLs (app/gvteway/compvss.atlvs.pro) are banned outside allowlisted SSOT files — use urlFor() instead", () => {
+    const RE = /['"`]https?:\/\/(app|gvteway|compvss)\.atlvs\.pro/;
+    const offenders: string[] = [];
+    for (const file of ALL) {
+      const rel = relative(REPO_ROOT, file);
+      if (ALLOW_SUBDOMAIN_LITERAL.has(rel)) continue;
+      const txt = readFileSync(file, "utf8");
+      if (RE.test(txt)) offenders.push(rel);
+    }
+    expect(
+      offenders,
+      `Files contain hardcoded subdomain URLs — use urlFor() from @/lib/urls instead. Offenders: ${offenders.join(", ")}`,
     ).toEqual([]);
   });
 

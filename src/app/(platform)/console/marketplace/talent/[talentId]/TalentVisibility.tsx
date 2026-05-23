@@ -1,7 +1,9 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 import { publishTalentAction, unpublishTalentAction } from "../new/actions";
 
 export function TalentVisibility({
@@ -14,12 +16,16 @@ export function TalentVisibility({
   publicHandle: string | null;
 }) {
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   return (
     <section className="surface p-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold tracking-wide uppercase">Visibility</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-semibold tracking-wide uppercase">Visibility</h2>
+            <Badge variant={isPublic ? "success" : "muted"}>{isPublic ? "Published" : "Private"}</Badge>
+          </div>
           <p className="mt-1 text-xs text-[var(--text-secondary)]">
             {publicHandle ? (
               <>
@@ -36,8 +42,8 @@ export function TalentVisibility({
         <form
           action={(fd) => {
             startTransition(async () => {
-              if (isPublic) await unpublishTalentAction(null, fd);
-              else await publishTalentAction(null, fd);
+              const result = isPublic ? await unpublishTalentAction(null, fd) : await publishTalentAction(null, fd);
+              if (!result?.error) router.refresh();
             });
           }}
         >

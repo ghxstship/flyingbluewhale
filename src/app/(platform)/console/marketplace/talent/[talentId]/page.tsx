@@ -62,8 +62,8 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
         subtitle={t.tagline ?? undefined}
         action={
           <div className="flex items-center gap-2">
-            {t.verified_at && <Badge variant="success">verified</Badge>}
-            <Badge variant={t.is_public ? "success" : "muted"}>{t.is_public ? "public" : "private"}</Badge>
+            {t.verified_at && <Badge variant="success">Verified</Badge>}
+            <Badge variant={t.is_public ? "success" : "muted"}>{t.is_public ? "Published" : "Private"}</Badge>
             <Button href={`/console/marketplace/talent/${t.id}/riders`} size="sm" variant="ghost">
               Riders
             </Button>

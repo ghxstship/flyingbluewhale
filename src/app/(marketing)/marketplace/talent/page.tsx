@@ -38,7 +38,9 @@ export default async function Page() {
     const { data } = await supabase
       .from("public_talent_directory")
       .select("*")
-      .order("verified_at", { ascending: false, nullsFirst: false })
+      // public_talent_directory exposes is_verified (boolean), not verified_at.
+      // Ordering by a non-existent column 400s and silently empties the page.
+      .order("is_verified", { ascending: false })
       .order("rating_count", { ascending: false })
       .limit(60);
     rows = (data ?? []) as Row[];

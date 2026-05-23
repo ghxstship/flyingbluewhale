@@ -34,7 +34,9 @@ export default async function Page() {
     const { data } = await supabase
       .from("public_vendor_directory")
       .select("*")
-      .order("verified_at", { ascending: false, nullsFirst: false })
+      // View exposes is_verified (boolean), not verified_at — ordering
+      // by a non-existent column 400s and silently empties the page.
+      .order("is_verified", { ascending: false })
       .order("rating_count", { ascending: false })
       .limit(60);
     rows = (data ?? []) as Row[];

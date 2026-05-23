@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { getRequestFormatters } from "@/lib/i18n/request";
 
 const Schema = z.object({
@@ -38,32 +38,39 @@ export async function requestSwap(fd: FormData): Promise<void> {
   });
 
   // Notify all admin/manager members of the org via service role.
-  const service = createServiceClient();
   // .is("deleted_at", null) so we don't notify offboarded admins
   // who'll either bounce on the link (RLS denies them) or worse,
   // re-engage with the org through a stale membership row.
-  const { data: admins } = await service
-    .from("memberships")
-    .select("user_id, role")
-    .eq("org_id", session.orgId)
-    .in("role", ["owner", "admin", "manager"])
-    .is("deleted_at", null);
+  //
+  // Notification fan-out is best-effort — without the service-role key
+  // (local dev), the swap request still persists; admins just don't
+  // get the live ping and have to discover the request via the
+  // /console/workforce/shift-swaps inbox on next visit.
+  if (isServiceClientAvailable()) {
+    const service = createServiceClient();
+    const { data: admins } = await service
+      .from("memberships")
+      .select("user_id, role")
+      .eq("org_id", session.orgId)
+      .in("role", ["owner", "admin", "manager"])
+      .is("deleted_at", null);
 
-  const venue = (shift as unknown as { venue?: { name: string | null } | null }).venue?.name ?? "venue TBD";
-  const startsAt = new Date((shift as { starts_at: string }).starts_at);
-  const title = `Shift swap requested: ${venue}`;
-  const fmt = await getRequestFormatters();
-  const body = `${fmt.dateParts(startsAt, { weekday: "short", month: "short", day: "numeric" })} · ${parsed.data!.reason}`;
+    const venue = (shift as unknown as { venue?: { name: string | null } | null }).venue?.name ?? "venue TBD";
+    const startsAt = new Date((shift as { starts_at: string }).starts_at);
+    const title = `Shift swap requested: ${venue}`;
+    const fmt = await getRequestFormatters();
+    const body = `${fmt.dateParts(startsAt, { weekday: "short", month: "short", day: "numeric" })} · ${parsed.data!.reason}`;
 
-  const inserts = (admins ?? []).map((a) => ({
-    org_id: session.orgId,
-    user_id: a.user_id,
-    title,
-    body,
-    href: "/console/workforce/shift-swaps",
-  }));
-  if (inserts.length > 0) {
-    await service.from("notifications").insert(inserts);
+    const inserts = (admins ?? []).map((a) => ({
+      org_id: session.orgId,
+      user_id: a.user_id,
+      title,
+      body,
+      href: "/console/workforce/shift-swaps",
+    }));
+    if (inserts.length > 0) {
+      await service.from("notifications").insert(inserts);
+    }
   }
 
   revalidatePath("/m/shift/swap");

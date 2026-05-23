@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 
 const Schema = z.object({
@@ -45,7 +45,14 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
   // Fan out push notifications when the announcement is published. We
   // target org members whose membership role matches the audience
   // ('all' → everyone in the org). Drafts don't fan out.
-  if (publish) {
+  //
+  // Push fan-out requires SUPABASE_SERVICE_ROLE_KEY (we need to read
+  // memberships across users, bypassing RLS). When the env-var is missing
+  // (local dev without the key), the announcement still publishes — push
+  // is best-effort, not a write-time hard dependency. Without this guard,
+  // dev-mode publish 500s and the user never sees their announcement
+  // saved.
+  if (publish && isServiceClientAvailable()) {
     const service = createServiceClient();
     const roleFilter: ("owner" | "admin" | "manager" | "member")[] | null =
       parsed.data.audience === "all"

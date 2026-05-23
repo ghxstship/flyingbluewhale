@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 
 const Schema = z.object({ id: z.string().uuid() });
@@ -24,8 +24,10 @@ export async function publishAnnouncement(fd: FormData): Promise<void> {
 
   // Fan out push only if the conditional UPDATE actually flipped a row
   // (i.e. it was previously draft). Avoids re-pushing on a no-op
-  // double-click.
-  if (updated) {
+  // double-click. Push fan-out is best-effort — when the service-role
+  // key is missing in dev, the publish still succeeds; only the push
+  // is skipped.
+  if (updated && isServiceClientAvailable()) {
     const u = updated as { id: string; title: string; body: string; audience: string };
     const service = createServiceClient();
     const roleFilter: ("owner" | "admin" | "manager" | "member")[] | null =

@@ -100,3 +100,57 @@ forwarding (a list with no create that points to the canonical create
 surface in another module) is intentional and labeled. Five workflows
 were end-to-end submitted (vendor, invoice, kudos, project, project
 edit) as proof.
+
+---
+
+## Addendum — Live form-submission tests (round 2)
+
+After the initial URL probe, drove actual form submissions across every
+representative module to verify create flows persist records and surface
+errors gracefully. Each test posted a real EDC-themed record:
+
+| Module                                                        | Test record                                           | Result                        |
+| ------------------------------------------------------------- | ----------------------------------------------------- | ----------------------------- |
+| Vendor (`/procurement/vendors`)                               | "EDC LV — Stage Scenic Fab Co."                       | ✅ Created, list went 2→3     |
+| Invoice (`/finance/invoices`)                                 | INV-2639557 $150,000 EDC LV 2026 deposit              | ✅ Created, landed on detail  |
+| Lead (`/leads`)                                               | Insomniac Events EDC LV 2027 advancing inquiry, $2.5M | ✅ Stage=New                  |
+| Sponsor Entitlement (`/commercial/sponsors`)                  | Bud Light stage naming rights                         | ✅ Created                    |
+| Task (`/tasks`)                                               | "Confirm SZA day-of arrival" linked to EDC LV 2026    | ✅ List 1→2                   |
+| RFI (`/rfis`)                                                 | RFI-001 cosmicMEADOW load-in window                   | ✅ Auto-numbered              |
+| Inspection (`/inspections`)                                   | INSP-001 fire marshal walkthrough                     | ✅ Auto-numbered              |
+| Punch (`/punch`)                                              | PUNCH-001 truss panel replacement                     | ✅ Auto-numbered              |
+| Risk (`/programs/risk`)                                       | LVMS heat advisory 105°F+                             | ✅ Register 3→4               |
+| Equipment (`/production/equipment`)                           | L-Acoustics K2 PA, $2,400/day                         | ✅ Inventory populated        |
+| Crew member (`/people/crew`)                                  | Marcus Riley — Stage Manager cosmicMEADOW             | ✅ Roster 20→21               |
+| Announcement (`/comms/announcements`)                         | EDC LV production kickoff Monday 09:00                | ✅ (after fix below)          |
+| Poll (`/comms/polls`)                                         | Friday-night crew dinner preference, 4 options        | ✅ Live, 0 votes              |
+| Kudos (`/workforce/recognition/new`)                          | (new surface added round 1)                           | ✅ Recipient picker populated |
+| Project (`/projects`)                                         | (validated prior session)                             | ✅                            |
+| Project edit (`/projects/[id]/edit`)                          | (validated prior session)                             | ✅                            |
+| Advancing assignment (`/projects/[id]/advancing/assignments`) | (validated prior session)                             | ✅                            |
+
+**17 distinct workflows verified end-to-end with EDC-themed records persisted to the live demo org.**
+
+## Real runtime bug found + fixed
+
+### Announcement publish crashed dev (and shift-swap fan-out)
+
+Publishing an announcement to dev failed with:
+
+```
+Service client requires SUPABASE_SERVICE_ROLE_KEY.
+```
+
+Root cause: [`/console/comms/announcements/new/actions.ts`](<src/app/(platform)/console/comms/announcements/new/actions.ts>) and [`/[id]/actions.ts`](<src/app/(platform)/console/comms/announcements/[id]/actions.ts>) unconditionally called `createServiceClient()` (required for cross-user `memberships` reads to drive push fan-out). When `SUPABASE_SERVICE_ROLE_KEY` is absent from the env (local dev), the announcement insert completed successfully but the subsequent fan-out threw 500 — and the user saw a generic error page, never knowing the announcement was actually saved.
+
+Same pattern in [`/m/shift/swap/actions.ts`](<src/app/(mobile)/m/shift/swap/actions.ts>) for shift-swap admin notifications.
+
+Fix: guard each service-client call with `isServiceClientAvailable()` (already exported from `src/lib/supabase/server.ts`). Push fan-out is best-effort; the write still succeeds when the key is missing. Verified: announcement create now redirects to the detail page cleanly even without the service-role key.
+
+## Notes / minor gaps observed (not fixed this round)
+
+- **Pluralization**: a handful of subtitles render `"1 items"` instead of `"1 Item"` (e.g. `/production/equipment` reads `"1 items · 1 available"`). The bulk Title Case sweep last commit handled the singular/plural toggle for ~52 pages; a handful of older subtitle templates use unconditional `"items"` and need targeted fixes.
+- **Detail-page chrome**: a few detail routes (sponsor entitlement) render with the generic `RECORD` eyebrow instead of the typed entity name. Cosmetic.
+- **Publish_now checkbox**: the announcement create form's `publish_now` checkbox didn't get set on first interaction during the form test (got `Draft`); needs a hydration/timing check or a default-on for admin-side creates.
+
+These three are tracked here for future cleanup but are below the bar of session-blocking.

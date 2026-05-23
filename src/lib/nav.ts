@@ -112,7 +112,10 @@ export type IconName =
   | "Coins"
   | "Route"
   // Sales pipeline
-  | "GitBranch";
+  | "GitBranch"
+  // Media + service desk
+  | "Camera"
+  | "LifeBuoy";
 
 export type NavItem = {
   label: string;
@@ -156,6 +159,7 @@ export const platformNav: NavGroup[] = [
     label: "Dashboard",
     items: [
       { label: "Overview", href: "/console", icon: "LayoutDashboard" },
+      { label: "Dashboards", href: "/console/dashboards", icon: "LayoutDashboard" },
       { label: "Inbox", href: "/me/notifications/inbox", icon: "Inbox" },
       { label: "Messages", href: "/console/inbox", icon: "MessageSquare" },
     ],
@@ -224,6 +228,8 @@ export const platformNav: NavGroup[] = [
       // Site Plans is a CAD-rooted creative artifact — primary class is
       // CREATIVE, secondary BUILD (where it materializes).
       { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
+      { label: "Photos", href: "/console/photos", icon: "Camera" },
+      { label: "Templates", href: "/console/templates", icon: "Files" },
     ],
   },
   {
@@ -251,6 +257,7 @@ export const platformNav: NavGroup[] = [
       { label: "Pipeline", href: "/console/pipeline", icon: "GitBranch" },
       { label: "Clients", href: "/console/clients", icon: "Handshake" },
       { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
+      { label: "Campaigns", href: "/console/campaigns", icon: "Megaphone" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
@@ -292,10 +299,14 @@ export const platformNav: NavGroup[] = [
       {
         label: "Coordination",
         items: [
+          { label: "Operations Hub", href: "/console/ops", icon: "Command" },
           { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
           { label: "Look-Ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
           { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
           { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
+          { label: "Action Items", href: "/console/action-items", icon: "CheckSquare" },
+          { label: "Meetings", href: "/console/meetings", icon: "CalendarDays" },
+          { label: "Forms", href: "/console/forms", icon: "ClipboardCheck" },
           { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
           { label: "Events", href: "/console/events", icon: "CalendarDays" },
           { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
@@ -383,6 +394,7 @@ export const platformNav: NavGroup[] = [
     label: "9 TECHNOLOGY",
     items: [
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
+      { label: "Service Desk", href: "/console/services", icon: "LifeBuoy" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
       // The XPMS Catalog (atom registry) is the canonical TECHNOLOGY-

@@ -11,6 +11,8 @@ const Schema = z.object({
   title: z.string().min(1).max(200),
   body: z.string().min(1).max(8000),
   audience: z.enum(["all", "crew", "contractors", "vendors", "admins"]),
+  project_id: z.string().uuid().optional().or(z.literal("")),
+  team_id: z.string().uuid().optional().or(z.literal("")),
   pinned: z.string().optional(),
   publish_now: z.string().optional(),
 });
@@ -26,6 +28,30 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
   const supabase = await createClient();
 
   const publish = parsed.data.publish_now === "on";
+  const projectId = parsed.data.project_id || null;
+  const teamId = parsed.data.team_id || null;
+
+  // Cross-tenant FK guards on the optional scope filters.
+  if (projectId) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!project) return { error: "Project not found in your organization" };
+  }
+  if (teamId) {
+    const { data: team } = await supabase
+      .from("teams")
+      .select("id")
+      .eq("id", teamId)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!team) return { error: "Team not found in your organization" };
+  }
+
   const { data, error } = await supabase
     .from("announcements")
     .insert({
@@ -34,10 +60,12 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
       title: parsed.data.title,
       body: parsed.data.body,
       audience: parsed.data.audience,
+      project_id: projectId,
+      team_id: teamId,
       pinned: parsed.data.pinned === "on",
       publish_state: publish ? "published" : "draft",
       published_at: publish ? new Date().toISOString() : null,
-    })
+    } as never)
     .select("id")
     .single();
   if (error) return { error: error.message };
@@ -65,7 +93,28 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
     let query = service.from("memberships").select("user_id").eq("org_id", session.orgId).is("deleted_at", null);
     if (roleFilter) query = query.in("role", roleFilter);
     const { data: recipients } = await query;
-    const userIds = ((recipients ?? []) as Array<{ user_id: string }>).map((r) => r.user_id);
+    let userIds = ((recipients ?? []) as Array<{ user_id: string }>).map((r) => r.user_id);
+
+    // Team filter narrows the role-band cohort to actual team members.
+    if (teamId && userIds.length > 0) {
+      const { data: teamMembers } = await service
+        .from("team_members")
+        .select("user_id")
+        .eq("team_id", teamId)
+        .in("user_id", userIds);
+      const teamSet = new Set(((teamMembers ?? []) as Array<{ user_id: string }>).map((r) => r.user_id));
+      userIds = userIds.filter((id) => teamSet.has(id));
+    }
+    // Project filter narrows further to users with a project membership.
+    if (projectId && userIds.length > 0) {
+      const { data: projectMembers } = await service
+        .from("project_members")
+        .select("user_id")
+        .eq("project_id", projectId)
+        .in("user_id", userIds);
+      const projectSet = new Set(((projectMembers ?? []) as Array<{ user_id: string }>).map((r) => r.user_id));
+      userIds = userIds.filter((id) => projectSet.has(id));
+    }
     if (userIds.length > 0) {
       void sendPushBulk(userIds, {
         title: parsed.data.title,

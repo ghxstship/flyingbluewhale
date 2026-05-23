@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import Link from "next/link";
 import { publishAnnouncement, archiveAnnouncement, deleteAnnouncement } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
@@ -49,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             >
               {a.publish_state}
             </Badge>
-            <Badge variant="muted">{a.audience}</Badge>
+            <Badge variant="muted">{toTitle(a.audience)}</Badge>
             {a.pinned && <Badge variant="warning">Pinned</Badge>}
             <span className="font-mono text-xs">{readCount ?? 0} read</span>
           </span>

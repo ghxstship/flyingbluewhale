@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -85,12 +86,12 @@ export default async function MyIncidentsPage() {
             <li key={r.id}>
               <Link href={`/m/incidents`} className="surface block p-4">
                 <div className="flex items-center justify-between gap-3">
-                  <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{r.severity}</Badge>
+                  <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">{fmt.date(r.occurred_at)}</span>
                 </div>
                 <h2 className="mt-2 line-clamp-2 text-sm font-semibold">{r.summary}</h2>
                 <div className="mt-1 flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-                  <Badge variant={r.status === "closed" ? "muted" : "info"}>{r.status}</Badge>
+                  <Badge variant={r.status === "closed" ? "muted" : "info"}>{toTitle(r.status)}</Badge>
                   {r.location && <span className="font-mono">{r.location}</span>}
                 </div>
               </Link>

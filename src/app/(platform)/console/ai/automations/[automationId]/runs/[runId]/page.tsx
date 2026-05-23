@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { RunTimeline, type RunTimelineStep } from "@/components/automations/RunTimeline";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
 
@@ -161,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
           { label: "Runs", href: `/console/ai/automations/${automationId}/runs` },
           { label: fmt(run.started_at) },
         ]}
-        action={<Badge variant={STATUS_TONE[run.status] ?? "muted"}>{run.status}</Badge>}
+        action={<Badge variant={STATUS_TONE[run.status] ?? "muted"}>{toTitle(run.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

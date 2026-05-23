@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 import { PunchKanban, type PunchKanbanRow } from "./PunchKanban";
 
 export const dynamic = "force-dynamic";
@@ -184,7 +185,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
               {
                 key: "priority",
                 header: "Priority",
-                render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{r.priority}</Badge>,
+                render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{toTitle(r.priority)}</Badge>,
                 accessor: (r) => r.priority ?? null,
                 filterable: true,
                 groupable: true,

@@ -8,6 +8,7 @@ import { StatusChip } from "@/components/ui/StatusChip";
 import { Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Spinner } from "@/components/ui/Spinner";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { toTitle } from "@/lib/format";
 
 /**
  * Export Centre — async-aware client shell.
@@ -200,7 +201,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                 return (
                   <tr key={r.id}>
                     <td className="font-mono text-xs">{fmt.dateTime(r.created_at)}</td>
-                    <td className="uppercase">{r.kind}</td>
+                    <td className="uppercase">{toTitle(r.kind)}</td>
                     <td>{params.table ?? "—"}</td>
                     <td className="font-mono text-xs">{r.row_count ?? "—"}</td>
                     <td className="font-mono text-xs">{formatBytes(r.size_bytes)}</td>

@@ -5,6 +5,7 @@ import { ConversationPanel } from "@/components/ConversationPanel";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { transitionPunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -86,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <dl className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
             <div>
               <dt className="text-xs text-[var(--text-muted)]">Priority</dt>
-              <dd className="font-medium">{item.priority}</dd>
+              <dd className="font-medium">{toTitle(item.priority)}</dd>
             </div>
             <div>
               <dt className="text-xs text-[var(--text-muted)]">Due</dt>

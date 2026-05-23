@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -57,7 +58,7 @@ export default async function MobileRequests() {
             <li key={r.id}>
               <Link href={`/m/requests/${r.id}`} className="surface flex flex-col gap-1 p-4">
                 <div className="flex items-center gap-2">
-                  <Badge variant={SEV[r.severity]}>{r.severity}</Badge>
+                  <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
                   <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.category}</span>
                   <span className="ml-auto font-mono text-[10px] text-[var(--text-muted)]">
                     {fmt.time(r.opened_at)}

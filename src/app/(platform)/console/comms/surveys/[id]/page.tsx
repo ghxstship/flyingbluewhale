@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { addQuestion, publishSurvey, closeSurvey } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -90,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             >
               {s.publish_state}
             </Badge>
-            <Badge variant="muted">{s.audience}</Badge>
+            <Badge variant="muted">{toTitle(s.audience)}</Badge>
             {s.anonymous && <Badge variant="info">Anonymous</Badge>}
             <span className="font-mono text-xs">{responseCount ?? 0} responses</span>
           </span>

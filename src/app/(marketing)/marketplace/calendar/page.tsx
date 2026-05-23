@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -64,7 +65,7 @@ export default async function Page() {
                 {byDay[d].map((r) => (
                   <li key={r.id} className="flex items-center justify-between py-2 text-sm">
                     <div className="flex items-center gap-3">
-                      <Badge variant={STATUS_TONE[r.kind] ?? "muted"}>{r.kind}</Badge>
+                      <Badge variant={STATUS_TONE[r.kind] ?? "muted"}>{toTitle(r.kind)}</Badge>
                       <span>{r.label ?? r.org_name}</span>
                     </div>
                     <span className="font-mono text-xs text-[var(--text-secondary)]">

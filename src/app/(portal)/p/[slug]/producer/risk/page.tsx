@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -100,7 +101,7 @@ export default async function ProducerRisk({ params }: { params: Promise<{ slug:
                   <td>{r.owner_id ? (ownerMap.get(r.owner_id) ?? "—") : "—"}</td>
                   <td className="font-mono text-xs">{r.due_on ? fmt.date(r.due_on) : "—"}</td>
                   <td>
-                    <Badge variant={RISK_TONE[r.status] ?? "muted"}>{r.status}</Badge>
+                    <Badge variant={RISK_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                   </td>
                 </tr>
               ))}

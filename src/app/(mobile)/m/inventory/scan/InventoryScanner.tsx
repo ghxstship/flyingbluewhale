@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useAnnounce } from "@/components/ui/LiveRegion";
 import { haptic } from "@/lib/haptics";
+import { toTitle } from "@/lib/format";
 
 type Entry = {
   at: string;
@@ -178,7 +179,7 @@ export function InventoryScanner() {
                 <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
                   {e.name && <span className="text-[var(--color-text-secondary)]">{e.name}</span>}
                   {e.result === "ok" && e.status && (
-                    <Badge variant={e.status === "available" ? "success" : "brand"}>{e.status}</Badge>
+                    <Badge variant={e.status === "available" ? "success" : "brand"}>{toTitle(e.status)}</Badge>
                   )}
                   {e.result === "not_found" && <Badge variant="muted">not found</Badge>}
                   {e.result === "error" && <Badge variant="error">{e.error ?? "error"}</Badge>}

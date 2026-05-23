@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +38,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
       <div className="text-label text-[var(--color-text-tertiary)]">Submission</div>
       <div className="mt-1 flex items-center gap-2">
         <h1 className="text-display text-3xl">#{s.id.slice(0, 8)}</h1>
-        <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>
+        <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         Submitted {new Date(s.submitted_at).toLocaleString()}

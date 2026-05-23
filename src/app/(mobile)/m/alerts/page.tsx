@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { acknowledgeAlert } from "./actions";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -82,7 +83,7 @@ export default async function AlertsPage() {
             return (
               <li key={a.id} className={`surface p-4 ${ack ? "opacity-60" : ""}`}>
                 <div className="flex items-start justify-between gap-3">
-                  <Badge variant={tone}>{a.severity}</Badge>
+                  <Badge variant={tone}>{toTitle(a.severity)}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">
                     {a.sent_at ? fmt.time(a.sent_at) : "scheduled"}
                   </span>

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -154,7 +155,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
                     <Link href={it.href} className="surface flex items-start justify-between gap-3 p-4">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <Badge variant="muted">{it.kind}</Badge>
+                          <Badge variant="muted">{toTitle(it.kind)}</Badge>
                           {overdue && <Badge variant="error">Overdue</Badge>}
                         </div>
                         <div className="mt-1 truncate text-sm font-semibold">{it.title}</div>

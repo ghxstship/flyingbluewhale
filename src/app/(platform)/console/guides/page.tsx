@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -74,7 +75,7 @@ export default async function GuidesIndex() {
                   <tr key={g.id}>
                     <td>{g.projects?.name ?? "—"}</td>
                     <td>
-                      <Badge variant="muted">{g.persona}</Badge>
+                      <Badge variant="muted">{toTitle(g.persona)}</Badge>
                     </td>
                     <td className="font-mono text-xs">
                       {g.updated_at ? new Date(g.updated_at).toLocaleDateString() : "—"}

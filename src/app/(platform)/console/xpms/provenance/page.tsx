@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ export default async function ProvenancePage() {
             {
               key: "kind",
               header: "Edge",
-              render: (e) => <Badge variant="info">{e.kind}</Badge>,
+              render: (e) => <Badge variant="info">{toTitle(e.kind)}</Badge>,
               accessor: (e) => e.kind,
               sortable: true,
               filterable: true,

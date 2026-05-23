@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { addChecklistItem, completeChecklistItem, skipChecklistItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -64,7 +65,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
                     <span className="flex-1">
                       {it.position + 1}. {it.prompt}
                     </span>
-                    <Badge variant={STATUS_TONE[it.status] ?? "muted"}>{it.status}</Badge>
+                    <Badge variant={STATUS_TONE[it.status] ?? "muted"}>{toTitle(it.status)}</Badge>
                   </div>
                   {it.status === "pending" && (
                     <div className="mt-2 flex gap-1.5">

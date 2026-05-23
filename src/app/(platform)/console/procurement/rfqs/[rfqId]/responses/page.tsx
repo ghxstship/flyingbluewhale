@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { timeAgo } from "@/lib/format";
+import { timeAgo, toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -96,7 +96,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
           { label: rfq.title, href: `/console/procurement/rfqs/${rfqId}` },
           { label: "Responses" },
         ]}
-        action={<Badge variant="muted">{rfq.status}</Badge>}
+        action={<Badge variant="muted">{toTitle(rfq.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

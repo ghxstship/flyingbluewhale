@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -125,7 +126,7 @@ export default async function MobileDriverPage() {
                     {r.actual_arrive ? `Arrived ${fmtTime(r.actual_arrive)}` : "Cancelled"}
                   </div>
                 </div>
-                <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>
+                <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
               </li>
             ))}
           </ul>

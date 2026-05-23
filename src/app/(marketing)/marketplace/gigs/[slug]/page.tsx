@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -55,7 +56,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <div className="eyebrow eyebrow-brand">Gig · {r.org_name}</div>
         <h1 className="hed-2xl mt-4">{r.title}</h1>
         <div className="mt-5 flex flex-wrap gap-2">
-          <Badge variant="muted">{r.posting_type}</Badge>
+          <Badge variant="muted">{toTitle(r.posting_type)}</Badge>
           <Badge variant="muted">{r.employment_type.toUpperCase()}</Badge>
           {[r.city, r.region, r.country].filter(Boolean).length > 0 && (
             <Badge variant="muted">{[r.city, r.region, r.country].filter(Boolean).join(", ")}</Badge>

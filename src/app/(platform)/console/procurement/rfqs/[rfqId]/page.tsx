@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -110,7 +111,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
           { label: "RFQs", href: "/console/procurement/rfqs" },
           { label: rfq.title },
         ]}
-        action={<Badge variant={STATUS_TONE[rfq.status] ?? "muted"}>{rfq.status}</Badge>}
+        action={<Badge variant={STATUS_TONE[rfq.status] ?? "muted"}>{toTitle(rfq.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         {rfq.description && <p className="text-sm text-[var(--text-secondary)]">{rfq.description}</p>}

@@ -5,6 +5,7 @@ import { Alert } from "@/components/ui/Alert";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, env } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { money } from "@/components/detail/DetailShell";
 import { OpenPortalButton } from "./OpenPortalButton";
 
@@ -134,7 +135,7 @@ export default async function BillingPage() {
                         </Link>
                       </td>
                       <td>
-                        <Badge variant="muted">{i.status}</Badge>
+                        <Badge variant="muted">{toTitle(i.status)}</Badge>
                       </td>
                       <td className="font-mono text-xs">{money(i.amount_cents)}</td>
                       <td className="font-mono text-xs">

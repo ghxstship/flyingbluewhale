@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 import { markAnnouncementRead } from "./actions";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 
@@ -69,7 +70,7 @@ export default async function MobileFeedPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2">
                     {a.pinned && <Badge variant="warning">Pinned</Badge>}
-                    <Badge variant="muted">{a.audience}</Badge>
+                    <Badge variant="muted">{toTitle(a.audience)}</Badge>
                   </div>
                   <span className="font-mono text-xs text-[var(--text-muted)]">
                     {a.published_at ? fmt.date(a.published_at) : ""}

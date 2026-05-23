@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -158,7 +159,7 @@ export default async function Page() {
                     className="surface-inset flex items-center justify-between gap-3 p-2 text-sm"
                   >
                     <div className="flex items-center gap-2">
-                      <Badge variant={KIND_TONE[it.kind] ?? "muted"}>{it.kind}</Badge>
+                      <Badge variant={KIND_TONE[it.kind] ?? "muted"}>{toTitle(it.kind)}</Badge>
                       <span>{it.title}</span>
                       {it.project && <span className="text-xs text-[var(--text-muted)]">· {it.project}</span>}
                     </div>

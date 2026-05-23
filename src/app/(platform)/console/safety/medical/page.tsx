@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -109,7 +110,7 @@ export default async function Page() {
                     <span className="font-medium">{e.kind.replace(/_/g, " ")}</span>{" "}
                     <span className="font-mono text-xs text-[var(--text-muted)]">since {fmt(e.started_at)}</span>
                   </div>
-                  <Badge variant={SEVERITY_TONE[e.severity] ?? "muted"}>{e.severity}</Badge>
+                  <Badge variant={SEVERITY_TONE[e.severity] ?? "muted"}>{toTitle(e.severity)}</Badge>
                 </li>
               ))}
             </ul>

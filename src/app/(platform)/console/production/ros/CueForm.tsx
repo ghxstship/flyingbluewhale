@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { createCueAction, setCueStatus, deleteCue, type State } from "./actions";
 import type { Cue } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 export function CueForm() {
   const [state, action, pending] = useActionState<State, FormData>(createCueAction, null);
@@ -72,7 +73,7 @@ export function CueRow({ cue }: { cue: Cue }) {
         {cue.description && <div className="text-xs text-[var(--text-muted)]">{cue.description}</div>}
       </td>
       <td>
-        <Badge variant={statusVariant(cue.status)}>{cue.status}</Badge>
+        <Badge variant={statusVariant(cue.status)}>{toTitle(cue.status)}</Badge>
       </td>
       <td className="text-end">
         <div className="inline-flex items-center gap-1">

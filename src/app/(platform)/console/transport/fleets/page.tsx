@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -100,7 +101,7 @@ export default async function Page() {
                     {f.runCount === 1 ? "" : "s"}
                   </div>
                 </div>
-                <Badge variant="muted">{f.fleet}</Badge>
+                <Badge variant="muted">{toTitle(f.fleet)}</Badge>
               </header>
               <table className="data-table w-full text-sm">
                 <thead>

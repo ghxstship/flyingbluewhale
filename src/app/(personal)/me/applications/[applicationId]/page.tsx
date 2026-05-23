@@ -4,6 +4,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +38,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
       <div className="text-label text-[var(--color-text-tertiary)]">Application</div>
       <div className="mt-1 flex items-center gap-2">
         <h1 className="text-display text-3xl">{a.id.slice(0, 8)}</h1>
-        <Badge variant={STATUS_TONE[a.status] ?? "muted"}>{a.status}</Badge>
+        <Badge variant={STATUS_TONE[a.status] ?? "muted"}>{toTitle(a.status)}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         Applied {new Date(a.applied_at).toLocaleString()}

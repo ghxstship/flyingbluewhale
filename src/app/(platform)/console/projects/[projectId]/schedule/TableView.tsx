@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { toTitle } from "@/lib/format";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fmtDateTime } from "@/components/detail/DetailShell";
 
@@ -44,7 +45,7 @@ export function TableView({ rows }: { rows: TableRow[] }) {
                   {r.title}
                 </Link>
               </td>
-              <td className="font-mono text-xs text-[var(--text-muted)] uppercase">{r.kind}</td>
+              <td className="font-mono text-xs text-[var(--text-muted)] uppercase">{toTitle(r.kind)}</td>
               <td>
                 <StatusBadge status={r.status} />
               </td>

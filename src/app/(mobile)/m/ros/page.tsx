@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -99,7 +100,7 @@ export default async function MobileRosPage() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="text-sm leading-snug font-semibold">{c.label}</div>
-                    <Badge variant={tone}>{c.status}</Badge>
+                    <Badge variant={tone}>{toTitle(c.status)}</Badge>
                   </div>
                   {c.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{c.description}</p>}
                   <div className="mt-1.5">

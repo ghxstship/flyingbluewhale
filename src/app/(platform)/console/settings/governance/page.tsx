@@ -96,7 +96,7 @@ export default async function GovernancePage() {
                 (policies ?? []).map((p) => (
                   <tr key={p.id}>
                     <td>{p.name}</td>
-                    <td className="text-xs text-[var(--text-secondary)] capitalize">{p.category}</td>
+                    <td className="text-xs text-[var(--text-secondary)]">{p.category ? toTitle(p.category) : "—"}</td>
                     <td>
                       <Badge variant={p.status === "active" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
                     </td>

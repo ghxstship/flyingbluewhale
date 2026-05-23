@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { toTitle } from "@/lib/format";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { money } from "@/components/detail/DetailShell";
 
@@ -85,7 +86,7 @@ export default async function CatalogPage() {
                       </td>
                       <td className="font-mono text-xs">{i.asset_tag ?? "—"}</td>
                       <td className="font-mono text-xs">{money(i.daily_rate_cents)}</td>
-                      <td className="font-mono text-xs">{i.status}</td>
+                      <td className="font-mono text-xs">{toTitle(i.status)}</td>
                     </tr>
                   ))}
                 </tbody>

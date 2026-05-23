@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,7 @@ export default async function Page() {
                   {formatMoney(o.fee_cents)} · {o.deposit_pct}% deposit
                 </p>
               </div>
-              <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{o.status}</Badge>
+              <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>
             </li>
           ))}
         </ul>

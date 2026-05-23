@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -87,7 +88,7 @@ export default async function NotificationsPage() {
                   </div>
                   {n.body && <p className="mt-1 text-xs text-[var(--text-secondary)]">{n.body}</p>}
                   <div className="mt-2">
-                    <Badge variant="muted">{n.kind}</Badge>
+                    <Badge variant="muted">{toTitle(n.kind)}</Badge>
                   </div>
                 </div>
               </div>

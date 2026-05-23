@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { timeAgo } from "@/lib/format";
+import { timeAgo, toTitle } from "@/lib/format";
 import type { Proposal, ProposalShareLink } from "@/lib/supabase/types";
 import { ProposalEditor } from "./ProposalEditor";
 import { ShareLinkPanel } from "./ShareLinkPanel";
@@ -87,7 +87,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           {revoked ? <Badge variant="muted">Revoked</Badge> : <Badge variant="success">Active</Badge>}
-                          {l.audience && <Badge variant="brand">{l.audience}</Badge>}
+                          {l.audience && <Badge variant="brand">{toTitle(l.audience)}</Badge>}
                           <span className="text-xs text-[var(--text-muted)]">· {l.view_count} views</span>
                           {l.last_viewed_at && (
                             <span className="text-xs text-[var(--text-muted)]">

@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { answerRfi, closeRfi } from "./actions";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Presence targetTable="rfis" targetId={id} currentUser={presenceUser} />
-            <Badge variant="info">{rfi.status}</Badge>
+            <Badge variant="info">{toTitle(rfi.status)}</Badge>
             <a
               href={`/console/rfis/${rfi.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"

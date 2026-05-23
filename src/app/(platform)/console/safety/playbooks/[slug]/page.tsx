@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { timeAgo } from "@/lib/format";
+import { timeAgo, toTitle } from "@/lib/format";
 import type { Json } from "@/lib/supabase/database.types";
 
 export const dynamic = "force-dynamic";
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         action={
           <div className="flex items-center gap-2">
             <Badge variant="info">{KIND_LABEL[pb.kind] ?? pb.kind}</Badge>
-            <Badge variant={STATUS_TONE[pb.status]}>{pb.status}</Badge>
+            <Badge variant={STATUS_TONE[pb.status]}>{toTitle(pb.status)}</Badge>
           </div>
         }
       />

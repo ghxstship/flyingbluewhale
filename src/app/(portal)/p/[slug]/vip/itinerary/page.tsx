@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -96,7 +97,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                               {e.location?.name ? ` · ${e.location.name}` : ""}
                             </div>
                           </div>
-                          <Badge variant="muted">{e.status}</Badge>
+                          <Badge variant="muted">{toTitle(e.status)}</Badge>
                         </div>
                         {e.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{e.description}</p>}
                       </div>

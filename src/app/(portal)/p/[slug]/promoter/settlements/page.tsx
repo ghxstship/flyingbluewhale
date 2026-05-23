@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -132,7 +133,7 @@ export default async function PromoterSettlements({ params }: { params: Promise<
                     {(s.balance_due_cents / 100).toLocaleString("en-US", { style: "currency", currency: s.currency })}
                   </td>
                   <td>
-                    <Badge variant={s.status === "final" ? "success" : "info"}>{s.status}</Badge>
+                    <Badge variant={s.status === "final" ? "success" : "info"}>{toTitle(s.status)}</Badge>
                   </td>
                 </tr>
               ))

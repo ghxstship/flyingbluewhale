@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -54,7 +55,7 @@ export default async function Page() {
                   Submitted {new Date(r.submitted_at).toLocaleDateString()}
                 </p>
               </div>
-              <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>
+              <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
             </li>
           ))}
         </ul>

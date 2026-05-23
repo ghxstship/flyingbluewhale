@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { isAdmin as sessionIsAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { toTitle } from "@/lib/format";
 import { InviteForm } from "./InviteForm";
 
 function relTime(iso: string): string {
@@ -104,7 +105,7 @@ export default async function InvitesPage() {
                     <td>{i.email}</td>
                     <td className="text-[var(--text-muted)]">{i.role}</td>
                     <td>
-                      <Badge variant={i.status === "accepted" ? "success" : "muted"}>{i.status}</Badge>
+                      <Badge variant={i.status === "accepted" ? "success" : "muted"}>{toTitle(i.status)}</Badge>
                     </td>
                     <td className="text-[var(--text-muted)]">{relTime(i.accepted_at ?? i.created_at)}</td>
                   </tr>

@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -87,7 +88,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
         breadcrumbs={[{ label: "Forms", href: "/console/forms" }, { label: form.title }]}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={tone}>{form.status}</Badge>
+            <Badge variant={tone}>{toTitle(form.status)}</Badge>
             <Button href={`/console/forms/${form.id}/edit`} variant="secondary" size="sm">
               Edit
             </Button>

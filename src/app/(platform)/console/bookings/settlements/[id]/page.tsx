@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={s.finalized_at ? `Finalized ${new Date(s.finalized_at).toLocaleString()}` : "Draft / reconciling"}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>
+            <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>
             {s.talent_offer_id && (
               <Button href={`/console/bookings/deals/${s.talent_offer_id}/settlement`} size="sm" variant="ghost">
                 Edit on deal

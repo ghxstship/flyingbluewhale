@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
             <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Deal Terms</h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
               <dt className="text-[var(--text-secondary)]">Type</dt>
-              <dd>{d.deal_type}</dd>
+              <dd>{toTitle(d.deal_type)}</dd>
               <dt className="text-[var(--text-secondary)]">Guarantee</dt>
               <dd className="font-mono">{d.guarantee_cents != null ? formatMoney(d.guarantee_cents) : "—"}</dd>
               <dt className="text-[var(--text-secondary)]">Door %</dt>

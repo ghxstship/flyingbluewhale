@@ -128,7 +128,7 @@ export default async function Page() {
                           </Link>
                         </td>
                         <td>
-                          <Badge variant="muted">{v.kind}</Badge>
+                          <Badge variant="muted">{toTitle(v.kind)}</Badge>
                         </td>
                         <td>{v.cluster ?? "—"}</td>
                         <td className="font-mono text-xs">{v.capacity != null ? fmt.number(v.capacity) : "—"}</td>

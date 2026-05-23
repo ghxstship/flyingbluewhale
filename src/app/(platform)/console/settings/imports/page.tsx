@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { ImportForm } from "./ImportForm";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 /**
  * Import Centre — Opportunity #7 UI surface.
@@ -66,7 +67,7 @@ export default async function ImportsPage() {
                 ) : (
                   (runs ?? []).map((r) => (
                     <tr key={r.id}>
-                      <td className="font-mono text-xs">{r.kind}</td>
+                      <td className="font-mono text-xs">{toTitle(r.kind)}</td>
                       <td className="text-xs text-[var(--text-secondary)]">{r.filename ?? r.source}</td>
                       <td className="font-mono text-xs">{r.rows_imported}</td>
                       <td className="font-mono text-xs">{r.rows_failed}</td>

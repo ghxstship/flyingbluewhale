@@ -131,7 +131,7 @@ export default async function Page() {
             {
               key: "priority",
               header: "Priority",
-              render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{r.priority}</Badge>,
+              render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{toTitle(r.priority)}</Badge>,
               accessor: (r) => r.priority ?? null,
               filterable: true,
               groupable: true,

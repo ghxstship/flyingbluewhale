@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -96,7 +97,7 @@ export default async function PromoterCoPro({ params }: { params: Promise<{ slug
                   </td>
                   <td className="font-mono text-xs">{o.door_pct != null ? `${o.door_pct}%` : "—"}</td>
                   <td>
-                    <Badge variant={o.status === "contracted" ? "success" : "info"}>{o.status}</Badge>
+                    <Badge variant={o.status === "contracted" ? "success" : "info"}>{toTitle(o.status)}</Badge>
                   </td>
                 </tr>
               ))}

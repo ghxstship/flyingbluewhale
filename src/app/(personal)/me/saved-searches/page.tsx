@@ -1,6 +1,7 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
@@ -86,7 +87,7 @@ export default async function Page() {
             {rows.map((r) => (
               <li key={r.id} className="card-elevated flex items-center justify-between p-3 text-sm">
                 <div className="flex items-center gap-3">
-                  <Badge variant="muted">{r.kind}</Badge>
+                  <Badge variant="muted">{toTitle(r.kind)}</Badge>
                   <span className="font-semibold">{r.name}</span>
                   {r.alert_email && <Badge variant="info">email</Badge>}
                   {r.alert_push && <Badge variant="info">push</Badge>}

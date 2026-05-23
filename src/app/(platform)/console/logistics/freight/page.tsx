@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -150,7 +151,7 @@ export default async function Page() {
                   {manifests.map((m) => (
                     <tr key={m.id}>
                       <td>
-                        <Badge variant="muted">{m.kind}</Badge>
+                        <Badge variant="muted">{toTitle(m.kind)}</Badge>
                       </td>
                       <td className="font-mono text-xs">{m.flight_ref ?? "—"}</td>
                       <td>{m.carrier ?? "—"}</td>
@@ -186,7 +187,7 @@ export default async function Page() {
                       {formatMoney(o.total_cents, o.currency)}
                     </div>
                   </div>
-                  <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{o.status}</Badge>
+                  <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>
                 </li>
               ))}
             </ul>

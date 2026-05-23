@@ -6,6 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 import { OfferControls } from "./OfferControls";
 
 export const dynamic = "force-dynamic";
@@ -57,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
         eyebrow="Marketplace · Offer"
         title={talent?.act_name ?? "Offer"}
         subtitle={`${o.performance_date} · ${formatMoney(o.fee_cents)}`}
-        action={<Badge variant={STATUS_TONE[o.status] ?? "muted"}>{o.status}</Badge>}
+        action={<Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <OfferControls offerId={o.id} status={o.status} />

@@ -12,6 +12,7 @@ import { hasSupabase } from "@/lib/env";
 import { transitionDailyLog } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -71,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Presence targetTable="daily_logs" targetId={id} currentUser={presenceUser} />
-            <Badge variant={STATUS_TONE[log.status] ?? "muted"}>{log.status}</Badge>
+            <Badge variant={STATUS_TONE[log.status] ?? "muted"}>{toTitle(log.status)}</Badge>
             {log.status === "draft" && (
               <StatusForm action={transitionDailyLog.bind(null, id, "submitted")} label="Submit" />
             )}

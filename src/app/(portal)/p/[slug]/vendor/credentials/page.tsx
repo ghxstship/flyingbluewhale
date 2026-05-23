@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusChip } from "@/components/ui/StatusChip";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { toTitle } from "@/lib/format";
 import { fmtDate } from "@/components/detail/DetailShell";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
@@ -49,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               const state = expiresAt < now ? "expired" : expiresAt - now < 30 * 864e5 ? "expiring" : "active";
               return (
                 <tr key={c.id}>
-                  <td className="font-mono text-xs">{c.kind}</td>
+                  <td className="font-mono text-xs">{toTitle(c.kind)}</td>
                   <td className="font-mono text-xs">{c.number ?? "—"}</td>
                   <td className="font-mono text-xs">{fmtDate(c.issued_on)}</td>
                   <td className="font-mono text-xs">{fmtDate(c.expires_on)}</td>

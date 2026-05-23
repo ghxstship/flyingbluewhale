@@ -52,7 +52,7 @@ export default async function WebhooksPage() {
       <ModuleHeader
         eyebrow="Settings"
         title="Webhooks"
-        subtitle="Outgoing event notifications to your endpoints — HMAC-signed, retried up to 5× with exponential backoff."
+        subtitle="Outgoing event notifications to your endpoints."
         action={
           <Button href="/console/settings/webhooks/new" size="sm">
             + New Endpoint

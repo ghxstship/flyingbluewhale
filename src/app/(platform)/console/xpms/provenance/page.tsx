@@ -43,7 +43,7 @@ export default async function ProvenancePage() {
       <ModuleHeader
         eyebrow="XPMS · Provenance"
         title="Provenance Graph"
-        subtitle="Cross-class edges. Every TPC atom traces back to its UAC origin, assigned people, authoring documents, and downstream consumers."
+        subtitle={`${edges.length} Edge${edges.length === 1 ? "" : "s"}`}
       />
       <div className="page-content">
         <DataTable<Edge>
@@ -51,7 +51,7 @@ export default async function ProvenancePage() {
           rows={edges}
           searchable
           emptyLabel="No provenance edges yet"
-          emptyDescription="Edges materialise when atoms reference each other — an Operations atom assigned to a Production atom, a Creative atom referencing Build atoms, a TPC atom tracing back to its UAC origin."
+          emptyDescription="Edges appear as records reference each other across classes — assignments, authoring, and downstream consumers."
           columns={[
             {
               key: "kind",

@@ -13,11 +13,7 @@ const SECTIONS = [
 export default function Page() {
   return (
     <>
-      <ModuleHeader
-        eyebrow="AI"
-        title="AI"
-        subtitle="Automations and assistive workflows powered by Claude. The chat surface lives inline on each module (see the AI assistant in the sidebar)."
-      />
+      <ModuleHeader eyebrow="AI" title="AI" subtitle="Automations and assistive workflows." />
       <div className="page-content">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {SECTIONS.map((s) => (

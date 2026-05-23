@@ -4,11 +4,12 @@ import * as React from "react";
 import Link from "next/link";
 import { ChartShell } from "@/components/charts/ChartShell";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import type { ProjectStatus } from "@/lib/supabase/types";
 
 export type PortfolioEntry = {
   id: string;
   name: string;
-  status: string;
+  status: ProjectStatus;
   startDate: string | null;
   endDate: string | null;
   budgetCents: number;
@@ -47,7 +48,6 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
       title="Portfolio Health"
       description="Tile size = budget · color = computed health (schedule + status)"
       empty={enriched.length === 0}
-      height={undefined as unknown as number}
       actions={
         <div className="flex items-center gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
           <Legend tone="bg-emerald-500" label={`On track ${counts.green}`} />
@@ -87,8 +87,9 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
 type Health = "green" | "amber" | "red";
 
 function computeHealth(p: PortfolioEntry): Health {
-  if (p.status === "on_hold" || p.status === "cancelled") return "red";
-  if (p.status === "completed") return "green";
+  if (p.status === "archived") return "red";
+  if (p.status === "complete") return "green";
+  if (p.status === "paused") return "amber";
   // Schedule pressure: how close to / past end date relative to span.
   if (!p.endDate) return "green";
   const end = new Date(p.endDate).getTime();

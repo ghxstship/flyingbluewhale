@@ -44,7 +44,7 @@ export default async function CatalogPage() {
       <ModuleHeader
         eyebrow="Procurement"
         title="Approved Item Catalog"
-        subtitle={`${rows.length} item${rows.length === 1 ? "" : "s"} across ${grouped.size} categor${grouped.size === 1 ? "y" : "ies"}`}
+        subtitle={`${rows.length} Item${rows.length === 1 ? "" : "s"} across ${grouped.size} categor${grouped.size === 1 ? "y" : "ies"}`}
       />
       <div className="page-content max-w-5xl space-y-4">
         {rows.length === 0 ? (

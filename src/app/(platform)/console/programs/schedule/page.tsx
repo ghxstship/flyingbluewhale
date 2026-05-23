@@ -72,7 +72,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Programs"
         title="Master Schedule"
-        subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"} · ${upcoming} upcoming · ${live} live`}
+        subtitle={`${rows.length} Event${rows.length === 1 ? "" : "s"} · ${upcoming} upcoming · ${live} live`}
         action={
           <Button href="/console/events/new" size="sm">
             + New Event

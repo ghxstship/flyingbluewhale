@@ -45,7 +45,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="Guard Tours"
-        subtitle={`${rows.length} tour${rows.length === 1 ? "" : "s"} · ${inProgress} in progress · ${overdue} overdue`}
+        subtitle={`${rows.length} Tour${rows.length === 1 ? "" : "s"} · ${inProgress} in progress · ${overdue} overdue`}
         action={
           <Button href="/console/safety/guard-tours/new" size="sm">
             + Schedule tour

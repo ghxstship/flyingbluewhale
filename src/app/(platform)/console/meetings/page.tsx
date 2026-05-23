@@ -67,7 +67,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workspace"
         title="Meetings"
-        subtitle={`${meetings.length} meeting${meetings.length === 1 ? "" : "s"}${upcoming ? ` · ${upcoming} upcoming` : ""}`}
+        subtitle={`${meetings.length} Meeting${meetings.length === 1 ? "" : "s"}${upcoming ? ` · ${upcoming} upcoming` : ""}`}
         action={
           <Button href="/console/events/new" size="sm">
             + New Event

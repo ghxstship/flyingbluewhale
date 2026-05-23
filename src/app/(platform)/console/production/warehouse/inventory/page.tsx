@@ -63,7 +63,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Production · Warehouse"
         title="Inventory"
-        subtitle={`${rows.length} asset${rows.length === 1 ? "" : "s"} · ${locationEntries.length} location${locationEntries.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Asset${rows.length === 1 ? "" : "s"} · ${locationEntries.length} location${locationEntries.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/production/equipment/new" size="sm">
             + New Item

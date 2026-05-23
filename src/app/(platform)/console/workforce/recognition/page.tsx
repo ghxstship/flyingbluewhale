@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -74,7 +75,12 @@ export default async function RecognitionAdminPage() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Recognition"
-        subtitle={`${rows.length} kudos posts · 90-day leaderboard below`}
+        subtitle={`${rows.length} Kudos · 90-Day Leaderboard Below`}
+        action={
+          <Button href="/console/workforce/recognition/new" size="sm">
+            + Give Kudos
+          </Button>
+        }
       />
       <div className="page-content grid gap-4 lg:grid-cols-2">
         <section className="surface p-4">

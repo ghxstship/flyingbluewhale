@@ -27,7 +27,7 @@ export default async function VendorsPage() {
       <ModuleHeader
         eyebrow="Procurement"
         title="Vendors"
-        subtitle={`${rows.length} vendor${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Vendor${rows.length === 1 ? "" : "s"}`}
         action={<Button href="/console/procurement/vendors/new">+ New Vendor</Button>}
       />
       <div className="page-content">

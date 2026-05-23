@@ -59,7 +59,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Settings"
         title="Master Catalog"
-        subtitle={`${rows.length} item${rows.length === 1 ? "" : "s"} · the assignable inventory for advancing surfaces`}
+        subtitle={`${rows.length} Item${rows.length === 1 ? "" : "s"} · the assignable inventory for advancing surfaces`}
         action={
           <Button href="/console/settings/catalog/new" size="sm">
             + New Item

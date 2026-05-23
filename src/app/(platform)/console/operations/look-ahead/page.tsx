@@ -136,7 +136,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Operations"
         title="Look-ahead — next 21 days"
-        subtitle={`${items.length} item${items.length === 1 ? "" : "s"} across tasks, events, briefings, inspections, dispatches.`}
+        subtitle={`${items.length} Item${items.length === 1 ? "" : "s"} across tasks, events, briefings, inspections, dispatches.`}
       />
       <div className="page-content space-y-3">
         {Object.keys(buckets).length === 0 ? (

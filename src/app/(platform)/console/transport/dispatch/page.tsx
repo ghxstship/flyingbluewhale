@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Transport"
         title="Dispatch"
-        subtitle={`${rows.length} run${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Run${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/transport/dispatch/new" size="sm">
             + New Run

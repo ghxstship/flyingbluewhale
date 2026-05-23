@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Logistics"
         title="Rate Card Items"
-        subtitle={`${rows.length} item${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Item${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/logistics/ratecard/new" size="sm">
             + New Rate

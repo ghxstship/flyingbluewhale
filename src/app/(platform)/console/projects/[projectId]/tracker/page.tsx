@@ -45,7 +45,7 @@ export default async function TrackerPage({
       <ModuleHeader
         eyebrow={project.name}
         title="Tracker"
-        subtitle={`${atoms.length} atom${atoms.length === 1 ? "" : "s"} · ${project.xpms_phase ?? "draft"} phase`}
+        subtitle={`${atoms.length} Atom${atoms.length === 1 ? "" : "s"} · ${project.xpms_phase ?? "draft"} phase`}
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project.name, href: `/console/projects/${projectId}` },

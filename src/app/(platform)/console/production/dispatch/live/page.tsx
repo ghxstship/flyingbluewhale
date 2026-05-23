@@ -87,7 +87,7 @@ export default async function LiveDispatchPage() {
       <ModuleHeader
         eyebrow="Production"
         title="Live Dispatch"
-        subtitle={`${points.length} run${points.length === 1 ? "" : "s"} with a fix`}
+        subtitle={`${points.length} Run${points.length === 1 ? "" : "s"} with a fix`}
       />
       <div className="page-content space-y-5">
         <LiveDispatchMap points={points} />

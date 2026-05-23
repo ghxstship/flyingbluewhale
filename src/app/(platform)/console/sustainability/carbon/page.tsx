@@ -47,7 +47,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Sustainability"
         title="Carbon"
-        subtitle={`${rows.length} measurement${rows.length === 1 ? "" : "s"} on file`}
+        subtitle={`${rows.length} Measurement${rows.length === 1 ? "" : "s"} on file`}
         action={
           <Button href="/console/sustainability/carbon/new" size="sm">
             + Record measurement

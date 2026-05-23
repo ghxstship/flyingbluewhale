@@ -79,7 +79,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Services"
-        subtitle={`${fmt.number(totalShifts)} shift${totalShifts === 1 ? "" : "s"} · ${fmt.number(mealCredits)} meal credit${mealCredits === 1 ? "" : "s"} · 7-day window`}
+        subtitle={`${fmt.number(totalShifts)} Shift${totalShifts === 1 ? "" : "s"} · ${fmt.number(mealCredits)} meal credit${mealCredits === 1 ? "" : "s"} · 7-day window`}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

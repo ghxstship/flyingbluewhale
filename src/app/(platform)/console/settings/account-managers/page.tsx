@@ -92,7 +92,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Settings"
         title="Account Managers"
-        subtitle={`${hydrated.length} assignment${hydrated.length === 1 ? "" : "s"} · who handles which portal user across personas`}
+        subtitle={`${hydrated.length} Assignment${hydrated.length === 1 ? "" : "s"} · who handles which portal user across personas`}
         action={
           <Button href="/console/settings/account-managers/new" size="sm">
             + New Assignment

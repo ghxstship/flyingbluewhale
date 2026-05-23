@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Accommodation"
         title="Group Blocks"
-        subtitle={`${rows.length} block${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Block${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/accommodation/blocks/new" size="sm">
             + New Block

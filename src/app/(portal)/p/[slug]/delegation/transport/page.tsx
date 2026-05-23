@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <ModuleHeader
         eyebrow="Portal · Delegation"
         title="Transport"
-        subtitle={`${runs.length} run${runs.length === 1 ? "" : "s"} · ${upcoming} active`}
+        subtitle={`${runs.length} Run${runs.length === 1 ? "" : "s"} · ${upcoming} active`}
         breadcrumbs={[
           { label: "Portal", href: `/p/${slug}` },
           { label: "Delegation", href: `/p/${slug}/delegation` },

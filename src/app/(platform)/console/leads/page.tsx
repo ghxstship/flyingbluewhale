@@ -30,7 +30,7 @@ export default async function LeadsPage() {
       <ModuleHeader
         eyebrow="Sales"
         title="Leads"
-        subtitle={`${rows.length} lead${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Lead${rows.length === 1 ? "" : "s"}`}
         action={<Button href="/console/leads/new">+ New Lead</Button>}
       />
       <div className="page-content">

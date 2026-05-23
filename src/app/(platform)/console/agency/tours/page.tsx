@@ -60,7 +60,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Agency"
         title="Tours"
-        subtitle={`${rows.length} tour${rows.length === 1 ? "" : "s"} · multi-date P&L roll-up`}
+        subtitle={`${rows.length} Tour${rows.length === 1 ? "" : "s"} · multi-date P&L roll-up`}
         action={
           <Button href="/console/agency/tours/new" size="sm">
             + New Tour

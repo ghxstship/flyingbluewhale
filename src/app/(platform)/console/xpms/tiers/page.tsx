@@ -43,7 +43,7 @@ export default async function TierCompositionPage() {
         <Card>
           <CardHeader
             title="Atom share by tier"
-            subtitle={`Across ${totalAtoms} atom${totalAtoms === 1 ? "" : "s"} carrying a primary tier`}
+            subtitle={`Across ${totalAtoms} Atom${totalAtoms === 1 ? "" : "s"} carrying a primary tier`}
           />
           <CardBody>
             <div className="space-y-3">

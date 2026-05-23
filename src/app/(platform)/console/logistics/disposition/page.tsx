@@ -66,7 +66,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Logistics"
         title="Disposition"
-        subtitle={`${rows.length} of ${totalAssets ?? 0} asset${totalAssets === 1 ? "" : "s"} pending disposition · ${retired} retired · ${maintenance} maintenance`}
+        subtitle={`${rows.length} of ${totalAssets ?? 0} Asset${totalAssets === 1 ? "" : "s"} pending disposition · ${retired} retired · ${maintenance} maintenance`}
         action={
           <Button href="/console/production/equipment" size="sm">
             All equipment

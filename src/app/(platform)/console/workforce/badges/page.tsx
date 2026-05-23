@@ -48,7 +48,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Badges"
-        subtitle={`${rows.length} badge${rows.length === 1 ? "" : "s"} · award to crew via recognition`}
+        subtitle={`${rows.length} Badge${rows.length === 1 ? "" : "s"} · award to crew via recognition`}
         action={
           <Button href="/console/workforce/badges/new" size="sm">
             + New Badge

@@ -45,7 +45,7 @@ export default async function GuidesIndex() {
       <ModuleHeader
         eyebrow="Knowledge"
         title="Guides"
-        subtitle={`${rows.length} guide${rows.length === 1 ? "" : "s"} across your projects`}
+        subtitle={`${rows.length} Guide${rows.length === 1 ? "" : "s"} across your projects`}
       />
       <div className="page-content">
         {rows.length === 0 ? (

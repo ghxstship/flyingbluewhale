@@ -47,7 +47,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="Playbooks"
-        subtitle={`${rows.length} playbook${rows.length === 1 ? "" : "s"} · ${published} published`}
+        subtitle={`${rows.length} Playbook${rows.length === 1 ? "" : "s"} · ${published} published`}
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
             + New Playbook

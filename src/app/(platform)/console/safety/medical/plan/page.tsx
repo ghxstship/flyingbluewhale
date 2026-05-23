@@ -84,7 +84,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="Medical Plan"
-        subtitle={`${venues.length} venue${venues.length === 1 ? "" : "s"} · ${covered} have medical capacity recorded${coveragePct != null ? ` · ${coveragePct}% coverage` : ""}`}
+        subtitle={`${venues.length} Venue${venues.length === 1 ? "" : "s"} · ${covered} have medical capacity recorded${coveragePct != null ? ` · ${coveragePct}% coverage` : ""}`}
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
             + New Plan

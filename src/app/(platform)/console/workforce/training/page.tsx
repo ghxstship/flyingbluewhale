@@ -58,7 +58,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Training"
-        subtitle={`${rows.length} credential${rows.length === 1 ? "" : "s"} on file · ${expiringSoon} expiring within 60 days · ${expired} expired`}
+        subtitle={`${rows.length} Credential${rows.length === 1 ? "" : "s"} on file · ${expiringSoon} expiring within 60 days · ${expired} expired`}
         action={
           <Button href="/console/people/credentials/new" size="sm">
             + Add credential

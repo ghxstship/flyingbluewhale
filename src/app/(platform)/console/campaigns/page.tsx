@@ -46,7 +46,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workspace"
         title="Campaigns"
-        subtitle={`${rows.length} campaign${rows.length === 1 ? "" : "s"} · ${live} live · ${formatMoney(totalSpent)} of ${formatMoney(totalBudget)} spent`}
+        subtitle={`${rows.length} Campaign${rows.length === 1 ? "" : "s"} · ${live} live · ${formatMoney(totalSpent)} of ${formatMoney(totalBudget)} spent`}
         action={
           <Button href="/console/campaigns/new" size="sm">
             + New Campaign

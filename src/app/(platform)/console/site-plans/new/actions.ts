@@ -59,7 +59,17 @@ const Schema = z.object({
   preset_code: z.string().max(80).optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = { error?: string; values?: Record<string, string> } | null;
+
+// Capture submitted strings to echo on validation failure — keeps user
+// input alive across the React form-action reset (see FormShell `values`).
+function echo(fd: FormData): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [k, v] of fd.entries()) {
+    if (typeof v === "string") out[k] = v;
+  }
+  return out;
+}
 
 export async function createCharthouseSheet(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -68,7 +78,9 @@ export async function createCharthouseSheet(_: State, fd: FormData): Promise<Sta
   if (raw.preset_code === "") delete raw.preset_code;
 
   const parsed = Schema.safeParse(raw);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid input", values: echo(fd) };
+  }
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const projectId = parsed.data.project_id || null;
@@ -84,7 +96,7 @@ export async function createCharthouseSheet(_: State, fd: FormData): Promise<Sta
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!data) return { error: "Project not found in your organization" };
+    if (!data) return { error: "Project not found in your organization", values: echo(fd) };
   }
   if (venueId) {
     const { data } = await supabase
@@ -93,7 +105,7 @@ export async function createCharthouseSheet(_: State, fd: FormData): Promise<Sta
       .eq("id", venueId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!data) return { error: "Venue not found in your organization" };
+    if (!data) return { error: "Venue not found in your organization", values: echo(fd) };
   }
   if (eventId) {
     const { data } = await supabase
@@ -102,7 +114,7 @@ export async function createCharthouseSheet(_: State, fd: FormData): Promise<Sta
       .eq("id", eventId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!data) return { error: "Event not found in your organization" };
+    if (!data) return { error: "Event not found in your organization", values: echo(fd) };
   }
 
   // Build the canonical Atom ID per protocol §3.
@@ -120,11 +132,11 @@ export async function createCharthouseSheet(_: State, fd: FormData): Promise<Sta
       rev: "A",
     });
   } catch (e) {
-    return { error: e instanceof Error ? e.message : "Failed to build atom ID" };
+    return { error: e instanceof Error ? e.message : "Failed to build atom ID", values: echo(fd) };
   }
   // Belt-and-suspenders — should be unreachable when builder accepts.
   if (!CHARTHOUSE_ATOM_ID_RE.test(atomId)) {
-    return { error: `Built atom id is malformed: ${atomId}` };
+    return { error: `Built atom id is malformed: ${atomId}`, values: echo(fd) };
   }
 
   const shellDims =
@@ -169,11 +181,11 @@ export async function createCharthouseSheet(_: State, fd: FormData): Promise<Sta
   if (error) {
     if (error.code === "23505") {
       if (error.message.includes("atom_id")) {
-        return { error: `Atom ID "${atomId}" already exists. Bump SEQ or revise codes.` };
+        return { error: `Atom ID "${atomId}" already exists. Bump SEQ or revise codes.`, values: echo(fd) };
       }
-      return { error: `Sheet code "${parsed.data.code}" already exists in this scope.` };
+      return { error: `Sheet code "${parsed.data.code}" already exists in this scope.`, values: echo(fd) };
     }
-    return { error: error.message };
+    return { error: error.message, values: echo(fd) };
   }
 
   // Instantiate preset skeleton (regions/bands/stations) when one was selected.

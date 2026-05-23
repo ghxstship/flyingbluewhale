@@ -29,6 +29,15 @@ export type FormState = {
   error?: string;
   ok?: true;
   fieldErrors?: Record<string, string>;
+  /**
+   * Submitted form values to echo back on validation failure. React server
+   * actions reset uncontrolled inputs on submission completion, so without
+   * this echo the user has to re-type everything on every error. Actions
+   * populate this with `Object.fromEntries(fd)` (filtering out File entries)
+   * on the failure path; FormShell walks the form on the next render and
+   * patches the matching `name=` element's `.value`.
+   */
+  values?: Record<string, string>;
 } | null;
 
 type FormShellProps = {
@@ -101,6 +110,30 @@ export function FormShell({
     if (state?.error) announce(state.error, "assertive");
     if (state?.ok) announce("Saved", "polite");
   }, [state, announce]);
+
+  // Restore submitted values after a validation failure. React server-actions
+  // reset uncontrolled inputs once the action settles; when the action returns
+  // `{ error, values }` we walk the form and patch each named field's `.value`
+  // back to what the user typed so they don't have to re-enter the form.
+  useEffect(() => {
+    if (!state?.values || !formRef.current) return;
+    const form = formRef.current;
+    for (const [name, value] of Object.entries(state.values)) {
+      if (typeof value !== "string") continue;
+      const el = form.elements.namedItem(name);
+      if (!el) continue;
+      // RadioNodeList for repeated names — skip; rare in our forms.
+      if (el instanceof HTMLInputElement && (el.type === "checkbox" || el.type === "radio")) {
+        el.checked = value === "on" || value === el.value;
+      } else if (
+        el instanceof HTMLInputElement ||
+        el instanceof HTMLTextAreaElement ||
+        el instanceof HTMLSelectElement
+      ) {
+        el.value = value;
+      }
+    }
+  }, [state]);
 
   const handleChange = useCallback(() => {
     if (!dirty) setDirty(true);

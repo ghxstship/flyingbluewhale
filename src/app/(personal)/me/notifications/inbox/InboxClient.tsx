@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Alert } from "@/components/ui/Alert";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover";
 import { timeAgo } from "@/lib/format";
 import { markReadAction, markAllReadAction, archiveAction, markDoneAction, snoozeAction, undoAction } from "./actions";
 
@@ -44,6 +45,37 @@ const TAB_ICONS: Record<InboxTab, React.ReactNode> = {
 };
 
 const TAB_ORDER: readonly InboxTab[] = ["all", "unread", "mentioned", "assigned", "snoozed", "done"];
+
+/**
+ * Snooze presets — modeled on Gmail/Linear. Hours-from-now so the
+ * snooze writer can compute the timestamp server-side and we avoid
+ * client/server clock drift. "Tomorrow" + "Next Week" are computed
+ * client-side at click time so they always land at 9am local.
+ */
+const SNOOZE_PRESETS: ReadonlyArray<{ label: string; hint: string; hours: number }> = [
+  { label: "Later Today", hint: "+3h", hours: 3 },
+  { label: "Tomorrow", hint: "9am", hours: hoursUntilTomorrow9am() },
+  { label: "Next Week", hint: "Mon 9am", hours: hoursUntilNextMonday9am() },
+  { label: "Two Weeks", hint: "14d", hours: 24 * 14 },
+];
+
+function hoursUntilTomorrow9am(): number {
+  const now = new Date();
+  const target = new Date(now);
+  target.setDate(target.getDate() + 1);
+  target.setHours(9, 0, 0, 0);
+  return Math.max(1, Math.round((target.getTime() - now.getTime()) / 3600 / 1000));
+}
+
+function hoursUntilNextMonday9am(): number {
+  const now = new Date();
+  const target = new Date(now);
+  // 1 = Monday in JS Date (0 = Sunday)
+  const daysUntilMonday = (1 + 7 - target.getDay()) % 7 || 7;
+  target.setDate(target.getDate() + daysUntilMonday);
+  target.setHours(9, 0, 0, 0);
+  return Math.max(1, Math.round((target.getTime() - now.getTime()) / 3600 / 1000));
+}
 
 const EMPTY_COPY: Record<InboxTab, { title: string; description: string }> = {
   all: {
@@ -287,16 +319,27 @@ export function InboxClient({
                           <Check size={14} aria-hidden="true" />
                         </Button>
                       )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label="Snooze 1 hour"
-                        onClick={() => handleSnooze(n.id, 1)}
-                        disabled={pending}
-                        title="Snooze 1 hour"
-                      >
-                        <Clock size={14} aria-hidden="true" />
-                      </Button>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="ghost" size="icon" aria-label="Snooze" disabled={pending} title="Snooze">
+                            <Clock size={14} aria-hidden="true" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="end" className="w-44 p-1 text-sm">
+                          {SNOOZE_PRESETS.map((p) => (
+                            <button
+                              key={p.label}
+                              type="button"
+                              className="flex w-full items-center justify-between rounded px-3 py-1.5 text-start hover:bg-[var(--surface-inset)]"
+                              onClick={() => handleSnooze(n.id, p.hours)}
+                              disabled={pending}
+                            >
+                              <span>{p.label}</span>
+                              <span className="font-mono text-[10px] text-[var(--text-muted)]">{p.hint}</span>
+                            </button>
+                          ))}
+                        </PopoverContent>
+                      </Popover>
                       <Button
                         variant="ghost"
                         size="icon"

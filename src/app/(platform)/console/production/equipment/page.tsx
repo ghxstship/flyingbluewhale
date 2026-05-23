@@ -39,8 +39,12 @@ export default async function EquipmentPage() {
       <ModuleHeader
         eyebrow="Production"
         title="Equipment"
-        subtitle={`${rows.length} items · ${available} available`}
-        action={<Button href="/console/production/equipment/new">+ Add equipment</Button>}
+        subtitle={`${rows.length} ${rows.length === 1 ? "Item" : "Items"} · ${available} Available`}
+        action={
+          <Button href="/console/production/equipment/new" size="sm">
+            + Add Equipment
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<Equipment>

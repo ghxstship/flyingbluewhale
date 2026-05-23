@@ -27,8 +27,12 @@ export default async function FabricationPage() {
       <ModuleHeader
         eyebrow="Production"
         title="Fabrication Orders"
-        subtitle={`${rows.length} orders`}
-        action={<Button href="/console/production/fabrication/new">+ New Order</Button>}
+        subtitle={`${rows.length} ${rows.length === 1 ? "Order" : "Orders"}`}
+        action={
+          <Button href="/console/production/fabrication/new" size="sm">
+            + New Order
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<FabricationOrder>

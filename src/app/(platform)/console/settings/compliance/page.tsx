@@ -4,6 +4,7 @@ import { ComplianceForm } from "./ComplianceForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -69,7 +70,7 @@ export default async function CompliancePage() {
                   <tr key={c.name}>
                     <td>{c.name}</td>
                     <td>
-                      <Badge variant="success">{c.status}</Badge>
+                      <Badge variant="success">{toTitle(c.status)}</Badge>
                     </td>
                     <td className="text-[var(--text-secondary)]">{c.note}</td>
                   </tr>

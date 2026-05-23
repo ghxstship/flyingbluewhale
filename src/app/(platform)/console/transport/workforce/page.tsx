@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -124,7 +125,7 @@ export default async function Page() {
                       <td>{r.origin?.name ?? "—"}</td>
                       <td>{r.destination?.name ?? "—"}</td>
                       <td>
-                        <Badge variant="muted">{r.fleet}</Badge>
+                        <Badge variant="muted">{toTitle(r.fleet)}</Badge>
                       </td>
                       <td className="font-mono text-xs">{r.vehicle_ref ?? "—"}</td>
                       <td>

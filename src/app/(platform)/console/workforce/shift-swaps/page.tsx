@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 import { decideSwap } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -96,7 +97,7 @@ export default async function Page() {
               <div key={r.id} className="surface p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <Badge variant={tone}>{r.swap_state}</Badge>
+                    <Badge variant={tone}>{toTitle(r.swap_state)}</Badge>
                     <h3 className="mt-2 text-sm font-semibold">{userMap.get(r.requested_by) ?? "Unknown"}</h3>
                     {shift && (
                       <p className="font-mono text-xs text-[var(--text-muted)]">

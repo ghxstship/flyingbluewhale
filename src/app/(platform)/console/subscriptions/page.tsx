@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listSubscriptions, type Subscription } from "@/lib/subscriptions";
-import { timeAgo } from "@/lib/format";
+import { timeAgo, toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -43,13 +43,13 @@ export default async function SubscriptionsPage() {
             {
               key: "kind",
               header: "Kind",
-              render: (r) => <Badge variant="default">{r.kind}</Badge>,
+              render: (r) => <Badge variant="default">{toTitle(r.kind)}</Badge>,
               accessor: (r) => r.kind,
             },
             {
               key: "state",
               header: "State",
-              render: (r) => <Badge variant={badgeVariantForState(r.state)}>{r.state}</Badge>,
+              render: (r) => <Badge variant={badgeVariantForState(r.state)}>{toTitle(r.state)}</Badge>,
               accessor: (r) => r.state,
             },
             {

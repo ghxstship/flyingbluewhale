@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Database } from "@/lib/supabase/database.types";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -140,7 +141,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "category",
               header: "Category",
-              render: (r) => <Badge variant="muted">{r.category}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.category)}</Badge>,
               accessor: (r) => r.category ?? null,
               filterable: true,
               groupable: true,

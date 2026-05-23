@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE, computeBreakEven } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 import { addCoProPartnerAction, removeCoProPartnerAction } from "./co-pro/actions";
 
 export const dynamic = "force-dynamic";
@@ -85,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
         subtitle={`Fee ${formatMoney(d.guarantee_cents ?? d.fee_cents)} · ${d.deposit_pct}% deposit`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[d.status] ?? "muted"}>{d.status}</Badge>
+            <Badge variant={STATUS_TONE[d.status] ?? "muted"}>{toTitle(d.status)}</Badge>
             <Button href={`/console/marketplace/offers/${d.id}`} size="sm" variant="ghost">
               Offer view
             </Button>

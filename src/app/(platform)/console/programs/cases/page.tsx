@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -95,7 +96,7 @@ export default async function Page() {
             {
               key: "severity",
               header: "Severity",
-              render: (r) => <Badge variant="muted">{r.severity}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
               groupable: true,

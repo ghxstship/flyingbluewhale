@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -68,7 +69,7 @@ export default async function Page() {
             {
               key: "subject",
               header: "Subject",
-              render: (r) => <Badge variant="muted">{r.subject_kind}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.subject_kind)}</Badge>,
               accessor: (r) => r.subject_kind,
               filterable: true,
               groupable: true,
@@ -76,7 +77,7 @@ export default async function Page() {
             {
               key: "tx",
               header: "Tx",
-              render: (r) => <Badge variant="muted">{r.transaction_type}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.transaction_type)}</Badge>,
               accessor: (r) => r.transaction_type,
               filterable: true,
             },

@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -176,7 +177,7 @@ export default async function Page() {
                     </Link>
                     <div className="font-mono text-xs text-[var(--text-muted)]">v{p.version}</div>
                   </div>
-                  <Badge variant={p.status === "published" ? "success" : "muted"}>{p.status}</Badge>
+                  <Badge variant={p.status === "published" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
                 </li>
               ))
             )}

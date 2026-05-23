@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 import { PublishControls } from "./PublishControls";
 
 export const dynamic = "force-dynamic";
@@ -59,7 +60,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
           .join(" · ")}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[p.status] ?? "muted"}>{p.status}</Badge>
+            <Badge variant={STATUS_TONE[p.status] ?? "muted"}>{toTitle(p.status)}</Badge>
             <Button href={`/console/marketplace/postings/${p.id}/applicants`} size="sm" variant="ghost">
               {p.applicant_count} applicants
             </Button>

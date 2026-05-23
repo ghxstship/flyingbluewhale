@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 import { decideTimeOff } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -85,7 +86,7 @@ export default async function TimeOffAdminPage() {
               <div key={r.id} className="surface p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <Badge variant={tone}>{r.request_state}</Badge>
+                    <Badge variant={tone}>{toTitle(r.request_state)}</Badge>
                     <h3 className="mt-2 text-sm font-semibold">{userMap.get(r.user_id) ?? "Unknown"}</h3>
                     <p className="text-xs text-[var(--text-secondary)]">
                       {policyMap.get(r.policy_id) ?? "Policy"} · {r.hours_requested}h

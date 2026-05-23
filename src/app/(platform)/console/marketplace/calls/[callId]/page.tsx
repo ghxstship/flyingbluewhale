@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 import { CallControls } from "./CallControls";
 
 export const dynamic = "force-dynamic";
@@ -52,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         subtitle={[c.region, c.venue_type].filter(Boolean).join(" · ") || undefined}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{c.status}</Badge>
+            <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
             <Button href={`/console/marketplace/calls/${c.id}/submissions`} size="sm" variant="ghost">
               {c.submission_count} submissions
             </Button>

@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -103,7 +104,7 @@ export default async function Page() {
             {
               key: "type",
               header: "Deal Type",
-              render: (r) => <Badge variant="muted">{r.deal_type}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.deal_type)}</Badge>,
               accessor: (r) => r.deal_type,
               filterable: true,
               groupable: true,

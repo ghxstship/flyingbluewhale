@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listProjects } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { toTitle } from "@/lib/format";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProjectPortfolioGrid, type PortfolioEntry } from "./ProjectPortfolioGrid";
 
@@ -63,7 +64,9 @@ export default async function ProjectsPage() {
                   key: "project_state",
                   header: "State",
                   render: (p) => (
-                    <Badge variant={p.project_state === "active" ? "success" : "muted"}>{p.project_state}</Badge>
+                    <Badge variant={p.project_state === "active" ? "success" : "muted"}>
+                      {toTitle(p.project_state)}
+                    </Badge>
                   ),
                   accessor: (p) => p.project_state,
                   filterable: true,

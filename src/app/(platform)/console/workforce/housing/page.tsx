@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -87,7 +88,8 @@ export default async function Page() {
             {
               key: "stakeholder",
               header: "Group",
-              render: (r) => (r.stakeholder_group ? <Badge variant="muted">{r.stakeholder_group}</Badge> : "—"),
+              render: (r) =>
+                r.stakeholder_group ? <Badge variant="muted">{toTitle(r.stakeholder_group)}</Badge> : "—",
               accessor: (r) => r.stakeholder_group ?? null,
             },
             {

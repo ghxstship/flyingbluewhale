@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -91,7 +92,7 @@ export default async function Page() {
             {
               key: "type",
               header: "Type",
-              render: (r) => <Badge variant="muted">{r.posting_type}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.posting_type)}</Badge>,
               accessor: (r) => r.posting_type,
               filterable: true,
               groupable: true,
@@ -119,7 +120,7 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,
               groupable: true,

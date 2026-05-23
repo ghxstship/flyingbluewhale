@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
 
 /**
@@ -201,7 +202,7 @@ export default async function Page({
                       </td>
                       <td className="px-3 py-2 font-mono text-xs">{r.trigger_kind}</td>
                       <td className="px-3 py-2">
-                        <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>
+                        <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                         {r.status === "failed" && r.error_summary && (
                           <span
                             className="ml-2 truncate font-mono text-[10px] text-[var(--color-error)]"

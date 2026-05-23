@@ -4,6 +4,7 @@ import { CommitteeForm, PolicyForm } from "./Forms";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -97,7 +98,7 @@ export default async function GovernancePage() {
                     <td>{p.name}</td>
                     <td className="text-xs text-[var(--text-secondary)] capitalize">{p.category}</td>
                     <td>
-                      <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>
+                      <Badge variant={p.status === "active" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
                     </td>
                     <td className="font-mono text-xs">
                       {p.next_review_at ? new Date(p.next_review_at).toLocaleDateString() : "—"}

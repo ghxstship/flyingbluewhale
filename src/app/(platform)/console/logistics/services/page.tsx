@@ -8,6 +8,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -94,7 +95,7 @@ export default async function Page() {
             {
               key: "category",
               header: "Category",
-              render: (r) => <Badge variant="muted">{r.category}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.category)}</Badge>,
               accessor: (r) => r.category ?? null,
               filterable: true,
               groupable: true,
@@ -102,7 +103,7 @@ export default async function Page() {
             {
               key: "severity",
               header: "Severity",
-              render: (r) => <Badge variant={SEVERITY_TONE[r.severity]}>{r.severity}</Badge>,
+              render: (r) => <Badge variant={SEVERITY_TONE[r.severity]}>{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
               groupable: true,

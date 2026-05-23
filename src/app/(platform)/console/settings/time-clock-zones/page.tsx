@@ -5,6 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -75,7 +76,9 @@ export default async function Page() {
               key: "lifecycle_state",
               header: "State",
               render: (r) => (
-                <Badge variant={r.lifecycle_state === "active" ? "success" : "muted"}>{r.lifecycle_state}</Badge>
+                <Badge variant={r.lifecycle_state === "active" ? "success" : "muted"}>
+                  {toTitle(r.lifecycle_state)}
+                </Badge>
               ),
             },
           ]}

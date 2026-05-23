@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { Threat } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +78,7 @@ export default async function Page() {
             {
               key: "severity",
               header: "Severity",
-              render: (r) => <Badge variant={SEVERITY_TONE[r.severity]}>{r.severity}</Badge>,
+              render: (r) => <Badge variant={SEVERITY_TONE[r.severity]}>{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
               groupable: true,
@@ -98,7 +99,7 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status]}>{r.status}</Badge>,
+              render: (r) => <Badge variant={STATUS_TONE[r.status]}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,
               groupable: true,

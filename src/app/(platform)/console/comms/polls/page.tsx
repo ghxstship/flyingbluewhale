@@ -5,6 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -70,7 +71,11 @@ export default async function Page() {
                 </Badge>
               ),
             },
-            { key: "audience", header: "Audience", render: (r) => <Badge variant="muted">{r.audience}</Badge> },
+            {
+              key: "audience",
+              header: "Audience",
+              render: (r) => <Badge variant="muted">{toTitle(r.audience)}</Badge>,
+            },
           ]}
         />
       </div>

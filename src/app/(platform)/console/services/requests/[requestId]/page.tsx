@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest, ServiceRequestEvent } from "@/lib/supabase/types";
 import { transitionRequest } from "../actions";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -100,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
       <div className="page-content max-w-3xl space-y-5">
         <div className="surface p-5">
           <div className="flex items-center gap-3">
-            <Badge variant={SEV[r.severity]}>{r.severity}</Badge>
+            <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
             <Badge variant={STATUS[r.status]}>{r.status.replace("_", " ")}</Badge>
             <span className="font-mono text-xs text-[var(--text-muted)]">{r.category}</span>
           </div>

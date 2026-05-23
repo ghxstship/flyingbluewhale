@@ -6,6 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { toggleActive, deleteItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -52,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         title={item.name}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
-            <Badge variant="muted">{item.kind}</Badge>
+            <Badge variant="muted">{toTitle(item.kind)}</Badge>
             <Badge variant={item.active ? "success" : "muted"}>{item.active ? "Active" : "Inactive"}</Badge>
             <span className="font-mono text-xs">{item.code}</span>
             <span className="font-mono text-xs">{usageCount ?? 0} assignments</span>

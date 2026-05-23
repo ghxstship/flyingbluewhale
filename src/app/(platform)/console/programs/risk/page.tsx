@@ -7,6 +7,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { RiskHeatmap, type RiskCell } from "./RiskHeatmap";
 import type { Risk, RiskLikelihood, RiskImpact } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -76,7 +77,7 @@ export default async function Page() {
             {
               key: "kind",
               header: "Kind",
-              render: (r) => <Badge variant="muted">{r.kind}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.kind)}</Badge>,
               accessor: (r) => r.kind ?? null,
               filterable: true,
               groupable: true,
@@ -112,7 +113,7 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant="muted">{r.status}</Badge>,
+              render: (r) => <Badge variant="muted">{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,
               groupable: true,

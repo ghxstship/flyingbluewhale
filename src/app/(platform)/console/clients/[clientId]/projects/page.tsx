@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
               key: "project_state",
               header: "State",
               render: (r) => (
-                <Badge variant={r.project_state === "active" ? "success" : "muted"}>{r.project_state}</Badge>
+                <Badge variant={r.project_state === "active" ? "success" : "muted"}>{toTitle(r.project_state)}</Badge>
               ),
               accessor: (r) => r.project_state,
               filterable: true,

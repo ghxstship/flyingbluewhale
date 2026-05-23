@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -86,7 +87,7 @@ export default async function Page() {
                   <Link href={`/m/inbox/${r.id}`} className="surface flex items-start justify-between gap-3 p-4">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <Badge variant="muted">{r.room_kind}</Badge>
+                        <Badge variant="muted">{toTitle(r.room_kind)}</Badge>
                         <span className="truncate text-sm font-medium">{r.name ?? "Untitled room"}</span>
                       </div>
                       {r.last_message_at && (

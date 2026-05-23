@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { closePoll } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -46,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Badge variant={p.publish_state === "live" ? "success" : p.publish_state === "closed" ? "muted" : "info"}>
               {p.publish_state}
             </Badge>
-            <Badge variant="muted">{p.audience}</Badge>
+            <Badge variant="muted">{toTitle(p.audience)}</Badge>
             <span className="font-mono text-xs">{total} votes</span>
           </span>
         }

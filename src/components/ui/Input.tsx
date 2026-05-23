@@ -188,30 +188,36 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         />
         {trailing && <span className="absolute end-2.5 inline-flex items-center">{trailing}</span>}
       </div>
-      <div className="flex items-center justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          {error && (
-            <span id={errorId} role="alert" className="text-xs text-[var(--color-error)]">
-              {error}
-            </span>
-          )}
-          {!error && hint && (
-            <span id={hintId} className="text-xs text-[var(--text-muted)]">
-              {hint}
+      {/* Footer is opt-in: only renders when there's actual content. An always-on
+          empty <div> here would inherit the parent flex-col gap-1.5, pushing the
+          input 6px lower than sibling hand-rolled <select>s and breaking
+          alignment across grid forms. */}
+      {(error || hint || (showCount && maxLength)) && (
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            {error && (
+              <span id={errorId} role="alert" className="text-xs text-[var(--color-error)]">
+                {error}
+              </span>
+            )}
+            {!error && hint && (
+              <span id={hintId} className="text-xs text-[var(--text-muted)]">
+                {hint}
+              </span>
+            )}
+          </div>
+          {showCount && maxLength && (
+            <span
+              id={countId}
+              className={`shrink-0 font-mono text-[10px] ${
+                currentValue.length >= maxLength ? "text-[var(--color-error)]" : "text-[var(--text-muted)]"
+              }`}
+            >
+              {currentValue.length} / {maxLength}
             </span>
           )}
         </div>
-        {showCount && maxLength && (
-          <span
-            id={countId}
-            className={`shrink-0 font-mono text-[10px] ${
-              currentValue.length >= maxLength ? "text-[var(--color-error)]" : "text-[var(--text-muted)]"
-            }`}
-          >
-            {currentValue.length} / {maxLength}
-          </span>
-        )}
-      </div>
+      )}
     </div>
   );
 });

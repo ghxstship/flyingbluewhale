@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Bell, Check, Archive, AtSign, UserCheck, Inbox as InboxIcon } from "lucide-react";
+import { Bell, Check, Archive, AtSign, UserCheck, Inbox as InboxIcon, CheckCheck, Clock, Undo2 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Alert } from "@/components/ui/Alert";
 import { timeAgo } from "@/lib/format";
-import { markReadAction, markAllReadAction, archiveAction } from "./actions";
+import { markReadAction, markAllReadAction, archiveAction, markDoneAction, snoozeAction, undoAction } from "./actions";
 
-export type InboxTab = "all" | "unread" | "mentioned" | "assigned";
+export type InboxTab = "all" | "unread" | "mentioned" | "assigned" | "snoozed" | "done";
 
 export type InboxNotification = {
   id: string;
@@ -21,6 +21,8 @@ export type InboxNotification = {
   href: string | null;
   read_at: string | null;
   created_at: string;
+  done_at?: string | null;
+  snoozed_until?: string | null;
 };
 
 const TAB_LABELS: Record<InboxTab, string> = {
@@ -28,6 +30,8 @@ const TAB_LABELS: Record<InboxTab, string> = {
   unread: "Unread",
   mentioned: "@Mentioned",
   assigned: "Assigned",
+  snoozed: "Snoozed",
+  done: "Done",
 };
 
 const TAB_ICONS: Record<InboxTab, React.ReactNode> = {
@@ -35,9 +39,11 @@ const TAB_ICONS: Record<InboxTab, React.ReactNode> = {
   unread: <Bell size={14} aria-hidden="true" />,
   mentioned: <AtSign size={14} aria-hidden="true" />,
   assigned: <UserCheck size={14} aria-hidden="true" />,
+  snoozed: <Clock size={14} aria-hidden="true" />,
+  done: <CheckCheck size={14} aria-hidden="true" />,
 };
 
-const TAB_ORDER: readonly InboxTab[] = ["all", "unread", "mentioned", "assigned"];
+const TAB_ORDER: readonly InboxTab[] = ["all", "unread", "mentioned", "assigned", "snoozed", "done"];
 
 const EMPTY_COPY: Record<InboxTab, { title: string; description: string }> = {
   all: {
@@ -55,6 +61,14 @@ const EMPTY_COPY: Record<InboxTab, { title: string; description: string }> = {
   assigned: {
     title: "Nothing assigned to you",
     description: "Tasks, requests, and reviews routed your way will land here.",
+  },
+  snoozed: {
+    title: "Nothing snoozed",
+    description: "Snooze a row to defer it — it returns to your inbox at the chosen time.",
+  },
+  done: {
+    title: "Nothing marked done",
+    description: "Mark items done to clear them from the active inbox; they stay searchable here.",
   },
 };
 
@@ -118,6 +132,34 @@ export function InboxClient({
   async function handleMarkAllRead() {
     startTransition(async () => {
       await markAllReadAction(null, new FormData());
+      router.refresh();
+    });
+  }
+
+  async function handleMarkDone(id: string) {
+    const fd = new FormData();
+    fd.set("id", id);
+    startTransition(async () => {
+      await markDoneAction(null, fd);
+      router.refresh();
+    });
+  }
+
+  async function handleSnooze(id: string, hours: number) {
+    const fd = new FormData();
+    fd.set("id", id);
+    fd.set("hours", String(hours));
+    startTransition(async () => {
+      await snoozeAction(null, fd);
+      router.refresh();
+    });
+  }
+
+  async function handleUndo(id: string) {
+    const fd = new FormData();
+    fd.set("id", id);
+    startTransition(async () => {
+      await undoAction(null, fd);
       router.refresh();
     });
   }
@@ -218,26 +260,65 @@ export function InboxClient({
                   )}
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
-                  {unread && (
+                  {n.done_at || n.snoozed_until ? (
+                    // Restoreable state — single Undo replaces the
+                    // read/snooze/done action rail.
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label="Mark as read"
-                      onClick={() => handleMarkRead(n.id)}
+                      aria-label="Restore to inbox"
+                      onClick={() => handleUndo(n.id)}
                       disabled={pending}
+                      title="Restore to inbox"
                     >
-                      <Check size={14} aria-hidden="true" />
+                      <Undo2 size={14} aria-hidden="true" />
                     </Button>
+                  ) : (
+                    <>
+                      {unread && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label="Mark as read"
+                          onClick={() => handleMarkRead(n.id)}
+                          disabled={pending}
+                          title="Mark as read"
+                        >
+                          <Check size={14} aria-hidden="true" />
+                        </Button>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Snooze 1 hour"
+                        onClick={() => handleSnooze(n.id, 1)}
+                        disabled={pending}
+                        title="Snooze 1 hour"
+                      >
+                        <Clock size={14} aria-hidden="true" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Mark done"
+                        onClick={() => handleMarkDone(n.id)}
+                        disabled={pending}
+                        title="Mark done"
+                      >
+                        <CheckCheck size={14} aria-hidden="true" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Archive"
+                        onClick={() => handleArchive(n.id)}
+                        disabled={pending}
+                        title="Archive"
+                      >
+                        <Archive size={14} aria-hidden="true" />
+                      </Button>
+                    </>
                   )}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label="Archive"
-                    onClick={() => handleArchive(n.id)}
-                    disabled={pending}
-                  >
-                    <Archive size={14} aria-hidden="true" />
-                  </Button>
                 </div>
               </li>
             );

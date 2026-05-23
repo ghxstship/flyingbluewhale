@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
+import { toTitle } from "@/lib/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import Link from "next/link";
 
@@ -59,7 +60,7 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
         eyebrow="Agency · Tour"
         title={pnl.name}
         subtitle={`${pnl.starts_on ?? "—"} → ${pnl.ends_on ?? "—"} · ${pnl.leg_count} legs`}
-        action={<Badge variant={STATUS_TONE[pnl.status] ?? "muted"}>{pnl.status}</Badge>}
+        action={<Badge variant={STATUS_TONE[pnl.status] ?? "muted"}>{toTitle(pnl.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
@@ -72,9 +73,15 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
         <section className="surface p-5">
           <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Legs</h2>
           {legs.length === 0 ? (
-            <p className="text-sm text-[var(--text-secondary)]">
-              No legs linked yet. Set <code className="font-mono">tour_id</code> on the talent_offer to link.
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-[var(--text-secondary)]">
+              <span>No legs linked yet. Each performance offer is a leg.</span>
+              <Link
+                href={`/console/marketplace/offers?tour=${pnl.tour_id}`}
+                className="text-xs text-[var(--brand-color)] underline-offset-2 hover:underline"
+              >
+                Link An Offer →
+              </Link>
+            </div>
           ) : (
             <ul className="divide-y divide-[var(--border-subtle)]">
               {legs.map((l) => (
@@ -85,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-xs">{formatMoney(l.fee_cents)}</span>
-                    <Badge variant={STATUS_TONE[l.status] ?? "muted"}>{l.status}</Badge>
+                    <Badge variant={STATUS_TONE[l.status] ?? "muted"}>{toTitle(l.status)}</Badge>
                     <Link href={`/console/bookings/deals/${l.id}`} className="text-xs text-[var(--brand-color)]">
                       Open →
                     </Link>

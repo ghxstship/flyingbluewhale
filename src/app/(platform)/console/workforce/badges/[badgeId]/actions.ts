@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { sendPushTo } from "@/lib/push/send";
+import { writeInbox } from "@/lib/inbox";
 
 const Schema = z.object({
   badgeId: z.string().uuid(),
@@ -38,23 +38,33 @@ export async function awardBadge(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!member) return;
 
-  await supabase.from("badge_awards").insert({
-    org_id: session.orgId,
-    badge_id: parsed.badgeId,
-    user_id: parsed.user_id,
-    awarded_by: session.userId,
-    note: parsed.note || null,
-  });
+  const { data: award } = await supabase
+    .from("badge_awards")
+    .insert({
+      org_id: session.orgId,
+      badge_id: parsed.badgeId,
+      user_id: parsed.user_id,
+      awarded_by: session.userId,
+      note: parsed.note || null,
+    })
+    .select("id")
+    .single();
 
-  // Push notify the recipient.
+  // Notify the recipient — lands in /me/notifications/inbox AND fires push.
   const b = badge as { name: string; icon: string | null };
-  void sendPushTo(parsed.user_id, {
-    title: `${b.icon ?? "🏅"} ${b.name}`,
-    body: parsed.note || "You earned a badge.",
-    url: "/m/kudos",
-    tag: `badge:${parsed.badgeId}:${parsed.user_id}:${Date.now()}`,
-    kind: "badge",
-  });
+  if (award) {
+    void writeInbox({
+      userId: parsed.user_id,
+      orgId: session.orgId,
+      kind: "badge",
+      sourceType: "badge_awards",
+      sourceId: (award as { id: string }).id,
+      actorId: session.userId,
+      title: `${b.icon ?? "🏅"} ${b.name}`,
+      body: parsed.note || "You earned a badge.",
+      href: "/m/kudos",
+    });
+  }
 
   revalidatePath(`/console/workforce/badges/${parsed.badgeId}`);
 }

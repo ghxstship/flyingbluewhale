@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { sendPushTo } from "@/lib/push/send";
+import { writeInbox } from "@/lib/inbox";
 
 const Schema = z.object({
   to_user_id: z.string().uuid(),
@@ -34,23 +34,33 @@ export async function createKudosFromConsole(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!member) return;
 
-  await supabase.from("recognition_posts").insert({
-    org_id: session.orgId,
-    from_user_id: session.userId,
-    to_user_id: parsed.to_user_id,
-    message: parsed.message,
-    value_tag: parsed.value_tag || null,
-    points: 0,
-    visibility_state: "public",
-  });
+  const { data: post } = await supabase
+    .from("recognition_posts")
+    .insert({
+      org_id: session.orgId,
+      from_user_id: session.userId,
+      to_user_id: parsed.to_user_id,
+      message: parsed.message,
+      value_tag: parsed.value_tag || null,
+      points: 0,
+      visibility_state: "public",
+    })
+    .select("id")
+    .single();
 
-  void sendPushTo(parsed.to_user_id, {
-    title: "You got kudos",
-    body: parsed.message.slice(0, 200),
-    url: "/m/kudos",
-    tag: `kudos:${session.userId}:${Date.now()}`,
-    kind: "kudos",
-  });
+  if (post) {
+    void writeInbox({
+      userId: parsed.to_user_id,
+      orgId: session.orgId,
+      kind: "kudos",
+      sourceType: "recognition_posts",
+      sourceId: (post as { id: string }).id,
+      actorId: session.userId,
+      title: "You got kudos",
+      body: parsed.message,
+      href: "/m/kudos",
+    });
+  }
 
   revalidatePath("/console/workforce/recognition");
   revalidatePath("/m/kudos");

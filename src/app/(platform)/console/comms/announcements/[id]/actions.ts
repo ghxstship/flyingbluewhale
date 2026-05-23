@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
-import { sendPushBulk } from "@/lib/push/send";
+import { writeInboxBulk } from "@/lib/inbox";
 
 const Schema = z.object({ id: z.string().uuid() });
 
@@ -43,12 +43,18 @@ export async function publishAnnouncement(fd: FormData): Promise<void> {
     const { data: recipients } = await query;
     const userIds = ((recipients ?? []) as Array<{ user_id: string }>).map((r) => r.user_id);
     if (userIds.length > 0) {
-      void sendPushBulk(userIds, {
-        title: u.title,
-        body: u.body.slice(0, 200),
-        url: "/m/feed",
-        tag: `announcement:${u.id}`,
+      // Source-keyed upsert collapses re-publish into the same inbox
+      // row (one announcement → one inbox card per recipient, even on
+      // re-publish from draft).
+      void writeInboxBulk(userIds, {
+        orgId: session.orgId,
         kind: "announcement",
+        sourceType: "announcements",
+        sourceId: u.id,
+        actorId: session.userId,
+        title: u.title,
+        body: u.body,
+        href: "/m/feed",
       });
     }
   }

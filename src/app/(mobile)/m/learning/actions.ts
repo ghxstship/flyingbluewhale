@@ -5,7 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { scoreQuiz } from "@/lib/connecteam";
-import { sendPushTo } from "@/lib/push/send";
+import { writeInbox } from "@/lib/inbox";
 
 const Schema = z.object({
   assignmentId: z.string().uuid(),
@@ -71,19 +71,26 @@ export async function submitQuiz(fd: FormData): Promise<void> {
   const c = course as { id: string; title: string; completion_badge_id: string | null } | null;
   if (passed && c?.completion_badge_id) {
     const ca = assignment as { id: string; course_id: string; org_id: string };
-    const { error: awardErr } = await supabase.from("badge_awards").insert({
-      org_id: ca.org_id,
-      badge_id: c.completion_badge_id,
-      user_id: session.userId,
-      note: `Auto-awarded for completing "${c.title}"`,
-    });
-    if (!awardErr) {
-      void sendPushTo(session.userId, {
+    const { data: award } = await supabase
+      .from("badge_awards")
+      .insert({
+        org_id: ca.org_id,
+        badge_id: c.completion_badge_id,
+        user_id: session.userId,
+        note: `Auto-awarded for completing "${c.title}"`,
+      })
+      .select("id")
+      .single();
+    if (award) {
+      void writeInbox({
+        userId: session.userId,
+        orgId: ca.org_id,
+        kind: "badge",
+        sourceType: "badge_awards",
+        sourceId: (award as { id: string }).id,
         title: "Badge earned",
         body: `Course passed: ${c.title}`,
-        url: "/m/kudos",
-        tag: `course-badge:${c.id}:${session.userId}`,
-        kind: "badge",
+        href: "/m/kudos",
       });
     }
   }

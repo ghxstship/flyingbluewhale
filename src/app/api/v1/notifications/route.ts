@@ -5,18 +5,25 @@ import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Notifications index — feeds the <NotificationsBell> in the glass nav.
+ * Notifications index — feeds the <NotificationsBell> in the glass nav
+ * + the full /me/notifications/inbox surface.
  *
- * GET  — returns the 50 most recent notifications for the session user,
- *        plus an `unread` count. Scope is `user_id = session.userId`;
- *        RLS on the table already enforces org boundary.
- * PATCH — marks a list of notifications as read by id. Zero-arg form
- *        marks every unread row read (inbox-zero convenience).
+ * GET   — 50 most recent for the session user + unread count. Scope is
+ *         `user_id = session.userId`; RLS enforces org boundary.
+ * PATCH — bulk state transitions on caller's own rows. Supports:
+ *           • `{ ids: [...] }`                      → mark read
+ *           • `{ readAll: true }`                   → mark all unread read
+ *           • `{ ids: [...], done: true }`          → mark done
+ *           • `{ ids: [...], snoozedUntil: ISO }`   → snooze
+ *           • `{ ids: [...], undo: true }`          → clear read/done/snooze
  */
 
 const PatchSchema = z.object({
   ids: z.array(z.string().uuid()).max(500).optional(),
   readAll: z.boolean().optional(),
+  done: z.boolean().optional(),
+  snoozedUntil: z.string().datetime().nullable().optional(),
+  undo: z.boolean().optional(),
 });
 
 export async function GET() {
@@ -48,10 +55,34 @@ export async function PATCH(req: NextRequest) {
   return withAuth(async (session) => {
     const supabase = await createClient();
     const now = new Date().toISOString();
-    let q = supabase.from("notifications").update({ read_at: now }).eq("user_id", session.userId).is("read_at", null);
+
+    // Build the update payload from the input variant. `undo` clears
+    // all three discipline columns; otherwise the named field is set.
+    const patch: Record<string, string | null> = {};
+    if (input.undo) {
+      patch.read_at = null;
+      patch.done_at = null;
+      patch.snoozed_until = null;
+    } else if (input.done) {
+      patch.done_at = now;
+      // Done implies read.
+      patch.read_at = now;
+    } else if (input.snoozedUntil !== undefined) {
+      patch.snoozed_until = input.snoozedUntil;
+    } else {
+      // Default = mark-read flavor (readAll / ids-read).
+      patch.read_at = now;
+    }
+
+    let q = supabase
+      .from("notifications")
+      .update(patch as never)
+      .eq("user_id", session.userId);
     if (input.ids && input.ids.length > 0) {
       q = q.in("id", input.ids);
-    } else if (!input.readAll) {
+    } else if (input.readAll) {
+      q = q.is("read_at", null);
+    } else {
       return apiError("bad_request", "Pass ids[] or readAll=true");
     }
     const { error, data } = await q.select("id");

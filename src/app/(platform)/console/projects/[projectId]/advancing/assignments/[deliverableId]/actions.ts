@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { sendPushTo } from "@/lib/push/send";
+import { writeInbox } from "@/lib/inbox";
 
 async function guardAssignment(projectId: string, deliverableId: string, orgId: string) {
   const supabase = await createClient();
@@ -65,12 +65,20 @@ export async function advanceState(fd: FormData): Promise<void> {
   // Notify the assignee on every state change — they care about
   // approvals + delivery confirmations.
   if (assignment.assignee_id) {
-    void sendPushTo(assignment.assignee_id, {
+    // State transition gets its own inbox row distinct from the initial
+    // assignment — the user wants "submitted", "approved", "delivered"
+    // as separate timeline events. Fresh randomUUID() per transition
+    // keeps the partial unique index from collapsing them.
+    void writeInbox({
+      userId: assignment.assignee_id,
+      orgId: session.orgId,
+      kind: "advancing_state",
+      sourceType: "deliverable_state_transitions",
+      sourceId: crypto.randomUUID(),
+      actorId: session.userId,
       title: `Advancing item ${parsed.next_state.replace(/_/g, " ")}`,
       body: assignment.title ?? "",
-      url: "/m/advances",
-      tag: `advancing-state:${parsed.deliverableId}:${Date.now()}`,
-      kind: "advancing_state",
+      href: "/m/advances",
     });
   }
 
@@ -109,12 +117,20 @@ export async function reassignAssignment(fd: FormData): Promise<void> {
     .eq("id", parsed.deliverableId)
     .eq("org_id", session.orgId);
 
-  void sendPushTo(parsed.assignee_id, {
+  // Reassignment writes a new advancing-inbox row for the new assignee,
+  // distinct from the original assignment (which lives under the
+  // deliverables source). Fresh randomUUID() so transitions don't
+  // collapse the row.
+  void writeInbox({
+    userId: parsed.assignee_id,
+    orgId: session.orgId,
+    kind: "advancing",
+    sourceType: "deliverable_reassignments",
+    sourceId: crypto.randomUUID(),
+    actorId: session.userId,
     title: "Advancing item reassigned to you",
     body: assignment.title ?? "",
-    url: "/m/advances",
-    tag: `advancing-reassign:${parsed.deliverableId}:${Date.now()}`,
-    kind: "advancing",
+    href: "/m/advances",
   });
 
   revalidatePath(`/console/projects/${parsed.projectId}/advancing/assignments/${parsed.deliverableId}`);

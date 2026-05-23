@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { sendPushBulk } from "@/lib/push/send";
+import { writeInboxBulk } from "@/lib/inbox";
 
 const MsgSchema = z.object({
   roomId: z.string().uuid(),
@@ -27,27 +27,31 @@ export async function postMessage(fd: FormData): Promise<void> {
   if (!member) return;
 
   const now = new Date().toISOString();
-  await supabase
+  const { data: msg } = await supabase
     .from("chat_messages")
-    .insert({ org_id: session.orgId, room_id: parsed.roomId, author_id: session.userId, body: parsed.body });
+    .insert({ org_id: session.orgId, room_id: parsed.roomId, author_id: session.userId, body: parsed.body })
+    .select("id")
+    .single();
   await supabase.from("chat_rooms").update({ last_message_at: now }).eq("id", parsed.roomId);
 
-  // Push notify room members other than the author. Service role isn't
-  // needed here — RLS on chat_room_members already lets a member read
-  // the membership list of rooms they belong to.
+  // Notify room members other than the author. Lands in /me/notifications/inbox
+  // AND fires push, gated by the chat preference matrix.
   const { data: others } = await supabase
     .from("chat_room_members")
     .select("user_id")
     .eq("room_id", parsed.roomId)
     .neq("user_id", session.userId);
   const userIds = ((others ?? []) as Array<{ user_id: string }>).map((r) => r.user_id);
-  if (userIds.length > 0) {
-    void sendPushBulk(userIds, {
-      title: "New message",
-      body: parsed.body.slice(0, 200),
-      url: `/m/inbox/${parsed.roomId}`,
-      tag: `chat:${parsed.roomId}`,
+  if (userIds.length > 0 && msg) {
+    void writeInboxBulk(userIds, {
+      orgId: session.orgId,
       kind: "chat",
+      sourceType: "chat_messages",
+      sourceId: (msg as { id: string }).id,
+      actorId: session.userId,
+      title: "New message",
+      body: parsed.body,
+      href: `/m/inbox/${parsed.roomId}`,
     });
   }
 

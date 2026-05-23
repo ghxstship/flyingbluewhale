@@ -69,14 +69,14 @@ export default async function MarketDetail({ params }: { params: Promise<{ city:
               </>
             )}
           </div>
-          <h1 className="mt-3 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-3 text-5xl uppercase sm:text-7xl font-display">
             {m.name}
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{m.blurb}</p>
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
             Venues & Anchors
           </div>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -107,7 +107,7 @@ export default async function MarketDetail({ params }: { params: Promise<{ city:
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised p-10">
-            <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="text-3xl uppercase sm:text-4xl font-display">
               Run something in {m.name}.
             </h2>
             <p className="mt-3 max-w-xl text-[var(--text-secondary)]">

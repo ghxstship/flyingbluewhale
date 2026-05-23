@@ -37,10 +37,10 @@ export default function MarketsHub() {
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--org-primary)]">
             Markets
           </div>
-          <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-4 text-5xl uppercase sm:text-7xl font-display">
             Four anchors.
             <br />
             Eight satellites.
@@ -53,7 +53,7 @@ export default function MarketsHub() {
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
             Anchor Markets
           </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -63,7 +63,7 @@ export default function MarketsHub() {
                 href={paths.marketDetail(m.slug)}
                 className="surface hover-lift flex h-full flex-col p-6"
               >
-                <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-xl uppercase font-display">
                   {m.name}
                 </div>
                 <p className="mt-3 line-clamp-4 text-sm text-[var(--text-secondary)]">{m.blurb}</p>
@@ -83,7 +83,7 @@ export default function MarketsHub() {
                 href={paths.marketDetail(m.slug)}
                 className="surface hover-lift flex h-full flex-col p-6"
               >
-                <div className="text-lg uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-lg uppercase font-display">
                   {m.name}
                 </div>
                 <p className="mt-3 line-clamp-4 text-xs text-[var(--text-secondary)]">{m.blurb}</p>

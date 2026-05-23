@@ -24,10 +24,10 @@ export default function TiersHub() {
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--org-primary)]">
             Experience Modes
           </div>
-          <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-4 text-5xl uppercase sm:text-7xl font-display">
             How the audience
             <br />
             experiences it.
@@ -47,7 +47,7 @@ export default function TiersHub() {
                 href={paths.tierDetail(t.slug)}
                 className="surface hover-lift group flex h-full flex-col p-6"
               >
-                <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-xl uppercase font-display">
                   {t.name}
                 </div>
                 <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{t.definition}</p>

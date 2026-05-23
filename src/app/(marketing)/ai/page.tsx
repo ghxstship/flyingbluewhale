@@ -100,11 +100,7 @@ export default function AiHub() {
           {AI_USES.map((u) => (
             <Link key={u.slug} href={`/ai/${u.slug}`} className="surface hover-lift p-5">
               <span
-                className="inline-flex h-9 w-9 items-center justify-center rounded-lg"
-                style={{
-                  background: "color-mix(in oklab, var(--org-primary) 12%, transparent)",
-                  color: "var(--org-primary)",
-                }}
+                className="icon-tint inline-flex h-9 w-9 items-center justify-center rounded-lg"
               >
                 <Sparkles size={16} aria-hidden="true" />
               </span>

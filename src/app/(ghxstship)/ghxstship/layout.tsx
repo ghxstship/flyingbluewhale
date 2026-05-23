@@ -29,11 +29,6 @@ export default function GhxstshipLayout({ children }: { children: React.ReactNod
       data-platform="ghxstship"
       data-mode="light"
       className="page-shell min-h-screen"
-      style={{
-        background: "var(--bg)",
-        color: "var(--text)",
-        fontFamily: "var(--font-body)",
-      }}
     >
       <GhxstshipHeader />
       <main>{children}</main>

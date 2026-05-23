@@ -24,10 +24,10 @@ export default function PhasesHub() {
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--org-primary)]">
             Production Phases
           </div>
-          <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-4 text-5xl uppercase sm:text-7xl font-display">
             Discovery to Wrap.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
@@ -50,7 +50,7 @@ export default function PhasesHub() {
                     Phase {p.number}
                   </span>
                 </div>
-                <span className="mt-2 text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <span className="mt-2 text-xl uppercase font-display">
                   {p.name}
                 </span>
                 <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{p.buyerIntent}</p>

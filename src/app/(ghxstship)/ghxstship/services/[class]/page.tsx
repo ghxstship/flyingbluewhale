@@ -64,7 +64,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
             <span className="text-[var(--text-primary)]">{c.shortName}</span>
           </nav>
           <div className="font-mono text-xs tracking-[0.18em] text-[var(--text-muted)]">Class {c.code}</div>
-          <h1 className="mt-3 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-3 text-5xl uppercase sm:text-7xl font-display">
             {c.shortName}
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{c.definition}</p>
@@ -127,7 +127,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised p-10">
-            <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="text-3xl uppercase sm:text-4xl font-display">
               Brief us with what you have.
             </h2>
             <p className="mt-3 max-w-xl text-[var(--text-secondary)]">

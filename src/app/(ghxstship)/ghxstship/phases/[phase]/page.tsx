@@ -48,7 +48,7 @@ export default async function PhaseDetail({ params }: { params: Promise<{ phase:
             <span className="text-[var(--text-primary)]">{p.name}</span>
           </nav>
           <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-muted)]">Phase {p.number} of 08</div>
-          <h1 className="mt-3 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-3 text-5xl uppercase sm:text-7xl font-display">
             {p.name}
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{p.buyerIntent}</p>
@@ -56,7 +56,7 @@ export default async function PhaseDetail({ params }: { params: Promise<{ phase:
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface p-6">
-            <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--org-primary)" }}>
+            <div className="text-xs font-semibold tracking-[0.18em] uppercase text-[var(--org-primary)]">
               What happens in this phase
             </div>
             <p className="mt-3 text-[var(--text-secondary)]">{p.whatHappens}</p>

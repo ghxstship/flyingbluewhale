@@ -68,8 +68,7 @@ export default function PressPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface relative overflow-hidden p-8 md:p-10">
           <span
-            className="absolute inset-x-0 top-0 h-1"
-            style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+            className="gradient-brand absolute inset-x-0 top-0 h-1"
           />
           <div className="eyebrow eyebrow-brand">Coming Soon</div>
           <h2 className="hed-lg mt-3">Full Press Kit.</h2>

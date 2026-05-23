@@ -60,10 +60,10 @@ export default function PricingPage() {
       <div className="space-y-24 pb-24">
         {/* HERO */}
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--org-primary)]">
             Pricing
           </div>
-          <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-4 text-5xl uppercase sm:text-7xl font-display">
             Two ways
             <br />
             to work with us.
@@ -92,10 +92,10 @@ export default function PricingPage() {
         <section id="per-project" className="mx-auto max-w-6xl scroll-mt-24 px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
                 Per Project
               </div>
-              <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+              <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
                 Five tiers.
                 <br />
                 One brief.
@@ -118,12 +118,12 @@ export default function PricingPage() {
                     Most engagements
                   </div>
                 )}
-                <div className="text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-2xl uppercase font-display">
                   {tier.name}
                 </div>
                 <p className="mt-1 text-sm text-[var(--text-secondary)]">{tier.positioning}</p>
                 <div className="mt-4 flex items-baseline gap-2">
-                  <span className="text-4xl font-semibold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
+                  <span className="text-4xl font-semibold tracking-tight font-display">
                     {tier.startingFee}
                   </span>
                   <span className="text-xs text-[var(--text-muted)]">starting fee</span>
@@ -134,7 +134,7 @@ export default function PricingPage() {
                 <ul className="mt-6 space-y-2 text-sm">
                   {tier.includes.map((line) => (
                     <li key={line} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--org-primary)" }} />
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--org-primary)]" />
                       <span>{line}</span>
                     </li>
                   ))}
@@ -164,10 +164,10 @@ export default function PricingPage() {
         <section id="retainer" className="mx-auto max-w-6xl scroll-mt-24 px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
                 Retainer
               </div>
-              <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+              <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
                 Bundled by
                 <br />
                 team composition.
@@ -191,12 +191,12 @@ export default function PricingPage() {
                     Most retained
                   </div>
                 )}
-                <div className="text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-2xl uppercase font-display">
                   {tier.name}
                 </div>
                 <p className="mt-1 text-sm text-[var(--text-secondary)]">{tier.positioning}</p>
                 <div className="mt-4 flex items-baseline gap-2">
-                  <span className="text-3xl font-semibold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
+                  <span className="text-3xl font-semibold tracking-tight font-display">
                     {tier.monthlyFee}
                   </span>
                 </div>
@@ -222,7 +222,7 @@ export default function PricingPage() {
                 <ul className="mt-5 space-y-2 text-sm">
                   {tier.includes.map((line) => (
                     <li key={line} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--org-primary)" }} />
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--org-primary)]" />
                       <span>{line}</span>
                     </li>
                   ))}
@@ -249,10 +249,10 @@ export default function PricingPage() {
         <section id="stack" className="mx-auto max-w-6xl scroll-mt-24 px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
                 Add-Ons
               </div>
-              <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+              <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
                 Stack on either path.
               </h2>
             </div>
@@ -265,11 +265,11 @@ export default function PricingPage() {
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {ADD_ONS.map((a) => (
               <div key={a.slug} className="surface hover-lift flex h-full flex-col p-6">
-                <div className="text-lg uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-lg uppercase font-display">
                   {a.name}
                 </div>
                 <p className="mt-2 text-sm text-[var(--text-secondary)]">{a.description}</p>
-                <div className="mt-4 font-mono text-xs tracking-[0.18em]" style={{ color: "var(--org-primary)" }}>
+                <div className="mt-4 font-mono text-xs tracking-[0.18em] text-[var(--org-primary)]">
                   {a.priceLine}
                 </div>
               </div>
@@ -281,17 +281,15 @@ export default function PricingPage() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised relative overflow-hidden p-10">
             <div
-              className="absolute inset-x-0 top-0 h-1"
-              style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+              className="gradient-brand absolute inset-x-0 top-0 h-1"
             />
-            <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="text-3xl uppercase sm:text-4xl font-display">
               How billing works.
             </h2>
             <div className="mt-8 grid gap-8 md:grid-cols-3">
               <div>
                 <div
-                  className="text-xs font-semibold tracking-[0.18em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
+                  className="text-xs font-semibold tracking-[0.18em] uppercase text-[var(--org-primary)]"
                 >
                   01 Professional Fee
                 </div>
@@ -302,8 +300,7 @@ export default function PricingPage() {
               </div>
               <div>
                 <div
-                  className="text-xs font-semibold tracking-[0.18em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
+                  className="text-xs font-semibold tracking-[0.18em] uppercase text-[var(--org-primary)]"
                 >
                   02 Production Pass-Through
                 </div>
@@ -314,8 +311,7 @@ export default function PricingPage() {
               </div>
               <div>
                 <div
-                  className="text-xs font-semibold tracking-[0.18em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
+                  className="text-xs font-semibold tracking-[0.18em] uppercase text-[var(--org-primary)]"
                 >
                   03 Schedule
                 </div>
@@ -338,10 +334,10 @@ export default function PricingPage() {
 
         {/* FAQ */}
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
             Pricing FAQ
           </div>
-          <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
             Common questions.
           </h2>
           <div className="mt-10 grid gap-5 md:grid-cols-2">

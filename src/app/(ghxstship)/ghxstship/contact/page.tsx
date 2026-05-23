@@ -51,10 +51,10 @@ export default function ContactPage() {
       />
       <div className="space-y-20 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--org-primary)]">
             Contact
           </div>
-          <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-4 text-5xl uppercase sm:text-7xl font-display">
             Brief us.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
@@ -68,13 +68,12 @@ export default function ContactPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             {ROUTES.map((r) => (
               <a key={r.href} href={r.href} className="surface hover-lift group flex h-full flex-col p-6">
-                <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-xl uppercase font-display">
                   {r.label}
                 </div>
                 <p className="mt-3 text-sm text-[var(--text-secondary)]">{r.body}</p>
                 <div
-                  className="mt-4 inline-flex items-center gap-2 font-mono text-sm tracking-wide"
-                  style={{ color: "var(--org-primary)" }}
+                  className="mt-4 inline-flex items-center gap-2 font-mono text-sm tracking-wide text-[var(--org-primary)]"
                 >
                   {r.line}
                   <ArrowRight className="cta-nudge h-3.5 w-3.5" />
@@ -86,7 +85,7 @@ export default function ContactPage() {
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised p-8">
-            <h2 className="text-2xl uppercase sm:text-3xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="text-2xl uppercase sm:text-3xl font-display">
               What to put in the email.
             </h2>
             <ul className="mt-6 grid gap-3 text-sm text-[var(--text-secondary)] sm:grid-cols-2">

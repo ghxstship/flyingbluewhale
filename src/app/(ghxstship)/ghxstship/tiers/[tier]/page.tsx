@@ -46,7 +46,7 @@ export default async function TierDetail({ params }: { params: Promise<{ tier: s
             <span className="mx-2">/</span>
             <span className="text-[var(--text-primary)]">{t.name}</span>
           </nav>
-          <h1 className="text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="text-5xl uppercase sm:text-7xl font-display">
             {t.name}
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{t.definition}</p>

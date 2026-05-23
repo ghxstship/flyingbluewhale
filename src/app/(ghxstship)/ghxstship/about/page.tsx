@@ -49,10 +49,10 @@ export default function AboutPage() {
       />
       <div className="space-y-20 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--org-primary)]">
             About
           </div>
-          <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-4 text-5xl uppercase sm:text-7xl font-display">
             The studio
             <br />
             behind the studio.
@@ -71,12 +71,11 @@ export default function AboutPage() {
             {PRINCIPLES.map((p) => (
               <div key={p.eyebrow} className="surface hover-lift p-8">
                 <div
-                  className="text-xs font-semibold tracking-[0.25em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
+                  className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--org-primary)]"
                 >
                   {p.eyebrow}
                 </div>
-                <h2 className="mt-3 text-2xl uppercase sm:text-3xl" style={{ fontFamily: "var(--font-display)" }}>
+                <h2 className="mt-3 text-2xl uppercase sm:text-3xl font-display">
                   {p.title}
                 </h2>
                 <p className="mt-3 text-[var(--text-secondary)]">{p.body}</p>
@@ -88,7 +87,7 @@ export default function AboutPage() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="grid gap-10 md:grid-cols-2">
             <div>
-              <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+              <h2 className="text-3xl uppercase sm:text-4xl font-display">
                 The lineage.
               </h2>
               <div className="mt-6 space-y-4 text-sm text-[var(--text-secondary)]">
@@ -108,7 +107,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div>
-              <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+              <h2 className="text-3xl uppercase sm:text-4xl font-display">
                 The roster.
               </h2>
               <div className="mt-6 space-y-4 text-sm text-[var(--text-secondary)]">
@@ -129,7 +128,7 @@ export default function AboutPage() {
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised p-10">
-            <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="text-3xl uppercase sm:text-4xl font-display">
               Brief us.
             </h2>
             <p className="mt-3 max-w-xl text-[var(--text-secondary)]">

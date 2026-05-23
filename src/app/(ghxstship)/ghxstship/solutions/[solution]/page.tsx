@@ -68,7 +68,7 @@ export default async function SolutionDetail({ params }: { params: Promise<{ sol
             <span className="mx-2">/</span>
             <span className="text-[var(--text-primary)]">{s.name}</span>
           </nav>
-          <h1 className="text-4xl uppercase sm:text-6xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="text-4xl uppercase sm:text-6xl font-display">
             {s.name}
           </h1>
           <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{s.definition}</p>
@@ -94,7 +94,7 @@ export default async function SolutionDetail({ params }: { params: Promise<{ sol
               return (
                 <div key={code} className="surface overflow-hidden">
                   <div className="flex items-baseline justify-between gap-4 bg-[var(--bg-secondary)] p-4">
-                    <span className="text-lg uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                    <span className="text-lg uppercase font-display">
                       {c.shortName}
                     </span>
                     <Link
@@ -127,7 +127,7 @@ export default async function SolutionDetail({ params }: { params: Promise<{ sol
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised p-10">
-            <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="text-3xl uppercase sm:text-4xl font-display">
               Run a {s.name.toLowerCase()} engagement.
             </h2>
             <p className="mt-3 max-w-xl text-[var(--text-secondary)]">
@@ -152,7 +152,7 @@ export default async function SolutionDetail({ params }: { params: Promise<{ sol
 function FactCell({ label, body }: { label: string; body: string }) {
   return (
     <div className="surface p-5">
-      <div className="text-[11px] font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+      <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
         {label}
       </div>
       <p className="mt-2 text-sm text-[var(--text-secondary)]">{body}</p>

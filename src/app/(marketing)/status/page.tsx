@@ -28,8 +28,8 @@ const SERVICES: ServiceRow[] = [
 ];
 
 const STATE_COLOR: Record<ServiceRow["state"], string> = {
-  operational: "var(--success)",
-  degraded: "var(--warning)",
+  operational: "var(--color-success)",
+  degraded: "var(--color-warning)",
   outage: "var(--color-error)",
 };
 
@@ -60,7 +60,7 @@ export default function StatusPage() {
         <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-1.5">
           <span
             className="inline-block h-2 w-2 rounded-full"
-            style={{ background: "var(--success)" }}
+            style={{ background: "var(--color-success)" }}
             aria-hidden="true"
           />
           <span className="text-xs font-medium">All systems operational · last 30 days</span>

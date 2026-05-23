@@ -46,10 +46,10 @@ export default function ServicesHub() {
 
       <div className="space-y-20 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase text-[var(--org-primary)]">
             Services Catalog
           </div>
-          <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-4 text-5xl uppercase sm:text-7xl font-display">
             {CATALOG_STATS.serviceCount} services.
             <br />
             {CATALOG_STATS.classCount} disciplines.
@@ -74,7 +74,7 @@ export default function ServicesHub() {
                       <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--text-muted)]">
                         Class {c.code}
                       </div>
-                      <h2 className="mt-1 text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+                      <h2 className="mt-1 text-3xl uppercase sm:text-4xl font-display">
                         {c.shortName}
                       </h2>
                       <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">{c.definition}</p>
@@ -108,7 +108,7 @@ export default function ServicesHub() {
           <div className="surface-raised p-10">
             <div className="grid gap-8 md:grid-cols-2 md:items-end">
               <div>
-                <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+                <h2 className="text-3xl uppercase sm:text-4xl font-display">
                   Don&apos;t know what to call it?
                 </h2>
                 <p className="mt-3 max-w-xl text-[var(--text-secondary)]">

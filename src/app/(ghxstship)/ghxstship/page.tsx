@@ -104,16 +104,15 @@ export default function GhxstshipHome() {
         {/* HERO */}
         <section className="mx-auto max-w-6xl px-6 pt-20 pb-12">
           <div className="text-xs font-semibold tracking-[0.25em] uppercase">
-            <span style={{ color: "var(--org-primary)" }}>GHXSTSHIP Industries</span>
+            <span className="text-[var(--org-primary)]">GHXSTSHIP Industries</span>
             <span className="ml-3 text-[var(--text-muted)]">Est. Miami · New York · Chicago · Los Angeles</span>
           </div>
           <h1
-            className="mt-6 text-5xl leading-[0.95] font-semibold tracking-tight uppercase sm:text-7xl lg:text-[8rem]"
-            style={{ fontFamily: "var(--font-display)" }}
+            className="mt-6 text-5xl leading-[0.95] font-semibold tracking-tight uppercase sm:text-7xl lg:text-[8rem] font-display"
           >
             Experiential
             <br />
-            <span style={{ color: "var(--org-primary)" }}>production,</span>
+            <span className="text-[var(--org-primary)]">production,</span>
             <br />
             built once,
             <br />
@@ -144,8 +143,7 @@ export default function GhxstshipHome() {
             {PROOF_STATS.map((stat) => (
               <div key={stat.label} className="bg-[var(--background)] p-6">
                 <div
-                  className="text-5xl font-semibold tracking-tight"
-                  style={{ fontFamily: "var(--font-display)", color: "var(--org-primary)" }}
+                  className="text-5xl font-semibold tracking-tight font-display text-[var(--org-primary)]"
                 >
                   {stat.value}
                 </div>
@@ -160,10 +158,10 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="grid items-end gap-6 md:grid-cols-2">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
                 What We Do
               </div>
-              <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+              <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
                 Six ways to find
                 <br />
                 the right team.
@@ -226,10 +224,10 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
                 Capabilities
               </div>
-              <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+              <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
                 Ten disciplines.
                 <br />
                 One studio.
@@ -252,7 +250,7 @@ export default function GhxstshipHome() {
               >
                 <div>
                   <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--text-muted)]">CLASS {c.code}</div>
-                  <div className="mt-2 text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                  <div className="mt-2 text-2xl uppercase font-display">
                     {c.shortName}
                   </div>
                   <div className="mt-2 line-clamp-2 text-sm text-[var(--text-secondary)]">{c.definition}</div>
@@ -267,10 +265,10 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
                 Industries
               </div>
-              <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+              <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
                 Where the
                 <br />
                 work lives.
@@ -290,7 +288,7 @@ export default function GhxstshipHome() {
               if (!s) return null;
               return (
                 <Link key={s.slug} href={paths.solutionDetail(s.slug)} className="surface hover-lift group block p-6">
-                  <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                  <div className="text-xl uppercase font-display">
                     {s.name}
                   </div>
                   <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{s.definition}</p>
@@ -307,18 +305,16 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised relative overflow-hidden p-10">
             <div
-              className="absolute inset-x-0 top-0 h-1"
-              style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+              className="gradient-brand absolute inset-x-0 top-0 h-1"
             />
             <div className="grid gap-8 md:grid-cols-2 md:items-end">
               <div>
                 <div
-                  className="text-xs font-semibold tracking-[0.2em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
+                  className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]"
                 >
                   How We Work Together
                 </div>
-                <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+                <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
                   Per project.
                   <br />
                   Or on retainer.
@@ -350,7 +346,7 @@ export default function GhxstshipHome() {
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {ANCHOR_MARKETS.map((m) => (
               <Link key={m.slug} href={paths.marketDetail(m.slug)} className="surface hover-lift block p-6">
-                <div className="text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+                <div className="text-2xl uppercase font-display">
                   {m.name}
                 </div>
                 <div className="mt-3 line-clamp-3 text-xs text-[var(--text-secondary)]">{m.blurb}</div>
@@ -369,10 +365,10 @@ export default function GhxstshipHome() {
 
         {/* FAQ */}
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase text-[var(--org-primary)]">
             FAQ
           </div>
-          <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h2 className="mt-3 text-4xl uppercase sm:text-5xl font-display">
             Common questions.
           </h2>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
@@ -416,7 +412,7 @@ function AxisCard({
         </span>
         <span className="ml-auto font-mono text-xs text-[var(--text-muted)]">{count}</span>
       </div>
-      <div className="mt-4 text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
+      <div className="mt-4 text-xl uppercase font-display">
         {title}
       </div>
       <p className="mt-2 text-sm text-[var(--text-secondary)]">{blurb}</p>

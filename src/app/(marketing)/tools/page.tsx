@@ -64,11 +64,7 @@ export default function ToolsIndex() {
               <Link key={tool.slug} href={`/tools/${tool.slug}`} className="surface hover-lift p-6">
                 <div className="flex items-center gap-3">
                   <span
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-lg"
-                    style={{
-                      background: "color-mix(in oklab, var(--org-primary) 12%, transparent)",
-                      color: "var(--org-primary)",
-                    }}
+                    className="icon-tint inline-flex h-10 w-10 items-center justify-center rounded-lg"
                   >
                     <Icon size={20} aria-hidden="true" />
                   </span>

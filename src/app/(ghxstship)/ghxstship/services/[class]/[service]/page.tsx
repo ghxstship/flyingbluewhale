@@ -94,7 +94,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
             Service {String(s.number).padStart(3, "0")} · {c.shortName}
             {crossClasses.length > 0 && ` × ${crossClasses.map((cc) => cc.shortName).join(" × ")}`}
           </div>
-          <h1 className="mt-3 text-4xl uppercase sm:text-6xl" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="mt-3 text-4xl uppercase sm:text-6xl font-display">
             {s.name}
           </h1>
         </section>
@@ -103,8 +103,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
           <div className="grid gap-5 md:grid-cols-2">
             <div className="surface p-6">
               <div
-                className="text-xs font-semibold tracking-[0.18em] uppercase"
-                style={{ color: "var(--org-primary)" }}
+                className="text-xs font-semibold tracking-[0.18em] uppercase text-[var(--org-primary)]"
               >
                 What it is
               </div>
@@ -112,8 +111,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
             </div>
             <div className="surface p-6">
               <div
-                className="text-xs font-semibold tracking-[0.18em] uppercase"
-                style={{ color: "var(--org-primary)" }}
+                className="text-xs font-semibold tracking-[0.18em] uppercase text-[var(--org-primary)]"
               >
                 When you need it
               </div>
@@ -121,8 +119,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
             </div>
             <div className="surface p-6">
               <div
-                className="text-xs font-semibold tracking-[0.18em] uppercase"
-                style={{ color: "var(--org-primary)" }}
+                className="text-xs font-semibold tracking-[0.18em] uppercase text-[var(--org-primary)]"
               >
                 What you receive
               </div>
@@ -130,8 +127,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
             </div>
             <div className="surface p-6">
               <div
-                className="text-xs font-semibold tracking-[0.18em] uppercase"
-                style={{ color: "var(--org-primary)" }}
+                className="text-xs font-semibold tracking-[0.18em] uppercase text-[var(--org-primary)]"
               >
                 Where it operates
               </div>
@@ -227,7 +223,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised p-10">
-            <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+            <h2 className="text-3xl uppercase sm:text-4xl font-display">
               Add this to your engagement.
             </h2>
             <p className="mt-3 max-w-xl text-[var(--text-secondary)]">

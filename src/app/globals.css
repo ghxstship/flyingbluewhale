@@ -953,6 +953,13 @@ pre,
     background: color-mix(in srgb, var(--org-primary) 10%, transparent);
     color: var(--org-primary);
   }
+  .icon-tint {
+    background: color-mix(in oklab, var(--org-primary) 12%, transparent);
+    color: var(--org-primary);
+  }
+  .gradient-brand {
+    background: linear-gradient(90deg, var(--org-primary), var(--org-accent));
+  }
 
   /* ───── Navigation ───── */
 

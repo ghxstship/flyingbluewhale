@@ -36,6 +36,7 @@ const Schema = z.object({
   deadline: z.string().optional().or(z.literal("")),
   notes: z.string().max(2000).optional().or(z.literal("")),
   atom_id: z.string().uuid().optional().or(z.literal("")),
+  catalog_item_id: z.string().uuid().optional().or(z.literal("")),
 });
 
 export type State = { error?: string } | null;
@@ -81,6 +82,20 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     if (!atom) return { error: "Atom not found in your organization" };
   }
 
+  // Cross-tenant guard on the master-catalog item, mirroring the
+  // atom_id check. 0051 added deliverables.catalog_item_id specifically
+  // so advancing assignments could anchor to a canonical SKU instead of
+  // free-text titles — surface a clean error on mismatch.
+  if (parsed.data.catalog_item_id) {
+    const { data: item } = await supabase
+      .from("master_catalog_items")
+      .select("id")
+      .eq("id", parsed.data.catalog_item_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!item) return { error: "Catalog item not found in your organization" };
+  }
+
   const { error } = await supabase.from("deliverables").insert({
     org_id: session.orgId,
     project_id: projectId,
@@ -91,6 +106,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     deadline: parsed.data.deadline || null,
     data: parsed.data.notes ? { notes: parsed.data.notes } : {},
     atom_id: parsed.data.atom_id || null,
+    catalog_item_id: parsed.data.catalog_item_id || null,
   } as never);
   if (error) return { error: error.message };
 

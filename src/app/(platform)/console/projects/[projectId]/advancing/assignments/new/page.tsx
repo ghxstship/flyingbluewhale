@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     .maybeSingle();
   if (!project) notFound();
 
-  const [{ data: members }, { data: atoms }] = await Promise.all([
+  const [{ data: members }, { data: atoms }, { data: catalog }] = await Promise.all([
     supabase
       .from("memberships")
       .select("user_id, users:users!inner(id, email, name)")
@@ -37,6 +37,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       .eq("org_id", session.orgId)
       .eq("project_id", projectId)
       .order("identifier", { ascending: true }),
+    supabase
+      .from("master_catalog_items")
+      .select("id, kind, code, name")
+      .eq("org_id", session.orgId)
+      .eq("active", true)
+      .order("kind", { ascending: true })
+      .order("name", { ascending: true })
+      .limit(500),
   ]);
   const memberList = (
     (members ?? []) as unknown as Array<{
@@ -48,6 +56,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     .filter((u): u is { id: string; email: string; name: string | null } => !!u)
     .sort((a, b) => (a.name ?? a.email).localeCompare(b.name ?? b.email));
   const atomOptions = (atoms ?? []).map((a) => ({ id: a.id, identifier: a.identifier, name: a.name }));
+  const catalogItems = (catalog ?? []) as Array<{ id: string; kind: string; code: string; name: string }>;
 
   return (
     <>
@@ -71,6 +80,20 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               <option value="lodging_assignment">Lodging (hotel, housing)</option>
               <option value="vehicle_assignment">Vehicle</option>
             </select>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">Catalog Item (optional)</label>
+            <select name="catalog_item_id" className="input-base mt-1.5 w-full" defaultValue="">
+              <option value="">— Free-text title —</option>
+              {catalogItems.map((c) => (
+                <option key={c.id} value={c.id}>
+                  [{c.kind}] {c.code} · {c.name}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-[10px] text-[var(--text-muted)]">
+              Pick a master-catalog SKU to anchor cost rollup + inventory; leave blank to author free-text.
+            </p>
           </div>
           <Input
             label="Title"

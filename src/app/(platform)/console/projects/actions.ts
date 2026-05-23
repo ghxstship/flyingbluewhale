@@ -13,11 +13,29 @@ const slugify = (s: string) =>
     .replace(/^-+|-+$/g, "")
     .slice(0, 48);
 
+const UUID = z.string().uuid();
+const OPT_UUID = z.union([UUID, z.literal("")]).optional();
+const OPT_DATE = z.string().date().optional().or(z.literal(""));
+const OPT_ENUM = <T extends [string, ...string[]]>(values: T) => z.union([z.enum(values), z.literal("")]).optional();
+
 const CreateSchema = z.object({
   name: z.string().min(1).max(120),
   description: z.string().max(2000).optional(),
-  startDate: z.string().date().optional().or(z.literal("")),
-  endDate: z.string().date().optional().or(z.literal("")),
+  startDate: OPT_DATE,
+  endDate: OPT_DATE,
+  clientId: OPT_UUID,
+  primaryVenueId: OPT_UUID,
+  // Budget arrives as a dollar string from the form; convert to cents before
+  // hitting the DB. Empty string means "no budget set", which is distinct
+  // from "$0.00 budget" — the DB stores NULL for the former.
+  budget: z
+    .string()
+    .regex(/^\d*\.?\d{0,2}$/u)
+    .optional()
+    .or(z.literal("")),
+  geographicScope: OPT_ENUM(["local", "regional", "national", "international"]),
+  tourStructure: OPT_ENUM(["single_stop", "multi_stop_sequential", "simultaneous_multi_city"]),
+  productionStyle: OPT_ENUM(["editorial", "documentary", "narrative", "spectacle", "intimate", "brutalist"]),
 });
 
 export type CreateProjectState = { error?: string } | null;
@@ -28,6 +46,17 @@ export async function createProjectAction(_: CreateProjectState, formData: FormD
   const parsed = CreateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
+  const budgetCents =
+    parsed.data.budget && parsed.data.budget.length > 0
+      ? Math.round(Number.parseFloat(parsed.data.budget) * 100)
+      : null;
+  // Empty-string sentinel from an unselected `<select>` collapses to null.
+  // The zod schema already validates the enum values; the cast is safe here.
+  // LDP discipline: never let `""` reach the DB enum columns.
+  const geoScope = parsed.data.geographicScope || null;
+  const tourStr = parsed.data.tourStructure || null;
+  const prodStyle = parsed.data.productionStyle || null;
+
   try {
     const project = await createProject({
       orgId: session.orgId,
@@ -37,6 +66,19 @@ export async function createProjectAction(_: CreateProjectState, formData: FormD
       startDate: parsed.data.startDate || null,
       endDate: parsed.data.endDate || null,
       createdBy: session.userId,
+      clientId: parsed.data.clientId || null,
+      primaryVenueId: parsed.data.primaryVenueId || null,
+      budgetCents,
+      geographicScope: geoScope as "local" | "regional" | "national" | "international" | null,
+      tourStructure: tourStr as "single_stop" | "multi_stop_sequential" | "simultaneous_multi_city" | null,
+      productionStyle: prodStyle as
+        | "editorial"
+        | "documentary"
+        | "narrative"
+        | "spectacle"
+        | "intimate"
+        | "brutalist"
+        | null,
     });
     revalidatePath("/console/projects");
     revalidatePath("/console");
@@ -48,13 +90,13 @@ export async function createProjectAction(_: CreateProjectState, formData: FormD
 }
 
 const UpdateSchema = z.object({
-  status: z.enum(["draft", "active", "paused", "archived", "complete"]).optional(),
+  project_state: z.enum(["draft", "active", "paused", "archived", "complete"]).optional(),
   description: z.string().max(2000).optional(),
 });
 
 export async function updateProjectAction(projectId: string, formData: FormData) {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can change project status" };
+  if (!isManagerPlus(session)) return { error: "Only manager+ can change project state" };
   const parsed = UpdateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 

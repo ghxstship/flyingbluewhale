@@ -4,7 +4,7 @@ import * as React from "react";
 import { ChartShell } from "@/components/charts/ChartShell";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
-export type GanttRow = {
+export type TimelineRow = {
   id: string;
   label: string;
   lane: "Tasks" | "Events";
@@ -17,44 +17,35 @@ const ROW_HEIGHT = 22;
 const HEADER_HEIGHT = 28;
 const LABEL_COL = 220;
 
-/**
- * Gantt — SVG bars + dependency-friendly swim-lane layout. Renders bars
- * scaled to a derived window (project range, padded by 7d on each side
- * to keep edge bars visible). Rows are grouped into "Tasks" and "Events"
- * swim lanes; today's date is overlaid as a vertical guide.
- */
-export function GanttChart({
+export function TimelineView({
   rows,
   projectStart,
   projectEnd,
 }: {
-  rows: GanttRow[];
+  rows: TimelineRow[];
   projectStart: string | null;
   projectEnd: string | null;
 }) {
   const fmt = useFormatters();
   const [now] = React.useState(() => new Date());
 
-  // Compute window: extend project bounds (or row bounds) by ±7 days.
   const allDates = rows.flatMap((r) => [new Date(r.start), new Date(r.end)]);
   if (projectStart) allDates.push(new Date(projectStart));
   if (projectEnd) allDates.push(new Date(projectEnd));
-  const minMs = Math.min(...allDates.map((d) => d.getTime()));
-  const maxMs = Math.max(...allDates.map((d) => d.getTime()));
+  const minMs = allDates.length > 0 ? Math.min(...allDates.map((d) => d.getTime())) : Date.now();
+  const maxMs = allDates.length > 0 ? Math.max(...allDates.map((d) => d.getTime())) : Date.now() + 30 * 86400000;
   const pad = 7 * 86400000;
   const windowStart = minMs - pad;
   const windowEnd = maxMs + pad;
   const totalMs = Math.max(windowEnd - windowStart, 86400000);
 
-  // Group into lanes for swim-lane styling.
   const lanes: Array<"Tasks" | "Events"> = ["Tasks", "Events"];
-  const grouped: Record<"Tasks" | "Events", GanttRow[]> = {
+  const grouped: Record<"Tasks" | "Events", TimelineRow[]> = {
     Tasks: rows.filter((r) => r.lane === "Tasks"),
     Events: rows.filter((r) => r.lane === "Events"),
   };
 
-  // Linear list with a small header per lane.
-  type Line = { kind: "header"; lane: "Tasks" | "Events" } | { kind: "row"; row: GanttRow };
+  type Line = { kind: "header"; lane: "Tasks" | "Events" } | { kind: "row"; row: TimelineRow };
   const lines: Line[] = [];
   for (const l of lanes) {
     if (grouped[l].length === 0) continue;
@@ -62,13 +53,11 @@ export function GanttChart({
     for (const r of grouped[l]) lines.push({ kind: "row", row: r });
   }
 
-  const width = 1100; // logical SVG width — scales via viewBox
+  const width = 1100;
   const innerWidth = width - LABEL_COL;
   const height = HEADER_HEIGHT + lines.length * ROW_HEIGHT + 8;
-
   const xFor = (ms: number) => LABEL_COL + ((ms - windowStart) / totalMs) * innerWidth;
 
-  // Month gridlines at first of each month within window.
   const monthTicks: { x: number; label: string }[] = [];
   {
     const cursor = new Date(windowStart);
@@ -85,8 +74,8 @@ export function GanttChart({
 
   return (
     <ChartShell
-      title="Gantt"
-      description={`${rows.length} bar${rows.length === 1 ? "" : "s"} across Tasks + Events`}
+      title="Timeline"
+      description={`${rows.length} Bar${rows.length === 1 ? "" : "s"} Across Tasks + Events`}
       empty={rows.length === 0}
       height={height + 32}
     >
@@ -97,13 +86,11 @@ export function GanttChart({
           preserveAspectRatio="xMinYMin meet"
           className="font-sans"
           role="img"
-          aria-label="Gantt chart"
+          aria-label="Project Timeline"
         >
-          {/* Header band */}
           <rect x={0} y={0} width={width} height={HEADER_HEIGHT} fill="var(--surface-inset)" />
           <line x1={LABEL_COL} y1={HEADER_HEIGHT} x2={width} y2={HEADER_HEIGHT} stroke="var(--border-color)" />
 
-          {/* Month tick labels + verticals */}
           {monthTicks.map((t, i) => (
             <g key={i}>
               <line
@@ -121,7 +108,6 @@ export function GanttChart({
             </g>
           ))}
 
-          {/* Today line */}
           {now.getTime() >= windowStart && now.getTime() <= windowEnd && (
             <g>
               <line
@@ -138,7 +124,6 @@ export function GanttChart({
             </g>
           )}
 
-          {/* Bars */}
           {lines.map((line, idx) => {
             const y = HEADER_HEIGHT + idx * ROW_HEIGHT;
             if (line.kind === "header") {
@@ -150,11 +135,7 @@ export function GanttChart({
                     y={y + ROW_HEIGHT / 2 + 4}
                     fontSize={10}
                     fill="var(--text-muted)"
-                    style={{
-                      letterSpacing: "0.16em",
-                      textTransform: "uppercase",
-                      fontWeight: 600,
-                    }}
+                    style={{ letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 600 }}
                   >
                     {line.lane}
                   </text>
@@ -193,9 +174,6 @@ export function GanttChart({
 }
 
 function barTone(lane: "Tasks" | "Events", status: string): string {
-  // Status colors consume the canonical semantic tokens so theme switches
-  // (including bermuda-triangle's monochrome accents) flow through to the
-  // Gantt visualization. SVG `fill`/`stroke` accept `var()`.
   if (lane === "Events") {
     if (status === "live") return "var(--color-success)";
     if (status === "completed") return "var(--text-muted)";

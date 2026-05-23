@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
         end_date: input.end_date ?? null,
         created_by: session.userId,
       })
-      .select("id, name, slug, status, description, start_date, end_date, created_at, updated_at")
+      .select("id, name, slug, project_state, description, start_date, end_date, created_at, updated_at")
       .single();
     if (error) {
       if (error.message.includes("duplicate")) return apiError("conflict", "Project slug already exists");

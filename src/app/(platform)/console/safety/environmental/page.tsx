@@ -11,7 +11,7 @@ export default async function Page() {
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Console" title="Environmental Events" />
+        <ModuleHeader eyebrow="Workspace" title="Environmental Events" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>

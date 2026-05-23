@@ -53,7 +53,7 @@ export default async function StagePlotDetailPage({
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
         title={plot.name}
-        subtitle="Drag-and-drop 2D stage layout editor."
+        subtitle="Drag And Drop 2D Stage Layout Editor"
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },

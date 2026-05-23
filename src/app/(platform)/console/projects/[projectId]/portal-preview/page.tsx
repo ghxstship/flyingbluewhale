@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
         title="Portal Preview"
-        subtitle="Jump into each persona's portal view for this project."
+        subtitle="Each Persona's Portal View For This Project"
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },

@@ -27,7 +27,7 @@ export default async function EventsPage() {
       <ModuleHeader
         eyebrow="Work"
         title="Events"
-        subtitle={`${rows.length} event${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Event${rows.length === 1 ? "" : "s"}`}
         action={<Button href="/console/events/new">+ New Event</Button>}
       />
       <div className="page-content">

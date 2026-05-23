@@ -21,7 +21,7 @@ export async function resolveProposalContext(slug: string, proposalId: string) {
 
   const { data: project } = await supabase
     .from("projects")
-    .select("id,name,org_id,slug,status,start_date,end_date,client_id")
+    .select("id,name,org_id,slug,project_state,start_date,end_date,client_id")
     .eq("slug", slug)
     .maybeSingle();
   if (!project) return null;

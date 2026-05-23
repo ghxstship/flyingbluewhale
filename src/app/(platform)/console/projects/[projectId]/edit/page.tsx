@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { MoneyInput } from "@/components/ui/MoneyInput";
 import { requireSession } from "@/lib/auth";
 import { getProject } from "@/lib/db/projects";
+import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { updateProject, type State } from "./actions";
 
@@ -19,7 +20,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const p = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const row = await getProject(session.orgId, p.projectId);
+  const [row, clients, venues] = await Promise.all([
+    getProject(session.orgId, p.projectId),
+    listOrgScoped("clients", session.orgId, { orderBy: "name", ascending: true }),
+    listOrgScoped("venues", session.orgId, { orderBy: "name", ascending: true }),
+  ]);
   if (!row) notFound();
   const action = updateProject.bind(null, p.projectId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
@@ -31,25 +36,103 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
-            <select name="status" defaultValue={row.status} required className="input-base focus-ring w-full">
-              <option value="draft">draft</option>
-              <option value="active">active</option>
-              <option value="paused">paused</option>
-              <option value="archived">archived</option>
-              <option value="complete">complete</option>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">State</span>
+            <select
+              name="project_state"
+              defaultValue={row.project_state}
+              required
+              className="input-base focus-ring w-full"
+            >
+              <option value="draft">Draft</option>
+              <option value="active">Active</option>
+              <option value="paused">Paused</option>
+              <option value="archived">Archived</option>
+              <option value="complete">Complete</option>
             </select>
           </label>
           <div className="grid grid-cols-2 gap-3">
             <Input label="Start Date" name="start_date" type="date" defaultValue={dateOnly(row.start_date)} />
             <Input label="End Date" name="end_date" type="date" defaultValue={dateOnly(row.end_date)} />
           </div>
+          <div className="grid grid-cols-2 gap-3">
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium text-[var(--text-secondary)]">Client</span>
+              <select name="client_id" defaultValue={row.client_id ?? ""} className="input-base focus-ring w-full">
+                <option value="">— None —</option>
+                {clients.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium text-[var(--text-secondary)]">Primary Venue</span>
+              <select
+                name="primary_venue_id"
+                defaultValue={row.primary_venue_id ?? ""}
+                className="input-base focus-ring w-full"
+              >
+                <option value="">— None —</option>
+                {venues.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
           <MoneyInput
             label="Budget"
             name="budget_cents"
             defaultCents={row.budget_cents ?? null}
-            hint="Enter dollars (e.g. 27,500.00). Stored as integer cents."
+            hint="Dollars. Stored as integer cents."
           />
+          <div className="grid grid-cols-3 gap-3">
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium text-[var(--text-secondary)]">Scope</span>
+              <select
+                name="geographic_scope"
+                defaultValue={row.geographic_scope ?? ""}
+                className="input-base focus-ring w-full"
+              >
+                <option value="">—</option>
+                <option value="local">Local</option>
+                <option value="regional">Regional</option>
+                <option value="national">National</option>
+                <option value="international">International</option>
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium text-[var(--text-secondary)]">Tour Structure</span>
+              <select
+                name="tour_structure"
+                defaultValue={row.tour_structure ?? ""}
+                className="input-base focus-ring w-full"
+              >
+                <option value="">—</option>
+                <option value="single_stop">Single Stop</option>
+                <option value="multi_stop_sequential">Multi-Stop Sequential</option>
+                <option value="simultaneous_multi_city">Simultaneous Multi-City</option>
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium text-[var(--text-secondary)]">Production Style</span>
+              <select
+                name="production_style"
+                defaultValue={row.production_style ?? ""}
+                className="input-base focus-ring w-full"
+              >
+                <option value="">—</option>
+                <option value="editorial">Editorial</option>
+                <option value="documentary">Documentary</option>
+                <option value="narrative">Narrative</option>
+                <option value="spectacle">Spectacle</option>
+                <option value="intimate">Intimate</option>
+                <option value="brutalist">Brutalist</option>
+              </select>
+            </label>
+          </div>
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
             <textarea
@@ -61,7 +144,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             />
           </label>
           <p className="text-xs text-[var(--text-muted)]">
-            Slug, branding, and FK relationships are managed elsewhere.
+            Slug is locked after create. Branding lives under the Branding tab.
           </p>
         </FormShell>
       </div>

@@ -38,14 +38,17 @@ export default async function ProjectLayout({
     .maybeSingle();
   const currentPhase = (project?.xpms_phase ?? null) as XpmsPhase | null;
 
+  // Schedule consolidates the prior Gantt + Calendar tabs into one domain
+  // with `?view=timeline|calendar|list` (Linear / Asana / Notion pattern).
+  // Tasks stays distinct — work items vs. scheduled events are different
+  // entities and operators access them on different cadences.
   const tabs = [
     { label: "Overview", href: `/console/projects/${projectId}/overview` },
     { label: "Tracker", href: `/console/projects/${projectId}/tracker` },
     { label: "Tasks", href: `/console/projects/${projectId}/tasks` },
-    { label: "Gantt", href: `/console/projects/${projectId}/gantt` },
+    { label: "Schedule", href: `/console/projects/${projectId}/schedule` },
     { label: "Files", href: `/console/projects/${projectId}/files` },
     { label: "Photos", href: `/console/projects/${projectId}/photos` },
-    { label: "Calendar", href: `/console/projects/${projectId}/calendar` },
     { label: "Budget", href: `/console/projects/${projectId}/budget` },
     { label: "P&L", href: `/console/projects/${projectId}/finance` },
     { label: "Crew", href: `/console/projects/${projectId}/crew` },

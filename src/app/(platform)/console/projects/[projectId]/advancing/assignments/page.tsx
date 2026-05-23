@@ -122,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <ModuleHeader
         eyebrow={project.name as string}
         title="Individual Assignments"
-        subtitle={`${rows.length} catalog assignment${rows.length === 1 ? "" : "s"} on this project`}
+        subtitle={`${rows.length} ${rows.length === 1 ? "Assignment" : "Assignments"} · Credentials, Catering, Radios, Tools, Equipment, Uniforms, Travel, Lodging, Vehicles`}
         action={
           <Button href={`/console/projects/${projectId}/advancing/assignments/new`} size="sm">
             + New Assignment
@@ -133,7 +133,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         {rows.length === 0 ? (
           <EmptyState
             title="No Assignments Yet"
-            description="Assign catalog items to people on the project — they show up on the assignee's portal and mobile views immediately."
+            description="Whatever you assign here lands on the assignee's portal and mobile views in real time."
+            action={
+              <Button href={`/console/projects/${projectId}/advancing/assignments/new`} size="sm">
+                + New Assignment
+              </Button>
+            }
           />
         ) : (
           <div className="space-y-6">

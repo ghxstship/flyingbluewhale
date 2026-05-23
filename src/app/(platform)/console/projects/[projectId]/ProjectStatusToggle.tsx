@@ -4,9 +4,9 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { updateProjectAction } from "../actions";
-import type { ProjectStatus } from "@/lib/supabase/types";
+import type { ProjectState } from "@/lib/supabase/types";
 
-const NEXT_STATUS: Partial<Record<ProjectStatus, ProjectStatus>> = {
+const NEXT_STATE: Partial<Record<ProjectState, ProjectState>> = {
   draft: "active",
   active: "paused",
   paused: "active",
@@ -14,9 +14,9 @@ const NEXT_STATUS: Partial<Record<ProjectStatus, ProjectStatus>> = {
   complete: "archived",
 };
 
-export function ProjectStatusToggle({ projectId, status }: { projectId: string; status: ProjectStatus }) {
+export function ProjectStatusToggle({ projectId, projectState }: { projectId: string; projectState: ProjectState }) {
   const [pending, start] = useTransition();
-  const next = NEXT_STATUS[status];
+  const next = NEXT_STATE[projectState];
   if (!next) return null;
 
   return (
@@ -26,7 +26,7 @@ export function ProjectStatusToggle({ projectId, status }: { projectId: string; 
       onClick={() =>
         start(async () => {
           const fd = new FormData();
-          fd.set("status", next);
+          fd.set("project_state", next);
           const res = await updateProjectAction(projectId, fd);
           if (res?.error) toast.error(res.error);
           else toast.success(`Marked ${next}`);

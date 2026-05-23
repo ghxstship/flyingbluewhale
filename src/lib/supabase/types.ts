@@ -52,7 +52,15 @@ export const PERSONAS = [
   "community",
 ] as const;
 
+/**
+ * Project operational state (cyclical/non-sequential, distinct from the
+ * `xpms_phase` sequential macro arc). Per LDP §NAMING DISCIPLINE the
+ * column is `project_state`; the type alias retains the historical
+ * `ProjectStatus` name for source-level call-site stability — flip the
+ * alias to `ProjectState` in a follow-up rename PR if desired.
+ */
 export type ProjectStatus = "draft" | "active" | "paused" | "archived" | "complete";
+export type ProjectState = ProjectStatus;
 export type TicketStatus = "issued" | "transferred" | "scanned" | "voided";
 export type DeliverableStatus =
   | "briefed"
@@ -176,20 +184,31 @@ export type ProjectMember = {
   updated_at: string;
 };
 
+export type XpmsPhaseEnum = "discovery" | "concept" | "development" | "advance" | "build" | "show" | "strike" | "wrap";
+export type GeographicScope = "local" | "regional" | "national" | "international";
+export type TourStructure = "single_stop" | "multi_stop_sequential" | "simultaneous_multi_city";
+export type ProductionStyle = "editorial" | "documentary" | "narrative" | "spectacle" | "intimate" | "brutalist";
+
 export type Project = {
   id: string;
   org_id: string;
   slug: string;
   name: string;
   description: string | null;
-  status: ProjectStatus;
+  project_state: ProjectStatus;
+  xpms_phase: XpmsPhaseEnum | null;
   start_date: string | null;
   end_date: string | null;
   client_id: string | null;
+  primary_venue_id: string | null;
   budget_cents: number | null;
+  geographic_scope: GeographicScope | null;
+  tour_structure: TourStructure | null;
+  production_style: ProductionStyle | null;
   created_by: string;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
 };
 
 export type Ticket = {

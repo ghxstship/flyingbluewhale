@@ -11,7 +11,7 @@ export default async function Page() {
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Console" title="Safeguarding Reports" />
+        <ModuleHeader eyebrow="Workspace" title="Safeguarding Reports" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>

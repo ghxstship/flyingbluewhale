@@ -10,7 +10,7 @@ export default async function Page() {
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Console" title="Gate Scans" />
+        <ModuleHeader eyebrow="Workspace" title="Gate Scans" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -25,7 +25,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Console"
+        eyebrow="Workspace"
         title="Gate Scans"
         subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
       />

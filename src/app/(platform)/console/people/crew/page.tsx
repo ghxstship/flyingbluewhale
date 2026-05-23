@@ -27,8 +27,8 @@ export default async function CrewPage() {
       <ModuleHeader
         eyebrow="People"
         title="Crew"
-        subtitle={`${rows.length} crew member${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/people/crew/new">+ Add crew</Button>}
+        subtitle={`${rows.length} Crew Member${rows.length === 1 ? "" : "s"}`}
+        action={<Button href="/console/people/crew/new">+ Add Crew</Button>}
       />
       <div className="page-content">
         <DataTable<CrewMember>

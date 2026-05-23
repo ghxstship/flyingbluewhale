@@ -124,7 +124,7 @@ export type ZapierNotification = {
 
 type ProjectRow = Pick<
   Project,
-  "id" | "name" | "slug" | "status" | "description" | "start_date" | "end_date" | "created_at" | "updated_at"
+  "id" | "name" | "slug" | "project_state" | "description" | "start_date" | "end_date" | "created_at" | "updated_at"
 >;
 
 export function toZapierProject(row: ProjectRow): ZapierProject {
@@ -132,7 +132,10 @@ export function toZapierProject(row: ProjectRow): ZapierProject {
     id: row.id,
     name: row.name,
     slug: row.slug,
-    status: row.status,
+    // Zapier consumers still see `status` in the webhook payload — the
+    // public contract pre-dates the LDP rename and breaking it would
+    // require versioning the trigger. Internal column is project_state.
+    status: row.project_state,
     description: row.description,
     start_date: row.start_date,
     end_date: row.end_date,

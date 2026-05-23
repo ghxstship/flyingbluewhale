@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
         title="Files"
-        subtitle={`${files?.length ?? 0} uploaded deliverable${(files?.length ?? 0) === 1 ? "" : "s"}`}
+        subtitle={`${files?.length ?? 0} Uploaded Deliverable${(files?.length ?? 0) === 1 ? "" : "s"}`}
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },

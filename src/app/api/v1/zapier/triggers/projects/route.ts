@@ -16,7 +16,7 @@ export async function GET() {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("projects")
-      .select("id, name, slug, status, description, start_date, end_date, created_at, updated_at")
+      .select("id, name, slug, project_state, description, start_date, end_date, created_at, updated_at")
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .order("created_at", { ascending: false })

@@ -28,7 +28,7 @@ export default async function ClientsPage() {
       <ModuleHeader
         eyebrow="Sales"
         title="Clients"
-        subtitle={`${rows.length} client${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Client${rows.length === 1 ? "" : "s"}`}
         action={<Button href="/console/clients/new">+ New Client</Button>}
       />
       <div className="page-content">

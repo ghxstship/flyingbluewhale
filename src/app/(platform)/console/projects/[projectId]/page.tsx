@@ -46,7 +46,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
         action={
           <div className="flex items-center gap-2">
             <Presence targetTable="projects" targetId={project.id} currentUser={presenceUser} />
-            <ProjectStatusToggle projectId={project.id} status={project.status} />
+            <ProjectStatusToggle projectId={project.id} projectState={project.project_state} />
             <Button href={`/console/projects/${projectId}/edit`} size="sm" variant="secondary">
               Edit
             </Button>
@@ -60,8 +60,8 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
       />
       <div className="page-content space-y-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Field label="Status">
-            <Badge variant={project.status === "active" ? "success" : "muted"}>{project.status}</Badge>
+          <Field label="State">
+            <Badge variant={project.project_state === "active" ? "success" : "muted"}>{project.project_state}</Badge>
           </Field>
           <Field label="Slug">{project.slug}</Field>
           <Field label="Start">{project.start_date ?? "—"}</Field>

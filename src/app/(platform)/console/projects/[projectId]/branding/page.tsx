@@ -21,7 +21,7 @@ export default async function BrandingPage({ params }: { params: Promise<{ proje
       <ModuleHeader
         eyebrow={project.name}
         title="Branding"
-        subtitle="White-label tokens applied to this project's portals (GVTEWAY)."
+        subtitle="White-Label Tokens For This Project's GVTEWAY Portal"
       />
       <div className="page-content max-w-2xl">
         <BrandingForm projectId={project.id} initial={branding} projectName={project.name} />

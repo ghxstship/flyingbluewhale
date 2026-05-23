@@ -132,8 +132,11 @@ export async function getSession(): Promise<Session | null> {
     tier: chosen.orgs?.tier ?? "access",
     // Persona-first: prefer the per-membership persona (granular: crew /
     // client / contractor / etc.) and fall back to role-based mapping for
-    // pre-migration rows or memberships that opted not to set it.
-    persona: isGuest ? "guest" : (chosen.persona ?? personaForRole(chosen.role)),
+    // pre-migration rows or memberships that opted not to set it. The
+    // demo-only fallback to "guest" only fires when persona is *unset* —
+    // an explicit persona on a seeded demo-org membership is honored so
+    // dev/test workflows can land in /console, /p, or /m as configured.
+    persona: chosen.persona ?? (isGuest ? "guest" : personaForRole(chosen.role)),
   };
 }
 

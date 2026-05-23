@@ -87,7 +87,14 @@ const config: NextConfig = {
         headers: [
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
+          // SAMEORIGIN (not DENY) so the marketing home's same-origin
+          // <iframe src="/p/<slug>/guide"> live preview can render. The
+          // stricter CSP `frame-ancestors 'self'` above is the canonical
+          // anti-clickjacking lever; this header is the back-compat
+          // shim for browsers that pre-date CSP frame-ancestors. Both
+          // must agree on "same-origin only" or the older header
+          // overrides and you get a blank iframe.
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self)" },
           { key: "Content-Security-Policy", value: csp },

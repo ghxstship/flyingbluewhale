@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listMsas } from "@/lib/msa/queries";
@@ -14,7 +15,7 @@ export default async function MsasPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="People" title="Master Services Agreements" />
+        <ModuleHeader eyebrow="People" title="Contracts" subtitle="Master Services Agreements" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -32,16 +33,13 @@ export default async function MsasPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="People"
+        eyebrow="People · Contracts"
         title="Master Services Agreements"
-        subtitle={`${rows.length} on file · ${counts["signed"] ?? 0} signed · ${counts["draft"] ?? 0} draft`}
+        subtitle={`${rows.length} On File · ${counts["signed"] ?? 0} Signed · ${counts["draft"] ?? 0} Draft`}
         action={
-          <Link
-            href="/console/people/msas/new"
-            className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
-          >
-            + Issue MSA
-          </Link>
+          <Button href="/console/people/msas/new" size="sm">
+            + New Contract
+          </Button>
         }
       />
       <div className="page-content">

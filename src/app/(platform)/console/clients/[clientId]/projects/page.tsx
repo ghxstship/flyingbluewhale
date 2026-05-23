@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 type Row = {
   id: string;
   name: string;
-  status: string;
+  project_state: string;
   start_date: string | null;
   end_date: string | null;
   budget_cents: number | null;
@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
   const supabase = await createClient();
   const { data } = await supabase
     .from("projects")
-    .select("id,name,status,start_date,end_date,budget_cents")
+    .select("id,name,project_state,start_date,end_date,budget_cents")
     .eq("org_id", session.orgId)
     .eq("client_id", clientId)
     .order("start_date", { ascending: false, nullsFirst: false });
@@ -42,10 +42,12 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
           columns={[
             { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name, sortable: true },
             {
-              key: "status",
-              header: "Status",
-              render: (r) => <Badge variant={r.status === "active" ? "success" : "muted"}>{r.status}</Badge>,
-              accessor: (r) => r.status,
+              key: "project_state",
+              header: "State",
+              render: (r) => (
+                <Badge variant={r.project_state === "active" ? "success" : "muted"}>{r.project_state}</Badge>
+              ),
+              accessor: (r) => r.project_state,
               filterable: true,
               groupable: true,
             },

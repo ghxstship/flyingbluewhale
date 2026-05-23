@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     await Promise.all([
       supabase
         .from("projects")
-        .select("id, name, slug, status, start_date, end_date, description")
+        .select("id, name, slug, project_state, start_date, end_date, description")
         .eq("org_id", session.orgId)
         .is("deleted_at", null)
         .eq("id", projectId)
@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 <p className="mt-1 text-sm text-[var(--text-secondary)]">{project.description}</p>
               )}
             </div>
-            <StatusBadge status={project.status ?? "draft"} />
+            <StatusBadge status={project.project_state ?? "draft"} />
           </div>
           <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div>

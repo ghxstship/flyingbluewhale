@@ -118,16 +118,15 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Portal</div>
       <h1 className="mt-1 text-2xl font-semibold">My Advancing</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Catalog items assigned to you for this project — credentials, catering, radios, tools, uniforms, travel,
-        lodging, vehicles. Same advancing → fulfillment → tracking lifecycle as the production team uses internally.
+        Your credentials, catering, radios, tools, uniforms, travel, lodging, and vehicles for this show.
       </p>
 
       {rows.length === 0 ? (
         <div className="mt-5">
           <EmptyState
             size="compact"
-            title="Nothing Assigned"
-            description="Items assigned to you from the project catalog will appear here grouped by kind."
+            title="Nothing Assigned Yet"
+            description="When your production team pins something to you, it lands here."
           />
         </div>
       ) : (

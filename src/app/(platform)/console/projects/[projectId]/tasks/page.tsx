@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fmtDate } from "@/components/detail/DetailShell";
+import { countLabel } from "@/lib/format";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
@@ -31,7 +32,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
         title="Tasks"
-        subtitle={`${tasks?.length ?? 0} task${(tasks?.length ?? 0) === 1 ? "" : "s"}`}
+        subtitle={countLabel(tasks?.length ?? 0, "Task")}
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
@@ -42,10 +43,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         {!tasks || tasks.length === 0 ? (
           <EmptyState
             title="No Tasks Yet"
-            description="Tasks for this project will appear here. Create one from the Tasks module."
+            description="Project tasks land here once you add the first one."
             action={
-              <Link className="text-sm text-[var(--org-primary)]" href="/console/tasks/new">
-                New task →
+              <Link className="text-sm font-medium text-[var(--org-primary)]" href="/console/tasks/new">
+                New Task →
               </Link>
             }
           />

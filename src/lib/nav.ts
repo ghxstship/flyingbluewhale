@@ -120,7 +120,14 @@ export type NavItem = {
    *  `src/components/nav-icons.ts`. Each item carries a unique key. */
   icon?: IconName;
 };
-export type NavGroup = { label: string; items: NavItem[] };
+/**
+ * Optional sub-grouping inside a NavGroup. Use when a class group exceeds
+ * Miller's 5-9 band — render section labels as quiet dividers above the
+ * items they introduce (Linear / Notion pattern). When `sections` is set,
+ * the group renderer ignores `items` and walks sections instead.
+ */
+export type NavSection = { label: string; items: NavItem[] };
+export type NavGroup = { label: string; items: NavItem[]; sections?: NavSection[] };
 
 /**
  * Primary console navigation — XPMS-native (ADR-0004, 2026-05-10).
@@ -150,41 +157,56 @@ export const platformNav: NavGroup[] = [
   },
   {
     // 0 EXECUTIVE — Org-level command + control. Strategy / Finance /
-    // Procurement / Legal / HR / Compliance fold under one canonical
-    // class. Today's Plan + Procurement + half of Commerce + half of
-    // People all live here.
+    // Procurement / HR / Compliance, sectioned so a single class doesn't
+    // blow Miller's 5-9 band (per docs/ia/03-ia-compression-proposal.md).
     label: "0 EXECUTIVE",
-    items: [
-      // Strategy
-      { label: "Projects", href: "/console/projects", icon: "FolderOpen" },
-      { label: "Programs", href: "/console/programs", icon: "Layers" },
-      { label: "Venues", href: "/console/venues", icon: "Building2" },
-      { label: "Risk Register", href: "/console/programs/risk", icon: "AlertTriangle" },
-      { label: "Readiness", href: "/console/programs/readiness", icon: "ShieldCheck" },
-      { label: "Reviews", href: "/console/programs/reviews", icon: "ClipboardCheck" },
-      // Finance
-      { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
-      { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
-      { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
-      { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
-      { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
-      { label: "Time", href: "/console/finance/time", icon: "Clock" },
-      { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
-      { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
-      { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
-      // Procurement (a finance arm — buying)
-      { label: "Vendors", href: "/console/procurement/vendors", icon: "Store" },
-      { label: "Prequalification", href: "/console/procurement/prequalification", icon: "BookOpenCheck" },
-      { label: "Sourcing", href: "/console/procurement/sourcing", icon: "Compass" },
-      { label: "Requisitions", href: "/console/procurement/requisitions", icon: "ShoppingCart" },
-      { label: "Purchase Orders", href: "/console/procurement/purchase-orders", icon: "Package" },
-      { label: "RFQs", href: "/console/procurement/rfqs", icon: "PackageCheck" },
-      { label: "Submittals", href: "/console/submittals", icon: "Inbox" },
-      { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
-      // HR / Workspace people
-      { label: "Directory", href: "/console/people", icon: "Users" },
-      // Sustainability / Compliance reporting
-      { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
+    items: [],
+    sections: [
+      {
+        label: "Strategy",
+        items: [
+          { label: "Projects", href: "/console/projects", icon: "FolderOpen" },
+          { label: "Programs", href: "/console/programs", icon: "Layers" },
+          { label: "Venues", href: "/console/venues", icon: "Building2" },
+          { label: "Risk Register", href: "/console/programs/risk", icon: "AlertTriangle" },
+          { label: "Readiness", href: "/console/programs/readiness", icon: "ShieldCheck" },
+          { label: "Reviews", href: "/console/programs/reviews", icon: "ClipboardCheck" },
+        ],
+      },
+      {
+        label: "Finance",
+        items: [
+          { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
+          { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
+          { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
+          { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
+          { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
+          { label: "Time", href: "/console/finance/time", icon: "Clock" },
+          { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
+          { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+          { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
+        ],
+      },
+      {
+        label: "Procurement",
+        items: [
+          { label: "Vendors", href: "/console/procurement/vendors", icon: "Store" },
+          { label: "Prequalification", href: "/console/procurement/prequalification", icon: "BookOpenCheck" },
+          { label: "Sourcing", href: "/console/procurement/sourcing", icon: "Compass" },
+          { label: "Requisitions", href: "/console/procurement/requisitions", icon: "ShoppingCart" },
+          { label: "Purchase Orders", href: "/console/procurement/purchase-orders", icon: "Package" },
+          { label: "RFQs", href: "/console/procurement/rfqs", icon: "PackageCheck" },
+          { label: "Submittals", href: "/console/submittals", icon: "Inbox" },
+          { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
+        ],
+      },
+      {
+        label: "People & Compliance",
+        items: [
+          { label: "Directory", href: "/console/people", icon: "Users" },
+          { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
+        ],
+      },
     ],
   },
   {
@@ -257,51 +279,77 @@ export const platformNav: NavGroup[] = [
   },
   {
     // 6 OPERATIONS — People + flow. Largest class: event ops, labor,
-    // logistics, transport, security, medical, permits, workplace.
-    // Today's Run + Safety + Logistics + Workforce + Delegations all
-    // collapse here. Dense — pin frequently-used items.
+    // logistics, transport, security, medical, permits. Sectioned so a
+    // single class doesn't blow Miller's 5-9 band.
     label: "6 OPERATIONS",
-    items: [
-      // Coordination
-      { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
-      { label: "Look-ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
-      { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
-      { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
-      { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
-      { label: "Events", href: "/console/events", icon: "CalendarDays" },
-      { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
-      // Workforce
-      { label: "Teams", href: "/console/people/teams", icon: "UsersRound" },
-      { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
-      { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
-      { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
-      { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
-      { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
-      { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
-      { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
-      { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
-      { label: "MSAs", href: "/console/people/msas", icon: "FileSignature" },
-      { label: "Offer Letters", href: "/console/people/offer-letters", icon: "FileText" },
-      { label: "Announcements", href: "/console/comms/announcements", icon: "Megaphone" },
-      { label: "Polls", href: "/console/comms/polls", icon: "BarChart3" },
-      { label: "Surveys", href: "/console/comms/surveys", icon: "ClipboardCheck" },
-      { label: "Delegations", href: "/console/participants/delegations", icon: "UsersRound" },
-      { label: "Visa", href: "/console/participants/visa", icon: "Stamp" },
-      // Logistics flow
-      { label: "Transport", href: "/console/transport", icon: "Truck" },
-      { label: "Dispatch", href: "/console/transport/dispatch", icon: "Send" },
-      { label: "Freight", href: "/console/logistics/freight", icon: "Container" },
-      { label: "Warehouse", href: "/console/logistics/warehouse", icon: "Warehouse" },
-      { label: "Disposition", href: "/console/logistics/disposition", icon: "PackageOpen" },
-      // Safety (operational care of humans)
-      { label: "Incidents", href: "/console/safety/incidents", icon: "Siren" },
-      { label: "Crisis", href: "/console/safety/crisis", icon: "Flame" },
-      { label: "Medical", href: "/console/safety/medical", icon: "Stethoscope" },
-      { label: "Safeguarding", href: "/console/safety/safeguarding", icon: "HeartHandshake" },
-      { label: "Inspections", href: "/console/inspections", icon: "Search" },
-      { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
-      { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
-      { label: "Playbooks", href: "/console/safety/playbooks", icon: "BookOpenCheck" },
+    items: [],
+    sections: [
+      {
+        label: "Coordination",
+        items: [
+          { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
+          { label: "Look-Ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
+          { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
+          { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
+          { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
+          { label: "Events", href: "/console/events", icon: "CalendarDays" },
+          { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
+        ],
+      },
+      {
+        label: "Workforce",
+        items: [
+          { label: "Teams", href: "/console/people/teams", icon: "UsersRound" },
+          { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
+          { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
+          { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
+          { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
+          { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
+          { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
+          { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
+          { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
+        ],
+      },
+      {
+        label: "Engagement",
+        items: [
+          { label: "Contracts", href: "/console/people/msas", icon: "FileSignature" },
+          { label: "Offer Letters", href: "/console/people/offer-letters", icon: "FileText" },
+          { label: "Delegations", href: "/console/participants/delegations", icon: "UsersRound" },
+          { label: "Visa", href: "/console/participants/visa", icon: "Stamp" },
+        ],
+      },
+      {
+        label: "Communications",
+        items: [
+          { label: "Announcements", href: "/console/comms/announcements", icon: "Megaphone" },
+          { label: "Polls", href: "/console/comms/polls", icon: "BarChart3" },
+          { label: "Surveys", href: "/console/comms/surveys", icon: "ClipboardCheck" },
+        ],
+      },
+      {
+        label: "Logistics",
+        items: [
+          { label: "Transport", href: "/console/transport", icon: "Truck" },
+          { label: "Dispatch", href: "/console/transport/dispatch", icon: "Send" },
+          { label: "Freight", href: "/console/logistics/freight", icon: "Container" },
+          { label: "Warehouse", href: "/console/logistics/warehouse", icon: "Warehouse" },
+          { label: "Disposition", href: "/console/logistics/disposition", icon: "PackageOpen" },
+        ],
+      },
+      {
+        label: "Safety",
+        items: [
+          { label: "Incidents", href: "/console/safety/incidents", icon: "Siren" },
+          { label: "Crisis", href: "/console/safety/crisis", icon: "Flame" },
+          { label: "Medical", href: "/console/safety/medical", icon: "Stethoscope" },
+          { label: "Safeguarding", href: "/console/safety/safeguarding", icon: "HeartHandshake" },
+          { label: "Inspections", href: "/console/inspections", icon: "Search" },
+          { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
+          { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
+          { label: "Playbooks", href: "/console/safety/playbooks", icon: "BookOpenCheck" },
+        ],
+      },
     ],
   },
   {
@@ -310,7 +358,7 @@ export const platformNav: NavGroup[] = [
     label: "7 EXPERIENCE",
     items: [
       { label: "Tickets", href: "/console/commercial/tickets", icon: "Ticket" },
-      { label: "Hospitality (guest)", href: "/console/commercial/hospitality", icon: "ConciergeBell" },
+      { label: "Guest Hospitality", href: "/console/commercial/hospitality", icon: "ConciergeBell" },
       { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
     ],
   },

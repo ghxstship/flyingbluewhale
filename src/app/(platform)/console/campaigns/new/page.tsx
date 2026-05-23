@@ -6,7 +6,7 @@ import { createCampaign } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader eyebrow="Console" title="New Campaign" />
+      <ModuleHeader eyebrow="Workspace" title="New Campaign" />
       <div className="page-content max-w-xl">
         <FormShell action={createCampaign} cancelHref="/console/campaigns" submitLabel="Create Campaign">
           <Input label="Name" name="name" maxLength={200} placeholder="Spring launch · 2026" required />

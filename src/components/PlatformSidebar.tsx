@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, PanelLeftClose, PanelLeftOpen, Pin, PinOff, ChevronRight, ChevronDown } from "lucide-react";
-import type { NavGroup, NavItem } from "@/lib/nav";
+import type { NavGroup, NavItem, NavSection } from "@/lib/nav";
 import { NAV_ICONS } from "@/components/nav-icons";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { useHotkeys, registerShortcut } from "@/lib/hooks/useHotkeys";
@@ -117,24 +117,37 @@ export function PlatformSidebar({
     });
   }
 
-  // Filter groups by query
-  const filtered = React.useMemo(() => {
+  // Flatten a group's items — counts items from `sections` if present so
+  // search/pin/active-route checks all consume one canonical list.
+  const itemsOf = React.useCallback((g: NavGroup): NavItem[] => {
+    if (g.sections && g.sections.length > 0) return g.sections.flatMap((s) => s.items);
+    return g.items;
+  }, []);
+
+  // Filter groups by query — when sections are present, filter them
+  // section-by-section so empty sections drop out.
+  const filtered = React.useMemo<NavGroup[]>(() => {
     if (!query) return groups;
     const q = query.toLowerCase();
     return groups
-      .map((g) => ({
-        ...g,
-        items: g.items.filter((i) => i.label.toLowerCase().includes(q)),
-      }))
-      .filter((g) => g.items.length > 0);
-  }, [groups, query]);
+      .map((g) => {
+        if (g.sections && g.sections.length > 0) {
+          const sections = g.sections
+            .map((s) => ({ ...s, items: s.items.filter((i) => i.label.toLowerCase().includes(q)) }))
+            .filter((s) => s.items.length > 0);
+          return { ...g, sections, items: sections.flatMap((s) => s.items) };
+        }
+        return { ...g, items: g.items.filter((i) => i.label.toLowerCase().includes(q)) };
+      })
+      .filter((g) => itemsOf(g).length > 0);
+  }, [groups, query, itemsOf]);
 
   // Pinned items as a synthesized group
   const pinnedItems: NavItem[] = React.useMemo(() => {
     if (!pinned.length) return [];
-    const all = groups.flatMap((g) => g.items);
+    const all = groups.flatMap((g) => itemsOf(g));
     return pinned.map((href) => all.find((i) => i.href === href)).filter(Boolean) as NavItem[];
-  }, [pinned, groups]);
+  }, [pinned, groups, itemsOf]);
 
   const currentWidth = collapsed ? COLLAPSED_WIDTH : width;
 
@@ -238,7 +251,8 @@ export function PlatformSidebar({
             //  so the sidebar reads as a clean list of group headers; the
             //  active-route group force-opens so the user can never lose
             //  their current page from the nav.
-            const hasActive = g.items.some((i) => matchRoute(pathname ?? "", i.href).isActive);
+            const groupItems = itemsOf(g);
+            const hasActive = groupItems.some((i) => matchRoute(pathname ?? "", i.href).isActive);
             const userExpanded = expandedGroups.includes(g.label);
             const isOpen = collapsed ? false : Boolean(query) || hasActive || userExpanded;
             return (
@@ -246,6 +260,7 @@ export function PlatformSidebar({
                 key={g.label}
                 label={g.label}
                 items={g.items}
+                sections={g.sections}
                 pathname={pathname}
                 collapsed={collapsed}
                 pinned={pinned}
@@ -314,6 +329,7 @@ export function PlatformSidebar({
 function SidebarGroup({
   label,
   items,
+  sections,
   pathname,
   collapsed,
   pinned,
@@ -323,6 +339,9 @@ function SidebarGroup({
 }: {
   label: string;
   items: NavItem[];
+  /** Optional sub-grouping (Linear/Notion pattern). When present, `items` is
+   *  ignored and the group renders each section's label + items in order. */
+  sections?: NavSection[];
   pathname?: string | null;
   collapsed: boolean;
   pinned: string[];
@@ -336,6 +355,7 @@ function SidebarGroup({
   onToggleGroup: ((label: string) => void) | null;
 }) {
   const headerId = `sidebar-group-${label.toLowerCase().replace(/\s+/g, "-")}`;
+  const useSections = sections && sections.length > 0;
   return (
     <div className="mb-3">
       {!collapsed &&
@@ -360,91 +380,128 @@ function SidebarGroup({
             {label}
           </div>
         ))}
-      {(collapsed || isOpen) && (
-        <ul id={`${headerId}-items`} aria-labelledby={headerId} className="mt-0.5 space-y-0.5">
-          {items.map((item) => {
-            // Use the unified active-route matcher so portal + mobile + palette
-            // all agree. IA spec §1.B / §7 anti-pattern #2.
-            const { isActive: active } = matchRoute(pathname ?? "", item.href);
-            const isPinned = pinned.includes(item.href);
-            // Resolve the string icon key to its Lucide component via the
-            // registry. Keeping the data side string-keyed lets the nav
-            // export cross the RSC boundary as plain props (Lucide
-            // components are functions and can't be serialized).
-            const Icon = item.icon ? NAV_ICONS[item.icon] : null;
-            const linkEl = (
-              <Link
-                href={item.href}
-                // Prefetch off: the sidebar carries ~120 nav links across 11
-                // groups; default `<Link>` viewport+hover prefetch caused an
-                // RSC fetch storm (~10–14 dupes per revalidation, ~200 dupes
-                // accumulated for the most-hovered link) that exhausted the
-                // browser's per-origin connection pool with
-                // `ERR_INSUFFICIENT_RESOURCES`. Sidebar links are orientation
-                // jumps, not perf-critical paths — pay the click latency for
-                // a sane network panel. Sea Trial FINDING-005.
-                prefetch={false}
-                aria-current={active ? "page" : undefined}
-                className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
-                  active
-                    ? "bg-[var(--surface)] font-medium text-[var(--text-primary)]"
-                    : "text-[var(--text-secondary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
+      {(collapsed || isOpen) &&
+        (useSections ? (
+          <div id={`${headerId}-items`} aria-labelledby={headerId} className="mt-0.5 space-y-2">
+            {sections.map((s) => (
+              <div key={s.label}>
+                {!collapsed && (
+                  <div className="mt-1.5 mb-0.5 px-2 text-[10px] font-medium tracking-[0.14em] text-[var(--text-muted)]/70 uppercase">
+                    {s.label}
+                  </div>
+                )}
+                <SidebarItems
+                  items={s.items}
+                  pathname={pathname}
+                  collapsed={collapsed}
+                  pinned={pinned}
+                  onTogglePin={onTogglePin}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <SidebarItems
+            id={`${headerId}-items`}
+            ariaLabelledBy={headerId}
+            items={items}
+            pathname={pathname}
+            collapsed={collapsed}
+            pinned={pinned}
+            onTogglePin={onTogglePin}
+          />
+        ))}
+    </div>
+  );
+}
+
+function SidebarItems({
+  items,
+  pathname,
+  collapsed,
+  pinned,
+  onTogglePin,
+  id,
+  ariaLabelledBy,
+}: {
+  items: NavItem[];
+  pathname?: string | null;
+  collapsed: boolean;
+  pinned: string[];
+  onTogglePin: (href: string) => void;
+  id?: string;
+  ariaLabelledBy?: string;
+}) {
+  return (
+    <ul id={id} aria-labelledby={ariaLabelledBy} className="space-y-0.5">
+      {items.map((item) => {
+        const { isActive: active } = matchRoute(pathname ?? "", item.href);
+        const isPinned = pinned.includes(item.href);
+        const Icon = item.icon ? NAV_ICONS[item.icon] : null;
+        const linkEl = (
+          <Link
+            href={item.href}
+            // Prefetch off — see SidebarGroup notes on RSC fetch storms.
+            prefetch={false}
+            aria-current={active ? "page" : undefined}
+            className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
+              active
+                ? "bg-[var(--surface)] font-medium text-[var(--text-primary)]"
+                : "text-[var(--text-secondary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
+            }`}
+          >
+            {active && (
+              <span
+                aria-hidden="true"
+                className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--org-primary)]"
+              />
+            )}
+            <span className="flex min-w-0 items-center gap-2 truncate ps-1">
+              {Icon ? (
+                <Icon
+                  size={14}
+                  strokeWidth={2}
+                  className={`shrink-0 ${
+                    active
+                      ? "text-[var(--text-primary)]"
+                      : "text-[var(--text-muted)] group-hover:text-[var(--text-primary)]"
+                  }`}
+                  aria-hidden="true"
+                />
+              ) : collapsed ? (
+                <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
+              ) : null}
+              {!collapsed && <span className="truncate">{item.label}</span>}
+            </span>
+            {!collapsed && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onTogglePin(item.href);
+                }}
+                aria-label={isPinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
+                className={`shrink-0 rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
+                  isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 }`}
               >
-                {active && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--org-primary)]"
-                  />
-                )}
-                <span className="flex min-w-0 items-center gap-2 truncate ps-1">
-                  {Icon ? (
-                    <Icon
-                      size={14}
-                      strokeWidth={2}
-                      className={`shrink-0 ${
-                        active
-                          ? "text-[var(--text-primary)]"
-                          : "text-[var(--text-muted)] group-hover:text-[var(--text-primary)]"
-                      }`}
-                      aria-hidden="true"
-                    />
-                  ) : collapsed ? (
-                    <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
-                  ) : null}
-                  {!collapsed && <span className="truncate">{item.label}</span>}
-                </span>
-                {!collapsed && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onTogglePin(item.href);
-                    }}
-                    aria-label={isPinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
-                    className={`shrink-0 rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
-                      isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                    }`}
-                  >
-                    {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
-                  </button>
-                )}
-              </Link>
-            );
-            return (
-              <li key={item.href} className="group relative">
-                {collapsed ? (
-                  <Hint label={item.label} side="right" delayDuration={300}>
-                    {linkEl}
-                  </Hint>
-                ) : (
-                  linkEl
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
+                {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
+              </button>
+            )}
+          </Link>
+        );
+        return (
+          <li key={item.href} className="group relative">
+            {collapsed ? (
+              <Hint label={item.label} side="right" delayDuration={300}>
+                {linkEl}
+              </Hint>
+            ) : (
+              linkEl
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 }

@@ -26,7 +26,7 @@ export default async function ConsoleDashboard() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Console" subtitle="Operations dashboard" tabs={<RouteTabs tabs={DASHBOARD_TABS} />} />
+        <ModuleHeader title="Workspace" subtitle="Operations dashboard" tabs={<RouteTabs tabs={DASHBOARD_TABS} />} />
         <div className="page-content">
           <div className="surface p-6">
             <div className="text-xs font-semibold tracking-wider text-[var(--color-warning)] uppercase">
@@ -53,7 +53,7 @@ export default async function ConsoleDashboard() {
     return (
       <>
         <ModuleHeader
-          title="Console"
+          title="Workspace"
           subtitle={`Logged in as ${session.email}`}
           tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
         />
@@ -80,7 +80,7 @@ export default async function ConsoleDashboard() {
   return (
     <>
       <ModuleHeader
-        title="Console"
+        title="Workspace"
         subtitle={`Logged in as ${session.email} · ${session.role}`}
         action={<Button href="/console/projects/new">+ New Project</Button>}
         tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
@@ -88,9 +88,9 @@ export default async function ConsoleDashboard() {
       <div className="page-content space-y-6">
         <div className="metric-grid">
           <MetricCard label="Projects" value={fmt.number(stats.total)} />
-          <MetricCard label="Active" value={fmt.number(stats.byStatus.active)} accent />
-          <MetricCard label="Draft" value={fmt.number(stats.byStatus.draft)} />
-          <MetricCard label="Archived" value={fmt.number(stats.byStatus.archived + stats.byStatus.complete)} />
+          <MetricCard label="Active" value={fmt.number(stats.byState.active)} accent />
+          <MetricCard label="Draft" value={fmt.number(stats.byState.draft)} />
+          <MetricCard label="Archived" value={fmt.number(stats.byState.archived + stats.byState.complete)} />
         </div>
 
         <section>
@@ -123,10 +123,10 @@ export default async function ConsoleDashboard() {
               columns={[
                 { key: "name", header: "Name", render: (p) => p.name, accessor: (p) => p.name, sortable: true },
                 {
-                  key: "status",
-                  header: "Status",
-                  render: (p) => <StatusBadge status={p.status} />,
-                  accessor: (p) => p.status,
+                  key: "project_state",
+                  header: "State",
+                  render: (p) => <StatusBadge status={p.project_state} />,
+                  accessor: (p) => p.project_state,
                   filterable: true,
                 },
                 {

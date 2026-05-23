@@ -28,7 +28,7 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
       <ModuleHeader
         eyebrow={project.name}
         title="Event Guides"
-        subtitle="Per-role Know-Before-You-Go — authored here, served in portals + mobile"
+        subtitle="Per-Role Know-Before-You-Go — Authored Here, Served In Portal + Mobile"
       />
       <div className="page-content space-y-4">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -56,12 +56,9 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
           })}
         </div>
         <div className="surface-inset p-5 text-sm text-[var(--text-muted)]">
-          <div className="text-sm font-semibold text-[var(--foreground)]">Boarding-Pass integration</div>
+          <div className="text-sm font-semibold text-[var(--foreground)]">Custom Guide</div>
           <p className="mt-2">
-            Guides follow the Boarding Pass Know-Before-You-Go pattern: same static schema, different data per role.
-            Author the config once per persona, publish, and the same rendering ships to the external portal (
-            <code className="font-mono">/p/[slug]/guide</code>) and the mobile PWA (
-            <code className="font-mono">/m/guide</code>) — automatically scoped to the viewer&apos;s role.
+            Build a guide for a role that isn&apos;t on the standard list. Same renderer, your fields.
           </p>
           <div className="mt-3">
             <Button href={`/console/projects/${projectId}/guides/custom`} variant="secondary">

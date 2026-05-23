@@ -48,7 +48,7 @@ export default async function MobileGuide() {
     .from("projects")
     .select("id,name,slug")
     .eq("org_id", session.orgId)
-    .eq("status", "active")
+    .eq("project_state", "active")
     .order("updated_at", { ascending: false })
     .limit(1)
     .maybeSingle();

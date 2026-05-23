@@ -20,7 +20,7 @@ export function SettingsSidebar() {
             className="inline-flex items-center gap-1 text-[10px] font-semibold tracking-[0.28em] text-[var(--text-muted)] uppercase hover:text-[var(--text-primary)]"
           >
             <ChevronLeft size={12} aria-hidden="true" />
-            Back to Console
+            Back to Workspace
           </Link>
           <div className="mt-2 text-sm font-semibold text-[var(--text-primary)]">Settings</div>
         </div>

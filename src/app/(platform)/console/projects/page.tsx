@@ -46,7 +46,7 @@ export default async function ProjectsPage() {
               entries={projects.map<PortfolioEntry>((p) => ({
                 id: p.id,
                 name: p.name,
-                status: p.status,
+                status: p.project_state,
                 startDate: p.start_date ?? null,
                 endDate: p.end_date ?? null,
                 budgetCents: p.budget_cents ?? 0,
@@ -60,10 +60,12 @@ export default async function ProjectsPage() {
                 { key: "name", header: "Name", render: (p) => p.name, accessor: (p) => p.name, sortable: true },
                 { key: "slug", header: "Slug", render: (p) => p.slug, accessor: (p) => p.slug, mono: true },
                 {
-                  key: "status",
-                  header: "Status",
-                  render: (p) => <Badge variant={p.status === "active" ? "success" : "muted"}>{p.status}</Badge>,
-                  accessor: (p) => p.status,
+                  key: "project_state",
+                  header: "State",
+                  render: (p) => (
+                    <Badge variant={p.project_state === "active" ? "success" : "muted"}>{p.project_state}</Badge>
+                  ),
+                  accessor: (p) => p.project_state,
                   filterable: true,
                   groupable: true,
                 },

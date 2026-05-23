@@ -22,15 +22,15 @@ export default async function Page() {
 
   const { data } = await supabase
     .from("projects")
-    .select("id, name, status")
+    .select("id, name, project_state")
     .eq("org_id", session.orgId)
-    .in("status", ["active", "draft"])
+    .in("project_state", ["active", "draft"])
     .order("name");
 
   const projects = (data ?? []).map((p) => ({
     value: p.id,
     label: p.name,
-    keywords: [p.status],
+    keywords: [p.project_state],
   }));
 
   return (

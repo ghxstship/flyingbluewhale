@@ -5,6 +5,22 @@ export function timeAgo(date: Date | string | number | null | undefined): string
   return formatRelative(date, { compact: true });
 }
 
+/**
+ * Title Case noun count for headers/subtitles. Use this in any non-body UI
+ * string that shows "{n} {noun}(s)" — module subtitles, eyebrows, badges,
+ * table summaries. Body paragraphs stay sentence case; this helper is the
+ * canonical lever for the Title Case convention everywhere else.
+ *
+ *   countLabel(0, "Task")          → "0 Tasks"
+ *   countLabel(1, "Task")          → "1 Task"
+ *   countLabel(3, "Atom", "Atoms") → "3 Atoms"
+ *   countLabel(2, "Entry", "Entries")
+ */
+export function countLabel(n: number, singular: string, plural?: string): string {
+  const word = n === 1 ? singular : (plural ?? `${singular}s`);
+  return `${n} ${word}`;
+}
+
 export function slugify(s: string, max = 48) {
   return s
     .toLowerCase()

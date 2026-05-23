@@ -16044,9 +16044,9 @@ export type Database = {
           production_style:
             | Database["public"]["Enums"]["xpms_production_style"]
             | null
+          project_state: Database["public"]["Enums"]["project_state"]
           slug: string
           start_date: string | null
-          status: Database["public"]["Enums"]["project_status"]
           tour_structure:
             | Database["public"]["Enums"]["xpms_tour_structure"]
             | null
@@ -16076,9 +16076,9 @@ export type Database = {
           production_style?:
             | Database["public"]["Enums"]["xpms_production_style"]
             | null
+          project_state?: Database["public"]["Enums"]["project_state"]
           slug: string
           start_date?: string | null
-          status?: Database["public"]["Enums"]["project_status"]
           tour_structure?:
             | Database["public"]["Enums"]["xpms_tour_structure"]
             | null
@@ -16108,9 +16108,9 @@ export type Database = {
           production_style?:
             | Database["public"]["Enums"]["xpms_production_style"]
             | null
+          project_state?: Database["public"]["Enums"]["project_state"]
           slug?: string
           start_date?: string | null
-          status?: Database["public"]["Enums"]["project_status"]
           tour_structure?:
             | Database["public"]["Enums"]["xpms_tour_structure"]
             | null
@@ -29475,7 +29475,7 @@ export type Database = {
         | "STRIKE"
         | "ARCHIVED"
       project_role: "lead" | "editor" | "contributor" | "viewer" | "vendor"
-      project_status: "draft" | "active" | "paused" | "archived" | "complete"
+      project_state: "draft" | "active" | "paused" | "archived" | "complete"
       proposal_phase_state:
         | "locked"
         | "active"
@@ -30255,7 +30255,7 @@ export const Constants = {
         "ARCHIVED",
       ],
       project_role: ["lead", "editor", "contributor", "viewer", "vendor"],
-      project_status: ["draft", "active", "paused", "archived", "complete"],
+      project_state: ["draft", "active", "paused", "archived", "complete"],
       proposal_phase_state: [
         "locked",
         "active",

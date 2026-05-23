@@ -8,20 +8,32 @@ import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 
+const UUID = z.string().uuid();
+const OPT_UUID = z.union([UUID, z.literal("")]).optional();
+
 const Schema = z
   .object({
     name: z.string().min(1).max(200),
-    status: z.string(),
+    project_state: z.string(),
     start_date: z.string().optional().or(z.literal("")),
     end_date: z.string().optional().or(z.literal("")),
     budget_cents: z.string().optional(),
     description: z.string().max(8000).optional().or(z.literal("")),
+    client_id: OPT_UUID,
+    primary_venue_id: OPT_UUID,
+    geographic_scope: z.string().optional(),
+    tour_structure: z.string().optional(),
+    production_style: z.string().optional(),
   })
   // Sea Trial R2 FINDING-018: end_date must not precede start_date when
   // both are supplied.
   .refine(...dateRangeRefine("start_date", "end_date"));
 
 export type State = { error?: string } | null;
+
+type GeoScope = "local" | "regional" | "national" | "international";
+type TourStructure = "single_stop" | "multi_stop_sequential" | "simultaneous_multi_city";
+type ProductionStyle = "editorial" | "documentary" | "narrative" | "spectacle" | "intimate" | "brutalist";
 
 export async function updateProject(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -31,11 +43,16 @@ export async function updateProject(id: string, _: State, fd: FormData): Promise
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("projects", session.orgId, id, expectedUpdatedAt, {
     name: parsed.data.name,
-    status: parsed.data.status as "draft" | "active" | "paused" | "archived" | "complete",
+    project_state: parsed.data.project_state as "draft" | "active" | "paused" | "archived" | "complete",
     start_date: parsed.data.start_date || null,
     end_date: parsed.data.end_date || null,
     budget_cents: parsed.data.budget_cents ? Number(parsed.data.budget_cents) : null,
     description: parsed.data.description || null,
+    client_id: parsed.data.client_id || null,
+    primary_venue_id: parsed.data.primary_venue_id || null,
+    geographic_scope: (parsed.data.geographic_scope || null) as GeoScope | null,
+    tour_structure: (parsed.data.tour_structure || null) as TourStructure | null,
+    production_style: (parsed.data.production_style || null) as ProductionStyle | null,
   });
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Project not found." };

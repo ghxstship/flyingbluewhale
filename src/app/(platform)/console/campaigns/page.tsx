@@ -23,7 +23,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Console" title="Campaigns" />
+        <ModuleHeader eyebrow="Workspace" title="Campaigns" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -44,7 +44,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Console"
+        eyebrow="Workspace"
         title="Campaigns"
         subtitle={`${rows.length} campaign${rows.length === 1 ? "" : "s"} · ${live} live · ${formatMoney(totalSpent)} of ${formatMoney(totalBudget)} spent`}
         action={

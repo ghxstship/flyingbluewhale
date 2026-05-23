@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
         title="Advancing"
-        subtitle="Review, approve, and fulfill every deliverable for this project."
+        subtitle="Every deliverable across talent, vendors, crew."
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         action={
           project ? (
             <Button href={`/p/${project.slug}/artist/advancing`} size="sm">
-              Open portal view →
+              Open Portal View →
             </Button>
           ) : undefined
         }
@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         {!deliverables || deliverables.length === 0 ? (
           <EmptyState
             title="No Deliverables Yet"
-            description="Artists, vendors, crew, and other stakeholders submit advancing materials via their portal pages."
+            description="Riders, plans, and lists land here as your stakeholders submit them from their portal pages."
           />
         ) : (
           <div className="overflow-x-auto">

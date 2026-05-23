@@ -124,7 +124,12 @@ export default function Home() {
             <iframe
               src="/p/mmw26-hialeah/guide"
               title="Live Product Preview — MMW26 Hialeah Guest Guide"
-              sandbox=""
+              // No `sandbox=""` — empty sandbox is the strictest setting and
+              // blocks scripts, which left the Next.js guide page completely
+              // unhydrated (blank white iframe). This frame is same-origin
+              // and governed by X-Frame-Options SAMEORIGIN + CSP
+              // frame-ancestors 'self'; clickjacking protection comes from
+              // those, not from a sandbox lockdown.
               loading="lazy"
               className="h-[640px] w-full bg-[var(--background)]"
             />

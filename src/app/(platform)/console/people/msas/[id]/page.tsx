@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { MSADocument } from "@/components/msa/MSADocument";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -29,12 +29,9 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
         action={
           <div className="flex items-center gap-2">
             <Badge variant={MSA_STATUS_VARIANT[resolved.msa_state]}>{MSA_STATUS_LABEL[resolved.msa_state]}</Badge>
-            <Link
-              href="/console/people/msas"
-              className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
-            >
+            <Button href="/console/people/msas" size="sm" variant="secondary">
               ← All MSAs
-            </Link>
+            </Button>
           </div>
         }
       />
@@ -56,22 +53,24 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
               <div className="font-mono text-2xl tracking-[0.4em]">{resolved.access_code}</div>
             </div>
             <div className="flex gap-2 pt-2">
-              <Link
+              <Button
                 href={`/msa/${resolved.public_token}`}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
+                size="sm"
+                variant="secondary"
               >
-                Preview as signer ↗
-              </Link>
-              <Link
+                Preview As Signer ↗
+              </Button>
+              <Button
                 href={`/msa/${resolved.public_token}/print`}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
+                size="sm"
+                variant="secondary"
               >
                 Print / PDF ↗
-              </Link>
+              </Button>
             </div>
           </div>
         </section>

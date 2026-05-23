@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <ModuleHeader
         eyebrow={project?.name ?? "Project"}
         title="Roadmap"
-        subtitle="Quarterly view of tasks and milestones."
+        subtitle="Quarterly View Of Tasks And Milestones"
         breadcrumbs={[
           { label: "Projects", href: "/console/projects" },
           { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },

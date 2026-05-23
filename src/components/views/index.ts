@@ -36,3 +36,14 @@ export type { MapMarkerProps } from "./MapMarker";
 // Phase 3.6c — DashboardCanvas (composable dashboard layout)
 export { DashboardCanvas } from "../dashboards/DashboardCanvas";
 export type { DashboardCanvasProps, DashboardWidgetData } from "../dashboards/DashboardCanvas";
+
+// Phase 3.7 — DataViewSwitcher (canonical collection-page view toggle).
+// Owns the `?view=` URL state and renders only the chips the dataset
+// supports. Use `resolveDataView()` in the server component to read the
+// current view; use `<DataViewSwitcher>` in the ModuleHeader `action`
+// slot to render the chip strip. The resolver is split into its own
+// file so server components can import it without pulling in the
+// "use client" boundary.
+export { DataViewSwitcher } from "./DataViewSwitcher";
+export { resolveDataView } from "./resolveDataView";
+export type { DataViewKind } from "./DataViewKind";

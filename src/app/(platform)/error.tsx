@@ -21,7 +21,7 @@ export default function ConsoleError({ error, reset }: { error: Error & { digest
           <div className="mt-4 flex gap-2">
             <Button onClick={() => reset()}>Try again</Button>
             <Button href="/console" variant="secondary">
-              Back to Console
+              Back to Workspace
             </Button>
           </div>
         </div>

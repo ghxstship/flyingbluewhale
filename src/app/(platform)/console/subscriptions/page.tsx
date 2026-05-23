@@ -31,7 +31,7 @@ export default async function SubscriptionsPage() {
       <ModuleHeader
         eyebrow="Membership"
         title="Subscriptions"
-        subtitle={`${rows.length} total · ${active} active · ${trial} trial · ${lapsed} lapsed`}
+        subtitle={`${rows.length} Total · ${active} Active  · ${trial} trial · ${lapsed} lapsed`}
         action={<Button href="/console/subscriptions/new">+ New Subscription</Button>}
       />
       <div className="page-content">

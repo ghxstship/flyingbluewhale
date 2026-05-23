@@ -125,7 +125,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Operations"
         title="Maintenance"
-        subtitle={`${overdueCount} overdue · ${next7} due in 7 days · ${all.length} total upcoming`}
+        subtitle={`${overdueCount} overdue · ${next7} due in 7 days · ${all.length} Total upcoming`}
         action={
           <Button href="/console/operations/maintenance/schedules/new" size="sm">
             + New Schedule

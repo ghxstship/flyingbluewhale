@@ -27,7 +27,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workspace"
         title="Consent Records"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
       />
       <div className="page-content">
         <DataTable

@@ -86,7 +86,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Procurement"
         title="Sourcing"
-        subtitle={`${reqs.length} Requisition${reqs.length === 1 ? "" : "s"} · ${pos.length} active PO${pos.length === 1 ? "" : "s"}${conversionRate != null ? ` · ${conversionRate}% converted` : ""}`}
+        subtitle={`${reqs.length} Requisition${reqs.length === 1 ? "" : "s"} · ${pos.length} Active  PO${pos.length === 1 ? "" : "s"}${conversionRate != null ? ` · ${conversionRate}% converted` : ""}`}
         action={
           <Button href="/console/procurement/requisitions/new" size="sm">
             + New Requisition

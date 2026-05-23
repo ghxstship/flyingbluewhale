@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <ModuleHeader
         eyebrow="Portal · Apply"
         title="Card Changes"
-        subtitle={`${changes.length} request${changes.length === 1 ? "" : "s"} · ${open} open`}
+        subtitle={`${changes.length} Request${changes.length === 1 ? "" : "s"} · ${open} Open`}
         breadcrumbs={[
           { label: "Portal", href: `/p/${slug}` },
           { label: "Apply", href: `/p/${slug}/apply` },

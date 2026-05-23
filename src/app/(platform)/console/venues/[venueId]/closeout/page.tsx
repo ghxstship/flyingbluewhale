@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
       <ModuleHeader
         eyebrow="Venue"
         title={`${venue.name} — Closeout`}
-        subtitle={`${items.length} Item${items.length === 1 ? "" : "s"} · ${complete} done`}
+        subtitle={`${items.length} Item${items.length === 1 ? "" : "s"} · ${complete} Done`}
         breadcrumbs={[
           { label: "Venues", href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },

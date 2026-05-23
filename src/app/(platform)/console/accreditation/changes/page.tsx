@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Accreditation"
         title="Changes"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/accreditation/changes/new" size="sm">
             + Request change

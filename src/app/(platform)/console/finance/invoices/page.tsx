@@ -34,7 +34,7 @@ export default async function InvoicesPage() {
       <ModuleHeader
         eyebrow="Finance"
         title="Invoices"
-        subtitle={`${rows.length} total · ${formatMoney(outstanding)} outstanding · ${formatMoney(paid)} paid`}
+        subtitle={`${rows.length} Total · ${formatMoney(outstanding)} outstanding · ${formatMoney(paid)} paid`}
         action={<Button href="/console/finance/invoices/new">+ New Invoice</Button>}
       />
       <div className="page-content">

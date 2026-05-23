@@ -27,7 +27,7 @@ export default async function BudgetsPage() {
       <ModuleHeader
         eyebrow="Finance"
         title="Budgets"
-        subtitle={`${rows.length} budgets`}
+        subtitle={`${rows.length} Budgets`}
         action={<Button href="/console/finance/budgets/new">+ New Budget</Button>}
       />
       <div className="page-content">

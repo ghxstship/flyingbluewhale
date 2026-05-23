@@ -105,7 +105,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Logistics"
         title="Freight"
-        subtitle={`${manifests.length} manifest${manifests.length === 1 ? "" : "s"} · ${upcoming.length} upcoming · ${orders.length} rate-card order${orders.length === 1 ? "" : "s"}`}
+        subtitle={`${manifests.length} manifest${manifests.length === 1 ? "" : "s"} · ${upcoming.length} Upcoming · ${orders.length} rate-card order${orders.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/logistics/ratecard" size="sm">
             Rate card

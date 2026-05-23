@@ -37,7 +37,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Marketing"
         title="On-sales"
-        subtitle={`${rows.length} upcoming on-sale + presale milestone${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Upcoming on-sale + presale milestone${rows.length === 1 ? "" : "s"}`}
       />
       <div className="page-content space-y-5">
         <DataTable<Row>

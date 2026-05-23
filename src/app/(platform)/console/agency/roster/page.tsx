@@ -47,7 +47,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Agency"
         title="Roster"
-        subtitle={`${rows.length} active artist${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Active  artist${rows.length === 1 ? "" : "s"}`}
       />
       <div className="page-content space-y-5">
         <DataTable<Row>

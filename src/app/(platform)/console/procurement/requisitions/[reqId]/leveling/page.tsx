@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
           { label: "Leveling" },
         ]}
         title={`Bid leveling — ${req.title}`}
-        subtitle={`${all.length} Response${all.length === 1 ? "" : "s"} · ${responded.length} priced · est. ${formatMoney(req.estimated_cents ?? 0)}`}
+        subtitle={`${all.length} Response${all.length === 1 ? "" : "s"} · ${responded.length} Priced · est. ${formatMoney(req.estimated_cents ?? 0)}`}
         action={
           <Button href={`/console/procurement/requisitions/${reqId}/leveling/new`} size="sm">
             + Add response

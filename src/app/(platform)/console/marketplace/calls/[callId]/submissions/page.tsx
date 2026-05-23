@@ -50,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
       <ModuleHeader
         eyebrow={`Call · ${call.title}`}
         title="Submissions"
-        subtitle={`${rows.length} total · ${rows.filter((r) => r.status === "submitted").length} unreviewed`}
+        subtitle={`${rows.length} Total · ${rows.filter((r) => r.status === "submitted").length} unreviewed`}
       />
       <div className="page-content space-y-5">
         <DataTable<Row>

@@ -73,7 +73,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Bookings"
         title="Deal Tracker"
-        subtitle={`${rows.length} deals · ${live} active · ${stuck} stuck >7d`}
+        subtitle={`${rows.length} deals · ${live} Active  · ${stuck} stuck >7d`}
         action={
           <Button href="/console/marketplace/offers/new" size="sm">
             + New Deal

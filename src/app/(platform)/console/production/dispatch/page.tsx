@@ -48,7 +48,7 @@ export default async function DispatchPage() {
       <ModuleHeader
         eyebrow="Production"
         title="Dispatch"
-        subtitle={`${eventRows.length} Event${eventRows.length === 1 ? "" : "s"} · ${rentalCount} active rental${rentalCount === 1 ? "" : "s"} in the next 48h`}
+        subtitle={`${eventRows.length} Event${eventRows.length === 1 ? "" : "s"} · ${rentalCount} Active  rental${rentalCount === 1 ? "" : "s"} in the next 48h`}
       />
       <div className="page-content max-w-5xl">
         {eventRows.length === 0 ? (

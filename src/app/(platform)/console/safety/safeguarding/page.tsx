@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="Safeguarding Reports"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/safety/safeguarding/new" size="sm">
             + File report

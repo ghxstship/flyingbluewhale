@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Transport"
         title="A&D manifests"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/transport/ad/new" size="sm">
             + New Manifest

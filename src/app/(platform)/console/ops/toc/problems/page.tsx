@@ -81,7 +81,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Operations"
         title="Problems"
-        subtitle={`${rows.length} problem record${rows.length === 1 ? "" : "s"} · ${open} open · ${knownErrors} known errors${p1 ? ` · ${p1} P1` : ""}`}
+        subtitle={`${rows.length} problem record${rows.length === 1 ? "" : "s"} · ${open} Open  · ${knownErrors} known errors${p1 ? ` · ${p1} P1` : ""}`}
         action={
           <Button href="/console/ops/toc/problems/new" size="sm">
             + New Problem

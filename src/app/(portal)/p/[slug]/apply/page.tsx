@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <ModuleHeader
         eyebrow="Portal"
         title="Accreditation"
-        subtitle={`${apps.length} Application${apps.length === 1 ? "" : "s"} on file`}
+        subtitle={`${apps.length} Application${apps.length === 1 ? "" : "s"} On File`}
         breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Apply" }]}
       />
       <div className="page-content space-y-5">

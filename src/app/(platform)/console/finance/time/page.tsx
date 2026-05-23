@@ -35,7 +35,7 @@ export default async function TimePage() {
       <ModuleHeader
         eyebrow="Finance"
         title="Time Tracking"
-        subtitle={`${rows.length} entries · ${fmtMinutes(totalMin)} logged`}
+        subtitle={`${rows.length} Entries  · ${fmtMinutes(totalMin)} logged`}
         action={<Button href="/console/finance/time/new">+ New Entry</Button>}
       />
       <div className="page-content">

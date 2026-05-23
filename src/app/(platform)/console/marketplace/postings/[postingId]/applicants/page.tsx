@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
       <ModuleHeader
         eyebrow={`Marketplace · ${posting.title}`}
         title="Applicants"
-        subtitle={`${rows.length} total · ${rows.filter((r) => r.status === "new").length} unreviewed`}
+        subtitle={`${rows.length} Total · ${rows.filter((r) => r.status === "new").length} unreviewed`}
       />
       <div className="page-content space-y-5">
         <DataTable<AppRow>

@@ -46,7 +46,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Uniforms"
-        subtitle={`${totalSkus} SKU${totalSkus === 1 ? "" : "s"} · ${activeSkus} active`}
+        subtitle={`${totalSkus} SKU${totalSkus === 1 ? "" : "s"} · ${activeSkus} Active`}
         action={
           <Button href="/console/logistics/ratecard/new" size="sm">
             + New SKU

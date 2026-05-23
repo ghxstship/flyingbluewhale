@@ -62,7 +62,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Marketplace"
         title="Job Postings"
-        subtitle={`${rows.length} total · ${published} live · ${drafts} draft`}
+        subtitle={`${rows.length} Total · ${published} Live · ${drafts} Draft`}
         action={
           <Button href="/console/marketplace/postings/new" size="sm">
             + New Posting

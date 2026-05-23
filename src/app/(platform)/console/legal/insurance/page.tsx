@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Legal"
         title="Insurance Policies"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/legal/insurance/new" size="sm">
             + New Policy

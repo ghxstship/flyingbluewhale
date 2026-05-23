@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Programs"
         title="Program Reviews"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/programs/reviews/new" size="sm">
             + Schedule review

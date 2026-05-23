@@ -65,7 +65,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Operations"
         title="Daily Log"
-        subtitle={`${rows.length} logs in last 30 days · ${drafts} draft · ${submitted} submitted · ${approved} approved`}
+        subtitle={`${rows.length} logs in last 30 days · ${drafts} Draft  · ${submitted} submitted · ${approved} Approved`}
         action={
           <Button href="/console/operations/daily-log/new" size="sm">
             + New Log

@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Medical"
         title="Encounters"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/safety/medical/encounters/new" size="sm">
             + Log encounter

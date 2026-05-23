@@ -35,7 +35,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
       <ModuleHeader
         eyebrow="Work"
         title="Tasks"
-        subtitle={`${open} open · ${rows.length - open} done`}
+        subtitle={`${open} Open  · ${rows.length - open} Done`}
         action={<Button href="/console/tasks/new">+ New Task</Button>}
       />
       <div className="page-content">

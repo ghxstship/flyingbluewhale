@@ -63,7 +63,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Procurement"
         title="RFQs"
-        subtitle={`${rows.length} open · ${submitted} submitted · ${approved} approved`}
+        subtitle={`${rows.length} Open  · ${submitted} submitted · ${approved} Approved`}
         action={
           <Button href="/console/procurement/requisitions/new" size="sm">
             + New RFQ

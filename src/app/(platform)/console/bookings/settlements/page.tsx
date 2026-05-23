@@ -59,7 +59,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Bookings"
         title="Settlements"
-        subtitle={`${rows.length} settlements · ${finalCount} final · ${draftCount} draft`}
+        subtitle={`${rows.length} Settlements · ${finalCount} Final · ${draftCount} Draft`}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">

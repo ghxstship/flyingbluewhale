@@ -42,7 +42,7 @@ export default async function AnnotationsPage() {
       <ModuleHeader
         eyebrow="Run"
         title="Annotations"
-        subtitle={`${open} open · ${critical} critical · ${rows.length - open} acknowledged`}
+        subtitle={`${open} Open  · ${critical} critical · ${rows.length - open} acknowledged`}
       />
       <div className="page-content">
         <DataTable<Annotation>

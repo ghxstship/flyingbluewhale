@@ -26,7 +26,7 @@ export default async function RentalsPage() {
       <ModuleHeader
         eyebrow="Production"
         title="Rentals"
-        subtitle={`${rows.length} active rentals`}
+        subtitle={`${rows.length} Active  rentals`}
         action={<Button href="/console/production/rentals/new">+ New Rental</Button>}
       />
       <div className="page-content">

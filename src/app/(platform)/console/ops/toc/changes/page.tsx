@@ -87,7 +87,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Operations"
         title="Changes"
-        subtitle={`${rows.length} change record${rows.length === 1 ? "" : "s"} · ${open} open${emergency ? ` · ${emergency} emergency` : ""}${failed ? ` · ${failed} failed` : ""}`}
+        subtitle={`${rows.length} Change Record${rows.length === 1 ? "" : "s"} · ${open} Open${emergency ? ` · ${emergency} Emergency` : ""}${failed ? ` · ${failed} Failed` : ""}`}
         action={
           <Button href="/console/ops/toc/changes/new" size="sm">
             + New Change

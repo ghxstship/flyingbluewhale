@@ -40,7 +40,7 @@ export default async function LogisticsPage() {
       <ModuleHeader
         eyebrow="Production"
         title="Logistics"
-        subtitle={`${rows.length} active rental window${rows.length === 1 ? "" : "s"} across the next 7 days`}
+        subtitle={`${rows.length} Active  rental window${rows.length === 1 ? "" : "s"} across the next 7 days`}
       />
       <div className="page-content max-w-5xl">
         {rows.length === 0 ? (

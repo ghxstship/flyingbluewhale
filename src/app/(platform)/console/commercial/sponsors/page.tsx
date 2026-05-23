@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Commercial"
         title="Sponsor Entitlements"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/commercial/sponsors/new" size="sm">
             + New Sponsor

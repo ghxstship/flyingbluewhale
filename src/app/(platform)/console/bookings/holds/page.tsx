@@ -56,7 +56,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Bookings"
         title="Holds"
-        subtitle={`${rows.length} active hold${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Active  hold${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/bookings/holds/new" size="sm">
             + New Hold

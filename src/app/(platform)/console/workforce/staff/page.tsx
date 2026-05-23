@@ -29,7 +29,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce"
         title="Paid Staff"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/workforce/staff/new" size="sm">
             + Add staff

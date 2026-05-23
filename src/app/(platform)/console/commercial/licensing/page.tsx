@@ -66,7 +66,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Commercial"
         title="Licensing"
-        subtitle={`${rows.length} trademark${rows.length === 1 ? "" : "s"} · ${active} active${expiringSoon.length ? ` · ${expiringSoon.length} expiring in ${SOON_DAYS}d` : ""}`}
+        subtitle={`${rows.length} Trademark${rows.length === 1 ? "" : "s"} · ${active} Active${expiringSoon.length ? ` · ${expiringSoon.length} Expiring In ${SOON_DAYS}d` : ""}`}
         action={
           <Button href="/console/legal/ip" size="sm">
             Legal · IP

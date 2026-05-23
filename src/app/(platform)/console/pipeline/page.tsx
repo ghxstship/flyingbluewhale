@@ -127,7 +127,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
       <ModuleHeader
         eyebrow="Sales"
         title="Pipeline"
-        subtitle={`${opportunities.length} open deal${opportunities.length === 1 ? "" : "s"} in ${active.name}`}
+        subtitle={`${opportunities.length} Open  deal${opportunities.length === 1 ? "" : "s"} in ${active.name}`}
         action={
           pipelines.length > 1 ? (
             <div className="flex items-center gap-1">

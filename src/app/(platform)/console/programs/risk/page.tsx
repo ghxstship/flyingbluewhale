@@ -58,7 +58,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Programs"
         title="Risk Register"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/programs/risk/new" size="sm">
             + New Risk

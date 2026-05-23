@@ -92,7 +92,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Services"
         title="Service Requests"
-        subtitle={`${open} open · ${breached} SLA breached · ${rows.length} total`}
+        subtitle={`${open} Open  · ${breached} SLA breached · ${rows.length} Total`}
         action={
           <Button href="/console/services/requests/new" size="sm">
             + Open request

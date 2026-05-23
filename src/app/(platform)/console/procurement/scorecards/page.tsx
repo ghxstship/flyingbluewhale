@@ -94,7 +94,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Procurement"
         title="Supplier Scorecards"
-        subtitle={`${vendors.length} Vendor${vendors.length === 1 ? "" : "s"} · ${formatMoney(totalSpend)} lifetime spend · ${w9Pct}% W-9 on file`}
+        subtitle={`${vendors.length} Vendor${vendors.length === 1 ? "" : "s"} · ${formatMoney(totalSpend)} Lifetime Spend · ${w9Pct}% W-9 on file`}
         action={
           <Button href="/console/procurement/vendors" size="sm">
             All vendors

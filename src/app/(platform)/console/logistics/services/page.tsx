@@ -65,7 +65,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Logistics"
         title="Services"
-        subtitle={`${rows.length} request${rows.length === 1 ? "" : "s"} · ${open} open · waste, cleaning, repairs`}
+        subtitle={`${rows.length} Request${rows.length === 1 ? "" : "s"} · ${open} Open  · waste, cleaning, repairs`}
         action={
           <Button href="/console/services/requests/new" size="sm">
             + New Service

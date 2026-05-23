@@ -50,7 +50,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Marketing"
         title="Overview"
-        subtitle={`${rows.length} upcoming milestone${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Upcoming milestone${rows.length === 1 ? "" : "s"}`}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

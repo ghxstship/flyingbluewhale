@@ -49,7 +49,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="Threat Register"
-        subtitle={`${rows.length} entr${rows.length === 1 ? "y" : "ies"} · ${active} active · ${critical} critical`}
+        subtitle={`${rows.length} entr${rows.length === 1 ? "y" : "ies"} · ${active} Active  · ${critical} critical`}
         action={
           <Button href="/console/safety/threats/new" size="sm">
             + New Threat

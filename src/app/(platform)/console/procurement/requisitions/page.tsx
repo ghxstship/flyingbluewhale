@@ -28,7 +28,7 @@ export default async function RequisitionsPage() {
       <ModuleHeader
         eyebrow="Procurement"
         title="Requisitions"
-        subtitle={`${rows.length} requests`}
+        subtitle={`${rows.length} Requests`}
         action={<Button href="/console/procurement/requisitions/new">+ New Request</Button>}
       />
       <div className="page-content">

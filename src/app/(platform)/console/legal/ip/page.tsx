@@ -28,7 +28,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Legal · IP"
         title="Trademarks"
-        subtitle={`${rows.length} record${rows.length === 1 ? "" : "s"}`}
+        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/legal/ip/new" size="sm">
             + Register mark

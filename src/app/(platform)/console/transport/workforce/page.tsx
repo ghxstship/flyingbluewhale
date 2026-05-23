@@ -77,7 +77,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Transport"
         title="Workforce Shuttles"
-        subtitle={`${runs.length} Run${runs.length === 1 ? "" : "s"} across workforce + T3 + spectator fleets, next 3 days`}
+        subtitle={`${runs.length} Run${runs.length === 1 ? "" : "s"} Across Workforce + T3 + spectator fleets, next 3 days`}
         action={
           <Button href="/console/transport/dispatch/new" size="sm">
             + Schedule run

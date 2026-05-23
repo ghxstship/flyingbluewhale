@@ -70,7 +70,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Programs"
         title="Cases"
-        subtitle={`${rows.length} case${rows.length === 1 ? "" : "s"} (90d) · ${open} open · protests, appeals, juries`}
+        subtitle={`${rows.length} Case${rows.length === 1 ? "" : "s"} (90d) · ${open} Open  · protests, appeals, juries`}
         action={
           <Button href="/console/operations/incidents/new" size="sm">
             + Open case

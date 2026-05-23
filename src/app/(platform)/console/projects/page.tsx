@@ -30,7 +30,7 @@ export default async function ProjectsPage() {
     <>
       <ModuleHeader
         title="Projects"
-        subtitle={`${projects.length} total`}
+        subtitle={`${projects.length} Total`}
         action={<Button href="/console/projects/new">+ New Project</Button>}
       />
       <div className="page-content space-y-5">

@@ -35,7 +35,7 @@ export default async function OfferLettersPage() {
       <ModuleHeader
         eyebrow="People"
         title="Offer Letters"
-        subtitle={`${rows.length} ${rows.length === 1 ? "letter" : "letters"} · ${counts["accepted"] ?? 0} accepted · ${counts["draft"] ?? 0} draft`}
+        subtitle={`${rows.length} ${rows.length === 1 ? "letter" : "letters"} · ${counts["accepted"] ?? 0} accepted · ${counts["draft"] ?? 0} Draft`}
       />
       <div className="page-content">
         <DataTable<OfferLetterResolved>

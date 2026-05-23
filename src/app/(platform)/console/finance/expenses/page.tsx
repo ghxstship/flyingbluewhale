@@ -28,7 +28,7 @@ export default async function ExpensesPage() {
       <ModuleHeader
         eyebrow="Finance"
         title="Expenses"
-        subtitle={`${rows.length} entries · ${formatMoney(total)} total`}
+        subtitle={`${rows.length} Entries  · ${formatMoney(total)} Total`}
         action={<Button href="/console/finance/expenses/new">+ Log expense</Button>}
       />
       <div className="page-content">

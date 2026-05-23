@@ -29,7 +29,7 @@ export default async function FinancePeriodsPage() {
       <ModuleHeader
         eyebrow="Finance"
         title="Accounting Periods"
-        subtitle={`${rows.length} total · ${open} open · ${closed} closed/audited`}
+        subtitle={`${rows.length} Total · ${open} Open  · ${closed} closed/audited`}
         action={<Button href="/console/finance/periods/new">+ New Period</Button>}
       />
       <div className="page-content">

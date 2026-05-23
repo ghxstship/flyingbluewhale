@@ -43,7 +43,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Agency" title="Commissions" subtitle={`${rows.length} settlements with commission`} />
+      <ModuleHeader eyebrow="Agency" title="Commissions" subtitle={`${rows.length} Settlements with commission`} />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label="Total Booked" value={formatMoney(total)} accent />

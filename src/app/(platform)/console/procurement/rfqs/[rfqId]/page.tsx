@@ -174,7 +174,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             </Link>
           </div>
           <p className="mt-2 text-xs text-[var(--text-muted)]">
-            Award is tracked via <code>rfqs.awarded_to_vendor_id</code> with line items in linked requisitions.
+            Award is captured on the linked requisitions; bidder line items roll up here.
           </p>
         </section>
       </div>

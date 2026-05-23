@@ -140,9 +140,7 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
         <section className="surface p-4">
           <h3 className="text-sm font-semibold">Manifest</h3>
           {passengers === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No passengers on this run. Manifests are stored as JSONB on <code>dispatch_runs.manifest</code>.
-            </p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">No passengers on this run.</p>
           ) : (
             <pre className="mt-3 max-h-72 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
               {JSON.stringify(run.manifest, null, 2)}

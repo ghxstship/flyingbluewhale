@@ -139,8 +139,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Certifications gate venue go-live. Operations dashboards check <code>venue_certifications.expires_on</code>{" "}
-          and surface anything expiring in the next 30 days.
+          Certifications gate venue go-live. Anything expiring in the next 30 days surfaces on operations dashboards.
         </p>
       </div>
     </>

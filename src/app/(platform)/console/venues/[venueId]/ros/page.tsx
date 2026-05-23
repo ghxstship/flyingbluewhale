@@ -138,8 +138,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         )}
 
         <p className="text-xs text-[var(--text-muted)]">
-          ROS for this venue is a filter over <code>cues</code> joined to <code>events.location_id</code>. Author cues
-          via the production ROS page; they appear here automatically.
+          Cues authored on the production ROS page appear here automatically for this venue.
         </p>
       </div>
     </>

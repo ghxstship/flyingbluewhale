@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <ModuleHeader
         eyebrow="Dashboard / Edit"
         title={dashboard.name}
-        subtitle="Drag widgets onto the canvas. Changes save automatically."
+        subtitle="Drag widgets onto the canvas."
         action={
           <div className="flex items-center gap-2">
             <Button href={`/console/dashboards/${id}`} variant="ghost" size="sm">

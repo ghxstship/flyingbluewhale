@@ -22,7 +22,7 @@ export default async function NewIncidentPage({ searchParams }: { searchParams: 
       <ModuleHeader
         eyebrow="Operations"
         title="Log Incident"
-        subtitle="Safety + near-miss reports. Photos upload directly from the camera or drop in the box."
+        subtitle="Safety + near-miss reports."
         breadcrumbs={[
           { label: "Operations", href: "/console/operations" },
           { label: "Incidents", href: "/console/operations/incidents" },

@@ -19,11 +19,7 @@ export default async function EmailTemplatesPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Email Templates"
-        subtitle="Transactional email shapes for proposals, invoices, and notifications."
-      />
+      <ModuleHeader eyebrow="Settings" title="Email Templates" subtitle="Transactional email shapes." />
       <div className="page-content max-w-5xl">
         <EmailTemplatesPanel initial={templates ?? []} />
       </div>

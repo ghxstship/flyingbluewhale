@@ -22,11 +22,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Procurement"
-        title="New Submittal"
-        subtitle="Create the register entry. Upload the first revision next."
-      />
+      <ModuleHeader eyebrow="Procurement" title="New Submittal" subtitle="Create the register entry." />
       <div className="page-content max-w-2xl">
         <FormShell action={createSubmittal} cancelHref="/console/submittals" submitLabel="Create">
           <label className="flex flex-col gap-1.5">

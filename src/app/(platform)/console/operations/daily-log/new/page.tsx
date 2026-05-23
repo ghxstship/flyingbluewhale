@@ -25,11 +25,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Operations"
-        title="New Daily Log"
-        subtitle="One entry per project per day. Captures weather, manpower, equipment, and notes."
-      />
+      <ModuleHeader eyebrow="Operations" title="New Daily Log" subtitle="One entry per project per day." />
       <div className="page-content max-w-2xl">
         <FormShell action={createDailyLog} cancelHref="/console/operations/daily-log" submitLabel="Create Log">
           <label className="flex flex-col gap-1.5">

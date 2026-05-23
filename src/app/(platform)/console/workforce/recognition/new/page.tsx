@@ -47,7 +47,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Workforce · Recognition"
         title="Give Kudos"
-        subtitle="Send a recognition post. The recipient gets a push immediately."
+        subtitle="Send a recognition post."
         breadcrumbs={[
           { label: "Workforce", href: "/console" },
           { label: "Recognition", href: "/console/workforce/recognition" },

@@ -23,11 +23,7 @@ export default async function NewMsaPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="People · MSAs"
-        title="Issue MSA"
-        subtitle="Generates a public link + 6-character access code. Email the link to the contractor; they fill Exhibits B/C and sign."
-      />
+      <ModuleHeader eyebrow="People · MSAs" title="Issue MSA" subtitle="Email the contractor a signing link." />
       <div className="page-content">
         <NewMsaForm crew={crew} />
       </div>

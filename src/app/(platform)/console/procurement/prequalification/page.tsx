@@ -58,7 +58,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Procurement"
         title="Prequalification"
-        subtitle="Vendor vetting — insurance, safety, financials, references. Approval gates which RFQs they can bid on."
+        subtitle="Vendor vetting — insurance, safety, financials, references."
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/procurement/prequalification/questionnaires" size="sm" variant="ghost">

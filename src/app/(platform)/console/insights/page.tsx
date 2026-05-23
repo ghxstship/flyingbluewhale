@@ -50,7 +50,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Insights"
         title="Booking Pool"
-        subtitle="Anonymized monthly aggregates by genre — opt-in only, k≥3 anonymity floor."
+        subtitle="Anonymized monthly aggregates by genre."
         action={<Badge variant={optedIn ? "success" : "muted"}>{optedIn ? "contributing" : "not contributing"}</Badge>}
       />
       <div className="page-content space-y-5">

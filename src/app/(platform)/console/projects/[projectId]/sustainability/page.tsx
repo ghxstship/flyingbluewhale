@@ -30,11 +30,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Project"
-        title="Sustainability"
-        subtitle="Carbon emissions tracked at organization level (per-project attribution coming)."
-      />
+      <ModuleHeader eyebrow="Project" title="Sustainability" subtitle="Carbon emissions at the org level." />
       <div className="page-content space-y-5">
         {!rows || rows.length === 0 ? (
           <EmptyState

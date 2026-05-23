@@ -41,7 +41,7 @@ export default async function XpmsOverviewPage() {
       <ModuleHeader
         eyebrow="XPMS"
         title="Experiential Project Management System"
-        subtitle="Atomic Production System · XTC Protocol™ · Six Tiers · Eight Phases — the unified spine."
+        subtitle="Atomic production catalog."
       />
       <div className="page-content">
         <div className="metric-grid mb-6">

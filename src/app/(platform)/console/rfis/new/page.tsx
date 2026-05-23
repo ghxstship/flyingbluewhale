@@ -21,11 +21,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Operations"
-        title="New RFI"
-        subtitle="Ask the production team an official question. Set ball-in-court so accountability is clear."
-      />
+      <ModuleHeader eyebrow="Operations" title="New RFI" subtitle="Ask the production team an official question." />
       <div className="page-content max-w-2xl">
         <FormShell action={createRfi} cancelHref="/console/rfis" submitLabel="Open RFI">
           <label className="flex flex-col gap-1.5">

@@ -7,11 +7,7 @@ import { createTicketingConnectionAction } from "./actions";
 export default function Page() {
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="New Ticketing Connection"
-        subtitle="Wire a ticketing provider so settlement re-calculates on each sale snapshot."
-      />
+      <ModuleHeader eyebrow="Settings" title="New Ticketing Connection" subtitle="Connect a ticketing provider." />
       <div className="page-content max-w-xl">
         <FormShell
           action={createTicketingConnectionAction}

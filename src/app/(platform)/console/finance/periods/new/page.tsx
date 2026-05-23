@@ -12,7 +12,7 @@ export default function NewAccountingPeriodPage() {
       <ModuleHeader
         eyebrow="Finance"
         title="New Accounting Period"
-        subtitle="Open a calendar month, quarter, or fiscal period for revenue + expense recognition."
+        subtitle="Open a month, quarter, or fiscal period."
       />
       <div className="page-content">
         <FormShell action={createAccountingPeriodAction}>

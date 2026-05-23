@@ -69,7 +69,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
       <ModuleHeader
         eyebrow="Safety"
         title={`OSHA 300 — ${year}`}
-        subtitle="Recordable incidents per 29 CFR 1904, derived from flagged incident records."
+        subtitle="OSHA-recordable incidents per 29 CFR 1904."
         action={
           <div className="flex items-center gap-2">
             <Button href={`/console/safety/osha?year=${year - 1}`} size="sm" variant="ghost">

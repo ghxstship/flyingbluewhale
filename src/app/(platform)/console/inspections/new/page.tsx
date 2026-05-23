@@ -26,11 +26,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Safety"
-        title="Schedule Inspection"
-        subtitle="Pick a template and target. The checklist items will be cloned from the template."
-      />
+      <ModuleHeader eyebrow="Safety" title="Schedule Inspection" subtitle="Pick a template and target." />
       <div className="page-content max-w-2xl">
         <FormShell action={createInspection} cancelHref="/console/inspections" submitLabel="Schedule">
           <label className="flex flex-col gap-1.5">

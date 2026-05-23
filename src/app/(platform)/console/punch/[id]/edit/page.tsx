@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <ModuleHeader
         eyebrow="Operations"
         title={`Edit Punch Item · ${item.code ?? item.id.slice(0, 8)}`}
-        subtitle="Update title, status, assignee, priority, and the show-ready gate."
+        subtitle="Edit punch item."
         breadcrumbs={[
           { label: "Punch List", href: "/console/punch" },
           { label: item.code ?? "Item", href: `/console/punch/${item.id}` },

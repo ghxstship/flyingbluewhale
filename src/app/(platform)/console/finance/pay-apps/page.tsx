@@ -68,7 +68,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Finance"
         title="Pay Applications"
-        subtitle="Production progress billing — % completion against PO line items with retention. G702/G703 analogue."
+        subtitle="Production progress billing against PO line items."
         action={
           <Button href="/console/finance/pay-apps/new" size="sm">
             + New Pay App

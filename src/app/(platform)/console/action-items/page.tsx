@@ -79,7 +79,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
       <ModuleHeader
         eyebrow="Workspace"
         title="Action Items"
-        subtitle="Cross-module ball-in-court rollup — RFIs, submittals, punch, inspections, tasks."
+        subtitle="Cross-module ball-in-court rollup."
         action={
           <a
             href={sp.mine === "1" ? "/console/action-items" : "/console/action-items?mine=1"}

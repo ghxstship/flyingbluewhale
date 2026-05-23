@@ -106,11 +106,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Finance"
-        title="Treasury"
-        subtitle="Multi-currency cash position · receivables · payables · stripe activity"
-      />
+      <ModuleHeader eyebrow="Finance" title="Treasury" subtitle="Cash position, receivables, payables." />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard

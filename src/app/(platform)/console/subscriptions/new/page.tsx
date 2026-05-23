@@ -13,7 +13,7 @@ export default function NewSubscriptionPage() {
       <ModuleHeader
         eyebrow="Subscriptions"
         title="New Subscription"
-        subtitle="Track a recurring member, retainer, or sponsor relationship."
+        subtitle="Recurring member, retainer, or sponsor."
       />
       <div className="page-content">
         <FormShell action={createSubscriptionAction}>

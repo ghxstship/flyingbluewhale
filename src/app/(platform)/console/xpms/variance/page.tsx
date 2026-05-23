@@ -49,7 +49,7 @@ export default async function VariancePage() {
       <ModuleHeader
         eyebrow="XPMS · Variance"
         title="Variance Ledger"
-        subtitle="UAC ↔ TPC delta as a first-class object. Reason codes per entry."
+        subtitle="Planned vs. actual delta, with reason codes."
       />
       <div className="page-content">
         <DataTable<Row>

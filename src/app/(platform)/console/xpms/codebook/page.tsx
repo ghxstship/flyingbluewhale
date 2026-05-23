@@ -51,11 +51,7 @@ export default async function CodebookPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="XPMS · XTC Protocol™"
-        title="Codebook"
-        subtitle="Class → Division → Section → Line. Append-only governance — codes are stable forever."
-      />
+      <ModuleHeader eyebrow="XPMS · XTC Protocol™" title="Codebook" subtitle="Class → Division → Section → Line." />
       <div className="page-content">
         {error ? <div className="surface p-4 text-sm">Could not load codebook: {error.message}</div> : null}
         <DataTable<CodebookRow>

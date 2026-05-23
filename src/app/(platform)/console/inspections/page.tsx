@@ -72,7 +72,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="Inspections"
-        subtitle="Template-driven checklists — rigging, fire, electrical, ADA, food safety, security."
+        subtitle="Template-driven safety + compliance checklists."
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/inspections/templates" size="sm" variant="ghost">

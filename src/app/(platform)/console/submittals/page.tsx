@@ -75,7 +75,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Procurement"
         title="Submittals"
-        subtitle="Vendor packages with stamps + revision rounds. Spec-section organized."
+        subtitle="Vendor packages with stamps + revision rounds."
         action={
           <Button href="/console/submittals/new" size="sm">
             + New Submittal

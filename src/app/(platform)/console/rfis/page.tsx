@@ -77,7 +77,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Operations"
         title="RFIs"
-        subtitle="Production queries — official questions with ball-in-court routing and binding answers."
+        subtitle="Production queries with binding answers."
         action={
           <Button href="/console/rfis/new" size="sm">
             + New RFI

@@ -81,7 +81,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
       <ModuleHeader
         eyebrow="Operations"
         title="Punch List"
-        subtitle="Show-ready checklist. Pinnable to site plans, gates doors-open when items remain open."
+        subtitle="Show-ready checklist."
         action={
           <Button href="/console/punch/new" size="sm">
             + New Item

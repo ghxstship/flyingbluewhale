@@ -39,7 +39,7 @@ export default async function PhasesPage() {
       <ModuleHeader
         eyebrow="XPMS · 8PP — Eight Production Phases"
         title="Phases"
-        subtitle="Temporal spine. Every atom carries one phase; ATLVS owns 1–4 + 8, COMPVSS owns 4–7, GVTEWAY owns 6."
+        subtitle="Temporal spine across project lifecycle."
       />
       <div className="page-content grid grid-cols-1 gap-4 md:grid-cols-2">
         {XPMS_PHASES.map((p) => {

@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <ModuleHeader
         eyebrow="Safety"
         title={`Edit Inspection · ${insp.code ?? insp.id.slice(0, 8)}`}
-        subtitle="Update name, status, schedule, inspector, and notes. Status pass/fail records signed_at + signed_by."
+        subtitle="Edit inspection."
         breadcrumbs={[
           { label: "Inspections", href: "/console/inspections" },
           { label: insp.code ?? "Inspection", href: `/console/inspections/${insp.id}` },

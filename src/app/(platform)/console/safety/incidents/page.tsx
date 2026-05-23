@@ -92,7 +92,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="Incidents (unified)"
-        subtitle="Cross-domain feed: ops · cyber · medical · safety. Last 30 days."
+        subtitle="Cross-domain incident feed."
         action={
           <Button href="/console/operations/incidents/new" size="sm">
             + Report incident

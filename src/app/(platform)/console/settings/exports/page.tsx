@@ -22,11 +22,7 @@ export default async function ExportsPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Settings"
-        title="Export Centre"
-        subtitle="Pull any org-scoped table as CSV, JSON, XLSX, or a ZIP bundle."
-      />
+      <ModuleHeader eyebrow="Settings" title="Export Centre" subtitle="Pull any table as CSV, JSON, XLSX, or ZIP." />
       <div className="page-content max-w-5xl">
         <ExportCenter initial={(runs ?? []) as never} />
       </div>

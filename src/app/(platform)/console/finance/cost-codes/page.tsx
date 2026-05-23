@@ -26,7 +26,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Finance"
         title="Cost Codes"
-        subtitle="Master list. Time entries roll labor cost up to the cost code attached to a budget line."
+        subtitle="Master cost-code list."
         action={
           <Button href="/console/finance/cost-codes/new" size="sm">
             + New Cost Code

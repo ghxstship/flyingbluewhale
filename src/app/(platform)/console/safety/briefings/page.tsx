@@ -63,7 +63,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="Safety Briefings"
-        subtitle="Pre-shift toolbox talks. Capture attendance + acknowledgments via mobile."
+        subtitle="Pre-shift toolbox talks."
         action={
           <Button href="/console/safety/briefings/new" size="sm">
             + Schedule briefing

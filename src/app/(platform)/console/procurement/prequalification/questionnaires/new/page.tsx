@@ -18,7 +18,7 @@ export default function Page() {
           { label: "New" },
         ]}
         title="New Questionnaire"
-        subtitle="Define the questions vendors must answer to be approved. Add questions on the detail page."
+        subtitle="Define the questions vendors must answer."
       />
       <div className="page-content max-w-xl">
         <FormShell

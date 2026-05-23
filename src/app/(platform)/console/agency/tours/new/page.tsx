@@ -38,11 +38,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Agency"
-        title="New Tour"
-        subtitle="Multi-date routing container. P&L rolls up across linked offers."
-      />
+      <ModuleHeader eyebrow="Agency" title="New Tour" subtitle="Multi-date routing container." />
       <div className="page-content max-w-xl">
         <FormShell action={createTourAction} cancelHref="/console/agency/tours" submitLabel="Create Tour">
           <Input label="Tour Name" name="name" required maxLength={200} />

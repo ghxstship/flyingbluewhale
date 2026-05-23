@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
       <ModuleHeader
         eyebrow={`Talent · ${talent.act_name}`}
         title="Riders"
-        subtitle="Tech, hospitality, input list — versioned. New version supersedes the current one."
+        subtitle="Tech, hospitality, input list — versioned."
         action={
           <Button href={`/console/marketplace/talent/${talent.id}/riders/new`} size="sm">
             + New Rider

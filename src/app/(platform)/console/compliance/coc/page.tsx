@@ -88,7 +88,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Compliance"
         title="Chain of Custody"
-        subtitle="Tamper-evident audit trail for evidence + samples · last 30 days"
+        subtitle="Audit trail for evidence + samples."
         action={
           <Button href="/m/coc" size="sm">
             Mobile capture

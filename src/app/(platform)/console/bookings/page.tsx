@@ -50,11 +50,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Bookings"
-        title="Overview"
-        subtitle="Show economy: deals, holds, settlement, tours, marketing, insights."
-      />
+      <ModuleHeader eyebrow="Bookings" title="Overview" subtitle="Deals, holds, settlements, tours." />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
           <MetricCard label="Live Deals" value={fmt.number(liveDeals)} accent />

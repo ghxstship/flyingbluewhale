@@ -25,7 +25,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Procurement"
         title="New WO broadcast"
-        subtitle="Post an open work order to the vendor pool. First qualified responder accepts."
+        subtitle="Post an open work order to the vendor pool."
       />
       <div className="page-content max-w-xl">
         <FormShell action={createBroadcast} cancelHref="/console/procurement/wo-broadcasts" submitLabel="Save Draft">

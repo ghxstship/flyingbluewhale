@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
+import { toTitle } from "@/lib/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { upsertSettlementAction, finalizeSettlementAction } from "./actions";
 
@@ -74,8 +75,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
       <ModuleHeader
         eyebrow={`Settlement · ${offer.performance_date}`}
         title="Post-Show Reconciliation"
-        subtitle="NBOR auto-computed = GBOR − sales tax − amusement tax − CC fees. Balance recomputes on save."
-        action={s && <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{s.status}</Badge>}
+        action={s && <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>}
       />
       <div className="page-content max-w-3xl space-y-5">
         {s && (

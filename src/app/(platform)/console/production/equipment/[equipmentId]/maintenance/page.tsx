@@ -39,11 +39,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Equipment"
-        title="Maintenance"
-        subtitle="Inspection, service, and certification jobs scheduled against this asset."
-      />
+      <ModuleHeader eyebrow="Equipment" title="Maintenance" subtitle="Scheduled inspection + service jobs." />
       <div className="page-content space-y-4">
         <DataTable<Row>
           rows={rows}

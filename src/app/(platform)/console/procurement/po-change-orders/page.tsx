@@ -65,7 +65,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Procurement"
         title="PO Change Orders"
-        subtitle="Vendor-side change orders against existing POs. Adjusts commitment + schedule."
+        subtitle="Vendor change orders against existing POs."
         action={
           <Button href="/console/procurement/po-change-orders/new" size="sm">
             + New Change Order

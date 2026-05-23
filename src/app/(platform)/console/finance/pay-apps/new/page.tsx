@@ -27,11 +27,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Finance"
-        title="New Pay Application"
-        subtitle="Bill against an active PO. Lines are seeded from the PO line items."
-      />
+      <ModuleHeader eyebrow="Finance" title="New Pay Application" />
       <div className="page-content max-w-2xl">
         <FormShell action={createPayApp} cancelHref="/console/finance/pay-apps" submitLabel="Create Draft">
           <label className="flex flex-col gap-1.5">

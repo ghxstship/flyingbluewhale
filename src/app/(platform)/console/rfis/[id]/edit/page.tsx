@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <ModuleHeader
         eyebrow="Operations"
         title={`Edit RFI · ${rfi.code ?? rfi.id.slice(0, 8)}`}
-        subtitle="Update subject, status, ball-in-court, and the official answer."
+        subtitle="Edit RFI."
         breadcrumbs={[
           { label: "RFIs", href: "/console/rfis" },
           { label: rfi.code ?? "RFI", href: `/console/rfis/${rfi.id}` },

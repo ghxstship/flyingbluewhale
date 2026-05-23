@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
       <ModuleHeader
         eyebrow="Talent · New Rider"
         title="New Rider"
-        subtitle="Saving demotes the current rider of this kind to historical and marks this as current."
+        subtitle="Saving supersedes the current rider of this kind."
       />
       <div className="page-content max-w-xl">
         <FormShell

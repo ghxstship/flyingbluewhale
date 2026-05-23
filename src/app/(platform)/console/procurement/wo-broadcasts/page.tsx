@@ -63,7 +63,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Procurement"
         title="Work Order Broadcasts"
-        subtitle="Open vendor-pool requests for last-minute needs. First qualified responder accepts."
+        subtitle="Open requests to the vendor pool — first qualified responder wins."
         action={
           <Button href="/console/procurement/wo-broadcasts/new" size="sm">
             + New Broadcast

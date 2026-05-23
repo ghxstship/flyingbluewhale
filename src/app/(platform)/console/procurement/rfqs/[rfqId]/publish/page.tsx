@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
       <ModuleHeader
         eyebrow={`Procurement · ${r.title}`}
         title="Publish RFQ"
-        subtitle="Public marketplace exposure, gated by your prequalification + compliance rules."
+        subtitle="Publish to the public marketplace."
       />
       <div className="page-content max-w-xl">
         <FormShell

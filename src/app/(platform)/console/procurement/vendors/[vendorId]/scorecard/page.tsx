@@ -43,11 +43,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Vendor"
-        title="Scorecard"
-        subtitle="Performance derived from PO fulfillment and submittal approval history."
-      />
+      <ModuleHeader eyebrow="Vendor" title="Scorecard" subtitle="Performance across POs + submittals." />
       <div className="page-content">
         {!hasSignal ? (
           <EmptyState

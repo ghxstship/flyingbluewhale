@@ -81,7 +81,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Safety"
         title="BC / DR"
-        subtitle="Business continuity + disaster recovery — runbooks plus exercises."
+        subtitle="Continuity runbooks + exercises."
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
             + New Runbook

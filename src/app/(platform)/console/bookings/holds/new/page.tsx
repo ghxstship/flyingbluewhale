@@ -28,11 +28,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow="Bookings"
-        title="New Hold"
-        subtitle="Tier 1 = first refusal. Releasing a higher tier auto-promotes the next."
-      />
+      <ModuleHeader eyebrow="Bookings" title="New Hold" subtitle="Tier 1 = first refusal." />
       <div className="page-content max-w-xl">
         <FormShell action={createTieredHoldAction} cancelHref="/console/bookings/holds" submitLabel="Place Hold">
           <div className="grid grid-cols-2 gap-3">

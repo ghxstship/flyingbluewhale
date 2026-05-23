@@ -25,11 +25,7 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
 
   return (
     <>
-      <ModuleHeader
-        eyebrow={project.name}
-        title="Event Guides"
-        subtitle="Per-Role Know-Before-You-Go — Authored Here, Served In Portal + Mobile"
-      />
+      <ModuleHeader eyebrow={project.name} title="Event Guides" subtitle="Per-role know-before-you-go." />
       <div className="page-content space-y-4">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {ALL_PERSONAS.map((p) => {

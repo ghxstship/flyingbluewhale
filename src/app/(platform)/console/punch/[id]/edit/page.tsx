@@ -4,6 +4,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { updatePunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -126,7 +127,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <span className={LBL}>Priority</span>
               <select name="priority" defaultValue={item.priority} className={INPUT}>
                 {PRIORITIES.map((p) => (
-                  <option key={p}>{p}</option>
+                  <option key={p} value={p}>
+                    {toTitle(p)}
+                  </option>
                 ))}
               </select>
             </label>
@@ -134,7 +137,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <span className={LBL}>Status</span>
               <select name="status" defaultValue={item.status} className={INPUT}>
                 {STATUSES.map((s) => (
-                  <option key={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {toTitle(s)}
+                  </option>
                 ))}
               </select>
             </label>

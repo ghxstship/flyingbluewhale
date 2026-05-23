@@ -4,6 +4,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import {
   CHARTHOUSE_ACCESSIBILITY,
   CHARTHOUSE_SECURITY_LEVELS,
@@ -114,7 +115,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <span className={LBL}>Discipline</span>
                 <select name="discipline" required defaultValue={sp.discipline} className={INPUT}>
                   {DISCIPLINES.map((d) => (
-                    <option key={d}>{d}</option>
+                    <option key={d} value={d}>
+                      {toTitle(d)}
+                    </option>
                   ))}
                 </select>
               </label>

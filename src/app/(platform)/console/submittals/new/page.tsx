@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { createSubmittal } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -62,7 +63,9 @@ export default async function Page() {
                   "fabrication",
                   "other",
                 ].map((s) => (
-                  <option key={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {toTitle(s)}
+                  </option>
                 ))}
               </select>
             </label>

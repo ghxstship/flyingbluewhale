@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { createAssignment } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -74,7 +75,7 @@ export default async function Page() {
             <select name="persona" required className="input-base mt-1.5 w-full" defaultValue="vendor">
               {PERSONAS.map((p) => (
                 <option key={p} value={p}>
-                  {p}
+                  {toTitle(p)}
                 </option>
               ))}
             </select>

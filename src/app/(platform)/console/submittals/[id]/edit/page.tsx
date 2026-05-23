@@ -4,6 +4,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { updateSubmittal } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -136,7 +137,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <span className={LBL}>Status</span>
               <select name="status" defaultValue={sub.status} className={INPUT}>
                 {STATUSES.map((s) => (
-                  <option key={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {toTitle(s)}
+                  </option>
                 ))}
               </select>
             </label>

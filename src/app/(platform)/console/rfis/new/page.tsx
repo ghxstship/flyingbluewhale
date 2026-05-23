@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { createRfi } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -76,7 +77,9 @@ export default async function Page() {
               <span className={LBL}>Priority</span>
               <select name="priority" className={INPUT} defaultValue="normal">
                 {["low", "normal", "high", "urgent"].map((p) => (
-                  <option key={p}>{p}</option>
+                  <option key={p} value={p}>
+                    {toTitle(p)}
+                  </option>
                 ))}
               </select>
             </label>

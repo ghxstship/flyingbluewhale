@@ -4,6 +4,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { updateRfi } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -122,7 +123,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <span className={LBL}>Priority</span>
               <select name="priority" defaultValue={rfi.priority} className={INPUT}>
                 {["low", "normal", "high", "urgent"].map((p) => (
-                  <option key={p}>{p}</option>
+                  <option key={p} value={p}>
+                    {toTitle(p)}
+                  </option>
                 ))}
               </select>
             </label>
@@ -130,7 +133,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <span className={LBL}>Status</span>
               <select name="status" defaultValue={rfi.status} className={INPUT}>
                 {["open", "answered", "closed"].map((s) => (
-                  <option key={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {toTitle(s)}
+                  </option>
                 ))}
               </select>
             </label>

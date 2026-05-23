@@ -1,6 +1,7 @@
 "use client";
 
 import { FormShell } from "@/components/FormShell";
+import { toTitle } from "@/lib/format";
 import { Input } from "@/components/ui/Input";
 import { createLeadAction } from "../actions";
 
@@ -20,7 +21,9 @@ export function NewLeadForm() {
           <label className="text-xs font-medium text-[var(--text-secondary)]">Stage</label>
           <select name="stage" defaultValue="new" className="input-base mt-1.5 w-full">
             {STAGES.map((s) => (
-              <option key={s}>{s}</option>
+              <option key={s} value={s}>
+                {toTitle(s)}
+              </option>
             ))}
           </select>
         </div>

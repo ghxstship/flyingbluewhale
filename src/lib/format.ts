@@ -29,6 +29,15 @@ export function slugify(s: string, max = 48) {
     .slice(0, max);
 }
 
+/**
+ * Render enum tokens like `in_review` / `briefed` / `talent_call` as
+ * `In Review` / `Briefed` / `Talent Call`. Use anywhere a column, badge,
+ * or chip is showing a raw enum value to a user.
+ */
+export function toTitle(s: string): string {
+  return s.replace(/_/g, " ").replace(/\b(\w)/g, (m) => m.toUpperCase());
+}
+
 export function dollarsToCents(v: string | number | undefined | null): number {
   if (v == null || v === "") return 0;
   const n = typeof v === "string" ? parseFloat(v) : v;

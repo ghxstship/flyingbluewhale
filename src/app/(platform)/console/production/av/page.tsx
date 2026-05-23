@@ -26,7 +26,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="AV systems" />
+        <ModuleHeader eyebrow="Production" title="AV Systems" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -57,7 +57,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Production"
-        title="AV systems"
+        title="AV Systems"
         subtitle={`${av.length} AV asset${av.length === 1 ? "" : "s"} · ${catEntries.length} categor${catEntries.length === 1 ? "y" : "ies"}`}
         action={
           <Button href="/console/production/equipment/new" size="sm">

@@ -1,4 +1,5 @@
 import { Badge, type BadgeVariant } from "./Badge";
+import { toTitle } from "@/lib/format";
 
 const MAP: Record<string, BadgeVariant> = {
   draft: "muted",
@@ -23,5 +24,5 @@ const MAP: Record<string, BadgeVariant> = {
 };
 
 export function StatusBadge({ status }: { status: string }) {
-  return <Badge variant={MAP[status] ?? "default"}>{status.replace(/_/g, " ")}</Badge>;
+  return <Badge variant={MAP[status] ?? "default"}>{toTitle(status)}</Badge>;
 }

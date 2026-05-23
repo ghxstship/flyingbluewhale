@@ -11,7 +11,7 @@ export default async function Page() {
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="A&D manifests" />
+        <ModuleHeader eyebrow="Workspace" title="A&D Manifests" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -27,7 +27,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Transport"
-        title="A&D manifests"
+        title="A&D Manifests"
         subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/transport/ad/new" size="sm">

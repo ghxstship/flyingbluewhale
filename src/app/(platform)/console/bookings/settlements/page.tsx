@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { formatMoney } from "@/lib/i18n/format";
+import { toTitle } from "@/lib/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 
 export const dynamic = "force-dynamic";
@@ -124,7 +125,7 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,
               groupable: true,

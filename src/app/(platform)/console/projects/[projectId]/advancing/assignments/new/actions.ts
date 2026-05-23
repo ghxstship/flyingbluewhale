@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { sendPushTo } from "@/lib/push/send";
+import { writeInbox } from "@/lib/inbox";
 
 const KIND_LABEL: Record<string, string> = {
   credential_assignment: "credential",
@@ -96,28 +96,37 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     if (!item) return { error: "Catalog item not found in your organization" };
   }
 
-  const { error } = await supabase.from("deliverables").insert({
-    org_id: session.orgId,
-    project_id: projectId,
-    type: parsed.data.type,
-    title: parsed.data.title,
-    assignee_id: parsed.data.assignee_id,
-    deliverable_state: "briefed",
-    deadline: parsed.data.deadline || null,
-    data: parsed.data.notes ? { notes: parsed.data.notes } : {},
-    atom_id: parsed.data.atom_id || null,
-    catalog_item_id: parsed.data.catalog_item_id || null,
-  } as never);
+  const { data: created, error } = await supabase
+    .from("deliverables")
+    .insert({
+      org_id: session.orgId,
+      project_id: projectId,
+      type: parsed.data.type,
+      title: parsed.data.title,
+      assignee_id: parsed.data.assignee_id,
+      deliverable_state: "briefed",
+      deadline: parsed.data.deadline || null,
+      data: parsed.data.notes ? { notes: parsed.data.notes } : {},
+      atom_id: parsed.data.atom_id || null,
+      catalog_item_id: parsed.data.catalog_item_id || null,
+    } as never)
+    .select("id")
+    .single();
   if (error) return { error: error.message };
 
-  // Notify the assignee — they'll see it on /m/advances and the portal.
-  // Fire-and-forget; push failures don't roll back the insert.
-  void sendPushTo(parsed.data.assignee_id, {
+  // Notify the assignee — lands in the unified inbox (in-app) AND
+  // fires push fan-out, gated by each user's per-kind preference.
+  // Push failures don't roll back the insert.
+  void writeInbox({
+    userId: parsed.data.assignee_id,
+    orgId: session.orgId,
+    kind: "advancing",
+    sourceType: "deliverables",
+    sourceId: (created as { id: string }).id,
+    actorId: session.userId,
     title: `New ${KIND_LABEL[parsed.data.type] ?? "advancing item"} assigned`,
     body: parsed.data.title,
-    url: "/m/advances",
-    tag: `advancing:${projectId}:${parsed.data.assignee_id}:${Date.now()}`,
-    kind: "advancing",
+    href: "/m/advances",
   });
 
   revalidatePath(`/console/projects/${projectId}/advancing/assignments`);

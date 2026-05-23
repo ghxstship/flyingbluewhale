@@ -129,7 +129,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
               Mark all read
             </button>
           </div>
-          <div className="max-h-[420px] overflow-y-auto p-1">
+          <div className="max-h-[360px] overflow-y-auto p-1">
             {items.length === 0 ? (
               <p className="px-3 py-6 text-center text-xs text-[var(--text-muted)]">You&apos;re all caught up.</p>
             ) : (
@@ -177,6 +177,15 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
                 );
               })
             )}
+          </div>
+          <div className="border-t border-[var(--border-color)] px-3 py-2 text-center">
+            <Link
+              href="/me/notifications/inbox"
+              onClick={() => setOpen(false)}
+              className="text-xs text-[var(--text-muted)] hover:text-[var(--foreground)]"
+            >
+              View All In Inbox →
+            </Link>
           </div>
         </Popover.Content>
       </Popover.Portal>

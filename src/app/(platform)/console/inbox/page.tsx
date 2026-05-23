@@ -20,7 +20,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Inbox" />
+        <ModuleHeader eyebrow="Workspace" title="Messages" />
         <div className="page-content text-sm">Configure Supabase.</div>
       </>
     );
@@ -68,7 +68,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow="Workspace"
-        title="Inbox"
+        title="Messages"
         subtitle={`${list.length} conversation${list.length === 1 ? "" : "s"}${unreadCount > 0 ? ` · ${unreadCount} unread` : ""}`}
       />
       <div className="page-content">

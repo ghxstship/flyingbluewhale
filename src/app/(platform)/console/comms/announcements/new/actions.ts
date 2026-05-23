@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
-import { sendPushBulk } from "@/lib/push/send";
+import { writeInboxBulk } from "@/lib/inbox";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -116,12 +116,19 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
       userIds = userIds.filter((id) => projectSet.has(id));
     }
     if (userIds.length > 0) {
-      void sendPushBulk(userIds, {
-        title: parsed.data.title,
-        body: parsed.data.body.slice(0, 200),
-        url: "/m/feed",
-        tag: `announcement:${data.id}`,
+      // writeInboxBulk lands the same payload on the in-app inbox AND
+      // fires push fan-out — gated by each user's per-kind preference
+      // matrix. Replaces the previous push-only call which left the
+      // /me/notifications/inbox stream empty.
+      void writeInboxBulk(userIds, {
+        orgId: session.orgId,
         kind: "announcement",
+        sourceType: "announcements",
+        sourceId: data.id,
+        actorId: session.userId,
+        title: parsed.data.title,
+        body: parsed.data.body,
+        href: "/m/feed",
       });
     }
   }

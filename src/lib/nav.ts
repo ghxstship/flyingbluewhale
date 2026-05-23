@@ -100,6 +100,7 @@ export type IconName =
   // Marketplace
   | "Globe"
   | "Megaphone"
+  | "MessageSquare"
   | "Mic2"
   | "Music"
   | "Star"
@@ -153,7 +154,11 @@ export const platformNav: NavGroup[] = [
     // Workspace chrome — not an XPMS class. Single "you are here" tile
     // at the top of the sidebar, separate from the 10 class groups.
     label: "Dashboard",
-    items: [{ label: "Overview", href: "/console", icon: "LayoutDashboard" }],
+    items: [
+      { label: "Overview", href: "/console", icon: "LayoutDashboard" },
+      { label: "Inbox", href: "/me/notifications/inbox", icon: "Inbox" },
+      { label: "Messages", href: "/console/inbox", icon: "MessageSquare" },
+    ],
   },
   {
     // 0 EXECUTIVE — Org-level command + control. Strategy / Finance /

@@ -123,7 +123,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="CHARTHOUSE"
+        eyebrow="Creative · Site Plans"
         breadcrumbs={[{ label: "Site Plans", href: "/console/site-plans" }, { label: sp.atom_id ?? sp.code }]}
         title={sp.title}
         subtitle={

@@ -15,38 +15,21 @@ import {
 } from "@/lib/charthouse/types";
 import { getPreset } from "@/lib/charthouse/presets";
 
-const DISCIPLINES = [
-  "site",
-  "rigging",
-  "power",
-  "audio",
-  "video",
-  "lighting",
-  "comms",
-  "evacuation",
-  "hospitality",
-  "accessibility",
-  "sustainability",
-  "other",
-] as const;
-
 const Schema = z.object({
-  // legacy display fields
   code: z.string().min(1).max(40),
   title: z.string().min(1).max(200),
-  discipline: z.enum(DISCIPLINES).default("site"),
   notes: z.string().max(2000).optional(),
   project_id: z.string().uuid().optional().or(z.literal("")),
   venue_id: z.string().uuid().optional().or(z.literal("")),
   event_id: z.string().uuid().optional().or(z.literal("")),
-  // CHARTHOUSE atom-id segments
+  // Atom-ID segments
   org_code: z.string().regex(/^[A-Z0-9]{2,4}$/, "ORG must be 2–4 alphanumerics (UPPER)"),
   evt_code: z.string().regex(/^[A-Z0-9]{3,5}$/, "EVT must be 3–5 alphanumerics (UPPER)"),
   year: z.string().regex(/^[0-9]{2}([0-9]{2})?$/, "YY must be 2 or 4 digits"),
   ven_code: z.string().regex(/^[A-Z0-9]{3,5}$/, "VEN must be 3–5 alphanumerics (UPPER)"),
   zon_code: z.string().regex(/^[A-Z0-9]{4,8}$/, "ZON must be 4–8 alphanumerics (UPPER)"),
   seq: z.coerce.number().int().min(1).max(999).default(1),
-  // CHARTHOUSE structural
+  // Structural
   sheet_type: z.enum(CHARTHOUSE_SHEET_TYPES),
   primary_class: z.coerce.number().int().min(0).max(9),
   tier_primary: z.coerce.number().int().min(1).max(6).optional(),
@@ -71,7 +54,7 @@ function echo(fd: FormData): Record<string, string> {
   return out;
 }
 
-export async function createCharthouseSheet(_: State, fd: FormData): Promise<State> {
+export async function createSitePlanSheet(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const raw = Object.fromEntries(fd);
   // Drop empty preset value so optional validates cleanly.
@@ -158,10 +141,9 @@ export async function createCharthouseSheet(_: State, fd: FormData): Promise<Sta
       event_id: eventId,
       code: parsed.data.code,
       title: parsed.data.title,
-      discipline: parsed.data.discipline,
       notes: parsed.data.notes || null,
       created_by: session.userId,
-      // CHARTHOUSE enrichment
+      // Atom-ID enrichment
       atom_id: atomId,
       sheet_type: parsed.data.sheet_type,
       primary_class: parsed.data.primary_class,

@@ -76,9 +76,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="CHARTHOUSE"
+        eyebrow="Creative · Site Plans"
         title={`Edit · ${sp.atom_id ?? sp.code}`}
-        subtitle="Update sheet-level CHARTHOUSE attributes. Atom-id segments are immutable once minted."
+        subtitle="Atom-ID segments are immutable once created."
         breadcrumbs={[
           { label: "Site Plans", href: "/console/site-plans" },
           { label: sp.atom_id ?? sp.code, href: `/console/site-plans/${sp.id}` },

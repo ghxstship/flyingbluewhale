@@ -58,7 +58,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="CHARTHOUSE" title="Site Plans" />
+        <ModuleHeader eyebrow="Creative" title="Site Plans" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -88,9 +88,9 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="CHARTHOUSE"
+        eyebrow="Creative"
         title="Site Plans"
-        subtitle={`${rows.length} sheet${rows.length === 1 ? "" : "s"} · CHARTHOUSE protocol v1.0 (FP-CHARTHOUSE-001) · floor / site / power / egress / flow / signage / section / as-built`}
+        subtitle={`${rows.length} Sheet${rows.length === 1 ? "" : "s"} · ${issuedCount} Issued · ${inReviewCount} In Review · ${draftCount} Draft`}
         action={
           <Button href="/console/site-plans/new" size="sm">
             + New Sheet
@@ -107,8 +107,8 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/site-plans/${r.id}`}
-          emptyLabel="No CHARTHOUSE sheets yet"
-          emptyDescription="Mint a sheet with a canonical Atom ID. Pick a preset to scaffold zones, bands, and stations in one step."
+          emptyLabel="No site plans yet"
+          emptyDescription="Pick a preset to scaffold zones, bands, and stations in one step."
           emptyAction={
             <Button href="/console/site-plans/new" size="sm">
               + New Sheet

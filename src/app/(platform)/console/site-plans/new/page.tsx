@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CHARTHOUSE_SHEET_TYPES, CHARTHOUSE_SHELL_TYPES } from "@/lib/charthouse/types";
 import { PRESETS } from "@/lib/charthouse/presets";
-import { createCharthouseSheet } from "./actions";
+import { createSitePlanSheet } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -35,21 +35,6 @@ const TIERS = [
   { value: 6, label: "Tier 6 · Express" },
 ];
 
-const DISCIPLINES = [
-  "site",
-  "rigging",
-  "power",
-  "audio",
-  "video",
-  "lighting",
-  "comms",
-  "evacuation",
-  "hospitality",
-  "accessibility",
-  "sustainability",
-  "other",
-];
-
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
@@ -65,13 +50,12 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="CHARTHOUSE"
+        eyebrow="Creative · Site Plans"
         title="New Sheet"
-        subtitle="Mint a CHARTHOUSE-canonical sheet atom. Format: {ORG}-{EVT}{YY}-{VEN}-{CLASS}.800.{SEC}-{ZON}-{SEQ}{REV}."
         breadcrumbs={[{ label: "Site Plans", href: "/console/site-plans" }, { label: "New" }]}
       />
       <div className="page-content max-w-3xl">
-        <FormShell action={createCharthouseSheet} cancelHref="/console/site-plans" submitLabel="Mint Sheet">
+        <FormShell action={createSitePlanSheet} cancelHref="/console/site-plans" submitLabel="Create Sheet">
           {/* ATOM-ID SEGMENTS */}
           <section className="space-y-3">
             <h3 className="text-sm font-semibold tracking-wide uppercase">Atom ID</h3>
@@ -138,22 +122,12 @@ export default async function Page() {
                 placeholder="Salvage City — Kitchen Perp Tent"
               />
             </label>
-            <div className="grid grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>
-                  Sheet Code<span className="ms-0.5 text-[var(--color-error)]">*</span>
-                </span>
-                <input name="code" required maxLength={40} className={INPUT} placeholder="K-101" />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Discipline (legacy)</span>
-                <select name="discipline" defaultValue="site" className={INPUT}>
-                  {DISCIPLINES.map((d) => (
-                    <option key={d}>{d}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
+            <label className="flex flex-col gap-1.5">
+              <span className={LBL}>
+                Sheet Code<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              </span>
+              <input name="code" required maxLength={40} className={INPUT} placeholder="K-101" />
+            </label>
             <div className="grid grid-cols-3 gap-3">
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>

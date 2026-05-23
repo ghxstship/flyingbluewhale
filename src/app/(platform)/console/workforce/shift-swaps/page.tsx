@@ -1,5 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -9,22 +11,24 @@ import { decideSwap } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-type Swap = {
+type Row = {
   id: string;
-  shift_id: string;
-  requested_by: string;
-  target_user_id: string | null;
+  requester: string;
+  target: string;
+  shift_window: string;
+  shift_role: string | null;
+  shift_venue: string | null;
   reason: string | null;
   swap_state: string;
   created_at: string;
 };
 
-type ShiftRef = {
-  id: string;
-  starts_at: string;
-  ends_at: string;
-  role: string | null;
-  venue: { name: string | null } | null;
+const STATE_TONE: Record<string, "info" | "success" | "muted" | "error"> = {
+  requested: "info",
+  accepted: "info",
+  approved: "success",
+  declined: "muted",
+  cancelled: "muted",
 };
 
 export default async function Page() {
@@ -47,14 +51,23 @@ export default async function Page() {
     .select("id, shift_id, requested_by, target_user_id, reason, swap_state, created_at")
     .eq("org_id", session.orgId)
     .order("created_at", { ascending: false })
-    .limit(200);
-  const rows = (swaps ?? []) as Swap[];
-  const pending = rows.filter((r) => r.swap_state === "requested" || r.swap_state === "accepted");
+    .limit(500);
 
-  // Hydrate shift + user labels for display.
-  const shiftIds = Array.from(new Set(rows.map((r) => r.shift_id)));
+  const raw = (swaps ?? []) as Array<{
+    id: string;
+    shift_id: string;
+    requested_by: string;
+    target_user_id: string | null;
+    reason: string | null;
+    swap_state: string;
+    created_at: string;
+  }>;
+  const pending = raw.filter((r) => r.swap_state === "requested" || r.swap_state === "accepted").length;
+  const approved = raw.filter((r) => r.swap_state === "approved").length;
+
+  const shiftIds = Array.from(new Set(raw.map((r) => r.shift_id)));
   const userIds = Array.from(
-    new Set([...rows.map((r) => r.requested_by), ...rows.map((r) => r.target_user_id).filter((u): u is string => !!u)]),
+    new Set([...raw.map((r) => r.requested_by), ...raw.map((r) => r.target_user_id).filter((u): u is string => !!u)]),
   );
   const [{ data: shifts }, { data: users }] = await Promise.all([
     shiftIds.length
@@ -66,7 +79,17 @@ export default async function Page() {
       : Promise.resolve({ data: [] }),
     userIds.length ? supabase.from("users").select("id, email, name").in("id", userIds) : Promise.resolve({ data: [] }),
   ]);
-  const shiftMap = new Map(((shifts ?? []) as unknown as ShiftRef[]).map((s) => [s.id, s]));
+  const shiftMap = new Map(
+    (
+      (shifts ?? []) as unknown as Array<{
+        id: string;
+        starts_at: string;
+        ends_at: string;
+        role: string | null;
+        venue: { name: string | null } | null;
+      }>
+    ).map((s) => [s.id, s]),
+  );
   const userMap = new Map(
     ((users ?? []) as unknown as Array<{ id: string; email: string; name: string | null }>).map((u) => [
       u.id,
@@ -74,64 +97,121 @@ export default async function Page() {
     ]),
   );
 
+  const rows: Row[] = raw.map((r) => {
+    const s = shiftMap.get(r.shift_id);
+    return {
+      id: r.id,
+      requester: userMap.get(r.requested_by) ?? "Unknown",
+      target: r.target_user_id ? (userMap.get(r.target_user_id) ?? "—") : "Open Pool",
+      shift_window: s
+        ? `${fmt.dateParts(s.starts_at, { month: "short", day: "numeric" })} · ${fmt.time(s.starts_at)}–${fmt.time(s.ends_at)}`
+        : "—",
+      shift_role: s?.role ?? null,
+      shift_venue: s?.venue?.name ?? null,
+      reason: r.reason,
+      swap_state: r.swap_state,
+      created_at: r.created_at,
+    };
+  });
+
   return (
     <>
       <ModuleHeader
         eyebrow="Workforce"
         title="Shift Swaps"
-        subtitle={`${pending.length} pending of ${rows.length} total`}
+        subtitle={`${pending} Pending · ${approved} Approved · ${rows.length} Total`}
       />
-      <div className="page-content space-y-3">
-        {rows.length === 0 ? (
-          <div className="surface p-6 text-sm">No swap requests yet.</div>
-        ) : (
-          rows.map((r) => {
-            const shift = shiftMap.get(r.shift_id);
-            const tone =
-              r.swap_state === "approved"
-                ? "success"
-                : r.swap_state === "declined" || r.swap_state === "cancelled"
-                  ? "muted"
-                  : "info";
-            return (
-              <div key={r.id} className="surface p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <Badge variant={tone}>{toTitle(r.swap_state)}</Badge>
-                    <h3 className="mt-2 text-sm font-semibold">{userMap.get(r.requested_by) ?? "Unknown"}</h3>
-                    {shift && (
-                      <p className="font-mono text-xs text-[var(--text-muted)]">
-                        {shift.venue?.name ?? "venue TBD"} ·{" "}
-                        {fmt.dateParts(shift.starts_at, { weekday: "short", month: "short", day: "numeric" })} ·{" "}
-                        {fmt.time(shift.starts_at)}–{fmt.time(shift.ends_at)}
-                        {shift.role ? ` · ${shift.role}` : ""}
-                      </p>
-                    )}
-                    {r.reason && <p className="mt-2 text-xs">{r.reason}</p>}
+      <div className="page-content space-y-5">
+        <div className="metric-grid-3">
+          <MetricCard label="Pending" value={fmt.number(pending)} accent />
+          <MetricCard label="Approved" value={fmt.number(approved)} />
+          <MetricCard label="Total" value={fmt.number(rows.length)} />
+        </div>
+        <DataTable<Row>
+          tableId="workforce.shift_swaps"
+          rows={rows}
+          emptyLabel="No swap requests"
+          emptyDescription="When crew request to swap shifts they appear here. Managers approve or decline inline."
+          columns={[
+            {
+              key: "requester",
+              header: "Requester",
+              render: (r) => r.requester,
+              accessor: (r) => r.requester,
+              filterable: true,
+            },
+            {
+              key: "target",
+              header: "Target",
+              render: (r) => r.target,
+              accessor: (r) => r.target,
+              filterable: true,
+            },
+            {
+              key: "shift",
+              header: "Shift",
+              render: (r) => r.shift_window,
+              accessor: (r) => r.shift_window,
+              className: "font-mono text-xs",
+            },
+            {
+              key: "role",
+              header: "Role",
+              render: (r) => r.shift_role ?? "—",
+              accessor: (r) => r.shift_role ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "venue",
+              header: "Venue",
+              render: (r) => r.shift_venue ?? "—",
+              accessor: (r) => r.shift_venue ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "reason",
+              header: "Reason",
+              render: (r) => r.reason ?? "—",
+              accessor: (r) => r.reason ?? null,
+            },
+            {
+              key: "state",
+              header: "State",
+              render: (r) => <Badge variant={STATE_TONE[r.swap_state] ?? "muted"}>{toTitle(r.swap_state)}</Badge>,
+              accessor: (r) => r.swap_state,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "action",
+              header: "Action",
+              render: (r) =>
+                r.swap_state === "requested" || r.swap_state === "accepted" ? (
+                  <div className="flex items-center gap-1">
+                    <form action={decideSwap}>
+                      <input type="hidden" name="id" value={r.id} />
+                      <input type="hidden" name="decision" value="approved" />
+                      <button type="submit" className="btn btn-primary btn-xs">
+                        Approve
+                      </button>
+                    </form>
+                    <form action={decideSwap}>
+                      <input type="hidden" name="id" value={r.id} />
+                      <input type="hidden" name="decision" value="declined" />
+                      <button type="submit" className="btn btn-secondary btn-xs">
+                        Decline
+                      </button>
+                    </form>
                   </div>
-                  {(r.swap_state === "requested" || r.swap_state === "accepted") && (
-                    <div className="flex flex-col gap-2">
-                      <form action={decideSwap}>
-                        <input type="hidden" name="id" value={r.id} />
-                        <input type="hidden" name="decision" value="approved" />
-                        <button type="submit" className="btn btn-primary btn-sm w-full">
-                          Approve
-                        </button>
-                      </form>
-                      <form action={decideSwap}>
-                        <input type="hidden" name="id" value={r.id} />
-                        <input type="hidden" name="decision" value="declined" />
-                        <button type="submit" className="btn btn-secondary btn-sm w-full">
-                          Decline
-                        </button>
-                      </form>
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })
-        )}
+                ) : (
+                  <span className="text-xs text-[var(--text-muted)]">—</span>
+                ),
+              accessor: () => null,
+            },
+          ]}
+        />
       </div>
     </>
   );

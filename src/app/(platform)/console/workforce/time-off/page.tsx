@@ -1,5 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
+import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -9,16 +11,23 @@ import { decideTimeOff } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-type Req = {
+type Row = {
   id: string;
-  user_id: string;
-  policy_id: string;
+  user: string;
+  policy: string;
   starts_on: string;
   ends_on: string;
   hours_requested: number;
   request_state: string;
   reason: string | null;
   created_at: string;
+};
+
+const STATE_TONE: Record<string, "info" | "success" | "error" | "muted"> = {
+  pending: "info",
+  approved: "success",
+  denied: "error",
+  cancelled: "muted",
 };
 
 export default async function TimeOffAdminPage() {
@@ -41,13 +50,25 @@ export default async function TimeOffAdminPage() {
     .select("id, user_id, policy_id, starts_on, ends_on, hours_requested, request_state, reason, created_at")
     .eq("org_id", session.orgId)
     .order("created_at", { ascending: false })
-    .limit(200);
+    .limit(500);
 
-  const rows = (requests ?? []) as Req[];
-  const pending = rows.filter((r) => r.request_state === "pending");
+  const raw = (requests ?? []) as Array<{
+    id: string;
+    user_id: string;
+    policy_id: string;
+    starts_on: string;
+    ends_on: string;
+    hours_requested: number;
+    request_state: string;
+    reason: string | null;
+    created_at: string;
+  }>;
+  const pending = raw.filter((r) => r.request_state === "pending").length;
+  const approved = raw.filter((r) => r.request_state === "approved").length;
+  const denied = raw.filter((r) => r.request_state === "denied").length;
 
-  const policyIds = Array.from(new Set(rows.map((r) => r.policy_id)));
-  const userIds = Array.from(new Set(rows.map((r) => r.user_id)));
+  const policyIds = Array.from(new Set(raw.map((r) => r.policy_id)));
+  const userIds = Array.from(new Set(raw.map((r) => r.user_id)));
   const [{ data: policies }, { data: users }] = await Promise.all([
     policyIds.length
       ? supabase.from("time_off_policies").select("id, name").in("id", policyIds)
@@ -62,63 +83,109 @@ export default async function TimeOffAdminPage() {
     ]),
   );
 
+  const rows: Row[] = raw.map((r) => ({
+    id: r.id,
+    user: userMap.get(r.user_id) ?? "Unknown",
+    policy: policyMap.get(r.policy_id) ?? "Policy",
+    starts_on: r.starts_on,
+    ends_on: r.ends_on,
+    hours_requested: r.hours_requested,
+    request_state: r.request_state,
+    reason: r.reason,
+    created_at: r.created_at,
+  }));
+
   return (
     <>
       <ModuleHeader
         eyebrow="Workforce"
         title="Time Off"
-        subtitle={`${pending.length} pending of ${rows.length} total`}
+        subtitle={`${pending} Pending · ${approved} Approved · ${denied} Denied`}
       />
-      <div className="page-content space-y-4">
-        {rows.length === 0 ? (
-          <div className="surface p-6 text-sm">No time-off requests yet.</div>
-        ) : (
-          rows.map((r) => {
-            const tone =
-              r.request_state === "approved"
-                ? "success"
-                : r.request_state === "denied"
-                  ? "error"
-                  : r.request_state === "cancelled"
-                    ? "muted"
-                    : "info";
-            return (
-              <div key={r.id} className="surface p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <Badge variant={tone}>{toTitle(r.request_state)}</Badge>
-                    <h3 className="mt-2 text-sm font-semibold">{userMap.get(r.user_id) ?? "Unknown"}</h3>
-                    <p className="text-xs text-[var(--text-secondary)]">
-                      {policyMap.get(r.policy_id) ?? "Policy"} · {r.hours_requested}h
-                    </p>
-                    <p className="font-mono text-xs text-[var(--text-muted)]">
-                      {fmt.date(r.starts_on)} → {fmt.date(r.ends_on)}
-                    </p>
-                    {r.reason && <p className="mt-2 text-xs">{r.reason}</p>}
+      <div className="page-content space-y-5">
+        <div className="metric-grid-3">
+          <MetricCard label="Pending" value={fmt.number(pending)} accent />
+          <MetricCard label="Approved" value={fmt.number(approved)} />
+          <MetricCard label="Denied" value={fmt.number(denied)} />
+        </div>
+        <DataTable<Row>
+          tableId="workforce.time_off"
+          rows={rows}
+          emptyLabel="No time-off requests"
+          emptyDescription="Requests filed from /m/time-off appear here. Managers approve or deny inline."
+          columns={[
+            {
+              key: "user",
+              header: "Requester",
+              render: (r) => r.user,
+              accessor: (r) => r.user,
+              filterable: true,
+            },
+            {
+              key: "policy",
+              header: "Policy",
+              render: (r) => r.policy,
+              accessor: (r) => r.policy,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "window",
+              header: "Window",
+              render: (r) => `${fmt.date(r.starts_on)} → ${fmt.date(r.ends_on)}`,
+              accessor: (r) => r.starts_on,
+              className: "font-mono text-xs",
+            },
+            {
+              key: "hours",
+              header: "Hours",
+              render: (r) => fmt.number(r.hours_requested),
+              accessor: (r) => r.hours_requested,
+              className: "font-mono text-xs tabular-nums",
+              total: "sum",
+            },
+            {
+              key: "reason",
+              header: "Reason",
+              render: (r) => r.reason ?? "—",
+              accessor: (r) => r.reason ?? null,
+            },
+            {
+              key: "state",
+              header: "State",
+              render: (r) => <Badge variant={STATE_TONE[r.request_state] ?? "muted"}>{toTitle(r.request_state)}</Badge>,
+              accessor: (r) => r.request_state,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "action",
+              header: "Action",
+              render: (r) =>
+                r.request_state === "pending" ? (
+                  <div className="flex items-center gap-1">
+                    <form action={decideTimeOff}>
+                      <input type="hidden" name="id" value={r.id} />
+                      <input type="hidden" name="decision" value="approved" />
+                      <button type="submit" className="btn btn-primary btn-xs">
+                        Approve
+                      </button>
+                    </form>
+                    <form action={decideTimeOff}>
+                      <input type="hidden" name="id" value={r.id} />
+                      <input type="hidden" name="decision" value="denied" />
+                      <button type="submit" className="btn btn-secondary btn-xs">
+                        Deny
+                      </button>
+                    </form>
                   </div>
-                  {r.request_state === "pending" && (
-                    <div className="flex flex-col gap-2">
-                      <form action={decideTimeOff}>
-                        <input type="hidden" name="id" value={r.id} />
-                        <input type="hidden" name="decision" value="approved" />
-                        <button type="submit" className="btn btn-primary btn-sm w-full">
-                          Approve
-                        </button>
-                      </form>
-                      <form action={decideTimeOff}>
-                        <input type="hidden" name="id" value={r.id} />
-                        <input type="hidden" name="decision" value="denied" />
-                        <button type="submit" className="btn btn-secondary btn-sm w-full">
-                          Deny
-                        </button>
-                      </form>
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })
-        )}
+                ) : (
+                  <span className="text-xs text-[var(--text-muted)]">—</span>
+                ),
+              accessor: () => null,
+            },
+          ]}
+        />
       </div>
     </>
   );

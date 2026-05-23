@@ -11,6 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
+import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Hint } from "@/components/ui/Tooltip";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
@@ -153,16 +154,17 @@ export function MarketingHeader() {
         </div>
 
         {/* Mobile trigger */}
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav-sheet"
-          className="btn btn-ghost btn-sm xl:hidden"
+          className="xl:hidden"
         >
           {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
-        </button>
+        </Button>
       </div>
 
       {/* Mobile sheet */}
@@ -192,17 +194,18 @@ export function MarketingHeader() {
                 <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">Language</span>
                 <LocaleSwitcher />
               </div>
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => {
                   setMobileOpen(false);
                   setThemePickerOpen(true);
                 }}
-                className="btn btn-ghost btn-sm inline-flex items-center justify-center gap-2"
+                className="inline-flex items-center justify-center gap-2"
               >
                 <Palette size={14} aria-hidden="true" />
                 Design themes
-              </button>
+              </Button>
             </div>
             <div className="flex flex-col gap-2 border-t border-[var(--border-color)] pt-4">
               <Link

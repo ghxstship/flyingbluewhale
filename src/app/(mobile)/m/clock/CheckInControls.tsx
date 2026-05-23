@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 type Action = "check_in" | "check_out" | "break_start" | "break_end";
 
@@ -76,53 +77,49 @@ export function CheckInControls({
   return (
     <div className="grid grid-cols-2 gap-2">
       {attendance === "scheduled" && (
-        <button
-          type="button"
-          className="btn btn-primary col-span-2"
-          disabled={pending}
+        <Button
+          variant="primary"
+          className="col-span-2"
+          loading={pending}
           onClick={() => submit("check_in", "Checked in")}
         >
-          {pending ? "Working…" : "Clock in"}
-        </button>
+          Clock in
+        </Button>
       )}
       {attendance === "checked_in" && (
         <>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            disabled={pending}
+          <Button
+            variant="secondary"
+            loading={pending}
             onClick={() => submit("break_start", "Break started")}
           >
             Start break
-          </button>
-          <button
-            type="button"
-            className="btn btn-danger"
-            disabled={pending}
+          </Button>
+          <Button
+            variant="danger"
+            loading={pending}
             onClick={() => submit("check_out", "Clocked out")}
           >
             Clock out
-          </button>
+          </Button>
         </>
       )}
       {attendance === "on_break" && (
         <>
-          <button
-            type="button"
-            className="btn btn-primary"
-            disabled={pending}
+          <Button
+            variant="primary"
+            loading={pending}
             onClick={() => submit("break_end", "Back from break")}
           >
             End break
-          </button>
-          <button
-            type="button"
-            className="btn btn-danger"
-            disabled={pending}
+          </Button>
+          <Button
+            variant="danger"
+            loading={pending}
             onClick={() => submit("check_out", "Clocked out")}
           >
             Clock out
-          </button>
+          </Button>
         </>
       )}
     </div>

@@ -10,6 +10,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { PricingCalculator } from "@/components/marketing/PricingCalculator";
 import { buildMetadata, faqSchema } from "@/lib/seo";
+import { formatMoney } from "@/lib/i18n/format";
 
 export const metadata: Metadata = buildMetadata({
   title: "Pricing — Per Org. Never Per Seat.",
@@ -31,7 +32,7 @@ export const metadata: Metadata = buildMetadata({
 const TIERS = [
   {
     tier: "Free",
-    price: "$0",
+    priceCents: 0 as number | null,
     per: "forever",
     description: "Solo operators and side projects.",
     features: [
@@ -46,7 +47,7 @@ const TIERS = [
   },
   {
     tier: "Crew",
-    price: "$49",
+    priceCents: 4900 as number | null,
     per: "month per org",
     description: "Small teams shipping their first season.",
     features: [
@@ -62,7 +63,7 @@ const TIERS = [
   },
   {
     tier: "Production",
-    price: "$199",
+    priceCents: 19900 as number | null,
     per: "month per org",
     description: "Teams running multiple productions in flight.",
     features: [
@@ -80,7 +81,7 @@ const TIERS = [
   },
   {
     tier: "Festival",
-    price: "Custom",
+    priceCents: null as number | null,
     per: "",
     description: "Multi-org agencies, touring companies, OCOG-scale work.",
     features: [
@@ -294,7 +295,11 @@ export default function PricingPage() {
                 {t.highlight && <Badge variant="brand">Most Common</Badge>}
               </div>
               <div className="mt-4">
-                <span className="text-3xl font-semibold tracking-tight">{t.price}</span>
+                <span className="text-3xl font-semibold tracking-tight">
+                  {t.priceCents !== null
+                    ? formatMoney(t.priceCents, { fractionDigits: 0 })
+                    : "Custom"}
+                </span>
                 {t.per && <span className="text-sm text-[var(--text-muted)]"> / {t.per}</span>}
               </div>
               <p className="mt-2 text-xs text-[var(--text-secondary)]">{t.description}</p>

@@ -11,6 +11,20 @@ import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
 
 export const dynamic = "force-dynamic";
 
+const KIND_LABEL: Record<string, string> = {
+  talent_call: "Talent Call",
+  audition: "Audition",
+  gig: "Gig",
+  rfq: "Public RFQ",
+};
+
+const STATUS_LABEL: Record<string, string> = {
+  draft: "Draft",
+  published: "Published",
+  closed: "Closed",
+  archived: "Archived",
+};
+
 type CallRow = {
   id: string;
   title: string;
@@ -88,7 +102,7 @@ export default async function Page() {
             {
               key: "kind",
               header: "Kind",
-              render: (r) => <Badge variant="muted">{r.kind}</Badge>,
+              render: (r) => <Badge variant="muted">{KIND_LABEL[r.kind] ?? r.kind}</Badge>,
               accessor: (r) => r.kind,
               filterable: true,
               groupable: true,
@@ -118,7 +132,9 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{STATUS_LABEL[r.status] ?? r.status}</Badge>
+              ),
               accessor: (r) => r.status,
               filterable: true,
               groupable: true,

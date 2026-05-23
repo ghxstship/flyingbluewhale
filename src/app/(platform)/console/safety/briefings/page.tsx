@@ -26,6 +26,12 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
   cancelled: "muted",
 };
 
+const STATUS_LABEL: Record<string, string> = {
+  scheduled: "Scheduled",
+  conducted: "Conducted",
+  cancelled: "Cancelled",
+};
+
 function fmt(iso: string | null): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleString(undefined, {
@@ -104,7 +110,9 @@ export default async function Page() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status}</Badge>,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{STATUS_LABEL[r.status] ?? r.status}</Badge>
+              ),
               accessor: (r) => r.status ?? null,
               filterable: true,
               groupable: true,

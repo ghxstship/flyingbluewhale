@@ -1,11 +1,24 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 
 export const dynamic = "force-dynamic";
+
+const SEVERITY_LABEL: Record<string, string> = {
+  info: "Info",
+  warn: "Warning",
+  critical: "Critical",
+};
+
+const SEVERITY_TONE: Record<string, "info" | "warning" | "error"> = {
+  info: "info",
+  warn: "warning",
+  critical: "error",
+};
 
 export default async function Page() {
   if (!hasSupabase)
@@ -46,7 +59,11 @@ export default async function Page() {
             {
               key: "severity",
               header: "Severity",
-              render: (r) => String(r.severity ?? "—"),
+              render: (r) => {
+                const sev = String(r.severity ?? "");
+                if (!sev) return "—";
+                return <Badge variant={SEVERITY_TONE[sev] ?? "muted"}>{SEVERITY_LABEL[sev] ?? sev}</Badge>;
+              },
               accessor: (r) => r.severity ?? null,
               filterable: true,
               groupable: true,

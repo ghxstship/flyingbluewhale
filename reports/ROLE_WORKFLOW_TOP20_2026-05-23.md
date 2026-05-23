@@ -134,7 +134,7 @@ Each row format: `# · Verb · Surface · Status`
 17. Inbox (B6) · `/console/inbox` · ✓
 18. Notifications preferences (A4) · `/m/settings/notifications` · ✓
 19. Workspace switcher (A2) · sidebar org chip · ✓
-20. P&L summary tab (B3) · ⚠ `/console/projects/[id]/pnl` 404 — finding
+20. P&L summary tab (B3) · `/console/projects/[id]/finance` · ✓
 
 **2 · Producer**
 1-7. Same project tabs as EP · ✓ 8. Budgets list (C-list) · `/console/finance/budgets` · ✓ 9. New budget (C-new) · `/console/finance/budgets/new` · ✓ 10. Budget detail (C-detail) · `/console/finance/budgets/[id]` · ✓ 11. Edit budget (C-edit) · ✓ 12. Expense filed (Round 6) · `/console/finance/expenses/new` · ✓ 13. Time entry (Round 6) · `/console/finance/time` · ✓ 14. Invoice (Round 6) · `/console/finance/invoices/new` · ✓ 15. Pay-app create (Round 6) · `/console/finance/pay-apps/new` · ✓ 16. Period close (G3) · `/console/finance/periods` · ✓ 17. Subscription mint (Round 6) · `/console/subscriptions/new` · ✓ 18. Procurement requisition (Round 6) · `/console/procurement/requisitions/new` · ✓ 19. PO create (Round 6) · `/console/procurement/pos/new` · ✓ 20. Tour P&L (portal) · `/p/edclv26/promoter/tour-pnl` · ✓

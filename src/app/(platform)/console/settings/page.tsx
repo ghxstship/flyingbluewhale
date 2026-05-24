@@ -25,6 +25,16 @@ const TILES = [
     label: "SLA Policies",
     description: "Per-severity response + resolution clocks for service requests",
   },
+  {
+    href: "/console/settings/sso",
+    label: "Single Sign-On",
+    description: "SAML / OIDC providers + email-domain routing",
+  },
+  {
+    href: "/console/settings/rate-limits",
+    label: "Rate Limits",
+    description: "Per-bucket overrides for AI, scan, webhook, auth",
+  },
 ];
 
 export default function SettingsHub() {

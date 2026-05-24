@@ -3,6 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { MSADocument } from "@/components/msa/MSADocument";
+import { LdpStateTimeline } from "@/components/ldp/LdpStateTimeline";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getMsa } from "@/lib/msa/queries";
@@ -84,6 +85,15 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
             </div>
           </section>
         )}
+
+        <LdpStateTimeline
+          table="msa_state_transitions"
+          parentColumn="msa_id"
+          parentId={id}
+          orgId={session.orgId}
+          heading="MSA Lifecycle"
+          subhead="Append-only ledger of state transitions on this MSA."
+        />
 
         <section className="surface p-6">
           <MSADocument msa={resolved} orgName={resolved.org_name} />

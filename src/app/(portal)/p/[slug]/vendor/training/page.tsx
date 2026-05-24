@@ -107,9 +107,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         )}
 
         <p className="text-xs text-[var(--text-muted)]">
-          Required modules are sourced from <code>kb_articles</code> tagged{" "}
-          <code>vendor_training · safety · compliance · ethics · anti_bribery</code>. Completion is tracked at the
-          membership level — your producer will share certificates as you complete each module.
+          Required modules cover vendor training, safety, compliance, ethics, and anti-bribery. Completion is tracked
+          against your membership — your producer will share certificates as you complete each module.
         </p>
       </div>
     </>

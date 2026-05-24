@@ -154,7 +154,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               render: (r) => <Badge variant={ITEM_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status.replace ?? null,
+              accessor: (r) => r.status ?? null,
             },
           ]}
         />

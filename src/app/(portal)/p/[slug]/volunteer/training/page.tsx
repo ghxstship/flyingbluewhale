@@ -73,8 +73,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <h3 className="text-sm font-semibold">Required Modules</h3>
           {required.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No required training right now. Modules publish via <code>kb_articles</code> tagged{" "}
-              <code>volunteer_training · induction · safety · safeguarding · diversity</code>.
+              No required training right now. Modules cover volunteer orientation, induction, safety, safeguarding, and
+              diversity; they appear here when the producer publishes them.
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">

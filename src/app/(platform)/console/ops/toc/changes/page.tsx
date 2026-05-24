@@ -155,7 +155,7 @@ export default async function Page() {
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status.replace ?? null,
+              accessor: (r) => r.status ?? null,
             },
           ]}
         />

@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: Promise<{ integrationId
         <section className="surface p-4">
           <h3 className="text-sm font-semibold">Configuration</h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Public configuration values for this connector. Secrets are stored in Vault under <code>secret_ref</code>.
+            Public configuration values for this connector. Secrets are stored separately in Vault.
           </p>
           <pre className="mt-3 max-h-96 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
             {JSON.stringify(integration.config, null, 2)}

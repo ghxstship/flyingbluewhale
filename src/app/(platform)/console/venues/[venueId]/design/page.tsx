@@ -148,14 +148,14 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status.replace ?? null,
+              accessor: (r) => r.status ?? null,
             },
           ]}
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Specs flow into procurement: link a spec to a requisition via <code>bom_requisition_id</code> and the bill of
-          materials is auto-derived for tendering.
+          Specs flow into procurement: link a spec to a requisition and the bill of materials is auto-derived for
+          tendering.
         </p>
       </div>
     </>

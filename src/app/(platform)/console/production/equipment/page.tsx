@@ -82,7 +82,7 @@ export default async function EquipmentPage() {
               render: (r) => <Badge variant={STATUS_BG[r.status]}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status.replace ?? null,
+              accessor: (r) => r.status ?? null,
             },
             {
               key: "rate",

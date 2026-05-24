@@ -201,7 +201,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
                 ),
                 filterable: true,
                 groupable: true,
-                accessor: (r) => r.status.replace ?? null,
+                accessor: (r) => r.status ?? null,
               },
             ]}
           />

@@ -34,8 +34,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
         <div className="eyebrow text-xs text-[var(--text-muted)]">Files</div>
         <h1 className="text-lg font-semibold">Signed Documents, Proofs, and Reports</h1>
         <p className="mt-1 text-sm text-[var(--text-muted)]">
-          Stored in the <code className="font-mono text-xs">proposals</code> Supabase bucket. Downloads are served via
-          short-lived signed URLs.
+          Securely stored. Downloads are served via short-lived signed URLs.
         </p>
       </header>
 

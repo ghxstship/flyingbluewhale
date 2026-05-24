@@ -46,9 +46,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               <MetricCard label="Total" value={`${total.toFixed(0)} kg CO₂e`} accent />
             </div>
             <div className="surface p-4 text-xs text-[var(--text-muted)]">
-              Per-project attribution requires adding a <code className="font-mono">project_id</code> column to{" "}
-              <code className="font-mono">sustainability_metrics</code>. Until then, this tab shows the org-level rollup
-              as a transparency stub.
+              Per-project attribution is in progress. Until then, this tab shows the org-level rollup as a transparency
+              stub.
             </div>
           </>
         )}

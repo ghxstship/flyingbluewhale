@@ -120,7 +120,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
               ),
               filterable: true,
               groupable: true,
-              accessor: (r) => r.osha_classification.replace ?? null,
+              accessor: (r) => r.osha_classification ?? null,
             },
             {
               key: "body",

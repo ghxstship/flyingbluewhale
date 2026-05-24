@@ -147,7 +147,7 @@ export default async function Page() {
               ),
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status.replace ?? null,
+              accessor: (r) => r.status ?? null,
             },
           ]}
         />

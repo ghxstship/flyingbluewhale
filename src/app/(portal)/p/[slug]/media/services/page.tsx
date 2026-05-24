@@ -73,8 +73,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <h3 className="text-sm font-semibold">Catalog</h3>
           {items.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No media services published. Producer publishes the MPC rate card to <code>rate_card_items</code> under
-              catalog <code>media</code>.
+              No media services published. The producer publishes the MPC rate card under the Media catalog; items
+              appear here when ready.
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">

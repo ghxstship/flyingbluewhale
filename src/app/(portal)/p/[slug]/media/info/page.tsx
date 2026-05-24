@@ -73,8 +73,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <h3 className="text-sm font-semibold">Documents</h3>
           {items.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No info-on-demand documents published yet. Producer publishes briefings and factsheets to{" "}
-              <code>kb_articles</code> tagged <code>media</code> or <code>press</code>.
+              No info-on-demand documents published yet. The producer publishes briefings and factsheets tagged Media or
+              Press; they appear here when ready.
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">

@@ -3,6 +3,7 @@ import "server-only";
 import React from "react";
 import { Text } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 import type { PdfBrand } from "./branding";
 
 /**
@@ -44,7 +45,7 @@ export function ExpenseReportPdf({
 }) {
   const money = (c: number) => {
     try {
-      return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(c / 100);
+      return new Intl.NumberFormat(DEFAULT_LOCALE, { style: "currency", currency }).format(c / 100);
     } catch {
       return `${currency} ${(c / 100).toFixed(2)}`;
     }

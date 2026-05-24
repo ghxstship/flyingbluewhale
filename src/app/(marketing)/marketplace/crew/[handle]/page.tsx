@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { DEFAULT_CURRENCY } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
 
@@ -115,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
           <dl className="space-y-1 text-sm">
             <div>
               <span className="text-[var(--text-secondary)]">Day rate:</span>{" "}
-              {formatFeeRange(c.day_rate_min_cents, c.day_rate_max_cents, "USD")}
+              {formatFeeRange(c.day_rate_min_cents, c.day_rate_max_cents, DEFAULT_CURRENCY)}
             </div>
             <div>
               <span className="text-[var(--text-secondary)]">Travel radius:</span>{" "}

@@ -46,6 +46,7 @@ import {
 } from "@/lib/views/chart-config";
 import { pivotForChart } from "@/lib/views/chart-aggregate";
 import { HeatmapGrid, type HeatmapCell } from "./HeatmapGrid";
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 export type ChartViewProps<T extends Record<string, unknown> = Record<string, unknown>> = {
   config: ChartViewConfig;
@@ -494,7 +495,7 @@ function TooltipContent({
       {payload.map((p, i) => {
         const seriesDef = series.find((s) => (s.label ?? s.field) === p.name || s.field === p.dataKey);
         const fmt = yAxis?.format ?? "auto";
-        const currency = yAxis?.currency ?? (seriesDef ? "USD" : undefined);
+        const currency = yAxis?.currency ?? (seriesDef ? DEFAULT_CURRENCY : undefined);
         return (
           <div key={i} className="flex items-center gap-1.5">
             <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
@@ -524,20 +525,20 @@ export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", cu
   }
   switch (format) {
     case "currency":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(DEFAULT_LOCALE, {
         style: "currency",
         currency,
         maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2,
       }).format(v);
     case "percent":
-      return new Intl.NumberFormat("en-US", {
+      return new Intl.NumberFormat(DEFAULT_LOCALE, {
         style: "percent",
         maximumFractionDigits: 1,
       }).format(Math.abs(v) > 1 ? v / 100 : v);
     case "date":
       return new Date(v).toLocaleDateString();
     case "number":
-      return new Intl.NumberFormat("en-US").format(v);
+      return new Intl.NumberFormat(DEFAULT_LOCALE).format(v);
     case "auto":
     default:
       if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;

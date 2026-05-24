@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Calculator, ArrowRight } from "lucide-react";
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 /**
  * `<PricingCalculator>` — total-cost-of-ownership calculator for /pricing.
@@ -25,7 +26,7 @@ import { Calculator, ArrowRight } from "lucide-react";
 const ATLVS_PRODUCTION_ANNUAL = 199 * 12; // $2,388/yr
 
 function formatUsd(n: number) {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  return n.toLocaleString(DEFAULT_LOCALE, { style: "currency", currency: DEFAULT_CURRENCY, maximumFractionDigits: 0 });
 }
 
 export function PricingCalculator() {

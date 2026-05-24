@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { DEFAULT_CURRENCY } from "@/lib/i18n/config";
 import { hasSupabase } from "@/lib/env";
 import { createOfferAction } from "./actions";
 
@@ -65,7 +66,7 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-3 gap-3">
             <Input label="Fee" name="fee" required placeholder="5000" />
-            <Input label="Currency" name="currency" maxLength={3} defaultValue="USD" />
+            <Input label="Currency" name="currency" maxLength={3} defaultValue={DEFAULT_CURRENCY} />
             <Input label="Deposit %" name="deposit_pct" type="number" defaultValue="60" min={0} max={100} />
           </div>
           <div>

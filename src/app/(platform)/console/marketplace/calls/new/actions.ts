@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { MARKETPLACE_KINDS, slugify } from "@/lib/marketplace";
+import { DEFAULT_CURRENCY } from "@/lib/i18n/config";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -22,7 +23,7 @@ const Schema = z.object({
   currency: z
     .string()
     .regex(/^[A-Z]{3}$/)
-    .default("USD"),
+    .default(DEFAULT_CURRENCY),
   deadline_at: z.string().optional().or(z.literal("")),
 });
 

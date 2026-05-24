@@ -2,11 +2,12 @@ import Link from "next/link";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { PhaseBlock } from "./PhaseBlock";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
   if (m == null) return "";
   if (typeof m === "string") return m;
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(DEFAULT_LOCALE, {
     style: "currency",
     currency: m.currency ?? currency,
     maximumFractionDigits: 0,

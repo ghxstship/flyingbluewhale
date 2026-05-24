@@ -16,6 +16,7 @@ import {
   type TimelineZoom,
 } from "@/lib/views/timeline";
 import { TimelineBar, type TimelineBarTone } from "./TimelineBar";
+import { DEFAULT_LOCALE, DEFAULT_TIMEZONE } from "@/lib/i18n/config";
 
 export type TimelineLane = {
   id: string;
@@ -431,10 +432,10 @@ export function TimelineView({
   );
 }
 
-const RANGE_FMT = new Intl.DateTimeFormat("en-US", {
+const RANGE_FMT = new Intl.DateTimeFormat(DEFAULT_LOCALE, {
   month: "short",
   day: "numeric",
-  timeZone: "UTC",
+  timeZone: DEFAULT_TIMEZONE,
 });
 
 function formatRange(start: Date, end: Date): string {

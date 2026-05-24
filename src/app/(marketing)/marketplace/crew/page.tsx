@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
+import { DEFAULT_CURRENCY } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
 
@@ -72,7 +73,7 @@ export default async function Page() {
                 subtitle={r.tagline ?? undefined}
                 tags={r.roles}
                 meta={[
-                  formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, "USD") + "/day",
+                  formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, DEFAULT_CURRENCY) + "/day",
                   r.unions.join(", ") || null,
                   r.travel_radius_km ? `${r.travel_radius_km} km radius` : null,
                   r.availability_open ? "Available now" : null,

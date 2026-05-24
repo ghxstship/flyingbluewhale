@@ -4,6 +4,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 /**
  * Proposal PDF — Opportunity #3.
@@ -53,7 +54,7 @@ export type ProposalPdfInput = {
 
 function money(cents: number, currency: string): string {
   try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(cents / 100);
+    return new Intl.NumberFormat(DEFAULT_LOCALE, { style: "currency", currency }).format(cents / 100);
   } catch {
     return `${currency} ${(cents / 100).toFixed(2)}`;
   }

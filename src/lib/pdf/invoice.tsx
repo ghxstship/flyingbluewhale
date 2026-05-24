@@ -4,6 +4,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 
 /**
  * Invoice PDF — Opportunity #5.
@@ -44,7 +45,7 @@ export type InvoicePdfInput = {
 function money(cents: number, currency: string): string {
   const amt = cents / 100;
   try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amt);
+    return new Intl.NumberFormat(DEFAULT_LOCALE, { style: "currency", currency }).format(amt);
   } catch {
     return `${currency} ${amt.toFixed(2)}`;
   }

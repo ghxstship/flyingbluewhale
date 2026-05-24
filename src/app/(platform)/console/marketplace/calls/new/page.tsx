@@ -2,6 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { createCallAction } from "./actions";
+import { DEFAULT_CURRENCY } from "@/lib/i18n/config";
 
 export default function Page() {
   return (
@@ -41,7 +42,7 @@ export default function Page() {
           <div className="grid grid-cols-3 gap-3">
             <Input label="Fee Min" name="fee_min" placeholder="2500" />
             <Input label="Fee Max" name="fee_max" placeholder="7500" />
-            <Input label="Currency" name="currency" maxLength={3} defaultValue="USD" />
+            <Input label="Currency" name="currency" maxLength={3} defaultValue={DEFAULT_CURRENCY} />
           </div>
         </FormShell>
       </div>

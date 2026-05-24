@@ -1,3 +1,5 @@
+import { DEFAULT_CURRENCY, DEFAULT_LOCALE } from "@/lib/i18n/config";
+
 // Miami HEAT × AGV Miami — Pop-Up Activation Program
 // Standardized proposal template, hydrated for the HEAT pop-up program at the
 // East Plaza inside Kaseya Center. Investment model: monthly baseline retainer
@@ -1065,7 +1067,7 @@ export const HEAT_CADENCE_RUNWAY: Record<TierId, string> = {
 };
 
 export function fmtMoney(n: number): string {
-  return "$" + n.toLocaleString("en-US");
+  return new Intl.NumberFormat(DEFAULT_LOCALE, { style: "currency", currency: DEFAULT_CURRENCY, maximumFractionDigits: 0 }).format(n);
 }
 
 export function fmtRange(base: number, ceiling: number): string {

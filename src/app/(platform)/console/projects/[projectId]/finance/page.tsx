@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { DEFAULT_CURRENCY } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
 
@@ -90,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     );
   }
 
-  const currency = "USD"; // projects table doesn't carry currency yet; invoices/POs each carry their own
+  const currency = DEFAULT_CURRENCY; // projects table doesn't carry currency yet; invoices/POs each carry their own
   const invList = (invoices ?? []) as InvoiceRow[];
   const expList = (expenses ?? []) as ExpenseRow[];
   const poList = (pos ?? []) as POrow[];

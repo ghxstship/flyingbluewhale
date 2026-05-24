@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { DEFAULT_CURRENCY } from "@/lib/i18n/config";
 
 const Schema = z.object({
   talent_profile_id: z.string().uuid(),
@@ -16,7 +17,7 @@ const Schema = z.object({
   currency: z
     .string()
     .regex(/^[A-Z]{3}$/)
-    .default("USD"),
+    .default(DEFAULT_CURRENCY),
   deposit_pct: z.string().default("60"),
   balance_terms: z.string().default("load_in"),
 });

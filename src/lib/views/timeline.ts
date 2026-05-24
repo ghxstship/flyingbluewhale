@@ -10,6 +10,8 @@
  * SmartSuite reference: https://help.smartsuite.com/en/articles/4765981
  */
 
+import { DEFAULT_LOCALE, DEFAULT_TIMEZONE } from "@/lib/i18n/config";
+
 export type TimelineZoom = "day" | "week" | "month" | "quarter";
 
 export type TimelineMarker = {
@@ -116,19 +118,19 @@ export function dateFromPx(px: number, anchor: Date, pxPerDay: number): Date {
   return addDaysUTC(startOfDayUTC(anchor), days);
 }
 
-const MONTH_FMT = new Intl.DateTimeFormat("en-US", {
+const MONTH_FMT = new Intl.DateTimeFormat(DEFAULT_LOCALE, {
   month: "short",
   year: "numeric",
-  timeZone: "UTC",
+  timeZone: DEFAULT_TIMEZONE,
 });
-const SHORT_MONTH_FMT = new Intl.DateTimeFormat("en-US", {
+const SHORT_MONTH_FMT = new Intl.DateTimeFormat(DEFAULT_LOCALE, {
   month: "short",
-  timeZone: "UTC",
+  timeZone: DEFAULT_TIMEZONE,
 });
-const DAY_FMT = new Intl.DateTimeFormat("en-US", {
+const DAY_FMT = new Intl.DateTimeFormat(DEFAULT_LOCALE, {
   month: "short",
   day: "numeric",
-  timeZone: "UTC",
+  timeZone: DEFAULT_TIMEZONE,
 });
 
 function quarterLabel(d: Date): string {

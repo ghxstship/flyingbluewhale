@@ -55,10 +55,10 @@ export function LetterEditor({
           {/* ── IDENTITY ─────────────────────────────────────────────────── */}
           <fieldset className="space-y-3">
             <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-              Identity & Position (FK → crew_members, org_roles)
+              Identity & Position
             </legend>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <FormField name="crew_member_id" label="Recipient (crew_members)" required>
+              <FormField name="crew_member_id" label="Recipient" required>
                 <NativeSelect name="crew_member_id" defaultValue={raw.crew_member_id}>
                   {crew.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -67,7 +67,7 @@ export function LetterEditor({
                   ))}
                 </NativeSelect>
               </FormField>
-              <FormField name="role_id" label="Role (org_roles)" required>
+              <FormField name="role_id" label="Role" required>
                 <NativeSelect name="role_id" defaultValue={raw.role_id}>
                   {roles.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -76,7 +76,7 @@ export function LetterEditor({
                   ))}
                 </NativeSelect>
               </FormField>
-              <FormField name="reports_to_crew_member_id" label="Reports To (crew_members)">
+              <FormField name="reports_to_crew_member_id" label="Reports To">
                 <NativeSelect name="reports_to_crew_member_id" defaultValue={raw.reports_to_crew_member_id ?? ""}>
                   <option value="">— None —</option>
                   {crew.map((c) => (
@@ -86,7 +86,7 @@ export function LetterEditor({
                   ))}
                 </NativeSelect>
               </FormField>
-              <FormField name="venue_id" label="Venue (venues)">
+              <FormField name="venue_id" label="Venue">
                 <NativeSelect name="venue_id" defaultValue={raw.venue_id ?? ""}>
                   <option value="">— None —</option>
                   {venues.map((v) => (
@@ -117,10 +117,10 @@ export function LetterEditor({
           {/* ── COMPENSATION ─────────────────────────────────────────────── */}
           <fieldset className="space-y-3">
             <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-              Compensation (FK → rate_card_items)
+              Compensation
             </legend>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <FormField name="rate_card_item_id" label="Rate Card (rate_card_items)">
+              <FormField name="rate_card_item_id" label="Rate Card">
                 <NativeSelect name="rate_card_item_id" defaultValue={raw.rate_card_item_id ?? ""}>
                   <option value="">— None —</option>
                   {rates.map((r) => (
@@ -131,7 +131,7 @@ export function LetterEditor({
                   ))}
                 </NativeSelect>
               </FormField>
-              <FormField name="per_diem_rate_card_item_id" label="Per Diem Rate Card (rate_card_items)">
+              <FormField name="per_diem_rate_card_item_id" label="Per Diem Rate Card">
                 <NativeSelect name="per_diem_rate_card_item_id" defaultValue={raw.per_diem_rate_card_item_id ?? ""}>
                   <option value="">— None —</option>
                   {rates.map((r) => (

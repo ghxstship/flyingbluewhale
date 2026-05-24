@@ -112,7 +112,18 @@ export type IconName =
   | "Coins"
   | "Route"
   // Sales pipeline
-  | "GitBranch";
+  | "GitBranch"
+  // New modules (Round 30)
+  | "LayoutGrid"
+  | "LayoutTemplate"
+  | "Camera"
+  | "Zap"
+  | "Scale"
+  | "Video"
+  | "FileEdit"
+  | "Headphones"
+  | "Cog"
+  | "Upload";
 
 export type NavItem = {
   label: string;
@@ -156,6 +167,7 @@ export const platformNav: NavGroup[] = [
     label: "Dashboard",
     items: [
       { label: "Overview", href: "/console", icon: "LayoutDashboard" },
+      { label: "Dashboards", href: "/console/dashboards", icon: "LayoutGrid" },
       { label: "Inbox", href: "/me/notifications/inbox", icon: "Inbox" },
       { label: "Messages", href: "/console/inbox", icon: "MessageSquare" },
     ],
@@ -210,6 +222,7 @@ export const platformNav: NavGroup[] = [
         items: [
           { label: "Directory", href: "/console/people", icon: "Users" },
           { label: "Sustainability", href: "/console/sustainability", icon: "Leaf" },
+          { label: "Code of Conduct", href: "/console/compliance/coc", icon: "Scale" },
         ],
       },
     ],
@@ -221,6 +234,8 @@ export const platformNav: NavGroup[] = [
     items: [
       { label: "Proposals", href: "/console/proposals", icon: "FileText" },
       { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
+      { label: "Templates", href: "/console/templates", icon: "LayoutTemplate" },
+      { label: "Photos", href: "/console/photos", icon: "Camera" },
       // Site Plans is a CAD-rooted creative artifact — primary class is
       // CREATIVE, secondary BUILD (where it materializes).
       { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
@@ -251,6 +266,7 @@ export const platformNav: NavGroup[] = [
       { label: "Pipeline", href: "/console/pipeline", icon: "GitBranch" },
       { label: "Clients", href: "/console/clients", icon: "Handshake" },
       { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
+      { label: "Campaigns", href: "/console/campaigns", icon: "Zap" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
@@ -296,6 +312,8 @@ export const platformNav: NavGroup[] = [
           { label: "Look-Ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
           { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
           { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
+          { label: "Action Items", href: "/console/action-items", icon: "CheckSquare" },
+          { label: "Meetings", href: "/console/meetings", icon: "Video" },
           { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
           { label: "Events", href: "/console/events", icon: "CalendarDays" },
           { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
@@ -383,6 +401,9 @@ export const platformNav: NavGroup[] = [
     label: "9 TECHNOLOGY",
     items: [
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
+      { label: "Forms", href: "/console/forms", icon: "FileEdit" },
+      { label: "Service Desk", href: "/console/services", icon: "Headphones" },
+      { label: "Ops Hub", href: "/console/ops", icon: "Cog" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
       // The XPMS Catalog (atom registry) is the canonical TECHNOLOGY-
@@ -431,6 +452,7 @@ export const settingsNav: NavGroup[] = [
       { label: "Billing", href: "/console/settings/billing" },
       { label: "Exports", href: "/console/settings/exports" },
       { label: "Imports", href: "/console/settings/imports" },
+      { label: "Import Jobs", href: "/console/import" },
     ],
   },
   {

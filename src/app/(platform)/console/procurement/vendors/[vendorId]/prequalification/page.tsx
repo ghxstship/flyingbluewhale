@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge, type BadgeVariant } from "@/components/ui/Badge";
@@ -52,13 +53,21 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
+          rowHref={(r) => `/console/procurement/vendors/${vendorId}/prequalification/${r.id}`}
           emptyLabel="No Prequalifications"
           emptyDescription="This vendor has not completed any prequalification questionnaires."
           columns={[
             {
               key: "submitted_at",
               header: "Submitted",
-              render: (r) => (r.submitted_at ? formatDate(r.submitted_at) : "—"),
+              render: (r) => (
+                <Link
+                  href={`/console/procurement/vendors/${vendorId}/prequalification/${r.id}`}
+                  className="hover:underline"
+                >
+                  {r.submitted_at ? formatDate(r.submitted_at) : "—"}
+                </Link>
+              ),
               accessor: (r) => r.submitted_at ?? "",
               mono: true,
               sortable: true,

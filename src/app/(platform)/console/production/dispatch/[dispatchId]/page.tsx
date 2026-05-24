@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -114,7 +115,7 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
           { label: "Dispatch", href: "/console/production/dispatch" },
           { label: run.id.slice(0, 8) },
         ]}
-        action={<Badge variant={tone}>{run.status.replace(/_/g, " ")}</Badge>}
+        action={<Badge variant={tone}>{toTitle(run.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

@@ -139,7 +139,7 @@ export default async function Page() {
                                     : "muted"
                             }
                           >
-                            {v.latest.status.replace("_", " ")}
+                            {toTitle(v.latest.status)}
                           </Badge>
                         </td>
                       </tr>

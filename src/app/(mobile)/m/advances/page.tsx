@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import type { DeliverableType } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -137,7 +138,7 @@ export default async function MobileAdvancesPage() {
                           </div>
                         </div>
                         <Badge variant={STATE_TONE[d.deliverable_state] ?? "muted"}>
-                          {d.deliverable_state.replace(/_/g, " ")}
+                          {toTitle(d.deliverable_state)}
                         </Badge>
                       </div>
                     </li>

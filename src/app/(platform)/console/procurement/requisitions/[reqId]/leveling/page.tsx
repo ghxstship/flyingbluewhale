@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { awardResponse } from "./actions";
+import { toTitle } from "@/lib/format";
 
 type ResponseRow = {
   id: string;
@@ -91,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
               key: "response_state",
               header: "State",
               render: (r) => (
-                <Badge variant={STATE_TONE[r.response_state] ?? "muted"}>{r.response_state.replace("_", " ")}</Badge>
+                <Badge variant={STATE_TONE[r.response_state] ?? "muted"}>{toTitle(r.response_state)}</Badge>
               ),
               accessor: (r) => r.response_state,
               filterable: true,

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -90,7 +91,7 @@ export default async function Page() {
               key: "status",
               header: "Status",
               render: (r) => (
-                <Badge variant={STATUS_TONE[String(r.status)] ?? "muted"}>{String(r.status).replace(/_/g, " ")}</Badge>
+                <Badge variant={STATUS_TONE[String(r.status)] ?? "muted"}>{toTitle(String(r.status))}</Badge>
               ),
               filterable: true,
               groupable: true,

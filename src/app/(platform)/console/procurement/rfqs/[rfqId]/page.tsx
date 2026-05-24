@@ -153,9 +153,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="font-mono text-xs">{fmtMoney(r.total_cents)}</span>
-                      <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>
-                        {r.response_state.replace(/_/g, " ")}
-                      </Badge>
+                      <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>{toTitle(r.response_state)}</Badge>
                     </div>
                   </li>
                 ))}

@@ -29,6 +29,7 @@ import { LetterLifecycleActions } from "./LetterLifecycleActions";
 import { LetterEmailComposer } from "./LetterEmailComposer";
 import { composeOfferLetterEmail } from "@/lib/offer-letters/compose";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -124,7 +125,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {raw.snapshot && (
           <div className="surface px-4 py-3 text-xs text-[var(--text-muted)]">
-            <span className="font-mono tracking-wider uppercase">Snapshot frozen</span>
+            <span className="tracking-wider uppercase">Snapshot Frozen</span>
             {raw.snapshot_at && <> at {fmt.dateTime(raw.snapshot_at)}.</>} The letter below renders from the frozen
             snapshot — even if rate cards, roles, or settings change later, the signed document stays the same.
           </div>
@@ -139,24 +140,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <LetterLifecycleActions letterId={raw.id} status={raw.status} hasMsa={!!activeMsa} />
 
             <section className="surface space-y-3 p-5">
-              <h3 className="text-sm font-semibold tracking-wider uppercase">Resolved Sources (SSOT)</h3>
-              <DefRow k="Recipient" v={`crew_members → ${resolved.recipient_name}`} />
-              <DefRow k="Role" v={`org_roles → ${resolved.role_title} (${resolved.role_slug})`} />
-              <DefRow
-                k="Reports to"
-                v={resolved.reports_to_name ? `crew_members → ${resolved.reports_to_name}` : "—"}
-              />
-              <DefRow k="Venue" v={resolved.venue_name ? `venues → ${resolved.venue_name}` : "—"} />
-              <DefRow k="Rate card" v={resolved.rate_sku ? `rate_card_items → ${resolved.rate_sku}` : "—"} />
-              <DefRow k="Project" v={`projects → ${resolved.project_name}`} />
-              <DefRow
-                k="Signing authority"
-                v={
-                  resolved.signing_authority_name
-                    ? `org_offer_letter_settings → ${resolved.signing_authority_name}`
-                    : "—"
-                }
-              />
+              <h3 className="text-sm font-semibold tracking-wider uppercase">Sources</h3>
+              <DefRow k="Recipient" v={resolved.recipient_name} />
+              <DefRow k="Role" v={`${resolved.role_title} (${resolved.role_slug})`} />
+              <DefRow k="Reports To" v={resolved.reports_to_name ?? "—"} />
+              <DefRow k="Venue" v={resolved.venue_name ?? "—"} />
+              <DefRow k="Rate Card" v={resolved.rate_sku ?? "—"} />
+              <DefRow k="Project" v={resolved.project_name} />
+              <DefRow k="Signing Authority" v={resolved.signing_authority_name ?? "—"} />
             </section>
 
             <section className="surface space-y-3 p-5">
@@ -167,7 +158,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <ul className="space-y-3 text-xs">
                   {activity.map((a) => (
                     <li key={a.id} className="border-l-2 border-[var(--border-default)] pl-3">
-                      <div className="font-mono tracking-wider text-[var(--text-muted)] uppercase">{a.kind}</div>
+                      <div className="tracking-wider text-[var(--text-muted)] uppercase">{toTitle(a.kind)}</div>
                       <div className="text-[var(--text-primary)]">{a.summary}</div>
                       <div className="text-[var(--text-muted)]">
                         {a.actor_label ? `${a.actor_label} · ` : ""}

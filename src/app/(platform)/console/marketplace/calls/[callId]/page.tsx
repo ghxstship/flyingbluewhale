@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow={`Marketplace · ${c.kind.replace("_", " ")}`}
+        eyebrow={`Marketplace · ${toTitle(c.kind)}`}
         title={c.title}
         subtitle={[c.region, c.venue_type].filter(Boolean).join(" · ") || undefined}
         action={

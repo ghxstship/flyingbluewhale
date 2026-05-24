@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -90,7 +91,7 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
                 return (
                   <section key={phase}>
                     <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                      {phase.replace(/_/g, " ")} <span>· {list.length}</span>
+                      {toTitle(phase)} <span>· {list.length}</span>
                     </h2>
                     <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                       {list.map((p) => (
@@ -101,7 +102,7 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
                           >
                             <div className="truncate text-sm font-semibold">{p.name}</div>
                             <div className="mt-1 flex items-center gap-2">
-                              {p.xpms_phase && <Badge variant="muted">{p.xpms_phase.replace(/_/g, " ")}</Badge>}
+                              {p.xpms_phase && <Badge variant="muted">{toTitle(p.xpms_phase)}</Badge>}
                               {p.start_date && (
                                 <span className="font-mono text-[10px] text-[var(--text-muted)]">
                                   {fmt.date(p.start_date)}

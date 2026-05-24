@@ -38,6 +38,7 @@ export async function updateKnowledgeArticle(_: State, fd: FormData): Promise<St
   // inlined.
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   if (!expectedUpdatedAt) return { error: STALE_ROW_MESSAGE };
+  const expectedVersion = Number(fd.get("_version") ?? 0) || 0;
   const { data, error } = await supabase
     .from("kb_articles")
     .update({
@@ -45,6 +46,7 @@ export async function updateKnowledgeArticle(_: State, fd: FormData): Promise<St
       slug,
       body_markdown: parsed.data.body_markdown,
       tags: tagList as never,
+      version: expectedVersion + 1,
     })
     .eq("slug", parsed.data.slug_current)
     .eq("org_id", session.orgId)

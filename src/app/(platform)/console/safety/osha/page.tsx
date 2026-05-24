@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -115,9 +116,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
               key: "class",
               header: "Classification",
               render: (r) => (
-                <Badge variant={CLASS_TONE[r.osha_classification] ?? "muted"}>
-                  {r.osha_classification.replace("_", " ")}
-                </Badge>
+                <Badge variant={CLASS_TONE[r.osha_classification] ?? "muted"}>{toTitle(r.osha_classification)}</Badge>
               ),
               filterable: true,
               groupable: true,

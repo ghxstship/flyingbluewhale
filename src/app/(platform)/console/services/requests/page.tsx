@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -140,9 +141,7 @@ export default async function Page() {
               header: "Status",
               render: (r) => (
                 <span className="flex items-center">
-                  <Badge variant={STATUS_TONE[r.status as ServiceRequest["status"]]}>
-                    {String(r.status).replace("_", " ")}
-                  </Badge>
+                  <Badge variant={STATUS_TONE[r.status as ServiceRequest["status"]]}>{toTitle(String(r.status))}</Badge>
                   {(r.status === "open" || r.status === "acknowledged" || r.status === "in_progress") &&
                     slaChip(
                       (r.status === "open" ? r.sla_response_due : r.sla_resolution_due) as string | null,

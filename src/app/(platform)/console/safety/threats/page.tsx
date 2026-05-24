@@ -86,7 +86,7 @@ export default async function Page() {
             {
               key: "likelihood",
               header: "Likelihood",
-              render: (r) => r.likelihood.replace(/_/g, " "),
+              render: (r) => toTitle(r.likelihood),
               accessor: (r) => r.likelihood.replace ?? null,
             },
             { key: "treatment", header: "Treatment", render: (r) => r.treatment, accessor: (r) => r.treatment },

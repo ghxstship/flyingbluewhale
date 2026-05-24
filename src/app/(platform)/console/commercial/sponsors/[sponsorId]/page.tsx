@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { deleteSponsorEntitlement } from "./edit/actions";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -63,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
         ]}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[status] ?? "muted"}>{status.replace(/_/g, " ")}</Badge>
+            <Badge variant={STATUS_TONE[status] ?? "muted"}>{toTitle(status)}</Badge>
             <Button href={`/console/commercial/sponsors/${p.sponsorId}/edit`} size="sm" variant="secondary">
               Edit
             </Button>
@@ -81,7 +82,7 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
           </h2>
           <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Title">{title}</Field>
-            <Field label="Status">{status.replace(/_/g, " ")}</Field>
+            <Field label="Status">{toTitle(status)}</Field>
             <Field label="Quantity">{quantity ?? "—"}</Field>
             <Field label="Due By">{fmtDate(dueBy)}</Field>
           </dl>

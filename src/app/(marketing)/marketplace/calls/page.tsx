@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -72,7 +73,7 @@ export default async function Page() {
                 title={r.title}
                 subtitle={r.org_name}
                 tags={[...r.genre_tags, ...r.trade_categories]}
-                badge={r.kind.replace("_", " ")}
+                badge={toTitle(r.kind)}
                 meta={[
                   r.region,
                   r.venue_type,

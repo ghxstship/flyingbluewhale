@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Deliverable, DeliverableType } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 export const TALENT_TYPES: { type: DeliverableType; label: string }[] = [
   { type: "technical_rider", label: "Technical Rider" },
@@ -25,7 +26,7 @@ export const PRODUCTION_TYPES: { type: DeliverableType; label: string }[] = [
 
 export function labelForType(t: DeliverableType): string {
   const all = [...TALENT_TYPES, ...PRODUCTION_TYPES];
-  return all.find((x) => x.type === t)?.label ?? t.replace(/_/g, " ");
+  return all.find((x) => x.type === t)?.label ?? toTitle(t);
 }
 
 export async function listDeliverables(projectId: string, types?: DeliverableType[]): Promise<Deliverable[]> {

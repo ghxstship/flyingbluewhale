@@ -95,7 +95,7 @@ export default async function MobileDriverPage() {
                       <div className="text-sm leading-snug font-semibold">
                         {r.origin?.name ?? "—"} → {r.destination?.name ?? "—"}
                       </div>
-                      <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                      <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                     </div>
                     <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-[10px] text-[var(--text-muted)]">
                       <span>{r.fleet}</span>

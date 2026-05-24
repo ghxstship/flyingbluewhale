@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { advanceState, deleteAssignment, reassignAssignment } from "./actions";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -92,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   return (
     <>
       <ModuleHeader
-        eyebrow={KIND_LABEL[d.type] ?? d.type.replace(/_/g, " ")}
+        eyebrow={KIND_LABEL[d.type] ?? toTitle(d.type)}
         title={d.title ?? "Untitled"}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
@@ -134,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   <input type="hidden" name="deliverableId" value={d.id} />
                   <input type="hidden" name="next_state" value={next} />
                   <Button type="submit" variant="secondary" size="sm">
-                    → {next.replace(/_/g, " ")}
+                    → {toTitle(next)}
                   </Button>
                 </form>
               ))}

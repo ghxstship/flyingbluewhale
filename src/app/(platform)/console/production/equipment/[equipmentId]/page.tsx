@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { fmtDate, money } from "@/components/detail/DetailShell";
 import { setEquipmentStatus, deleteEquipment } from "../actions";
 import type { EquipmentStatus } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 const NEXT: Record<EquipmentStatus, EquipmentStatus[]> = {
   available: ["reserved", "in_use", "maintenance", "retired"],
@@ -67,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                       : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  Mark {to.replace("_", " ")}
+                  Mark {toTitle(to)}
                 </button>
               </form>
             ))}

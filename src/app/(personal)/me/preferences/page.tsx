@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import { savePreferencesAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -83,7 +84,7 @@ export default async function Page() {
                       defaultChecked={prefs.theme === t}
                       className="accent-[var(--org-primary)]"
                     />
-                    <span className="capitalize">{t}</span>
+                    <span>{toTitle(t)}</span>
                   </label>
                 ))}
               </div>
@@ -104,7 +105,7 @@ export default async function Page() {
                       defaultChecked={prefs.density === d}
                       className="accent-[var(--org-primary)]"
                     />
-                    <span className="capitalize">{d}</span>
+                    <span>{toTitle(d)}</span>
                   </label>
                 ))}
               </div>

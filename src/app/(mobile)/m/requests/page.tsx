@@ -65,7 +65,7 @@ export default async function MobileRequests() {
                   </span>
                 </div>
                 <div className="text-sm font-medium">{r.summary}</div>
-                <div className="font-mono text-[10px] text-[var(--text-muted)]">{r.status.replace("_", " ")}</div>
+                <div className="font-mono text-[10px] text-[var(--text-muted)]">{toTitle(r.status)}</div>
               </Link>
             </li>
           ))

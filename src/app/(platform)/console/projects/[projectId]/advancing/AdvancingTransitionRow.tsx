@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/lib/hooks/useToast";
+import { toTitle } from "@/lib/format";
 
 const NEXT_BUTTONS: Record<string, Array<{ to: string; label: string; variant: "default" | "danger" }>> = {
   submitted: [
@@ -42,7 +43,7 @@ export function AdvancingTransitionRow({ id, status, fulfilled }: { id: string; 
       if (!r.ok || !json.ok) {
         throw new Error(json.error?.message ?? "Transition failed");
       }
-      toast.success(`Moved to ${to.replace("_", " ")}`);
+      toast.success(`Moved to ${toTitle(to)}`);
       router.refresh();
     } catch (e) {
       toast.error("Transition failed", {

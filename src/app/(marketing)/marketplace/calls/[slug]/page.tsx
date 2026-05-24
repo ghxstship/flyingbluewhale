@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">
-          {c.kind.replace("_", " ")} · {c.org_name}
+          {toTitle(c.kind)} · {c.org_name}
         </div>
         <h1 className="hed-2xl mt-4">{c.title}</h1>
         <div className="mt-5 flex flex-wrap gap-2">

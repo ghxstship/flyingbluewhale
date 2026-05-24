@@ -153,7 +153,7 @@ export default async function Page() {
                     <div className="text-sm font-medium">{e.name}</div>
                     <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(e.scheduled_at)}</div>
                   </div>
-                  <Badge variant={KIND_TONE[e.kind] ?? "muted"}>{e.kind.replace(/_/g, " ")}</Badge>
+                  <Badge variant={KIND_TONE[e.kind] ?? "muted"}>{toTitle(e.kind)}</Badge>
                 </li>
               ))
             )}

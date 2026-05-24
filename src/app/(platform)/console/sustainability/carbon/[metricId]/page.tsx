@@ -6,6 +6,7 @@ import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteMetric } from "./edit/actions";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ metricId: str
         <dl className="surface grid grid-cols-1 gap-3 p-6 sm:grid-cols-2">
           {Object.entries(fields).map(([k, v]) => (
             <div key={k} className="flex flex-col gap-1">
-              <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">{k.replace(/_/g, " ")}</dt>
+              <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">{toTitle(k)}</dt>
               <dd className="font-mono text-xs break-all">
                 {v === null || v === undefined ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v)}
               </dd>

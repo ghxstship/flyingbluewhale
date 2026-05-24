@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <Badge variant={c.severity === "urgent" ? "error" : "warning"}>{toTitle(c.severity)}</Badge>
-                    <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{c.status.replace(/_/g, " ")}</Badge>
+                    <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
                   </div>
                 </li>
               ))}

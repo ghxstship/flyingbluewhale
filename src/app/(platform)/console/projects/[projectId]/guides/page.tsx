@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { getProject } from "@/lib/db/projects";
 import { listGuides, PERSONA_TIERS } from "@/lib/db/guides";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 import type { GuidePersona } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -34,7 +35,7 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
             return (
               <Link key={p} href={`/console/projects/${projectId}/guides/${p}`} className="surface hover-lift p-5">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold capitalize">{p}</div>
+                  <div className="text-sm font-semibold">{toTitle(p)}</div>
                   {existing?.published ? (
                     <Badge variant="success">Live</Badge>
                   ) : existing ? (

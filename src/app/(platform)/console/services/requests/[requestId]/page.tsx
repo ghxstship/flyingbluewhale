@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
         <div className="surface p-5">
           <div className="flex items-center gap-3">
             <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
-            <Badge variant={STATUS[r.status]}>{r.status.replace("_", " ")}</Badge>
+            <Badge variant={STATUS[r.status]}>{toTitle(r.status)}</Badge>
             <span className="font-mono text-xs text-[var(--text-muted)]">{r.category}</span>
           </div>
           {r.description && (
@@ -185,7 +185,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
                       {new Date(e.occurred_at).toLocaleTimeString()}
                     </span>
                     <span className="flex-1">
-                      <Badge variant="muted">{e.kind.replace("_", " ")}</Badge>
+                      <Badge variant="muted">{toTitle(e.kind)}</Badge>
                       {(transition || note) && (
                         <span className="ml-2 text-[var(--text-secondary)]">
                           {[transition, note].filter(Boolean).join(" · ")}

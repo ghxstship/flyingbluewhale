@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -218,7 +219,7 @@ export default async function DatamapPage() {
                   </td>
                   <td className="text-xs text-[var(--text-secondary)]">{r.processors.join(", ")}</td>
                   <td className="text-xs">{r.retention}</td>
-                  <td className="text-xs capitalize">{r.legal_basis.replace("_", " ")}</td>
+                  <td className="text-xs">{toTitle(r.legal_basis)}</td>
                 </tr>
               ))}
             </tbody>

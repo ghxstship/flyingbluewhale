@@ -6,6 +6,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +78,7 @@ export default async function MobileGuardPage() {
                     {r.cadence_minutes ? ` · every ${r.cadence_minutes}m` : ""}
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                     {r.next_run_at && r.status === "scheduled" && (
                       <Badge variant="muted">Next {fmtTime(r.next_run_at)}</Badge>
                     )}

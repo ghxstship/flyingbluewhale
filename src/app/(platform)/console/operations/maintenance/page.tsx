@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -164,7 +165,7 @@ export default async function Page() {
                       >
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <Badge variant={KIND_TONE[j.kind]}>{j.kind.replace("_", " ")}</Badge>
+                            <Badge variant={KIND_TONE[j.kind]}>{toTitle(j.kind)}</Badge>
                             <span className="font-mono text-[10px] text-[var(--text-muted)]">{j.target_kind}</span>
                             {j.source === "credential" && <Badge variant="muted">auto</Badge>}
                           </div>

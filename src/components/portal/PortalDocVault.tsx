@@ -5,6 +5,7 @@ import { fmtDate } from "@/components/detail/DetailShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { DeliverableType } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 /**
  * <PortalDocVault> — shared per-persona document vault primitive.
@@ -87,7 +88,7 @@ export async function PortalDocVault({
           <tr key={r.id}>
             <td>{r.title ?? "Untitled"}</td>
             <td>
-              <Badge variant="muted">{r.type.replace(/_/g, " ")}</Badge>
+              <Badge variant="muted">{toTitle(r.type)}</Badge>
             </td>
             <td className="font-mono">{r.version}</td>
             <td>

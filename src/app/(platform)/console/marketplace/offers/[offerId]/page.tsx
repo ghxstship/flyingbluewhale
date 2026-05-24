@@ -75,7 +75,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
               </dd>
               <dt className="text-[var(--text-secondary)]">Balance</dt>
               <dd className="font-mono">
-                {formatMoney(balanceCents)} on {o.balance_terms.replace("_", " ")}
+                {formatMoney(balanceCents)} on {toTitle(o.balance_terms)}
               </dd>
               <dt className="text-[var(--text-secondary)]">Slot</dt>
               <dd>{o.slot_start ? `${new Date(o.slot_start).toLocaleString()}` : "—"}</dd>

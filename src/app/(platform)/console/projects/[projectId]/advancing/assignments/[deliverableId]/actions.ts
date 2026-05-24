@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { writeInbox } from "@/lib/inbox";
+import { toTitle } from "@/lib/format";
 
 async function guardAssignment(projectId: string, deliverableId: string, orgId: string) {
   const supabase = await createClient();
@@ -76,7 +77,7 @@ export async function advanceState(fd: FormData): Promise<void> {
       sourceType: "deliverable_state_transitions",
       sourceId: crypto.randomUUID(),
       actorId: session.userId,
-      title: `Advancing item ${parsed.next_state.replace(/_/g, " ")}`,
+      title: `Advancing item ${toTitle(parsed.next_state)}`,
       body: assignment.title ?? "",
       href: "/m/advances",
     });

@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { RunActions } from "./RunActions";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -91,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ runId: string
             {run.vehicle_ref && <span>· {run.vehicle_ref}</span>}
           </div>
         </div>
-        <Badge variant={tone}>{run.status.replace(/_/g, " ")}</Badge>
+        <Badge variant={tone}>{toTitle(run.status)}</Badge>
       </div>
 
       <section className="mt-5 grid grid-cols-2 gap-2">

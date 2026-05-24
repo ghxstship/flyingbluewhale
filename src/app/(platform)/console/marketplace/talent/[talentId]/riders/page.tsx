@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -75,9 +76,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             if (list.length === 0) return null;
             return (
               <section key={kind} className="surface p-5">
-                <h2 className="mb-3 text-sm font-semibold tracking-wide capitalize uppercase">
-                  {kind.replace("_", " ")}
-                </h2>
+                <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">{toTitle(kind)}</h2>
                 <ul className="divide-y divide-[var(--border-subtle)]">
                   {list.map((r) => (
                     <li key={r.id} className="flex items-center justify-between py-2 text-sm">

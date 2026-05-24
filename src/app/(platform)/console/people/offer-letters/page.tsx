@@ -35,14 +35,14 @@ export default async function OfferLettersPage() {
       <ModuleHeader
         eyebrow="People"
         title="Offer Letters"
-        subtitle={`${rows.length} ${rows.length === 1 ? "letter" : "letters"} · ${counts["accepted"] ?? 0} accepted · ${counts["draft"] ?? 0} Draft`}
+        subtitle={`${rows.length} ${rows.length === 1 ? "Letter" : "Letters"} · ${counts["accepted"] ?? 0} Accepted · ${counts["draft"] ?? 0} Draft`}
       />
       <div className="page-content">
         <DataTable<OfferLetterResolved>
           rows={rows}
           rowHref={(r) => `/console/people/offer-letters/${r.id}`}
-          emptyLabel="No offer letters yet"
-          emptyDescription="Letters seed from the project crew roster. Run seed_salvage_city_ssot('demo') to populate Salvage City."
+          emptyLabel="No Offer Letters Yet"
+          emptyDescription="Letters seed from the project crew roster. Add crew to a project and letters appear here."
           columns={[
             {
               key: "recipient",

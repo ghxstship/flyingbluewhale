@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
+import { toTitle } from "@/lib/format";
 import { updateFormDefAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -107,10 +108,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
             <label className="text-xs font-medium text-[var(--text-secondary)]">Status</label>
             <div className="mt-1.5 grid grid-cols-3 gap-1.5">
               {(["draft", "published", "archived"] as const).map((s) => (
-                <label
-                  key={s}
-                  className="surface hover-lift flex cursor-pointer items-center gap-2 px-3 py-2 text-sm capitalize"
-                >
+                <label key={s} className="surface hover-lift flex cursor-pointer items-center gap-2 px-3 py-2 text-sm">
                   <input
                     type="radio"
                     name="status"
@@ -118,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
                     defaultChecked={form.status === s}
                     className="accent-[var(--org-primary)]"
                   />
-                  {s}
+                  {toTitle(s)}
                 </label>
               ))}
             </div>

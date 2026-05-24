@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -91,7 +92,7 @@ export default async function MobilePunchPage() {
                       <p className="mt-1 line-clamp-2 text-xs text-[var(--text-secondary)]">{r.description}</p>
                     )}
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                      <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                       <Badge variant="muted">{PRIORITY_LABEL[r.priority] ?? `P${r.priority}`}</Badge>
                       {r.project?.name && <Badge variant="muted">{r.project.name}</Badge>}
                       {overdue && <Badge variant="error">Overdue</Badge>}

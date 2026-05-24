@@ -5,6 +5,7 @@ import { LinkAssetForm } from "./LinkAssetForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -91,7 +92,7 @@ export default async function AssetLinkerPage() {
                           {cred?.kind ?? "—"}
                           {cred?.number ? ` · ${cred.number}` : ""}
                         </td>
-                        <td className="text-xs capitalize">{l.asset_kind.replace("_", " ")}</td>
+                        <td className="text-xs">{toTitle(l.asset_kind)}</td>
                         <td className="font-mono text-xs">{l.asset_serial}</td>
                         <td className="font-mono text-xs">{new Date(l.issued_at).toLocaleDateString()}</td>
                         <td>

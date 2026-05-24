@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { LiveDispatchMap, type DispatchPoint } from "./LiveDispatchMap";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -130,7 +131,7 @@ export default async function LiveDispatchPage() {
                                 : "muted"
                         }
                       >
-                        {p.status.replace("_", " ")}
+                        {toTitle(p.status)}
                       </Badge>
                     </td>
                     <td className="font-mono text-xs">

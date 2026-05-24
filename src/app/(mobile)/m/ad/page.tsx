@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -89,7 +90,7 @@ export default async function MobileAdPage() {
                         {m.flight_ref ?? "—"}{" "}
                         {m.carrier ? <span className="text-[var(--text-muted)]">· {m.carrier}</span> : null}
                       </div>
-                      <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{m.status.replace(/_/g, " ")}</Badge>
+                      <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
                     </div>
                     <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
                       Party of {m.party_size}
@@ -126,7 +127,7 @@ export default async function MobileAdPage() {
                         {m.flight_ref ?? "—"}{" "}
                         {m.carrier ? <span className="text-[var(--text-muted)]">· {m.carrier}</span> : null}
                       </div>
-                      <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{m.status.replace(/_/g, " ")}</Badge>
+                      <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
                     </div>
                     <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
                       Party of {m.party_size}

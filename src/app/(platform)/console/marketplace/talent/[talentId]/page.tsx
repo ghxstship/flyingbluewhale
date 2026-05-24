@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { toTitle } from "@/lib/format";
 import { TalentVisibility } from "./TalentVisibility";
 
 export const dynamic = "force-dynamic";
@@ -136,10 +137,10 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             <ul className="divide-y divide-[var(--border-subtle)] text-sm">
               {riders.map((r) => (
                 <li key={r.id} className="flex items-center justify-between py-2">
-                  <span className="capitalize">
-                    {r.kind.replace("_", " ")} · v{r.version}
+                  <span>
+                    {toTitle(r.kind)} · v{r.version}
                   </span>
-                  {r.is_current && <Badge variant="success">current</Badge>}
+                  {r.is_current && <Badge variant="success">Current</Badge>}
                 </li>
               ))}
             </ul>

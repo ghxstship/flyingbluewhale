@@ -68,7 +68,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
     }>) {
       items.push({
         kind: "advancing",
-        title: `${d.type.replace(/_/g, " ")}: ${d.title ?? "Untitled"}`,
+        title: `${toTitle(d.type)}: ${d.title ?? "Untitled"}`,
         state: d.deliverable_state,
         due: d.deadline,
         href: `/p/${slug}/crew/advances`,

@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ChartShell } from "@/components/charts/ChartShell";
 import type { RiskLikelihood, RiskImpact, RiskStatus } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 export type RiskCell = {
   impact: RiskImpact;
@@ -146,7 +147,7 @@ function Legend({ tone, label }: { tone: string; label: string }) {
 }
 
 function pretty(s: string) {
-  return s.replace(/_/g, " ");
+  return toTitle(s);
 }
 
 /**

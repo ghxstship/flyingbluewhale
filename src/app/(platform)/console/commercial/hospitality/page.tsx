@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -150,7 +151,7 @@ export default async function Page() {
                       {e.due_by ? ` · due ${e.due_by}` : ""}
                     </div>
                   </div>
-                  <Badge variant={STATUS_TONE[e.status] ?? "muted"}>{e.status.replace(/_/g, " ")}</Badge>
+                  <Badge variant={STATUS_TONE[e.status] ?? "muted"}>{toTitle(e.status)}</Badge>
                 </li>
               ))}
             </ul>

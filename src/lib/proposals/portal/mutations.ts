@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 import type { ChangeOrderState, RevisionState } from "./types";
+import { toTitle } from "@/lib/format";
 
 type ActorContext = {
   userId: string;
@@ -295,7 +296,7 @@ export async function decideRevisionRound(
     row.proposal_id,
     actor,
     `rev.${decision}`,
-    `Revision round #${row.round_num} (${row.title}): ${decision.replace(/_/g, " ")}.`,
+    `Revision round #${row.round_num} (${row.title}): ${toTitle(decision)}.`,
     { targetKind: "revision_round", targetId: roundId },
   );
 }

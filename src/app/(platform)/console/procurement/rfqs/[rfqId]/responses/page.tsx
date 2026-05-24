@@ -120,9 +120,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
               key: "response_state",
               header: "State",
               render: (r) => (
-                <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>
-                  {r.response_state.replace(/_/g, " ")}
-                </Badge>
+                <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>{toTitle(r.response_state)}</Badge>
               ),
               accessor: (r) => r.response_state,
               filterable: true,

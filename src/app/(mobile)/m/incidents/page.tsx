@@ -102,7 +102,7 @@ export default async function MobileIncidentPage() {
                   {r.location && <div className="mt-1 text-xs text-[var(--text-muted)]">{r.location}</div>}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                   </div>
                 </div>
               </Link>

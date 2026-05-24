@@ -114,7 +114,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
             {
               key: "status",
               header: "Status",
-              render: (r) => r.status.replace(/_/g, " "),
+              render: (r) => toTitle(r.status),
               accessor: (r) => r.status,
               filterable: true,
             },

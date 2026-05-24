@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -109,7 +110,7 @@ export default async function MobileShiftPage() {
                       {s.meal_credit && <Badge variant="success">Meal Credit</Badge>}
                     </div>
                   </div>
-                  <Badge variant={ATT_TONE[s.attendance] ?? "muted"}>{s.attendance.replace(/_/g, " ")}</Badge>
+                  <Badge variant={ATT_TONE[s.attendance] ?? "muted"}>{toTitle(s.attendance)}</Badge>
                 </div>
               </li>
             ))
@@ -131,7 +132,7 @@ export default async function MobileShiftPage() {
                     {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
                   </div>
                 </div>
-                <Badge variant="muted">{s.attendance.replace(/_/g, " ")}</Badge>
+                <Badge variant="muted">{toTitle(s.attendance)}</Badge>
               </li>
             ))}
           </ul>

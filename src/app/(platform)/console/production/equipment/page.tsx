@@ -7,6 +7,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import type { Equipment, EquipmentStatus } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 const STATUS_BG: Record<EquipmentStatus, "success" | "warning" | "info" | "muted" | "error"> = {
   available: "success",
@@ -78,7 +79,7 @@ export default async function EquipmentPage() {
             {
               key: "status",
               header: "Status",
-              render: (r) => <Badge variant={STATUS_BG[r.status]}>{r.status.replace("_", " ")}</Badge>,
+              render: (r) => <Badge variant={STATUS_BG[r.status]}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.status.replace ?? null,

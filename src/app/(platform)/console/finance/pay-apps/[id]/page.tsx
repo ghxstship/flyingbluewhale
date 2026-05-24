@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { transitionPayApp, updatePayAppLine } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`PO ${(app.purchase_order as unknown as { number: string } | null)?.number ?? "—"} · ${(app.vendor as unknown as { name: string | null } | null)?.name ?? "—"} · ${fmt(app.period_start)} — ${fmt(app.period_end)}`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[app.status] ?? "muted"}>{app.status.replace("_", " ")}</Badge>
+            <Badge variant={STATUS_TONE[app.status] ?? "muted"}>{toTitle(app.status)}</Badge>
             {app.status === "draft" && (
               <StatusForm action={transitionPayApp.bind(null, id, "submitted")} label="Submit" />
             )}

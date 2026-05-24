@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -75,9 +76,7 @@ export default async function MobileHandoverPage() {
                       {v.cluster ?? "—"} · cap {v.capacity != null ? fmt.number(v.capacity) : "—"}
                     </div>
                   </div>
-                  <Badge variant={HANDOVER_TONE[v.handover_state] ?? "muted"}>
-                    {v.handover_state.replace(/_/g, " ")}
-                  </Badge>
+                  <Badge variant={HANDOVER_TONE[v.handover_state] ?? "muted"}>{toTitle(v.handover_state)}</Badge>
                 </Link>
               </li>
             ))
@@ -100,7 +99,7 @@ export default async function MobileHandoverPage() {
                   <div className="text-sm">
                     <div className="font-medium">{v.name}</div>
                   </div>
-                  <Badge variant="success">{v.handover_state.replace(/_/g, " ")}</Badge>
+                  <Badge variant="success">{toTitle(v.handover_state)}</Badge>
                 </Link>
               </li>
             ))}

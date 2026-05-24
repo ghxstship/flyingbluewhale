@@ -45,12 +45,12 @@ export function LetterLifecycleActions({
         {status === "draft" && (
           <>
             <Button onClick={send} loading={pending} disabled={sendDisabled}>
-              Mark sent — activate public link
+              Mark Sent — Activate Public Link
             </Button>
             {sendDisabled && (
               <div className="rounded border border-[var(--color-warning)]/40 bg-[var(--color-warning)]/10 p-3 text-xs leading-relaxed">
                 <div className="mb-1 font-medium tracking-wider text-[var(--text-secondary)] uppercase">
-                  MSA required before send
+                  MSA Required Before Send
                 </div>
                 <p>
                   No Master Services Agreement on file for this contractor. Issue an MSA first; the recipient&rsquo;s
@@ -65,12 +65,12 @@ export function LetterLifecycleActions({
         )}
         {status !== "draft" && status !== "withdrawn" && status !== "accepted" && status !== "declined" && (
           <Button variant="secondary" onClick={withdraw} loading={pending}>
-            Withdraw letter
+            Withdraw Letter
           </Button>
         )}
         {status !== "accepted" && status !== "declined" && status !== "withdrawn" && (
           <Button variant="ghost" size="sm" onClick={rotate} loading={pending}>
-            Rotate access code
+            Rotate Access Code
           </Button>
         )}
       </div>

@@ -4,6 +4,7 @@ import * as React from "react";
 import { toast } from "sonner";
 import { Music, Mic, Speaker, Drum, Guitar, Radio, Lightbulb, Square, Trash2, Save, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { toTitle } from "@/lib/format";
 
 /**
  * 2D stage plot editor. SVG-based drag-and-drop — every palette item
@@ -378,7 +379,7 @@ export function StagePlotCanvas({
                     textAnchor="middle"
                     pointerEvents="none"
                   >
-                    {el.kind.replace("_", " ")}
+                    {toTitle(el.kind)}
                   </text>
                 </g>
               );

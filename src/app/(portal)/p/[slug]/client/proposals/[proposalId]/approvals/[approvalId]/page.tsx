@@ -6,6 +6,7 @@ import { resolveProposalContext, getApproval } from "@/lib/proposals/portal/quer
 import { APPROVAL_STATE_LABEL, APPROVAL_STATE_VARIANT } from "@/lib/proposals/portal/types";
 import { timeAgo } from "@/lib/format";
 import { ApprovalSignBlock } from "./ApprovalSignBlock";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +31,7 @@ export default async function Page({
       <header className="surface p-6">
         <div className="flex items-center gap-2">
           <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
-            {approval.kind.replace(/_/g, " ")}
+            {toTitle(approval.kind)}
           </span>
           <Badge variant={APPROVAL_STATE_VARIANT[approval.state]}>{APPROVAL_STATE_LABEL[approval.state]}</Badge>
         </div>

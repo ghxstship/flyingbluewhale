@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -139,7 +140,7 @@ export default async function Page() {
                     </div>
                     <div className="font-mono text-xs text-[var(--text-muted)]">{fmt(r.scheduled_depart)}</div>
                   </div>
-                  <Badge variant="muted">{r.status.replace(/_/g, " ")}</Badge>
+                  <Badge variant="muted">{toTitle(r.status)}</Badge>
                 </li>
               ))}
             </ul>

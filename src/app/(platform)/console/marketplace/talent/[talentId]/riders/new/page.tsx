@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { TALENT_RIDER_KINDS } from "@/lib/marketplace";
 import { createRiderAction } from "../../../new/actions";
+import { toTitle } from "@/lib/format";
 
 export default async function Page({ params }: { params: Promise<{ talentId: string }> }) {
   const { talentId } = await params;
@@ -26,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             <select name="kind" required className="input-base mt-1.5 w-full">
               {TALENT_RIDER_KINDS.map((k) => (
                 <option key={k} value={k}>
-                  {k.replace("_", " ")}
+                  {toTitle(k)}
                 </option>
               ))}
             </select>

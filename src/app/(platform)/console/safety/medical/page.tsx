@@ -107,7 +107,7 @@ export default async function Page() {
               {env.map((e) => (
                 <li key={e.id} className="flex items-center justify-between text-sm">
                   <div>
-                    <span className="font-medium">{e.kind.replace(/_/g, " ")}</span>{" "}
+                    <span className="font-medium">{toTitle(e.kind)}</span>{" "}
                     <span className="font-mono text-xs text-[var(--text-muted)]">since {fmt(e.started_at)}</span>
                   </div>
                   <Badge variant={SEVERITY_TONE[e.severity] ?? "muted"}>{toTitle(e.severity)}</Badge>

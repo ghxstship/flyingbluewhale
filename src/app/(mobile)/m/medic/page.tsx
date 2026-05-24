@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -96,7 +97,7 @@ export default async function MobileMedicPage() {
                   )}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {r.triage && <Badge variant={TRIAGE_TONE[r.triage.toLowerCase()] ?? "muted"}>{r.triage}</Badge>}
-                    {r.disposition && <Badge variant="success">{r.disposition.replace(/_/g, " ")}</Badge>}
+                    {r.disposition && <Badge variant="success">{toTitle(r.disposition)}</Badge>}
                     {r.venue?.name && <Badge variant="muted">{r.venue.name}</Badge>}
                   </div>
                 </div>

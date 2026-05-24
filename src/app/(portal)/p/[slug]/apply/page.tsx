@@ -122,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant={VETTING_TONE[a.vetting] ?? "muted"}>{a.vetting.replace(/_/g, " ")}</Badge>
+                    <Badge variant={VETTING_TONE[a.vetting] ?? "muted"}>{toTitle(a.vetting)}</Badge>
                     <Badge variant={STATE_TONE[a.state] ?? "muted"}>{toTitle(a.state)}</Badge>
                   </div>
                 </li>

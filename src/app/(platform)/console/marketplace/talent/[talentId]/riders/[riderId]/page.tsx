@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
   return (
     <>
       <ModuleHeader
-        eyebrow={`Rider · ${r.kind.replace("_", " ")} v${r.version}`}
+        eyebrow={`Rider · ${toTitle(r.kind)} v${r.version}`}
         title={r.title ?? `${r.kind} v${r.version}`}
         action={
           <div className="flex items-center gap-2">

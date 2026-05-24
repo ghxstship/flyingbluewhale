@@ -119,7 +119,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                     <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
                     {(r.sla_response_breached || r.sla_resolution_breached) && <Badge variant="error">SLA</Badge>}
                   </div>

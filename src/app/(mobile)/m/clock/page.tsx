@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CheckInControls } from "./CheckInControls";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -117,7 +118,7 @@ export default async function CheckInPage() {
                     </div>
                   )}
                 </div>
-                <Badge variant={ATT_TONE[s.attendance]}>{s.attendance.replace("_", " ")}</Badge>
+                <Badge variant={ATT_TONE[s.attendance]}>{toTitle(s.attendance)}</Badge>
               </div>
               <div className="mt-4">
                 <CheckInControls shiftId={s.id} attendance={s.attendance} />

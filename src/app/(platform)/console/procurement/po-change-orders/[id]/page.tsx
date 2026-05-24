@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { transitionPoChangeOrder } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`${po?.number ?? "—"} · ${po?.vendor?.name ?? ""}`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[co.status] ?? "muted"}>{co.status.replace("_", " ")}</Badge>
+            <Badge variant={STATUS_TONE[co.status] ?? "muted"}>{toTitle(co.status)}</Badge>
             {co.status === "proposed" && (
               <StatusForm action={transitionPoChangeOrder.bind(null, id, "submitted")} label="Submit" />
             )}

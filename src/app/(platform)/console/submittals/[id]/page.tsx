@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { stampRevision, addNextRound, closeSubmittal } from "./actions";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`${project} · ${sub.spec_section ?? "no spec section"} · round #${sub.current_round}`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[sub.status] ?? "muted"}>{sub.status.replace(/_/g, " ")}</Badge>
+            <Badge variant={STATUS_TONE[sub.status] ?? "muted"}>{toTitle(sub.status)}</Badge>
             <a
               href={`/console/submittals/${sub.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
@@ -91,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <td className="font-mono text-xs">#{r.round}</td>
                   <td className="font-mono text-xs">{new Date(r.submitted_at).toLocaleDateString()}</td>
                   <td>
-                    <Badge variant={STATUS_TONE[r.stamp] ?? "muted"}>{r.stamp.replace(/_/g, " ")}</Badge>
+                    <Badge variant={STATUS_TONE[r.stamp] ?? "muted"}>{toTitle(r.stamp)}</Badge>
                   </td>
                   <td>{r.stamp_notes ?? "—"}</td>
                 </tr>

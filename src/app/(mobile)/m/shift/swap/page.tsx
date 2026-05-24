@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { requestSwap } from "./actions";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -89,7 +90,7 @@ export default async function MobileShiftSwapPage() {
                     {s.role ? ` · ${s.role}` : ""}
                   </div>
                 </div>
-                <Badge variant="muted">{s.attendance.replace(/_/g, " ")}</Badge>
+                <Badge variant="muted">{toTitle(s.attendance)}</Badge>
               </div>
               <form action={requestSwap} className="mt-3 space-y-2">
                 <input type="hidden" name="shift_id" value={s.id} />

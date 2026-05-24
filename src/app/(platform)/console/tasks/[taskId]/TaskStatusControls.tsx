@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { setTaskStatusAction } from "../actions";
 import type { TaskStatus } from "@/lib/supabase/types";
+import { toTitle } from "@/lib/format";
 
 const NEXT: Partial<Record<TaskStatus, TaskStatus>> = {
   todo: "in_progress",
@@ -28,7 +29,7 @@ export function TaskStatusControls({ id, status }: { id: string; status: TaskSta
             })
           }
         >
-          {pending ? "…" : `→ ${next.replace("_", " ")}`}
+          {pending ? "…" : `→ ${toTitle(next)}`}
         </Button>
       )}
       {status !== "blocked" && status !== "done" && (

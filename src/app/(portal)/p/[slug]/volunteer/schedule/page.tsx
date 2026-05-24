@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -123,7 +124,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                       {s.meal_credit ? " · meal credit" : ""}
                     </div>
                   </div>
-                  <Badge variant={ATTEND_TONE[s.attendance] ?? "muted"}>{s.attendance.replace(/_/g, " ")}</Badge>
+                  <Badge variant={ATTEND_TONE[s.attendance] ?? "muted"}>{toTitle(s.attendance)}</Badge>
                 </li>
               ))}
             </ul>

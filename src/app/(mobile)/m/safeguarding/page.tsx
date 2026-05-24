@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -76,7 +77,7 @@ export default async function SafeguardingPage() {
             reports.map((r) => (
               <li key={r.id} className="surface p-4">
                 <div className="flex items-start justify-between gap-3">
-                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">
                     {fmt.dateParts(r.created_at, { month: "short", day: "numeric" })}
                   </span>

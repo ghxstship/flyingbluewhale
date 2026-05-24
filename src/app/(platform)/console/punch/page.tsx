@@ -195,7 +195,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
                 header: "Status",
                 render: (r) => (
                   <span className="inline-flex items-center gap-2">
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace("_", " ")}</Badge>
+                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                     <DueDateBadge dueAt={r.due_at} closedAt={r.closed_at} status={r.status} iconOnly size="sm" />
                   </span>
                 ),

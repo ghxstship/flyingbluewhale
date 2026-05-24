@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { resolveProposalContext, listApprovals } from "@/lib/proposals/portal/queries";
 import { APPROVAL_STATE_LABEL, APPROVAL_STATE_VARIANT } from "@/lib/proposals/portal/types";
 import { timeAgo } from "@/lib/format";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
-                        {a.kind.replace(/_/g, " ")}
+                        {toTitle(a.kind)}
                       </span>
                       <Badge variant={APPROVAL_STATE_VARIANT[a.state]}>{APPROVAL_STATE_LABEL[a.state]}</Badge>
                     </div>

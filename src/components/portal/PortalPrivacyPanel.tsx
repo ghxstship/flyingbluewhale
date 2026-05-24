@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 
 type DsarRow = {
   id: string;
@@ -147,14 +148,14 @@ export async function PortalPrivacyPanel({
               {dsars.map((d) => (
                 <li key={d.id} className="flex items-center justify-between py-2 text-sm">
                   <div>
-                    <div className="font-medium">{d.kind.replace(/_/g, " ")}</div>
+                    <div className="font-medium">{toTitle(d.kind)}</div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
                       filed {fmt(d.created_at)}
                       {d.due_by ? ` · due ${fmt(d.due_by)}` : ""}
                       {d.fulfilled_at ? ` · fulfilled ${fmt(d.fulfilled_at)}` : ""}
                     </div>
                   </div>
-                  <Badge variant={DSAR_TONE[d.status] ?? "muted"}>{d.status.replace(/_/g, " ")}</Badge>
+                  <Badge variant={DSAR_TONE[d.status] ?? "muted"}>{toTitle(d.status)}</Badge>
                 </li>
               ))}
             </ul>

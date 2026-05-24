@@ -5,6 +5,7 @@ import { AddDomainForm } from "./AddDomainForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -67,7 +68,7 @@ export default async function DomainsPage() {
                   domains.map((d) => (
                     <tr key={d.id}>
                       <td className="font-mono text-xs">{d.hostname}</td>
-                      <td className="text-xs text-[var(--text-secondary)] capitalize">{d.purpose}</td>
+                      <td className="text-xs text-[var(--text-secondary)]">{toTitle(d.purpose)}</td>
                       <td>
                         <Badge variant={d.verified_at ? "success" : "muted"}>
                           {d.verified_at ? "Verified" : "Pending"}

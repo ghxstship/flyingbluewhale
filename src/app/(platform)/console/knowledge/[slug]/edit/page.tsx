@@ -15,6 +15,7 @@ type Article = {
   title: string;
   body_markdown: string;
   tags: string[] | null;
+  version: number;
   updated_at: string;
 };
 
@@ -26,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const { data } = await supabase
     .from("kb_articles")
-    .select("id, slug, title, body_markdown, tags, updated_at")
+    .select("id, slug, title, body_markdown, tags, version, updated_at")
     .eq("slug", slug)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -41,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <ModuleHeader
         eyebrow="Knowledge"
         title={`Edit · ${article.title}`}
-        subtitle="Update title, slug, body, and tags. Body is markdown."
+        subtitle={`v${article.version} on save → v${article.version + 1}. Body is markdown.`}
         breadcrumbs={[
           { label: "Knowledge", href: "/console/knowledge" },
           { label: article.title, href: `/console/knowledge/${article.slug}` },
@@ -57,6 +58,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={article.updated_at} />
+          <input type="hidden" name="_version" defaultValue={article.version} />
           <input type="hidden" name="slug_current" value={article.slug} />
           <Input label="Title" name="title" defaultValue={article.title} required maxLength={300} />
           <Input

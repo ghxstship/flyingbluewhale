@@ -62,7 +62,7 @@ export default async function GovernancePage() {
                 (committees ?? []).map((c) => (
                   <tr key={c.id}>
                     <td>{c.name}</td>
-                    <td className="text-xs text-[var(--text-secondary)]">{c.cadence?.replace("_", " ") ?? "—"}</td>
+                    <td className="text-xs text-[var(--text-secondary)]">{c.cadence ? toTitle(c.cadence) : "—"}</td>
                     <td className="text-xs text-[var(--text-muted)]">{c.charter ?? "—"}</td>
                   </tr>
                 ))

@@ -159,7 +159,7 @@ export default async function Page() {
                       <td className="font-mono text-xs">{fmt(m.actual_at)}</td>
                       <td className="text-end font-mono text-xs">{fmtIntl.number(m.party_size)}</td>
                       <td>
-                        <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{m.status.replace(/_/g, " ")}</Badge>
+                        <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
                       </td>
                     </tr>
                   ))}

@@ -129,7 +129,7 @@ export default async function Page() {
                       </td>
                       <td className="font-mono text-xs">{r.vehicle_ref ?? "—"}</td>
                       <td>
-                        <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{r.status.replace(/_/g, " ")}</Badge>
+                        <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                       </td>
                     </tr>
                   ))}

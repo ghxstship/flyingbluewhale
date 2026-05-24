@@ -72,7 +72,7 @@ export default async function BillingPage() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Plan</div>
-              <div className="mt-1 text-base font-semibold capitalize">{current}</div>
+              <div className="mt-1 text-base font-semibold">{toTitle(current)}</div>
             </div>
             <OpenPortalButton disabled={!stripeConfigured} />
           </div>
@@ -87,7 +87,7 @@ export default async function BillingPage() {
                 className={`surface p-5 ${t.tier === current ? "ring-2 ring-[var(--org-primary)]" : ""}`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold capitalize">{t.tier}</div>
+                  <div className="text-sm font-semibold">{toTitle(t.tier)}</div>
                   {t.tier === current && <Badge variant="brand">Current</Badge>}
                 </div>
                 <div className="mt-2 text-lg font-semibold tracking-tight">{t.price}</div>

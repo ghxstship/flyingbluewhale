@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
       <h1 className="mt-2 text-xl leading-snug font-semibold">{r.summary}</h1>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
-        <Badge variant={STATUS[r.status]}>{r.status.replace("_", " ")}</Badge>
+        <Badge variant={STATUS[r.status]}>{toTitle(r.status)}</Badge>
         <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.category}</span>
       </div>
       {r.description && <div className="surface mt-4 p-4 text-sm whitespace-pre-wrap">{r.description}</div>}

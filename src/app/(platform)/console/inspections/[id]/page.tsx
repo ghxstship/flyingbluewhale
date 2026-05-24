@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { transitionInspection, setInspectionItemResult } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +51,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={(insp.project as unknown as { name: string | null } | null)?.name ?? "No project"}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant="info">{insp.status.replace("_", " ")}</Badge>
+            <Badge variant="info">{toTitle(insp.status)}</Badge>
             <a
               href={`/console/inspections/${insp.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"

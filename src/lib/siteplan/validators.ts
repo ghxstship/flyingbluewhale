@@ -1,5 +1,5 @@
 /**
- * CHARTHOUSE validators — protocol §8.3 (acceptance) + §9 (placement laws).
+ * SITEPLAN validators — protocol §8.3 (acceptance) + §9 (placement laws).
  *
  * Acceptance criteria gate the `issue` transition (the DB RPC also enforces
  * these — this module is the duplicate front-line check that runs before
@@ -11,13 +11,13 @@
 
 import type {
   AcceptanceSnapshot,
-  CharthouseAdjacency,
-  CharthouseBand,
-  CharthouseBandType,
-  CharthousePlacement,
-  CharthouseSheet,
-  CharthouseStation,
-  CharthouseUtility,
+  SitePlanAdjacency,
+  SitePlanBand,
+  SitePlanBandType,
+  SitePlanPlacement,
+  SitePlanSheet,
+  SitePlanStation,
+  SitePlanUtility,
 } from "./types";
 
 /** §8.3 acceptance check items. Order = display order. */
@@ -53,11 +53,11 @@ export function failingAcceptance(snap: AcceptanceSnapshot): AcceptanceFailure[]
  * just warn.
  */
 export function validatePlacementLaws(args: {
-  sheet: Pick<CharthouseSheet, "id">;
-  bands: CharthouseBand[];
-  stations: CharthouseStation[];
-  placements: CharthousePlacement[];
-  utilities: CharthouseUtility[];
+  sheet: Pick<SitePlanSheet, "id">;
+  bands: SitePlanBand[];
+  stations: SitePlanStation[];
+  placements: SitePlanPlacement[];
+  utilities: SitePlanUtility[];
 }): string[] {
   const { bands, placements, utilities } = args;
   const violations: string[] = [];
@@ -135,7 +135,7 @@ export function validatePlacementLaws(args: {
  * Adjacency declaration coverage. Returns the cardinal edges that are
  * missing — useful for the sheet detail page to surface a checklist.
  */
-export function missingAdjacencyEdges(adjacencies: CharthouseAdjacency[]): Array<"N" | "S" | "E" | "W"> {
+export function missingAdjacencyEdges(adjacencies: SitePlanAdjacency[]): Array<"N" | "S" | "E" | "W"> {
   const declared = new Set(adjacencies.map((a) => a.edge));
   return (["N", "S", "E", "W"] as const).filter((e) => !declared.has(e));
 }
@@ -143,7 +143,7 @@ export function missingAdjacencyEdges(adjacencies: CharthouseAdjacency[]): Array
 /**
  * Band-type validity guard — used by form schemas. Closed enum check.
  */
-export function isBandType(s: string): s is CharthouseBandType {
+export function isBandType(s: string): s is SitePlanBandType {
   return [
     "appliance",
     "service",
@@ -155,5 +155,5 @@ export function isBandType(s: string): s is CharthouseBandType {
     "bench",
     "tech",
     "barricade",
-  ].includes(s as CharthouseBandType);
+  ].includes(s as SitePlanBandType);
 }

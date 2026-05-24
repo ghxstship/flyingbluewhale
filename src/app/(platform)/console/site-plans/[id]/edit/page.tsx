@@ -6,16 +6,16 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import {
-  CHARTHOUSE_ACCESSIBILITY,
-  CHARTHOUSE_SECURITY_LEVELS,
-  CHARTHOUSE_SENSITIVITY,
-  CHARTHOUSE_SHEET_TYPES,
-  CHARTHOUSE_SHELL_TYPES,
-  CHARTHOUSE_SUSTAINABILITY,
-  CHARTHOUSE_WEATHER_EXPOSURE,
-  type CharthouseSheet,
-} from "@/lib/charthouse/types";
-import { updateCharthouseSheet } from "./actions";
+  SITEPLAN_ACCESSIBILITY,
+  SITEPLAN_SECURITY_LEVELS,
+  SITEPLAN_SENSITIVITY,
+  SITEPLAN_SHEET_TYPES,
+  SITEPLAN_SHELL_TYPES,
+  SITEPLAN_SUSTAINABILITY,
+  SITEPLAN_WEATHER_EXPOSURE,
+  type SitePlanSheet,
+} from "@/lib/siteplan/types";
+import { updateSitePlanSheet } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     supabase.from("events").select("id, name").eq("org_id", session.orgId).order("name").limit(200),
   ]);
 
-  const sp = data as unknown as CharthouseSheet | null;
+  const sp = data as unknown as SitePlanSheet | null;
   if (!sp) notFound();
 
   const dims = sp.shell_dimensions;
@@ -88,7 +88,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content max-w-3xl">
         <FormShell
-          action={updateCharthouseSheet}
+          action={updateSitePlanSheet}
           cancelHref={`/console/site-plans/${sp.id}`}
           submitLabel="Save Sheet"
           dirtyGuard
@@ -128,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   Sheet Type<span className="ms-0.5 text-[var(--color-error)]">*</span>
                 </span>
                 <select name="sheet_type" required defaultValue={sp.sheet_type} className={INPUT}>
-                  {CHARTHOUSE_SHEET_TYPES.map((t) => (
+                  {SITEPLAN_SHEET_TYPES.map((t) => (
                     <option key={t} value={t}>
                       {t}
                     </option>
@@ -172,7 +172,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <span className={LBL}>Shell Type</span>
                 <select name="shell_type" defaultValue={sp.shell_type ?? ""} className={INPUT}>
                   <option value="">—</option>
-                  {CHARTHOUSE_SHELL_TYPES.map((s) => (
+                  {SITEPLAN_SHELL_TYPES.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>
@@ -236,7 +236,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <span className={LBL}>Sustainability</span>
                 <select name="sustainability_tag" defaultValue={sp.sustainability_tag ?? ""} className={INPUT}>
                   <option value="">—</option>
-                  {CHARTHOUSE_SUSTAINABILITY.map((v) => (
+                  {SITEPLAN_SUSTAINABILITY.map((v) => (
                     <option key={v} value={v}>
                       {v}
                     </option>
@@ -247,7 +247,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <span className={LBL}>Accessibility</span>
                 <select name="accessibility_tag" defaultValue={sp.accessibility_tag ?? ""} className={INPUT}>
                   <option value="">—</option>
-                  {CHARTHOUSE_ACCESSIBILITY.map((v) => (
+                  {SITEPLAN_ACCESSIBILITY.map((v) => (
                     <option key={v} value={v}>
                       {v}
                     </option>
@@ -258,7 +258,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <span className={LBL}>Weather</span>
                 <select name="weather_exposure" defaultValue={sp.weather_exposure ?? ""} className={INPUT}>
                   <option value="">—</option>
-                  {CHARTHOUSE_WEATHER_EXPOSURE.map((v) => (
+                  {SITEPLAN_WEATHER_EXPOSURE.map((v) => (
                     <option key={v} value={v}>
                       {v}
                     </option>
@@ -269,7 +269,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <span className={LBL}>Security</span>
                 <select name="security_level" defaultValue={sp.security_level ?? ""} className={INPUT}>
                   <option value="">—</option>
-                  {CHARTHOUSE_SECURITY_LEVELS.map((v) => (
+                  {SITEPLAN_SECURITY_LEVELS.map((v) => (
                     <option key={v} value={v}>
                       {v}
                     </option>
@@ -280,7 +280,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <span className={LBL}>Sensitivity</span>
                 <select name="sensitivity" defaultValue={sp.sensitivity ?? ""} className={INPUT}>
                   <option value="">—</option>
-                  {CHARTHOUSE_SENSITIVITY.map((v) => (
+                  {SITEPLAN_SENSITIVITY.map((v) => (
                     <option key={v} value={v}>
                       {v}
                     </option>

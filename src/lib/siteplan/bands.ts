@@ -1,13 +1,13 @@
 /**
- * CHARTHOUSE Band Vocabulary — protocol §6.
+ * SITEPLAN Band Vocabulary — protocol §6.
  *
  * The blue line / orange line in the Salvage City sheet are not arbitrary
  * colors. They are instances of a closed enum of band types. Every linear
- * surface that can hold equipment or stations in any CHARTHOUSE plan is
+ * surface that can hold equipment or stations in any SITEPLAN plan is
  * one of these — new band types enter via UWCP, never inline.
  */
 
-import type { CharthouseBandType } from "./types";
+import type { SitePlanBandType } from "./types";
 
 export type BandMeta = {
   token: string;
@@ -16,7 +16,7 @@ export type BandMeta = {
   typicalUse: string;
 };
 
-export const BAND_VOCAB: Record<CharthouseBandType, BandMeta> = {
+export const BAND_VOCAB: Record<SitePlanBandType, BandMeta> = {
   appliance: {
     token: "band.appliance",
     defaultColor: "#1d4ed8",

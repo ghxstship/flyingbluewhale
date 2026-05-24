@@ -1,11 +1,11 @@
 /**
- * CHARTHOUSE TS types — schema-anchored to migration 0057_charthouse_v1.sql.
+ * SITEPLAN TS types — schema-anchored to migration 0057_siteplan_v1.sql.
  *
- * These mirror the protocol §4 data model. Keep enum tuples (CHARTHOUSE_*)
+ * These mirror the protocol §4 data model. Keep enum tuples (SITEPLAN_*)
  * as `as const` arrays so they double as runtime values for forms.
  */
 
-export const CHARTHOUSE_SHEET_TYPES = [
+export const SITEPLAN_SHEET_TYPES = [
   "site_plan",
   "floor_plan",
   "rcp",
@@ -16,20 +16,13 @@ export const CHARTHOUSE_SHEET_TYPES = [
   "section",
   "as_built",
 ] as const;
-export type CharthouseSheetType = (typeof CHARTHOUSE_SHEET_TYPES)[number];
+export type SitePlanSheetType = (typeof SITEPLAN_SHEET_TYPES)[number];
 
 /** Protocol §5 — lifecycle states. */
-export const CHARTHOUSE_DOCUMENT_STATES = [
-  "draft",
-  "in_review",
-  "approved",
-  "issued",
-  "superseded",
-  "as_built",
-] as const;
-export type CharthouseDocumentState = (typeof CHARTHOUSE_DOCUMENT_STATES)[number];
+export const SITEPLAN_DOCUMENT_STATES = ["draft", "in_review", "approved", "issued", "superseded", "as_built"] as const;
+export type SitePlanDocumentState = (typeof SITEPLAN_DOCUMENT_STATES)[number];
 
-export const CHARTHOUSE_SHELL_TYPES = [
+export const SITEPLAN_SHELL_TYPES = [
   "tent",
   "container",
   "building",
@@ -39,10 +32,10 @@ export const CHARTHOUSE_SHELL_TYPES = [
   "riser",
   "open",
 ] as const;
-export type CharthouseShellType = (typeof CHARTHOUSE_SHELL_TYPES)[number];
+export type SitePlanShellType = (typeof SITEPLAN_SHELL_TYPES)[number];
 
 /** Protocol §6 — closed band-vocabulary enum. */
-export const CHARTHOUSE_BAND_TYPES = [
+export const SITEPLAN_BAND_TYPES = [
   "appliance",
   "service",
   "bar",
@@ -54,15 +47,15 @@ export const CHARTHOUSE_BAND_TYPES = [
   "tech",
   "barricade",
 ] as const;
-export type CharthouseBandType = (typeof CHARTHOUSE_BAND_TYPES)[number];
+export type SitePlanBandType = (typeof SITEPLAN_BAND_TYPES)[number];
 
-export const CHARTHOUSE_EDGES = ["N", "S", "E", "W", "L_NE", "L_SE", "L_SW", "L_NW"] as const;
-export type CharthouseEdge = (typeof CHARTHOUSE_EDGES)[number];
+export const SITEPLAN_EDGES = ["N", "S", "E", "W", "L_NE", "L_SE", "L_SW", "L_NW"] as const;
+export type SitePlanEdge = (typeof SITEPLAN_EDGES)[number];
 
 export const CARDINAL_EDGES = ["N", "S", "E", "W"] as const;
 export type CardinalEdge = (typeof CARDINAL_EDGES)[number];
 
-export const CHARTHOUSE_UTILITY_SERVICES = [
+export const SITEPLAN_UTILITY_SERVICES = [
   "power_120v_20a",
   "power_120v_30a",
   "power_208v_30a",
@@ -79,9 +72,9 @@ export const CHARTHOUSE_UTILITY_SERVICES = [
   "comms_intercom",
   "compressed_air",
 ] as const;
-export type CharthouseUtilityService = (typeof CHARTHOUSE_UTILITY_SERVICES)[number];
+export type SitePlanUtilityService = (typeof SITEPLAN_UTILITY_SERVICES)[number];
 
-export const CHARTHOUSE_ADJACENCY_RELS = [
+export const SITEPLAN_ADJACENCY_RELS = [
   "feeds",
   "egress_to",
   "service_from",
@@ -91,14 +84,14 @@ export const CHARTHOUSE_ADJACENCY_RELS = [
   "public_facing",
   "restricted",
 ] as const;
-export type CharthouseAdjacencyRel = (typeof CHARTHOUSE_ADJACENCY_RELS)[number];
+export type SitePlanAdjacencyRel = (typeof SITEPLAN_ADJACENCY_RELS)[number];
 
 /** Protocol §11 — cross-cutting tags. Never structural. */
-export const CHARTHOUSE_SUSTAINABILITY = ["none", "aspirational", "committed", "certified"] as const;
-export const CHARTHOUSE_ACCESSIBILITY = ["ada_compliant", "partial", "none"] as const;
-export const CHARTHOUSE_WEATHER_EXPOSURE = ["enclosed", "covered", "open"] as const;
-export const CHARTHOUSE_SECURITY_LEVELS = ["public", "restricted", "talent_only", "exec"] as const;
-export const CHARTHOUSE_SENSITIVITY = ["low", "med", "high"] as const;
+export const SITEPLAN_SUSTAINABILITY = ["none", "aspirational", "committed", "certified"] as const;
+export const SITEPLAN_ACCESSIBILITY = ["ada_compliant", "partial", "none"] as const;
+export const SITEPLAN_WEATHER_EXPOSURE = ["enclosed", "covered", "open"] as const;
+export const SITEPLAN_SECURITY_LEVELS = ["public", "restricted", "talent_only", "exec"] as const;
+export const SITEPLAN_SENSITIVITY = ["low", "med", "high"] as const;
 
 /** Shell dimensions JSONB shape stored on site_plans.shell_dimensions. */
 export type ShellDimensions = {
@@ -108,12 +101,12 @@ export type ShellDimensions = {
   gross_sqft?: number;
 };
 
-/** Computed acceptance snapshot — mirrors v_charthouse_sheet_acceptance. */
+/** Computed acceptance snapshot — mirrors v_siteplan_sheet_acceptance. */
 export type AcceptanceSnapshot = {
   sheet_id: string;
   org_id: string;
   atom_id: string | null;
-  document_state: CharthouseDocumentState;
+  document_state: SitePlanDocumentState;
   has_atom_id: boolean;
   has_sheet_type: boolean;
   has_primary_class: boolean;
@@ -128,7 +121,7 @@ export type AcceptanceSnapshot = {
 };
 
 /** Sheet row shape after the 0057 enrichment. */
-export type CharthouseSheet = {
+export type SitePlanSheet = {
   id: string;
   org_id: string;
   project_id: string | null;
@@ -138,18 +131,18 @@ export type CharthouseSheet = {
   title: string;
   discipline: string;
   notes: string | null;
-  // CHARTHOUSE enrichment
+  // SITEPLAN enrichment
   atom_id: string | null;
-  sheet_type: CharthouseSheetType;
+  sheet_type: SitePlanSheetType;
   primary_class: number | null;
   secondary_classes: number[] | null;
   tier_primary: number | null;
   tier_secondary: unknown;
-  shell_type: CharthouseShellType | null;
+  shell_type: SitePlanShellType | null;
   shell_dimensions: ShellDimensions | null;
   orientation_deg: number | null;
   scale: string | null;
-  document_state: CharthouseDocumentState;
+  document_state: SitePlanDocumentState;
   superseded_by: string | null;
   issued_at: string | null;
   approved_at: string | null;
@@ -170,7 +163,7 @@ export type CharthouseSheet = {
   deleted_at: string | null;
 };
 
-export type CharthouseZoneRegion = {
+export type SitePlanZoneRegion = {
   id: string;
   org_id: string;
   sheet_id: string;
@@ -184,13 +177,13 @@ export type CharthouseZoneRegion = {
   deleted_at: string | null;
 };
 
-export type CharthouseBand = {
+export type SitePlanBand = {
   id: string;
   org_id: string;
   sheet_id: string;
   region_id: string | null;
-  band_type: CharthouseBandType;
-  edge: CharthouseEdge;
+  band_type: SitePlanBandType;
+  edge: SitePlanEdge;
   depth_in: number | null;
   path: unknown;
   color_token: string | null;
@@ -200,7 +193,7 @@ export type CharthouseBand = {
   deleted_at: string | null;
 };
 
-export type CharthouseStation = {
+export type SitePlanStation = {
   id: string;
   org_id: string;
   sheet_id: string;
@@ -215,7 +208,7 @@ export type CharthouseStation = {
   deleted_at: string | null;
 };
 
-export type CharthousePlacement = {
+export type SitePlanPlacement = {
   id: string;
   org_id: string;
   sheet_id: string;
@@ -234,12 +227,12 @@ export type CharthousePlacement = {
   deleted_at: string | null;
 };
 
-export type CharthouseUtility = {
+export type SitePlanUtility = {
   id: string;
   org_id: string;
   sheet_id: string;
   drop_code: string;
-  service_type: CharthouseUtilityService;
+  service_type: SitePlanUtilityService;
   loads: string[];
   location: { x: number; y: number } | null;
   circuit_id: string | null;
@@ -249,22 +242,22 @@ export type CharthouseUtility = {
   deleted_at: string | null;
 };
 
-export type CharthouseAdjacency = {
+export type SitePlanAdjacency = {
   id: string;
   org_id: string;
   sheet_id: string;
-  edge: CharthouseEdge;
+  edge: SitePlanEdge;
   adjacent_sheet_id: string | null;
   adjacent_label: string | null;
-  relationship: CharthouseAdjacencyRel;
+  relationship: SitePlanAdjacencyRel;
   notes: string | null;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
 };
 
-/** Lifecycle transitions accepted by the charthouse_transition_state RPC. */
-export const CHARTHOUSE_TRANSITIONS = [
+/** Lifecycle transitions accepted by the siteplan_transition_state RPC. */
+export const SITEPLAN_TRANSITIONS = [
   "submit",
   "approve",
   "reject",
@@ -273,4 +266,4 @@ export const CHARTHOUSE_TRANSITIONS = [
   "supersede",
   "field_change",
 ] as const;
-export type CharthouseTransition = (typeof CHARTHOUSE_TRANSITIONS)[number];
+export type SitePlanTransition = (typeof SITEPLAN_TRANSITIONS)[number];

@@ -3,8 +3,8 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { CHARTHOUSE_SHEET_TYPES, CHARTHOUSE_SHELL_TYPES } from "@/lib/charthouse/types";
-import { PRESETS } from "@/lib/charthouse/presets";
+import { SITEPLAN_SHEET_TYPES, SITEPLAN_SHELL_TYPES } from "@/lib/siteplan/types";
+import { PRESETS } from "@/lib/siteplan/presets";
 import { createSitePlanSheet } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -134,7 +134,7 @@ export default async function Page() {
                   Sheet Type<span className="ms-0.5 text-[var(--color-error)]">*</span>
                 </span>
                 <select name="sheet_type" required defaultValue="floor_plan" className={INPUT}>
-                  {CHARTHOUSE_SHEET_TYPES.map((t) => (
+                  {SITEPLAN_SHEET_TYPES.map((t) => (
                     <option key={t} value={t}>
                       {t}
                     </option>
@@ -175,7 +175,7 @@ export default async function Page() {
                 <span className={LBL}>Shell Type</span>
                 <select name="shell_type" defaultValue="tent" className={INPUT}>
                   <option value="">—</option>
-                  {CHARTHOUSE_SHELL_TYPES.map((s) => (
+                  {SITEPLAN_SHELL_TYPES.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>

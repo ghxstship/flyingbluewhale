@@ -9,22 +9,22 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import {
-  CHARTHOUSE_ADJACENCY_RELS,
-  CHARTHOUSE_BAND_TYPES,
-  CHARTHOUSE_EDGES,
-  CHARTHOUSE_UTILITY_SERVICES,
-  type CharthouseAdjacency,
-  type CharthouseBand,
-  type CharthousePlacement,
-  type CharthouseSheet,
-  type CharthouseStation,
-  type CharthouseUtility,
-  type CharthouseZoneRegion,
-} from "@/lib/charthouse/types";
-import { STATE_LABEL, STATE_TONE, transitionsFromState, TRANSITION_LABEL } from "@/lib/charthouse/state";
-import { BAND_VOCAB } from "@/lib/charthouse/bands";
-import { ACCEPTANCE_ITEMS } from "@/lib/charthouse/validators";
-import { missingAdjacencyEdges, validatePlacementLaws } from "@/lib/charthouse/validators";
+  SITEPLAN_ADJACENCY_RELS,
+  SITEPLAN_BAND_TYPES,
+  SITEPLAN_EDGES,
+  SITEPLAN_UTILITY_SERVICES,
+  type SitePlanAdjacency,
+  type SitePlanBand,
+  type SitePlanPlacement,
+  type SitePlanSheet,
+  type SitePlanStation,
+  type SitePlanUtility,
+  type SitePlanZoneRegion,
+} from "@/lib/siteplan/types";
+import { STATE_LABEL, STATE_TONE, transitionsFromState, TRANSITION_LABEL } from "@/lib/siteplan/state";
+import { BAND_VOCAB } from "@/lib/siteplan/bands";
+import { ACCEPTANCE_ITEMS } from "@/lib/siteplan/validators";
+import { missingAdjacencyEdges, validatePlacementLaws } from "@/lib/siteplan/validators";
 import { TransitionBar } from "./TransitionBar";
 import { InlineAddForm } from "./InlineAddForm";
 import {
@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .is("deleted_at", null)
     .maybeSingle();
   if (!sheet) notFound();
-  const sp = sheet as unknown as CharthouseSheet & {
+  const sp = sheet as unknown as SitePlanSheet & {
     project: { name: string | null } | null;
     venue: { name: string | null } | null;
     event: { name: string | null } | null;
@@ -82,13 +82,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const [regions, bands, stations, placements, utilities, adjacencies, acceptance, revisions, pins] = await Promise.all(
     [
-      loose.from("charthouse_zone_region").select("*").eq("sheet_id", id).order("code"),
-      loose.from("charthouse_band").select("*").eq("sheet_id", id).order("created_at"),
-      loose.from("charthouse_station").select("*").eq("sheet_id", id).order("station_code"),
-      loose.from("charthouse_placement").select("*").eq("sheet_id", id).order("tag"),
-      loose.from("charthouse_utility").select("*").eq("sheet_id", id).order("drop_code"),
-      loose.from("charthouse_adjacency").select("*").eq("sheet_id", id).order("edge"),
-      loose.from("v_charthouse_sheet_acceptance").select("*").eq("sheet_id", id).maybeSingle(),
+      loose.from("siteplan_zone_region").select("*").eq("sheet_id", id).order("code"),
+      loose.from("siteplan_band").select("*").eq("sheet_id", id).order("created_at"),
+      loose.from("siteplan_station").select("*").eq("sheet_id", id).order("station_code"),
+      loose.from("siteplan_placement").select("*").eq("sheet_id", id).order("tag"),
+      loose.from("siteplan_utility").select("*").eq("sheet_id", id).order("drop_code"),
+      loose.from("siteplan_adjacency").select("*").eq("sheet_id", id).order("edge"),
+      loose.from("v_siteplan_sheet_acceptance").select("*").eq("sheet_id", id).maybeSingle(),
       supabase
         .from("site_plan_revisions")
         .select("*")
@@ -98,12 +98,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     ],
   );
 
-  const regionRows = (regions.data ?? []) as unknown as CharthouseZoneRegion[];
-  const bandRows = (bands.data ?? []) as unknown as CharthouseBand[];
-  const stationRows = (stations.data ?? []) as unknown as CharthouseStation[];
-  const placementRows = (placements.data ?? []) as unknown as CharthousePlacement[];
-  const utilityRows = (utilities.data ?? []) as unknown as CharthouseUtility[];
-  const adjRows = (adjacencies.data ?? []) as unknown as CharthouseAdjacency[];
+  const regionRows = (regions.data ?? []) as unknown as SitePlanZoneRegion[];
+  const bandRows = (bands.data ?? []) as unknown as SitePlanBand[];
+  const stationRows = (stations.data ?? []) as unknown as SitePlanStation[];
+  const placementRows = (placements.data ?? []) as unknown as SitePlanPlacement[];
+  const utilityRows = (utilities.data ?? []) as unknown as SitePlanUtility[];
+  const adjRows = (adjacencies.data ?? []) as unknown as SitePlanAdjacency[];
   const acc = acceptance.data as
     | (Record<string, boolean | string | null> & { sheet_id: string; document_state: string })
     | null;
@@ -318,14 +318,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 label: "Type",
                 kind: "select",
                 required: true,
-                options: CHARTHOUSE_BAND_TYPES.map((t) => ({ value: t, label: t })),
+                options: SITEPLAN_BAND_TYPES.map((t) => ({ value: t, label: t })),
               },
               {
                 name: "edge",
                 label: "Edge",
                 kind: "select",
                 required: true,
-                options: CHARTHOUSE_EDGES.map((e) => ({ value: e, label: e })),
+                options: SITEPLAN_EDGES.map((e) => ({ value: e, label: e })),
               },
               { name: "depth_in", label: 'Depth (")', type: "number" },
               { name: "label", label: "Label", maxLength: 80 },
@@ -511,7 +511,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 label: "Service",
                 kind: "select",
                 required: true,
-                options: CHARTHOUSE_UTILITY_SERVICES.map((s) => ({ value: s, label: s })),
+                options: SITEPLAN_UTILITY_SERVICES.map((s) => ({ value: s, label: s })),
               },
               { name: "loads", label: "Loads (comma)", placeholder: "CONV-1, RI-REF", maxLength: 400 },
               { name: "circuit_id", label: "Circuit", maxLength: 40 },
@@ -567,14 +567,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 label: "Edge",
                 kind: "select",
                 required: true,
-                options: CHARTHOUSE_EDGES.map((e) => ({ value: e, label: e })),
+                options: SITEPLAN_EDGES.map((e) => ({ value: e, label: e })),
               },
               {
                 name: "relationship",
                 label: "Relationship",
                 kind: "select",
                 required: true,
-                options: CHARTHOUSE_ADJACENCY_RELS.map((r) => ({ value: r, label: r })),
+                options: SITEPLAN_ADJACENCY_RELS.map((r) => ({ value: r, label: r })),
               },
               { name: "adjacent_label", label: "Adjacent", placeholder: "SC Performer BOH", maxLength: 120 },
               { name: "notes", label: "Notes", maxLength: 500 },

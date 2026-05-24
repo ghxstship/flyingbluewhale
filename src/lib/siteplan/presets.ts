@@ -1,5 +1,5 @@
 /**
- * CHARTHOUSE Preset Library — protocol §10.
+ * SITEPLAN Preset Library — protocol §10.
  *
  * Each preset defines default zones, default bands, default station counts,
  * a default shell, and a starter UAC pick list. Indexed by `primary_class`.
@@ -7,7 +7,7 @@
  * inline.
  */
 
-import type { CharthouseBandType, CharthouseEdge, CharthouseSheetType, CharthouseShellType } from "./types";
+import type { SitePlanBandType, SitePlanEdge, SitePlanSheetType, SitePlanShellType } from "./types";
 
 export type PresetRegionDef = {
   code: string;
@@ -16,8 +16,8 @@ export type PresetRegionDef = {
 };
 
 export type PresetBandDef = {
-  band_type: CharthouseBandType;
-  edge: CharthouseEdge;
+  band_type: SitePlanBandType;
+  edge: SitePlanEdge;
   depth_in: number;
   label?: string;
 };
@@ -33,8 +33,8 @@ export type Preset = {
   code: string;
   label: string;
   primary_class: number;
-  default_sheet_type: CharthouseSheetType;
-  shell_type: CharthouseShellType;
+  default_sheet_type: SitePlanSheetType;
+  shell_type: SitePlanShellType;
   shell_dimensions: { length_in: number; width_in: number; height_in: number };
   regions: PresetRegionDef[];
   bands: PresetBandDef[];

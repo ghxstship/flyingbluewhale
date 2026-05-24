@@ -8,8 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters } from "@/lib/i18n/request";
-import { STATE_LABEL, STATE_TONE } from "@/lib/charthouse/state";
-import type { CharthouseDocumentState, CharthouseSheetType } from "@/lib/charthouse/types";
+import { STATE_LABEL, STATE_TONE } from "@/lib/siteplan/state";
+import type { SitePlanDocumentState, SitePlanSheetType } from "@/lib/siteplan/types";
 
 export const dynamic = "force-dynamic";
 
@@ -18,8 +18,8 @@ type Row = {
   atom_id: string | null;
   code: string;
   title: string;
-  sheet_type: CharthouseSheetType;
-  document_state: CharthouseDocumentState;
+  sheet_type: SitePlanSheetType;
+  document_state: SitePlanDocumentState;
   primary_class: number | null;
   revision_letter: string | null;
   discipline: string;
@@ -29,7 +29,7 @@ type Row = {
   venue: { name: string | null } | null;
 };
 
-const SHEET_TYPE_TONE: Record<CharthouseSheetType, "muted" | "info" | "warning" | "error" | "success"> = {
+const SHEET_TYPE_TONE: Record<SitePlanSheetType, "muted" | "info" | "warning" | "error" | "success"> = {
   site_plan: "muted",
   floor_plan: "info",
   rcp: "info",

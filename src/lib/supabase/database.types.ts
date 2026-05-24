@@ -3177,509 +3177,6 @@ export type Database = {
           },
         ]
       }
-      charthouse_adjacency: {
-        Row: {
-          adjacent_label: string | null
-          adjacent_sheet_id: string | null
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          edge: Database["public"]["Enums"]["charthouse_edge"]
-          id: string
-          notes: string | null
-          org_id: string
-          relationship: Database["public"]["Enums"]["charthouse_adjacency_rel"]
-          sheet_id: string
-          updated_at: string
-          updated_by: string | null
-        }
-        Insert: {
-          adjacent_label?: string | null
-          adjacent_sheet_id?: string | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          edge: Database["public"]["Enums"]["charthouse_edge"]
-          id?: string
-          notes?: string | null
-          org_id: string
-          relationship: Database["public"]["Enums"]["charthouse_adjacency_rel"]
-          sheet_id: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Update: {
-          adjacent_label?: string | null
-          adjacent_sheet_id?: string | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          edge?: Database["public"]["Enums"]["charthouse_edge"]
-          id?: string
-          notes?: string | null
-          org_id?: string
-          relationship?: Database["public"]["Enums"]["charthouse_adjacency_rel"]
-          sheet_id?: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "charthouse_adjacency_adjacent_sheet_id_fkey"
-            columns: ["adjacent_sheet_id"]
-            isOneToOne: false
-            referencedRelation: "site_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_adjacency_adjacent_sheet_id_fkey"
-            columns: ["adjacent_sheet_id"]
-            isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
-            referencedColumns: ["sheet_id"]
-          },
-          {
-            foreignKeyName: "charthouse_adjacency_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_adjacency_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "site_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_adjacency_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
-            referencedColumns: ["sheet_id"]
-          },
-        ]
-      }
-      charthouse_band: {
-        Row: {
-          band_type: Database["public"]["Enums"]["charthouse_band_type"]
-          color_token: string | null
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          depth_in: number | null
-          edge: Database["public"]["Enums"]["charthouse_edge"]
-          id: string
-          label: string | null
-          org_id: string
-          path: Json | null
-          region_id: string | null
-          sheet_id: string
-          updated_at: string
-          updated_by: string | null
-        }
-        Insert: {
-          band_type: Database["public"]["Enums"]["charthouse_band_type"]
-          color_token?: string | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          depth_in?: number | null
-          edge: Database["public"]["Enums"]["charthouse_edge"]
-          id?: string
-          label?: string | null
-          org_id: string
-          path?: Json | null
-          region_id?: string | null
-          sheet_id: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Update: {
-          band_type?: Database["public"]["Enums"]["charthouse_band_type"]
-          color_token?: string | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          depth_in?: number | null
-          edge?: Database["public"]["Enums"]["charthouse_edge"]
-          id?: string
-          label?: string | null
-          org_id?: string
-          path?: Json | null
-          region_id?: string | null
-          sheet_id?: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "charthouse_band_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_band_region_id_fkey"
-            columns: ["region_id"]
-            isOneToOne: false
-            referencedRelation: "charthouse_zone_region"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_band_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "site_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_band_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
-            referencedColumns: ["sheet_id"]
-          },
-        ]
-      }
-      charthouse_placement: {
-        Row: {
-          band_id: string | null
-          catalog_item_id: string | null
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          footprint: Json | null
-          id: string
-          notes: string | null
-          org_id: string
-          power_drop_id: string | null
-          qty: number
-          sheet_id: string
-          station_id: string | null
-          tag: string
-          tpc_atom_id: string | null
-          uac_atom_id: string | null
-          updated_at: string
-          updated_by: string | null
-        }
-        Insert: {
-          band_id?: string | null
-          catalog_item_id?: string | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          footprint?: Json | null
-          id?: string
-          notes?: string | null
-          org_id: string
-          power_drop_id?: string | null
-          qty?: number
-          sheet_id: string
-          station_id?: string | null
-          tag: string
-          tpc_atom_id?: string | null
-          uac_atom_id?: string | null
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Update: {
-          band_id?: string | null
-          catalog_item_id?: string | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          footprint?: Json | null
-          id?: string
-          notes?: string | null
-          org_id?: string
-          power_drop_id?: string | null
-          qty?: number
-          sheet_id?: string
-          station_id?: string | null
-          tag?: string
-          tpc_atom_id?: string | null
-          uac_atom_id?: string | null
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "charthouse_placement_band_id_fkey"
-            columns: ["band_id"]
-            isOneToOne: false
-            referencedRelation: "charthouse_band"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_placement_catalog_item_id_fkey"
-            columns: ["catalog_item_id"]
-            isOneToOne: false
-            referencedRelation: "master_catalog_items"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_placement_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_placement_power_drop_fk"
-            columns: ["power_drop_id"]
-            isOneToOne: false
-            referencedRelation: "charthouse_utility"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_placement_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "site_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_placement_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
-            referencedColumns: ["sheet_id"]
-          },
-          {
-            foreignKeyName: "charthouse_placement_station_id_fkey"
-            columns: ["station_id"]
-            isOneToOne: false
-            referencedRelation: "charthouse_station"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      charthouse_station: {
-        Row: {
-          band_id: string
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          function: string | null
-          head_count: number | null
-          id: string
-          notes: string | null
-          org_id: string
-          position_in: number | null
-          sheet_id: string
-          station_code: string
-          updated_at: string
-          updated_by: string | null
-        }
-        Insert: {
-          band_id: string
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          function?: string | null
-          head_count?: number | null
-          id?: string
-          notes?: string | null
-          org_id: string
-          position_in?: number | null
-          sheet_id: string
-          station_code: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Update: {
-          band_id?: string
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          function?: string | null
-          head_count?: number | null
-          id?: string
-          notes?: string | null
-          org_id?: string
-          position_in?: number | null
-          sheet_id?: string
-          station_code?: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "charthouse_station_band_id_fkey"
-            columns: ["band_id"]
-            isOneToOne: false
-            referencedRelation: "charthouse_band"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_station_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_station_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "site_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_station_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
-            referencedColumns: ["sheet_id"]
-          },
-        ]
-      }
-      charthouse_utility: {
-        Row: {
-          circuit_id: string | null
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          drop_code: string
-          id: string
-          loads: string[] | null
-          location: Json | null
-          notes: string | null
-          org_id: string
-          service_type: Database["public"]["Enums"]["charthouse_utility_service"]
-          sheet_id: string
-          updated_at: string
-          updated_by: string | null
-        }
-        Insert: {
-          circuit_id?: string | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          drop_code: string
-          id?: string
-          loads?: string[] | null
-          location?: Json | null
-          notes?: string | null
-          org_id: string
-          service_type: Database["public"]["Enums"]["charthouse_utility_service"]
-          sheet_id: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Update: {
-          circuit_id?: string | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          drop_code?: string
-          id?: string
-          loads?: string[] | null
-          location?: Json | null
-          notes?: string | null
-          org_id?: string
-          service_type?: Database["public"]["Enums"]["charthouse_utility_service"]
-          sheet_id?: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "charthouse_utility_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_utility_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "site_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_utility_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
-            referencedColumns: ["sheet_id"]
-          },
-        ]
-      }
-      charthouse_zone_region: {
-        Row: {
-          bbox: Json | null
-          class_tag: number | null
-          code: string
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          id: string
-          label: string
-          notes: string | null
-          org_id: string
-          sheet_id: string
-          updated_at: string
-          updated_by: string | null
-        }
-        Insert: {
-          bbox?: Json | null
-          class_tag?: number | null
-          code: string
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          id?: string
-          label: string
-          notes?: string | null
-          org_id: string
-          sheet_id: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Update: {
-          bbox?: Json | null
-          class_tag?: number | null
-          code?: string
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          id?: string
-          label?: string
-          notes?: string | null
-          org_id?: string
-          sheet_id?: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "charthouse_zone_region_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_zone_region_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "site_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "charthouse_zone_region_sheet_id_fkey"
-            columns: ["sheet_id"]
-            isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
-            referencedColumns: ["sheet_id"]
-          },
-        ]
-      }
       chat_messages: {
         Row: {
           attachments: Json
@@ -16707,7 +16204,7 @@ export type Database = {
             foreignKeyName: "punch_items_site_plan_id_fkey"
             columns: ["site_plan_id"]
             isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
+            referencedRelation: "v_siteplan_sheet_acceptance"
             referencedColumns: ["sheet_id"]
           },
           {
@@ -17882,7 +17379,7 @@ export type Database = {
             foreignKeyName: "rfis_linked_site_plan_id_fkey"
             columns: ["linked_site_plan_id"]
             isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
+            referencedRelation: "v_siteplan_sheet_acceptance"
             referencedColumns: ["sheet_id"]
           },
           {
@@ -19507,7 +19004,7 @@ export type Database = {
             foreignKeyName: "site_plan_pins_site_plan_id_fkey"
             columns: ["site_plan_id"]
             isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
+            referencedRelation: "v_siteplan_sheet_acceptance"
             referencedColumns: ["sheet_id"]
           },
         ]
@@ -19568,7 +19065,7 @@ export type Database = {
             foreignKeyName: "site_plan_revisions_site_plan_id_fkey"
             columns: ["site_plan_id"]
             isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
+            referencedRelation: "v_siteplan_sheet_acceptance"
             referencedColumns: ["sheet_id"]
           },
           {
@@ -19592,7 +19089,7 @@ export type Database = {
           current_revision_id: string | null
           deleted_at: string | null
           discipline: string
-          document_state: Database["public"]["Enums"]["charthouse_document_state"]
+          document_state: Database["public"]["Enums"]["siteplan_document_state"]
           event_id: string | null
           id: string
           issued_at: string | null
@@ -19607,11 +19104,9 @@ export type Database = {
           secondary_classes: number[] | null
           security_level: string | null
           sensitivity: string | null
-          sheet_type: Database["public"]["Enums"]["charthouse_sheet_type"]
+          sheet_type: Database["public"]["Enums"]["siteplan_sheet_type"]
           shell_dimensions: Json | null
-          shell_type:
-            | Database["public"]["Enums"]["charthouse_shell_type"]
-            | null
+          shell_type: Database["public"]["Enums"]["siteplan_shell_type"] | null
           submitted_at: string | null
           submitted_by: string | null
           superseded_by: string | null
@@ -19635,7 +19130,7 @@ export type Database = {
           current_revision_id?: string | null
           deleted_at?: string | null
           discipline?: string
-          document_state?: Database["public"]["Enums"]["charthouse_document_state"]
+          document_state?: Database["public"]["Enums"]["siteplan_document_state"]
           event_id?: string | null
           id?: string
           issued_at?: string | null
@@ -19650,11 +19145,9 @@ export type Database = {
           secondary_classes?: number[] | null
           security_level?: string | null
           sensitivity?: string | null
-          sheet_type?: Database["public"]["Enums"]["charthouse_sheet_type"]
+          sheet_type?: Database["public"]["Enums"]["siteplan_sheet_type"]
           shell_dimensions?: Json | null
-          shell_type?:
-            | Database["public"]["Enums"]["charthouse_shell_type"]
-            | null
+          shell_type?: Database["public"]["Enums"]["siteplan_shell_type"] | null
           submitted_at?: string | null
           submitted_by?: string | null
           superseded_by?: string | null
@@ -19678,7 +19171,7 @@ export type Database = {
           current_revision_id?: string | null
           deleted_at?: string | null
           discipline?: string
-          document_state?: Database["public"]["Enums"]["charthouse_document_state"]
+          document_state?: Database["public"]["Enums"]["siteplan_document_state"]
           event_id?: string | null
           id?: string
           issued_at?: string | null
@@ -19693,11 +19186,9 @@ export type Database = {
           secondary_classes?: number[] | null
           security_level?: string | null
           sensitivity?: string | null
-          sheet_type?: Database["public"]["Enums"]["charthouse_sheet_type"]
+          sheet_type?: Database["public"]["Enums"]["siteplan_sheet_type"]
           shell_dimensions?: Json | null
-          shell_type?:
-            | Database["public"]["Enums"]["charthouse_shell_type"]
-            | null
+          shell_type?: Database["public"]["Enums"]["siteplan_shell_type"] | null
           submitted_at?: string | null
           submitted_by?: string | null
           superseded_by?: string | null
@@ -19757,7 +19248,7 @@ export type Database = {
             foreignKeyName: "site_plans_superseded_by_fkey"
             columns: ["superseded_by"]
             isOneToOne: false
-            referencedRelation: "v_charthouse_sheet_acceptance"
+            referencedRelation: "v_siteplan_sheet_acceptance"
             referencedColumns: ["sheet_id"]
           },
           {
@@ -19766,6 +19257,509 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "venues"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      siteplan_adjacency: {
+        Row: {
+          adjacent_label: string | null
+          adjacent_sheet_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          edge: Database["public"]["Enums"]["siteplan_edge"]
+          id: string
+          notes: string | null
+          org_id: string
+          relationship: Database["public"]["Enums"]["siteplan_adjacency_rel"]
+          sheet_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          adjacent_label?: string | null
+          adjacent_sheet_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          edge: Database["public"]["Enums"]["siteplan_edge"]
+          id?: string
+          notes?: string | null
+          org_id: string
+          relationship: Database["public"]["Enums"]["siteplan_adjacency_rel"]
+          sheet_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          adjacent_label?: string | null
+          adjacent_sheet_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          edge?: Database["public"]["Enums"]["siteplan_edge"]
+          id?: string
+          notes?: string | null
+          org_id?: string
+          relationship?: Database["public"]["Enums"]["siteplan_adjacency_rel"]
+          sheet_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "siteplan_adjacency_adjacent_sheet_id_fkey"
+            columns: ["adjacent_sheet_id"]
+            isOneToOne: false
+            referencedRelation: "site_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_adjacency_adjacent_sheet_id_fkey"
+            columns: ["adjacent_sheet_id"]
+            isOneToOne: false
+            referencedRelation: "v_siteplan_sheet_acceptance"
+            referencedColumns: ["sheet_id"]
+          },
+          {
+            foreignKeyName: "siteplan_adjacency_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_adjacency_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "site_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_adjacency_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "v_siteplan_sheet_acceptance"
+            referencedColumns: ["sheet_id"]
+          },
+        ]
+      }
+      siteplan_band: {
+        Row: {
+          band_type: Database["public"]["Enums"]["siteplan_band_type"]
+          color_token: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          depth_in: number | null
+          edge: Database["public"]["Enums"]["siteplan_edge"]
+          id: string
+          label: string | null
+          org_id: string
+          path: Json | null
+          region_id: string | null
+          sheet_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          band_type: Database["public"]["Enums"]["siteplan_band_type"]
+          color_token?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          depth_in?: number | null
+          edge: Database["public"]["Enums"]["siteplan_edge"]
+          id?: string
+          label?: string | null
+          org_id: string
+          path?: Json | null
+          region_id?: string | null
+          sheet_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          band_type?: Database["public"]["Enums"]["siteplan_band_type"]
+          color_token?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          depth_in?: number | null
+          edge?: Database["public"]["Enums"]["siteplan_edge"]
+          id?: string
+          label?: string | null
+          org_id?: string
+          path?: Json | null
+          region_id?: string | null
+          sheet_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "siteplan_band_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_band_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "siteplan_zone_region"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_band_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "site_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_band_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "v_siteplan_sheet_acceptance"
+            referencedColumns: ["sheet_id"]
+          },
+        ]
+      }
+      siteplan_placement: {
+        Row: {
+          band_id: string | null
+          catalog_item_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          footprint: Json | null
+          id: string
+          notes: string | null
+          org_id: string
+          power_drop_id: string | null
+          qty: number
+          sheet_id: string
+          station_id: string | null
+          tag: string
+          tpc_atom_id: string | null
+          uac_atom_id: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          band_id?: string | null
+          catalog_item_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          footprint?: Json | null
+          id?: string
+          notes?: string | null
+          org_id: string
+          power_drop_id?: string | null
+          qty?: number
+          sheet_id: string
+          station_id?: string | null
+          tag: string
+          tpc_atom_id?: string | null
+          uac_atom_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          band_id?: string | null
+          catalog_item_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          footprint?: Json | null
+          id?: string
+          notes?: string | null
+          org_id?: string
+          power_drop_id?: string | null
+          qty?: number
+          sheet_id?: string
+          station_id?: string | null
+          tag?: string
+          tpc_atom_id?: string | null
+          uac_atom_id?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "siteplan_placement_band_id_fkey"
+            columns: ["band_id"]
+            isOneToOne: false
+            referencedRelation: "siteplan_band"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_placement_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "master_catalog_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_placement_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_placement_power_drop_fk"
+            columns: ["power_drop_id"]
+            isOneToOne: false
+            referencedRelation: "siteplan_utility"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_placement_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "site_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_placement_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "v_siteplan_sheet_acceptance"
+            referencedColumns: ["sheet_id"]
+          },
+          {
+            foreignKeyName: "siteplan_placement_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "siteplan_station"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      siteplan_station: {
+        Row: {
+          band_id: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          function: string | null
+          head_count: number | null
+          id: string
+          notes: string | null
+          org_id: string
+          position_in: number | null
+          sheet_id: string
+          station_code: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          band_id: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          function?: string | null
+          head_count?: number | null
+          id?: string
+          notes?: string | null
+          org_id: string
+          position_in?: number | null
+          sheet_id: string
+          station_code: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          band_id?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          function?: string | null
+          head_count?: number | null
+          id?: string
+          notes?: string | null
+          org_id?: string
+          position_in?: number | null
+          sheet_id?: string
+          station_code?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "siteplan_station_band_id_fkey"
+            columns: ["band_id"]
+            isOneToOne: false
+            referencedRelation: "siteplan_band"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_station_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_station_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "site_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_station_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "v_siteplan_sheet_acceptance"
+            referencedColumns: ["sheet_id"]
+          },
+        ]
+      }
+      siteplan_utility: {
+        Row: {
+          circuit_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          drop_code: string
+          id: string
+          loads: string[] | null
+          location: Json | null
+          notes: string | null
+          org_id: string
+          service_type: Database["public"]["Enums"]["siteplan_utility_service"]
+          sheet_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          circuit_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          drop_code: string
+          id?: string
+          loads?: string[] | null
+          location?: Json | null
+          notes?: string | null
+          org_id: string
+          service_type: Database["public"]["Enums"]["siteplan_utility_service"]
+          sheet_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          circuit_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          drop_code?: string
+          id?: string
+          loads?: string[] | null
+          location?: Json | null
+          notes?: string | null
+          org_id?: string
+          service_type?: Database["public"]["Enums"]["siteplan_utility_service"]
+          sheet_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "siteplan_utility_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_utility_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "site_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_utility_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "v_siteplan_sheet_acceptance"
+            referencedColumns: ["sheet_id"]
+          },
+        ]
+      }
+      siteplan_zone_region: {
+        Row: {
+          bbox: Json | null
+          class_tag: number | null
+          code: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          label: string
+          notes: string | null
+          org_id: string
+          sheet_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          bbox?: Json | null
+          class_tag?: number | null
+          code: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          label: string
+          notes?: string | null
+          org_id: string
+          sheet_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          bbox?: Json | null
+          class_tag?: number | null
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          label?: string
+          notes?: string | null
+          org_id?: string
+          sheet_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "siteplan_zone_region_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_zone_region_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "site_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siteplan_zone_region_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "v_siteplan_sheet_acceptance"
+            referencedColumns: ["sheet_id"]
           },
         ]
       }
@@ -26945,11 +26939,11 @@ export type Database = {
           },
         ]
       }
-      v_charthouse_sheet_acceptance: {
+      v_siteplan_sheet_acceptance: {
         Row: {
           atom_id: string | null
           document_state:
-            | Database["public"]["Enums"]["charthouse_document_state"]
+            | Database["public"]["Enums"]["siteplan_document_state"]
             | null
           has_all_four_edges: boolean | null
           has_approval_signoff: boolean | null
@@ -26968,7 +26962,7 @@ export type Database = {
         Insert: {
           atom_id?: string | null
           document_state?:
-            | Database["public"]["Enums"]["charthouse_document_state"]
+            | Database["public"]["Enums"]["siteplan_document_state"]
             | null
           has_all_four_edges?: never
           has_approval_signoff?: never
@@ -26987,7 +26981,7 @@ export type Database = {
         Update: {
           atom_id?: string | null
           document_state?:
-            | Database["public"]["Enums"]["charthouse_document_state"]
+            | Database["public"]["Enums"]["siteplan_document_state"]
             | null
           has_all_four_edges?: never
           has_approval_signoff?: never
@@ -27399,58 +27393,6 @@ export type Database = {
         Args: { p_id: string; p_op: string; p_table: string }
         Returns: boolean
       }
-      charthouse_transition_state: {
-        Args: { p_sheet_id: string; p_transition: string }
-        Returns: {
-          accessibility_tag: string | null
-          approved_at: string | null
-          approved_by: string | null
-          atom_id: string | null
-          code: string
-          created_at: string
-          created_by: string | null
-          current_revision_id: string | null
-          deleted_at: string | null
-          discipline: string
-          document_state: Database["public"]["Enums"]["charthouse_document_state"]
-          event_id: string | null
-          id: string
-          issued_at: string | null
-          notes: string | null
-          org_id: string
-          orientation_deg: number | null
-          preset_code: string | null
-          primary_class: number | null
-          project_id: string | null
-          revision_letter: string | null
-          scale: string | null
-          secondary_classes: number[] | null
-          security_level: string | null
-          sensitivity: string | null
-          sheet_type: Database["public"]["Enums"]["charthouse_sheet_type"]
-          shell_dimensions: Json | null
-          shell_type:
-            | Database["public"]["Enums"]["charthouse_shell_type"]
-            | null
-          submitted_at: string | null
-          submitted_by: string | null
-          superseded_by: string | null
-          sustainability_tag: string | null
-          tier_primary: number | null
-          tier_secondary: Json | null
-          title: string
-          updated_at: string
-          venue_id: string | null
-          weather_exposure: string | null
-          zone_code: string | null
-        }
-        SetofOptions: {
-          from: "*"
-          to: "site_plans"
-          isOneToOne: true
-          isSetofReturn: false
-        }
-      }
       claim_jobs: {
         Args: { p_batch: number; p_visibility_s: number; p_worker: string }
         Returns: {
@@ -27818,6 +27760,56 @@ export type Database = {
           p_user_agent: string
         }
         Returns: Json
+      }
+      siteplan_transition_state: {
+        Args: { p_sheet_id: string; p_transition: string }
+        Returns: {
+          accessibility_tag: string | null
+          approved_at: string | null
+          approved_by: string | null
+          atom_id: string | null
+          code: string
+          created_at: string
+          created_by: string | null
+          current_revision_id: string | null
+          deleted_at: string | null
+          discipline: string
+          document_state: Database["public"]["Enums"]["siteplan_document_state"]
+          event_id: string | null
+          id: string
+          issued_at: string | null
+          notes: string | null
+          org_id: string
+          orientation_deg: number | null
+          preset_code: string | null
+          primary_class: number | null
+          project_id: string | null
+          revision_letter: string | null
+          scale: string | null
+          secondary_classes: number[] | null
+          security_level: string | null
+          sensitivity: string | null
+          sheet_type: Database["public"]["Enums"]["siteplan_sheet_type"]
+          shell_dimensions: Json | null
+          shell_type: Database["public"]["Enums"]["siteplan_shell_type"] | null
+          submitted_at: string | null
+          submitted_by: string | null
+          superseded_by: string | null
+          sustainability_tag: string | null
+          tier_primary: number | null
+          tier_secondary: Json | null
+          title: string
+          updated_at: string
+          venue_id: string | null
+          weather_exposure: string | null
+          zone_code: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "site_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       st_3dclosestpoint: {
         Args: { geom1: unknown; geom2: unknown }
@@ -28493,69 +28485,6 @@ export type Database = {
         | "approved"
         | "rejected"
         | "withdrawn"
-      charthouse_adjacency_rel:
-        | "feeds"
-        | "egress_to"
-        | "service_from"
-        | "blocks"
-        | "noise_buffer"
-        | "thermal_buffer"
-        | "public_facing"
-        | "restricted"
-      charthouse_band_type:
-        | "appliance"
-        | "service"
-        | "bar"
-        | "display"
-        | "cold_rail"
-        | "hot_rail"
-        | "queue"
-        | "bench"
-        | "tech"
-        | "barricade"
-      charthouse_document_state:
-        | "draft"
-        | "in_review"
-        | "approved"
-        | "issued"
-        | "superseded"
-        | "as_built"
-      charthouse_edge: "N" | "S" | "E" | "W" | "L_NE" | "L_SE" | "L_SW" | "L_NW"
-      charthouse_sheet_type:
-        | "site_plan"
-        | "floor_plan"
-        | "rcp"
-        | "power"
-        | "egress"
-        | "flow"
-        | "signage"
-        | "section"
-        | "as_built"
-      charthouse_shell_type:
-        | "tent"
-        | "container"
-        | "building"
-        | "parcel"
-        | "truss_structure"
-        | "vehicle"
-        | "riser"
-        | "open"
-      charthouse_utility_service:
-        | "power_120v_20a"
-        | "power_120v_30a"
-        | "power_208v_30a"
-        | "power_208v_50a"
-        | "power_480v_50a_3ph"
-        | "gas_propane"
-        | "gas_natural"
-        | "water_potable"
-        | "water_greywater"
-        | "drain"
-        | "data_ethernet"
-        | "data_fiber"
-        | "comms_rf"
-        | "comms_intercom"
-        | "compressed_air"
       compensation_basis:
         | "per_day"
         | "per_show_day"
@@ -28813,6 +28742,69 @@ export type Database = {
         | "on_break"
         | "checked_out"
         | "no_show"
+      siteplan_adjacency_rel:
+        | "feeds"
+        | "egress_to"
+        | "service_from"
+        | "blocks"
+        | "noise_buffer"
+        | "thermal_buffer"
+        | "public_facing"
+        | "restricted"
+      siteplan_band_type:
+        | "appliance"
+        | "service"
+        | "bar"
+        | "display"
+        | "cold_rail"
+        | "hot_rail"
+        | "queue"
+        | "bench"
+        | "tech"
+        | "barricade"
+      siteplan_document_state:
+        | "draft"
+        | "in_review"
+        | "approved"
+        | "issued"
+        | "superseded"
+        | "as_built"
+      siteplan_edge: "N" | "S" | "E" | "W" | "L_NE" | "L_SE" | "L_SW" | "L_NW"
+      siteplan_sheet_type:
+        | "site_plan"
+        | "floor_plan"
+        | "rcp"
+        | "power"
+        | "egress"
+        | "flow"
+        | "signage"
+        | "section"
+        | "as_built"
+      siteplan_shell_type:
+        | "tent"
+        | "container"
+        | "building"
+        | "parcel"
+        | "truss_structure"
+        | "vehicle"
+        | "riser"
+        | "open"
+      siteplan_utility_service:
+        | "power_120v_20a"
+        | "power_120v_30a"
+        | "power_208v_30a"
+        | "power_208v_50a"
+        | "power_480v_50a_3ph"
+        | "gas_propane"
+        | "gas_natural"
+        | "water_potable"
+        | "water_greywater"
+        | "drain"
+        | "data_ethernet"
+        | "data_fiber"
+        | "comms_rf"
+        | "comms_intercom"
+        | "compressed_air"
       submission_status:
         | "submitted"
         | "shortlisted"
@@ -29254,75 +29246,6 @@ export const Constants = {
         "rejected",
         "withdrawn",
       ],
-      charthouse_adjacency_rel: [
-        "feeds",
-        "egress_to",
-        "service_from",
-        "blocks",
-        "noise_buffer",
-        "thermal_buffer",
-        "public_facing",
-        "restricted",
-      ],
-      charthouse_band_type: [
-        "appliance",
-        "service",
-        "bar",
-        "display",
-        "cold_rail",
-        "hot_rail",
-        "queue",
-        "bench",
-        "tech",
-        "barricade",
-      ],
-      charthouse_document_state: [
-        "draft",
-        "in_review",
-        "approved",
-        "issued",
-        "superseded",
-        "as_built",
-      ],
-      charthouse_edge: ["N", "S", "E", "W", "L_NE", "L_SE", "L_SW", "L_NW"],
-      charthouse_sheet_type: [
-        "site_plan",
-        "floor_plan",
-        "rcp",
-        "power",
-        "egress",
-        "flow",
-        "signage",
-        "section",
-        "as_built",
-      ],
-      charthouse_shell_type: [
-        "tent",
-        "container",
-        "building",
-        "parcel",
-        "truss_structure",
-        "vehicle",
-        "riser",
-        "open",
-      ],
-      charthouse_utility_service: [
-        "power_120v_20a",
-        "power_120v_30a",
-        "power_208v_30a",
-        "power_208v_50a",
-        "power_480v_50a_3ph",
-        "gas_propane",
-        "gas_natural",
-        "water_potable",
-        "water_greywater",
-        "drain",
-        "data_ethernet",
-        "data_fiber",
-        "comms_rf",
-        "comms_intercom",
-        "compressed_air",
-      ],
       compensation_basis: [
         "per_day",
         "per_show_day",
@@ -29601,6 +29524,75 @@ export const Constants = {
         "on_break",
         "checked_out",
         "no_show",
+      ],
+      siteplan_adjacency_rel: [
+        "feeds",
+        "egress_to",
+        "service_from",
+        "blocks",
+        "noise_buffer",
+        "thermal_buffer",
+        "public_facing",
+        "restricted",
+      ],
+      siteplan_band_type: [
+        "appliance",
+        "service",
+        "bar",
+        "display",
+        "cold_rail",
+        "hot_rail",
+        "queue",
+        "bench",
+        "tech",
+        "barricade",
+      ],
+      siteplan_document_state: [
+        "draft",
+        "in_review",
+        "approved",
+        "issued",
+        "superseded",
+        "as_built",
+      ],
+      siteplan_edge: ["N", "S", "E", "W", "L_NE", "L_SE", "L_SW", "L_NW"],
+      siteplan_sheet_type: [
+        "site_plan",
+        "floor_plan",
+        "rcp",
+        "power",
+        "egress",
+        "flow",
+        "signage",
+        "section",
+        "as_built",
+      ],
+      siteplan_shell_type: [
+        "tent",
+        "container",
+        "building",
+        "parcel",
+        "truss_structure",
+        "vehicle",
+        "riser",
+        "open",
+      ],
+      siteplan_utility_service: [
+        "power_120v_20a",
+        "power_120v_30a",
+        "power_208v_30a",
+        "power_208v_50a",
+        "power_480v_50a_3ph",
+        "gas_propane",
+        "gas_natural",
+        "water_potable",
+        "water_greywater",
+        "drain",
+        "data_ethernet",
+        "data_fiber",
+        "comms_rf",
+        "comms_intercom",
+        "compressed_air",
       ],
       submission_status: [
         "submitted",

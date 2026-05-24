@@ -6,14 +6,14 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { buildAtomId, CHARTHOUSE_ATOM_ID_RE } from "@/lib/charthouse/atom-id";
+import { buildAtomId, SITEPLAN_ATOM_ID_RE } from "@/lib/siteplan/atom-id";
 import {
-  CHARTHOUSE_SHEET_TYPES,
-  CHARTHOUSE_SHELL_TYPES,
-  type CharthouseSheetType,
-  type CharthouseShellType,
-} from "@/lib/charthouse/types";
-import { getPreset } from "@/lib/charthouse/presets";
+  SITEPLAN_SHEET_TYPES,
+  SITEPLAN_SHELL_TYPES,
+  type SitePlanSheetType,
+  type SitePlanShellType,
+} from "@/lib/siteplan/types";
+import { getPreset } from "@/lib/siteplan/presets";
 
 const Schema = z.object({
   code: z.string().min(1).max(40),
@@ -30,10 +30,10 @@ const Schema = z.object({
   zon_code: z.string().regex(/^[A-Z0-9]{4,8}$/, "ZON must be 4–8 alphanumerics (UPPER)"),
   seq: z.coerce.number().int().min(1).max(999).default(1),
   // Structural
-  sheet_type: z.enum(CHARTHOUSE_SHEET_TYPES),
+  sheet_type: z.enum(SITEPLAN_SHEET_TYPES),
   primary_class: z.coerce.number().int().min(0).max(9),
   tier_primary: z.coerce.number().int().min(1).max(6).optional(),
-  shell_type: z.enum(CHARTHOUSE_SHELL_TYPES).optional(),
+  shell_type: z.enum(SITEPLAN_SHELL_TYPES).optional(),
   shell_length_in: z.coerce.number().min(1).optional(),
   shell_width_in: z.coerce.number().min(1).optional(),
   shell_height_in: z.coerce.number().min(0).optional(),
@@ -109,7 +109,7 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
       year: parsed.data.year,
       ven: parsed.data.ven_code,
       primaryClass: parsed.data.primary_class,
-      sheetType: parsed.data.sheet_type as CharthouseSheetType,
+      sheetType: parsed.data.sheet_type as SitePlanSheetType,
       zon: parsed.data.zon_code,
       seq: parsed.data.seq,
       rev: "A",
@@ -118,7 +118,7 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
     return { error: e instanceof Error ? e.message : "Failed to build atom ID", values: echo(fd) };
   }
   // Belt-and-suspenders — should be unreachable when builder accepts.
-  if (!CHARTHOUSE_ATOM_ID_RE.test(atomId)) {
+  if (!SITEPLAN_ATOM_ID_RE.test(atomId)) {
     return { error: `Built atom id is malformed: ${atomId}`, values: echo(fd) };
   }
 
@@ -148,7 +148,7 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
       sheet_type: parsed.data.sheet_type,
       primary_class: parsed.data.primary_class,
       tier_primary: parsed.data.tier_primary ?? null,
-      shell_type: (parsed.data.shell_type as CharthouseShellType | undefined) ?? null,
+      shell_type: (parsed.data.shell_type as SitePlanShellType | undefined) ?? null,
       shell_dimensions: shellDims,
       orientation_deg: parsed.data.orientation_deg ?? null,
       scale: parsed.data.scale || null,
@@ -186,7 +186,7 @@ type PresetArg = NonNullable<ReturnType<typeof getPreset>>;
 
 async function instantiatePreset(supabase: LooseSupabase, orgId: string, sheetId: string, preset: PresetArg) {
   if (preset.regions.length > 0) {
-    await supabase.from("charthouse_zone_region").insert(
+    await supabase.from("siteplan_zone_region").insert(
       preset.regions.map((r) => ({
         org_id: orgId,
         sheet_id: sheetId,
@@ -200,7 +200,7 @@ async function instantiatePreset(supabase: LooseSupabase, orgId: string, sheetId
   const bandIds: string[] = [];
   if (preset.bands.length > 0) {
     const { data: bandRows } = await supabase
-      .from("charthouse_band")
+      .from("siteplan_band")
       .insert(
         preset.bands.map((b) => ({
           org_id: orgId,
@@ -218,7 +218,7 @@ async function instantiatePreset(supabase: LooseSupabase, orgId: string, sheetId
   }
 
   if (preset.stations.length > 0) {
-    await supabase.from("charthouse_station").insert(
+    await supabase.from("siteplan_station").insert(
       preset.stations.map((s) => ({
         org_id: orgId,
         sheet_id: sheetId,

@@ -35,16 +35,16 @@ or already-cased literals.
 
 ## B · Action depth checks
 
-| Workflow                                               | Test                                                                      | Result |
-| ------------------------------------------------------ | ------------------------------------------------------------------------- | ------ |
-| Crisis alert send                                      | severity `warn` accepted, list shows Warning badge                        | ✓      |
-| Site-plan transition (charthouse_transition_state RPC) | "Cannot issue without at least one zone region" (prefix stripped Round 7) | ✓      |
-| Settlement reconciliation                              | GBOR $125k → auto-NBOR $109,625 persisted                                 | ✓      |
-| Talent publish flow                                    | publishTalentAction + router.refresh() reflects state                     | ✓      |
-| Form-reset on validation error                         | site-plans/new echoes back ORG/EVT/YY/etc. after failure                  | ✓      |
-| Briefing → detail                                      | new briefing created → detail page renders (Round 6 fix)                  | ✓      |
-| Offer FSM (Draft → Sent → Accepted)                    | all three transitions render new button set                               | ✓      |
-| Fabrication FSM (Open → In Progress → Complete)        | all transitions persist + UI updates                                      | ✓      |
+| Workflow                                             | Test                                                                      | Result |
+| ---------------------------------------------------- | ------------------------------------------------------------------------- | ------ |
+| Crisis alert send                                    | severity `warn` accepted, list shows Warning badge                        | ✓      |
+| Site-plan transition (siteplan_transition_state RPC) | "Cannot issue without at least one zone region" (prefix stripped Round 7) | ✓      |
+| Settlement reconciliation                            | GBOR $125k → auto-NBOR $109,625 persisted                                 | ✓      |
+| Talent publish flow                                  | publishTalentAction + router.refresh() reflects state                     | ✓      |
+| Form-reset on validation error                       | site-plans/new echoes back ORG/EVT/YY/etc. after failure                  | ✓      |
+| Briefing → detail                                    | new briefing created → detail page renders (Round 6 fix)                  | ✓      |
+| Offer FSM (Draft → Sent → Accepted)                  | all three transitions render new button set                               | ✓      |
+| Fabrication FSM (Open → In Progress → Complete)      | all transitions persist + UI updates                                      | ✓      |
 
 ## C · Zero-tolerance `/validate` suite
 
@@ -84,9 +84,9 @@ or already-cased literals.
 20. Open Calls kind labels (Talent Call / Public RFQ)
 21. Holds form pickers (venue + talent_profile selects)
 22. FormShell preserves values via toEcho() on validation error
-23. Charthouse user-visible string purge (5 eyebrows + jargon dumps)
+23. SitePlan user-visible string purge (5 eyebrows + jargon dumps)
 24. `discipline (legacy)` field removed
-25. SQL `charthouse:` prefix stripped from user-facing errors
+25. SQL `siteplan:` prefix stripped from user-facing errors
 26. TalentVisibility router.refresh fix
 27. Marketplace render bug (`verified_at` → `is_verified` in views)
 28. StatusBadge canonical Title Case

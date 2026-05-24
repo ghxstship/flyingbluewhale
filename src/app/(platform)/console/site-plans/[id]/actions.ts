@@ -6,12 +6,12 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import {
-  CHARTHOUSE_ADJACENCY_RELS,
-  CHARTHOUSE_BAND_TYPES,
-  CHARTHOUSE_EDGES,
-  CHARTHOUSE_TRANSITIONS,
-  CHARTHOUSE_UTILITY_SERVICES,
-} from "@/lib/charthouse/types";
+  SITEPLAN_ADJACENCY_RELS,
+  SITEPLAN_BAND_TYPES,
+  SITEPLAN_EDGES,
+  SITEPLAN_TRANSITIONS,
+  SITEPLAN_UTILITY_SERVICES,
+} from "@/lib/siteplan/types";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -21,13 +21,13 @@ export type State = { error?: string; ok?: true } | null;
 
 const TransitionSchema = z.object({
   sheet_id: z.string().uuid(),
-  transition: z.enum(CHARTHOUSE_TRANSITIONS),
+  transition: z.enum(SITEPLAN_TRANSITIONS),
 });
 
-// Strip the internal "charthouse:" prefix that the SQL RAISE EXCEPTIONs use
+// Strip the internal "siteplan:" prefix that the SQL RAISE EXCEPTIONs use
 // so end users see a clean message instead of leaking the lib name.
 function cleanTransitionError(msg: string): string {
-  const stripped = msg.replace(/^charthouse:\s*/i, "").trim();
+  const stripped = msg.replace(/^siteplan:\s*/i, "").trim();
   return stripped.charAt(0).toUpperCase() + stripped.slice(1);
 }
 
@@ -37,7 +37,7 @@ export async function transitionSheet(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { error } = await supabase.rpc("charthouse_transition_state", {
+  const { error } = await supabase.rpc("siteplan_transition_state", {
     p_sheet_id: parsed.data.sheet_id,
     p_transition: parsed.data.transition,
   });
@@ -65,7 +65,7 @@ export async function addRegion(_: State, fd: FormData): Promise<State> {
   const parsed = RegionSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { error } = await supabase.from("charthouse_zone_region").insert({
+  const { error } = await supabase.from("siteplan_zone_region").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
     code: parsed.data.code,
@@ -90,7 +90,7 @@ export async function deleteRegion(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
-    .from("charthouse_zone_region")
+    .from("siteplan_zone_region")
     .delete()
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
@@ -105,8 +105,8 @@ export async function deleteRegion(_: State, fd: FormData): Promise<State> {
 
 const BandSchema = z.object({
   sheet_id: z.string().uuid(),
-  band_type: z.enum(CHARTHOUSE_BAND_TYPES),
-  edge: z.enum(CHARTHOUSE_EDGES),
+  band_type: z.enum(SITEPLAN_BAND_TYPES),
+  edge: z.enum(SITEPLAN_EDGES),
   depth_in: z.coerce.number().min(0).optional(),
   label: z.string().max(80).optional(),
 });
@@ -116,7 +116,7 @@ export async function addBand(_: State, fd: FormData): Promise<State> {
   const parsed = BandSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { error } = await supabase.from("charthouse_band").insert({
+  const { error } = await supabase.from("siteplan_band").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
     band_type: parsed.data.band_type,
@@ -135,11 +135,7 @@ export async function deleteBand(_: State, fd: FormData): Promise<State> {
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { error } = await supabase
-    .from("charthouse_band")
-    .delete()
-    .eq("id", parsed.data.id)
-    .eq("org_id", session.orgId);
+  const { error } = await supabase.from("siteplan_band").delete().eq("id", parsed.data.id).eq("org_id", session.orgId);
   if (error) return { error: error.message };
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
   return { ok: true };
@@ -163,7 +159,7 @@ export async function addStation(_: State, fd: FormData): Promise<State> {
   const parsed = StationSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { error } = await supabase.from("charthouse_station").insert({
+  const { error } = await supabase.from("siteplan_station").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
     band_id: parsed.data.band_id,
@@ -188,7 +184,7 @@ export async function deleteStation(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
-    .from("charthouse_station")
+    .from("siteplan_station")
     .delete()
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
@@ -217,7 +213,7 @@ export async function addPlacement(_: State, fd: FormData): Promise<State> {
   const parsed = PlacementSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { error } = await supabase.from("charthouse_placement").insert({
+  const { error } = await supabase.from("siteplan_placement").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
     tag: parsed.data.tag,
@@ -243,7 +239,7 @@ export async function deletePlacement(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
-    .from("charthouse_placement")
+    .from("siteplan_placement")
     .delete()
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
@@ -259,7 +255,7 @@ export async function deletePlacement(_: State, fd: FormData): Promise<State> {
 const UtilitySchema = z.object({
   sheet_id: z.string().uuid(),
   drop_code: z.string().min(1).max(40),
-  service_type: z.enum(CHARTHOUSE_UTILITY_SERVICES),
+  service_type: z.enum(SITEPLAN_UTILITY_SERVICES),
   loads: z.string().max(400).optional(),
   circuit_id: z.string().max(40).optional(),
   notes: z.string().max(500).optional(),
@@ -274,7 +270,7 @@ export async function addUtility(_: State, fd: FormData): Promise<State> {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  const { error } = await supabase.from("charthouse_utility").insert({
+  const { error } = await supabase.from("siteplan_utility").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
     drop_code: parsed.data.drop_code,
@@ -298,7 +294,7 @@ export async function deleteUtility(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
-    .from("charthouse_utility")
+    .from("siteplan_utility")
     .delete()
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
@@ -313,8 +309,8 @@ export async function deleteUtility(_: State, fd: FormData): Promise<State> {
 
 const AdjacencySchema = z.object({
   sheet_id: z.string().uuid(),
-  edge: z.enum(CHARTHOUSE_EDGES),
-  relationship: z.enum(CHARTHOUSE_ADJACENCY_RELS),
+  edge: z.enum(SITEPLAN_EDGES),
+  relationship: z.enum(SITEPLAN_ADJACENCY_RELS),
   adjacent_sheet_id: z.string().uuid().optional().or(z.literal("")),
   adjacent_label: z.string().max(120).optional(),
   notes: z.string().max(500).optional(),
@@ -325,7 +321,7 @@ export async function addAdjacency(_: State, fd: FormData): Promise<State> {
   const parsed = AdjacencySchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { error } = await supabase.from("charthouse_adjacency").insert({
+  const { error } = await supabase.from("siteplan_adjacency").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
     edge: parsed.data.edge,
@@ -349,7 +345,7 @@ export async function deleteAdjacency(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
-    .from("charthouse_adjacency")
+    .from("siteplan_adjacency")
     .delete()
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);

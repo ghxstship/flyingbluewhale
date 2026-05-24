@@ -1,15 +1,15 @@
 /**
- * CHARTHOUSE state machine — protocol §5.
+ * SITEPLAN state machine — protocol §5.
  *
  * Mirrors the canonical transitions enforced by the
- * public.charthouse_transition_state RPC defined in 0057_charthouse_v1.sql.
+ * public.siteplan_transition_state RPC defined in 0057_siteplan_v1.sql.
  * Use this client-side to gate transition buttons and surface
  * human-readable transition labels.
  */
 
-import type { CharthouseDocumentState, CharthouseTransition } from "./types";
+import type { SitePlanDocumentState, SitePlanTransition } from "./types";
 
-export const STATE_LABEL: Record<CharthouseDocumentState, string> = {
+export const STATE_LABEL: Record<SitePlanDocumentState, string> = {
   draft: "Draft",
   in_review: "In Review",
   approved: "Approved",
@@ -19,7 +19,7 @@ export const STATE_LABEL: Record<CharthouseDocumentState, string> = {
 };
 
 /** Badge tone keyed to current shell-design tones used across console surfaces. */
-export const STATE_TONE: Record<CharthouseDocumentState, "muted" | "info" | "warning" | "success" | "error"> = {
+export const STATE_TONE: Record<SitePlanDocumentState, "muted" | "info" | "warning" | "success" | "error"> = {
   draft: "muted",
   in_review: "warning",
   approved: "info",
@@ -28,7 +28,7 @@ export const STATE_TONE: Record<CharthouseDocumentState, "muted" | "info" | "war
   as_built: "info",
 };
 
-export const TRANSITION_LABEL: Record<CharthouseTransition, string> = {
+export const TRANSITION_LABEL: Record<SitePlanTransition, string> = {
   submit: "Submit for Review",
   approve: "Approve",
   reject: "Reject",
@@ -39,7 +39,7 @@ export const TRANSITION_LABEL: Record<CharthouseTransition, string> = {
 };
 
 /** Which transitions are legally callable from a given state. */
-export function transitionsFromState(s: CharthouseDocumentState): CharthouseTransition[] {
+export function transitionsFromState(s: SitePlanDocumentState): SitePlanTransition[] {
   switch (s) {
     case "draft":
       return ["submit"];
@@ -57,9 +57,9 @@ export function transitionsFromState(s: CharthouseDocumentState): CharthouseTran
 
 /** Compute the state that results from applying a transition. */
 export function nextState(
-  current: CharthouseDocumentState,
-  transition: CharthouseTransition,
-): CharthouseDocumentState | null {
+  current: SitePlanDocumentState,
+  transition: SitePlanTransition,
+): SitePlanDocumentState | null {
   if (!transitionsFromState(current).includes(transition)) return null;
   switch (transition) {
     case "submit":

@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
-import { CHARTHOUSE_SHEET_TYPES, CHARTHOUSE_SHELL_TYPES } from "@/lib/charthouse/types";
+import { SITEPLAN_SHEET_TYPES, SITEPLAN_SHELL_TYPES } from "@/lib/siteplan/types";
 
 const DISCIPLINES = [
   "site",
@@ -29,10 +29,10 @@ const Schema = z.object({
   code: z.string().min(1).max(40),
   title: z.string().min(1).max(200),
   discipline: z.enum(DISCIPLINES),
-  sheet_type: z.enum(CHARTHOUSE_SHEET_TYPES),
+  sheet_type: z.enum(SITEPLAN_SHEET_TYPES),
   primary_class: z.coerce.number().int().min(0).max(9),
   tier_primary: z.coerce.number().int().min(1).max(6).optional(),
-  shell_type: z.enum(CHARTHOUSE_SHELL_TYPES).optional(),
+  shell_type: z.enum(SITEPLAN_SHELL_TYPES).optional(),
   shell_length_in: z.coerce.number().min(0).optional(),
   shell_width_in: z.coerce.number().min(0).optional(),
   shell_height_in: z.coerce.number().min(0).optional(),
@@ -51,7 +51,7 @@ const Schema = z.object({
 
 export type State = { error?: string; ok?: true } | null;
 
-export async function updateCharthouseSheet(_: State, fd: FormData): Promise<State> {
+export async function updateSitePlanSheet(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const raw = Object.fromEntries(fd);
   const parsed = Schema.safeParse(raw);

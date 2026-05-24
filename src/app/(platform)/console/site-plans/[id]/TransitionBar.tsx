@@ -1,13 +1,13 @@
 "use client";
 
 import { useActionState } from "react";
-import type { CharthouseTransition } from "@/lib/charthouse/types";
+import type { SitePlanTransition } from "@/lib/siteplan/types";
 import { transitionSheet, type State } from "./actions";
 
 type Props = {
   sheetId: string;
-  transitions: CharthouseTransition[];
-  labels: Record<CharthouseTransition, string>;
+  transitions: SitePlanTransition[];
+  labels: Record<SitePlanTransition, string>;
 };
 
 export function TransitionBar({ sheetId, transitions, labels }: Props) {
@@ -34,7 +34,7 @@ function TransitionButton({
   label,
 }: {
   sheetId: string;
-  transition: CharthouseTransition;
+  transition: SitePlanTransition;
   label: string;
 }) {
   const [state, action, pending] = useActionState<State, FormData>(transitionSheet, null);

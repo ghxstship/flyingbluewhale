@@ -19,7 +19,10 @@ import { describe, expect, it } from "vitest";
 import { sync as glob } from "fast-glob";
 import { relative } from "node:path";
 
-const REPO_ROOT = new URL("../../", import.meta.url).pathname;
+// process.cwd() is the repo root when vitest runs from the project directory.
+// import.meta.url gets a /@fs/ prefix in vitest's jsdom env and can't be used
+// with new URL() to derive a real filesystem path.
+const REPO_ROOT = process.cwd();
 
 // Files allowed to keep `as any`. Empty for now — the rule is strict.
 // Add an entry here only when (a) you've documented WHY in a comment

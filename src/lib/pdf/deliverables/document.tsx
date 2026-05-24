@@ -14,7 +14,7 @@ import { renderDeliverable, labelFor } from "./registry";
 export type DeliverableRow = {
   id: string;
   type: string;
-  status: string | null;
+  deliverable_state: string | null;
   version: number | null;
   deadline: string | null;
   data: unknown;
@@ -38,7 +38,7 @@ export function DeliverablePdf({
         title={label}
         subtitle={
           [
-            deliverable.status ? `Status: ${deliverable.status}` : null,
+            deliverable.deliverable_state ? `Status: ${deliverable.deliverable_state}` : null,
             deliverable.version != null ? `Version ${deliverable.version}` : null,
             deliverable.deadline ? `Due ${deliverable.deadline}` : null,
           ]

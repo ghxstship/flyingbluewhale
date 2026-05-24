@@ -71,7 +71,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   const deliverables: DeliverableRow[] = (rows ?? []).map((r) => ({
     id: r.id as string,
     type: r.type as string,
-    status: (r.fulfillment_state as string | null) ?? null,
+    deliverable_state: (r.fulfillment_state as string | null) ?? null,
     version: (r.version as number | null) ?? null,
     deadline: (r.deadline as string | null) ?? null,
     data: r.data,

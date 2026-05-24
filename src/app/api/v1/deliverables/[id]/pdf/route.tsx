@@ -59,7 +59,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
           deliverable={{
             id: d.id,
             type: d.type as string,
-            status: (d.fulfillment_state as string | null) ?? null,
+            deliverable_state: (d.fulfillment_state as string | null) ?? null,
             version: (d.version as number | null) ?? null,
             deadline: (d.deadline as string | null) ?? null,
             data: d.data,

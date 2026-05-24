@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { Project, ProjectStatus } from "@/lib/supabase/types";
 
 export async function listProjects(orgId: string, opts?: { includeArchived?: boolean }): Promise<Project[]> {
@@ -75,18 +76,18 @@ export async function createProject(input: {
 
 export async function updateProject(orgId: string, projectId: string, patch: Partial<Project>): Promise<Project> {
   const supabase = await createClient();
-  // The generated `Update` type narrows out `null` for nullable enums (DB
-  // gen artifact); the schema accepts null, so widen here.
-  const { data, error } = await supabase
+  // LooseSupabase: the generated Update type incorrectly rejects null for
+  // nullable enum columns (supabase-js codegen artifact). Schema accepts null.
+  const loose = supabase as unknown as LooseSupabase;
+  const { data, error } = (await loose
     .from("projects")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update(patch as any)
+    .update(patch)
     .eq("org_id", orgId)
     .eq("id", projectId)
     .select()
-    .single();
+    .single()) as { data: Project | null; error: { message: string } | null };
   if (error) throw error;
-  return data;
+  return data as Project;
 }
 
 export async function projectStats(orgId: string) {

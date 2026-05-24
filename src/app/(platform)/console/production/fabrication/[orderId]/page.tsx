@@ -15,6 +15,7 @@ import {
   type ProductionPhase,
 } from "@/lib/production-phase";
 import { ProductionPhaseControls } from "./ProductionPhaseControls";
+import { toTitle } from "@/lib/format";
 
 const NEXT: Record<FabricationStatus, { to: FabricationStatus; label: string }[]> = {
   open: [
@@ -108,7 +109,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             <form action={deleteFab}>
               <input type="hidden" name="id" value={row.id} />
               <button type="submit" className="text-[color:var(--color-error)] hover:underline">
-                Delete order
+                Delete Order
               </button>
             </form>
           </div>
@@ -131,13 +132,13 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
   return (
     <section className="surface space-y-4 p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold tracking-wide uppercase">Production Phase (LDP §2)</h2>
-        <Badge variant="default">{fab.production_phase}</Badge>
+        <h2 className="text-sm font-semibold tracking-wide uppercase">Production Phase</h2>
+        <Badge variant="default">{toTitle(fab.production_phase)}</Badge>
       </div>
       <p className="text-xs text-[var(--text-secondary)]">
-        Sequential macro-arc: discovery → concept → engineering → pre-pro → fab → logistics → install → strike. Phase
-        regression is permitted with a logged reason. Distinct from the operational <code>status</code> column above
-        (workflow-execution: open / in_progress / blocked / complete).
+        Sequential macro-arc: Discovery → Concept → Engineering → Pre-Pro → Fab → Logistics → Install → Strike. Phase
+        regression is permitted with a logged reason. Distinct from the workflow status shown above (Open / In Progress
+        / Blocked / Complete).
       </p>
       <ProductionPhaseControls
         orderId={fab.id}
@@ -146,13 +147,13 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
       />
       {transitions.length > 0 && (
         <div className="border-t border-[var(--border-color)] pt-3">
-          <div className="mb-2 text-xs font-semibold tracking-wide uppercase">Recent transitions</div>
+          <div className="mb-2 text-xs font-semibold tracking-wide uppercase">Recent Transitions</div>
           <ul className="space-y-1 text-xs">
             {transitions.slice(0, 5).map((t) => (
-              <li key={t.id} className="font-mono">
-                {t.from_phase ?? "(initial)"} → <strong>{t.to_phase}</strong> ·{" "}
+              <li key={t.id}>
+                {t.from_phase ? toTitle(t.from_phase) : "Initial"} → <strong>{toTitle(t.to_phase)}</strong> ·{" "}
                 {new Date(t.transitioned_at).toLocaleDateString()}
-                {t.reason ? <span className="ml-2 font-sans">{t.reason}</span> : null}
+                {t.reason ? <span className="ml-2">{t.reason}</span> : null}
               </li>
             ))}
           </ul>

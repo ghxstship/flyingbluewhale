@@ -66,7 +66,7 @@ export function CueRow({ cue }: { cue: Cue }) {
         {cue.duration_seconds ? ` · ${formatDuration(cue.duration_seconds)}` : ""}
       </td>
       <td>
-        <Badge variant={laneVariant(cue.lane)}>{cue.lane}</Badge>
+        <Badge variant={laneVariant(cue.lane)}>{toTitle(cue.lane)}</Badge>
       </td>
       <td>
         <div>{cue.label}</div>

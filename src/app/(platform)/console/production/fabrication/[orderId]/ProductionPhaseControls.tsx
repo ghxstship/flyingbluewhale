@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { transitionProductionPhaseAction } from "../actions";
 import type { ProductionPhase } from "@/lib/production-phase";
+import { toTitle } from "@/lib/format";
 
 export function ProductionPhaseControls({
   orderId,
@@ -37,12 +38,12 @@ export function ProductionPhaseControls({
           className="inline-flex"
         >
           <Button type="submit" disabled={pending} size="sm" variant="secondary">
-            → {target}
+            → {toTitle(target)}
           </Button>
         </form>
       ))}
       <span className="ml-2 self-center text-xs text-[var(--text-secondary)]">
-        From <strong>{currentPhase}</strong>
+        From <strong>{toTitle(currentPhase)}</strong>
       </span>
     </div>
   );

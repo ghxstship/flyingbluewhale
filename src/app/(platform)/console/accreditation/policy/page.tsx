@@ -73,7 +73,7 @@ export default async function Page() {
         subtitle={`${categories.length} categor${categories.length === 1 ? "y" : "ies"} × ${zones.length} zone${zones.length === 1 ? "" : "s"}${coverage != null ? ` · ${coverage}% coverage` : ""}`}
         action={
           <Button href="/console/accreditation/categories" variant="secondary" size="sm">
-            Manage categories
+            Manage Categories
           </Button>
         }
       />
@@ -81,11 +81,11 @@ export default async function Page() {
         {categories.length === 0 || zones.length === 0 ? (
           <EmptyState
             title="Need Categories + Zones First"
-            description="The matrix derives from accreditation_categories and venue_zones. Author at least one of each before the policy renders."
+            description="The matrix derives from accreditation categories crossed with venue zones. Author at least one of each before the policy renders."
             action={
               <div className="flex items-center gap-2">
                 <Link href="/console/accreditation/categories/new" className="btn btn-primary btn-sm">
-                  + New Policy
+                  + New Category
                 </Link>
                 <Link href="/console/venues" className="btn btn-secondary btn-sm">
                   Open Venues

@@ -146,7 +146,7 @@ export default async function Page() {
 
         <p className="mt-4 text-xs text-[var(--text-muted)]">
           A green cell means cardholders of the column's category are allowed in the row's zone. To edit, open the venue
-          and use its Zones tab — the <code>allowed_categories</code> array on each zone drives this matrix.
+          and use its Zones tab — each zone's allowed-categories list drives this matrix.
         </p>
       </div>
     </>

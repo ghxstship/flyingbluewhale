@@ -16,7 +16,7 @@ export default function MarketingError({ error, reset }: { error: Error & { dige
         {error.digest ? <span className="mt-2 block font-mono text-xs">Ref: {error.digest}</span> : null}
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Button onClick={() => reset()}>Try again</Button>
+        <Button onClick={() => reset()}>Try Again</Button>
         <Button href="/" variant="secondary">
           Home
         </Button>

@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="surface p-4">
           <h3 className="text-sm font-semibold">Question</h3>
           <p className="mt-2 text-sm whitespace-pre-wrap">{rfi.question}</p>
-          {rfi.category && <p className="mt-2 text-xs text-[var(--text-muted)]">Category: {rfi.category}</p>}
+          {rfi.category && <p className="mt-2 text-xs text-[var(--text-muted)]">Category: {toTitle(rfi.category)}</p>}
         </section>
 
         <section className="surface p-4">
@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 />
                 <div className="flex justify-end">
                   <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
-                    Post answer
+                    Post Answer
                   </button>
                 </div>
               </form>

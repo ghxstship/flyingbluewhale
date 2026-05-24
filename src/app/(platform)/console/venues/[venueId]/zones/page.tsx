@@ -105,8 +105,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Zones drive the accreditation policy matrix. Edit <code>allowed_categories</code> to grant access to category
-          codes — the matrix at <code>/console/accreditation/policy</code> renders the result.
+          Zones drive the accreditation policy matrix. Edit the allowed categories list to grant access — the policy
+          matrix renders the result.
         </p>
       </div>
     </>

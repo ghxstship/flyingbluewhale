@@ -49,9 +49,9 @@ export default async function Page() {
       {rows.length === 0 ? (
         <div className="mt-6">
           <EmptyState
-            title="No applications yet"
+            title="No Applications Yet"
             description="Browse open gigs and apply to start building your application history."
-            action={<Button href="/marketplace/gigs">Browse gigs</Button>}
+            action={<Button href="/marketplace/gigs">Browse Gigs</Button>}
           />
         </div>
       ) : (
@@ -60,7 +60,7 @@ export default async function Page() {
             <li key={r.id} className="card-elevated flex items-center justify-between p-4">
               <div>
                 <Link href={`/me/applications/${r.id}`} className="text-sm font-semibold">
-                  {r.posting?.title ?? "(deleted posting)"}
+                  {r.posting?.title ?? "Deleted Posting"}
                 </Link>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                   Applied {new Date(r.applied_at).toLocaleDateString()}

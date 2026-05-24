@@ -109,16 +109,16 @@ export function CookieConsent() {
             onClick={() => setShowDetails((v) => !v)}
             className="text-xs text-[var(--text-muted)] underline-offset-4 hover:underline"
           >
-            {showDetails ? "Hide details" : "Customize"}
+            {showDetails ? "Hide Details" : "Customize"}
           </button>
           <div className="flex gap-2">
             <Button variant="ghost" onClick={() => decide({ analytics: false, marketing: false })}>
-              Reject all
+              Reject All
             </Button>
             {showDetails ? (
-              <Button onClick={() => decide({ analytics, marketing })}>Save preferences</Button>
+              <Button onClick={() => decide({ analytics, marketing })}>Save Preferences</Button>
             ) : (
-              <Button onClick={() => decide({ analytics: true, marketing: true })}>Accept all</Button>
+              <Button onClick={() => decide({ analytics: true, marketing: true })}>Accept All</Button>
             )}
           </div>
         </DialogFooter>

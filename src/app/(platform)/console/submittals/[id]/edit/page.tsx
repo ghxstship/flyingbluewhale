@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Spec section</span>
+              <span className={LBL}>Spec Section</span>
               <input name="spec_section" defaultValue={sub.spec_section ?? ""} maxLength={80} className={INPUT} />
             </label>
           </div>
@@ -120,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Ball in court</span>
+              <span className={LBL}>Ball In Court</span>
               <select name="ball_in_court_id" defaultValue={sub.ball_in_court_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(users ?? []).map((u) => (
@@ -144,7 +144,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Due by</span>
+              <span className={LBL}>Due By</span>
               <input
                 type="date"
                 name="due_at"

@@ -9,15 +9,15 @@ export default function AuthError({ error, reset }: { error: Error & { digest?: 
   }, [error]);
   return (
     <div className="mx-auto max-w-md px-6 py-12 text-center">
-      <h1 className="text-2xl font-semibold tracking-tight">Sign-in error</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Sign-In Error</h1>
       <p className="mt-3 text-sm text-[var(--text-secondary)]">
         {error.message || "We couldn't complete the request. Try again or contact support if this persists."}
         {error.digest ? <span className="mt-2 block font-mono text-xs">Ref: {error.digest}</span> : null}
       </p>
       <div className="mt-6 flex justify-center gap-2">
-        <Button onClick={() => reset()}>Try again</Button>
+        <Button onClick={() => reset()}>Try Again</Button>
         <Button href="/login" variant="secondary">
-          Back to sign in
+          Back To Sign In
         </Button>
       </div>
     </div>

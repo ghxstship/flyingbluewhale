@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         eyebrow="Procurement"
         breadcrumbs={[{ label: "Submittals", href: "/console/submittals" }, { label: sub.code }]}
         title={`${sub.code} — ${sub.title}`}
-        subtitle={`${project} · ${sub.spec_section ?? "no spec section"} · round #${sub.current_round}`}
+        subtitle={`${project} · ${sub.spec_section ?? "No Spec Section"} · Round #${sub.current_round}`}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[sub.status] ?? "muted"}>{toTitle(sub.status)}</Badge>
@@ -83,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <th>Round</th>
                 <th>Submitted</th>
                 <th>Stamp</th>
-                <th>Stamp notes</th>
+                <th>Stamp Notes</th>
               </tr>
             </thead>
             <tbody>
@@ -110,8 +110,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <span className="text-xs font-medium text-[var(--text-secondary)]">Stamp</span>
                   <select name="stamp" required className={INPUT}>
                     <option value="approved">Approved</option>
-                    <option value="approved_with_comments">Approved with comments</option>
-                    <option value="revise_resubmit">Revise &amp; resubmit</option>
+                    <option value="approved_with_comments">Approved With Comments</option>
+                    <option value="revise_resubmit">Revise &amp; Resubmit</option>
                     <option value="rejected">Rejected</option>
                   </select>
                 </label>
@@ -119,7 +119,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <textarea name="stamp_notes" rows={3} placeholder="Reviewer notes…" className={INPUT} />
               <div className="flex justify-end">
                 <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
-                  Apply stamp
+                  Apply Stamp
                 </button>
               </div>
             </form>
@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <section className="surface p-4">
             <form action={addNextRound.bind(null, id)}>
               <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
-                + Open round #{sub.current_round + 1}
+                + Open Round #{sub.current_round + 1}
               </button>
             </form>
           </section>

@@ -59,13 +59,13 @@ export default async function ConsoleDashboard() {
         />
         <div className="page-content">
           <EmptyState
-            title="No organization yet"
-            description="Operations console is org-scoped. Create your first organization, or accept an invitation from your team."
+            title="No Organization Yet"
+            description="The operations workspace is org-scoped. Create your first organization, or accept an invitation from your team."
             action={
               <div className="flex flex-wrap items-center gap-3">
-                <Button href="/me/organizations">Create organization</Button>
+                <Button href="/me/organizations">Create Organization</Button>
                 <Link href="/me" className="text-xs text-[var(--org-primary)]">
-                  ← Back to dashboard
+                  ← Back To Dashboard
                 </Link>
               </div>
             }

@@ -19,7 +19,7 @@ export default function ConsoleError({ error, reset }: { error: Error & { digest
         <div className="surface p-6">
           <p className="text-sm text-[var(--text-secondary)]">{error.message || "An unexpected error occurred."}</p>
           <div className="mt-4 flex gap-2">
-            <Button onClick={() => reset()}>Try again</Button>
+            <Button onClick={() => reset()}>Try Again</Button>
             <Button href="/console" variant="secondary">
               Back to Workspace
             </Button>

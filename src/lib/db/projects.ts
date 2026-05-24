@@ -79,8 +79,7 @@ export async function updateProject(orgId: string, projectId: string, patch: Par
   // gen artifact); the schema accepts null, so widen here.
   const { data, error } = await supabase
     .from("projects")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update(patch as any)
+    .update(patch)
     .eq("org_id", orgId)
     .eq("id", projectId)
     .select()

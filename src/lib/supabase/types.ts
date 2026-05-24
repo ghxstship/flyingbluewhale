@@ -196,7 +196,7 @@ export type Project = {
   name: string;
   description: string | null;
   project_state: ProjectStatus;
-  xpms_phase: XpmsPhaseEnum | null;
+  xpms_phase: XpmsPhaseEnum;
   start_date: string | null;
   end_date: string | null;
   client_id: string | null;

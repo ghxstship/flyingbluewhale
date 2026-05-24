@@ -10,26 +10,21 @@ import { toTitle } from "@/lib/format";
 /**
  * <PortalDocVault> — shared per-persona document vault primitive.
  *
- * The portal had bespoke vault-style surfaces on vendor/submissions
- * (deliverables they submitted), client/files (proposal collateral),
- * and sponsor/assets — but each was reimplemented with slightly
- * different shapes. This widget reads `deliverables` (the canonical
- * document table) filtered to the caller's `assignee_id` AND/OR
- * `submitted_by`, scoped to a project + optional `types` filter so
- * each persona can show their relevant kinds (riders for artist,
- * activation specs for sponsor, etc).
+ * Reads `deliverables` filtered to the caller's `submitted_by`, scoped
+ * to a project + optional `types` filter so each persona can show their
+ * relevant kinds (riders for artist, activation specs for sponsor).
  *
- * For per-persona doc surfaces that don't yet exist (artist riders,
- * media credentials, delegation visa docs), mount this with the
- * relevant types[] to give them a vault view without writing new
- * server logic.
+ * Per-individual catalog entitlements (tickets, credentials, lodging,
+ * etc.) no longer live in deliverables — they're in the unified
+ * `assignments` table, surfaced via /m/advances and /p/[slug]/crew/advances.
+ * This widget only renders *documents the user submitted* now.
  */
 
 type Row = {
   id: string;
   title: string | null;
   type: string;
-  deliverable_state: string;
+  fulfillment_state: string;
   version: number;
   updated_at: string;
 };
@@ -37,13 +32,11 @@ type Row = {
 export async function PortalDocVault({
   projectId,
   types,
-  showSubmittedByMe = true,
   emptyTitle = "No Documents",
   emptyDescription = "Documents tied to you on this project appear here.",
 }: {
   projectId: string | null;
   types?: DeliverableType[];
-  showSubmittedByMe?: boolean;
   emptyTitle?: string;
   emptyDescription?: string;
 }) {
@@ -53,16 +46,12 @@ export async function PortalDocVault({
   const session = await requireSession();
   const supabase = await createClient();
 
-  // `submitted_by` (legacy) OR `assignee_id` (per-individual, 0049) — the
-  // OR captures both "things I sent in" and "things assigned to me".
-  const filters: string[] = [`assignee_id.eq.${session.userId}`];
-  if (showSubmittedByMe) filters.push(`submitted_by.eq.${session.userId}`);
   let q = supabase
     .from("deliverables")
-    .select("id, title, type, deliverable_state, version, updated_at")
+    .select("id, title, type, fulfillment_state, version, updated_at")
     .eq("org_id", session.orgId)
     .eq("project_id", projectId)
-    .or(filters.join(","))
+    .eq("submitted_by", session.userId)
     .is("deleted_at", null);
   if (types && types.length > 0) q = q.in("type", types);
   const { data } = await q.order("updated_at", { ascending: false }).limit(100);
@@ -92,7 +81,7 @@ export async function PortalDocVault({
             </td>
             <td className="font-mono">{r.version}</td>
             <td>
-              <StatusBadge status={r.deliverable_state} />
+              <StatusBadge status={r.fulfillment_state} />
             </td>
             <td className="font-mono text-xs">{fmtDate(r.updated_at)}</td>
           </tr>

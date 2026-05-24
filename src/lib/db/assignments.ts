@@ -1,0 +1,337 @@
+import "server-only";
+import { createClient } from "@/lib/supabase/server";
+
+// ──────────────────────────────────────────────────────────────
+// Catalog kinds — the 10 things you can assign to a party.
+// Mirrors public.catalog_kind in the database (migration 0067).
+// ──────────────────────────────────────────────────────────────
+
+export const CATALOG_KINDS = [
+  "ticket",
+  "credential",
+  "catering",
+  "radio",
+  "tool",
+  "equipment",
+  "uniform",
+  "travel",
+  "lodging",
+  "vehicle",
+] as const;
+export type CatalogKind = (typeof CATALOG_KINDS)[number];
+
+export const CATALOG_KIND_LABEL: Record<CatalogKind, string> = {
+  ticket: "Tickets",
+  credential: "Credentials",
+  catering: "Catering",
+  radio: "Radios",
+  tool: "Tools",
+  equipment: "Equipment",
+  uniform: "Uniforms",
+  travel: "Travel",
+  lodging: "Lodging",
+  vehicle: "Vehicles",
+};
+
+export const CATALOG_KIND_LABEL_SINGULAR: Record<CatalogKind, string> = {
+  ticket: "Ticket",
+  credential: "Credential",
+  catering: "Catering item",
+  radio: "Radio",
+  tool: "Tool",
+  equipment: "Equipment",
+  uniform: "Uniform",
+  travel: "Travel itinerary",
+  lodging: "Lodging",
+  vehicle: "Vehicle",
+};
+
+// ──────────────────────────────────────────────────────────────
+// Fulfillment lifecycle — shared by deliverables and assignments.
+// ──────────────────────────────────────────────────────────────
+
+export const FULFILLMENT_STATES = [
+  "briefed",
+  "draft",
+  "submitted",
+  "in_review",
+  "revision_requested",
+  "approved",
+  "rejected",
+  "delivered",
+  "issued",
+  "transferred",
+  "redeemed",
+  "expired",
+  "voided",
+  "returned",
+] as const;
+export type FulfillmentState = (typeof FULFILLMENT_STATES)[number];
+
+// Sequential transitions allowed by the UI. Server enforces these so a
+// stale tab can't write an illegal jump (e.g. briefed → delivered).
+export const NEXT_FULFILLMENT_STATES: Record<FulfillmentState, FulfillmentState[]> = {
+  briefed: ["draft", "submitted", "issued"],
+  draft: ["submitted"],
+  submitted: ["in_review", "approved", "revision_requested", "rejected"],
+  in_review: ["approved", "revision_requested", "rejected"],
+  revision_requested: ["submitted", "rejected"],
+  approved: ["delivered", "issued"],
+  delivered: ["returned"],
+  rejected: [],
+  issued: ["transferred", "redeemed", "voided", "expired"],
+  transferred: ["redeemed", "voided", "expired"],
+  redeemed: [],
+  expired: [],
+  voided: [],
+  returned: [],
+};
+
+// ──────────────────────────────────────────────────────────────
+// Party — exactly one of (user, crew_member, external_holder).
+// ──────────────────────────────────────────────────────────────
+
+export type AssignmentPartyKind = "user" | "crew_member" | "external_holder";
+
+// ──────────────────────────────────────────────────────────────
+// Row types — the columns we project in the read helpers below.
+// Loose by design: regen `supabase/database.types.ts` for the full
+// generated row when needed.
+// ──────────────────────────────────────────────────────────────
+
+export type AssignmentListRow = {
+  id: string;
+  project_id: string;
+  catalog_item_id: string;
+  catalog_kind: CatalogKind;
+  party_kind: AssignmentPartyKind;
+  party_user_id: string | null;
+  party_crew_id: string | null;
+  party_external_id: string | null;
+  fulfillment_state: FulfillmentState;
+  title: string | null;
+  deadline: string | null;
+  issued_at: string | null;
+  fulfilled_at: string | null;
+  version: number;
+  updated_at: string;
+};
+
+export type AssignmentDetailRow = AssignmentListRow & {
+  org_id: string;
+  notes: string | null;
+  data: Record<string, unknown> | null;
+  atom_id: string | null;
+  created_at: string;
+  created_by: string | null;
+};
+
+// ──────────────────────────────────────────────────────────────
+// Read helpers
+// ──────────────────────────────────────────────────────────────
+
+const LIST_SELECT =
+  "id, project_id, catalog_item_id, catalog_kind, party_kind, party_user_id, party_crew_id, party_external_id, fulfillment_state, title, deadline, issued_at, fulfilled_at, version, updated_at";
+
+const DETAIL_SELECT = LIST_SELECT + ", org_id, notes, data, atom_id, created_at, created_by";
+
+export async function listProjectAssignments(
+  orgId: string,
+  projectId: string,
+  opts?: { kinds?: CatalogKind[]; limit?: number },
+): Promise<AssignmentListRow[]> {
+  const supabase = await createClient();
+  let q = supabase
+    .from("assignments")
+    .select(LIST_SELECT)
+    .eq("org_id", orgId)
+    .eq("project_id", projectId)
+    .is("deleted_at", null);
+  if (opts?.kinds && opts.kinds.length > 0) q = q.in("catalog_kind", opts.kinds);
+  const { data, error } = await q.order("deadline", { ascending: true, nullsFirst: false }).limit(opts?.limit ?? 500);
+  if (error) throw error;
+  return (data ?? []) as unknown as AssignmentListRow[];
+}
+
+export async function listMyAssignments(
+  orgId: string,
+  userId: string,
+  opts?: { kinds?: CatalogKind[]; projectId?: string; limit?: number },
+): Promise<AssignmentListRow[]> {
+  const supabase = await createClient();
+  let q = supabase
+    .from("assignments")
+    .select(LIST_SELECT)
+    .eq("org_id", orgId)
+    .eq("party_user_id", userId)
+    .is("deleted_at", null);
+  if (opts?.projectId) q = q.eq("project_id", opts.projectId);
+  if (opts?.kinds && opts.kinds.length > 0) q = q.in("catalog_kind", opts.kinds);
+  const { data, error } = await q.order("deadline", { ascending: true, nullsFirst: false }).limit(opts?.limit ?? 200);
+  if (error) throw error;
+  return (data ?? []) as unknown as AssignmentListRow[];
+}
+
+export async function getAssignment(orgId: string, id: string): Promise<AssignmentDetailRow | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("assignments")
+    .select(DETAIL_SELECT)
+    .eq("id", id)
+    .eq("org_id", orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  return (data ?? null) as unknown as AssignmentDetailRow | null;
+}
+
+// ──────────────────────────────────────────────────────────────
+// Scan — unified gate-scan flow.
+// Replaces src/lib/db/tickets.ts scanTicket(). Same race-handling
+// pattern: conditional UPDATE on assignment_scan_codes claims the
+// scan, parent assignment flips to 'redeemed', event journal records
+// every attempt (accepted/duplicate/voided/not_found).
+// ──────────────────────────────────────────────────────────────
+
+export type ScanResult =
+  | { result: "accepted"; assignmentId: string; scanCodeId: string; catalogKind: CatalogKind; title: string | null }
+  | { result: "duplicate"; assignmentId: string; redeemedAt: string | null }
+  | { result: "voided"; assignmentId: string }
+  | { result: "expired"; assignmentId: string }
+  | { result: "not_found" };
+
+export async function scanAssignment(input: {
+  orgId: string;
+  scannerUserId: string;
+  code: string;
+  location?: { lat: number; lng: number; accuracy?: number };
+}): Promise<ScanResult> {
+  const supabase = await createClient();
+
+  // Active scan code lookup (partial unique index on (org_id, code) WHERE active).
+  const { data: scanCode } = await supabase
+    .from("assignment_scan_codes")
+    .select("id, assignment_id, active")
+    .eq("org_id", input.orgId)
+    .eq("code", input.code)
+    .eq("active", true)
+    .maybeSingle();
+
+  if (!scanCode) {
+    // Fall back to looking up any code (active or voided) so we can
+    // distinguish voided/not_found.
+    const { data: anyCode } = await supabase
+      .from("assignment_scan_codes")
+      .select("id, assignment_id, active")
+      .eq("org_id", input.orgId)
+      .eq("code", input.code)
+      .maybeSingle();
+    if (anyCode && !anyCode.active) {
+      // Code was voided — log + return voided.
+      await supabase.from("assignment_events").insert({
+        assignment_id: anyCode.assignment_id,
+        org_id: input.orgId,
+        event_kind: "scan",
+        actor_user_id: input.scannerUserId,
+        scan_code_id: anyCode.id,
+        result: "voided",
+        location: input.location ?? null,
+      });
+      return { result: "voided", assignmentId: anyCode.assignment_id };
+    }
+    return { result: "not_found" };
+  }
+
+  // Read the parent assignment to evaluate validity.
+  const { data: a } = await supabase
+    .from("assignments")
+    .select("id, org_id, fulfillment_state, fulfilled_at, catalog_kind, title")
+    .eq("id", scanCode.assignment_id)
+    .eq("org_id", input.orgId)
+    .maybeSingle();
+  if (!a) return { result: "not_found" };
+  const state = a.fulfillment_state as FulfillmentState;
+  const catalogKind = a.catalog_kind as CatalogKind;
+  const title = (a.title as string | null) ?? null;
+
+  if (state === "voided") {
+    await supabase.from("assignment_events").insert({
+      assignment_id: a.id,
+      org_id: input.orgId,
+      event_kind: "scan",
+      actor_user_id: input.scannerUserId,
+      scan_code_id: scanCode.id,
+      result: "voided",
+      location: input.location ?? null,
+    });
+    return { result: "voided", assignmentId: a.id };
+  }
+
+  if (state === "expired") {
+    await supabase.from("assignment_events").insert({
+      assignment_id: a.id,
+      org_id: input.orgId,
+      event_kind: "scan",
+      actor_user_id: input.scannerUserId,
+      scan_code_id: scanCode.id,
+      result: "expired",
+      location: input.location ?? null,
+    });
+    return { result: "expired", assignmentId: a.id };
+  }
+
+  if (state === "redeemed") {
+    await supabase.from("assignment_events").insert({
+      assignment_id: a.id,
+      org_id: input.orgId,
+      event_kind: "scan",
+      actor_user_id: input.scannerUserId,
+      scan_code_id: scanCode.id,
+      result: "duplicate",
+      location: input.location ?? null,
+    });
+    return { result: "duplicate", assignmentId: a.id, redeemedAt: a.fulfilled_at as string | null };
+  }
+
+  // Conditional claim — race-safe. We only redeem if the row is still
+  // in a redeemable state. Mirrors the old tickets.ts conditional UPDATE.
+  const now = new Date().toISOString();
+  const { data: claimed } = await supabase
+    .from("assignments")
+    .update({ fulfillment_state: "redeemed", fulfilled_at: now })
+    .eq("id", a.id)
+    .eq("org_id", input.orgId)
+    .in("fulfillment_state", ["issued", "transferred", "approved", "delivered", "briefed"])
+    .select("id, fulfilled_at");
+
+  if (!claimed || claimed.length === 0) {
+    // Lost the race — refetch + return duplicate with the canonical timestamp.
+    const { data: latest } = await supabase
+      .from("assignments")
+      .select("fulfilled_at")
+      .eq("id", a.id)
+      .eq("org_id", input.orgId)
+      .maybeSingle();
+    await supabase.from("assignment_events").insert({
+      assignment_id: a.id,
+      org_id: input.orgId,
+      event_kind: "scan",
+      actor_user_id: input.scannerUserId,
+      scan_code_id: scanCode.id,
+      result: "duplicate",
+      location: input.location ?? null,
+    });
+    return { result: "duplicate", assignmentId: a.id, redeemedAt: (latest?.fulfilled_at as string | null) ?? now };
+  }
+
+  await supabase.from("assignment_events").insert({
+    assignment_id: a.id,
+    org_id: input.orgId,
+    event_kind: "scan",
+    actor_user_id: input.scannerUserId,
+    scan_code_id: scanCode.id,
+    result: "accepted",
+    location: input.location ?? null,
+  });
+
+  return { result: "accepted", assignmentId: a.id, scanCodeId: scanCode.id, catalogKind, title };
+}

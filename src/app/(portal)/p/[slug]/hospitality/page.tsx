@@ -25,7 +25,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const fmt = await getRequestFormatters();
   const [{ count: tickets }, { count: blocks }] = await Promise.all([
-    supabase.from("tickets").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
+    supabase
+      .from("assignments")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("catalog_kind", "ticket")
+      .is("deleted_at", null),
     supabase.from("accommodation_blocks").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
   ]);
 

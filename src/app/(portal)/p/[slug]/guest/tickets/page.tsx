@@ -3,36 +3,87 @@ import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
-import type { Ticket } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
+
+type Row = {
+  id: string;
+  tier_code: string | null;
+  scan_code: string | null;
+  fulfillment_state: string;
+  holder_name: string | null;
+  issued_at: string | null;
+};
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = await projectIdFromSlug(slug);
+  if (!project) {
+    return (
+      <PortalSubpage slug={slug} persona="guest" title="Tickets" subtitle="Your tickets for this event">
+        <p className="text-sm text-[var(--text-muted)]">Project not found.</p>
+      </PortalSubpage>
+    );
+  }
   const supabase = await createClient();
-  const rows = project
-    ? (((
-        await supabase.from("tickets").select("*").eq("project_id", project.id).order("issued_at", { ascending: false })
-      ).data as Ticket[]) ?? [])
-    : [];
+
+  const { data } = await supabase
+    .from("assignments")
+    .select(
+      "id, fulfillment_state, issued_at, party_user_id, party_external_id, ticket_assignment_details(tier_code), assignment_scan_codes(code, active), party_user:users!assignments_party_user_id_fkey(name, email), party_external:assignment_external_holders!assignments_party_external_id_fkey(holder_name, holder_email)",
+    )
+    .eq("project_id", project.id)
+    .eq("catalog_kind", "ticket")
+    .is("deleted_at", null)
+    .order("issued_at", { ascending: false })
+    .limit(500);
+
+  type Raw = {
+    id: string;
+    fulfillment_state: string;
+    issued_at: string | null;
+    party_user_id: string | null;
+    party_external_id: string | null;
+    ticket_assignment_details: { tier_code: string | null } | null;
+    assignment_scan_codes: Array<{ code: string; active: boolean }>;
+    party_user: { name: string | null; email: string } | null;
+    party_external: { holder_name: string | null; holder_email: string | null } | null;
+  };
+  const rows = ((data ?? []) as unknown as Raw[]).map((r): Row => {
+    const activeCode = r.assignment_scan_codes.find((c) => c.active);
+    const holderName =
+      r.party_user?.name ??
+      r.party_user?.email ??
+      r.party_external?.holder_name ??
+      r.party_external?.holder_email ??
+      null;
+    return {
+      id: r.id,
+      tier_code: r.ticket_assignment_details?.tier_code ?? null,
+      scan_code: activeCode?.code ?? null,
+      fulfillment_state: r.fulfillment_state,
+      holder_name: holderName,
+      issued_at: r.issued_at,
+    };
+  });
+
   return (
     <PortalSubpage slug={slug} persona="guest" title="Tickets" subtitle="Your tickets for this event">
-      <DataTable<Ticket>
+      <DataTable<Row>
         rows={rows}
         emptyLabel="No tickets yet — buy or claim to get started"
         columns={[
           {
             key: "code",
             header: "Code",
-            render: (r) => <span className="font-mono text-xs">{r.code}</span>,
-            accessor: (r) => r.code ?? null,
+            render: (r) => <span className="font-mono text-xs">{r.scan_code ?? "—"}</span>,
+            accessor: (r) => r.scan_code ?? null,
           },
           {
             key: "tier",
             header: "Tier",
-            render: (r) => r.tier,
-            accessor: (r) => r.tier,
+            render: (r) => r.tier_code ?? "—",
+            accessor: (r) => r.tier_code,
             filterable: true,
             groupable: true,
           },
@@ -43,10 +94,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             accessor: (r) => r.holder_name ?? null,
           },
           {
-            key: "status",
-            header: "Status",
-            render: (r) => <StatusBadge status={r.status} />,
-            accessor: (r) => r.status,
+            key: "state",
+            header: "State",
+            render: (r) => <StatusBadge status={r.fulfillment_state} />,
+            accessor: (r) => r.fulfillment_state,
             filterable: true,
             groupable: true,
           },

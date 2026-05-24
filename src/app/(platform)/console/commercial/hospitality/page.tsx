@@ -13,13 +13,16 @@ import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-type TicketTypeRow = {
+type CatalogRow = {
   id: string;
   name: string;
-  channel: string;
-  price_cents: number;
-  currency: string;
-  allocation: number;
+  code: string;
+  unit_cost_cents: number | null;
+  currency: string | null;
+  inventory_qty: number | null;
+  open_count: number;
+  fulfilled_count: number;
+  total_count: number;
 };
 
 type EntitlementRow = {
@@ -38,7 +41,7 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
   blocked: "warning",
 };
 
-const HOSP_CHANNEL = "hospitality";
+const HOSP_CODE_PREFIX = "hospitality";
 
 export default async function Page() {
   if (!hasSupabase) {
@@ -53,14 +56,19 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
-
   const fmt = await getRequestFormatters();
+
+  // Hospitality packages are now master_catalog_items rows of kind='ticket'
+  // tagged via the `code` prefix (or a description marker). The
+  // v_catalog_inventory view rolls up live counts from the assignments
+  // table — no denormalized `sold` to maintain.
   const [{ data: ttData }, { data: entData }] = await Promise.all([
     supabase
-      .from("ticket_types")
-      .select("id, name, channel, price_cents, currency, allocation")
+      .from("v_catalog_inventory")
+      .select("catalog_item_id, name, code, allocated, open_count, fulfilled_count, total_count")
       .eq("org_id", session.orgId)
-      .eq("channel", HOSP_CHANNEL)
+      .eq("catalog_kind", "ticket")
+      .ilike("code", `${HOSP_CODE_PREFIX}%`)
       .order("name", { ascending: true })
       .limit(200),
     supabase
@@ -72,11 +80,42 @@ export default async function Page() {
       .limit(200),
   ]);
 
-  const tickets = (ttData ?? []) as TicketTypeRow[];
+  // We also need unit_cost_cents + currency for revenue rollup.
+  const ids = ((ttData ?? []) as Array<{ catalog_item_id: string }>).map((r) => r.catalog_item_id);
+  const { data: pricing } = ids.length
+    ? await supabase.from("master_catalog_items").select("id, unit_cost_cents, currency").in("id", ids)
+    : { data: [] };
+  const priceMap = new Map<string, { unit_cost_cents: number | null; currency: string | null }>(
+    ((pricing ?? []) as Array<{ id: string; unit_cost_cents: number | null; currency: string | null }>).map((p) => [
+      p.id,
+      { unit_cost_cents: p.unit_cost_cents, currency: p.currency },
+    ]),
+  );
+
+  type InvRow = {
+    catalog_item_id: string;
+    name: string;
+    code: string;
+    allocated: number | null;
+    open_count: number;
+    fulfilled_count: number;
+    total_count: number;
+  };
+  const packages: CatalogRow[] = ((ttData ?? []) as unknown as InvRow[]).map((r) => ({
+    id: r.catalog_item_id,
+    name: r.name,
+    code: r.code,
+    unit_cost_cents: priceMap.get(r.catalog_item_id)?.unit_cost_cents ?? null,
+    currency: priceMap.get(r.catalog_item_id)?.currency ?? null,
+    inventory_qty: r.allocated,
+    open_count: r.open_count,
+    fulfilled_count: r.fulfilled_count,
+    total_count: r.total_count,
+  }));
   const ents = (entData ?? []) as EntitlementRow[];
 
-  const totalAllocation = tickets.reduce((s, t) => s + t.allocation, 0);
-  const totalRevenue = tickets.reduce((s, t) => s + t.allocation * t.price_cents, 0);
+  const totalAllocation = packages.reduce((s, p) => s + (p.inventory_qty ?? 0), 0);
+  const totalRevenue = packages.reduce((s, p) => s + (p.inventory_qty ?? 0) * (p.unit_cost_cents ?? 0), 0);
   const totalEntitlements = ents.reduce((s, e) => s + e.quantity, 0);
   const delivered = ents.reduce((s, e) => s + e.delivered, 0);
 
@@ -85,7 +124,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow="Commercial"
         title="Hospitality"
-        subtitle={`${tickets.length} package${tickets.length === 1 ? "" : "s"} · ${fmt.number(totalAllocation)} seats · ${ents.length} entitlement${ents.length === 1 ? "" : "s"}`}
+        subtitle={`${packages.length} package${packages.length === 1 ? "" : "s"} · ${fmt.number(totalAllocation)} seats · ${ents.length} entitlement${ents.length === 1 ? "" : "s"}`}
         action={
           <Button href="/console/commercial/sponsors" size="sm">
             Sponsors
@@ -104,23 +143,25 @@ export default async function Page() {
 
         <section>
           <h3 className="text-sm font-semibold">Hospitality Packages</h3>
-          {tickets.length === 0 ? (
+          {packages.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No Hospitality Ticket Types"
-              description="Hospitality maps onto ticket_types with channel = 'hospitality'. Author one in Console → Tickets."
+              title="No Hospitality Packages"
+              description="Hospitality maps onto master_catalog_items rows of kind='ticket' whose code starts with 'hospitality'. Author one in Console → Catalog."
             />
           ) : (
             <ul className="mt-3 space-y-2">
-              {tickets.map((t) => (
+              {packages.map((t) => (
                 <li key={t.id} className="surface flex items-center justify-between p-3">
                   <div>
                     <div className="text-sm font-medium">{t.name}</div>
                     <div className="font-mono text-xs text-[var(--text-muted)]">
-                      {fmt.number(t.allocation)} seats · {formatMoney(t.price_cents, t.currency)} ea
+                      {fmt.number(t.inventory_qty ?? 0)} seats ·{" "}
+                      {formatMoney(t.unit_cost_cents ?? 0, t.currency ?? "USD")} ea · {fmt.number(t.fulfilled_count)}{" "}
+                      redeemed / {fmt.number(t.total_count)} issued
                     </div>
                   </div>
-                  <Badge variant="muted">{t.channel}</Badge>
+                  <Badge variant="muted">{t.code}</Badge>
                 </li>
               ))}
             </ul>

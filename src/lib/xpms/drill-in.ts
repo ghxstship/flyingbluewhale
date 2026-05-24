@@ -49,7 +49,7 @@ export async function fetchAtomDrillIn(
         .order("due_at", { ascending: true, nullsFirst: false }),
       supabase
         .from("deliverables")
-        .select("id, title, type, deliverable_state, deliverable_state, deadline")
+        .select("id, title, type, fulfillment_state, fulfillment_state, deadline")
         .eq("org_id", orgId)
         .eq("atom_id", atomId)
         .is("deleted_at", null)

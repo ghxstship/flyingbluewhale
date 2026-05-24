@@ -6,36 +6,46 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({
-  credential_id: z.string().uuid(),
-  asset_kind: z.enum(["nfc_tag", "rfid_card", "barcode", "qr_code"]),
-  asset_serial: z.string().min(1).max(120),
+  assignment_id: z.string().uuid(),
+  kind: z.enum(["nfc", "rfid", "barcode", "qr", "wristband_serial"]),
+  code: z.string().min(1).max(120),
 });
 
 export type State = { error?: string } | null;
 
+/**
+ * Bind a physical scan token (NFC tag, RFID card, barcode, QR, wristband)
+ * to a credential-kind assignment. Replaces the legacy asset_links
+ * binding to a `credentials` row — now everything attaches at the
+ * assignment level via assignment_scan_codes. One row per active token;
+ * voiding a row lets the same code be re-issued later.
+ */
 export async function linkAssetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can link assets to credentials" };
+  if (!isManagerPlus(session)) return { error: "Only manager+ can bind scan codes" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
-  // Cross-tenant FK guard on credential_id.
-  const { data: credential } = await supabase
-    .from("credentials")
-    .select("id")
-    .eq("id", parsed.data.credential_id)
+  const { data: a } = await supabase
+    .from("assignments")
+    .select("id, catalog_kind")
+    .eq("id", parsed.data.assignment_id)
     .eq("org_id", session.orgId)
+    .is("deleted_at", null)
     .maybeSingle();
-  if (!credential) return { error: "Credential not found in your organization" };
+  if (!a) return { error: "Assignment not found in your organization" };
 
-  const { error } = await supabase.from("asset_links").insert({
+  const { error } = await supabase.from("assignment_scan_codes").insert({
+    assignment_id: parsed.data.assignment_id,
     org_id: session.orgId,
-    credential_id: parsed.data.credential_id,
-    asset_kind: parsed.data.asset_kind,
-    asset_serial: parsed.data.asset_serial,
+    kind: parsed.data.kind,
+    code: parsed.data.code,
   });
-  if (error) return { error: error.message };
+  if (error) {
+    // Most likely a unique-violation on (org_id, code) WHERE active.
+    return { error: "That code is already active on another assignment. Void it before re-issuing." };
+  }
   revalidatePath("/console/people/credentials/asset-linker");
   return null;
 }
@@ -47,8 +57,8 @@ export async function revokeLinkAction(formData: FormData) {
   if (!id) return;
   const supabase = await createClient();
   await supabase
-    .from("asset_links")
-    .update({ revoked_at: new Date().toISOString() })
+    .from("assignment_scan_codes")
+    .update({ active: false, voided_at: new Date().toISOString(), voided_by: session.userId })
     .eq("id", id)
     .eq("org_id", session.orgId);
   revalidatePath("/console/people/credentials/asset-linker");

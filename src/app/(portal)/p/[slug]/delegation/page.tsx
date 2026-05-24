@@ -101,9 +101,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <div className="surface mt-3 p-3">
             <PortalDocVault
               projectId={project?.id ?? null}
-              types={["credential_assignment", "travel_assignment", "lodging_assignment"]}
+              types={["vendor_package", "safety_compliance"]}
               emptyTitle="No Documents Yet"
-              emptyDescription="Visa packages and delegation credentials assigned to you appear here."
+              emptyDescription="Visa packages and delegation paperwork submitted by you appear here. Issued credentials, travel, and lodging show up under /p/[slug]/crew/advances."
             />
           </div>
         </section>

@@ -1536,51 +1536,6 @@ export type Database = {
           },
         ]
       }
-      asset_links: {
-        Row: {
-          asset_kind: string
-          asset_serial: string
-          credential_id: string
-          id: string
-          issued_at: string
-          org_id: string
-          revoked_at: string | null
-        }
-        Insert: {
-          asset_kind: string
-          asset_serial: string
-          credential_id: string
-          id?: string
-          issued_at?: string
-          org_id: string
-          revoked_at?: string | null
-        }
-        Update: {
-          asset_kind?: string
-          asset_serial?: string
-          credential_id?: string
-          id?: string
-          issued_at?: string
-          org_id?: string
-          revoked_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "asset_links_credential_id_fkey"
-            columns: ["credential_id"]
-            isOneToOne: false
-            referencedRelation: "credentials"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "asset_links_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       asset_locations: {
         Row: {
           asset_id: string
@@ -1887,6 +1842,333 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assignment_events: {
+        Row: {
+          actor_user_id: string | null
+          assignment_id: string
+          at: string
+          body: string | null
+          event_kind: Database["public"]["Enums"]["assignment_event_kind"]
+          from_state: Database["public"]["Enums"]["fulfillment_state"] | null
+          id: string
+          location: Json | null
+          org_id: string
+          payload: Json
+          result: Database["public"]["Enums"]["assignment_scan_result"] | null
+          scan_code_id: string | null
+          to_state: Database["public"]["Enums"]["fulfillment_state"] | null
+        }
+        Insert: {
+          actor_user_id?: string | null
+          assignment_id: string
+          at?: string
+          body?: string | null
+          event_kind: Database["public"]["Enums"]["assignment_event_kind"]
+          from_state?: Database["public"]["Enums"]["fulfillment_state"] | null
+          id?: string
+          location?: Json | null
+          org_id: string
+          payload?: Json
+          result?: Database["public"]["Enums"]["assignment_scan_result"] | null
+          scan_code_id?: string | null
+          to_state?: Database["public"]["Enums"]["fulfillment_state"] | null
+        }
+        Update: {
+          actor_user_id?: string | null
+          assignment_id?: string
+          at?: string
+          body?: string | null
+          event_kind?: Database["public"]["Enums"]["assignment_event_kind"]
+          from_state?: Database["public"]["Enums"]["fulfillment_state"] | null
+          id?: string
+          location?: Json | null
+          org_id?: string
+          payload?: Json
+          result?: Database["public"]["Enums"]["assignment_scan_result"] | null
+          scan_code_id?: string | null
+          to_state?: Database["public"]["Enums"]["fulfillment_state"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_events_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_events_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_events_scan_code_id_fkey"
+            columns: ["scan_code_id"]
+            isOneToOne: false
+            referencedRelation: "assignment_scan_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assignment_external_holders: {
+        Row: {
+          claimed_at: string | null
+          claimed_user_id: string | null
+          created_at: string
+          holder_email: string | null
+          holder_name: string | null
+          holder_phone: string | null
+          id: string
+          org_id: string
+          project_id: string | null
+        }
+        Insert: {
+          claimed_at?: string | null
+          claimed_user_id?: string | null
+          created_at?: string
+          holder_email?: string | null
+          holder_name?: string | null
+          holder_phone?: string | null
+          id?: string
+          org_id: string
+          project_id?: string | null
+        }
+        Update: {
+          claimed_at?: string | null
+          claimed_user_id?: string | null
+          created_at?: string
+          holder_email?: string | null
+          holder_name?: string | null
+          holder_phone?: string | null
+          id?: string
+          org_id?: string
+          project_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_external_holders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_external_holders_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assignment_scan_codes: {
+        Row: {
+          active: boolean
+          assignment_id: string
+          code: string
+          created_at: string
+          id: string
+          issued_at: string
+          kind: Database["public"]["Enums"]["assignment_scan_code_kind"]
+          org_id: string
+          voided_at: string | null
+          voided_by: string | null
+        }
+        Insert: {
+          active?: boolean
+          assignment_id: string
+          code: string
+          created_at?: string
+          id?: string
+          issued_at?: string
+          kind: Database["public"]["Enums"]["assignment_scan_code_kind"]
+          org_id: string
+          voided_at?: string | null
+          voided_by?: string | null
+        }
+        Update: {
+          active?: boolean
+          assignment_id?: string
+          code?: string
+          created_at?: string
+          id?: string
+          issued_at?: string
+          kind?: Database["public"]["Enums"]["assignment_scan_code_kind"]
+          org_id?: string
+          voided_at?: string | null
+          voided_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_scan_codes_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_scan_codes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assignments: {
+        Row: {
+          atom_id: string | null
+          catalog_item_id: string
+          catalog_kind: Database["public"]["Enums"]["catalog_kind"]
+          closed_at: string | null
+          closed_by: string | null
+          created_at: string
+          created_by: string | null
+          data: Json
+          deadline: string | null
+          deleted_at: string | null
+          fulfilled_at: string | null
+          fulfillment_state: Database["public"]["Enums"]["fulfillment_state"]
+          id: string
+          issued_at: string | null
+          notes: string | null
+          org_id: string
+          party_crew_id: string | null
+          party_external_id: string | null
+          party_kind: Database["public"]["Enums"]["assignment_party_kind"]
+          party_user_id: string | null
+          project_id: string
+          title: string | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          atom_id?: string | null
+          catalog_item_id: string
+          catalog_kind: Database["public"]["Enums"]["catalog_kind"]
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          deadline?: string | null
+          deleted_at?: string | null
+          fulfilled_at?: string | null
+          fulfillment_state?: Database["public"]["Enums"]["fulfillment_state"]
+          id?: string
+          issued_at?: string | null
+          notes?: string | null
+          org_id: string
+          party_crew_id?: string | null
+          party_external_id?: string | null
+          party_kind: Database["public"]["Enums"]["assignment_party_kind"]
+          party_user_id?: string | null
+          project_id: string
+          title?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          atom_id?: string | null
+          catalog_item_id?: string
+          catalog_kind?: Database["public"]["Enums"]["catalog_kind"]
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          data?: Json
+          deadline?: string | null
+          deleted_at?: string | null
+          fulfilled_at?: string | null
+          fulfillment_state?: Database["public"]["Enums"]["fulfillment_state"]
+          id?: string
+          issued_at?: string | null
+          notes?: string | null
+          org_id?: string
+          party_crew_id?: string | null
+          party_external_id?: string | null
+          party_kind?: Database["public"]["Enums"]["assignment_party_kind"]
+          party_user_id?: string | null
+          project_id?: string
+          title?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_xpms_atom_rollup_recursive"
+            referencedColumns: ["atom_id"]
+          },
+          {
+            foreignKeyName: "assignments_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "master_catalog_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "v_catalog_inventory"
+            referencedColumns: ["catalog_item_id"]
+          },
+          {
+            foreignKeyName: "assignments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_party_crew_id_fkey"
+            columns: ["party_crew_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_party_crew_id_fkey"
+            columns: ["party_crew_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_party_external_id_fkey"
+            columns: ["party_external_id"]
+            isOneToOne: false
+            referencedRelation: "assignment_external_holders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -4682,6 +4964,51 @@ export type Database = {
           },
         ]
       }
+      credential_assignment_details: {
+        Row: {
+          access_level: string | null
+          assignment_id: string
+          expires_on: string | null
+          issued_on: string | null
+          must_return: boolean
+          parent_assignment_id: string | null
+          returned_at: string | null
+        }
+        Insert: {
+          access_level?: string | null
+          assignment_id: string
+          expires_on?: string | null
+          issued_on?: string | null
+          must_return?: boolean
+          parent_assignment_id?: string | null
+          returned_at?: string | null
+        }
+        Update: {
+          access_level?: string | null
+          assignment_id?: string
+          expires_on?: string | null
+          issued_on?: string | null
+          must_return?: boolean
+          parent_assignment_id?: string | null
+          returned_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credential_assignment_details_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: true
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credential_assignment_details_parent_assignment_id_fkey"
+            columns: ["parent_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       credentials: {
         Row: {
           created_at: string
@@ -6035,33 +6362,33 @@ export type Database = {
         Row: {
           correlation_id: string | null
           deliverable_id: string
-          from_state: Database["public"]["Enums"]["deliverable_state"] | null
+          from_state: Database["public"]["Enums"]["fulfillment_state"] | null
           id: string
           org_id: string
           reason: string | null
-          to_state: Database["public"]["Enums"]["deliverable_state"]
+          to_state: Database["public"]["Enums"]["fulfillment_state"]
           transitioned_at: string
           transitioned_by: string | null
         }
         Insert: {
           correlation_id?: string | null
           deliverable_id: string
-          from_state?: Database["public"]["Enums"]["deliverable_state"] | null
+          from_state?: Database["public"]["Enums"]["fulfillment_state"] | null
           id?: string
           org_id: string
           reason?: string | null
-          to_state: Database["public"]["Enums"]["deliverable_state"]
+          to_state: Database["public"]["Enums"]["fulfillment_state"]
           transitioned_at?: string
           transitioned_by?: string | null
         }
         Update: {
           correlation_id?: string | null
           deliverable_id?: string
-          from_state?: Database["public"]["Enums"]["deliverable_state"] | null
+          from_state?: Database["public"]["Enums"]["fulfillment_state"] | null
           id?: string
           org_id?: string
           reason?: string | null
-          to_state?: Database["public"]["Enums"]["deliverable_state"]
+          to_state?: Database["public"]["Enums"]["fulfillment_state"]
           transitioned_at?: string
           transitioned_by?: string | null
         }
@@ -6126,17 +6453,15 @@ export type Database = {
       }
       deliverables: {
         Row: {
-          assignee_id: string | null
           atom_id: string | null
-          catalog_item_id: string | null
           closed_at: string | null
           closed_by: string | null
           created_at: string
           data: Json
           deadline: string | null
           deleted_at: string | null
-          deliverable_state: Database["public"]["Enums"]["deliverable_state"]
           file_path: string | null
+          fulfillment_state: Database["public"]["Enums"]["fulfillment_state"]
           id: string
           org_id: string
           project_id: string
@@ -6155,17 +6480,15 @@ export type Database = {
           version: number
         }
         Insert: {
-          assignee_id?: string | null
           atom_id?: string | null
-          catalog_item_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
           data?: Json
           deadline?: string | null
           deleted_at?: string | null
-          deliverable_state?: Database["public"]["Enums"]["deliverable_state"]
           file_path?: string | null
+          fulfillment_state?: Database["public"]["Enums"]["fulfillment_state"]
           id?: string
           org_id: string
           project_id: string
@@ -6184,17 +6507,15 @@ export type Database = {
           version?: number
         }
         Update: {
-          assignee_id?: string | null
           atom_id?: string | null
-          catalog_item_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
           data?: Json
           deadline?: string | null
           deleted_at?: string | null
-          deliverable_state?: Database["public"]["Enums"]["deliverable_state"]
           file_path?: string | null
+          fulfillment_state?: Database["public"]["Enums"]["fulfillment_state"]
           id?: string
           org_id?: string
           project_id?: string
@@ -6232,13 +6553,6 @@ export type Database = {
             columns: ["atom_id"]
             isOneToOne: false
             referencedRelation: "xpms_atoms"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "deliverables_catalog_item_id_fkey"
-            columns: ["catalog_item_id"]
-            isOneToOne: false
-            referencedRelation: "master_catalog_items"
             referencedColumns: ["id"]
           },
           {
@@ -10533,6 +10847,51 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lodging_assignment_details: {
+        Row: {
+          assignment_id: string
+          check_in: string | null
+          check_out: string | null
+          confirmation_code: string | null
+          property_name: string | null
+          room_number: string | null
+          roommate_assignment_id: string | null
+        }
+        Insert: {
+          assignment_id: string
+          check_in?: string | null
+          check_out?: string | null
+          confirmation_code?: string | null
+          property_name?: string | null
+          room_number?: string | null
+          roommate_assignment_id?: string | null
+        }
+        Update: {
+          assignment_id?: string
+          check_in?: string | null
+          check_out?: string | null
+          confirmation_code?: string | null
+          property_name?: string | null
+          room_number?: string | null
+          roommate_assignment_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lodging_assignment_details_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: true
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lodging_assignment_details_roommate_assignment_id_fkey"
+            columns: ["roommate_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
             referencedColumns: ["id"]
           },
         ]
@@ -19504,6 +19863,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "siteplan_placement_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "v_catalog_inventory"
+            referencedColumns: ["catalog_item_id"]
+          },
+          {
             foreignKeyName: "siteplan_placement_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -21600,86 +21966,52 @@ export type Database = {
           },
         ]
       }
-      ticket_scans: {
+      ticket_assignment_details: {
         Row: {
-          id: string
-          location: Json | null
-          result: string
-          scanned_at: string
-          scanner_id: string
-          ticket_id: string
+          assignment_id: string
+          gate_codes: string[]
+          seat_number: string | null
+          seat_row: string | null
+          seat_section: string | null
+          tier_code: string | null
+          transferable: boolean
+          valid_from: string | null
+          valid_until: string | null
+          zone_codes: string[]
         }
         Insert: {
-          id?: string
-          location?: Json | null
-          result: string
-          scanned_at?: string
-          scanner_id: string
-          ticket_id: string
+          assignment_id: string
+          gate_codes?: string[]
+          seat_number?: string | null
+          seat_row?: string | null
+          seat_section?: string | null
+          tier_code?: string | null
+          transferable?: boolean
+          valid_from?: string | null
+          valid_until?: string | null
+          zone_codes?: string[]
         }
         Update: {
-          id?: string
-          location?: Json | null
-          result?: string
-          scanned_at?: string
-          scanner_id?: string
-          ticket_id?: string
+          assignment_id?: string
+          gate_codes?: string[]
+          seat_number?: string | null
+          seat_row?: string | null
+          seat_section?: string | null
+          tier_code?: string | null
+          transferable?: boolean
+          valid_from?: string | null
+          valid_until?: string | null
+          zone_codes?: string[]
         }
         Relationships: [
           {
-            foreignKeyName: "ticket_scans_scanner_id_fkey"
-            columns: ["scanner_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ticket_scans_ticket_id_fkey"
-            columns: ["ticket_id"]
-            isOneToOne: false
-            referencedRelation: "tickets"
+            foreignKeyName: "ticket_assignment_details_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: true
+            referencedRelation: "assignments"
             referencedColumns: ["id"]
           },
         ]
-      }
-      ticket_types: {
-        Row: {
-          allocation: number
-          channel: string
-          created_at: string
-          currency: string
-          event_id: string | null
-          id: string
-          name: string
-          org_id: string
-          price_cents: number
-          sold: number
-        }
-        Insert: {
-          allocation?: number
-          channel?: string
-          created_at?: string
-          currency?: string
-          event_id?: string | null
-          id?: string
-          name: string
-          org_id: string
-          price_cents?: number
-          sold?: number
-        }
-        Update: {
-          allocation?: number
-          channel?: string
-          created_at?: string
-          currency?: string
-          event_id?: string | null
-          id?: string
-          name?: string
-          org_id?: string
-          price_cents?: number
-          sold?: number
-        }
-        Relationships: []
       }
       ticketing_connections: {
         Row: {
@@ -21766,73 +22098,6 @@ export type Database = {
             columns: ["ticketing_connection_id"]
             isOneToOne: false
             referencedRelation: "ticketing_connections"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      tickets: {
-        Row: {
-          code: string
-          holder_email: string | null
-          holder_name: string | null
-          id: string
-          issued_at: string
-          org_id: string
-          project_id: string
-          scanned_at: string | null
-          scanned_by: string | null
-          status: Database["public"]["Enums"]["ticket_status"]
-          tier: string
-          updated_at: string
-        }
-        Insert: {
-          code: string
-          holder_email?: string | null
-          holder_name?: string | null
-          id?: string
-          issued_at?: string
-          org_id: string
-          project_id: string
-          scanned_at?: string | null
-          scanned_by?: string | null
-          status?: Database["public"]["Enums"]["ticket_status"]
-          tier?: string
-          updated_at?: string
-        }
-        Update: {
-          code?: string
-          holder_email?: string | null
-          holder_name?: string | null
-          id?: string
-          issued_at?: string
-          org_id?: string
-          project_id?: string
-          scanned_at?: string | null
-          scanned_by?: string | null
-          status?: Database["public"]["Enums"]["ticket_status"]
-          tier?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tickets_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tickets_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tickets_scanned_by_fkey"
-            columns: ["scanned_by"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -22721,6 +22986,50 @@ export type Database = {
           },
         ]
       }
+      travel_assignment_details: {
+        Row: {
+          arrive_at: string | null
+          assignment_id: string
+          carrier: string | null
+          confirmation_code: string | null
+          depart_at: string | null
+          from_location: string | null
+          mode: string | null
+          seat: string | null
+          to_location: string | null
+        }
+        Insert: {
+          arrive_at?: string | null
+          assignment_id: string
+          carrier?: string | null
+          confirmation_code?: string | null
+          depart_at?: string | null
+          from_location?: string | null
+          mode?: string | null
+          seat?: string | null
+          to_location?: string | null
+        }
+        Update: {
+          arrive_at?: string | null
+          assignment_id?: string
+          carrier?: string | null
+          confirmation_code?: string | null
+          depart_at?: string | null
+          from_location?: string | null
+          mode?: string | null
+          seat?: string | null
+          to_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_assignment_details_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: true
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ucm_comments: {
         Row: {
           author_party_id: string | null
@@ -23251,6 +23560,44 @@ export type Database = {
           query?: string | null
         }
         Relationships: []
+      }
+      vehicle_assignment_details: {
+        Row: {
+          assignment_id: string
+          mileage_end: number | null
+          mileage_start: number | null
+          picked_up_at: string | null
+          plate: string | null
+          returned_at: string | null
+          vehicle_label: string | null
+        }
+        Insert: {
+          assignment_id: string
+          mileage_end?: number | null
+          mileage_start?: number | null
+          picked_up_at?: string | null
+          plate?: string | null
+          returned_at?: string | null
+          vehicle_label?: string | null
+        }
+        Update: {
+          assignment_id?: string
+          mileage_end?: number | null
+          mileage_start?: number | null
+          picked_up_at?: string | null
+          plate?: string | null
+          returned_at?: string | null
+          vehicle_label?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_assignment_details_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: true
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vendor_prequalification_answers: {
         Row: {
@@ -26939,6 +27286,30 @@ export type Database = {
           },
         ]
       }
+      v_catalog_inventory: {
+        Row: {
+          allocated: number | null
+          available_count: number | null
+          cancelled_count: number | null
+          catalog_item_id: string | null
+          catalog_kind: Database["public"]["Enums"]["catalog_kind"] | null
+          code: string | null
+          fulfilled_count: number | null
+          name: string | null
+          open_count: number | null
+          org_id: string | null
+          total_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "master_catalog_items_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_siteplan_sheet_acceptance: {
         Row: {
           atom_id: string | null
@@ -28460,6 +28831,28 @@ export type Database = {
       annotation_severity: "info" | "warning" | "critical"
       annotation_status: "open" | "acknowledged" | "resolved" | "dismissed"
       approval_state: "pending" | "signed" | "declined" | "expired"
+      assignment_event_kind:
+        | "scan"
+        | "consume"
+        | "state_change"
+        | "comment"
+        | "version"
+        | "void"
+        | "reissue"
+      assignment_party_kind: "user" | "crew_member" | "external_holder"
+      assignment_scan_code_kind:
+        | "barcode"
+        | "qr"
+        | "nfc"
+        | "rfid"
+        | "wristband_serial"
+      assignment_scan_result:
+        | "accepted"
+        | "duplicate"
+        | "voided"
+        | "not_found"
+        | "expired"
+        | "wrong_zone"
       automation_run_status:
         | "pending"
         | "running"
@@ -28477,6 +28870,7 @@ export type Database = {
         | "travel"
         | "lodging"
         | "vehicle"
+        | "ticket"
       change_order_state:
         | "draft"
         | "requested"
@@ -28504,15 +28898,6 @@ export type Database = {
         | "tiered"
         | "flat_plus"
         | "vs_plus_walk"
-      deliverable_state:
-        | "briefed"
-        | "draft"
-        | "submitted"
-        | "in_review"
-        | "approved"
-        | "delivered"
-        | "rejected"
-        | "revision_requested"
       deliverable_type:
         | "technical_rider"
         | "hospitality_rider"
@@ -28530,15 +28915,6 @@ export type Database = {
         | "comms_plan"
         | "signage_grid"
         | "custom"
-        | "credential_assignment"
-        | "catering_assignment"
-        | "radio_assignment"
-        | "tool_assignment"
-        | "equipment_assignment"
-        | "uniform_assignment"
-        | "travel_assignment"
-        | "lodging_assignment"
-        | "vehicle_assignment"
       dispatch_fleet: "t1" | "t2" | "t3" | "media" | "workforce" | "spectator"
       dsar_kind:
         | "access"
@@ -28575,6 +28951,21 @@ export type Database = {
         | "expired"
       export_kind: "csv" | "json" | "xlsx" | "zip" | "project_archive"
       export_status: "pending" | "running" | "done" | "failed"
+      fulfillment_state:
+        | "briefed"
+        | "draft"
+        | "submitted"
+        | "in_review"
+        | "approved"
+        | "delivered"
+        | "rejected"
+        | "revision_requested"
+        | "issued"
+        | "transferred"
+        | "redeemed"
+        | "expired"
+        | "voided"
+        | "returned"
       guide_persona:
         | "artist"
         | "vendor"
@@ -28835,7 +29226,6 @@ export type Database = {
         | "cancelled"
       talent_rider_kind: "tech" | "hospitality" | "input_list"
       task_status: "todo" | "in_progress" | "blocked" | "review" | "done"
-      ticket_status: "issued" | "transferred" | "scanned" | "voided"
       ticketing_provider:
         | "etix"
         | "dice"
@@ -29218,6 +29608,31 @@ export const Constants = {
       annotation_severity: ["info", "warning", "critical"],
       annotation_status: ["open", "acknowledged", "resolved", "dismissed"],
       approval_state: ["pending", "signed", "declined", "expired"],
+      assignment_event_kind: [
+        "scan",
+        "consume",
+        "state_change",
+        "comment",
+        "version",
+        "void",
+        "reissue",
+      ],
+      assignment_party_kind: ["user", "crew_member", "external_holder"],
+      assignment_scan_code_kind: [
+        "barcode",
+        "qr",
+        "nfc",
+        "rfid",
+        "wristband_serial",
+      ],
+      assignment_scan_result: [
+        "accepted",
+        "duplicate",
+        "voided",
+        "not_found",
+        "expired",
+        "wrong_zone",
+      ],
       automation_run_status: [
         "pending",
         "running",
@@ -29236,6 +29651,7 @@ export const Constants = {
         "travel",
         "lodging",
         "vehicle",
+        "ticket",
       ],
       change_order_state: [
         "draft",
@@ -29268,16 +29684,6 @@ export const Constants = {
         "flat_plus",
         "vs_plus_walk",
       ],
-      deliverable_state: [
-        "briefed",
-        "draft",
-        "submitted",
-        "in_review",
-        "approved",
-        "delivered",
-        "rejected",
-        "revision_requested",
-      ],
       deliverable_type: [
         "technical_rider",
         "hospitality_rider",
@@ -29295,15 +29701,6 @@ export const Constants = {
         "comms_plan",
         "signage_grid",
         "custom",
-        "credential_assignment",
-        "catering_assignment",
-        "radio_assignment",
-        "tool_assignment",
-        "equipment_assignment",
-        "uniform_assignment",
-        "travel_assignment",
-        "lodging_assignment",
-        "vehicle_assignment",
       ],
       dispatch_fleet: ["t1", "t2", "t3", "media", "workforce", "spectator"],
       dsar_kind: [
@@ -29346,6 +29743,22 @@ export const Constants = {
       ],
       export_kind: ["csv", "json", "xlsx", "zip", "project_archive"],
       export_status: ["pending", "running", "done", "failed"],
+      fulfillment_state: [
+        "briefed",
+        "draft",
+        "submitted",
+        "in_review",
+        "approved",
+        "delivered",
+        "rejected",
+        "revision_requested",
+        "issued",
+        "transferred",
+        "redeemed",
+        "expired",
+        "voided",
+        "returned",
+      ],
       guide_persona: [
         "artist",
         "vendor",
@@ -29628,7 +30041,6 @@ export const Constants = {
       ],
       talent_rider_kind: ["tech", "hospitality", "input_list"],
       task_status: ["todo", "in_progress", "blocked", "review", "done"],
-      ticket_status: ["issued", "transferred", "scanned", "voided"],
       ticketing_provider: [
         "etix",
         "dice",

@@ -101,7 +101,7 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
     project_id: project.id,
     type: parsed.data.type,
     title: parsed.data.title,
-    deliverable_state: "submitted",
+    fulfillment_state: "submitted",
     data: { notes: parsed.data.notes ?? null },
     file_path: filePath ?? null,
     submitted_by: session.userId,
@@ -115,14 +115,14 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
   return { ok: true };
 }
 
-type DeliverableState = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "revision_requested";
+type DeliverableTransition = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "revision_requested";
 
 // Deliverable FSM: draft → submitted → in_review → approved | rejected.
 // revision_requested loops back to submitted. Approved + rejected are
 // terminal. The conditional update below prevents a stale review
 // dashboard from re-firing the deliverable.approved notification on a
 // double click.
-const DELIVERABLE_TRANSITIONS: Record<DeliverableState, readonly DeliverableState[]> = {
+const DELIVERABLE_TRANSITIONS: Record<DeliverableTransition, readonly DeliverableTransition[]> = {
   draft: ["submitted"],
   submitted: ["in_review", "approved", "rejected", "revision_requested"],
   in_review: ["approved", "rejected", "revision_requested"],
@@ -131,7 +131,7 @@ const DELIVERABLE_TRANSITIONS: Record<DeliverableState, readonly DeliverableStat
   rejected: [],
 };
 
-export async function setDeliverableStatusAction(deliverableId: string, nextState: DeliverableState) {
+export async function setDeliverableStatusAction(deliverableId: string, nextState: DeliverableTransition) {
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -142,24 +142,24 @@ export async function setDeliverableStatusAction(deliverableId: string, nextStat
   // difference.
   const { data: before } = await supabase
     .from("deliverables")
-    .select("org_id, project_id, title, type, submitted_by, deliverable_state")
+    .select("org_id, project_id, title, type, submitted_by, fulfillment_state")
     .eq("id", deliverableId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!before) return { error: "Deliverable not found" };
-  const current = before.deliverable_state as DeliverableState;
+  const current = before.fulfillment_state as DeliverableTransition;
   const allowed = DELIVERABLE_TRANSITIONS[current] ?? [];
   if (!allowed.includes(nextState)) {
     return { error: `Cannot move ${current} → ${nextState}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
   }
 
   const patch: {
-    deliverable_state: DeliverableState;
+    fulfillment_state: DeliverableTransition;
     reviewed_by?: string;
     reviewed_at?: string;
     submitted_by?: string;
     submitted_at?: string;
-  } = { deliverable_state: nextState };
+  } = { fulfillment_state: nextState };
   if (["approved", "rejected", "revision_requested", "in_review"].includes(nextState)) {
     patch.reviewed_by = session.userId;
     patch.reviewed_at = new Date().toISOString();
@@ -172,7 +172,7 @@ export async function setDeliverableStatusAction(deliverableId: string, nextStat
     .update(patch)
     .eq("id", deliverableId)
     .eq("org_id", session.orgId)
-    .eq("deliverable_state", current)
+    .eq("fulfillment_state", current)
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {

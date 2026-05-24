@@ -8,59 +8,19 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
-import type { DeliverableType } from "@/lib/supabase/types";
+import { CATALOG_KINDS, CATALOG_KIND_LABEL, listProjectAssignments, type CatalogKind } from "@/lib/db/assignments";
 
 export const dynamic = "force-dynamic";
 
 /**
  * /console/projects/[projectId]/advancing/assignments — per-individual
- * catalog assignment admin. Operators assign credentials, catering,
- * radios, tools, equipment, uniforms, travel, lodging, and vehicles to
- * specific people on the project. The 9 catalog kinds use the same
- * `deliverables` table + `deliverable_state` lifecycle as project-
- * document deliverables (riders, plans, lists). Assignment is the new
- * `assignee_id` column from migration 0049.
- *
- * Per-individual rows show up in:
- *   - GVTEWAY portal: /p/[slug]/crew/advances (project-scoped)
- *   - COMPVSS field: /m/advances (cross-project)
- *
- * Authoring lives here; create form lives at ./new.
+ * catalog assignment admin. Operators assign tickets, credentials,
+ * catering, radios, tools, equipment, uniforms, travel, lodging, and
+ * vehicles to specific people on the project. One table (`assignments`),
+ * one lifecycle (`fulfillment_state`), one set of UI controls — the same
+ * row shows up on the assignee's portal (/p/[slug]/crew/advances) and
+ * field (/m/advances) surfaces.
  */
-
-type AssignmentRow = {
-  id: string;
-  type: string;
-  title: string | null;
-  deliverable_state: string;
-  deadline: string | null;
-  assignee_id: string | null;
-  updated_at: string;
-};
-
-const CATALOG_KINDS: DeliverableType[] = [
-  "credential_assignment",
-  "catering_assignment",
-  "radio_assignment",
-  "tool_assignment",
-  "equipment_assignment",
-  "uniform_assignment",
-  "travel_assignment",
-  "lodging_assignment",
-  "vehicle_assignment",
-];
-
-const KIND_LABEL: Record<string, string> = {
-  credential_assignment: "Credentials",
-  catering_assignment: "Catering",
-  radio_assignment: "Radios",
-  tool_assignment: "Tools",
-  equipment_assignment: "Equipment",
-  uniform_assignment: "Uniforms",
-  travel_assignment: "Travel",
-  lodging_assignment: "Lodging",
-  vehicle_assignment: "Vehicles",
-};
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   if (!hasSupabase) {
@@ -87,34 +47,47 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     .maybeSingle();
   if (!project) notFound();
 
-  const { data } = await supabase
-    .from("deliverables")
-    .select("id, type, title, deliverable_state, deadline, assignee_id, updated_at")
-    .eq("org_id", session.orgId)
-    .eq("project_id", projectId)
-    .in("type", CATALOG_KINDS)
-    .is("deleted_at", null)
-    .order("deadline", { ascending: true, nullsFirst: false })
-    .limit(500);
-  const rows = (data ?? []) as AssignmentRow[];
+  const rows = await listProjectAssignments(session.orgId, projectId);
 
-  // Hydrate assignee names.
-  const assigneeIds = Array.from(new Set(rows.map((r) => r.assignee_id).filter((u): u is string => !!u)));
-  const userMap = new Map<string, string>();
-  if (assigneeIds.length) {
-    const { data: users } = await supabase.from("users").select("id, email, name").in("id", assigneeIds);
-    for (const u of (users ?? []) as unknown as Array<{ id: string; email: string; name: string | null }>) {
-      userMap.set(u.id, u.name ?? u.email);
-    }
+  // Hydrate party names across all three kinds in parallel.
+  const userIds = Array.from(new Set(rows.filter((r) => r.party_user_id).map((r) => r.party_user_id!)));
+  const crewIds = Array.from(new Set(rows.filter((r) => r.party_crew_id).map((r) => r.party_crew_id!)));
+  const extIds = Array.from(new Set(rows.filter((r) => r.party_external_id).map((r) => r.party_external_id!)));
+  const [userRes, crewRes, extRes] = await Promise.all([
+    userIds.length ? supabase.from("users").select("id, email, name").in("id", userIds) : Promise.resolve({ data: [] }),
+    crewIds.length ? supabase.from("crew_members").select("id, name").in("id", crewIds) : Promise.resolve({ data: [] }),
+    extIds.length
+      ? supabase.from("assignment_external_holders").select("id, holder_name, holder_email").in("id", extIds)
+      : Promise.resolve({ data: [] }),
+  ]);
+  const userMap = new Map<string, string>(
+    ((userRes.data ?? []) as Array<{ id: string; name: string | null; email: string }>).map((u) => [
+      u.id,
+      u.name ?? u.email,
+    ]),
+  );
+  const crewMap = new Map<string, string>(
+    ((crewRes.data ?? []) as Array<{ id: string; name: string }>).map((c) => [c.id, c.name]),
+  );
+  const extMap = new Map<string, string>(
+    ((extRes.data ?? []) as Array<{ id: string; holder_name: string | null; holder_email: string | null }>).map((e) => [
+      e.id,
+      e.holder_name ?? e.holder_email ?? "Guest",
+    ]),
+  );
+
+  function partyLabel(r: (typeof rows)[number]): string {
+    if (r.party_kind === "user" && r.party_user_id) return userMap.get(r.party_user_id) ?? "Unknown user";
+    if (r.party_kind === "crew_member" && r.party_crew_id) return crewMap.get(r.party_crew_id) ?? "Unknown crew";
+    if (r.party_kind === "external_holder" && r.party_external_id) return extMap.get(r.party_external_id) ?? "Guest";
+    return "Unassigned";
   }
 
-  // Group by kind so admins see the catalog laid out like the field
-  // worker will see it.
-  const byKind = new Map<string, AssignmentRow[]>();
+  const byKind = new Map<CatalogKind, typeof rows>();
   for (const r of rows) {
-    const list = byKind.get(r.type) ?? [];
+    const list = byKind.get(r.catalog_kind) ?? [];
     list.push(r);
-    byKind.set(r.type, list);
+    byKind.set(r.catalog_kind, list);
   }
 
   return (
@@ -122,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <ModuleHeader
         eyebrow={project.name as string}
         title="Individual Assignments"
-        subtitle={`${rows.length} ${rows.length === 1 ? "Assignment" : "Assignments"} · Credentials, Catering, Radios, Tools, Equipment, Uniforms, Travel, Lodging, Vehicles`}
+        subtitle={`${rows.length} ${rows.length === 1 ? "Assignment" : "Assignments"} · Tickets, Credentials, Catering, Radios, Tools, Equipment, Uniforms, Travel, Lodging, Vehicles`}
         action={
           <Button href={`/console/projects/${projectId}/advancing/assignments/new`} size="sm">
             + New Assignment
@@ -147,13 +120,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               return (
                 <section key={kind} className="surface p-4">
                   <h2 className="text-sm font-semibold">
-                    {KIND_LABEL[kind]} <span className="text-[var(--text-muted)]">· {items.length}</span>
+                    {CATALOG_KIND_LABEL[kind]} <span className="text-[var(--text-muted)]">· {items.length}</span>
                   </h2>
                   <table className="data-table mt-3 w-full text-sm">
                     <thead>
                       <tr>
                         <th>Title</th>
-                        <th>Assignee</th>
+                        <th>Party</th>
                         <th>State</th>
                         <th>Due</th>
                         <th>Updated</th>
@@ -171,14 +144,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                             </a>
                           </td>
                           <td>
-                            {r.assignee_id ? (
-                              (userMap.get(r.assignee_id) ?? "Unknown")
+                            {r.party_kind === "external_holder" ? (
+                              <Badge variant="warning">{partyLabel(r)}</Badge>
                             ) : (
-                              <Badge variant="warning">Unassigned</Badge>
+                              partyLabel(r)
                             )}
                           </td>
                           <td>
-                            <StatusBadge status={r.deliverable_state} />
+                            <StatusBadge status={r.fulfillment_state} />
                           </td>
                           <td className="font-mono text-xs">{r.deadline ? fmt.date(r.deadline) : "—"}</td>
                           <td className="font-mono text-xs text-[var(--text-muted)]">{fmt.date(r.updated_at)}</td>

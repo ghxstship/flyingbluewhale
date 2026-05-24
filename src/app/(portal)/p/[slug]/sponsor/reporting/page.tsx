@@ -14,14 +14,30 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   let tickets = 0;
   if (project) {
     const supabase = await createClient();
-    const { data: ticketRows } = await supabase.from("tickets").select("id").eq("project_id", project.id);
-    const ticketIds = (ticketRows ?? []).map((t) => t.id);
-    tickets = ticketIds.length;
-    if (ticketIds.length > 0) {
+    // Tickets are assignments WHERE catalog_kind='ticket' on this project.
+    const { count: ticketCount } = await supabase
+      .from("assignments")
+      .select("id", { count: "exact", head: true })
+      .eq("project_id", project.id)
+      .eq("catalog_kind", "ticket")
+      .is("deleted_at", null);
+    tickets = ticketCount ?? 0;
+
+    // Scans are assignment_events for ticket assignments on this project.
+    const { data: ticketAssignments } = await supabase
+      .from("assignments")
+      .select("id")
+      .eq("project_id", project.id)
+      .eq("catalog_kind", "ticket")
+      .is("deleted_at", null);
+    const ids = (ticketAssignments ?? []).map((a) => a.id);
+    if (ids.length > 0) {
       const { count } = await supabase
-        .from("ticket_scans")
+        .from("assignment_events")
         .select("id", { count: "exact", head: true })
-        .in("ticket_id", ticketIds);
+        .eq("event_kind", "scan")
+        .eq("result", "accepted")
+        .in("assignment_id", ids);
       scans = count ?? 0;
     }
   }

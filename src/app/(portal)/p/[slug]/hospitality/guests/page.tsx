@@ -10,22 +10,23 @@ import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-type Ticket = {
+type Row = {
   id: string;
-  code: string;
+  code: string | null;
   holder_name: string | null;
   holder_email: string | null;
-  tier: string;
-  status: string;
-  scanned_at: string | null;
+  tier_code: string | null;
+  fulfillment_state: string;
+  fulfilled_at: string | null;
 };
 
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  active: "info",
-  used: "success",
-  void: "error",
-  refunded: "muted",
-  comped: "warning",
+const STATE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
+  issued: "info",
+  transferred: "info",
+  redeemed: "success",
+  voided: "error",
+  expired: "warning",
+  briefed: "muted",
 };
 
 function fmt(iso: string | null): string {
@@ -52,19 +53,46 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
   const session = await requireSession();
   const supabase = await createClient();
-
   const fmtIntl = await getRequestFormatters();
-  // Hospitality tier tickets only — common tier names: hospitality, vip, suite.
-  const { data } = await supabase
-    .from("tickets")
-    .select("id, code, holder_name, holder_email, tier, status, scanned_at")
-    .eq("org_id", session.orgId)
-    .in("tier", ["hospitality", "vip", "suite", "premium"])
-    .order("holder_name", { ascending: true });
 
-  const guests = ((data ?? []) as unknown as Ticket[]) ?? [];
-  const checkedIn = guests.filter((g) => g.scanned_at).length;
-  const active = guests.filter((g) => g.status === "active").length;
+  // Hospitality tier tickets only — common tier_code values: hospitality, vip, suite.
+  const { data } = await supabase
+    .from("assignments")
+    .select(
+      "id, fulfillment_state, fulfilled_at, party_user_id, party_external_id, ticket_assignment_details!inner(tier_code), assignment_scan_codes(code, active), party_user:users!assignments_party_user_id_fkey(name, email), party_external:assignment_external_holders!assignments_party_external_id_fkey(holder_name, holder_email)",
+    )
+    .eq("org_id", session.orgId)
+    .eq("catalog_kind", "ticket")
+    .is("deleted_at", null)
+    .in("ticket_assignment_details.tier_code", ["hospitality", "vip", "suite", "premium"])
+    .limit(500);
+
+  type Raw = {
+    id: string;
+    fulfillment_state: string;
+    fulfilled_at: string | null;
+    party_user_id: string | null;
+    party_external_id: string | null;
+    ticket_assignment_details: { tier_code: string | null } | null;
+    assignment_scan_codes: Array<{ code: string; active: boolean }>;
+    party_user: { name: string | null; email: string } | null;
+    party_external: { holder_name: string | null; holder_email: string | null } | null;
+  };
+  const guests: Row[] = ((data ?? []) as unknown as Raw[]).map((r) => {
+    const activeCode = r.assignment_scan_codes.find((c) => c.active);
+    return {
+      id: r.id,
+      code: activeCode?.code ?? null,
+      holder_name: r.party_user?.name ?? r.party_external?.holder_name ?? null,
+      holder_email: r.party_user?.email ?? r.party_external?.holder_email ?? null,
+      tier_code: r.ticket_assignment_details?.tier_code ?? null,
+      fulfillment_state: r.fulfillment_state,
+      fulfilled_at: r.fulfilled_at,
+    };
+  });
+
+  const checkedIn = guests.filter((g) => g.fulfilled_at).length;
+  const active = guests.filter((g) => g.fulfillment_state === "issued" || g.fulfillment_state === "transferred").length;
 
   return (
     <>
@@ -85,7 +113,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <MetricCard label="Total" value={fmtIntl.number(guests.length)} />
         </div>
 
-        <DataTable<Ticket>
+        <DataTable<Row>
           rows={guests}
           emptyLabel="No guests yet"
           emptyDescription="Hospitality and VIP tickets land here. Add guests to your party via the producer or upload a manifest."
@@ -105,28 +133,30 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "tier",
               header: "Tier",
-              render: (r) => <Badge variant="muted">{r.tier}</Badge>,
-              accessor: (r) => r.tier ?? null,
+              render: (r) => <Badge variant="muted">{r.tier_code ?? "—"}</Badge>,
+              accessor: (r) => r.tier_code ?? null,
               filterable: true,
               groupable: true,
             },
             {
               key: "code",
               header: "Code",
-              render: (r) => <span className="font-mono text-[10px]">{r.code.slice(-8)}</span>,
-              accessor: (r) => r.code.slice ?? null,
+              render: (r) => <span className="font-mono text-[10px]">{r.code ? r.code.slice(-8) : "—"}</span>,
+              accessor: (r) => r.code,
             },
             {
               key: "scanned",
               header: "Checked in",
-              render: (r) => <span className="font-mono text-xs">{fmt(r.scanned_at)}</span>,
-              accessor: (r) => r.scanned_at ?? null,
+              render: (r) => <span className="font-mono text-xs">{fmt(r.fulfilled_at)}</span>,
+              accessor: (r) => r.fulfilled_at ?? null,
             },
             {
-              key: "status",
-              header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status ?? null,
+              key: "state",
+              header: "State",
+              render: (r) => (
+                <Badge variant={STATE_TONE[r.fulfillment_state] ?? "muted"}>{toTitle(r.fulfillment_state)}</Badge>
+              ),
+              accessor: (r) => r.fulfillment_state,
               filterable: true,
               groupable: true,
             },

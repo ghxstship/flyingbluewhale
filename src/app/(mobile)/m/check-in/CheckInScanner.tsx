@@ -77,7 +77,7 @@ export function CheckInScanner() {
         }
 
         try {
-          const res = await fetch(`/api/v1/tickets/scan`, {
+          const res = await fetch(`/api/v1/scan`, {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({ code: trimmed, location }),

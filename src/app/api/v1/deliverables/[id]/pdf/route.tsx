@@ -36,7 +36,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
   const supabase = await createClient();
   const { data: d, error } = await supabase
     .from("deliverables")
-    .select("id, type, deliverable_state, version, deadline, data, project_id, org_id")
+    .select("id, type, fulfillment_state, version, deadline, data, project_id, org_id")
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -59,7 +59,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
           deliverable={{
             id: d.id,
             type: d.type as string,
-            status: (d.deliverable_state as string | null) ?? null,
+            status: (d.fulfillment_state as string | null) ?? null,
             version: (d.version as number | null) ?? null,
             deadline: (d.deadline as string | null) ?? null,
             data: d.data,

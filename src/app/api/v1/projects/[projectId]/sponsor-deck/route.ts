@@ -55,7 +55,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ projectId: str
   if (denial) return denial;
 
   const supabase = await createClient();
-  const [{ data: project }, { data: org }, { data: tickets }] = await Promise.all([
+  const [{ data: project }, { data: org }, { data: ticketAssignments }] = await Promise.all([
     supabase
       .from("projects")
       .select("id, name")
@@ -66,11 +66,23 @@ export async function POST(req: Request, ctx: { params: Promise<{ projectId: str
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
     // Cap at 100k; real events never exceed this ceiling, and the query
     // feeds a count + sponsor-deck summary that doesn't need every row.
-    supabase.from("tickets").select("id").eq("project_id", p.data.projectId).limit(100_000),
+    supabase
+      .from("assignments")
+      .select("id")
+      .eq("org_id", session.orgId)
+      .eq("project_id", p.data.projectId)
+      .eq("catalog_kind", "ticket")
+      .is("deleted_at", null)
+      .limit(100_000),
   ]);
-  const ticketIds = (tickets ?? []).map((t) => t.id);
-  const { count: scanCount } = ticketIds.length
-    ? await supabase.from("ticket_scans").select("*", { count: "exact", head: true }).in("ticket_id", ticketIds)
+  const assignmentIds = (ticketAssignments ?? []).map((a) => a.id);
+  const { count: scanCount } = assignmentIds.length
+    ? await supabase
+        .from("assignment_events")
+        .select("*", { count: "exact", head: true })
+        .eq("event_kind", "scan")
+        .eq("result", "accepted")
+        .in("assignment_id", assignmentIds)
     : { count: 0 };
   if (!project) return apiError("not_found", "Project not found");
   if (!org) return apiError("internal", "Missing organization row");
@@ -85,7 +97,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ projectId: str
       dateRange: b.dateRange,
       accentColor: brand.producerAccent,
       metrics: {
-        totalAttendees: tickets?.length ?? undefined,
+        totalAttendees: ticketAssignments?.length ?? undefined,
         scans: scanCount ?? undefined,
       },
       activations: b.activations,

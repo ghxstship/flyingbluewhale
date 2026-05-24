@@ -346,12 +346,10 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
-  /api/v1/tickets/scan:
-    post: { summary: Scan a ticket by QR payload. }
+  /api/v1/scan:
+    post: { summary: Scan an assignment code (any catalog kind — ticket, credential, wristband, vehicle, etc.). Race-safe via assignment_scan_codes unique partial index. }
   /api/v1/equipment/scan:
     post: { summary: Scan an equipment asset tag to toggle / check-in / check-out. Emits status updates. }
-  /api/v1/tickets/{id}/scan:
-    post: { summary: Scan a specific ticket id. }
 
   /api/v1/deliverables/{id}/download:
     get: { summary: Redirect to a signed URL for a deliverable file. }
@@ -649,5 +647,5 @@ paths:
     get: { summary: Zapier polling trigger — recent deliverables for the caller's org. }
   /api/v1/zapier/triggers/invoices:
     get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
-  /api/v1/zapier/triggers/ticket-scans:
-    get: { summary: Zapier polling trigger — recent ticket scans for the caller's org. }
+  /api/v1/zapier/triggers/assignment-scans:
+    get: { summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind). }

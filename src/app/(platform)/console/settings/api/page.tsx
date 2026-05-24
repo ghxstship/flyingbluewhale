@@ -15,7 +15,7 @@ const ENDPOINT_DOCS = [
   ["POST", "/api/v1/projects", "Create project"],
   ["GET", "/api/v1/projects/[id]", "Get a project"],
   ["PATCH", "/api/v1/projects/[id]", "Update project"],
-  ["POST", "/api/v1/tickets/scan", "Scan a ticket (race-safe)"],
+  ["POST", "/api/v1/scan", "Scan an assignment code (race-safe, any catalog kind)"],
   ["POST", "/api/v1/risks", "Create RAID register entry"],
   ["POST", "/api/v1/crisis/alerts", "Broadcast crisis alert"],
   ["GET", "/api/v1/deliverables/[id]/download", "Signed download URL (60s)"],

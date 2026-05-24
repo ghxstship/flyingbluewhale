@@ -10,7 +10,15 @@ import { createServiceClient } from "@/lib/supabase/server";
  * service-role client. Add tables here only after auditing for hidden side
  * effects (cascading triggers, audit-log emission, etc.).
  */
-const ALLOWED_TABLES = ["tickets", "tasks", "deliverables", "incidents", "punch_items", "rfis", "submittals"] as const;
+const ALLOWED_TABLES = [
+  "assignments",
+  "tasks",
+  "deliverables",
+  "incidents",
+  "punch_items",
+  "rfis",
+  "submittals",
+] as const;
 
 type AllowedTable = (typeof ALLOWED_TABLES)[number];
 

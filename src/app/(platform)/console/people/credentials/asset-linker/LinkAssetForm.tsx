@@ -7,47 +7,45 @@ import { Input } from "@/components/ui/Input";
 import { linkAssetAction, type State } from "./actions";
 
 export function LinkAssetForm({
-  credentials,
+  assignments,
 }: {
-  credentials: {
+  assignments: {
     id: string;
-    kind: string | null;
-    number: string | null;
-    crew_members?: { name?: string } | null;
+    title: string | null;
+    party_label: string;
   }[];
 }) {
   const [state, action, pending] = useActionState<State, FormData>(linkAssetAction, null);
   return (
     <form action={action} className="grid gap-3 sm:grid-cols-3">
       <div className="sm:col-span-1">
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Credential</label>
-        <select name="credential_id" required className="input-base mt-1.5 w-full">
+        <label className="text-xs font-medium text-[var(--text-secondary)]">Credential Assignment</label>
+        <select name="assignment_id" required className="input-base mt-1.5 w-full">
           <option value="">— Select —</option>
-          {credentials.map((c) => (
-            <option key={c.id} value={c.id}>
-              {(c.crew_members?.name ?? "Unnamed") +
-                (c.kind ? ` · ${c.kind}` : "") +
-                (c.number ? ` (${c.number})` : "")}
+          {assignments.map((a) => (
+            <option key={a.id} value={a.id}>
+              {a.party_label} · {a.title ?? "Untitled"}
             </option>
           ))}
         </select>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Asset Kind</label>
-        <select name="asset_kind" defaultValue="nfc_tag" className="input-base mt-1.5 w-full">
-          <option value="nfc_tag">NFC tag</option>
-          <option value="rfid_card">RFID card</option>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">Token Kind</label>
+        <select name="kind" defaultValue="nfc" className="input-base mt-1.5 w-full">
+          <option value="nfc">NFC tag</option>
+          <option value="rfid">RFID card</option>
           <option value="barcode">Barcode</option>
-          <option value="qr_code">QR code</option>
+          <option value="qr">QR code</option>
+          <option value="wristband_serial">Wristband serial</option>
         </select>
       </div>
       <div>
-        <Input label="Serial" name="asset_serial" required maxLength={120} placeholder="e.g. 04:A2:B5:C0" />
+        <Input label="Code" name="code" required maxLength={120} placeholder="e.g. 04:A2:B5:C0" />
       </div>
       {state?.error && <p className="text-xs text-[var(--color-error)] sm:col-span-3">{state.error}</p>}
       <div className="flex justify-end sm:col-span-3">
         <Button type="submit" loading={pending}>
-          Link Asset
+          Bind Code
         </Button>
       </div>
     </form>

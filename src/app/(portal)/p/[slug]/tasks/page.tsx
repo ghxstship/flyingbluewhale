@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 /**
  * /p/[slug]/tasks — unified "what do I owe?" inbox for portal users.
  * Aggregates open work the caller has across:
- *   - deliverables.assignee_id = caller (catalog + rider items)
+ *   - assignments.party_user_id = caller (catalog items: tickets, credentials, lodging, etc.)
  *   - proposal_approvals.approver_id = caller (decisions waiting)
  *   - new_hire_assignments.assignee_id = caller (onboarding)
  *
@@ -23,7 +23,7 @@ export const dynamic = "force-dynamic";
  */
 
 type Item = {
-  kind: "advancing" | "approval" | "onboarding";
+  kind: "assignment" | "approval" | "onboarding";
   title: string;
   state: string;
   due: string | null;
@@ -41,15 +41,15 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
   const items: Item[] = [];
 
   if (project) {
-    const [{ data: deliverables }, { data: proposals }, { data: onboarding }] = await Promise.all([
+    const [{ data: assignments }, { data: proposals }, { data: onboarding }] = await Promise.all([
       supabase
-        .from("deliverables")
-        .select("id, title, type, deliverable_state, deadline")
+        .from("assignments")
+        .select("id, title, catalog_kind, fulfillment_state, deadline")
         .eq("org_id", session.orgId)
         .eq("project_id", project.id)
-        .eq("assignee_id", session.userId)
+        .eq("party_user_id", session.userId)
         .is("deleted_at", null)
-        .neq("deliverable_state", "delivered"),
+        .not("fulfillment_state", "in", "(delivered,rejected,redeemed,voided,expired,returned)"),
       supabase.from("proposals").select("id, title").eq("org_id", session.orgId).eq("project_id", project.id),
       supabase
         .from("new_hire_assignments")
@@ -59,18 +59,18 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
         .neq("assignment_phase", "completed"),
     ]);
 
-    for (const d of (deliverables ?? []) as Array<{
+    for (const a of (assignments ?? []) as Array<{
       id: string;
       title: string | null;
-      type: string;
-      deliverable_state: string;
+      catalog_kind: string;
+      fulfillment_state: string;
       deadline: string | null;
     }>) {
       items.push({
-        kind: "advancing",
-        title: `${toTitle(d.type)}: ${d.title ?? "Untitled"}`,
-        state: d.deliverable_state,
-        due: d.deadline,
+        kind: "assignment",
+        title: `${toTitle(a.catalog_kind)}: ${a.title ?? "Untitled"}`,
+        state: a.fulfillment_state,
+        due: a.deadline,
         href: `/p/${slug}/crew/advances`,
       });
     }

@@ -38,9 +38,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     created_at: string;
   };
 
-  // Roll-up: how many deliverables reference this catalog item.
+  // Roll-up: how many active assignments reference this catalog item.
   const { count: usageCount } = await supabase
-    .from("deliverables")
+    .from("assignments")
     .select("id", { count: "exact", head: true })
     .eq("org_id", session.orgId)
     .eq("catalog_item_id", item.id)

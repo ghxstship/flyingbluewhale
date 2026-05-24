@@ -61,8 +61,10 @@ export const PERSONAS = [
  */
 export type ProjectStatus = "draft" | "active" | "paused" | "archived" | "complete";
 export type ProjectState = ProjectStatus;
-export type TicketStatus = "issued" | "transferred" | "scanned" | "voided";
-export type DeliverableStatus =
+// Canonical lifecycle for both deliverables (project documents) and
+// assignments (per-individual entitlements). Mirrors public.fulfillment_state
+// renamed from fulfillment_state in migration 0061.
+export type FulfillmentState =
   | "briefed"
   | "draft"
   | "submitted"
@@ -70,11 +72,14 @@ export type DeliverableStatus =
   | "approved"
   | "rejected"
   | "revision_requested"
-  | "delivered";
-/** Alias matching the renamed enum in the database (deliverable_status -> deliverable_state, 2026-05-09). */
-export type DeliverableState = DeliverableStatus;
+  | "delivered"
+  | "issued"
+  | "transferred"
+  | "redeemed"
+  | "expired"
+  | "voided"
+  | "returned";
 export type DeliverableType =
-  // Project-document kinds (org-level — assignee_id IS NULL).
   | "technical_rider"
   | "hospitality_rider"
   | "input_list"
@@ -90,19 +95,7 @@ export type DeliverableType =
   | "safety_compliance"
   | "comms_plan"
   | "signage_grid"
-  | "custom"
-  // Per-individual catalog kinds (migration 0049 — assignee_id set).
-  // Same advancing → fulfillment → tracking lifecycle as the project
-  // kinds; the surface filters by `assignee_id = caller`.
-  | "credential_assignment"
-  | "catering_assignment"
-  | "radio_assignment"
-  | "tool_assignment"
-  | "equipment_assignment"
-  | "uniform_assignment"
-  | "travel_assignment"
-  | "lodging_assignment"
-  | "vehicle_assignment";
+  | "custom";
 export type LeadStage = "new" | "qualified" | "contacted" | "proposal" | "won" | "lost";
 export type ProposalStatus = "draft" | "sent" | "approved" | "rejected" | "expired" | "signed";
 export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "voided";
@@ -211,27 +204,13 @@ export type Project = {
   deleted_at: string | null;
 };
 
-export type Ticket = {
-  id: string;
-  org_id: string;
-  project_id: string;
-  code: string;
-  holder_name: string | null;
-  holder_email: string | null;
-  tier: string;
-  status: TicketStatus;
-  issued_at: string;
-  scanned_at: string | null;
-  scanned_by: string | null;
-};
-
 export type Deliverable = {
   id: string;
   org_id: string;
   project_id: string;
   type: DeliverableType;
   title: string | null;
-  deliverable_state: DeliverableState;
+  fulfillment_state: FulfillmentState;
   data: unknown;
   file_path: string | null;
   version: number;
@@ -1193,19 +1172,6 @@ export type AccommodationBlock = {
   created_at: string;
   updated_at: string;
 };
-export type TicketType = {
-  id: string;
-  org_id: string;
-  event_id: string | null;
-  name: string;
-  channel: string;
-  price_cents: number;
-  currency: string;
-  allocation: number;
-  sold: number;
-  created_at: string;
-  updated_at: string;
-};
 export type SponsorEntitlement = {
   id: string;
   org_id: string;
@@ -1452,16 +1418,6 @@ export type OrgRole = {
   is_system: boolean;
   created_at: string;
 };
-export type AssetLink = {
-  id: string;
-  org_id: string;
-  credential_id: string;
-  asset_kind: string;
-  asset_serial: string;
-  issued_at: string;
-  revoked_at: string | null;
-};
-
 // ── 2026-04-30 procore parity ─────────────────────────────────────
 export type Conversation = {
   id: string;
@@ -2050,37 +2006,6 @@ export type Database = {
         Partial<Project>
       >;
 
-      tickets: TableDef<
-        Ticket,
-        {
-          id?: string;
-          org_id: string;
-          project_id: string;
-          code: string;
-          holder_name?: string | null;
-          holder_email?: string | null;
-          tier?: string;
-          status?: TicketStatus;
-          issued_at?: string;
-          scanned_at?: string | null;
-          scanned_by?: string | null;
-        },
-        Partial<Ticket>
-      >;
-
-      ticket_scans: TableDef<
-        { id: string; ticket_id: string; scanner_id: string; scanned_at: string; location: unknown; result: string },
-        { id?: string; ticket_id: string; scanner_id: string; scanned_at?: string; location?: unknown; result: string },
-        Partial<{
-          id: string;
-          ticket_id: string;
-          scanner_id: string;
-          scanned_at: string;
-          location: unknown;
-          result: string;
-        }>
-      >;
-
       deliverables: TableDef<
         Deliverable,
         {
@@ -2089,7 +2014,7 @@ export type Database = {
           project_id: string;
           type: DeliverableType;
           title?: string | null;
-          deliverable_state?: DeliverableState;
+          fulfillment_state?: FulfillmentState;
           data?: unknown;
           file_path?: string | null;
           version?: number;
@@ -2790,7 +2715,6 @@ export type Database = {
         Partial<AccommodationBlock> & { org_id: string; name: string; property: string },
         Partial<AccommodationBlock>
       >;
-      ticket_types: TableDef<TicketType, Partial<TicketType> & { org_id: string; name: string }, Partial<TicketType>>;
       sponsor_entitlements: TableDef<
         SponsorEntitlement,
         Partial<SponsorEntitlement> & { org_id: string; title: string },
@@ -2854,11 +2778,6 @@ export type Database = {
         OrgRole,
         Partial<OrgRole> & { org_id: string; slug: string; label: string },
         Partial<OrgRole>
-      >;
-      asset_links: TableDef<
-        AssetLink,
-        Partial<AssetLink> & { org_id: string; credential_id: string; asset_kind: string; asset_serial: string },
-        Partial<AssetLink>
       >;
       cues: TableDef<Cue, Partial<Cue> & { org_id: string; scheduled_at: string; label: string }, Partial<Cue>>;
       rfqs: TableDef<Rfq, Partial<Rfq> & { org_id: string; title: string }, Partial<Rfq>>;
@@ -3110,12 +3029,7 @@ export type Database = {
       project_role: ProjectRole;
       tier: Tier;
       project_status: ProjectStatus;
-      ticket_status: TicketStatus;
-      // DB-side enum was renamed to `deliverable_state` per LDP naming discipline (2026-05-09).
-      // Keeping `deliverable_status` key here under an alias for the loose-typed
-      // legacy client; canonical name now exposed alongside.
-      deliverable_status: DeliverableStatus;
-      deliverable_state: DeliverableState;
+      fulfillment_state: FulfillmentState;
       deliverable_type: DeliverableType;
       lead_stage: LeadStage;
       proposal_status: ProposalStatus;

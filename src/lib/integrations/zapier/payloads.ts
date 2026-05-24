@@ -34,10 +34,12 @@ export type ZapierProject = {
   url: string;
 };
 
-export type ZapierTicketScan = {
+export type ZapierAssignmentScan = {
   id: string;
-  ticket_id: string;
-  scanner_id: string;
+  assignment_id: string;
+  catalog_kind: string;
+  scan_code_id: string | null;
+  scanner_id: string | null;
   result: string;
   scanned_at: string;
   location: { lat: number; lng: number } | null;
@@ -145,24 +147,28 @@ export function toZapierProject(row: ProjectRow): ZapierProject {
   };
 }
 
-type TicketScanRow = {
+type AssignmentScanRow = {
   id: string;
-  ticket_id: string;
-  scanner_id: string;
-  result: string;
-  scanned_at: string;
+  assignment_id: string;
+  scan_code_id: string | null;
+  actor_user_id: string | null;
+  result: string | null;
+  at: string;
   location: unknown;
+  catalog_kind: string;
 };
 
-export function toZapierTicketScan(row: TicketScanRow): ZapierTicketScan {
+export function toZapierAssignmentScan(row: AssignmentScanRow): ZapierAssignmentScan {
   return {
     id: row.id,
-    ticket_id: row.ticket_id,
-    scanner_id: row.scanner_id,
-    result: row.result,
-    scanned_at: row.scanned_at,
+    assignment_id: row.assignment_id,
+    catalog_kind: row.catalog_kind,
+    scan_code_id: row.scan_code_id,
+    scanner_id: row.actor_user_id,
+    result: row.result ?? "unknown",
+    scanned_at: row.at,
     location: parseLocation(row.location),
-    url: urlFor("platform", `/commercial/tickets/${row.ticket_id}`),
+    url: urlFor("platform", `/console/settings/catalog`),
   };
 }
 
@@ -181,7 +187,7 @@ type DeliverableRow = Pick<
   | "project_id"
   | "type"
   | "title"
-  | "deliverable_state"
+  | "fulfillment_state"
   | "version"
   | "submitted_by"
   | "submitted_at"
@@ -197,7 +203,7 @@ export function toZapierDeliverable(row: DeliverableRow): ZapierDeliverable {
     project_id: row.project_id,
     type: row.type,
     title: row.title,
-    status: row.deliverable_state,
+    status: row.fulfillment_state,
     version: row.version,
     submitted_by: row.submitted_by,
     submitted_at: row.submitted_at,
@@ -343,15 +349,17 @@ export const ZAPIER_SAMPLES = {
     updated_at: "2026-01-15T10:23:00.000Z",
     url: "https://app.atlvs.pro/projects/00000000-0000-0000-0000-000000000001",
   } satisfies ZapierProject,
-  ticket_scan: {
+  assignment_scan: {
     id: "00000000-0000-0000-0000-000000000002",
-    ticket_id: "00000000-0000-0000-0000-000000000003",
+    assignment_id: "00000000-0000-0000-0000-000000000003",
+    catalog_kind: "ticket",
+    scan_code_id: "00000000-0000-0000-0000-00000000000b",
     scanner_id: "00000000-0000-0000-0000-000000000004",
-    result: "ok",
+    result: "accepted",
     scanned_at: "2026-03-21T19:04:11.000Z",
     location: { lat: 25.8576, lng: -80.2781 },
-    url: "https://app.atlvs.pro/commercial/tickets/00000000-0000-0000-0000-000000000003",
-  } satisfies ZapierTicketScan,
+    url: "https://app.atlvs.pro/console/settings/catalog",
+  } satisfies ZapierAssignmentScan,
   deliverable: {
     id: "00000000-0000-0000-0000-000000000005",
     project_id: "00000000-0000-0000-0000-000000000001",

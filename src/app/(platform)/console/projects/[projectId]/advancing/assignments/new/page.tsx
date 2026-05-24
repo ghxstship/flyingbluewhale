@@ -6,6 +6,7 @@ import { AtomPicker } from "@/components/xpms/AtomPicker";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { CATALOG_KIND_LABEL } from "@/lib/db/assignments";
 import { createAssignmentAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +43,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       .select("id, kind, code, name")
       .eq("org_id", session.orgId)
       .eq("active", true)
+      .is("deleted_at", null)
       .order("kind", { ascending: true })
       .order("name", { ascending: true })
       .limit(500),
@@ -56,7 +58,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     .filter((u): u is { id: string; email: string; name: string | null } => !!u)
     .sort((a, b) => (a.name ?? a.email).localeCompare(b.name ?? b.email));
   const atomOptions = (atoms ?? []).map((a) => ({ id: a.id, identifier: a.identifier, name: a.name }));
-  const catalogItems = (catalog ?? []) as Array<{ id: string; kind: string; code: string; name: string }>;
+  const catalogItems = (catalog ?? []) as Array<{
+    id: string;
+    kind: keyof typeof CATALOG_KIND_LABEL;
+    code: string;
+    name: string;
+  }>;
 
   return (
     <>
@@ -68,31 +75,27 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           submitLabel="Create Assignment"
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
-            <select name="type" required className="input-base mt-1.5 w-full" defaultValue="credential_assignment">
-              <option value="credential_assignment">Credential (badge, pass, NDA)</option>
-              <option value="catering_assignment">Catering (meal, dietary accommodation)</option>
-              <option value="radio_assignment">Radio</option>
-              <option value="tool_assignment">Tool</option>
-              <option value="equipment_assignment">Equipment (incl. forklift, golf cart)</option>
-              <option value="uniform_assignment">Uniform</option>
-              <option value="travel_assignment">Travel (flight, train, rideshare)</option>
-              <option value="lodging_assignment">Lodging (hotel, housing)</option>
-              <option value="vehicle_assignment">Vehicle</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Catalog Item (optional)</label>
-            <select name="catalog_item_id" className="input-base mt-1.5 w-full" defaultValue="">
-              <option value="">— Free-text title —</option>
-              {catalogItems.map((c) => (
-                <option key={c.id} value={c.id}>
-                  [{c.kind}] {c.code} · {c.name}
-                </option>
-              ))}
-            </select>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">Catalog Item</label>
+            {catalogItems.length === 0 ? (
+              <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+                No active catalog items in this org. Author one at{" "}
+                <a className="underline" href="/console/settings/catalog">
+                  /console/settings/catalog
+                </a>{" "}
+                first.
+              </p>
+            ) : (
+              <select name="catalog_item_id" required className="input-base mt-1.5 w-full">
+                <option value="">— Pick a catalog item —</option>
+                {catalogItems.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    [{CATALOG_KIND_LABEL[c.kind]}] {c.code} · {c.name}
+                  </option>
+                ))}
+              </select>
+            )}
             <p className="mt-1 text-[10px] text-[var(--text-muted)]">
-              Pick a master-catalog SKU to anchor cost rollup + inventory; leave blank to author free-text.
+              The catalog row drives kind, pricing, and inventory rollup. Every assignment references a SKU.
             </p>
           </div>
           <Input
@@ -100,11 +103,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             name="title"
             required
             maxLength={200}
-            placeholder="e.g. Crew Pass · Bay 4 Forklift · Hotel Suite A"
+            placeholder="e.g. All-Access Pass · Bay 4 Forklift · Hotel Suite A"
           />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">Assignee</label>
-            <select name="assignee_id" required className="input-base mt-1.5 w-full">
+            <select name="party_user_id" required className="input-base mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name ?? m.email}

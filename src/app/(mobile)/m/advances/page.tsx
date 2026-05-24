@@ -5,50 +5,17 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
-import type { DeliverableType } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { CATALOG_KINDS, CATALOG_KIND_LABEL, listMyAssignments, type CatalogKind } from "@/lib/db/assignments";
 
 export const dynamic = "force-dynamic";
 
 /**
- * /m/advances — cross-project view of catalog items assigned to the
- * caller. The portal version (/p/[slug]/crew/advances) is scoped to a
- * single show; this is the COMPVSS "across every project I'm on" view.
- * Same deliverables table + lifecycle, no project filter.
+ * /m/advances — cross-project view of everything assigned to the caller.
+ * Tickets, credentials, lodging, travel, catering, radios — one list.
+ * The portal version (/p/[slug]/crew/advances) is scoped to a single
+ * show; this is the "across every project I'm on" view.
  */
-
-type DeliverableRow = {
-  id: string;
-  project_id: string;
-  type: string;
-  title: string | null;
-  deliverable_state: string;
-  deadline: string | null;
-};
-
-const CATALOG_KINDS: DeliverableType[] = [
-  "credential_assignment",
-  "catering_assignment",
-  "radio_assignment",
-  "tool_assignment",
-  "equipment_assignment",
-  "uniform_assignment",
-  "travel_assignment",
-  "lodging_assignment",
-  "vehicle_assignment",
-];
-
-const KIND_LABEL: Record<string, string> = {
-  credential_assignment: "Credentials",
-  catering_assignment: "Catering",
-  radio_assignment: "Radios",
-  tool_assignment: "Tools",
-  equipment_assignment: "Equipment",
-  uniform_assignment: "Uniforms",
-  travel_assignment: "Travel",
-  lodging_assignment: "Lodging",
-  vehicle_assignment: "Vehicles",
-};
 
 const STATE_TONE: Record<string, "info" | "success" | "warning" | "error" | "muted"> = {
   briefed: "muted",
@@ -59,6 +26,12 @@ const STATE_TONE: Record<string, "info" | "success" | "warning" | "error" | "mut
   approved: "success",
   delivered: "success",
   rejected: "error",
+  issued: "info",
+  transferred: "info",
+  redeemed: "success",
+  expired: "warning",
+  voided: "error",
+  returned: "success",
 };
 
 export default async function MobileAdvancesPage() {
@@ -69,19 +42,8 @@ export default async function MobileAdvancesPage() {
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
-  const { data } = await supabase
-    .from("deliverables")
-    .select("id, project_id, type, title, deliverable_state, deadline")
-    .eq("org_id", session.orgId)
-    .eq("assignee_id", session.userId)
-    .in("type", CATALOG_KINDS)
-    .is("deleted_at", null)
-    .order("deadline", { ascending: true, nullsFirst: false })
-    .limit(200);
-  const rows = (data ?? []) as unknown as DeliverableRow[];
+  const rows = await listMyAssignments(session.orgId, session.userId);
 
-  // Project name hydration so the "for which show?" question is
-  // answerable at a glance.
   const projectIds = Array.from(new Set(rows.map((r) => r.project_id)));
   const projectMap = new Map<string, string>();
   if (projectIds.length) {
@@ -91,22 +53,22 @@ export default async function MobileAdvancesPage() {
     }
   }
 
-  const byKind = new Map<string, DeliverableRow[]>();
+  const byKind = new Map<CatalogKind, typeof rows>();
   for (const r of rows) {
-    const list = byKind.get(r.type) ?? [];
+    const list = byKind.get(r.catalog_kind) ?? [];
     list.push(r);
-    byKind.set(r.type, list);
+    byKind.set(r.catalog_kind, list);
   }
   const openCount = rows.filter(
-    (r) => r.deliverable_state !== "delivered" && r.deliverable_state !== "rejected",
+    (r) => !["delivered", "rejected", "redeemed", "voided", "expired"].includes(r.fulfillment_state),
   ).length;
 
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">My Advancing</h1>
+      <h1 className="mt-1 text-2xl font-semibold">My Assignments</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        {openCount} open of {rows.length} across every show you're on.
+        {openCount} open of {rows.length} across every show you&apos;re on.
       </p>
 
       {rows.length === 0 ? (
@@ -124,7 +86,7 @@ export default async function MobileAdvancesPage() {
             return (
               <section key={kind}>
                 <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  {KIND_LABEL[kind]} <span>· {items.length}</span>
+                  {CATALOG_KIND_LABEL[kind]} <span>· {items.length}</span>
                 </h2>
                 <ul className="mt-2 space-y-2">
                   {items.map((d) => (
@@ -137,8 +99,8 @@ export default async function MobileAdvancesPage() {
                             {d.deadline ? ` · due ${fmt.date(d.deadline)}` : ""}
                           </div>
                         </div>
-                        <Badge variant={STATE_TONE[d.deliverable_state] ?? "muted"}>
-                          {toTitle(d.deliverable_state)}
+                        <Badge variant={STATE_TONE[d.fulfillment_state] ?? "muted"}>
+                          {toTitle(d.fulfillment_state)}
                         </Badge>
                       </div>
                     </li>

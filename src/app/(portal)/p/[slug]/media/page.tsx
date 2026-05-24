@@ -70,9 +70,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <div className="surface mt-3 p-3">
             <PortalDocVault
               projectId={project?.id ?? null}
-              types={["credential_assignment", "vendor_package", "comms_plan"]}
+              types={["vendor_package", "comms_plan"]}
               emptyTitle="No Documents Yet"
-              emptyDescription="Press credentials and editorial packages assigned to you appear here."
+              emptyDescription="Press packages submitted by you appear here. Issued press credentials show up under /p/[slug]/crew/advances."
             />
           </div>
         </section>

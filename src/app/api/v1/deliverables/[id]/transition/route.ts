@@ -5,7 +5,7 @@ import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit, type AuditAction } from "@/lib/audit";
 import { log } from "@/lib/log";
-import type { DeliverableState } from "@/lib/supabase/types";
+import type { FulfillmentState } from "@/lib/supabase/types";
 
 /**
  * POST /api/v1/deliverables/:id/transition
@@ -49,24 +49,24 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const supabase = await createClient();
     const { data: row, error } = await supabase
       .from("deliverables")
-      .select("id, deliverable_state, data")
+      .select("id, fulfillment_state, data")
       .eq("org_id", session.orgId)
       .eq("id", id)
       .maybeSingle();
     if (error) return apiError("internal", error.message);
     if (!row) return apiError("not_found", "Deliverable not found");
 
-    const allowed = ALLOWED[row.deliverable_state] ?? [];
+    const allowed = ALLOWED[row.fulfillment_state] ?? [];
     if (!allowed.includes(input.to)) {
       return apiError(
         "conflict",
-        `Cannot transition ${row.deliverable_state} → ${input.to}. Allowed: ${allowed.join(", ") || "(none)"}`,
+        `Cannot transition ${row.fulfillment_state} → ${input.to}. Allowed: ${allowed.join(", ") || "(none)"}`,
       );
     }
 
-    const before = { status: row.deliverable_state, fulfilled_at: (row.data as DeliverableData)?.fulfilled_at ?? null };
+    const before = { status: row.fulfillment_state, fulfilled_at: (row.data as DeliverableData)?.fulfilled_at ?? null };
 
-    let nextStatus: DeliverableState = input.to === "fulfilled" ? "approved" : (input.to as DeliverableState);
+    let nextStatus: FulfillmentState = input.to === "fulfilled" ? "approved" : (input.to as FulfillmentState);
     let nextData: DeliverableData = (row.data as DeliverableData) ?? {};
     if (input.to === "fulfilled") {
       nextData = { ...nextData, fulfilled_at: new Date().toISOString() };
@@ -74,19 +74,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     // Conditional update: only land if the row is still in the state we
     // observed above. Closes the TOCTOU between the SELECT and the
-    // UPDATE — if a concurrent transition raced us, the .eq("deliverable_state", // row.deliverable_state) makes the update a no-op (rows = 0) and we surface a
+    // UPDATE — if a concurrent transition raced us, the .eq("fulfillment_state", // row.fulfillment_state) makes the update a no-op (rows = 0) and we surface a
     // 409 conflict instead of silently overwriting the newer state.
     const { data: updated, error: upErr } = await supabase
       .from("deliverables")
       .update({
-        deliverable_state: nextStatus,
+        fulfillment_state: nextStatus,
         data: nextData as never,
         reviewed_by: session.userId,
         reviewed_at: new Date().toISOString(),
       })
       .eq("id", id)
       .eq("org_id", session.orgId)
-      .eq("deliverable_state", row.deliverable_state)
+      .eq("fulfillment_state", row.fulfillment_state)
       .select("id");
     if (upErr) return apiError("internal", upErr.message);
     if (!updated || updated.length === 0) {
@@ -96,12 +96,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const after = { status: nextStatus, fulfilled_at: nextData.fulfilled_at ?? null };
 
     // LDP §4 Deliverable Lifecycle — append a typed row to the
-    // deliverable_state_transitions log alongside the generic audit_log
+    // fulfillment_state_transitions log alongside the generic audit_log
     // entry. Best-effort; a log failure does not block the transition.
     const { error: logErr } = await supabase.from("deliverable_state_transitions").insert({
       org_id: session.orgId,
       deliverable_id: id,
-      from_state: row.deliverable_state as never,
+      from_state: row.fulfillment_state as never,
       to_state: nextStatus as never,
       transitioned_by: session.userId,
       reason: input.note ?? null,

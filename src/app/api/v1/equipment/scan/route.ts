@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
- * Asset-tag lookup + check-in/out toggle. Mirrors `/api/v1/tickets/scan`
+ * Asset-tag lookup + check-in/out toggle. Mirrors `/api/v1/scan`
  * for equipment. Given an `assetTag`, fetches the equipment row, toggles
  * its `status` between `available` and `checked_out`.
  */

@@ -34,7 +34,7 @@ export type NotifyEvent =
   | "proposal.signed"
   | "deliverable.submitted"
   | "deliverable.approved"
-  | "ticket.scanned"
+  | "assignment.scanned"
   | "po.acknowledged"
   | "po.fulfilled"
   | "incident.filed"

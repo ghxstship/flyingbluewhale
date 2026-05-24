@@ -20,7 +20,7 @@ export type LogFields = {
   org_id?: string;
   /** HTTP method. */
   method?: string;
-  /** Route pattern (`/api/v1/tickets/[id]`), NOT the interpolated path. */
+  /** Route pattern (`/api/v1/assignments/[id]`), NOT the interpolated path. */
   route?: string;
   /** Response status code. */
   status?: number;

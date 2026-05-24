@@ -20,7 +20,7 @@ export type AtomDeliverable = {
   id: string;
   title: string | null;
   type: string;
-  deliverable_state: string | null;
+  fulfillment_state: string | null;
   status: string;
   deadline: string | null;
 };
@@ -143,7 +143,7 @@ export function AtomDrillIn({
               <p className="text-xs text-[var(--text-muted)]">No submittals pinned to this atom.</p>
             ) : (
               deliverables.map((d) => {
-                const stateKey = d.deliverable_state ?? d.status;
+                const stateKey = d.fulfillment_state ?? d.status;
                 return (
                   <div key={d.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
                     <div className="min-w-0">

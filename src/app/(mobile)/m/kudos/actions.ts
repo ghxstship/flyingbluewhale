@@ -6,6 +6,9 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { writeInbox } from "@/lib/inbox";
 
+const REACTION_EMOJIS = ["👏", "🙌", "🔥", "💯", "🚀", "❤️"] as const;
+export type ReactionEmoji = (typeof REACTION_EMOJIS)[number];
+
 const Schema = z.object({
   to_user_id: z.string().uuid(),
   message: z.string().min(1).max(500),
@@ -57,6 +60,58 @@ export async function createKudos(fd: FormData): Promise<void> {
       title: "You got kudos",
       body: parsed.message,
       href: "/m/kudos",
+    });
+  }
+
+  revalidatePath("/m/kudos");
+}
+
+const ReactSchema = z.object({
+  post_id: z.string().uuid(),
+  emoji: z.enum(REACTION_EMOJIS),
+});
+
+// Toggle: if the (post, user, emoji) row exists, remove it; else insert.
+// recognition_reactions PK is (post_id, user_id, emoji) so this is the
+// natural like/unlike pattern without needing a separate "remove" route.
+export async function toggleReaction(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  const parsed = ReactSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return;
+
+  const supabase = await createClient();
+  // Ensure the post is in the caller's org — recognition_posts.org_id
+  // gates reactions transitively, but a pre-check produces clean UX
+  // on tampered hidden inputs.
+  const { data: post } = await supabase
+    .from("recognition_posts")
+    .select("id")
+    .eq("id", parsed.data.post_id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!post) return;
+
+  const { data: existing } = await supabase
+    .from("recognition_reactions")
+    .select("post_id")
+    .eq("post_id", parsed.data.post_id)
+    .eq("user_id", session.userId)
+    .eq("emoji", parsed.data.emoji)
+    .maybeSingle();
+
+  if (existing) {
+    await supabase
+      .from("recognition_reactions")
+      .delete()
+      .eq("post_id", parsed.data.post_id)
+      .eq("user_id", session.userId)
+      .eq("emoji", parsed.data.emoji);
+  } else {
+    await supabase.from("recognition_reactions").insert({
+      post_id: parsed.data.post_id,
+      user_id: session.userId,
+      emoji: parsed.data.emoji,
     });
   }
 

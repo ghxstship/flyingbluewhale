@@ -4,7 +4,9 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
-import { createKudos } from "./actions";
+import { createKudos, toggleReaction } from "./actions";
+
+const REACTION_EMOJIS = ["👏", "🙌", "🔥", "💯", "🚀", "❤️"] as const;
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +44,31 @@ export default async function MobileKudosPage() {
       .order("awarded_at", { ascending: false })
       .limit(20),
   ]);
+
+  // recognition_reactions was orphaned — no surface let anyone +1 a kudo.
+  // Pull all reactions for the visible window in one round-trip and group
+  // client-side: cheaper than a per-post fetch and the 50-post limit caps
+  // the row count.
+  const postIds = ((posts ?? []) as Array<{ id: string }>).map((p) => p.id);
+  const { data: reactionsData } = postIds.length
+    ? await supabase.from("recognition_reactions").select("post_id, user_id, emoji").in("post_id", postIds)
+    : { data: [] as Array<{ post_id: string; user_id: string; emoji: string }> };
+  type ReactionRow = { post_id: string; user_id: string; emoji: string };
+  const reactions = (reactionsData ?? []) as ReactionRow[];
+  // Per-post per-emoji: total count + whether the caller is in.
+  type ReactionTally = Map<string, { count: number; mine: boolean }>;
+  const reactionsByPost = new Map<string, ReactionTally>();
+  for (const r of reactions) {
+    let tally = reactionsByPost.get(r.post_id);
+    if (!tally) {
+      tally = new Map();
+      reactionsByPost.set(r.post_id, tally);
+    }
+    const entry = tally.get(r.emoji) ?? { count: 0, mine: false };
+    entry.count += 1;
+    if (r.user_id === session.userId) entry.mine = true;
+    tally.set(r.emoji, entry);
+  }
 
   const { data: memberships } = await supabase
     .from("memberships")
@@ -152,6 +179,32 @@ export default async function MobileKudosPage() {
               <div className="mt-2 flex items-center gap-2">
                 {p.value_tag && <Badge variant="info">{p.value_tag}</Badge>}
                 {p.points > 0 && <Badge variant="muted">{p.points} pts</Badge>}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {REACTION_EMOJIS.map((emoji) => {
+                  const tally = reactionsByPost.get(p.id)?.get(emoji);
+                  const count = tally?.count ?? 0;
+                  const mine = tally?.mine ?? false;
+                  return (
+                    <form key={emoji} action={toggleReaction}>
+                      <input type="hidden" name="post_id" value={p.id} />
+                      <input type="hidden" name="emoji" value={emoji} />
+                      <button
+                        type="submit"
+                        aria-label={`React with ${emoji}`}
+                        aria-pressed={mine}
+                        className={`rounded-full border px-2 py-0.5 text-xs transition-colors ${
+                          mine
+                            ? "border-[var(--org-primary)] bg-[var(--surface-inset)]"
+                            : "border-[var(--border-color)] hover:bg-[var(--surface-inset)]"
+                        }`}
+                      >
+                        <span aria-hidden>{emoji}</span>
+                        {count > 0 && <span className="ml-1 font-mono">{count}</span>}
+                      </button>
+                    </form>
+                  );
+                })}
               </div>
             </li>
           ))

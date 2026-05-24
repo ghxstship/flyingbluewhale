@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { fmtDate, money } from "@/components/detail/DetailShell";
 import { setEquipmentStatus, deleteEquipment } from "../actions";
 import type { EquipmentStatus } from "@/lib/supabase/types";
@@ -23,12 +24,29 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   const { equipmentId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
-  const { data: row } = await supabase
-    .from("equipment")
-    .select("id, name, category, asset_tag, serial, status, daily_rate_cents, notes, deleted_at, created_at")
-    .eq("org_id", session.orgId)
-    .eq("id", equipmentId)
-    .maybeSingle();
+  // asset_movements canonical (0016) schema lives on the remote — but
+  // database.types.ts was generated against the shadowed (0019) variant
+  // with `asset_id` and no org_id. Migration 0060 guards against the
+  // schema flipping back; until type generation catches up we use the
+  // loose client for this one read.
+  const loose = supabase as unknown as LooseSupabase;
+  const [{ data: row }, { data: movementsData }] = await Promise.all([
+    supabase
+      .from("equipment")
+      .select("id, name, category, asset_tag, serial, status, daily_rate_cents, notes, deleted_at, created_at")
+      .eq("org_id", session.orgId)
+      .eq("id", equipmentId)
+      .maybeSingle(),
+    loose
+      .from("asset_movements")
+      .select(
+        "id, from_state, to_state, moved_at, reason, project_id, rental_id, moved_by, mover:users!asset_movements_moved_by_fkey(name, email), project:projects!asset_movements_project_id_fkey(name)",
+      )
+      .eq("org_id", session.orgId)
+      .eq("equipment_id", equipmentId)
+      .order("moved_at", { ascending: false })
+      .limit(50),
+  ]);
 
   if (!row || row.deleted_at) {
     return (
@@ -42,6 +60,25 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   }
 
   const transitions = NEXT[row.status as EquipmentStatus];
+
+  // asset_movements is the LDP §3 append-only state ledger and had zero
+  // UI exposure before this page — the equipment status was visible but
+  // the audit trail of who moved what when wasn't reachable from the
+  // app. Render the last 50 transitions; older entries stay queryable
+  // via the activity log.
+  type MovementRow = {
+    id: string;
+    from_state: string | null;
+    to_state: string;
+    moved_at: string;
+    reason: string | null;
+    project_id: string | null;
+    rental_id: string | null;
+    moved_by: string | null;
+    mover: { name: string | null; email: string | null } | null;
+    project: { name: string | null } | null;
+  };
+  const movements = (movementsData ?? []) as unknown as MovementRow[];
 
   return (
     <>
@@ -95,6 +132,47 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             <div className="mt-4 border-t border-[var(--border-color)] pt-3 text-xs text-[var(--text-secondary)]">
               {row.notes}
             </div>
+          )}
+        </section>
+
+        <section className="surface p-5">
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-sm font-semibold">Movement Ledger</h2>
+            <span className="font-mono text-xs text-[var(--text-muted)]">
+              {movements.length} recent transition{movements.length === 1 ? "" : "s"}
+            </span>
+          </div>
+          {movements.length === 0 ? (
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              No movements recorded yet. Every status change writes a row to the append-only ledger.
+            </p>
+          ) : (
+            <ol className="mt-3 space-y-2 text-xs">
+              {movements.map((m) => {
+                const who = m.mover?.name ?? m.mover?.email ?? "system";
+                return (
+                  <li
+                    key={m.id}
+                    className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-subtle)] pb-2 last:border-0"
+                  >
+                    <span className="flex flex-wrap items-center gap-2">
+                      {m.from_state ? (
+                        <>
+                          <StatusBadge status={m.from_state} /> →{" "}
+                        </>
+                      ) : (
+                        <Badge variant="muted">initial</Badge>
+                      )}
+                      <StatusBadge status={m.to_state} />
+                      <span className="text-[var(--text-muted)]">by {who}</span>
+                      {m.project?.name && <Badge variant="muted">{m.project.name}</Badge>}
+                      {m.reason && <span className="text-[var(--text-secondary)]">— {m.reason}</span>}
+                    </span>
+                    <span className="font-mono text-[var(--text-muted)]">{new Date(m.moved_at).toLocaleString()}</span>
+                  </li>
+                );
+              })}
+            </ol>
           )}
         </section>
 

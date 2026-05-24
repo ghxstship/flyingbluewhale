@@ -9,8 +9,10 @@ import { getActivityForRecord } from "@/lib/db/activity";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { transitionDailyLog } from "./actions";
+import { createServiceClient } from "@/lib/supabase/server";
+import { deleteDailyLogPhoto, transitionDailyLog, uploadDailyLogPhoto } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
+import { Button } from "@/components/ui/Button";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
@@ -51,12 +53,41 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     limit: 50,
   });
 
-  const [{ data: manpower }, { data: equipment }, { data: deliveries }, { data: visitors }] = await Promise.all([
-    supabase.from("daily_log_manpower").select("*").eq("daily_log_id", id).order("trade"),
-    supabase.from("daily_log_equipment").select("*").eq("daily_log_id", id),
-    supabase.from("daily_log_deliveries").select("*").eq("daily_log_id", id).order("arrived_at"),
-    supabase.from("daily_log_visitors").select("*").eq("daily_log_id", id).order("arrived_at"),
-  ]);
+  const [{ data: manpower }, { data: equipment }, { data: deliveries }, { data: visitors }, { data: photosData }] =
+    await Promise.all([
+      supabase.from("daily_log_manpower").select("*").eq("daily_log_id", id).order("trade"),
+      supabase.from("daily_log_equipment").select("*").eq("daily_log_id", id),
+      supabase.from("daily_log_deliveries").select("*").eq("daily_log_id", id).order("arrived_at"),
+      supabase.from("daily_log_visitors").select("*").eq("daily_log_id", id).order("arrived_at"),
+      supabase
+        .from("daily_log_photos")
+        .select("id, file_path, caption, taken_at, taken_by")
+        .eq("daily_log_id", id)
+        .eq("org_id", session.orgId)
+        .order("taken_at", { ascending: false }),
+    ]);
+
+  // Photos were orphaned in the schema — no surface lets a foreman add
+  // or view them, so site documentation has been living in side-channel
+  // tools (Slack, text msgs) instead of the audit-trailed log. Render
+  // them with short-lived signed URLs (procore-parity bucket is
+  // private; signed URLs scope per-request and expire on their own).
+  type PhotoRow = {
+    id: string;
+    file_path: string;
+    caption: string | null;
+    taken_at: string;
+    taken_by: string | null;
+  };
+  const photos = (photosData ?? []) as PhotoRow[];
+  const service = createServiceClient();
+  const signedPhotos = await Promise.all(
+    photos.map(async (p) => {
+      const { data: signed } = await service.storage.from("procore-parity").createSignedUrl(p.file_path, 600);
+      return { ...p, signed_url: signed?.signedUrl ?? null };
+    }),
+  );
+  const photosEditable = log.status !== "approved";
 
   const totalHeadcount = (manpower ?? []).reduce((s, m) => s + (m.headcount ?? 0), 0);
   const totalHours = (manpower ?? []).reduce((s, m) => s + Number(m.hours_worked ?? 0), 0);
@@ -141,6 +172,83 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 ))}
               </tbody>
             </table>
+          )}
+        </section>
+
+        <section className="surface p-4">
+          <div className="flex items-baseline justify-between">
+            <h3 className="text-sm font-semibold">Photos</h3>
+            <span className="font-mono text-xs text-[var(--text-muted)]">
+              {photos.length} photo{photos.length === 1 ? "" : "s"}
+            </span>
+          </div>
+          {photos.length === 0 ? (
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              No site photos attached. Upload below — captioned photos land in the audit trail with the log.
+            </p>
+          ) : (
+            <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {signedPhotos.map((p) => (
+                <li key={p.id} className="surface-inset overflow-hidden rounded-md">
+                  {p.signed_url ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={p.signed_url}
+                      alt={p.caption ?? "Daily log site photo"}
+                      className="aspect-video w-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="aspect-video w-full bg-[var(--surface)] text-center text-xs leading-[14rem] text-[var(--text-muted)]">
+                      Preview unavailable
+                    </div>
+                  )}
+                  <div className="flex items-start justify-between gap-2 p-2 text-xs">
+                    <div>
+                      {p.caption && <div className="font-medium">{p.caption}</div>}
+                      <div className="font-mono text-[10px] text-[var(--text-muted)]">{fmt.dateTime(p.taken_at)}</div>
+                    </div>
+                    {photosEditable && (
+                      <form action={deleteDailyLogPhoto}>
+                        <input type="hidden" name="dailyLogId" value={id} />
+                        <input type="hidden" name="photoId" value={p.id} />
+                        <Button type="submit" size="sm" variant="ghost">
+                          Remove
+                        </Button>
+                      </form>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          {photosEditable && (
+            <form
+              action={uploadDailyLogPhoto}
+              encType="multipart/form-data"
+              className="surface-inset mt-4 grid grid-cols-1 gap-2 rounded-md p-3 sm:grid-cols-4"
+            >
+              <input type="hidden" name="dailyLogId" value={id} />
+              <input
+                name="file"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif"
+                required
+                className="input-base sm:col-span-2"
+              />
+              <input
+                name="caption"
+                placeholder="Caption (optional)"
+                maxLength={280}
+                className="input-base sm:col-span-1"
+              />
+              <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
+                Upload
+              </Button>
+            </form>
+          )}
+          {!photosEditable && (
+            <p className="mt-3 text-xs text-[var(--text-muted)]">Photos are locked once the log is approved.</p>
           )}
         </section>
 

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
@@ -101,4 +102,97 @@ export async function transitionPoChangeOrder(id: string, to: PoChangeOrderStatu
 
   revalidatePath(`/console/procurement/po-change-orders/${id}`);
   revalidatePath("/console/procurement/po-change-orders");
+}
+
+async function guardCoEditable(coId: string, orgId: string): Promise<boolean> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("po_change_orders")
+    .select("status")
+    .eq("id", coId)
+    .eq("org_id", orgId)
+    .maybeSingle();
+  if (!data) return false;
+  const s = (data as { status: PoChangeOrderStatus }).status;
+  // Lines are locked once the CO leaves the proposed/draft window — after
+  // submit, the bid is "in flight" and shouldn't drift under the
+  // approver's feet.
+  return s === "draft" || s === "submitted";
+}
+
+async function refreshCoAmount(coId: string, orgId: string): Promise<void> {
+  const supabase = await createClient();
+  const { data: lines } = await supabase
+    .from("po_change_order_lines")
+    .select("quantity, unit_price_cents")
+    .eq("po_change_order_id", coId)
+    .eq("org_id", orgId);
+  const total = ((lines ?? []) as Array<{ quantity: number; unit_price_cents: number }>).reduce(
+    (acc, l) => acc + Math.round(Number(l.quantity) * l.unit_price_cents),
+    0,
+  );
+  // Keep the rolled-up CO amount honest. Lines are SoT; amount_cents
+  // on the parent is a denorm we maintain via this action.
+  await supabase.from("po_change_orders").update({ amount_cents: total }).eq("id", coId).eq("org_id", orgId);
+}
+
+const AddLineSchema = z.object({
+  coId: z.string().uuid(),
+  description: z.string().trim().min(1).max(500),
+  quantity: z.coerce.number().nonnegative().finite(),
+  unit_price_dollars: z.coerce.number().nonnegative().finite(),
+});
+
+export async function addCoLine(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const parsed = AddLineSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return;
+  if (!(await guardCoEditable(parsed.data.coId, session.orgId))) return;
+
+  const supabase = await createClient();
+  const { data: maxPos } = await supabase
+    .from("po_change_order_lines")
+    .select("position")
+    .eq("po_change_order_id", parsed.data.coId)
+    .order("position", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const nextPos = ((maxPos?.position as number | undefined) ?? 0) + 1;
+
+  await supabase.from("po_change_order_lines").insert({
+    org_id: session.orgId,
+    po_change_order_id: parsed.data.coId,
+    position: nextPos,
+    description: parsed.data.description,
+    quantity: parsed.data.quantity,
+    unit_price_cents: Math.round(parsed.data.unit_price_dollars * 100),
+  });
+
+  await refreshCoAmount(parsed.data.coId, session.orgId);
+  revalidatePath(`/console/procurement/po-change-orders/${parsed.data.coId}`);
+}
+
+const DeleteLineSchema = z.object({
+  coId: z.string().uuid(),
+  lineId: z.string().uuid(),
+});
+
+export async function deleteCoLine(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const parsed = DeleteLineSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return;
+  if (!(await guardCoEditable(parsed.data.coId, session.orgId))) return;
+
+  const supabase = await createClient();
+  await supabase
+    .from("po_change_order_lines")
+    .delete()
+    .eq("id", parsed.data.lineId)
+    .eq("po_change_order_id", parsed.data.coId)
+    .eq("org_id", session.orgId);
+
+  await refreshCoAmount(parsed.data.coId, session.orgId);
+  revalidatePath(`/console/procurement/po-change-orders/${parsed.data.coId}`);
 }

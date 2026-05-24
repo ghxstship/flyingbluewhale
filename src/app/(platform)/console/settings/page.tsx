@@ -15,6 +15,16 @@ const TILES = [
   { href: "/console/settings/compliance", label: "Compliance", description: "Retention, DPA, data export" },
   { href: "/console/settings/branding", label: "Branding", description: "Portal + email appearance" },
   { href: "/console/settings/domains", label: "Domains", description: "Custom domains for portals" },
+  {
+    href: "/console/settings/sequences",
+    label: "Auto-Numbers",
+    description: "Invoice, PO, proposal identifier formats",
+  },
+  {
+    href: "/console/settings/sla-policies",
+    label: "SLA Policies",
+    description: "Per-severity response + resolution clocks for service requests",
+  },
 ];
 
 export default function SettingsHub() {

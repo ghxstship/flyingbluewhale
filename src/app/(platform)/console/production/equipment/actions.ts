@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { dollarsToCents } from "@/lib/format";
 import type { EquipmentStatus } from "@/lib/supabase/types";
 
@@ -87,6 +88,25 @@ export async function setEquipmentStatus(formData: FormData): Promise<void> {
   if (!updated || updated.length === 0) {
     throw new Error("Equipment status changed concurrently — refresh and retry");
   }
+
+  // Append to the LDP §3 asset_movements ledger — the equipment detail
+  // page surfaces this as a movement timeline. Best-effort: a write
+  // failure here shouldn't block the status transition (the equipment
+  // row already moved) but it leaves the timeline incomplete, which is
+  // a visible UI cue that something's off. Uses the loose client
+  // because database.types.ts was generated against the 0019 shadowed
+  // schema (asset_id) rather than the canonical 0016 (equipment_id +
+  // org_id); migration 0060 enforces the canonical shape stays.
+  const loose = supabase as unknown as LooseSupabase;
+  void loose.from("asset_movements").insert({
+    org_id: session.orgId,
+    equipment_id: id,
+    from_state: current,
+    to_state: next.data,
+    moved_by: session.userId,
+    reason: null,
+  });
+
   revalidatePath("/console/production/equipment");
   revalidatePath(`/console/production/equipment/${id}`);
 }

@@ -101,6 +101,9 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(platform)/console/annotations/[id]/page.tsx",
     "src/app/(platform)/console/people/offer-letters/[id]/page.tsx",
     "src/app/(platform)/console/procurement/rfqs/[rfqId]/page.tsx",
+    // Advancing assignment detail renders inline empties inside the
+    // Comments + Activity sub-cards (orphan-dataset exposure, 2026-05).
+    "src/app/(platform)/console/projects/[projectId]/advancing/assignments/[deliverableId]/page.tsx",
     "src/app/(platform)/console/production/ros/page.tsx",
     "src/app/(platform)/console/services/requests/[requestId]/page.tsx",
     "src/app/(platform)/console/settings/billing/page.tsx",

@@ -56,12 +56,36 @@ export async function advanceState(fd: FormData): Promise<void> {
   if (!NEXT_ALLOWED[assignment.deliverable_state]?.includes(parsed.next_state)) return;
 
   const supabase = await createClient();
-  await supabase
+  const { data: updated } = await supabase
     .from("deliverables")
     .update({ deliverable_state: parsed.next_state })
     .eq("id", parsed.deliverableId)
     .eq("org_id", session.orgId)
-    .eq("deliverable_state", assignment.deliverable_state as "briefed");
+    .eq("deliverable_state", assignment.deliverable_state as "briefed")
+    .select("id, deliverable_state")
+    .maybeSingle();
+  if (!updated) return; // optimistic concurrency lost — state moved underneath us
+
+  // Append to the per-assignment history ledger so the activity feed
+  // on the detail page reflects every transition. version is monotonic
+  // per deliverable so future timeline UIs can scrub by step.
+  const { data: lastVersion } = await supabase
+    .from("deliverable_history")
+    .select("version")
+    .eq("deliverable_id", parsed.deliverableId)
+    .order("version", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  void supabase.from("deliverable_history").insert({
+    deliverable_id: parsed.deliverableId,
+    version: ((lastVersion?.version as number | undefined) ?? 0) + 1,
+    data: {
+      kind: "state_transition",
+      from: assignment.deliverable_state,
+      to: parsed.next_state,
+    },
+    changed_by: session.userId,
+  });
 
   // Notify the assignee on every state change — they care about
   // approvals + delivery confirmations.
@@ -136,6 +160,45 @@ export async function reassignAssignment(fd: FormData): Promise<void> {
 
   revalidatePath(`/console/projects/${parsed.projectId}/advancing/assignments/${parsed.deliverableId}`);
   revalidatePath(`/console/projects/${parsed.projectId}/advancing/assignments`);
+}
+
+const CommentSchema = z.object({
+  projectId: z.string().uuid(),
+  deliverableId: z.string().uuid(),
+  body: z.string().trim().min(1).max(4000),
+});
+
+export async function postComment(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  const parsed = CommentSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return;
+  const assignment = await guardAssignment(parsed.data.projectId, parsed.data.deliverableId, session.orgId);
+  if (!assignment) return;
+
+  const supabase = await createClient();
+  await supabase.from("deliverable_comments").insert({
+    deliverable_id: parsed.data.deliverableId,
+    user_id: session.userId,
+    body: parsed.data.body,
+  });
+
+  // Notify the assignee (if someone else commented) so they know there's
+  // a question waiting on them.
+  if (assignment.assignee_id && assignment.assignee_id !== session.userId) {
+    void writeInbox({
+      userId: assignment.assignee_id,
+      orgId: session.orgId,
+      kind: "advancing",
+      sourceType: "deliverable_comments",
+      sourceId: crypto.randomUUID(),
+      actorId: session.userId,
+      title: "New comment on your advancing item",
+      body: assignment.title ?? "",
+      href: "/m/advances",
+    });
+  }
+
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.deliverableId}`);
 }
 
 export async function deleteAssignment(projectId: string, deliverableId: string): Promise<void> {

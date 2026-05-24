@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { markConducted } from "./actions";
+import { acknowledgeAttendee, addAttendee, markConducted, removeAttendee } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +70,45 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
   if (!row) notFound();
 
   const brieferName = row.briefer?.name ?? row.briefer?.email ?? "—";
+
+  // Attendance roll — was orphaned in the schema until now. Without it
+  // safety_briefings is just a calendar entry with no audit trail of
+  // who was actually in the room.
+  const [{ data: attendeesData }, { data: membersData }, { data: crewData }] = await Promise.all([
+    supabase
+      .from("safety_briefing_attendees")
+      .select(
+        "id, acknowledged_at, notes, signature_path, user_id, crew_member_id, user:users!safety_briefing_attendees_user_id_fkey(name, email), crew:crew_members!safety_briefing_attendees_crew_member_id_fkey(name)",
+      )
+      .eq("briefing_id", briefingId)
+      .eq("org_id", session.orgId)
+      .order("acknowledged_at", { ascending: true, nullsFirst: true }),
+    supabase
+      .from("memberships")
+      .select("user_id, users:users!inner(id, name, email)")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null),
+    supabase.from("crew_members").select("id, name").eq("org_id", session.orgId).order("name", { ascending: true }),
+  ]);
+  type Attendee = {
+    id: string;
+    acknowledged_at: string | null;
+    notes: string | null;
+    signature_path: string | null;
+    user_id: string | null;
+    crew_member_id: string | null;
+    user: { name: string | null; email: string | null } | null;
+    crew: { name: string | null } | null;
+  };
+  const attendees = (attendeesData ?? []) as unknown as Attendee[];
+  const orgMembers = (
+    (membersData ?? []) as unknown as Array<{ users: { id: string; name: string | null; email: string } | null }>
+  )
+    .map((m) => m.users)
+    .filter((u): u is { id: string; name: string | null; email: string } => !!u)
+    .sort((x, y) => (x.name ?? x.email).localeCompare(y.name ?? y.email));
+  const crew = (crewData ?? []) as unknown as Array<{ id: string; name: string | null }>;
+  const acknowledgedCount = attendees.filter((a) => a.acknowledged_at).length;
 
   return (
     <>
@@ -139,6 +178,90 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{row.notes}</p>
           </section>
         )}
+
+        <section className="surface p-5">
+          <div className="flex items-baseline justify-between">
+            <h3 className="text-sm font-semibold">Attendance</h3>
+            <span className="font-mono text-xs text-[var(--text-muted)]">
+              {acknowledgedCount}/{attendees.length} acknowledged
+            </span>
+          </div>
+          {attendees.length === 0 ? (
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              No attendees recorded. Add org members or crew below — they sign in by acknowledging the briefing.
+            </p>
+          ) : (
+            <ul className="mt-3 divide-y divide-[var(--border-subtle)] text-sm">
+              {attendees.map((a) => {
+                const who = a.user?.name ?? a.user?.email ?? a.crew?.name ?? "Unknown";
+                return (
+                  <li key={a.id} className="flex items-center justify-between gap-3 py-2">
+                    <div>
+                      <div className="font-medium">{who}</div>
+                      {a.notes && <div className="text-xs text-[var(--text-muted)]">{a.notes}</div>}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {a.acknowledged_at ? (
+                        <Badge variant="success">Signed {new Date(a.acknowledged_at).toLocaleDateString()}</Badge>
+                      ) : (
+                        <form action={acknowledgeAttendee}>
+                          <input type="hidden" name="briefingId" value={briefingId} />
+                          <input type="hidden" name="attendeeId" value={a.id} />
+                          <Button type="submit" size="sm" variant="secondary">
+                            Sign In
+                          </Button>
+                        </form>
+                      )}
+                      <form action={removeAttendee}>
+                        <input type="hidden" name="briefingId" value={briefingId} />
+                        <input type="hidden" name="attendeeId" value={a.id} />
+                        <Button type="submit" size="sm" variant="ghost">
+                          Remove
+                        </Button>
+                      </form>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          <form
+            action={addAttendee}
+            className="surface-inset mt-4 grid grid-cols-1 gap-2 rounded-md p-3 sm:grid-cols-2"
+          >
+            <input type="hidden" name="briefingId" value={briefingId} />
+            <select name="user_id" defaultValue="" className="input-base">
+              <option value="">— Org member —</option>
+              {orgMembers.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name ?? m.email}
+                </option>
+              ))}
+            </select>
+            <select name="crew_member_id" defaultValue="" className="input-base">
+              <option value="">— Crew member —</option>
+              {crew.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name ?? c.id.slice(0, 8)}
+                </option>
+              ))}
+            </select>
+            <input name="notes" placeholder="Note (optional)" maxLength={500} className="input-base sm:col-span-2" />
+            <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)] sm:col-span-1">
+              <input type="checkbox" name="acknowledged" value="true" />
+              Mark already acknowledged
+            </label>
+            <div className="flex justify-end sm:col-span-1">
+              <Button type="submit" size="sm" variant="secondary">
+                Add Attendee
+              </Button>
+            </div>
+          </form>
+          <p className="mt-2 text-[10px] text-[var(--text-muted)]">
+            Pick exactly one of org member or crew member — both nullable but the schema requires one to be set.
+          </p>
+        </section>
       </div>
     </>
   );

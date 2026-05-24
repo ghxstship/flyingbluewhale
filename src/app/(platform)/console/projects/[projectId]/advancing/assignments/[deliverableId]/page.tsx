@@ -9,7 +9,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
-import { advanceState, deleteAssignment, reassignAssignment } from "./actions";
+import { advanceState, deleteAssignment, postComment, reassignAssignment } from "./actions";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -66,8 +66,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     created_at: string;
   };
 
-  // Hydrate assignee + org members for reassignment dropdown.
-  const [{ data: assignee }, { data: members }] = await Promise.all([
+  // Hydrate assignee + org members + activity ledger + comment thread.
+  // History and comments were previously orphaned tables (existed in
+  // schema, never rendered) — surfacing them turns this page into the
+  // single source of truth for the assignment lifecycle.
+  const [{ data: assignee }, { data: members }, { data: history }, { data: comments }] = await Promise.all([
     d.assignee_id
       ? supabase.from("users").select("id, email, name").eq("id", d.assignee_id).maybeSingle()
       : Promise.resolve({ data: null }),
@@ -76,6 +79,18 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       .select("user_id, users:users!inner(id, email, name)")
       .eq("org_id", session.orgId)
       .is("deleted_at", null),
+    supabase
+      .from("deliverable_history")
+      .select(
+        "id, version, data, changed_at, changed_by, changed_by_user:users!deliverable_history_changed_by_fkey(name, email)",
+      )
+      .eq("deliverable_id", deliverableId)
+      .order("changed_at", { ascending: false }),
+    supabase
+      .from("deliverable_comments")
+      .select("id, body, created_at, user:users!deliverable_comments_user_id_fkey(name, email)")
+      .eq("deliverable_id", deliverableId)
+      .order("created_at", { ascending: true }),
   ]);
   const a = assignee as { email: string; name: string | null } | null;
   const memberList = (
@@ -87,6 +102,22 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     .map((m) => m.users)
     .filter((u): u is { id: string; email: string; name: string | null } => !!u)
     .sort((x, y) => (x.name ?? x.email).localeCompare(y.name ?? y.email));
+
+  type HistoryRow = {
+    id: string;
+    version: number;
+    data: { kind?: string; from?: string; to?: string } | null;
+    changed_at: string;
+    changed_by_user: { name: string | null; email: string | null } | null;
+  };
+  type CommentRow = {
+    id: string;
+    body: string;
+    created_at: string;
+    user: { name: string | null; email: string | null } | null;
+  };
+  const historyRows = (history ?? []) as unknown as HistoryRow[];
+  const commentRows = (comments ?? []) as unknown as CommentRow[];
 
   const allowed = NEXT_STATES[d.deliverable_state] ?? [];
 
@@ -162,6 +193,85 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               Save
             </Button>
           </form>
+        </section>
+
+        <section className="surface p-4">
+          <h2 className="text-sm font-semibold">Comments</h2>
+          <p className="mt-1 text-xs text-[var(--text-muted)]">
+            Back-and-forth between the assignee and the project team. The assignee is push-notified on every new
+            comment.
+          </p>
+          <ol className="mt-3 space-y-3">
+            {commentRows.length === 0 ? (
+              <li className="text-xs text-[var(--text-muted)]">No comments yet.</li>
+            ) : (
+              commentRows.map((c) => (
+                <li key={c.id} className="surface-inset rounded-md p-3">
+                  <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
+                    <span className="font-medium text-[var(--text-secondary)]">
+                      {c.user?.name ?? c.user?.email ?? "Unknown"}
+                    </span>
+                    <span className="font-mono">{fmt.date(c.created_at)}</span>
+                  </div>
+                  <p className="mt-2 text-sm whitespace-pre-wrap">{c.body}</p>
+                </li>
+              ))
+            )}
+          </ol>
+          <form action={postComment} className="mt-3 space-y-2">
+            <input type="hidden" name="projectId" value={projectId} />
+            <input type="hidden" name="deliverableId" value={d.id} />
+            <textarea
+              name="body"
+              required
+              rows={3}
+              maxLength={4000}
+              placeholder="Add a comment for the assignee…"
+              className="input-base w-full resize-y"
+            />
+            <div className="flex justify-end">
+              <Button type="submit" variant="secondary" size="sm">
+                Post Comment
+              </Button>
+            </div>
+          </form>
+        </section>
+
+        <section className="surface p-4">
+          <h2 className="text-sm font-semibold">Activity</h2>
+          <p className="mt-1 text-xs text-[var(--text-muted)]">
+            Every state transition, in reverse chronological order.
+          </p>
+          <ol className="mt-3 space-y-2 text-xs">
+            {historyRows.length === 0 ? (
+              <li className="text-[var(--text-muted)]">No transitions recorded yet.</li>
+            ) : (
+              historyRows.map((h) => {
+                const from = h.data?.from;
+                const to = h.data?.to;
+                const actor = h.changed_by_user?.name ?? h.changed_by_user?.email ?? "system";
+                return (
+                  <li
+                    key={h.id}
+                    className="flex items-center justify-between gap-3 border-b border-[var(--border-subtle)] pb-2 last:border-0"
+                  >
+                    <span>
+                      <span className="font-mono text-[var(--text-muted)]">v{h.version}</span>{" "}
+                      {from && to ? (
+                        <>
+                          <Badge variant="muted">{toTitle(from)}</Badge> → <Badge variant="info">{toTitle(to)}</Badge>
+                        </>
+                      ) : (
+                        <span className="text-[var(--text-secondary)]">snapshot</span>
+                      )}{" "}
+                      <span className="text-[var(--text-muted)]">by {actor}</span>
+                    </span>
+                    <span className="font-mono text-[var(--text-muted)]">{fmt.date(h.changed_at)}</span>
+                  </li>
+                );
+              })
+            )}
+          </ol>
         </section>
 
         <p className="text-xs text-[var(--text-muted)]">

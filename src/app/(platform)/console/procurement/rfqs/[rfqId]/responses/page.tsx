@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
+import Link from "next/link";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -113,7 +114,11 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
             {
               key: "vendor",
               header: "Vendor",
-              render: (r) => r.vendor?.name ?? "—",
+              render: (r) => (
+                <Link href={`/console/procurement/rfqs/${rfqId}/responses/${r.id}`} className="hover:underline">
+                  {r.vendor?.name ?? "—"}
+                </Link>
+              ),
               accessor: (r) => r.vendor?.name ?? null,
             },
             {

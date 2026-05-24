@@ -1101,6 +1101,7 @@ export type Database = {
           publish_state: string
           published_at: string | null
           read_count: number
+          team_id: string | null
           title: string
           updated_at: string
         }
@@ -1117,6 +1118,7 @@ export type Database = {
           publish_state?: string
           published_at?: string | null
           read_count?: number
+          team_id?: string | null
           title: string
           updated_at?: string
         }
@@ -1133,6 +1135,7 @@ export type Database = {
           publish_state?: string
           published_at?: string | null
           read_count?: number
+          team_id?: string | null
           title?: string
           updated_at?: string
         }
@@ -1149,6 +1152,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcements_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
@@ -4840,54 +4850,6 @@ export type Database = {
           },
         ]
       }
-      corrective_actions: {
-        Row: {
-          category: string | null
-          closed_at: string | null
-          description: string
-          due_at: string | null
-          effectiveness_notes: string | null
-          id: string
-          incident_id: string
-          task_id: string | null
-        }
-        Insert: {
-          category?: string | null
-          closed_at?: string | null
-          description: string
-          due_at?: string | null
-          effectiveness_notes?: string | null
-          id?: string
-          incident_id: string
-          task_id?: string | null
-        }
-        Update: {
-          category?: string | null
-          closed_at?: string | null
-          description?: string
-          due_at?: string | null
-          effectiveness_notes?: string | null
-          id?: string
-          incident_id?: string
-          task_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "corrective_actions_incident_id_fkey"
-            columns: ["incident_id"]
-            isOneToOne: false
-            referencedRelation: "uqm_incidents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "corrective_actions_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks_v2"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       cost_centers: {
         Row: {
           active: boolean
@@ -6688,7 +6650,6 @@ export type Database = {
           rendered_xlsx_path: string | null
           reviewed_at: string | null
           reviewed_by: string | null
-          status: Database["public"]["Enums"]["deliverable_state"]
           submitted_at: string | null
           submitted_by: string | null
           title: string | null
@@ -6718,7 +6679,6 @@ export type Database = {
           rendered_xlsx_path?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
-          status?: Database["public"]["Enums"]["deliverable_state"]
           submitted_at?: string | null
           submitted_by?: string | null
           title?: string | null
@@ -6748,7 +6708,6 @@ export type Database = {
           rendered_xlsx_path?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
-          status?: Database["public"]["Enums"]["deliverable_state"]
           submitted_at?: string | null
           submitted_by?: string | null
           title?: string | null
@@ -8202,75 +8161,6 @@ export type Database = {
           },
         ]
       }
-      form_definitions: {
-        Row: {
-          approval_policy_id: string | null
-          created_at: string
-          description: string | null
-          id: string
-          intake_role_class: string | null
-          intake_subsystem: string | null
-          metadata: Json
-          on_submit_actions: Json
-          org_id: string | null
-          prior_version_id: string | null
-          requires_approval: boolean
-          slug: string
-          status: string
-          title: string
-          version: number
-        }
-        Insert: {
-          approval_policy_id?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          intake_role_class?: string | null
-          intake_subsystem?: string | null
-          metadata?: Json
-          on_submit_actions?: Json
-          org_id?: string | null
-          prior_version_id?: string | null
-          requires_approval?: boolean
-          slug: string
-          status: string
-          title: string
-          version?: number
-        }
-        Update: {
-          approval_policy_id?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          intake_role_class?: string | null
-          intake_subsystem?: string | null
-          metadata?: Json
-          on_submit_actions?: Json
-          org_id?: string | null
-          prior_version_id?: string | null
-          requires_approval?: boolean
-          slug?: string
-          status?: string
-          title?: string
-          version?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "form_definitions_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "form_definitions_prior_version_id_fkey"
-            columns: ["prior_version_id"]
-            isOneToOne: false
-            referencedRelation: "form_definitions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       form_defs: {
         Row: {
           created_at: string
@@ -8314,130 +8204,6 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      form_drafts: {
-        Row: {
-          form_definition_id: string
-          id: string
-          last_saved_at: string
-          party_id: string | null
-          state: Json
-        }
-        Insert: {
-          form_definition_id: string
-          id?: string
-          last_saved_at?: string
-          party_id?: string | null
-          state?: Json
-        }
-        Update: {
-          form_definition_id?: string
-          id?: string
-          last_saved_at?: string
-          party_id?: string | null
-          state?: Json
-        }
-        Relationships: [
-          {
-            foreignKeyName: "form_drafts_form_definition_id_fkey"
-            columns: ["form_definition_id"]
-            isOneToOne: false
-            referencedRelation: "form_definitions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "form_drafts_party_id_fkey"
-            columns: ["party_id"]
-            isOneToOne: false
-            referencedRelation: "parties"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      form_field_options: {
-        Row: {
-          display_label: string
-          display_order: number
-          field_id: string
-          id: string
-          value: string
-        }
-        Insert: {
-          display_label: string
-          display_order: number
-          field_id: string
-          id?: string
-          value: string
-        }
-        Update: {
-          display_label?: string
-          display_order?: number
-          field_id?: string
-          id?: string
-          value?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "form_field_options_field_id_fkey"
-            columns: ["field_id"]
-            isOneToOne: false
-            referencedRelation: "form_fields"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      form_fields: {
-        Row: {
-          display_order: number
-          field_key: string
-          field_type: string
-          form_definition_id: string
-          help_text: string | null
-          id: string
-          label: string
-          metadata: Json
-          placeholder: string | null
-          required: boolean
-          validation: Json | null
-          visible_when: Json | null
-        }
-        Insert: {
-          display_order: number
-          field_key: string
-          field_type: string
-          form_definition_id: string
-          help_text?: string | null
-          id?: string
-          label: string
-          metadata?: Json
-          placeholder?: string | null
-          required?: boolean
-          validation?: Json | null
-          visible_when?: Json | null
-        }
-        Update: {
-          display_order?: number
-          field_key?: string
-          field_type?: string
-          form_definition_id?: string
-          help_text?: string | null
-          id?: string
-          label?: string
-          metadata?: Json
-          placeholder?: string | null
-          required?: boolean
-          validation?: Json | null
-          visible_when?: Json | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "form_fields_form_definition_id_fkey"
-            columns: ["form_definition_id"]
-            isOneToOne: false
-            referencedRelation: "form_definitions"
             referencedColumns: ["id"]
           },
         ]
@@ -8506,22 +8272,7 @@ export type Database = {
           value_tag_id?: string | null
           value_text?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "form_submission_values_field_id_fkey"
-            columns: ["field_id"]
-            isOneToOne: false
-            referencedRelation: "form_fields"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "form_submission_values_submission_id_fkey"
-            columns: ["submission_id"]
-            isOneToOne: false
-            referencedRelation: "ufs_form_submissions"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       form_submissions: {
         Row: {
@@ -11037,223 +10788,6 @@ export type Database = {
         }
         Relationships: []
       }
-      knowledge_articles: {
-        Row: {
-          body_html: string | null
-          body_markdown: string
-          collection_id: string | null
-          created_at: string
-          current_version: number
-          excerpt: string | null
-          id: string
-          last_reviewed_at: string | null
-          org_id: string | null
-          owner_party_id: string | null
-          review_cadence_days: number | null
-          slug: string
-          status: string
-          title: string
-          updated_at: string
-          visibility: string
-        }
-        Insert: {
-          body_html?: string | null
-          body_markdown: string
-          collection_id?: string | null
-          created_at?: string
-          current_version?: number
-          excerpt?: string | null
-          id?: string
-          last_reviewed_at?: string | null
-          org_id?: string | null
-          owner_party_id?: string | null
-          review_cadence_days?: number | null
-          slug: string
-          status?: string
-          title: string
-          updated_at?: string
-          visibility: string
-        }
-        Update: {
-          body_html?: string | null
-          body_markdown?: string
-          collection_id?: string | null
-          created_at?: string
-          current_version?: number
-          excerpt?: string | null
-          id?: string
-          last_reviewed_at?: string | null
-          org_id?: string | null
-          owner_party_id?: string | null
-          review_cadence_days?: number | null
-          slug?: string
-          status?: string
-          title?: string
-          updated_at?: string
-          visibility?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "knowledge_articles_collection_id_fkey"
-            columns: ["collection_id"]
-            isOneToOne: false
-            referencedRelation: "knowledge_collections"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "knowledge_articles_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      knowledge_collections: {
-        Row: {
-          description: string | null
-          id: string
-          name: string
-          org_id: string | null
-          parent_id: string | null
-          slug: string
-          visibility: string
-        }
-        Insert: {
-          description?: string | null
-          id?: string
-          name: string
-          org_id?: string | null
-          parent_id?: string | null
-          slug: string
-          visibility: string
-        }
-        Update: {
-          description?: string | null
-          id?: string
-          name?: string
-          org_id?: string | null
-          parent_id?: string | null
-          slug?: string
-          visibility?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "knowledge_collections_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "knowledge_collections_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "knowledge_collections"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      knowledge_relations: {
-        Row: {
-          from_article_id: string
-          id: string
-          relation: string
-          to_article_id: string
-        }
-        Insert: {
-          from_article_id: string
-          id?: string
-          relation: string
-          to_article_id: string
-        }
-        Update: {
-          from_article_id?: string
-          id?: string
-          relation?: string
-          to_article_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "knowledge_relations_from_article_id_fkey"
-            columns: ["from_article_id"]
-            isOneToOne: false
-            referencedRelation: "knowledge_articles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "knowledge_relations_to_article_id_fkey"
-            columns: ["to_article_id"]
-            isOneToOne: false
-            referencedRelation: "knowledge_articles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      knowledge_revisions: {
-        Row: {
-          article_id: string
-          body_markdown: string
-          edited_at: string
-          edited_by: string | null
-          id: string
-          notes: string | null
-          version: number
-        }
-        Insert: {
-          article_id: string
-          body_markdown: string
-          edited_at?: string
-          edited_by?: string | null
-          id?: string
-          notes?: string | null
-          version: number
-        }
-        Update: {
-          article_id?: string
-          body_markdown?: string
-          edited_at?: string
-          edited_by?: string | null
-          id?: string
-          notes?: string | null
-          version?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "knowledge_revisions_article_id_fkey"
-            columns: ["article_id"]
-            isOneToOne: false
-            referencedRelation: "knowledge_articles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      knowledge_subscribers: {
-        Row: {
-          article_id: string
-          party_id: string
-          subscribed_at: string
-        }
-        Insert: {
-          article_id: string
-          party_id: string
-          subscribed_at?: string
-        }
-        Update: {
-          article_id?: string
-          party_id?: string
-          subscribed_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "knowledge_subscribers_article_id_fkey"
-            columns: ["article_id"]
-            isOneToOne: false
-            referencedRelation: "knowledge_articles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       kpi_definitions: {
         Row: {
           created_at: string
@@ -12611,40 +12145,55 @@ export type Database = {
       }
       notifications: {
         Row: {
+          actor_id: string | null
           body: string | null
           created_at: string
           deleted_at: string | null
+          done_at: string | null
           href: string | null
           id: string
           kind: string
           org_id: string
           read_at: string | null
+          snoozed_until: string | null
+          source_id: string | null
+          source_type: string | null
           title: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          actor_id?: string | null
           body?: string | null
           created_at?: string
           deleted_at?: string | null
+          done_at?: string | null
           href?: string | null
           id?: string
           kind?: string
           org_id: string
           read_at?: string | null
+          snoozed_until?: string | null
+          source_id?: string | null
+          source_type?: string | null
           title: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          actor_id?: string | null
           body?: string | null
           created_at?: string
           deleted_at?: string | null
+          done_at?: string | null
           href?: string | null
           id?: string
           kind?: string
           org_id?: string
           read_at?: string | null
+          snoozed_until?: string | null
+          source_id?: string | null
+          source_type?: string | null
           title?: string
           updated_at?: string
           user_id?: string
@@ -15553,7 +15102,6 @@ export type Database = {
           lessons_learned: string | null
           metadata: Json
           root_cause: string | null
-          ukb_article_id: string | null
         }
         Insert: {
           conducted_at?: string | null
@@ -15564,7 +15112,6 @@ export type Database = {
           lessons_learned?: string | null
           metadata?: Json
           root_cause?: string | null
-          ukb_article_id?: string | null
         }
         Update: {
           conducted_at?: string | null
@@ -15575,7 +15122,6 @@ export type Database = {
           lessons_learned?: string | null
           metadata?: Json
           root_cause?: string | null
-          ukb_article_id?: string | null
         }
         Relationships: [
           {
@@ -15583,13 +15129,6 @@ export type Database = {
             columns: ["incident_id"]
             isOneToOne: false
             referencedRelation: "uqm_incidents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "post_mortems_ukb_article_id_fkey"
-            columns: ["ukb_article_id"]
-            isOneToOne: false
-            referencedRelation: "knowledge_articles"
             referencedColumns: ["id"]
           },
         ]
@@ -21647,141 +21186,6 @@ export type Database = {
           },
         ]
       }
-      task_assignments: {
-        Row: {
-          assigned_at: string
-          id: string
-          party_id: string
-          role: string
-          task_id: string
-        }
-        Insert: {
-          assigned_at?: string
-          id?: string
-          party_id: string
-          role: string
-          task_id: string
-        }
-        Update: {
-          assigned_at?: string
-          id?: string
-          party_id?: string
-          role?: string
-          task_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "task_assignments_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks_v2"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      task_dependencies: {
-        Row: {
-          depends_on_task_id: string
-          id: string
-          kind: string
-          task_id: string
-        }
-        Insert: {
-          depends_on_task_id: string
-          id?: string
-          kind: string
-          task_id: string
-        }
-        Update: {
-          depends_on_task_id?: string
-          id?: string
-          kind?: string
-          task_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "task_dependencies_depends_on_task_id_fkey"
-            columns: ["depends_on_task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks_v2"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "task_dependencies_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks_v2"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      task_recurring_definitions: {
-        Row: {
-          active: boolean
-          id: string
-          rrule: string
-          template_task_id: string
-        }
-        Insert: {
-          active?: boolean
-          id?: string
-          rrule: string
-          template_task_id: string
-        }
-        Update: {
-          active?: boolean
-          id?: string
-          rrule?: string
-          template_task_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "task_recurring_definitions_template_task_id_fkey"
-            columns: ["template_task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks_v2"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      task_status_history: {
-        Row: {
-          actor_id: string | null
-          from_state: Database["public"]["Enums"]["utm_state"] | null
-          id: string
-          occurred_at: string
-          reason: string | null
-          task_id: string
-          to_state: Database["public"]["Enums"]["utm_state"]
-        }
-        Insert: {
-          actor_id?: string | null
-          from_state?: Database["public"]["Enums"]["utm_state"] | null
-          id?: string
-          occurred_at?: string
-          reason?: string | null
-          task_id: string
-          to_state: Database["public"]["Enums"]["utm_state"]
-        }
-        Update: {
-          actor_id?: string | null
-          from_state?: Database["public"]["Enums"]["utm_state"] | null
-          id?: string
-          occurred_at?: string
-          reason?: string | null
-          task_id?: string
-          to_state?: Database["public"]["Enums"]["utm_state"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "task_status_history_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks_v2"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       tasks: {
         Row: {
           assigned_to: string | null
@@ -21876,90 +21280,6 @@ export type Database = {
             columns: ["xpms_atom_id"]
             isOneToOne: false
             referencedRelation: "xpms_atoms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      tasks_v2: {
-        Row: {
-          ball_in_court_party_id: string | null
-          cancelled_at: string | null
-          created_at: string
-          description: string | null
-          due_at: string | null
-          id: string
-          kind: string
-          metadata: Json
-          number: string | null
-          org_id: string
-          priority: number
-          project_id: string | null
-          resolved_at: string | null
-          sla_due_at: string | null
-          sla_policy_id: string | null
-          state: Database["public"]["Enums"]["utm_state"]
-          subject_id: string | null
-          subject_table: string | null
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          ball_in_court_party_id?: string | null
-          cancelled_at?: string | null
-          created_at?: string
-          description?: string | null
-          due_at?: string | null
-          id?: string
-          kind: string
-          metadata?: Json
-          number?: string | null
-          org_id: string
-          priority?: number
-          project_id?: string | null
-          resolved_at?: string | null
-          sla_due_at?: string | null
-          sla_policy_id?: string | null
-          state?: Database["public"]["Enums"]["utm_state"]
-          subject_id?: string | null
-          subject_table?: string | null
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          ball_in_court_party_id?: string | null
-          cancelled_at?: string | null
-          created_at?: string
-          description?: string | null
-          due_at?: string | null
-          id?: string
-          kind?: string
-          metadata?: Json
-          number?: string | null
-          org_id?: string
-          priority?: number
-          project_id?: string | null
-          resolved_at?: string | null
-          sla_due_at?: string | null
-          sla_policy_id?: string | null
-          state?: Database["public"]["Enums"]["utm_state"]
-          subject_id?: string | null
-          subject_table?: string | null
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tasks_v2_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tasks_v2_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -23457,59 +22777,6 @@ export type Database = {
             columns: ["thread_id"]
             isOneToOne: false
             referencedRelation: "comment_threads"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      ufs_form_submissions: {
-        Row: {
-          approval_instance_id: string | null
-          created_at: string
-          form_definition_id: string
-          id: string
-          metadata: Json
-          org_id: string
-          reviewed_at: string | null
-          status: string
-          submitted_at: string | null
-          submitter_email: string | null
-          submitter_party_id: string | null
-          updated_at: string
-        }
-        Insert: {
-          approval_instance_id?: string | null
-          created_at?: string
-          form_definition_id: string
-          id?: string
-          metadata?: Json
-          org_id: string
-          reviewed_at?: string | null
-          status: string
-          submitted_at?: string | null
-          submitter_email?: string | null
-          submitter_party_id?: string | null
-          updated_at?: string
-        }
-        Update: {
-          approval_instance_id?: string | null
-          created_at?: string
-          form_definition_id?: string
-          id?: string
-          metadata?: Json
-          org_id?: string
-          reviewed_at?: string | null
-          status?: string
-          submitted_at?: string | null
-          submitter_email?: string | null
-          submitter_party_id?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ufs_form_submissions_form_definition_id_fkey"
-            columns: ["form_definition_id"]
-            isOneToOne: false
-            referencedRelation: "form_definitions"
             referencedColumns: ["id"]
           },
         ]
@@ -30622,4 +29889,3 @@ export const Constants = {
     },
   },
 } as const
-

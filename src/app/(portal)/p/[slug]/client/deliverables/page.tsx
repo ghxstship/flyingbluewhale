@@ -34,8 +34,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {
             key: "status",
             header: "Status",
-            render: (r) => <StatusBadge status={r.status} />,
-            accessor: (r) => r.status,
+            render: (r) => <StatusBadge status={r.deliverable_state} />,
+            accessor: (r) => r.deliverable_state,
             filterable: true,
             groupable: true,
           },

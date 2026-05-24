@@ -51,7 +51,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   const [{ data: rows }, { data: org }, { data: tiers }] = await Promise.all([
     supabase
       .from("deliverables")
-      .select("id, type, status, version, deadline, data")
+      .select("id, type, deliverable_state, version, deadline, data")
       .eq("project_id", parsed.data.projectId)
       .in("status", ["approved", "submitted"] as never)
       .order("type", { ascending: true }),
@@ -71,7 +71,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   const deliverables: DeliverableRow[] = (rows ?? []).map((r) => ({
     id: r.id as string,
     type: r.type as string,
-    status: (r.status as string | null) ?? null,
+    status: (r.deliverable_state as string | null) ?? null,
     version: (r.version as number | null) ?? null,
     deadline: (r.deadline as string | null) ?? null,
     data: r.data,

@@ -73,7 +73,7 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
-                              <StatusBadge status={d.status} />
+                              <StatusBadge status={d.deliverable_state} />
                               {d.file_path && (
                                 <Link
                                   href={`/api/v1/deliverables/${d.id}/download`}

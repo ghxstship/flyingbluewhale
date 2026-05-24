@@ -13,7 +13,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const supabase = await createClient();
   const { data } = await supabase
     .from("deliverables")
-    .select("id, title, type, status, version, updated_at")
+    .select("id, title, type, deliverable_state, version, updated_at")
     .eq("org_id", session.orgId)
     .eq("submitted_by", session.userId)
     .is("deleted_at", null)
@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     id: string;
     title: string | null;
     type: string;
-    status: string;
+    deliverable_state: string;
     version: number;
     updated_at: string;
   }>;
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <td className="font-mono text-xs">{r.type}</td>
                 <td className="font-mono text-xs">{r.version}</td>
                 <td>
-                  <StatusBadge status={r.status} />
+                  <StatusBadge status={r.deliverable_state} />
                 </td>
                 <td className="font-mono text-xs">{fmtDate(r.updated_at)}</td>
               </tr>

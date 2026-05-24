@@ -101,7 +101,7 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
     project_id: project.id,
     type: parsed.data.type,
     title: parsed.data.title,
-    status: "submitted",
+    deliverable_state: "submitted",
     data: { notes: parsed.data.notes ?? null },
     file_path: filePath ?? null,
     submitted_by: session.userId,
@@ -115,14 +115,14 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
   return { ok: true };
 }
 
-type DeliverableStatus = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "revision_requested";
+type DeliverableState = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "revision_requested";
 
 // Deliverable FSM: draft → submitted → in_review → approved | rejected.
 // revision_requested loops back to submitted. Approved + rejected are
 // terminal. The conditional update below prevents a stale review
 // dashboard from re-firing the deliverable.approved notification on a
 // double click.
-const DELIVERABLE_TRANSITIONS: Record<DeliverableStatus, readonly DeliverableStatus[]> = {
+const DELIVERABLE_TRANSITIONS: Record<DeliverableState, readonly DeliverableState[]> = {
   draft: ["submitted"],
   submitted: ["in_review", "approved", "rejected", "revision_requested"],
   in_review: ["approved", "rejected", "revision_requested"],
@@ -131,40 +131,40 @@ const DELIVERABLE_TRANSITIONS: Record<DeliverableStatus, readonly DeliverableSta
   rejected: [],
 };
 
-export async function setDeliverableStatusAction(deliverableId: string, status: DeliverableStatus) {
+export async function setDeliverableStatusAction(deliverableId: string, nextState: DeliverableState) {
   const session = await requireSession();
   const supabase = await createClient();
 
-  // Capture org/project + current status before write so we can validate
+  // Capture org/project + current state before write so we can validate
   // the transition AND scope the conditional update. Pin org_id on
   // top of RLS so a foreign-org deliverable id 404s instead of leaking
   // its existence through a "not found" vs "permission denied" timing
   // difference.
   const { data: before } = await supabase
     .from("deliverables")
-    .select("org_id, project_id, title, type, submitted_by, status")
+    .select("org_id, project_id, title, type, submitted_by, deliverable_state")
     .eq("id", deliverableId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!before) return { error: "Deliverable not found" };
-  const current = before.status as DeliverableStatus;
+  const current = before.deliverable_state as DeliverableState;
   const allowed = DELIVERABLE_TRANSITIONS[current] ?? [];
-  if (!allowed.includes(status)) {
-    return { error: `Cannot move ${current} → ${status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
+  if (!allowed.includes(nextState)) {
+    return { error: `Cannot move ${current} → ${nextState}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
   }
 
   const patch: {
-    status: DeliverableStatus;
+    deliverable_state: DeliverableState;
     reviewed_by?: string;
     reviewed_at?: string;
     submitted_by?: string;
     submitted_at?: string;
-  } = { status };
-  if (["approved", "rejected", "revision_requested", "in_review"].includes(status)) {
+  } = { deliverable_state: nextState };
+  if (["approved", "rejected", "revision_requested", "in_review"].includes(nextState)) {
     patch.reviewed_by = session.userId;
     patch.reviewed_at = new Date().toISOString();
   }
-  if (status === "submitted") {
+  if (nextState === "submitted") {
     patch.submitted_by = session.userId;
   }
   const { data: updated, error } = await supabase
@@ -172,20 +172,20 @@ export async function setDeliverableStatusAction(deliverableId: string, status: 
     .update(patch)
     .eq("id", deliverableId)
     .eq("org_id", session.orgId)
-    .eq("status", current)
+    .eq("deliverable_state", current)
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Deliverable status changed concurrently — refresh and retry" };
+    return { error: "Deliverable state changed concurrently — refresh and retry" };
   }
-  if (status === "submitted" || status === "approved") {
+  if (nextState === "submitted" || nextState === "approved") {
     const { notify } = await import("@/lib/notify");
     await notify({
       orgId: before.org_id,
       userId: before.submitted_by ?? session.userId,
-      eventType: status === "submitted" ? "deliverable.submitted" : "deliverable.approved",
+      eventType: nextState === "submitted" ? "deliverable.submitted" : "deliverable.approved",
       title:
-        status === "submitted" ? `Deliverable submitted: ${before.title}` : `Deliverable approved: ${before.title}`,
+        nextState === "submitted" ? `Deliverable submitted: ${before.title}` : `Deliverable approved: ${before.title}`,
       body: `Type: ${before.type}`,
       href: `/console/projects/${before.project_id}/advancing`,
       data: { deliverableId, projectId: before.project_id, type: before.type },

@@ -181,7 +181,7 @@ type DeliverableRow = Pick<
   | "project_id"
   | "type"
   | "title"
-  | "status"
+  | "deliverable_state"
   | "version"
   | "submitted_by"
   | "submitted_at"
@@ -197,7 +197,7 @@ export function toZapierDeliverable(row: DeliverableRow): ZapierDeliverable {
     project_id: row.project_id,
     type: row.type,
     title: row.title,
-    status: row.status,
+    status: row.deliverable_state,
     version: row.version,
     submitted_by: row.submitted_by,
     submitted_at: row.submitted_at,

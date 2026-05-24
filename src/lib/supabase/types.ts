@@ -231,7 +231,7 @@ export type Deliverable = {
   project_id: string;
   type: DeliverableType;
   title: string | null;
-  status: DeliverableStatus;
+  deliverable_state: DeliverableState;
   data: unknown;
   file_path: string | null;
   version: number;
@@ -2089,7 +2089,7 @@ export type Database = {
           project_id: string;
           type: DeliverableType;
           title?: string | null;
-          status?: DeliverableStatus;
+          deliverable_state?: DeliverableState;
           data?: unknown;
           file_path?: string | null;
           version?: number;

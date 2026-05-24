@@ -18,7 +18,7 @@ export async function GET() {
     const { data, error } = await supabase
       .from("deliverables")
       .select(
-        "id, project_id, type, title, status, version, submitted_by, submitted_at, reviewed_at, deadline, created_at, updated_at",
+        "id, project_id, type, title, deliverable_state, version, submitted_by, submitted_at, reviewed_at, deadline, created_at, updated_at",
       )
       .eq("org_id", session.orgId)
       .not("submitted_at", "is", null)

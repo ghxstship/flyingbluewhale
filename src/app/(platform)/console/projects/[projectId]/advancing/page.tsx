@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       .maybeSingle(),
     supabase
       .from("deliverables")
-      .select("id, title, type, status, version, deadline, updated_at, data")
+      .select("id, title, type, deliverable_state, version, deadline, updated_at, data")
       .eq("project_id", projectId)
       .is("deleted_at", null)
       .order("updated_at", { ascending: false }),
@@ -92,8 +92,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                       <td className="font-mono text-xs">{d.type}</td>
                       <td>
                         <div className="flex items-center gap-2">
-                          <StatusBadge status={d.status} />
-                          <DueDateBadge dueAt={d.deadline} status={d.status} iconOnly size="sm" />
+                          <StatusBadge status={d.deliverable_state} />
+                          <DueDateBadge dueAt={d.deadline} status={d.deliverable_state} iconOnly size="sm" />
                           {data?.fulfilled_at && <StatusChip tone="success">Fulfilled</StatusChip>}
                         </div>
                       </td>
@@ -103,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                       <td className="text-end">
                         <AdvancingTransitionRow
                           id={d.id}
-                          status={d.status as string}
+                          status={d.deliverable_state as string}
                           fulfilled={Boolean(data?.fulfilled_at)}
                         />
                       </td>

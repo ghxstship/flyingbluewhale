@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Project, ProjectStatus } from "@/lib/supabase/types";
+import type { TablesUpdate } from "@/lib/supabase/database.types";
 
 export async function listProjects(orgId: string, opts?: { includeArchived?: boolean }): Promise<Project[]> {
   if (!orgId) return [];
@@ -79,8 +80,7 @@ export async function updateProject(orgId: string, projectId: string, patch: Par
   // gen artifact); the schema accepts null, so widen here.
   const { data, error } = await supabase
     .from("projects")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update(patch as any)
+    .update(patch as unknown as TablesUpdate<"projects">)
     .eq("org_id", orgId)
     .eq("id", projectId)
     .select()

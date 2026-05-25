@@ -15,11 +15,17 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
-  const [{ data: projects }, { data: users }, { data: vendors }, { data: plans }] = await Promise.all([
+  const [{ data: projects }, { data: users }, { data: vendors }, { data: plans }, { data: lists }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).order("name"),
     supabase.from("users").select("id, name, email").limit(200),
     supabase.from("vendors").select("id, name").eq("org_id", session.orgId).order("name"),
     supabase.from("site_plans").select("id, code, title").eq("org_id", session.orgId).order("code"),
+    supabase
+      .from("punch_lists")
+      .select("id, name, project_id, status")
+      .eq("org_id", session.orgId)
+      .eq("status", "open")
+      .order("created_at", { ascending: false }),
   ]);
 
   return (
@@ -107,6 +113,21 @@ export default async function Page() {
               </select>
             </label>
           </div>
+          <label className="flex flex-col gap-1.5">
+            <span className={LBL}>Punch list</span>
+            <select name="punch_list_id" className={INPUT} defaultValue="">
+              <option value="">— Unassigned —</option>
+              {((lists ?? []) as Array<{ id: string; name: string; project_id: string }>).map((l) => (
+                <option key={l.id} value={l.id} data-project={l.project_id}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+            <span className="text-[10px] text-[var(--text-muted)]">
+              Optional. Pick a list to group this item with others. The server enforces that the list&rsquo;s project
+              matches the item&rsquo;s.
+            </span>
+          </label>
           <label className="flex items-center gap-2">
             <input type="checkbox" name="show_ready_gate" value="1" />
             <span className="text-xs">Gate doors-open until this item is closed</span>

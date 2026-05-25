@@ -42,7 +42,7 @@ const PRIORITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
   urgent: "error",
 };
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ view?: string }> }) {
+export default async function Page({ searchParams }: { searchParams: Promise<{ view?: string; list?: string }> }) {
   if (!hasSupabase) {
     return (
       <>
@@ -58,19 +58,34 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
   const fmt = await getRequestFormatters();
   const sp = await searchParams;
   const view = VALID_VIEWS.has(sp.view ?? "") ? (sp.view as "list" | "kanban") : "list";
+  // List filter: ?list=<uuid> scopes items to a named punch_list. Accepted
+  // shape is the bare uuid since this is the URL the lists page links to.
+  const listFilter = sp.list && /^[0-9a-f-]{36}$/.test(sp.list) ? sp.list : null;
 
   function fmtDate(d: string | null): string {
     if (!d) return "—";
     return fmt.dateParts(d + "T00:00:00", { month: "short", day: "numeric" });
   }
-  const { data } = await supabase
+
+  // Hydrate the active list (if any) so we can show its name in the
+  // breadcrumb + the "clear filter" affordance.
+  const { data: activeList } = listFilter
+    ? await supabase
+        .from("punch_lists")
+        .select("id, name, status")
+        .eq("id", listFilter)
+        .eq("org_id", session.orgId)
+        .maybeSingle()
+    : { data: null as { id: string; name: string; status: string } | null };
+
+  let itemQuery = supabase
     .from("punch_items")
     .select(
       "id, code, title, status, priority, due_at, closed_at, show_ready_gate, project:project_id(name), assignee:assignee_id(name, email)",
     )
-    .eq("org_id", session.orgId)
-    .order("created_at", { ascending: false })
-    .limit(200);
+    .eq("org_id", session.orgId);
+  if (listFilter) itemQuery = itemQuery.eq("punch_list_id", listFilter);
+  const { data } = await itemQuery.order("created_at", { ascending: false }).limit(200);
 
   const rows = (data ?? []) as unknown as Row[];
   const open = rows.filter((r) => !["complete", "void"].includes(r.status)).length;
@@ -81,12 +96,22 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
     <>
       <ModuleHeader
         eyebrow="Operations"
-        title="Punch List"
-        subtitle="Show-ready checklist."
+        title={activeList ? `Punch · ${activeList.name}` : "Punch List"}
+        subtitle={activeList ? `Filtered to one list. Clear to see all items.` : "Show-ready checklist."}
         action={
-          <Button href="/console/punch/new" size="sm">
-            + New Item
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/console/punch/lists" size="sm" variant="ghost">
+              Lists
+            </Button>
+            {activeList && (
+              <Button href="/console/punch" size="sm" variant="ghost">
+                Clear Filter
+              </Button>
+            )}
+            <Button href="/console/punch/new" size="sm">
+              + New Item
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-5">

@@ -16,6 +16,7 @@ const Schema = z.object({
   vendor_id: z.string().uuid().optional().or(z.literal("")),
   due_at: z.string().optional(),
   site_plan_id: z.string().uuid().optional().or(z.literal("")),
+  punch_list_id: z.string().uuid().optional().or(z.literal("")),
   show_ready_gate: z.string().optional(),
 });
 
@@ -57,6 +58,21 @@ export async function createPunchItem(_: State, fd: FormData): Promise<State> {
       .maybeSingle();
     if (!sitePlan) return { error: "Site plan not found in your organization" };
   }
+  if (parsed.data.punch_list_id) {
+    // Cross-tenant + cross-project guard: the chosen list must belong
+    // to the same org AND target the same project as this item so
+    // grouping stays coherent.
+    const { data: list } = await supabase
+      .from("punch_lists")
+      .select("id, project_id")
+      .eq("id", parsed.data.punch_list_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!list) return { error: "Punch list not found in your organization" };
+    if ((list as { project_id: string }).project_id !== parsed.data.project_id) {
+      return { error: "Punch list belongs to a different project" };
+    }
+  }
 
   const code = await nextOrgCode("punch_items", session.orgId, "PUNCH");
 
@@ -73,6 +89,7 @@ export async function createPunchItem(_: State, fd: FormData): Promise<State> {
       vendor_id: parsed.data.vendor_id || null,
       due_at: parsed.data.due_at || null,
       site_plan_id: parsed.data.site_plan_id || null,
+      punch_list_id: parsed.data.punch_list_id || null,
       show_ready_gate: parsed.data.show_ready_gate === "1",
       created_by: session.userId,
     } as never)

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatSequencePreview } from "@/lib/sequences";
 import { resetSequence, upsertSequence } from "./actions";
+import { formatNumber } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -96,7 +97,7 @@ export default async function Page() {
               {
                 key: "current_val",
                 header: "Current",
-                render: (r) => <span className="font-mono text-xs">{r.current_val.toLocaleString()}</span>,
+                render: (r) => <span className="font-mono text-xs">{formatNumber(r.current_val)}</span>,
                 accessor: (r) => r.current_val,
               },
               {

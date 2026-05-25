@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +53,7 @@ export default async function Page() {
                   {r.open_call?.title ?? "(deleted call)"}
                 </Link>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                  Submitted {new Date(r.submitted_at).toLocaleDateString()}
+                  Submitted {formatDate(r.submitted_at)}
                 </p>
               </div>
               <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

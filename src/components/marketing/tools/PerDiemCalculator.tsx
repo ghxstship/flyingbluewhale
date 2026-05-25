@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Plus, X } from "lucide-react";
+import { formatMoney } from "@/lib/i18n/format";
 
 type Leg = { id: string; city: string; days: number; rate: number; headcount: number };
 
@@ -107,7 +108,7 @@ export function PerDiemCalculator() {
               <div className="sm:col-span-2">
                 <label className="eyebrow">Leg total</label>
                 <div className="mt-1 rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 font-mono text-sm">
-                  ${(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount)).toLocaleString()}
+                  {formatMoney(Math.round(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount) * 100), { fractionDigits: 0 })}
                 </div>
               </div>
             </div>
@@ -126,7 +127,7 @@ export function PerDiemCalculator() {
               {totalDays} crew-days across {legs.length} leg{legs.length === 1 ? "" : "s"}
             </div>
           </div>
-          <div className="font-mono text-2xl font-semibold">${total.toLocaleString()}</div>
+          <div className="font-mono text-2xl font-semibold">{formatMoney(Math.round(total * 100), { fractionDigits: 0 })}</div>
         </div>
       </div>
     </div>

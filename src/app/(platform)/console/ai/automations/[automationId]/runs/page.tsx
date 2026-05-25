@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * Run history — list view.
@@ -50,13 +51,7 @@ const STATUS_FILTERS: Array<{ key: "all" | RunRow["status"]; label: string }> = 
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  return formatDateParts(iso, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
 function durationMs(started: string | null, finished: string | null): number | null {

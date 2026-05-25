@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export type CalendarEvent = {
   id: string;
@@ -34,7 +35,7 @@ export function CalendarGrid({
   initialMonth: string;
 }) {
   const [cursor, setCursor] = React.useState(() => parseMonth(initialMonth));
-  const monthLabel = cursor.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  const monthLabel = formatDateParts(cursor, { month: "long", year: "numeric" });
 
   const monthStart = startOfMonth(cursor);
   const monthEnd = endOfMonth(cursor);

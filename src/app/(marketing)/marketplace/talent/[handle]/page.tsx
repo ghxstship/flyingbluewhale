@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { formatNumber } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -95,11 +96,11 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <dl className="space-y-1 text-sm">
               <div>
                 <span className="text-[var(--text-secondary)]">Monthly listeners:</span>{" "}
-                {t.monthly_listeners?.toLocaleString() ?? "—"}
+                {formatNumber(t.monthly_listeners) ?? "—"}
               </div>
               <div>
                 <span className="text-[var(--text-secondary)]">Followers:</span>{" "}
-                {t.follower_count?.toLocaleString() ?? "—"}
+                {formatNumber(t.follower_count) ?? "—"}
               </div>
               <div>
                 <span className="text-[var(--text-secondary)]">Reel:</span>{" "}

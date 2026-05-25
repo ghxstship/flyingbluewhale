@@ -6,6 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -77,8 +78,8 @@ export default async function Page() {
                 meta={[
                   r.region,
                   r.venue_type,
-                  r.performance_date ? `Show ${new Date(r.performance_date).toLocaleDateString()}` : null,
-                  r.deadline_at ? `Closes ${new Date(r.deadline_at).toLocaleDateString()}` : null,
+                  r.performance_date ? `Show ${formatDate(r.performance_date)}` : null,
+                  r.deadline_at ? `Closes ${formatDate(r.deadline_at)}` : null,
                   formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
                 ]}
               />

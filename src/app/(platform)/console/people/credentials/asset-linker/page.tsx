@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -113,7 +114,7 @@ export default async function AssetLinkerPage() {
                       <td className="text-xs">{titleById.get(l.assignment_id) ?? "—"}</td>
                       <td className="text-xs">{toTitle(l.kind)}</td>
                       <td className="font-mono text-xs">{l.code}</td>
-                      <td className="font-mono text-xs">{new Date(l.issued_at).toLocaleDateString()}</td>
+                      <td className="font-mono text-xs">{formatDate(l.issued_at)}</td>
                       <td>
                         <Badge variant={l.active ? "success" : "muted"}>{l.active ? "Active" : "Voided"}</Badge>
                       </td>

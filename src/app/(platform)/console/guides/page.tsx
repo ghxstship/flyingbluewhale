@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -78,7 +79,7 @@ export default async function GuidesIndex() {
                       <Badge variant="muted">{toTitle(g.persona)}</Badge>
                     </td>
                     <td className="font-mono text-xs">
-                      {g.updated_at ? new Date(g.updated_at).toLocaleDateString() : "—"}
+                      {g.updated_at ? formatDate(g.updated_at) : "—"}
                     </td>
                     <td>
                       <Link

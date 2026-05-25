@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -29,12 +30,7 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
 const CASE_PATTERN = /(protest|appeal|jury|disqualif|disq\b|hearing|case\b|grievance|disciplinary|sanction|doping)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateParts(iso, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 export default async function Page() {

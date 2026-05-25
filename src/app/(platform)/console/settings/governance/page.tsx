@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -101,7 +102,7 @@ export default async function GovernancePage() {
                       <Badge variant={p.status === "active" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
                     </td>
                     <td className="font-mono text-xs">
-                      {p.next_review_at ? new Date(p.next_review_at).toLocaleDateString() : "—"}
+                      {p.next_review_at ? formatDate(p.next_review_at) : "—"}
                     </td>
                   </tr>
                 ))

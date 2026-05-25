@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { toggleActive, deleteItem } from "./actions";
+import { formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -85,10 +86,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Unit Cost</div>
             <div className="mt-1 font-mono">
               {item.unit_cost_cents != null
-                ? (item.unit_cost_cents / 100).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: item.currency ?? "USD",
-                  })
+                ? formatMoney(item.unit_cost_cents, { currency: item.currency ?? "USD" })
                 : "—"}
             </div>
           </div>

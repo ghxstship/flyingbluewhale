@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -21,13 +22,7 @@ type EventRow = {
 const MEETING_PATTERN = /(meeting|chef[- ]de[- ]mission|cdm|technical brief|attaché|attache|delegation brief)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateParts(iso, { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

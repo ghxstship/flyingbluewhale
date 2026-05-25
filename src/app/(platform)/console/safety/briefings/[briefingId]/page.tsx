@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { acknowledgeAttendee, addAttendee, markConducted, removeAttendee } from "./actions";
+import { formatDate, formatDateParts } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -34,14 +35,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateParts(iso, { weekday: "short", month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 export default async function Page({ params }: { params: Promise<{ briefingId: string }> }) {
@@ -202,7 +196,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
                     </div>
                     <div className="flex items-center gap-2">
                       {a.acknowledged_at ? (
-                        <Badge variant="success">Signed {new Date(a.acknowledged_at).toLocaleDateString()}</Badge>
+                        <Badge variant="success">Signed {formatDate(a.acknowledged_at)}</Badge>
                       ) : (
                         <form action={acknowledgeAttendee}>
                           <input type="hidden" name="briefingId" value={briefingId} />

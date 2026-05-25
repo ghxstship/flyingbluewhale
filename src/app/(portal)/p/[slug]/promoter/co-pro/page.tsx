@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { toTitle } from "@/lib/format";
+import { formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -89,10 +90,7 @@ export default async function PromoterCoPro({ params }: { params: Promise<{ slug
                   <td className="font-mono text-xs">{o.performance_date ? fmt.date(o.performance_date) : "—"}</td>
                   <td className="font-mono text-xs">
                     {o.guarantee_cents != null
-                      ? (o.guarantee_cents / 100).toLocaleString("en-US", {
-                          style: "currency",
-                          currency: o.currency ?? "USD",
-                        })
+                      ? formatMoney(o.guarantee_cents, { currency: o.currency ?? "USD" })
                       : "—"}
                   </td>
                   <td className="font-mono text-xs">{o.door_pct != null ? `${o.door_pct}%` : "—"}</td>

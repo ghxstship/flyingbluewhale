@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ChartShell } from "@/components/charts/ChartShell";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { formatMoney } from "@/lib/i18n/format";
 
 export type PortfolioEntry = {
   id: string;

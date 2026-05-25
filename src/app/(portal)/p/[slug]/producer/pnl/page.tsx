@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
     .filter((i) => i.status === "paid")
     .reduce((s, i) => s + (i.amount_cents ?? 0), 0);
   const margin = invoiceTotal - expenseTotal;
-  const fmtMoney = (cents: number) => (cents / 100).toLocaleString("en-US", { style: "currency", currency });
+  const fmtMoney = (cents: number) => formatMoney(cents, { currency });
 
   return (
     <div className="flex min-h-screen">

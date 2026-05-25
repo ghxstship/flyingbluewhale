@@ -4,7 +4,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { STATUS_TONE } from "@/lib/marketplace";
-import { formatMoney } from "@/lib/i18n/format";
+import { formatDateTime, formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
         <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Submitted {new Date(s.submitted_at).toLocaleString()}
+        Submitted {formatDateTime(s.submitted_at)}
       </p>
 
       <div className="mt-6 space-y-4">

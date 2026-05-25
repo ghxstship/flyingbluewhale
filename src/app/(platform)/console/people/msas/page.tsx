@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { listMsas } from "@/lib/msa/queries";
 import { MSA_STATUS_LABEL, MSA_STATUS_VARIANT } from "@/lib/msa/types";
 import type { IndependentContractorMsaResolved } from "@/lib/msa/types";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -87,7 +88,7 @@ export default async function MsasPage() {
               header: "Signed",
               render: (r) =>
                 r.signed_at ? (
-                  <span className="font-mono text-xs">{new Date(r.signed_at).toLocaleDateString()}</span>
+                  <span className="font-mono text-xs">{formatDate(r.signed_at)}</span>
                 ) : (
                   <span className="text-xs text-[var(--text-muted)]">—</span>
                 ),

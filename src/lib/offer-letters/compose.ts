@@ -2,6 +2,7 @@ import { env } from "@/lib/env";
 import type { OfferLetterResolved } from "./types";
 import { formatDateRange, formatDollars } from "./format";
 import { EMPLOYER_LABEL } from "./types";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export type ComposedEmail = {
   to: string;
@@ -263,7 +264,7 @@ function renderHtml(a: HtmlArgs): string {
 function formatShortDate(iso: string): string {
   try {
     const d = new Date(iso);
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    return formatDateParts(d, { month: "short", day: "numeric", year: "numeric" });
   } catch {
     return iso;
   }

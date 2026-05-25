@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { RunTimeline, type RunTimelineStep } from "@/components/automations/RunTimeline";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * Run detail — single run view with per-step timeline.
@@ -57,14 +58,7 @@ const STATUS_TONE: Record<RunRow["status"], "muted" | "info" | "success" | "warn
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  return formatDateParts(iso, { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
 function durationMs(started: string | null, finished: string | null): number | null {

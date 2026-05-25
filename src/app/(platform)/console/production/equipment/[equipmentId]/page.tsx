@@ -11,6 +11,7 @@ import { fmtDate, money } from "@/components/detail/DetailShell";
 import { setEquipmentStatus, deleteEquipment } from "../actions";
 import type { EquipmentStatus } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { formatDateTime } from "@/lib/i18n/format";
 
 const NEXT: Record<EquipmentStatus, EquipmentStatus[]> = {
   available: ["reserved", "in_use", "maintenance", "retired"],
@@ -168,7 +169,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                       {m.project?.name && <Badge variant="muted">{m.project.name}</Badge>}
                       {m.reason && <span className="text-[var(--text-secondary)]">— {m.reason}</span>}
                     </span>
-                    <span className="font-mono text-[var(--text-muted)]">{new Date(m.moved_at).toLocaleString()}</span>
+                    <span className="font-mono text-[var(--text-muted)]">{formatDateTime(m.moved_at)}</span>
                   </li>
                 );
               })}

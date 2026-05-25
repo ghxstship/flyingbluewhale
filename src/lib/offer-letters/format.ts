@@ -1,5 +1,6 @@
 import { urlFor } from "@/lib/urls";
 import type { OfferLetterResolved, CompensationBasis } from "./types";
+import { formatDateParts, formatMoney } from "@/lib/i18n/format";
 
 export function offerPublicUrl(token: string): string {
   // Public offer-letter URL — unauthenticated, served by the apex (marketing
@@ -9,20 +10,13 @@ export function offerPublicUrl(token: string): string {
 
 export function formatDateRange(start: string | null, end: string | null): string {
   if (!start && !end) return "TBD";
-  const fmt = (iso: string) => {
-    const d = new Date(iso + "T00:00:00");
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  };
+  const fmt = (iso: string) => formatDateParts(iso + "T00:00:00", { month: "short", day: "numeric", year: "numeric" });
   if (start && end) return `${fmt(start)} – ${fmt(end)}`;
   return fmt((start ?? end)!);
 }
 
 export function formatDollars(cents: number): string {
-  return (cents / 100).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
+  return formatMoney(cents, { fractionDigits: 0 });
 }
 
 /**

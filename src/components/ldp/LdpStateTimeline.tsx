@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { toTitle } from "@/lib/format";
+import { formatDateTime } from "@/lib/i18n/format";
 
 /**
  * Generic timeline renderer for any LDP `*_state_transitions` audit
@@ -143,7 +144,7 @@ export async function LdpStateTimeline({
                   {r.reason && <span className="text-[var(--text-secondary)]">— {r.reason}</span>}
                 </span>
                 <span className="font-mono text-[var(--text-muted)]">
-                  {new Date(r.transitioned_at).toLocaleString()}
+                  {formatDateTime(r.transitioned_at)}
                 </span>
               </li>
             );

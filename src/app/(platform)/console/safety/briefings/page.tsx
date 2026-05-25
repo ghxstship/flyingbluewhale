@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -34,12 +35,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateParts(iso, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 export default async function Page() {

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +59,7 @@ export default async function Page() {
             {
               key: "when",
               header: "Occurs",
-              render: (r) => new Date(r.occurs_at).toLocaleString(),
+              render: (r) => formatDateTime(r.occurs_at),
               accessor: (r) => r.occurs_at,
               className: "font-mono text-xs",
             },

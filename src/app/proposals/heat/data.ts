@@ -4,6 +4,8 @@
 // + per-activation tier menu (Small / Medium / Large), each with a base
 // execution price and a fully customized ceiling. All ranges are buildout-only.
 
+import { formatNumber } from "@/lib/i18n/format";
+
 export type Money = number; // dollars
 
 export type TierId = "small" | "medium" | "large";
@@ -1065,7 +1067,7 @@ export const HEAT_CADENCE_RUNWAY: Record<TierId, string> = {
 };
 
 export function fmtMoney(n: number): string {
-  return "$" + n.toLocaleString("en-US");
+  return formatNumber(n);
 }
 
 export function fmtRange(base: number, ceiling: number): string {

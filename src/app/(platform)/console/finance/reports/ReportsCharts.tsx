@@ -19,6 +19,7 @@ import {
 import { ChartShell } from "@/components/charts/ChartShell";
 import { ChartView } from "@/components/views/ChartView";
 import type { ChartViewConfig } from "@/lib/views/chart-config";
+import { formatMoney } from "@/lib/i18n/format";
 
 type MonthPoint = { month: string; revenue: number; expenses: number; margin: number };
 type AgingRow = { bucket: string; count: number; amount: number };
@@ -208,5 +209,5 @@ function DarkTooltip({
 }
 
 function fmtTooltip(v: number): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v);
+  return formatMoney(v, { fractionDigits: 0 });
 }

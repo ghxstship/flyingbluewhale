@@ -17,6 +17,7 @@ import { StepBuilder, type AutomationStep } from "@/components/automations/StepB
 import "@/lib/automations/actions";
 import { listActions } from "@/lib/automations/registry";
 import { saveStepsAction, saveTriggerAction } from "./actions";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -51,13 +52,7 @@ const RUN_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateParts(iso, { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 function stepCount(steps: Json): number {

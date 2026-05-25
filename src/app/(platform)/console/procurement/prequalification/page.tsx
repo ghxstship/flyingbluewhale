@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,7 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 
 function fmt(d: string | null): string {
   if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString();
+  return formatDate(d + "T00:00:00");
 }
 
 export default async function Page() {

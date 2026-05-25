@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney } from "@/lib/i18n/format";
+import { formatDate, formatMoney } from "@/lib/i18n/format";
 import { awardResponse } from "./actions";
 import { toTitle } from "@/lib/format";
 
@@ -128,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             {
               key: "submitted_at",
               header: "Submitted",
-              render: (r) => (r.submitted_at ? new Date(r.submitted_at).toLocaleDateString() : "—"),
+              render: (r) => (r.submitted_at ? formatDate(r.submitted_at) : "—"),
               accessor: (r) => r.submitted_at ?? "",
               mono: true,
               sortable: true,

@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney } from "@/lib/i18n/format";
+import { formatDateTime, formatMoney } from "@/lib/i18n/format";
 import { timeAgo, toTitle } from "@/lib/format";
 import { awardToInvite, inviteVendor, removeInvite, transitionBroadcast } from "./actions";
 
@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
             {broadcast.category && <Badge variant="muted">{broadcast.category}</Badge>}
             {broadcast.project?.name && <Badge variant="muted">{broadcast.project.name}</Badge>}
             {broadcast.needed_by && (
-              <span className="font-mono text-xs">needed by {new Date(broadcast.needed_by).toLocaleString()}</span>
+              <span className="font-mono text-xs">needed by {formatDateTime(broadcast.needed_by)}</span>
             )}
           </span>
         }

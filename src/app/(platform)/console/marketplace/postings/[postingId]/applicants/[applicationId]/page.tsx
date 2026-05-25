@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { JOB_APPLICATION_STATUSES, STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { transitionApplicationAction } from "./actions";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
       <ModuleHeader
         eyebrow="Applicant"
         title={`#${a.id.slice(0, 8)}`}
-        subtitle={`Applied ${new Date(a.applied_at).toLocaleDateString()}`}
+        subtitle={`Applied ${formatDate(a.applied_at)}`}
         action={<Badge variant={STATUS_TONE[a.status] ?? "muted"}>{toTitle(a.status)}</Badge>}
       />
       <div className="page-content max-w-2xl space-y-5">

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { transitionPunchItem } from "./actions";
+import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
 
 function fmt(d: string | null): string {
   if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString();
+  return formatDate(d + "T00:00:00");
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {

@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { deleteRateLimitOverride, upsertRateLimitOverride } from "./actions";
+import { formatNumber } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -94,7 +95,7 @@ export default async function Page() {
               header: "Limit",
               render: (r) => (
                 <span className="font-mono text-sm">
-                  {r.limit_count.toLocaleString()} <span className="text-[var(--text-muted)]">req</span>
+                  {formatNumber(r.limit_count)} <span className="text-[var(--text-muted)]">req</span>
                 </span>
               ),
               accessor: (r) => r.limit_count,

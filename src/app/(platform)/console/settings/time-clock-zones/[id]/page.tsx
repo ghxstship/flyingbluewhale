@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { archiveZone, reactivateZone } from "./actions";
+import { formatDateTime } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -100,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 }>
               ).map((p) => (
                 <li key={p.id} className="flex items-center justify-between text-xs">
-                  <span className="font-mono">{new Date(p.started_at).toLocaleString()}</span>
+                  <span className="font-mono">{formatDateTime(p.started_at)}</span>
                   <span className="flex items-center gap-2">
                     <Badge
                       variant={

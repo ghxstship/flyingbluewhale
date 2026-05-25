@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Project, ProjectStatus } from "@/lib/supabase/types";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
 export async function listProjects(orgId: string, opts?: { includeArchived?: boolean }): Promise<Project[]> {
   if (!orgId) return [];
@@ -75,12 +76,12 @@ export async function createProject(input: {
 
 export async function updateProject(orgId: string, projectId: string, patch: Partial<Project>): Promise<Project> {
   const supabase = await createClient();
-  // The generated `Update` type narrows out `null` for nullable enums (DB
-  // gen artifact); the schema accepts null, so widen here.
-  const { data, error } = await supabase
+  // The generated `Update` type's RejectExcessProperties constraint rejects
+  // `null` for nullable enum columns (DB gen artifact). Route through
+  // LooseSupabase — the canonical escape hatch — to allow the null values.
+  const { data, error } = await (supabase as unknown as LooseSupabase)
     .from("projects")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update(patch as any)
+    .update(patch)
     .eq("org_id", orgId)
     .eq("id", projectId)
     .select()

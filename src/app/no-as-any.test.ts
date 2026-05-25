@@ -15,11 +15,14 @@
  */
 
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, relative, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { sync as glob } from "fast-glob";
-import { relative } from "node:path";
 
-const REPO_ROOT = new URL("../../", import.meta.url).pathname;
+// Vitest's jsdom virtualises import.meta.url via /@fs/ — use fileURLToPath
+// so fast-glob receives a real OS path, not the Vite virtual prefix.
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../");
 
 // Files allowed to keep `as any`. Empty for now — the rule is strict.
 // Add an entry here only when (a) you've documented WHY in a comment

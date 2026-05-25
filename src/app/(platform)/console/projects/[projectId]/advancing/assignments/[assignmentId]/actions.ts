@@ -175,6 +175,255 @@ export async function postComment(fd: FormData): Promise<void> {
   revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
 }
 
+// Per-kind detail upserts. Each catalog_kind has a sibling
+// *_assignment_details table keyed by assignment_id (1:1). The R32
+// migrations created the tables but left them unwritten — an admin
+// could mark an assignment kind=lodging without ever recording the
+// room number, leaving the field surface unable to render anything
+// useful at /m. These actions fill that gap.
+
+function emptyToNull<T extends string | undefined>(v: T): string | null {
+  if (!v) return null;
+  const trimmed = v.trim();
+  return trimmed.length === 0 ? null : trimmed;
+}
+
+async function verifyAssignmentKind(
+  projectId: string,
+  assignmentId: string,
+  orgId: string,
+  expectedKind: string,
+): Promise<{ id: string } | null> {
+  const a = await guardAssignment(projectId, assignmentId, orgId);
+  if (!a || a.catalog_kind !== expectedKind) return null;
+  return { id: a.id };
+}
+
+// ── ticket ──────────────────────────────────────────────────────────────
+const TicketDetailsSchema = z.object({
+  projectId: z.string().uuid(),
+  assignmentId: z.string().uuid(),
+  tier_code: z.string().trim().max(80).optional().or(z.literal("")),
+  zone_codes: z.string().trim().max(500).optional().or(z.literal("")),
+  gate_codes: z.string().trim().max(500).optional().or(z.literal("")),
+  transferable: z.coerce.boolean().optional(),
+  valid_from: z.string().trim().optional().or(z.literal("")),
+  valid_until: z.string().trim().optional().or(z.literal("")),
+  seat_section: z.string().trim().max(40).optional().or(z.literal("")),
+  seat_row: z.string().trim().max(20).optional().or(z.literal("")),
+  seat_number: z.string().trim().max(20).optional().or(z.literal("")),
+});
+
+function splitCsv(raw: string | undefined): string[] {
+  if (!raw) return [];
+  return raw
+    .split(/[,\s]+/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 50);
+}
+
+export async function upsertTicketDetails(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const parsed = TicketDetailsSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return;
+  const ok = await verifyAssignmentKind(parsed.data.projectId, parsed.data.assignmentId, session.orgId, "ticket");
+  if (!ok) return;
+
+  const supabase = await createClient();
+  await supabase.from("ticket_assignment_details").upsert(
+    {
+      assignment_id: parsed.data.assignmentId,
+      tier_code: emptyToNull(parsed.data.tier_code),
+      zone_codes: splitCsv(parsed.data.zone_codes),
+      gate_codes: splitCsv(parsed.data.gate_codes),
+      transferable: parsed.data.transferable ?? false,
+      valid_from: emptyToNull(parsed.data.valid_from),
+      valid_until: emptyToNull(parsed.data.valid_until),
+      seat_section: emptyToNull(parsed.data.seat_section),
+      seat_row: emptyToNull(parsed.data.seat_row),
+      seat_number: emptyToNull(parsed.data.seat_number),
+    },
+    { onConflict: "assignment_id" },
+  );
+
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
+}
+
+// ── credential ──────────────────────────────────────────────────────────
+const CredentialDetailsSchema = z.object({
+  projectId: z.string().uuid(),
+  assignmentId: z.string().uuid(),
+  access_level: z.string().trim().max(80).optional().or(z.literal("")),
+  parent_assignment_id: z.string().trim().optional().or(z.literal("")),
+  issued_on: z.string().trim().optional().or(z.literal("")),
+  expires_on: z.string().trim().optional().or(z.literal("")),
+  must_return: z.coerce.boolean().optional(),
+});
+
+export async function upsertCredentialDetails(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const parsed = CredentialDetailsSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return;
+  const ok = await verifyAssignmentKind(parsed.data.projectId, parsed.data.assignmentId, session.orgId, "credential");
+  if (!ok) return;
+
+  const parent = emptyToNull(parsed.data.parent_assignment_id);
+  // Self-reference would create a cycle — refuse outright. Cross-tenant
+  // parent FK is gated by RLS but pre-check would be cheap too; we rely
+  // on the FK + CASCADE/SET-NULL semantics for now.
+  if (parent === parsed.data.assignmentId) return;
+
+  const supabase = await createClient();
+  await supabase.from("credential_assignment_details").upsert(
+    {
+      assignment_id: parsed.data.assignmentId,
+      access_level: emptyToNull(parsed.data.access_level),
+      parent_assignment_id: parent,
+      issued_on: emptyToNull(parsed.data.issued_on),
+      expires_on: emptyToNull(parsed.data.expires_on),
+      must_return: parsed.data.must_return ?? false,
+    },
+    { onConflict: "assignment_id" },
+  );
+
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
+}
+
+// ── lodging ─────────────────────────────────────────────────────────────
+const LodgingDetailsSchema = z.object({
+  projectId: z.string().uuid(),
+  assignmentId: z.string().uuid(),
+  property_name: z.string().trim().max(200).optional().or(z.literal("")),
+  room_number: z.string().trim().max(40).optional().or(z.literal("")),
+  check_in: z.string().trim().optional().or(z.literal("")),
+  check_out: z.string().trim().optional().or(z.literal("")),
+  roommate_assignment_id: z.string().trim().optional().or(z.literal("")),
+  confirmation_code: z.string().trim().max(120).optional().or(z.literal("")),
+});
+
+export async function upsertLodgingDetails(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const parsed = LodgingDetailsSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return;
+  const ok = await verifyAssignmentKind(parsed.data.projectId, parsed.data.assignmentId, session.orgId, "lodging");
+  if (!ok) return;
+
+  const roommate = emptyToNull(parsed.data.roommate_assignment_id);
+  if (roommate === parsed.data.assignmentId) return; // self-room would be nonsense
+
+  const supabase = await createClient();
+  await supabase.from("lodging_assignment_details").upsert(
+    {
+      assignment_id: parsed.data.assignmentId,
+      property_name: emptyToNull(parsed.data.property_name),
+      room_number: emptyToNull(parsed.data.room_number),
+      check_in: emptyToNull(parsed.data.check_in),
+      check_out: emptyToNull(parsed.data.check_out),
+      roommate_assignment_id: roommate,
+      confirmation_code: emptyToNull(parsed.data.confirmation_code),
+    },
+    { onConflict: "assignment_id" },
+  );
+
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
+}
+
+// ── travel ──────────────────────────────────────────────────────────────
+const TravelDetailsSchema = z.object({
+  projectId: z.string().uuid(),
+  assignmentId: z.string().uuid(),
+  mode: z.enum(["flight", "ground", "rail", "sea", ""]).optional(),
+  from_location: z.string().trim().max(120).optional().or(z.literal("")),
+  to_location: z.string().trim().max(120).optional().or(z.literal("")),
+  depart_at: z.string().trim().optional().or(z.literal("")),
+  arrive_at: z.string().trim().optional().or(z.literal("")),
+  carrier: z.string().trim().max(120).optional().or(z.literal("")),
+  confirmation_code: z.string().trim().max(120).optional().or(z.literal("")),
+  seat: z.string().trim().max(20).optional().or(z.literal("")),
+});
+
+export async function upsertTravelDetails(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const parsed = TravelDetailsSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return;
+  const ok = await verifyAssignmentKind(parsed.data.projectId, parsed.data.assignmentId, session.orgId, "travel");
+  if (!ok) return;
+
+  const supabase = await createClient();
+  await supabase.from("travel_assignment_details").upsert(
+    {
+      assignment_id: parsed.data.assignmentId,
+      mode: parsed.data.mode ? parsed.data.mode : null,
+      from_location: emptyToNull(parsed.data.from_location),
+      to_location: emptyToNull(parsed.data.to_location),
+      depart_at: emptyToNull(parsed.data.depart_at),
+      arrive_at: emptyToNull(parsed.data.arrive_at),
+      carrier: emptyToNull(parsed.data.carrier),
+      confirmation_code: emptyToNull(parsed.data.confirmation_code),
+      seat: emptyToNull(parsed.data.seat),
+    },
+    { onConflict: "assignment_id" },
+  );
+
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
+}
+
+// ── vehicle ─────────────────────────────────────────────────────────────
+const VehicleDetailsSchema = z.object({
+  projectId: z.string().uuid(),
+  assignmentId: z.string().uuid(),
+  vehicle_label: z.string().trim().max(120).optional().or(z.literal("")),
+  plate: z.string().trim().max(40).optional().or(z.literal("")),
+  picked_up_at: z.string().trim().optional().or(z.literal("")),
+  returned_at: z.string().trim().optional().or(z.literal("")),
+  mileage_start: z.coerce.number().int().min(0).max(10_000_000).optional(),
+  mileage_end: z.coerce.number().int().min(0).max(10_000_000).optional(),
+});
+
+export async function upsertVehicleDetails(fd: FormData): Promise<void> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return;
+  const raw = Object.fromEntries(fd);
+  // Empty number inputs come through as "", which coerce.number()
+  // would turn into NaN. Strip them before validation.
+  if (raw.mileage_start === "") delete raw.mileage_start;
+  if (raw.mileage_end === "") delete raw.mileage_end;
+  const parsed = VehicleDetailsSchema.safeParse(raw);
+  if (!parsed.success) return;
+  const ok = await verifyAssignmentKind(parsed.data.projectId, parsed.data.assignmentId, session.orgId, "vehicle");
+  if (!ok) return;
+
+  // mileage_end can't precede mileage_start — common data-entry error.
+  if (
+    parsed.data.mileage_start != null &&
+    parsed.data.mileage_end != null &&
+    parsed.data.mileage_end < parsed.data.mileage_start
+  ) {
+    return;
+  }
+
+  const supabase = await createClient();
+  await supabase.from("vehicle_assignment_details").upsert(
+    {
+      assignment_id: parsed.data.assignmentId,
+      vehicle_label: emptyToNull(parsed.data.vehicle_label),
+      plate: emptyToNull(parsed.data.plate),
+      picked_up_at: emptyToNull(parsed.data.picked_up_at),
+      returned_at: emptyToNull(parsed.data.returned_at),
+      mileage_start: parsed.data.mileage_start ?? null,
+      mileage_end: parsed.data.mileage_end ?? null,
+    },
+    { onConflict: "assignment_id" },
+  );
+
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
+}
+
 export async function deleteAssignment(projectId: string, assignmentId: string): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;

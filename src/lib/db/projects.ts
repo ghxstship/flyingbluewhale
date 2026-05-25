@@ -1,6 +1,9 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/database.types";
 import type { Project, ProjectStatus } from "@/lib/supabase/types";
+
+type ProjectUpdate = Database["public"]["Tables"]["projects"]["Update"];
 
 export async function listProjects(orgId: string, opts?: { includeArchived?: boolean }): Promise<Project[]> {
   if (!orgId) return [];
@@ -75,12 +78,11 @@ export async function createProject(input: {
 
 export async function updateProject(orgId: string, projectId: string, patch: Partial<Project>): Promise<Project> {
   const supabase = await createClient();
-  // The generated `Update` type narrows out `null` for nullable enums (DB
-  // gen artifact); the schema accepts null, so widen here.
+  // xpms_phase and similar enum columns are nullable at the DB level but the
+  // generated Update type omits null (gen artifact). Bridge via unknown.
   const { data, error } = await supabase
     .from("projects")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update(patch as any)
+    .update(patch as unknown as ProjectUpdate)
     .eq("org_id", orgId)
     .eq("id", projectId)
     .select()

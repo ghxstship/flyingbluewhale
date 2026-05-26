@@ -191,6 +191,9 @@ export const platformNav: NavGroup[] = [
           { label: "Time", href: "/console/finance/time", icon: "Clock" },
           { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
           { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+          // WIP + EAC forecasts (round 41).
+          { label: "WIP", href: "/console/finance/wip", icon: "FileSpreadsheet" },
+          { label: "Forecasts (EAC)", href: "/console/finance/forecasts", icon: "TrendingUp" },
           { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
         ],
       },

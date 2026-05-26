@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CATALOG_KIND_LABEL } from "@/lib/db/assignments";
+import Link from "next/link";
 import { createAssignmentAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -79,9 +80,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             {catalogItems.length === 0 ? (
               <p className="mt-1.5 text-xs text-[var(--text-muted)]">
                 No active catalog items in this org. Author one at{" "}
-                <a className="underline" href="/console/settings/catalog">
+                <Link className="underline" href="/console/settings/catalog">
                   /console/settings/catalog
-                </a>{" "}
+                </Link>{" "}
                 first.
               </p>
             ) : (

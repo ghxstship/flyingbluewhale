@@ -206,6 +206,8 @@ export const platformNav: NavGroup[] = [
           { label: "Requisitions", href: "/console/procurement/requisitions", icon: "ShoppingCart" },
           { label: "Purchase Orders", href: "/console/procurement/purchase-orders", icon: "Package" },
           { label: "RFQs", href: "/console/procurement/rfqs", icon: "PackageCheck" },
+          // Formal Invitations to Bid (round 43) — trade-bundled, prequal-driven.
+          { label: "ITB", href: "/console/procurement/itb", icon: "Gavel" },
           { label: "Submittals", href: "/console/submittals", icon: "Inbox" },
           { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
         ],

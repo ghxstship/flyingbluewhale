@@ -1,0 +1,111 @@
+import { ModuleHeader } from "@/components/Shell";
+import { FormShell } from "@/components/FormShell";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
+import { createLienWaiver } from "./actions";
+
+export const dynamic = "force-dynamic";
+
+const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+
+export default async function Page() {
+  if (!hasSupabase) return null;
+  const session = await requireSession();
+  const supabase = await createClient();
+  const [{ data: projects }, { data: vendors }] = await Promise.all([
+    supabase.from("projects").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
+    supabase.from("vendors").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
+  ]);
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow="Finance"
+        title="New Lien Waiver"
+        subtitle="Statutory release of mechanic's lien rights. Conditional waivers release on payment clearing; unconditional waivers release on signature."
+      />
+      <div className="page-content max-w-2xl">
+        <FormShell action={createLienWaiver} cancelHref="/console/finance/lien-waivers" submitLabel="Create Waiver">
+          <div className="grid grid-cols-2 gap-3">
+            <label className="flex flex-col gap-1.5">
+              <span className={LBL}>
+                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              </span>
+              <select name="project_id" required className={INPUT}>
+                <option value="">Select…</option>
+                {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className={LBL}>Sub / Vendor</span>
+              <select name="vendor_id" className={INPUT}>
+                <option value="">—</option>
+                {((vendors ?? []) as Array<{ id: string; name: string }>).map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <label className="flex flex-col gap-1.5">
+              <span className={LBL}>
+                Type<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              </span>
+              <select name="waiver_type" required className={INPUT} defaultValue="conditional">
+                {["conditional", "unconditional"].map((t) => (
+                  <option key={t} value={t}>
+                    {toTitle(t)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className={LBL}>
+                Scope<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              </span>
+              <select name="waiver_scope" required className={INPUT} defaultValue="partial">
+                {["partial", "final"].map((s) => (
+                  <option key={s} value={s}>
+                    {toTitle(s)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <label className="flex flex-col gap-1.5">
+              <span className={LBL}>Amount (USD)</span>
+              <input type="number" step="0.01" name="amount" placeholder="0.00" className={`${INPUT} font-mono`} />
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className={LBL}>Through date</span>
+              <input type="date" name="through_date" className={INPUT} />
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className={LBL}>State jurisdiction</span>
+              <input
+                name="state_jurisdiction"
+                placeholder="CA, NV, TX…"
+                maxLength={4}
+                className={`${INPUT} font-mono`}
+              />
+            </label>
+          </div>
+          <label className="flex flex-col gap-1.5">
+            <span className={LBL}>Notes</span>
+            <textarea name="notes" rows={3} className={INPUT} />
+          </label>
+        </FormShell>
+      </div>
+    </>
+  );
+}

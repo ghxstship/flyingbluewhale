@@ -183,6 +183,8 @@ export const platformNav: NavGroup[] = [
         items: [
           { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
           { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
+          // Lien Waivers — statutory 4-quadrant matrix (round 40).
+          { label: "Lien Waivers", href: "/console/finance/lien-waivers", icon: "Stamp" },
           { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
           { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
           { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },

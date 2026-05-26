@@ -305,6 +305,8 @@ export const platformNav: NavGroup[] = [
     label: "5 PRODUCTION",
     items: [
       { label: "Equipment", href: "/console/production/equipment", icon: "Wrench" },
+      // Per-asset 30/90-day utilization rollup w/ idle-revenue (round 52).
+      { label: "Equipment Utilization", href: "/console/production/equipment/utilization", icon: "BarChart3" },
       { label: "AV Inventory", href: "/console/production/av", icon: "Speaker" },
       { label: "Rentals", href: "/console/production/rentals", icon: "ArrowLeftRight" },
       { label: "Production Logistics", href: "/console/production/logistics", icon: "Crosshair" },

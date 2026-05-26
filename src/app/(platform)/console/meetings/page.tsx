@@ -2,44 +2,65 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-type EventRow = {
+type MeetingKind =
+  | "kickoff"
+  | "owner_architect_contractor"
+  | "sub_meeting"
+  | "safety"
+  | "punch_walk"
+  | "design_review"
+  | "progress"
+  | "other";
+type MeetingState = "scheduled" | "in_progress" | "completed" | "cancelled";
+
+type Row = {
   id: string;
-  name: string;
+  code: string;
+  title: string;
+  kind: MeetingKind;
+  meeting_state: MeetingState;
   starts_at: string;
-  ends_at: string;
-  status: string;
-  description: string | null;
+  ends_at: string | null;
+  location_name: string | null;
+  finalized_at: string | null;
   project: { name: string | null } | null;
+  attendee_count: number;
+  open_action_count: number;
 };
 
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
+const STATE_TONE: Record<MeetingState, "muted" | "info" | "success" | "error"> = {
   scheduled: "info",
-  live: "success",
-  complete: "muted",
+  in_progress: "info",
+  completed: "success",
   cancelled: "error",
 };
 
-const MEETING_PATTERN =
-  /(meet|brief|sync|standup|review|coordination|liaison|interface|chef|kickoff|kick-off|debrief|technical)/i;
-
-function fmt(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
-}
+const KIND_LABEL: Record<MeetingKind, string> = {
+  kickoff: "Kickoff",
+  owner_architect_contractor: "OAC",
+  sub_meeting: "Sub Meeting",
+  safety: "Safety",
+  punch_walk: "Punch Walk",
+  design_review: "Design Review",
+  progress: "Progress",
+  other: "Other",
+};
 
 export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Meetings" />
+        <ModuleHeader eyebrow="Coordination" title="Meetings" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -47,72 +68,140 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const supabase = await createClient();
+  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const fmt = await getRequestFormatters();
 
-  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await supabase
-    .from("events")
-    .select("id, name, starts_at, ends_at, status, description, project:project_id(name)")
+    .from("meetings")
+    .select(
+      "id, code, title, kind, meeting_state, starts_at, ends_at, location_name, finalized_at, project:project_id(name)",
+    )
     .eq("org_id", session.orgId)
-    .gte("starts_at", since)
-    .order("starts_at", { ascending: true })
-    .limit(500);
-  const all = (data ?? []) as unknown as EventRow[];
-  const meetings = all.filter(
-    (e) => MEETING_PATTERN.test(e.name) || (e.description ? MEETING_PATTERN.test(e.description) : false),
-  );
-  const upcoming = meetings.filter((e) => new Date(e.starts_at).getTime() >= Date.now()).length;
+    .is("deleted_at", null)
+    .order("starts_at", { ascending: false })
+    .limit(300);
+
+  const headers = (data ?? []) as unknown as Omit<Row, "attendee_count" | "open_action_count">[];
+  const ids = headers.map((h) => h.id);
+
+  const attendeeCounts: Record<string, number> = {};
+  const actionCounts: Record<string, number> = {};
+  if (ids.length > 0) {
+    const [{ data: attendees }, { data: actions }] = await Promise.all([
+      supabase.from("meeting_attendees").select("meeting_id").in("meeting_id", ids),
+      supabase.from("meeting_action_items").select("meeting_id, action_state").in("meeting_id", ids),
+    ]);
+    for (const a of (attendees ?? []) as { meeting_id: string }[]) {
+      attendeeCounts[a.meeting_id] = (attendeeCounts[a.meeting_id] ?? 0) + 1;
+    }
+    for (const a of (actions ?? []) as { meeting_id: string; action_state: string }[]) {
+      if (a.action_state === "open" || a.action_state === "in_progress") {
+        actionCounts[a.meeting_id] = (actionCounts[a.meeting_id] ?? 0) + 1;
+      }
+    }
+  }
+
+  const rows: Row[] = headers.map((h) => ({
+    ...h,
+    attendee_count: attendeeCounts[h.id] ?? 0,
+    open_action_count: actionCounts[h.id] ?? 0,
+  }));
+
+  const upcomingCount = rows.filter((r) => r.meeting_state === "scheduled" || r.meeting_state === "in_progress").length;
+  const totalOpenActions = rows.reduce((s, r) => s + r.open_action_count, 0);
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Workspace"
+        eyebrow="Coordination"
         title="Meetings"
-        subtitle={`${meetings.length} Meeting${meetings.length === 1 ? "" : "s"}${upcoming ? ` · ${upcoming} upcoming` : ""}`}
+        subtitle={`${rows.length} meeting${rows.length === 1 ? "" : "s"} · ${upcomingCount} upcoming · ${totalOpenActions} open action item${totalOpenActions === 1 ? "" : "s"}`}
         action={
-          <Button href="/console/events/new" size="sm">
-            + New Event
+          <Button href="/console/meetings/new" size="sm">
+            + New Meeting
           </Button>
         }
       />
-      <div className="page-content">
-        <DataTable<EventRow>
-          rows={meetings}
-          rowHref={(r) => `/console/events/${r.id}`}
-          emptyLabel="No meetings"
-          emptyDescription="Technical meetings, Chef-de-Mission interfaces, team-leader briefings. Author them as Events with a meeting-style name; this view filters automatically."
+      <div className="page-content space-y-5">
+        <div className="metric-grid-3">
+          <MetricCard label="Upcoming" value={fmt.number(upcomingCount)} accent />
+          <MetricCard label="Open Actions" value={fmt.number(totalOpenActions)} />
+          <MetricCard label="Total" value={fmt.number(rows.length)} />
+        </div>
+        <div className="text-[10px] text-[var(--text-muted)]">
+          Project meetings with minutes. Action items added to a meeting auto-create a task for the assignee — closure
+          is bidirectional via meeting_action_items.task_id.
+        </div>
+        <DataTable<Row>
+          rows={rows}
+          rowHref={(r) => `/console/meetings/${r.id}`}
+          emptyLabel="No meetings yet"
+          emptyDescription="Schedule a meeting to capture agenda + minutes + action items in one place."
           emptyAction={
-            <Button href="/console/events/new" size="sm">
-              + New Event
+            <Button href="/console/meetings/new" size="sm">
+              + New Meeting
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
             {
-              key: "starts",
-              header: "Starts",
-              render: (r) => fmt(r.starts_at),
+              key: "code",
+              header: "Code",
+              render: (r) => r.code,
+              accessor: (r) => r.code,
               className: "font-mono text-xs",
-              accessor: (r) => r.starts_at ?? null,
             },
+            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
             {
-              key: "ends",
-              header: "Ends",
-              render: (r) => fmt(r.ends_at),
-              className: "font-mono text-xs",
-              accessor: (r) => r.ends_at ?? null,
+              key: "kind",
+              header: "Kind",
+              render: (r) => KIND_LABEL[r.kind],
+              accessor: (r) => r.kind,
+              filterable: true,
+              groupable: true,
+              className: "text-xs",
             },
             {
               key: "project",
               header: "Project",
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
+              filterable: true,
+              groupable: true,
             },
             {
-              key: "status",
-              header: "Status",
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status ?? null,
+              key: "starts",
+              header: "When",
+              render: (r) =>
+                fmt.dateParts(r.starts_at, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }),
+              accessor: (r) => r.starts_at,
+              className: "font-mono text-xs",
+            },
+            {
+              key: "attendees",
+              header: "People",
+              render: (r) => fmt.number(r.attendee_count),
+              accessor: (r) => r.attendee_count,
+              className: "font-mono text-xs text-right",
+            },
+            {
+              key: "actions",
+              header: "Open Acts",
+              render: (r) =>
+                r.open_action_count > 0 ? (
+                  <Badge variant="warning">{fmt.number(r.open_action_count)}</Badge>
+                ) : (
+                  <span className="text-[var(--text-muted)]">{fmt.number(r.open_action_count)}</span>
+                ),
+              accessor: (r) => r.open_action_count,
+              className: "font-mono text-xs text-right",
+            },
+            {
+              key: "state",
+              header: "State",
+              render: (r) => (
+                <Badge variant={STATE_TONE[r.meeting_state]}>{toTitle(r.meeting_state.replace(/_/g, " "))}</Badge>
+              ),
+              accessor: (r) => r.meeting_state,
               filterable: true,
               groupable: true,
             },

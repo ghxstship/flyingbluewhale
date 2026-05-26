@@ -224,6 +224,9 @@ export const platformNav: NavGroup[] = [
       // Site Plans is a CAD-rooted creative artifact — primary class is
       // CREATIVE, secondary BUILD (where it materializes).
       { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
+      // Drawings = versioned sheet sets grouping site_plans for construction
+      // delivery (50% DD, 100% CD, etc.). Slip-sheet diff between versions.
+      { label: "Drawings", href: "/console/drawings", icon: "Files" },
     ],
   },
   {

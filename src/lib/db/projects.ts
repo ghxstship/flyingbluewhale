@@ -75,12 +75,11 @@ export async function createProject(input: {
 
 export async function updateProject(orgId: string, projectId: string, patch: Partial<Project>): Promise<Project> {
   const supabase = await createClient();
-  // The generated `Update` type narrows out `null` for nullable enums (DB
-  // gen artifact); the schema accepts null, so widen here.
+  // The generated Update type narrows out null for nullable enums (DB gen
+  // artifact); cast through unknown so callers can pass null for those fields.
   const { data, error } = await supabase
     .from("projects")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update(patch as any)
+    .update(patch as unknown as Record<string, unknown>)
     .eq("org_id", orgId)
     .eq("id", projectId)
     .select()

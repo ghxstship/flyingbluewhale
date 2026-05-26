@@ -216,6 +216,8 @@ export const platformNav: NavGroup[] = [
           // Formal Invitations to Bid (round 43) — trade-bundled, prequal-driven.
           { label: "ITB", href: "/console/procurement/itb", icon: "Gavel" },
           { label: "Submittals", href: "/console/submittals", icon: "Inbox" },
+          // Unified contracts (prime/sub/consultant/service/rental/purchase) — round 49.
+          { label: "Contracts", href: "/console/contracts", icon: "ClipboardSignature" },
           { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
         ],
       },

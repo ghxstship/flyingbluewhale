@@ -285,6 +285,9 @@ export const platformNav: NavGroup[] = [
       { label: "Compounds", href: "/console/production/compounds", icon: "Tent" },
       { label: "Yard", href: "/console/production/warehouse", icon: "Network" },
       { label: "Punch List", href: "/console/punch", icon: "ClipboardList" },
+      // Reality captures + warranty coverage (round 44).
+      { label: "Reality Captures", href: "/console/captures", icon: "Telescope" },
+      { label: "Warranties", href: "/console/warranties", icon: "ShieldCheck" },
     ],
   },
   {

@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { apiError, apiOk } from "@/lib/api";
+import { env } from "@/lib/env";
 import { evaluateSchedules } from "@/lib/automations/schedule";
 
 function tokensMatch(provided: string, expected: string): boolean {
@@ -20,7 +21,7 @@ function tokensMatch(provided: string, expected: string): boolean {
  */
 
 export async function POST(req: NextRequest) {
-  const expected = process.env.JOB_WORKER_TOKEN;
+  const expected = env.JOB_WORKER_TOKEN;
   if (!expected) return apiError("service_unavailable", "JOB_WORKER_TOKEN not configured");
   const auth = req.headers.get("authorization") ?? "";
   const provided = auth.startsWith("Bearer ") ? auth.slice(7) : (req.headers.get("x-worker-token") ?? "");

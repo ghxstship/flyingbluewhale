@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { apiError } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
+import { env } from "@/lib/env";
 import { buildInstallUrl } from "@/lib/integrations/slack/oauth";
 import { signOAuthState } from "@/lib/integrations/slack/sign";
 import { urlFor } from "@/lib/urls";
@@ -24,8 +25,8 @@ export async function GET() {
     const denial = assertCapability(session, "*");
     if (denial) return denial;
 
-    const clientId = process.env.SLACK_CLIENT_ID;
-    const signingSecret = process.env.SLACK_SIGNING_SECRET;
+    const clientId = env.SLACK_CLIENT_ID;
+    const signingSecret = env.SLACK_SIGNING_SECRET;
     if (!clientId) return apiError("service_unavailable", "SLACK_CLIENT_ID is not configured");
     if (!signingSecret) return apiError("service_unavailable", "SLACK_SIGNING_SECRET is not configured");
 

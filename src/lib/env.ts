@@ -33,6 +33,14 @@ const schema = z.object({
   // local cookies survive process restarts. Rotating this value revokes
   // every outstanding access token.
   GUIDE_ACCESS_SECRET: z.string().optional(),
+  // Slack integration — OAuth app credentials + request signing secret.
+  SLACK_CLIENT_ID: z.string().optional(),
+  SLACK_CLIENT_SECRET: z.string().optional(),
+  SLACK_SIGNING_SECRET: z.string().optional(),
+  // Internal job worker — bearer token gating the internal automation routes.
+  JOB_WORKER_TOKEN: z.string().optional(),
+  // Web Push (VAPID) — public key is safe to expose to the browser.
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -56,6 +64,11 @@ export const env = schema.parse({
   WEATHER_DISABLED: process.env.WEATHER_DISABLED,
   LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
   GUIDE_ACCESS_SECRET: process.env.GUIDE_ACCESS_SECRET,
+  SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
+  SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
+  SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
+  JOB_WORKER_TOKEN: process.env.JOB_WORKER_TOKEN,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);

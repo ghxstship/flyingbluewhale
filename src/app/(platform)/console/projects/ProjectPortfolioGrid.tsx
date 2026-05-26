@@ -52,7 +52,7 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
         <div className="flex items-center gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
           <Legend tone="bg-emerald-500" label={`On track ${counts.green}`} />
           <Legend tone="bg-amber-500" label={`Watch ${counts.amber}`} />
-          <Legend tone="bg-red-600" label={`At risk ${counts.red}`} />
+          <Legend tone="bg-[color:var(--color-error)]" label={`At risk ${counts.red}`} />
         </div>
       }
     >
@@ -105,7 +105,7 @@ function tone(h: Health): { bg: string; dot: string } {
   if (h === "red")
     return {
       bg: "bg-[color:var(--color-error)]/8 hover:bg-[color:var(--color-error)]/12",
-      dot: "bg-red-500",
+      dot: "bg-[color:var(--color-error)]",
     };
   if (h === "amber")
     return {

@@ -86,7 +86,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
         {steps.map((s) => (
           <li key={s.id} className="surface flex flex-col gap-1 p-4">
             <div className="flex items-center gap-2">
-              {s.critical_path ? <span className="font-bold text-red-600">★</span> : null}
+              {s.critical_path ? <span className="font-bold text-(--color-error)">★</span> : null}
               <span className="font-medium">{s.title}</span>
               <Badge variant={STATE_VARIANT[s.step_state]}>{STATE_LABEL[s.step_state]}</Badge>
               {s.category ? <span className="text-xs text-(--text-muted) uppercase">{s.category}</span> : null}

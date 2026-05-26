@@ -71,7 +71,7 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
           </div>
           <div className="flex items-center gap-3">
             <PrintTrigger />
-            <a href={`/offer/${token}`} className="text-blue-700 hover:underline">
+            <a href={`/offer/${token}`} className="text-(--color-info) hover:underline">
               ← Back to letter
             </a>
           </div>

@@ -3,13 +3,13 @@ import { Badge } from "@/components/ui/Badge";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { hasSupabase } from "@/lib/env";
+import { env, hasSupabase } from "@/lib/env";
 import { PushToggle, type RegisteredDevice } from "@/app/(personal)/me/notifications/push/PushToggle";
 
 export const dynamic = "force-dynamic";
 
 export default async function MobileSettings() {
-  const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
+  const vapidPublicKey = env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
   let devices: RegisteredDevice[] = [];
   if (hasSupabase) {
     const session = await requireSession();

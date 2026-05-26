@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { apiError } from "@/lib/api";
 import { getSession } from "@/lib/auth";
+import { env } from "@/lib/env";
 import { exchangeOAuthCode, upsertWorkspace } from "@/lib/integrations/slack/oauth";
 import { verifyOAuthState } from "@/lib/integrations/slack/sign";
 import { log } from "@/lib/log";
@@ -29,9 +30,9 @@ export async function GET(req: Request) {
     return apiError("bad_request", "Missing OAuth code or state");
   }
 
-  const signingSecret = process.env.SLACK_SIGNING_SECRET;
-  const clientId = process.env.SLACK_CLIENT_ID;
-  const clientSecret = process.env.SLACK_CLIENT_SECRET;
+  const signingSecret = env.SLACK_SIGNING_SECRET;
+  const clientId = env.SLACK_CLIENT_ID;
+  const clientSecret = env.SLACK_CLIENT_SECRET;
   if (!signingSecret || !clientId || !clientSecret) {
     return apiError("service_unavailable", "Slack environment variables not configured");
   }

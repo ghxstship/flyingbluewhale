@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { apiError, apiOk } from "@/lib/api";
+import { env } from "@/lib/env";
 import { disableWorkspaceByTeamId } from "@/lib/integrations/slack/oauth";
 import { verifySlackSignature } from "@/lib/integrations/slack/sign";
 import { log } from "@/lib/log";
@@ -19,7 +20,7 @@ import type { SlackEventEnvelope } from "@/lib/integrations/slack/types";
  */
 
 export async function POST(req: Request) {
-  const signingSecret = process.env.SLACK_SIGNING_SECRET;
+  const signingSecret = env.SLACK_SIGNING_SECRET;
   if (!signingSecret) return apiError("service_unavailable", "SLACK_SIGNING_SECRET is not configured");
 
   const sig = req.headers.get("x-slack-signature");

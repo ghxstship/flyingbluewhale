@@ -62,6 +62,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[app.status] ?? "muted"}>{toTitle(app.status)}</Badge>
+            {/* AIA G702/G703 PDF — round 51. Opens in a new tab; server route
+                signs the storage URL with a 60-second TTL. */}
+            <a
+              href={`/api/v1/pay-apps/${id}/pdf`}
+              target="_blank"
+              rel="noopener"
+              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+            >
+              AIA PDF
+            </a>
             {app.status === "draft" && (
               <StatusForm action={transitionPayApp.bind(null, id, "submitted")} label="Submit" />
             )}

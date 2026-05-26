@@ -95,6 +95,7 @@ export type IconName =
   | "BookOpen"
   | "Atlas"
   | "Bot"
+  | "Sparkles"
   | "Leaf"
   | "Spline"
   // Marketplace
@@ -412,6 +413,8 @@ export const platformNav: NavGroup[] = [
     label: "9 TECHNOLOGY",
     items: [
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
+      // Document-grounded AI assistant w/ RAG citations (round 47).
+      { label: "Assistant", href: "/console/assistant", icon: "Sparkles" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
       // The XPMS Catalog (atom registry) is the canonical TECHNOLOGY-

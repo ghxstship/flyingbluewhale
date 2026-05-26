@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { compute, type ActivityInput, type DependencyInput, type DepType } from "@/lib/schedule/cpm";
+import { parseSchedule } from "@/lib/schedule/import";
 
 const Schema = z.object({ baseline_id: z.string().uuid() });
 
@@ -152,4 +153,118 @@ export async function runCpm(fd: FormData): Promise<void> {
   }
 
   revalidatePath(`/console/schedule/baselines/${parsed.data.baseline_id}`);
+}
+
+/**
+ * Import a P6 XER / P6 XML / MSP XML / Asta XML file into this baseline.
+ * Wipes any existing activities + dependencies on the baseline first
+ * (replace semantics) — re-import is non-destructive at the baseline
+ * level since baselines are versioned.
+ */
+const ImportScheduleSchema = z.object({
+  baseline_id: z.string().uuid(),
+  source_content: z
+    .string()
+    .min(1)
+    .max(50 * 1024 * 1024), // 50MB cap
+});
+
+export type ImportState = {
+  error?: string;
+  success?: { activities: number; dependencies: number; warnings: string[] };
+} | null;
+
+export async function importSchedule(_: ImportState, fd: FormData): Promise<ImportState> {
+  const session = await requireSession();
+  const parsed = ImportScheduleSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  const supabase = (await createClient()) as unknown as LooseSupabase;
+
+  // Cross-tenant guard.
+  const { data: baseline } = await supabase
+    .from("schedule_baselines")
+    .select("id, baseline_state")
+    .eq("id", parsed.data.baseline_id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!baseline) return { error: "Baseline not found in your organization" };
+
+  const result = parseSchedule(parsed.data.source_content);
+  if (result.activities.length === 0) {
+    return { error: result.warnings[0] ?? "No activities found in the import file" };
+  }
+
+  // Replace semantics: clear existing rows.
+  await supabase
+    .from("schedule_activity_dependencies")
+    .delete()
+    .eq("baseline_id", parsed.data.baseline_id)
+    .eq("org_id", session.orgId);
+  await supabase
+    .from("schedule_activities")
+    .delete()
+    .eq("baseline_id", parsed.data.baseline_id)
+    .eq("org_id", session.orgId);
+
+  // Insert activities. We need our DB id per source_id for dependency mapping.
+  const sourceIdToDbId = new Map<string, string>();
+  for (const a of result.activities) {
+    const { data: inserted } = await supabase
+      .from("schedule_activities")
+      .insert({
+        org_id: session.orgId,
+        baseline_id: parsed.data.baseline_id,
+        code: a.code || a.source_id,
+        name: a.name,
+        wbs_path: a.wbs_path,
+        start_planned: a.start_planned,
+        finish_planned: a.finish_planned,
+        duration_days: a.duration_days,
+        constraint_type: a.constraint_type,
+        constraint_date: a.constraint_date,
+        percent_complete: a.percent_complete,
+        notes_md: a.notes_md,
+      })
+      .select("id")
+      .single();
+    if (inserted) sourceIdToDbId.set(a.source_id, (inserted as { id: string }).id);
+  }
+
+  // Insert dependencies, mapping source IDs to our DB IDs.
+  let dependenciesInserted = 0;
+  for (const d of result.dependencies) {
+    const predId = sourceIdToDbId.get(d.predecessor_source_id);
+    const succId = sourceIdToDbId.get(d.successor_source_id);
+    if (!predId || !succId) continue; // skip dangling deps
+    const { error } = await supabase.from("schedule_activity_dependencies").insert({
+      org_id: session.orgId,
+      baseline_id: parsed.data.baseline_id,
+      predecessor_id: predId,
+      successor_id: succId,
+      dep_type: d.dep_type,
+      lag_days: d.lag_days,
+    });
+    if (!error) dependenciesInserted += 1;
+  }
+
+  // Mark the baseline as imported.
+  await supabase
+    .from("schedule_baselines")
+    .update({
+      imported_from: result.source_format,
+      imported_at: new Date().toISOString(),
+      imported_by: session.userId,
+    })
+    .eq("id", parsed.data.baseline_id)
+    .eq("org_id", session.orgId);
+
+  revalidatePath(`/console/schedule/baselines/${parsed.data.baseline_id}`);
+  return {
+    success: {
+      activities: result.activities.length,
+      dependencies: dependenciesInserted,
+      warnings: result.warnings,
+    },
+  };
 }

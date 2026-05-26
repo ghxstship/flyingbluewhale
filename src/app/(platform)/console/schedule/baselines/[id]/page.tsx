@@ -11,6 +11,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { activateBaseline, archiveBaseline, runCpm } from "./actions";
+import { ImportScheduleClient } from "./import-client";
 
 export const dynamic = "force-dynamic";
 
@@ -135,6 +136,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <MetricCard label="On Critical Path" value={fmt.number(criticalCount)} />
           <MetricCard label="Cumulative Days" value={totalDuration.toFixed(1)} />
         </div>
+
+        {activities.length === 0 && (
+          <section className="surface space-y-3 p-4">
+            <h2 className="text-sm font-semibold">Import from P6 / MSP / Asta</h2>
+            <p className="text-xs text-[var(--text-muted)]">
+              Paste or upload an XER (P6) or XML (P6 / Microsoft Project / Asta Powerproject) export to populate
+              activities + dependencies in this baseline. Re-imports overwrite the current activity set.
+            </p>
+            <ImportScheduleClient baselineId={baseline.id} />
+          </section>
+        )}
 
         <DataTable<Activity>
           rows={activities}

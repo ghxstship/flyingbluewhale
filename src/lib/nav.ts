@@ -185,6 +185,8 @@ export const platformNav: NavGroup[] = [
           { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
           // Lien Waivers — statutory 4-quadrant matrix (round 40).
           { label: "Lien Waivers", href: "/console/finance/lien-waivers", icon: "Stamp" },
+          // E-Sign envelopes (DocuSign / Adobe Sign / HelloSign / PandaDoc) — round 46.
+          { label: "E-Sign Envelopes", href: "/console/envelopes", icon: "ClipboardSignature" },
           { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
           { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
           { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },

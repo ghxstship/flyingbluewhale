@@ -175,6 +175,8 @@ export const platformNav: NavGroup[] = [
           { label: "Programs", href: "/console/programs", icon: "Layers" },
           { label: "Venues", href: "/console/venues", icon: "Building2" },
           { label: "Risk Register", href: "/console/programs/risk", icon: "AlertTriangle" },
+          // Predictive risk scoring rollup w/ severity trend (round 48).
+          { label: "Risk Scores", href: "/console/risk", icon: "ShieldAlert" },
           { label: "Readiness", href: "/console/programs/readiness", icon: "ShieldCheck" },
           { label: "Reviews", href: "/console/programs/reviews", icon: "ClipboardCheck" },
         ],
@@ -336,6 +338,8 @@ export const platformNav: NavGroup[] = [
         items: [
           { label: "Teams", href: "/console/people/teams", icon: "UsersRound" },
           { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
+          // Cross-project capacity vs demand forecast — Bridgit Bench parity (round 48).
+          { label: "Resource Forecast", href: "/console/workforce/forecast", icon: "TrendingUp" },
           { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
           { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
           { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },

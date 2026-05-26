@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -81,7 +82,11 @@ export function CookieConsent() {
           <DialogTitle>Cookies & privacy</DialogTitle>
           <DialogDescription>
             We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use
-            analytics and marketing cookies to improve the product.
+            analytics and marketing cookies to improve the product.{" "}
+            <Link href="/legal/privacy" className="underline underline-offset-2">
+              Privacy Policy
+            </Link>
+            .
           </DialogDescription>
         </DialogHeader>
 

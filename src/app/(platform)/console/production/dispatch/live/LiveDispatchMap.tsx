@@ -70,17 +70,14 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
   );
 }
 
+const STATUS_TOKEN: Record<string, string> = {
+  in_transit: "--color-info",
+  arrived: "--color-success",
+  delayed: "--color-warning",
+  cancelled: "--color-error",
+};
+
 function statusColor(status: string): string {
-  switch (status) {
-    case "in_transit":
-      return "#3b82f6";
-    case "arrived":
-      return "#22c55e";
-    case "delayed":
-      return "#f59e0b";
-    case "cancelled":
-      return "#ef4444";
-    default:
-      return "#94a3b8";
-  }
+  const token = STATUS_TOKEN[status] ?? "--text-muted";
+  return getComputedStyle(document.documentElement).getPropertyValue(token).trim();
 }

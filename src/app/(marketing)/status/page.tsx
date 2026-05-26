@@ -28,8 +28,8 @@ const SERVICES: ServiceRow[] = [
 ];
 
 const STATE_COLOR: Record<ServiceRow["state"], string> = {
-  operational: "var(--success)",
-  degraded: "var(--warning)",
+  operational: "var(--color-success)",
+  degraded: "var(--color-warning)",
   outage: "var(--color-error)",
 };
 

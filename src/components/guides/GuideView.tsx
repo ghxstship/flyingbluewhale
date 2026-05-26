@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Check } from "lucide-react";
 import type { GuideConfig, GuideSection } from "@/lib/guides/types";
 import { Alert } from "@/components/ui/Alert";
+import { formatDate } from "@/lib/i18n/format";
 
 export function GuideView({
   title,
@@ -400,7 +401,7 @@ function SectionBody({ section }: { section: GuideSection }) {
 
 function formatLastUpdated(iso: string): string {
   try {
-    return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    return formatDate(iso, "medium");
   } catch {
     return iso;
   }

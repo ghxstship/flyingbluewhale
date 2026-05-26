@@ -4,6 +4,7 @@ import * as React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import type { ActivityItem as ActivityItemType } from "@/lib/db/activity";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * Map an audit `action` to a human verb phrase.
@@ -61,12 +62,7 @@ function formatRelative(iso: string): string {
 }
 
 function formatAbsolute(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateParts(iso, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 }
 
 function fieldsTouched(item: ActivityItemType): string[] {

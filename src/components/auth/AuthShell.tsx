@@ -60,7 +60,7 @@ export function AuthShell({
             // eslint-disable-next-line @next/next/no-img-element
             <img src={rail.logoUrl} alt="" className="h-6 w-auto" />
           ) : null}
-          <span className={rail?.productName ? "" : "tracking-[0.14em] uppercase"}>{rail?.productName ?? "ATLVS"}</span>
+          <span className={rail?.productName ? "" : "uppercase"}>{rail?.productName ?? "A T L V S"}</span>
         </Link>
         <div>
           <h2 className="text-3xl font-semibold tracking-tight">{tagline}</h2>

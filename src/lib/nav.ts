@@ -301,6 +301,8 @@ export const platformNav: NavGroup[] = [
           { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
           { label: "Look-Ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
           { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
+          // Transmittals — audit-grade dispatch envelope w/ read receipts (round 37).
+          { label: "Transmittals", href: "/console/transmittals", icon: "Send" },
           { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
           { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
           { label: "Events", href: "/console/events", icon: "CalendarDays" },

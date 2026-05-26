@@ -299,6 +299,8 @@ export const platformNav: NavGroup[] = [
         label: "Coordination",
         items: [
           { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
+          // Baselines = CPM Gantt data spine w/ critical path + float (round 38).
+          { label: "Schedule Baselines", href: "/console/schedule/baselines", icon: "GitBranch" },
           { label: "Look-Ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
           { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
           // Transmittals — audit-grade dispatch envelope w/ read receipts (round 37).

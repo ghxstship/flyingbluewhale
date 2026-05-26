@@ -196,6 +196,8 @@ export const platformNav: NavGroup[] = [
           { label: "Time", href: "/console/finance/time", icon: "Clock" },
           // Certified payroll — Davis-Bacon, CA DIR, NY PWA, WA L&I (round 45).
           { label: "Certified Payroll", href: "/console/finance/payroll", icon: "FileSignature" },
+          // AP invoice OCR via Anthropic Vision (round 58).
+          { label: "AP Invoice OCR", href: "/console/finance/ap-ocr", icon: "Sparkles" },
           { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
           { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
           // WIP + EAC forecasts (round 41).

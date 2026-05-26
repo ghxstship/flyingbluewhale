@@ -230,6 +230,8 @@ export const platformNav: NavGroup[] = [
       // Specifications — CSI MasterFormat / Uniformat / NRM2 spec book.
       // RFIs and submittals link back via spec_section_id (round 36).
       { label: "Specifications", href: "/console/specs", icon: "BookOpen" },
+      // BIM Models — IFC/RVT/NWD registry. Viewer pass forthcoming (round 39).
+      { label: "BIM Models", href: "/console/bim", icon: "Network" },
     ],
   },
   {

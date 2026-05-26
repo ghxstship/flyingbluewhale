@@ -189,6 +189,8 @@ export const platformNav: NavGroup[] = [
           { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
           { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
           { label: "Time", href: "/console/finance/time", icon: "Clock" },
+          // Certified payroll — Davis-Bacon, CA DIR, NY PWA, WA L&I (round 45).
+          { label: "Certified Payroll", href: "/console/finance/payroll", icon: "FileSignature" },
           { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
           { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
           // WIP + EAC forecasts (round 41).

@@ -329,6 +329,8 @@ export const platformNav: NavGroup[] = [
           { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
           // Transmittals — audit-grade dispatch envelope w/ read receipts (round 37).
           { label: "Transmittals", href: "/console/transmittals", icon: "Send" },
+          // Email-in inbox — per-project SES capture (round 50).
+          { label: "Email Inbox", href: "/console/email-inbox", icon: "Inbox" },
           { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
           { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
           { label: "Events", href: "/console/events", icon: "CalendarDays" },

@@ -649,3 +649,9 @@ paths:
     get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
   /api/v1/zapier/triggers/assignment-scans:
     get: { summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind). }
+
+  /api/v1/bim/{modelId}/download:
+    get: { summary: Stream a signed download URL for the BIM model file (IFC/RVT/NWD). Requires org membership. }
+
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Render the pay application as a PDF (React-PDF). Returns application/pdf. Requires org membership. }

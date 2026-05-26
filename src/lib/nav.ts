@@ -227,6 +227,9 @@ export const platformNav: NavGroup[] = [
       // Drawings = versioned sheet sets grouping site_plans for construction
       // delivery (50% DD, 100% CD, etc.). Slip-sheet diff between versions.
       { label: "Drawings", href: "/console/drawings", icon: "Files" },
+      // Specifications — CSI MasterFormat / Uniformat / NRM2 spec book.
+      // RFIs and submittals link back via spec_section_id (round 36).
+      { label: "Specifications", href: "/console/specs", icon: "BookOpen" },
     ],
   },
   {

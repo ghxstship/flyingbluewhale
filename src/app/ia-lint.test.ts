@@ -99,8 +99,10 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     // size="compact"> would be a visual change inside dense detail layouts;
     // the canonical zero-state primitive is reserved for page-level voids.
     "src/app/(platform)/console/annotations/[id]/page.tsx",
+    "src/app/(platform)/console/drawings/[id]/page.tsx",
     "src/app/(platform)/console/people/offer-letters/[id]/page.tsx",
     "src/app/(platform)/console/procurement/rfqs/[rfqId]/page.tsx",
+    "src/app/(platform)/console/transmittals/[id]/page.tsx",
     // Advancing assignment detail renders inline empties inside the
     // Comments + Activity sub-cards (orphan-dataset exposure, 2026-05).
     "src/app/(platform)/console/projects/[projectId]/advancing/assignments/[deliverableId]/page.tsx",

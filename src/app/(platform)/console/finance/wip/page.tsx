@@ -73,6 +73,16 @@ export default async function Page() {
         eyebrow="Finance"
         title="WIP"
         subtitle="Work-in-progress snapshots. One row per project per snapshot date. Required for surety / bonding review."
+        action={
+          <a
+            href="/api/v1/wip/snapshot-pdf"
+            target="_blank"
+            rel="noopener"
+            className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+          >
+            Download Latest WIP PDF
+          </a>
+        }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

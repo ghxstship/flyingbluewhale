@@ -106,7 +106,7 @@ export default async function Page() {
         </div>
         <DataTable<Row>
           rows={rows}
-          rowHref={(r) => `/console/finance/payroll/${r.id}`}
+          rowHref={(r) => `/api/v1/payroll-runs/${r.id}/pdf`}
           emptyLabel="No payroll runs yet"
           emptyDescription="A payroll run is one week-ending per project. Lines hold per-employee hours by classification + wage determination."
           emptyAction={

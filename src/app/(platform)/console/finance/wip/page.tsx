@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { generateOrgWipSnapshots } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -74,14 +75,24 @@ export default async function Page() {
         title="WIP"
         subtitle="Work-in-progress snapshots. One row per project per snapshot date. Required for surety / bonding review."
         action={
-          <a
-            href="/api/v1/wip/snapshot-pdf"
-            target="_blank"
-            rel="noopener"
-            className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
-          >
-            Download Latest WIP PDF
-          </a>
+          <div className="flex items-center gap-2">
+            <form action={generateOrgWipSnapshots}>
+              <button
+                type="submit"
+                className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              >
+                Generate snapshots
+              </button>
+            </form>
+            <a
+              href="/api/v1/wip/snapshot-pdf"
+              target="_blank"
+              rel="noopener"
+              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+            >
+              Download Latest WIP PDF
+            </a>
+          </div>
         }
       />
       <div className="page-content space-y-5">

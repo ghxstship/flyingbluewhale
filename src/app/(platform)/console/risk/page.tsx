@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { runRiskBatch } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -80,6 +81,16 @@ export default async function Page() {
         eyebrow="Programs"
         title="Risk Scores"
         subtitle={`${rows.length} score${rows.length === 1 ? "" : "s"} across ${projectCount} project${projectCount === 1 ? "" : "s"} · ${criticalCount} critical · ${highCount} high`}
+        action={
+          <form action={runRiskBatch}>
+            <button
+              type="submit"
+              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+            >
+              Run risk batch
+            </button>
+          </form>
+        }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

@@ -649,3 +649,63 @@ paths:
     get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
   /api/v1/zapier/triggers/assignment-scans:
     get: { summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind). }
+
+  /api/v1/ai/embed-source:
+    post: { summary: Embed a source document into the AI knowledge base for retrieval-augmented generation. }
+
+  /api/v1/bim/{modelId}/download:
+    get: { summary: Download a BIM model file by ID — returns a signed storage URL or streams the file directly. }
+
+  /api/v1/daily-logs/{id}/refresh-weather:
+    post: { summary: Pull fresh weather snapshot (NWS / OpenWeatherMap) for the daily log's date and project coordinates. }
+
+  /api/v1/drawings/{siteplanId}/markups:
+    get:  { summary: List all markups on a site plan, grouped by layer. }
+    post: { summary: Create a new markup on a site plan page. }
+
+  /api/v1/drawings/markups/{id}:
+    patch:  { summary: Update markup geometry, color, stroke, or text content. }
+    delete: { summary: Delete a markup by ID. }
+
+  /api/v1/graphql:
+    get:  { summary: GraphQL endpoint — GET serves GraphiQL UI in development; POST runs queries and mutations. }
+    post: { summary: GraphQL query/mutation endpoint for partner integrations. Auth resolves via session cookie or Bearer token. }
+
+  /api/v1/integrations/{system}/sync:
+    post: { summary: Trigger a one-way data sync from the named third-party system (e.g. procore, buildertrend) into ATLVS. }
+
+  /api/v1/integrations/fx/refresh:
+    post: { summary: Refresh exchange-rate cache from the configured FX provider. }
+
+  /api/v1/integrations/qb-online/oauth-start:
+    get: { summary: Begin the QuickBooks Online OAuth 2.0 flow — redirects to Intuit's authorization page. }
+
+  /api/v1/integrations/qb-online/callback:
+    get: { summary: QuickBooks Online OAuth callback — exchanges code for tokens and persists the integration. }
+
+  /api/v1/integrations/qb-online/push:
+    post: { summary: Push a batch of ATLVS records (invoices, expenses, bills) to QuickBooks Online. }
+
+  /api/v1/integrations/qb-online/sync:
+    post: { summary: Pull QuickBooks Online data (chart of accounts, vendors, customers) into ATLVS. }
+
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Generate and stream a PDF for the given AIA G702/G703 pay application. }
+
+  /api/v1/payroll-runs/{runId}/pdf:
+    get: { summary: Generate and stream a PDF payroll register for the given payroll run. }
+
+  /api/v1/payroll-runs/{runId}/state-xml:
+    get: { summary: Export state-agency XML filing for the given payroll run. }
+
+  /api/v1/site-plans/{id}/pdf:
+    get: { summary: Generate and stream a PDF of the site plan with its latest approved markup layer. }
+
+  /api/v1/webhooks/docusign:
+    post: { summary: DocuSign Connect event webhook — updates envelope signer states and triggers downstream actions on completion. }
+
+  /api/v1/webhooks/ses-inbound:
+    post: { summary: AWS SES inbound-email webhook — routes received messages to the matching project inbox. }
+
+  /api/v1/wip/snapshot-pdf:
+    get: { summary: Generate and stream a PDF WIP (Work-In-Progress) schedule-of-values snapshot for the caller's org. }

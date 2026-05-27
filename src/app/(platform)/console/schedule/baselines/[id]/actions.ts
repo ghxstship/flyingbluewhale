@@ -192,7 +192,7 @@ export async function importSchedule(_: ImportState, fd: FormData): Promise<Impo
 
   const result = parseSchedule(parsed.data.source_content);
   if (result.activities.length === 0) {
-    return { error: result.warnings[0] ?? "No activities found in the import file" };
+    return { error: result.warnings[0] ?? "Import file contained zero activities" };
   }
 
   // Replace semantics: clear existing rows.

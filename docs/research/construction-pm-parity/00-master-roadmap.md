@@ -8,18 +8,20 @@ Companion docs:
 - [01 — Competitive landscape](01-competitive-landscape.md)
 - [02 — Lifecycle parity matrix](02-parity-matrix.md)
 - [03 — Gap inventory (severity-ranked)](03-gap-inventory.md)
-- [04 — Shipped rounds 35–53](04-shipped-rounds-35-53.md) ← current state
+- [04 — Shipped rounds 35–53](04-shipped-rounds-35-53.md)
+- [05 — Shipped rounds 54–66](05-shipped-rounds-54-66.md) ← current state
 
 ---
 
-## Delivery snapshot (as of 2026-05-26)
+## Delivery snapshot (as of 2026-05-27)
 
-**Rounds 35–53 shipped to `main`** — see [04](04-shipped-rounds-35-53.md)
-for the round-by-round breakdown. Aggregate **42% → ~91% parity** (C+S)
-in 19 rounds. 14 of the 15 hard schema gaps closed; 1 (P6 parser) is a
-runtime engine on top of completed schema. Remaining work is concentrated
-in runtime engines (BIM 3D viewer, PDF markup, OAuth workers, etc.) that
-sit atop the now-complete schema spine.
+**Rounds 35–66 shipped to `main`** in 32 trunk-based commits — see
+[04](04-shipped-rounds-35-53.md) and [05](05-shipped-rounds-54-66.md)
+for round-by-round detail. Aggregate **42% → ~98% parity** (C+S).
+**Zero hard schema gaps remain.** Three P items still need
+client-side UX work (PDF markup canvas renderer, BIM 3D viewer, multi-
+entity consolidation); the rest is operator/credential configuration to
+flip the env-var-gated workers on.
 
 ---
 

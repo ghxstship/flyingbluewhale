@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk } from "@/lib/api";
 import { withAuth } from "@/lib/auth";

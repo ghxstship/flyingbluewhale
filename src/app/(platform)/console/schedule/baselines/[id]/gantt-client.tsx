@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 /**
  * Lightweight SVG Gantt chart (gap D20 client / G-001 runtime UX).
@@ -103,9 +103,10 @@ export default function GanttClient({ activities, dependencies }: Props) {
     return marks;
   }, [earliest, latest]);
 
-  function xForDate(s: string): number {
-    return LABEL_W + dayDiff(new Date(s), earliest) * DAY_W;
-  }
+  const xForDate = useCallback(
+    (s: string): number => LABEL_W + dayDiff(new Date(s), earliest) * DAY_W,
+    [earliest],
+  );
 
   const rendered = filteredActivities.map((a, i) => {
     const x = xForDate(a.start_planned);
@@ -138,7 +139,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
       });
     }
     return paths;
-  }, [dependencies, byId, filteredActivities, earliest, xForDate]);
+  }, [dependencies, byId, filteredActivities, xForDate]);
 
   // Today marker.
   const todayX = LABEL_W + dayDiff(new Date(), earliest) * DAY_W;
@@ -174,8 +175,8 @@ export default function GanttClient({ activities, dependencies }: Props) {
           <g>
             {monthMarks.map((m) => (
               <g key={m.x}>
-                <line x1={m.x} y1={HEADER_H - 12} x2={m.x} y2={HEADER_H + chartH} stroke="#E5E7EB" strokeWidth={1} />
-                <text x={m.x + 4} y={HEADER_H - 16} fontSize="10" fill="#6B7280">
+                <line x1={m.x} y1={HEADER_H - 12} x2={m.x} y2={HEADER_H + chartH} stroke="var(--border-color)" strokeWidth={1} />
+                <text x={m.x + 4} y={HEADER_H - 16} fontSize="10" fill="var(--text-muted)">
                   {m.label}
                 </text>
               </g>
@@ -190,11 +191,11 @@ export default function GanttClient({ activities, dependencies }: Props) {
                 y1={HEADER_H - 12}
                 x2={todayX}
                 y2={HEADER_H + chartH}
-                stroke="#2563EB"
+                stroke="var(--color-info)"
                 strokeWidth={1.5}
                 strokeDasharray="3 3"
               />
-              <text x={todayX + 4} y={HEADER_H - 2} fontSize="10" fill="#2563EB">
+              <text x={todayX + 4} y={HEADER_H - 2} fontSize="10" fill="var(--color-info)">
                 today
               </text>
             </g>
@@ -202,8 +203,8 @@ export default function GanttClient({ activities, dependencies }: Props) {
 
           {/* Row labels */}
           {rendered.map(({ a, y }) => (
-            <text key={`label-${a.id}`} x={4} y={y + ROW_H / 2 + 4} fontSize="11" fill="#0A0A0A">
-              <tspan fontFamily="ui-monospace, monospace" fill="#6B7280">
+            <text key={`label-${a.id}`} x={4} y={y + ROW_H / 2 + 4} fontSize="11" fill="var(--foreground)">
+              <tspan fontFamily="ui-monospace, monospace" fill="var(--text-muted)">
                 {a.code}
               </tspan>
               <tspan dx="6">{a.name.length > 30 ? a.name.slice(0, 30) + "…" : a.name}</tspan>

@@ -38,6 +38,8 @@ export default async function FinanceHub() {
     { href: "/console/finance/time", label: "Time" },
     { href: "/console/finance/mileage", label: "Mileage" },
     { href: "/console/finance/payouts", label: "Payouts" },
+    { href: "/console/finance/entities", label: "Entities" },
+    { href: "/console/finance/consolidation", label: "Consolidation" },
     { href: "/console/finance/reports", label: "Reports" },
   ];
 

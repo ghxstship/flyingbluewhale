@@ -358,6 +358,8 @@ paths:
 
   /api/v1/ai/chat:
     post: { summary: Streaming chat completion. }
+  /api/v1/ai/embed-source:
+    post: { summary: Index a document into the RAG corpus. Caller supplies rendered text; embedding worker picks the provider. Idempotent per (org, source_type, source_id). }
   /api/v1/ai/conversations:
     get: { summary: List conversations for the session. Creation is implicit via /api/v1/ai/chat. }
   /api/v1/ai/conversations/{id}:
@@ -499,6 +501,21 @@ paths:
     get: { summary: Download a GDPR JSON export of the session's data. }
   /api/v1/me/delete:
     post: { summary: Request account deletion with a 30-day grace window. }
+
+  /api/v1/bim/{modelId}/download:
+    get: { summary: Mint a 60-second signed URL for the IFC/RVT/NWD file in the bim bucket and 303-redirect. Org-scoped; read-only. }
+
+  /api/v1/daily-logs/{id}/refresh-weather:
+    post: { summary: Re-pull NWS weather for a daily log's date + project lat/lon and overwrite daily_logs.weather_*. Idempotent. }
+
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Render a pay application as an AIA G702 (Application & Certificate) + G703 (Continuation Sheet) PDF and 302-redirect to a signed URL. }
+
+  /api/v1/payroll-runs/{runId}/pdf:
+    get: { summary: Render a certified payroll run as a WH-347 PDF and 302-redirect to a signed URL. }
+
+  /api/v1/wip/snapshot-pdf:
+    get: { summary: Render the org-wide WIP report for `?date=YYYY-MM-DD` (defaults to latest snapshot) as a PDF and 302-redirect to a signed URL. }
 
   /api/v1/invoices/{invoiceId}/pdf:
     get: { summary: Render an invoice to PDF and 302-redirect to a signed download URL. }

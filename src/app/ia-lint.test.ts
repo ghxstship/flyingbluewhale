@@ -122,6 +122,14 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(marketing)/marketplace/crew/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/talent/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
+    // Drawing detail renders "No versions yet" inside the Versions sub-card.
+    "src/app/(platform)/console/drawings/[id]/page.tsx",
+    // Consolidation list renders "No entities yet" inline (dense metric layout).
+    "src/app/(platform)/console/finance/consolidation/page.tsx",
+    // Gantt sub-page renders "No activities yet" in the chart area (no-data state).
+    "src/app/(platform)/console/schedule/baselines/[id]/gantt/page.tsx",
+    // Transmittal detail renders "No items yet" / "No recipients yet" in sub-sections.
+    "src/app/(platform)/console/transmittals/[id]/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

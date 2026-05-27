@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
@@ -79,9 +80,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             {catalogItems.length === 0 ? (
               <p className="mt-1.5 text-xs text-[var(--text-muted)]">
                 No active catalog items in this org. Author one at{" "}
-                <a className="underline" href="/console/settings/catalog">
+                <Link className="underline" href="/console/settings/catalog">
                   /console/settings/catalog
-                </a>{" "}
+                </Link>{" "}
                 first.
               </p>
             ) : (

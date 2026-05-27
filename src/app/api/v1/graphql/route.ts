@@ -1,4 +1,5 @@
 import { createSchema, createYoga } from "graphql-yoga";
+import { apiError } from "@/lib/api";
 import { typeDefs } from "@/lib/graphql/schema";
 import { resolvers } from "@/lib/graphql/resolvers";
 import { buildGqlContext, type GqlContext } from "@/lib/graphql/context";
@@ -29,11 +30,19 @@ const yoga = createYoga<GqlContext>({
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  return yoga.handle(req, {} as never);
+  try {
+    return await yoga.handle(req, {} as never);
+  } catch {
+    return apiError("internal", "GraphQL execution failed");
+  }
 }
 
 export async function POST(req: Request) {
-  return yoga.handle(req, {} as never);
+  try {
+    return await yoga.handle(req, {} as never);
+  } catch {
+    return apiError("internal", "GraphQL execution failed");
+  }
 }
 
 export async function OPTIONS(req: Request) {

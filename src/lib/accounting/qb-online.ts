@@ -159,3 +159,109 @@ export async function fetchAccounts(
   };
   return json.QueryResponse?.Account ?? [];
 }
+
+// ============================================================================
+// Push-side writes — Round 72.
+// ============================================================================
+
+type QboInvoiceLine = {
+  Amount: number;
+  DetailType: "SalesItemLineDetail";
+  Description?: string;
+  SalesItemLineDetail: {
+    ItemRef: { value: string };
+    Qty?: number;
+    UnitPrice?: number;
+  };
+};
+
+type QboInvoicePayload = {
+  CustomerRef: { value: string };
+  Line: QboInvoiceLine[];
+  DocNumber?: string;
+  TxnDate?: string; // YYYY-MM-DD
+  DueDate?: string;
+  CurrencyRef?: { value: string };
+  CustomerMemo?: { value: string };
+  PrivateNote?: string;
+};
+
+/**
+ * Push an invoice into QBO. Returns the QBO-assigned Id on success so
+ * the caller can stamp invoices.metadata.qb_id for round-trip dedup.
+ *
+ * Requires a customer mapping — accepts the QBO Customer ref string
+ * directly (caller resolves from our clients.metadata.qb_id or
+ * lazily-creates a Customer row).
+ */
+export async function pushInvoice(
+  tokens: TokenPayload,
+  payload: QboInvoicePayload,
+): Promise<{ qb_id: string; sync_token: string } | { error: string }> {
+  const url = `${QBO_BASE}/${tokens.realm_id}/invoice?minorversion=70`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${tokens.access_token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    return { error: `QBO invoice push failed: ${res.status} ${text.slice(0, 200)}` };
+  }
+  const json = (await res.json()) as { Invoice?: { Id: string; SyncToken: string } };
+  if (!json.Invoice?.Id) return { error: "QBO returned no Invoice.Id" };
+  return { qb_id: json.Invoice.Id, sync_token: json.Invoice.SyncToken };
+}
+
+type QboBillLine = {
+  Amount: number;
+  DetailType: "AccountBasedExpenseLineDetail";
+  Description?: string;
+  AccountBasedExpenseLineDetail: {
+    AccountRef: { value: string };
+  };
+};
+
+type QboBillPayload = {
+  VendorRef: { value: string };
+  Line: QboBillLine[];
+  DocNumber?: string;
+  TxnDate?: string;
+  DueDate?: string;
+  CurrencyRef?: { value: string };
+  PrivateNote?: string;
+};
+
+/**
+ * Push an AP bill into QBO. Mirrors pushInvoice for AP-side records
+ * (vendor bills, OCR-extracted invoices that were promoted into our
+ * invoices table as AP).
+ */
+export async function pushBill(
+  tokens: TokenPayload,
+  payload: QboBillPayload,
+): Promise<{ qb_id: string; sync_token: string } | { error: string }> {
+  const url = `${QBO_BASE}/${tokens.realm_id}/bill?minorversion=70`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${tokens.access_token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    return { error: `QBO bill push failed: ${res.status} ${text.slice(0, 200)}` };
+  }
+  const json = (await res.json()) as { Bill?: { Id: string; SyncToken: string } };
+  if (!json.Bill?.Id) return { error: "QBO returned no Bill.Id" };
+  return { qb_id: json.Bill.Id, sync_token: json.Bill.SyncToken };
+}

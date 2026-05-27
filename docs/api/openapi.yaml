@@ -363,6 +363,8 @@ paths:
   /api/v1/ai/conversations/{id}:
     get:    { summary: Get a conversation + messages. }
     delete: { summary: Delete a conversation. }
+  /api/v1/ai/embed-source:
+    post: { summary: Index a document into the RAG corpus. Caller supplies rendered text; embedding model selected from env config. Idempotent per (org, source_type, source_id). }
 
   /api/v1/schedule.ics:
     get: { summary: iCalendar feed for the session's events. }
@@ -502,6 +504,12 @@ paths:
 
   /api/v1/invoices/{invoiceId}/pdf:
     get: { summary: Render an invoice to PDF and 302-redirect to a signed download URL. }
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Render a payment application as AIA G702 + G703 PDF and 302-redirect to a short-lived signed URL. }
+  /api/v1/payroll-runs/{runId}/pdf:
+    get: { summary: Render a certified payroll run as WH-347 PDF and 302-redirect to a short-lived signed URL. }
+  /api/v1/wip/snapshot-pdf:
+    get: { summary: Render the org-wide WIP report for a given snapshot date (defaults to latest) and 302-redirect to a signed URL. }
   /api/v1/guides/{guideId}/pdf:
     get: { summary: Render an event guide to PDF (persona-scoped boarding pass) and 302-redirect to a signed download URL. }
   /api/v1/deliverables/{id}/pdf:
@@ -534,6 +542,10 @@ paths:
     get: { summary: Printable 10-up QR wristband sheet for active tickets. }
   /api/v1/rentals/{rentalId}/pull-sheet:
     get: { summary: Rental checkout / equipment pull sheet PDF. }
+  /api/v1/bim/{modelId}/download:
+    get: { summary: Mint a 60-second signed URL for a BIM model file (IFC/RVT/NWD) and 303-redirect. Org-pinned read-only; bim bucket is service-role-write-only. }
+  /api/v1/daily-logs/{id}/refresh-weather:
+    post: { summary: Pull NWS weather snapshot for a daily log's date and coordinates, writing back to daily_logs.weather_*. Idempotent. US territory + ~7-day forecast horizon only. }
   /api/v1/compliance/audit-export:
     get: { summary: Branded PDF dump of audit_log for a date range / actor filter — SOC-2 export shape. }
   /api/v1/brand-kit:

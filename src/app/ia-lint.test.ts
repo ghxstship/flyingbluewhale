@@ -122,6 +122,11 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(marketing)/marketplace/crew/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/talent/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
+    // Detail-page in-section inline empties for construction-pm-parity surfaces.
+    "src/app/(platform)/console/drawings/[id]/page.tsx",
+    "src/app/(platform)/console/transmittals/[id]/page.tsx",
+    // Server action returning an error string — not a UI empty state.
+    "src/app/(platform)/console/schedule/baselines/[id]/actions.ts",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

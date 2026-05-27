@@ -5,6 +5,7 @@ import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { fetchNwsWeather } from "@/lib/weather/nws";
+import { fetchOwmWeather, openWeatherMapConfigured } from "@/lib/weather/openweathermap";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**
@@ -80,11 +81,16 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     return apiError("bad_request", "No coordinates available for this log's location or any project venue.");
   }
 
-  const snap = await fetchNwsWeather(lat, lon, l.log_date);
+  // NWS first (US, free, no key). Falls through to OpenWeatherMap for
+  // non-US sites or past-the-7-day-horizon dates if OWM is configured.
+  let snap = await fetchNwsWeather(lat, lon, l.log_date);
+  if (!snap && openWeatherMapConfigured()) {
+    snap = await fetchOwmWeather(lat, lon);
+  }
   if (!snap) {
     return apiError(
       "internal",
-      "NWS unavailable for this location/date. NWS only covers US territory + forecast horizon ~7 days.",
+      "No weather provider returned data. NWS covers US + ~7-day forecast. Set OPENWEATHERMAP_API_KEY for global coverage.",
     );
   }
 

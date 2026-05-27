@@ -363,6 +363,8 @@ paths:
   /api/v1/ai/conversations/{id}:
     get:    { summary: Get a conversation + messages. }
     delete: { summary: Delete a conversation. }
+  /api/v1/ai/embed-source:
+    post: { summary: Index a document into the RAG corpus. Caller supplies extracted text; idempotent on (org, source_type, source_id). }
 
   /api/v1/schedule.ics:
     get: { summary: iCalendar feed for the session's events. }
@@ -508,6 +510,16 @@ paths:
     get: { summary: Render a single deliverable (rider, plot, list, etc.) to a type-canonical PDF. }
   /api/v1/projects/{projectId}/advance-book:
     get: { summary: Compile every approved/submitted deliverable on a project into one branded advance-book PDF. }
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Render a payment application as AIA G702 + G703 PDF and 302-redirect to a short-lived signed URL. }
+  /api/v1/payroll-runs/{runId}/pdf:
+    get: { summary: Render a certified payroll run as WH-347 PDF and 302-redirect to a short-lived signed URL. }
+  /api/v1/wip/snapshot-pdf:
+    get: { summary: Render the org-wide WIP report for a given ?date= snapshot and 302-redirect to a short-lived signed URL. }
+  /api/v1/bim/{modelId}/download:
+    get: { summary: Mint a 60-second signed URL for a BIM model file (IFC/RVT/NWD) in the bim bucket and 303-redirect. }
+  /api/v1/daily-logs/{id}/refresh-weather:
+    post: { summary: Pull NWS weather for the daily log's date + location and write back into daily_logs.weather_*. Idempotent. US territory only, ~7-day forecast horizon. }
 
   /api/v1/exports:
     get:  { summary: List the caller org's recent export runs. }

@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { sendTransmittal, closeTransmittal, addRecipient, addItem } from "./actions";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 
@@ -164,9 +165,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="space-y-3">
           <h2 className="text-sm font-semibold">Items ({items.length})</h2>
           {items.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">
-              No items yet. Add drawings, specs, RFIs, or files to dispatch.
-            </p>
+            <EmptyState size="compact" title="No items yet" description="Add drawings, specs, RFIs, or files to dispatch." />
           ) : (
             <ul className="space-y-1">
               {items.map((it) => (
@@ -207,7 +206,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="space-y-3">
           <h2 className="text-sm font-semibold">Recipients ({recipients.length})</h2>
           {recipients.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">No recipients yet. Add at least one to enable Send.</p>
+            <EmptyState size="compact" title="No recipients yet" description="Add at least one to enable Send." />
           ) : (
             <ul className="space-y-1">
               {recipients.map((r) => {

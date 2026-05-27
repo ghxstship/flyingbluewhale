@@ -122,6 +122,16 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(marketing)/marketplace/crew/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/talent/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
+    // Server action — error messages returned as JSON data, not rendered UI.
+    // The string "No activities found" is a parseSchedule error, not a JSX empty state.
+    "src/app/(platform)/console/schedule/baselines/[id]/actions.ts",
+    // Detail-page in-section inline empties inside sub-cards of a dense detail layout.
+    // Same pattern as the annotations / offer-letters / rfqs allowlist above.
+    "src/app/(platform)/console/drawings/[id]/page.tsx",
+    "src/app/(platform)/console/transmittals/[id]/page.tsx",
+    // Finance consolidation — "No entities yet" is inside a grid-card surface,
+    // not a page-level void; consistent with the other inline-empty allowlist entries.
+    "src/app/(platform)/console/finance/consolidation/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import GanttClient from "../gantt-client";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 
@@ -84,9 +85,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {a.length > 0 ? (
           <GanttClient activities={a} dependencies={d} />
         ) : (
-          <div className="surface p-6 text-sm">
-            No activities yet — import a P6/MSP/Asta file or add activities to populate the schedule.
-          </div>
+          <EmptyState
+            size="compact"
+            title="No activities yet"
+            description="Import a P6/MSP/Asta file or add activities to populate the schedule."
+          />
         )}
       </div>
     </>

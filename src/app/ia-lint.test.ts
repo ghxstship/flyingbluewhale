@@ -122,6 +122,8 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(marketing)/marketplace/crew/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/talent/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
+    // Server action returning an import-validation error message — not a UI zero-state.
+    "src/app/(platform)/console/schedule/baselines/[id]/actions.ts",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

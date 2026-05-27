@@ -180,6 +180,7 @@ const config = [
       "src/app/(platform)/console/sustainability/carbon/CarbonCharts.tsx",
       "src/app/(platform)/console/production/dispatch/live/LiveDispatchMap.tsx",
       "src/app/(platform)/console/projects/[projectId]/gantt/GanttChart.tsx",
+      "src/app/(platform)/console/schedule/baselines/**/gantt-client.tsx",   // SVG Gantt — presentation attrs require raw hex
     ],
     rules: {
       "no-restricted-syntax": "off",

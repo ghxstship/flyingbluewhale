@@ -649,3 +649,59 @@ paths:
     get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
   /api/v1/zapier/triggers/assignment-scans:
     get: { summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind). }
+
+  /api/v1/ai/embed-source:
+    post: { summary: Embed a source document into the AI knowledge base for retrieval-augmented generation. }
+
+  /api/v1/bim/{modelId}/download:
+    get: { summary: Download the BIM model file by ID (returns a signed storage URL). }
+
+  /api/v1/drawings/{siteplanId}/markups:
+    get: { summary: List all markup annotations for a site plan, grouped by layer. }
+    post: { summary: Create a new markup annotation on a site plan canvas. }
+
+  /api/v1/drawings/markups/{id}:
+    patch: { summary: Update an existing markup annotation (geometry, color, stroke, text). }
+    delete: { summary: Delete a markup annotation by ID. }
+
+  /api/v1/integrations/{system}/sync:
+    post: { summary: Trigger a full or incremental sync for the given integration system (e.g. quickbooks, xero). }
+
+  /api/v1/integrations/fx/refresh:
+    post: { summary: Refresh foreign-exchange rates for all currencies in the org's entity set. }
+
+  /api/v1/integrations/qb-online/callback:
+    get: { summary: QuickBooks Online OAuth2 callback — exchanges code for access/refresh tokens and stores the connection. }
+
+  /api/v1/integrations/qb-online/oauth-start:
+    get: { summary: Initiate the QuickBooks Online OAuth2 flow — redirects the user to Intuit's authorization endpoint. }
+
+  /api/v1/integrations/qb-online/push:
+    post: { summary: Push a specific record (invoice, bill, vendor) to QuickBooks Online on demand. }
+
+  /api/v1/integrations/qb-online/sync:
+    post: { summary: Run a full bidirectional sync between the org's QuickBooks Online company and the platform. }
+
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Generate and stream a PDF rendering of the pay application (AIA G702/G703 format). }
+
+  /api/v1/payroll-runs/{runId}/pdf:
+    get: { summary: Generate and stream a PDF summary for the given payroll run. }
+
+  /api/v1/payroll-runs/{runId}/state-xml:
+    get: { summary: Export the payroll run as a state-agency XML file (format varies by jurisdiction). }
+
+  /api/v1/site-plans/{id}/pdf:
+    get: { summary: Render and stream a PDF of the site plan with all published markup layers composited. }
+
+  /api/v1/webhooks/docusign:
+    post: { summary: DocuSign Connect webhook receiver — processes envelope status events and updates contract_envelopes accordingly. }
+
+  /api/v1/webhooks/ses-inbound:
+    post: { summary: AWS SES inbound-email webhook — routes received messages to the matching project_email and inserts into inbound_email_messages. }
+
+  /api/v1/wip/snapshot-pdf:
+    get: { summary: Generate and stream a PDF WIP (work-in-progress) snapshot report for the org's active billing period. }
+
+  /api/v1/daily-logs/{id}/refresh-weather:
+    post: { summary: Pull current weather data for the daily log's location from NWS (US) or OpenWeatherMap and persist to daily_logs. }

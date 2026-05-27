@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { toTitle } from "@/lib/format";
 import { formatMoney } from "@/lib/i18n/format";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 
@@ -186,13 +187,12 @@ export default async function Page() {
             </Link>
           ))}
           {bucketList.length === 0 ? (
-            <div className="surface p-6 text-sm text-[var(--text-secondary)]">
-              No entities yet. Create one at{" "}
-              <Link href="/console/finance/entities/new" className="underline">
-                /console/finance/entities/new
-              </Link>
-              .
-            </div>
+            <EmptyState
+              size="compact"
+              title="No entities yet"
+              description="Create one to start consolidating financials."
+              action={<Link href="/console/finance/entities/new" className="underline text-xs">Create entity</Link>}
+            />
           ) : null}
         </div>
       </div>

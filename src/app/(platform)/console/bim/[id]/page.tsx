@@ -102,6 +102,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`${m.source_type.toUpperCase()}${m.discipline ? ` · ${m.discipline.toUpperCase()}` : ""} · ${links.length} hot link${links.length === 1 ? "" : "s"} · ${fmtBytes(m.size_bytes)}`}
         action={
           <div className="flex items-center gap-2">
+            {(m.source_type === "ifc" || m.source_type === "ifc_zip") && (
+              <a
+                href={`/console/bim/${m.id}/view`}
+                className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              >
+                Open 3D Viewer
+              </a>
+            )}
             <a
               href={`/api/v1/bim/${m.id}/download`}
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"

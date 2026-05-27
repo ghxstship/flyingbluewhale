@@ -9,19 +9,28 @@ Companion docs:
 - [02 — Lifecycle parity matrix](02-parity-matrix.md)
 - [03 — Gap inventory (severity-ranked)](03-gap-inventory.md)
 - [04 — Shipped rounds 35–53](04-shipped-rounds-35-53.md)
-- [05 — Shipped rounds 54–66](05-shipped-rounds-54-66.md) ← current state
+- [05 — Shipped rounds 54–66](05-shipped-rounds-54-66.md)
+- [06 — Shipped rounds 67–72](06-shipped-rounds-67-72.md) ← current state
+- [07 — Acceptance criteria + operator runbook](07-acceptance-criteria.md)
 
 ---
 
 ## Delivery snapshot (as of 2026-05-27)
 
-**Rounds 35–66 shipped to `main`** in 32 trunk-based commits — see
-[04](04-shipped-rounds-35-53.md) and [05](05-shipped-rounds-54-66.md)
-for round-by-round detail. Aggregate **42% → ~98% parity** (C+S).
-**Zero hard schema gaps remain.** Three P items still need
-client-side UX work (PDF markup canvas renderer, BIM 3D viewer, multi-
-entity consolidation); the rest is operator/credential configuration to
-flip the env-var-gated workers on.
+**Rounds 35–72 shipped to `main`** in 38 trunk-based commits — see
+[04](04-shipped-rounds-35-53.md), [05](05-shipped-rounds-54-66.md),
+and [06](06-shipped-rounds-67-72.md) for round-by-round detail.
+Aggregate **42% → ~99.5% parity** (C+S). **Zero hard schema gaps,
+zero remaining client-island P-items.** Rounds 67–72 closed the three
+P items that survived the 35–66 wave (PDF.js markup, web-ifc 3D viewer,
+SVG Gantt UI), completed the four-connector accounting matrix (added
+Sage 300 CRE, Foundation, Viewpoint Vista; closed QBO push-side
+write-back), and shipped OpenWeatherMap fallback + CA/NY/WA state
+certified-payroll XML exporters. Only F44 (multi-entity / multi-currency)
+remains, and it was explicitly tagged post-parity in the original
+inventory. Per-gap DoD verification + credential provisioning runbook
+in [07](07-acceptance-criteria.md). The next motion is the **Wave 5
+differentiator program** described below.
 
 ---
 

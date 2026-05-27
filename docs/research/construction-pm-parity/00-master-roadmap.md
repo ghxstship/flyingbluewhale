@@ -10,27 +10,33 @@ Companion docs:
 - [03 — Gap inventory (severity-ranked)](03-gap-inventory.md)
 - [04 — Shipped rounds 35–53](04-shipped-rounds-35-53.md)
 - [05 — Shipped rounds 54–66](05-shipped-rounds-54-66.md)
-- [06 — Shipped rounds 67–72](06-shipped-rounds-67-72.md) ← current state
+- [06 — Shipped rounds 67–72](06-shipped-rounds-67-72.md)
 - [07 — Acceptance criteria + operator runbook](07-acceptance-criteria.md)
+- [08 — Shipped Round 74 (Final)](08-shipped-round-74.md) ← current state
 
 ---
 
 ## Delivery snapshot (as of 2026-05-27)
 
-**Rounds 35–72 shipped to `main`** in 38 trunk-based commits — see
+**Rounds 35–74 shipped to `main`** in 40 trunk-based commits — see
 [04](04-shipped-rounds-35-53.md), [05](05-shipped-rounds-54-66.md),
 and [06](06-shipped-rounds-67-72.md) for round-by-round detail.
-Aggregate **42% → ~99.5% parity** (C+S). **Zero hard schema gaps,
-zero remaining client-island P-items.** Rounds 67–72 closed the three
-P items that survived the 35–66 wave (PDF.js markup, web-ifc 3D viewer,
-SVG Gantt UI), completed the four-connector accounting matrix (added
-Sage 300 CRE, Foundation, Viewpoint Vista; closed QBO push-side
-write-back), and shipped OpenWeatherMap fallback + CA/NY/WA state
-certified-payroll XML exporters. Only F44 (multi-entity / multi-currency)
-remains, and it was explicitly tagged post-parity in the original
-inventory. Per-gap DoD verification + credential provisioning runbook
-in [07](07-acceptance-criteria.md). The next motion is the **Wave 5
-differentiator program** described below.
+Aggregate **42% → 100% parity** (C+S). **Zero hard schema gaps,
+zero remaining client-island P-items, zero remaining gaps from the
+inventory.** Rounds 67–72 closed the three P items that survived the
+35–66 wave (PDF.js markup, web-ifc 3D viewer, SVG Gantt UI), completed
+the four-connector accounting matrix (added Sage 300 CRE, Foundation,
+Viewpoint Vista; closed QBO push-side write-back), and shipped
+OpenWeatherMap fallback + CA/NY/WA state certified-payroll XML
+exporters. \*\*Round 74 closed the final gap — G-030 / F44 multi-entity
+
+- multi-currency consolidation** (org_entities hierarchy + daily FX
+  rate worker + line-level FX snapshots on invoices/expenses/pay-apps +
+  v_consolidated_ar view + /console/finance/entities and
+  /console/finance/consolidation surfaces). Per-gap DoD verification +
+  credential provisioning runbook in [07](07-acceptance-criteria.md).
+  The construction-PM table-stakes parity program is **complete**; the
+  next motion is the **Wave 5 differentiator program\*\* described below.
 
 ---
 

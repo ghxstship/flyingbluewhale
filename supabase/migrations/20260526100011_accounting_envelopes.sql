@@ -183,6 +183,17 @@ DO $$ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
+  CREATE TYPE public.envelope_signer_state AS ENUM (
+    'pending',
+    'sent',
+    'delivered',
+    'signed',
+    'declined',
+    'voided'
+  );
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
   CREATE TYPE public.envelope_target_type AS ENUM (
     'proposal',
     'offer_letter',
@@ -246,8 +257,7 @@ CREATE TABLE IF NOT EXISTS public.contract_envelope_signers (
   vendor_id       uuid REFERENCES public.vendors(id) ON DELETE SET NULL,
   external_email  text,
   signer_role     text,                  -- 'signer' | 'cc' | 'witness' | 'approver' | 'in_person_signer'
-  status          text NOT NULL DEFAULT 'pending'
-                    CHECK (status IN ('pending','sent','delivered','signed','declined','voided')),
+  signer_state    public.envelope_signer_state NOT NULL DEFAULT 'pending',
   signed_at       timestamptz,
   signed_name     text,
   signed_title    text,

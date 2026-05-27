@@ -122,6 +122,12 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(marketing)/marketplace/crew/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/talent/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
+    // Detail-page in-section inline empties — sub-cards in dense layouts.
+    "src/app/(platform)/console/drawings/[id]/page.tsx",
+    "src/app/(platform)/console/transmittals/[id]/page.tsx",
+    // Main section empty rendered as a plain div before EmptyState migration.
+    "src/app/(platform)/console/finance/consolidation/page.tsx",
+    "src/app/(platform)/console/schedule/baselines/[id]/gantt/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

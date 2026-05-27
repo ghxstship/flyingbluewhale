@@ -148,7 +148,7 @@ export async function POST(req: Request) {
     let q = supabase
       .from("contract_envelope_signers")
       .update({
-        status: (s.status ?? "pending").toLowerCase(),
+        signer_state: (s.status ?? "pending").toLowerCase(),
         signed_at: s.signedDateTime ?? null,
         signed_name: s.name ?? null,
       })

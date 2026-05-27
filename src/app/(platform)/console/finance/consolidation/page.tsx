@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -186,13 +187,15 @@ export default async function Page() {
             </Link>
           ))}
           {bucketList.length === 0 ? (
-            <div className="surface p-6 text-sm text-[var(--text-secondary)]">
-              No entities yet. Create one at{" "}
-              <Link href="/console/finance/entities/new" className="underline">
-                /console/finance/entities/new
-              </Link>
-              .
-            </div>
+            <EmptyState
+              title="No entities yet"
+              description="Create a legal entity to start consolidating financials."
+              action={
+                <Link href="/console/finance/entities/new" className="btn btn-primary text-xs">
+                  Create Entity
+                </Link>
+              }
+            />
           ) : null}
         </div>
       </div>

@@ -101,6 +101,10 @@ describe("API canon — parseJson enforcement", () => {
       "src/app/api/v1/webhooks/stripe/route.ts",
       // ICS calendar feed serves text/calendar, not JSON.
       "src/app/api/v1/users/[userId]/calendar.ics/route.ts",
+      // GraphQL endpoint — graphql-yoga manages the request/response lifecycle
+      // and serves the standard GraphQL { data, errors } envelope. Cannot wrap
+      // in the ATLVS ApiEnvelope.
+      "src/app/api/v1/graphql/route.ts",
       // OAuth initiator — every code path returns NextResponse.redirect (302)
       // either to the provider URL or to /login with an error param. There's
       // no JSON envelope to surface; using apiError would break the redirect

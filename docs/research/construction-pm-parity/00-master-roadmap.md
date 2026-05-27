@@ -28,15 +28,14 @@ inventory.** Rounds 67–72 closed the three P items that survived the
 the four-connector accounting matrix (added Sage 300 CRE, Foundation,
 Viewpoint Vista; closed QBO push-side write-back), and shipped
 OpenWeatherMap fallback + CA/NY/WA state certified-payroll XML
-exporters. \*\*Round 74 closed the final gap — G-030 / F44 multi-entity
-
-- multi-currency consolidation** (org_entities hierarchy + daily FX
-  rate worker + line-level FX snapshots on invoices/expenses/pay-apps +
-  v_consolidated_ar view + /console/finance/entities and
-  /console/finance/consolidation surfaces). Per-gap DoD verification +
-  credential provisioning runbook in [07](07-acceptance-criteria.md).
-  The construction-PM table-stakes parity program is **complete**; the
-  next motion is the **Wave 5 differentiator program\*\* described below.
+exporters. **Round 74 closed the final gap — G-030 / F44 multi-entity
+plus multi-currency consolidation** (org_entities hierarchy + daily FX
+rate worker + line-level FX snapshots on invoices/expenses/pay-apps +
+v_consolidated_ar view + /console/finance/entities and
+/console/finance/consolidation surfaces). Per-gap DoD verification +
+credential provisioning runbook in [07](07-acceptance-criteria.md).
+The construction-PM table-stakes parity program is **complete**; the
+next motion is the **Wave 5 differentiator program** described below.
 
 ---
 

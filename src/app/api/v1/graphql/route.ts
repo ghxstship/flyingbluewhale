@@ -2,6 +2,7 @@ import { createSchema, createYoga } from "graphql-yoga";
 import { typeDefs } from "@/lib/graphql/schema";
 import { resolvers } from "@/lib/graphql/resolvers";
 import { buildGqlContext, type GqlContext } from "@/lib/graphql/context";
+import { apiError } from "@/lib/api";
 
 /**
  * GraphQL endpoint — Round 76 (G-031).
@@ -29,11 +30,19 @@ const yoga = createYoga<GqlContext>({
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  return yoga.handle(req, {} as never);
+  try {
+    return await yoga.handle(req, {} as never);
+  } catch (e) {
+    return apiError("internal", e instanceof Error ? e.message : "GraphQL error");
+  }
 }
 
 export async function POST(req: Request) {
-  return yoga.handle(req, {} as never);
+  try {
+    return await yoga.handle(req, {} as never);
+  } catch (e) {
+    return apiError("internal", e instanceof Error ? e.message : "GraphQL error");
+  }
 }
 
 export async function OPTIONS(req: Request) {

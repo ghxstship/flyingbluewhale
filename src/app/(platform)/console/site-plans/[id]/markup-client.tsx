@@ -141,6 +141,125 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
     refetchMarkups();
   }, [refetchMarkups]);
 
+  // ── Markup geometry helpers ──────────────────────────────────────────────
+  const kindGeometry = useCallback(
+    (live: NonNullable<typeof drawingRef.current>): Record<string, unknown> => {
+      const x = Math.min(live.start.x, live.current.x);
+      const y = Math.min(live.start.y, live.current.y);
+      const w = Math.abs(live.current.x - live.start.x);
+      const h = Math.abs(live.current.y - live.start.y);
+      switch (live.kind) {
+        case "rectangle":
+        case "ellipse":
+        case "cloud":
+        case "highlight":
+          return { x, y, w, h, page };
+        case "text":
+        case "callout":
+        case "measure_count":
+          return { x: live.start.x, y: live.start.y, page };
+        case "polyline":
+        case "polygon":
+        case "freehand":
+          return { points: live.points, page };
+        case "dimension":
+          return {
+            a: [live.start.x, live.start.y],
+            b: [live.current.x, live.current.y],
+            page,
+            length_ft: calibrationInchesPerFoot
+              ? Math.hypot(live.current.x - live.start.x, live.current.y - live.start.y) / (72 * calibrationInchesPerFoot)
+              : null,
+          };
+      }
+    },
+    [page, calibrationInchesPerFoot],
+  );
+
+  const drawMarkup = useCallback(
+    (ctx: CanvasRenderingContext2D, m: Markup) => {
+      ctx.save();
+      ctx.strokeStyle = m.color;
+      ctx.lineWidth = Number(m.stroke_width) / scale;
+      if (m.fill_color) {
+        ctx.fillStyle = m.fill_color;
+        ctx.globalAlpha = m.fill_opacity ?? 0.2;
+      }
+      const g = m.geometry as Record<string, number | number[] | string | undefined>;
+
+      if (m.kind === "rectangle" || m.kind === "highlight") {
+        const x = Number(g.x ?? 0),
+          y = Number(g.y ?? 0),
+          w = Number(g.w ?? 0),
+          h = Number(g.h ?? 0);
+        if (m.fill_color) ctx.fillRect(x, y, w, h);
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = m.color;
+        ctx.strokeRect(x, y, w, h);
+      } else if (m.kind === "ellipse") {
+        const x = Number(g.x ?? 0),
+          y = Number(g.y ?? 0),
+          w = Number(g.w ?? 0),
+          h = Number(g.h ?? 0);
+        ctx.beginPath();
+        ctx.ellipse(x + w / 2, y + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2);
+        if (m.fill_color) ctx.fill();
+        ctx.stroke();
+      } else if (m.kind === "cloud") {
+        const x = Number(g.x ?? 0),
+          y = Number(g.y ?? 0),
+          w = Number(g.w ?? 0),
+          h = Number(g.h ?? 0);
+        const r = Math.max(8, Math.min(w, h) / 10);
+        ctx.beginPath();
+        const drawArc = (cx: number, cy: number) => ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        for (let cx = x + r; cx < x + w; cx += r * 1.6) drawArc(cx, y);
+        for (let cy = y + r; cy < y + h; cy += r * 1.6) drawArc(x + w, cy);
+        for (let cx = x + w - r; cx > x; cx -= r * 1.6) drawArc(cx, y + h);
+        for (let cy = y + h - r; cy > y; cy -= r * 1.6) drawArc(x, cy);
+        ctx.stroke();
+      } else if (m.kind === "polyline" || m.kind === "polygon" || m.kind === "freehand") {
+        const pts = (g.points as unknown as number[][]) ?? [];
+        if (pts.length < 2) return ctx.restore();
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+        if (m.kind === "polygon") ctx.closePath();
+        ctx.stroke();
+      } else if (m.kind === "text" || m.kind === "callout") {
+        const x = Number(g.x ?? 0),
+          y = Number(g.y ?? 0);
+        ctx.fillStyle = m.color;
+        ctx.font = `${Number(m.text_size ?? 12) / scale}px sans-serif`;
+        ctx.fillText(m.text_content ?? "", x, y);
+      } else if (m.kind === "dimension") {
+        const a = (g.a as number[]) ?? [0, 0];
+        const b = (g.b as number[]) ?? [0, 0];
+        ctx.beginPath();
+        ctx.moveTo(a[0], a[1]);
+        ctx.lineTo(b[0], b[1]);
+        ctx.stroke();
+        const lengthFt = g.length_ft;
+        ctx.fillStyle = m.color;
+        ctx.font = `${10 / scale}px sans-serif`;
+        ctx.fillText(
+          typeof lengthFt === "number" ? `${lengthFt.toFixed(2)} ft` : "—",
+          (a[0] + b[0]) / 2,
+          (a[1] + b[1]) / 2,
+        );
+      } else if (m.kind === "measure_count") {
+        const x = Number(g.x ?? 0),
+          y = Number(g.y ?? 0);
+        ctx.beginPath();
+        ctx.arc(x, y, 6 / scale, 0, Math.PI * 2);
+        ctx.fillStyle = m.color;
+        ctx.fill();
+      }
+      ctx.restore();
+    },
+    [scale],
+  );
+
   // ── Overlay paint ────────────────────────────────────────────────────────
   const paintOverlay = useCallback(() => {
     const canvas = overlayCanvasRef.current;
@@ -170,7 +289,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
         text_size: 12,
       });
     }
-  }, [markups, page, scale, color, stroke, text]);
+  }, [markups, page, scale, color, stroke, text, drawMarkup, kindGeometry]);
 
   useEffect(() => {
     paintOverlay();
@@ -221,119 +340,6 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
       body: JSON.stringify(body),
     });
     if (res.ok) await refetchMarkups();
-  }
-
-  function kindGeometry(live: NonNullable<typeof drawingRef.current>): Record<string, unknown> {
-    const x = Math.min(live.start.x, live.current.x);
-    const y = Math.min(live.start.y, live.current.y);
-    const w = Math.abs(live.current.x - live.start.x);
-    const h = Math.abs(live.current.y - live.start.y);
-    switch (live.kind) {
-      case "rectangle":
-      case "ellipse":
-      case "cloud":
-      case "highlight":
-        return { x, y, w, h, page };
-      case "text":
-      case "callout":
-      case "measure_count":
-        return { x: live.start.x, y: live.start.y, page };
-      case "polyline":
-      case "polygon":
-      case "freehand":
-        return { points: live.points, page };
-      case "dimension":
-        return {
-          a: [live.start.x, live.start.y],
-          b: [live.current.x, live.current.y],
-          page,
-          length_ft: calibrationInchesPerFoot
-            ? Math.hypot(live.current.x - live.start.x, live.current.y - live.start.y) / (72 * calibrationInchesPerFoot)
-            : null,
-        };
-    }
-  }
-
-  function drawMarkup(ctx: CanvasRenderingContext2D, m: Markup) {
-    ctx.save();
-    ctx.strokeStyle = m.color;
-    ctx.lineWidth = Number(m.stroke_width) / scale;
-    if (m.fill_color) {
-      ctx.fillStyle = m.fill_color;
-      ctx.globalAlpha = m.fill_opacity ?? 0.2;
-    }
-    const g = m.geometry as Record<string, number | number[] | string | undefined>;
-
-    if (m.kind === "rectangle" || m.kind === "highlight") {
-      const x = Number(g.x ?? 0),
-        y = Number(g.y ?? 0),
-        w = Number(g.w ?? 0),
-        h = Number(g.h ?? 0);
-      if (m.fill_color) ctx.fillRect(x, y, w, h);
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = m.color;
-      ctx.strokeRect(x, y, w, h);
-    } else if (m.kind === "ellipse") {
-      const x = Number(g.x ?? 0),
-        y = Number(g.y ?? 0),
-        w = Number(g.w ?? 0),
-        h = Number(g.h ?? 0);
-      ctx.beginPath();
-      ctx.ellipse(x + w / 2, y + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2);
-      if (m.fill_color) ctx.fill();
-      ctx.stroke();
-    } else if (m.kind === "cloud") {
-      // Wavy rectangle — classic revision cloud.
-      const x = Number(g.x ?? 0),
-        y = Number(g.y ?? 0),
-        w = Number(g.w ?? 0),
-        h = Number(g.h ?? 0);
-      const r = Math.max(8, Math.min(w, h) / 10);
-      ctx.beginPath();
-      const drawArc = (cx: number, cy: number) => ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      for (let cx = x + r; cx < x + w; cx += r * 1.6) drawArc(cx, y);
-      for (let cy = y + r; cy < y + h; cy += r * 1.6) drawArc(x + w, cy);
-      for (let cx = x + w - r; cx > x; cx -= r * 1.6) drawArc(cx, y + h);
-      for (let cy = y + h - r; cy > y; cy -= r * 1.6) drawArc(x, cy);
-      ctx.stroke();
-    } else if (m.kind === "polyline" || m.kind === "polygon" || m.kind === "freehand") {
-      const pts = (g.points as unknown as number[][]) ?? [];
-      if (pts.length < 2) return ctx.restore();
-      ctx.beginPath();
-      ctx.moveTo(pts[0][0], pts[0][1]);
-      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
-      if (m.kind === "polygon") ctx.closePath();
-      ctx.stroke();
-    } else if (m.kind === "text" || m.kind === "callout") {
-      const x = Number(g.x ?? 0),
-        y = Number(g.y ?? 0);
-      ctx.fillStyle = m.color;
-      ctx.font = `${Number(m.text_size ?? 12) / scale}px sans-serif`;
-      ctx.fillText(m.text_content ?? "", x, y);
-    } else if (m.kind === "dimension") {
-      const a = (g.a as number[]) ?? [0, 0];
-      const b = (g.b as number[]) ?? [0, 0];
-      ctx.beginPath();
-      ctx.moveTo(a[0], a[1]);
-      ctx.lineTo(b[0], b[1]);
-      ctx.stroke();
-      const lengthFt = g.length_ft;
-      ctx.fillStyle = m.color;
-      ctx.font = `${10 / scale}px sans-serif`;
-      ctx.fillText(
-        typeof lengthFt === "number" ? `${lengthFt.toFixed(2)} ft` : "—",
-        (a[0] + b[0]) / 2,
-        (a[1] + b[1]) / 2,
-      );
-    } else if (m.kind === "measure_count") {
-      const x = Number(g.x ?? 0),
-        y = Number(g.y ?? 0);
-      ctx.beginPath();
-      ctx.arc(x, y, 6 / scale, 0, Math.PI * 2);
-      ctx.fillStyle = m.color;
-      ctx.fill();
-    }
-    ctx.restore();
   }
 
   return (

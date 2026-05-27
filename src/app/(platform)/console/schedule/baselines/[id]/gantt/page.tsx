@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -84,9 +85,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {a.length > 0 ? (
           <GanttClient activities={a} dependencies={d} />
         ) : (
-          <div className="surface p-6 text-sm">
-            No activities yet — import a P6/MSP/Asta file or add activities to populate the schedule.
-          </div>
+          <EmptyState
+            title="No activities yet"
+            description="Import a P6 XER, P6 XML, MSP XML, or Asta file to populate the schedule, or add activities manually."
+          />
         )}
       </div>
     </>

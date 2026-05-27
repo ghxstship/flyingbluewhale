@@ -104,6 +104,9 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     // Advancing assignment detail renders inline empties inside the
     // Comments + Activity sub-cards (orphan-dataset exposure, 2026-05).
     "src/app/(platform)/console/projects/[projectId]/advancing/assignments/[deliverableId]/page.tsx",
+    // Server action file — "No activities found in the import file" is an
+    // error-return string literal, not JSX empty-state copy.
+    "src/app/(platform)/console/schedule/baselines/[id]/actions.ts",
     "src/app/(platform)/console/production/ros/page.tsx",
     "src/app/(platform)/console/services/requests/[requestId]/page.tsx",
     "src/app/(platform)/console/settings/billing/page.tsx",

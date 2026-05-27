@@ -107,6 +107,13 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(platform)/console/production/ros/page.tsx",
     "src/app/(platform)/console/services/requests/[requestId]/page.tsx",
     "src/app/(platform)/console/settings/billing/page.tsx",
+    // Drawings + transmittals detail pages render 1-line section empties
+    // ("No versions yet", "No items yet", "No recipients yet") inside
+    // dense sub-section lists. Schedule baselines actions.ts returns
+    // an error string from a server action (not a UI render).
+    "src/app/(platform)/console/drawings/[id]/page.tsx",
+    "src/app/(platform)/console/transmittals/[id]/page.tsx",
+    "src/app/(platform)/console/schedule/baselines/[id]/actions.ts",
     "src/app/(platform)/console/settings/governance/page.tsx",
     "src/app/(platform)/console/settings/imports/page.tsx",
     "src/app/(platform)/console/site-plans/[id]/page.tsx",

@@ -87,9 +87,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         title={baseline.name}
         subtitle={`${totalCount} activities · ${criticalCount} critical · ${totalDuration.toFixed(1)} cumulative days`}
         action={
-          <Button href="/console/schedule/baselines" size="sm" variant="ghost">
-            ← All Baselines
-          </Button>
+          <div className="flex items-center gap-2">
+            {activities.length > 0 && (
+              <a
+                href={`/console/schedule/baselines/${baseline.id}/gantt`}
+                className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              >
+                Open Gantt
+              </a>
+            )}
+            <Button href="/console/schedule/baselines" size="sm" variant="ghost">
+              ← All Baselines
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-6">

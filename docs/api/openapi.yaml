@@ -649,3 +649,63 @@ paths:
     get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
   /api/v1/zapier/triggers/assignment-scans:
     get: { summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind). }
+
+  /api/v1/ai/embed-source:
+    post: { summary: Ingest a knowledge-base source into the org's vector store for AI-assisted retrieval. }
+
+  /api/v1/bim/{modelId}/download:
+    get: { summary: Download a BIM model file (IFC/RVT/NWC) as a signed URL. }
+
+  /api/v1/daily-logs/{id}/refresh-weather:
+    post: { summary: Re-fetch and patch weather data on an existing daily log from NWS/OWM. }
+
+  /api/v1/drawings/{siteplanId}/markups:
+    get:  { summary: List all markups on a site plan page. }
+    post: { summary: Create a new markup on a site plan page. }
+
+  /api/v1/drawings/markups/{id}:
+    patch:  { summary: Update geometry, color, or text of an existing markup. }
+    delete: { summary: Delete a markup. }
+
+  /api/v1/graphql:
+    get:  { summary: GraphQL introspection (GET) — returns the org-scoped schema. }
+    post: { summary: Execute a GraphQL query or mutation against the org-scoped schema. }
+
+  /api/v1/integrations/{system}/sync:
+    post: { summary: Trigger a full sync for the named integration (procore, sage, etc.). }
+
+  /api/v1/integrations/fx/refresh:
+    post: { summary: Force-refresh FX rates for the org's active currencies. }
+
+  /api/v1/integrations/qb-online/callback:
+    get: { summary: QuickBooks Online OAuth2 callback — exchanges code for tokens and completes the connection flow. }
+
+  /api/v1/integrations/qb-online/oauth-start:
+    get: { summary: Begin the QuickBooks Online OAuth2 flow — redirects to Intuit's authorization URL. }
+
+  /api/v1/integrations/qb-online/push:
+    post: { summary: Push a single entity (invoice, vendor, etc.) to the connected QuickBooks Online company. }
+
+  /api/v1/integrations/qb-online/sync:
+    post: { summary: Pull updates from QuickBooks Online into the org's records. }
+
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Render a pay application (AIA G702/G703 format) as a PDF and return it inline. }
+
+  /api/v1/payroll-runs/{runId}/pdf:
+    get: { summary: Render a payroll run summary as a PDF and return it inline. }
+
+  /api/v1/payroll-runs/{runId}/state-xml:
+    get: { summary: Export a payroll run as state-agency XML (ICESA/EFW2 format). }
+
+  /api/v1/site-plans/{id}/pdf:
+    get: { summary: Download the original PDF for a site plan (proxied through signed storage URL). }
+
+  /api/v1/webhooks/docusign:
+    post: { summary: DocuSign Connect webhook receiver — verifies HMAC, updates envelope + signer state. }
+
+  /api/v1/webhooks/ses-inbound:
+    post: { summary: Amazon SES inbound-email webhook — routes parsed emails to the appropriate org inbox. }
+
+  /api/v1/wip/snapshot-pdf:
+    get: { summary: Render the current WIP (Work-In-Progress) schedule snapshot as a PDF. }

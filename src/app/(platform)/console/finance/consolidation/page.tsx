@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -186,13 +187,16 @@ export default async function Page() {
             </Link>
           ))}
           {bucketList.length === 0 ? (
-            <div className="surface p-6 text-sm text-[var(--text-secondary)]">
-              No entities yet. Create one at{" "}
-              <Link href="/console/finance/entities/new" className="underline">
-                /console/finance/entities/new
-              </Link>
-              .
-            </div>
+            <EmptyState
+              size="compact"
+              title="No entities yet"
+              description="Create one at /console/finance/entities/new to get started."
+              action={
+                <Link href="/console/finance/entities/new" className="btn btn-primary text-xs press-scale">
+                  New entity
+                </Link>
+              }
+            />
           ) : null}
         </div>
       </div>

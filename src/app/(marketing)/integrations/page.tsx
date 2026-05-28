@@ -83,10 +83,7 @@ export default function IntegrationsIndex() {
             >
               Partner directory
             </Link>
-            <Link
-              href="/integrations/submit"
-              className="rounded-md bg-[var(--org-primary)] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
-            >
+            <Link href="/integrations/submit" className="btn btn-primary text-sm press-scale">
               Submit a proposal
             </Link>
           </div>

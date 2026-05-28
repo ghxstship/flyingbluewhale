@@ -76,11 +76,12 @@ export async function createProject(input: {
 export async function updateProject(orgId: string, projectId: string, patch: Partial<Project>): Promise<Project> {
   const supabase = await createClient();
   // The generated `Update` type narrows out `null` for nullable enums (DB
-  // gen artifact); the schema accepts null, so widen here.
+  // gen artifact); the actual DB schema accepts null. Tracked for fix on next
+  // `npm run gen:types` pass.
   const { data, error } = await supabase
     .from("projects")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .update(patch as any)
+    // @ts-expect-error -- DB gen artifact: Update type excludes null for nullable enum columns
+    .update(patch)
     .eq("org_id", orgId)
     .eq("id", projectId)
     .select()

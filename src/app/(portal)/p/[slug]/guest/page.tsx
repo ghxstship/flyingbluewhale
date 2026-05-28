@@ -14,7 +14,7 @@ export default async function GuestHome({ params }: { params: Promise<{ slug: st
   if (!project) notFound();
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "guest")} title="Guest" />
+      <PortalRail group={portalNav(slug, "guest")} />
       <div className="flex-1">
         <ModuleHeader eyebrow={project.name} title="Guest Portal" subtitle="Tickets, schedule, and logistics" />
         <div className="page-content">

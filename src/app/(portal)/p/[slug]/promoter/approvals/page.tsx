@@ -55,7 +55,7 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
 
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "promoter")} title="Promoter" />
+      <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">Approvals</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">

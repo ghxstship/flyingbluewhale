@@ -161,7 +161,10 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       );
     } else if (scope === "portal" && portalSlug) {
       for (const persona of ["client", "vendor", "artist", "sponsor", "guest", "crew"] as const) {
-        const items = portalNav(portalSlug, persona);
+        // ADR-0005: portalNav now returns a NavGroup with sections —
+        // flatten the sections back to a flat command list for ⌘K.
+        const group = portalNav(portalSlug, persona);
+        const items = group.sections?.flatMap((s) => s.items) ?? group.items;
         for (const item of items) {
           list.push({
             id: `portal-${persona}-${item.href}`,

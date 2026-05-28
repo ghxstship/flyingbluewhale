@@ -14,7 +14,7 @@ export default async function CrewHome({ params }: { params: Promise<{ slug: str
   if (!project) notFound();
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "crew")} title="Crew" />
+      <PortalRail group={portalNav(slug, "crew")} />
       <div className="flex-1">
         <ModuleHeader eyebrow={project.name} title="Crew Portal" subtitle="Call sheet, time, advances" />
         <div className="page-content">

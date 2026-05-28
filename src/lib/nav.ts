@@ -154,11 +154,14 @@ export const platformNav: NavGroup[] = [
   {
     // Workspace chrome — not an XPMS class. Single "you are here" tile
     // at the top of the sidebar, separate from the 10 class groups.
+    // ADR-0005: dedupe of the old Inbox/Messages twins — `Notifications`
+    // is the personal alerts feed, `Threads` is the org-internal DM/chat
+    // history. Two distinct surfaces, two distinct labels.
     label: "Dashboard",
     items: [
       { label: "Overview", href: "/console", icon: "LayoutDashboard" },
-      { label: "Inbox", href: "/me/notifications/inbox", icon: "Inbox" },
-      { label: "Messages", href: "/console/inbox", icon: "MessageSquare" },
+      { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox" },
+      { label: "Threads", href: "/console/inbox", icon: "MessageSquare" },
     ],
   },
   {
@@ -181,8 +184,17 @@ export const platformNav: NavGroup[] = [
           { label: "Reviews", href: "/console/programs/reviews", icon: "ClipboardCheck" },
         ],
       },
+      // ADR-0005: Finance rebalanced into 4 ledger sub-sections — none
+      // exceeds Miller's 5-9 band. Receivables / Payables / Planning /
+      // Time & Payroll. The previous flat 14-leaf shape forced a
+      // scan-then-click for every finance task; sub-sections restore
+      // recognition. Section labels render as Linear-style dividers.
+      // Since NavGroup carries one `sections` array, Finance is split
+      // across multiple NavGroup-shaped sections inside the EXECUTIVE
+      // group: each becomes its own NavSection with a Finance / prefix
+      // so the section divider reads as a finance sub-ledger.
       {
-        label: "Finance",
+        label: "Finance / Receivables",
         items: [
           { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
           { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
@@ -190,19 +202,34 @@ export const platformNav: NavGroup[] = [
           { label: "Lien Waivers", href: "/console/finance/lien-waivers", icon: "Stamp" },
           // E-Sign envelopes (DocuSign / Adobe Sign / HelloSign / PandaDoc) — round 46.
           { label: "E-Sign Envelopes", href: "/console/envelopes", icon: "ClipboardSignature" },
-          { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
-          { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
-          { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
-          { label: "Time", href: "/console/finance/time", icon: "Clock" },
-          // Certified payroll — Davis-Bacon, CA DIR, NY PWA, WA L&I (round 45).
-          { label: "Certified Payroll", href: "/console/finance/payroll", icon: "FileSignature" },
           // AP invoice OCR via Anthropic Vision (round 58).
           { label: "AP Invoice OCR", href: "/console/finance/ap-ocr", icon: "Sparkles" },
-          { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
-          { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+        ],
+      },
+      {
+        label: "Finance / Payables",
+        items: [
+          { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
+          { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
+        ],
+      },
+      {
+        label: "Finance / Planning",
+        items: [
+          { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
           // WIP + EAC forecasts (round 41).
           { label: "WIP", href: "/console/finance/wip", icon: "FileSpreadsheet" },
           { label: "Forecasts (EAC)", href: "/console/finance/forecasts", icon: "TrendingUp" },
+          { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
+          { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+        ],
+      },
+      {
+        label: "Finance / Time & Payroll",
+        items: [
+          { label: "Time", href: "/console/finance/time", icon: "Clock" },
+          // Certified payroll — Davis-Bacon, CA DIR, NY PWA, WA L&I (round 45).
+          { label: "Certified Payroll", href: "/console/finance/payroll", icon: "FileSignature" },
           { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
         ],
       },
@@ -239,6 +266,9 @@ export const platformNav: NavGroup[] = [
     items: [
       { label: "Proposals", href: "/console/proposals", icon: "FileText" },
       { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
+      // ADR-0005 hoist: project-templates library was an orphan top-
+      // level prefix; it's a creative authoring artifact, belongs here.
+      { label: "Project Templates", href: "/console/templates", icon: "Files" },
       // Site Plans is a CAD-rooted creative artifact — primary class is
       // CREATIVE, secondary BUILD (where it materializes).
       { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
@@ -258,13 +288,13 @@ export const platformNav: NavGroup[] = [
   {
     // 2 TALENT — Anyone in front of the audience: bookings, programming,
     // curation, talent ops, agency, riders. Show economy.
+    //
+    // ADR-0005: Bookings collapsed from 5 sibling leaves to one entry —
+    // /console/bookings is a tabbed landing exposing Deals / Holds /
+    // Calendar / Settlements. URLs preserved for deep links.
     label: "2 TALENT",
     items: [
       { label: "Bookings", href: "/console/bookings", icon: "TrendingUp" },
-      { label: "Deal Tracker", href: "/console/bookings/deals", icon: "Gavel" },
-      { label: "Holds", href: "/console/bookings/holds", icon: "Lock" },
-      { label: "Booking Calendar", href: "/console/bookings/calendar", icon: "CalendarDays" },
-      { label: "Settlements", href: "/console/bookings/settlements", icon: "Coins" },
       { label: "Tours", href: "/console/agency/tours", icon: "Route" },
       { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
       { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
@@ -274,6 +304,10 @@ export const platformNav: NavGroup[] = [
   {
     // 3 MARKETING — Audience acquisition + revenue partnerships.
     // Sponsorship sales, CRM, public marketplace surfaces.
+    //
+    // ADR-0005: Marketplace collapsed from 3 siblings (Marketplace + Job
+    // Postings + Open Calls) to one entry — /console/marketplace is the
+    // hub that tabs into postings/calls/talent/offers/reviews.
     label: "3 MARKETING",
     items: [
       { label: "Leads", href: "/console/leads", icon: "UserPlus" },
@@ -283,8 +317,6 @@ export const platformNav: NavGroup[] = [
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
-      { label: "Job Postings", href: "/console/marketplace/postings", icon: "Megaphone" },
-      { label: "Open Calls", href: "/console/marketplace/calls", icon: "Mic2" },
     ],
   },
   {
@@ -298,6 +330,9 @@ export const platformNav: NavGroup[] = [
       { label: "Punch List", href: "/console/punch", icon: "ClipboardList" },
       // Reality captures + warranty coverage (round 44).
       { label: "Reality Captures", href: "/console/captures", icon: "Telescope" },
+      // ADR-0005 hoist: site photo log was an orphan; pairs with
+      // captures (drone/360) as the visual progress record for BUILD.
+      { label: "Photo Log", href: "/console/photos", icon: "Telescope" },
       { label: "Warranties", href: "/console/warranties", icon: "ShieldCheck" },
     ],
   },
@@ -323,22 +358,43 @@ export const platformNav: NavGroup[] = [
     label: "6 OPERATIONS",
     items: [],
     sections: [
+      // ADR-0005: Coordination split into Schedule, Execution, and
+      // Service Desk sub-sections; orphan prefixes that already had
+      // real pages but no nav entry (/operations, /services/requests,
+      // /meetings, /forms, /action-items, /ops/toc) are now surfaced
+      // where operators expect to find them.
       {
-        label: "Coordination",
+        label: "Coordination / Schedule",
         items: [
           { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
           // Baselines = CPM Gantt data spine w/ critical path + float (round 38).
           { label: "Schedule Baselines", href: "/console/schedule/baselines", icon: "GitBranch" },
           { label: "Look-Ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
+          { label: "Events", href: "/console/events", icon: "CalendarDays" },
+          { label: "Meetings", href: "/console/meetings", icon: "CalendarDays" },
+        ],
+      },
+      {
+        label: "Coordination / Execution",
+        items: [
+          { label: "Operations Hub", href: "/console/operations", icon: "Command" },
           { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
+          { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
+          { label: "Action Items", href: "/console/action-items", icon: "CheckSquare" },
+          { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
+          { label: "Forms", href: "/console/forms", icon: "ClipboardList" },
+        ],
+      },
+      {
+        label: "Coordination / Correspondence",
+        items: [
           // Transmittals — audit-grade dispatch envelope w/ read receipts (round 37).
           { label: "Transmittals", href: "/console/transmittals", icon: "Send" },
           // Email-in inbox — per-project SES capture (round 50).
           { label: "Email Inbox", href: "/console/email-inbox", icon: "Inbox" },
-          { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
-          { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
-          { label: "Events", href: "/console/events", icon: "CalendarDays" },
           { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
+          { label: "Service Desk", href: "/console/services/requests", icon: "ConciergeBell" },
+          { label: "TOC (ITIL)", href: "/console/ops/toc", icon: "Network" },
         ],
       },
       {
@@ -384,13 +440,22 @@ export const platformNav: NavGroup[] = [
           { label: "Disposition", href: "/console/logistics/disposition", icon: "PackageOpen" },
         ],
       },
+      // ADR-0005: Safety split into Operational (live-event response) and
+      // Compliance (audit-grade record-keeping). Operators in a Show-phase
+      // shift only see the four live-response leaves at a glance; the
+      // OSHA/playbook compliance set stays available behind its own divider.
       {
-        label: "Safety",
+        label: "Safety / Operational",
         items: [
           { label: "Incidents", href: "/console/safety/incidents", icon: "Siren" },
           { label: "Crisis", href: "/console/safety/crisis", icon: "Flame" },
           { label: "Medical", href: "/console/safety/medical", icon: "Stethoscope" },
           { label: "Safeguarding", href: "/console/safety/safeguarding", icon: "HeartHandshake" },
+        ],
+      },
+      {
+        label: "Safety / Compliance",
+        items: [
           { label: "Inspections", href: "/console/inspections", icon: "Search" },
           { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
           { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
@@ -429,6 +494,9 @@ export const platformNav: NavGroup[] = [
       { label: "Assistant", href: "/console/assistant", icon: "Sparkles" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
+      // ADR-0005 hoist: shareable dashboards are a TECHNOLOGY surface
+      // (the saved-view registry), not an EXECUTIVE one.
+      { label: "Dashboards", href: "/console/dashboards", icon: "ChartBar" },
       // The XPMS Catalog (atom registry) is the canonical TECHNOLOGY-
       // class surface — a typed, searchable atom browse.
       { label: "Catalog", href: "/console/xpms", icon: "Spline" },
@@ -475,6 +543,10 @@ export const settingsNav: NavGroup[] = [
       { label: "Billing", href: "/console/settings/billing" },
       { label: "Exports", href: "/console/settings/exports" },
       { label: "Imports", href: "/console/settings/imports" },
+      // ADR-0005 hoist: the project-level Import Jobs queue surfaced
+      // as an orphan top-level prefix; it shares its mental model
+      // with Exports, so it lands in the same admin sub-section.
+      { label: "Import Jobs", href: "/console/import" },
     ],
   },
   {
@@ -592,7 +664,68 @@ export function dashboardTemplateForPersona(p: PortalPersona): XpmsDashboardTemp
   return XPMS_DASHBOARD_TEMPLATES[classOfPersona(p)];
 }
 
-export function portalNav(slug: string, persona: PortalPersona) {
+/**
+ * ADR-0005 — super-persona collapse. 15 sub-personas roll up to 4
+ * super-personas, each aligned to its primary XPMS class. The rail
+ * shows the super-persona label as its title; the sub-persona name
+ * becomes a section divider inside the rail (so the operator still
+ * sees "Artist" vs "Athlete" semantics, but the cognitive primary
+ * unit is one of 4 super-personas).
+ *
+ * Sub-persona URL paths (/p/[slug]/<sub-persona>/...) are preserved.
+ */
+export type SuperPersona = "buyer" | "talent" | "workforce" | "audience";
+
+export function superPersonaOf(p: PortalPersona): SuperPersona {
+  switch (p) {
+    case "client":
+    case "sponsor":
+    case "promoter":
+    case "stakeholder":
+      return "buyer";
+    case "artist":
+    case "athlete":
+    case "delegation":
+    case "vip":
+    case "hospitality":
+    case "media":
+    case "producer":
+      return "talent";
+    case "vendor":
+    case "crew":
+    case "volunteer":
+      return "workforce";
+    case "guest":
+      return "audience";
+  }
+}
+
+export const SUPER_PERSONA_LABEL: Record<SuperPersona, string> = {
+  buyer: "Buyer",
+  talent: "Talent",
+  workforce: "Workforce",
+  audience: "Audience",
+};
+
+const PERSONA_TITLE: Record<PortalPersona, string> = {
+  promoter: "Promoter",
+  producer: "Producer",
+  stakeholder: "Stakeholder",
+  artist: "Artist",
+  athlete: "Athlete",
+  delegation: "Delegation",
+  client: "Client",
+  sponsor: "Sponsor",
+  media: "Media",
+  vendor: "Vendor",
+  crew: "Crew",
+  volunteer: "Volunteer",
+  hospitality: "Hospitality",
+  guest: "Guest",
+  vip: "VIP",
+};
+
+export function portalNav(slug: string, persona: PortalPersona): NavGroup {
   const base = `/p/${slug}/${persona}`;
   const guide: NavItem = { label: "Guide", href: `/p/${slug}/guide` };
   const privacy: NavItem = { label: "Privacy", href: `${base}/privacy` };
@@ -604,18 +737,22 @@ export function portalNav(slug: string, persona: PortalPersona) {
   const inbox: NavItem = { label: "Inbox", href: `/p/${slug}/inbox` };
   const tasks: NavItem = { label: "Tasks", href: `/p/${slug}/tasks` };
   const messages: NavItem = { label: "Messages", href: `/p/${slug}/messages` };
-  const map: Record<PortalPersona, NavItem[]> = {
-    // EXECUTIVE (0) — board / co-pro / fiscal counterparts. NEW
-    // 2026-05-10. The three slugs differ in default landing tile but
-    // share the same EXECUTIVE dashboard template; sub-routes mirror
-    // what each role most commonly looks at.
+  // ADR-0005: workspace items (the shared 6) lift into their own section
+  // so the persona-specific section stays inside Miller's band. Every
+  // persona rail used to start with these 6, eating the operator's
+  // recognition budget before any persona-specific work appeared.
+  const overview: NavItem = { label: "Overview", href: base };
+  const workspaceSection: NavSection = {
+    label: "Workspace",
+    items: [overview, guide, updates, inbox, tasks, messages],
+  };
+  // Only persona-specific items here — the shared 6 (Overview, Guide,
+  // Updates, Inbox, Tasks, Messages) live in `workspaceSection` above
+  // and render as a separate section in the rail. Privacy is included
+  // where it's persona-relevant (most external personas).
+  const personaSubItems: Record<PortalPersona, NavItem[]> = {
+    // EXECUTIVE (0) — board / co-pro / fiscal counterparts.
     promoter: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Co-Pro Splits", href: `${base}/co-pro` },
       { label: "Settlements", href: `${base}/settlements` },
       { label: "Tour P&L", href: `${base}/tour-pnl` },
@@ -624,12 +761,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
       privacy,
     ],
     producer: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Portfolio", href: `${base}/portfolio` },
       { label: "Tracker", href: `${base}/tracker` },
       { label: "P&L", href: `${base}/pnl` },
@@ -640,12 +771,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
       privacy,
     ],
     stakeholder: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Portfolio", href: `${base}/portfolio` },
       { label: "P&L", href: `${base}/pnl` },
       { label: "Governance", href: `${base}/governance` },
@@ -655,12 +780,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
     ],
     // TALENT (2) — in front of the audience.
     artist: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Advancing", href: `${base}/advancing` },
       { label: "Catering", href: `${base}/catering` },
       { label: "Venue", href: `${base}/venue` },
@@ -668,12 +787,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
       { label: "Travel", href: `${base}/travel` },
     ],
     athlete: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Requests", href: `${base}/requests` },
       { label: "Training", href: `${base}/training` },
       { label: "Safeguarding", href: `${base}/safeguarding` },
@@ -681,12 +794,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
       privacy,
     ],
     delegation: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Entries", href: `${base}/entries` },
       { label: "Rate Card", href: `${base}/ratecard` },
       { label: "Bookings", href: `${base}/bookings` },
@@ -699,26 +806,13 @@ export function portalNav(slug: string, persona: PortalPersona) {
     ],
     // MARKETING (3) — revenue partners + press.
     client: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Proposals", href: `${base}/proposals` },
       { label: "Deliverables", href: `${base}/deliverables` },
       { label: "Invoices", href: `${base}/invoices` },
-      { label: "Messages", href: `${base}/messages` },
       { label: "Files", href: `${base}/files` },
       privacy,
     ],
     sponsor: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Entitlements", href: `${base}/entitlements` },
       { label: "Activations", href: `${base}/activations` },
       { label: "Assets", href: `${base}/assets` },
@@ -726,12 +820,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
       privacy,
     ],
     media: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Services", href: `${base}/services` },
       { label: "Accommodation", href: `${base}/accommodation` },
       { label: "Transport", href: `${base}/transport` },
@@ -740,12 +828,6 @@ export function portalNav(slug: string, persona: PortalPersona) {
     ],
     // OPERATIONS (6) — labor + fulfillment.
     vendor: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Submissions", href: `${base}/submissions` },
       { label: "Equipment Pull List", href: `${base}/equipment-pull-list` },
       { label: "Purchase Orders", href: `${base}/purchase-orders` },
@@ -755,63 +837,41 @@ export function portalNav(slug: string, persona: PortalPersona) {
       privacy,
     ],
     crew: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Call Sheet", href: `${base}/call-sheet` },
       { label: "Time", href: `${base}/time` },
     ],
     volunteer: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Application", href: `${base}/application` },
       { label: "Training", href: `${base}/training` },
       { label: "Schedule", href: `${base}/schedule` },
       { label: "Uniform", href: `${base}/uniform` },
     ],
     hospitality: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Guests", href: `${base}/guests` },
       { label: "Itinerary", href: `${base}/itinerary` },
     ],
     // EXPERIENCE (7) — audience-facing.
     guest: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Tickets", href: `${base}/tickets` },
       { label: "Schedule", href: `${base}/schedule` },
       { label: "Logistics", href: `${base}/logistics` },
       privacy,
     ],
     vip: [
-      { label: "Overview", href: base },
-      guide,
-      updates,
-      inbox,
-      tasks,
-      messages,
       { label: "Transport", href: `${base}/transport` },
       { label: "Accommodation", href: `${base}/accommodation` },
       { label: "Itinerary", href: `${base}/itinerary` },
     ],
   };
-  return map[persona];
+  const personaSection: NavSection = {
+    label: PERSONA_TITLE[persona],
+    items: personaSubItems[persona],
+  };
+  return {
+    label: SUPER_PERSONA_LABEL[superPersonaOf(persona)],
+    items: [],
+    sections: [workspaceSection, personaSection],
+  };
 }
 
 export const mobileTabs: NavItem[] = [
@@ -826,13 +886,21 @@ export const mobileTabs: NavItem[] = [
  * Secondary mobile surfaces. Reachable from the Tools tab on /m and
  * from the mobile cmd-K palette. Connecteam-parity additions live in
  * the second cluster.
+ *
+ * ADR-0005 cleanup: the three near-twins (/m/clock, /m/checkin,
+ * /m/check-in) do different things — /m/clock is the punch surface,
+ * /m/checkin is the meal-credit read view, /m/check-in is the ticket
+ * scanner. Labels rewritten so operators can tell them apart at a
+ * glance without having to remember which dash spelling does what.
  */
 export const mobileSurfaces: NavItem[] = [
   // Field-ops surfaces (existing).
   { label: "Gate Scan", href: "/m/gate" },
   { label: "Wallet", href: "/m/wallet" },
   { label: "Shift", href: "/m/shift" },
-  { label: "Check-in", href: "/m/clock" },
+  { label: "Clock In", href: "/m/clock" },
+  { label: "Meal Credit", href: "/m/checkin" },
+  { label: "Ticket Scan", href: "/m/check-in" },
   { label: "Incident", href: "/m/incidents" },
   { label: "Medic", href: "/m/medic" },
   { label: "Safeguarding", href: "/m/safeguarding" },
@@ -863,3 +931,43 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Advancing", href: "/m/advances" },
   { label: "Tracker", href: "/m/tracker" },
 ];
+
+/**
+ * ADR-0005 — phase-aware ordering of `mobileSurfaces`. Field operators
+ * in different production phases need different tools-first. The
+ * canonical XPMS phase comes from `projects.xpms_phase`; pass it in
+ * and the surfaces most likely to be used in that phase float to the
+ * top, others keep their existing order beneath them.
+ *
+ * Pass `undefined` (no active project / unscoped) to get the default
+ * static order from `mobileSurfaces`. The same export remains the
+ * source of truth for the full surface list.
+ */
+const PHASE_PRIORITY_HREFS: Record<string, string[]> = {
+  discovery: ["/m/directory", "/m/feed", "/m/inbox"],
+  concept: ["/m/feed", "/m/inbox", "/m/directory"],
+  development: ["/m/feed", "/m/inbox", "/m/learning", "/m/docs"],
+  advance: ["/m/onboarding", "/m/advances", "/m/learning", "/m/docs", "/m/directory"],
+  build: ["/m/punch", "/m/daily-log", "/m/driver", "/m/handover", "/m/coc", "/m/wms"],
+  show: ["/m/gate", "/m/incidents", "/m/ros", "/m/medic", "/m/clock", "/m/alerts"],
+  strike: ["/m/punch", "/m/daily-log", "/m/handover", "/m/coc", "/m/wms"],
+  wrap: ["/m/time-off", "/m/kudos", "/m/onboarding", "/m/feed", "/m/surveys"],
+};
+
+export function mobileSurfacesForPhase(phase?: string): NavItem[] {
+  if (!phase) return mobileSurfaces;
+  const priority = PHASE_PRIORITY_HREFS[phase];
+  if (!priority) return mobileSurfaces;
+  const byHref = new Map(mobileSurfaces.map((i) => [i.href, i] as const));
+  const head: NavItem[] = [];
+  const seen = new Set<string>();
+  for (const href of priority) {
+    const item = byHref.get(href);
+    if (item) {
+      head.push(item);
+      seen.add(href);
+    }
+  }
+  const tail = mobileSurfaces.filter((i) => !seen.has(i.href));
+  return [...head, ...tail];
+}

@@ -130,7 +130,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="flex">
-      <PortalRail items={portalNav(slug, "crew")} title="Portal" />
+      <PortalRail group={portalNav(slug, "crew")} title="Portal" />
       <div className="flex-1">
         <div className="page-content">
           <h1 className="text-2xl font-semibold">My Tasks</h1>

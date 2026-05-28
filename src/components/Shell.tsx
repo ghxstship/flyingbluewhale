@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import type { NavItem } from "@/lib/nav";
+import type { NavGroup, NavItem, NavSection } from "@/lib/nav";
 import { MobileTabBarClient } from "./MobileTabBarClient";
 import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
 import { RecordTabsSlot } from "@/components/ui/RecordTabsContext";
@@ -9,31 +9,65 @@ import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 
 export { PlatformSidebar } from "./PlatformSidebar";
 
-export function PortalRail({ items, title, currentPath }: { items: NavItem[]; title: string; currentPath?: string }) {
+/**
+ * Portal rail — accepts ADR-0005 super-persona-shaped `NavGroup` and
+ * renders sectioned (Workspace + persona) when sections are present;
+ * falls back to flat `items` for any caller passing the legacy shape.
+ *
+ * `title` is optional and overrides `group.label` when supplied — used
+ * by the shared `/p/[slug]/{tasks,messages,inbox,announcements}` pages
+ * that need a generic "Portal" label rather than a super-persona name.
+ */
+export function PortalRail({
+  group,
+  items,
+  title,
+  currentPath,
+}: {
+  group?: NavGroup;
+  items?: NavItem[];
+  title?: string;
+  currentPath?: string;
+}) {
+  const sections: NavSection[] = group?.sections?.length
+    ? group.sections
+    : group
+      ? [{ label: group.label, items: group.items }]
+      : [{ label: title ?? "", items: items ?? [] }];
+  const headerTitle = title ?? group?.label ?? "";
   return (
     <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
       <div className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-[var(--org-primary)]">
         GVTEWAY
       </div>
-      <div className="nav-label">{title}</div>
-      <ul className="mt-0.5 space-y-0.5">
-        {items.map((i) => {
-          // Unified active-route rule so /p/{slug}/client/invoices/{id} still
-          // marks `Invoices` active. IA spec §7 anti-pattern #2.
-          const { isActive: active } = matchRoute(currentPath ?? "", i.href);
-          return (
-            <li key={i.href}>
-              <Link
-                href={i.href}
-                aria-current={active ? "page" : undefined}
-                className={active ? "nav-item nav-item-active" : "nav-item"}
-              >
-                {i.label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      {headerTitle ? <div className="nav-label">{headerTitle}</div> : null}
+      {sections.map((section, idx) => (
+        <div key={`${section.label}-${idx}`} className={idx === 0 ? "mt-0.5" : "mt-3"}>
+          {idx > 0 && section.label ? (
+            <div className="nav-label px-2 pb-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {section.label}
+            </div>
+          ) : null}
+          <ul className="space-y-0.5">
+            {section.items.map((i) => {
+              // Unified active-route rule so /p/{slug}/client/invoices/{id} still
+              // marks `Invoices` active. IA spec §7 anti-pattern #2.
+              const { isActive: active } = matchRoute(currentPath ?? "", i.href);
+              return (
+                <li key={i.href}>
+                  <Link
+                    href={i.href}
+                    aria-current={active ? "page" : undefined}
+                    className={active ? "nav-item nav-item-active" : "nav-item"}
+                  >
+                    {i.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
       {/* Language switch parity with the platform sidebar — every authed
           surface needs a way out of English without leaving the page. */}
       <div className="mt-auto flex justify-end pt-3">

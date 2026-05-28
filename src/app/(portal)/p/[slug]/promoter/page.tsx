@@ -61,7 +61,7 @@ export default async function PromoterHome({ params }: { params: Promise<{ slug:
 
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={nav} title="Promoter" />
+      <PortalRail group={nav} />
       <div className="flex-1 p-6">
         <ExecutiveDashboard title="Promoter Portal" subtitle={project.name} sections={sections} />
       </div>

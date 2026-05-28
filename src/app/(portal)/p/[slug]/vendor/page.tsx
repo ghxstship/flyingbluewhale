@@ -14,7 +14,7 @@ export default async function VendorHome({ params }: { params: Promise<{ slug: s
   if (!project) notFound();
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "vendor")} title="Vendor" />
+      <PortalRail group={portalNav(slug, "vendor")} />
       <div className="flex-1">
         <ModuleHeader eyebrow={project.name} title="Vendor Portal" subtitle="Quotes, POs, invoicing, credentials" />
         <div className="page-content">

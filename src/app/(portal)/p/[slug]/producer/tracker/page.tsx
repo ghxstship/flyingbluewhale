@@ -40,7 +40,7 @@ export default async function ProducerTracker({
 
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "producer")} title="Producer" />
+      <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">Tracker</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">

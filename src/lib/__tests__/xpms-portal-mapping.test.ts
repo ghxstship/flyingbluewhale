@@ -1,5 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { classOfPersona, dashboardTemplateForPersona, XPMS_DASHBOARD_TEMPLATES, type PortalPersona } from "@/lib/nav";
+import {
+  classOfPersona,
+  dashboardTemplateForPersona,
+  portalNav,
+  superPersonaOf,
+  SUPER_PERSONA_LABEL,
+  XPMS_DASHBOARD_TEMPLATES,
+  type PortalPersona,
+} from "@/lib/nav";
 import { XPMS_CLASSES, XPMS_PHASES } from "@/lib/xpms";
 
 /**
@@ -105,5 +113,70 @@ describe("XPMS portal mapping (ADR-0004)", () => {
       "strike",
       "wrap",
     ]);
+  });
+});
+
+describe("ADR-0005 super-persona collapse", () => {
+  it("every sub-persona resolves to one of 4 super-personas", () => {
+    for (const p of ALL_PERSONAS) {
+      const sp = superPersonaOf(p);
+      expect(["buyer", "talent", "workforce", "audience"]).toContain(sp);
+    }
+  });
+
+  it("buyer = client/sponsor/promoter/stakeholder", () => {
+    expect(superPersonaOf("client")).toBe("buyer");
+    expect(superPersonaOf("sponsor")).toBe("buyer");
+    expect(superPersonaOf("promoter")).toBe("buyer");
+    expect(superPersonaOf("stakeholder")).toBe("buyer");
+  });
+
+  it("talent = artist/athlete/delegation/vip/hospitality/media/producer", () => {
+    expect(superPersonaOf("artist")).toBe("talent");
+    expect(superPersonaOf("athlete")).toBe("talent");
+    expect(superPersonaOf("delegation")).toBe("talent");
+    expect(superPersonaOf("vip")).toBe("talent");
+    expect(superPersonaOf("hospitality")).toBe("talent");
+    expect(superPersonaOf("media")).toBe("talent");
+    expect(superPersonaOf("producer")).toBe("talent");
+  });
+
+  it("workforce = vendor/crew/volunteer", () => {
+    expect(superPersonaOf("vendor")).toBe("workforce");
+    expect(superPersonaOf("crew")).toBe("workforce");
+    expect(superPersonaOf("volunteer")).toBe("workforce");
+  });
+
+  it("audience = guest", () => {
+    expect(superPersonaOf("guest")).toBe("audience");
+  });
+
+  it("SUPER_PERSONA_LABEL covers all 4 super-personas in Title Case", () => {
+    expect(SUPER_PERSONA_LABEL.buyer).toBe("Buyer");
+    expect(SUPER_PERSONA_LABEL.talent).toBe("Talent");
+    expect(SUPER_PERSONA_LABEL.workforce).toBe("Workforce");
+    expect(SUPER_PERSONA_LABEL.audience).toBe("Audience");
+  });
+
+  it("portalNav returns a NavGroup with Workspace + persona sections", () => {
+    for (const p of ALL_PERSONAS) {
+      const group = portalNav("demo", p);
+      expect(group.label).toBe(SUPER_PERSONA_LABEL[superPersonaOf(p)]);
+      expect(group.sections).toBeDefined();
+      expect(group.sections).toHaveLength(2);
+      const [workspace, personaSection] = group.sections!;
+      expect(workspace.label).toBe("Workspace");
+      // Workspace section is the shared 6 — same across every persona.
+      expect(workspace.items).toHaveLength(6);
+      expect(workspace.items.map((i) => i.label)).toEqual([
+        "Overview",
+        "Guide",
+        "Updates",
+        "Inbox",
+        "Tasks",
+        "Messages",
+      ]);
+      expect(personaSection.items.length).toBeGreaterThan(0);
+    }
   });
 });

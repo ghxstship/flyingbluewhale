@@ -34,7 +34,7 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
 
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "artist")} title="Artist" />
+      <PortalRail group={portalNav(slug, "artist")} />
       <div className="flex-1">
         <ModuleHeader
           eyebrow={project.name}

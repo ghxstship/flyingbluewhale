@@ -20,7 +20,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
   if (!project) {
     return (
       <div className="flex min-h-screen">
-        <PortalRail items={portalNav(slug, "producer")} title="Producer" />
+        <PortalRail group={portalNav(slug, "producer")} />
         <div className="flex-1 p-6">
           <EmptyState title="No Project" description="P&L surfaces require a resolved project." />
         </div>
@@ -50,7 +50,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "producer")} title="Producer" />
+      <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">P&amp;L</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">Headline roll-up for {project.name}.</p>

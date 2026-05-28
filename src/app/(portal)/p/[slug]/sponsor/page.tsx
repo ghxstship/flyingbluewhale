@@ -14,7 +14,7 @@ export default async function SponsorHome({ params }: { params: Promise<{ slug: 
   if (!project) notFound();
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "sponsor")} title="Sponsor" />
+      <PortalRail group={portalNav(slug, "sponsor")} />
       <div className="flex-1">
         <ModuleHeader eyebrow={project.name} title="Sponsor Portal" subtitle="Activations, brand assets, reporting" />
         <div className="page-content">

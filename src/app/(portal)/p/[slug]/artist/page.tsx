@@ -15,7 +15,7 @@ export default async function ArtistHome({ params }: { params: Promise<{ slug: s
   if (!project) notFound();
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "artist")} title="Artist" />
+      <PortalRail group={portalNav(slug, "artist")} />
       <div className="flex-1">
         <ModuleHeader
           eyebrow={project.name}

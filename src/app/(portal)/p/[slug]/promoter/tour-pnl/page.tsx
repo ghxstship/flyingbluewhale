@@ -17,7 +17,7 @@ export default async function PromoterTourPnL({ params }: { params: Promise<{ sl
   const { slug } = await params;
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "promoter")} title="Promoter" />
+      <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">Tour P&amp;L</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">

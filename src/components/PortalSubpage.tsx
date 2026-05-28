@@ -23,7 +23,7 @@ export async function PortalSubpage({
   if (!project) notFound();
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, persona)} title={persona.charAt(0).toUpperCase() + persona.slice(1)} />
+      <PortalRail group={portalNav(slug, persona)} />
       <div className="flex-1">
         <ModuleHeader eyebrow={project.name} title={title} subtitle={subtitle} />
         <div className="page-content">{children}</div>

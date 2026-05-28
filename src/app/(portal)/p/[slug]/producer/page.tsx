@@ -67,7 +67,7 @@ export default async function ProducerHome({ params }: { params: Promise<{ slug:
 
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={nav} title="Producer" />
+      <PortalRail group={nav} />
       <div className="flex-1 p-6">
         <ExecutiveDashboard title="Producer Portal" subtitle={project.name} sections={sections} />
       </div>

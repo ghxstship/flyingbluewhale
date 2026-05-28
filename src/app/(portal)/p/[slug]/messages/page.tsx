@@ -63,7 +63,7 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
 
   return (
     <div className="flex">
-      <PortalRail items={portalNav(slug, "vendor")} title="Portal" />
+      <PortalRail group={portalNav(slug, "vendor")} title="Portal" />
       <div className="flex-1">
         <div className="page-content">
           <h1 className="text-2xl font-semibold">Messages</h1>

@@ -62,7 +62,7 @@ export default async function StakeholderHome({ params }: { params: Promise<{ sl
 
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={nav} title="Stakeholder" />
+      <PortalRail group={nav} />
       <div className="flex-1 p-6">
         <ExecutiveDashboard title="Stakeholder Portal" subtitle={project.name} sections={sections} />
       </div>

@@ -32,7 +32,7 @@ export default async function ProposalPortalLayout({
 
   return (
     <div className="flex min-h-screen">
-      <PortalRail items={portalNav(slug, "client")} title="Client" />
+      <PortalRail group={portalNav(slug, "client")} />
       <div className="flex-1">
         <ModuleHeader
           eyebrow={ctx.project.name}

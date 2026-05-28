@@ -221,6 +221,8 @@ export const platformNav: NavGroup[] = [
           // Unified contracts (prime/sub/consultant/service/rental/purchase) — round 49.
           { label: "Contracts", href: "/console/contracts", icon: "ClipboardSignature" },
           { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
+          // PO / Req approval routing — round 80 (vs Coupa / SAP Joule).
+          { label: "Approvals", href: "/console/procurement/approvals", icon: "ClipboardCheck" },
         ],
       },
       {

@@ -33,7 +33,9 @@ export type PushKind =
   | "shift_swap"
   | "time_off"
   | "course"
-  | "incident";
+  | "incident"
+  | "approval_request"
+  | "approval_resolved";
 
 export type PushPayload = {
   title: string;

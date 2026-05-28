@@ -54,6 +54,8 @@
 (platform)/console/projects/[projectId]/crew/page.tsx|Crew|
 (platform)/console/projects/[projectId]/advancing/page.tsx|Advancing|Internal view of portal advancing
 (platform)/console/projects/[projectId]/portal-preview/page.tsx|Portal preview|Preview external portal as role
+(platform)/console/projects/[projectId]/run-of-show/page.tsx|Run of show|AI-generated cue list for this project
+(platform)/console/projects/[projectId]/debrief/page.tsx|Post-event debrief|AI post-event report aggregating crew snapshots, expenses, and incidents
 (platform)/console/tasks/page.tsx|Tasks|All tasks
 (platform)/console/tasks/new/page.tsx|New task|
 (platform)/console/tasks/[taskId]/page.tsx|Task|
@@ -118,6 +120,8 @@
 (platform)/console/procurement/rfqs/page.tsx|RFQs|
 (platform)/console/procurement/rfqs/new/page.tsx|New RFQ|
 (platform)/console/procurement/rfqs/[rfqId]/page.tsx|RFQ|
+(platform)/console/procurement/approvals/page.tsx|Approvals|PO and requisition approval queue
+(platform)/console/procurement/approvals/[approvalId]/page.tsx|Approval|Review and resolve a pending approval request
 (platform)/console/procurement/catalog/page.tsx|Catalog|Approved item catalog
 
 # PLATFORM — production
@@ -511,6 +515,8 @@
 (mobile)/m/coc/page.tsx|Chain of custody|Sample and evidence
 (mobile)/m/wayfind/page.tsx|Wayfind|Indoor map
 (mobile)/m/notifications/page.tsx|Notifications|
+(mobile)/m/snapshot/page.tsx|Snapshots|My live-event bookmarks
+(mobile)/m/snapshot/new/page.tsx|New snapshot|Quick field capture during a live event
 
 # Chain of custody (WF-101) — generic COC for doping/evidence
 (platform)/console/compliance/coc/page.tsx|Chain of custody|Sample and evidence tracking

@@ -12,30 +12,35 @@ Companion docs:
 - [05 — Shipped rounds 54–66](05-shipped-rounds-54-66.md)
 - [06 — Shipped rounds 67–72](06-shipped-rounds-67-72.md)
 - [07 — Acceptance criteria + operator runbook](07-acceptance-criteria.md)
-- [08 — Shipped Round 74 (Final)](08-shipped-round-74.md) ← current state
+- [08 — Shipped Round 74 (Final parity closure)](08-shipped-round-74.md)
+- [09 — Shipped rounds 76–78 (Post-parity backlog closure)](09-shipped-rounds-76-78.md) ← current state
 
 ---
 
 ## Delivery snapshot (as of 2026-05-27)
 
-**Rounds 35–74 shipped to `main`** in 40 trunk-based commits — see
+**Rounds 35–78 shipped to `main`** in 43 trunk-based commits — see
 [04](04-shipped-rounds-35-53.md), [05](05-shipped-rounds-54-66.md),
-and [06](06-shipped-rounds-67-72.md) for round-by-round detail.
-Aggregate **42% → 100% parity** (C+S). **Zero hard schema gaps,
-zero remaining client-island P-items, zero remaining gaps from the
-inventory.** Rounds 67–72 closed the three P items that survived the
-35–66 wave (PDF.js markup, web-ifc 3D viewer, SVG Gantt UI), completed
-the four-connector accounting matrix (added Sage 300 CRE, Foundation,
-Viewpoint Vista; closed QBO push-side write-back), and shipped
-OpenWeatherMap fallback + CA/NY/WA state certified-payroll XML
-exporters. **Round 74 closed the final gap — G-030 / F44 multi-entity
-plus multi-currency consolidation** (org_entities hierarchy + daily FX
-rate worker + line-level FX snapshots on invoices/expenses/pay-apps +
-v_consolidated_ar view + /console/finance/entities and
-/console/finance/consolidation surfaces). Per-gap DoD verification +
-credential provisioning runbook in [07](07-acceptance-criteria.md).
-The construction-PM table-stakes parity program is **complete**; the
-next motion is the **Wave 5 differentiator program** described below.
+[06](06-shipped-rounds-67-72.md), [08](08-shipped-round-74.md), and
+[09](09-shipped-rounds-76-78.md) for round-by-round detail.
+Aggregate **42% → 100% parity** (C+S). **Zero remaining parity gaps,
+zero remaining post-parity backlog items.** Rounds 67–72 closed the
+three P items that survived the 35–66 wave (PDF.js markup, web-ifc 3D
+viewer, SVG Gantt UI), completed the four-connector accounting matrix
+(added Sage 300 CRE, Foundation, Viewpoint Vista; closed QBO push-side
+write-back), and shipped OpenWeatherMap fallback + CA/NY/WA state
+certified-payroll XML exporters. **Round 74** closed the final
+inventory gap (G-030 / F44 multi-entity + multi-currency
+consolidation). **Rounds 76–78** closed the entire post-parity backlog:
+GraphQL read API (R76, G-031), partner integration marketplace +
+certification program (R77, G-032), and Capacitor mobile-wrapper
+scaffold for App Store / Play Store distribution (R78, G-033). The
+single open inventory item — G-017 clash detection — is
+schema-ready but blocked on an Autodesk Forge commercial contract, not
+on engineering. Per-gap DoD verification + credential provisioning
+runbook in [07](07-acceptance-criteria.md). The construction-PM
+table-stakes parity program is **delivered**; the next motion is the
+**Wave 5 differentiator program** described below.
 
 ---
 

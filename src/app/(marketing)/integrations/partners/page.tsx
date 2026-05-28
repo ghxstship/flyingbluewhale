@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
-import { createServiceClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
@@ -49,7 +49,7 @@ export default async function Page() {
 
   let rows: Row[] = [];
   if (hasSupabase) {
-    const supabase = createServiceClient() as unknown as LooseSupabase;
+    const supabase = (await createClient()) as unknown as LooseSupabase;
     const { data } = await supabase
       .from("partner_integrations")
       .select(

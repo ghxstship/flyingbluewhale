@@ -46,7 +46,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return null;
   const { id } = await params;
   await requireSession();
-  const supabase = createServiceClient() as unknown as LooseSupabase;
+  let supabase: LooseSupabase;
+  try {
+    supabase = createServiceClient() as unknown as LooseSupabase;
+  } catch {
+    const { createClient } = await import("@/lib/supabase/server");
+    supabase = (await createClient()) as unknown as LooseSupabase;
+  }
 
   const { data } = await supabase
     .from("partner_integrations")

@@ -50,7 +50,20 @@ export default async function Page() {
   // submissions are platform-wide. We require auth so anonymous folks
   // can't crawl this; ATLVS internal staff are the intended viewers.
   await requireSession();
-  const supabase = createServiceClient() as unknown as LooseSupabase;
+  // The admin queue needs to see ALL submissions including submitted/
+  // reviewing/rejected rows. The public RLS policy hides those, so we
+  // use the service-role client when available. Without it, we fall
+  // back to the regular client and surface a banner explaining the
+  // limitation — verified/certified+published rows are still visible.
+  let supabase: LooseSupabase;
+  let serviceRoleAvailable = false;
+  try {
+    supabase = createServiceClient() as unknown as LooseSupabase;
+    serviceRoleAvailable = true;
+  } catch {
+    const { createClient } = await import("@/lib/supabase/server");
+    supabase = (await createClient()) as unknown as LooseSupabase;
+  }
 
   const { data } = await supabase
     .from("partner_integrations")
@@ -78,6 +91,14 @@ export default async function Page() {
         subtitle={`${rows.length} Submission${rows.length === 1 ? "" : "s"} · ${counts.submitted + counts.reviewing} In Queue · ${counts.verified + counts.certified} Live`}
       />
       <div className="page-content space-y-5">
+        {!serviceRoleAvailable ? (
+          <div className="surface border-l-4 border-l-amber-500 p-4 text-xs text-[var(--text-secondary)]">
+            <strong className="text-[var(--text-primary)]">Limited view:</strong>{" "}
+            <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code> is not configured. Showing only published
+            verified/certified submissions. Set the env var to see the full review queue (submitted, reviewing,
+            rejected).
+          </div>
+        ) : null}
         <div className="metric-grid-4">
           <MetricCard label="In queue" value={counts.submitted + counts.reviewing} accent />
           <MetricCard label="Verified" value={counts.verified} />

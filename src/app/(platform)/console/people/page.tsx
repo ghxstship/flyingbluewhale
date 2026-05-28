@@ -2,7 +2,8 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
-import { requireSession } from "@/lib/auth";
+import { Button } from "@/components/ui/Button";
+import { isAdmin as sessionIsAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -39,6 +40,7 @@ export default async function PeoplePage() {
       </>
     );
   const session = await requireSession();
+  const isAdmin = sessionIsAdmin(session);
   const supabase = await createClient();
   const { data } = await supabase
     .from("memberships")
@@ -54,13 +56,27 @@ export default async function PeoplePage() {
         eyebrow="People"
         title="Directory"
         subtitle={`${rows.length} member${rows.length === 1 ? "" : "s"}`}
+        action={
+          isAdmin ? (
+            <Button href="/console/people/invites" size="sm">
+              + Invite member
+            </Button>
+          ) : undefined
+        }
       />
       <div className="page-content">
         <DataTable<MemberRow>
           rows={rows}
           rowHref={(r) => (r.users?.id ? `/console/people/${r.users.id}` : undefined)}
           emptyLabel="No members yet"
-          emptyDescription="Invite teammates from /console/settings/members."
+          emptyDescription="Invite teammates to your organization to get started."
+          emptyAction={
+            isAdmin ? (
+              <Button href="/console/people/invites" size="sm">
+                + Invite member
+              </Button>
+            ) : undefined
+          }
           columns={[
             {
               key: "user",

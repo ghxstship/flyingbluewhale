@@ -122,6 +122,12 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(marketing)/marketplace/crew/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/talent/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
+    // Drawings detail sub-section inline empty (versions panel, dense layout).
+    "src/app/(platform)/console/drawings/[id]/page.tsx",
+    // Server action error string — not UI copy; no EmptyState import warranted.
+    "src/app/(platform)/console/schedule/baselines/[id]/actions.ts",
+    // Transmittal detail sub-section inline empties (Items + Recipients panels).
+    "src/app/(platform)/console/transmittals/[id]/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

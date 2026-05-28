@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
@@ -83,12 +84,9 @@ export default function IntegrationsIndex() {
             >
               Partner directory
             </Link>
-            <Link
-              href="/integrations/submit"
-              className="rounded-md bg-[var(--org-primary)] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
-            >
+            <Button href="/integrations/submit" variant="primary" size="sm">
               Submit a proposal
-            </Link>
+            </Button>
           </div>
         </div>
       </section>

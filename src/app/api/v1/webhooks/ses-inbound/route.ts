@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
 import { z } from "zod";
-import { apiError, apiOk } from "@/lib/api";
+import { apiError, apiOk, parseJson } from "@/lib/api";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { log } from "@/lib/log";
@@ -57,17 +56,11 @@ export async function POST(req: Request) {
     return apiError("forbidden", "Invalid webhook secret");
   }
 
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return apiError("bad_request", "Invalid JSON body");
-  }
-  const parsed = SesEventSchema.safeParse(body);
-  if (!parsed.success) return apiError("bad_request", parsed.error.issues[0]?.message ?? "Invalid SES event");
+  const parsed = await parseJson(req, SesEventSchema);
+  if (parsed instanceof Response) return parsed;
 
   const supabase = createServiceClient() as unknown as LooseSupabase;
-  const evt = parsed.data;
+  const evt = parsed;
 
   // Resolve project_email by destination local-part. Pick the first
   // destination that matches a project_email row in any org.

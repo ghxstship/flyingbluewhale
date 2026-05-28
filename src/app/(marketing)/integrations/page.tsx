@@ -67,6 +67,32 @@ export default function IntegrationsIndex() {
         </section>
       ))}
 
+      <section className="mx-auto max-w-6xl px-6 pb-12">
+        <div className="surface flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="eyebrow eyebrow-brand">Partner Program</div>
+            <h3 className="mt-2 text-lg font-semibold">Build your own integration.</h3>
+            <p className="mt-1 text-sm text-[var(--text-secondary)]">
+              Open API surface (REST + GraphQL). Verified Partner + Certified tiers. No revenue share, no gatekeeping.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Link
+              href="/integrations/partners"
+              className="rounded-md border border-[var(--border-color)] px-4 py-2 text-sm font-medium hover:bg-[var(--surface-raised)]"
+            >
+              Partner directory
+            </Link>
+            <Link
+              href="/integrations/submit"
+              className="rounded-md bg-[var(--org-primary)] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+            >
+              Submit a proposal
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <CTASection title="ATLVS Is Open." subtitle="Free for small teams. All integrations included on every tier." />
     </div>
   );

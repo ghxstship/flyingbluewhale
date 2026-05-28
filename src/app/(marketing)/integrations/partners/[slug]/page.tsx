@@ -1,0 +1,130 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { JsonLd } from "@/components/marketing/JsonLd";
+import { CTASection } from "@/components/marketing/CTASection";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { createServiceClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import type { LooseSupabase } from "@/lib/supabase/loose";
+
+type Row = {
+  slug: string;
+  name: string;
+  partner_org_name: string;
+  partner_contact_email: string | null;
+  short_description: string;
+  long_description: string | null;
+  category: string;
+  capabilities: string[];
+  certification_tier: "verified" | "certified";
+  homepage_url: string | null;
+  docs_url: string | null;
+  logo_url: string | null;
+  published_at: string;
+};
+
+async function getPartner(slug: string): Promise<Row | null> {
+  if (!hasSupabase) return null;
+  const supabase = createServiceClient() as unknown as LooseSupabase;
+  const { data } = await supabase
+    .from("partner_integrations")
+    .select(
+      "slug, name, partner_org_name, partner_contact_email, short_description, long_description, category, capabilities, certification_tier, homepage_url, docs_url, logo_url, published_at",
+    )
+    .eq("slug", slug)
+    .in("certification_tier", ["verified", "certified"])
+    .not("published_at", "is", null)
+    .is("deleted_at", null)
+    .maybeSingle();
+  return (data as unknown as Row | null) ?? null;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const p = await getPartner(slug);
+  if (!p)
+    return buildMetadata({ title: "Partner Integration", description: "", path: `/integrations/partners/${slug}` });
+  return buildMetadata({
+    title: `${p.name} — ATLVS Partner Integration`,
+    description: p.short_description,
+    path: `/integrations/partners/${p.slug}`,
+    ogImageEyebrow: p.certification_tier === "certified" ? "Certified Partner" : "Verified Partner",
+    ogImageTitle: p.name,
+  });
+}
+
+export const dynamic = "force-dynamic";
+
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const p = await getPartner(slug);
+  if (!p) notFound();
+
+  const crumbs = [
+    { label: "Home", href: "/" },
+    { label: "Integrations", href: "/integrations" },
+    { label: "Partner Directory", href: "/integrations/partners" },
+    { label: p.name, href: `/integrations/partners/${p.slug}` },
+  ];
+
+  return (
+    <div>
+      <JsonLd data={[breadcrumbSchema(crumbs)]} />
+      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
+
+      <section className="mx-auto max-w-4xl px-6 pt-8 pb-8">
+        <div className="flex items-center justify-between">
+          <div className="eyebrow eyebrow-brand">Partner Integration</div>
+          <Badge variant={p.certification_tier === "certified" ? "success" : "info"}>
+            {p.certification_tier === "certified" ? "Certified" : "Verified"}
+          </Badge>
+        </div>
+        <h1 className="hed-3xl mt-4">{p.name}</h1>
+        <p className="mt-2 text-xs text-[var(--text-muted)]">by {p.partner_org_name}</p>
+        <p className="mt-5 text-lg text-[var(--text-secondary)]">{p.short_description}</p>
+        {p.long_description ? <p className="mt-3 text-sm">{p.long_description}</p> : null}
+
+        {p.capabilities.length > 0 ? (
+          <div className="surface mt-6 p-5">
+            <div className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+              Capabilities
+            </div>
+            <ul className="mt-3 space-y-1.5 text-sm">
+              {p.capabilities.map((c) => (
+                <li key={c} className="flex items-start gap-2">
+                  <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--org-primary)]" />
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          {p.homepage_url ? (
+            <Button href={p.homepage_url} variant="primary">
+              Partner site
+            </Button>
+          ) : null}
+          {p.docs_url ? (
+            <Button href={p.docs_url} variant="ghost">
+              Integration docs
+            </Button>
+          ) : null}
+          <Button href="/integrations/partners" variant="ghost">
+            Back to directory
+          </Button>
+        </div>
+      </section>
+
+      <CTASection
+        title="Want To Build One?"
+        subtitle="Open API surface. No revenue share, no gatekeeping. Apply through /integrations/submit."
+      />
+    </div>
+  );
+}

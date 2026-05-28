@@ -106,6 +106,9 @@ describe("API canon — parseJson enforcement", () => {
       // no JSON envelope to surface; using apiError would break the redirect
       // contract OAuth callers depend on.
       "src/app/api/v1/auth/oauth/route.ts",
+      // GraphQL endpoint — responses follow the GraphQL wire protocol, not the
+      // ATLVS { ok, data } envelope. graphql-yoga handles error shape internally.
+      "src/app/api/v1/graphql/route.ts",
     ]);
     const V1_RE = /^src\/app\/api\/v1\//;
     for (const file of ROUTES) {

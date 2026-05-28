@@ -13,7 +13,12 @@
     "test:coverage": "vitest run --coverage",
     "e2e": "playwright test",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md}\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md}\"",
+    "cap:sync": "cap sync",
+    "cap:open:ios": "cap open ios",
+    "cap:open:android": "cap open android",
+    "cap:run:ios": "cap run ios",
+    "cap:run:android": "cap run android"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.88.0",
@@ -71,6 +76,10 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.2",
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/cli": "^8.3.4",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/ios": "^8.3.4",
     "@eslint/eslintrc": "^3.3.5",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.0",

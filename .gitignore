@@ -19,3 +19,8 @@ docs/audits/evidence/webkit/
 docs/audits/evidence/.report/
 test-results/
 e2e/.auth/
+
+# Capacitor native projects — generated locally via `npx cap add ios/android`.
+# Each project is ~50MB+ of native tooling state; keep out of git.
+/ios/
+/android/

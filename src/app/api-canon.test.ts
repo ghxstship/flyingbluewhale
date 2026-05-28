@@ -106,6 +106,10 @@ describe("API canon — parseJson enforcement", () => {
       // no JSON envelope to surface; using apiError would break the redirect
       // contract OAuth callers depend on.
       "src/app/api/v1/auth/oauth/route.ts",
+      // GraphQL endpoint — graphql-yoga owns the entire request/response cycle
+      // and returns the GraphQL wire protocol ({ data, errors }), not the ATLVS
+      // { ok, data } envelope. Importing @/lib/api here would be a dead import.
+      "src/app/api/v1/graphql/route.ts",
     ]);
     const V1_RE = /^src\/app\/api\/v1\//;
     for (const file of ROUTES) {

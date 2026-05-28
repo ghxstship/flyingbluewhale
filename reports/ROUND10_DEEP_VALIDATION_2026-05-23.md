@@ -54,7 +54,7 @@ or already-cased literals.
 | Typecheck                                       | ✅ 0 errors                                                                               |
 | Vitest                                          | ✅ 577/577 across 50 test files                                                           |
 | Production build                                | ✅ Compiled successfully                                                                  |
-| Brand SSOT (no flytehaus)                       | ✅ 0 hits                                                                                 |
+| Brand SSOT (no legacy brand names)              | ✅ 0 hits                                                                                 |
 | URL canon (no hardcoded atlvs.pro outside SSOT) | ✅ 0 hits                                                                                 |
 | LDP naming (no new `status` columns)            | ✅ 0 hits                                                                                 |
 | Unsafe casts (`as any` in src)                  | ✅ 0 violations (sole hit on projects.ts:83 is gen-type widening, eslint-disabled inline) |

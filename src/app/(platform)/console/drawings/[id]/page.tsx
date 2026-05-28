@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { addVersion, addMember, publishVersion, supersedeVersion } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -149,9 +150,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           </header>
           {versionRows.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">
-              No versions yet. Add one below to start collecting sheets.
-            </p>
+            <EmptyState size="compact" title="No versions yet" description="Add one below to start collecting sheets." />
           ) : (
             <ul className="space-y-1.5">
               {versionRows.map((v) => (

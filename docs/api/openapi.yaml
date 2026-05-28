@@ -649,3 +649,45 @@ paths:
     get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
   /api/v1/zapier/triggers/assignment-scans:
     get: { summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind). }
+
+  /api/v1/ai/embed-source:
+    post: { summary: Embed a knowledge-base source document into the org's pgvector store for AI RAG retrieval. }
+  /api/v1/bim/{modelId}/download:
+    get: { summary: Issue a short-lived signed download URL for a BIM model file from the `bim-models` storage bucket. }
+  /api/v1/daily-logs/{id}/refresh-weather:
+    post: { summary: Pull current NWS (US) or OpenWeatherMap weather snapshot for the daily log's project location and write it back to the row. Idempotent. }
+  /api/v1/drawings/{siteplanId}/markups:
+    get:  { summary: List all markup annotations for a site plan, including layers. }
+    post: { summary: Create a new markup annotation on a site plan page. }
+  /api/v1/drawings/markups/{id}:
+    patch:  { summary: Update a markup annotation's geometry, color, stroke, or text. }
+    delete: { summary: Permanently delete a markup annotation. }
+  /api/v1/graphql:
+    get:  { summary: "GraphQL endpoint — GET renders the GraphiQL explorer in development; returns 404 in production." }
+    post: { summary: GraphQL endpoint — POST { query, variables } with a session cookie or Bearer PAT. }
+  /api/v1/integrations/{system}/sync:
+    post: { summary: Trigger an on-demand sync for a named third-party integration (e.g. procore, autodesk, aconex). }
+  /api/v1/integrations/fx/refresh:
+    post: { summary: Refresh daily FX exchange rates from the configured provider and upsert into the `fx_rates` table. }
+  /api/v1/integrations/qb-online/callback:
+    get: { summary: QuickBooks Online OAuth 2.0 callback — exchanges the authorization code for tokens and persists them. }
+  /api/v1/integrations/qb-online/oauth-start:
+    get: { summary: Begin the QuickBooks Online OAuth 2.0 authorization flow — redirects the user to the Intuit auth URL. }
+  /api/v1/integrations/qb-online/push:
+    post: { summary: Push a single invoice, bill, or journal entry to the org's connected QuickBooks Online company. }
+  /api/v1/integrations/qb-online/sync:
+    post: { summary: Full bidirectional sync between the org's QuickBooks Online company and the ATLVS ledger. }
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Render an AIA G702/G703 pay application to a branded PDF and 302-redirect to a signed download URL. }
+  /api/v1/payroll-runs/{runId}/pdf:
+    get: { summary: Render a payroll run summary to PDF and 302-redirect to a signed download URL. }
+  /api/v1/payroll-runs/{runId}/state-xml:
+    get: { summary: Generate state payroll tax XML (940/941-equivalent) for a completed payroll run. }
+  /api/v1/site-plans/{id}/pdf:
+    get: { summary: Export a site plan (with all published markups) to a branded PDF and 302-redirect to a signed download URL. }
+  /api/v1/webhooks/docusign:
+    post: { summary: DocuSign Connect webhook receiver — processes envelope status events (completed, declined, voided) and updates offer_letter_status accordingly. }
+  /api/v1/webhooks/ses-inbound:
+    post: { summary: AWS SES inbound-email webhook — routes incoming messages to the matching project_email row and inserts into inbound_email_messages. HMAC-authenticated via X-Webhook-Secret. }
+  /api/v1/wip/snapshot-pdf:
+    get: { summary: Generate a WIP (Work-in-Progress) schedule of values snapshot PDF for the caller's org and 302-redirect to a signed download URL. }

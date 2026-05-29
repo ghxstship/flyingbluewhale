@@ -9,7 +9,7 @@ import type { GuidePersona } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 const VALID_PERSONAS: GuidePersona[] = [
-  "staff", "crew", "vendor", "artist", "client", "sponsor", "guest", "custom",
+  "staff", "crew", "vendor", "brand_ambassador", "sponsor", "artist", "media_press", "client", "guest", "custom",
 ];
 
 export default async function SignagePage({

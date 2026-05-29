@@ -23,7 +23,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ gui
   // Service client for public read — guide must be published.
   // We intentionally do NOT use the user session here; signage
   // screens are unauthenticated displays.
-  const supabase = await createServiceClient();
+  const supabase = createServiceClient();
 
   const { data, error } = await supabase
     .from("event_guides")

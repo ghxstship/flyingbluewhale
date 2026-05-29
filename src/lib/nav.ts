@@ -411,6 +411,9 @@ export const platformNav: NavGroup[] = [
           { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
           { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
+          // Competitive features — Connecteam/Deputy parity (round: competitive-2026).
+          { label: "AI Scheduler", href: "/console/workforce/scheduling", icon: "Sparkles" },
+          { label: "Labor Costs", href: "/console/workforce/labor-costs", icon: "ChartBar" },
         ],
       },
       {

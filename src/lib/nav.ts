@@ -411,6 +411,7 @@ export const platformNav: NavGroup[] = [
           { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
           { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
+          { label: "Hiring", href: "/console/workforce/hiring", icon: "UserPlus" },
         ],
       },
       {

@@ -70,6 +70,15 @@ export default async function MobileShiftPage() {
   const todayShifts = shifts.filter((s) => new Date(s.starts_at).toDateString() === todayKey);
   const upcoming = shifts.filter((s) => new Date(s.starts_at).toDateString() !== todayKey);
 
+  // Projected hours — sum (ends_at - starts_at) net of break_minutes
+  function shiftHours(s: ShiftRow): number {
+    const raw = (new Date(s.ends_at).getTime() - new Date(s.starts_at).getTime()) / 3_600_000;
+    return Math.max(0, raw - (s.break_minutes ?? 0) / 60);
+  }
+  const todayHrs = todayShifts.reduce((acc, s) => acc + shiftHours(s), 0);
+  const weekHrs = shifts.reduce((acc, s) => acc + shiftHours(s), 0);
+  const fmtHrs = (h: number) => (Number.isFinite(h) ? `${h.toFixed(1)}h` : "—");
+
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
@@ -85,6 +94,21 @@ export default async function MobileShiftPage() {
       {!wfm && (
         <div className="surface mt-6 p-4 text-sm">
           Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your record.
+        </div>
+      )}
+
+      {shifts.length > 0 && (
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <div className="surface p-3">
+            <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">Today</div>
+            <div className="mt-1 text-xl font-semibold tabular-nums">{fmtHrs(todayHrs)}</div>
+            <div className="text-[10px] text-[var(--text-muted)]">projected</div>
+          </div>
+          <div className="surface p-3">
+            <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">This week</div>
+            <div className="mt-1 text-xl font-semibold tabular-nums">{fmtHrs(weekHrs)}</div>
+            <div className="text-[10px] text-[var(--text-muted)]">{shifts.length} shift{shifts.length === 1 ? "" : "s"}</div>
+          </div>
         </div>
       )}
 

@@ -1,8 +1,9 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { PhotoCapture } from "./PhotoCapture";
 
 type Action = "check_in" | "check_out" | "break_start" | "break_end";
 
@@ -27,9 +28,10 @@ export function CheckInControls({
   attendance: "scheduled" | "checked_in" | "on_break" | "checked_out" | "no_show";
 }) {
   const [pending, start] = useTransition();
+  const [photoDataUrl, setPhotoDataUrl] = useState<string | null | undefined>(undefined);
   const router = useRouter();
 
-  const submit = (action: Action, label: string) => {
+  const submit = (action: Action, label: string, photo?: string | null) => {
     start(async () => {
       try {
         // Capture GPS only for the clock_in/clock_out events. Break
@@ -43,6 +45,7 @@ export function CheckInControls({
             shiftId,
             action,
             ...(pos ? { lat: pos.lat, lng: pos.lng } : {}),
+            ...(action === "check_in" ? { clockInPhoto: photo ?? null } : {}),
           }),
         });
         const json = (await res.json()) as {
@@ -76,14 +79,24 @@ export function CheckInControls({
   return (
     <div className="grid grid-cols-2 gap-2">
       {attendance === "scheduled" && (
-        <button
-          type="button"
-          className="btn btn-primary col-span-2"
-          disabled={pending}
-          onClick={() => submit("check_in", "Checked in")}
-        >
-          {pending ? "Working…" : "Clock in"}
-        </button>
+        <>
+          <div className="col-span-2">
+            <PhotoCapture
+              onCapture={(url) => setPhotoDataUrl(url)}
+              onRetake={() => setPhotoDataUrl(undefined)}
+            />
+          </div>
+          {photoDataUrl !== undefined && (
+            <button
+              type="button"
+              className="btn btn-primary col-span-2"
+              disabled={pending}
+              onClick={() => submit("check_in", "Checked in", photoDataUrl)}
+            >
+              {pending ? "Working…" : "Clock in"}
+            </button>
+          )}
+        </>
       )}
       {attendance === "checked_in" && (
         <>

@@ -2,8 +2,9 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { classifyPunch } from "@/lib/connecteam";
+import { log } from "@/lib/log";
 
 /** /api/v1/shifts/checkin — COMPVSS shift T&A (WF-197).
  *
@@ -24,6 +25,8 @@ const PostSchema = z.object({
   // desktop test) send neither — we record geofence_state='unknown'.
   lat: z.number().min(-90).max(90).optional(),
   lng: z.number().min(-180).max(180).optional(),
+  // Optional selfie at clock-in. Base64 JPEG data URL, capped at ~375 KB.
+  clockInPhoto: z.string().max(500_000).optional(),
 });
 
 type Attendance = "scheduled" | "checked_in" | "on_break" | "checked_out";
@@ -148,6 +151,35 @@ export async function POST(req: NextRequest) {
         punch_lng: input.lng ?? null,
         geofence_state: geoState,
       });
+
+      // Photo upload — best-effort. A failure never blocks the clock-in.
+      if (input.clockInPhoto) {
+        try {
+          const svc = createServiceClient();
+          // Strip the data URL header to get raw base64, then decode.
+          const base64 = input.clockInPhoto.replace(/^data:image\/\w+;base64,/, "");
+          const buffer = Buffer.from(base64, "base64");
+          const path = `${session.orgId}/${shift.id}/${Date.now()}.jpg`;
+          const { error: uploadErr } = await svc.storage
+            .from("clock-in-photos")
+            .upload(path, buffer, { contentType: "image/jpeg", upsert: false });
+          if (uploadErr) {
+            log.warn("checkin.photo_upload_error", { shiftId: shift.id, err: uploadErr.message });
+          } else {
+            const { data: urlData } = svc.storage.from("clock-in-photos").getPublicUrl(path);
+            await supabase
+              .from("shifts")
+              .update({ clock_in_photo_url: urlData.publicUrl } as never)
+              .eq("id", shift.id)
+              .eq("org_id", session.orgId);
+          }
+        } catch (err) {
+          log.warn("checkin.photo_upload_exception", {
+            shiftId: shift.id,
+            err: (err as Error).message,
+          });
+        }
+      }
     } else if (input.action === "check_out") {
       // Close the open time_entries row for this shift (ended_at is null).
       const { data: open } = await supabase

@@ -33,7 +33,8 @@ export type PushKind =
   | "shift_swap"
   | "time_off"
   | "course"
-  | "incident";
+  | "incident"
+  | "credential_expiry";
 
 export type PushPayload = {
   title: string;

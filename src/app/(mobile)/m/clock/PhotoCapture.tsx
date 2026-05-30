@@ -68,7 +68,7 @@ export function PhotoCapture({
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     setCaptured(dataUrl);
-    onCapture(dataUrl);
+    onCaptureRef.current(dataUrl);
   }
 
   function retake() {
@@ -84,7 +84,7 @@ export function PhotoCapture({
         }
       } catch {
         setUnavailable(true);
-        onCapture(null);
+        onCaptureRef.current(null);
       }
     }
     void restartCamera();
@@ -131,7 +131,7 @@ export function PhotoCapture({
             streamRef.current?.getTracks().forEach((t) => t.stop());
             streamRef.current = null;
             setUnavailable(true);
-            onCapture(null);
+            onCaptureRef.current(null);
           }}
         >
           Skip photo

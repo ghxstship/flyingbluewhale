@@ -395,6 +395,7 @@ export const platformNav: NavGroup[] = [
           { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
           { label: "Service Desk", href: "/console/services/requests", icon: "ConciergeBell" },
           { label: "TOC (ITIL)", href: "/console/ops/toc", icon: "Network" },
+          { label: "Operational Alerts", href: "/console/ops/alerts", icon: "TriangleAlert" },
         ],
       },
       {
@@ -490,8 +491,8 @@ export const platformNav: NavGroup[] = [
     label: "9 TECHNOLOGY",
     items: [
       { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
-      // Document-grounded AI assistant w/ RAG citations (round 47).
       { label: "Assistant", href: "/console/assistant", icon: "Sparkles" },
+      { label: "Ops Health AI", href: "/console/assistant/ops", icon: "Activity" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
       { label: "Guides", href: "/console/guides", icon: "Atlas" },
       // ADR-0005 hoist: shareable dashboards are a TECHNOLOGY surface

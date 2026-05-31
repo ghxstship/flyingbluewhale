@@ -19,6 +19,14 @@ export default function Page() {
           <Link className="surface hover-lift p-4" href="/console/settings/integrations">
             <div className="text-sm font-medium">Integrations</div>
           </Link>
+          <Link className="surface hover-lift p-4 border-l-2 border-[var(--color-warning)]" href="/console/ops/alerts">
+            <div className="text-sm font-medium">Operational Alerts</div>
+            <div className="mt-1 text-xs text-[var(--text-muted)]">Budget overruns · crew gaps · overdue work</div>
+          </Link>
+          <Link className="surface hover-lift p-4 border-l-2 border-[var(--org-primary)]" href="/console/assistant/ops">
+            <div className="text-sm font-medium">Ops Health AI</div>
+            <div className="mt-1 text-xs text-[var(--text-muted)]">Ask questions about your operations in plain language</div>
+          </Link>
         </div>
       </div>
     </>

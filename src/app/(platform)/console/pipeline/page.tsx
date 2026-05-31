@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { PipelineKanban } from "@/components/pipeline/PipelineKanban";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +48,11 @@ function stageTone(stage: StageRow): "muted" | "info" | "success" | "error" {
   return "info";
 }
 
-export default async function PipelinePage({ searchParams }: { searchParams: Promise<{ pipeline?: string }> }) {
+export default async function PipelinePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ pipeline?: string; view?: string }>;
+}) {
   if (!hasSupabase) {
     return (
       <>
@@ -59,7 +64,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
     );
   }
 
-  const { pipeline: pipelineSlug } = await searchParams;
+  const { pipeline: pipelineSlug, view = "list" } = await searchParams;
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -129,22 +134,38 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
         title="Pipeline"
         subtitle={`${opportunities.length} Open  deal${opportunities.length === 1 ? "" : "s"} in ${active.name}`}
         action={
-          pipelines.length > 1 ? (
-            <div className="flex items-center gap-1">
-              {pipelines.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/console/pipeline?pipeline=${p.slug}`}
-                  className={
-                    "rounded px-2 py-1 text-xs " +
-                    (p.id === active.id ? "bg-[var(--org-primary)] text-white" : "surface hover-lift")
-                  }
-                >
-                  {p.name}
-                </Link>
-              ))}
+          <div className="flex items-center gap-2">
+            {pipelines.length > 1 && (
+              <div className="flex items-center gap-1">
+                {pipelines.map((p) => (
+                  <Link
+                    key={p.id}
+                    href={`/console/pipeline?pipeline=${p.slug}&view=${view}`}
+                    className={
+                      "rounded px-2 py-1 text-xs " +
+                      (p.id === active.id ? "bg-[var(--org-primary)] text-white" : "surface hover-lift")
+                    }
+                  >
+                    {p.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+            <div className="flex items-center gap-1 surface rounded p-0.5">
+              <Link
+                href={`/console/pipeline?pipeline=${active.slug}&view=list`}
+                className={`rounded px-2 py-1 text-xs ${view === "list" ? "bg-[var(--org-primary)] text-white" : "hover-lift"}`}
+              >
+                List
+              </Link>
+              <Link
+                href={`/console/pipeline?pipeline=${active.slug}&view=kanban`}
+                className={`rounded px-2 py-1 text-xs ${view === "kanban" ? "bg-[var(--org-primary)] text-white" : "hover-lift"}`}
+              >
+                Board
+              </Link>
             </div>
-          ) : null
+          </div>
         }
       />
       <div className="page-content space-y-5">
@@ -159,6 +180,8 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
             title="No Stages"
             description={`Pipeline "${active.name}" has no stages. Add rows to \`pipeline_stages\` with this pipeline_id to start placing deals.`}
           />
+        ) : view === "kanban" ? (
+          <PipelineKanban stages={stages} opportunities={opportunities} />
         ) : (
           <div className="space-y-4">
             {stages.map((stage) => {

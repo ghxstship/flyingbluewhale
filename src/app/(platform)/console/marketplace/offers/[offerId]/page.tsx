@@ -63,6 +63,12 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
       <div className="page-content space-y-5">
         <OfferControls offerId={o.id} status={o.status} />
 
+        <div className="flex gap-2">
+          <Button href={`/console/marketplace/offers/${o.id}/contract`} variant="secondary" size="sm">
+            Contract / Rider
+          </Button>
+        </div>
+
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="surface p-5">
             <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Terms</h2>

@@ -61,6 +61,9 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[p.status] ?? "muted"}>{toTitle(p.status)}</Badge>
+            <Button href={`/console/marketplace/postings/${p.id}/pipeline`} size="sm" variant="ghost">
+              Pipeline
+            </Button>
             <Button href={`/console/marketplace/postings/${p.id}/applicants`} size="sm" variant="ghost">
               {p.applicant_count} applicants
             </Button>

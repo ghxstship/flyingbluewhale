@@ -535,6 +535,8 @@ export const settingsNav: NavGroup[] = [
     items: [
       { label: "Master Catalog", href: "/console/settings/catalog" },
       { label: "Time-Clock Zones", href: "/console/settings/time-clock-zones" },
+      { label: "Overtime Rules", href: "/console/settings/overtime-rules" },
+      { label: "Contract Templates", href: "/console/settings/contracts" },
     ],
   },
   {

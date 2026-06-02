@@ -404,6 +404,8 @@ export const platformNav: NavGroup[] = [
           { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
           // Cross-project capacity vs demand forecast — Bridgit Bench parity (round 48).
           { label: "Resource Forecast", href: "/console/workforce/forecast", icon: "TrendingUp" },
+          // Crew credential compliance dashboard — Rentman parity (competitive round).
+          { label: "Credential Compliance", href: "/console/workforce/credential-compliance", icon: "ShieldCheck" },
           { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
           { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
           { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },

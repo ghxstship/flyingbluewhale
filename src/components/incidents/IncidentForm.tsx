@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Upload, X, Camera, AlertTriangle } from "lucide-react";
+import { Upload, X, Camera, AlertTriangle, Video } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 /**
@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/Button";
  * photos.
  */
 
-type Photo = { path: string; caption?: string; localPreview?: string };
+type Photo = { path: string; caption?: string; localPreview?: string; mediaKind?: "photo" | "video" };
 
 export function IncidentForm({
   projects,
@@ -39,17 +39,24 @@ export function IncidentForm({
   const [uploading, setUploading] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
 
-  async function handleFiles(files: FileList | File[]) {
-    const list = Array.from(files).filter((f) => f.type.startsWith("image/"));
+  async function handleFiles(files: FileList | File[], forceKind?: "photo" | "video") {
+    const ACCEPTED = /\.(jpe?g|png|webp|heic|heif|gif|mp4|mov|webm)$/i;
+    const list = Array.from(files).filter((f) => {
+      if (forceKind === "video") return f.type.startsWith("video/");
+      if (forceKind === "photo") return f.type.startsWith("image/");
+      return f.type.startsWith("image/") || f.type.startsWith("video/");
+    });
     if (list.length === 0) return;
     setUploading(true);
     try {
       for (const file of list) {
-        const filename = `${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
+        const mediaKind: "photo" | "video" = file.type.startsWith("video/") ? "video" : "photo";
+        const ext = file.name.match(ACCEPTED)?.[0] ?? (mediaKind === "video" ? ".mp4" : ".jpg");
+        const sanitized = `${Date.now()}-evidence${ext}`;
         const res = await fetch("/api/v1/incidents/photo-upload", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ draftId, filename, contentType: file.type }),
+          body: JSON.stringify({ draftId, filename: sanitized, contentType: file.type, mediaKind }),
         });
         const json = await res.json();
         if (!json?.ok) {
@@ -66,7 +73,8 @@ export function IncidentForm({
           toast.error(`Upload failed: ${file.name}`);
           continue;
         }
-        setPhotos((prev) => [...prev, { path, localPreview: URL.createObjectURL(file) }]);
+        const localPreview = mediaKind === "photo" ? URL.createObjectURL(file) : undefined;
+        setPhotos((prev) => [...prev, { path, localPreview, mediaKind }]);
       }
     } finally {
       setUploading(false);
@@ -95,7 +103,7 @@ export function IncidentForm({
           severity,
           location: location || undefined,
           occurredAt: new Date(occurredAt).toISOString(),
-          photos: photos.map((p) => ({ path: p.path, caption: p.caption })),
+          photos: photos.map((p) => ({ path: p.path, caption: p.caption, mediaKind: p.mediaKind ?? "photo" })),
         }),
       });
       const json = await res.json();
@@ -191,7 +199,7 @@ export function IncidentForm({
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-[var(--text-muted)]">Photos</label>
+        <label className="block text-xs font-medium text-[var(--text-muted)]">Evidence (photos &amp; video)</label>
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -205,13 +213,13 @@ export function IncidentForm({
           <div className="flex flex-wrap items-center gap-2">
             <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs hover:bg-[var(--surface-inset)]">
               <Upload size={12} />
-              <span>Choose files</span>
+              <span>Photos</span>
               <input
                 type="file"
                 accept="image/*"
                 multiple
                 className="hidden"
-                onChange={(e) => e.target.files && handleFiles(e.target.files)}
+                onChange={(e) => e.target.files && handleFiles(e.target.files, "photo")}
               />
             </label>
             <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs hover:bg-[var(--surface-inset)]">
@@ -222,7 +230,28 @@ export function IncidentForm({
                 accept="image/*"
                 capture="environment"
                 className="hidden"
-                onChange={(e) => e.target.files && handleFiles(e.target.files)}
+                onChange={(e) => e.target.files && handleFiles(e.target.files, "photo")}
+              />
+            </label>
+            <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs hover:bg-[var(--surface-inset)]">
+              <Video size={12} />
+              <span>Video</span>
+              <input
+                type="file"
+                accept="video/mp4,video/quicktime,video/webm"
+                className="hidden"
+                onChange={(e) => e.target.files && handleFiles(e.target.files, "video")}
+              />
+            </label>
+            <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs hover:bg-[var(--surface-inset)]">
+              <Video size={12} />
+              <span>Record</span>
+              <input
+                type="file"
+                accept="video/*"
+                capture="environment"
+                className="hidden"
+                onChange={(e) => e.target.files && handleFiles(e.target.files, "video")}
               />
             </label>
             {uploading && <span className="text-xs text-[var(--text-muted)]">Uploading…</span>}
@@ -232,16 +261,23 @@ export function IncidentForm({
             <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {photos.map((p, idx) => (
                 <li key={p.path} className="group relative overflow-hidden rounded border border-[var(--border-color)]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={p.localPreview}
-                    alt="Uploaded incident photo"
-                    className="aspect-video w-full object-cover"
-                  />
+                  {p.mediaKind === "video" ? (
+                    <div className="flex aspect-video w-full items-center justify-center bg-[var(--surface-inset)]">
+                      <Video size={24} className="text-[var(--text-muted)]" />
+                      <span className="ml-1 text-[10px] text-[var(--text-muted)]">Video</span>
+                    </div>
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={p.localPreview}
+                      alt="Uploaded incident photo"
+                      className="aspect-video w-full object-cover"
+                    />
+                  )}
                   <button
                     type="button"
                     onClick={() => removePhoto(idx)}
-                    aria-label="Remove photo"
+                    aria-label="Remove evidence"
                     className="absolute top-1 right-1 rounded bg-black/50 p-0.5 text-white opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                   >
                     <X size={10} />
@@ -251,6 +287,9 @@ export function IncidentForm({
             </ul>
           )}
         </div>
+        <p className="mt-1 text-[10px] text-[var(--text-muted)]">
+          Photos: jpg/png/webp/heic · Video: mp4/mov/webm (max ~100 MB). Keep clips under 2 minutes for fast upload.
+        </p>
       </div>
 
       <div className="flex items-center justify-between gap-2 border-t border-[var(--border-color)] pt-4">

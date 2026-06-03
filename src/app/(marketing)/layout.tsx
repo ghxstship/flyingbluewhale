@@ -98,8 +98,13 @@ const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: s
 ];
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
+  // Two-skin lock: the ATLVS marketing site uses the same neutral SaaS
+  // skin as the console — visual consistency with the actual products
+  // (Inter, soft elevation, neutral surfaces, per-product accent). The
+  // cosmic GHXSTSHIP brand voice lives only at /ghxstship (the parent
+  // company surface, locked in (ghxstship)/ghxstship/layout.tsx).
   return (
-    <div className="page-shell">
+    <div data-theme="atlvs-product" data-platform="atlvs" className="page-shell">
       <MarketingHeader />
       <WebVitalsReporter />
       <main>{children}</main>

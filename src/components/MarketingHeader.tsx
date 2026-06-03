@@ -30,8 +30,11 @@ type NavGroup = { label: string; items: NavLink[] };
 const PRODUCT: NavGroup = {
   label: "Product",
   items: [
-    { label: "The Itinerary", href: "/features", description: "Every port. Every act." },
-    { label: "Rooms", href: "/solutions", description: "The bridge, the ports, the deck" },
+    { label: "Features", href: "/features", description: "Every module, every phase" },
+    { label: "Solutions", href: "/solutions", description: "ATLVS · COMPVSS · GVTEWAY" },
+    { label: "ATLVS — Production", href: "/solutions/atlvs", description: "Producer console" },
+    { label: "COMPVSS — Crew", href: "/solutions/compvss", description: "Workforce + field ops" },
+    { label: "GVTEWAY — Guests", href: "/solutions/gvteway", description: "Ticketing + stakeholder portal" },
   ],
 };
 
@@ -52,9 +55,9 @@ const INDUSTRIES: NavGroup = {
 const RESOURCES: NavGroup = {
   label: "Resources",
   items: [
-    { label: "Blog", href: "/blog", description: "Launches, tour notes, industry takes" },
-    { label: "Guides", href: "/guides", description: "Long-form runs for promoters" },
-    { label: "Docs", href: "/docs", description: "The run-sheet + API" },
+    { label: "Blog", href: "/blog", description: "Launches, releases, industry takes" },
+    { label: "Guides", href: "/guides", description: "Long-form for producers" },
+    { label: "Docs", href: "/docs", description: "Platform reference + API" },
     { label: "Changelog", href: "/changelog", description: "Every release, dated" },
   ],
 };
@@ -92,13 +95,7 @@ export function MarketingHeader() {
   const [themePickerOpen, setThemePickerOpen] = useState(false);
 
   return (
-    <header
-      className="sticky top-0 z-40"
-      style={{
-        background: "var(--bg, var(--background))",
-        borderBottom: "3px solid var(--gx-brass, var(--org-primary))",
-      }}
-    >
+    <header className="sticky top-0 z-40 border-b border-[var(--p-border)] bg-[var(--p-surface)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-3">
         <Link
           href="/"
@@ -108,10 +105,10 @@ export function MarketingHeader() {
           // (~1024px tablet) wrap the mark letter-by-letter into a vertical
           // stack instead of keeping it horizontal.
           //
-          // font-display (Big Shoulders) + weight 900 + uppercase tightens
-          // the wordmark to its poster-loud canon under the GHXSTSHIP
-          // theme; legacy themes still get a heavy uppercase tracking.
-          className="font-display text-[1.3rem] leading-none font-black tracking-[0.04em] whitespace-nowrap text-[var(--foreground)] uppercase"
+          // Inter at weight 800 + tight tracking is the ATLVS product canon
+          // lockup — the SaaS skin doesn't use Big Shoulders even for the
+          // wordmark. Brand display is reserved for the cosmic surface only.
+          className="text-[1.3rem] leading-none font-extrabold tracking-[0.04em] whitespace-nowrap text-[var(--p-text-1)] uppercase"
           onClick={() => setMobileOpen(false)}
           aria-label="ATLVS Technologies — home"
         >
@@ -159,10 +156,9 @@ export function MarketingHeader() {
           </Link>
           <Link
             href="/signup"
-            className="gx-btn gx-btn--nebula gx-btn--sm"
-            style={{ color: "var(--gx-bone, #fbfaf6)" }}
+            className="rounded-md bg-[var(--p-accent)] px-4 py-2 text-sm font-semibold text-[var(--p-accent-contrast)] transition hover:brightness-95"
           >
-            Book Now ↗
+            Start Free
           </Link>
         </div>
 
@@ -228,11 +224,10 @@ export function MarketingHeader() {
               </Link>
               <Link
                 href="/signup"
-                className="gx-btn gx-btn--nebula gx-btn--sm w-full justify-center"
-                style={{ color: "var(--gx-bone, #fbfaf6)" }}
+                className="w-full justify-center rounded-md bg-[var(--p-accent)] px-4 py-2 text-center text-sm font-semibold text-[var(--p-accent-contrast)] transition hover:brightness-95"
                 onClick={() => setMobileOpen(false)}
               >
-                Book Now ↗
+                Start Free
               </Link>
             </div>
           </div>

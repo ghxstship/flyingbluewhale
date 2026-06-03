@@ -24,11 +24,14 @@
 
 [data-theme="atlvs-product"] {
   /* ----------- TYPE -------------------------------------------------- *
-   * Neutral product sans (Inter) so the UI recedes — v3 canon. Brand
+   * Neutral product sans (Space Grotesk) so the UI recedes — kit canon
+   * per design_handoff/ATLVS_PRODUCT/README.md ("product UI font is Space
+   * Grotesk") and every reference HTML in ui_kits/atlvs/*.html. Brand
    * display (Big Shoulders) is RESERVED for the cosmic marketing skin
-   * and must not appear on SaaS surfaces. --font-inter is loaded by
-   * next/font in src/app/layout.tsx. */
-  --p-font: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+   * and must not appear on SaaS surfaces. --font-space-grotesk is loaded
+   * by next/font in src/app/layout.tsx. */
+  --p-font:
+    var(--font-space-grotesk), "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --p-mono: var(--font-space-mono), ui-monospace, "SF Mono", monospace;
 
   /* Radii — productivity-tool friendly, not pop-art sharp. */
@@ -116,22 +119,21 @@
   --color-info: var(--p-info);
 
   /* Font utility overrides — the ATLVS product canon is single-family
-     Inter (the UI recedes; brand display reserved for the logo). Without
-     these, Tailwind `font-display` / `font-body` and any unscoped
-     `var(--font-display)` consumer would resolve to Big Shoulders /
-     Space Grotesk from globals.css @theme inline defaults. */
-  --font-sans: var(--font-inter);
-  --font-body: var(--font-inter);
-  --font-display: var(--font-inter);
-  --font-subdisplay: var(--font-inter);
+     Space Grotesk (the UI recedes; brand display reserved for the logo).
+     Without these, Tailwind `font-display` / `font-body` and any
+     unscoped `var(--font-display)` consumer would resolve to Big
+     Shoulders from globals.css @theme inline defaults. */
+  --font-sans: var(--font-space-grotesk);
+  --font-body: var(--font-space-grotesk);
+  --font-display: var(--font-space-grotesk);
+  --font-subdisplay: var(--font-space-grotesk);
   --font-pixel: var(--font-space-mono);
   --font-mono: var(--font-space-mono);
 
-  /* Cosmic-skin token aliases — a handful of product pages
-     (annotations, onboarding flows) reach for `--ink-soft` from the
-     cosmic vocabulary. Alias it to the SaaS tertiary text so the
-     references resolve without each call site needing to be rewritten. */
-  --ink-soft: var(--p-text-3);
+  /* (Note: the previous --ink-soft alias bridge was removed in the
+     ATLVS-kit alignment pass — every product page now uses
+     --text-subtle directly, which routes through to --p-text-3 via
+     the legacy alias contract above.) */
   --accent: var(--p-accent);
   --accent-solid: var(--p-accent);
   --accent-contrast: var(--p-accent-contrast);

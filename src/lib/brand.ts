@@ -109,9 +109,29 @@ export const BRAND = {
    * Tailwind class names stay readable. The actual paint flows through
    * the per-platform `--org-primary` overlays in src/app/theme/index.css. */
   products: {
-    console: { name: "ATLVS", mark: "A T L V S", color: "nebula" },
-    portal: { name: "GVTEWAY", mark: "G V T E W A Y", color: "plasma" },
-    mobile: { name: "COMPVSS", mark: "C O M P V S S", color: "brass" },
+    console: {
+      name: "ATLVS",
+      mark: "A T L V S",
+      color: "nebula",
+      /** Sidebar subtitle per the ATLVS product kit reference HTMLs
+       *  (ui_kits/atlvs/dashboard.html: "Production Management"). */
+      subtitle: "Production Management",
+      audience: "Producers · Internal",
+    },
+    portal: {
+      name: "GVTEWAY",
+      mark: "G V T E W A Y",
+      color: "plasma",
+      subtitle: "Tickets & Fans",
+      audience: "Guests · Clients",
+    },
+    mobile: {
+      name: "COMPVSS",
+      mark: "C O M P V S S",
+      color: "brass",
+      subtitle: "Workforce & Crew",
+      audience: "Crew · Vendors · Talent",
+    },
   },
 } as const;
 

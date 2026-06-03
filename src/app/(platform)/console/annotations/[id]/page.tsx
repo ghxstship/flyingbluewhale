@@ -66,7 +66,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
                 <Badge variant="warning">Required</Badge>
               )
             ) : (
-              <span className="text-(--ink-soft)">—</span>
+              <span className="text-[var(--text-subtle)]">—</span>
             )}
           </Field>
         </div>
@@ -90,7 +90,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
             <h3 className="text-sm font-semibold">Resolution note</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{root.resolution_note}</p>
             {root.resolved_at ? (
-              <p className="mt-2 text-xs text-(--ink-soft)">Resolved {timeAgo(root.resolved_at)}</p>
+              <p className="mt-2 text-xs text-[var(--text-subtle)]">Resolved {timeAgo(root.resolved_at)}</p>
             ) : null}
           </div>
         ) : null}
@@ -110,17 +110,17 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
             {replies.map((r) => (
               <li key={r.id} className="border-l-2 border-(--ink) pl-3 text-sm">
                 <p className="whitespace-pre-wrap">{r.body}</p>
-                <p className="mt-1 font-mono text-xs text-(--ink-soft)">{timeAgo(r.created_at)}</p>
+                <p className="mt-1 font-mono text-xs text-[var(--text-subtle)]">{timeAgo(r.created_at)}</p>
               </li>
             ))}
-            {replies.length === 0 ? <li className="text-sm text-(--ink-soft)">No replies yet.</li> : null}
+            {replies.length === 0 ? <li className="text-sm text-[var(--text-subtle)]">No replies yet.</li> : null}
           </ul>
           <div className="mt-4">
             <ReplyForm parentId={root.id} />
           </div>
         </div>
 
-        <Link href="/console/annotations" className="inline-block text-xs text-(--ink-soft) underline">
+        <Link href="/console/annotations" className="inline-block text-xs text-[var(--text-subtle)] underline">
           ← Back to all annotations
         </Link>
       </div>
@@ -131,7 +131,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wider text-(--ink-soft) uppercase">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wider text-[var(--text-subtle)] uppercase">{label}</div>
       <div className="mt-1 font-mono text-sm">{children}</div>
     </div>
   );

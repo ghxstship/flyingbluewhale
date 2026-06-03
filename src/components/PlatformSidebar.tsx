@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { Search, PanelLeftClose, PanelLeftOpen, Pin, PinOff, ChevronRight, ChevronDown } from "lucide-react";
 import type { NavGroup, NavItem, NavSection } from "@/lib/nav";
 import { NAV_ICONS } from "@/components/nav-icons";
@@ -12,6 +13,7 @@ import { matchRoute } from "@/lib/hooks/useActiveRoute";
 import { Hint } from "@/components/ui/Tooltip";
 import { WorkspaceSwitcher } from "@/components/WorkspaceSwitcher";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
+import { BRAND } from "@/lib/brand";
 
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 400;
@@ -299,13 +301,36 @@ export function PlatformSidebar({
           </Hint>
         ) : (
           <div className="flex items-center justify-between gap-2 border-t border-[var(--border-color)] px-3 py-2.5">
-            {/* Canonical SaaS wordmark — Inter 700 16px tight letter-spacing
-                per ui_kits/atlvs/dashboard.html .brandrow b. Color = the
-                org accent so the platform overlay (nebula pink) shows
-                through. Spaced "A T L V S" form is a brand-canon
-                affordance, not a font choice — Big Shoulders display
-                stays reserved for marketing per the v3 register. */}
-            <span className="text-base font-bold tracking-[-0.01em] text-[var(--org-primary)]">A T L V S</span>
+            {/* Canonical SaaS brand mark — accent tile + white skull +
+                name + product subtitle, mirrors ui_kits/atlvs/
+                dashboard.html .brandrow. Tile uses --p-accent (the
+                per-product overlay sets this), skull is white-inverted
+                via CSS filter, name is Space Grotesk 700 with -0.01em
+                tracking, subtitle is Space Mono uppercase 8px in
+                tertiary text. */}
+            <div className="flex min-w-0 items-center gap-2">
+              <span
+                aria-hidden
+                className="grid h-7 w-7 flex-none place-items-center rounded-[7px]"
+                style={{ background: "var(--p-accent, var(--org-primary))" }}
+              >
+                <Image
+                  src="/brand/skull-bone.svg"
+                  alt=""
+                  width={18}
+                  height={18}
+                  className="[filter:brightness(0)_invert(1)]"
+                />
+              </span>
+              <div className="min-w-0 leading-tight">
+                <div className="truncate text-sm font-bold tracking-[-0.01em] text-[var(--p-text-1,var(--text-primary))]">
+                  {BRAND.products.console.name}
+                </div>
+                <div className="truncate font-mono text-[8px] tracking-[0.1em] text-[var(--p-text-3,var(--text-muted))] uppercase">
+                  {BRAND.products.console.subtitle}
+                </div>
+              </div>
+            </div>
             {/* Language switcher mirrors the marketing header so authed
                 operators can flip the entire console — internal labels,
                 date formats, currency — without leaving the page. Persists

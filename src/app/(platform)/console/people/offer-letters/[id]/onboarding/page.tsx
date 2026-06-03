@@ -53,10 +53,12 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
                   {s.critical_path ? <span className="font-bold text-red-600">★</span> : null}
                   <span className="font-medium">{s.title}</span>
                   <Badge variant={STATE_VARIANT[s.step_state]}>{STATE_LABEL[s.step_state]}</Badge>
-                  {s.category ? <span className="text-xs text-(--ink-soft) uppercase">{s.category}</span> : null}
+                  {s.category ? (
+                    <span className="text-xs text-[var(--text-subtle)] uppercase">{s.category}</span>
+                  ) : null}
                 </div>
-                {s.description ? <p className="mt-1 text-sm text-(--ink-soft)">{s.description}</p> : null}
-                <div className="mt-2 flex gap-3 text-xs text-(--ink-soft)">
+                {s.description ? <p className="mt-1 text-sm text-[var(--text-subtle)]">{s.description}</p> : null}
+                <div className="mt-2 flex gap-3 text-xs text-[var(--text-subtle)]">
                   {s.due_at ? <span>Due {formatDate(s.due_at, "medium")}</span> : null}
                   {s.completed_at ? <span>· Completed {formatDate(s.completed_at, "medium")}</span> : null}
                 </div>
@@ -64,7 +66,7 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
             </li>
           ))}
         </ul>
-        <div className="surface p-4 text-xs text-(--ink-soft)">
+        <div className="surface p-4 text-xs text-[var(--text-subtle)]">
           <Link href="/console/people/offer-letters" className="underline">
             ← Back to offer letters
           </Link>

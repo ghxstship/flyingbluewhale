@@ -69,14 +69,14 @@ export default async function ProjectOnboardingPage({ params }: { params: Promis
                 r.critical_path_open > 0 ? (
                   <Badge variant="warning">{r.critical_path_open}</Badge>
                 ) : (
-                  <span className="text-(--ink-soft)">—</span>
+                  <span className="text-[var(--text-subtle)]">—</span>
                 ),
               accessor: (r) => r.critical_path_open,
               filterable: true,
             },
           ]}
         />
-        <div className="surface mt-6 p-4 text-xs text-(--ink-soft)">
+        <div className="surface mt-6 p-4 text-xs text-[var(--text-subtle)]">
           Each row links to the per-recipient tracker. Recipients see their own live view at{" "}
           <code className="font-mono">/offer/[token]/onboarding</code>. Onboarding step changes auto-fire notifications
           to the assignee + watchers and write to the audit log via the annotations system.

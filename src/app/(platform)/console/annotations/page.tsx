@@ -76,7 +76,7 @@ export default async function AnnotationsPage() {
                 <div className="flex flex-col gap-0.5">
                   <span className="font-medium">{r.title ?? r.body.slice(0, 80)}</span>
                   {r.tags.length > 0 ? (
-                    <span className="text-xs text-(--ink-soft)">{r.tags.map((t) => `#${t}`).join(" ")}</span>
+                    <span className="text-xs text-[var(--text-subtle)]">{r.tags.map((t) => `#${t}`).join(" ")}</span>
                   ) : null}
                 </div>
               ),
@@ -120,7 +120,7 @@ export default async function AnnotationsPage() {
                     <Badge variant="warning">Needed</Badge>
                   )
                 ) : (
-                  <span className="text-(--ink-soft)">—</span>
+                  <span className="text-[var(--text-subtle)]">—</span>
                 ),
               accessor: (r) => (r.confirmation_required ? (r.confirmed_at ? 2 : 1) : 0),
             },
@@ -135,14 +135,14 @@ export default async function AnnotationsPage() {
         />
 
         {rows.length === 0 ? (
-          <div className="surface mt-6 p-6 text-sm text-(--ink-soft)">
+          <div className="surface mt-6 p-6 text-sm text-[var(--text-subtle)]">
             No open annotations. Use <code className="font-mono">createAnnotation()</code> from{" "}
             <code className="font-mono">@/lib/db/annotations</code> or the helper SQL function{" "}
             <code className="font-mono">create_annotation()</code> to flag records for follow-up.
           </div>
         ) : null}
 
-        <div className="surface mt-6 p-4 text-xs text-(--ink-soft)">
+        <div className="surface mt-6 p-4 text-xs text-[var(--text-subtle)]">
           Annotations are polymorphic across all entity types. They auto-fire notifications to assignees and watchers,
           and append to the audit log. Use <span className="font-mono">kind=flag</span> for items requiring action,{" "}
           <span className="font-mono">kind=note</span> for context,

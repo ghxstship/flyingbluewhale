@@ -102,6 +102,36 @@
   --text-muted: var(--p-text-2);
   --text-secondary: var(--p-text-2);
   --text-subtle: var(--p-text-3);
+
+  /* Semantic palette — SaaS values (muted vs. the cosmic kit's loud
+     signals). Cosmic root-tier defaults (success #2FBF71, warning brass,
+     danger flare, info plasma) are kit-correct for marketing but bleed
+     into product surfaces unless overridden here. The two product apps
+     should never paint with brass/plasma/flare — they're brand-loud,
+     not status-loud. Per product-theme.css#semantic. */
+  --color-success: var(--p-success);
+  --color-warning: var(--p-warning);
+  --color-danger: var(--p-danger);
+  --color-error: var(--p-danger);
+  --color-info: var(--p-info);
+
+  /* Font utility overrides — the ATLVS product canon is single-family
+     Inter (the UI recedes; brand display reserved for the logo). Without
+     these, Tailwind `font-display` / `font-body` and any unscoped
+     `var(--font-display)` consumer would resolve to Big Shoulders /
+     Space Grotesk from globals.css @theme inline defaults. */
+  --font-sans: var(--font-inter);
+  --font-body: var(--font-inter);
+  --font-display: var(--font-inter);
+  --font-subdisplay: var(--font-inter);
+  --font-pixel: var(--font-space-mono);
+  --font-mono: var(--font-space-mono);
+
+  /* Cosmic-skin token aliases — a handful of product pages
+     (annotations, onboarding flows) reach for `--ink-soft` from the
+     cosmic vocabulary. Alias it to the SaaS tertiary text so the
+     references resolve without each call site needing to be rewritten. */
+  --ink-soft: var(--p-text-3);
   --accent: var(--p-accent);
   --accent-solid: var(--p-accent);
   --accent-contrast: var(--p-accent-contrast);

@@ -124,11 +124,14 @@
   --org-accent: var(--accent);
   --org-on-primary: var(--accent-contrast);
 
-  /* ─── Status pairings — shared across themes ───────────────────── */
-  --color-error: #dc2626;
-  --color-warning: #d97706;
-  --color-success: #059669;
-  --color-info: #2563eb;
+  /* ─── Status pairings — locked to the GHXSTSHIP kit (tokens.json#semantic).
+   * Kit names this swatch `danger` (matches `--flare`); `--color-error`
+   * is a back-compat alias so existing consumers keep painting. */
+  --color-error: #f23a2f;
+  --color-danger: #f23a2f;
+  --color-warning: #e9a23b;
+  --color-success: #2fbf71;
+  --color-info: #21d4d4;
 
   /* ─── Specialty token fallbacks (audit m1) ─────────────────────────
      Themes are free to override these; neutral fallbacks make sure a

@@ -20,10 +20,18 @@
   --color-org-secondary: var(--org-secondary);
   --color-org-accent: var(--org-accent);
 
-  --color-success: #2e7d32;
-  --color-warning: #e65100;
-  --color-error: #c62828;
-  --color-info: #4a6fa5;
+  /* Semantic palette — locked to the GHXSTSHIP kit (tokens.json#semantic).
+   * `--color-error` is the legacy alias used throughout the codebase; the
+   * kit names this swatch `danger` (matches `--flare`). Both are exposed
+   * so kit-aligned consumers (`text-[var(--color-danger)]`) and legacy
+   * consumers (`text-[var(--color-error)]`) paint the same color.
+   * `--color-info` is the plasma teal — same swatch as the GHXSTSHIP
+   * `--gx-plasma` signal. */
+  --color-success: #2fbf71;
+  --color-warning: #e9a23b;
+  --color-error: #f23a2f;
+  --color-danger: #f23a2f;
+  --color-info: #21d4d4;
 
   /* Audit DS-T1: --font-sans previously bound to Inter directly, so Tailwind
    * `font-sans` resolved to Inter regardless of the active theme. Now points
@@ -34,14 +42,21 @@
    * Audit DS-T2: register --font-display / --font-subdisplay / --font-body
    * so Tailwind v4 generates `font-display`, `font-subdisplay`, `font-body`
    * utility classes — replaces the inline-style and legacy `font-serif`
-   * escapes scattered across proposals + offer-letters. Defaults bind to
-   * the bermuda-triangle / HVRBOR brand stack (Anton + Bebas Neue + DM Sans);
-   * other themes override via their CSS files. */
-  --font-sans: var(--font-dm-sans);
-  --font-mono: var(--font-share-tech-mono);
-  --font-display: var(--font-anton);
-  --font-subdisplay: var(--font-bebas-neue);
-  --font-body: var(--font-dm-sans);
+   * escapes scattered across proposals + offer-letters.
+   *
+   * Kit lock (2026-06-03): defaults bind to the canonical GHXSTSHIP
+   * four-family stack — Big Shoulders Display (poster headlines),
+   * Space Grotesk (UI + body), Silkscreen (8-bit/pixel labels), Space
+   * Mono (coordinates, specs, manifest metadata). The `ghxstship` theme
+   * file rebinds the same vars on its own selector for symmetry; any
+   * future theme that drops in without overrides will now inherit the
+   * kit instead of the dead Bermuda Triangle / HVRBOR stack. */
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-space-mono);
+  --font-display: var(--font-big-shoulders);
+  --font-subdisplay: var(--font-big-shoulders);
+  --font-body: var(--font-space-grotesk);
+  --font-pixel: var(--font-silkscreen);
 
   /* Audit T2 fix: breakpoints registered with Tailwind v4's `@theme` so
      `sm:` / `md:` / `lg:` / `xl:` / `2xl:` utilities resolve from a single

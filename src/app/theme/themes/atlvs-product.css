@@ -172,8 +172,17 @@
   color-scheme: light;
 }
 
-/* ---- DARK (orthogonal to theme; chosen by ThemeProvider mode) ------- */
-[data-theme="atlvs-product"][data-mode="dark"] {
+/* ---- DARK (orthogonal to theme; chosen by ThemeProvider mode) -------
+ * Cascade note: `data-mode` is written to <html> by theme-script.ts
+ * (pre-paint) and ThemeProvider (post-mount). `data-theme="atlvs-product"`
+ * lives on the product-shell <div> deeper in the tree. A compound
+ * selector like `[data-theme="atlvs-product"][data-mode="dark"]` would
+ * require both attributes on the same element and silently never match
+ * the cross-boundary case. The descendant combinator below correctly
+ * fires when <html data-mode="dark"> wraps a <div data-theme="atlvs-
+ * product">. Specificity (0,2,0) still beats the single-attribute LIGHT
+ * defaults (0,1,0), so cascade order is preserved without !important. */
+[data-mode="dark"] [data-theme="atlvs-product"] {
   --p-bg: #111318;
   --p-surface: #1a1d24;
   --p-surface-2: #232730;
@@ -200,7 +209,7 @@
   --p-accent-text: #d11668;
   --p-accent-weak: rgba(255, 46, 136, 0.12);
 }
-[data-theme="atlvs-product"][data-platform="atlvs"][data-mode="dark"] {
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff4d9b;
   --p-accent-text: #ff6fae;
   --p-accent-weak: rgba(255, 46, 136, 0.18);
@@ -214,7 +223,7 @@
   --p-accent-weak: rgba(233, 162, 59, 0.14);
   --p-accent-contrast: #1b1305;
 }
-[data-theme="atlvs-product"][data-platform="compvss"][data-mode="dark"] {
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
   --p-accent: #f0b255;
   --p-accent-text: #f0b255;
   --p-accent-weak: rgba(233, 162, 59, 0.2);
@@ -228,7 +237,7 @@
   --p-accent-text: #0b7e7e;
   --p-accent-weak: rgba(33, 212, 212, 0.14);
 }
-[data-theme="atlvs-product"][data-platform="gvteway"][data-mode="dark"] {
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
   --p-accent: #2bd6d6;
   --p-accent-text: #3fe0e0;
   --p-accent-weak: rgba(33, 212, 212, 0.18);

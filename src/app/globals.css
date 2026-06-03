@@ -1161,6 +1161,60 @@ pre,
     min-height: 3.5rem; /* 56px — matches sidebar header */
   }
 
+  /* ───── v3 ATLVS Product theme — SaaS-scoped surface overrides ─────
+   *
+   * The cosmic ghxstship skin uses a translucent glass-blur header to
+   * read as a "ship's bridge" affordance. The neutral SaaS register
+   * (atlvs-product) is deliberately quieter — solid surface, hairline
+   * separator, no blur. Per design_handoff/ATLVS_PRODUCT/README.md
+   * "deliberately NOT the cosmic-voyage GHXSTSHIP marketing aesthetic". */
+  [data-theme="atlvs-product"] .glass-nav {
+    background: var(--p-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid var(--p-border);
+  }
+  [data-theme="atlvs-product"] .glass-card {
+    background: var(--p-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid var(--p-border);
+  }
+
+  /* Canonical nav-item active state — uses the v3 product accent-weak
+   * tint + accent-text color (per ui_kits/atlvs/dashboard.html .ni.on).
+   * Replaces the color-mix() fallback so the active row reads in exact
+   * canon (12% tint for atlvs/gvteway, 14% for compvss). */
+  [data-theme="atlvs-product"] .nav-item-active {
+    background: var(--p-accent-weak);
+    color: var(--p-accent-text);
+    font-weight: 600;
+  }
+
+  /* Canonical data-table polish — per ui_kits/atlvs/dashboard.html. The
+   * thead text stays Title Case per the project's standing convention
+   * (feedback_title_case_default.md); the canonical pattern's UPPERCASE
+   * is explicitly NOT adopted. Everything else aligns: tinted thead
+   * background, no trailing border on the last row, secondary text
+   * tone on tbody td, surface-2 hover. */
+  [data-theme="atlvs-product"] .data-table thead tr {
+    background: var(--p-surface-2);
+  }
+  [data-theme="atlvs-product"] .data-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  [data-theme="atlvs-product"] .data-table tbody td {
+    color: var(--p-text-2);
+  }
+  [data-theme="atlvs-product"] .data-table tbody td b,
+  [data-theme="atlvs-product"] .data-table tbody td strong {
+    color: var(--p-text-1);
+    font-weight: 600;
+  }
+  [data-theme="atlvs-product"] .data-table tbody tr:hover {
+    background: var(--p-surface-2);
+  }
+
   .page-shell {
     min-height: 100vh;
     background: var(--background);
@@ -1303,7 +1357,6 @@ pre,
     font-weight: 600;
   }
 
-
   /* ───── Density (compact / comfortable / spacious) ───── */
 
   [data-density="compact"] .input-base {
@@ -1392,14 +1445,862 @@ pre,
    * Audit B6: Bermuda Triangle canon calls for "geometric thick-stroke"
    * iconography. Lucide React renders icons with `class="lucide lucide-…"`
    * and a default stroke-width of 2. Bumping to 2.25 here under the theme
-   * scope gives every Lucide icon a more deliberate, geometric weight
-   * without touching call sites or wrapping the icon module. Other CHROMA
-   * themes keep Lucide's default unless they opt in.
-   *
-   * Scoped to `svg.lucide` so non-Lucide SVGs (charts, illustrations,
-   * decorative graphics) are unaffected. */
-  [data-theme="bermuda-triangle"] svg.lucide {
-    stroke-width: 2.25;
+   * scope gave every Lucide icon a deliberate, geometric weight on the
+   * pre-v3 `bermuda-triangle` skin. That skin was purged in the v3 brand
+   * sweep, so the override is gone — Lucide ships with its default stroke
+   * width across both surviving skins (ghxstship, atlvs-product). If a
+   * future skin wants the chunkier weight, scope an override to its
+   * data-theme selector. */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     GHXSTSHIP "Deep Space Voyage" component layer (gx-*)
+     ───────────────────────────────────────────────────────────────────
+     Pop art building blocks. Every primitive below maps 1:1 to the
+     GHXSTSHIP design handoff (project/components.css + project/terminal.css
+     + project/polish.css). Tokens come from the ghxstship theme file —
+     these classes paint with --gx-* values so they keep working when the
+     theme switches; under non-ghxstship themes the gx-* tokens are
+     undefined and call sites should opt in via [data-theme="ghxstship"].
+     ─────────────────────────────────────────────────────────────────── */
+
+  /* ── Typography helpers ─────────────────────────────────────────── */
+  .gx-eyebrow {
+    font-family: var(--font-pixel, var(--font-mono, ui-monospace, monospace));
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gx-brass, var(--org-primary));
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+  .gx-eyebrow::before {
+    content: "◆";
+    color: var(--gx-nebula, var(--org-accent));
+    font-size: 10px;
+  }
+  .gx-eyebrow.no-dot::before {
+    content: none;
+  }
+  .gx-eyebrow-mono {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gx-plasma, var(--org-primary));
+    margin: 0;
+  }
+
+  /* Display headings — Big Shoulders Display, condensed and poster-loud.
+     Sizes use clamp() so they breathe through the breakpoint without
+     `sm:` / `md:` class clouds at every call site. */
+  .gx-display-xl,
+  .gx-display-l,
+  .gx-display-m,
+  .gx-h1,
+  .gx-h2,
+  .gx-h3 {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--text);
+    text-wrap: balance;
+    line-height: 0.95;
+  }
+  .gx-display-xl {
+    font-size: clamp(56px, 9vw, 128px);
+    line-height: 0.84;
+    font-weight: 900;
+  }
+  .gx-display-l {
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 0.9;
+    font-weight: 900;
+  }
+  .gx-display-m {
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 0.92;
+  }
+  .gx-h1 {
+    font-size: clamp(32px, 4vw, 44px);
+    line-height: 1;
+  }
+  .gx-h2 {
+    font-size: clamp(24px, 2vw, 32px);
+    line-height: 1.05;
+  }
+  .gx-h3 {
+    font-size: 22px;
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  /* ── Buttons ────────────────────────────────────────────────────── */
+  .gx-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 18px;
+    line-height: 1;
+    padding: 14px 26px;
+    border: 3px solid var(--gx-ink, var(--border));
+    border-radius: 4px;
+    background: var(--gx-brass, var(--org-primary));
+    color: var(--gx-ink, var(--org-on-primary, #0a0e27));
+    box-shadow: 3px 3px 0 var(--gx-ink, var(--border));
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      transform 80ms ease,
+      box-shadow 80ms ease,
+      background 150ms ease;
+    user-select: none;
+  }
+  .gx-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--gx-ink, var(--border));
+  }
+  .gx-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--gx-ink, var(--border));
+  }
+  .gx-btn--nebula {
+    background: var(--gx-nebula, var(--org-accent));
+    color: var(--gx-bone, #fbfaf6);
+  }
+  .gx-btn--plasma {
+    background: var(--gx-plasma, #21d4d4);
+    color: var(--gx-ink, #0a0e27);
+  }
+  .gx-btn--ink {
+    background: var(--gx-ink, var(--border));
+    color: var(--gx-bone, #fbfaf6);
+    border-color: var(--gx-ink, var(--border));
+  }
+  .gx-btn--ghost {
+    background: transparent;
+    color: var(--gx-bone, var(--text));
+    border-color: var(--gx-bone, var(--text));
+    box-shadow: 3px 3px 0 var(--gx-brass, var(--org-primary));
+  }
+  .gx-btn--sm {
+    font-size: 14px;
+    padding: 9px 16px;
+  }
+  .gx-btn--lg {
+    font-size: 22px;
+    padding: 18px 34px;
+  }
+
+  /* ── Tags / chips / badges ──────────────────────────────────────── */
+  .gx-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 5px 12px;
+    border: 2px solid var(--gx-ink, var(--border));
+    border-radius: 999px;
+    background: var(--gx-bone, #fbfaf6);
+    color: var(--gx-ink, var(--border));
+    transition:
+      transform 100ms ease,
+      box-shadow 100ms ease;
+  }
+  .gx-tag:hover {
+    transform: translate(-1px, -1px);
+  }
+  .gx-tag--brass {
+    background: var(--gx-brass, var(--org-primary));
+    color: var(--gx-ink, var(--border));
+  }
+  .gx-tag--nebula {
+    background: var(--gx-nebula, var(--org-accent));
+    color: var(--gx-bone, #fbfaf6);
+    border-color: var(--gx-bone, #fbfaf6);
+  }
+  .gx-tag--plasma {
+    background: var(--gx-plasma, #21d4d4);
+    color: var(--gx-ink, var(--border));
+  }
+  .gx-tag--ghost {
+    background: transparent;
+    color: var(--gx-bone, var(--text));
+    border-color: var(--gx-ink-3, var(--border));
+  }
+  .gx-chip-pixel {
+    display: inline-block;
+    font-family: var(--font-pixel, var(--font-mono, ui-monospace, monospace));
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 7px 12px;
+    background: var(--gx-ink, var(--border));
+    color: var(--gx-brass, var(--org-primary));
+    box-shadow: 3px 3px 0 var(--gx-brass-deep, var(--org-secondary));
+  }
+
+  /* ── Panels & cards ─────────────────────────────────────────────── */
+  .gx-panel {
+    background: var(--gx-bone, var(--surface));
+    border: 4px solid var(--gx-ink, var(--border));
+    border-radius: 4px;
+    box-shadow: 6px 6px 0 var(--gx-ink, var(--border));
+    padding: 32px;
+    color: var(--gx-ink, var(--text));
+  }
+  .gx-panel--dark {
+    background: var(--gx-ink-2, var(--surface-2));
+    color: var(--gx-bone, var(--text));
+    border-color: var(--gx-bone, var(--border));
+    box-shadow: 6px 6px 0 var(--gx-brass-deep, var(--org-secondary));
+  }
+  .gx-card {
+    background: var(--gx-ink-2, var(--surface-2));
+    border: 3px solid var(--gx-ink-3, var(--border));
+    border-radius: 4px;
+    overflow: hidden;
+    transition:
+      transform 120ms ease,
+      border-color 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .gx-card:hover {
+    transform: translate(-3px, -3px);
+    border-color: var(--gx-brass, var(--org-primary));
+    box-shadow: 8px 8px 0 var(--gx-ink, var(--border));
+  }
+
+  /* ── Halftone backgrounds (CSS-only Ben-Day dots) ──────────────── */
+  .gx-halftone {
+    background-image: var(--gx-halftone-ink);
+    background-size: var(--gx-dot-size) var(--gx-dot-size);
+  }
+  .gx-halftone-brass {
+    background-image: var(--gx-halftone-brass);
+    background-size: var(--gx-dot-size) var(--gx-dot-size);
+  }
+  .gx-halftone-nebula {
+    background-image: var(--gx-halftone-nebula);
+    background-size: var(--gx-dot-size) var(--gx-dot-size);
+  }
+  .gx-halftone-fade {
+    background-image: var(--gx-halftone-bone);
+    background-size: var(--gx-dot-size) var(--gx-dot-size);
+    -webkit-mask-image: linear-gradient(180deg, #000, transparent);
+    mask-image: linear-gradient(180deg, #000, transparent);
+  }
+  .gx-stripe {
+    background: var(--gx-stripe-brass);
+  }
+  .gx-rule {
+    height: 4px;
+    background: var(--gx-ink, var(--border));
+    border: 0;
+  }
+  .gx-rule--stripe {
+    height: 14px;
+    border: 0;
+    background: var(--gx-stripe-brass);
+  }
+
+  /* ── Coordinate stamp (nautical metadata) ──────────────────────── */
+  .gx-coords {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-subtle, var(--text-muted));
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .gx-coords::before {
+    content: "◆";
+    color: var(--gx-brass, var(--org-primary));
+  }
+
+  /* ── Booking stepper (5-step horizontal nav) ───────────────────── */
+  .gx-stepper {
+    background: var(--gx-ink, var(--surface));
+    border-top: 4px solid var(--gx-ink-3, var(--border));
+    border-bottom: 4px solid var(--gx-ink-3, var(--border));
+  }
+  .gx-stepper__row {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .gx-bstep {
+    flex: 1;
+    min-width: 190px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 22px 20px;
+    text-decoration: none;
+    border-right: 2px solid var(--gx-ink-3, var(--border));
+    transition: background 120ms ease;
+    color: inherit;
+  }
+  .gx-bstep:last-child {
+    border-right: 0;
+  }
+  .gx-bstep:hover {
+    background: var(--gx-ink-2, var(--surface-2));
+  }
+  .gx-bstep__n {
+    width: 38px;
+    height: 38px;
+    flex: none;
+    border-radius: 50%;
+    border: 3px solid var(--gx-brass, var(--org-primary));
+    color: var(--gx-brass, var(--org-primary));
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .gx-bstep.is-cta .gx-bstep__n {
+    background: var(--gx-brass, var(--org-primary));
+    color: var(--gx-ink, var(--background));
+  }
+  .gx-bstep__l {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-subtle, var(--text-muted));
+  }
+  .gx-bstep__t {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: var(--text);
+    line-height: 1;
+    margin-top: 3px;
+    display: block;
+  }
+  @media (max-width: 880px) {
+    .gx-bstep {
+      min-width: 50%;
+    }
+  }
+
+  /* ── Marquee & trust bar (ticker) ──────────────────────────────── */
+  .gx-marquee {
+    background: var(--gx-brass, var(--org-primary));
+    border-top: 4px solid var(--gx-ink, var(--border));
+    border-bottom: 4px solid var(--gx-ink, var(--border));
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .gx-marquee__track {
+    display: inline-flex;
+    gap: 40px;
+    padding: 13px 0;
+    animation: gx-marquee-scroll 28s linear infinite;
+  }
+  .gx-marquee__track span {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 900;
+    font-size: 23px;
+    text-transform: uppercase;
+    color: var(--gx-ink, var(--background));
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 40px;
+  }
+  .gx-marquee__track span::after {
+    content: "✦";
+    color: var(--gx-nebula, var(--org-accent));
+  }
+  @keyframes gx-marquee-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gx-marquee__track {
+      animation: none;
+    }
+  }
+  .gx-trustbar {
+    background: var(--gx-ink, var(--surface));
+    border-top: 3px solid var(--gx-ink-3, var(--border));
+    border-bottom: 3px solid var(--gx-ink-3, var(--border));
+    padding: 18px 0;
+  }
+  .gx-trustbar__lbl {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-subtle, var(--text-muted));
+    text-align: center;
+    margin: 0 0 12px;
+  }
+  .gx-trustbar__logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 34px;
+    flex-wrap: wrap;
+  }
+  .gx-trustbar__logos span {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 900;
+    font-size: 19px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.75;
+    transition:
+      opacity 150ms ease,
+      color 150ms ease;
+  }
+  .gx-trustbar__logos span:hover {
+    opacity: 1;
+    color: var(--gx-brass, var(--org-primary));
+  }
+
+  /* ── Boarding strip (live departures ticker) ──────────────────── */
+  .gx-boardingstrip {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gx-plasma, var(--org-accent));
+    margin-bottom: 30px;
+    border: 1.5px solid var(--gx-ink, var(--border));
+    border-radius: 4px;
+    padding: 8px 14px;
+    background: #05060f;
+    box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.7);
+    flex-wrap: wrap;
+  }
+  .gx-boardingstrip__now {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--gx-nebula, var(--org-accent));
+    flex: none;
+    padding-right: 12px;
+    margin-right: 12px;
+    border-right: 1.5px solid var(--gx-ink-3, var(--border));
+  }
+  .gx-boardingstrip__now::before {
+    content: "●";
+    animation: gx-blink 1.1s steps(1) infinite;
+  }
+  .gx-boardingstrip__ticker {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .gx-boardingstrip__ticker > span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: gx-ticker 26s linear infinite;
+    color: var(--gx-plasma, var(--org-accent));
+    text-shadow: 0 0 8px rgba(33, 212, 212, 0.5);
+  }
+  @keyframes gx-ticker {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes gx-blink {
+    50% {
+      opacity: 0.45;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gx-boardingstrip__ticker > span {
+      animation: none;
+      padding-left: 0;
+    }
+  }
+
+  /* ── Subway strip-map (8-phase itinerary) ──────────────────────── */
+  .gx-smap__line {
+    display: flex;
+    gap: 0;
+  }
+  .gx-smap__stop {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 48px;
+  }
+  .gx-smap__stop::before {
+    content: "";
+    position: absolute;
+    top: 18px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--gx-brass, var(--org-primary));
+  }
+  .gx-smap__stop:first-child::before {
+    left: 50%;
+    width: 50%;
+  }
+  .gx-smap__stop:last-child::before {
+    width: 50%;
+  }
+  .gx-smap__dot {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--gx-void, var(--background));
+    border: 5px solid var(--gx-brass, var(--org-primary));
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--gx-brass, var(--org-primary));
+  }
+  .gx-smap__stop.is-terminus .gx-smap__dot {
+    background: var(--gx-brass, var(--org-primary));
+    color: var(--gx-ink, var(--background));
+  }
+  .gx-smap__name {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: var(--text);
+    line-height: 1.02;
+    margin-top: 2px;
+    letter-spacing: 0.005em;
+  }
+  .gx-smap__sub {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    color: var(--text-subtle, var(--text-muted));
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+  @media (max-width: 880px) {
+    .gx-smap__line {
+      flex-direction: column;
+    }
+    .gx-smap__stop {
+      flex-direction: row;
+      text-align: left;
+      gap: 16px;
+      padding: 0 0 26px 0;
+      align-items: flex-start;
+    }
+    .gx-smap__stop::before {
+      top: 0;
+      left: 18px;
+      width: 6px;
+      height: 100%;
+    }
+    .gx-smap__stop:first-child::before {
+      top: 50%;
+      height: 50%;
+    }
+    .gx-smap__stop:last-child::before {
+      height: 50%;
+    }
+    .gx-smap__dot {
+      position: static;
+      transform: none;
+      flex: none;
+    }
+    .gx-smap__name {
+      margin-top: 3px;
+    }
+  }
+
+  /* ── FIDS departures board (Past Voyages / Archives) ───────────── */
+  .gx-fids {
+    background: #080a12;
+    border: 3px solid #000;
+    border-radius: 6px;
+    box-shadow: 6px 6px 0 var(--gx-ink, var(--border));
+    overflow: hidden;
+  }
+  .gx-fids__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--gx-brass, var(--org-primary));
+    padding: 12px 22px;
+    border-bottom: 3px solid #000;
+  }
+  .gx-fids__head .gx-fids__ttl {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 900;
+    font-size: 24px;
+    text-transform: uppercase;
+    color: var(--gx-ink, var(--background));
+    letter-spacing: 0.02em;
+  }
+  .gx-fids__head .gx-fids__clock {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--gx-ink, var(--background));
+    letter-spacing: 0.08em;
+  }
+  .gx-fids__row {
+    display: grid;
+    grid-template-columns: 84px 1fr 150px 168px;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 22px;
+    border-bottom: 1px solid #161b28;
+  }
+  .gx-fids__row--head {
+    background: #0b0e18;
+    border-bottom: 2px solid #222a3d;
+  }
+  .gx-fids__row--head span {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #667099;
+  }
+  .gx-flap {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    color: #f4c657;
+    background: #11141f;
+    border-radius: 3px;
+    padding: 7px 9px;
+    display: inline-block;
+    box-shadow:
+      inset 0 -2px 0 #000,
+      inset 0 1px 0 #2a2f40;
+    position: relative;
+  }
+  .gx-flap::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.55);
+  }
+  .gx-fids__dest {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: 22px;
+    text-transform: uppercase;
+    color: var(--gx-bone, var(--text));
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+  .gx-fids__dest small {
+    display: block;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #667099;
+    margin-top: 3px;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+  .gx-fids__meta {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9aa3c2;
+  }
+  .gx-status {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 11px;
+    border-radius: 3px;
+    text-align: center;
+    display: inline-block;
+  }
+  .gx-status--boarding {
+    background: var(--gx-nebula, var(--org-accent));
+    color: #fff;
+    animation: gx-blink 1.1s steps(1) infinite;
+  }
+  .gx-status--ontime {
+    background: rgba(47, 191, 113, 0.16);
+    color: #3ee08a;
+    border: 1px solid rgba(47, 191, 113, 0.4);
+  }
+  .gx-status--final {
+    background: rgba(233, 162, 59, 0.16);
+    color: var(--gx-brass, var(--org-primary));
+    border: 1px solid rgba(233, 162, 59, 0.45);
+  }
+  .gx-status--departed {
+    background: #161b28;
+    color: #667099;
+    border: 1px solid #222a3d;
+  }
+  .gx-status--scheduled {
+    background: rgba(33, 212, 212, 0.14);
+    color: var(--gx-plasma, var(--org-accent));
+    border: 1px solid rgba(33, 212, 212, 0.4);
+  }
+  @media (max-width: 760px) {
+    .gx-fids__row {
+      grid-template-columns: 70px 1fr 100px;
+    }
+    .gx-fids__row > .gx-fids__meta {
+      display: none;
+    }
+    .gx-fids__row--head span:nth-child(3) {
+      display: none;
+    }
+  }
+
+  /* ── Gate placard ─────────────────────────────────────────────── */
+  .gx-gate {
+    background: var(--gx-ink, var(--surface));
+    border: 3px solid var(--gx-bone, var(--border));
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .gx-gate__top {
+    background: var(--gx-bone, var(--border));
+    color: var(--gx-ink, var(--background));
+    padding: 10px 20px;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .gx-gate__mid {
+    padding: 26px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .gx-gate__num {
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 900;
+    font-size: 84px;
+    line-height: 0.8;
+    color: var(--gx-brass, var(--org-primary));
+    flex: none;
+  }
+  .gx-gate__now {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gx-nebula, var(--org-accent));
+    margin: 0 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .gx-gate__now::before {
+    content: "●";
+    animation: gx-blink 1.1s steps(1) infinite;
+  }
+
+  /* ── Marketing nav — GHXSTSHIP wayfinding look ───────────────────
+     Override .nav-item under the ghxstship theme so the marketing
+     header reads as mono-uppercase wayfinding (Vercel/Linear neutral
+     style replaced by the design's punchier coordinate label).
+     Scoped to headers so console/portal/mobile sidebar nav-items keep
+     their own treatment. */
+  [data-theme="ghxstship"] header .nav-item {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 11px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  [data-theme="ghxstship"] header .nav-item:hover {
+    color: var(--gx-brass, var(--org-primary));
+    background: transparent;
+  }
+
+  /* ── Starburst "POW" badge (clip-path star) ───────────────────── */
+  .gx-burst {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    color: var(--gx-ink, var(--background));
+    font-family: var(--font-display, system-ui, sans-serif);
+    font-weight: 900;
+    text-transform: uppercase;
+    background: var(--gx-nebula, var(--org-accent));
+    clip-path: polygon(
+      50% 0%,
+      61% 16%,
+      79% 8%,
+      79% 28%,
+      98% 28%,
+      86% 44%,
+      100% 56%,
+      82% 64%,
+      92% 82%,
+      72% 79%,
+      68% 98%,
+      52% 86%,
+      38% 100%,
+      33% 80%,
+      13% 86%,
+      20% 67%,
+      1% 60%,
+      16% 47%,
+      3% 31%,
+      22% 30%,
+      21% 10%,
+      39% 17%
+    );
   }
 } /* end @layer components */
 

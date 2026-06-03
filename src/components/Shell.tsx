@@ -37,8 +37,14 @@ export function PortalRail({
   const headerTitle = title ?? group?.label ?? "";
   return (
     <aside className="flex w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3">
-      <div className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-[var(--org-primary)]">
-        GVTEWAY
+      <div className="mb-3 flex items-center gap-2">
+        {/* Canonical SaaS brand row — Inter 700 16px tight letter-spacing
+            per ui_kits/atlvs/dashboard.html .brandrow b. The pre-v3
+            cosmic Big Shoulders display + uppercase has been removed
+            from SaaS surfaces (design canon: brand display reserved for
+            marketing only). The spaced "G V T E W A Y" wordmark form
+            remains — that's a brand-canon affordance, not a font choice. */}
+        <span className="text-base font-bold tracking-[-0.01em] text-[var(--org-primary)]">G V T E W A Y</span>
       </div>
       {headerTitle ? <div className="nav-label">{headerTitle}</div> : null}
       {sections.map((section, idx) => (
@@ -106,10 +112,18 @@ export function ModuleHeader({
       <div className="module-header-inner">
         <div className="min-w-0 flex-1">
           {breadcrumbs && breadcrumbs.length > 0 && <UnifiedBreadcrumbs items={breadcrumbs} className="mb-2" />}
+          {/* Canonical SaaS module header — Space Mono uppercase crumb +
+              Inter h1 sentence case per ui_kits/atlvs/dashboard.html .top.
+              The pre-v3 cosmic Big Shoulders display + UPPERCASE h1 was
+              removed from SaaS surfaces; UPPERCASE remains on the small
+              eyebrow per the Title Case rule's letter-spaced-label
+              exception. */}
           {eyebrow && (
-            <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+            <div className="font-mono text-[11px] font-semibold tracking-[0.14em] text-[var(--org-primary)] uppercase">
+              {eyebrow}
+            </div>
           )}
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-[var(--foreground)]">{title}</h1>
+          <h1 className="mt-1 text-2xl font-bold tracking-[-0.01em] text-[var(--foreground)]">{title}</h1>
           {subtitle ? <p className="mt-1 text-sm text-[var(--text-muted)]">{subtitle}</p> : null}
         </div>
         {action && <div className="flex items-center gap-2">{action}</div>}

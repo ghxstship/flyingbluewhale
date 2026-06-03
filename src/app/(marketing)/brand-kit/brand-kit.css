@@ -1,0 +1,273 @@
+/*
+ * /brand-kit page styles — port of the inline <style> block from
+ * project/index.html in the design handoff bundle.
+ *
+ * All paint flows through the --gx-* GHXSTSHIP palette declared in
+ * src/app/theme/themes/ghxstship.css (and aliased to safe defaults
+ * below so the kit page still reads on themes that don't define
+ * the cosmic world).
+ */
+
+.bk-root {
+  /* Defensive fallbacks — bermuda-light + other CHROMA themes never
+     defined the named --gx-* world, so we re-pin them here so this
+     page paints in canon regardless of the active theme. */
+  --gx-void: #060815;
+  --gx-ink: #0a0e27;
+  --gx-ink-2: #161c3d;
+  --gx-ink-3: #28305c;
+  --gx-bone: #fbfaf6;
+  --gx-bone-2: #b9c0e0;
+  --gx-bone-3: #8a93b8;
+  --gx-brass: #e9a23b;
+  --gx-brass-deep: #b6772a;
+  --gx-nebula: #ff2e88;
+  --gx-plasma: #21d4d4;
+
+  background: var(--gx-void);
+  color: var(--gx-bone);
+  font-family: var(--font-body, var(--font-space-grotesk), system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  /* Stretch beyond the (marketing) shell padding so the cosmic void
+     reads full-bleed even though the layout's <main> doesn't reset
+     its padding. */
+  min-height: 100svh;
+}
+
+/* hero */
+.bk-hero {
+  padding: 64px 0 40px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 3px solid var(--gx-ink-3);
+}
+.bk-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(var(--gx-ink-3) 1.4px, transparent 1.5px) 0 0 / 26px 26px;
+  opacity: 0.4;
+  -webkit-mask: radial-gradient(120% 90% at 80% 0%, #000, transparent);
+  mask: radial-gradient(120% 90% at 80% 0%, #000, transparent);
+  pointer-events: none;
+}
+.bk-hero-in {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.bk-mark {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--gx-ink);
+  border: 5px solid var(--gx-brass);
+  box-shadow: 8px 8px 0 var(--gx-brass-deep);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.bk-mark img {
+  width: 62px;
+  height: 62px;
+  image-rendering: pixelated;
+}
+
+.bk-h1 {
+  font-family: var(--font-display, var(--font-big-shoulders), "Arial Narrow", system-ui, sans-serif);
+  font-weight: 900;
+  font-size: clamp(40px, 7vw, 76px);
+  line-height: 0.86;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+  white-space: nowrap;
+  color: var(--gx-bone);
+}
+.bk-tag {
+  font-family: var(--font-mono, var(--font-space-mono), ui-monospace, monospace);
+  font-size: 13px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gx-brass);
+  margin: 8px 0 0;
+}
+.bk-def {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--gx-bone-2);
+  max-width: 720px;
+  margin: 22px 0 0;
+  position: relative;
+}
+
+/* chips on the hero */
+.bk-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  position: relative;
+}
+.bk-chip {
+  font-family: var(--font-mono, var(--font-space-mono), ui-monospace, monospace);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gx-bone-2);
+  border: 1px solid var(--gx-ink-3);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+/* sections */
+.bk-section {
+  padding: 48px 0;
+  border-bottom: 2px solid var(--gx-ink-3);
+}
+.bk-eyebrow {
+  font-family: var(--font-mono, var(--font-space-mono), ui-monospace, monospace);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gx-brass);
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.bk-eyebrow::before {
+  content: "◆";
+  color: var(--gx-nebula);
+}
+.bk-h2 {
+  font-family: var(--font-display, var(--font-big-shoulders), "Arial Narrow", system-ui, sans-serif);
+  font-weight: 900;
+  font-size: 34px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 0 0 22px;
+  color: var(--gx-bone);
+}
+
+/* tile grid */
+.bk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 840px) {
+  .bk-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .bk-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bk-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--gx-ink-2);
+  border: 2px solid var(--gx-ink-3);
+  border-radius: 6px;
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+.bk-card:hover {
+  transform: translate(-3px, -3px);
+  border-color: var(--gx-brass);
+  box-shadow: 7px 7px 0 var(--gx-ink);
+}
+.bk-card:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--gx-ink);
+}
+.bk-card:focus-visible {
+  outline: none;
+  border-color: var(--gx-brass);
+  box-shadow:
+    0 0 0 3px var(--gx-brass),
+    7px 7px 0 var(--gx-ink);
+}
+
+.bk-card-ic {
+  width: 24px;
+  height: 24px;
+  color: var(--gx-brass);
+  margin-bottom: 8px;
+}
+
+.bk-card-title {
+  font-family: var(--font-display, var(--font-big-shoulders), "Arial Narrow", system-ui, sans-serif);
+  font-weight: 800;
+  font-size: 19px;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.05;
+  color: var(--gx-bone);
+}
+.bk-card-body {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--gx-bone-2);
+  margin: 2px 0 0;
+}
+
+.bk-card-foot {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.bk-card-meta {
+  font-family: var(--font-mono, var(--font-space-mono), ui-monospace, monospace);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gx-bone-3);
+}
+.bk-card-pill {
+  font-family: var(--font-mono, var(--font-space-mono), ui-monospace, monospace);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gx-ink);
+  background: var(--gx-brass);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-weight: 700;
+}
+
+/* The "preview" tiles get the doc-card ink ground + plasma signal so
+   they read as reference/placeholder slots distinct from the live
+   product surfaces. */
+.bk-card--preview {
+  background: var(--gx-ink);
+}
+.bk-card--preview .bk-card-ic {
+  color: var(--gx-plasma);
+}
+
+/* footer */
+.bk-foot {
+  padding: 40px 0;
+  text-align: center;
+  font-family: var(--font-mono, var(--font-space-mono), ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gx-bone-3);
+  margin: 0;
+}

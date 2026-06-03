@@ -92,8 +92,14 @@ export function MarketingHeader() {
   const [themePickerOpen, setThemePickerOpen] = useState(false);
 
   return (
-    <header className="glass-nav sticky top-0 z-40">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
+    <header
+      className="sticky top-0 z-40"
+      style={{
+        background: "var(--bg, var(--background))",
+        borderBottom: "3px solid var(--gx-brass, var(--org-primary))",
+      }}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-3">
         <Link
           href="/"
           // whitespace-nowrap: the spaced "A T L V S" mark uses literal
@@ -101,7 +107,11 @@ export function MarketingHeader() {
           // letter as a separate word. Without nowrap, narrow viewports
           // (~1024px tablet) wrap the mark letter-by-letter into a vertical
           // stack instead of keeping it horizontal.
-          className="text-base font-semibold tracking-[0.18em] whitespace-nowrap text-[var(--foreground)] uppercase"
+          //
+          // font-display (Big Shoulders) + weight 900 + uppercase tightens
+          // the wordmark to its poster-loud canon under the GHXSTSHIP
+          // theme; legacy themes still get a heavy uppercase tracking.
+          className="font-display text-[1.3rem] leading-none font-black tracking-[0.04em] whitespace-nowrap text-[var(--foreground)] uppercase"
           onClick={() => setMobileOpen(false)}
           aria-label="ATLVS Technologies — home"
         >
@@ -147,8 +157,12 @@ export function MarketingHeader() {
           >
             Log In
           </Link>
-          <Link href="/signup" className="btn btn-primary btn-sm">
-            Sign Up Free
+          <Link
+            href="/signup"
+            className="gx-btn gx-btn--nebula gx-btn--sm"
+            style={{ color: "var(--gx-bone, #fbfaf6)" }}
+          >
+            Book Now ↗
           </Link>
         </div>
 
@@ -214,10 +228,11 @@ export function MarketingHeader() {
               </Link>
               <Link
                 href="/signup"
-                className="btn btn-primary btn-sm w-full justify-center"
+                className="gx-btn gx-btn--nebula gx-btn--sm w-full justify-center"
+                style={{ color: "var(--gx-bone, #fbfaf6)" }}
                 onClick={() => setMobileOpen(false)}
               >
-                Sign Up Free
+                Book Now ↗
               </Link>
             </div>
           </div>

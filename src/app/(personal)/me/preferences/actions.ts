@@ -12,23 +12,17 @@ import type { Json } from "@/lib/supabase/database.types";
 const BCP47 = /^[a-z]{2,3}(-[A-Z][a-z]{3})?(-[A-Z]{2}|-[0-9]{3})?$/;
 
 const Schema = z.object({
-  // Mirrors the user_preferences_theme_check Postgres constraint. The
-  // previous ["light","dark","system"] enum was a stale relic from before
-  // chroma themes; submitting any chroma theme name from the preferences
-  // form would 500 with a check_violation. light/dark is the orthogonal
-  // `data-mode` attribute, not stored in this column.
-  theme: z.enum([
-    "bermuda-triangle",
-    "glass",
-    "brutal",
-    "bento",
-    "kinetic",
-    "copilot",
-    "cyber",
-    "soft",
-    "earthy",
-    "system",
-  ]),
+  // Mirrors src/app/theme/themes.config.ts#ThemeSlug + "system" sentinel.
+  // The v3 GHXSTSHIP brand sweep purged the pre-v3 CHROMA exploration set
+  // (bermuda-triangle, glass, brutal, bento, kinetic, copilot, cyber,
+  // soft, earthy) — the canon ships exactly two skins: ghxstship
+  // (cosmic marketing) + atlvs-product (neutral SaaS). The underlying
+  // user_preferences_theme_check Postgres CHECK will be widened to match
+  // by a separate migration; until that ships the DB will still ACCEPT
+  // the dead slugs but no app code can write them.
+  //
+  // light/dark is the orthogonal `data-mode` attribute, not stored here.
+  theme: z.enum(["ghxstship", "atlvs-product", "system"]),
   density: z.enum(["compact", "comfortable", "spacious"]),
   locale: z.string().regex(BCP47, "Use a BCP-47 tag like 'en' or 'fr-CA'"),
   timezone: z.string().min(1).max(64),

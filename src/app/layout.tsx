@@ -20,6 +20,12 @@ import {
   Share_Tech, // retained for legacy CHROMA themes that opt in
   Share_Tech_Mono,
   DM_Sans,
+  // GHXSTSHIP typography — Big Shoulders Display (poster condensed),
+  // Space Grotesk (body — already imported as spaceGrot above; reused),
+  // Silkscreen (pixel/8-bit labels), Space Mono (data/coordinates).
+  Big_Shoulders,
+  Silkscreen,
+  Space_Mono,
 } from "next/font/google";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
@@ -99,14 +105,38 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+// GHXSTSHIP — Deep Space Voyage brand stack.
+// Big Shoulders Display (condensed poster display), Silkscreen (pixel
+// labels), Space Mono (coordinates / data). Space Grotesk for body is
+// already loaded above as `spaceGrot`; the ghxstship theme reads it
+// via the same `--font-space-grotesk` variable.
+const bigShoulders = Big_Shoulders({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-big-shoulders",
+  display: "swap",
+});
+const silkscreen = Silkscreen({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-silkscreen",
+  display: "swap",
+});
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.baseUrl),
   title: {
-    default: "ATLVS Technologies — ATLVS, GVTEWAY, COMPVSS",
+    default: "ATLVS Technologies — Production Runs On It",
     template: "%s · ATLVS Technologies",
   },
   description:
-    "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. The bridge, the ports of call, the open deck. From horizon to homecoming.",
+    "ATLVS · COMPVSS · GVTEWAY — proprietary production, workforce, and ticketing software from GHXSTSHIP. Three instruments, one connected bridge for experiential production at scale.",
   keywords: [
     "production management",
     "live events",
@@ -141,8 +171,10 @@ export const viewport: Viewport = {
   // paper #F5F2EC; dark paint is near-black ink. Native mobile chrome (status
   // bar, app switcher) follows the user's OS preference.
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f2ec" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#fbfaf6" },
+    // GHXSTSHIP cosmic ink — matches --void on the default ghxstship theme
+    // so the native chrome / status bar / app switcher reads brand-on.
+    { media: "(prefers-color-scheme: dark)", color: "#060815" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -171,7 +203,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   // Client head script reconciles with localStorage on mount.
   const cs = await cookies();
   const cookieTheme = cs.get(THEME_COOKIE_NAME)?.value;
-  const ssrTheme = isValidThemeSlug(cookieTheme) ? cookieTheme : "bermuda-triangle";
+  const ssrTheme = isValidThemeSlug(cookieTheme) ? cookieTheme : "ghxstship";
   const ssrColorScheme = colorSchemeFor(ssrTheme);
 
   return (
@@ -180,7 +212,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       dir={dir}
       data-theme={ssrTheme}
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${inter.variable} ${mono.variable} ${serif.variable} ${fraunces.variable} ${instrument.variable} ${dmSerif.variable} ${bricolage.variable} ${spaceGrot.variable} ${geist.variable} ${geistMono.variable} ${anton.variable} ${bebasNeue.variable} ${shareTech.variable} ${shareTechMono.variable} ${dmSans.variable}`}
+      className={`h-full ${inter.variable} ${mono.variable} ${serif.variable} ${fraunces.variable} ${instrument.variable} ${dmSerif.variable} ${bricolage.variable} ${spaceGrot.variable} ${geist.variable} ${geistMono.variable} ${anton.variable} ${bebasNeue.variable} ${shareTech.variable} ${shareTechMono.variable} ${dmSans.variable} ${bigShoulders.variable} ${silkscreen.variable} ${spaceMono.variable}`}
       suppressHydrationWarning
     >
       <head>

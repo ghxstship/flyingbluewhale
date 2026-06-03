@@ -1,6 +1,19 @@
 /**
  * Brand canon — single source of truth for every visible brand string.
  *
+ * Dual-brand setup:
+ *   - GHXSTSHIP is the parent company (the "Spaceport" marketing
+ *     site, ghxstship.tours — coming later).
+ *   - ATLVS Technologies is the Tech vertical legal entity that
+ *     owns the proprietary software: ATLVS (production/resource mgmt
+ *     console, nebula/pink), COMPVSS (workforce/crew mobile PWA,
+ *     brass/yellow), and GVTEWAY (ticketing/fan portal, plasma/cyan).
+ *
+ * This file describes the ATLVS Technologies brand that ships on
+ * atlvs.pro today. The umbrella `parent` block carries the GHXSTSHIP
+ * fields used wherever we surface the holding co (footer trademark,
+ * about page, OG schema's `parentOrganization`).
+ *
  * Every marketing page, OG card, email template, SEO tag, push fallback,
  * and i18n message reaches into this module. Rebrands edit this file
  * (and the i18n message catalogs); call sites stay untouched.
@@ -29,6 +42,11 @@ export const BRAND = {
   /** Inc. form — used in structured data, T&Cs, copyright lines. */
   legalNameInc: "ATLVS Technologies, Inc.",
 
+  /** Tagline — Bermuda canon was "Production Runs On It"; GHXSTSHIP
+   *  canon is "Venture Beyond". We surface the ATLVS-Technologies-tier
+   *  tagline here; the umbrella tagline lives on `parent.tagline`. */
+  tagline: "Production Runs On It.",
+
   /** Apex domain (no scheme, no path). */
   apexDomain: "atlvs.pro",
 
@@ -56,23 +74,44 @@ export const BRAND = {
   socialHandle: "@atlvs.pro",
 
   /**
-   * Parent company. Independent of the ATLVS rebrand — GHXSTSHIP
-   * is the holding co; ATLVS is the platform product.
+   * Parent company — GHXSTSHIP Industries LLC. The umbrella brand that
+   * eventually lives on ghxstship.tours. Used in trademark lines, OG
+   * schema (`parentOrganization`), the About page, and the footer.
+   *
+   * The literal "G H X S T S H I P" is the visible spaced wordmark;
+   * `GHXSTSHIP` (unspaced) is the machine-readable token for URLs,
+   * schema name, and handles. Tagline: "Venture Beyond."
    */
   parent: {
-    name: "GHXSTSHIP Industries",
-    mark: "G H X S T S H I P Industries",
+    name: "GHXSTSHIP",
+    mark: "G H X S T S H I P",
+    legalName: "GHXSTSHIP Industries LLC",
+    apexDomain: "ghxstship.tours",
+    apexUrl: "https://ghxstship.tours",
+    tagline: "Venture Beyond.",
+    /** Three integrated verticals (per BRAND_ARCHITECTURE.md). */
+    verticals: ["Production", "Operations", "Technology"] as const,
+    /** ATLVS Technologies is the legal entity under GHXSTSHIP's
+     *  Technology vertical. */
+    techVertical: "ATLVS Technologies",
   },
 
   /**
-   * Sub-products under the ATLVS umbrella. The console is now the
-   * ATLVS app itself (no sub-name); portal + mobile keep their
-   * function names + color overlays.
-   */
+   * Sub-products under the ATLVS umbrella.
+   *
+   * Color palette is canonical (per project/tokens.json):
+   *   - ATLVS  = nebula magenta (#FF2E88) — internal, producer & exec facing
+   *   - COMPVSS = brass doubloon (#E9A23B) — crew, vendor & talent facing
+   *   - GVTEWAY = plasma teal     (#21D4D4) — guest & client facing
+   *
+   * The legacy `color` strings carry the GHXSTSHIP signal name (nebula /
+   * brass / plasma) so call sites that build `data-platform` attributes or
+   * Tailwind class names stay readable. The actual paint flows through
+   * the per-platform `--org-primary` overlays in src/app/theme/index.css. */
   products: {
-    console: { name: "ATLVS", mark: "A T L V S", color: "red" },
-    portal: { name: "GVTEWAY", mark: "G V T E W A Y", color: "blue" },
-    mobile: { name: "COMPVSS", mark: "C O M P V S S", color: "yellow" },
+    console: { name: "ATLVS", mark: "A T L V S", color: "nebula" },
+    portal: { name: "GVTEWAY", mark: "G V T E W A Y", color: "plasma" },
+    mobile: { name: "COMPVSS", mark: "C O M P V S S", color: "brass" },
   },
 } as const;
 

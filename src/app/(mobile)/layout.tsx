@@ -11,7 +11,13 @@ export default async function MobileLayout({ children }: { children: React.React
   await requireSession("/login");
   return (
     <TenantShell>
-      <div data-platform="compvss" className="page-shell mobile-shell">
+      {/*
+       * Theme lock — per v2 GHXSTSHIP handoff: SaaS shells (mobile/COMPVSS
+       * included) paint with the neutral atlvs-product skin regardless of
+       * the user's cosmic-marketing cookie pref.
+       * data-platform="compvss" narrows the accent to brass amber.
+       */}
+      <div data-theme="atlvs-product" data-platform="compvss" className="page-shell mobile-shell">
         <ConnectivityBanner />
         <main className="animate-fade-in">{children}</main>
         <MobileTabBar items={mobileTabs} />

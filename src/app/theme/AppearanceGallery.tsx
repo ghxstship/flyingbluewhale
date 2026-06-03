@@ -154,7 +154,6 @@ function ThemePreview({ slug }: { slug: ThemeSlug }) {
           border: "var(--border-width) solid var(--border)",
           borderRadius: "var(--radius-sm)",
           boxShadow: "var(--shadow-elev)",
-          backdropFilter: slug === "glass" ? "blur(20px) saturate(180%)" : undefined,
         }}
       >
         <div className="text-[11px] font-semibold" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>

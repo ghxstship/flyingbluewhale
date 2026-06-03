@@ -18,7 +18,7 @@ export const MODE_STORAGE_KEY = "chroma.mode";
 export const themeScript = `
 (function() {
   try {
-    var valid = ['bermuda-triangle','glass','brutal','bento','kinetic','copilot','cyber','soft','earthy'];
+    var valid = ['ghxstship','bermuda-triangle','glass','brutal','bento','kinetic','copilot','cyber','soft','earthy'];
     var validModes = ['light','dark','system'];
     // Themes whose family is intrinsically dark (mirrors
     // colorSchemeFor() in src/app/theme/themes.config.ts). The script
@@ -26,9 +26,11 @@ export const themeScript = `
     // and the client bootstrap then overwrites it with light, the
     // page flashes light scrollbars + form controls before the React
     // tree hydrates. Hard-code the list rather than ship a JSON blob.
-    var darkThemes = ['cyber','glass'];
+    var darkThemes = ['ghxstship','cyber','glass'];
 
-    // Theme slug (palette)
+    // Theme slug (palette). Default = ghxstship (Deep Space Voyage) —
+    // the GHXSTSHIP canon since the rebrand. Falls back to legacy
+    // bermuda-triangle only via cookie/localStorage override.
     var c = document.cookie.match(/(?:^|;\\s*)${THEME_COOKIE_NAME}=([^;]+)/);
     var fromCookie = c ? decodeURIComponent(c[1]) : null;
     var stored = null;
@@ -37,7 +39,7 @@ export const themeScript = `
     var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     var picked = (fromCookie && valid.indexOf(fromCookie) > -1) ? fromCookie
                : (stored && valid.indexOf(stored) > -1) ? stored
-               : (systemPrefersDark ? 'cyber' : 'bermuda-triangle');
+               : 'ghxstship';
     document.documentElement.setAttribute('data-theme', picked);
 
     // Color mode (light / dark / system → resolved). Read the canonical
@@ -63,9 +65,9 @@ export const themeScript = `
     var themeColorScheme = darkThemes.indexOf(picked) > -1 ? 'dark' : 'light';
     document.documentElement.style.colorScheme = themeColorScheme;
   } catch (e) {
-    document.documentElement.setAttribute('data-theme', 'bermuda-triangle');
-    document.documentElement.setAttribute('data-mode', 'light');
-    document.documentElement.style.colorScheme = 'light';
+    document.documentElement.setAttribute('data-theme', 'ghxstship');
+    document.documentElement.setAttribute('data-mode', 'dark');
+    document.documentElement.style.colorScheme = 'dark';
   }
 })();
 `.trim();

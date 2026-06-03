@@ -194,11 +194,11 @@
  * declared on `[data-theme]` (not `:root`) so the value re-resolves at
  * every element that carries a data-theme attribute — not just <html>.
  *
- * Without this scope, an AppearanceGallery card tagged `data-theme="brutal"`
+ * Without this scope, an AppearanceGallery card tagged `data-theme="atlvs-product"`
  * would inherit `--bg-hero` computed at `:root` (using the active theme's
  * `--bg`), defeating the gallery's whole purpose as a theme reference.
- * Themes like cyber, glass, and earthy that declare their own `--bg-hero`
- * gradient still win via cascade order (their CSS files are imported
+ * The surviving themes (ghxstship, atlvs-product) can each declare their own
+ * `--bg-hero` and win via cascade order (their CSS files are imported
  * after primitives). */
 [data-theme] {
   --bg-hero: var(--bg);

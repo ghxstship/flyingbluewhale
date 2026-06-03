@@ -12,22 +12,20 @@ export const metadata: Metadata = {
 };
 
 /**
- * GHXSTSHIP marketing surface. Theme is LOCKED to bermuda-triangle here so
- * the brand identity (Anton display, cream paper, ink line, 3px borders)
- * holds regardless of which CHROMA theme the visitor has selected elsewhere
- * on the parent property. Bioluminescent green accent applies via
- * data-platform="ghxstship".
+ * GHXSTSHIP marketing surface. Theme is LOCKED to the cosmic `ghxstship`
+ * skin (Big Shoulders display, void ink ground, brass doubloon accent,
+ * halftone dots, hard-offset shadows) regardless of any preference
+ * inherited from the parent property — this surface IS the GHXSTSHIP
+ * brand expression. Brass-default accent applies via data-platform.
  *
- * `data-mode` is intentionally NOT set so the wrapper always reads as the
- * light-family bermuda-triangle paint (paper / ink), even when the parent
- * `<html>` is in dark mode for the SaaS surface.
+ * Pre-v3 this layout pinned the now-purged `bermuda-triangle` skin; that
+ * was a legacy reference replaced in the v3 brand sweep.
  */
 export default function GhxstshipLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      data-theme="bermuda-triangle"
+      data-theme="ghxstship"
       data-platform="ghxstship"
-      data-mode="light"
       className="page-shell min-h-screen"
       style={{
         background: "var(--bg)",

@@ -14,26 +14,35 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   const tenant = await resolveTenant();
   return (
     <TenantShell tenant={tenant}>
-      <div data-platform="atlvs" className="console-shell">
+      {/*
+       * Theme lock — per the v2 GHXSTSHIP handoff
+       * (design_handoff/ATLVS_PRODUCT/README.md), the SaaS console
+       * MUST paint with the neutral atlvs-product skin, not the cosmic
+       * GHXSTSHIP brand. data-theme here overrides the html-level slug
+       * for this subtree, so the user's cookie pref still controls the
+       * marketing site while /console stays canonical regardless.
+       * data-platform="atlvs" narrows the accent to nebula pink.
+       */}
+      <div data-theme="atlvs-product" data-platform="atlvs" className="console-shell">
         <PlatformSidebar groups={platformNav} workspaceName={tenant.orgName} />
         <div className="console-main">
           {/*
-           * Glass nav — IA redesign (docs/ia/02-navigation-redesign.md §3.3).
-           * The static "Console" label was removed; the page's ModuleHeader
-           * now carries orientation via breadcrumbs. The right-hand cluster
-           * keeps the canonical global actions: command palette trigger,
-           * notifications bell, theme toggle.
+           * Canonical SaaS topbar — per ui_kits/atlvs/dashboard.html .top.
+           * The pre-v3 layout pinned a cosmic "ATLVS THE BRIDGE" lockup
+           * (Big Shoulders display, brass accent) which violated the
+           * "deliberately NOT the cosmic-voyage GHXSTSHIP aesthetic" rule
+           * for SaaS surfaces (design_handoff/ATLVS_PRODUCT/README.md).
+           *
+           * The page-level ModuleHeader carries the crumb + h1 per route;
+           * this band only hosts the global action cluster (command
+           * palette, notifications, theme, profile) plus the workspace
+           * orientation handed up from the sidebar's WorkspaceSwitcher.
            */}
-          <header className="glass-nav sticky top-0 z-30 flex shrink-0 items-center justify-between px-6">
-            <div className="flex flex-1 items-center gap-2 text-xs font-semibold tracking-wide text-[var(--text-muted)]">
-              <span className="tracking-wider text-[var(--org-primary)]">ATLVS</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CommandPaletteTrigger />
-              <NotificationsBell />
-              <ThemeToggle />
-              <AvatarMenu name={session.email || "User"} email={session.email} />
-            </div>
+          <header className="glass-nav sticky top-0 z-30 flex shrink-0 items-center justify-end gap-2 px-6">
+            <CommandPaletteTrigger />
+            <NotificationsBell />
+            <ThemeToggle />
+            <AvatarMenu name={session.email || "User"} email={session.email} />
           </header>
           {/*
            * <main> landmark — Sea Trial FINDING-004. Was a generic <div>

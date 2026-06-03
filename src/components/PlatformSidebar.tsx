@@ -299,7 +299,13 @@ export function PlatformSidebar({
           </Hint>
         ) : (
           <div className="flex items-center justify-between gap-2 border-t border-[var(--border-color)] px-3 py-2.5">
-            <span className="text-[10px] font-semibold tracking-[0.28em] text-[var(--org-primary)]">ATLVS</span>
+            {/* Canonical SaaS wordmark — Inter 700 16px tight letter-spacing
+                per ui_kits/atlvs/dashboard.html .brandrow b. Color = the
+                org accent so the platform overlay (nebula pink) shows
+                through. Spaced "A T L V S" form is a brand-canon
+                affordance, not a font choice — Big Shoulders display
+                stays reserved for marketing per the v3 register. */}
+            <span className="text-base font-bold tracking-[-0.01em] text-[var(--org-primary)]">A T L V S</span>
             {/* Language switcher mirrors the marketing header so authed
                 operators can flip the entire console — internal labels,
                 date formats, currency — without leaving the page. Persists

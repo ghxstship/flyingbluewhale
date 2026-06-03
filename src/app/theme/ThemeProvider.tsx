@@ -58,15 +58,17 @@ async function persistRemote(patch: { theme?: ThemeSlug; density?: Density }) {
 }
 
 function systemDefault(): ThemeSlug {
-  if (typeof window === "undefined") return "bermuda-triangle";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "cyber" : "bermuda-triangle";
+  // GHXSTSHIP — Deep Space Voyage — is the canonical default after the
+  // GHXSTSHIP rebrand. We no longer flip to `cyber` on prefers-color-scheme:
+  // dark because the new default is itself a dark-family palette.
+  return "ghxstship";
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Initialize from the DOM attribute set by the head script — this is the
   // "mount" value. Storage (and any remote pref) reconcile in the first
   // effect to avoid hydration mismatch.
-  const [theme, setThemeState] = React.useState<ThemeSlug>("bermuda-triangle");
+  const [theme, setThemeState] = React.useState<ThemeSlug>("ghxstship");
   const [isSystemDriven, setSystemDriven] = React.useState(true);
   const [density, setDensityState] = React.useState<Density>("comfortable");
   const [mode, setModeState] = React.useState<ColorMode>("system");

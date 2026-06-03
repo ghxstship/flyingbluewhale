@@ -27,7 +27,13 @@ export default async function PersonalLayout({ children }: { children: React.Rea
   const isDefaultBrand = !tenant.branding.productName && !tenant.orgName;
   return (
     <TenantShell tenant={tenant}>
-      <div className="page-shell">
+      {/*
+       * Theme lock — per v2 GHXSTSHIP handoff: /me is a per-user SaaS
+       * surface, so it paints with the neutral atlvs-product skin (not
+       * cosmic ghxstship). No data-platform here — /me is product-agnostic
+       * so the theme's default accent (atlvs pink) is correct.
+       */}
+      <div data-theme="atlvs-product" className="page-shell">
         <div className="mx-auto max-w-5xl px-6 pt-5">
           <div className="flex items-center justify-between">
             <Link

@@ -196,11 +196,7 @@
 /* `--bg-hero` falls back to the theme's own `--bg` per scope. This MUST be
  * declared on `[data-theme]` (not `:root`) so the value re-resolves at
  * every element that carries a data-theme attribute — not just <html>.
- *
- * Without this scope, an AppearanceGallery card tagged `data-theme="atlvs-product"`
- * would inherit `--bg-hero` computed at `:root` (using the active theme's
- * `--bg`), defeating the gallery's whole purpose as a theme reference.
- * The surviving themes (ghxstship, atlvs-product) can each declare their own
+ * Each surviving theme (ghxstship, atlvs-product) can declare its own
  * `--bg-hero` and win via cascade order (their CSS files are imported
  * after primitives). */
 [data-theme] {

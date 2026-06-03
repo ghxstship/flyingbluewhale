@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronDown, Palette } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -12,16 +12,15 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { Hint } from "@/components/ui/Tooltip";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
-import { ThemeGallerySheet } from "@/components/marketing/ThemeGallerySheet";
 
 /**
  * Marketing header — three grouped dropdowns + two direct links + a
- * primary CTA, plus a utility cluster (palette / locale / light-dark) on
- * the right. Theme-picking is a deliberate product-personality signal
- * for this app (eight fully-realized CHROMA themes), so the palette gets
- * top-chrome discoverability rather than being buried in the footer.
+ * primary CTA, plus a utility cluster (locale / light-dark) on the
+ * right. The legacy 8-theme design picker was retired with the v3
+ * ATLVS-kit lock — the platform now ships a two-skin canon (cosmic
+ * GHXSTSHIP for /ghxstship, ATLVS product for everything else) and the
+ * mode toggle is the only visible appearance affordance.
  */
 
 type NavLink = { label: string; href: string; description?: string };
@@ -92,7 +91,6 @@ function NavDropdown({ group }: { group: NavGroup }) {
 
 export function MarketingHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [themePickerOpen, setThemePickerOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--p-border)] bg-[var(--p-surface)]">
@@ -132,19 +130,9 @@ export function MarketingHeader() {
           <NavDropdown group={RESOURCES} />
         </nav>
 
-        {/* Desktop right cluster — utility icons (palette / locale / mode) +
+        {/* Desktop right cluster — utility icons (locale / mode) +
             Log In (secondary text link) + Start free (primary CTA). */}
         <div className="hidden items-center gap-2 xl:flex">
-          <Hint label="Design Themes">
-            <button
-              type="button"
-              onClick={() => setThemePickerOpen(true)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--foreground)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)]"
-              aria-label="Open design themes"
-            >
-              <Palette size={14} aria-hidden="true" />
-            </button>
-          </Hint>
           <LocaleSwitcher />
           <ThemeToggle />
           <div aria-hidden="true" className="mx-1 h-5 w-px bg-[var(--border-color)]" />
@@ -202,17 +190,6 @@ export function MarketingHeader() {
                 <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">Language</span>
                 <LocaleSwitcher />
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false);
-                  setThemePickerOpen(true);
-                }}
-                className="btn btn-ghost btn-sm inline-flex items-center justify-center gap-2"
-              >
-                <Palette size={14} aria-hidden="true" />
-                Design themes
-              </button>
             </div>
             <div className="flex flex-col gap-2 border-t border-[var(--border-color)] pt-4">
               <Link
@@ -233,7 +210,6 @@ export function MarketingHeader() {
           </div>
         </div>
       )}
-      <ThemeGallerySheet open={themePickerOpen} onOpenChange={setThemePickerOpen} />
     </header>
   );
 }

@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { AppearanceGallery } from "@/app/theme/AppearanceGallery";
 import { DensityToggle } from "@/components/ui/DensityToggle";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "Appearance",
-  description: "Pick a visual theme, color mode, and density for your workspace.",
+  description: "Pick a color mode and density for your workspace.",
 };
 
 export default function AppearancePage() {
@@ -14,12 +13,9 @@ export default function AppearancePage() {
       <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Settings</div>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">Appearance</h1>
       <p className="mt-3 text-sm text-[var(--text-secondary)]">
-        Eight curated looks. Applies instantly across every page.
+        The platform ships a two-skin canon — the ATLVS product kit on every app surface and the cosmic GHXSTSHIP kit on
+        the parent-company marketing page. Mode and density are yours to tune.
       </p>
-
-      <div className="mt-8">
-        <AppearanceGallery />
-      </div>
 
       <section className="mt-10 grid gap-6 sm:grid-cols-2">
         <div className="surface p-5">

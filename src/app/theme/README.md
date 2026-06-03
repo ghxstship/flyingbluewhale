@@ -27,8 +27,13 @@ src/app/theme/
   themes.config.ts            registry (slug, label, family, essence, swatchColor)
   theme-script.ts             pre-hydration FOUC bootstrap string
   ThemeProvider.tsx           client provider + useTheme hook
-  AppearanceGallery.tsx       8-card radiogroup picker
 ```
+
+> The legacy 8-card AppearanceGallery picker was retired with the v3
+> ATLVS-kit lock — the platform now ships a fixed two-skin canon
+> (`ghxstship` on the parent-company marketing page, `atlvs-product`
+> on every app surface). Mode (light/dark) and density remain
+> user-tunable; theme slug is no longer user-pickable from the UI.
 
 ## Adding a 9th theme
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef, useState, useTransition } from "react";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -26,13 +26,72 @@ export function NewAnnouncementForm({
   teams: Array<{ id: string; name: string }>;
 }) {
   const [state, formAction, pending] = useActionState<State, FormData>(createAnnouncementAction, null);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiTone, setAiTone] = useState<"professional" | "urgent" | "friendly">("professional");
+  const [aiDrafting, startAiTransition] = useTransition();
+  const [aiError, setAiError] = useState<string | null>(null);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+
+  function draftWithAI() {
+    setAiError(null);
+    startAiTransition(async () => {
+      const res = await fetch("/api/v1/ai/draft-announcement", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ prompt: aiPrompt, tone: aiTone }),
+      });
+      const json = await res.json();
+      if (!json.ok) {
+        setAiError(json.error?.message ?? "Draft failed");
+        return;
+      }
+      if (bodyRef.current) bodyRef.current.value = json.data.body;
+    });
+  }
 
   return (
     <form action={formAction} className="surface space-y-4 p-6">
       <Input label="Title" name="title" required maxLength={200} />
+
+      <div className="rounded-md border border-[var(--border-color)] p-3 space-y-2.5 bg-[var(--surface-raised)]">
+        <p className="text-[10px] font-semibold tracking-wide text-[var(--text-muted)] uppercase">AI Draft</p>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={aiPrompt}
+            onChange={(e) => setAiPrompt(e.target.value)}
+            placeholder="Briefly describe what to announce…"
+            maxLength={600}
+            className="input-base focus-ring flex-1 text-sm"
+          />
+          <select
+            value={aiTone}
+            onChange={(e) => setAiTone(e.target.value as typeof aiTone)}
+            className="input-base focus-ring w-36"
+          >
+            <option value="professional">Professional</option>
+            <option value="urgent">Urgent</option>
+            <option value="friendly">Friendly</option>
+          </select>
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            disabled={aiDrafting || aiPrompt.trim().length < 4}
+            onClick={draftWithAI}
+          >
+            {aiDrafting ? "Drafting…" : "Draft"}
+          </Button>
+        </div>
+        {aiError ? <p className="text-xs text-[var(--color-error)]">{aiError}</p> : null}
+        <p className="text-[11px] text-[var(--text-muted)]">
+          AI fills the Body field — review and edit before publishing.
+        </p>
+      </div>
+
       <label className="flex flex-col gap-1.5">
         <span className="text-xs font-medium text-[var(--text-secondary)]">Body</span>
-        <textarea name="body" rows={6} required maxLength={8000} className="input-base focus-ring w-full" />
+        <textarea ref={bodyRef} name="body" rows={6} required maxLength={8000} className="input-base focus-ring w-full" />
       </label>
 
       <fieldset className="space-y-3 rounded-md border border-[var(--border-color)] p-3">

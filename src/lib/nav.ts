@@ -367,6 +367,7 @@ export const platformNav: NavGroup[] = [
         label: "Coordination / Schedule",
         items: [
           { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
+          { label: "Labor Insights", href: "/console/schedule/insights", icon: "TrendingUp" },
           // Baselines = CPM Gantt data spine w/ critical path + float (round 38).
           { label: "Schedule Baselines", href: "/console/schedule/baselines", icon: "GitBranch" },
           { label: "Look-Ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
@@ -426,6 +427,7 @@ export const platformNav: NavGroup[] = [
         label: "Communications",
         items: [
           { label: "Announcements", href: "/console/comms/announcements", icon: "Megaphone" },
+          { label: "Broadcast DM", href: "/console/comms/broadcast", icon: "MessageSquareDot" },
           { label: "Polls", href: "/console/comms/polls", icon: "BarChart3" },
           { label: "Surveys", href: "/console/comms/surveys", icon: "ClipboardCheck" },
         ],

@@ -36,7 +36,14 @@ export default async function TimePage() {
         eyebrow="Finance"
         title="Time Tracking"
         subtitle={`${rows.length} Entries  · ${fmtMinutes(totalMin)} logged`}
-        action={<Button href="/console/finance/time/new">+ New Entry</Button>}
+        action={
+          <div className="flex gap-2">
+            <Button href="/api/v1/exports/timesheet-audit" variant="secondary">
+              Export CSV
+            </Button>
+            <Button href="/console/finance/time/new">+ New Entry</Button>
+          </div>
+        }
       />
       <div className="page-content">
         <DataTable<TimeEntry>

@@ -2,13 +2,14 @@
 
 import { useActionState, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { SortableList } from "@/components/ui/SortableList";
 import { BLOCK_LABELS, BLOCK_TYPES, type ProposalBlock, type ProposalBlockType } from "@/lib/proposals/types";
 import { saveProposalAction, type EditState } from "./actions";
+import { LineagePanel, isLineageBlock } from "./LineagePanel";
 
 // Give each block a stable id for sortable purposes.
 type IdentifiedBlock = ProposalBlock & { _dragId: string };
@@ -132,6 +133,23 @@ export function ProposalEditor({
     });
   };
 
+  const updateBlock = (id: string, patch: ProposalBlock) => {
+    setBlocks((b) => {
+      const next: IdentifiedBlock[] = b.map((x) => (x._dragId === id ? { ...patch, _dragId: x._dragId } : x));
+      setJson(JSON.stringify(serializeBlocks(next), null, 2));
+      return next;
+    });
+  };
+
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const toggleExpanded = (id: string) =>
+    setExpanded((s) => {
+      const next = new Set(s);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
   const summary = useMemo(
     () => ({
       count: blocks.length,
@@ -207,24 +225,46 @@ export function ProposalEditor({
               setBlocks(next);
               setJson(JSON.stringify(serializeBlocks(next), null, 2));
             }}
-            renderItem={(item, i) => (
-              <div className="surface flex items-start justify-between gap-3 p-3">
-                <div className="min-w-0">
-                  <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                    {i + 1} · {BLOCK_LABELS[item.block.type]}
+            renderItem={(item, i) => {
+              const lineage = isLineageBlock(item.block.type);
+              const isOpen = expanded.has(item.block._dragId);
+              return (
+                <div className="surface p-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+                        {i + 1} · {BLOCK_LABELS[item.block.type]}
+                      </div>
+                      <div className="mt-0.5 truncate text-sm">{describeBlock(item.block)}</div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {lineage && (
+                        <button
+                          type="button"
+                          onClick={() => toggleExpanded(item.block._dragId)}
+                          className="btn btn-ghost btn-sm"
+                          aria-label={isOpen ? "Collapse lineage" : "Edit lineage"}
+                        >
+                          <ChevronRight size={14} className={`transition-transform ${isOpen ? "rotate-90" : ""}`} />
+                          <span className="ml-1 text-xs">Lineage</span>
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeBlock(item.block._dragId)}
+                        className="btn btn-ghost btn-sm text-[var(--color-error)]"
+                        aria-label="Remove"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
                   </div>
-                  <div className="mt-0.5 truncate text-sm">{describeBlock(item.block)}</div>
+                  {lineage && isOpen && (
+                    <LineagePanel block={item.block} onChange={(next) => updateBlock(item.block._dragId, next)} />
+                  )}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => removeBlock(item.block._dragId)}
-                  className="btn btn-ghost btn-sm text-[var(--color-error)]"
-                  aria-label="Remove"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            )}
+              );
+            }}
           />
 
           <div className="surface-inset p-3">

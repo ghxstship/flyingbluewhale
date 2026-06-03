@@ -5,14 +5,25 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { dollarsToCents } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
+
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48);
 
 const Schema = z
   .object({
     title: z.string().min(1).max(200),
     client_id: z.string().uuid().optional().or(z.literal("")),
     project_id: z.string().uuid().optional().or(z.literal("")),
+    // Optional template seed — when provided, copies blocks + theme
+    // from the referenced proposal_templates row into the new proposal.
+    template_id: z.string().uuid().optional().or(z.literal("")),
     // Sea Trial R3 FINDING-019: amount optional but must be a valid
     // non-negative dollar amount when supplied.
     amount: moneyDollarsString({ allowEmpty: true }),
@@ -70,6 +81,27 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
     if (!project) return { error: "Project not found in your organization" };
   }
 
+  // Resolve the template seed iff requested. RLS guarantees the caller
+  // can only see system rows + their org's rows, so a leak through the
+  // template_id query parameter would already be blocked at the SELECT.
+  let seedBlocks: unknown = [];
+  let seedTheme: unknown = { primary: "#D4782A", secondary: "#6D4A2A" };
+  const templateId = parsed.data.template_id || null;
+  if (templateId) {
+    const loose = supabase as unknown as LooseSupabase;
+    const { data: tpl } = await loose
+      .from("proposal_templates")
+      .select("id, blocks, theme")
+      .eq("id", templateId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (tpl) {
+      const t = tpl as { blocks?: unknown; theme?: unknown };
+      seedBlocks = t.blocks ?? [];
+      if (t.theme) seedTheme = t.theme;
+    }
+  }
+
   const { data, error } = await supabase
     .from("proposals")
     .insert({
@@ -81,6 +113,8 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
       expires_at: parsed.data.expires_at || null,
       notes: parsed.data.notes || null,
       created_by: session.userId,
+      blocks: seedBlocks as never,
+      theme: seedTheme as never,
     })
     .select()
     .single();
@@ -155,4 +189,221 @@ export async function setProposalStatusAction(
   revalidatePath(`/console/proposals/${id}`);
   revalidatePath("/console/proposals");
   return { ok: true as const };
+}
+
+// Convert a signed proposal into a live project + deposit/balance
+// invoices. Generic and content-agnostic: the action only carries
+// fields that are universal to every proposal (title, client, money,
+// deposit split). Downstream seeding — SOW → deliverables, components
+// → master_catalog_items, phase milestones — happens in follow-up
+// surfaces against the resulting project_id.
+//
+// Idempotency layers (each independently sufficient):
+//   1. DB unique partial index `projects_proposal_id_unique` rejects a
+//      second insert at the same proposal_id.
+//   2. App-level pre-check returns the existing project id on retry so
+//      double-clicks land on the same destination instead of erroring.
+//   3. The proposal-side back-pointer (proposals.project_id) is set on
+//      the success path; if it is already populated and points at a
+//      live project, the action treats that as already-converted.
+//
+// Requires proposal.status='signed' — the FSM is the authorization
+// gate. A signed proposal is the contract; converting it materialises
+// the production engagement.
+export type ConvertProposalState = { error?: string; projectId?: string } | null;
+
+export async function convertProposalToProjectAction(proposalId: string): Promise<ConvertProposalState> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can convert proposals" };
+
+  const supabase = await createClient();
+
+  const { data: proposal, error: loadError } = await supabase
+    .from("proposals")
+    .select(
+      "id, org_id, title, client_id, project_id, amount_cents, status, deposit_percent, currency, doc_number, notes, blocks",
+    )
+    .eq("org_id", session.orgId)
+    .eq("id", proposalId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (loadError) return { error: loadError.message };
+  if (!proposal) return { error: "Proposal not found" };
+  if (proposal.status !== "signed") {
+    return { error: `Proposal must be signed before conversion (currently ${proposal.status})` };
+  }
+
+  // Layer 2: app-level idempotency via the new reverse FK. If a project
+  // already cites this proposal, return it.
+  const { data: existing } = await supabase
+    .from("projects")
+    // proposal_id is added by 20260603100000 migration — cast through
+    // a loose alias until the generated types pick it up on next gen.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .select("id" as any)
+    .eq("org_id", session.orgId)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .eq("proposal_id" as any, proposalId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  const existingId = (existing as unknown as { id?: string } | null)?.id;
+  if (existingId) {
+    revalidatePath(`/console/proposals/${proposalId}`);
+    redirect(`/console/projects/${existingId}`);
+  }
+
+  // Layer 3: the proposal was manually attached to a pre-existing
+  // project. Adopt that project as the conversion target and backfill
+  // the reverse pointer so subsequent lookups short-circuit at layer 2.
+  if (proposal.project_id) {
+    const { data: attached } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("org_id", session.orgId)
+      .eq("id", proposal.project_id)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (attached) {
+      await supabase
+        .from("projects")
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .update({ proposal_id: proposalId } as any)
+        .eq("org_id", session.orgId)
+        .eq("id", attached.id);
+      revalidatePath(`/console/proposals/${proposalId}`);
+      redirect(`/console/projects/${attached.id}`);
+    }
+  }
+
+  // Derive a unique slug within the org. The (org_id, slug) UNIQUE
+  // constraint on projects means a colliding slug would 23505 the
+  // insert; suffixing pre-empts that without a retry loop on insert.
+  const baseSlug = slugify(proposal.title) || `project-${proposalId.slice(0, 8)}`;
+  let slug = baseSlug;
+  for (let suffix = 2; suffix <= 99; suffix++) {
+    const { data: clash } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("org_id", session.orgId)
+      .eq("slug", slug)
+      .maybeSingle();
+    if (!clash) break;
+    slug = `${baseSlug}-${suffix}`;
+    if (suffix === 99) return { error: "Could not derive a unique project slug" };
+  }
+
+  const { data: project, error: projectError } = await supabase
+    .from("projects")
+    .insert({
+      org_id: session.orgId,
+      slug,
+      name: proposal.title,
+      description: proposal.notes ?? null,
+      project_state: "active",
+      xpms_phase: "discovery",
+      client_id: proposal.client_id,
+      budget_cents: proposal.amount_cents,
+      proposal_id: proposalId,
+      created_by: session.userId,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any)
+    .select("id")
+    .single();
+  if (projectError) return { error: projectError.message };
+  const projectId = project.id;
+
+  // Backfill the proposal → project pointer iff still empty. Avoids
+  // clobbering a deliberately-attached prior project.
+  if (!proposal.project_id) {
+    await supabase
+      .from("proposals")
+      .update({ project_id: projectId })
+      .eq("org_id", session.orgId)
+      .eq("id", proposalId)
+      .is("project_id", null);
+  }
+
+  // Seed deposit + balance invoices on the 60/40 convention. The
+  // proposal carries deposit_percent (defaults to 25 in the column
+  // default, overridden to 60 here when the proposal didn't set its
+  // own) so client-specific terms flow through.
+  if (proposal.amount_cents && proposal.amount_cents > 0) {
+    const depositPct = proposal.deposit_percent ?? 60;
+    const depositCents = Math.round((proposal.amount_cents * depositPct) / 100);
+    const balanceCents = proposal.amount_cents - depositCents;
+    const currency = proposal.currency ?? "USD";
+    const numBase = (proposal.doc_number ?? proposalId.slice(0, 8)).toUpperCase();
+    const { error: invoiceError } = await supabase.from("invoices").insert([
+      {
+        org_id: session.orgId,
+        project_id: projectId,
+        client_id: proposal.client_id,
+        number: `${numBase}-D`,
+        title: `${proposal.title} — Deposit (${depositPct}%)`,
+        amount_cents: depositCents,
+        currency,
+        status: "draft",
+        created_by: session.userId,
+      },
+      {
+        org_id: session.orgId,
+        project_id: projectId,
+        client_id: proposal.client_id,
+        number: `${numBase}-B`,
+        title: `${proposal.title} — Balance on Load-In (${100 - depositPct}%)`,
+        amount_cents: balanceCents,
+        currency,
+        status: "draft",
+        created_by: session.userId,
+      },
+    ]);
+    // Soft-fail the invoice seed: the project exists, conversion is
+    // committed, the operator can hand-create invoices if the seed
+    // collided on (org_id, number) due to a re-conversion edge case.
+    if (invoiceError) {
+      const { log } = await import("@/lib/log");
+      log.warn("convert_proposal.invoice_seed_failed", {
+        proposalId,
+        projectId,
+        err: invoiceError.message,
+      });
+    }
+  }
+
+  // Walk the proposal's blocks JSONB and materialise downstream rows
+  // (deliverables, master_catalog_items, budgets). Each step soft-
+  // fails internally so a partial seed never undoes the project — the
+  // operator can finish by hand if any step errors. See
+  // src/lib/proposals/seed.ts for the lineage rules.
+  const { seedFromBlocks } = await import("@/lib/proposals/seed");
+  const seedResult = await seedFromBlocks({
+    orgId: session.orgId,
+    projectId,
+    blocks: proposal.blocks,
+    doc_number: proposal.doc_number,
+  });
+
+  const { notify } = await import("@/lib/notify");
+  await notify({
+    orgId: session.orgId,
+    userId: session.userId,
+    eventType: "project.created",
+    title: `Project created from proposal ${proposal.doc_number ?? proposalId.slice(0, 8)}`,
+    body: proposal.title,
+    href: `/console/projects/${projectId}`,
+    data: {
+      projectId,
+      proposalId,
+      targetTable: "projects",
+      targetId: projectId,
+      seedDeliverables: seedResult.deliverables,
+      seedCatalog: seedResult.catalog,
+      seedBudgets: seedResult.budgets,
+    },
+  });
+
+  revalidatePath("/console/projects");
+  revalidatePath("/console/proposals");
+  revalidatePath(`/console/proposals/${proposalId}`);
+  redirect(`/console/projects/${projectId}`);
 }

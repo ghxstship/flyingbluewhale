@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { validateBlocks } from "@/lib/proposals/validate";
 import { urlFor } from "@/lib/urls";
 
 const UpdateSchema = z.object({
@@ -23,12 +24,19 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   const parsed = UpdateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
-  let blocks: import("@/lib/supabase/database.types").Json;
+  let parsedBlocks: unknown;
   try {
-    blocks = JSON.parse(parsed.data.blocks || "[]") as import("@/lib/supabase/database.types").Json;
+    parsedBlocks = JSON.parse(parsed.data.blocks || "[]");
   } catch {
     return { error: "Blocks JSON is invalid" };
   }
+  // Boundary validation. The TS union in src/lib/proposals/types.ts is
+  // the source of truth; the zod schema mirrors it so a single
+  // malformed block is rejected at save time rather than discovered
+  // mid-convert when the seeder iterates the array.
+  const validation = validateBlocks(parsedBlocks);
+  if (!validation.ok) return { error: `Block validation failed — ${validation.error}` };
+  const blocks = validation.blocks as unknown as import("@/lib/supabase/database.types").Json;
 
   const supabase = await createClient();
   const { data: current } = await supabase

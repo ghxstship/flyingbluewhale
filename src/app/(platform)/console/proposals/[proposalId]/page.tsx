@@ -3,10 +3,12 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { ProposalConvertButton } from "./ProposalConvertButton";
 import { ProposalStatusControls } from "./ProposalStatusControls";
 
 export const dynamic = "force-dynamic";
@@ -17,6 +19,23 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
   const session = await requireSession();
   const proposal = await getOrgScoped("proposals", session.orgId, proposalId);
   if (!proposal) notFound();
+
+  // Resolve the linked project (if any) so the header can swap the
+  // Convert button for a View Project link once conversion has run.
+  // Queried via the reverse FK so we surface the project that explicitly
+  // cites this proposal — not just any project the proposal happens to
+  // be attached to.
+  const supabase = await createClient();
+  const { data: linkedProject } = await supabase
+    .from("projects")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .select("id, slug, name" as any)
+    .eq("org_id", session.orgId)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .eq("proposal_id" as any, proposal.id)
+    .is("deleted_at", null)
+    .maybeSingle();
+  const project = linkedProject as { id: string; slug: string; name: string } | null;
 
   return (
     <>
@@ -35,6 +54,12 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
               Edit Document
             </Link>
             <ProposalStatusControls id={proposal.id} status={proposal.status} />
+            {proposal.status === "signed" && !project && <ProposalConvertButton id={proposal.id} />}
+            {project && (
+              <Link href={`/console/projects/${project.id}`} className="btn btn-primary btn-sm">
+                View Project
+              </Link>
+            )}
           </div>
         }
       />

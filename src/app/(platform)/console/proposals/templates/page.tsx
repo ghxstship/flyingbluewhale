@@ -2,44 +2,50 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { money, fmtDate } from "@/components/detail/DetailShell";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
+import { fmtDate } from "@/components/detail/DetailShell";
 
-/**
- * Proposal templates = every draft proposal in the org. Drafts double
- * as reusable templates: click through to duplicate + tailor for a new
- * client. No separate `proposal_templates` table needed today.
- */
-export default async function TemplatesPage() {
-  const session = await requireSession();
-  const supabase = await createClient();
+// Lists proposal_templates rows visible to the caller: every system
+// template + every org-scoped template their RLS policy admits. The
+// canonical 17-section system row seeded by migration 20260603100001
+// is the structural SSOT — every new proposal should fork from it.
+export default async function ProposalTemplatesPage() {
+  await requireSession();
+  // LooseSupabase cast because proposal_templates was added in
+  // migration 20260603100001 and the generated types haven't been
+  // regenerated yet — same pattern marketplace tables use per CLAUDE.md.
+  const supabase = (await createClient()) as unknown as LooseSupabase;
   const { data } = await supabase
-    .from("proposals")
-    .select("id, doc_number, title, amount_cents, updated_at")
-    .eq("org_id", session.orgId)
-    .eq("status", "draft")
+    .from("proposal_templates")
+    .select("id, name, description, scope, is_system, blocks, updated_at")
     .is("deleted_at", null)
-    .order("updated_at", { ascending: false })
-    .limit(100);
-  const rows = (data ?? []) as Array<{
-    id: string;
-    doc_number: string | null;
-    title: string | null;
-    amount_cents: number | null;
-    updated_at: string;
-  }>;
+    .order("is_system", { ascending: false })
+    .order("updated_at", { ascending: false });
+  const rows = (
+    (data ?? []) as unknown as Array<{
+      id: string;
+      name: string;
+      description: string | null;
+      scope: string;
+      is_system: boolean;
+      blocks: unknown[];
+      updated_at: string;
+    }>
+  ).map((r) => ({ ...r, blockCount: Array.isArray(r.blocks) ? r.blocks.length : 0 }));
+
   return (
     <>
       <ModuleHeader
         eyebrow="Sales"
         title="Proposal Templates"
-        subtitle="Draft proposals that can be duplicated into a new engagement."
+        subtitle="Canonical structures and saved reusables. Apply one to start a new proposal pre-filled."
         action={
           <Button href="/console/proposals/new" size="sm">
-            + New Proposal
+            + Blank Proposal
           </Button>
         }
       />
@@ -47,7 +53,7 @@ export default async function TemplatesPage() {
         {rows.length === 0 ? (
           <EmptyState
             title="No Templates Yet"
-            description="Save any proposal in draft state and it becomes a reusable template. Duplicate into a new client engagement from the detail page."
+            description="The canonical 17-section template ships with every org. Reach out if it isn't showing — your migration may not have applied."
             action={
               <Link className="text-sm text-[var(--org-primary)]" href="/console/proposals/new">
                 Draft from scratch →
@@ -58,23 +64,40 @@ export default async function TemplatesPage() {
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Amount</th>
+                <th>Name</th>
+                <th>Scope</th>
+                <th>Blocks</th>
+                <th>Source</th>
                 <th>Updated</th>
+                <th />
               </tr>
             </thead>
             <tbody>
               {rows.map((r) => (
                 <tr key={r.id}>
-                  <td className="font-mono text-xs">{r.doc_number ?? r.id.slice(0, 8)}</td>
                   <td>
-                    <Link href={`/console/proposals/${r.id}`} className="hover:underline">
-                      {r.title ?? "Untitled"}
+                    <Link href={`/console/proposals/templates/${r.id}`} className="hover:underline">
+                      {r.name}
+                    </Link>
+                    {r.description && <div className="text-xs text-[var(--text-muted)]">{r.description}</div>}
+                  </td>
+                  <td className="font-mono text-xs">{r.scope}</td>
+                  <td className="font-mono text-xs">{r.blockCount}</td>
+                  <td className="text-xs">
+                    {r.is_system ? (
+                      <span className="rounded-full bg-[var(--bg-secondary)] px-2 py-0.5 text-[10px] tracking-wide uppercase">
+                        System
+                      </span>
+                    ) : (
+                      "Org"
+                    )}
+                  </td>
+                  <td className="font-mono text-xs">{fmtDate(r.updated_at)}</td>
+                  <td className="text-right">
+                    <Link href={`/console/proposals/new?templateId=${r.id}`} className="btn btn-secondary btn-sm">
+                      Use Template
                     </Link>
                   </td>
-                  <td className="font-mono text-xs">{money(r.amount_cents)}</td>
-                  <td className="font-mono text-xs">{fmtDate(r.updated_at)}</td>
                 </tr>
               ))}
             </tbody>

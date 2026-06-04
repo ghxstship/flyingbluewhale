@@ -1,15 +1,8 @@
-import { CrewScaffoldPage } from "@/components/portal/CrewScaffoldPage";
+import { DirectorySurface } from "@/components/connecteam/DirectorySurface";
 
-/** Crew portal — directory (ADR-0008 Move 2 scaffold). */
+/** GVTEWAY crew directory — thin wrapper over shared <DirectorySurface>. */
 export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <CrewScaffoldPage
-      title="Directory"
-      subtitle="Everyone on this project."
-      mobilePath="/m/directory"
-      mobileLabel="Browse directory in COMPVSS"
-    />
-  );
+export default function CrewDirectoryPage() {
+  return <DirectorySurface variant="portal" eyebrowLabel="Crew" titleLabel="Directory" />;
 }

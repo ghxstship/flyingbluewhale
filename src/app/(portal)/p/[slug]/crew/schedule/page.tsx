@@ -1,15 +1,20 @@
-import { CrewScaffoldPage } from "@/components/portal/CrewScaffoldPage";
+import { ScheduleSurface } from "@/components/connecteam/ScheduleSurface";
 
-/** Crew portal — schedule (ADR-0008 Move 2 scaffold). */
+/**
+ * GVTEWAY crew schedule — thin wrapper over shared <ScheduleSurface>.
+ * Clock-in + swap CTAs cross-shell-deep-link to mobile forms until
+ * portal-side authoring lifts in a future PR.
+ */
 export const dynamic = "force-dynamic";
 
-export default function Page() {
+export default function CrewSchedulePage() {
   return (
-    <CrewScaffoldPage
-      title="Schedule"
-      subtitle="Your upcoming shifts on this project."
-      mobilePath="/m/shift"
-      mobileLabel="Open schedule in COMPVSS"
+    <ScheduleSurface
+      variant="portal"
+      clockInHref="/m/clock"
+      swapHref="/m/shift/swap"
+      eyebrowLabel="Crew"
+      titleLabel="Schedule"
     />
   );
 }

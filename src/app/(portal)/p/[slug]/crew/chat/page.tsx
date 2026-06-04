@@ -1,15 +1,12 @@
-import { CrewScaffoldPage } from "@/components/portal/CrewScaffoldPage";
+import { ChatSurface } from "@/components/connecteam/ChatSurface";
 
-/** Crew portal — chat (ADR-0008 Move 2 scaffold). */
+/**
+ * GVTEWAY crew chat — thin wrapper over shared <ChatSurface>. Room
+ * detail still routes to /m/inbox/[id] until portal-side room rendering
+ * lifts in a future PR.
+ */
 export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <CrewScaffoldPage
-      title="Chat"
-      subtitle="Project team rooms + threads."
-      mobilePath="/m/inbox"
-      mobileLabel="Open chat in COMPVSS"
-    />
-  );
+export default function CrewChatPage() {
+  return <ChatSurface variant="portal" roomHref={(id) => `/m/inbox/${id}`} eyebrowLabel="Crew" titleLabel="Chat" />;
 }

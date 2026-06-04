@@ -1,15 +1,11 @@
-import { CrewScaffoldPage } from "@/components/portal/CrewScaffoldPage";
+import { KudosSurface } from "@/components/connecteam/KudosSurface";
 
-/** Crew portal — kudos (ADR-0008 Move 2 scaffold). */
+/** GVTEWAY crew kudos — thin wrapper over shared <KudosSurface>. */
 export const dynamic = "force-dynamic";
 
-export default function Page() {
+export default async function CrewKudosPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   return (
-    <CrewScaffoldPage
-      title="Kudos"
-      subtitle="Recent recognition on this project."
-      mobilePath="/m/kudos"
-      mobileLabel="Post + react in COMPVSS"
-    />
+    <KudosSurface variant="portal" revalidatePath={`/p/${slug}/crew/kudos`} eyebrowLabel="Crew" titleLabel="Kudos" />
   );
 }

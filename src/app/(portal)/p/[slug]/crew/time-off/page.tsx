@@ -1,15 +1,12 @@
-import { CrewScaffoldPage } from "@/components/portal/CrewScaffoldPage";
+import { TimeOffSurface } from "@/components/connecteam/TimeOffSurface";
 
-/** Crew portal — time off (ADR-0008 Move 2 scaffold). */
+/**
+ * GVTEWAY crew time off — thin wrapper over shared <TimeOffSurface>.
+ * New-request CTA cross-shell-deep-links to the mobile request form
+ * until portal-side authoring lifts.
+ */
 export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <CrewScaffoldPage
-      title="Time Off"
-      subtitle="Your requests + their state."
-      mobilePath="/m/time-off"
-      mobileLabel="Manage time off in COMPVSS"
-    />
-  );
+export default function CrewTimeOffPage() {
+  return <TimeOffSurface variant="portal" newRequestHref="/m/time-off/new" eyebrowLabel="Crew" titleLabel="Time Off" />;
 }

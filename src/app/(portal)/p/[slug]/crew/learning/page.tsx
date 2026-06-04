@@ -1,15 +1,19 @@
-import { CrewScaffoldPage } from "@/components/portal/CrewScaffoldPage";
+import { LearningSurface } from "@/components/connecteam/LearningSurface";
 
-/** Crew portal — learning (ADR-0008 Move 2 scaffold). */
+/**
+ * GVTEWAY crew learning — thin wrapper over shared <LearningSurface>.
+ * Course detail links deep into the mobile quiz surface; portal-side
+ * assessment lifts in a future PR.
+ */
 export const dynamic = "force-dynamic";
 
-export default function Page() {
+export default function CrewLearningPage() {
   return (
-    <CrewScaffoldPage
-      title="Learning"
-      subtitle="Assigned courses + due dates."
-      mobilePath="/m/learning"
-      mobileLabel="Take courses in COMPVSS"
+    <LearningSurface
+      variant="portal"
+      detailHref={(id) => `/m/learning/${id}`}
+      eyebrowLabel="Crew"
+      titleLabel="Learning"
     />
   );
 }

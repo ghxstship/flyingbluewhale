@@ -6,23 +6,31 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { writeInbox } from "@/lib/inbox";
 
+/**
+ * Shared kudos actions (ADR-0008 Move 1).
+ *
+ * Extracted from `src/app/(mobile)/m/kudos/actions.ts` so the portal
+ * crew kudos surface and /m/kudos can both mount the same shared
+ * <KudosSurface>. Callers pass a `revalidate` hidden form field so the
+ * action invalidates the correct route's cache.
+ */
+
 const REACTION_EMOJIS = ["👏", "🙌", "🔥", "💯", "🚀", "❤️"] as const;
 export type ReactionEmoji = (typeof REACTION_EMOJIS)[number];
 
-const Schema = z.object({
+const CreateSchema = z.object({
   to_user_id: z.string().uuid(),
   message: z.string().min(1).max(500),
   value_tag: z.string().max(40).optional().or(z.literal("")),
+  revalidate: z.string().min(1).max(200),
 });
 
 export async function createKudos(fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = Schema.parse(Object.fromEntries(fd));
+  const parsed = CreateSchema.parse(Object.fromEntries(fd));
   if (parsed.to_user_id === session.userId) return;
   const supabase = await createClient();
 
-  // Recipient must be an active org member. Without this any user could
-  // hand kudos to someone outside the org by guessing their UUID.
   const { data: member } = await supabase
     .from("memberships")
     .select("user_id")
@@ -46,9 +54,6 @@ export async function createKudos(fd: FormData): Promise<void> {
     .select("id")
     .single();
 
-  // Notify the recipient — lands in /me/notifications/inbox AND fires
-  // push, gated by the kudos preference matrix. Source-keyed so retries
-  // don't duplicate.
   if (post) {
     void writeInbox({
       userId: parsed.to_user_id,
@@ -59,30 +64,25 @@ export async function createKudos(fd: FormData): Promise<void> {
       actorId: session.userId,
       title: "You got kudos",
       body: parsed.message,
-      href: "/m/kudos",
+      href: parsed.revalidate,
     });
   }
 
-  revalidatePath("/m/kudos");
+  revalidatePath(parsed.revalidate);
 }
 
 const ReactSchema = z.object({
   post_id: z.string().uuid(),
   emoji: z.enum(REACTION_EMOJIS),
+  revalidate: z.string().min(1).max(200),
 });
 
-// Toggle: if the (post, user, emoji) row exists, remove it; else insert.
-// recognition_reactions PK is (post_id, user_id, emoji) so this is the
-// natural like/unlike pattern without needing a separate "remove" route.
 export async function toggleReaction(fd: FormData): Promise<void> {
   const session = await requireSession();
   const parsed = ReactSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return;
 
   const supabase = await createClient();
-  // Ensure the post is in the caller's org — recognition_posts.org_id
-  // gates reactions transitively, but a pre-check produces clean UX
-  // on tampered hidden inputs.
   const { data: post } = await supabase
     .from("recognition_posts")
     .select("id")
@@ -115,5 +115,5 @@ export async function toggleReaction(fd: FormData): Promise<void> {
     });
   }
 
-  revalidatePath("/m/kudos");
+  revalidatePath(parsed.data.revalidate);
 }

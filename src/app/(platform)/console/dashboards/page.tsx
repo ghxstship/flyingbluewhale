@@ -92,17 +92,25 @@ export default async function Page() {
         .eq("org_id", session.orgId)
         .eq("osha_recordable", true)
         .gte("occurred_at", since30),
+      // P4.2 — pull both actual_cents (XPMS canonical) and spent_cents
+      // (legacy); the sumSpent helper coalesces. Migration 0073 trigger
+      // keeps the two columns in sync for new data.
       supabase
         .from("budgets")
-        .select("project_id, spent_cents")
+        .select("project_id, actual_cents, spent_cents")
         .eq("org_id", session.orgId)
         .in("project_id", projectIds),
     ]);
 
     const count = (rs: Array<{ project_id: string | null }> | null, pid: string) =>
       (rs ?? []).filter((r) => r.project_id === pid).length;
-    const sumSpent = (rs: Array<{ project_id: string | null; spent_cents: number }> | null, pid: string) =>
-      (rs ?? []).filter((r) => r.project_id === pid).reduce((s, r) => s + Number(r.spent_cents), 0);
+    const sumSpent = (
+      rs: Array<{ project_id: string | null; actual_cents?: number | null; spent_cents: number }> | null,
+      pid: string,
+    ) =>
+      (rs ?? [])
+        .filter((r) => r.project_id === pid)
+        .reduce((s, r) => s + Number(r.actual_cents ?? r.spent_cents ?? 0), 0);
 
     const kpis: ProjectKpi[] = (projects ?? []).map((p) => ({
       id: p.id,

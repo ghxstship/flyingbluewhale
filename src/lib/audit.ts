@@ -154,7 +154,29 @@ export type AuditInput = {
   requestId?: string | null;
 };
 
+/**
+ * P3 hardening — auto-resolve request_id from next/headers when the
+ * caller didn't pass one. proxy.ts mints x-request-id on every request
+ * and propagates it through the response; Server Components and Server
+ * Actions can read it back via headers(). This avoids threading the id
+ * through every call site while still correlating every audit row to a
+ * single user-visible HTTP request.
+ */
+async function resolveRequestId(explicit: string | null | undefined): Promise<string | null> {
+  if (explicit) return explicit;
+  try {
+    const { headers } = await import("next/headers");
+    const hs = await headers();
+    return hs.get("x-request-id");
+  } catch {
+    // headers() throws outside a request scope (cron/queue/worker).
+    // No request to correlate; emit with null.
+    return null;
+  }
+}
+
 export async function emitAudit(input: AuditInput): Promise<void> {
+  const requestId = await resolveRequestId(input.requestId);
   // audit_log is a VIEW over audit_events; RLS on the underlying table
   // restricts inserts to postgres / service_role. Without
   // SUPABASE_SERVICE_ROLE_KEY we have no way to persist the row — the
@@ -166,7 +188,7 @@ export async function emitAudit(input: AuditInput): Promise<void> {
     log.debug("audit.emit.skipped", {
       action: input.action,
       reason: "no_service_role_key",
-      request_id: input.requestId ?? undefined,
+      request_id: requestId ?? undefined,
     });
     return;
   }
@@ -181,7 +203,7 @@ export async function emitAudit(input: AuditInput): Promise<void> {
       target_table: input.targetTable ?? null,
       target_id: input.targetId ?? null,
       metadata: (input.metadata ?? {}) as never,
-      request_id: input.requestId ?? null,
+      request_id: requestId,
       operation: "EMIT",
     });
     if (error) {
@@ -190,14 +212,14 @@ export async function emitAudit(input: AuditInput): Promise<void> {
       log.warn("audit.emit.failed", {
         action: input.action,
         err: error.message,
-        request_id: input.requestId ?? undefined,
+        request_id: requestId ?? undefined,
       });
     }
   } catch (err) {
     log.warn("audit.emit.failed", {
       action: input.action,
       err: err instanceof Error ? err.message : String(err),
-      request_id: input.requestId ?? undefined,
+      request_id: requestId ?? undefined,
     });
   }
 }

@@ -40,14 +40,24 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
   }
 
   // Headline numbers from invoices (revenue), expenses (cost),
-  // budgets.spent_cents (committed). Lightweight roll-up; the full
-  // finance view lives on /console/finance/reports.
+  // budgets.actual_cents (XPMS canonical; falls back to legacy
+  // spent_cents). Lightweight roll-up; the full finance view lives on
+  // /console/finance/reports.
   const [{ data: budget }, expensesRes, invoicesRes] = await Promise.all([
-    supabase.from("budgets").select("budget_cents, spent_cents, currency").eq("project_id", project.id).maybeSingle(),
+    supabase
+      .from("budgets")
+      .select("budget_cents, actual_cents, spent_cents, currency")
+      .eq("project_id", project.id)
+      .maybeSingle(),
     supabase.from("expenses").select("amount_cents").eq("org_id", session.orgId).eq("project_id", project.id),
     supabase.from("invoices").select("amount_cents, status").eq("org_id", session.orgId).eq("project_id", project.id),
   ]);
-  const b = budget as { budget_cents: number; spent_cents: number; currency: string } | null;
+  const b = budget as {
+    budget_cents: number;
+    actual_cents: number | null;
+    spent_cents: number;
+    currency: string;
+  } | null;
   const currency = b?.currency ?? "USD";
   const expenseTotal = ((expensesRes.data ?? []) as Array<{ amount_cents: number }>).reduce(
     (s, e) => s + (e.amount_cents ?? 0),
@@ -81,7 +91,9 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
             <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
               {t("p.producer.pnl.metrics.spent", undefined, "Spent")}
             </div>
-            <div className="mt-1 font-mono text-2xl font-semibold">{fmtMoney(b?.spent_cents ?? expenseTotal)}</div>
+            <div className="mt-1 font-mono text-2xl font-semibold">
+              {fmtMoney(b?.actual_cents ?? b?.spent_cents ?? expenseTotal)}
+            </div>
           </div>
           <div className="surface p-4">
             <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">

@@ -25,7 +25,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         .maybeSingle(),
       supabase.from("tasks").select("id", { count: "exact", head: true }).eq("project_id", projectId),
       supabase.from("events").select("id", { count: "exact", head: true }).eq("project_id", projectId),
-      supabase.from("budgets").select("amount_cents, spent_cents").eq("project_id", projectId),
+      // P4.2 — read actual_cents (XPMS canonical) with spent_cents
+      // coalesce so pre-XPMS rows still render. Trigger 0073 keeps
+      // both in sync for new data.
+      supabase.from("budgets").select("amount_cents, actual_cents, spent_cents").eq("project_id", projectId),
       supabase
         .from("deliverables")
         .select("id", { count: "exact", head: true })
@@ -34,7 +37,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     ]);
   if (!project) notFound();
   const totalBudget = (budgets ?? []).reduce((s, b) => s + (b.amount_cents ?? 0), 0);
-  const totalSpent = (budgets ?? []).reduce((s, b) => s + (b.spent_cents ?? 0), 0);
+  const totalSpent = (budgets ?? []).reduce(
+    (s, b) => s + Number((b as { actual_cents?: number | null }).actual_cents ?? b.spent_cents ?? 0),
+    0,
+  );
   return (
     <>
       <ModuleHeader

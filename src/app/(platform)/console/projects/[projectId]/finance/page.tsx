@@ -80,7 +80,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         .eq("org_id", session.orgId)
         .eq("project_id", projectId)
         .order("created_at", { ascending: false }),
-      supabase.from("budgets").select("amount_cents, spent_cents").eq("project_id", projectId),
+      // P4.2 — XPMS canonical actual_cents with spent_cents coalesce.
+      supabase.from("budgets").select("amount_cents, actual_cents, spent_cents").eq("project_id", projectId),
     ]);
 
   if (!project) {
@@ -116,7 +117,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const marginPct = revenue > 0 ? Math.round((margin / revenue) * 100) : null;
 
   const budgetTotal = (budgets ?? []).reduce((s, b) => s + (b.amount_cents ?? 0), 0);
-  const budgetSpent = (budgets ?? []).reduce((s, b) => s + (b.spent_cents ?? 0), 0);
+  const budgetSpent = (budgets ?? []).reduce(
+    (s, b) => s + Number((b as { actual_cents?: number | null }).actual_cents ?? b.spent_cents ?? 0),
+    0,
+  );
 
   return (
     <>

@@ -17,26 +17,100 @@ export type ListOpts = {
 };
 
 /**
- * Tables that carry a `deleted_at` column for soft-delete. Kept in sync with
- * `supabase/migrations/20260417_000010_ssot_triggers.sql` §5 — the loop that
- * adds `deleted_at` to a fixed set of tables. Anything not in this set is
- * treated as hard-delete only and the soft-delete filter is skipped.
+ * Tables that carry a `deleted_at` column for soft-delete. Hand-maintained
+ * to match the DB schema. The audit (docs/HARDENING_AUDIT.md §B
+ * Multitenancy HIGH) found 69 tables in the DB with `deleted_at` but only
+ * 14 in this allowlist — the missing 55 silently bypassed the soft-delete
+ * filter in listOrgScoped/getOrgScoped, so soft-deleted rows surfaced in
+ * list views.
+ *
+ * Sourced from:
+ *   select table_name from information_schema.columns
+ *    where column_name = 'deleted_at' and table_schema = 'public'
+ *
+ * RLS provides defense-in-depth: per-table SELECT policies should also
+ * filter `deleted_at IS NULL`, but only 14 currently do — the remaining
+ * 55 rely on this application-level filter as their only soft-delete
+ * gate. Tightening RLS policies to add the filter is queued as a
+ * separate ADR-scoped task.
  */
 export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
-  "projects",
+  "accounting_connections",
+  "agencies",
+  "annotations",
+  "announcements",
+  "ap_invoice_extractions",
+  "assignments",
+  "bim_models",
+  "chat_rooms",
+  "client_dashboards",
   "clients",
-  "vendors",
-  "invoices",
-  "purchase_orders",
-  "equipment",
-  "proposals",
-  "event_guides",
+  "contract_envelopes",
+  "contracts",
+  "cost_databases",
+  "cost_forecasts",
+  "courses",
+  "deliverable_templates",
   "deliverables",
-  "notifications",
+  "drawing_markups",
   "email_templates",
-  "webhook_endpoints",
-  "stage_plots",
+  "equipment",
+  "estimates",
+  "event_guides",
+  "file_relations",
+  "files",
   "incidents",
+  "invoices",
+  "job_postings",
+  "lien_waivers",
+  "master_catalog_items",
+  "meetings",
+  "memberships",
+  "messages",
+  "new_hire_flows",
+  "notifications",
+  "open_calls",
+  "org_entities",
+  "parties",
+  "partner_integrations",
+  "payroll_runs",
+  "personal_documents",
+  "pinboard_items",
+  "pinboards",
+  "places",
+  "polls",
+  "projects",
+  "proposal_templates",
+  "proposals",
+  "purchase_orders",
+  "reality_captures",
+  "recognition_posts",
+  "schedule_baselines",
+  "sheet_sets",
+  "site_plans",
+  "siteplan_adjacency",
+  "siteplan_band",
+  "siteplan_placement",
+  "siteplan_station",
+  "siteplan_utility",
+  "siteplan_zone_region",
+  "spec_sections",
+  "stage_plots",
+  "submittal_review_chains",
+  "subscriptions",
+  "surveys",
+  "takeoffs",
+  "talent_profiles",
+  "time_clock_zones",
+  "time_off_policies",
+  "tours",
+  "transmittals",
+  "ucm_comments",
+  "users",
+  "vendor_products",
+  "vendors",
+  "warranties",
+  "webhook_endpoints",
 ]);
 
 async function anyFrom(t: string) {

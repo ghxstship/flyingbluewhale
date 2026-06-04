@@ -219,6 +219,18 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // P3 hardening — inject x-request-id into the inbound request headers
+  // so Server Components + Server Actions can read it back via
+  // `headers().get("x-request-id")`. Without this the audit emitter
+  // and structured loggers can only see the id if a downstream caller
+  // already passed it explicitly. The mutation only takes effect via
+  // NextResponse.next({ request: { headers: ... } }) — updateSession
+  // already constructs the response from request.headers, so seed the
+  // id there before it forwards.
+  if (!request.headers.has("x-request-id")) {
+    request.headers.set("x-request-id", requestId);
+  }
+
   const response = await updateSession(request, rewriteUrl);
 
   // ────────────────────────────────────────────────────────────────────

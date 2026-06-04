@@ -1,5 +1,9 @@
 import { notFound } from "next/navigation";
-import { ModuleHeader } from "@/components/Shell";
+// Import ModuleHeader directly from its zero-i18n module to avoid
+// pulling Shell.tsx's re-exports (which include PortalRail's i18n
+// imports) into the Client Component graph via the AtomDrillIn →
+// DetailShell static-import chain.
+import { ModuleHeader } from "@/components/ModuleHeader";
 import type { ReactNode } from "react";
 import { formatDate, formatDateTime, formatMoney } from "@/lib/i18n/format";
 

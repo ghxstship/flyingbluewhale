@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 import { SITE } from "@/lib/seo";
-import { getRequestT } from "@/lib/i18n/request";
+
+// Deliberately no i18n import — this primitive ships from a Server
+// Component module that ModuleHeader (now zero-i18n) consumes. Pulling
+// `getRequestT()` here would transitively drag `next/headers` into any
+// Client Component graph that touches ModuleHeader (e.g. error.tsx),
+// breaking the build. The two aria-labels emitted below are accessibility
+// metadata in English — a future iteration takes them as optional props
+// from callers that have a translator in scope.
 
 /**
  * Unified breadcrumb primitive — used by every shell (platform console,
@@ -25,7 +32,7 @@ import { getRequestT } from "@/lib/i18n/request";
 
 export type Crumb = { label: string; href?: string };
 
-export async function Breadcrumbs({
+export function Breadcrumbs({
   items,
   baseUrl,
   className = "",
@@ -39,7 +46,6 @@ export async function Breadcrumbs({
 }) {
   if (items.length === 0) return null;
 
-  const { t } = await getRequestT();
   const resolvedBase = baseUrl ?? SITE.baseUrl;
 
   // Visual truncation: if > 4 crumbs, collapse middle entries into
@@ -60,7 +66,7 @@ export async function Breadcrumbs({
     : null;
 
   return (
-    <nav aria-label={t("ui.breadcrumbs.ariaLabel", undefined, "Breadcrumb")} className={className}>
+    <nav aria-label="Breadcrumb" className={className}>
       <ol className="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
         {visible.map((c, idx) => {
           const isLast = idx === visible.length - 1;
@@ -69,7 +75,7 @@ export async function Breadcrumbs({
               <li key={`ellipsis-${idx}`} className="flex items-center gap-1.5">
                 <ChevronRight size={12} aria-hidden="true" className="opacity-50" />
                 <span
-                  aria-label={t("ui.breadcrumbs.collapsedSegments", undefined, "Collapsed breadcrumb segments")}
+                  aria-label="Collapsed breadcrumb segments"
                   className="inline-flex h-4 w-4 items-center justify-center rounded hover:bg-[var(--bg-secondary)]"
                 >
                   <MoreHorizontal size={12} aria-hidden="true" />

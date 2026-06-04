@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { ModuleHeader } from "@/components/Shell";
+// Import ModuleHeader from its dedicated zero-i18n module, NOT from
+// @/components/Shell — Shell.tsx pulls `getRequestT` (server-only) into
+// any importer's module graph, which breaks when error.tsx is rendered
+// as a Client Component. Trace: Shell.tsx → i18n/request.ts →
+// i18n/server.ts → next/headers. ADR-0007 follow-up.
+import { ModuleHeader } from "@/components/ModuleHeader";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 

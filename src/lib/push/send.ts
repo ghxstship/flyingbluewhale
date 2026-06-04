@@ -45,6 +45,16 @@ export type PushPayload = {
   data?: Record<string, unknown>;
   /** Categorisation tag for user-prefs filtering. */
   kind?: PushKind;
+  /** ADR-0010 Move 1: shell scoping for the `notifications` row written
+   *  alongside this push. `"all"` (default) surfaces in every shell's
+   *  bell; `"platform"` / `"portal"` / `"mobile"` scope to that shell. */
+  scope?: "platform" | "portal" | "mobile" | "all";
+  /** Optional project scope for the notifications row — the portal bell
+   *  on `/p/[slug]` filters here. */
+  projectId?: string;
+  /** Optional org scope for the notifications row — the ATLVS bell
+   *  filters here on multi-org sessions. */
+  orgId?: string;
 };
 
 export type PushSendResult = { sent: number; failed: number; disabled: number };
@@ -213,6 +223,46 @@ async function bumpLastSeen(id: string): Promise<void> {
   }
 }
 
+/**
+ * ADR-0010 Move 1 — write a `notifications` row for each recipient
+ * alongside the push send.
+ *
+ * The notifications matrix is the SSOT for the bell on every shell;
+ * push is just one delivery channel. This helper writes the row before
+ * any push-pref gating so users who've muted push for a kind still see
+ * the event in their bell.
+ *
+ * Fire-and-forget pattern: failures log + swallow so the push pipeline
+ * never blocks on notifications-table availability. RLS is the
+ * authorization boundary (`user_id = auth.uid()` policy on
+ * notifications), but the service-role client bypasses RLS here since
+ * sending is a system action by definition.
+ */
+async function recordNotifications(userIds: string[], payload: PushPayload): Promise<void> {
+  if (userIds.length === 0) return;
+  try {
+    const svc = createServiceClient();
+    const rows = userIds.map((userId) => ({
+      user_id: userId,
+      kind: payload.kind ?? null,
+      title: payload.title,
+      body: payload.body,
+      href: payload.url ?? null,
+      scope: payload.scope ?? "all",
+      project_id: payload.projectId ?? null,
+      org_id: payload.orgId ?? null,
+    }));
+    const { error } = await (
+      svc.from as unknown as (table: string) => {
+        insert: (rows: Array<Record<string, unknown>>) => Promise<{ error: { message: string } | null }>;
+      }
+    )("notifications").insert(rows);
+    if (error) log.warn("push.record_notifications_error", { err: error.message, count: rows.length });
+  } catch (err) {
+    log.warn("push.record_notifications_exception", { err: (err as Error).message });
+  }
+}
+
 async function sendOne(sub: PushSubRow, serialized: string): Promise<"sent" | "disabled" | "failed"> {
   try {
     await webpush.sendNotification(
@@ -254,8 +304,14 @@ async function filterByPushPrefs(userIds: string[], kind: PushKind | undefined):
 }
 
 export async function sendPushTo(userId: string, payload: PushPayload): Promise<PushSendResult> {
+  // ADR-0010 Move 1 — write the notifications row BEFORE the push-pref
+  // gate. The matrix is the canonical event log, independent of whether
+  // the user has push delivery enabled for this kind. Bell on every
+  // shell reads from here; push is the optional channel.
+  await recordNotifications([userId], payload);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
-  // Pref gate: if the user has toggled this kind off, short-circuit.
+  // Pref gate: if the user has toggled this kind off, short-circuit
+  // (push channel only — the notifications row above is already written).
   const excluded = await filterByPushPrefs([userId], payload.kind);
   if (excluded.has(userId)) return { sent: 0, failed: 0, disabled: 0 };
   const subs = await fetchActiveSubs(userId);
@@ -278,10 +334,14 @@ export async function sendPushTo(userId: string, payload: PushPayload): Promise<
 }
 
 export async function sendPushBulk(userIds: string[], payload: PushPayload): Promise<PushSendResult> {
-  if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   if (userIds.length === 0) return { sent: 0, failed: 0, disabled: 0 };
+  // ADR-0010 Move 1 — write notifications rows for every recipient
+  // before the push-pref gate. Single batch insert; bell on every shell
+  // reads from here regardless of push delivery state.
+  await recordNotifications(userIds, payload);
+  if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   // Pref gate: drop users who've toggled this kind off before we hit
-  // the push_subscriptions read.
+  // the push_subscriptions read (push channel only).
   const excluded = await filterByPushPrefs(userIds, payload.kind);
   const allowed = userIds.filter((u) => !excluded.has(u));
   if (allowed.length === 0) return { sent: 0, failed: 0, disabled: 0 };

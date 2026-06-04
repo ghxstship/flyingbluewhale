@@ -5,7 +5,22 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-const Schema = z.object({ announcementId: z.string().uuid() });
+/**
+ * Shared `markAnnouncementRead` action (ADR-0008 Move 1).
+ *
+ * Extracted from `src/app/(mobile)/m/feed/actions.ts` so both shells
+ * (mobile + portal crew) can mount the same FeedSurface component
+ * without duplicating the action's RLS guard and the announcement-read
+ * upsert pattern.
+ *
+ * Callers pass a `revalidate` hidden form field with the path that
+ * should re-render after the upsert — so /m/feed revalidates /m/feed
+ * and /p/[slug]/crew/feed revalidates that specific portal path.
+ */
+const Schema = z.object({
+  announcementId: z.string().uuid(),
+  revalidate: z.string().min(1).max(200),
+});
 
 export async function markAnnouncementRead(fd: FormData): Promise<void> {
   const session = await requireSession();
@@ -27,5 +42,5 @@ export async function markAnnouncementRead(fd: FormData): Promise<void> {
       { announcement_id: parsed.announcementId, user_id: session.userId, read_at: new Date().toISOString() },
       { onConflict: "announcement_id,user_id" },
     );
-  revalidatePath("/m/feed");
+  revalidatePath(parsed.revalidate);
 }

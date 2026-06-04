@@ -1,15 +1,17 @@
-import { CrewScaffoldPage } from "@/components/portal/CrewScaffoldPage";
+import { FeedSurface } from "@/components/connecteam/FeedSurface";
 
-/** Crew portal — feed (ADR-0008 Move 2 scaffold). */
+/**
+ * GVTEWAY crew feed (ADR-0008 Move 1) — thin wrapper over the shared
+ * `<FeedSurface>`. Replaces the placeholder CrewScaffoldPage that
+ * landed in the prior commit; this surface now renders the full
+ * announcements list, identical to /m/feed.
+ *
+ * Per-slug revalidate path is computed so a mark-as-read on the
+ * portal-side surface refreshes exactly the right cache entry.
+ */
 export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <CrewScaffoldPage
-      title="Feed"
-      subtitle="Project announcements + updates."
-      mobilePath="/m/feed"
-      mobileLabel="Open feed in COMPVSS"
-    />
-  );
+export default async function CrewFeedPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return <FeedSurface variant="portal" revalidatePath={`/p/${slug}/crew/feed`} eyebrowLabel="Crew" titleLabel="Feed" />;
 }

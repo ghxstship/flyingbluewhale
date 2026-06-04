@@ -1,6 +1,11 @@
+import { redirect } from "next/navigation";
 import { QrCode } from "lucide-react";
 import { FAB } from "@/components/mobile/FAB";
 import { getRequestT } from "@/lib/i18n/request";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { MOBILE_ROLES, type MobileRole } from "@/lib/nav";
 import { MobileHomeTabs } from "./MobileHomeTabs";
 
 /**
@@ -13,9 +18,34 @@ import { MobileHomeTabs } from "./MobileHomeTabs";
  * iOS HIG / Apple Maps pattern — five bottom-tab surfaces with section
  * grouping inside the active tab. Hick's-Law-respecting (6 primary tiles,
  * then scoped sub-grids on demand).
+ *
+ * ADR-0009 minimal grace-window: if the signed-in user has chosen a
+ * `mobile_role` via `/m/settings/role`, hand them off to their
+ * role-scoped home (`/m/[role]` for performer/crew/admin, or the
+ * existing static surface for driver/medic/guard which already serve as
+ * those roles' homes). Users who haven't picked a role keep the generic
+ * Today/Tools/Reports view they had before. No proxy.ts middleware
+ * required for this scaffold — the full URL migration (moving every
+ * `/m/<surface>` under `/m/[role]/<surface>`) ships as its own PR.
  */
 export default async function MobileHome() {
   const { t } = await getRequestT();
+  if (hasSupabase) {
+    const session = await requireSession();
+    const supabase = await createClient();
+    const { data: prefRow } = await supabase
+      .from("user_preferences")
+      .select("ui_state")
+      .eq("user_id", session.userId)
+      .maybeSingle();
+    const uiState = (prefRow?.ui_state as { mobile_role?: MobileRole } | null) ?? null;
+    const chosen = uiState?.mobile_role;
+    if (chosen && MOBILE_ROLES.includes(chosen)) {
+      // driver/medic/guard already have static surfaces at /m/<role>;
+      // performer/crew/admin land on the dynamic /m/[role] home.
+      redirect(`/m/${chosen}`);
+    }
+  }
   const today = [
     {
       href: "/m/check-in",

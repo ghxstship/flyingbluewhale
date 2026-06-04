@@ -9,6 +9,7 @@ import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { CallControls } from "./CallControls";
+import { CallInsightsPanel } from "@/components/marketplace/CallInsightsPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,8 @@ type Call = {
   currency: string;
   deadline_at: string | null;
   submission_count: number;
+  ai_market_intelligence: string | null;
+  ai_market_intelligence_at: string | null;
 };
 
 export default async function Page({ params }: { params: Promise<{ callId: string }> }) {
@@ -38,14 +41,18 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
-  const { data } = await supabase
-    .from("open_calls")
-    .select("*")
-    .eq("id", callId)
-    .eq("org_id", session.orgId)
-    .maybeSingle();
+  const [{ data }, statsResult] = await Promise.all([
+    supabase
+      .from("open_calls")
+      .select("*")
+      .eq("id", callId)
+      .eq("org_id", session.orgId)
+      .maybeSingle(),
+    supabase.rpc("open_call_stats", { p_call_id: callId }),
+  ]);
   if (!data) return notFound();
   const c = data as Call;
+  const callStats = statsResult.data ?? {};
 
   return (
     <>
@@ -78,6 +85,13 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           </h2>
           <div className="text-sm whitespace-pre-wrap text-[var(--text-primary)]">{c.description ?? "—"}</div>
         </section>
+
+        <CallInsightsPanel
+          stats={callStats as Parameters<typeof CallInsightsPanel>[0]["stats"]}
+          aiIntelligence={c.ai_market_intelligence ?? null}
+          aiIntelligenceAt={c.ai_market_intelligence_at ?? null}
+          currency={c.currency}
+        />
 
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="surface p-5">

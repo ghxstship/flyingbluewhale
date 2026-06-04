@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
 import { DataTable } from "@/components/DataTable";
@@ -10,6 +11,7 @@ import { listProjects, projectStats } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { DigestWidget } from "@/components/dashboards/DigestWidget";
 
 // Dashboard hub tabs — folds the previous Dashboard sidebar group
 // (Overview, Portfolio, Action Items, Command Palette) into one record-
@@ -108,6 +110,10 @@ export default async function ConsoleDashboard() {
         tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
       />
       <div className="page-content space-y-6">
+        <Suspense fallback={<DigestSkeleton />}>
+          <DigestWidget userId={session.userId} orgId={session.orgId} />
+        </Suspense>
+
         <div className="metric-grid">
           <MetricCard
             label={t("console.dashboard.metrics.projects", undefined, "Projects")}
@@ -198,6 +204,21 @@ export default async function ConsoleDashboard() {
         </section>
       </div>
     </>
+  );
+}
+
+function DigestSkeleton() {
+  return (
+    <div className="surface rounded-lg border border-[var(--border-subtle)] overflow-hidden">
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--border-subtle)] bg-[var(--surface-raised)]">
+        <div className="skeleton h-3 w-20 rounded" />
+      </div>
+      <div className="px-4 py-4 space-y-2">
+        <div className="skeleton h-3 w-full rounded" />
+        <div className="skeleton h-3 w-4/5 rounded" />
+        <div className="skeleton h-3 w-3/5 rounded" />
+      </div>
+    </div>
   );
 }
 

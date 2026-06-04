@@ -84,7 +84,15 @@ async function verifyHmac(req: Request, body: string): Promise<boolean> {
   ]);
   const sig = await crypto.subtle.sign("HMAC", cryptoKey, enc.encode(body));
   const expected = Buffer.from(sig).toString("base64");
-  return expected === got;
+  // P0 hardening — replace `===` with constant-time compare so a
+  // timing oracle can't probe the HMAC secret byte-by-byte. Length
+  // mismatch is the first-failure case; treat it as forbidden without
+  // running timingSafeEqual (which throws on different-length inputs).
+  const expectedBuf = Buffer.from(expected);
+  const gotBuf = Buffer.from(got);
+  if (expectedBuf.length !== gotBuf.length) return false;
+  const { timingSafeEqual } = await import("node:crypto");
+  return timingSafeEqual(expectedBuf, gotBuf);
 }
 
 export async function POST(req: Request) {

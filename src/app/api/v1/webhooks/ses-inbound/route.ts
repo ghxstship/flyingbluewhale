@@ -53,7 +53,15 @@ export async function POST(req: Request) {
     return apiError("internal", "SES_INBOUND_SECRET not configured; endpoint inactive.");
   }
   const got = req.headers.get("x-webhook-secret");
-  if (got !== expected) {
+  // P0 hardening — constant-time compare on the webhook secret.
+  // Length mismatch short-circuits without invoking timingSafeEqual
+  // (which throws on different-length inputs). Without this a timing
+  // oracle could probe the secret byte-by-byte.
+  if (!got || got.length !== expected.length) {
+    return apiError("forbidden", "Invalid webhook secret");
+  }
+  const { timingSafeEqual } = await import("node:crypto");
+  if (!timingSafeEqual(Buffer.from(got), Buffer.from(expected))) {
     return apiError("forbidden", "Invalid webhook secret");
   }
 

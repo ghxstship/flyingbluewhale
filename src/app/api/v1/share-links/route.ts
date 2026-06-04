@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       // Cast: the AuditAction union doesn't yet include share_link.* — the
       // audit_log column is plain text, so the row writes correctly. The
       // union is intentionally narrow; broadening it lives with the audit lib.
-      action: "share_link.create" as AuditAction,
+      action: "share_link.create",
       targetTable: "share_links",
       targetId: created.result.id,
       metadata: {

@@ -55,13 +55,87 @@ export type AuditAction =
   // grants and removes anon access to a proposal document.
   | "auth.proposal_share.created"
   | "auth.proposal_share.revoked"
+  // Generic share-link surface (post-audit drift fix). Any anon-reach
+  // surface — proposals, decks, drawings — should emit one of these.
+  | "share_link.create"
+  | "share_link.revoke"
+  // MFA recovery code rotation. Recovery codes are sensitive material;
+  // when they're regenerated the prior batch is hard-deleted (no soft
+  // delete — leaves redeemable secrets findable). The audit row is the
+  // forensic trail.
+  | "auth.mfa.recovery_codes_regenerated"
   // Advancing state-machine transitions — driven by
   // POST /api/v1/deliverables/:id/transition
   | "deliverable.in_review"
   | "deliverable.approved"
   | "deliverable.rejected"
   | "deliverable.revision_requested"
-  | "deliverable.fulfilled";
+  | "deliverable.fulfilled"
+  // ────────────────────────────────────────────────────────────────
+  // XPMS / finance (migrations 0070-0073)
+  // ────────────────────────────────────────────────────────────────
+  | "budget.created"
+  | "budget.updated"
+  | "budget.deleted"
+  | "budget.reconciled"
+  | "budget.imported"
+  | "expense.created"
+  | "expense.updated"
+  | "expense.deleted"
+  | "expense.approved"
+  | "expense.reimbursed"
+  | "expense.rejected"
+  | "draw.created"
+  | "draw.updated"
+  | "draw.deleted"
+  | "draw.marked_drawn"
+  | "draw.marked_pending"
+  | "draw.seeded_default"
+  // ────────────────────────────────────────────────────────────────
+  // Connecteam parity (migrations 0046–0048, 0050–0051)
+  // ────────────────────────────────────────────────────────────────
+  | "announcement.published"
+  | "announcement.read"
+  | "kudos.created"
+  | "kudos.reaction.toggled"
+  | "badge.awarded"
+  | "badge.revoked"
+  | "course.assigned"
+  | "course.completed"
+  | "time_off.requested"
+  | "time_off.approved"
+  | "time_off.denied"
+  | "time_off.cancelled"
+  | "shift_swap.requested"
+  | "shift_swap.accepted"
+  | "shift_swap.declined"
+  | "incident.filed"
+  | "onboarding.assigned"
+  | "onboarding.completed"
+  | "personal_document.uploaded"
+  | "personal_document.deleted"
+  // ────────────────────────────────────────────────────────────────
+  // Accreditation + workforce
+  // ────────────────────────────────────────────────────────────────
+  | "credential.assigned"
+  | "credential.revoked"
+  | "accreditation.scan"
+  // ────────────────────────────────────────────────────────────────
+  // Notification matrix (migration 0069)
+  // ────────────────────────────────────────────────────────────────
+  | "notification.read"
+  | "notification.preferences_updated"
+  // ────────────────────────────────────────────────────────────────
+  // Marketplace
+  // ────────────────────────────────────────────────────────────────
+  | "talent_offer.sent"
+  | "talent_offer.accepted"
+  | "talent_offer.declined"
+  | "talent_offer.countersigned"
+  | "review.created"
+  | "review.released"
+  | "job_application.submitted"
+  | "open_call_submission.submitted";
 
 export type AuditInput = {
   /** Actor's user id (auth.users.id). */

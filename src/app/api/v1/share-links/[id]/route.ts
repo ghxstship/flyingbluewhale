@@ -26,7 +26,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
       actorId: session.userId,
       orgId: session.orgId,
       actorEmail: session.email,
-      action: "share_link.revoke" as AuditAction,
+      action: "share_link.revoke",
       targetTable: "share_links",
       targetId: id,
       metadata: {},

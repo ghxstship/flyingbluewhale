@@ -279,5 +279,20 @@ export async function regenerateRecoveryCodesAction(): Promise<RegenerateResult>
   if (error) return { error: error.message };
   await admin.from("mfa_recovery_codes").delete().eq("user_id", session.userId).lt("created_at", cutoff);
 
+  // P0 hardening — emit an audit row for the regeneration. Recovery
+  // codes are sensitive material; without an audit trail the user
+  // (and security review) can't tell when codes were rotated. Hard
+  // delete on prior codes is correct (soft delete leaves redeemable
+  // secrets findable); the audit row preserves the forensic record.
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.mfa.recovery_codes_regenerated",
+    targetTable: "mfa_recovery_codes",
+    targetId: session.userId,
+    metadata: { count: codes.length },
+  });
+
   return { ok: true, recoveryCodes: codes };
 }

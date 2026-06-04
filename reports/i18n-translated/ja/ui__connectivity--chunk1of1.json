@@ -1,0 +1,4 @@
+{
+  "ui.connectivity.offline": "オフラインです。操作はキューに保存され、再接続時に同期されます。",
+  "ui.connectivity.backOnline": "オンラインに復帰しました。保留中の操作を同期しています…"
+}

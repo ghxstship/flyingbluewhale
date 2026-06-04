@@ -1,0 +1,6 @@
+{
+  "common.time.justNow": "たった今",
+  "common.time.minutesShort": "${min}分",
+  "common.time.hoursShort": "${hr}時間",
+  "common.time.daysShort": "${day}日"
+}

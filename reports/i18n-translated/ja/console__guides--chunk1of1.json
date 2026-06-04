@@ -1,0 +1,13 @@
+{
+  "console.guides.eyebrow": "ナレッジ",
+  "console.guides.title": "ガイド",
+  "console.guides.configureSupabase": "Supabaseを設定してください。",
+  "console.guides.subtitleSingular": "プロジェクト全体で${rows.length}件のガイド",
+  "console.guides.subtitlePlural": "プロジェクト全体で${rows.length}件のガイド",
+  "console.guides.empty.title": "イベントガイドはまだありません",
+  "console.guides.empty.openProjects": "プロジェクトを開く →",
+  "console.guides.table.project": "プロジェクト",
+  "console.guides.table.persona": "ペルソナ",
+  "console.guides.table.updated": "更新日",
+  "console.guides.editLink": "編集 →"
+}

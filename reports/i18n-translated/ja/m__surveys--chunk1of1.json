@@ -1,0 +1,9 @@
+{
+  "m.surveys.title": "アンケート",
+  "m.surveys.empty.title": "実施中のアンケートはありません",
+  "m.surveys.empty.description": "公開中のアンケートはここに表示されます。",
+  "m.surveys.badge.submitted": "提出済み",
+  "m.surveys.badge.open": "公開中",
+  "m.surveys.badge.anonymous": "匿名",
+  "m.surveys.closesAt": "${fmt.date(s.closes_at)}に締切"
+}

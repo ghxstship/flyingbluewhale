@@ -1,0 +1,9 @@
+{
+  "m.incidents.eyebrow": "現場",
+  "m.incidents.title": "インシデント",
+  "m.incidents.noneLast30": "直近30日間にインシデントの記録はありません。",
+  "m.incidents.summary": "直近30日で${rows.length}件 · 未対応${open}件",
+  "m.incidents.criticalSuffix": "重大${critical}件",
+  "m.incidents.reportCta": "+ インシデントを報告",
+  "m.incidents.empty.title": "異常なし"
+}

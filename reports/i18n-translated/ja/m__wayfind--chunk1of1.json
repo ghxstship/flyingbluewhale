@@ -1,0 +1,8 @@
+{
+  "m.wayfind.otherCluster": "その他",
+  "m.wayfind.eyebrow": "現場",
+  "m.wayfind.title": "ウェイファインディング",
+  "m.wayfind.subtitle": "会場を選択して、ゾーン、ゲート、集合場所を表示します。",
+  "m.wayfind.empty.title": "会場はまだありません",
+  "m.wayfind.empty.action": "会場を開く"
+}

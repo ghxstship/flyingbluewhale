@@ -1,0 +1,12 @@
+{
+  "me.reviews.configure": "Supabaseを設定してください。",
+  "me.reviews.eyebrow": "マイレビュー",
+  "me.reviews.title": "レビュー",
+  "me.reviews.subtitle": "双方が投稿するまでレビューは非公開です。報復の余地はありません。",
+  "me.reviews.received": "受領",
+  "me.reviews.emptyReceived": "公開済みのレビューはまだありません。",
+  "me.reviews.written": "投稿済み",
+  "me.reviews.emptyWritten": "まだレビューを投稿していません。",
+  "me.reviews.status.released": "公開済み",
+  "me.reviews.status.hidden": "非公開 — 相手方の投稿待ち"
+}

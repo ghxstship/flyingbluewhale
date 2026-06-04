@@ -1,0 +1,22 @@
+{
+  "me.savedSearches.eyebrow": "保存した検索",
+  "me.savedSearches.title": "保存した検索",
+  "me.savedSearches.add.title": "通知を追加",
+  "me.savedSearches.fields.kind": "種別",
+  "me.savedSearches.fields.name": "名称",
+  "me.savedSearches.fields.namePlaceholder": "A1 / 照明プログラマー · FL",
+  "me.savedSearches.fields.query": "クエリ (JSON)",
+  "me.savedSearches.fields.emailAlerts": "メール通知",
+  "me.savedSearches.fields.pushAlerts": "プッシュ通知",
+  "me.savedSearches.kinds.gig": "ギグ",
+  "me.savedSearches.kinds.rfq": "RFQ",
+  "me.savedSearches.kinds.talentCall": "タレントコール",
+  "me.savedSearches.kinds.talent": "タレント",
+  "me.savedSearches.kinds.crew": "クルー",
+  "me.savedSearches.kinds.vendor": "ベンダー",
+  "me.savedSearches.active.title": "有効な通知",
+  "me.savedSearches.empty": "保存した検索はまだありません。",
+  "me.savedSearches.badge.email": "メール",
+  "me.savedSearches.badge.push": "プッシュ",
+  "me.savedSearches.matches": "${r.match_count} 件一致"
+}

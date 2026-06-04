@@ -1,0 +1,22 @@
+{
+  "me.layout.groups.account": "アカウント",
+  "me.layout.groups.activity": "アクティビティ",
+  "me.layout.groups.marketplace": "マーケットプレイス",
+  "me.layout.tabs.profile": "プロフィール",
+  "me.layout.tabs.preferences": "環境設定",
+  "me.layout.tabs.settings": "設定",
+  "me.layout.tabs.privacy": "プライバシー",
+  "me.layout.tabs.security": "セキュリティ",
+  "me.layout.tabs.organizations": "組織",
+  "me.layout.tabs.dashboard": "ダッシュボード",
+  "me.layout.tabs.notifications": "通知",
+  "me.layout.tabs.tickets": "チケット",
+  "me.layout.tabs.reviews": "レビュー",
+  "me.layout.tabs.talent": "タレント",
+  "me.layout.tabs.applications": "応募",
+  "me.layout.tabs.submissions": "提出",
+  "me.layout.tabs.offers": "オファー",
+  "me.layout.tabs.availability": "稼働状況",
+  "me.layout.tabs.savedSearches": "保存した検索",
+  "me.layout.tabs.crew": "クルー"
+}

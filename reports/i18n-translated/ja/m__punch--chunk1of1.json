@@ -1,0 +1,10 @@
+{
+  "m.punch.eyebrow": "現場",
+  "m.punch.title": "パンチリスト",
+  "m.punch.noOpenItems": "あなたに割り当てられた未対応項目はありません。",
+  "m.punch.openCount": "${rows.length} 件未対応",
+  "m.punch.empty.title": "パンチリストは完了済み",
+  "m.punch.empty.action": "未対応タスクを開く",
+  "m.punch.overdue": "期限超過",
+  "m.punch.due": "期限 ${r.due_at}"
+}

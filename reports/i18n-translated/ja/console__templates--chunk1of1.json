@@ -1,0 +1,20 @@
+{
+  "console.templates.new.eyebrow": "テンプレートから新規プロジェクト",
+  "console.templates.new.cardTitle": "プロジェクト詳細",
+  "console.templates.new.projectNameLabel": "プロジェクト名",
+  "console.templates.new.slugLabel": "スラッグ",
+  "console.templates.new.modulesLabel": "有効化するモジュール",
+  "console.templates.new.willBeCreatedLabel": "作成されます",
+  "console.templates.new.createProjectButton": "プロジェクトを作成",
+  "console.templates.category.festival": "フェスティバル",
+  "console.templates.category.activation": "アクティベーション",
+  "console.templates.category.tour": "ツアー",
+  "console.templates.category.corporate": "コーポレート",
+  "console.templates.category.sponsor": "スポンサー",
+  "console.templates.category.custom": "カスタム",
+  "console.templates.eyebrow": "テンプレート",
+  "console.templates.title": "プロジェクトテンプレート",
+  "console.templates.empty.title": "テンプレートはまだありません",
+  "console.templates.useTemplateAria": "テンプレート ${tpl.name} を使用",
+  "console.templates.officialBadge": "公式"
+}

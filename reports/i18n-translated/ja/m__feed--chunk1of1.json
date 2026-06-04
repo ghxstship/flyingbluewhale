@@ -1,0 +1,10 @@
+{
+  "m.feed.eyebrow": "モバイル",
+  "m.feed.title": "アップデート",
+  "m.feed.noUpdatesYet": "アップデートはまだありません。",
+  "m.feed.unreadOfTotal": "${rows.length}件中${unread}件未読",
+  "m.feed.empty.title": "アップデートなし",
+  "m.feed.empty.description": "組織のお知らせはここに表示されます。",
+  "m.feed.pinned": "ピン留め済み",
+  "m.feed.markRead": "既読にする"
+}

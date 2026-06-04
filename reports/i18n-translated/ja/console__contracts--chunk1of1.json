@@ -1,0 +1,23 @@
+{
+  "console.contracts.eyebrow": "調達",
+  "console.contracts.title": "契約",
+  "console.contracts.configureSupabase": "Supabaseを設定してください。",
+  "console.contracts.contractWordSingular": "契約",
+  "console.contracts.contractWordPlural": "契約",
+  "console.contracts.newContract": "+ 新規契約",
+  "console.contracts.metrics.activeAll": "進行中(全体)",
+  "console.contracts.metrics.activeConstruction": "進行中(建設)",
+  "console.contracts.metrics.paidYtd": "年初来支払額",
+  "console.contracts.scope.all": "すべて",
+  "console.contracts.scope.constructionOnly": "建設のみ",
+  "console.contracts.emptyLabel": "契約はまだありません",
+  "console.contracts.columns.code": "コード",
+  "console.contracts.columns.title": "件名",
+  "console.contracts.columns.kind": "種別",
+  "console.contracts.columns.counterparty": "相手方",
+  "console.contracts.columns.billing": "請求",
+  "console.contracts.columns.value": "金額",
+  "console.contracts.columns.paid": "支払済",
+  "console.contracts.columns.retainage": "留保率",
+  "console.contracts.columns.state": "状態"
+}

@@ -1,0 +1,14 @@
+{
+  "m.kudos.title": "称賛",
+  "m.kudos.myBadges": "マイバッジ",
+  "m.kudos.badgeFallback": "バッジ",
+  "m.kudos.give": "称賛を贈る",
+  "m.kudos.to": "宛先",
+  "m.kudos.message": "メッセージ",
+  "m.kudos.valueTag": "バリュー(任意タグ)",
+  "m.kudos.empty.title": "称賛はまだありません",
+  "m.kudos.empty.description": "表彰投稿はここに表示されます。",
+  "m.kudos.someone": "誰か",
+  "m.kudos.points": "${p.points} pt",
+  "m.kudos.reactWith": "${emoji} でリアクション"
+}

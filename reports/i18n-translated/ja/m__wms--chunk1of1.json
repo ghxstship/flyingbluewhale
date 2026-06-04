@@ -1,0 +1,13 @@
+{
+  "m.wms.eyebrow": "現場",
+  "m.wms.title": "倉庫",
+  "m.wms.subtitle": "スキャンでピック、棚入れ、チェックイン/アウト。",
+  "m.wms.scanAsset": "資産をスキャン",
+  "m.wms.assetRegister": "資産台帳",
+  "m.wms.inMaintenance": "整備中",
+  "m.wms.empty.maintenance": "整備中の品目はありません",
+  "m.wms.empty.returns": "返却予定はありません",
+  "m.wms.noTag": "タグなし",
+  "m.wms.returnsDue": "返却期限",
+  "m.wms.due": "期限 ${fmtDay(r.ends_at)}"
+}

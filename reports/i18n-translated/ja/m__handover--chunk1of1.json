@@ -1,0 +1,9 @@
+{
+  "m.handover.eyebrow": "モバイル",
+  "m.handover.title": "引き渡し",
+  "m.handover.needsWalk": "ウォークスルー要",
+  "m.handover.empty.title": "全会場の引き渡し完了",
+  "m.handover.empty.description": "本日の保留事項はありません。",
+  "m.handover.capAbbrev": "収容",
+  "m.handover.handedOver": "引き渡し済み"
+}

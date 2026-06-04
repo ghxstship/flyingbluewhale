@@ -1,0 +1,12 @@
+{
+  "m.tracker.configureSupabase": "Supabaseを設定してください。",
+  "m.tracker.title": "トラッカー",
+  "m.tracker.projectSingular": "プロジェクト",
+  "m.tracker.projectPlural": "プロジェクト",
+  "m.tracker.atomSingular": "アトム",
+  "m.tracker.atomPlural": "アトム",
+  "m.tracker.empty.title": "プロジェクトはまだありません",
+  "m.tracker.metric.budget": "予算",
+  "m.tracker.metric.actual": "実績",
+  "m.tracker.metric.variance": "差異"
+}

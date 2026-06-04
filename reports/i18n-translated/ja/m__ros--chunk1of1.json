@@ -1,0 +1,15 @@
+{
+  "m.ros.show.configureSupabase": "Supabaseを設定してください。",
+  "m.ros.show.backToAll": "← すべてのキュー",
+  "m.ros.show.eyebrow": "ショー",
+  "m.ros.show.liveLabel": "ライブ",
+  "m.ros.show.startedAt": "${fmtTime(live.scheduled_at)}に開始",
+  "m.ros.show.upcomingHeading": "今後の予定 · ${upcoming.length}",
+  "m.ros.show.noMoreCues": "キュー待ちはありません。",
+  "m.ros.show.completedHeading": "完了 · ${done.length}",
+  "m.ros.show.doneBadge": "完了",
+  "m.ros.eyebrow": "モバイル",
+  "m.ros.title": "Run of Show",
+  "m.ros.noneToday": "本日予定のキューはありません。",
+  "m.ros.empty.title": "本日のキューなし"
+}

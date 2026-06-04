@@ -1,0 +1,10 @@
+{
+  "m.dailyLog.eyebrow": "現場",
+  "m.dailyLog.title": "日報",
+  "m.dailyLog.subtitle": "現場からの即時記録",
+  "m.dailyLog.todaysLog": "本日の日報 — {date}",
+  "m.dailyLog.selectProject": "プロジェクトを選択…",
+  "m.dailyLog.weatherPlaceholder": "天候(例:26℃、晴れ)",
+  "m.dailyLog.saveLog": "日報を保存",
+  "m.dailyLog.recent": "最近の記録"
+}

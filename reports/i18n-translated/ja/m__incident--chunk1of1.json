@@ -1,0 +1,14 @@
+{
+  "m.incident.new.eyebrow": "現場",
+  "m.incident.new.title": "クイック起票",
+  "m.incident.new.openFullForm": "詳細フォームを開く",
+  "m.incident.new.summaryLabel": "何が起きましたか？",
+  "m.incident.new.fileNow": "今すぐ起票",
+  "m.incident.new.subtitle": "安全上の問題を記録します — 管理者とEHSリードに即時通知されます。",
+  "m.incident.eyebrow": "現場",
+  "m.incident.title": "自分のインシデント",
+  "m.incident.subtitle": "あなたが起票した報告です。未対応は{count}件。組織全体のキューはこちら：",
+  "m.incident.quickFile": "クイック起票（1項目）",
+  "m.incident.fullReport": "詳細報告",
+  "m.incident.empty.title": "報告はまだありません"
+}

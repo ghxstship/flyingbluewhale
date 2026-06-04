@@ -1,0 +1,11 @@
+{
+  "console.inbox.eyebrow": "ワークスペース",
+  "console.inbox.title": "メッセージ",
+  "console.inbox.configureSupabase": "Supabase を構成してください。",
+  "console.inbox.conversationCount.one": "${list.length} 件のスレッド",
+  "console.inbox.conversationCount.other": "${list.length} 件のスレッド",
+  "console.inbox.unreadSuffix": "未読 ${unreadCount} 件",
+  "console.inbox.empty.title": "スレッドがありません",
+  "console.inbox.untitledRoom": "無題のルーム",
+  "console.inbox.newBadge": "新着"
+}

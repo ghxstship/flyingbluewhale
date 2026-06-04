@@ -1,0 +1,9 @@
+{
+  "m.onboarding.title": "オンボーディング",
+  "m.onboarding.markDone": "完了にする",
+  "m.onboarding.completed": "✓ 完了",
+  "m.onboarding.finish": "オンボーディングを終了",
+  "m.onboarding.eyebrow": "モバイル",
+  "m.onboarding.empty.title": "実行中のフローはありません",
+  "m.onboarding.fallbackFlowName": "オンボーディング"
+}

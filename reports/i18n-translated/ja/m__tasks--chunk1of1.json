@@ -1,0 +1,9 @@
+{
+  "m.tasks.eyebrow": "現場",
+  "m.tasks.title": "マイタスク",
+  "m.tasks.empty": "割り当てられたタスクはありません",
+  "m.tasks.dueLabel": "期限 ${formatDate(task.due_at)}",
+  "m.tasks.detail.back": "← タスク",
+  "m.tasks.detail.dueLabel": "期限 ${formatDate(task.due_at)}",
+  "m.tasks.detail.updateStatus": "ステータスを更新"
+}

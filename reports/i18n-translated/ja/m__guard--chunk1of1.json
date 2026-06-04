@@ -1,0 +1,12 @@
+{
+  "m.guard.configureSupabase": "Supabaseを設定してください。",
+  "m.guard.eyebrow": "現場",
+  "m.guard.title": "警備",
+  "m.guard.noToursAssigned": "割り当てられた巡回はありません。",
+  "m.guard.empty.title": "割り当て済み巡回なし",
+  "m.guard.empty.action": "警備巡回を開く",
+  "m.guard.venue.assigned": "担当会場",
+  "m.guard.venue.any": "全会場",
+  "m.guard.cadenceSuffix": " · ${r.cadence_minutes}分ごと",
+  "m.guard.badge.next": "次回 ${fmtTime(r.next_run_at)}"
+}

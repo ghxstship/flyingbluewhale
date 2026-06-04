@@ -1,0 +1,12 @@
+{
+  "console.import.noOrg.title": "組織が選択されていません",
+  "console.import.noOrg.description": "インポートジョブを表示するには組織を切り替えてください。",
+  "console.import.eyebrow": "インポート",
+  "console.import.title": "インポートセンター",
+  "console.import.newImport": "新規インポート",
+  "console.import.empty.title": "インポートはまだありません",
+  "console.import.stats.total": "合計",
+  "console.import.stats.succeeded": "成功",
+  "console.import.stats.failed": "失敗",
+  "console.import.errors.rowPrefix": "行 ${e.row}"
+}

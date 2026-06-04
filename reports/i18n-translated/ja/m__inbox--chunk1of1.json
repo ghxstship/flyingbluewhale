@@ -1,0 +1,11 @@
+{
+  "m.inbox.room.directMessage": "ダイレクトメッセージ",
+  "m.inbox.room.messagePlaceholder": "メッセージ",
+  "m.inbox.configureSupabase": "Supabase を構成してください。",
+  "m.inbox.eyebrow": "モバイル",
+  "m.inbox.title": "受信トレイ",
+  "m.inbox.count": "${list.length} 件の会話",
+  "m.inbox.empty.title": "会話なし",
+  "m.inbox.unreadBadge": "新着",
+  "m.inbox.directMessage": "ダイレクトメッセージ"
+}

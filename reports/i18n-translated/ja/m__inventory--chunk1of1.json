@@ -1,0 +1,17 @@
+{
+  "m.inventory.scan.toast.failed": "スキャンに失敗しました",
+  "m.inventory.scan.toast.notFound": "そのタグの機材は見つかりません",
+  "m.inventory.scan.announce.notFound": "アセットが見つかりません",
+  "m.inventory.scan.assetTag": "アセットタグ",
+  "m.inventory.scan.placeholder": "スキャンまたは入力",
+  "m.inventory.scan.toggle": "切替",
+  "m.inventory.scan.checkIn": "チェックイン",
+  "m.inventory.scan.checkOut": "チェックアウト",
+  "m.inventory.scan.recent": "最近",
+  "m.inventory.scan.empty.title": "スキャン履歴なし",
+  "m.inventory.scan.badge.notFound": "見つかりません",
+  "m.inventory.scan.badge.error": "エラー",
+  "m.inventory.scan.eyebrow": "現場",
+  "m.inventory.scan.title": "在庫スキャン",
+  "m.inventory.scan.subtitle": "アセットタグをスキャンまたは入力してチェックイン／チェックアウト。"
+}

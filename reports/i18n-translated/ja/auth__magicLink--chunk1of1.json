@@ -1,0 +1,5 @@
+{
+  "auth.magicLink.expiredTitle": "リンクの有効期限が切れているか、無効です",
+  "auth.magicLink.expiredSubtitle": "このリンクではサインインできませんでした。",
+  "auth.magicLink.sendAnother": "マジックリンクを再送する"
+}

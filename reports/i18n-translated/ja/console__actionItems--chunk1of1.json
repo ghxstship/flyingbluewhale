@@ -1,0 +1,16 @@
+{
+  "console.actionItems.eyebrow": "ワークスペース",
+  "console.actionItems.title": "アクションアイテム",
+  "console.actionItems.subtitle": "モジュール横断の対応待ち一覧。",
+  "console.actionItems.filter.all": "すべて",
+  "console.actionItems.filter.mineOnly": "自分のみ",
+  "console.actionItems.metrics.openItems": "未対応アイテム",
+  "console.actionItems.metrics.overdue": "期限超過",
+  "console.actionItems.metrics.acrossKinds": "種別横断",
+  "console.actionItems.empty.label": "受信トレイゼロ",
+  "console.actionItems.columns.kind": "種別",
+  "console.actionItems.columns.title": "タイトル",
+  "console.actionItems.columns.status": "ステータス",
+  "console.actionItems.columns.due": "期限",
+  "console.actionItems.columns.priority": "優先度"
+}

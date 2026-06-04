@@ -1,0 +1,6 @@
+{
+  "me.error.title": "問題が発生しました",
+  "me.error.fallbackMessage": "アカウント画面の読み込み中にエラーが発生しました。",
+  "me.error.ref": "参照: ${error.digest}",
+  "me.error.backToYourSpace": "マイスペースに戻る"
+}

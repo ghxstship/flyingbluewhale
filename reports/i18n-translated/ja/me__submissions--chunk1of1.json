@@ -1,0 +1,11 @@
+{
+  "me.submissions.detail.eyebrow": "応募",
+  "me.submissions.detail.coverNote": "カバーノート",
+  "me.submissions.detail.proposedFee": "提示フィー",
+  "me.submissions.eyebrow": "応募履歴",
+  "me.submissions.title": "応募",
+  "me.submissions.subtitle": "あなたが提出したオープンコールへの応募。",
+  "me.submissions.empty.title": "応募はまだありません",
+  "me.submissions.empty.action": "オープンコールを見る",
+  "me.submissions.deletedCall": "(削除されたコール)"
+}

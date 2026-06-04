@@ -1,0 +1,16 @@
+{
+  "me.privacy.errors.deleteFailed": "削除できませんでした",
+  "me.privacy.toast.scheduled": "アカウントは30日後に削除される予定です。",
+  "me.privacy.export.title": "データのエクスポート",
+  "me.privacy.export.action": "ダウンロード",
+  "me.privacy.cookies.title": "Cookie設定",
+  "me.privacy.cookies.action": "Cookieを管理",
+  "me.privacy.delete.title": "アカウントの削除",
+  "me.privacy.delete.action": "アカウントを削除",
+  "me.privacy.dialog.title": "アカウントを削除しますか？",
+  "me.privacy.dialog.descriptionSuffix": "を以下に入力してください。",
+  "me.privacy.dialog.placeholder": "delete my account",
+  "me.privacy.dialog.ariaLabel": "確認フレーズを入力",
+  "me.privacy.eyebrow": "アカウント",
+  "me.privacy.title": "プライバシーとデータ"
+}

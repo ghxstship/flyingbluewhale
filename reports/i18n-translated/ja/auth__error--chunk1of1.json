@@ -1,0 +1,4 @@
+{
+  "auth.error.title": "サインインエラー",
+  "auth.error.ref": "リファレンス: ${error.digest}"
+}

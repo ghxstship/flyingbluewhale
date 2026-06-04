@@ -1,0 +1,16 @@
+{
+  "console.insights.eyebrow": "インサイト",
+  "console.insights.title": "ブッキングプール",
+  "console.insights.configureSupabase": "Supabase を構成してください。",
+  "console.insights.subtitle": "ジャンル別の匿名化された月次集計。",
+  "console.insights.contributing": "提供中",
+  "console.insights.notContributing": "未提供",
+  "console.insights.optInPrefix": "貴組織はブッキングプールにデータを提供していません。有効化してください:",
+  "console.insights.emptyLabel": "集計データはまだありません",
+  "console.insights.columns.month": "月",
+  "console.insights.columns.genre": "ジャンル",
+  "console.insights.columns.shows": "公演数",
+  "console.insights.columns.avgGross": "平均総売上",
+  "console.insights.columns.avgAttendance": "平均動員数",
+  "console.insights.columns.avgArtistPayout": "平均アーティスト支払額"
+}

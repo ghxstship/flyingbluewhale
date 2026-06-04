@@ -1,0 +1,5 @@
+{
+  "auth.sso.errorTitle": "SSOを開始できませんでした",
+  "auth.sso.errorSubtitle": "${provider}へリダイレクトできませんでした。",
+  "auth.sso.noRedirect": "リダイレクトURLが返されませんでした。"
+}

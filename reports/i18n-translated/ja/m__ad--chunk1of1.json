@@ -1,0 +1,14 @@
+{
+  "m.ad.eyebrow": "モバイル",
+  "m.ad.title": "到着・出発",
+  "m.ad.todayPrefix": "本日",
+  "m.ad.arrivalsHeading": "到着",
+  "m.ad.noArrivals": "本日の到着はありません",
+  "m.ad.eta": "到着予定",
+  "m.ad.partyOf": "${m.party_size}名",
+  "m.ad.landedAt": "${fmtClock(m.actual_at)}着",
+  "m.ad.departuresHeading": "出発",
+  "m.ad.noDepartures": "本日の出発はありません",
+  "m.ad.etd": "出発予定",
+  "m.ad.departedAt": "${fmtClock(m.actual_at)}発"
+}

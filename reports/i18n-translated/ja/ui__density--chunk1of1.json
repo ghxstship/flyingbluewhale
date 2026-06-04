@@ -1,0 +1,9 @@
+{
+  "ui.density.compact": "コンパクト",
+  "ui.density.compactAria": "コンパクト表示に切り替える",
+  "ui.density.comfortable": "標準",
+  "ui.density.comfortableAria": "標準表示に切り替える",
+  "ui.density.spacious": "ゆったり",
+  "ui.density.spaciousAria": "ゆったり表示に切り替える",
+  "ui.density.label": "表示密度"
+}

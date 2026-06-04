@@ -1,0 +1,11 @@
+{
+  "m.coc.eyebrow": "現場",
+  "m.coc.title": "管理連鎖",
+  "m.coc.actions.logIncident": "+ インシデントを記録",
+  "m.coc.actions.scanAsset": "資産をスキャン",
+  "m.coc.recent.heading": "最近の管理イベント",
+  "m.coc.empty.title": "過去7日間に記録なし",
+  "m.coc.badge.audit": "監査",
+  "m.coc.desktopPrompt": "デスクトップ表示が必要ですか?",
+  "m.coc.desktopLink": "管理連鎖を開く"
+}

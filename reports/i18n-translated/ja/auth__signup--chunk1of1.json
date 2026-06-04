@@ -1,0 +1,6 @@
+{
+  "auth.signup.organization": "組織",
+  "auth.signup.organizationHelp": "後から設定で作成できます。",
+  "auth.signup.tosPrefix": "アカウントを作成することで、以下に同意したものとみなされます",
+  "auth.signup.privacyPolicy": "プライバシーポリシー"
+}

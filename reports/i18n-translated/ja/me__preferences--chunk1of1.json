@@ -1,0 +1,20 @@
+{
+  "me.preferences.eyebrow": "マイアカウント",
+  "me.preferences.title": "環境設定",
+  "me.preferences.supabaseRequired": "環境設定を管理するには Supabase を構成してください。",
+  "me.preferences.subtitle": "テーマ、密度、ロケール、同意設定。",
+  "me.preferences.breadcrumbs.account": "マイアカウント",
+  "me.preferences.submit": "環境設定を保存",
+  "me.preferences.appearance.legend": "外観",
+  "me.preferences.appearance.theme": "テーマ",
+  "me.preferences.appearance.density": "密度",
+  "me.preferences.locale.legend": "ロケール",
+  "me.preferences.locale.languageCode": "言語コード",
+  "me.preferences.locale.languageHint": "例: en、es、fr-CA",
+  "me.preferences.locale.timezone": "タイムゾーン",
+  "me.preferences.locale.timezoneHint": "IANA 形式、例: America/Los_Angeles",
+  "me.preferences.consent.legend": "同意設定",
+  "me.preferences.consent.essential.label": "必須クッキー",
+  "me.preferences.consent.analytics.label": "アナリティクス",
+  "me.preferences.consent.marketing.label": "マーケティング"
+}

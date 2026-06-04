@@ -1,0 +1,18 @@
+{
+  "me.talent.configureSupabase": "Supabaseを設定してください。",
+  "me.talent.eyebrow": "マイタレントプロフィール",
+  "me.talent.title": "EPK",
+  "me.talent.descriptionPrefix": "切り替えで公開。発見経路は",
+  "me.talent.liveAt": "公開URL",
+  "me.talent.liveBadge": "公開中",
+  "me.talent.publishedNotice": "EPKを公開しました。",
+  "me.talent.submit": "EPKを保存",
+  "me.talent.fields.actName": "アクト名",
+  "me.talent.fields.tagline": "タグライン",
+  "me.talent.fields.bio": "プロフィール",
+  "me.talent.fields.genreTags": "ジャンルタグ（カンマ区切り）",
+  "me.talent.fields.feeMin": "最低フィー",
+  "me.talent.fields.feeMax": "最高フィー",
+  "me.talent.fields.reelUrl": "リールURL",
+  "me.talent.fields.publishToMarketplace": "/marketplace/talent に公開"
+}

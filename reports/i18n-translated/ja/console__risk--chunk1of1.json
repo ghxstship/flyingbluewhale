@@ -1,0 +1,17 @@
+{
+  "console.risk.eyebrow": "プログラム",
+  "console.risk.title": "リスクスコア",
+  "console.risk.configureSupabase": "Supabase を設定してください。",
+  "console.risk.runBatch": "リスクバッチを実行",
+  "console.risk.metric.critical": "クリティカル",
+  "console.risk.metric.high": "ハイ",
+  "console.risk.metric.projectsScored": "採点済みプロジェクト",
+  "console.risk.empty.label": "リスクスコアはまだありません",
+  "console.risk.col.project": "プロジェクト",
+  "console.risk.col.category": "カテゴリー",
+  "console.risk.col.score": "スコア",
+  "console.risk.col.trend7d": "Δ 7日",
+  "console.risk.col.trend30d": "Δ 30日",
+  "console.risk.col.severity": "重大度",
+  "console.risk.col.scored": "採点日"
+}

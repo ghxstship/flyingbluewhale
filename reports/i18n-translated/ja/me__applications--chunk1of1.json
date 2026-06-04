@@ -1,0 +1,13 @@
+{
+  "me.applications.detail.eyebrow": "応募",
+  "me.applications.detail.coverNote": "カバーノート",
+  "me.applications.detail.proposedDayRate": "提示デイレート",
+  "me.applications.detail.resume": "履歴書",
+  "me.applications.title": "応募一覧",
+  "me.applications.configureSupabase": "Supabaseを設定してください。",
+  "me.applications.eyebrow": "応募",
+  "me.applications.heading": "応募",
+  "me.applications.empty.title": "応募はまだありません",
+  "me.applications.empty.action": "ギグを探す",
+  "me.applications.deletedPosting": "削除済みの求人"
+}

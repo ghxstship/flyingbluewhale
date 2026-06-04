@@ -1,0 +1,7 @@
+{
+  "m.polls.title": "投票",
+  "m.polls.empty.title": "実施中の投票はありません",
+  "m.polls.empty.description": "ライブ投票はここに表示されます。",
+  "m.polls.liveBadge": "ライブ",
+  "m.polls.voteButton": "投票する"
+}

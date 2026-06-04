@@ -1,0 +1,10 @@
+{
+  "auth.onboarding.title": "ワークスペースに名前を付ける",
+  "auth.onboarding.workspaceName": "ワークスペース名",
+  "auth.onboarding.workspaceNamePlaceholder": "Acme Productions",
+  "auth.onboarding.workspaceNameHint": "後から設定画面で変更できます。",
+  "auth.onboarding.submitting": "ワークスペースを作成中",
+  "auth.onboarding.submit": "ワークスペースを作成",
+  "auth.onboarding.ownerNotePrefix": "あなたがオーナーになります。チームメンバーの招待は",
+  "auth.onboarding.ownerNoteSuffix": "ログイン後に行えます。"
+}

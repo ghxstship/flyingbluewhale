@@ -1,0 +1,10 @@
+{
+  "m.advances.eyebrow": "モバイル",
+  "m.advances.title": "あなたのアサインメント",
+  "m.advances.empty.title": "まだ何もアサインされていません",
+  "m.advances.untitled": "無題",
+  "m.advances.projectFallback": "プロジェクト",
+  "m.advances.singleShow.prompt": "単発のショーで稼働中ですか？",
+  "m.advances.singleShow.link": "シフトを開く",
+  "m.advances.singleShow.suffix": "本日のコールを確認できます。"
+}

@@ -1,0 +1,16 @@
+{
+  "console.emailInbox.eyebrow": "プロジェクト連絡",
+  "console.emailInbox.title": "メール受信箱",
+  "console.emailInbox.configureSupabase": "Supabaseを構成してください。",
+  "console.emailInbox.metric.unrouted": "未振分け",
+  "console.emailInbox.metric.promoted": "昇格済み",
+  "console.emailInbox.metric.total": "合計",
+  "console.emailInbox.emptyLabel": "受信メールはまだありません",
+  "console.emailInbox.column.received": "受信日時",
+  "console.emailInbox.column.from": "差出人",
+  "console.emailInbox.column.subject": "件名",
+  "console.emailInbox.column.project": "プロジェクト",
+  "console.emailInbox.column.routedTo": "振分け先",
+  "console.emailInbox.noSubject": "(件名なし)",
+  "console.emailInbox.unrouted": "未振分け"
+}

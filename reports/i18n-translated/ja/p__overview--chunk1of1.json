@@ -1,0 +1,5 @@
+{
+  "p.overview.title": "プロジェクト概要",
+  "p.overview.subtitle": "続行するポータルをお選びください",
+  "p.overview.openPortal": "${toTitle(persona)}ポータルを開く →"
+}

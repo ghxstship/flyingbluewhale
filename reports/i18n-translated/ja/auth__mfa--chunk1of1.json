@@ -1,0 +1,9 @@
+{
+  "auth.mfa.recoveryCode": "リカバリーコード",
+  "auth.mfa.recoveryHint": "登録時に保存したリカバリーコードのいずれかを入力してください。",
+  "auth.mfa.authenticatorCode": "認証アプリのコード",
+  "auth.mfa.submitting": "検証中",
+  "auth.mfa.submit": "検証する",
+  "auth.mfa.useAuthenticator": "認証アプリのコードを使用",
+  "auth.mfa.useRecovery": "リカバリーコードを使用"
+}

@@ -1,0 +1,5 @@
+{
+  "m.notFound.title": "画面が見つかりません",
+  "m.notFound.description": "このモバイル画面はマニフェストに登録されていません。",
+  "m.notFound.homeCta": "ホーム"
+}

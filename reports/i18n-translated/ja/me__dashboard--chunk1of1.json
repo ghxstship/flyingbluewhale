@@ -1,0 +1,13 @@
+{
+  "me.dashboard.title": "マイダッシュボード",
+  "me.dashboard.configureSupabase": "サインインするには Supabase を設定してください。",
+  "me.dashboard.eyebrow": "マイダッシュボード",
+  "me.dashboard.role": "ロール",
+  "me.dashboard.tier": "ティア",
+  "me.dashboard.organization": "組織",
+  "me.dashboard.noOrg": "なし",
+  "me.dashboard.openConsole": "コンソールを開く →",
+  "me.dashboard.consoleBlurb": "プロジェクト、財務、調達、プロダクション、ピープル、AI。",
+  "me.dashboard.marketplaceHeading": "マーケットプレイス",
+  "me.dashboard.accountHeading": "アカウント"
+}

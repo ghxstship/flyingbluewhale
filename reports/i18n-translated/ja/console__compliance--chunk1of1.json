@@ -1,0 +1,14 @@
+{
+  "console.compliance.coc.eyebrow": "コンプライアンス",
+  "console.compliance.coc.title": "証拠保全の連鎖",
+  "console.compliance.coc.configureSupabase": "Supabaseを設定してください。",
+  "console.compliance.coc.subtitle": "証拠とサンプルの監査証跡。",
+  "console.compliance.coc.mobileCapture": "モバイルキャプチャ",
+  "console.compliance.coc.metrics.events24h": "イベント・24時間",
+  "console.compliance.coc.metrics.events30d": "イベント・30日",
+  "console.compliance.coc.metrics.distinctActors": "実行者数",
+  "console.compliance.coc.byTarget": "対象別",
+  "console.compliance.coc.recentEvents": "最近のイベント",
+  "console.compliance.coc.empty.title": "過去30日間にCOCイベントはありません",
+  "console.compliance.coc.system": "システム"
+}

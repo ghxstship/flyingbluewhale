@@ -1,0 +1,9 @@
+{
+  "m.alerts.eyebrow": "モバイル",
+  "m.alerts.title": "アラート",
+  "m.alerts.noneActive": "有効なアラートはありません。",
+  "m.alerts.empty.title": "有効なアラートなし",
+  "m.alerts.scheduled": "予定",
+  "m.alerts.acknowledgedAt": "${fmt.time(ack)} に確認済み",
+  "m.alerts.acknowledge": "確認する"
+}

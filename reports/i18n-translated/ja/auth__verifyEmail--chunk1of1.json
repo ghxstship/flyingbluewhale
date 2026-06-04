@@ -1,0 +1,4 @@
+{
+  "auth.verifyEmail.failedTitle": "認証に失敗しました",
+  "auth.verifyEmail.failedSubtitle": "そのリンクではメールアドレスを認証できませんでした。"
+}

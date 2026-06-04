@@ -1,0 +1,9 @@
+{
+  "m.guide.eyebrow": "フィールドガイド",
+  "m.guide.noActiveProject.title": "アクティブなプロジェクトなし",
+  "m.guide.noActiveProject.body": "ショーにアサインされたら再度ご確認ください。",
+  "m.guide.pending.title": "ガイド準備中",
+  "m.guide.pending.body": "プロダクションはまだあなたの役割向けのガイドを公開していません。",
+  "m.guide.downloadPdf.ariaLabel": "このガイドをPDFとしてダウンロード",
+  "m.guide.downloadPdf.label": "PDFをダウンロード"
+}

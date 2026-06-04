@@ -1,0 +1,8 @@
+{
+  "m.gigs.eyebrow": "マーケットプレイス",
+  "m.gigs.title": "公開中の案件",
+  "m.gigs.countOne": "ネットワーク全体で${rows.length}件の公開中案件。",
+  "m.gigs.countOther": "ネットワーク全体で${rows.length}件の公開中案件。",
+  "m.gigs.empty": "現在公開中の案件はありません。",
+  "m.gigs.travelPaid": "交通費支給"
+}

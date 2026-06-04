@@ -1,0 +1,13 @@
+{
+  "me.settings.title": "設定",
+  "me.settings.appearance.title": "外観",
+  "me.settings.workspace.title": "ワークスペース設定",
+  "me.settings.workspace.submit": "設定を保存",
+  "me.settings.workspace.density.label": "密度",
+  "me.settings.workspace.density.compact": "コンパクト",
+  "me.settings.workspace.density.comfortable": "標準",
+  "me.settings.workspace.density.spacious": "ゆったり",
+  "me.settings.workspace.locale.label": "ロケール（例：en、en-US、es）",
+  "me.settings.workspace.timezone.label": "タイムゾーン（IANA、例：America/New_York）",
+  "me.settings.workspace.timezone.placeholder": "空欄の場合は自動検出"
+}

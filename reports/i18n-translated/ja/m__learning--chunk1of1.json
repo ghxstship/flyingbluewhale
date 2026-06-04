@@ -1,0 +1,12 @@
+{
+  "m.learning.course.lessonLabel": "レッスン ${l.ordinal}",
+  "m.learning.course.quizHeading": "クイズ",
+  "m.learning.course.passed": "合格",
+  "m.learning.course.didNotPass": "不合格",
+  "m.learning.title": "ラーニング",
+  "m.learning.coursesAssigned": "${rows.length} 件のコースが割り当てられています",
+  "m.learning.empty.title": "コースなし",
+  "m.learning.empty.description": "研修の割り当てはこちらに表示されます。",
+  "m.learning.dueDate": "期限 ${fmt.date(a.due_at)}",
+  "m.learning.courseFallback": "コース"
+}

@@ -1,0 +1,13 @@
+{
+  "console.photos.eyebrow": "オペレーション",
+  "console.photos.title": "プロジェクト写真",
+  "console.photos.photosLabel": "枚",
+  "console.photos.albumLabel": "アルバム",
+  "console.photos.upload": "+ アップロード",
+  "console.photos.metrics.photos": "写真",
+  "console.photos.metrics.albums": "アルバム",
+  "console.photos.metrics.projectsCovered": "対象プロジェクト",
+  "console.photos.albums.all": "すべて",
+  "console.photos.empty.title": "写真はまだありません",
+  "console.photos.unalbumed": "未分類"
+}

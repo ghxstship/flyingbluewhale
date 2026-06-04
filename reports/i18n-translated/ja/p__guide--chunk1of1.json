@@ -1,0 +1,19 @@
+{
+  "p.guide.title": "イベントガイド",
+  "p.guide.subtitle": "出発前に知っておくべきこと",
+  "p.guide.downloadPdf.aria": "このガイドをPDFでダウンロード",
+  "p.guide.downloadPdf.label": "PDFをダウンロード",
+  "p.guide.persona.staff": "プロダクション",
+  "p.guide.persona.crew": "オペレーション",
+  "p.guide.persona.vendor": "飲食",
+  "p.guide.persona.brandAmbassador": "ブランドアンバサダー",
+  "p.guide.persona.sponsor": "スポンサー",
+  "p.guide.persona.artist": "タレント",
+  "p.guide.persona.mediaPress": "メディア・プレス",
+  "p.guide.persona.guest": "ゲスト",
+  "p.guide.persona.custom": "一時アクセス",
+  "p.guide.persona.client": "クライアント",
+  "p.guide.preview.previewingAs": "プレビュー中:",
+  "p.guide.preview.previewAs": "プレビュー対象:",
+  "p.guide.preview.exit": "プレビューを終了"
+}

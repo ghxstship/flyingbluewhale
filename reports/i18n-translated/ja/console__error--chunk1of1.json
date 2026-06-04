@@ -1,0 +1,8 @@
+{
+  "console.error.eyebrow": "エラー",
+  "console.error.title": "問題が発生しました",
+  "console.error.ref": "参照: ${error.digest}",
+  "console.error.fallbackMessage": "予期しないエラーが発生しました。",
+  "console.error.tryAgain": "再試行",
+  "console.error.backToWorkspace": "ワークスペースへ戻る"
+}

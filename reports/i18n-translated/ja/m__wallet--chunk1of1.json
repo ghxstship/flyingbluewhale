@@ -1,0 +1,13 @@
+{
+  "m.wallet.configureSupabase": "Supabase を設定してください。",
+  "m.wallet.eyebrow": "モバイル",
+  "m.wallet.title": "マイ クレデンシャル",
+  "m.wallet.subtitle": "ゲートでこの画面を提示してください。シフト終了までアクティブのままにしてください。",
+  "m.wallet.empty.title": "発行済みクレデンシャルなし",
+  "m.wallet.defaultCategoryCode": "ACC",
+  "m.wallet.cardBarcode": "カード バーコード",
+  "m.wallet.validFrom": "有効開始日",
+  "m.wallet.validTo": "有効終了日",
+  "m.wallet.otherCards": "その他のカード",
+  "m.wallet.openProfile": "プロフィールを開く →"
+}

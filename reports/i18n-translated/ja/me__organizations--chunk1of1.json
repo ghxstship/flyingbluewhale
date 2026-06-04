@@ -1,0 +1,6 @@
+{
+  "me.organizations.title": "組織",
+  "me.organizations.configureSupabase": "Supabase を設定してください。",
+  "me.organizations.subtitle": "あなたが所属するすべての組織",
+  "me.organizations.empty.title": "メンバーシップはまだありません"
+}

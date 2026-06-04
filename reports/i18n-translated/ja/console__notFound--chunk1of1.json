@@ -1,0 +1,6 @@
+{
+  "console.notFound.eyebrow": "404",
+  "console.notFound.title": "見つかりません",
+  "console.notFound.subtitle": "該当のレコードは存在しないか、アクセス権がありません。",
+  "console.notFound.backToWorkspace": "ワークスペースに戻る"
+}

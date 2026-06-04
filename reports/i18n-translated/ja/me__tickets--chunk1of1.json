@@ -1,0 +1,11 @@
+{
+  "me.tickets.title": "マイチケット",
+  "me.tickets.configureSupabase": "Supabaseを設定してください。",
+  "me.tickets.subtitle": "${session.email} に発行されたチケット",
+  "me.tickets.empty": "チケットはまだありません",
+  "me.tickets.columns.code": "コード",
+  "me.tickets.columns.tier": "ティア",
+  "me.tickets.columns.state": "ステート",
+  "me.tickets.columns.issued": "発行日",
+  "me.tickets.columns.redeemed": "引換日"
+}

@@ -1,0 +1,14 @@
+{
+  "me.availability.configureSupabase": "Supabaseを設定してください。",
+  "me.availability.eyebrow": "稼働状況",
+  "me.availability.title": "ブッキングカレンダー",
+  "me.availability.addSlot": "枠を追加",
+  "me.availability.kind": "種別",
+  "me.availability.label": "ラベル",
+  "me.availability.labelPlaceholder": "MMW26 デッキ製作",
+  "me.availability.starts": "開始",
+  "me.availability.ends": "終了",
+  "me.availability.allDay": "終日",
+  "me.availability.upcoming": "今後の予定",
+  "me.availability.empty": "稼働枠はまだ登録されていません。"
+}

@@ -1,0 +1,19 @@
+{
+  "p.stakeholder.home.portfolioPnl.title": "ポートフォリオ＆P&L",
+  "p.stakeholder.home.portfolio.label": "ポートフォリオ",
+  "p.stakeholder.home.portfolio.desc": "進行中のプロジェクトとフェーズ",
+  "p.stakeholder.home.pnl.label": "P&L",
+  "p.stakeholder.home.pnl.desc": "ポートフォリオ全体の集計",
+  "p.stakeholder.home.governance.title": "ガバナンス",
+  "p.stakeholder.home.committees.label": "委員会",
+  "p.stakeholder.home.committees.desc": "憲章と開催頻度",
+  "p.stakeholder.home.esg.title": "サステナビリティ",
+  "p.stakeholder.home.esg.description": "ESGレポーティングとサステナビリティ姿勢。",
+  "p.stakeholder.home.esg.label": "ESG",
+  "p.stakeholder.home.esg.desc": "カーボンとコミュニティへの影響",
+  "p.stakeholder.home.audit.title": "監査証跡",
+  "p.stakeholder.home.audit.description": "すべての特権操作をタイムスタンプ付きで記録。",
+  "p.stakeholder.home.auditLog.label": "監査ログ",
+  "p.stakeholder.home.auditLog.desc": "読み取り専用台帳",
+  "p.stakeholder.home.title": "ステークホルダーポータル"
+}

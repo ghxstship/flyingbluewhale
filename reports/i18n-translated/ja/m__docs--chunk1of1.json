@@ -1,0 +1,23 @@
+{
+  "m.docs.download.openError": "ドキュメントを開けませんでした",
+  "m.docs.download.openFailed": "開封に失敗しました",
+  "m.docs.download.opening": "開いています…",
+  "m.docs.download.label": "ダウンロード",
+  "m.docs.new.configureSupabase": "Supabaseを設定してください。",
+  "m.docs.new.title": "ドキュメントをアップロード",
+  "m.docs.new.label": "ラベル",
+  "m.docs.new.labelPlaceholder": "例:運転免許証",
+  "m.docs.new.kind": "種別",
+  "m.docs.new.kindId": "身分証明書",
+  "m.docs.new.kindLicense": "免許 / 認定証",
+  "m.docs.new.kindTax": "税務書類",
+  "m.docs.new.kindContract": "契約書",
+  "m.docs.new.kindMedical": "医療関連",
+  "m.docs.new.kindOther": "その他",
+  "m.docs.new.file": "ファイル",
+  "m.docs.new.upload": "アップロード",
+  "m.docs.eyebrow": "モバイル",
+  "m.docs.title": "マイ ドキュメント",
+  "m.docs.uploadCta": "+ アップロード",
+  "m.docs.empty.title": "ドキュメントなし"
+}

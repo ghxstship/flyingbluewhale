@@ -1,0 +1,7 @@
+{
+  "m.directory.eyebrow": "モバイル",
+  "m.directory.title": "ディレクトリ",
+  "m.directory.peopleCount": "組織に${members.length}名",
+  "m.directory.empty.title": "メンバーなし",
+  "m.directory.empty.description": "組織メンバーを追加するとここに表示されます。"
+}

@@ -211,14 +211,14 @@ export function TrackerView({
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                  <th className="px-4 py-3 text-left">WBS / Atom</th>
+                  <th className="px-4 py-3 text-start">WBS / Atom</th>
                   <th className="px-3 py-3 text-right">Budget</th>
                   <th className="px-3 py-3 text-right">Actual</th>
                   <th className="px-3 py-3 text-right">Committed</th>
                   <th className="px-3 py-3 text-right">Variance</th>
-                  <th className="px-3 py-3 text-left">Tasks</th>
-                  <th className="px-3 py-3 text-left">Submittals</th>
-                  <th className="px-4 py-3 text-left">Progress</th>
+                  <th className="px-3 py-3 text-start">Tasks</th>
+                  <th className="px-3 py-3 text-start">Submittals</th>
+                  <th className="px-4 py-3 text-start">Progress</th>
                 </tr>
               </thead>
               <tbody>
@@ -290,7 +290,7 @@ export function TrackerView({
                           <span className="font-mono">
                             {row.deliverables_approved_rollup ?? 0}/{row.deliverable_count_rollup ?? 0}
                             {(row.deliverables_open_rollup ?? 0) > 0 && (
-                              <span className="ml-1 text-[var(--text-muted)]">
+                              <span className="ms-1 text-[var(--text-muted)]">
                                 · {row.deliverables_open_rollup} open
                               </span>
                             )}

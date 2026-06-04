@@ -118,7 +118,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
                   </DropdownMenu.ItemIndicator>
                 </span>
                 <span>{LOCALE_LABELS[loc]}</span>
-                <span className="ml-auto text-xs tracking-wider text-[var(--text-muted)] uppercase">{loc}</span>
+                <span className="ms-auto text-xs tracking-wider text-[var(--text-muted)] uppercase">{loc}</span>
               </DropdownMenu.RadioItem>
             ))}
           </DropdownMenu.RadioGroup>

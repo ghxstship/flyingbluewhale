@@ -83,7 +83,7 @@ export function CommandPaletteDemo() {
         <div className="flex-1 font-mono text-sm">
           <span aria-hidden>{typed}</span>
           <span
-            className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse bg-[var(--org-primary)]"
+            className="ms-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse bg-[var(--org-primary)]"
             aria-hidden
           />
           <span className="sr-only">{SCRIPT[scriptIdx].query}</span>

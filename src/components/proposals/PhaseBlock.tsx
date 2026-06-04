@@ -51,9 +51,9 @@ export function PhaseBlock({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="surface relative flex w-full items-center gap-4 p-5 text-left"
+        className="surface relative flex w-full items-center gap-4 p-5 text-start"
       >
-        <span className="absolute inset-y-0 left-0 w-1" style={{ background: accent }} />
+        <span className="absolute inset-y-0 start-0 w-1" style={{ background: accent }} />
         <span className="font-mono text-3xl font-light" style={{ color: accent }}>
           {String(block.num).padStart(2, "0")}
         </span>
@@ -86,7 +86,7 @@ export function PhaseBlock({
                 {block.core.map((c, i) => (
                   <li
                     key={i}
-                    className="relative flex items-start justify-between gap-4 border-l-2 pl-4"
+                    className="relative flex items-start justify-between gap-4 border-s-2 ps-4"
                     style={{ borderColor: accent }}
                   >
                     <div>
@@ -107,7 +107,7 @@ export function PhaseBlock({
               <div className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase">
                 Add-ons{" "}
                 {addonTotalCents > 0 && (
-                  <span className="ml-2 font-mono text-[var(--foreground)] normal-case">
+                  <span className="ms-2 font-mono text-[var(--foreground)] normal-case">
                     +{fmtMoney({ cents: addonTotalCents }, currency)} selected
                   </span>
                 )}

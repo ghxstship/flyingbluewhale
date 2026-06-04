@@ -204,7 +204,7 @@ export function AccessCodeManager({
                   <td>{fmtDateTime(r.redeemed_at)}</td>
                   <td>
                     <span className="font-mono">{r.code_prefix}-…</span>
-                    {r.code_label ? <span className="ml-2 text-[var(--text-muted)]">{r.code_label}</span> : null}
+                    {r.code_label ? <span className="ms-2 text-[var(--text-muted)]">{r.code_label}</span> : null}
                   </td>
                   <td className="font-mono text-xs">{r.ip ?? "—"}</td>
                   <td className="max-w-[18rem] truncate text-xs text-[var(--text-muted)]">{r.user_agent ?? "—"}</td>

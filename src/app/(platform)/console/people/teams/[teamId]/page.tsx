@@ -149,7 +149,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
         )}
 
         {canManage && (
-          <section className="surface border-l-4 border-[var(--color-error)]/40 p-5">
+          <section className="surface border-s-4 border-[var(--color-error)]/40 p-5">
             <h3 className="text-sm font-semibold text-[var(--color-error)]">Danger Zone</h3>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
               Deleting a team removes all members and cancels any team-scoped record grants. This cannot be undone.

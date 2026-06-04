@@ -318,7 +318,7 @@ export function TimelineView({
               style={{ height: HEADER_HEIGHT }}
             >
               <div
-                className="sticky left-0 z-30 flex shrink-0 items-center border-r border-[var(--border-color)] bg-[var(--surface-raised)] px-3 text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase"
+                className="sticky start-0 z-30 flex shrink-0 items-center border-e border-[var(--border-color)] bg-[var(--surface-raised)] px-3 text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase"
                 style={{ width: LANE_RAIL_WIDTH }}
               >
                 Lane
@@ -327,7 +327,7 @@ export function TimelineView({
                 {markers.map((m, i) => (
                   <div
                     key={`${m.date.toISOString()}-${i}`}
-                    className="absolute top-0 flex h-full items-center border-l border-[var(--border-color)] pl-1 font-mono text-[10px] text-[var(--text-muted)]"
+                    className="absolute top-0 flex h-full items-center border-s border-[var(--border-color)] ps-1 font-mono text-[10px] text-[var(--text-muted)]"
                     style={{ left: m.offset }}
                   >
                     {m.label}
@@ -358,7 +358,7 @@ export function TimelineView({
                 >
                   {/* Sticky lane label */}
                   <div
-                    className="sticky left-0 z-10 flex shrink-0 items-center gap-2 border-r border-[var(--border-color)] bg-[var(--surface)] px-3 text-xs font-medium text-[var(--text-primary)]"
+                    className="sticky start-0 z-10 flex shrink-0 items-center gap-2 border-e border-[var(--border-color)] bg-[var(--surface)] px-3 text-xs font-medium text-[var(--text-primary)]"
                     style={{ width: LANE_RAIL_WIDTH }}
                   >
                     {lane.icon && (

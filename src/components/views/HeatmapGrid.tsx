@@ -132,12 +132,12 @@ export function HeatmapGrid({
         <div
           role="status"
           aria-live="polite"
-          className="pointer-events-none absolute top-2 right-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2 py-1 text-[10px] text-[var(--text-secondary)]"
+          className="pointer-events-none absolute end-2 top-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2 py-1 text-[10px] text-[var(--text-secondary)]"
         >
           <span className="font-medium text-[var(--text-primary)]">
             {hover.x} · {hover.y}
           </span>
-          <span className="ml-2 font-mono">{formatNum(hover.value)}</span>
+          <span className="ms-2 font-mono">{formatNum(hover.value)}</span>
         </div>
       )}
     </div>

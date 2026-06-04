@@ -99,26 +99,26 @@ export function AtomDrillIn({
           <DialogTitle className="mt-1">{atom.name}</DialogTitle>
           <DialogDescription>
             <span className="font-mono text-xs">{atom.identifier}</span>
-            <span className="ml-2 text-xs text-[var(--text-muted)]">· {atom.phase}</span>
+            <span className="ms-2 text-xs text-[var(--text-muted)]">· {atom.phase}</span>
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="tasks" className="mt-2">
           <TabsList scrollable>
             <TabsTrigger value="tasks">
-              Tasks <span className="ml-1 font-mono text-[10px] text-[var(--text-muted)]">{tasks.length}</span>
+              Tasks <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{tasks.length}</span>
             </TabsTrigger>
             <TabsTrigger value="submittals">
               Submittals{" "}
-              <span className="ml-1 font-mono text-[10px] text-[var(--text-muted)]">{deliverables.length}</span>
+              <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{deliverables.length}</span>
             </TabsTrigger>
             <TabsTrigger value="expenses">
-              Expenses <span className="ml-1 font-mono text-[10px] text-[var(--text-muted)]">{expenses.length}</span>
+              Expenses <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{expenses.length}</span>
             </TabsTrigger>
             <TabsTrigger value="pos">
-              POs <span className="ml-1 font-mono text-[10px] text-[var(--text-muted)]">{poLines.length}</span>
+              POs <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{poLines.length}</span>
             </TabsTrigger>
             <TabsTrigger value="variance">
-              Variance <span className="ml-1 font-mono text-[10px] text-[var(--text-muted)]">{variances.length}</span>
+              Variance <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{variances.length}</span>
             </TabsTrigger>
           </TabsList>
 

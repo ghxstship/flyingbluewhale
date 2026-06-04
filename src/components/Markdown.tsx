@@ -196,7 +196,7 @@ export function Markdown({ source, className = "" }: { source: string; className
         );
       case "ul":
         return (
-          <ul key={k} className="my-3 ml-5 list-disc space-y-1 text-sm text-[var(--text-secondary)]">
+          <ul key={k} className="my-3 ms-5 list-disc space-y-1 text-sm text-[var(--text-secondary)]">
             {b.items.map((it, j) => (
               <li key={`${k}-${j}`}>{renderInline(it, `${k}-${j}`)}</li>
             ))}
@@ -204,7 +204,7 @@ export function Markdown({ source, className = "" }: { source: string; className
         );
       case "ol":
         return (
-          <ol key={k} className="my-3 ml-5 list-decimal space-y-1 text-sm text-[var(--text-secondary)]">
+          <ol key={k} className="my-3 ms-5 list-decimal space-y-1 text-sm text-[var(--text-secondary)]">
             {b.items.map((it, j) => (
               <li key={`${k}-${j}`}>{renderInline(it, `${k}-${j}`)}</li>
             ))}

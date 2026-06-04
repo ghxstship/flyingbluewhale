@@ -166,7 +166,7 @@ function Field({
         <div className="font-mono text-sm tabular-nums">
           {prefix}
           {value.toLocaleString()}
-          {suffix && <span className="ml-1 text-[var(--text-muted)]">{suffix}</span>}
+          {suffix && <span className="ms-1 text-[var(--text-muted)]">{suffix}</span>}
         </div>
       </div>
       <input

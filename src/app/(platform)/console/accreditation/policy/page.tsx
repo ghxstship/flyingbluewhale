@@ -98,7 +98,7 @@ export default async function Page() {
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th className="text-left">Zone (venue)</th>
+                  <th className="text-start">Zone (venue)</th>
                   {categories.map((c) => (
                     <th key={c.id} className="text-center">
                       <span

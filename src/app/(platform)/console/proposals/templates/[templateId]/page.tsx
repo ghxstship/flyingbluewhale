@@ -61,7 +61,7 @@ export default async function TemplatePreviewPage({ params }: { params: Promise<
             <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
               {i + 1} · {BLOCK_LABELS[block.type]}
               {"anchorId" in block && block.anchorId ? (
-                <span className="ml-2 font-mono text-[10px] text-[var(--text-muted)]">#{block.anchorId}</span>
+                <span className="ms-2 font-mono text-[10px] text-[var(--text-muted)]">#{block.anchorId}</span>
               ) : null}
             </div>
             <div className="mt-1 text-sm">{describeBlock(block)}</div>

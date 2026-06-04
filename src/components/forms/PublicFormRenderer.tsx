@@ -125,7 +125,7 @@ export function PublicFormRenderer({
       data-embed={embed ? "1" : undefined}
     >
       {/* Honeypot — hidden from real users via CSS, bots will fill it. */}
-      <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+      <div className="absolute -start-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
         <label>
           Leave blank
           <input type="text" name="hp_url" tabIndex={-1} autoComplete="off" />
@@ -201,8 +201,8 @@ function FieldRenderer({
   const labelEl = (
     <label className="text-xs font-medium text-[var(--text-secondary)]">
       {field.label}
-      {field.required && <span className="ml-0.5 text-[var(--color-error)]">*</span>}
-      {field.help ? <span className="ml-2 text-[10px] font-normal text-[var(--text-muted)]">{field.help}</span> : null}
+      {field.required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
+      {field.help ? <span className="ms-2 text-[10px] font-normal text-[var(--text-muted)]">{field.help}</span> : null}
     </label>
   );
 

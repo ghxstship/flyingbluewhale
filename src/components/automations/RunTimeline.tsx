@@ -108,13 +108,13 @@ export function RunTimeline({ steps }: RunTimelineProps) {
     return <p className="text-xs text-[var(--text-muted)]">No steps recorded.</p>;
   }
   return (
-    <ol className="relative space-y-3 pl-6">
+    <ol className="relative space-y-3 ps-6">
       {/* Vertical rail — sits behind the status dots. */}
-      <div className="absolute top-1 bottom-1 left-[7px] w-px bg-[var(--border-color)]" aria-hidden="true" />
+      <div className="absolute start-[7px] top-1 bottom-1 w-px bg-[var(--border-color)]" aria-hidden="true" />
       {steps.map((s) => (
         <li key={s.stepIndex} className="relative">
           <span
-            className={`absolute top-2 -left-[1px] inline-block h-3 w-3 rounded-full ring-2 ring-[var(--bg-primary)] ${STATUS_DOT[s.status]}`}
+            className={`absolute -start-[1px] top-2 inline-block h-3 w-3 rounded-full ring-2 ring-[var(--bg-primary)] ${STATUS_DOT[s.status]}`}
             aria-hidden="true"
           />
           <div className="surface rounded border border-[var(--border-color)] p-3">
@@ -122,7 +122,7 @@ export function RunTimeline({ steps }: RunTimelineProps) {
               <span className="font-mono text-xs text-[var(--text-muted)]">#{s.stepIndex}</span>
               <span className="text-sm font-semibold">{s.actionType || "(unknown)"}</span>
               <Badge variant={STATUS_TONE[s.status]}>{s.status}</Badge>
-              <span className="ml-auto font-mono text-[10px] text-[var(--text-muted)]">
+              <span className="ms-auto font-mono text-[10px] text-[var(--text-muted)]">
                 {fmtTime(s.startedAt)} · {fmtLatency(s.latencyMs)}
               </span>
             </div>

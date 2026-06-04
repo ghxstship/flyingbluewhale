@@ -79,7 +79,7 @@ export function SavedViewWidget({
               {columns.map((col) => (
                 <th
                   key={col}
-                  className="border-b border-[var(--border-color)] px-2 py-1.5 text-left text-[10px] font-medium tracking-wider text-[var(--text-muted)] uppercase"
+                  className="border-b border-[var(--border-color)] px-2 py-1.5 text-start text-[10px] font-medium tracking-wider text-[var(--text-muted)] uppercase"
                 >
                   {col}
                 </th>

@@ -442,7 +442,7 @@ export function CameraScanner({
           onClick={() => void toggleTorch()}
           aria-pressed={torchOn}
           aria-label={torchOn ? "Turn torch off" : "Turn torch on"}
-          className="absolute right-2 bottom-2 rounded-md border border-white/30 bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur hover:bg-black/80"
+          className="absolute end-2 bottom-2 rounded-md border border-white/30 bg-black/60 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur hover:bg-black/80"
         >
           {torchOn ? "Torch Off" : "Torch On"}
         </button>

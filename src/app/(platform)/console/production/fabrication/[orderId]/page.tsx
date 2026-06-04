@@ -153,7 +153,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
               <li key={t.id}>
                 {t.from_phase ? toTitle(t.from_phase) : "Initial"} → <strong>{toTitle(t.to_phase)}</strong> ·{" "}
                 {new Date(t.transitioned_at).toLocaleDateString()}
-                {t.reason ? <span className="ml-2">{t.reason}</span> : null}
+                {t.reason ? <span className="ms-2">{t.reason}</span> : null}
               </li>
             ))}
           </ul>

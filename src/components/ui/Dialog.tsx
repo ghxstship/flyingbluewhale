@@ -54,7 +54,7 @@ export const DialogContent = React.forwardRef<
         {children}
         {!hideCloseButton && (
           <DialogPrimitive.Close
-            className="focus-ring absolute top-4 right-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100"
+            className="focus-ring absolute end-4 top-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100"
             aria-label="Close dialog"
           >
             <X size={16} />

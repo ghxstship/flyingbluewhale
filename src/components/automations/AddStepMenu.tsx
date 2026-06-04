@@ -43,7 +43,7 @@ export function AddStepMenu({
                   onAdd(a.type);
                   setOpen(false);
                 }}
-                className="w-full rounded-md px-2 py-1.5 text-left transition-colors hover:bg-[var(--surface-inset)]"
+                className="w-full rounded-md px-2 py-1.5 text-start transition-colors hover:bg-[var(--surface-inset)]"
               >
                 <div className="text-sm font-medium text-[var(--text-primary)]">{a.label}</div>
                 <div className="text-[11px] text-[var(--text-muted)]">{a.description}</div>

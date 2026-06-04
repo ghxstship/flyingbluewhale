@@ -83,7 +83,7 @@ export default async function XpmsOverviewPage() {
                 {XPMS_TIERS.map((t) => (
                   <li key={t.id} className="flex items-center justify-between">
                     <span>
-                      <span className="mr-2 font-mono text-[10px] text-[var(--text-muted)]">{t.num}</span>
+                      <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{t.num}</span>
                       {t.label}
                     </span>
                     <span className="text-xs text-[var(--text-muted)]">paired with {t.pair}</span>
@@ -104,7 +104,7 @@ export default async function XpmsOverviewPage() {
                 {XPMS_PHASES.map((p) => (
                   <li key={p.id} className="flex items-center justify-between">
                     <span>
-                      <span className="mr-2 font-mono text-[10px] text-[var(--text-muted)]">{p.num}</span>
+                      <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{p.num}</span>
                       {p.label}
                     </span>
                     <span className="text-[11px] text-[var(--text-muted)]">{p.platform}</span>

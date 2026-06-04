@@ -246,7 +246,7 @@ export function ProposalEditor({
                           aria-label={isOpen ? "Collapse lineage" : "Edit lineage"}
                         >
                           <ChevronRight size={14} className={`transition-transform ${isOpen ? "rotate-90" : ""}`} />
-                          <span className="ml-1 text-xs">Lineage</span>
+                          <span className="ms-1 text-xs">Lineage</span>
                         </button>
                       )}
                       <button

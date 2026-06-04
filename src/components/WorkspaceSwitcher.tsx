@@ -219,7 +219,7 @@ function WorkspaceMenu({
               <WorkspaceTile name={w.name} logoUrl={w.logoUrl} size={20} />
               <span className="flex-1 truncate">
                 <span className="text-[var(--text-primary)]">{w.name}</span>
-                <span className="ml-2 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{w.role}</span>
+                <span className="ms-2 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{w.role}</span>
               </span>
               {isActive && <Check size={12} className="text-[var(--org-primary)]" aria-hidden />}
             </DropdownMenuItem>

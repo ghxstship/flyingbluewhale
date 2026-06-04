@@ -175,9 +175,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <table className="data-table mt-3 w-full">
               <thead>
                 <tr>
-                  <th className="text-left">Kind</th>
-                  <th className="text-left">Category</th>
-                  <th className="text-left">Description</th>
+                  <th className="text-start">Kind</th>
+                  <th className="text-start">Category</th>
+                  <th className="text-start">Description</th>
                   <th className="text-right">Amount</th>
                   {editable && <th />}
                 </tr>

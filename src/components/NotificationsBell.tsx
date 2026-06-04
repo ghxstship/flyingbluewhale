@@ -100,7 +100,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
           <Bell size={16} aria-hidden="true" />
           {unread > 0 ? (
             <span
-              className="absolute -top-0.5 -right-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[color:var(--color-error)] px-1 text-[10px] font-semibold text-white"
+              className="absolute -end-0.5 -top-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[color:var(--color-error)] px-1 text-[10px] font-semibold text-white"
               aria-hidden="true"
             >
               {unread > 99 ? "99+" : unread}

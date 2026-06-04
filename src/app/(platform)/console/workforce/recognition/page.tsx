@@ -111,7 +111,7 @@ export default async function RecognitionAdminPage() {
                   <span className="font-semibold">{userMap.get(p.from_user_id) ?? "Someone"}</span>
                   <span className="text-[var(--text-muted)]"> → </span>
                   <span className="font-semibold">{userMap.get(p.to_user_id) ?? "Someone"}</span>
-                  <span className="ml-2 font-mono text-[var(--text-muted)]">{fmt.time(p.created_at)}</span>
+                  <span className="ms-2 font-mono text-[var(--text-muted)]">{fmt.time(p.created_at)}</span>
                 </div>
                 <p className="mt-1 text-xs">{p.message}</p>
                 {p.value_tag && (

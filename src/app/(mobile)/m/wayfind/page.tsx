@@ -80,7 +80,7 @@ export default async function MobileWayfindPage() {
           {clusters.map(([cluster, list]) => (
             <section key={cluster}>
               <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                <Compass className="mr-1 inline-block" size={12} /> {cluster}
+                <Compass className="me-1 inline-block" size={12} /> {cluster}
               </h2>
               <ul className="mt-2 space-y-2">
                 {list.map((v) => (
@@ -92,7 +92,7 @@ export default async function MobileWayfindPage() {
                           {v.name}
                         </div>
                         {v.capacity != null && (
-                          <div className="mt-0.5 ml-5 font-mono text-xs text-[var(--text-muted)]">
+                          <div className="ms-5 mt-0.5 font-mono text-xs text-[var(--text-muted)]">
                             cap {fmt.number(v.capacity)}
                           </div>
                         )}

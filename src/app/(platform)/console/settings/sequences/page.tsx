@@ -186,7 +186,7 @@ export default async function Page() {
                     <input type="hidden" name="format" value={h.suggested} />
                     <Button type="submit" variant="secondary" size="sm">
                       <Badge variant="muted">{h.scope}</Badge>
-                      <span className="ml-2">Pre-seed</span>
+                      <span className="ms-2">Pre-seed</span>
                     </Button>
                   </form>
                 </li>

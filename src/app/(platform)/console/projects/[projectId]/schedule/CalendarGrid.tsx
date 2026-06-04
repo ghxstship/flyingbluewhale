@@ -85,7 +85,7 @@ export function CalendarGrid({
           return (
             <div
               key={key}
-              className={`min-h-[90px] border-r border-b border-[var(--border-color)] p-1.5 text-xs ${
+              className={`min-h-[90px] border-e border-b border-[var(--border-color)] p-1.5 text-xs ${
                 inMonth ? "" : "bg-[var(--surface-inset)]/40 text-[var(--text-muted)]"
               }`}
             >

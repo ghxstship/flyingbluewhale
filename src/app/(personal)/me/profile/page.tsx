@@ -93,7 +93,7 @@ export default async function ProfilePage() {
                   @{profile.public_handle}
                 </Link>
                 {profile.rating_count > 0 && (
-                  <span className="ml-2 font-mono text-[var(--text-muted)]">
+                  <span className="ms-2 font-mono text-[var(--text-muted)]">
                     {profile.rating_avg?.toFixed(1) ?? "—"} ★ ({profile.rating_count})
                   </span>
                 )}

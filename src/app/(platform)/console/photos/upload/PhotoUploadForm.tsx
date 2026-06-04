@@ -77,7 +77,7 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
             multiple
             accept={ACCEPT}
             onChange={onPick}
-            className="block w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:border-0 file:bg-[var(--foreground)] file:px-4 file:py-2 file:text-xs file:font-semibold file:text-[var(--background)] hover:file:opacity-90"
+            className="block w-full cursor-pointer text-sm file:me-4 file:cursor-pointer file:border-0 file:bg-[var(--foreground)] file:px-4 file:py-2 file:text-xs file:font-semibold file:text-[var(--background)] hover:file:opacity-90"
           />
         </div>
         <div className="mt-1 text-[11px] text-[var(--text-muted)]">
@@ -87,7 +87,7 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
           <div className="mt-2 text-[11px] text-[var(--text-secondary)]">
             {files.length} file{files.length === 1 ? "" : "s"} selected · {fmtBytes(totalBytes)} total
             {tooBig && (
-              <span className="ml-2 font-semibold text-[var(--color-error)]">
+              <span className="ms-2 font-semibold text-[var(--color-error)]">
                 One or more files exceed 25 MB and will be rejected.
               </span>
             )}

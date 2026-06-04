@@ -59,7 +59,7 @@ export function GlobalBanner({
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss banner"
-          className="ml-2 rounded p-0.5 hover:bg-black/10"
+          className="ms-2 rounded p-0.5 hover:bg-black/10"
         >
           <X size={12} aria-hidden />
         </button>

@@ -55,7 +55,7 @@ export default function TiersHub() {
                   <span className="text-[var(--text-muted)]">
                     {t.anchoredServices.length > 0 ? `${t.anchoredServices.length} anchored` : "Cross-cutting"}
                   </span>
-                  <ArrowRight className="ml-auto h-3 w-3 text-[var(--text-muted)] group-hover:text-[var(--org-primary)]" />
+                  <ArrowRight className="ms-auto h-3 w-3 text-[var(--text-muted)] group-hover:text-[var(--org-primary)]" />
                 </div>
               </Link>
             ))}

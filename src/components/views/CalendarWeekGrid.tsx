@@ -75,7 +75,7 @@ export function CalendarWeekGrid({
           {HOURS.map((h) => (
             <div
               key={h}
-              className="flex items-start justify-end pr-1 font-mono text-[9px] text-[var(--text-muted)]"
+              className="flex items-start justify-end pe-1 font-mono text-[9px] text-[var(--text-muted)]"
               style={{ height: `${HOUR_HEIGHT_PX}px` }}
             >
               {h.toString().padStart(2, "0")}:00
@@ -133,7 +133,7 @@ function DayColumn({
         if (!block) {
           // All-day or no time info: render as a top banner.
           return (
-            <div key={event.id} className="absolute top-1 right-1 left-1 z-10" style={{ minHeight: 20 }}>
+            <div key={event.id} className="absolute start-1 end-1 top-1 z-10" style={{ minHeight: 20 }}>
               <CalendarEventChip event={event} renderEvent={renderEvent} />
             </div>
           );
@@ -141,7 +141,7 @@ function DayColumn({
         return (
           <div
             key={event.id}
-            className="absolute right-1 left-1 z-10 rounded border border-[var(--border-color)] bg-[var(--surface-raised)] p-1"
+            className="absolute start-1 end-1 z-10 rounded border border-[var(--border-color)] bg-[var(--surface-raised)] p-1"
             style={{
               top: `${block.top}px`,
               height: `${block.height}px`,

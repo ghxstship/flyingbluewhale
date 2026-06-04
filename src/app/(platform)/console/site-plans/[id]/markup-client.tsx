@@ -438,7 +438,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
         <canvas ref={baseCanvasRef} className="block" />
         <canvas
           ref={overlayCanvasRef}
-          className="absolute top-0 left-0 cursor-crosshair"
+          className="absolute start-0 top-0 cursor-crosshair"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}

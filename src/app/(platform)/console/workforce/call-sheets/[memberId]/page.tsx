@@ -98,8 +98,8 @@ export default async function Page({
             <div className="mt-1 text-2xl font-bold">{member.full_name}</div>
             <div className="mt-1 font-mono text-xs text-[var(--text-secondary)]">
               {member.role ?? "—"}
-              {member.phone && <span className="ml-3">{member.phone}</span>}
-              {member.email && <span className="ml-3">{member.email}</span>}
+              {member.phone && <span className="ms-3">{member.phone}</span>}
+              {member.email && <span className="ms-3">{member.email}</span>}
             </div>
           </header>
 
@@ -132,7 +132,7 @@ export default async function Page({
                     </div>
                     <div className="mt-1 text-sm">
                       {s.venue?.name ?? "Unassigned venue"}
-                      {s.role && <span className="ml-2 font-mono text-xs text-[var(--text-muted)]">· {s.role}</span>}
+                      {s.role && <span className="ms-2 font-mono text-xs text-[var(--text-muted)]">· {s.role}</span>}
                     </div>
                     {s.venue?.locations?.address && (
                       <div className="mt-0.5 text-xs text-[var(--text-secondary)]">

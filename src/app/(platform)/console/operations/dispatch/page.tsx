@@ -181,7 +181,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
           >
             {nextDate} →
           </Link>
-          <span className="ml-auto flex items-center gap-3 text-xs">
+          <span className="ms-auto flex items-center gap-3 text-xs">
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-sm bg-[var(--color-info)]" />
               Shift
@@ -202,7 +202,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
           <div className="sticky top-0 flex border-b border-[var(--border-color)] bg-[var(--surface)]">
             <div
               style={{ width: 180 }}
-              className="shrink-0 border-r border-[var(--border-color)] px-3 py-2 text-[10px] font-semibold tracking-wide text-[var(--text-muted)] uppercase"
+              className="shrink-0 border-e border-[var(--border-color)] px-3 py-2 text-[10px] font-semibold tracking-wide text-[var(--text-muted)] uppercase"
             >
               Lane
             </div>
@@ -211,7 +211,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                 <div
                   key={h}
                   style={{ width: colWidth }}
-                  className="border-r border-[var(--border-color)] px-2 py-2 font-mono text-[10px] text-[var(--text-muted)]"
+                  className="border-e border-[var(--border-color)] px-2 py-2 font-mono text-[10px] text-[var(--text-muted)]"
                 >
                   {h.toString().padStart(2, "0")}:00
                 </div>
@@ -226,9 +226,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
               <div key={lane.id} className="flex border-b border-[var(--border-color)]">
                 <div
                   style={{ width: 180, height: laneHeight }}
-                  className="flex shrink-0 items-center border-r border-[var(--border-color)] px-3 text-xs"
+                  className="flex shrink-0 items-center border-e border-[var(--border-color)] px-3 text-xs"
                 >
-                  <Badge variant={lane.kind === "venue" ? "muted" : "info"} className="mr-2">
+                  <Badge variant={lane.kind === "venue" ? "muted" : "info"} className="me-2">
                     {lane.kind}
                   </Badge>
                   <span className="truncate">{lane.label}</span>
@@ -238,7 +238,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                   {HOURS.map((_, idx) => (
                     <div
                       key={idx}
-                      className="absolute top-0 bottom-0 border-r border-[var(--border-color)] opacity-30"
+                      className="absolute top-0 bottom-0 border-e border-[var(--border-color)] opacity-30"
                       style={{ left: idx * colWidth, width: colWidth }}
                     />
                   ))}
@@ -257,7 +257,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                         title={b.label}
                       >
                         <span
-                          className={`mr-1 inline-block h-1.5 w-1.5 rounded-sm ${
+                          className={`me-1 inline-block h-1.5 w-1.5 rounded-sm ${
                             b.source === "shift"
                               ? "bg-[var(--color-info)]"
                               : b.source === "task"

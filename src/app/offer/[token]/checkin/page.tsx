@@ -43,7 +43,7 @@ export default async function CheckInPage({ params }: { params: Promise<{ token:
         <div className="text-xs tracking-widest text-(--text-muted) uppercase">Day-1 Check-in</div>
         <h1 className="text-3xl font-semibold">Welcome to Salvage City, {letter.recipient_name.split(" ")[0]}.</h1>
       </header>
-      <div className="border-l-success bg-success-soft border-l-4 p-4">
+      <div className="border-s-success bg-success-soft border-s-4 p-4">
         <p className="text-sm font-medium">You're checked in.</p>
         <p className="text-xs text-(--text-secondary)">
           Production sees this immediately. Head to the production trailer for credentials and the safety briefing.

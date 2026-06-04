@@ -92,7 +92,7 @@ function PaletteItem({
       type="button"
       onClick={onClick}
       aria-label={`Add ${label} widget`}
-      className={`hover-lift flex items-start gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-2 text-left transition-shadow ${
+      className={`hover-lift flex items-start gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-2 text-start transition-shadow ${
         isDragging ? "opacity-60" : ""
       }`}
       {...attributes}

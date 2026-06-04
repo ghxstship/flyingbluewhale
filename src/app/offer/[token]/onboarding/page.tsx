@@ -72,7 +72,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
       </header>
 
       {cpOpen > 0 ? (
-        <div className="border-l-warning bg-warning-soft border-l-4 p-4">
+        <div className="border-s-warning bg-warning-soft border-s-4 p-4">
           <p className="text-sm font-medium">
             {cpOpen} critical-path step{cpOpen === 1 ? "" : "s"} open
           </p>

@@ -111,7 +111,7 @@ function HeroBlock({
   return (
     <section className="proposal-hero relative overflow-hidden border-b border-[var(--border-color)]">
       <div
-        className="absolute inset-y-0 left-0 w-1"
+        className="absolute inset-y-0 start-0 w-1"
         style={{ background: `linear-gradient(180deg, ${theme.primary}, ${theme.secondary})` }}
       />
       <div className="mx-auto max-w-4xl px-8 py-20">
@@ -210,8 +210,8 @@ function OverviewCards({
         {block.cards.map((c, i) => {
           const a = accent(theme, c.accent);
           return (
-            <div key={i} className="surface relative overflow-hidden p-5 pl-6">
-              <span className="absolute inset-y-0 left-0 w-1" style={{ background: a }} />
+            <div key={i} className="surface relative overflow-hidden p-5 ps-6">
+              <span className="absolute inset-y-0 start-0 w-1" style={{ background: a }} />
               {c.tag && (
                 <div className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: a }}>
                   {c.tag}
@@ -249,7 +249,7 @@ function JourneyBlock({
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {block.steps.map((s) => (
           <div key={s.num} className="surface relative p-4">
-            <div className="absolute top-4 right-4 font-mono text-xs text-[var(--text-muted)]">{s.status ?? ""}</div>
+            <div className="absolute end-4 top-4 font-mono text-xs text-[var(--text-muted)]">{s.status ?? ""}</div>
             <div className="font-mono text-4xl font-light tracking-tight" style={{ color: theme.primary }}>
               {String(s.num).padStart(2, "0")}
             </div>
@@ -451,7 +451,7 @@ function EquipmentManifest({ block }: { block: Extract<ProposalBlock, { type: "e
                 ) : (
                   <span>{it.name}</span>
                 )}
-                {it.vendor && <span className="ml-2 font-mono text-[10px] text-[var(--text-muted)]">{it.vendor}</span>}
+                {it.vendor && <span className="ms-2 font-mono text-[10px] text-[var(--text-muted)]">{it.vendor}</span>}
               </span>
               <span className="font-mono text-xs text-[var(--text-muted)]">×{it.quantity}</span>
             </li>

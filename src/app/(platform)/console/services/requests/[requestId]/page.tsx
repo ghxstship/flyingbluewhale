@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
               <dd className="font-mono">
                 {r.sla_response_due ? fmt.dateTime(r.sla_response_due) : "—"}
                 {r.sla_response_breached && (
-                  <Badge variant="error" className="ml-2">
+                  <Badge variant="error" className="ms-2">
                     breached
                   </Badge>
                 )}
@@ -129,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
               <dd className="font-mono">
                 {r.sla_resolution_due ? fmt.dateTime(r.sla_resolution_due) : "—"}
                 {r.sla_resolution_breached && (
-                  <Badge variant="error" className="ml-2">
+                  <Badge variant="error" className="ms-2">
                     breached
                   </Badge>
                 )}
@@ -154,7 +154,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
                       name="note"
                       placeholder="Resolution note (optional)"
                       maxLength={2000}
-                      className="input-base mr-2 inline-block w-64 align-middle"
+                      className="input-base me-2 inline-block w-64 align-middle"
                     />
                   )}
                   <Button type="submit" variant={t.variant ?? "secondary"} size="sm">
@@ -187,7 +187,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
                     <span className="flex-1">
                       <Badge variant="muted">{toTitle(e.kind)}</Badge>
                       {(transition || note) && (
-                        <span className="ml-2 text-[var(--text-secondary)]">
+                        <span className="ms-2 text-[var(--text-secondary)]">
                           {[transition, note].filter(Boolean).join(" · ")}
                         </span>
                       )}

@@ -54,7 +54,7 @@ export default async function TierCompositionPage() {
                   <div key={t.id}>
                     <div className="flex items-center justify-between text-sm">
                       <span>
-                        <span className="mr-2 font-mono text-[10px] text-[var(--text-muted)]">{t.num}</span>
+                        <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{t.num}</span>
                         {t.label}
                       </span>
                       <span className="font-mono text-xs text-[var(--text-muted)]">

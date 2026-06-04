@@ -41,7 +41,7 @@ export function PortalRail({
   // the user can reach via back-navigation. Add a portal MobileNavDrawer
   // later when persona nav surfaces grow.
   return (
-    <aside className="hidden w-56 shrink-0 flex-col border-r border-[var(--border-color)] bg-[var(--bg-secondary)] p-3 md:flex">
+    <aside className="hidden w-56 shrink-0 flex-col border-e border-[var(--border-color)] bg-[var(--bg-secondary)] p-3 md:flex">
       <div className="mb-3 flex items-center gap-2">
         {/* Canonical SaaS brand row — Inter 700 16px tight letter-spacing
             per ui_kits/atlvs/dashboard.html .brandrow b. The pre-v3

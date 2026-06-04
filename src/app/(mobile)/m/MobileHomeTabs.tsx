@@ -42,7 +42,7 @@ export function MobileHomeTabs({ today, tools, reports }: { today: Tile[]; tools
             }`}
           >
             {label}
-            <span className="ml-1.5 text-[10px] text-[var(--text-muted)]">{count}</span>
+            <span className="ms-1.5 text-[10px] text-[var(--text-muted)]">{count}</span>
           </button>
         ))}
       </div>

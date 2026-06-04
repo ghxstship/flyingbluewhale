@@ -35,7 +35,7 @@ export function MedicForm() {
                 <input type="radio" name="triage" value={t.value} required className="accent-[var(--org-primary)]" />
                 <span className="font-semibold">{t.label}</span>
               </span>
-              <span className="ml-5 text-xs text-[var(--text-muted)]">{t.hint}</span>
+              <span className="ms-5 text-xs text-[var(--text-muted)]">{t.hint}</span>
             </label>
           ))}
         </div>

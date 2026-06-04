@@ -73,7 +73,7 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
             {tpl.blueprint.deliverables?.length ? (
               <div>
                 <label className="text-xs font-medium text-[var(--text-secondary)]">Will be created</label>
-                <ul className="mt-1.5 list-disc pl-5 text-sm text-[var(--text-secondary)]">
+                <ul className="mt-1.5 list-disc ps-5 text-sm text-[var(--text-secondary)]">
                   {tpl.blueprint.deliverables.map((d, i) => (
                     <li key={i}>
                       <span className="font-mono text-[10px] tracking-wider uppercase">{d.kind}</span>

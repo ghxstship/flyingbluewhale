@@ -147,7 +147,7 @@ export default function PricingPage() {
                     ))}
                   </ul>
                 </div>
-                <p className="mt-6 border-l-[3px] border-[var(--org-accent)] pl-3 text-sm text-[var(--text-secondary)] italic">
+                <p className="mt-6 border-s-[3px] border-[var(--org-accent)] ps-3 text-sm text-[var(--text-secondary)] italic">
                   {tier.bestLine}
                 </p>
                 <div className="mt-auto pt-6">
@@ -227,7 +227,7 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-5 border-l-[3px] border-[var(--org-accent)] pl-3 text-sm text-[var(--text-secondary)] italic">
+                <p className="mt-5 border-s-[3px] border-[var(--org-accent)] ps-3 text-sm text-[var(--text-secondary)] italic">
                   {tier.bestLine}
                 </p>
                 <div className="mt-auto pt-6">

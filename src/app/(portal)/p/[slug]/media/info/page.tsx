@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                           {t}
                         </Badge>
                       ))}
-                    <span className="ml-1">{fmtDate(a.updated_at)}</span>
+                    <span className="ms-1">{fmtDate(a.updated_at)}</span>
                   </div>
                 </li>
               ))}

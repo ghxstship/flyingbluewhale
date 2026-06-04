@@ -70,7 +70,7 @@ export function ShortcutDialog() {
         <DialogHeader>
           <DialogTitle>
             Keyboard shortcuts
-            <span className="ml-2 rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[11px] text-[var(--text-muted)]">
+            <span className="ms-2 rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[11px] text-[var(--text-muted)]">
               {shortcuts.length}
             </span>
           </DialogTitle>
@@ -93,7 +93,7 @@ export function ShortcutDialog() {
           />
         </div>
 
-        <div className="mt-4 max-h-[50vh] space-y-5 overflow-y-auto pr-1">
+        <div className="mt-4 max-h-[50vh] space-y-5 overflow-y-auto pe-1">
           {grouped.map(([group, items]) => (
             <div key={group}>
               <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">

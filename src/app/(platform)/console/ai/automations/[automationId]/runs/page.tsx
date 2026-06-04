@@ -182,11 +182,11 @@ export default async function Page({
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th className="px-3 py-2 text-left text-xs tracking-wide uppercase">Started</th>
-                  <th className="px-3 py-2 text-left text-xs tracking-wide uppercase">Trigger</th>
-                  <th className="px-3 py-2 text-left text-xs tracking-wide uppercase">Status</th>
+                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">Started</th>
+                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">Trigger</th>
+                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">Status</th>
                   <th className="px-3 py-2 text-right text-xs tracking-wide uppercase">Actions</th>
-                  <th className="px-3 py-2 text-left text-xs tracking-wide uppercase">Finished</th>
+                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">Finished</th>
                   <th className="px-3 py-2 text-right text-xs tracking-wide uppercase">Duration</th>
                 </tr>
               </thead>
@@ -205,7 +205,7 @@ export default async function Page({
                         <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                         {r.status === "failed" && r.error_summary && (
                           <span
-                            className="ml-2 truncate font-mono text-[10px] text-[var(--color-error)]"
+                            className="ms-2 truncate font-mono text-[10px] text-[var(--color-error)]"
                             title={r.error_summary}
                           >
                             {r.error_summary.slice(0, 60)}

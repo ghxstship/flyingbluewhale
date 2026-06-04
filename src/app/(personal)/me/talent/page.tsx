@@ -67,7 +67,7 @@ export default async function Page() {
       {t?.is_public && (
         <div className="card-elevated p-3">
           <Badge variant="success">live</Badge>
-          <span className="ml-3 text-sm text-[var(--color-text-secondary)]">Your EPK is published.</span>
+          <span className="ms-3 text-sm text-[var(--color-text-secondary)]">Your EPK is published.</span>
         </div>
       )}
 

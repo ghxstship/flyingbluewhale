@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
               Capabilities
             </h3>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+            <ul className="mt-2 list-disc space-y-1 ps-5 text-sm">
               {r.capabilities.map((c) => (
                 <li key={c}>{c}</li>
               ))}
@@ -145,7 +145,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </div>
 
         {r.certification_tier === "rejected" && r.rejection_reason ? (
-          <div className="surface border-l-4 border-l-[var(--color-error)] p-5">
+          <div className="surface border-s-4 border-s-[var(--color-error)] p-5">
             <h3 className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
               Rejection reason
             </h3>

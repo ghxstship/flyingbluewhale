@@ -73,9 +73,9 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
                     {t.from_state ?? "(initial)"} → <strong>{t.to_state}</strong>
                   </span>{" "}
                   · <span className="text-[var(--text-secondary)]">{timeAgo(t.transitioned_at)}</span>
-                  {t.reason ? <span className="ml-2">{t.reason}</span> : null}
+                  {t.reason ? <span className="ms-2">{t.reason}</span> : null}
                   {t.stripe_event_id ? (
-                    <span className="ml-2 font-mono text-xs">[stripe:{t.stripe_event_id}]</span>
+                    <span className="ms-2 font-mono text-xs">[stripe:{t.stripe_event_id}]</span>
                   ) : null}
                 </li>
               ))}

@@ -92,7 +92,7 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         {!serviceRoleAvailable ? (
-          <div className="surface border-l-4 border-l-amber-500 p-4 text-xs text-[var(--text-secondary)]">
+          <div className="surface border-s-4 border-s-amber-500 p-4 text-xs text-[var(--text-secondary)]">
             <strong className="text-[var(--text-primary)]">Limited view:</strong>{" "}
             <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code> is not configured. Showing only published
             verified/certified submissions. Set the env var to see the full review queue (submitted, reviewing,

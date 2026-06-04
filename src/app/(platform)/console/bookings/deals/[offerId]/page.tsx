@@ -201,12 +201,12 @@ async function CoProSection({ offerId }: { offerId: string }) {
             <li key={r.id} className="flex items-center justify-between py-2 text-sm">
               <div>
                 <span className="font-semibold">{r.partner_name}</span>
-                <span className="ml-2 font-mono text-xs">{r.split_pct}%</span>
+                <span className="ms-2 font-mono text-xs">{r.split_pct}%</span>
                 {r.contact_email && (
-                  <span className="ml-2 text-xs text-[var(--text-secondary)]">{r.contact_email}</span>
+                  <span className="ms-2 text-xs text-[var(--text-secondary)]">{r.contact_email}</span>
                 )}
                 {r.settled_at && (
-                  <Badge variant="success" className="ml-2">
+                  <Badge variant="success" className="ms-2">
                     settled
                   </Badge>
                 )}

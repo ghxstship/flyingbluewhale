@@ -14,7 +14,7 @@ export default function RootError({ error, reset }: { error: Error & { digest?: 
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">Something Went Wrong</h1>
       <p className="mt-2 text-sm text-[var(--text-muted)]">
         {error.message || "An unexpected error occurred."}
-        {error.digest && <span className="ml-2 font-mono text-xs">ref: {error.digest}</span>}
+        {error.digest && <span className="ms-2 font-mono text-xs">ref: {error.digest}</span>}
       </p>
       <div className="mt-6 flex justify-center gap-2">
         <button type="button" onClick={reset} className="btn btn-primary">

@@ -35,7 +35,7 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
   return (
     <form action={action} className="surface space-y-4 p-6" aria-busy={pending || undefined} aria-describedby={errId}>
       {/* Honeypot — hidden from real users via CSS, bots will fill it. */}
-      <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+      <div className="absolute -start-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
         <label>
           Leave blank
           <input type="text" name="hp_url" tabIndex={-1} autoComplete="off" />
@@ -49,7 +49,7 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
             <div key={f.key}>
               <label className="text-xs font-medium text-[var(--text-secondary)]">
                 {f.label}
-                {f.required && <span className="ml-0.5 text-[var(--color-error)]">*</span>}
+                {f.required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
               </label>
               <textarea
                 name={name}
@@ -67,7 +67,7 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
             <div key={f.key}>
               <label className="text-xs font-medium text-[var(--text-secondary)]">
                 {f.label}
-                {f.required && <span className="ml-0.5 text-[var(--color-error)]">*</span>}
+                {f.required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
               </label>
               <select name={name} required={f.required} className="input-base mt-1.5 w-full" defaultValue="">
                 <option value="" disabled>

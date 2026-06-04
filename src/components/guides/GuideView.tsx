@@ -86,7 +86,7 @@ function SectionWrapper({ index, section }: { index: number; section: GuideSecti
           <h2 className="text-xl font-semibold tracking-tight">{section.heading}</h2>
         </div>
       </div>
-      <div className="pl-16">
+      <div className="ps-16">
         <SectionBody section={section} />
       </div>
     </section>
@@ -249,7 +249,7 @@ function SectionBody({ section }: { section: GuideSection }) {
                 )}
                 <div className="text-sm font-semibold">{e.title}</div>
               </div>
-              <ol className="mt-3 space-y-1 pl-5 text-sm text-[var(--text-secondary)]">
+              <ol className="mt-3 space-y-1 ps-5 text-sm text-[var(--text-secondary)]">
                 {e.steps.map((step, j) => (
                   <li key={j} className="list-decimal">
                     {step}

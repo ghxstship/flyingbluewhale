@@ -279,7 +279,7 @@ function PreviewSwitcher({
         );
       })}
       {previewing && (
-        <Link href={`/p/${slug}/guide`} className="ml-auto text-[var(--text-muted)] underline-offset-2 hover:underline">
+        <Link href={`/p/${slug}/guide`} className="ms-auto text-[var(--text-muted)] underline-offset-2 hover:underline">
           Exit preview
         </Link>
       )}

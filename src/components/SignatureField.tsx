@@ -93,7 +93,7 @@ export function SignatureField({
       <div className="flex items-center justify-between">
         <label className="text-xs font-medium text-[var(--text-secondary)]">
           {label}
-          {required && <span className="ml-1 text-[var(--color-error)]">*</span>}
+          {required && <span className="ms-1 text-[var(--color-error)]">*</span>}
         </label>
         <div className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5 text-xs">
           <button

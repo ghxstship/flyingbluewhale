@@ -897,7 +897,7 @@ export function DataTableInteractive({
                         >
                           {isCollapsed ? <ChevronRightIcon size={12} /> : <ChevronDown size={12} />}
                           {g.label}
-                          <span className="ml-2 font-mono text-[10px] text-[var(--text-muted)]">{g.rows.length}</span>
+                          <span className="ms-2 font-mono text-[10px] text-[var(--text-muted)]">{g.rows.length}</span>
                         </button>
                       </td>
                     </tr>
@@ -1963,7 +1963,7 @@ function SortableColumnRow({
       >
         <GripVertical size={12} aria-hidden="true" />
       </button>
-      <button type="button" onClick={onToggleHidden} className="flex flex-1 items-center gap-2 text-left">
+      <button type="button" onClick={onToggleHidden} className="flex flex-1 items-center gap-2 text-start">
         {isHidden ? (
           <EyeOff size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
         ) : (

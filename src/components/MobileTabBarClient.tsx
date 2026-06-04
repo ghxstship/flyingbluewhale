@@ -50,7 +50,7 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
                     aria-hidden="true"
                   />
                   {badgeCount > 0 && (
-                    <span className="absolute -top-1.5 -right-2">
+                    <span className="absolute -end-2 -top-1.5">
                       <Badge variant="error" shape="count" aria-label={`${badgeCount} unread`}>
                         {badgeCount > 99 ? "99+" : badgeCount}
                       </Badge>

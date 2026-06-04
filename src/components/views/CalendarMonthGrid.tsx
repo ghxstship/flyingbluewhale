@@ -123,7 +123,7 @@ function DayCell({
           <button
             type="button"
             onClick={() => setShowOverflow((prev) => !prev)}
-            className="px-1 text-left text-[9px] text-[var(--text-muted)] underline-offset-2 hover:underline"
+            className="px-1 text-start text-[9px] text-[var(--text-muted)] underline-offset-2 hover:underline"
             aria-expanded={showOverflow}
           >
             +{overflow.length} more
@@ -132,7 +132,7 @@ function DayCell({
       </div>
       {showOverflow && overflow.length > 0 && (
         <div
-          className="elevation-2 absolute top-full right-1 left-1 z-20 mt-1 flex flex-col gap-1 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-1.5"
+          className="elevation-2 absolute start-1 end-1 top-full z-20 mt-1 flex flex-col gap-1 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-1.5"
           role="dialog"
           aria-label={`More events on ${dateKey}`}
         >

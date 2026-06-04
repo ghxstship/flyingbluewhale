@@ -75,10 +75,10 @@ export default async function Page() {
                   <Badge variant={s.kind === "confirm" ? "success" : s.kind === "block" ? "error" : "warning"}>
                     {s.kind}
                   </Badge>
-                  <span className="ml-3 font-mono text-xs">
+                  <span className="ms-3 font-mono text-xs">
                     {new Date(s.starts_at).toLocaleString()} → {new Date(s.ends_at).toLocaleString()}
                   </span>
-                  {s.label && <span className="ml-3">{s.label}</span>}
+                  {s.label && <span className="ms-3">{s.label}</span>}
                 </div>
                 <form
                   action={async (fd) => {

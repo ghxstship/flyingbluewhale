@@ -60,7 +60,7 @@ export default async function MobileRequests() {
                 <div className="flex items-center gap-2">
                   <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
                   <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.category}</span>
-                  <span className="ml-auto font-mono text-[10px] text-[var(--text-muted)]">
+                  <span className="ms-auto font-mono text-[10px] text-[var(--text-muted)]">
                     {fmt.time(r.opened_at)}
                   </span>
                 </div>

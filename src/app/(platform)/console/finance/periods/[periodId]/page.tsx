@@ -67,7 +67,7 @@ export default async function AccountingPeriodDetailPage({ params }: { params: P
                     {t.from_state ?? "(initial)"} → <strong>{t.to_state}</strong>
                   </span>{" "}
                   · <span className="text-[var(--text-secondary)]">{timeAgo(t.transitioned_at)}</span>
-                  {t.reason ? <span className="ml-2">{t.reason}</span> : null}
+                  {t.reason ? <span className="ms-2">{t.reason}</span> : null}
                 </li>
               ))}
             </ul>

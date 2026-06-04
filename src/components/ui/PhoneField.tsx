@@ -146,7 +146,7 @@ export function PhoneField(props: PhoneFieldProps) {
       {label ? (
         <label className="text-xs font-medium text-[var(--text-secondary)]">
           {label}
-          {required && <span className="ml-0.5 text-[var(--color-error)]">*</span>}
+          {required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
         </label>
       ) : null}
       <div className="mt-1.5 flex gap-2">

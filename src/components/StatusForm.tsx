@@ -75,7 +75,7 @@ export function StatusForm({
         </button>
       </form>
       {error && (
-        <span className="absolute top-full left-0 z-10 mt-1 inline-block max-w-xs">
+        <span className="absolute start-0 top-full z-10 mt-1 inline-block max-w-xs">
           <Alert kind="error">{error}</Alert>
         </span>
       )}

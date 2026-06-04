@@ -130,7 +130,7 @@ export default function ApiDocsPage() {
         <div className="rounded-lg border border-[var(--border)] p-5">
           <h2 className="text-sm tracking-wider text-[var(--text-secondary)] uppercase">Rate limits</h2>
           <p className="mt-2 text-sm">Limits scale with your org plan. Every response includes:</p>
-          <ul className="mt-2 list-disc pl-5 text-sm text-[var(--text-secondary)]">
+          <ul className="mt-2 list-disc ps-5 text-sm text-[var(--text-secondary)]">
             <li>
               <code>RateLimit-Limit</code>
             </li>
@@ -187,7 +187,7 @@ export default function ApiDocsPage() {
                   <h4 className="mb-1 text-xs font-semibold text-[var(--text-secondary)] uppercase">Parameters</h4>
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-left text-xs text-[var(--text-secondary)] uppercase">
+                      <tr className="text-start text-xs text-[var(--text-secondary)] uppercase">
                         <th className="pb-1">Name</th>
                         <th className="pb-1">In</th>
                         <th className="pb-1">Type</th>
@@ -223,7 +223,7 @@ export default function ApiDocsPage() {
                   {Object.entries(op.responses).map(([status, r]) => (
                     <li key={status} className="border-t border-[var(--border)] py-1">
                       <span className="font-mono">{status}</span>
-                      <span className="ml-3 text-[var(--text-secondary)]">{r.description}</span>
+                      <span className="ms-3 text-[var(--text-secondary)]">{r.description}</span>
                     </li>
                   ))}
                 </ul>

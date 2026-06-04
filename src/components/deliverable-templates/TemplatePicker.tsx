@@ -90,7 +90,7 @@ export function TemplatePicker({
             />
           </div>
 
-          <div className="mt-3 max-h-[50vh] space-y-1 overflow-y-auto pr-1">
+          <div className="mt-3 max-h-[50vh] space-y-1 overflow-y-auto pe-1">
             {loading && <div className="py-8 text-center text-xs text-[var(--text-muted)]">Loading templates…</div>}
             {!loading &&
               filtered.map((t) => (
@@ -101,7 +101,7 @@ export function TemplatePicker({
                     onPick(t);
                     setOpen(false);
                   }}
-                  className="block w-full rounded border border-transparent px-3 py-2 text-left text-xs hover:border-[var(--border-color)] hover:bg-[var(--surface-inset)]"
+                  className="block w-full rounded border border-transparent px-3 py-2 text-start text-xs hover:border-[var(--border-color)] hover:bg-[var(--surface-inset)]"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-medium text-[var(--text-primary)]">{t.name}</span>

@@ -34,13 +34,13 @@ function slaChip(due: string | null, now: number, breached: boolean) {
   const min = Math.round(ms / 60000);
   if (breached || ms < 0)
     return (
-      <Badge variant="error" className="ml-2">
+      <Badge variant="error" className="ms-2">
         SLA breached
       </Badge>
     );
   if (min < 15)
     return (
-      <Badge variant="warning" className="ml-2">
+      <Badge variant="warning" className="ms-2">
         {min}m left
       </Badge>
     );

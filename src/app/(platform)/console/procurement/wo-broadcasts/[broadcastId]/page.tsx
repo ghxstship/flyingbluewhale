@@ -196,10 +196,10 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
             <table className="data-table mt-3 w-full">
               <thead>
                 <tr>
-                  <th className="text-left">Vendor</th>
-                  <th className="text-left">State</th>
-                  <th className="text-left">Responded</th>
-                  <th className="text-left">Notes</th>
+                  <th className="text-start">Vendor</th>
+                  <th className="text-start">State</th>
+                  <th className="text-start">Responded</th>
+                  <th className="text-start">Notes</th>
                   {editable && <th />}
                 </tr>
               </thead>

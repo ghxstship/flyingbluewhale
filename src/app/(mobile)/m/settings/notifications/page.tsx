@@ -64,7 +64,7 @@ export default async function NotifPrefsPage() {
           </p>
           <table className="mt-3 w-full text-sm">
             <thead>
-              <tr className="text-left text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              <tr className="text-start text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
                 <th className="pb-2">Kind</th>
                 <th className="pb-2 text-center">Push</th>
                 <th className="pb-2 text-center">Email</th>

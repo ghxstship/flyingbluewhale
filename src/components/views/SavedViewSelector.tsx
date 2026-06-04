@@ -93,7 +93,7 @@ export function SavedViewSelector({
               {modified && (
                 <span
                   aria-hidden="true"
-                  className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-[var(--org-primary)]"
+                  className="ms-1 inline-block h-1.5 w-1.5 rounded-full bg-[var(--org-primary)]"
                   title="Unsaved changes"
                 />
               )}
@@ -105,7 +105,7 @@ export function SavedViewSelector({
             <span className="flex w-full items-center justify-between">
               <span className="flex items-center gap-1.5">
                 {!activeId && <Check size={12} aria-hidden="true" />}
-                <span className={!activeId ? "" : "ml-[18px]"}>Default View</span>
+                <span className={!activeId ? "" : "ms-[18px]"}>Default View</span>
               </span>
               <span className="text-[10px] text-[var(--text-muted)]">Auto-Saved</span>
             </span>
@@ -204,7 +204,7 @@ function SavedViewRow({
 }) {
   return (
     <div className="group relative flex items-center justify-between gap-1 px-2 py-1 hover:bg-[var(--surface-inset)]">
-      <button type="button" onClick={onLoad} className="flex flex-1 items-center gap-1.5 truncate text-left text-sm">
+      <button type="button" onClick={onLoad} className="flex flex-1 items-center gap-1.5 truncate text-start text-sm">
         {active ? <Check size={12} aria-hidden="true" /> : <span className="inline-block w-3" />}
         <span className="truncate">{view.name}</span>
         {view.isDefault && <Star size={10} aria-hidden="true" className="text-[var(--org-primary)]" />}

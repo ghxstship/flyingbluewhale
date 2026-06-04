@@ -47,7 +47,7 @@ export function SubscriptionStateControls({
           </Button>
         </form>
       ))}
-      <span className="ml-2 self-center text-xs text-[var(--text-secondary)]">
+      <span className="ms-2 self-center text-xs text-[var(--text-secondary)]">
         From <strong>{currentState}</strong>
       </span>
     </div>

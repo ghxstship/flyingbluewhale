@@ -105,7 +105,7 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6 pt-20 pb-12">
           <div className="text-xs font-semibold tracking-[0.25em] uppercase">
             <span style={{ color: "var(--org-primary)" }}>GHXSTSHIP Industries</span>
-            <span className="ml-3 text-[var(--text-muted)]">Est. Miami · New York · Chicago · Los Angeles</span>
+            <span className="ms-3 text-[var(--text-muted)]">Est. Miami · New York · Chicago · Los Angeles</span>
           </div>
           <h1
             className="mt-6 text-5xl leading-[0.95] font-semibold tracking-tight uppercase sm:text-7xl lg:text-[8rem]"
@@ -414,7 +414,7 @@ function AxisCard({
         >
           {icon}
         </span>
-        <span className="ml-auto font-mono text-xs text-[var(--text-muted)]">{count}</span>
+        <span className="ms-auto font-mono text-xs text-[var(--text-muted)]">{count}</span>
       </div>
       <div className="mt-4 text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
         {title}

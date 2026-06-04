@@ -200,7 +200,7 @@ export default async function MobileKudosPage() {
                         }`}
                       >
                         <span aria-hidden>{emoji}</span>
-                        {count > 0 && <span className="ml-1 font-mono">{count}</span>}
+                        {count > 0 && <span className="ms-1 font-mono">{count}</span>}
                       </button>
                     </form>
                   );

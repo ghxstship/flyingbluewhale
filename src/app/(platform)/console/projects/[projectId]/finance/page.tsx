@@ -155,7 +155,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               {" · "}
               actual spent (POs + expenses) is {formatMoney(spent, currency)}
               {budgetTotal > 0 && spent > budgetTotal && (
-                <Badge variant="error" className="ml-2">
+                <Badge variant="error" className="ms-2">
                   over budget
                 </Badge>
               )}

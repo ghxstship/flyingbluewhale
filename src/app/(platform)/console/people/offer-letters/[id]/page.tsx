@@ -157,7 +157,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               ) : (
                 <ul className="space-y-3 text-xs">
                   {activity.map((a) => (
-                    <li key={a.id} className="border-l-2 border-[var(--border-default)] pl-3">
+                    <li key={a.id} className="border-s-2 border-[var(--border-default)] ps-3">
                       <div className="tracking-wider text-[var(--text-muted)] uppercase">{toTitle(a.kind)}</div>
                       <div className="text-[var(--text-primary)]">{a.summary}</div>
                       <div className="text-[var(--text-muted)]">

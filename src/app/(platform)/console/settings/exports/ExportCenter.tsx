@@ -156,7 +156,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
             {isPending ? "Generating…" : "Run export"}
           </Button>
           {(kind === "csv" || kind === "json") && (
-            <label className="ml-2 flex items-center gap-1 text-xs text-[var(--text-muted)]">
+            <label className="ms-2 flex items-center gap-1 text-xs text-[var(--text-muted)]">
               <input type="checkbox" checked={asyncMode} onChange={(e) => setAsyncMode(e.target.checked)} />
               Queue in background
             </label>

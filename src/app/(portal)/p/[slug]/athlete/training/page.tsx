@@ -125,7 +125,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={s.id} className="flex items-center justify-between py-2 text-xs">
                   <div className="min-w-0">
                     <span className="font-medium">{s.name}</span>
-                    <span className="ml-2 font-mono text-[10px] text-[var(--text-muted)]">{fmt(s.starts_at)}</span>
+                    <span className="ms-2 font-mono text-[10px] text-[var(--text-muted)]">{fmt(s.starts_at)}</span>
                   </div>
                   <Badge variant="muted">{toTitle(s.status)}</Badge>
                 </li>

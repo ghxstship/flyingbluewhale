@@ -127,7 +127,7 @@ function ProposalPreviewLink({ proposal }: { proposal: Proposal }) {
     <div className="surface p-4 text-xs text-[var(--text-muted)]">
       Tip · Save, then open a share link to view the fully rendered proposal (including scroll-spy nav, phase
       accordions, and signature capture).
-      <span className="ml-2 font-mono">{proposal.id.slice(0, 8)}</span>
+      <span className="ms-2 font-mono">{proposal.id.slice(0, 8)}</span>
     </div>
   );
 }

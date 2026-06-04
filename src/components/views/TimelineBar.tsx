@@ -92,7 +92,7 @@ export function TimelineBar({
   const content = (
     <span className="flex h-full items-center gap-2 truncate px-2 text-[11px] font-medium text-[var(--text-primary)]">
       <span className="truncate">{title}</span>
-      <span className="ml-auto truncate font-mono text-[10px] text-[var(--text-muted)]" aria-hidden="true">
+      <span className="ms-auto truncate font-mono text-[10px] text-[var(--text-muted)]" aria-hidden="true">
         {rangeLabel}
       </span>
     </span>
@@ -122,7 +122,7 @@ export function TimelineBar({
           e.stopPropagation();
           onResizeStart?.("start", e.clientX);
         }}
-        className="absolute top-0 left-0 z-10 h-full w-2 cursor-ew-resize rounded-l-md hover:bg-[var(--surface-inset)]"
+        className="absolute start-0 top-0 z-10 h-full w-2 cursor-ew-resize rounded-s-md hover:bg-[var(--surface-inset)]"
       />
       {/* Bar body */}
       {href ? (
@@ -153,7 +153,7 @@ export function TimelineBar({
           e.stopPropagation();
           onResizeStart?.("end", e.clientX);
         }}
-        className="absolute top-0 right-0 z-10 h-full w-2 cursor-ew-resize rounded-r-md hover:bg-[var(--surface-inset)]"
+        className="absolute end-0 top-0 z-10 h-full w-2 cursor-ew-resize rounded-e-md hover:bg-[var(--surface-inset)]"
       />
     </div>
   );

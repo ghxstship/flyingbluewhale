@@ -108,7 +108,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
           <h3 className="text-sm font-semibold">Replies ({replies.length})</h3>
           <ul className="mt-3 space-y-3">
             {replies.map((r) => (
-              <li key={r.id} className="border-l-2 border-(--ink) pl-3 text-sm">
+              <li key={r.id} className="border-s-2 border-(--ink) ps-3 text-sm">
                 <p className="whitespace-pre-wrap">{r.body}</p>
                 <p className="mt-1 font-mono text-xs text-[var(--text-subtle)]">{timeAgo(r.created_at)}</p>
               </li>

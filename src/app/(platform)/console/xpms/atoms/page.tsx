@@ -104,7 +104,7 @@ export default async function AtomsPage() {
               header: "Phase",
               render: (r) => (
                 <span className="text-xs">
-                  <span className="mr-1 font-mono text-[10px] text-[var(--text-muted)]">
+                  <span className="me-1 font-mono text-[10px] text-[var(--text-muted)]">
                     {PHASE_NUM[r.phase] ?? "?"}
                   </span>
                   {r.phase}
@@ -130,7 +130,7 @@ export default async function AtomsPage() {
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.quantity ?? 1}
-                  {r.unit ? <span className="ml-1 text-[var(--text-muted)]">{r.unit}</span> : null}
+                  {r.unit ? <span className="ms-1 text-[var(--text-muted)]">{r.unit}</span> : null}
                 </span>
               ),
               accessor: (r) => Number(r.quantity ?? 1),

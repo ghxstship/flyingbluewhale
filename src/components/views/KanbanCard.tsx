@@ -49,7 +49,7 @@ export function KanbanCard({
 
   const padding = density === "compact" ? "p-2" : "p-3";
   const base =
-    "block w-full text-left bg-[var(--surface)] border-[3px] border-[var(--ink, var(--foreground))] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]";
+    "block w-full text-start bg-[var(--surface)] border-[3px] border-[var(--ink, var(--foreground))] rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]";
   const interactive = href ? "hover:-translate-y-0.5 transition-transform" : "";
   const cls = `${base} ${padding} ${interactive} ${className}`.trim();
 

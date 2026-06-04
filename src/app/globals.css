@@ -2349,6 +2349,82 @@ pre,
   }
 } /* end @layer components */
 
+/* ───── RTL — bidirectional layout ─────
+ *
+ * <html dir="rtl"> handles inline text reordering for Arabic. This block
+ * handles the layout pieces the browser does NOT auto-flip:
+ *
+ *   1. Directional icons (chevrons, arrows) carry meaning ("next →") that
+ *      must flip in RTL. Lucide ships stable class names (`lucide-chevron-
+ *      right`, etc.) so we target them directly. `scaleX(-1)` flips the
+ *      glyph without affecting siblings.
+ *   2. Bidirectional icons (rotate, refresh, swap) flip too — the implied
+ *      sweep direction reads differently in RTL.
+ *   3. Non-directional icons (clock, search, settings, user, etc.) stay
+ *      unflipped — they have internal orientation.
+ *
+ * Opt-out: add `data-no-rtl-flip` to any svg that should not flip even in
+ * RTL. Opt-in for non-Lucide icons: add `data-rtl-flip`.
+ *
+ * Tailwind utility-class layer fix: physical utilities (`ml-*`, `pl-*`,
+ * `text-left`, `border-l-*`, `left-*`) do NOT flip with `dir`. Code should
+ * use the logical equivalents (`ms-*`, `ps-*`, `text-start`, `border-s-*`,
+ * `start-*`). Sweep migrations live alongside the i18n rollout.
+ *
+ * Implementation note: Tailwind v4's CSS layer hoists `@import "tailwindcss"`
+ * baseline above unscoped author rules, so these selectors are wrapped in
+ * `@layer utilities` to win the cascade. Each selector is enumerated at top
+ * level (not via :is()) so Lightning CSS keeps them — the Lucide class names
+ * are runtime-injected and the CSS-extractor was discarding the :is() wrapper
+ * when none of the inner classes appeared in the source scan.
+ */
+
+@layer utilities {
+  [dir="rtl"] .lucide-chevron-right,
+  [dir="rtl"] .lucide-chevron-left,
+  [dir="rtl"] .lucide-chevrons-right,
+  [dir="rtl"] .lucide-chevrons-left,
+  [dir="rtl"] .lucide-arrow-right,
+  [dir="rtl"] .lucide-arrow-left,
+  [dir="rtl"] .lucide-arrow-up-right,
+  [dir="rtl"] .lucide-arrow-up-left,
+  [dir="rtl"] .lucide-arrow-down-right,
+  [dir="rtl"] .lucide-arrow-down-left,
+  [dir="rtl"] .lucide-arrow-big-right,
+  [dir="rtl"] .lucide-arrow-big-left,
+  [dir="rtl"] .lucide-corner-down-right,
+  [dir="rtl"] .lucide-corner-down-left,
+  [dir="rtl"] .lucide-corner-up-right,
+  [dir="rtl"] .lucide-corner-up-left,
+  [dir="rtl"] .lucide-circle-arrow-right,
+  [dir="rtl"] .lucide-circle-arrow-left,
+  [dir="rtl"] .lucide-square-arrow-right,
+  [dir="rtl"] .lucide-square-arrow-left,
+  [dir="rtl"] .lucide-square-chevron-right,
+  [dir="rtl"] .lucide-square-chevron-left,
+  [dir="rtl"] .lucide-circle-chevron-right,
+  [dir="rtl"] .lucide-circle-chevron-left,
+  [dir="rtl"] .lucide-move-right,
+  [dir="rtl"] .lucide-move-left,
+  [dir="rtl"] .lucide-panel-left-open,
+  [dir="rtl"] .lucide-panel-left-close,
+  [dir="rtl"] .lucide-panel-right-open,
+  [dir="rtl"] .lucide-panel-right-close,
+  [dir="rtl"] .lucide-arrow-left-right,
+  [dir="rtl"] .lucide-redo,
+  [dir="rtl"] .lucide-undo,
+  [dir="rtl"] .lucide-redo-2,
+  [dir="rtl"] .lucide-undo-2,
+  [dir="rtl"] [data-rtl-flip] {
+    transform: scaleX(-1);
+  }
+
+  /* Opt-out hatch — wins over the broad rule above. */
+  [dir="rtl"] [data-no-rtl-flip] {
+    transform: none;
+  }
+}
+
 /* ───── Print ───── */
 
 @media print {

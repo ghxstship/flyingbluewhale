@@ -75,7 +75,7 @@ export default function SolutionsHub() {
                 <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{s.definition}</p>
                 <div className="mt-4 flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] uppercase">
                   <span className="text-[var(--text-muted)]">{s.anchoredServices.length} anchored services</span>
-                  <ArrowRight className="ml-auto h-3 w-3 text-[var(--text-muted)] group-hover:text-[var(--org-primary)]" />
+                  <ArrowRight className="ms-auto h-3 w-3 text-[var(--text-muted)] group-hover:text-[var(--org-primary)]" />
                 </div>
               </Link>
             ))}

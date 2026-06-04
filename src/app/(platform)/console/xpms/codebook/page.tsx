@@ -105,7 +105,7 @@ export default async function CodebookPage() {
               render: (r) => (
                 <span className="text-xs">
                   {r.line_name}
-                  {r.is_position_root ? <span className="ml-2 text-[10px] text-[var(--text-muted)]">root</span> : null}
+                  {r.is_position_root ? <span className="ms-2 text-[10px] text-[var(--text-muted)]">root</span> : null}
                 </span>
               ),
               accessor: (r) => r.line_name ?? null,

@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
           <div className="font-mono">
             {r.sla_response_due ? fmt.dateTime(r.sla_response_due) : "—"}
             {r.sla_response_breached && (
-              <Badge variant="error" className="ml-1">
+              <Badge variant="error" className="ms-1">
                 !
               </Badge>
             )}

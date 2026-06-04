@@ -47,7 +47,7 @@ export function AtomPicker({
       <div className="flex items-center justify-between">
         <label className="text-xs font-medium text-[var(--text-secondary)]">
           {label}
-          {!required && <span className="ml-1 text-[var(--text-muted)]">(optional)</span>}
+          {!required && <span className="ms-1 text-[var(--text-muted)]">(optional)</span>}
         </label>
         <Link href={catalogHref} className="text-xs text-[var(--org-primary)] hover:underline">
           + New atom

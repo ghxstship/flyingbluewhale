@@ -63,7 +63,7 @@ export function ProposalTopBar({ proposal, blocks }: { proposal: Proposal; block
         <button
           type="button"
           onClick={() => window.print()}
-          className="print-hide ml-2 shrink-0 rounded-full border border-[var(--border-color)] px-3 py-1 text-[10px] font-semibold tracking-widest uppercase hover:bg-[var(--bg-secondary)]"
+          className="print-hide ms-2 shrink-0 rounded-full border border-[var(--border-color)] px-3 py-1 text-[10px] font-semibold tracking-widest uppercase hover:bg-[var(--bg-secondary)]"
         >
           Print / PDF
         </button>

@@ -323,7 +323,7 @@ function WidgetCell({
       )}
       <div className="h-full w-full">{children}</div>
       {editable && (
-        <div className="absolute top-1 right-1 z-20 flex gap-1">
+        <div className="absolute end-1 top-1 z-20 flex gap-1">
           <button
             type="button"
             aria-label={`Move ${widget.title ?? widget.type}`}

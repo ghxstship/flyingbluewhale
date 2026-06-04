@@ -3,6 +3,7 @@ import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import { XPMS_CLASS_BY_CODE } from "@/lib/xpms";
 
@@ -22,12 +23,15 @@ type Row = {
 };
 
 export default async function VariancePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="XPMS" title="Variance Ledger" />
+        <ModuleHeader eyebrow="XPMS" title={t("console.xpms.variance.title", undefined, "Variance Ledger")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.xpms.variance.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -47,21 +51,25 @@ export default async function VariancePage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="XPMS · Variance"
-        title="Variance Ledger"
-        subtitle="Planned vs. actual delta, with reason codes."
+        eyebrow={t("console.xpms.variance.eyebrow", undefined, "XPMS · Variance")}
+        title={t("console.xpms.variance.title", undefined, "Variance Ledger")}
+        subtitle={t("console.xpms.variance.subtitle", undefined, "Planned vs. actual delta, with reason codes.")}
       />
       <div className="page-content">
         <DataTable<Row>
           tableId="xpms.variance"
           rows={rows}
           searchable
-          emptyLabel="No variance entries yet"
-          emptyDescription="Variance accrues when a TPC atom diverges from its UAC origin (no-shows, substitutions, quantity deltas, spec changes, weather, …)."
+          emptyLabel={t("console.xpms.variance.emptyLabel", undefined, "No variance entries yet")}
+          emptyDescription={t(
+            "console.xpms.variance.emptyDescription",
+            undefined,
+            "Variance accrues when a TPC atom diverges from its UAC origin (no-shows, substitutions, quantity deltas, spec changes, weather, …).",
+          )}
           columns={[
             {
               key: "class",
-              header: "Class",
+              header: t("console.xpms.variance.columns.class", undefined, "Class"),
               render: (r) => {
                 const c = XPMS_CLASS_BY_CODE[r.class_code];
                 return c ? <span style={{ color: c.accent }}>{c.name}</span> : <>{r.class_code}</>;
@@ -74,7 +82,7 @@ export default async function VariancePage() {
             },
             {
               key: "reason",
-              header: "Reason",
+              header: t("console.xpms.variance.columns.reason", undefined, "Reason"),
               render: (r) => <Badge variant="muted">{r.reason}</Badge>,
               accessor: (r) => r.reason,
               sortable: true,
@@ -83,7 +91,7 @@ export default async function VariancePage() {
             },
             {
               key: "entries",
-              header: "Entries",
+              header: t("console.xpms.variance.columns.entries", undefined, "Entries"),
               render: (r) => r.entries,
               accessor: (r) => r.entries,
               className: "text-right font-mono text-xs",
@@ -91,7 +99,7 @@ export default async function VariancePage() {
             },
             {
               key: "qty_delta",
-              header: "Qty Δ",
+              header: t("console.xpms.variance.columns.qtyDelta", undefined, "Qty Δ"),
               render: (r) => r.qty_delta_total ?? 0,
               accessor: (r) => Number(r.qty_delta_total ?? 0),
               className: "text-right font-mono text-xs",
@@ -99,7 +107,7 @@ export default async function VariancePage() {
             },
             {
               key: "cost_delta",
-              header: "Cost Δ (cents)",
+              header: t("console.xpms.variance.columns.costDelta", undefined, "Cost Δ (cents)"),
               render: (r) => r.cost_delta_cents_total ?? 0,
               accessor: (r) => Number(r.cost_delta_cents_total ?? 0),
               className: "text-right font-mono text-xs",

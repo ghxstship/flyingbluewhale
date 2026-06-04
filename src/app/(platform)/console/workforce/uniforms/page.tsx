@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +21,18 @@ type UniformRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Uniforms" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.uniforms.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.uniforms.title", undefined, "Uniforms")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.uniforms.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -40,16 +47,22 @@ export default async function Page() {
 
   const totalSkus = rows.length;
   const activeSkus = rows.filter((r) => r.active).length;
+  const skuLabel = t(
+    totalSkus === 1 ? "console.workforce.uniforms.skuSingular" : "console.workforce.uniforms.skuPlural",
+    undefined,
+    totalSkus === 1 ? "SKU" : "SKUs",
+  );
+  const activeLabel = t("console.workforce.uniforms.activeLabel", undefined, "Active");
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Uniforms"
-        subtitle={`${totalSkus} SKU${totalSkus === 1 ? "" : "s"} · ${activeSkus} Active`}
+        eyebrow={t("console.workforce.uniforms.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.uniforms.title", undefined, "Uniforms")}
+        subtitle={`${totalSkus} ${skuLabel} · ${activeSkus} ${activeLabel}`}
         action={
           <Button href="/console/logistics/ratecard/new" size="sm">
-            + New SKU
+            {t("console.workforce.uniforms.newSku", undefined, "+ New SKU")}
           </Button>
         }
       />
@@ -57,39 +70,52 @@ export default async function Page() {
         <DataTable<UniformRow>
           rows={rows}
           rowHref={(r) => `/console/logistics/ratecard/${r.id}`}
-          emptyLabel="No uniform SKUs"
-          emptyDescription="Uniform inventory is tracked in the rate card with catalog='uniform'. Author each style + size as a SKU with a unit cost."
+          emptyLabel={t("console.workforce.uniforms.emptyLabel", undefined, "No uniform SKUs")}
+          emptyDescription={t(
+            "console.workforce.uniforms.emptyDescription",
+            undefined,
+            "Uniform inventory is tracked in the rate card with catalog='uniform'. Author each style + size as a SKU with a unit cost.",
+          )}
           emptyAction={
             <Button href="/console/logistics/ratecard/new" size="sm">
-              + New SKU
+              {t("console.workforce.uniforms.newSku", undefined, "+ New SKU")}
             </Button>
           }
           columns={[
             {
               key: "sku",
-              header: "SKU",
+              header: t("console.workforce.uniforms.columns.sku", undefined, "SKU"),
               render: (r) => <span className="font-mono text-xs">{r.sku}</span>,
               accessor: (r) => r.sku ?? null,
             },
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.workforce.uniforms.columns.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "description",
-              header: "Description",
+              header: t("console.workforce.uniforms.columns.description", undefined, "Description"),
               render: (r) => r.description ?? "—",
               accessor: (r) => r.description ?? null,
             },
             {
               key: "unit_price_cents",
-              header: "Unit Cost",
+              header: t("console.workforce.uniforms.columns.unitCost", undefined, "Unit Cost"),
               render: (r) => formatMoney(r.unit_price_cents, r.currency),
               className: "font-mono text-xs",
               accessor: (r) => r.unit_price_cents ?? null,
             },
             {
               key: "active",
-              header: "Active",
+              header: t("console.workforce.uniforms.columns.active", undefined, "Active"),
               render: (r) =>
-                r.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Retired</Badge>,
+                r.active ? (
+                  <Badge variant="success">{t("console.workforce.uniforms.status.active", undefined, "Active")}</Badge>
+                ) : (
+                  <Badge variant="muted">{t("console.workforce.uniforms.status.retired", undefined, "Retired")}</Badge>
+                ),
               accessor: (r) => r.active ?? null,
             },
           ]}

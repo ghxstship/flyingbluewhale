@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { XPMS_CLASS_BY_CODE } from "@/lib/xpms";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,12 +32,16 @@ export default async function Page({ params }: { params: Promise<{ code: string 
   const klass = XPMS_CLASS_BY_CODE[code];
   if (!klass) notFound();
 
+  const { t } = await getRequestT();
+
   if (!hasSupabase) {
     return (
       <>
         <ModuleHeader eyebrow="XPMS" title={klass.name} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.xpms.classes.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -66,7 +70,10 @@ export default async function Page({ params }: { params: Promise<{ code: string 
         subtitle={klass.oneLine}
         breadcrumbs={[
           { label: "XPMS", href: "/console/xpms" },
-          { label: "Classes", href: "/console/xpms/classes" },
+          {
+            label: t("console.xpms.classes.detail.breadcrumb.classes", undefined, "Classes"),
+            href: "/console/xpms/classes",
+          },
           { label: klass.name },
         ]}
       />
@@ -76,46 +83,62 @@ export default async function Page({ params }: { params: Promise<{ code: string 
         <p className="text-sm text-[var(--text-secondary)]">{klass.domain}</p>
 
         <div className="metric-grid-3">
-          <MetricCard label="Total Atoms" value={fmt.number(atoms.length)} accent />
-          <MetricCard label="UAC" value={fmt.number(uac)} />
-          <MetricCard label="TPC" value={fmt.number(tpc)} />
+          <MetricCard
+            label={t("console.xpms.classes.detail.metric.totalAtoms", undefined, "Total Atoms")}
+            value={fmt.number(atoms.length)}
+            accent
+          />
+          <MetricCard label={t("console.xpms.classes.detail.metric.uac", undefined, "UAC")} value={fmt.number(uac)} />
+          <MetricCard label={t("console.xpms.classes.detail.metric.tpc", undefined, "TPC")} value={fmt.number(tpc)} />
         </div>
 
         <section>
           <div className="flex items-center justify-between pb-3">
-            <h3 className="text-base font-semibold">Atoms in This Class</h3>
+            <h3 className="text-base font-semibold">
+              {t("console.xpms.classes.detail.atomsInClass", undefined, "Atoms in This Class")}
+            </h3>
             <Link
               href={`/console/xpms/codebook#class-${klass.code}`}
               className="text-xs text-[var(--org-primary)] hover:underline"
             >
-              Codebook section →
+              {t("console.xpms.classes.detail.codebookSection", undefined, "Codebook section →")}
             </Link>
           </div>
 
           <DataTable<Atom>
             rows={atoms}
-            emptyLabel="No Atoms In This Class"
-            emptyDescription="No atoms have been recorded in this XPMS class yet."
+            emptyLabel={t("console.xpms.classes.detail.empty.label", undefined, "No Atoms In This Class")}
+            emptyDescription={t(
+              "console.xpms.classes.detail.empty.description",
+              undefined,
+              "No atoms have been recorded in this XPMS class yet.",
+            )}
             columns={[
               {
                 key: "identifier",
-                header: "Identifier",
+                header: t("console.xpms.classes.detail.column.identifier", undefined, "Identifier"),
                 render: (a) => a.identifier,
                 accessor: (a) => a.identifier,
                 mono: true,
                 sortable: true,
               },
-              { key: "name", header: "Name", render: (a) => a.name, accessor: (a) => a.name, sortable: true },
+              {
+                key: "name",
+                header: t("console.xpms.classes.detail.column.name", undefined, "Name"),
+                render: (a) => a.name,
+                accessor: (a) => a.name,
+                sortable: true,
+              },
               {
                 key: "phase",
-                header: "Phase",
+                header: t("console.xpms.classes.detail.column.phase", undefined, "Phase"),
                 render: (a) => a.phase ?? "—",
                 accessor: (a) => a.phase ?? "",
                 filterable: true,
               },
               {
                 key: "state",
-                header: "State",
+                header: t("console.xpms.classes.detail.column.state", undefined, "State"),
                 render: (a) => <Badge variant={STATE_TONE[a.state]}>{a.state.toUpperCase()}</Badge>,
                 accessor: (a) => a.state,
                 filterable: true,

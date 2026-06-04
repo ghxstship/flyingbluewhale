@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,20 +19,56 @@ type ShiftRow = {
   venue: { name: string | null } | null;
 };
 
-const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
-  { href: "/console/workforce/rosters", label: "Rosters", description: "Daily check-in source of truth" },
-  { href: "/console/transport/workforce", label: "Workforce Shuttles", description: "Shift-linked routes" },
-  { href: "/console/accommodation/blocks", label: "Accommodation", description: "Group blocks for staff" },
-  { href: "/console/services/requests", label: "Service Tickets", description: "Cleaning, IT, hospitality" },
+const HUB_TILES: Array<{
+  href: string;
+  labelKey: string;
+  labelFallback: string;
+  descriptionKey: string;
+  descriptionFallback: string;
+}> = [
+  {
+    href: "/console/workforce/rosters",
+    labelKey: "console.workforce.services.tiles.rosters.label",
+    labelFallback: "Rosters",
+    descriptionKey: "console.workforce.services.tiles.rosters.description",
+    descriptionFallback: "Daily check-in source of truth",
+  },
+  {
+    href: "/console/transport/workforce",
+    labelKey: "console.workforce.services.tiles.shuttles.label",
+    labelFallback: "Workforce Shuttles",
+    descriptionKey: "console.workforce.services.tiles.shuttles.description",
+    descriptionFallback: "Shift-linked routes",
+  },
+  {
+    href: "/console/accommodation/blocks",
+    labelKey: "console.workforce.services.tiles.accommodation.label",
+    labelFallback: "Accommodation",
+    descriptionKey: "console.workforce.services.tiles.accommodation.description",
+    descriptionFallback: "Group blocks for staff",
+  },
+  {
+    href: "/console/services/requests",
+    labelKey: "console.workforce.services.tiles.tickets.label",
+    labelFallback: "Service Tickets",
+    descriptionKey: "console.workforce.services.tiles.tickets.description",
+    descriptionFallback: "Cleaning, IT, hospitality",
+  },
 ];
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Services" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.services.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.services.title", undefined, "Services")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.services.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -77,27 +113,52 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Services"
-        subtitle={`${fmt.number(totalShifts)} Shift${totalShifts === 1 ? "" : "s"} · ${fmt.number(mealCredits)} meal credit${mealCredits === 1 ? "" : "s"} · 7-day window`}
+        eyebrow={t("console.workforce.services.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.services.title", undefined, "Services")}
+        subtitle={t(
+          "console.workforce.services.subtitle",
+          {
+            shiftCount: fmt.number(totalShifts),
+            shiftLabel: totalShifts === 1 ? "Shift" : "Shifts",
+            mealCount: fmt.number(mealCredits),
+            mealLabel: mealCredits === 1 ? "meal credit" : "meal credits",
+          },
+          `${fmt.number(totalShifts)} ${totalShifts === 1 ? "Shift" : "Shifts"} · ${fmt.number(mealCredits)} ${mealCredits === 1 ? "meal credit" : "meal credits"} · 7-day window`,
+        )}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Meal Credits · 7d" value={fmt.number(mealCredits)} accent />
-          <MetricCard label="Break Minutes · 7d" value={fmt.number(totalBreakMinutes)} />
-          <MetricCard label="Checked In Now" value={fmt.number(checkedIn)} />
+          <MetricCard
+            label={t("console.workforce.services.metrics.mealCredits", undefined, "Meal Credits · 7d")}
+            value={fmt.number(mealCredits)}
+            accent
+          />
+          <MetricCard
+            label={t("console.workforce.services.metrics.breakMinutes", undefined, "Break Minutes · 7d")}
+            value={fmt.number(totalBreakMinutes)}
+          />
+          <MetricCard
+            label={t("console.workforce.services.metrics.checkedInNow", undefined, "Checked In Now")}
+            value={fmt.number(checkedIn)}
+          />
         </div>
 
         {days.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Meal Credits by Day</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.workforce.services.mealCreditsByDay", undefined, "Meal Credits by Day")}
+            </h3>
             <ul className="mt-3 space-y-1.5">
               {days.map(([day, agg]) => (
                 <li key={day} className="flex items-center justify-between text-sm">
                   <span>{fmtDay(day)}</span>
                   <span>
                     <Badge variant="muted">
-                      {agg.meals} / {agg.total} shifts
+                      {t(
+                        "console.workforce.services.shiftsCount",
+                        { meals: agg.meals, total: agg.total },
+                        `${agg.meals} / ${agg.total} shifts`,
+                      )}
                     </Badge>
                   </span>
                 </li>
@@ -107,12 +168,14 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill In</h3>
+          <h3 className="text-sm font-semibold">{t("console.workforce.services.drillIn", undefined, "Drill In")}</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {HUB_TILES.map((t) => (
-              <Link key={t.href} href={t.href} className="surface hover-lift p-4">
-                <div className="text-sm font-medium">{t.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.description}</div>
+            {HUB_TILES.map((tile) => (
+              <Link key={tile.href} href={tile.href} className="surface hover-lift p-4">
+                <div className="text-sm font-medium">{t(tile.labelKey, undefined, tile.labelFallback)}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                  {t(tile.descriptionKey, undefined, tile.descriptionFallback)}
+                </div>
               </Link>
             ))}
           </div>

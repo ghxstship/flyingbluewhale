@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteVolunteer } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ volunteerId: string }> }) {
   const p = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.workforce.volunteers.detail.title", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.volunteers.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ volunteerId: 
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.workforce.volunteers.detail.eyebrow", undefined, "Record")}
         title={title ?? p.volunteerId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/workforce/volunteers" variant="ghost" size="sm">
-              Back
+              {t("console.workforce.volunteers.detail.back", undefined, "Back")}
             </Button>
             <Button href={`/console/workforce/volunteers/${p.volunteerId}/edit`} size="sm">
-              Edit
+              {t("console.workforce.volunteers.detail.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteVolunteer.bind(null, p.volunteerId)}
-              confirm={`Delete this record? This cannot be undone.`}
+              confirm={t(
+                "console.workforce.volunteers.detail.deleteConfirm",
+                undefined,
+                "Delete this record? This cannot be undone.",
+              )}
             />
           </div>
         }

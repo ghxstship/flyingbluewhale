@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteRoster } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ rosterId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.workforce.rosters.detail.title", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.rosters.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ rosterId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.workforce.rosters.detail.eyebrow", undefined, "Record")}
         title={title ?? p.rosterId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/workforce/rosters" variant="ghost" size="sm">
-              Back
+              {t("console.workforce.rosters.detail.back", undefined, "Back")}
             </Button>
             <Button href={`/console/workforce/rosters/${p.rosterId}/edit`} size="sm">
-              Edit
+              {t("console.workforce.rosters.detail.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteRoster.bind(null, p.rosterId)}
-              confirm={`Delete this record? This cannot be undone.`}
+              confirm={t(
+                "console.workforce.rosters.detail.deleteConfirm",
+                undefined,
+                "Delete this record? This cannot be undone.",
+              )}
             />
           </div>
         }

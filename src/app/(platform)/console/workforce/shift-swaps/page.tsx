@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { decideSwap } from "./actions";
 
@@ -32,12 +32,18 @@ const STATE_TONE: Record<string, "info" | "success" | "muted" | "error"> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Shift Swaps" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.shiftSwaps.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.shiftSwaps.title", undefined, "Shift Swaps")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.shiftSwaps.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -101,8 +107,10 @@ export default async function Page() {
     const s = shiftMap.get(r.shift_id);
     return {
       id: r.id,
-      requester: userMap.get(r.requested_by) ?? "Unknown",
-      target: r.target_user_id ? (userMap.get(r.target_user_id) ?? "—") : "Open Pool",
+      requester: userMap.get(r.requested_by) ?? t("console.workforce.shiftSwaps.unknown", undefined, "Unknown"),
+      target: r.target_user_id
+        ? (userMap.get(r.target_user_id) ?? "—")
+        : t("console.workforce.shiftSwaps.openPool", undefined, "Open Pool"),
       shift_window: s
         ? `${fmt.dateParts(s.starts_at, { month: "short", day: "numeric" })} · ${fmt.time(s.starts_at)}–${fmt.time(s.ends_at)}`
         : "—",
@@ -117,46 +125,64 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Shift Swaps"
-        subtitle={`${pending} Pending · ${approved} Approved · ${rows.length} Total`}
+        eyebrow={t("console.workforce.shiftSwaps.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.shiftSwaps.title", undefined, "Shift Swaps")}
+        subtitle={t(
+          "console.workforce.shiftSwaps.subtitle",
+          { pending, approved, total: rows.length },
+          `${pending} Pending · ${approved} Approved · ${rows.length} Total`,
+        )}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending" value={fmt.number(pending)} accent />
-          <MetricCard label="Approved" value={fmt.number(approved)} />
-          <MetricCard label="Total" value={fmt.number(rows.length)} />
+          <MetricCard
+            label={t("console.workforce.shiftSwaps.metric.pending", undefined, "Pending")}
+            value={fmt.number(pending)}
+            accent
+          />
+          <MetricCard
+            label={t("console.workforce.shiftSwaps.metric.approved", undefined, "Approved")}
+            value={fmt.number(approved)}
+          />
+          <MetricCard
+            label={t("console.workforce.shiftSwaps.metric.total", undefined, "Total")}
+            value={fmt.number(rows.length)}
+          />
         </div>
         <DataTable<Row>
           tableId="workforce.shift_swaps"
           rows={rows}
-          emptyLabel="No swap requests"
-          emptyDescription="When crew request to swap shifts they appear here. Managers approve or decline inline."
+          emptyLabel={t("console.workforce.shiftSwaps.empty.label", undefined, "No swap requests")}
+          emptyDescription={t(
+            "console.workforce.shiftSwaps.empty.description",
+            undefined,
+            "When crew request to swap shifts they appear here. Managers approve or decline inline.",
+          )}
           columns={[
             {
               key: "requester",
-              header: "Requester",
+              header: t("console.workforce.shiftSwaps.column.requester", undefined, "Requester"),
               render: (r) => r.requester,
               accessor: (r) => r.requester,
               filterable: true,
             },
             {
               key: "target",
-              header: "Target",
+              header: t("console.workforce.shiftSwaps.column.target", undefined, "Target"),
               render: (r) => r.target,
               accessor: (r) => r.target,
               filterable: true,
             },
             {
               key: "shift",
-              header: "Shift",
+              header: t("console.workforce.shiftSwaps.column.shift", undefined, "Shift"),
               render: (r) => r.shift_window,
               accessor: (r) => r.shift_window,
               className: "font-mono text-xs",
             },
             {
               key: "role",
-              header: "Role",
+              header: t("console.workforce.shiftSwaps.column.role", undefined, "Role"),
               render: (r) => r.shift_role ?? "—",
               accessor: (r) => r.shift_role ?? null,
               filterable: true,
@@ -164,7 +190,7 @@ export default async function Page() {
             },
             {
               key: "venue",
-              header: "Venue",
+              header: t("console.workforce.shiftSwaps.column.venue", undefined, "Venue"),
               render: (r) => r.shift_venue ?? "—",
               accessor: (r) => r.shift_venue ?? null,
               filterable: true,
@@ -172,13 +198,13 @@ export default async function Page() {
             },
             {
               key: "reason",
-              header: "Reason",
+              header: t("console.workforce.shiftSwaps.column.reason", undefined, "Reason"),
               render: (r) => r.reason ?? "—",
               accessor: (r) => r.reason ?? null,
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.workforce.shiftSwaps.column.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.swap_state] ?? "muted"}>{toTitle(r.swap_state)}</Badge>,
               accessor: (r) => r.swap_state,
               filterable: true,
@@ -186,7 +212,7 @@ export default async function Page() {
             },
             {
               key: "action",
-              header: "Action",
+              header: t("console.workforce.shiftSwaps.column.action", undefined, "Action"),
               render: (r) =>
                 r.swap_state === "requested" || r.swap_state === "accepted" ? (
                   <div className="flex items-center gap-1">
@@ -194,14 +220,14 @@ export default async function Page() {
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="approved" />
                       <button type="submit" className="btn btn-primary btn-xs">
-                        Approve
+                        {t("console.workforce.shiftSwaps.action.approve", undefined, "Approve")}
                       </button>
                     </form>
                     <form action={decideSwap}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="declined" />
                       <button type="submit" className="btn btn-secondary btn-xs">
-                        Decline
+                        {t("console.workforce.shiftSwaps.action.decline", undefined, "Decline")}
                       </button>
                     </form>
                   </div>

@@ -4,16 +4,23 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Rosters" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.rosters.eyebrowFallback", undefined, "Workspace")}
+          title={t("console.workforce.rosters.title", undefined, "Rosters")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.rosters.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -22,12 +29,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Rosters"
-        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.workforce.rosters.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.rosters.title", undefined, "Rosters")}
+        subtitle={
+          rows.length === 1
+            ? t("console.workforce.rosters.subtitleOne", { count: rows.length }, `${rows.length} Record`)
+            : t("console.workforce.rosters.subtitleOther", { count: rows.length }, `${rows.length} Records`)
+        }
         action={
           <Button href="/console/workforce/rosters/new" size="sm">
-            + New Roster
+            {t("console.workforce.rosters.newRoster", undefined, "+ New Roster")}
           </Button>
         }
       />
@@ -35,24 +46,33 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/workforce/rosters/${r.id}`}
-          emptyLabel="No rosters"
-          emptyDescription="Daily rosters drive scheduling, sign-in, and call-time delivery for the workforce."
+          emptyLabel={t("console.workforce.rosters.emptyLabel", undefined, "No rosters")}
+          emptyDescription={t(
+            "console.workforce.rosters.emptyDescription",
+            undefined,
+            "Daily rosters drive scheduling, sign-in, and call-time delivery for the workforce.",
+          )}
           emptyAction={
             <Button href="/console/workforce/rosters/new" size="sm">
-              + New Roster
+              {t("console.workforce.rosters.newRoster", undefined, "+ New Roster")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "name",
+              header: t("console.workforce.rosters.col.name", undefined, "Name"),
+              render: (r) => String(r.name ?? "—"),
+              accessor: (r) => r.name ?? null,
+            },
             {
               key: "day_of",
-              header: "Day",
+              header: t("console.workforce.rosters.col.day", undefined, "Day"),
               render: (r) => <span className="font-mono text-xs">{String(r.day_of ?? "—")}</span>,
               accessor: (r) => r.day_of ?? null,
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.workforce.rosters.col.state", undefined, "State"),
               render: (r) => String(r.state ?? "—"),
               accessor: (r) => r.state ?? null,
               filterable: true,

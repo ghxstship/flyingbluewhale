@@ -3,18 +3,22 @@ import { ModuleHeader } from "@/components/Shell";
 import { Card, CardBody, CardHeader } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import { XPMS_CLASSES } from "@/lib/xpms";
 
 export const dynamic = "force-dynamic";
 
 export default async function ClassesPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="XPMS" title="Classes" />
+        <ModuleHeader eyebrow="XPMS" title={t("console.xpms.classes.title", undefined, "Classes")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.xpms.classes.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -34,8 +38,12 @@ export default async function ClassesPage() {
     <>
       <ModuleHeader
         eyebrow="XPMS · XTC Protocol™"
-        title="Classes"
-        subtitle="Ten classes — collection and code unified into a single taxonomy."
+        title={t("console.xpms.classes.title", undefined, "Classes")}
+        subtitle={t(
+          "console.xpms.classes.subtitle",
+          undefined,
+          "Ten classes — collection and code unified into a single taxonomy.",
+        )}
       />
       <div className="page-content grid grid-cols-1 gap-4 md:grid-cols-2">
         {XPMS_CLASSES.map((c) => {
@@ -48,18 +56,18 @@ export default async function ClassesPage() {
                 <div className="mb-3 text-xs text-[var(--text-muted)]">{c.domain}</div>
                 <div className="flex gap-4 font-mono text-xs">
                   <span>
-                    UAC <strong>{ct.uac}</strong>
+                    {t("console.xpms.classes.uac", undefined, "UAC")} <strong>{ct.uac}</strong>
                   </span>
                   <span>
-                    TPC <strong>{ct.tpc}</strong>
+                    {t("console.xpms.classes.tpc", undefined, "TPC")} <strong>{ct.tpc}</strong>
                   </span>
                   <span>
-                    Total <strong>{ct.uac + ct.tpc}</strong>
+                    {t("console.xpms.classes.total", undefined, "Total")} <strong>{ct.uac + ct.tpc}</strong>
                   </span>
                 </div>
                 <div className="mt-3 text-xs">
                   <Link href={`/console/xpms/codebook#class-${c.code}`} className="text-[var(--org-primary)]">
-                    View codebook section →
+                    {t("console.xpms.classes.viewCodebookSection", undefined, "View codebook section →")}
                   </Link>
                 </div>
               </CardBody>

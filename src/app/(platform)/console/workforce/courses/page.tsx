@@ -5,6 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +20,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Courses" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.courses.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.courses.title", undefined, "Courses")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.courses.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -43,12 +50,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Courses"
-        subtitle={`${rows.length} course${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.workforce.courses.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.courses.title", undefined, "Courses")}
+        subtitle={
+          rows.length === 1
+            ? t("console.workforce.courses.subtitleOne", { count: rows.length }, `${rows.length} course`)
+            : t("console.workforce.courses.subtitleOther", { count: rows.length }, `${rows.length} courses`)
+        }
         action={
           <Button href="/console/workforce/courses/new" size="sm">
-            + New Course
+            {t("console.workforce.courses.newCourse", undefined, "+ New Course")}
           </Button>
         }
       />
@@ -56,13 +67,21 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/workforce/courses/${r.id}`}
-          emptyLabel="No courses yet"
-          emptyDescription="Author micro-learning content with lessons + a quiz. Assign to crew via /m/learning."
+          emptyLabel={t("console.workforce.courses.emptyLabel", undefined, "No courses yet")}
+          emptyDescription={t(
+            "console.workforce.courses.emptyDescription",
+            undefined,
+            "Author micro-learning content with lessons + a quiz. Assign to crew via /m/learning.",
+          )}
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.workforce.courses.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+            },
             {
               key: "publish_state",
-              header: "State",
+              header: t("console.workforce.courses.columns.state", undefined, "State"),
               render: (r) => (
                 <Badge
                   variant={
@@ -75,12 +94,19 @@ export default async function Page() {
             },
             {
               key: "duration_minutes",
-              header: "Duration",
-              render: (r) => (r.duration_minutes ? `${r.duration_minutes} min` : "—"),
+              header: t("console.workforce.courses.columns.duration", undefined, "Duration"),
+              render: (r) =>
+                r.duration_minutes
+                  ? t(
+                      "console.workforce.courses.durationMinutes",
+                      { minutes: r.duration_minutes },
+                      `${r.duration_minutes} min`,
+                    )
+                  : "—",
             },
             {
               key: "required_for_role",
-              header: "Role",
+              header: t("console.workforce.courses.columns.role", undefined, "Role"),
               render: (r) => r.required_for_role ?? "—",
             },
           ]}

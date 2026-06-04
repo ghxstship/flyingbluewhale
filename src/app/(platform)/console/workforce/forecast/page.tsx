@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,20 +23,25 @@ type Row = {
   gap_count: number;
 };
 
-const HORIZON_LABEL: Record<Horizon, string> = {
-  thirty_day: "30-Day",
-  ninety_day: "90-Day",
-  one_year: "1-Year",
-  five_year: "5-Year",
-};
-
 export default async function Page() {
+  const { t } = await getRequestT();
+  const HORIZON_LABEL: Record<Horizon, string> = {
+    thirty_day: t("console.workforce.forecast.horizon.thirty_day", undefined, "30-Day"),
+    ninety_day: t("console.workforce.forecast.horizon.ninety_day", undefined, "90-Day"),
+    one_year: t("console.workforce.forecast.horizon.one_year", undefined, "1-Year"),
+    five_year: t("console.workforce.forecast.horizon.five_year", undefined, "5-Year"),
+  };
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Resource Forecast" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.forecast.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.forecast.title", undefined, "Resource Forecast")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.forecast.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -80,40 +85,71 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Resource Forecast"
-        subtitle={`${rows.length} forecast${rows.length === 1 ? "" : "s"} on file · ${totalGaps} resource gap${totalGaps === 1 ? "" : "s"} flagged across all horizons`}
+        eyebrow={t("console.workforce.forecast.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.forecast.title", undefined, "Resource Forecast")}
+        subtitle={t(
+          "console.workforce.forecast.subtitle",
+          {
+            forecastCount: rows.length,
+            forecastSuffix: rows.length === 1 ? "" : "s",
+            gapCount: totalGaps,
+            gapSuffix: totalGaps === 1 ? "" : "s",
+          },
+          `${rows.length} forecast${rows.length === 1 ? "" : "s"} on file · ${totalGaps} resource gap${totalGaps === 1 ? "" : "s"} flagged across all horizons`,
+        )}
         action={
           <Button href="/console/workforce/forecast/new" size="sm">
-            + New Forecast
+            {t("console.workforce.forecast.newForecast", undefined, "+ New Forecast")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Forecasts" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Resource Gaps" value={fmt.number(totalGaps)} />
-          <MetricCard label="Horizons Covered" value={fmt.number(new Set(rows.map((r) => r.horizon)).size)} />
+          <MetricCard
+            label={t("console.workforce.forecast.metrics.forecasts", undefined, "Forecasts")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.workforce.forecast.metrics.resourceGaps", undefined, "Resource Gaps")}
+            value={fmt.number(totalGaps)}
+          />
+          <MetricCard
+            label={t("console.workforce.forecast.metrics.horizonsCovered", undefined, "Horizons Covered")}
+            value={fmt.number(new Set(rows.map((r) => r.horizon)).size)}
+          />
         </div>
         <div className="text-[10px] text-[var(--text-muted)]">
-          Cross-project capacity vs demand at 30-day / 90-day / 1-year / 5-year horizons (Bridgit Bench equivalent).
-          Negative surplus = staffing or equipment gap. contributing_projects[] surfaces what is driving demand.
+          {t(
+            "console.workforce.forecast.description",
+            undefined,
+            "Cross-project capacity vs demand at 30-day / 90-day / 1-year / 5-year horizons (Bridgit Bench equivalent). Negative surplus = staffing or equipment gap. contributing_projects[] surfaces what is driving demand.",
+          )}
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/workforce/forecast/${r.id}`}
-          emptyLabel="No resource forecasts yet"
-          emptyDescription="A forecast is a cross-project capacity-vs-demand rollup per resource_kind per period."
+          emptyLabel={t("console.workforce.forecast.emptyLabel", undefined, "No resource forecasts yet")}
+          emptyDescription={t(
+            "console.workforce.forecast.emptyDescription",
+            undefined,
+            "A forecast is a cross-project capacity-vs-demand rollup per resource_kind per period.",
+          )}
           emptyAction={
             <Button href="/console/workforce/forecast/new" size="sm">
-              + New Forecast
+              {t("console.workforce.forecast.newForecast", undefined, "+ New Forecast")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.workforce.forecast.columns.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "horizon",
-              header: "Horizon",
+              header: t("console.workforce.forecast.columns.horizon", undefined, "Horizon"),
               render: (r) => <Badge variant="info">{HORIZON_LABEL[r.horizon]}</Badge>,
               accessor: (r) => r.horizon,
               filterable: true,
@@ -121,7 +157,7 @@ export default async function Page() {
             },
             {
               key: "baseline",
-              header: "Baseline",
+              header: t("console.workforce.forecast.columns.baseline", undefined, "Baseline"),
               render: (r) =>
                 fmt.dateParts(r.baseline_at + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.baseline_at,
@@ -129,14 +165,14 @@ export default async function Page() {
             },
             {
               key: "lines",
-              header: "Lines",
+              header: t("console.workforce.forecast.columns.lines", undefined, "Lines"),
               render: (r) => fmt.number(r.line_count),
               accessor: (r) => r.line_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "gaps",
-              header: "Gaps",
+              header: t("console.workforce.forecast.columns.gaps", undefined, "Gaps"),
               render: (r) =>
                 r.gap_count > 0 ? (
                   <Badge variant="error">{fmt.number(r.gap_count)}</Badge>
@@ -148,7 +184,7 @@ export default async function Page() {
             },
             {
               key: "created",
-              header: "Created",
+              header: t("console.workforce.forecast.columns.created", undefined, "Created"),
               render: (r) => fmt.dateParts(r.created_at, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.created_at,
               className: "font-mono text-xs",

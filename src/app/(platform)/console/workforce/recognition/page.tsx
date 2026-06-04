@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +20,18 @@ type Post = {
 };
 
 export default async function RecognitionAdminPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Recognition" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.recognition.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.recognition.title", undefined, "Recognition")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.recognition.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -73,27 +79,35 @@ export default async function RecognitionAdminPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Recognition"
-        subtitle={`${rows.length} Kudos · 90-Day Leaderboard Below`}
+        eyebrow={t("console.workforce.recognition.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.recognition.title", undefined, "Recognition")}
+        subtitle={t(
+          "console.workforce.recognition.subtitle",
+          { count: rows.length },
+          `${rows.length} Kudos · 90-Day Leaderboard Below`,
+        )}
         action={
           <Button href="/console/workforce/recognition/new" size="sm">
-            + Give Kudos
+            {t("console.workforce.recognition.giveKudos", undefined, "+ Give Kudos")}
           </Button>
         }
       />
       <div className="page-content grid gap-4 lg:grid-cols-2">
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">90-Day Leaderboard</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.workforce.recognition.leaderboardTitle", undefined, "90-Day Leaderboard")}
+          </h2>
           {top.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">No kudos in the last 90 days.</p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t("console.workforce.recognition.leaderboardEmpty", undefined, "No kudos in the last 90 days.")}
+            </p>
           ) : (
             <ol className="mt-3 space-y-2">
               {top.map(([uid, count], idx) => (
                 <li key={uid} className="flex items-center justify-between text-sm">
                   <span>
                     <span className="font-mono text-xs text-[var(--text-muted)]">#{idx + 1}</span>{" "}
-                    {userMap.get(uid) ?? "Unknown"}
+                    {userMap.get(uid) ?? t("console.workforce.recognition.unknownUser", undefined, "Unknown")}
                   </span>
                   <span className="font-mono text-xs">{count}</span>
                 </li>
@@ -103,14 +117,20 @@ export default async function RecognitionAdminPage() {
         </section>
 
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Recent Posts</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.workforce.recognition.recentPostsTitle", undefined, "Recent Posts")}
+          </h2>
           <ul className="mt-3 space-y-3">
             {rows.slice(0, 20).map((p) => (
               <li key={p.id}>
                 <div className="text-xs">
-                  <span className="font-semibold">{userMap.get(p.from_user_id) ?? "Someone"}</span>
+                  <span className="font-semibold">
+                    {userMap.get(p.from_user_id) ?? t("console.workforce.recognition.someone", undefined, "Someone")}
+                  </span>
                   <span className="text-[var(--text-muted)]"> → </span>
-                  <span className="font-semibold">{userMap.get(p.to_user_id) ?? "Someone"}</span>
+                  <span className="font-semibold">
+                    {userMap.get(p.to_user_id) ?? t("console.workforce.recognition.someone", undefined, "Someone")}
+                  </span>
                   <span className="ms-2 font-mono text-[var(--text-muted)]">{fmt.time(p.created_at)}</span>
                 </div>
                 <p className="mt-1 text-xs">{p.message}</p>

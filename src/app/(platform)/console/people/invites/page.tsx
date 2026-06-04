@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { isAdmin as sessionIsAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { InviteForm } from "./InviteForm";
 
 function relTime(iso: string): string {
@@ -21,6 +22,7 @@ function relTime(iso: string): string {
 export const dynamic = "force-dynamic";
 
 export default async function InvitesPage() {
+  const { t } = await getRequestT();
   const session = await requireSession();
   const isAdmin = sessionIsAdmin(session);
 
@@ -44,13 +46,23 @@ export default async function InvitesPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="People" title="Invites" subtitle="Pending organization invitations" />
+      <ModuleHeader
+        eyebrow={t("console.people.invites.eyebrow", undefined, "People")}
+        title={t("console.people.invites.title", undefined, "Invites")}
+        subtitle={t("console.people.invites.subtitle", undefined, "Pending organization invitations")}
+      />
       <div className="page-content space-y-6">
         {isAdmin && (
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">Invite Someone</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.people.invites.inviteSomeone", undefined, "Invite Someone")}
+            </h3>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              They&apos;ll get an email with a link to accept. Expires in 7 days.
+              {t(
+                "console.people.invites.inviteSomeoneHint",
+                undefined,
+                "They'll get an email with a link to accept. Expires in 7 days.",
+              )}
             </p>
             <div className="mt-4">
               <InviteForm projects={(projects ?? []) as Array<{ id: string; name: string }>} />
@@ -59,20 +71,30 @@ export default async function InvitesPage() {
         )}
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Pending ({pending.length})</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.people.invites.pendingHeading", { count: pending.length }, `Pending (${pending.length})`)}
+          </h3>
           {pending.length === 0 ? (
             <EmptyState
-              title="No Pending Invites"
-              description={isAdmin ? "Send one above to get started." : "Ask an admin to invite new members."}
+              title={t("console.people.invites.empty.title", undefined, "No Pending Invites")}
+              description={
+                isAdmin
+                  ? t("console.people.invites.empty.adminDescription", undefined, "Send one above to get started.")
+                  : t(
+                      "console.people.invites.empty.memberDescription",
+                      undefined,
+                      "Ask an admin to invite new members.",
+                    )
+              }
             />
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Expires</th>
-                  <th>Link</th>
+                  <th>{t("console.people.invites.col.email", undefined, "Email")}</th>
+                  <th>{t("console.people.invites.col.role", undefined, "Role")}</th>
+                  <th>{t("console.people.invites.col.expires", undefined, "Expires")}</th>
+                  <th>{t("console.people.invites.col.link", undefined, "Link")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -83,14 +105,23 @@ export default async function InvitesPage() {
                       <Badge variant="brand">{i.role}</Badge>
                       {i.project_id && (
                         <span className="ms-2 text-xs text-[var(--text-muted)]">
-                          + {i.project_role} on {projectName.get(i.project_id) ?? "project"}
+                          + {i.project_role}{" "}
+                          {t(
+                            "console.people.invites.onProject",
+                            {
+                              project:
+                                projectName.get(i.project_id) ??
+                                t("console.people.invites.projectFallback", undefined, "project"),
+                            },
+                            `on ${projectName.get(i.project_id) ?? "project"}`,
+                          )}
                         </span>
                       )}
                     </td>
                     <td className="text-[var(--text-muted)]">{relTime(i.expires_at)}</td>
                     <td>
                       <Button href={`/accept-invite/${i.token}`} variant="ghost" size="sm">
-                        Copy link
+                        {t("console.people.invites.copyLink", undefined, "Copy link")}
                       </Button>
                     </td>
                   </tr>
@@ -102,14 +133,14 @@ export default async function InvitesPage() {
 
         {history.length > 0 && (
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">History</h3>
+            <h3 className="text-sm font-semibold">{t("console.people.invites.history", undefined, "History")}</h3>
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>When</th>
+                  <th>{t("console.people.invites.col.email", undefined, "Email")}</th>
+                  <th>{t("console.people.invites.col.role", undefined, "Role")}</th>
+                  <th>{t("console.people.invites.col.status", undefined, "Status")}</th>
+                  <th>{t("console.people.invites.col.when", undefined, "When")}</th>
                 </tr>
               </thead>
               <tbody>

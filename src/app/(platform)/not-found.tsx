@@ -1,13 +1,19 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
+import { getRequestT } from "@/lib/i18n/request";
 
-export default function ConsoleNotFound() {
+export default async function ConsoleNotFound() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="404" title="Not Found" subtitle="That record doesn't exist, or you don't have access." />
+      <ModuleHeader
+        eyebrow={t("console.notFound.eyebrow", undefined, "404")}
+        title={t("console.notFound.title", undefined, "Not Found")}
+        subtitle={t("console.notFound.subtitle", undefined, "That record doesn't exist, or you don't have access.")}
+      />
       <div className="page-content">
         <div className="surface p-6">
-          <Button href="/console">Back to Workspace</Button>
+          <Button href="/console">{t("console.notFound.backToWorkspace", undefined, "Back to Workspace")}</Button>
         </div>
       </div>
     </>

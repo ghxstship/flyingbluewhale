@@ -3,18 +3,25 @@ import { ModuleHeader } from "@/components/Shell";
 import { Card, CardBody, CardHeader, MetricCard } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import { XPMS_CLASSES, XPMS_TIERS, XPMS_PHASES } from "@/lib/xpms";
 
 export const dynamic = "force-dynamic";
 
 export default async function XpmsOverviewPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="XPMS" title="Experiential Project Management System" />
+        <ModuleHeader
+          eyebrow="XPMS"
+          title={t("console.xpms.title", undefined, "Experiential Project Management System")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.xpms.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -40,19 +47,32 @@ export default async function XpmsOverviewPage() {
     <>
       <ModuleHeader
         eyebrow="XPMS"
-        title="Experiential Project Management System"
-        subtitle="Atomic production catalog."
+        title={t("console.xpms.title", undefined, "Experiential Project Management System")}
+        subtitle={t("console.xpms.subtitle", undefined, "Atomic production catalog.")}
       />
       <div className="page-content">
         <div className="metric-grid mb-6">
-          <MetricCard label="Atoms" value={String(atoms.data?.length ?? 0)} />
-          <MetricCard label="UAC (planned)" value={String(uacCount)} />
-          <MetricCard label="TPC (deployed)" value={String(tpcCount)} />
-          <MetricCard label="Variance entries" value={String(variance.data?.length ?? 0)} />
+          <MetricCard
+            label={t("console.xpms.metric.atoms", undefined, "Atoms")}
+            value={String(atoms.data?.length ?? 0)}
+          />
+          <MetricCard label={t("console.xpms.metric.uac", undefined, "UAC (planned)")} value={String(uacCount)} />
+          <MetricCard label={t("console.xpms.metric.tpc", undefined, "TPC (deployed)")} value={String(tpcCount)} />
+          <MetricCard
+            label={t("console.xpms.metric.variance", undefined, "Variance entries")}
+            value={String(variance.data?.length ?? 0)}
+          />
         </div>
 
         <Card className="mb-6">
-          <CardHeader title="Ten Classes" subtitle="Class is collection and code — one taxonomy, two faces." />
+          <CardHeader
+            title={t("console.xpms.classes.title", undefined, "Ten Classes")}
+            subtitle={t(
+              "console.xpms.classes.subtitle",
+              undefined,
+              "Class is collection and code — one taxonomy, two faces.",
+            )}
+          />
           <CardBody>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-5">
               {XPMS_CLASSES.map((c) => (
@@ -65,7 +85,13 @@ export default async function XpmsOverviewPage() {
                   <div className="font-mono text-[10px] tracking-widest text-[var(--text-muted)]">{c.code}000</div>
                   <div className="mt-1 text-sm font-semibold">{c.name}</div>
                   <div className="mt-2 line-clamp-2 text-xs text-[var(--text-muted)]">{c.oneLine}</div>
-                  <div className="mt-3 font-mono text-xs">{byClass.get(c.code) ?? 0} atoms</div>
+                  <div className="mt-3 font-mono text-xs">
+                    {t(
+                      "console.xpms.classes.atomsCount",
+                      { count: byClass.get(c.code) ?? 0 },
+                      `${byClass.get(c.code) ?? 0} atoms`,
+                    )}
+                  </div>
                 </Link>
               ))}
             </div>
@@ -75,30 +101,39 @@ export default async function XpmsOverviewPage() {
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader
-              title="Six Tiers of Experience"
-              subtitle="The second axis — what kind of human encounter the atom delivers."
+              title={t("console.xpms.tiers.title", undefined, "Six Tiers of Experience")}
+              subtitle={t(
+                "console.xpms.tiers.subtitle",
+                undefined,
+                "The second axis — what kind of human encounter the atom delivers.",
+              )}
             />
             <CardBody>
               <ul className="space-y-2 text-sm">
-                {XPMS_TIERS.map((t) => (
-                  <li key={t.id} className="flex items-center justify-between">
+                {XPMS_TIERS.map((tier) => (
+                  <li key={tier.id} className="flex items-center justify-between">
                     <span>
-                      <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{t.num}</span>
-                      {t.label}
+                      <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{tier.num}</span>
+                      {tier.label}
                     </span>
-                    <span className="text-xs text-[var(--text-muted)]">paired with {t.pair}</span>
+                    <span className="text-xs text-[var(--text-muted)]">
+                      {t("console.xpms.tiers.pairedWith", { pair: tier.pair }, `paired with ${tier.pair}`)}
+                    </span>
                   </li>
                 ))}
               </ul>
               <div className="mt-3 text-xs">
                 <Link href="/console/xpms/tiers" className="text-[var(--org-primary)]">
-                  Open tier composition →
+                  {t("console.xpms.tiers.openLink", undefined, "Open tier composition →")}
                 </Link>
               </div>
             </CardBody>
           </Card>
           <Card>
-            <CardHeader title="Eight Production Phases" subtitle="Temporal spine. Every atom carries a phase." />
+            <CardHeader
+              title={t("console.xpms.phases.title", undefined, "Eight Production Phases")}
+              subtitle={t("console.xpms.phases.subtitle", undefined, "Temporal spine. Every atom carries a phase.")}
+            />
             <CardBody>
               <ol className="space-y-2 text-sm">
                 {XPMS_PHASES.map((p) => (
@@ -113,7 +148,7 @@ export default async function XpmsOverviewPage() {
               </ol>
               <div className="mt-3 text-xs">
                 <Link href="/console/xpms/phases" className="text-[var(--org-primary)]">
-                  Open phase view →
+                  {t("console.xpms.phases.openLink", undefined, "Open phase view →")}
                 </Link>
               </div>
             </CardBody>
@@ -121,9 +156,14 @@ export default async function XpmsOverviewPage() {
         </div>
 
         <div className="mt-6 text-xs text-[var(--text-muted)]">
-          Composition rows on file: {comp.data?.length ?? 0}. Codebook is global and append-only — see{" "}
+          {t(
+            "console.xpms.footer.compositionRows",
+            { count: comp.data?.length ?? 0 },
+            `Composition rows on file: ${comp.data?.length ?? 0}.`,
+          )}{" "}
+          {t("console.xpms.footer.codebookNote", undefined, "Codebook is global and append-only — see")}{" "}
           <Link href="/console/xpms/codebook" className="text-[var(--org-primary)]">
-            XTC codebook
+            {t("console.xpms.footer.codebookLink", undefined, "XTC codebook")}
           </Link>
           .
         </div>

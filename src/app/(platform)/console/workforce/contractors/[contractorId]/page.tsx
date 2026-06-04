@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteContractor } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ contractorId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.workforce.contractors.detail.title", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.contractors.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ contractorId:
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.workforce.contractors.detail.eyebrow", undefined, "Record")}
         title={title ?? p.contractorId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/workforce/contractors" variant="ghost" size="sm">
-              Back
+              {t("console.workforce.contractors.detail.back", undefined, "Back")}
             </Button>
             <Button href={`/console/workforce/contractors/${p.contractorId}/edit`} size="sm">
-              Edit
+              {t("console.workforce.contractors.detail.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteContractor.bind(null, p.contractorId)}
-              confirm={`Delete this record? This cannot be undone.`}
+              confirm={t(
+                "console.workforce.contractors.detail.deleteConfirm",
+                undefined,
+                "Delete this record? This cannot be undone.",
+              )}
             />
           </div>
         }

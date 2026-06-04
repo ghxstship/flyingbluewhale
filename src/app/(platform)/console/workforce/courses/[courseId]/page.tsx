@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { addLesson, addQuizQuestion, publishCourse, assignCourse, setCompletionBadge, deleteCourse } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,13 @@ type Question = { id: string; ordinal: number; prompt: string; choices: unknown;
 type Assignment = { id: string; assignee_id: string; assignment_state: string; assigned_at: string };
 
 export default async function Page({ params }: { params: Promise<{ courseId: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("console.workforce.courses.detail.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { courseId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -84,14 +91,26 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Course"
+        eyebrow={t("console.workforce.courses.detail.eyebrow", undefined, "Course")}
         title={c.title}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <Badge variant={c.publish_state === "published" ? "success" : "info"}>{c.publish_state}</Badge>
-            {c.duration_minutes && <span className="font-mono text-xs">{c.duration_minutes} min</span>}
+            {c.duration_minutes && (
+              <span className="font-mono text-xs">
+                {t(
+                  "console.workforce.courses.detail.durationMinutes",
+                  { minutes: c.duration_minutes },
+                  `${c.duration_minutes} min`,
+                )}
+              </span>
+            )}
             <span className="font-mono text-xs">
-              {lessonList.length} lessons · {questionList.length} questions · {assignmentList.length} assignees
+              {t(
+                "console.workforce.courses.detail.counts",
+                { lessons: lessonList.length, questions: questionList.length, assignees: assignmentList.length },
+                `${lessonList.length} lessons · ${questionList.length} questions · ${assignmentList.length} assignees`,
+              )}
             </span>
           </span>
         }
@@ -101,27 +120,39 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               <form action={publishCourse}>
                 <input type="hidden" name="courseId" value={c.id} />
                 <Button type="submit" size="sm">
-                  Publish
+                  {t("console.workforce.courses.detail.publish", undefined, "Publish")}
                 </Button>
               </form>
             )}
             <DeleteForm
               action={deleteCourse.bind(null, c.id)}
-              confirm="Soft-delete this course? Existing assignments stay; new assignments will fail."
+              confirm={t(
+                "console.workforce.courses.detail.deleteConfirm",
+                undefined,
+                "Soft-delete this course? Existing assignments stay; new assignments will fail.",
+              )}
             />
           </div>
         }
       />
       <div className="page-content grid gap-4 lg:grid-cols-2">
         <section className="surface p-4 lg:col-span-2">
-          <h2 className="text-sm font-semibold">Completion Badge</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.workforce.courses.detail.completionBadge.title", undefined, "Completion Badge")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-secondary)]">
-            Optional. When set, any assignee who passes the quiz auto-receives this badge.
+            {t(
+              "console.workforce.courses.detail.completionBadge.hint",
+              undefined,
+              "Optional. When set, any assignee who passes the quiz auto-receives this badge.",
+            )}
           </p>
           <form action={setCompletionBadge} className="mt-3 flex items-end gap-2">
             <input type="hidden" name="courseId" value={c.id} />
             <select name="badge_id" defaultValue={c.completion_badge_id ?? ""} className="input-base flex-1">
-              <option value="">— None —</option>
+              <option value="">
+                {t("console.workforce.courses.detail.completionBadge.none", undefined, "— None —")}
+              </option>
               {badgeList.map((b) => (
                 <option key={b.id} value={b.id}>
                   {b.icon ? `${b.icon} ` : ""}
@@ -130,18 +161,26 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               ))}
             </select>
             <Button type="submit" variant="secondary" size="sm">
-              Save
+              {t("console.workforce.courses.detail.save", undefined, "Save")}
             </Button>
           </form>
         </section>
 
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Lessons</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.workforce.courses.detail.lessons.title", undefined, "Lessons")}
+          </h2>
           <ol className="mt-3 space-y-2">
             {lessonList.map((l) => (
               <li key={l.id} className="rounded-md border border-[var(--border-color)] p-3">
                 <div className="flex items-center justify-between">
-                  <Badge variant="muted">Lesson {l.ordinal}</Badge>
+                  <Badge variant="muted">
+                    {t(
+                      "console.workforce.courses.detail.lessons.lessonLabel",
+                      { ordinal: l.ordinal },
+                      `Lesson ${l.ordinal}`,
+                    )}
+                  </Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">{l.lesson_kind}</span>
                 </div>
                 <div className="mt-1 text-sm font-semibold">{l.title}</div>
@@ -153,20 +192,28 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
             <input
               type="text"
               name="title"
-              placeholder="Lesson title"
+              placeholder={t("console.workforce.courses.detail.lessons.titlePlaceholder", undefined, "Lesson title")}
               required
               maxLength={200}
               className="input-base w-full"
             />
-            <textarea name="body" rows={3} placeholder="Lesson body" maxLength={4000} className="input-base w-full" />
+            <textarea
+              name="body"
+              rows={3}
+              placeholder={t("console.workforce.courses.detail.lessons.bodyPlaceholder", undefined, "Lesson body")}
+              maxLength={4000}
+              className="input-base w-full"
+            />
             <Button type="submit" variant="secondary" size="sm">
-              + Add Lesson
+              {t("console.workforce.courses.detail.lessons.addLesson", undefined, "+ Add Lesson")}
             </Button>
           </form>
         </section>
 
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Quiz Questions</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.workforce.courses.detail.quiz.title", undefined, "Quiz Questions")}
+          </h2>
           <ol className="mt-3 space-y-2">
             {questionList.map((q) => {
               const choices = Array.isArray(q.choices) ? (q.choices as string[]) : [];
@@ -195,7 +242,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
             <input
               type="text"
               name="prompt"
-              placeholder="Question prompt"
+              placeholder={t("console.workforce.courses.detail.quiz.promptPlaceholder", undefined, "Question prompt")}
               required
               maxLength={400}
               className="input-base w-full"
@@ -203,7 +250,11 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
             <input
               type="text"
               name="choices"
-              placeholder="Choices (one per line) — first 4"
+              placeholder={t(
+                "console.workforce.courses.detail.quiz.choicesPlaceholder",
+                undefined,
+                "Choices (one per line) — first 4",
+              )}
               required
               className="input-base w-full"
             />
@@ -212,25 +263,34 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               name="correct_index"
               min="0"
               max="3"
-              placeholder="Correct index (0-based)"
+              placeholder={t(
+                "console.workforce.courses.detail.quiz.correctIndexPlaceholder",
+                undefined,
+                "Correct index (0-based)",
+              )}
               required
               className="input-base w-full"
             />
             <Button type="submit" variant="secondary" size="sm">
-              + Add Question
+              {t("console.workforce.courses.detail.quiz.addQuestion", undefined, "+ Add Question")}
             </Button>
           </form>
         </section>
 
         <section className="surface p-4 lg:col-span-2">
-          <h2 className="text-sm font-semibold">Assignees</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.workforce.courses.detail.assignees.title", undefined, "Assignees")}
+          </h2>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {assignmentList.map((a) => {
               const tone =
                 a.assignment_state === "completed" ? "success" : a.assignment_state === "overdue" ? "error" : "info";
               return (
                 <li key={a.id} className="rounded-md border border-[var(--border-color)] p-3">
-                  <div className="text-sm">{memberMap.get(a.assignee_id) ?? "Unknown"}</div>
+                  <div className="text-sm">
+                    {memberMap.get(a.assignee_id) ??
+                      t("console.workforce.courses.detail.assignees.unknown", undefined, "Unknown")}
+                  </div>
                   <div className="font-mono text-[10px] text-[var(--text-muted)]">
                     {new Date(a.assigned_at).toLocaleDateString()}
                   </div>
@@ -254,7 +314,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
             </select>
             <input type="date" name="due_at" className="input-base w-full" />
             <Button type="submit" variant="secondary" size="sm">
-              + Assign
+              {t("console.workforce.courses.detail.assignees.assign", undefined, "+ Assign")}
             </Button>
           </form>
         </section>

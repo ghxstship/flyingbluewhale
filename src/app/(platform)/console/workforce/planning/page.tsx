@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,12 +22,18 @@ type DeploymentRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Planning" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.planning.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.planning.title", undefined, "Planning")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.planning.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -51,8 +57,9 @@ export default async function Page() {
   const fillRate = totalPlanned > 0 ? Math.round((totalActual / totalPlanned) * 100) : null;
 
   // Roll up by functional area
+  const unspecifiedLabel = t("console.workforce.planning.unspecified", undefined, "Unspecified");
   const byFA = rows.reduce<Map<string, { planned: number; actual: number; rows: DeploymentRow[] }>>((map, r) => {
-    const fa = r.functional_area ?? "Unspecified";
+    const fa = r.functional_area ?? unspecifiedLabel;
     if (!map.has(fa)) map.set(fa, { planned: 0, actual: 0, rows: [] });
     const acc = map.get(fa)!;
     acc.planned += r.planned_fte;
@@ -62,38 +69,64 @@ export default async function Page() {
   }, new Map());
   const faEntries = Array.from(byFA.entries()).sort((a, b) => b[1].planned - a[1].planned);
 
+  const deploymentsLabel =
+    rows.length === 1
+      ? t("console.workforce.planning.deploymentSingular", undefined, "deployment")
+      : t("console.workforce.planning.deploymentPlural", undefined, "deployments");
+  const filledSuffix =
+    fillRate != null
+      ? ` · ${t("console.workforce.planning.filledSuffix", { pct: fillRate }, `${fillRate}% filled`)}`
+      : "";
+  const subtitle = `${rows.length} ${deploymentsLabel} · ${fmt.number(totalActual)} / ${fmt.number(totalPlanned)} FTE${filledSuffix}`;
+
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Planning"
-        subtitle={`${rows.length} deployment${rows.length === 1 ? "" : "s"} · ${fmt.number(totalActual)} / ${fmt.number(totalPlanned)} FTE${fillRate != null ? ` · ${fillRate}% filled` : ""}`}
+        eyebrow={t("console.workforce.planning.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.planning.title", undefined, "Planning")}
+        subtitle={subtitle}
         action={
           <Button href="/console/workforce/deployment" size="sm">
-            Open deployment
+            {t("console.workforce.planning.openDeployment", undefined, "Open deployment")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Planned FTE" value={fmt.number(totalPlanned)} accent />
-          <MetricCard label="Actual FTE" value={fmt.number(totalActual)} />
-          <MetricCard label="Fill Rate" value={fillRate != null ? `${fillRate}%` : "—"} />
+          <MetricCard
+            label={t("console.workforce.planning.plannedFte", undefined, "Planned FTE")}
+            value={fmt.number(totalPlanned)}
+            accent
+          />
+          <MetricCard
+            label={t("console.workforce.planning.actualFte", undefined, "Actual FTE")}
+            value={fmt.number(totalActual)}
+          />
+          <MetricCard
+            label={t("console.workforce.planning.fillRate", undefined, "Fill Rate")}
+            value={fillRate != null ? `${fillRate}%` : "—"}
+          />
         </div>
 
         {faEntries.length === 0 ? (
           <EmptyState
-            title="No Deployments Planned"
-            description="Author workforce_deployments rows per venue+zone+window to drive headcount planning."
+            title={t("console.workforce.planning.emptyTitle", undefined, "No Deployments Planned")}
+            description={t(
+              "console.workforce.planning.emptyDescription",
+              undefined,
+              "Author workforce_deployments rows per venue+zone+window to drive headcount planning.",
+            )}
             action={
               <Link href="/console/workforce/deployment" className="btn btn-secondary btn-sm">
-                Open deployment
+                {t("console.workforce.planning.openDeployment", undefined, "Open deployment")}
               </Link>
             }
           />
         ) : (
           <section>
-            <h3 className="text-sm font-semibold">By Functional Area</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.workforce.planning.byFunctionalArea", undefined, "By Functional Area")}
+            </h3>
             <div className="mt-3 space-y-3">
               {faEntries.map(([fa, agg]) => {
                 const fr = agg.planned > 0 ? Math.round((agg.actual / agg.planned) * 100) : null;
@@ -103,7 +136,7 @@ export default async function Page() {
                       <h4 className="text-sm font-semibold">{fa}</h4>
                       <div className="flex items-center gap-2">
                         <Badge variant="muted">
-                          {agg.actual} / {agg.planned} FTE
+                          {agg.actual} / {agg.planned} {t("console.workforce.planning.fteUnit", undefined, "FTE")}
                         </Badge>
                         {fr != null && (
                           <Badge variant={fr >= 90 ? "success" : fr >= 70 ? "warning" : "error"}>{fr}%</Badge>
@@ -127,7 +160,14 @@ export default async function Page() {
                         );
                       })}
                       {agg.rows.length > 6 && (
-                        <li className="text-xs text-[var(--text-muted)]">+{agg.rows.length - 6} more</li>
+                        <li className="text-xs text-[var(--text-muted)]">
+                          +
+                          {t(
+                            "console.workforce.planning.moreCount",
+                            { count: agg.rows.length - 6 },
+                            `${agg.rows.length - 6} more`,
+                          )}
+                        </li>
                       )}
                     </ul>
                   </div>

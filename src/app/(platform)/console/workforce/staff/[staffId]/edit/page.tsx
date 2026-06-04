@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateStaffMember, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -17,23 +18,57 @@ export default async function Page({ params }: { params: Promise<{ staffId: stri
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   void r;
+  const { t } = await getRequestT();
   const action = updateStaffMember.bind(null, p.staffId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const fullName = (row as Record<string, unknown>)["full_name"] as string | undefined;
+  const fallbackName = t("console.workforce.staff.edit.fallbackName", undefined, "Staff member");
   return (
     <>
       <ModuleHeader
-        eyebrow="Staff Member"
-        title={`Edit ${((row as Record<string, unknown>)["full_name"] as string | undefined) ?? "Staff member"}`}
+        eyebrow={t("console.workforce.staff.edit.eyebrow", undefined, "Staff Member")}
+        title={t(
+          "console.workforce.staff.edit.title",
+          { name: fullName ?? fallbackName },
+          `Edit ${fullName ?? fallbackName}`,
+        )}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/workforce/staff/${p.staffId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/workforce/staff/${p.staffId}`}
+          submitLabel={t("console.workforce.staff.edit.submit", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Full Name" name="full_name" defaultValue={row.full_name ?? ""} required maxLength={200} />
-          <Input label="Email" name="email" type="email" defaultValue={row.email ?? ""} />
-          <Input label="Phone" name="phone" defaultValue={row.phone ?? ""} maxLength={40} />
-          <Input label="Role" name="role" defaultValue={row.role ?? ""} maxLength={120} />
+          <Input
+            label={t("console.workforce.staff.edit.fullName", undefined, "Full Name")}
+            name="full_name"
+            defaultValue={row.full_name ?? ""}
+            required
+            maxLength={200}
+          />
+          <Input
+            label={t("console.workforce.staff.edit.email", undefined, "Email")}
+            name="email"
+            type="email"
+            defaultValue={row.email ?? ""}
+          />
+          <Input
+            label={t("console.workforce.staff.edit.phone", undefined, "Phone")}
+            name="phone"
+            defaultValue={row.phone ?? ""}
+            maxLength={40}
+          />
+          <Input
+            label={t("console.workforce.staff.edit.role", undefined, "Role")}
+            name="role"
+            defaultValue={row.role ?? ""}
+            maxLength={120}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Kind</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.workforce.staff.edit.kind", undefined, "Kind")}
+            </span>
             <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
               <option value="paid_staff">paid_staff</option>
               <option value="volunteer">volunteer</option>

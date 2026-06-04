@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { decideTimeOff } from "./actions";
 
@@ -31,12 +31,18 @@ const STATE_TONE: Record<string, "info" | "success" | "error" | "muted"> = {
 };
 
 export default async function TimeOffAdminPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Time Off" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.timeOff.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.timeOff.title", undefined, "Time Off")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.timeOff.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -85,8 +91,8 @@ export default async function TimeOffAdminPage() {
 
   const rows: Row[] = raw.map((r) => ({
     id: r.id,
-    user: userMap.get(r.user_id) ?? "Unknown",
-    policy: policyMap.get(r.policy_id) ?? "Policy",
+    user: userMap.get(r.user_id) ?? t("console.workforce.timeOff.unknown", undefined, "Unknown"),
+    policy: policyMap.get(r.policy_id) ?? t("console.workforce.timeOff.policyFallback", undefined, "Policy"),
     starts_on: r.starts_on,
     ends_on: r.ends_on,
     hours_requested: r.hours_requested,
@@ -98,32 +104,50 @@ export default async function TimeOffAdminPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Time Off"
-        subtitle={`${pending} Pending · ${approved} Approved · ${denied} Denied`}
+        eyebrow={t("console.workforce.timeOff.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.timeOff.title", undefined, "Time Off")}
+        subtitle={t(
+          "console.workforce.timeOff.subtitle",
+          { pending: fmt.number(pending), approved: fmt.number(approved), denied: fmt.number(denied) },
+          `${pending} Pending · ${approved} Approved · ${denied} Denied`,
+        )}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending" value={fmt.number(pending)} accent />
-          <MetricCard label="Approved" value={fmt.number(approved)} />
-          <MetricCard label="Denied" value={fmt.number(denied)} />
+          <MetricCard
+            label={t("console.workforce.timeOff.metric.pending", undefined, "Pending")}
+            value={fmt.number(pending)}
+            accent
+          />
+          <MetricCard
+            label={t("console.workforce.timeOff.metric.approved", undefined, "Approved")}
+            value={fmt.number(approved)}
+          />
+          <MetricCard
+            label={t("console.workforce.timeOff.metric.denied", undefined, "Denied")}
+            value={fmt.number(denied)}
+          />
         </div>
         <DataTable<Row>
           tableId="workforce.time_off"
           rows={rows}
-          emptyLabel="No time-off requests"
-          emptyDescription="Requests filed from /m/time-off appear here. Managers approve or deny inline."
+          emptyLabel={t("console.workforce.timeOff.emptyLabel", undefined, "No time-off requests")}
+          emptyDescription={t(
+            "console.workforce.timeOff.emptyDescription",
+            undefined,
+            "Requests filed from /m/time-off appear here. Managers approve or deny inline.",
+          )}
           columns={[
             {
               key: "user",
-              header: "Requester",
+              header: t("console.workforce.timeOff.column.requester", undefined, "Requester"),
               render: (r) => r.user,
               accessor: (r) => r.user,
               filterable: true,
             },
             {
               key: "policy",
-              header: "Policy",
+              header: t("console.workforce.timeOff.column.policy", undefined, "Policy"),
               render: (r) => r.policy,
               accessor: (r) => r.policy,
               filterable: true,
@@ -131,14 +155,14 @@ export default async function TimeOffAdminPage() {
             },
             {
               key: "window",
-              header: "Window",
+              header: t("console.workforce.timeOff.column.window", undefined, "Window"),
               render: (r) => `${fmt.date(r.starts_on)} → ${fmt.date(r.ends_on)}`,
               accessor: (r) => r.starts_on,
               className: "font-mono text-xs",
             },
             {
               key: "hours",
-              header: "Hours",
+              header: t("console.workforce.timeOff.column.hours", undefined, "Hours"),
               render: (r) => fmt.number(r.hours_requested),
               accessor: (r) => r.hours_requested,
               className: "font-mono text-xs tabular-nums",
@@ -146,13 +170,13 @@ export default async function TimeOffAdminPage() {
             },
             {
               key: "reason",
-              header: "Reason",
+              header: t("console.workforce.timeOff.column.reason", undefined, "Reason"),
               render: (r) => r.reason ?? "—",
               accessor: (r) => r.reason ?? null,
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.workforce.timeOff.column.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.request_state] ?? "muted"}>{toTitle(r.request_state)}</Badge>,
               accessor: (r) => r.request_state,
               filterable: true,
@@ -160,7 +184,7 @@ export default async function TimeOffAdminPage() {
             },
             {
               key: "action",
-              header: "Action",
+              header: t("console.workforce.timeOff.column.action", undefined, "Action"),
               render: (r) =>
                 r.request_state === "pending" ? (
                   <div className="flex items-center gap-1">
@@ -168,14 +192,14 @@ export default async function TimeOffAdminPage() {
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="approved" />
                       <button type="submit" className="btn btn-primary btn-xs">
-                        Approve
+                        {t("console.workforce.timeOff.action.approve", undefined, "Approve")}
                       </button>
                     </form>
                     <form action={decideTimeOff}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="denied" />
                       <button type="submit" className="btn btn-secondary btn-xs">
-                        Deny
+                        {t("console.workforce.timeOff.action.deny", undefined, "Deny")}
                       </button>
                     </form>
                   </div>

@@ -2,6 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Card, CardBody, CardHeader } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import { XPMS_PHASES, XPMS_CLASSES, type XpmsPhase } from "@/lib/xpms";
 
@@ -10,12 +11,15 @@ export const dynamic = "force-dynamic";
 type AtomPhaseRow = { phase: XpmsPhase; class_code: number; state: "uac" | "tpc" };
 
 export default async function PhasesPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="XPMS" title="Phases" />
+        <ModuleHeader eyebrow="XPMS" title={t("console.xpms.phases.title", undefined, "Phases")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.xpms.phases.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -37,9 +41,9 @@ export default async function PhasesPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="XPMS · 8PP — Eight Production Phases"
-        title="Phases"
-        subtitle="Temporal spine across project lifecycle."
+        eyebrow={t("console.xpms.phases.eyebrow", undefined, "XPMS · 8PP — Eight Production Phases")}
+        title={t("console.xpms.phases.title", undefined, "Phases")}
+        subtitle={t("console.xpms.phases.subtitle", undefined, "Temporal spine across project lifecycle.")}
       />
       <div className="page-content grid grid-cols-1 gap-4 md:grid-cols-2">
         {XPMS_PHASES.map((p) => {
@@ -51,13 +55,13 @@ export default async function PhasesPage() {
               <CardBody>
                 <div className="mb-3 flex gap-4 font-mono text-xs">
                   <span>
-                    UAC <strong>{stat.uac}</strong>
+                    {t("console.xpms.phases.uac", undefined, "UAC")} <strong>{stat.uac}</strong>
                   </span>
                   <span>
-                    TPC <strong>{stat.tpc}</strong>
+                    {t("console.xpms.phases.tpc", undefined, "TPC")} <strong>{stat.tpc}</strong>
                   </span>
                   <span>
-                    Total <strong>{total}</strong>
+                    {t("console.xpms.phases.total", undefined, "Total")} <strong>{total}</strong>
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-1 text-xs text-[var(--text-muted)]">
@@ -66,7 +70,7 @@ export default async function PhasesPage() {
                       {c.name} <span className="font-mono">{stat.byClass[c.code]}</span>
                     </span>
                   ))}
-                  {!total && <span>No atoms in this phase yet</span>}
+                  {!total && <span>{t("console.xpms.phases.empty", undefined, "No atoms in this phase yet")}</span>}
                 </div>
               </CardBody>
             </Card>

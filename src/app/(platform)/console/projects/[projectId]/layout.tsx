@@ -1,6 +1,7 @@
 import { RecordTabsProvider } from "@/components/ui/RecordTabsContext";
 import { PhaseStepper } from "@/components/xpms/PhaseStepper";
 import { requireSession } from "@/lib/auth";
+import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import type { XpmsPhase } from "@/lib/xpms";
 
@@ -25,6 +26,7 @@ export default async function ProjectLayout({
   const { projectId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   // Read xpms_phase only — the stepper doesn't need the rest of the
   // row. Maybe-single so a soft-deleted or cross-org project just
   // renders the stepper inactive (Project page itself surfaces the
@@ -43,19 +45,31 @@ export default async function ProjectLayout({
   // Tasks stays distinct — work items vs. scheduled events are different
   // entities and operators access them on different cadences.
   const tabs = [
-    { label: "Overview", href: `/console/projects/${projectId}/overview` },
-    { label: "Tracker", href: `/console/projects/${projectId}/tracker` },
-    { label: "Tasks", href: `/console/projects/${projectId}/tasks` },
-    { label: "Schedule", href: `/console/projects/${projectId}/schedule` },
-    { label: "Files", href: `/console/projects/${projectId}/files` },
-    { label: "Photos", href: `/console/projects/${projectId}/photos` },
-    { label: "Budget", href: `/console/projects/${projectId}/budget` },
-    { label: "P&L", href: `/console/projects/${projectId}/finance` },
-    { label: "Crew", href: `/console/projects/${projectId}/crew` },
-    { label: "Members", href: `/console/projects/${projectId}/members` },
-    { label: "Advancing", href: `/console/projects/${projectId}/advancing` },
-    { label: "Guides", href: `/console/projects/${projectId}/guides` },
-    { label: "Sustainability", href: `/console/projects/${projectId}/sustainability` },
+    {
+      label: t("console.projects.tabs.overview", undefined, "Overview"),
+      href: `/console/projects/${projectId}/overview`,
+    },
+    { label: t("console.projects.tabs.tracker", undefined, "Tracker"), href: `/console/projects/${projectId}/tracker` },
+    { label: t("console.projects.tabs.tasks", undefined, "Tasks"), href: `/console/projects/${projectId}/tasks` },
+    {
+      label: t("console.projects.tabs.schedule", undefined, "Schedule"),
+      href: `/console/projects/${projectId}/schedule`,
+    },
+    { label: t("console.projects.tabs.files", undefined, "Files"), href: `/console/projects/${projectId}/files` },
+    { label: t("console.projects.tabs.photos", undefined, "Photos"), href: `/console/projects/${projectId}/photos` },
+    { label: t("console.projects.tabs.budget", undefined, "Budget"), href: `/console/projects/${projectId}/budget` },
+    { label: t("console.projects.tabs.finance", undefined, "P&L"), href: `/console/projects/${projectId}/finance` },
+    { label: t("console.projects.tabs.crew", undefined, "Crew"), href: `/console/projects/${projectId}/crew` },
+    { label: t("console.projects.tabs.members", undefined, "Members"), href: `/console/projects/${projectId}/members` },
+    {
+      label: t("console.projects.tabs.advancing", undefined, "Advancing"),
+      href: `/console/projects/${projectId}/advancing`,
+    },
+    { label: t("console.projects.tabs.guides", undefined, "Guides"), href: `/console/projects/${projectId}/guides` },
+    {
+      label: t("console.projects.tabs.sustainability", undefined, "Sustainability"),
+      href: `/console/projects/${projectId}/sustainability`,
+    },
   ];
   return (
     <RecordTabsProvider tabs={tabs}>

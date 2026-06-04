@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,12 +19,18 @@ type CredentialRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Training" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.training.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.training.title", undefined, "Training")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.training.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -53,22 +60,34 @@ export default async function Page() {
   }, {});
   const kindEntries = Object.entries(byKind).sort((a, b) => b[1] - a[1]);
 
+  const credentialsLabel =
+    rows.length === 1
+      ? t("console.workforce.training.credentialSingular", undefined, "Credential")
+      : t("console.workforce.training.credentialPlural", undefined, "Credentials");
+  const subtitle = t(
+    "console.workforce.training.subtitle",
+    { count: rows.length, credentialsLabel, expiringSoon, expired },
+    `${rows.length} ${credentialsLabel} On File · ${expiringSoon} Expiring Within 60 Days · ${expired} Expired`,
+  );
+
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Training"
-        subtitle={`${rows.length} Credential${rows.length === 1 ? "" : "s"} On File · ${expiringSoon} Expiring Within 60 Days · ${expired} Expired`}
+        eyebrow={t("console.workforce.training.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.training.title", undefined, "Training")}
+        subtitle={subtitle}
         action={
           <Button href="/console/people/credentials/new" size="sm">
-            + Add credential
+            {t("console.workforce.training.addCredential", undefined, "+ Add credential")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {kindEntries.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By Certification Kind</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.workforce.training.byCertificationKind", undefined, "By Certification Kind")}
+            </h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {kindEntries.map(([kind, count]) => (
                 <li key={kind} className="flex items-center justify-between text-sm">
@@ -83,17 +102,21 @@ export default async function Page() {
         <DataTable<CredentialRow>
           rows={rows}
           rowHref={(r) => `/console/people/credentials/${r.id}`}
-          emptyLabel="No training credentials tracked"
-          emptyDescription="Training is tracked alongside other certifications. Add first-aid, working-at-height, RIGGER, SIA, and similar issued certs to surface them here."
+          emptyLabel={t("console.workforce.training.emptyLabel", undefined, "No training credentials tracked")}
+          emptyDescription={t(
+            "console.workforce.training.emptyDescription",
+            undefined,
+            "Training is tracked alongside other certifications. Add first-aid, working-at-height, RIGGER, SIA, and similar issued certs to surface them here.",
+          )}
           emptyAction={
             <Button href="/console/people/credentials/new" size="sm">
-              + Add credential
+              {t("console.workforce.training.addCredential", undefined, "+ Add credential")}
             </Button>
           }
           columns={[
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.workforce.training.columns.kind", undefined, "Kind"),
               render: (r) => r.kind,
               accessor: (r) => r.kind,
               filterable: true,
@@ -101,26 +124,41 @@ export default async function Page() {
             },
             {
               key: "number",
-              header: "Number",
+              header: t("console.workforce.training.columns.number", undefined, "Number"),
               render: (r) => <span className="font-mono text-xs">{r.number ?? "—"}</span>,
               accessor: (r) => r.number ?? null,
             },
             {
               key: "issued",
-              header: "Issued",
+              header: t("console.workforce.training.columns.issued", undefined, "Issued"),
               render: (r) => formatDate(r.issued_on, "medium"),
               className: "font-mono text-xs",
               accessor: (r) => r.issued_on,
             },
             {
               key: "expires",
-              header: "Expires",
+              header: t("console.workforce.training.columns.expires", undefined, "Expires"),
               render: (r) => {
                 if (!r.expires_on) return "—";
                 const days = Math.ceil((new Date(r.expires_on).getTime() - now) / 86_400_000);
-                if (days < 0) return <Badge variant="error">Expired {Math.abs(days)}d ago</Badge>;
-                if (days <= 30) return <Badge variant="warning">{days}d</Badge>;
-                if (days <= 60) return <Badge variant="muted">{days}d</Badge>;
+                if (days < 0)
+                  return (
+                    <Badge variant="error">
+                      {t(
+                        "console.workforce.training.expiredAgo",
+                        { days: Math.abs(days) },
+                        `Expired ${Math.abs(days)}d ago`,
+                      )}
+                    </Badge>
+                  );
+                if (days <= 30)
+                  return (
+                    <Badge variant="warning">{t("console.workforce.training.daysShort", { days }, `${days}d`)}</Badge>
+                  );
+                if (days <= 60)
+                  return (
+                    <Badge variant="muted">{t("console.workforce.training.daysShort", { days }, `${days}d`)}</Badge>
+                  );
                 return <span className="font-mono text-xs">{formatDate(r.expires_on, "medium")}</span>;
               },
               accessor: (r) => r.expires_on ?? null,

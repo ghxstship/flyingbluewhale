@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteTrainingCourse } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ courseId: string }> }) {
   const p = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.workforce.training.course.title", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.training.course.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.workforce.training.course.eyebrow", undefined, "Record")}
         title={title ?? p.courseId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/workforce/training" variant="ghost" size="sm">
-              Back
+              {t("console.workforce.training.course.back", undefined, "Back")}
             </Button>
             <Button href={`/console/workforce/training/${p.courseId}/edit`} size="sm">
-              Edit
+              {t("console.workforce.training.course.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteTrainingCourse.bind(null, p.courseId)}
-              confirm={`Delete this record? This cannot be undone.`}
+              confirm={t(
+                "console.workforce.training.course.deleteConfirm",
+                undefined,
+                "Delete this record? This cannot be undone.",
+              )}
             />
           </div>
         }

@@ -7,17 +7,21 @@ import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteDeployment } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ deploymentId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Deployment" />
+        <ModuleHeader title={t("console.workforce.deployment.detail.title", undefined, "Deployment")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.deployment.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,19 +33,23 @@ export default async function Page({ params }: { params: Promise<{ deploymentId:
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce · Deployment"
+        eyebrow={t("console.workforce.deployment.detail.eyebrow", undefined, "Workforce · Deployment")}
         title={title}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/workforce/deployment" variant="ghost" size="sm">
-              Back
+              {t("console.workforce.deployment.detail.back", undefined, "Back")}
             </Button>
             <Button href={`/console/workforce/deployment/${p.deploymentId}/edit`} size="sm">
-              Edit
+              {t("console.workforce.deployment.detail.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteDeployment.bind(null, p.deploymentId)}
-              confirm={`Delete deployment "${title}"? This cannot be undone.`}
+              confirm={t(
+                "console.workforce.deployment.detail.deleteConfirm",
+                { title },
+                `Delete deployment "${title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

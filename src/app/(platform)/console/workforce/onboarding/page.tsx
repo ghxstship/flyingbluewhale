@@ -5,6 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,12 +19,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Onboarding" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.onboarding.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.onboarding.title", undefined, "Onboarding")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.onboarding.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -42,12 +49,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Onboarding"
-        subtitle={`${rows.length} flow${rows.length === 1 ? "" : "s"} · new-hire journeys for /m/onboarding`}
+        eyebrow={t("console.workforce.onboarding.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.onboarding.title", undefined, "Onboarding")}
+        subtitle={t(
+          "console.workforce.onboarding.subtitle",
+          { count: rows.length, suffix: rows.length === 1 ? "" : "s" },
+          `${rows.length} flow${rows.length === 1 ? "" : "s"} · new-hire journeys for /m/onboarding`,
+        )}
         action={
           <Button href="/console/workforce/onboarding/new" size="sm">
-            + New Flow
+            {t("console.workforce.onboarding.newFlow", undefined, "+ New Flow")}
           </Button>
         }
       />
@@ -55,13 +66,21 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/workforce/onboarding/${r.id}`}
-          emptyLabel="No flows yet"
-          emptyDescription="Build a step-by-step new-hire journey: read SOPs, sign forms, complete courses. Assignees see it on /m/onboarding."
+          emptyLabel={t("console.workforce.onboarding.emptyLabel", undefined, "No flows yet")}
+          emptyDescription={t(
+            "console.workforce.onboarding.emptyDescription",
+            undefined,
+            "Build a step-by-step new-hire journey: read SOPs, sign forms, complete courses. Assignees see it on /m/onboarding.",
+          )}
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.workforce.onboarding.col.name", undefined, "Name"),
+              render: (r) => r.name,
+            },
             {
               key: "publish_state",
-              header: "State",
+              header: t("console.workforce.onboarding.col.state", undefined, "State"),
               render: (r) => (
                 <Badge
                   variant={
@@ -72,7 +91,11 @@ export default async function Page() {
                 </Badge>
               ),
             },
-            { key: "target_role", header: "Role", render: (r) => r.target_role ?? "—" },
+            {
+              key: "target_role",
+              header: t("console.workforce.onboarding.col.role", undefined, "Role"),
+              render: (r) => r.target_role ?? "—",
+            },
           ]}
         />
       </div>

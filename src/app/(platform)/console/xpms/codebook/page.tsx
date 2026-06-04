@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatXtcCode } from "@/lib/xpms";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,12 +30,15 @@ const FACE_VARIANT: Record<CodebookRow["face"], "info" | "warning" | "success"> 
 };
 
 export default async function CodebookPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="XPMS" title="XTC Codebook" />
+        <ModuleHeader eyebrow="XPMS" title={t("console.xpms.codebook.titleShort", undefined, "XTC Codebook")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.xpms.codebook.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -51,19 +55,35 @@ export default async function CodebookPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="XPMS · XTC Protocol™" title="Codebook" subtitle="Class → Division → Section → Line." />
+      <ModuleHeader
+        eyebrow="XPMS · XTC Protocol™"
+        title={t("console.xpms.codebook.title", undefined, "Codebook")}
+        subtitle={t("console.xpms.codebook.subtitle", undefined, "Class → Division → Section → Line.")}
+      />
       <div className="page-content">
-        {error ? <div className="surface p-4 text-sm">Could not load codebook: {error.message}</div> : null}
+        {error ? (
+          <div className="surface p-4 text-sm">
+            {t(
+              "console.xpms.codebook.loadError",
+              { message: error.message },
+              `Could not load codebook: ${error.message}`,
+            )}
+          </div>
+        ) : null}
         <DataTable<CodebookRow>
           tableId="xpms.codebook"
           rows={rows}
           searchable
-          emptyLabel="No published line items yet"
-          emptyDescription="Divisions and sections are reserved; line items publish on demand."
+          emptyLabel={t("console.xpms.codebook.empty.label", undefined, "No published line items yet")}
+          emptyDescription={t(
+            "console.xpms.codebook.empty.description",
+            undefined,
+            "Divisions and sections are reserved; line items publish on demand.",
+          )}
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.xpms.codebook.columns.code", undefined, "Code"),
               render: (r) => formatXtcCode(r.line_code),
               accessor: (r) => r.line_code,
               className: "font-mono text-xs",
@@ -71,7 +91,7 @@ export default async function CodebookPage() {
             },
             {
               key: "class",
-              header: "Class",
+              header: t("console.xpms.codebook.columns.class", undefined, "Class"),
               render: (r) => r.class_name ?? "—",
               accessor: (r) => r.class_name ?? null,
               className: "text-xs",
@@ -81,7 +101,7 @@ export default async function CodebookPage() {
             },
             {
               key: "division",
-              header: "Division",
+              header: t("console.xpms.codebook.columns.division", undefined, "Division"),
               render: (r) => r.division_name ?? "—",
               accessor: (r) => r.division_name ?? null,
               className: "text-xs",
@@ -91,7 +111,7 @@ export default async function CodebookPage() {
             },
             {
               key: "section",
-              header: "Section",
+              header: t("console.xpms.codebook.columns.section", undefined, "Section"),
               render: (r) => r.section_name ?? "—",
               accessor: (r) => r.section_name ?? null,
               className: "text-xs",
@@ -101,11 +121,15 @@ export default async function CodebookPage() {
             },
             {
               key: "line",
-              header: "Line item",
+              header: t("console.xpms.codebook.columns.line", undefined, "Line item"),
               render: (r) => (
                 <span className="text-xs">
                   {r.line_name}
-                  {r.is_position_root ? <span className="ms-2 text-[10px] text-[var(--text-muted)]">root</span> : null}
+                  {r.is_position_root ? (
+                    <span className="ms-2 text-[10px] text-[var(--text-muted)]">
+                      {t("console.xpms.codebook.rootLabel", undefined, "root")}
+                    </span>
+                  ) : null}
                 </span>
               ),
               accessor: (r) => r.line_name ?? null,
@@ -113,7 +137,7 @@ export default async function CodebookPage() {
             },
             {
               key: "face",
-              header: "Face",
+              header: t("console.xpms.codebook.columns.face", undefined, "Face"),
               render: (r) => <Badge variant={FACE_VARIANT[r.face]}>{r.face}</Badge>,
               accessor: (r) => r.face,
               sortable: true,

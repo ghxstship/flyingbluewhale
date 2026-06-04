@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateTrainingCourse, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ courseId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
@@ -21,20 +23,40 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
     state: State,
     fd: FormData,
   ) => Promise<State>;
+  const fallbackTitle = t("console.workforce.training.edit.fallbackTitle", undefined, "Training course");
+  const courseTitle = ((row as Record<string, unknown>)["title"] as string | undefined) ?? fallbackTitle;
   return (
     <>
       <ModuleHeader
-        eyebrow="Training Course"
-        title={`Edit ${((row as Record<string, unknown>)["title"] as string | undefined) ?? "Training course"}`}
+        eyebrow={t("console.workforce.training.edit.eyebrow", undefined, "Training Course")}
+        title={t("console.workforce.training.edit.title", { title: courseTitle }, `Edit ${courseTitle}`)}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/workforce/training/${p.courseId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/workforce/training/${p.courseId}`}
+          submitLabel={t("console.workforce.training.edit.submit", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Title" name="title" defaultValue={row.title ?? ""} required maxLength={200} />
-          <Input label="Slug" name="slug" defaultValue={row.slug ?? ""} required maxLength={160} />
+          <Input
+            label={t("console.workforce.training.edit.fields.title", undefined, "Title")}
+            name="title"
+            defaultValue={row.title ?? ""}
+            required
+            maxLength={200}
+          />
+          <Input
+            label={t("console.workforce.training.edit.fields.slug", undefined, "Slug")}
+            name="slug"
+            defaultValue={row.slug ?? ""}
+            required
+            maxLength={160}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Body (markdown)</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.workforce.training.edit.fields.body", undefined, "Body (markdown)")}
+            </span>
             <textarea
               name="body_markdown"
               defaultValue={row.body_markdown ?? ""}

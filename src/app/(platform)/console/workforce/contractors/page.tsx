@@ -4,16 +4,23 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Contractors" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.contractors.eyebrowWorkspace", undefined, "Workspace")}
+          title={t("console.workforce.contractors.title", undefined, "Contractors")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.contractors.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,12 +34,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Contractors"
-        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.workforce.contractors.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.contractors.title", undefined, "Contractors")}
+        subtitle={
+          rows.length === 1
+            ? t("console.workforce.contractors.subtitleOne", { count: rows.length }, `${rows.length} Record`)
+            : t("console.workforce.contractors.subtitleOther", { count: rows.length }, `${rows.length} Records`)
+        }
         action={
           <Button href="/console/workforce/contractors/new" size="sm">
-            + Add contractor
+            {t("console.workforce.contractors.addAction", undefined, "+ Add contractor")}
           </Button>
         }
       />
@@ -40,23 +51,27 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/workforce/contractors/${r.id}`}
-          emptyLabel="No contractors"
-          emptyDescription="Independent contractors and freelancers — capture W-9/insurance and SOW deliverables."
+          emptyLabel={t("console.workforce.contractors.emptyLabel", undefined, "No contractors")}
+          emptyDescription={t(
+            "console.workforce.contractors.emptyDescription",
+            undefined,
+            "Independent contractors and freelancers — capture W-9/insurance and SOW deliverables.",
+          )}
           emptyAction={
             <Button href="/console/workforce/contractors/new" size="sm">
-              + Add contractor
+              {t("console.workforce.contractors.addAction", undefined, "+ Add contractor")}
             </Button>
           }
           columns={[
             {
               key: "full_name",
-              header: "Name",
+              header: t("console.workforce.contractors.columnName", undefined, "Name"),
               render: (r) => String(r.full_name ?? "—"),
               accessor: (r) => r.full_name ?? null,
             },
             {
               key: "role",
-              header: "Role",
+              header: t("console.workforce.contractors.columnRole", undefined, "Role"),
               render: (r) => String(r.role ?? "—"),
               accessor: (r) => r.role ?? null,
               filterable: true,
@@ -64,7 +79,7 @@ export default async function Page() {
             },
             {
               key: "email",
-              header: "Email",
+              header: t("console.workforce.contractors.columnEmail", undefined, "Email"),
               render: (r) => <span className="font-mono text-xs">{String(r.email ?? "—")}</span>,
               accessor: (r) => r.email ?? null,
             },

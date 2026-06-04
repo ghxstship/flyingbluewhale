@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { XPMS_CLASS_BY_CODE, XPMS_PHASES, formatXtcCode } from "@/lib/xpms";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +26,15 @@ type AtomRow = {
 const PHASE_NUM = Object.fromEntries(XPMS_PHASES.map((p) => [p.id, p.num]));
 
 export default async function AtomsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="XPMS" title="Atoms" />
+        <ModuleHeader eyebrow="XPMS" title={t("console.xpms.atoms.title", undefined, "Atoms")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.xpms.atoms.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -49,22 +53,34 @@ export default async function AtomsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="XPMS · Atomic Production System"
-        title="Atoms"
-        subtitle={`${rows.length} addressable units across the ten classes`}
+        eyebrow={t("console.xpms.atoms.eyebrow", undefined, "XPMS · Atomic Production System")}
+        title={t("console.xpms.atoms.title", undefined, "Atoms")}
+        subtitle={t(
+          "console.xpms.atoms.subtitle",
+          { count: rows.length },
+          `${rows.length} addressable units across the ten classes`,
+        )}
       />
       <div className="page-content">
-        {error ? <div className="surface p-4 text-sm">Could not load atoms: {error.message}</div> : null}
+        {error ? (
+          <div className="surface p-4 text-sm">
+            {t("console.xpms.atoms.loadError", { message: error.message }, `Could not load atoms: ${error.message}`)}
+          </div>
+        ) : null}
         <DataTable<AtomRow>
           tableId="xpms.atoms"
           rows={rows}
           searchable
-          emptyLabel="No atoms yet"
-          emptyDescription="Crew, equipment, scenic, and other production rows promote to atoms automatically once they carry an XTC code."
+          emptyLabel={t("console.xpms.atoms.emptyLabel", undefined, "No atoms yet")}
+          emptyDescription={t(
+            "console.xpms.atoms.emptyDescription",
+            undefined,
+            "Crew, equipment, scenic, and other production rows promote to atoms automatically once they carry an XTC code.",
+          )}
           columns={[
             {
               key: "identifier",
-              header: "Identifier",
+              header: t("console.xpms.atoms.columns.identifier", undefined, "Identifier"),
               render: (r) => r.identifier,
               accessor: (r) => r.identifier,
               className: "font-mono text-[11px]",
@@ -72,7 +88,7 @@ export default async function AtomsPage() {
             },
             {
               key: "name",
-              header: "Name",
+              header: t("console.xpms.atoms.columns.name", undefined, "Name"),
               render: (r) => r.name,
               accessor: (r) => r.name,
               className: "text-xs",
@@ -80,7 +96,7 @@ export default async function AtomsPage() {
             },
             {
               key: "class",
-              header: "Class",
+              header: t("console.xpms.atoms.columns.class", undefined, "Class"),
               render: (r) => {
                 const cls = XPMS_CLASS_BY_CODE[r.class_code];
                 return cls ? <span style={{ color: cls.accent }}>{cls.name}</span> : <>{r.class_code}</>;
@@ -93,7 +109,7 @@ export default async function AtomsPage() {
             },
             {
               key: "xtc",
-              header: "XTC",
+              header: t("console.xpms.atoms.columns.xtc", undefined, "XTC"),
               render: (r) => formatXtcCode(r.xtc_code),
               accessor: (r) => r.xtc_code,
               className: "font-mono text-[11px]",
@@ -101,7 +117,7 @@ export default async function AtomsPage() {
             },
             {
               key: "phase",
-              header: "Phase",
+              header: t("console.xpms.atoms.columns.phase", undefined, "Phase"),
               render: (r) => (
                 <span className="text-xs">
                   <span className="me-1 font-mono text-[10px] text-[var(--text-muted)]">
@@ -117,7 +133,7 @@ export default async function AtomsPage() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.xpms.atoms.columns.state", undefined, "State"),
               render: (r) => <Badge variant={r.state === "tpc" ? "success" : "info"}>{r.state.toUpperCase()}</Badge>,
               accessor: (r) => r.state,
               sortable: true,
@@ -126,7 +142,7 @@ export default async function AtomsPage() {
             },
             {
               key: "qty",
-              header: "Qty",
+              header: t("console.xpms.atoms.columns.qty", undefined, "Qty"),
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.quantity ?? 1}

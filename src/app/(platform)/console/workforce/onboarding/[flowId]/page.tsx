@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { addStep, publishFlow, assignFlow } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,13 @@ type Assignment = {
 };
 
 export default async function Page({ params }: { params: Promise<{ flowId: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("console.workforce.onboarding.flow.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { flowId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -82,14 +89,18 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Onboarding Flow"
+        eyebrow={t("console.workforce.onboarding.flow.eyebrow", undefined, "Onboarding Flow")}
         title={f.name}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <Badge variant={f.publish_state === "published" ? "success" : "info"}>{f.publish_state}</Badge>
             {f.target_role && <span className="font-mono text-xs">{f.target_role}</span>}
             <span className="font-mono text-xs">
-              {stepList.length} steps · {assignmentList.length} assignees
+              {t(
+                "console.workforce.onboarding.flow.stepsAssigneesSummary",
+                { steps: stepList.length, assignees: assignmentList.length },
+                `${stepList.length} steps · ${assignmentList.length} assignees`,
+              )}
             </span>
           </span>
         }
@@ -98,7 +109,7 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
             <form action={publishFlow}>
               <input type="hidden" name="flowId" value={f.id} />
               <Button type="submit" size="sm">
-                Publish
+                {t("console.workforce.onboarding.flow.publish", undefined, "Publish")}
               </Button>
             </form>
           ) : null
@@ -106,7 +117,9 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
       />
       <div className="page-content grid gap-4 lg:grid-cols-2">
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Steps</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.workforce.onboarding.flow.stepsHeading", undefined, "Steps")}
+          </h2>
           <ol className="mt-3 space-y-2">
             {stepList.map((s) => (
               <li key={s.id} className="rounded-md border border-[var(--border-color)] p-3">
@@ -125,7 +138,7 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
               <input
                 type="text"
                 name="title"
-                placeholder="Step title"
+                placeholder={t("console.workforce.onboarding.flow.stepTitlePlaceholder", undefined, "Step title")}
                 required
                 maxLength={200}
                 className="input-base w-full"
@@ -133,27 +146,37 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
               <textarea
                 name="description"
                 rows={2}
-                placeholder="What the new hire needs to do"
+                placeholder={t(
+                  "console.workforce.onboarding.flow.stepDescriptionPlaceholder",
+                  undefined,
+                  "What the new hire needs to do",
+                )}
                 maxLength={2000}
                 className="input-base w-full"
               />
               <select name="step_kind" className="input-base w-full" defaultValue="read">
-                <option value="read">Read</option>
-                <option value="sign">Sign</option>
-                <option value="upload">Upload</option>
-                <option value="quiz">Quiz</option>
-                <option value="course">Course</option>
-                <option value="form">Form</option>
+                <option value="read">{t("console.workforce.onboarding.flow.kind.read", undefined, "Read")}</option>
+                <option value="sign">{t("console.workforce.onboarding.flow.kind.sign", undefined, "Sign")}</option>
+                <option value="upload">
+                  {t("console.workforce.onboarding.flow.kind.upload", undefined, "Upload")}
+                </option>
+                <option value="quiz">{t("console.workforce.onboarding.flow.kind.quiz", undefined, "Quiz")}</option>
+                <option value="course">
+                  {t("console.workforce.onboarding.flow.kind.course", undefined, "Course")}
+                </option>
+                <option value="form">{t("console.workforce.onboarding.flow.kind.form", undefined, "Form")}</option>
               </select>
               <button type="submit" className="btn btn-secondary btn-sm">
-                + Add Step
+                {t("console.workforce.onboarding.flow.addStep", undefined, "+ Add Step")}
               </button>
             </form>
           )}
         </section>
 
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Assignees</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.workforce.onboarding.flow.assigneesHeading", undefined, "Assignees")}
+          </h2>
           <ul className="mt-3 space-y-2">
             {assignmentList.map((a) => {
               const tone =
@@ -170,9 +193,16 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                   className="flex items-center justify-between rounded-md border border-[var(--border-color)] p-3"
                 >
                   <div>
-                    <div className="text-sm font-semibold">{memberMap.get(a.assignee_id) ?? "Unknown"}</div>
+                    <div className="text-sm font-semibold">
+                      {memberMap.get(a.assignee_id) ??
+                        t("console.workforce.onboarding.flow.unknownAssignee", undefined, "Unknown")}
+                    </div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                      assigned {new Date(a.assigned_at).toLocaleDateString()}
+                      {t(
+                        "console.workforce.onboarding.flow.assignedOn",
+                        { date: new Date(a.assigned_at).toLocaleDateString() },
+                        `assigned ${new Date(a.assigned_at).toLocaleDateString()}`,
+                      )}
                     </div>
                   </div>
                   <Badge variant={tone}>{a.assignment_phase}</Badge>
@@ -193,7 +223,7 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                   ))}
               </select>
               <button type="submit" className="btn btn-secondary btn-sm">
-                + Assign
+                {t("console.workforce.onboarding.flow.assign", undefined, "+ Assign")}
               </button>
             </form>
           )}

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 type Row = {
   id: string;
@@ -48,12 +49,60 @@ const RELATED = [
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ kind?: string }> }) {
   const sp = await searchParams;
+  const { t } = await getRequestT();
+  const KIND_LABEL_I18N: Record<string, string> = {
+    paid_staff: t("console.workforce.kind.paidStaff", undefined, "Paid Staff"),
+    volunteer: t("console.workforce.kind.volunteers", undefined, "Volunteers"),
+    contractor: t("console.workforce.kind.contractors", undefined, "Contractors"),
+    official: t("console.workforce.kind.officials", undefined, "Officials"),
+  };
+  const KIND_FILTERS_I18N = [
+    { kind: null, label: t("console.workforce.filter.all", undefined, "All") },
+    { kind: "paid_staff", label: t("console.workforce.kind.paidStaff", undefined, "Paid Staff") },
+    { kind: "volunteer", label: t("console.workforce.kind.volunteers", undefined, "Volunteers") },
+    { kind: "contractor", label: t("console.workforce.kind.contractors", undefined, "Contractors") },
+    { kind: "official", label: t("console.workforce.kind.officials", undefined, "Officials") },
+  ] as const;
+  const RELATED_I18N = [
+    {
+      href: "/console/workforce/planning",
+      label: t("console.workforce.related.planning.label", undefined, "Planning"),
+      sub: t("console.workforce.related.planning.sub", undefined, "Capacity + needs"),
+    },
+    {
+      href: "/console/workforce/deployment",
+      label: t("console.workforce.related.deployment.label", undefined, "Deployment"),
+      sub: t("console.workforce.related.deployment.sub", undefined, "Where they go"),
+    },
+    {
+      href: "/console/workforce/call-sheets",
+      label: t("console.workforce.related.callSheets.label", undefined, "Call Sheets"),
+      sub: t("console.workforce.related.callSheets.sub", undefined, "Day-of-show"),
+    },
+    {
+      href: "/console/workforce/housing",
+      label: t("console.workforce.related.housing.label", undefined, "Housing"),
+      sub: t("console.workforce.related.housing.sub", undefined, "Crew accommodation"),
+    },
+    {
+      href: "/console/workforce/uniforms",
+      label: t("console.workforce.related.uniforms.label", undefined, "Uniforms"),
+      sub: t("console.workforce.related.uniforms.sub", undefined, "Issue + return"),
+    },
+    {
+      href: "/console/workforce/services",
+      label: t("console.workforce.related.services.label", undefined, "Services"),
+      sub: t("console.workforce.related.services.sub", undefined, "Service requests"),
+    },
+  ];
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Workforce" />
+        <ModuleHeader title={t("console.workforce.title", undefined, "Workforce")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -83,21 +132,29 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
   return (
     <>
       <ModuleHeader
-        eyebrow="People"
-        title="Workforce"
+        eyebrow={t("console.workforce.eyebrow", undefined, "People")}
+        title={t("console.workforce.title", undefined, "Workforce")}
         subtitle={
           activeKind
-            ? `${rows.length} ${KIND_LABEL[activeKind].toLowerCase()}`
-            : `${totalCount} member${totalCount === 1 ? "" : "s"} across all kinds`
+            ? t(
+                "console.workforce.subtitle.filtered",
+                { count: rows.length, kind: KIND_LABEL_I18N[activeKind].toLowerCase() },
+                `${rows.length} ${KIND_LABEL_I18N[activeKind].toLowerCase()}`,
+              )
+            : t(
+                "console.workforce.subtitle.all",
+                { count: totalCount, plural: totalCount === 1 ? "" : "s" },
+                `${totalCount} member${totalCount === 1 ? "" : "s"} across all kinds`,
+              )
         }
       />
       <div className="page-content space-y-5">
         <div
           role="tablist"
-          aria-label="Filter by workforce kind"
+          aria-label={t("console.workforce.filterAriaLabel", undefined, "Filter by workforce kind")}
           className="inline-flex flex-wrap items-center gap-1.5"
         >
-          {KIND_FILTERS.map((f) => {
+          {KIND_FILTERS_I18N.map((f) => {
             const isActive = (f.kind ?? null) === activeKind;
             const count = f.kind ? (counts[f.kind] ?? 0) : totalCount;
             const href = f.kind ? `/console/workforce?kind=${f.kind}` : "/console/workforce";
@@ -122,34 +179,46 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
 
         <DataTable<Row>
           rows={rows}
-          emptyLabel={activeKind ? `No ${KIND_LABEL[activeKind]}` : "No Workforce Members"}
-          emptyDescription="Add a workforce member to the directory to start scheduling and assigning."
+          emptyLabel={
+            activeKind
+              ? t(
+                  "console.workforce.empty.filtered",
+                  { kind: KIND_LABEL_I18N[activeKind] },
+                  `No ${KIND_LABEL_I18N[activeKind]}`,
+                )
+              : t("console.workforce.empty.all", undefined, "No Workforce Members")
+          }
+          emptyDescription={t(
+            "console.workforce.emptyDescription",
+            undefined,
+            "Add a workforce member to the directory to start scheduling and assigning.",
+          )}
           columns={[
             {
               key: "full_name",
-              header: "Name",
+              header: t("console.workforce.column.name", undefined, "Name"),
               render: (r) => r.full_name,
               accessor: (r) => r.full_name,
               sortable: true,
             },
             {
               key: "kind",
-              header: "Kind",
-              render: (r) => <Badge variant="brand">{KIND_LABEL[r.kind] ?? r.kind}</Badge>,
+              header: t("console.workforce.column.kind", undefined, "Kind"),
+              render: (r) => <Badge variant="brand">{KIND_LABEL_I18N[r.kind] ?? r.kind}</Badge>,
               accessor: (r) => r.kind,
               filterable: true,
               groupable: true,
             },
             {
               key: "role",
-              header: "Role",
+              header: t("console.workforce.column.role", undefined, "Role"),
               render: (r) => r.role ?? "—",
               accessor: (r) => r.role ?? "",
               filterable: true,
             },
             {
               key: "contact",
-              header: "Contact",
+              header: t("console.workforce.column.contact", undefined, "Contact"),
               render: (r) => r.email ?? r.phone ?? "—",
               accessor: (r) => r.email ?? r.phone ?? "",
               mono: true,
@@ -159,13 +228,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
 
         <section>
           <h2 className="mb-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-            Related Sections
+            {t("console.workforce.relatedSections", undefined, "Related Sections")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {RELATED.map((t) => (
-              <Link key={t.href} href={t.href} className="surface hover-lift p-4">
-                <div className="text-sm font-semibold">{t.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.sub}</div>
+            {RELATED_I18N.map((item) => (
+              <Link key={item.href} href={item.href} className="surface hover-lift p-4">
+                <div className="text-sm font-semibold">{item.label}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{item.sub}</div>
               </Link>
             ))}
           </div>
